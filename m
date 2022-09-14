@@ -2,326 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5D75B7E3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313015B7E41
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiINBXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S229911AbiINB0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiINBXk (ORCPT
+        with ESMTP id S229531AbiINB0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:23:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12176556D;
-        Tue, 13 Sep 2022 18:23:38 -0700 (PDT)
+        Tue, 13 Sep 2022 21:26:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006546B658;
+        Tue, 13 Sep 2022 18:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663118618; x=1694654618;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lbeU84M3yA/lQbBKX0b3sLR775J5S+s8pCPMWnzhg3E=;
-  b=QzZPhegPMpULmMI2ygr8Cwt7R/QbzK/f74QIpEjxcr6QXVP5TgEBnDUl
-   oDHbNb5fAc0bo5n0Hk6JywWAMZHpn9J8xEvqTQa89NRkhB+ZqWNckGuK/
-   7X2GtG06MW/Y3Nwi+lQ5W+rMM7jy9T50ctb0FW1mN+e97qFmFOkYl4l07
-   x5p8w5yBEOO4eVXM8dTe6mbOp/KgjMTc4M33vqi8CWcg6fYkPaI25XZdj
-   Hse8CU6FhkCMuIvg3hwfYW+f999Wz74Jy8nU47n0BgUfakGIKGhncfftp
-   Uow6pV3wp3GjdyyaQsLLmvoU5BlvVuMrpfKAqTRgAy8uQywqQ1jd31x8G
+  t=1663118763; x=1694654763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mJVxyJFWo45bZ2CDtxtawCQCsQQ+ZLsf08JzYOfSQQI=;
+  b=UqktmH0IvfAOUoU3zfidqpawRlMMSY1XIMzhWyDUg5OS7/3rijUHsTSJ
+   C1v+3zHXyEdkevQVByr4ezhcJsA5TkQPEE/qim+UNfpZY7Go0s/BXD0Q8
+   csRXQ5MuCDt2KBgo1aLzjMA5MOTSXbnMLy2+UbuTaJAhvBHE6/nArt4fF
+   f3VzWxIX9YmA4YkYAhCZl8vqo4zFiZpRl+63T4Yuo0KlRcXt7J5bt+zjq
+   BW2VKAQyMVFDnwA/KdRRLBOIsWtLuNfnFxMDHJYqcCEtGDspp6j8SuZw6
+   G5EaY82tAetmP9qdEoc9FbKbJu2UY+ACuwrtsszonaLMzjjTaTibjbaCP
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="281337398"
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="362268333"
 X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="281337398"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:23:35 -0700
+   d="scan'208";a="362268333"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:26:02 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="792144302"
-Received: from ewcubbag-mobl2.amr.corp.intel.com (HELO [10.209.57.220]) ([10.209.57.220])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:23:35 -0700
-Message-ID: <c5868924-f2a0-d6fd-c757-ae539194f9f2@linux.intel.com>
-Date:   Tue, 13 Sep 2022 18:23:34 -0700
+   d="scan'208";a="594178545"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Sep 2022 18:25:59 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYHA7-0004Cn-0Q;
+        Wed, 14 Sep 2022 01:25:59 +0000
+Date:   Wed, 14 Sep 2022 09:25:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, ldewangan@nvidia.com,
+        jonathanh@nvidia.com, vkoul@kernel.org, thierry.reding@gmail.com,
+        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, akhilrajeev@nvidia.com
+Subject: Re: [PATCH 3/3] dmaengine: tegra: Add support for dma-channel-mask
+Message-ID: <202209140942.NsWTm6xM-lkp@intel.com>
+References: <20220913155251.59375-4-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
- process
-Content-Language: en-US
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220913175440.wahcdmaumeqjgzmh@box>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220913175440.wahcdmaumeqjgzmh@box>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913155251.59375-4-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kirill/Kai,
-
-On 9/13/22 10:54 AM, Kirill A . Shutemov wrote:
-> On Fri, Sep 09, 2022 at 12:27:08PM -0700, Kuppuswamy Sathyanarayanan wrote:
->> Document details about TDX attestation process and related user API
->> support.
-> 
-> "related user API support" sounds wrong to me.
-> 
-> Maybe just "related userspace API"?
-> 
->> Attestation details can be found in Guest-Host-Communication Interface
->> (GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
->> attestation".
->>
->> [Bagas Sanjaya fixed htmldocs warning]
->> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
->> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
->> ---
->>
->> Change since v12:
->>  * None
->>
->> Changes since v11:
->>  * Fixed htmldocs warnings.
->>
->>  Documentation/x86/tdx.rst | 75 +++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 75 insertions(+)
->>
->> diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
->> index b8fa4329e1a5..c9e3ecf86e0b 100644
->> --- a/Documentation/x86/tdx.rst
->> +++ b/Documentation/x86/tdx.rst
->> @@ -210,6 +210,81 @@ converted to shared on boot.
->>  For coherent DMA allocation, the DMA buffer gets converted on the
->>  allocation. Check force_dma_unencrypted() for details.
->>  
->> +Attestation
->> +===========
->> +
->> +Attestation is used to verify the TDX guest trustworthiness to other
->> +entities before provisioning secrets to the guest. For example, a key
->> +server may request for attestation before releasing the encryption keys
->> +to mount the encrypted rootfs or secondary drive.
-> 
-> Maybe "may request attestation quote before ..."?
-> 
->> +TDX module records the state of the TDX guest in various stages of guest
->> +boot process using build time measurement register (MRTD) and runtime
->> +measurement registers (RTMR). Measurements related to guest initial
->> +configuration and firmware image is recorded in the MRTD register.
->> +Measurements related to initial state, kernel image, firmware image,
->> +command line options, initrd, ACPI tables, etc are recorded in RTMR
->> +registers. For more details, please refer to TDX Virtual Firmware design
->> +specification, sec titled "TD Measurement".
->> +
->> +At TDX guest runtime, the Intel TDX module reuses the Intel SGX attestation
->> +infrastructure to provide support for attesting to these measurements as
->> +described below.
->> +
->> +The attestation process consists of two steps: TDREPORT generation and
->> +Quote generation.
->> +
->> +TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
->> +from the TDX module. TDREPORT is a fixed-size data structure generated by
->> +the TDX module which contains guest-specific information (such as build
->> +and boot measurements), platform security version, and the MAC to protect
->> +the integrity of the TDREPORT.
->> +
->> +After getting the TDREPORT, the second step of the attestation process
->> +is to send it to the QE to generate the Quote. TDREPORT by design can only
-> 
-> The first use of QE abbreviation is before it is defined. -EPARSE.
-> 
->> +be verified on local platform as the MAC key is bound to the platform. To
->> +support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
->> +Enclave (QE) to verify the TDREPORT locally and convert it to a remote
->> +verifiable Quote. Method of sending TDREPORT to QE is implemenentation
->> +specific. Attestation software can choose whatever communication channel
->> +available (i.e. vsock or hypercall) to send the TDREPORT to QE and receive
->> +the Quote.
->> +
->> +To allow userspace attestation agent get the TDREPORT, TDX guest driver
->> +exposes an IOCTL (TDX_CMD_GET_REPORT) interface via /dev/tdx-guest misc
->> +device.
->> +
->> +TDX Guest driver
->> +================
->> +
->> +The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
->> +device to allow user space to get certain TDX guest specific details
->> +(like attestation report, attestation quote or storage keys, etc).
->> +
->> +In this section, for each supported IOCTL, following information is
->> +provided along with generic description.
-> 
-> "for each" looks strange as we only have single IOCTL.
-> 
->> +:Input parameters: Parameters passed to the IOCTL and related details.
->> +:Output: Details about output data and return value (with details
->> +         about the non common error values).
->> +
->> +TDX_CMD_GET_REPORT
->> +------------------
->> +
->> +:Input parameters: struct tdx_report_req
->> +:Output: Upon successful execution, TDREPORT data is copied to
->> +         tdx_report_req.tdreport and returns 0 or returns
->> +         -EIO on TDCALL failure and standard error number on
->> +         other common failures.
->> +
->> +The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
->> +get the TDX guest measurements data (with few other info) in the format
->> +of TDREPORT_STRUCT. It uses TDCALL[TDG.MR.REPORT] to get the TDREPORT
->> +from the TDX Module.
->> +
->> +Format of TDREPORT_STRUCT can be found in TDX 1.0 Module specification,
->> +sec titled "TDREPORT_STRUCT".
->> +
-> 
-
-After addressing the comments, the final version looks like below.
-
-
-
-Attestation
-
-===========
-
-
-
-Attestation is used to verify the TDX guest trustworthiness to other
-
-entities before provisioning secrets to the guest. For example, a key
-
-server may request attestation quote before releasing the encryption
-
-keys to mount the encrypted rootfs or secondary drive.
-
-
-
-The TDX module records the state of the TDX guest in various stages of
-
-the guest boot process using build time measurement register (MRTD) and
-
-runtime measurement registers (RTMR). Measurements related to guest
-
-initial configuration and firmware image are recorded in the MRTD
-
-register. Measurements related to initial state, kernel image, firmware
-
-image, command line options, initrd, ACPI tables, etc are recorded in
-
-RTMR registers. For more details, please refer to TDX Virtual Firmware
-
-design specification, sec titled "TD Measurement". At TDX guest runtime,
-
-the attestation process is used to attest to these measurements.
-
-
-
-The attestation process consists of two steps: TDREPORT generation and
-
-Quote generation.
-
-
-
-TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
-
-from the TDX module. TDREPORT is a fixed-size data structure generated by
-
-the TDX module which contains guest-specific information (such as build
-
-and boot measurements), platform security version, and the MAC to protect
-
-the integrity of the TDREPORT.
-
-
-
-After getting the TDREPORT, the second step of the attestation process
-
-is to send it to the Quoting Enclave (QE) to generate the Quote. TDREPORT
-
-by design can only be verified on the local platform as the MAC key is
-
-bound to the platform. To support remote verification of the TDREPORT,
-
-TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT locally
-
-and convert it to a remotely verifiable Quote. Method of sending TDREPORT
-
-to QE is implementation specific. Attestation software can choose
-
-whatever communication channel available (i.e. vsock or hypercall) to
-
-send the TDREPORT to QE and receive the Quote.
-
-
-TDX Guest driver
-
-================
-
-
-
-The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest device
-
-to service TDX guest user-specific requests. But currently only
-
-TDX_CMD_GET_RERPORT IOCTL is supported to allow user space attestation
-
-agent to get the TDREPORT.
-
-
-
-Following are the IOCTL ABI details:
-
-
-
-TDX_CMD_GET_REPORT
-
-------------------
-
-
-
-:Input parameters: struct tdx_report_req
-
-:Output: Upon successful execution, TDREPORT data is copied to
-
-         tdx_report_req.tdreport and return 0. Return -EIO on
-
-         TDCALL failure or standard error number on other common
-
-         failures.
-
-
-
-The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
-
-get the TDREPORT from the TDX module using TDCALL[TDG.MR.REPORT].
-
-
-
+Hi Akhil,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on vkoul-dmaengine/next linus/master v6.0-rc5 next-20220913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/Tegra-GCPDMA-Add-dma-channel-mask-support/20220914-010611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220914/202209140942.NsWTm6xM-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b760183e9631ceaf2f36072fc4a7438c3d62887b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Akhil-R/Tegra-GCPDMA-Add-dma-channel-mask-support/20220914-010611
+        git checkout b760183e9631ceaf2f36072fc4a7438c3d62887b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/dmaengine.h:8,
+                    from drivers/dma/tegra186-gpc-dma.c:9:
+   drivers/dma/tegra186-gpc-dma.c: In function 'tegra_dma_probe':
+>> drivers/dma/tegra186-gpc-dma.c:1469:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'long unsigned int' [-Wformat=]
+    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                          ^~~~~~~
+   drivers/dma/tegra186-gpc-dma.c:1469:9: note: in expansion of macro 'dev_info'
+    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
+         |         ^~~~~~~~
+   drivers/dma/tegra186-gpc-dma.c:1469:56: note: format string is defined here
+    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
+         |                                                       ~^
+         |                                                        |
+         |                                                        int
+         |                                                       %ld
+
+
+vim +1469 drivers/dma/tegra186-gpc-dma.c
+
+ee17028009d49f Akhil R 2022-02-25  1346  
+ee17028009d49f Akhil R 2022-02-25  1347  static int tegra_dma_probe(struct platform_device *pdev)
+ee17028009d49f Akhil R 2022-02-25  1348  {
+ee17028009d49f Akhil R 2022-02-25  1349  	const struct tegra_dma_chip_data *cdata = NULL;
+ee17028009d49f Akhil R 2022-02-25  1350  	struct iommu_fwspec *iommu_spec;
+ee17028009d49f Akhil R 2022-02-25  1351  	unsigned int stream_id, i;
+ee17028009d49f Akhil R 2022-02-25  1352  	struct tegra_dma *tdma;
+ee17028009d49f Akhil R 2022-02-25  1353  	int ret;
+ee17028009d49f Akhil R 2022-02-25  1354  
+ee17028009d49f Akhil R 2022-02-25  1355  	cdata = of_device_get_match_data(&pdev->dev);
+ee17028009d49f Akhil R 2022-02-25  1356  
+ee17028009d49f Akhil R 2022-02-25  1357  	tdma = devm_kzalloc(&pdev->dev,
+ee17028009d49f Akhil R 2022-02-25  1358  			    struct_size(tdma, channels, cdata->nr_channels),
+ee17028009d49f Akhil R 2022-02-25  1359  			    GFP_KERNEL);
+ee17028009d49f Akhil R 2022-02-25  1360  	if (!tdma)
+ee17028009d49f Akhil R 2022-02-25  1361  		return -ENOMEM;
+ee17028009d49f Akhil R 2022-02-25  1362  
+ee17028009d49f Akhil R 2022-02-25  1363  	tdma->dev = &pdev->dev;
+ee17028009d49f Akhil R 2022-02-25  1364  	tdma->chip_data = cdata;
+ee17028009d49f Akhil R 2022-02-25  1365  	platform_set_drvdata(pdev, tdma);
+ee17028009d49f Akhil R 2022-02-25  1366  
+ee17028009d49f Akhil R 2022-02-25  1367  	tdma->base_addr = devm_platform_ioremap_resource(pdev, 0);
+ee17028009d49f Akhil R 2022-02-25  1368  	if (IS_ERR(tdma->base_addr))
+ee17028009d49f Akhil R 2022-02-25  1369  		return PTR_ERR(tdma->base_addr);
+ee17028009d49f Akhil R 2022-02-25  1370  
+ee17028009d49f Akhil R 2022-02-25  1371  	tdma->rst = devm_reset_control_get_exclusive(&pdev->dev, "gpcdma");
+ee17028009d49f Akhil R 2022-02-25  1372  	if (IS_ERR(tdma->rst)) {
+ee17028009d49f Akhil R 2022-02-25  1373  		return dev_err_probe(&pdev->dev, PTR_ERR(tdma->rst),
+ee17028009d49f Akhil R 2022-02-25  1374  			      "Missing controller reset\n");
+ee17028009d49f Akhil R 2022-02-25  1375  	}
+ee17028009d49f Akhil R 2022-02-25  1376  	reset_control_reset(tdma->rst);
+ee17028009d49f Akhil R 2022-02-25  1377  
+ee17028009d49f Akhil R 2022-02-25  1378  	tdma->dma_dev.dev = &pdev->dev;
+ee17028009d49f Akhil R 2022-02-25  1379  
+ee17028009d49f Akhil R 2022-02-25  1380  	iommu_spec = dev_iommu_fwspec_get(&pdev->dev);
+ee17028009d49f Akhil R 2022-02-25  1381  	if (!iommu_spec) {
+ee17028009d49f Akhil R 2022-02-25  1382  		dev_err(&pdev->dev, "Missing iommu stream-id\n");
+ee17028009d49f Akhil R 2022-02-25  1383  		return -EINVAL;
+ee17028009d49f Akhil R 2022-02-25  1384  	}
+ee17028009d49f Akhil R 2022-02-25  1385  	stream_id = iommu_spec->ids[0] & 0xffff;
+ee17028009d49f Akhil R 2022-02-25  1386  
+b760183e9631ce Akhil R 2022-09-13  1387  	ret = device_property_read_u32(&pdev->dev, "dma-channel-mask",
+b760183e9631ce Akhil R 2022-09-13  1388  				       &tdma->chan_mask);
+b760183e9631ce Akhil R 2022-09-13  1389  	if (ret) {
+b760183e9631ce Akhil R 2022-09-13  1390  		dev_warn(&pdev->dev,
+b760183e9631ce Akhil R 2022-09-13  1391  			 "Missing dma-channel-mask property, using default channel mask %#x\n",
+b760183e9631ce Akhil R 2022-09-13  1392  			 TEGRA_GPCDMA_DEFAULT_CHANNEL_MASK);
+b760183e9631ce Akhil R 2022-09-13  1393  		tdma->chan_mask = TEGRA_GPCDMA_DEFAULT_CHANNEL_MASK;
+b760183e9631ce Akhil R 2022-09-13  1394  	}
+b760183e9631ce Akhil R 2022-09-13  1395  
+ee17028009d49f Akhil R 2022-02-25  1396  	INIT_LIST_HEAD(&tdma->dma_dev.channels);
+ee17028009d49f Akhil R 2022-02-25  1397  	for (i = 0; i < cdata->nr_channels; i++) {
+ee17028009d49f Akhil R 2022-02-25  1398  		struct tegra_dma_channel *tdc = &tdma->channels[i];
+ee17028009d49f Akhil R 2022-02-25  1399  
+b760183e9631ce Akhil R 2022-09-13  1400  		/* Check for channel mask */
+b760183e9631ce Akhil R 2022-09-13  1401  		if (!((1 << i) & tdma->chan_mask))
+b760183e9631ce Akhil R 2022-09-13  1402  			continue;
+b760183e9631ce Akhil R 2022-09-13  1403  
+461cd3709f266d Akhil R 2022-05-05  1404  		tdc->irq = platform_get_irq(pdev, i);
+461cd3709f266d Akhil R 2022-05-05  1405  		if (tdc->irq < 0)
+461cd3709f266d Akhil R 2022-05-05  1406  			return tdc->irq;
+461cd3709f266d Akhil R 2022-05-05  1407  
+b760183e9631ce Akhil R 2022-09-13  1408  		tdc->chan_base_offset = TEGRA_GPCDMA_CHANNEL_BASE_ADDR_OFFSET +
+ee17028009d49f Akhil R 2022-02-25  1409  					i * cdata->channel_reg_size;
+ee17028009d49f Akhil R 2022-02-25  1410  		snprintf(tdc->name, sizeof(tdc->name), "gpcdma.%d", i);
+ee17028009d49f Akhil R 2022-02-25  1411  		tdc->tdma = tdma;
+ee17028009d49f Akhil R 2022-02-25  1412  		tdc->id = i;
+ee17028009d49f Akhil R 2022-02-25  1413  		tdc->slave_id = -1;
+ee17028009d49f Akhil R 2022-02-25  1414  
+ee17028009d49f Akhil R 2022-02-25  1415  		vchan_init(&tdc->vc, &tdma->dma_dev);
+ee17028009d49f Akhil R 2022-02-25  1416  		tdc->vc.desc_free = tegra_dma_desc_free;
+ee17028009d49f Akhil R 2022-02-25  1417  
+ee17028009d49f Akhil R 2022-02-25  1418  		/* program stream-id for this channel */
+ee17028009d49f Akhil R 2022-02-25  1419  		tegra_dma_program_sid(tdc, stream_id);
+ee17028009d49f Akhil R 2022-02-25  1420  		tdc->stream_id = stream_id;
+ee17028009d49f Akhil R 2022-02-25  1421  	}
+ee17028009d49f Akhil R 2022-02-25  1422  
+ee17028009d49f Akhil R 2022-02-25  1423  	dma_cap_set(DMA_SLAVE, tdma->dma_dev.cap_mask);
+ee17028009d49f Akhil R 2022-02-25  1424  	dma_cap_set(DMA_PRIVATE, tdma->dma_dev.cap_mask);
+ee17028009d49f Akhil R 2022-02-25  1425  	dma_cap_set(DMA_MEMCPY, tdma->dma_dev.cap_mask);
+ee17028009d49f Akhil R 2022-02-25  1426  	dma_cap_set(DMA_MEMSET, tdma->dma_dev.cap_mask);
+ee17028009d49f Akhil R 2022-02-25  1427  	dma_cap_set(DMA_CYCLIC, tdma->dma_dev.cap_mask);
+ee17028009d49f Akhil R 2022-02-25  1428  
+ee17028009d49f Akhil R 2022-02-25  1429  	/*
+ee17028009d49f Akhil R 2022-02-25  1430  	 * Only word aligned transfers are supported. Set the copy
+ee17028009d49f Akhil R 2022-02-25  1431  	 * alignment shift.
+ee17028009d49f Akhil R 2022-02-25  1432  	 */
+ee17028009d49f Akhil R 2022-02-25  1433  	tdma->dma_dev.copy_align = 2;
+ee17028009d49f Akhil R 2022-02-25  1434  	tdma->dma_dev.fill_align = 2;
+ee17028009d49f Akhil R 2022-02-25  1435  	tdma->dma_dev.device_alloc_chan_resources =
+ee17028009d49f Akhil R 2022-02-25  1436  					tegra_dma_alloc_chan_resources;
+ee17028009d49f Akhil R 2022-02-25  1437  	tdma->dma_dev.device_free_chan_resources =
+ee17028009d49f Akhil R 2022-02-25  1438  					tegra_dma_free_chan_resources;
+ee17028009d49f Akhil R 2022-02-25  1439  	tdma->dma_dev.device_prep_slave_sg = tegra_dma_prep_slave_sg;
+ee17028009d49f Akhil R 2022-02-25  1440  	tdma->dma_dev.device_prep_dma_memcpy = tegra_dma_prep_dma_memcpy;
+ee17028009d49f Akhil R 2022-02-25  1441  	tdma->dma_dev.device_prep_dma_memset = tegra_dma_prep_dma_memset;
+ee17028009d49f Akhil R 2022-02-25  1442  	tdma->dma_dev.device_prep_dma_cyclic = tegra_dma_prep_dma_cyclic;
+ee17028009d49f Akhil R 2022-02-25  1443  	tdma->dma_dev.device_config = tegra_dma_slave_config;
+ee17028009d49f Akhil R 2022-02-25  1444  	tdma->dma_dev.device_terminate_all = tegra_dma_terminate_all;
+ee17028009d49f Akhil R 2022-02-25  1445  	tdma->dma_dev.device_tx_status = tegra_dma_tx_status;
+ee17028009d49f Akhil R 2022-02-25  1446  	tdma->dma_dev.device_issue_pending = tegra_dma_issue_pending;
+ee17028009d49f Akhil R 2022-02-25  1447  	tdma->dma_dev.device_pause = tegra_dma_device_pause;
+ee17028009d49f Akhil R 2022-02-25  1448  	tdma->dma_dev.device_resume = tegra_dma_device_resume;
+ee17028009d49f Akhil R 2022-02-25  1449  	tdma->dma_dev.device_synchronize = tegra_dma_chan_synchronize;
+ee17028009d49f Akhil R 2022-02-25  1450  	tdma->dma_dev.residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
+ee17028009d49f Akhil R 2022-02-25  1451  
+ee17028009d49f Akhil R 2022-02-25  1452  	ret = dma_async_device_register(&tdma->dma_dev);
+ee17028009d49f Akhil R 2022-02-25  1453  	if (ret < 0) {
+ee17028009d49f Akhil R 2022-02-25  1454  		dev_err_probe(&pdev->dev, ret,
+ee17028009d49f Akhil R 2022-02-25  1455  			      "GPC DMA driver registration failed\n");
+ee17028009d49f Akhil R 2022-02-25  1456  		return ret;
+ee17028009d49f Akhil R 2022-02-25  1457  	}
+ee17028009d49f Akhil R 2022-02-25  1458  
+ee17028009d49f Akhil R 2022-02-25  1459  	ret = of_dma_controller_register(pdev->dev.of_node,
+ee17028009d49f Akhil R 2022-02-25  1460  					 tegra_dma_of_xlate, tdma);
+ee17028009d49f Akhil R 2022-02-25  1461  	if (ret < 0) {
+ee17028009d49f Akhil R 2022-02-25  1462  		dev_err_probe(&pdev->dev, ret,
+ee17028009d49f Akhil R 2022-02-25  1463  			      "GPC DMA OF registration failed\n");
+ee17028009d49f Akhil R 2022-02-25  1464  
+ee17028009d49f Akhil R 2022-02-25  1465  		dma_async_device_unregister(&tdma->dma_dev);
+ee17028009d49f Akhil R 2022-02-25  1466  		return ret;
+ee17028009d49f Akhil R 2022-02-25  1467  	}
+ee17028009d49f Akhil R 2022-02-25  1468  
+ee17028009d49f Akhil R 2022-02-25 @1469  	dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
+b760183e9631ce Akhil R 2022-09-13  1470  		 hweight_long(tdma->chan_mask));
+ee17028009d49f Akhil R 2022-02-25  1471  
+ee17028009d49f Akhil R 2022-02-25  1472  	return 0;
+ee17028009d49f Akhil R 2022-02-25  1473  }
+ee17028009d49f Akhil R 2022-02-25  1474  
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+0-DAY CI Kernel Test Service
+https://01.org/lkp
