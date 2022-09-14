@@ -2,199 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413425B8C56
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D19A5B8C5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiINPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S229738AbiINQCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiINPzO (ORCPT
+        with ESMTP id S229490AbiINQB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:55:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B6913D2F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:55:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AE29B81178
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4316CC433C1;
-        Wed, 14 Sep 2022 15:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663170911;
-        bh=CeuOyMEVkb9REc9JL9C/aOeVs5Xn30KZu2M8Yy4gaf4=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=bwd8sgNa8Eaiz7FyieMf+7bse0D/zBZQNjBrtdutXOnYa/3SeloxTdxL1OF7r8HYY
-         UYVNGidVoxiXCrW+Myk2jalsvr65rqcRIZAwm83jl2iyigTwx4iqwveKUoNwX2RWc5
-         XLjSSQjrOSRZuG29AhdfbA6WBsRMR/BnQFqzTlEueFN7QQ4gh1eHUC2/3LUggDyLva
-         IABWU8CQ5GG7Rg56pIqFIerdic5jnRPNZItEMVeaHEZ3hBQGPXb4Xb2xqYfkCQ5Nas
-         ImH8tpWTnoINRkULP8Ot1uI8EDFRNikzIf/kIhwbF4k3ets54BPKMB05y8eGdvARZY
-         rw9AKPBIydjzg==
-Date:   Wed, 14 Sep 2022 16:55:04 +0100
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-CC:     =?ISO-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        Ash Logan <ash@heyquark.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "j.ne@posteo.net" <j.ne@posteo.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: Fragmented physical memory on powerpc/32
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ed8ff681-4182-3f9f-a65f-21cf5012fff0@csgroup.eu>
-References: <20220609222420.ponpoodiqmaqtwht@pali> <20220808184034.lskqrk6z3gb5q76r@pali> <219cda7b-da4b-7a5a-9809-0878e0fc02ba@csgroup.eu> <20220908153511.57ceunyusziqfcav@pali> <20220908201701.sd3zqn5hfixmjvhh@pali> <9fbc5338-5e10-032a-8f55-e080bd93f74b@csgroup.eu> <Yx9GpV1XT8r2a++R@kernel.org> <20220912211623.djb7fckgknyfmof7@pali> <1c95875c-29f8-68b7-e480-fed8614f3037@csgroup.eu> <4f540391-37dc-8e22-be0a-74543082504d@csgroup.eu> <YyGfkDKgeW7/nNlr@kernel.org> <ed8ff681-4182-3f9f-a65f-21cf5012fff0@csgroup.eu>
-Message-ID: <9779CA34-E40D-4035-A319-A92D2F6E4DDF@kernel.org>
+        Wed, 14 Sep 2022 12:01:59 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B870A65660;
+        Wed, 14 Sep 2022 09:01:56 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so19501937pjm.1;
+        Wed, 14 Sep 2022 09:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=fJZXvJJAeX0LGU5VCwVr+J7zSPoBFc6czPG+erhf0rg=;
+        b=AChYOUP6jE/qKcAMu+Ddpc1DEwkCjNbCGP6+RhU8kMeTomUX7jutP71kjMGvdH5DMf
+         wq7jWATqsngqyN6hE5/A8x5lkBMYg0jizj1ADYEocMgYYSPzrGxZUY6frK+Q+joYNwZp
+         av/dAv8ftrWtp4dXqT1ML2oR3hrQH14bVpgJeWuYbEF0bAxqeamJzTnmlnoISNblII5K
+         PWObzPgnGjGKt4ZhMDkpOfKOW8r8m5x5NFO0xnMYuStWITnhTBJftdeEmPNbQCR+CZgB
+         jqpm1Qsc9EeLftuI6CsFDVigUEsgLMXqsGhi2RtbVB/kiziybk0SmCkEYuAHuTl7pu+y
+         CXOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fJZXvJJAeX0LGU5VCwVr+J7zSPoBFc6czPG+erhf0rg=;
+        b=ve6wFtmJbZBQoLoWnczWrHREx/IPJ6ROSu6E6i+MXWiWQocqTDGS8otjOn8yqh1UDx
+         Z74xfl3wAqEDm+UyEROCTklCCX5HoXsvzIe4Q6wEupCOSeKmsBsOjXIqpBOb9eRNXDU4
+         APBMtHUN9jalMSDgy3aA78yuUf1BxNl2dPEJkCM5FNo2QmMB57v2iuTLooSjhWXalGU3
+         onARWYhdjrvMlZilw3QisCbE9NZ9Qfsz6rMc7/QE8RB5mzZC//aplkM5xntOK6RxdnK8
+         yNhY0g/G4tDq7XXvFEmONCdc5OmrMwgxmZDJZeftMG4QoME1VUipZw12NkHptzD3qoS0
+         F5wg==
+X-Gm-Message-State: ACrzQf3d+SJdQqWA1cX6RDXEEGjtgoZ7YiJYr/BGTj22V14Oj0g2BdzE
+        W70xry81i3lMaRgXs/4vrnoXL8TbXjROmaF5rVw=
+X-Google-Smtp-Source: AMsMyM4diyJoj91fDVH6e9dREtfE6XXUiSssb2REPzWBrjyBTVwoWt4JwlPpx9UyOsRJUI0ekxZ9+K7kvab+8KhacGM=
+X-Received: by 2002:a17:90b:4b44:b0:202:562a:b8c0 with SMTP id
+ mi4-20020a17090b4b4400b00202562ab8c0mr5525866pjb.99.1663171316154; Wed, 14
+ Sep 2022 09:01:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000f537cc05ddef88db@google.com> <0000000000007d793405e87350df@google.com>
+ <CAHbLzkp6BEaM8cFwLsCiYmGaR-LxbG8z-f_bz2ijL+K27zR4GQ@mail.gmail.com>
+ <CAHbLzkrr3PvKjs2vanVi5JFTQQ3R7hSNRWoHhAw+gBWOcFurcw@mail.gmail.com> <YyDOSbLrUx6KbX+R@google.com>
+In-Reply-To: <YyDOSbLrUx6KbX+R@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 14 Sep 2022 09:01:43 -0700
+Message-ID: <CAHbLzkp_de19ACWs8bNdRF240AK=dL6_Bu9HtxNivqPfatMyiw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: Bad page map (5)
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     syzbot <syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 13, 2022 at 11:39 AM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On Sep 13 09:14, Yang Shi wrote:
+> > On Mon, Sep 12, 2022 at 2:47 PM Yang Shi <shy828301@gmail.com> wrote:
+> > >
+> > > On Sun, Sep 11, 2022 at 9:27 PM syzbot
+> > > <syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > syzbot has found a reproducer for the following issue on:
+> > > >
+> > > > HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
+> > > > git tree:       linux-next
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=17330430880000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=915f3e317adb0e85835f
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13397b77080000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1793564f080000
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com
+> > > >
+> > > > BUG: Bad page map in process syz-executor198  pte:8000000071c00227 pmd:74b30067
+> > > > addr:0000000020563000 vm_flags:08100077 anon_vma:ffff8880547d2200 mapping:0000000000000000 index:20563
+> > > > file:(null) fault:0x0 mmap:0x0 read_folio:0x0
+> > > > CPU: 1 PID: 3614 Comm: syz-executor198 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > >  print_bad_pte.cold+0x2a7/0x2d0 mm/memory.c:565
+> > > >  vm_normal_page+0x10c/0x2a0 mm/memory.c:636
+> > > >  hpage_collapse_scan_pmd+0x729/0x1da0 mm/khugepaged.c:1199
+> > > >  madvise_collapse+0x481/0x910 mm/khugepaged.c:2433
+> > > >  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1062
+> > > >  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1236
+> > > >  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1415
+> > > >  do_madvise mm/madvise.c:1428 [inline]
+> > > >  __do_sys_madvise mm/madvise.c:1428 [inline]
+> > > >  __se_sys_madvise mm/madvise.c:1426 [inline]
+> > > >  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1426
+> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > RIP: 0033:0x7f770ba87929
+> > > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > > > RSP: 002b:00007f770ba18308 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+> > > > RAX: ffffffffffffffda RBX: 00007f770bb0f3f8 RCX: 00007f770ba87929
+> > > > RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+> > > > RBP: 00007f770bb0f3f0 R08: 00007f770ba18700 R09: 0000000000000000
+> > > > R10: 00007f770ba18700 R11: 0000000000000246 R12: 00007f770bb0f3fc
+> > > > R13: 00007ffc2d8b62ef R14: 00007f770ba18400 R15: 0000000000022000
+> > > >  </TASK>
+> > >
+> > > I think I figured out the problem. The reproducer actually triggered
+> > > the below race in madvise_collapse():
+> > >
+> > >              CPU A
+> > >         CPU B
+> > > mmap 0x20000000 - 0x21000000 as anon
+> > >
+> > >        madvise_collapse is called on this area
+> > >
+> > >            Retrieve start and end address from the vma (NEVER updated
+> > > later!)
+> > >
+> > >            Collapsed the first 2M area and dropped mmap_lock
+> > > Acquire mmap_lock
+> > > mmap io_uring file at 0x20563000
+> > > Release mmap_lock
+> > >
+> > >             Reacquire mmap_lock
+> > >
+> > >             revalidate vma pass since 0x20200000 + 0x200000 >
+> > > 0x20563000
+> > >
+> > >             scan the next 2M (0x20200000 - 0x20400000), but due to
+> > > whatever reason it didn't release mmap_lock
+> > >
+> > >             scan the 3rd 2M area (start from 0x20400000)
+> > >
+> > >               actually scan the new vma created by io_uring since the
+> > > end was never updated
+> > >
+> > > The below patch should be able to fix the problem (untested):
+> > >
+> > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > > index 5f7c60b8b269..e708c5d62325 100644
+> > > --- a/mm/khugepaged.c
+> > > +++ b/mm/khugepaged.c
+> > > @@ -2441,8 +2441,10 @@ int madvise_collapse(struct vm_area_struct
+> > > *vma, struct vm_area_struct **prev,
+> > >                 memset(cc->node_load, 0, sizeof(cc->node_load));
+> > >                 result = hpage_collapse_scan_pmd(mm, vma, addr, &mmap_locked,
+> > >                                                  cc);
+> > > -               if (!mmap_locked)
+> > > +               if (!mmap_locked) {
+> > >                         *prev = NULL;  /* Tell caller we dropped mmap_lock */
+> > > +                       hend = vma->end & HPAGE_PMD_MASK;
+> > > +               }
+> >
+> > This is wrong. We should refetch the vma end after
+> > hugepage_vma_revalidate() otherwise the vma is still the old one.
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index a3acd3e5e0f3..1860be232a26 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -2592,6 +2592,8 @@ int madvise_collapse(struct vm_area_struct *vma,
+> > struct vm_area_struct **prev,
+> >                                 last_fail = result;
+> >                                 goto out_nolock;
+> >                         }
+> > +
+> > +                       hend = vma->vm_end & HPAGE_PMD_MASK;
+> >                 }
+> >                 mmap_assert_locked(mm);
+> >                 memset(cc->node_load, 0, sizeof(cc->node_load));
+> >
+> >
+> > >
+> > >                 switch (result) {
+> > >                 case SCAN_SUCCEED:
+> > >
+> > >
+>
+> Hey Yang,
+>
+> Thanks for triaging this, and apologies for intro'ing this bug.
+>
+> Also thank you for the repro explanation - I believe you are correct here.
+>
+> Generalizing the issue of:
+>
+>         1) hugepage_vma_revalidate() pmd X
+>         2) collapse of pmd X doesn't drop mmap_lock
+>         3) don't revalidate pmd X+1
+>         4) attempt collapse of pmd X+1
+>
+> I think the only problem is that
+>
+>         hugepage_vma_revalidate()
+>                 transhuge_vma_suitable()
+>
+> only checks if a single hugepage-sized/aligned region properly fits / is aligned
 
+I think it is what transhuge_vma_suitable() is designed for. As long
+as one hugepage fits, it is suitable.
 
-On September 14, 2022 10:43:52 AM GMT+01:00, Christophe Leroy <christophe=
-=2Eleroy@csgroup=2Eeu> wrote:
+> in the VMA (i.e. the issue you found here).  All other checks should be
+> intrinsic to the VMA itself and should be safe to skip if mmap_lock isn't
+> dropped since last hugepage_vma_revalidate().
 >
->
->Le 14/09/2022 =C3=A0 11:32, Mike Rapoport a =C3=A9crit=C2=A0:
->> On Tue, Sep 13, 2022 at 02:36:13PM +0200, Christophe Leroy wrote:
->>>
->>>
->>> Le 13/09/2022 =C3=A0 08:11, Christophe Leroy a =C3=A9crit=C2=A0:
->>>>
->>>>
->>>> Le 12/09/2022 =C3=A0 23:16, Pali Roh=C3=A1r a =C3=A9crit=C2=A0:
->>>>>>
->>>>>> My guess would be that something went wrong in the linear map
->>>>>> setup, but it
->>>>>> won't hurt running with "memblock=3Ddebug" added to the kernel
->>>>>> command line
->>>>>> to see if there is anything suspicious there=2E
->>>>>
->>>>> Here is boot log on serial console with memblock=3Ddebug command lin=
-e:
->>>>>
->>>> =2E=2E=2E
->>>>>
->>>>> Do you need something more for debug?
->>>>
->>>> Can you send me the 'vmlinux' used to generate the above Oops so that=
- I
->>>> can see exactly where we are in function mem_init()=2E
->>>>
->>>> And could you also try without CONFIG_HIGHMEM just in case=2E
->>>>
->>>
->>> I looked at the vmlinux you sent me, the problem is in the loop for hi=
-ghmem
->>> in mem_init()=2E It crashes in the call to free_highmem_page()
->>>
->>> #ifdef CONFIG_HIGHMEM
->>> 	{
->>> 		unsigned long pfn, highmem_mapnr;
->>>
->>> 		highmem_mapnr =3D lowmem_end_addr >> PAGE_SHIFT;
->>> 		for (pfn =3D highmem_mapnr; pfn < max_mapnr; ++pfn) {
->>> 			phys_addr_t paddr =3D (phys_addr_t)pfn << PAGE_SHIFT;
->>> 			struct page *page =3D pfn_to_page(pfn);
->>> 			if (!memblock_is_reserved(paddr))
->>> 				free_highmem_page(page);
->>> 		}
->>> 	}
->>> #endif /* CONFIG_HIGHMEM */
->>>
->>>
->>> As far as I can see in the memblock debug lines, the holes don't seem =
-to be
->>> marked as reserved by memblock=2E So it is above valid ? Other archite=
-ctures
->>> seem to do differently=2E
->>>
->>> Can you try by replacing !memblock_is_reserved(paddr) by
->>> memblock_is_memory(paddr) ?
->>=20
->> The holes should not be marked as reserved, we just need to loop over t=
-he
->> memory ranges rather than over pfns=2E Then the holes will be taken int=
-o
->> account=2E
->>=20
->> I believe arm and xtensa got this right:
->>=20
->> (from arch/arm/mm/init=2Ec)
->>=20
->> static void __init free_highpages(void)
->> {
->> #ifdef CONFIG_HIGHMEM
->> 	unsigned long max_low =3D max_low_pfn;
->> 	phys_addr_t range_start, range_end;
->> 	u64 i;
->>=20
->> 	/* set highmem page free */
->> 	for_each_free_mem_range(i, NUMA_NO_NODE, MEMBLOCK_NONE,
->> 				&range_start, &range_end, NULL) {
->> 		unsigned long start =3D PFN_UP(range_start);
->> 		unsigned long end =3D PFN_DOWN(range_end);
->>=20
->> 		/* Ignore complete lowmem entries */
->> 		if (end <=3D max_low)
->> 			continue;
->>=20
->> 		/* Truncate partial highmem entries */
->> 		if (start < max_low)
->> 			start =3D max_low;
->>=20
->> 		for (; start < end; start++)
->> 			free_highmem_page(pfn_to_page(start));
->> 	}
->> #endif
->> }
->>=20
->
->
->And what about the way MIPS does it ?
->
->static inline void __init mem_init_free_highmem(void)
->{
->#ifdef CONFIG_HIGHMEM
->	unsigned long tmp;
->
->	if (cpu_has_dc_aliases)
->		return;
->
->	for (tmp =3D highstart_pfn; tmp < highend_pfn; tmp++) {
->		struct page *page =3D pfn_to_page(tmp);
->
->		if (!memblock_is_memory(PFN_PHYS(tmp)))
->			SetPageReserved(page);
->		else
->			free_highmem_page(page);
->	}
->#endif
->}
+> As for the fix, I think your fix will work.  If a VMA's size changes inside the
+> main for-loop of madvise_collapse, then at some point we will lock mmap_lock and
+> call hugepage_vma_revalidate(), which might fail itself if the next
+> hugepage-aligned/sized region is now not contained in the VMA.  By updating
+> "hend" as you propose (i.e. using vma->m_end of the just-found VMA), we also
+> ensure that for "addr" < "hend", the hugepage-aligned/sized region at "addr"
+> will fit into the VMA.  Note that we don't need to worry about the VMA being
+> shrank from the other direction, so updating "hend" should be enough.
 
-This iterates over all PFNs in the highmem range and skips those in holes=
-=2E
-for_each_free_mem_range() skips the holes altogether=2E
+Yeah, we don't have to worry about the other direction. The
+hugepage_vma_revalidate() could handle it correctly. Either no valid
+vma is found or the vma doesn't fit anymore.
 
-Largely, I think we need to move, say, arm's version to mm/ and use it eve=
-rywhere, except, perhaps, x86=2E
+>
+> I think the fix is fine as-is.  I briefly thought a comment would be nice, but I
+> think the code is self evident.  The alternative is introing another
+> transhuge_vma_suitable() call in the "if (!mmap_locked) { .. } else { .. }"
+> failure path, but I think your approach is easier to read.
+>
+> Thanks again for taking the time to debug this, and hopefully I can be more
+> careful in the future.
 
->Christophe
---=20
-Sincerely yours,
-Mike
+It is fine.
+
+>
+> Best,
+> Zach
+>
+> Reviewed-by: Zach O'Keefe <zokeefe@google.com>
+
+Thanks.
+
+>
