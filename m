@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87BB5B8CE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395805B8CDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiINQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S229969AbiINQ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiINQ0k (ORCPT
+        with ESMTP id S229615AbiINQ0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Sep 2022 12:26:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC667D7A0;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6CB61B28;
         Wed, 14 Sep 2022 09:26:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8FB2619E4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBFCB616F9;
         Wed, 14 Sep 2022 16:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F162C4347C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27086C433B5;
         Wed, 14 Sep 2022 16:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1663172798;
-        bh=dLPgyWdHoIX1J4UX8IPp0xA3NVaikcm11pREj0/B7Us=;
+        bh=zQhu727GEw7VP8DXjQJ7IHMfWXIoD2D5Lvjr3Ra5m70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qgLHpzAwEKU2IWg2z/I9eCfzShIjsswh/I4HJUxD5wjKnJhaoAxTXXOqkcyD3VNKZ
-         a1r2KPl8BK4LubYeM7HGEXh00VykHvwBEcTipvXEBEtMMNDcGLMLJLmYhXIwmLrKh1
-         HUZngysgBynvaEy5DoGYqQSjs8IJeRMceJcUW7UcsKYaSgOJ8b9VU6gO5/8D6M5xai
-         44sNg6YsGMv0QRRxN9JR3UhtipLDmwnTl+dozpowx9CybL66yFH5bzs3/GQAs+bUDm
-         IhE7DD0yEA4Y3ZNAw3QfVElwXjfuG7wdc8HWlCiSLSLp6rHg4Yui2WOomovO0vm1bE
-         XzgLBGZV1jnWQ==
+        b=FlqogLJMiKH6gHVSNtLG9/H54hHUmc6DlGHQGeNfrCz43i0W4hlmtA6ZSDSNF2Tfg
+         xo1E9iGzs8oBzgGJknhGoS7BraViS/Ur9BG0GJBx7XUlw/N6XvmTDzAn9bZmqq37o5
+         Fm9YvQo8472FWH2W5iL1F4oVuhdsOCt8NIBUo7jvpe99DrnhAjJO1jfaqhtaw7cWYB
+         4HSnEG60AqaqnIlnCCdLz0wXQaM2fAS9acDkVIl2G4DJjMfXQIzl0bZkD1dV8SFkew
+         qlOj/k4pH2Ph5gsaJPVT0khCs3+L6ZeGotiubNVXfRs+Uzu5+DGUYFuHbppmRc8inZ
+         7YgTVDuSIxxsA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oYVDj-0001eh-Qy; Wed, 14 Sep 2022 18:26:39 +0200
+        id 1oYVDj-0001ej-Ts; Wed, 14 Sep 2022 18:26:39 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -45,9 +45,9 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 05/11] phy: qcom-qmp-ufs: fix memleak on probe deferral
-Date:   Wed, 14 Sep 2022 18:25:39 +0200
-Message-Id: <20220914162545.6289-6-johan+linaro@kernel.org>
+Subject: [PATCH 06/11] phy: qcom-qmp-usb: fix memleak on probe deferral
+Date:   Wed, 14 Sep 2022 18:25:40 +0200
+Message-Id: <20220914162545.6289-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220914162545.6289-1-johan+linaro@kernel.org>
 References: <20220914162545.6289-1-johan+linaro@kernel.org>
@@ -72,14 +72,14 @@ if there are multiple devices claiming the same memory.
 Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 30 ++++++++++++-------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 32 +++++++++++++------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index 4d0eee620f37..1b1ac20cf290 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -1125,17 +1125,17 @@ static int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+index 41635c21e3ca..768ece8e9076 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+@@ -2627,17 +2627,17 @@ int qmp_usb_create(struct device *dev, struct device_node *np, int id,
  	 * For dual lane PHYs: tx2 -> 3, rx2 -> 4, pcs_misc (optional) -> 5
  	 * For single lane PHYs: pcs_misc (optional) -> 3.
  	 */
@@ -104,9 +104,9 @@ index 4d0eee620f37..1b1ac20cf290 100644
 +	if (IS_ERR(qphy->pcs))
 +		return PTR_ERR(qphy->pcs);
  
- 	/*
- 	 * If this is a dual-lane PHY, then there should be registers for the
-@@ -1144,9 +1144,9 @@ static int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
+ 	if (cfg->pcs_usb_offset)
+ 		qphy->pcs_usb = qphy->pcs + cfg->pcs_usb_offset;
+@@ -2649,9 +2649,9 @@ int qmp_usb_create(struct device *dev, struct device_node *np, int id,
  	 * offset from the first lane.
  	 */
  	if (cfg->is_dual_lane_phy) {
@@ -119,7 +119,7 @@ index 4d0eee620f37..1b1ac20cf290 100644
  			dev_warn(dev,
  				 "Underspecified device tree, falling back to legacy register regions\n");
  
-@@ -1156,14 +1156,14 @@ static int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
+@@ -2661,15 +2661,17 @@ int qmp_usb_create(struct device *dev, struct device_node *np, int id,
  			qphy->rx2 = qphy->rx + QMP_PHY_LEGACY_LANE_STRIDE;
  
  		} else {
@@ -133,10 +133,13 @@ index 4d0eee620f37..1b1ac20cf290 100644
  	}
  
 -	if (!qphy->pcs_misc)
-+	if (IS_ERR(qphy->pcs_misc))
++	if (IS_ERR(qphy->pcs_misc)) {
  		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
++		qphy->pcs_misc = NULL;
++	}
  
- 	generic_phy = devm_phy_create(dev, np, &qcom_qmp_ufs_ops);
+ 	qphy->pipe_clk = devm_get_clk_from_child(dev, np, NULL);
+ 	if (IS_ERR(qphy->pipe_clk)) {
 -- 
 2.35.1
 
