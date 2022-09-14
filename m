@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF65B8673
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1665B867F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiINKfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S229609AbiINKjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiINKfu (ORCPT
+        with ESMTP id S229582AbiINKjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:35:50 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD3C564F1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:35:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z21so21564190edi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:35:49 -0700 (PDT)
+        Wed, 14 Sep 2022 06:39:02 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045F77A539
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:39:01 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id h188so13914049pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9R4Qb6/eZoL08cSuhU5zbiGZtzfSBbdj1XMsqivoRDc=;
-        b=FeNv4kze+PUgBxeZ8u20xM7vWicI3MDzZN1ratQf5K6w2MATkfQjfgFdvM7/ZG2B2Q
-         6A6oZnJFpXAivJM8IM+ZWPMFPA8B9VhzWX5vnkNRqbbnQLoJGF5yFZ+gRiR7O3n8jYuY
-         3FuQmRa9wHuVbav7zdboUdF+ISLpFG3x2hNQGZ9veed2C3O9BEYZpQqQFRXX41LCHxsX
-         tYpgb80AHMFideH+lHoGtUPJAgX/MRI9FVRKqkqE79RYAn9EmnjmsJG1rQJ93q+SjHmu
-         0eqX5aEnACOVD1I3fEUCRU/5wKnubHbx9/R+v4XZuqwChr2/Kp6NWherCeBGqn8ZMre9
-         6Pag==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=HqhuQ7GCm2rsYRiDOgm7J5PsMumYPik+gWgifMr97AI=;
+        b=StmhHATsSBjXLCwbnOcC98gLAHHkq/FQNlkVoPGZZWORq2lKWYM5Rbq5fl3tC7VXuy
+         GpTWuWsG93szuALYeLyy64tcGq9ZIRBXyMJN5fo/FZfifTyKqe01so8vVYnQOK4T2/GT
+         q510RtcF90HORXzfWfjBNgYFPYc7VKho3Rb3LjZsqisZnWbTywMmDap7flaCV1ECcU2z
+         9gtRFoVO/Urj4t+AqJjIakkTDp1LT78EiIV/IMDHO9uf+Xez2g6Ud0Cj5Ou11wohRq2d
+         YcU2Mguku+45alZIKpIANfnV0XOdjFc4lTlqrevZDFu6ZYPJPLSB+kJiYHuvHOjojEiF
+         8f2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9R4Qb6/eZoL08cSuhU5zbiGZtzfSBbdj1XMsqivoRDc=;
-        b=1CbzGWw8YEScMadANcBkzBiRmCnr4JilYy74Llp2hwdE55ojzcF1Lf2bIIo5YDDweo
-         JhlAZFDvvBntUuO3Qt16W97DT1Ft2SYscqQJfPf41ayPM6lsPY6lQdgeJ4o7ckEzFd4X
-         /5FCq/FckmZZKDG5QvWbTnMuRSEvSV5srVXsliElOWWeXyJMU9HocFm8mRmiXy8CFt33
-         Wo/SHVPMdDzbmKZ8wrmvED6cC7ZJ+KoKhc/4iCjcREkePR8WsIOfKJsSqgrMe77TuJbD
-         SYT3HW5SKIsiAoOQ1kIxSxwXztrnj9QqZVO6SIck3g3O5QAMKCgIFlB6oknMa6CU4zyq
-         4yxg==
-X-Gm-Message-State: ACgBeo0zR5maUHh8M8w7LOXHY/eKA0qAgJWUsH568VIedJolkRoi8lFX
-        DFOOBhNR9pdQ8kl/b3Ok/7sKSiVM1AfIT3dIYdoQAQ==
-X-Google-Smtp-Source: AA6agR6ozhdIMePkvj6txPi/h/TnaiD7gHVJV++34/XV5xh2tnc5f+zK9Kf5UtfhMq+zusS28ejyMIOp44ZO6N+3S8w=
-X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
- w16-20020a056402269000b004523a858b28mr7914423edd.158.1663151748276; Wed, 14
- Sep 2022 03:35:48 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HqhuQ7GCm2rsYRiDOgm7J5PsMumYPik+gWgifMr97AI=;
+        b=4bo+KmAvHS6HLMyrtX2rNxUvwKE/7URn42wYaMRGgqG54mPVcgIAaBSJ+jVWcRFVTa
+         LHkKXm4yttS/M037taGFfiqUyi9DRiNFpqJ+sKlLFtXMi+UN0psFRcIcZXU33NTgwerU
+         2g3pkdVIK8G8rvaka4wbim2rZyiUC5I3GeK5VZCc7O87w25XVjLVmJLlI6ypfvxGUEIs
+         odjzkTW8Mqcb8nmGSFHkEydAY3cTb/r5zxOq6OE6quY954EqEUWGAsrT3GLfm7hHLy73
+         YCO4c0XiH4J+Env9IfnQauV0xulpbLpRB4cgRzviJ2IYDdYJ4rJRqJ9E5QcbXAvxbFXr
+         BFXA==
+X-Gm-Message-State: ACgBeo2PZkY/20QRiq4U47vCWViKtXDKrZTuFmB7i027zB6Or46o2qAA
+        AmOTXbFBjC1ikbU6D7VgaFs=
+X-Google-Smtp-Source: AA6agR4HeqN2eZDyKsWWb4m6kP1HZfLjFFCmv/LW5KI5/KL+W8U2yNsIM9AOQCeszeNUMjt6zKEfWQ==
+X-Received: by 2002:a63:2444:0:b0:438:63d9:bd65 with SMTP id k65-20020a632444000000b0043863d9bd65mr24427868pgk.560.1663151940531;
+        Wed, 14 Sep 2022 03:39:00 -0700 (PDT)
+Received: from autolfshost ([2409:4041:d9d:79ec:78cd:7d4c:66f8:5f42])
+        by smtp.gmail.com with ESMTPSA id y10-20020a62640a000000b0053e6bda08e0sm9729768pfb.219.2022.09.14.03.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 03:39:00 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 16:06:50 +0530
+From:   Anup K Parikh <parikhanupk.foss@gmail.com>
+To:     skhan@linuxfoundation.org, andrey.grodzovsky@amd.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] A simple doc fix
+Message-ID: <YyGuwqpuwq+PT3K1@autolfshost>
 MIME-Version: 1.0
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
- <20220906204301.3736813-2-dmitry.torokhov@gmail.com> <20220906211628.6u4hbpn4shjcvqel@pali>
- <Yxe7CJnIT5AiUilL@google.com> <20220906214114.vj3v32dzwxz6uqik@pali>
- <YxfBKkqce/IQQLk9@google.com> <20220906220901.p2c44we7i4c35uvx@pali> <YxfMkzW+5W3Hm1dU@google.com>
-In-Reply-To: <YxfMkzW+5W3Hm1dU@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 14 Sep 2022 12:35:36 +0200
-Message-ID: <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 12:41 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+Fix two warnings during doc build which also results in corresponding
+additions in generated docs
 
-> Linus, do you think we should introduce GPIOD_OUT_INACTIVE /
-> GPIOD_OUT_ACTIVE or GPIOD_OUT_DEASSERTED / GPIOD_OUT_ASSERTED and
-> deprecate existing GPIOD_OUT_LOW and GPIO_OUT_HIGH?
+Warnings Fixed:
+1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
+   'dev' not described in 'drm_gpu_scheduler'
+2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
+   parameter or member 'dev' not described in 'drm_sched_init'
 
-They should rather be replaced everywhere in one go.
+Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
+---
+ drivers/gpu/drm/scheduler/sched_main.c | 1 +
+ include/drm/gpu_scheduler.h            | 1 +
+ 2 files changed, 2 insertions(+)
 
-I think it is just a half-measure unless we also add
-#define GPIOD_ASSERTED 1
-#define GPIOD_DEASSERTED 0
-to be used instead of 1/0 in gpiod_set_value().
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index 68317d3a7a27..875d00213849 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -994,6 +994,7 @@ static int drm_sched_main(void *param)
+  *		used
+  * @score: optional score atomic shared with other schedulers
+  * @name: name used for debugging
++ * @dev: A device pointer for use in error reporting in a multiple GPU scenario.
+  *
+  * Return 0 on success, otherwise error code.
+  */
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index addb135eeea6..920b91fd1719 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -435,6 +435,7 @@ struct drm_sched_backend_ops {
+  * @_score: score used when the driver doesn't provide one
+  * @ready: marks if the underlying HW is ready to work
+  * @free_guilty: A hit to time out handler to free the guilty job.
++ * @dev: A device pointer for use in error reporting in a multiple GPU scenario.
+  *
+  * One scheduler is implemented for each hardware ring.
+  */
+-- 
+2.35.1
 
-It would also imply changing the signature of the function
-gpiod_set_value() to gpiod_set_state() as we are not
-really setting a value but a state.
-
-I have thought about changing this, but the problem is that I felt
-it should be accompanied with a change fixing as many users
-as possible.
-
-I think this is one of those occasions where we should merge
-the new defines, and then send Linus Torvalds a sed script
-that he can run at the end of the merge window to change all
-gpiod_set_value(...., 1) -> gpiod_set_state(...., GPIOD_ASSERTED);
-everywhere.
-
-After all users are changed, the GPIOD_ASSERTED/DEASSERTED
-defined can be turned into an enum.
-
-That would be the silver bullet against a lot of confusion IMO.
-
-We would need Bartosz' input on this.
-
-Yours,
-Linus Walleij
