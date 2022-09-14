@@ -2,80 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75F5B8690
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6535B8694
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiINKqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S229521AbiINKsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiINKqr (ORCPT
+        with ESMTP id S229615AbiINKr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:46:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2185361702;
-        Wed, 14 Sep 2022 03:46:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64C95B81A0C;
-        Wed, 14 Sep 2022 10:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651CDC4314B;
-        Wed, 14 Sep 2022 10:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663152397;
-        bh=UTHNNi7hiWzPKsrCRyObV9gT2Co0UbmtzeOVej8lszg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l+sWd8KABWEDq88Au62EnUbBgNB6iHHJdJt6y7ujMrwQPf7mP+mIYM5y+KsDw/FZr
-         h6EKVa8NYbZyNrEKGBwwdP1pfI/87RcH+O03oxF8drsJvxcXWqvbRHNj1ZAiEwFy0A
-         eQpxnjc5nR7ZZF0zBYqikUNdirMsDpTRlAKE/61ILHk0Mg3wSwO/lmn8fyB4W2bAB4
-         vInW6xDbx0Ykv1QY0UP8EHLnJQyOSKZGwzuQbOORZJPDuLD55O9ObRjqfG1fP6+Nyg
-         hIuVxQl1EtiyIeobMBVye6tuAW7C0FQuxZd8vbkpbUdbGa4s+2ZWEwtYGBoGoTWkn1
-         rNtyEq+LrQG6w==
-Date:   Wed, 14 Sep 2022 12:46:34 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] rcu: Simplify rcu_init_nohz() cpumask handling
-Message-ID: <20220914104634.GC1936@lothringen>
-References: <20220913030036.1569-1-thunder.leizhen@huawei.com>
- <20220913030036.1569-2-thunder.leizhen@huawei.com>
+        Wed, 14 Sep 2022 06:47:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F78E5F99C;
+        Wed, 14 Sep 2022 03:47:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D46F15A1;
+        Wed, 14 Sep 2022 03:48:03 -0700 (PDT)
+Received: from [10.57.18.118] (unknown [10.57.18.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C013F3F71A;
+        Wed, 14 Sep 2022 03:47:54 -0700 (PDT)
+Message-ID: <65db2835-f70a-dcaf-7949-879e10bd9ebc@arm.com>
+Date:   Wed, 14 Sep 2022 11:47:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913030036.1569-2-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH net] net: stmmac: fix invalid usage of
+ irq_set_affinity_hint
+Content-Language: en-GB
+To:     Qingfang DENG <dqfext@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220914015120.3023123-1-dqfext@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220914015120.3023123-1-dqfext@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 11:00:36AM +0800, Zhen Lei wrote:
-> In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
-> CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
-> Except that kernels booted without the rcu_nocbs= will not have
-> allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
-> its need_rcu_nocb_mask and offload_all local variables to track the
-> rcu_nocb and nohz_full state.
-> 
-> But there is a much simpler approach, namely creating a cpumask pointer
-> to track the default and then using cpumask_available() to check the
-> rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
-> and shortening the rcu_init_nohz() function.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+On 2022-09-14 02:51, Qingfang DENG wrote:
+> The cpumask should not be a local variable, since its pointer is saved
+> to irq_desc and may be accessed from procfs.
+> To fix it, store cpumask to the heap.
 
-Looks good, thanks!
+FWIW, by the look of it you might be able to use cpumask_of() and not 
+store anything at all.
+
+Robin.
+
+> Fixes: 8deec94c6040 ("net: stmmac: set IRQ affinity hint for multi MSI vectors")
+> Signed-off-by: Qingfang DENG <dqfext@gmail.com>
+> ---
+>   drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
+>   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 ++++++++-------
+>   2 files changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> index bdbf86cb102a..720e9f2a40d8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -77,6 +77,7 @@ struct stmmac_tx_queue {
+>   	dma_addr_t dma_tx_phy;
+>   	dma_addr_t tx_tail_addr;
+>   	u32 mss;
+> +	cpumask_t cpu_mask;
+>   };
+>   
+>   struct stmmac_rx_buffer {
+> @@ -114,6 +115,7 @@ struct stmmac_rx_queue {
+>   		unsigned int len;
+>   		unsigned int error;
+>   	} state;
+> +	cpumask_t cpu_mask;
+>   };
+>   
+>   struct stmmac_channel {
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 8418e795cc21..7b1c1be998e3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -3469,7 +3469,6 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+>   {
+>   	struct stmmac_priv *priv = netdev_priv(dev);
+>   	enum request_irq_err irq_err;
+> -	cpumask_t cpu_mask;
+>   	int irq_idx = 0;
+>   	char *int_name;
+>   	int ret;
+> @@ -3580,9 +3579,10 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+>   			irq_idx = i;
+>   			goto irq_error;
+>   		}
+> -		cpumask_clear(&cpu_mask);
+> -		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
+> -		irq_set_affinity_hint(priv->rx_irq[i], &cpu_mask);
+> +		cpumask_set_cpu(i % num_online_cpus(),
+> +				&priv->dma_conf.rx_queue[i].cpu_mask);
+> +		irq_set_affinity_hint(priv->rx_irq[i],
+> +				      &priv->dma_conf.rx_queue[i].cpu_mask);
+>   	}
+>   
+>   	/* Request Tx MSI irq */
+> @@ -3605,9 +3605,10 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+>   			irq_idx = i;
+>   			goto irq_error;
+>   		}
+> -		cpumask_clear(&cpu_mask);
+> -		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
+> -		irq_set_affinity_hint(priv->tx_irq[i], &cpu_mask);
+> +		cpumask_set_cpu(i % num_online_cpus(),
+> +				&priv->dma_conf.tx_queue[i].cpu_mask);
+> +		irq_set_affinity_hint(priv->tx_irq[i],
+> +				      &priv->dma_conf.tx_queue[i].cpu_mask);
+>   	}
+>   
+>   	return 0;
