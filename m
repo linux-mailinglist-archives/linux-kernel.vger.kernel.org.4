@@ -2,174 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133FC5B8A69
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C925B8A6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiINOZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S229919AbiINO02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiINOZ1 (ORCPT
+        with ESMTP id S229849AbiINO0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:25:27 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E69611808
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:24:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DReekOeYfnPHn9osLEqemZnRtbiyWTCgJu91uFJrDeWIfM6qz3Qohkg2xSORy1KdxyoNO1G8E+Q93xQvjHrzqingJFE34O7dUQcWDQ59u25RowBYMie+cePcS2OV/rIcmESN/Zk9zE1g9xcxGAJuMtlWFiOYtiPHpx5iwfWnXD+0CzJL8Ul+IggsJP2v9Ih9D3SmywuwcY6VMn2EquhpfPhTxe/B4Jzfkull2yj0uZ5vlirsvHrs8oVnkBIGcXEsqUGVZP8871BNzhtxwakxIusak1D4gRY8RS8W4OaAGBKWAP2JQQcX5GE1zwhuniTa0L965bt+daiILt6Mi8MgFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0LEiJ6Q1vMm+T1oQeEnzfIVPugxFSgeNgr4I0Y63Adk=;
- b=eezgV4cN5zHEI5Wq94/TP3NJM08Bg+54rTV9bLh/Hyz4SDkMQAFyZySjmojqP81fYNH0CausKjWgSC+W4o+WPqiBcVpE4hW3c2T2ajtxbk7T8X+XL7xtc2SsIHrAAlibPfVtZzX7mXTv6DOhV+u3MHHRWcog7MwHiEGF2oMPNLpUJ2aa5UCkLFXe+LGZofAzHvYTWfsDBI9BywG+4aeO0Fd0DuaIC4pUeky7siT2ZjcCRt0UxC/wjGLCTUGflYJ/zmmX4PovGAAX09li3Htbn9/0BujO97X/YDQcrSHOTkX09slDx+zcwhQ3u2QLM8iLoO5qMWW+p0UNuFUa6e2xdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0LEiJ6Q1vMm+T1oQeEnzfIVPugxFSgeNgr4I0Y63Adk=;
- b=qtv+oVFGjoOJHi/GMRAa/QReXX0KqwDMqvkhHF1/l2wLdE2rRQHT4AdTcykQz4qdxJAUizOo17UpwHlmXnUbfZZOWOJ5nOQIIqCPIYzgyuNbLL2YebRn2jPlYoWYzhcPmAXvYjAfwGSV6rY31G41NKcoyV/rvtBqZAJpt5mYbY8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CY4PR12MB1943.namprd12.prod.outlook.com (2603:10b6:903:11b::7)
- by SA1PR12MB6919.namprd12.prod.outlook.com (2603:10b6:806:24e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 14:24:40 +0000
-Received: from CY4PR12MB1943.namprd12.prod.outlook.com
- ([fe80::a527:1309:e629:789e]) by CY4PR12MB1943.namprd12.prod.outlook.com
- ([fe80::a527:1309:e629:789e%6]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 14:24:39 +0000
-Message-ID: <5372b154-dc25-a917-9908-c59555afc865@amd.com>
-Date:   Wed, 14 Sep 2022 10:24:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] A simple doc fix
-Content-Language: en-US
-To:     Anup K Parikh <parikhanupk.foss@gmail.com>,
-        skhan@linuxfoundation.org, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <YyGuwqpuwq+PT3K1@autolfshost>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <YyGuwqpuwq+PT3K1@autolfshost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0108.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::23) To CY4PR12MB1943.namprd12.prod.outlook.com
- (2603:10b6:903:11b::7)
+        Wed, 14 Sep 2022 10:26:05 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C2325C59
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:25:28 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id u132so15085962pfc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=hdSD8tJb664Fr8pl0NO+kf8L2z4TDzTohEl0wY+gzYc=;
+        b=W15M6v323Iel/iK6eFB5fJmsZj9UgNfzHvij6SGJNxbTuWnqIovbfOPRNq3jRPbdSH
+         0oyEjnHDaHKU56TfRiVWrQ8OK4AkxXGpiH4n2ZY07EN7lKx2rh0fiNP/u3aArQnoqFKx
+         /juLxkWKnaA99ijCsePo3+Yh3Qbi1J71jaTZA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=hdSD8tJb664Fr8pl0NO+kf8L2z4TDzTohEl0wY+gzYc=;
+        b=J/+plrMpLSU1QvCX32ujbWG440HbcpTqEoYfTEp7HU7A/7gO4hmFIdsSZTtcX8MG1z
+         xYtF+eEUSNdh3MsqzAH/O49P3HVKHlkfUCCU7nA5tLaSSdGv/kUOESgFVPJL6kz5ciug
+         lru9PGjwg0mZbhFP8H791dsYu1Gyyw2R3SSadwG9L1clPuVrE9gbQrhryDA3ue0qsUCZ
+         eqc9jTOPX9eSJoh6JkJvtZ0JhGU4Dr4goynokHMk0NFksWm4RSjzXUUreMVLh5V0b9db
+         P80bnc7NLXL8bXdthhVzsgXKBJ+bok4ZV/OPOG+lRvfD9vt33ktgt+WHSDqCY56FKrsh
+         7cAw==
+X-Gm-Message-State: ACgBeo2n1VPmkUtIQBUS85ZSFucGx/dHAuA6vgPMvOuM/qUhjOwoTWu3
+        cywXsYO7LEJMFpyOUpHRW9LTrQ==
+X-Google-Smtp-Source: AA6agR6En5JhEov24TDmvwIDj3j1j5VGKylIZcdmOMCIY6+KUUuqabgXpORLodRAghUj4fpa4NlpVw==
+X-Received: by 2002:aa7:97b4:0:b0:547:f861:1fc3 with SMTP id d20-20020aa797b4000000b00547f8611fc3mr2784496pfq.42.1663165527599;
+        Wed, 14 Sep 2022 07:25:27 -0700 (PDT)
+Received: from fastly.com (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
+        by smtp.gmail.com with ESMTPSA id e19-20020a656bd3000000b004351358f056sm9642274pgw.85.2022.09.14.07.25.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Sep 2022 07:25:27 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 07:25:24 -0700
+From:   Joe Damato <jdamato@fastly.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     x86@kernel.org, linux-mm@kvack.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC 1/1] mm: Add per-task struct tlb counters
+Message-ID: <20220914142523.GC4422@fastly.com>
+References: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
+ <1663120270-2673-2-git-send-email-jdamato@fastly.com>
+ <e0067441-19e2-2ae6-df47-2018672426be@intel.com>
+ <20220914141507.GA4422@fastly.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1943:EE_|SA1PR12MB6919:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8246b6cf-06c1-4cde-919e-08da965cdb4e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tuy0Ze3Ir6Jvia7hmHivsqrjb5cywmZhkJTdQLMx250Nr6H4Tqm9ROZp4FECp6AsKnM80tsB7zjNih10MT+AUmYGp1keW0EAI1CEfG0sQVn6lmGSjiyj1QiTmFrKYPJufejGXkUqWHpxH338/hKoJmrw12PNF6MmD00DwKls6sAV0Vna/gSJs/XdciFeQIqazlnNtS0U+8VjJ33uAu2SV5TuK32OGaOJ5EUdibPv8AyXwQS6PicpSIvs6BhKTDqkP8Qh4f35RQ9YbCzVTNIKf0X11Pte3F7ANopq+jm9MAFzZ1K9vzmgrKRUbD2vEf79fYv23uTyA2UZAEhSbFPOdPCmj2Tgjceitdzc34b4tq0qLucMtGRSMGCVA324JP39KnmJ/YhhWnjIsUhxPNpkcUeg9lK7b3mvpa2ipq2cP3yk3ScTUqlbetWXLaWzTU9Zpxx/g9JOCoZxgsBAc5ogR9zXZpKybCrP3vDQj2ohQn0Pyy9jK1Vvszg1dREk3BNaiRE8FVkYHca7KUh8H3zdrGlIX7nehc9QKtUxrEJPk8575c8jxiRwDAozb5yZZnyMiNeQ7d3bW5MBAelG9ByFwKNJu4EZxDrftBGPqIum18EbKMQHYIsQgx8MZXVgIgRjKPwG1AQmjGC3QDJ4dcS29NaZJPqiDeKyZfHkn5ojhMiFsbapo6bAr3AOsTlAfwYytjRyydMRnyo/Ao0DoBOpIzjUpmsPL877PPsv+lyWhMrVuubpcOqEb6+nhR5maUEK8qrfQZChK68xQplkhijTA3RVo3HzjKWOlKUhb9lP72I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1943.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(346002)(376002)(39860400002)(451199015)(66946007)(83380400001)(4326008)(44832011)(38100700002)(2906002)(8936002)(186003)(6512007)(31696002)(6666004)(478600001)(41300700001)(53546011)(5660300002)(31686004)(8676002)(66476007)(6506007)(2616005)(66556008)(6486002)(36756003)(86362001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0pDOTVlS2MxVHpiWHVKMjhyMmlSb2dNVThTQldyU3pOdnJvbUp1UzVESm5j?=
- =?utf-8?B?Y09tbjVla0gvbXBnbGM5aVFUQ21DaGJVeXp5NjU1L0xuK1BzQTZ5WVM4aEdP?=
- =?utf-8?B?UjN3YjlIK3IwbE0yK1crYTBDVzhZWlRFYlFwc0JVV2NZNFJOOWU3TFpWUWcz?=
- =?utf-8?B?Q0ZleVUvemlHYTBqZUl5YTdOTjBzQkZTQ3J2Z2Jsb0JlaWVJZmxza2RYamFh?=
- =?utf-8?B?Q1JpN2RCMVcyaUFtb2F4NDBwUmY3U21UTkdCc2lWa1kzdVM2U1VrY1lYZFFN?=
- =?utf-8?B?ZHRVajZZa0hLS05VRkFFc0VMRHZxNGNzZTBmbmNNRmdERGdEb3Q1cHB0TnAz?=
- =?utf-8?B?bjFHZThpUVJuTlFSNGdUU3lUZkx5TzErSmk5eHlrdTF3aitlSGpkU2JjUng5?=
- =?utf-8?B?djNwcjgxa3lvcWJZN29NL1hDVzgrMVIySWpxSVdTT3FNVysvcnF0M3Y1QVo5?=
- =?utf-8?B?RFpaQnVWdVZoSjR2VUF1dkd5RTEveDgxZVZoUitlK3JQckxrWWhDeFQ4WnYw?=
- =?utf-8?B?KzNIMEhsdE4wTHNXeFlMNDVYN1JJM0MxUng4RzcweGRUNGd6bVBUd2J4Y3Ir?=
- =?utf-8?B?d0FhYmVXZ3RXa2ExNjh6T3NPU0FNR0xUOEl6SVgzSjVMZDZqb0Z1N09JUFZ1?=
- =?utf-8?B?V3MyQ0ZCYlh5M2NxdzJNQSt5Nk1mMnZHWldBY0hIWHVvZmdDY0xlckZWK2hs?=
- =?utf-8?B?U2JIU3pNYmRGWkV5N2tXaFQraGZkV0ovUGxvajlRUmJrTkc4QVBKdnVIUHMx?=
- =?utf-8?B?UFk1Tzk1ZUhSUjdkQjdJM3dGUFo1SVQrWjl2N0VBTGdXRzF2alU5eGJtdDJM?=
- =?utf-8?B?OVNvL2EwQSswYjNmeHR3dTdsTVdZTlFPVlFSdmlOb2FCOTRSOXp4QWdPS0VO?=
- =?utf-8?B?UXhONzZNdWRNU2RWc3o2ak1tT1V4dXY2dGIyb0l3VGRPSDVQNUs5dTd6YVpr?=
- =?utf-8?B?citTbjFXckpnQ211QUp3SFZyYVU3a0Z1SUZmdzBUa28zdE1rQklpdGxZSnVU?=
- =?utf-8?B?UHl0Q1Z1bnZESTRFSmV5ZnZhWmpzN2p4RkdVb0wxWVhxVGNvUmJ0Sk5XY2tW?=
- =?utf-8?B?Tm5abVdmZ2NDR2U0cUlxRk5uOGlIVkRLK2Q5MUJTL0F4VGtCUXJrZUhOUFhW?=
- =?utf-8?B?b2VQMTcwcVFzd2ZzWFcwbmRxNXp4eUtjRU92b0xJK0VSUFQ3QkZzOUZvNkhZ?=
- =?utf-8?B?Y3crTFlSWHQxTmtNS1FuUHlDWVlKWHVWaUtSQVM2cE1jTHBLOWdIWmF3QUF2?=
- =?utf-8?B?eCtxTkhuQ2tRNzQ2UElEYlE3RzFhMjFpckFXWWNmS2c5RGEySCtQeS9uZGJU?=
- =?utf-8?B?aGJQQ0x6N28zQ2NSRG5RV3JBS1ZLM3FzZ0dmRm84WUU4TGdZUWhPYlRrWEZR?=
- =?utf-8?B?WXhBZmNuZC9mcUhKbW1tcURNbmh4bjhBTWVxMVgxVHMzQUVOMEtuWGdnZ0pE?=
- =?utf-8?B?TGJCQyt5WGNMaTRqSlFCK2NsSWV3OW5WMmpoNWN1QnNQK0RIUlZJaGErMGFG?=
- =?utf-8?B?THhUY0tadEU5MXgyelZqZGZDTFB1RVBhVEphVVFZZks0a1pENDF4ZkRrcmZ1?=
- =?utf-8?B?U0tkWUo5VFpYVDdqT2ZDeVdJQ0drSEJ2YjFqU0UyWEwzRzBKaU5jMDdqSDJN?=
- =?utf-8?B?MmJyUVd5RVBYdGFSS2toTEgrM0ZFQ2tyb01LVW1aMi9NRmtjU1NVdEsrWk1t?=
- =?utf-8?B?Qnk0N1lmMVJ3Z3lUcW51T3lvOGVTUFJqb3hoeTdKTHBwbUlZenpKN3ltNm5P?=
- =?utf-8?B?b29yN0ZjbjRmNFZxemhacGFQWEhFei9yMDJnd3R3VWxxbEVCNEVNbDhWQnlO?=
- =?utf-8?B?U29TS29EeG5IOHBNNGFmbndzSmtoVnp6ZHRyUmV5d2U4NFk3RUpleWV6TjND?=
- =?utf-8?B?ZW02VFU2NGU0bVFWaXR5M016L1N0ZFVlanpqQmw2ODdUY2hmT1AxZXJaM1h2?=
- =?utf-8?B?MjJBd3BkNVpaN2FhZWx5Q0RlN29WZEVDUlpJNWhCaCtWZW5Dc1h0ZjdVRWxi?=
- =?utf-8?B?akVqTGVJSVAzcGFTOEFBZExIZVROdDUwVm1ReHpmRlY3cjh5cEtWY0xGVUhP?=
- =?utf-8?B?c2NpNzd0NjBTL0FoZ2Zpb0RseWtXL2NEVjM4NlpTVVZJZFRlNVB6QUM4NDEy?=
- =?utf-8?B?WFUvRU1rYlpkZjhtbmJpNWVhR1lYZE85SEUvMUFxUWtLaklLcCtZNVBqVTJl?=
- =?utf-8?Q?yYRRadX9+QsySnRWjJhHQMJF/+Cc7yAL5YkCSpGcHNlw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8246b6cf-06c1-4cde-919e-08da965cdb4e
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1943.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 14:24:39.5768
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S5R8MfDIvqeDy5zo00GD1YvNYvojQInzmNPJSGRJaZAEC6A654CM1ClYmKaE89AFcC39hJaXJ3tGbXpC5kdMLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6919
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914141507.GA4422@fastly.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 14, 2022 at 07:15:07AM -0700, Joe Damato wrote:
+> On Wed, Sep 14, 2022 at 12:40:55AM -0700, Dave Hansen wrote:
+> > On 9/13/22 18:51, Joe Damato wrote:
+> > > TLB shootdowns are tracked globally, but on a busy system it can be
+> > > difficult to disambiguate the source of TLB shootdowns.
+> > > 
+> > > Add two counter fields:
+> > > 	- nrtlbflush: number of tlb flush events received
+> > > 	- ngtlbflush: number of tlb flush events generated
+> > > 
+> > > Expose those fields in /proc/[pid]/stat so that they can be analyzed
+> > > alongside similar metrics (e.g. min_flt and maj_flt).
+> > 
+> > On x86 at least, we already have two other ways to count flushes.  You
+> > even quoted them with your patch:
+> > 
+> > >  	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
+> > > +	current->ngtlbflush++;
+> > >  	if (info->end == TLB_FLUSH_ALL)
+> > >  		trace_tlb_flush(TLB_REMOTE_SEND_IPI, TLB_FLUSH_ALL);
+> > 
+> > Granted, the count_vm_tlb...() one is debugging only.  But, did you try
+> > to use those other mechanisms?  For instance, could you patch
+> > count_vm_tlb_event()? 
+> 
+> I tried to address this in my cover letter[1]...
 
-On 2022-09-14 06:36, Anup K Parikh wrote:
-> Fix two warnings during doc build which also results in corresponding
-> additions in generated docs
->
-> Warnings Fixed:
-> 1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
->     'dev' not described in 'drm_gpu_scheduler'
-> 2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
->     parameter or member 'dev' not described in 'drm_sched_init'
->
-> Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
-> ---
->   drivers/gpu/drm/scheduler/sched_main.c | 1 +
->   include/drm/gpu_scheduler.h            | 1 +
->   2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index 68317d3a7a27..875d00213849 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -994,6 +994,7 @@ static int drm_sched_main(void *param)
->    *		used
->    * @score: optional score atomic shared with other schedulers
->    * @name: name used for debugging
-> + * @dev: A device pointer for use in error reporting in a multiple GPU scenario.
-
-
-Why multiple GPUs scenario ? It's also used in single GPU scenario.
-
-Andrey
-
-
->    *
->    * Return 0 on success, otherwise error code.
->    */
-> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> index addb135eeea6..920b91fd1719 100644
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@ -435,6 +435,7 @@ struct drm_sched_backend_ops {
->    * @_score: score used when the driver doesn't provide one
->    * @ready: marks if the underlying HW is ready to work
->    * @free_guilty: A hit to time out handler to free the guilty job.
-> + * @dev: A device pointer for use in error reporting in a multiple GPU scenario.
->    *
->    * One scheduler is implemented for each hardware ring.
->    */
+Err, I forgot the [1]:
+https://lore.kernel.org/linux-mm/1663120270-2673-1-git-send-email-jdamato@fastly.com/
