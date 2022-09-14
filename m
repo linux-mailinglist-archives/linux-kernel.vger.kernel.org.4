@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254FF5B829B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2D35B829C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiINIE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:04:58 -0400
+        id S230024AbiINIF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:05:59 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiINIER (ORCPT
+        with ESMTP id S230121AbiINIFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:04:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB3D4F399
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:04:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71E32B81180
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF35C433C1;
-        Wed, 14 Sep 2022 08:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663142647;
-        bh=WzqqgSgzUFWOkOjIplcFxh7on/nwjcTWKKddQ0+s+KY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KWUoZ6/UySZmgNgzT1dSbBtIMaa3WjDd3S+vKfIU4fGqRSadPoNcHzSvhzPlqJi+B
-         Q4QUJkfdVbMv1K3WlGMvPPHWasNL4nptfRUb1wQk96O6B+4pV72zM9jOoQcD0spUyh
-         YEvTOtTH9E8gOazRwVxaMClI5F/WXi0us/+9ZFfs+kBsboe2UYaJqtmCffCvAuIsAh
-         d1q2rpwALHlFYDJGm3cy59PwQliqSsCQhOQ+dKJzczSSrcR8a9mlpK3jtEtm47I920
-         VUlbDxlOKkyNRm5euKKgiGbRTQSrc/C3ul1mcd6B+jaVxIG5p61QPfUlUMWLQmctv6
-         Z0O//8w+HR9nA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Kaixu Xia <xiakaixu1987@gmail.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH 4/4] mm/damon/vaddr: indicate the target is invalid when 'nr_regions' is zero
-Date:   Wed, 14 Sep 2022 08:04:04 +0000
-Message-Id: <20220914080404.58913-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAGjdHu=8pGmyBpVMpf-V=6w7hZHLmG4WH5EsNchn_+GqikTDxQ@mail.gmail.com>
-References: 
+        Wed, 14 Sep 2022 04:05:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC436DD5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:05:18 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-310-cVSRc361N3OiNWkHinkhfg-1; Wed, 14 Sep 2022 09:05:14 +0100
+X-MC-Unique: cVSRc361N3OiNWkHinkhfg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 14 Sep
+ 2022 09:05:13 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 14 Sep 2022 09:05:13 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alexey Dobriyan' <adobriyan@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: procfs readlink after unshare() in a chroot() reports the full
+ path
+Thread-Topic: procfs readlink after unshare() in a chroot() reports the full
+ path
+Thread-Index: AdjEMqjMb0GR/+CiSFubzc4Cg1EybADZcK0AAB3dyJA=
+Date:   Wed, 14 Sep 2022 08:05:13 +0000
+Message-ID: <09a2de005bf84ebcb9def00234ea3950@AcuMS.aculab.com>
+References: <12add75b103b412494487518c408fe0b@AcuMS.aculab.com>
+ <YyDPdr7v/ltQI+wc@localhost.localdomain>
+In-Reply-To: <YyDPdr7v/ltQI+wc@localhost.localdomain>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,76 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 12:02:05 +0800 Kaixu Xia <xiakaixu1987@gmail.com> wrote:
+RnJvbTogQWxleGV5IERvYnJpeWFuDQo+IFNlbnQ6IDEzIFNlcHRlbWJlciAyMDIyIDE5OjQ0DQo+
+IA0KPiBPbiBGcmksIFNlcCAwOSwgMjAyMiBhdCAxMDowNjozMkFNICswMDAwLCBEYXZpZCBMYWln
+aHQgd3JvdGU6DQo+ID4gVGhlIHJlYWRsaW5rIGNhbGxzIGluIHByb2NmcyAoZWcgZm9yIC9wcm9j
+L3NlbGYvZmQvMCkgcmV0dXJucw0KPiA+IHRoZSBmdWxsIHBhdGhuYW1lIGlmIHVuc2hhcmUoKSBp
+cyBjYWxsZWQgaW5zaWRlIGEgY2hyb290Lg0KPiA+DQo+ID4gVGhlIHByb2dyYW0gYmVsb3cgcmVw
+cm9kdWNlcyB0aGlzIHdoZW4gcnVuIHdpdGggc3RkaW4NCj4gPiByZWRpcmVjdGVkIHRvIGEgZmls
+ZSBpbiB0aGUgY3VycmVudCBkaXJlY3RvcnkuDQo+ID4NCj4gPiBUaGlzIHNlcXVlbmNlIGlzIHVz
+ZWQgYnkgJ2lwIG5ldG5zIGV4ZWMnIHNvIGlzbid0IGFjdHVhbGx5DQo+ID4gdGhhdCB1bnVzdWFs
+Lg0KPiA+DQo+ID4gCURhdmlkDQo+ID4NCj4gPiAjZGVmaW5lIF9HTlVfU09VUkNFDQo+ID4gI2lu
+Y2x1ZGUgPHVuaXN0ZC5oPg0KPiA+ICNpbmNsdWRlIDxzdGRpby5oPg0KPiA+ICNpbmNsdWRlIDxm
+Y250bC5oPg0KPiA+ICNpbmNsdWRlIDxzY2hlZC5oPg0KPiA+DQo+ID4gc3RhdGljIHZvaWQgcHJp
+bnRfbGluayhjb25zdCBjaGFyICp3aGVyZSwgaW50IGZkKQ0KPiA+IHsNCj4gPiAgICAgICAgIGNo
+YXIgYnVmWzI1Nl07DQo+ID4NCj4gPiAgICAgICAgIHByaW50ZigiJXM6ICUuKnNcbiIsIHdoZXJl
+LCAoaW50KXJlYWRsaW5rYXQoZmQsICIiLCBidWYsIHNpemVvZiBidWYpLCBidWYpOw0KPiA+IH0N
+Cj4gPg0KPiA+IGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikNCj4gPiB7DQo+ID4gICAg
+ICAgICBpbnQgbGlua19mZCA9IG9wZW4oIi9wcm9jL3NlbGYvZmQvMCIsIE9fUEFUSCB8IE9fTk9G
+T0xMT1cpOw0KPiA+DQo+ID4gICAgICAgICBwcmludF9saW5rKCJpbml0aWFsIiwgbGlua19mZCk7
+DQo+ID4gICAgICAgICBpZiAoY2hyb290KCIuIikpDQo+ID4gICAgICAgICAgICAgICAgIHJldHVy
+biAxOw0KPiA+ICAgICAgICAgcHJpbnRfbGluaygiYWZ0ZXIgY2hyb290IiwgbGlua19mZCk7DQo+
+ID4gICAgICAgICBpZiAodW5zaGFyZShDTE9ORV9ORVdOUykpDQo+ID4gICAgICAgICAgICAgICAg
+IHJldHVybiAyOw0KPiA+ICAgICAgICAgcHJpbnRfbGluaygiYWZ0ZXIgdW5zaGFyZSIsIGxpbmtf
+ZmQpOw0KPiA+ICAgICAgICAgcmV0dXJuIDA7DQo+ID4gfQ0KPiANCj4gSSB0ZXN0ZWQgbWFpbmxp
+bmUgYW5kIDUuMTkuOCwgYm90aCBhcmUgT0s6DQo+IA0KPiBvcGVuKCIvcHJvYy9zZWxmL2ZkLzAi
+LCBPX1JET05MWXxPX05PRk9MTE9XfE9fUEFUSCkgPSAzDQo+IHJlYWRsaW5rYXQoMywgIiIsICIv
+ZGV2L3B0cy8wIiwgMjU2KSAgICA9IDEwDQo+IGZzdGF0KDEsIHtzdF9tb2RlPVNfSUZDSFJ8MDYy
+MCwgc3RfcmRldj1tYWtlZGV2KDEzNiwgMCksIC4uLn0pID0gMA0KPiBtbWFwKE5VTEwsIDQwOTYs
+IFBST1RfUkVBRHxQUk9UX1dSSVRFLCBNQVBfUFJJVkFURXxNQVBfQU5PTllNT1VTLCAtMSwgMCkg
+PSAweDdmZDk0NzUzZTAwMA0KPiB3cml0ZSgxLCAiaW5pdGlhbDogL2Rldi9wdHMvMFxuIiwgMjBp
+bml0aWFsOiAvZGV2L3B0cy8wDQo+ICkgICA9IDIwDQo+IGNocm9vdCgiLiIpICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICA9IDANCj4gcmVhZGxpbmthdCgzLCAiIiwgIi9kZXYvcHRzLzAiLCAy
+NTYpICAgID0gMTANCj4gd3JpdGUoMSwgImFmdGVyIGNocm9vdDogL2Rldi9wdHMvMFxuIiwgMjVh
+ZnRlciBjaHJvb3Q6IC9kZXYvcHRzLzANCj4gKSA9IDI1DQo+IHVuc2hhcmUoQ0xPTkVfTkVXTlMp
+ICAgICAgICAgICAgICAgICAgICA9IDANCj4gcmVhZGxpbmthdCgzLCAiIiwgIi9kZXYvcHRzLzAi
+LCAyNTYpICAgID0gMTANCj4gd3JpdGUoMSwgImFmdGVyIHVuc2hhcmU6IC9kZXYvcHRzLzBcbiIs
+IDI2YWZ0ZXIgdW5zaGFyZTogL2Rldi9wdHMvMA0KPiApID0gMjYNCg0KWW91IG5lZWQgdGhlIHBh
+dGggdG8gYmUgaW5zaWRlIHRoZSBjaHJvb3QuDQpJbiBzb21lIHNlbnNlICIvZGV2L3B0cy8wIiBp
+cyBhY3R1YWxseSBpbnZhbGlkIGFuZCBwcm9iYWJseQ0Kb3VnaHQgdG8gYmUgdGFnZ2VkIGFzIHN1
+Y2ggb3IgYW4gZXJyb3IgcmV0dXJuZWQuDQpTbyByZXJ1biBhbmQgcmVkaXJlY3Qgc3RkaW4gdG8g
+YSBmaWxlIGluc2lkZSB0aGUgY2hyb290Lg0KDQpJbiBteSBvcmlnaW5hbCBjYXNlIGV2ZXJ5dGhp
+bmcgd2FzIGluc2lkZSBhIGNocm9vdC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-> On Tue, Sep 13, 2022 at 11:11 PM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > On Tue, 13 Sep 2022 17:11:27 +0800 xiakaixu1987@gmail.com wrote:
-> >
-> > > From: Kaixu Xia <kaixuxia@tencent.com>
-> > >
-> > > When 'init()' and 'update()' DAMON operations failed and the number
-> > > of the damon_target regions is zero,
-> >
-> > Well, I think that could be a temporal failure.  In the case, later call of
-> > 'update()' could success?
-> >
-> Yeah, the kdamond while() loop calls 'update()' periodically to fix this
-> temporary failure. But for extreme scenarios that 'update()' continues to fail,
-> we should have some ways to detect this case.
-
-Even in the case, kdamond will do nothing but continuing the main loop while
-sleeping sample_aggr interval (5ms by default) for each iteration, and calling
-'update()' for every update interval (100ms by default).  Waste is waste, but I
-don't think that's a real issue.  Further, continuous 'update()' failures mean
-the process is in some weird state anyway, so I'd assume the process would be
-finished soon.  kdamond will also finish as soon as the process finishes.
-Users could also find the strange situation (nothing in the monitoring results)
-and finish kdamond on their own.
-
-Anything I'm missing?
-
-
-Andrew, I found you merged this patch in mm-unstable.  Could you please hold it
-until we finish this discussion?
-
-
-Thanks,
-SJ
-
-> 
-> Thanks,
-> Kaixu
-> >
-> > Thanks,
-> > SJ
-> >
-> > > the kdamond would do nothing
-> > > to this monitoring target in this case. It makes no sense to run
-> > > kdamond when all of monitoring targets have no regions. So add the
-> > > judgement in 'target_valid()' operation to indicate the target is
-> > > invalid when 'nr_regions' is zero.
-> >
-> > >
-> > > Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-> > > ---
-> > >  mm/damon/vaddr.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> > > index 39ea48d9cc15..65ff98d49ec0 100644
-> > > --- a/mm/damon/vaddr.c
-> > > +++ b/mm/damon/vaddr.c
-> > > @@ -598,6 +598,9 @@ static bool damon_va_target_valid(void *target)
-> > >       struct damon_target *t = target;
-> > >       struct task_struct *task;
-> > >
-> > > +     if (!damon_nr_regions(t))
-> > > +             return false;
-> > > +
-> > >       task = damon_get_task_struct(t);
-> > >       if (task) {
-> > >               put_task_struct(task);
-> > > --
-> > > 2.27.0
-> 
