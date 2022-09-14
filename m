@@ -2,159 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8352D5B7E93
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09A35B7E96
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiINBpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S230043AbiINBqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiINBpf (ORCPT
+        with ESMTP id S229648AbiINBqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:45:35 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A065839
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:45:33 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id b23so5252158qtr.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
-        b=Oe8JnBSVgSMmqPNFrZr6uzBF/MsmXi9Nee/enb8/xccCc7JVyURajg/V5pr9jjpDW7
-         RNCmRZLDsLReno9LXIN2zp/cqjkYRNiKkFHGUCvWRZQVuMInyHndbXOX6cDzDe7eizFF
-         ed0a5o28Y+QxB0B+wWFcbtsD0kr8Z1mgNfJMQV6W2pBlm8vVf+OqVpXuzLoQb9Awyn+Q
-         n848eZEUh9KivIQUP2Vbw4atlx7cGTXwu6KZaqbbfv06jDDBb6iGHWS2jMDIZ5mv9S4e
-         jtX1571mzSZ6cyd3EA6Gyb6LQSUlEV4ZJg7eeFWROk7kqZSd7HNQ1xcryQqfBbPBgbuI
-         izHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
-        b=SV/+Up66kO15VrKuii985Rw5cA/zcMulPUN2ydnVglPmk7DaxLsHqP3rCseGx+yCJs
-         I6m9y+MiSvz2jtOW+fPklPbD8dzWrW8Pt2OsW3LyNgIT0JN/c2tU4vKnxKI4tbTlmAau
-         /+PYN4aRzbl6Tw6uNCHScTNWvDtol9abaQNvBMizFyOKKmlVeB5mJjrLnMlxFxOByE0Y
-         4u4AH6GFZfhXfQyIAEpiBPwWrYMlrJWeWewQ5uRl7YN9r0/Ecz6EGkMSEp1Dig6WVQnU
-         HkX2abimvfKk3TXcJ1L7lWO55HStc8B8m3mqQ1BYQBxIXeI7fzu3lOB8BidTtssxSJJ8
-         UToA==
-X-Gm-Message-State: ACgBeo2Ucs6wq0L8WNkVnTNQuuwA6o4hUxi/10Qwoll+uQNCW8r5Mpuo
-        u4ipcpDtvYdn1lPJcCtINbH6mo4reBxJdFZF3qgFag==
-X-Google-Smtp-Source: AA6agR7ZlBYQI9ZokbyfOHpFIIymY6tIse9RDdoF3wV8R9iGFdrGtQG+znlmV9nlP4yNq9O+IMb6tRKwuFxFqM6bZKg=
-X-Received: by 2002:ac8:7dca:0:b0:344:5679:2dbb with SMTP id
- c10-20020ac87dca000000b0034456792dbbmr31410571qte.245.1663119932138; Tue, 13
- Sep 2022 18:45:32 -0700 (PDT)
+        Tue, 13 Sep 2022 21:46:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D73D66A7C;
+        Tue, 13 Sep 2022 18:46:02 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E1UBRN004564;
+        Wed, 14 Sep 2022 01:45:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bRGK0vQLs/hcPSYsM/CdxI6H5+3Ppjl1vf7g1OOxl9I=;
+ b=csuO1OUcGFizCEK+/jKVTZSrcw7lExyr0cJnkJqcqIRPain+bSJaqPr/390K9lGbLitk
+ hUsgX6lDkeUsGlVK343ZNCa8i9iAhv4fDOhu8UhyzqkdQPjpXzRci7MTzswBPsVXf2Wv
+ q6zD3jDZX9YLa0NNKFlZu4gTH0TnRIDI3xIDjsnPHYAsL54Wmu6fMbUbx84cIC+rerH4
+ Pe6fB4ES38YbvSllWIpKPEACzcAoYGE7x36sYF2BRLqppMfZUCApg1GyBZvLEmF7ZuFb
+ nURM7dd2sacaA2o2lcEm6HYA8be1BqZGFV/atAmHmq8ZWyngyJ8pZpVSq6Jt/PONCZxk mQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0b8p0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 01:45:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E1jkLs015412
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 01:45:46 GMT
+Received: from [10.216.1.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
+ 2022 18:45:39 -0700
+Message-ID: <51be0ae5-8f48-fc6e-0246-810018326594@quicinc.com>
+Date:   Wed, 14 Sep 2022 07:15:35 +0530
 MIME-Version: 1.0
-References: <20220912214559.929186-1-nhuck@google.com> <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
-In-Reply-To: <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
-From:   Nathan Huckleberry <nhuck@google.com>
-Date:   Tue, 13 Sep 2022 18:45:00 -0700
-Message-ID: <CAJkfWY6FYCNz_5+5cM2GoJdGLdBu7aPzs0e8uFmhgZRE_axLSQ@mail.gmail.com>
-Subject: Re: [PATCH] staging: rtl8192u: Fix return type of ieee80211_xmit
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 2/5] PCI: qcom: Add retry logic for link to be stable
+ in L1ss
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Bjorn Helgaas <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mka@chromium.org>, <quic_vbadigan@quicinc.com>,
+        <quic_hemantk@quicinc.com>, <quic_nitegupt@quicinc.com>,
+        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220909195000.GA310621@bhelgaas>
+ <7310fc0c-5f87-87a6-4484-d60970ce3285@quicinc.com>
+ <20220912173346.GB25849@workstation>
+ <e9c5d29a-f1a7-46c8-a456-6c75c129876f@quicinc.com>
+ <20220913163921.GE25849@workstation>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20220913163921.GE25849@workstation>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aSOESEzz8gJnyI2oAG5cjt6AMgJKT1s7
+X-Proofpoint-ORIG-GUID: aSOESEzz8gJnyI2oAG5cjt6AMgJKT1s7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-13_12,2022-09-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 spamscore=0 impostorscore=0 suspectscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140006
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Nathan,
 
-On Tue, Sep 13, 2022 at 4:09 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On 9/13/2022 10:09 PM, Manivannan Sadhasivam wrote:
+> On Tue, Sep 13, 2022 at 07:54:22PM +0530, Krishna Chaitanya Chundru wrote:
+>> On 9/12/2022 11:03 PM, Manivannan Sadhasivam wrote:
+>>> On Mon, Sep 12, 2022 at 09:39:36PM +0530, Krishna Chaitanya Chundru wrote:
+>>>> On 9/10/2022 1:20 AM, Bjorn Helgaas wrote:
+>>>>> On Fri, Sep 09, 2022 at 02:14:41PM +0530, Krishna chaitanya chundru wrote:
+>>>>>> Some specific devices are taking time to settle the link in L1ss.
+>>>>>> So added a retry logic before returning from the suspend op.
+>>>>> "L1ss" is not a state.  If you mean "L1.1" or "L1.2", say that.  Also
+>>>>> in code comments below.
+>>>> Yes L1ss means L1.2 and L1.2 We will update it next patch
+>>>>> s/So added a/Add/
+>>>>>
+>>>>> What are these specific devices?  Is this a qcom controller defect?
+>>>>> An endpoint defect that should be addressed via some kind of generic
+>>>>> quirk?
+>>>> This is depending up on the endpoint devices and it varies to device to
+>>>> device.
+>>>>
+>>> Can we identify the source of the traffic? Is the NVMe driver not
+>>> flushing it's queues correctly?
+>> We found that it is not from nvme data, we are seeing some physical layer
+>> activity on the
+>>
+>> protocol analyzer.
+>>
+> Okay
 >
-> On Mon, Sep 12, 2022 at 02:45:56PM -0700, Nathan Huckleberry wrote:
-> > The ndo_start_xmit field in net_device_ops is expected to be of type
-> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
-> >
-> > The mismatched return type breaks forward edge kCFI since the underlying
-> > function definition does not match the function hook definition.
-> >
-> > The return type of ieee80211_xmit should be changed from int to
-> > netdev_tx_t.
-> >
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+>>>> We are thinking this is not a defect if there is some traffic in the link
+>>>> the link will
+>>>>
+>>>> not go to L1ss .
+>>>>
+>>> Is this hack still required even after switching to syscore ops?
+>>>
+>>> Thanks,
+>>> Mani
+>> Yes, mani it is still required. And just before this sycore ops there will
+>> be a pci transaction to
+>>
+>> mask msix interrupts.
+>>
+> Hmm. I'm getting slightly confused here. What really happens when you do
+> the resource teardown during suspend and the link has not entered L1SS?
 >
-> The protoype in drivers/staging/rtl8192u/ieee80211/ieee80211.h should be
-> updated as well. With that:
-
-Nice catch, thanks.
-
+> Since PHY is powered by MX domain, I'm wondering why we should wait for
+> the link to be in L1SS?
 >
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> > ---
-> >  drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > index 8602e3a6c837..e4b6454809a0 100644
-> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > @@ -526,7 +526,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
-> >       }
-> >  }
-> >
-> > -int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> > +netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> >  {
-> >       struct ieee80211_device *ieee = netdev_priv(dev);
-> >       struct ieee80211_txb *txb = NULL;
-> > @@ -822,13 +822,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> >                       if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
-> >                               stats->tx_packets++;
-> >                               stats->tx_bytes += __le16_to_cpu(txb->payload_size);
-> > -                             return 0;
-> > +                             return NETDEV_TX_OK;
-> >                       }
-> >                       ieee80211_txb_free(txb);
-> >               }
-> >       }
-> >
-> > -     return 0;
-> > +     return NETDEV_TX_OK;
-> >
-> >   failed:
-> >       spin_unlock_irqrestore(&ieee->lock, flags);
->
-> I see 'return 1' down here, that doesn't appear to be a valid
-> 'netdev_tx_t'. Should that be 'return NETDEV_TX_BUSY'? I guess that is
-> an outstanding issue though, just figured I would mention it.
+> Thanks,
+> Mani
 
-I'm not sure. As far as I can tell, the dev_xmit_complete function in
-include/linux/netdevice.h is used to determine whether an skb was
-consumed or not. It looks like a value of 1 (NET_XMIT_DROP) would
-signify that it was consumed, whereas NETDEV_TX_BUSY would not.
+Mani, we need to turn off the link only after link entered in to L1ss. 
+If we do before that
 
-It's somewhat confusing that a function which returns an enum may also
-return values outside of that enum.
+some transactions will be disturbed and we see a link down.
 
-For more info see the foillowing commits:
-dc1f8bf68b311b1537cb65893430b6796118498a
-572a9d7b6fc7f20f573664063324c086be310c42
-7f2e870f2a48a0524a3b03b04fa019311d16a7f7
+Mx power rail will control digital logic of the PHY and tries to retain 
+the link state only,
 
->
-> > --
-> > 2.37.2.789.g6183377224-goog
-> >
->
-> Cheers,
-> Nathan
+The analog logic is controlled by the CX rail only, so when the link is 
+in L1ss only we turn off
 
-Thanks,
-Huck
+clks and phy.
+
+>>>>>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>>>>>> ---
+>>>>>>     drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++-----------
+>>>>>>     1 file changed, 25 insertions(+), 11 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>>>>>> index 6e04d0d..15c2067 100644
+>>>>>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>>>>>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>>>>>> @@ -1809,26 +1809,40 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>>>>>>     static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
+>>>>>>     {
+>>>>>>     	u32 val;
+>>>>>> +	ktime_t timeout, start;
+>>>>>>     	struct dw_pcie *pci = pcie->pci;
+>>>>>>     	struct device *dev = pci->dev;
+>>>>>>     	if (!pcie->cfg->supports_system_suspend)
+>>>>>>     		return 0;
+>>>>>> -	/* if the link is not active turn off clocks */
+>>>>>> -	if (!dw_pcie_link_up(pci)) {
+>>>>>> -		dev_info(dev, "Link is not active\n");
+>>>>>> -		goto suspend;
+>>>>>> -	}
+>>>>>> +	start = ktime_get();
+>>>>>> +	/* Wait max 200 ms */
+>>>>>> +	timeout = ktime_add_ms(start, 200);
+>>>>>> -	/* if the link is not in l1ss don't turn off clocks */
+>>>>>> -	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+>>>>>> -	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+>>>>>> -		dev_warn(dev, "Link is not in L1ss\n");
+>>>>>> -		return 0;
+>>>>>> +	while (1) {
+>>>>>> +
+>>>>>> +		if (!dw_pcie_link_up(pci)) {
+>>>>>> +			dev_warn(dev, "Link is not active\n");
+>>>>>> +			break;
+>>>>>> +		}
+>>>>>> +
+>>>>>> +		/* if the link is not in l1ss don't turn off clocks */
+>>>>>> +		val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+>>>>>> +		if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+>>>>>> +			dev_dbg(dev, "Link enters L1ss after %d  ms\n",
+>>>>>> +					ktime_to_ms(ktime_get() - start));
+>>>>>> +			break;
+>>>>>> +		}
+>>>>>> +
+>>>>>> +		if (ktime_after(ktime_get(), timeout)) {
+>>>>>> +			dev_warn(dev, "Link is not in L1ss\n");
+>>>>>> +			return 0;
+>>>>>> +		}
+>>>>>> +
+>>>>>> +		udelay(1000);
+>>>>>>     	}
+>>>>>> -suspend:
+>>>>>>     	if (pcie->cfg->ops->suspend)
+>>>>>>     		pcie->cfg->ops->suspend(pcie);
+>>>>>> -- 
+>>>>>> 2.7.4
+>>>>>>
