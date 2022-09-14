@@ -2,480 +2,935 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852CE5B8F69
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28C25B8F72
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 22:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiINT4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 15:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S229729AbiINUBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 16:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiINT4l (ORCPT
+        with ESMTP id S229627AbiINUBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 15:56:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AD463D3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:56:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC9D161EBA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E71C433C1;
-        Wed, 14 Sep 2022 19:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663185398;
-        bh=1DrhO9J6QoptsuptEgf0uLTwWzccKrsoDC0CgVBHBFk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AiojQUMqkHashxOR7ml2VpTipnwdPjbJUI6LJ9f3ZiTFndPx8DXl3z5j1RyHpM6aM
-         nuifkRvWDngygC3NWYkI5VGWjJbNVUdzTozwQQj+28BPQqxuYVmCEPaQVVLcZSfSN7
-         0ahzYcssRxvhLfEG3ZSogs+zYegUAomVRXSsRLxd8k7Mn1IVVfDPm7mdzTtImNF0p0
-         WcW7DwdSe/ozHTtAG12YS375kFDQXEv5DjL5nKa6NVLO6pDIFbSePqnQr6FI1yQ8qT
-         xKjBG8SKv5KgUCtp0lVMD3lrceb7jdoESdOMo92qSE4m0RYBI51WQgcIJBnVe0l61Z
-         ++gDpht0Ek8ag==
-Received: by pali.im (Postfix)
-        id F03A47B8; Wed, 14 Sep 2022 21:56:34 +0200 (CEST)
-Date:   Wed, 14 Sep 2022 21:56:34 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ash Logan <ash@heyquark.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "j.ne@posteo.net" <j.ne@posteo.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: Fragmented physical memory on powerpc/32
-Message-ID: <20220914195634.fumjtflzetvy52fl@pali>
-References: <20220908153511.57ceunyusziqfcav@pali>
- <20220908201701.sd3zqn5hfixmjvhh@pali>
- <9fbc5338-5e10-032a-8f55-e080bd93f74b@csgroup.eu>
- <Yx9GpV1XT8r2a++R@kernel.org>
- <20220912211623.djb7fckgknyfmof7@pali>
- <1c95875c-29f8-68b7-e480-fed8614f3037@csgroup.eu>
- <4f540391-37dc-8e22-be0a-74543082504d@csgroup.eu>
- <YyGfkDKgeW7/nNlr@kernel.org>
- <ed8ff681-4182-3f9f-a65f-21cf5012fff0@csgroup.eu>
- <9779CA34-E40D-4035-A319-A92D2F6E4DDF@kernel.org>
+        Wed, 14 Sep 2022 16:01:20 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2908275E;
+        Wed, 14 Sep 2022 13:01:18 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dv25so37230819ejb.12;
+        Wed, 14 Sep 2022 13:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date;
+        bh=GqSVl2wuF3SdqA6bpwUS/1MpYYqFvRrH95FXWD7+cCo=;
+        b=HM824CHX0lfxr/BSdkos2oStz+oOatti92+QU4prOEOVtSIc1RIGDg5EOX1FhkM5b7
+         BT8eOnRTMU2j3KxSOeFzvlo8KwDB5YXj3Mg2fxL0H/kbiw0UpWn8kDufCE/JCf8DS+2x
+         KXDwUNr0PMiCmyLJxRkWXkkbDOXnITDxW4cvRPHQQHDtWUuJOR2xEdSLlCVdNrTIUNdf
+         N4fsrT3f/P6rJ8UOag+CvYMLYDimGlrLmQaQuDl0u92Flzw5JdnAzZubVVZaRiCMqi91
+         3Au53a4NukiJoc5BGERTWClKDi2GT/oXuTTp4T9gPgQDDpJlRGuy7gOEHUw0bOEpciio
+         e1Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=GqSVl2wuF3SdqA6bpwUS/1MpYYqFvRrH95FXWD7+cCo=;
+        b=5383fsbqN7KFT2W8JAlPdbiHNGeykqP9qjcuSZe98452XYjN8TYKNEfLMW3JkgNWtl
+         s2E2Fp8PCzhNGtdW1R3lXAJDeopc0kggOYYAm9wl26MP6GJAy7z5wGR8dgGu/SFPFMEJ
+         P1hd+YbfDtaMKUEXf/bVpM38dD0ZYcSDlF4QfyGjIG2YDHVT7yAe6nE2i60i4AaJ+IV/
+         s4AzOrJfiRsUUy4b7ST/tVkGmsg3BbXX6+XbMf4ySjPdrojfenSonVAU687xm6DgglCR
+         YYAH/a8CPeGxKgGmhyHf2UGvUJxY1Jg4IrBJtaa4GG9Kbfajd1QBIR1QfGIITN2FAcgx
+         S+Pw==
+X-Gm-Message-State: ACgBeo3toZ54C9aSyj7awRi1PRfqHqszM5ViQk4ccWIEQss7PzaqbvGk
+        ddDp+oXOmMYhP9CB3OOouL5eV66WGvL8Trgp
+X-Google-Smtp-Source: AA6agR6hyzyn5YMfU7IdsCcsn44gAbjSx/rzxY+b0zCE8i8R1UyqGZf8Nhz6lasfVAui3C4IoyT3vA==
+X-Received: by 2002:a17:907:6d90:b0:77c:68a8:a5b with SMTP id sb16-20020a1709076d9000b0077c68a80a5bmr13617621ejc.342.1663185677288;
+        Wed, 14 Sep 2022 13:01:17 -0700 (PDT)
+Received: from lab.hqhome163.com ([194.183.10.152])
+        by smtp.gmail.com with ESMTPSA id bo24-20020a0564020b3800b0044e8ecb9d25sm10266619edb.52.2022.09.14.13.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 13:01:16 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 19:59:31 +0000
+From:   Alessandro Carminati <alessandro.carminati@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Changes phy configuration to expose sata in place of usb3 on
+ quartz64-a board
+Message-ID: <YyIyo42QWvgJTBjL@lab.hqhome163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9779CA34-E40D-4035-A319-A92D2F6E4DDF@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 14 September 2022 16:55:04 Mike Rapoport wrote:
-> On September 14, 2022 10:43:52 AM GMT+01:00, Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
-> >
-> >
-> >Le 14/09/2022 à 11:32, Mike Rapoport a écrit :
-> >> On Tue, Sep 13, 2022 at 02:36:13PM +0200, Christophe Leroy wrote:
-> >>>
-> >>>
-> >>> Le 13/09/2022 à 08:11, Christophe Leroy a écrit :
-> >>>>
-> >>>>
-> >>>> Le 12/09/2022 à 23:16, Pali Rohár a écrit :
-> >>>>>>
-> >>>>>> My guess would be that something went wrong in the linear map
-> >>>>>> setup, but it
-> >>>>>> won't hurt running with "memblock=debug" added to the kernel
-> >>>>>> command line
-> >>>>>> to see if there is anything suspicious there.
-> >>>>>
-> >>>>> Here is boot log on serial console with memblock=debug command line:
-> >>>>>
-> >>>> ...
-> >>>>>
-> >>>>> Do you need something more for debug?
-> >>>>
-> >>>> Can you send me the 'vmlinux' used to generate the above Oops so that I
-> >>>> can see exactly where we are in function mem_init().
-> >>>>
-> >>>> And could you also try without CONFIG_HIGHMEM just in case.
+The Quartz64 board is built upon Rockchip RK3566.
+Rockchip RK3566 has two combo phys.
+The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
+ctrl2.
+The second combo phy is hardwired to the PCIe slot, where for the first,
+the hardware on the board provides both the USB3 connector and the SATA
+connector.
+This DT allows the users to switch the combo phy to the SATA connector.
 
-Hello! I disabled CONFIG_HIGHMEM and there is no crash anymore. But
-kernel see only 761160 kB of RAM, which is less than 3GB. I guess this
-is expected.
+Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+---
+ .../dts/rockchip/rk3566-quartz64-a.sata.dts   | 839 ++++++++++++++++++
+ 1 file changed, 839 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
 
-> >>>>
-> >>>
-> >>> I looked at the vmlinux you sent me, the problem is in the loop for highmem
-> >>> in mem_init(). It crashes in the call to free_highmem_page()
-> >>>
-> >>> #ifdef CONFIG_HIGHMEM
-> >>> 	{
-> >>> 		unsigned long pfn, highmem_mapnr;
-> >>>
-> >>> 		highmem_mapnr = lowmem_end_addr >> PAGE_SHIFT;
-> >>> 		for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
-> >>> 			phys_addr_t paddr = (phys_addr_t)pfn << PAGE_SHIFT;
-> >>> 			struct page *page = pfn_to_page(pfn);
-> >>> 			if (!memblock_is_reserved(paddr))
-> >>> 				free_highmem_page(page);
-> >>> 		}
-> >>> 	}
-> >>> #endif /* CONFIG_HIGHMEM */
-> >>>
-> >>>
-> >>> As far as I can see in the memblock debug lines, the holes don't seem to be
-> >>> marked as reserved by memblock. So it is above valid ? Other architectures
-> >>> seem to do differently.
-> >>>
-> >>> Can you try by replacing !memblock_is_reserved(paddr) by
-> >>> memblock_is_memory(paddr) ?
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
+new file mode 100644
+index 000000000000..6ac21b729be7
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
+@@ -0,0 +1,839 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/pinctrl/rockchip.h>
++#include <dt-bindings/soc/rockchip,vop2.h>
++#include "rk3566.dtsi"
++
++/ {
++	model = "Pine64 RK3566 Quartz64-A Board";
++	compatible = "pine64,quartz64-a", "rockchip,rk3566";
++
++	aliases {
++		ethernet0 = &gmac1;
++		mmc0 = &sdmmc0;
++		mmc1 = &sdhci;
++	};
++
++	chosen: chosen {
++		stdout-path = "serial2:1500000n8";
++	};
++
++	gmac1_clkin: external-gmac1-clock {
++		compatible = "fixed-clock";
++		clock-frequency = <125000000>;
++		clock-output-names = "gmac1_clkin";
++		#clock-cells = <0>;
++	};
++
++	fan: gpio_fan {
++		compatible = "gpio-fan";
++		gpios = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;
++		gpio-fan,speed-map = <0    0
++				      4500 1>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&fan_en_h>;
++		#cooling-cells = <2>;
++	};
++
++	hdmi-con {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led-work {
++			label = "work-led";
++			default-state = "off";
++			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;
++			pinctrl-names = "default";
++			pinctrl-0 = <&work_led_enable_h>;
++			retain-state-suspended;
++		};
++
++		led-diy {
++			label = "diy-led";
++			default-state = "on";
++			gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++			pinctrl-names = "default";
++			pinctrl-0 = <&diy_led_enable_h>;
++			retain-state-suspended;
++		};
++	};
++
++	rk817-sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,name = "Analog RK817";
++		simple-audio-card,mclk-fs = <256>;
++
++		simple-audio-card,cpu {
++			sound-dai = <&i2s1_8ch>;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&rk817>;
++		};
++	};
++
++	sdio_pwrseq: sdio-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		clocks = <&rk817 1>;
++		clock-names = "ext_clock";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_enable_h>;
++		post-power-on-delay-ms = <100>;
++		power-off-delay-us = <5000000>;
++		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
++	};
++
++	spdif_dit: spdif-dit {
++		compatible = "linux,spdif-dit";
++		#sound-dai-cells = <0>;
++	};
++
++	spdif_sound: spdif-sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "SPDIF";
++
++		simple-audio-card,cpu {
++			sound-dai = <&spdif>;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&spdif_dit>;
++		};
++	};
++
++	vcc12v_dcin: vcc12v_dcin {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc12v_dcin";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++	};
++
++	/* vbus feeds the rk817 usb input.
++	 * With no battery attached, also feeds vcc_bat+
++	 * via ON/OFF_BAT jumper
++	 */
++	vbus: vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "vbus";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&vcc12v_dcin>;
++	};
++
++	vcc3v3_pcie_p: vcc3v3-pcie-p-regulator {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pcie_enable_h>;
++		regulator-name = "vcc3v3_pcie_p";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_3v3>;
++	};
++
++	vcc5v0_usb: vcc5v0_usb {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_usb";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&vcc12v_dcin>;
++	};
++
++	/* all four ports are controlled by one gpio
++	 * the host ports are sourced from vcc5v0_usb
++	 * the otg port is sourced from vcc5v0_midu
++	 */
++	vcc5v0_usb20_host: vcc5v0_usb20_host {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_usb20_host_en>;
++		regulator-name = "vcc5v0_usb20_host";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&vcc5v0_usb>;
++	};
++
++	vcc5v0_usb20_otg: vcc5v0_usb20_otg {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
++		regulator-name = "vcc5v0_usb20_otg";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&dcdc_boost>;
++	};
++
++	vcc3v3_sd: vcc3v3_sd {
++		compatible = "regulator-fixed";
++		enable-active-low;
++		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc_sd_h>;
++		regulator-boot-on;
++		regulator-name = "vcc3v3_sd";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_3v3>;
++	};
++
++	/* sourced from vbus and vcc_bat+ via rk817 sw5 */
++	vcc_sys: vcc_sys {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <4400000>;
++		regulator-max-microvolt = <4400000>;
++		vin-supply = <&vbus>;
++	};
++
++	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
++	vcc_wl: vcc_wl {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_wl";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_sys>;
++	};
++};
++
++&combphy1 {
++	status = "okay";
++};
++
++&combphy2 {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu1 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu2 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu3 {
++	cpu-supply = <&vdd_cpu>;
++};
++
++&cpu_thermal {
++	trips {
++		cpu_hot: cpu_hot {
++			temperature = <55000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map1 {
++			trip = <&cpu_hot>;
++			cooling-device = <&fan THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++		};
++	};
++};
++
++&gmac1 {
++	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1_RGMII_SPEED>, <&cru SCLK_GMAC1>;
++	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&cru SCLK_GMAC1>, <&gmac1_clkin>;
++	clock_in_out = "input";
++	phy-supply = <&vcc_3v3>;
++	phy-mode = "rgmii";
++	pinctrl-names = "default";
++	pinctrl-0 = <&gmac1m0_miim
++		     &gmac1m0_tx_bus2
++		     &gmac1m0_rx_bus2
++		     &gmac1m0_rgmii_clk
++		     &gmac1m0_clkinout
++		     &gmac1m0_rgmii_bus>;
++	snps,reset-gpio = <&gpio0 RK_PC3 GPIO_ACTIVE_LOW>;
++	snps,reset-active-low;
++	/* Reset time is 20ms, 100ms for rtl8211f */
++	snps,reset-delays-us = <0 20000 100000>;
++	tx_delay = <0x30>;
++	rx_delay = <0x10>;
++	phy-handle = <&rgmii_phy1>;
++	status = "okay";
++};
++
++&gpu {
++	mali-supply = <&vdd_gpu>;
++	status = "okay";
++};
++
++&hdmi {
++	avdd-0v9-supply = <&vdda_0v9>;
++	avdd-1v8-supply = <&vcc_1v8>;
++	status = "okay";
++};
++
++&hdmi_in {
++	hdmi_in_vp0: endpoint {
++		remote-endpoint = <&vp0_out_hdmi>;
++	};
++};
++
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
++
++&hdmi_sound {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	vdd_cpu: regulator@1c {
++		compatible = "tcs,tcs4525";
++		reg = <0x1c>;
++		fcs,suspend-voltage-selector = <1>;
++		regulator-name = "vdd_cpu";
++		regulator-min-microvolt = <800000>;
++		regulator-max-microvolt = <1150000>;
++		regulator-ramp-delay = <2300>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&vcc_sys>;
++
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	rk817: pmic@20 {
++		compatible = "rockchip,rk817";
++		reg = <0x20>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
++		assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
++		assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
++		clock-names = "mclk";
++		clocks = <&cru I2S1_MCLKOUT_TX>;
++		clock-output-names = "rk808-clkout1", "rk808-clkout2";
++		#clock-cells = <1>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pmic_int_l>, <&i2s1m0_mclk>;
++		rockchip,system-power-controller;
++		#sound-dai-cells = <0>;
++		wakeup-source;
++
++		vcc1-supply = <&vcc_sys>;
++		vcc2-supply = <&vcc_sys>;
++		vcc3-supply = <&vcc_sys>;
++		vcc4-supply = <&vcc_sys>;
++		vcc5-supply = <&vcc_sys>;
++		vcc6-supply = <&vcc_sys>;
++		vcc7-supply = <&vcc_sys>;
++		vcc8-supply = <&vcc_sys>;
++		vcc9-supply = <&dcdc_boost>;
++
++		regulators {
++			vdd_logic: DCDC_REG1 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-init-microvolt = <900000>;
++				regulator-ramp-delay = <6001>;
++				regulator-initial-mode = <0x2>;
++				regulator-name = "vdd_logic";
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <900000>;
++				};
++			};
++
++			vdd_gpu: DCDC_REG2 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-init-microvolt = <900000>;
++				regulator-ramp-delay = <6001>;
++				regulator-initial-mode = <0x2>;
++				regulator-name = "vdd_gpu";
++					regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc_ddr: DCDC_REG3 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-initial-mode = <0x2>;
++				regulator-name = "vcc_ddr";
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++			};
++
++			vcc_3v3: DCDC_REG4 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-initial-mode = <0x2>;
++				regulator-name = "vcc_3v3";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcca1v8_pmu: LDO_REG1 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-name = "vcca1v8_pmu";
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vdda_0v9: LDO_REG2 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <900000>;
++				regulator-name = "vdda_0v9";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdda0v9_pmu: LDO_REG3 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <900000>;
++				regulator-name = "vdda0v9_pmu";
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <900000>;
++				};
++			};
++
++			vccio_acodec: LDO_REG4 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-name = "vccio_acodec";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vccio_sd: LDO_REG5 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-name = "vccio_sd";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc3v3_pmu: LDO_REG6 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-name = "vcc3v3_pmu";
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++			};
++
++			vcc_1v8: LDO_REG7 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-name = "vcc_1v8";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc1v8_dvp: LDO_REG8 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-name = "vcc1v8_dvp";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc2v8_dvp: LDO_REG9 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <2800000>;
++				regulator-max-microvolt = <2800000>;
++				regulator-name = "vcc2v8_dvp";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			dcdc_boost: BOOST {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <5000000>;
++				regulator-max-microvolt = <5000000>;
++				regulator-name = "boost";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			otg_switch: OTG_SWITCH {
++				regulator-name = "otg_switch";
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++		};
++	};
++};
++
++/* i2c3 is exposed on con40
++ * pin 3 - i2c3_sda_m0, pullup to vcc_3v3
++ * pin 5 - i2c3_scl_m0, pullup to vcc_3v3
++ */
++&i2c3 {
++	status = "okay";
++};
++
++&i2s0_8ch {
++	status = "okay";
++};
++
++&i2s1_8ch {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2s1m0_sclktx
++		     &i2s1m0_lrcktx
++		     &i2s1m0_sdi0
++		     &i2s1m0_sdo0>;
++	rockchip,trcm-sync-tx-only;
++	status = "okay";
++};
++
++&mdio1 {
++	rgmii_phy1: ethernet-phy@0 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <0>;
++	};
++};
++
++&pcie2x1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_reset_h>;
++	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
++	vpcie3v3-supply = <&vcc3v3_pcie_p>;
++	status = "okay";
++};
++
++&pinctrl {
++	bt {
++		bt_enable_h: bt-enable-h {
++			rockchip,pins = <2 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		bt_host_wake_l: bt-host-wake-l {
++			rockchip,pins = <2 RK_PC0 RK_FUNC_GPIO &pcfg_pull_down>;
++		};
++
++		bt_wake_l: bt-wake-l {
++			rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	fan {
++		fan_en_h: fan-en-h {
++			rockchip,pins = <0 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	leds {
++		work_led_enable_h: work-led-enable-h {
++			rockchip,pins = <0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		diy_led_enable_h: diy-led-enable-h {
++			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	pcie {
++		pcie_enable_h: pcie-enable-h {
++			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		pcie_reset_h: pcie-reset-h {
++			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	pmic {
++		pmic_int_l: pmic-int-l {
++			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	usb2 {
++		vcc5v0_usb20_host_en: vcc5v0-usb20-host-en {
++			rockchip,pins = <4 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	sdio-pwrseq {
++		wifi_enable_h: wifi-enable-h {
++			rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	vcc_sd {
++		vcc_sd_h: vcc-sd-h {
++			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++};
++
++&pmu_io_domains {
++	pmuio1-supply = <&vcc3v3_pmu>;
++	pmuio2-supply = <&vcc3v3_pmu>;
++	vccio1-supply = <&vccio_acodec>;
++	vccio2-supply = <&vcc_1v8>;
++	vccio3-supply = <&vccio_sd>;
++	vccio4-supply = <&vcc_1v8>;
++	vccio5-supply = <&vcc_3v3>;
++	vccio6-supply = <&vcc1v8_dvp>;
++	vccio7-supply = <&vcc_3v3>;
++	status = "okay";
++};
++
++&sdhci {
++	bus-width = <8>;
++	mmc-hs200-1_8v;
++	non-removable;
++	vmmc-supply = <&vcc_3v3>;
++	vqmmc-supply = <&vcc_1v8>;
++	status = "okay";
++};
++
++&sdmmc0 {
++	bus-width = <4>;
++	cap-sd-highspeed;
++	cd-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
++	disable-wp;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
++	sd-uhs-sdr104;
++	vmmc-supply = <&vcc3v3_sd>;
++	vqmmc-supply = <&vccio_sd>;
++	status = "okay";
++};
++
++&sdmmc1 {
++	bus-width = <4>;
++	cap-sd-highspeed;
++	cap-sdio-irq;
++	keep-power-in-suspend;
++	mmc-pwrseq = <&sdio_pwrseq>;
++	non-removable;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
++	sd-uhs-sdr104;
++	vmmc-supply = <&vcc_wl>;
++	vqmmc-supply = <&vcc_1v8>;
++	status = "okay";
++};
++
++&sfc {
++	pinctrl-0 = <&fspi_pins>;
++	pinctrl-names = "default";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "disabled";
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <24000000>;
++		spi-rx-bus-width = <4>;
++		spi-tx-bus-width = <1>;
++	};
++};
++
++/* spdif is exposed on con40 pin 18 */
++&spdif {
++	status = "okay";
++};
++
++/* spi1 is exposed on con40
++ * pin 11 - spi1_mosi_m1
++ * pin 13 - spi1_miso_m1
++ * pin 15 - spi1_clk_m1
++ * pin 17 - spi1_cs0_m1
++ */
++&spi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi1m1_cs0 &spi1m1_pins>;
++};
++
++&tsadc {
++	/* tshut mode 0:CRU 1:GPIO */
++	rockchip,hw-tshut-mode = <1>;
++	/* tshut polarity 0:LOW 1:HIGH */
++	rockchip,hw-tshut-polarity = <0>;
++	status = "okay";
++};
++
++/* uart0 is exposed on con40
++ * pin 12 - uart0_tx
++ * pin 14 - uart0_rx
++ */
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_xfer>;
++	status = "okay";
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
++	status = "okay";
++	uart-has-rtscts;
++
++	bluetooth {
++		compatible = "brcm,bcm43438-bt";
++		clocks = <&rk817 1>;
++		clock-names = "lpo";
++		device-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
++		host-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
++		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
++		vbat-supply = <&vcc_sys>;
++		vddio-supply = <&vcca1v8_pmu>;
++	};
++};
++
++/* uart2 is exposed on con40
++ * pin 8 - uart2_tx_m0_debug
++ * pin 10 - uart2_rx_m0_debug
++ */
++&uart2 {
++	status = "okay";
++};
++
++&usb_host0_ehci {
++	status = "okay";
++};
++
++&usb_host0_ohci {
++	status = "okay";
++};
++
++&usb_host1_ehci {
++	status = "okay";
++};
++
++&usb_host1_ohci {
++	status = "okay";
++};
++
++&usb_host0_xhci {
++	dr_mode = "host";
++	status = "okay";
++};
++
++/* usb3 controller is muxed with sata1 */
++&sata1 {
++	status = "okay";
++};
++
++&usb2phy0 {
++	status = "okay";
++};
++
++&usb2phy0_host {
++	phy-supply = <&vcc5v0_usb20_host>;
++	status = "okay";
++};
++
++&usb2phy0_otg {
++	phy-supply = <&vcc5v0_usb20_otg>;
++	status = "okay";
++};
++
++&usb2phy1 {
++	status = "okay";
++};
++
++&usb2phy1_host {
++	phy-supply = <&vcc5v0_usb20_host>;
++	status = "okay";
++};
++
++&usb2phy1_otg {
++	phy-supply = <&vcc5v0_usb20_host>;
++	status = "okay";
++};
++
++&vop {
++	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
++	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
++	status = "okay";
++};
++
++&vop_mmu {
++	status = "okay";
++};
++
++&vp0 {
++	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
++		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
++		remote-endpoint = <&hdmi_in_vp0>;
++	};
++};
+-- 
+2.34.1
 
-I enabled CONFIG_HIGHMEM again, applied this change and kernel does not
-crash too anymore. And it sees 3062896 kB of memory (in 'free' output).
-
-So seems that this change fixed it.
-
-I tried simple C program for allocating memory via malloc() and it
-successfully allocated 2800 MB. If it tried to request/allocate more
-then kernel started OOM killer which killed that program gracefully.
-No kernel or HW crash.
-
-Here is bootlog:
-
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x4 nid=-1 from=0x00000000 max_addr=0x00000000 smp_setup_cpu_maps+0x40/0x2b4
-[    0.000000] memblock_reserve: [0x2fff5d74-0x2fff5d7b] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] CPU maps initialized for 1 thread per core
-[    0.000000]  (thread shift is 0)
-[    0.000000] memblock_phys_free: [0x2fff5d74-0x2fff5d7b] setup_arch+0x1bc/0x318
-[    0.000000] -----------------------------------------------------
-[    0.000000] phys_mem_size     = 0xbe500000
-[    0.000000] dcache_bsize      = 0x20
-[    0.000000] icache_bsize      = 0x20
-[    0.000000] cpu_features      = 0x0000000010010108
-[    0.000000]   possible        = 0x0000000010010108
-[    0.000000]   always          = 0x0000000010010108
-[    0.000000] cpu_user_features = 0x84e08000 0x08000000
-[    0.000000] mmu_features      = 0x00020010
-[    0.000000] -----------------------------------------------------
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2fff2000-0x2fff3fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2fff0000-0x2fff1fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffee000-0x2ffeffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffec000-0x2ffedfff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffea000-0x2ffebfff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe8000-0x2ffe9fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe6000-0x2ffe7fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe4000-0x2ffe5fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe2000-0x2ffe3fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe0000-0x2ffe1fff] memblock_alloc_range_nid+0xe8/0x1b0
-mpc85xx_rdb_setup_arch()
-[    0.000000] ioremap() called early from of_iomap+0x48/0x80. Use early_ioremap() instead
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
-[    0.000000] memblock_reserve: [0x2fff4000-0x2fff4fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] MPC85xx RDB board from Freescale Semiconductor
-[    0.000000] barrier-nospec: using isync; sync as speculation barrier
-[    0.000000] barrier-nospec: patched 182 locations
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
-[    0.000000] memblock_reserve: [0x2ffdf000-0x2ffdffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Top of RAM: 0xff700000, Total RAM: 0xbe500000
-[    0.000000] Memory hole size: 1042MB
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000000000000-0x000000002fffffff]
-[    0.000000]   HighMem  [mem 0x0000000030000000-0x00000000ff6fffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000000000000-0x000000007fffffff]
-[    0.000000]   node   0: [mem 0x00000000c0200000-0x00000000eeffffff]
-[    0.000000]   node   0: [mem 0x00000000f0000000-0x00000000ff6fffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000000ff6fffff]
-[    0.000000] memblock_alloc_try_nid_raw: 37675008 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 free_area_init+0x890/0xc94
-[    0.000000] memblock_reserve: [0x2dbf1000-0x2ffdefff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
-[    0.000000] memblock_reserve: [0x2fff5d00-0x2fff5d5f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 416 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
-[    0.000000] memblock_reserve: [0x2fff5b60-0x2fff5cff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x38/0x154
-[    0.000000] memblock_reserve: [0x2fff5b40-0x2fff5b5f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 1024 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x7c/0x154
-[    0.000000] memblock_reserve: [0x2fff5740-0x2fff5b3f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0xc4/0x154
-[    0.000000] memblock_reserve: [0x2fff5720-0x2fff573f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] MMU: Allocated 1088 bytes of context maps for 255 contexts
-[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x194/0x6d0
-[    0.000000] memblock_reserve: [0x2fff56a0-0x2fff570e] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x1c0/0x6d0
-[    0.000000] memblock_reserve: [0x2fff5620-0x2fff568e] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x314/0x7b4
-[    0.000000] memblock_reserve: [0x2dbf0000-0x2dbf0fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x4d4/0x7b4
-[    0.000000] memblock_reserve: [0x2dbef000-0x2dbeffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 90112 bytes align=0x1000 nid=-1 from=0x3fffffff max_addr=0x00000000 pcpu_embed_first_chunk+0x564/0x7b4
-[    0.000000] memblock_reserve: [0x2dbd9000-0x2dbeefff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_phys_free: [0x2dbe4000-0x2dbe3fff] pcpu_embed_first_chunk+0x680/0x7b4
-[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeefff] pcpu_embed_first_chunk+0x680/0x7b4
-[    0.000000] percpu: Embedded 11 pages/cpu s14196 r8192 d22668 u45056
-[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x37c/0x924
-[    0.000000] memblock_reserve: [0x2fff5d60-0x2fff5d63] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3a4/0x924
-[    0.000000] memblock_reserve: [0x2fff5600-0x2fff5603] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3cc/0x924
-[    0.000000] memblock_reserve: [0x2fff55e0-0x2fff55e7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3f4/0x924
-[    0.000000] memblock_reserve: [0x2fff55c0-0x2fff55c7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] pcpu-alloc: s14196 r8192 d22668 u45056 alloc=11*4096
-[    0.000000] pcpu-alloc: [0] 0 [0] 1 
-[    0.000000] memblock_alloc_try_nid: 136 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x7fc/0x924
-[    0.000000] memblock_reserve: [0x2fff5520-0x2fff55a7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
-[    0.000000] memblock_reserve: [0x2fff54c0-0x2fff551f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 384 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5340-0x2fff54bf] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 388 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
-[    0.000000] memblock_reserve: [0x2fff51a0-0x2fff5323] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5140-0x2fff519f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
-[    0.000000] memblock_reserve: [0x2fff50e0-0x2fff513f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 768 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
-[    0.000000] memblock_reserve: [0x2dbd8d00-0x2dbd8fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 772 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
-[    0.000000] memblock_reserve: [0x2dbd89e0-0x2dbd8ce3] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 192 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5020-0x2fff50df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_phys_free: [0x2dbf0000-0x2dbf0fff] pcpu_embed_first_chunk+0x744/0x7b4
-[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeffff] pcpu_embed_first_chunk+0x754/0x7b4
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 777792
-[    0.000000] Kernel command line: root=ubi0:rootfs rootfstype=ubifs ubi.mtd=rootfs rootflags=chk_data_crc rw console=ttyS0,115200 memblock=debug
-[    0.000000] memblock_alloc_try_nid: 524288 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
-[    0.000000] memblock_reserve: [0x2db589e0-0x2dbd89df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Dentry cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-[    0.000000] memblock_alloc_try_nid: 262144 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
-[    0.000000] memblock_reserve: [0x2db189e0-0x2db589df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Kernel virtual memory layout:
-[    0.000000]   * 0xffbbf000..0xfffff000  : fixmap
-[    0.000000]   * 0xff400000..0xff800000  : highmem PTEs
-[    0.000000]   * 0xff3fe000..0xff400000  : early ioremap
-[    0.000000]   * 0xf1000000..0xff3fe000  : vmalloc & ioremap
-[    0.000000] Memory: 3062620K/3118080K available (10732K kernel code, 712K rwdata, 2044K rodata, 276K init, 287K bss, 55460K reserved, 0K cma-reserved, 2331648K highmem)
-[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
-
-> >> 
-> >> The holes should not be marked as reserved, we just need to loop over the
-> >> memory ranges rather than over pfns. Then the holes will be taken into
-> >> account.
-> >> 
-> >> I believe arm and xtensa got this right:
-> >> 
-> >> (from arch/arm/mm/init.c)
-> >> 
-> >> static void __init free_highpages(void)
-> >> {
-> >> #ifdef CONFIG_HIGHMEM
-> >> 	unsigned long max_low = max_low_pfn;
-> >> 	phys_addr_t range_start, range_end;
-> >> 	u64 i;
-> >> 
-> >> 	/* set highmem page free */
-> >> 	for_each_free_mem_range(i, NUMA_NO_NODE, MEMBLOCK_NONE,
-> >> 				&range_start, &range_end, NULL) {
-> >> 		unsigned long start = PFN_UP(range_start);
-> >> 		unsigned long end = PFN_DOWN(range_end);
-> >> 
-> >> 		/* Ignore complete lowmem entries */
-> >> 		if (end <= max_low)
-> >> 			continue;
-> >> 
-> >> 		/* Truncate partial highmem entries */
-> >> 		if (start < max_low)
-> >> 			start = max_low;
-> >> 
-> >> 		for (; start < end; start++)
-> >> 			free_highmem_page(pfn_to_page(start));
-> >> 	}
-> >> #endif
-> >> }
-> >> 
-> >
-> >
-> >And what about the way MIPS does it ?
-> >
-> >static inline void __init mem_init_free_highmem(void)
-> >{
-> >#ifdef CONFIG_HIGHMEM
-> >	unsigned long tmp;
-> >
-> >	if (cpu_has_dc_aliases)
-> >		return;
-> >
-> >	for (tmp = highstart_pfn; tmp < highend_pfn; tmp++) {
-> >		struct page *page = pfn_to_page(tmp);
-> >
-> >		if (!memblock_is_memory(PFN_PHYS(tmp)))
-> >			SetPageReserved(page);
-> >		else
-> >			free_highmem_page(page);
-> >	}
-> >#endif
-> >}
-> 
-> This iterates over all PFNs in the highmem range and skips those in holes.
-> for_each_free_mem_range() skips the holes altogether.
-> 
-> Largely, I think we need to move, say, arm's version to mm/ and use it everywhere, except, perhaps, x86.
-
-I tried to replace quoted powerpc CONFIG_HIGHMEM code by above arm code
-and it worked fine too! No kernel crash anymore. But 'free' see only
-3062888 kB of total memory. Which is less then with the first
-workaround.
-
-Here is bootlog:
-
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x4 nid=-1 from=0x00000000 max_addr=0x00000000 smp_setup_cpu_maps+0x40/0x2b4
-[    0.000000] memblock_reserve: [0x2fff5d74-0x2fff5d7b] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] CPU maps initialized for 1 thread per core
-[    0.000000]  (thread shift is 0)
-[    0.000000] memblock_phys_free: [0x2fff5d74-0x2fff5d7b] setup_arch+0x1bc/0x318
-[    0.000000] -----------------------------------------------------
-[    0.000000] phys_mem_size     = 0xbe500000
-[    0.000000] dcache_bsize      = 0x20
-[    0.000000] icache_bsize      = 0x20
-[    0.000000] cpu_features      = 0x0000000010010108
-[    0.000000]   possible        = 0x0000000010010108
-[    0.000000]   always          = 0x0000000010010108
-[    0.000000] cpu_user_features = 0x84e08000 0x08000000
-[    0.000000] mmu_features      = 0x00020010
-[    0.000000] -----------------------------------------------------
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2fff2000-0x2fff3fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2fff0000-0x2fff1fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffee000-0x2ffeffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffec000-0x2ffedfff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffea000-0x2ffebfff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe8000-0x2ffe9fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe6000-0x2ffe7fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe4000-0x2ffe5fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe2000-0x2ffe3fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
-[    0.000000] memblock_reserve: [0x2ffe0000-0x2ffe1fff] memblock_alloc_range_nid+0xe8/0x1b0
-mpc85xx_rdb_setup_arch()
-[    0.000000] ioremap() called early from of_iomap+0x48/0x80. Use early_ioremap() instead
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
-[    0.000000] memblock_reserve: [0x2fff4000-0x2fff4fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] MPC85xx RDB board from Freescale Semiconductor
-[    0.000000] barrier-nospec: using isync; sync as speculation barrier
-[    0.000000] barrier-nospec: patched 182 locations
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
-[    0.000000] memblock_reserve: [0x2ffdf000-0x2ffdffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Top of RAM: 0xff700000, Total RAM: 0xbe500000
-[    0.000000] Memory hole size: 1042MB
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000000000000-0x000000002fffffff]
-[    0.000000]   HighMem  [mem 0x0000000030000000-0x00000000ff6fffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000000000000-0x000000007fffffff]
-[    0.000000]   node   0: [mem 0x00000000c0200000-0x00000000eeffffff]
-[    0.000000]   node   0: [mem 0x00000000f0000000-0x00000000ff6fffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000000ff6fffff]
-[    0.000000] memblock_alloc_try_nid_raw: 37675008 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 free_area_init+0x890/0xc94
-[    0.000000] memblock_reserve: [0x2dbf1000-0x2ffdefff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
-[    0.000000] memblock_reserve: [0x2fff5d00-0x2fff5d5f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 416 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
-[    0.000000] memblock_reserve: [0x2fff5b60-0x2fff5cff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x38/0x154
-[    0.000000] memblock_reserve: [0x2fff5b40-0x2fff5b5f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 1024 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x7c/0x154
-[    0.000000] memblock_reserve: [0x2fff5740-0x2fff5b3f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0xc4/0x154
-[    0.000000] memblock_reserve: [0x2fff5720-0x2fff573f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] MMU: Allocated 1088 bytes of context maps for 255 contexts
-[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x194/0x6d0
-[    0.000000] memblock_reserve: [0x2fff56a0-0x2fff570e] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x1c0/0x6d0
-[    0.000000] memblock_reserve: [0x2fff5620-0x2fff568e] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x314/0x7b4
-[    0.000000] memblock_reserve: [0x2dbf0000-0x2dbf0fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x4d4/0x7b4
-[    0.000000] memblock_reserve: [0x2dbef000-0x2dbeffff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 90112 bytes align=0x1000 nid=-1 from=0x3fffffff max_addr=0x00000000 pcpu_embed_first_chunk+0x564/0x7b4
-[    0.000000] memblock_reserve: [0x2dbd9000-0x2dbeefff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_phys_free: [0x2dbe4000-0x2dbe3fff] pcpu_embed_first_chunk+0x680/0x7b4
-[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeefff] pcpu_embed_first_chunk+0x680/0x7b4
-[    0.000000] percpu: Embedded 11 pages/cpu s14196 r8192 d22668 u45056
-[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x37c/0x924
-[    0.000000] memblock_reserve: [0x2fff5d60-0x2fff5d63] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3a4/0x924
-[    0.000000] memblock_reserve: [0x2fff5600-0x2fff5603] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3cc/0x924
-[    0.000000] memblock_reserve: [0x2fff55e0-0x2fff55e7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3f4/0x924
-[    0.000000] memblock_reserve: [0x2fff55c0-0x2fff55c7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] pcpu-alloc: s14196 r8192 d22668 u45056 alloc=11*4096
-[    0.000000] pcpu-alloc: [0] 0 [0] 1 
-[    0.000000] memblock_alloc_try_nid: 136 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x7fc/0x924
-[    0.000000] memblock_reserve: [0x2fff5520-0x2fff55a7] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
-[    0.000000] memblock_reserve: [0x2fff54c0-0x2fff551f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 384 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5340-0x2fff54bf] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 388 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
-[    0.000000] memblock_reserve: [0x2fff51a0-0x2fff5323] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5140-0x2fff519f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
-[    0.000000] memblock_reserve: [0x2fff50e0-0x2fff513f] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 768 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
-[    0.000000] memblock_reserve: [0x2dbd8d00-0x2dbd8fff] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 772 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
-[    0.000000] memblock_reserve: [0x2dbd89e0-0x2dbd8ce3] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_alloc_try_nid: 192 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
-[    0.000000] memblock_reserve: [0x2fff5020-0x2fff50df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] memblock_phys_free: [0x2dbf0000-0x2dbf0fff] pcpu_embed_first_chunk+0x744/0x7b4
-[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeffff] pcpu_embed_first_chunk+0x754/0x7b4
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 777792
-[    0.000000] Kernel command line: root=ubi0:rootfs rootfstype=ubifs ubi.mtd=rootfs rootflags=chk_data_crc rw console=ttyS0,115200 memblock=debug
-[    0.000000] memblock_alloc_try_nid: 524288 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
-[    0.000000] memblock_reserve: [0x2db589e0-0x2dbd89df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Dentry cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-[    0.000000] memblock_alloc_try_nid: 262144 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
-[    0.000000] memblock_reserve: [0x2db189e0-0x2db589df] memblock_alloc_range_nid+0xe8/0x1b0
-[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Kernel virtual memory layout:
-[    0.000000]   * 0xffbbf000..0xfffff000  : fixmap
-[    0.000000]   * 0xff400000..0xff800000  : highmem PTEs
-[    0.000000]   * 0xff3fe000..0xff400000  : early ioremap
-[    0.000000]   * 0xf1000000..0xff3fe000  : vmalloc & ioremap
-[    0.000000] Memory: 3062612K/3118080K available (10732K kernel code, 712K rwdata, 2044K rodata, 276K init, 287K bss, 55468K reserved, 0K cma-reserved, 2331640K highmem)
-[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
-
-> >Christophe
-> -- 
-> Sincerely yours,
-> Mike
