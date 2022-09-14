@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BEC5B8BB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3F15B8BB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiINP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S229641AbiINPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiINP0U (ORCPT
+        with ESMTP id S229493AbiINPZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:26:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BE47C32E;
-        Wed, 14 Sep 2022 08:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663169178; x=1694705178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w2AVshTSG88TxCtziOS+qzrWEimtM+9ls56BMEl28zk=;
-  b=kFD6pmFQapaAUZPYq1My+KTn2bhSpGFL/4E3X3rml+1//+/S/Rrw6XYX
-   G9hJNg94Rg5G1tdoLv4AkhNlfIAhy0MQ3db6jwvONl2u6pCltG+L3cPj9
-   0Wc3xhFfiWiZqt1tJwBZjg0goXI3QAwgnNhrfF8tWLCdybx/YP4yJFYk1
-   1cw7xkxW1AvQNXgdbNRM2IX5nvhUOb4WvdlE0yfnSRVr7cPFAo0oyv2eY
-   YLMSbGe1GvgILSb4iEaGKmPZVTko+GVs6ivTuxQ0W50p2AEPujR8VJeZc
-   iJ3VfxHGtzUv9H2rs6iPp5ZqG4XA/Vb2N+kp9xSreQkjvf78MD1sOAT9s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362419807"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="362419807"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 08:26:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="742592762"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Sep 2022 08:26:11 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYUHD-0000Km-02;
-        Wed, 14 Sep 2022 15:26:11 +0000
-Date:   Wed, 14 Sep 2022 23:25:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-        bhelgaas@google.com
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com,
-        jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com,
-        ntb@lists.linux.dev, lznuaa@gmail.com, imx@lists.linux.dev,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v10 5/6] PCI: endpoint: makeup pci-epf-vntb.c
-Message-ID: <202209142334.YTRtjuFD-lkp@intel.com>
-References: <20220913210957.3493826-6-Frank.Li@nxp.com>
+        Wed, 14 Sep 2022 11:25:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A521B792F1;
+        Wed, 14 Sep 2022 08:25:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 324D061D42;
+        Wed, 14 Sep 2022 15:25:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDBEC433B5;
+        Wed, 14 Sep 2022 15:25:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663169144;
+        bh=s8Zya7nr1IH4LVxPFMGBwyM71TXotZVu5kNE5NlYC/M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Vq4vNCCDuGHeXI3L68QpDsugkMEhH5uCfpQivnP+GMenxfWRptCv6jwxiHGDl/BSf
+         pB77X7SNP6gEB7/BOmjko6qJD2hk61I/bbUVTF/KOoMmOMkQQCMqKTHDJpY9SK2iSA
+         sE6KCnLTWgA40ft6kXxEGhhw+8WnBPjwRDsugN2bs42rXZ0JKfri+HWnn8vrQ2UTdD
+         RVGjtbeqO+/x4ltnPyhMyIFDcHuX0zgk7y6FihuOC6FSrREy5TjbQRejMXJqN9mCqt
+         FyoVi6vg0FOtnLvAgb8Ue5VydpkeyxpzF1rgmhbsMe49MFcOvjLK6kIGnrSjK5nSYB
+         x3U6LR0Uu3bkA==
+Received: by mail-vs1-f53.google.com with SMTP id 129so16258026vsi.10;
+        Wed, 14 Sep 2022 08:25:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0tFrVimLo2Fk2ce9yhYlnPthjDpRxTDPtCGFXTRSI9Sg6KLCAz
+        ThIZsFQIoTmJuJGhLJ9DoecbH0iqwIIr9g5bvw==
+X-Google-Smtp-Source: AA6agR5T0qx3DOjT227Yr0wW94npJRy1Hsz66HzwaAkZ/JvVj0UCT1kCcq+i3sBbLO+o2pXkwZGEM6fSwmotX2R8QDc=
+X-Received: by 2002:a67:c18a:0:b0:398:4c72:cafb with SMTP id
+ h10-20020a67c18a000000b003984c72cafbmr9193050vsj.53.1663169143415; Wed, 14
+ Sep 2022 08:25:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913210957.3493826-6-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220913131447.2877280-1-cyndis@kapsi.fi> <20220913131447.2877280-4-cyndis@kapsi.fi>
+ <20220914120840.GA1837218-robh@kernel.org> <6d739e27-c41c-e18f-8d13-0c38b912aa86@kapsi.fi>
+ <YyHl+4O56brs1Pik@orome>
+In-Reply-To: <YyHl+4O56brs1Pik@orome>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 14 Sep 2022 10:25:32 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLGgjb97amt6dc7k-k6O=cDQNMteWadtf-x-9NdVz1eJw@mail.gmail.com>
+Message-ID: <CAL_JsqLGgjb97amt6dc7k-k6O=cDQNMteWadtf-x-9NdVz1eJw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] dt-bindings: Add bindings for Tegra234 NVDEC
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mikko Perttunen <cyndis@kapsi.fi>, devicetree@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Sameer Pujar <spujar@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,149 +72,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+On Wed, Sep 14, 2022 at 9:32 AM Thierry Reding <thierry.reding@gmail.com> wrote:
+>
+> On Wed, Sep 14, 2022 at 03:19:01PM +0300, Mikko Perttunen wrote:
+> > On 9/14/22 15:08, Rob Herring wrote:
+> > > On Tue, Sep 13, 2022 at 04:14:41PM +0300, Mikko Perttunen wrote:
+> > > > From: Mikko Perttunen <mperttunen@nvidia.com>
+> > > >
+> > > > Update NVDEC bindings for Tegra234. This new engine version only has
+> > > > two memory clients, but now requires three clocks, and as a bigger
+> > > > change the engine loads firmware from a secure carveout configured by
+> > > > the bootloader.
+> > > >
+> > > > For the latter, we need to add a phandle to the memory controller
+> > > > to query the location of this carveout, and several other properties
+> > > > containing offsets into the firmware inside the carveout. These
+> > > > properties are intended to be populated through a device tree overlay
+> > > > configured at flashing time, so that the values correspond to the
+> > > > flashed NVDEC firmware.
+> > > >
+> > > > As the binding was getting large with many conditional properties,
+> > > > also split the Tegra234 version out into a separate file.
+> > > >
+> > > > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> > > > ---
+> > > > v2:
+> > > > - Split out into separate file to avoid complexity with
+> > > >    conditionals etc.
+> > > > ---
+> > > >   .../gpu/host1x/nvidia,tegra234-nvdec.yaml     | 154 ++++++++++++++++++
+> > > >   1 file changed, 154 insertions(+)
+> > > >   create mode 100644 Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..eab0475ca983
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+> > > > @@ -0,0 +1,154 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra234-nvdec.yaml#"
+> > > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > > +
+> > > > +title: Device tree binding for NVIDIA Tegra234 NVDEC
+> > > > +
+> > > > +description: |
+> > > > +  NVDEC is the hardware video decoder present on NVIDIA Tegra210
+> > > > +  and newer chips. It is located on the Host1x bus and typically
+> > > > +  programmed through Host1x channels.
+> > > > +
+> > > > +maintainers:
+> > > > +  - Thierry Reding <treding@gmail.com>
+> > > > +  - Mikko Perttunen <mperttunen@nvidia.com>
+> > > > +
+> > > > +properties:
+> > > > +  $nodename:
+> > > > +    pattern: "^nvdec@[0-9a-f]*$"
+> > > > +
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - nvidia,tegra234-nvdec
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    maxItems: 3
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: nvdec
+> > > > +      - const: fuse
+> > > > +      - const: tsec_pka
+> > > > +
+> > > > +  resets:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  reset-names:
+> > > > +    items:
+> > > > +      - const: nvdec
+> > > > +
+> > > > +  power-domains:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  iommus:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  dma-coherent: true
+> > > > +
+> > > > +  interconnects:
+> > > > +    items:
+> > > > +      - description: DMA read memory client
+> > > > +      - description: DMA write memory client
+> > > > +
+> > > > +  interconnect-names:
+> > > > +    items:
+> > > > +      - const: dma-mem
+> > > > +      - const: write
+> > > > +
+> > > > +  nvidia,memory-controller:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description:
+> > > > +      phandle to the memory controller for determining carveout information.
+> > > > +
+> > > > +  nvidia,bl-manifest-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to bootloader manifest from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > > > +
+> > > > +  nvidia,bl-code-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to bootloader code section from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > > > +
+> > > > +  nvidia,bl-data-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to bootloader data section from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > > > +
+> > > > +  nvidia,os-manifest-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to operating system manifest from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > > > +
+> > > > +  nvidia,os-code-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to operating system code section from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > > > +
+> > > > +  nvidia,os-data-offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Offset to operating system data section from beginning of firmware. Typically set as
+> > > > +      part of a device tree overlay corresponding to flashed firmware.
+> > >
+> > > I don't think DT is the place for describing your runtime loaded
+> > > firmware layout.
+> > >
+> > > Rob
+> >
+> > The way I see it, from the kernel's point of view it's not runtime loaded
+> > but a contract with the bootloader. Bootloader sets up hardware in a certain
+> > way the kernel doesn't otherwise know so the bootloader needs to tell the
+> > kernel how the hardware is set up.
+> >
+> > The fact that the information is supplied through an overlay is accidental
+> > -- equivalently the bootloader that sets up the firmware could adjust the
+> > device tree like we do in other situations, but in this case an overlay is
+> > an easier implementation method.
+>
+> I think the key bit of information to know here is that the kernel is
+> not permitted to load this firmware. It's a bootloader early in the boot
+> process that sets this up in a secure context and then needs to convey
+> that information to the kernel.
+>
+> Perhaps a slightly more idiomatic way to pass this information would be
+> using a reserved memory node? That could span the entirety of the secure
+> carveout (therefore removing the need to query the memory controller for
+> that information) and be identified with a compatible string that would
+> allow custom properties for these various offsets. Yet another way would
+> be to have each of the bootloader and OS regions (manifest, code and
+> data) be their own reserved memory regions. But given that this is one
+> chunk with different regions inside makes that seem excessive.
+>
+> Rob, do you have any other ideas how this information could be passed to
+> the kernel if not via DT?
 
-I love your patch! Perhaps something to improve:
+Just update the description summarizing the above removing the overlay
+aspect as when they are set is more important than how.
 
-[auto build test WARNING on jonmason-ntb/ntb-next]
-[also build test WARNING on driver-core/driver-core-testing linus/master v6.0-rc5 next-20220914]
-[cannot apply to tip/irq/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/platform-msi-export-symbol-platform_msi_create_irq_domain/20220914-060955
-base:   https://github.com/jonmason/ntb ntb-next
-config: ia64-randconfig-s051-20220914 (https://download.01.org/0day-ci/archive/20220914/202209142334.YTRtjuFD-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/c0b811e4bf3a50a612ed143d284880e09790eff5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frank-Li/platform-msi-export-symbol-platform_msi_create_irq_domain/20220914-060955
-        git checkout c0b811e4bf3a50a612ed143d284880e09790eff5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/pci/endpoint/functions/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:258:47: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:258:47: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:258:47: sparse:     got void *
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:260:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:260:47: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:260:47: sparse:     got void *
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:560:66: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void [noderef] __iomem *virt_addr @@     got void *[assigned] mw_addr @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:560:66: sparse:     expected void [noderef] __iomem *virt_addr
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:560:66: sparse:     got void *[assigned] mw_addr
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1106:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *base @@     got struct epf_ntb_ctrl *reg @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1106:33: sparse:     expected void [noderef] __iomem *base
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1106:33: sparse:     got struct epf_ntb_ctrl *reg
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1117:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *base @@     got struct epf_ntb_ctrl *reg @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1117:33: sparse:     expected void [noderef] __iomem *base
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1117:33: sparse:     got struct epf_ntb_ctrl *reg
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1128:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *base @@     got struct epf_ntb_ctrl *reg @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1128:33: sparse:     expected void [noderef] __iomem *base
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1128:33: sparse:     got struct epf_ntb_ctrl *reg
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1140:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *base @@     got struct epf_ntb_ctrl *reg @@
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1140:33: sparse:     expected void [noderef] __iomem *base
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1140:33: sparse:     got struct epf_ntb_ctrl *reg
-   drivers/pci/endpoint/functions/pci-epf-vntb.c: note: in included file (through arch/ia64/include/asm/io.h, include/linux/io.h):
-   include/asm-generic/io.h:335:15: sparse: sparse: cast to restricted __le32
-
-vim +258 drivers/pci/endpoint/functions/pci-epf-vntb.c
-
-   236	
-   237	/**
-   238	 * epf_ntb_cmd_handler() - Handle commands provided by the NTB Host
-   239	 * @work: work_struct for the epf_ntb_epc
-   240	 *
-   241	 * Workqueue function that gets invoked for the two epf_ntb_epc
-   242	 * periodically (once every 5ms) to see if it has received any commands
-   243	 * from NTB host. The host can send commands to configure doorbell or
-   244	 * configure memory window or to update link status.
-   245	 */
-   246	static void epf_ntb_cmd_handler(struct work_struct *work)
-   247	{
-   248		struct epf_ntb_ctrl *ctrl;
-   249		u32 command, argument;
-   250		struct epf_ntb *ntb;
-   251		struct device *dev;
-   252		int ret;
-   253		int i;
-   254	
-   255		ntb = container_of(work, struct epf_ntb, cmd_handler.work);
-   256	
-   257		for (i = 1; i < ntb->db_count; i++) {
- > 258			if (readl_relaxed(ntb->epf_db + i * ENTRY_SIZE)) {
-   259				ntb_db_event(&ntb->ntb, i);
- > 260				writel(0, ntb->epf_db + i * ENTRY_SIZE);
-   261			}
-   262		}
-   263	
-   264		ctrl = ntb->reg;
-   265		command = ctrl->command;
-   266		if (!command)
-   267			goto reset_handler;
-   268		argument = ctrl->argument;
-   269	
-   270		ctrl->command = 0;
-   271		ctrl->argument = 0;
-   272	
-   273		ctrl = ntb->reg;
-   274		dev = &ntb->epf->dev;
-   275	
-   276		switch (command) {
-   277		case COMMAND_CONFIGURE_DOORBELL:
-   278			ctrl->command_status = COMMAND_STATUS_OK;
-   279			break;
-   280		case COMMAND_TEARDOWN_DOORBELL:
-   281			ctrl->command_status = COMMAND_STATUS_OK;
-   282			break;
-   283		case COMMAND_CONFIGURE_MW:
-   284			ret = epf_ntb_configure_mw(ntb, argument);
-   285			if (ret < 0)
-   286				ctrl->command_status = COMMAND_STATUS_ERROR;
-   287			else
-   288				ctrl->command_status = COMMAND_STATUS_OK;
-   289			break;
-   290		case COMMAND_TEARDOWN_MW:
-   291			epf_ntb_teardown_mw(ntb, argument);
-   292			ctrl->command_status = COMMAND_STATUS_OK;
-   293			break;
-   294		case COMMAND_LINK_UP:
-   295			ntb->linkup = true;
-   296			ret = epf_ntb_link_up(ntb, true);
-   297			if (ret < 0)
-   298				ctrl->command_status = COMMAND_STATUS_ERROR;
-   299			else
-   300				ctrl->command_status = COMMAND_STATUS_OK;
-   301			goto reset_handler;
-   302		case COMMAND_LINK_DOWN:
-   303			ntb->linkup = false;
-   304			ret = epf_ntb_link_up(ntb, false);
-   305			if (ret < 0)
-   306				ctrl->command_status = COMMAND_STATUS_ERROR;
-   307			else
-   308				ctrl->command_status = COMMAND_STATUS_OK;
-   309			break;
-   310		default:
-   311			dev_err(dev, "UNKNOWN command: %d\n", command);
-   312			break;
-   313		}
-   314	
-   315	reset_handler:
-   316		queue_delayed_work(kpcintb_workqueue, &ntb->cmd_handler,
-   317				   msecs_to_jiffies(5));
-   318	}
-   319	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob
