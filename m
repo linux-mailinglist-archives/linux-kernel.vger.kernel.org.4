@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06D5B8644
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1795B8646
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiINKYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S229820AbiINKYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiINKX1 (ORCPT
+        with ESMTP id S229774AbiINKX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Sep 2022 06:23:27 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813737A749;
-        Wed, 14 Sep 2022 03:23:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPn4krt_1663150996;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VPn4krt_1663150996)
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E997B78D;
+        Wed, 14 Sep 2022 03:23:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPn2vp8_1663151001;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VPn2vp8_1663151001)
           by smtp.aliyun-inc.com;
-          Wed, 14 Sep 2022 18:23:21 +0800
+          Wed, 14 Sep 2022 18:23:24 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 To:     deller@gmx.de
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] video: fbdev: tridentfb: Remove the unused function shadowmode_off()
-Date:   Wed, 14 Sep 2022 18:23:00 +0800
-Message-Id: <20220914102301.87981-2-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] video: fbdev: arkfb: Remove the unused function dac_read_reg()
+Date:   Wed, 14 Sep 2022 18:23:01 +0800
+Message-Id: <20220914102301.87981-3-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 In-Reply-To: <20220914102301.87981-1-jiapeng.chong@linux.alibaba.com>
 References: <20220914102301.87981-1-jiapeng.chong@linux.alibaba.com>
@@ -43,34 +43,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function shadowmode_off() is defined in the tridentfb.c file, but not
+The function dac_read_reg() is defined in the arkfb.c file, but not
 called elsewhere, so delete this unused function.
 
-drivers/video/fbdev/tridentfb.c:1131:20: warning: unused function 'shadowmode_off'.
+drivers/video/fbdev/arkfb.c:322:18: warning: unused function 'dac_read_reg'.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2154
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2155
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/video/fbdev/tridentfb.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/video/fbdev/arkfb.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/video/fbdev/tridentfb.c b/drivers/video/fbdev/tridentfb.c
-index f9c3b1d38fc2..2154dd5e37bd 100644
---- a/drivers/video/fbdev/tridentfb.c
-+++ b/drivers/video/fbdev/tridentfb.c
-@@ -1128,11 +1128,6 @@ static inline void shadowmode_on(struct tridentfb_par *par)
- 	write3CE(par, CyberControl, read3CE(par, CyberControl) | 0x81);
- }
+diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
+index a317d9fe1d67..5f8fec9e5fd4 100644
+--- a/drivers/video/fbdev/arkfb.c
++++ b/drivers/video/fbdev/arkfb.c
+@@ -318,14 +318,6 @@ struct dac_info
+ 	void *data;
+ };
  
--static inline void shadowmode_off(struct tridentfb_par *par)
+-
+-static inline u8 dac_read_reg(struct dac_info *info, u8 reg)
 -{
--	write3CE(par, CyberControl, read3CE(par, CyberControl) & 0x7E);
+-	u8 code[2] = {reg, 0};
+-	info->dac_read_regs(info->data, code, 1);
+-	return code[1];
 -}
 -
- /* Set the hardware to the requested video mode */
- static int tridentfb_set_par(struct fb_info *info)
+ static inline void dac_read_regs(struct dac_info *info, u8 *code, int count)
  {
+ 	info->dac_read_regs(info->data, code, count);
 -- 
 2.20.1.7.g153144c
 
