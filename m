@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A0F5B860C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53EA5B860E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiINKOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S229640AbiINKPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiINKON (ORCPT
+        with ESMTP id S229701AbiINKOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:14:13 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850C21267
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:11 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id j7so9937527vsr.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=aVHGh2KXaAGeDBRMRckt00P09mGtnKYfnn7Un16et9k=;
-        b=fyFvrZ3JObd/xtxvG5Ow0U9li7MbmyuOhfuVYcFdexiTt688/Bd+KepOFtO6WI7k53
-         uvq6Og4MS4pY4OG2UojhtIlYM5kOk6tfs6ZD6venLIjryw2tUtBXnxW1rE9n5bNATZWp
-         zu9Z0bEPA98OgeHml0eR0TW5A/k2Pe+Obv1rpRGy3+nlomGS3TXFT8SHLklf7/jT7KG2
-         O0leXfG15LQrviHnoZ6vOs/FiCQejxIDJXzWOauQwLxnwtRir/bcabwX2G8x6J3SgMXG
-         KakGlgV+9aDtBKfYvDyPARU+oV5a3jzXVceHJB++z7dMF0TbgNuU8qmaNgT6iLIWPQjJ
-         T/Yg==
+        Wed, 14 Sep 2022 06:14:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2582A5F6E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663150477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zy+HcecB9X1fmoe+ZX8nNbCTxaTOZTGJoW+YzpIXLDQ=;
+        b=M3Z7JcjW7NrSyfbqZ/vi8X1Za3ZLc9ilgriin2kW6dhy8JF+cpWjaK9u80a1IsXgH3VbdS
+        jTH8hzKF0Aj8+tSc87G4TdgMtoBBnekAqo/fTf+A3pGQUUlMu7NAXmq5pNAiK6PEIHLBQz
+        60ttlDD7aj9PjAHGOZIBekTjClijCqE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-626-mWLjvtTGMVaBbolDTwV5fw-1; Wed, 14 Sep 2022 06:14:36 -0400
+X-MC-Unique: mWLjvtTGMVaBbolDTwV5fw-1
+Received: by mail-wm1-f71.google.com with SMTP id q16-20020a1cf310000000b003a626026ed1so5229003wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aVHGh2KXaAGeDBRMRckt00P09mGtnKYfnn7Un16et9k=;
-        b=bILoUJtrZnkT+a72fjCEJAmC1RkpH4/Hm0DCkzvibjBydeu82KXyTSq/tFJ+LLLYnl
-         /I7kR2UNMETpMUtn+Wmtb4joejyFs17cvAC/2jP2zQjIfZq6h3CamNAivjoHyQoJzRHo
-         7syFltkCzVWVNwu4gU0o9zQZB7AGux615um/7OLdv2+B2fQNr6l2Nj9UOTbcoCZLb78a
-         dYw21FTaYXvuaK0hQusu8iYcQWvEWEBRMCN5BXa9v8jlsGSOA1Z6PpLv6kHUc5mTcWAe
-         FixfVgye+RwvuwJuYJ7j4sBhb6q/9KISXmMED0pWKlxg+2KR5P2Qtd0i5Oni1DLsJ7M3
-         2ZbA==
-X-Gm-Message-State: ACgBeo24GGEv6FoFL4g2aroK+i2q6irYWmFlzsLdgXxblXkhMeWbakb+
-        zbwmQ8GL79VWo5HXc+kqjL5uu6T9FnsUD6MnhYMjRA==
-X-Google-Smtp-Source: AA6agR4bxwbfTAdlXC3065+Rj0FOZ3/0/EKkHVL8gqO4/u1CRlKPF0tDXfVxyEweZ5yqatpRrrTT+nzW/SfvGU4zcUo=
-X-Received: by 2002:a67:e04d:0:b0:397:f787:7880 with SMTP id
- n13-20020a67e04d000000b00397f7877880mr12930358vsl.71.1663150450866; Wed, 14
- Sep 2022 03:14:10 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=zy+HcecB9X1fmoe+ZX8nNbCTxaTOZTGJoW+YzpIXLDQ=;
+        b=XmAf9+DhS7JFiV0S8kftTnVbxgWbORVgn7dJe2gNy2mdKqTKtC/B2j87ktzbWRRaxC
+         yI3OrCJxDKJnjdQKmgPJX/fe52z+jEsRmnhy/RaPwrcZ2ZyJ82hb4wowzdNA//AhAAGi
+         QazrNLcyqhRPPIu3z9VFIrb/ZFaJdzfM0U9OZtOtnATgDU0SlU5jk7ntBRMHFaN7j+Mo
+         BmjYj5jC3ukhfXSCrDe/pRzXSIfy+lwONt07W70N35Dof8eWAKPdsFNTGV/Xi5vNnVP1
+         eI+XGEvK0P2DgMeIpxF51VIO21y9l5tZ6AGvqb1HuIK6Bu7S1pT/9adzabyw/S8/LTEU
+         xTKQ==
+X-Gm-Message-State: ACgBeo3mdtEKwUBaAYt81nm5rhsKgfp5DfblXGirsq90Ol2+GPBU7PGq
+        SgSLD/iwOx5ZYtLS9tAKaLilH/f2fYBJK6FiuzpRob18gXIZHJsAA1HfxGSvxGR7I10BmVopO2B
+        mlQ0TQedWJDDUOb3Ks+qOE8MV
+X-Received: by 2002:a05:600c:35cc:b0:3a6:f08:9b1 with SMTP id r12-20020a05600c35cc00b003a60f0809b1mr2466544wmq.22.1663150475168;
+        Wed, 14 Sep 2022 03:14:35 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6tsbQzTZqxq9VBgBW8gyHvMcYArl5cDcuQG6dou43DSCrZ3irgtyQ51KtnTgmIsxZSJdl4Jw==
+X-Received: by 2002:a05:600c:35cc:b0:3a6:f08:9b1 with SMTP id r12-20020a05600c35cc00b003a60f0809b1mr2466520wmq.22.1663150474902;
+        Wed, 14 Sep 2022 03:14:34 -0700 (PDT)
+Received: from [10.119.22.46] ([89.101.193.71])
+        by smtp.gmail.com with ESMTPSA id m7-20020a5d6247000000b002258235bda3sm13171662wrv.61.2022.09.14.03.14.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 03:14:34 -0700 (PDT)
+Message-ID: <433f00b8-c860-e2ad-09ba-b1abd4dc6189@redhat.com>
+Date:   Wed, 14 Sep 2022 12:14:33 +0200
 MIME-Version: 1.0
-References: <20220913173136.1926909-1-keescook@chromium.org>
-In-Reply-To: <20220913173136.1926909-1-keescook@chromium.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 14 Sep 2022 18:13:59 +0800
-Message-ID: <CABVgOSnSsMxHQJNPs77rzA729wW1k6o17_ERqGvszFVkQ-hv_Q@mail.gmail.com>
-Subject: Re: [PATCH] fortify: Adjust KUnit test for modular build
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 3/3] vmw_balloon: open-code vmballoon_compaction_init()
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
+References: <20220913094306.317734-1-namit@vmware.com>
+ <20220913094306.317734-4-namit@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220913094306.317734-4-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,55 +85,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 1:31 AM Kees Cook <keescook@chromium.org> wrote:
->
-> A much better "unknown size" string pointer is available directly from
-> struct test, so use that instead of a global that isn't shared with
-> modules.
->
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://lore.kernel.org/lkml/YyCOHOchVuE/E7vS@dev-arch.thelio-3990X
-> Fixes: 875bfd5276f3 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On 13.09.22 11:43, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
+> 
+> Following commit 68f2736a85832 ("mm: Convert all PageMovable users to
+> movable_operations"), the code of vmballoon_compaction_init() is very
+> simple and does not worth a separate function.
+> 
+> Instead, open code vmballoon_compaction_init. As migratepage is always
+> defined, use IS_ENABLED(), which makes the code easier to read. No
+> functional change is intended.
+> 
+> Signed-off-by: Nadav Amit <namit@vmware.com>
 > ---
-> Whoops! Thanks Nathan! :) This fixes it for your reproducer.
 
-Ah, this is better than saved_command_line, IMO. I don't think it'd
-necessarily be a _disaster_ to just introduce a new dynamically-sized
-string here, which would be more explicit, but test->name is at least
-obviously related to this file anyway.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Reviewed-by: David Gow <davidgow@google.com>
+-- 
+Thanks,
 
-Cheers
--- David
+David / dhildenb
 
-> ---
->  lib/fortify_kunit.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
-> index 99bc0ea60d27..409af07f340a 100644
-> --- a/lib/fortify_kunit.c
-> +++ b/lib/fortify_kunit.c
-> @@ -17,7 +17,6 @@
->
->  #include <kunit/test.h>
->  #include <linux/string.h>
-> -#include <linux/init.h>
->
->  static const char array_of_10[] = "this is 10";
->  static const char *ptr_of_11 = "this is 11!";
-> @@ -31,7 +30,7 @@ static void known_sizes_test(struct kunit *test)
->
->         KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
->         /* Externally defined and dynamically sized string pointer: */
-> -       KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
-> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(test->name), SIZE_MAX);
->  }
->
->  /* This is volatile so the optimizer can't perform DCE below. */
-> --
-> 2.34.1
->
