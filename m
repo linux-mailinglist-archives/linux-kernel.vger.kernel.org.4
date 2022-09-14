@@ -2,129 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B91F5B85F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2965B85F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiINKK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S229577AbiINKKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiINKKA (ORCPT
+        with ESMTP id S229546AbiINKJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:10:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD72417059;
-        Wed, 14 Sep 2022 03:09:58 -0700 (PDT)
+        Wed, 14 Sep 2022 06:09:47 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE27BF75;
+        Wed, 14 Sep 2022 03:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663150198; x=1694686198;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nDq1Jq+CBdwiqeg0WoX/BodjNBVR/c2opxgpCEwHwLo=;
-  b=a611p2sxzkoOesMM+3zXI8JB7/lHb/lydKmwJ5CNnv2v35FUxWgHDHnL
-   5R3qXQQzbJHcN0ZU3OI2KqHbMHjpSd2q5UH+iVOH2TdsgX5Rt6Ewa0T0z
-   wFQg6K280edoT+0ph9EwZD3wmYi6rJPEU2ypG+XFE+HNJmtN6AAKfTS43
-   aP/rd29t3z0c9rX0u/8al2oeAWXboiyHBdYly5Q1GEicecWxJv47HunqB
-   kqH/g/YDM22RPo028uuUgJO499nifRT9caOEClX8CmVDYZ2+u2eNGxSOR
-   AzBKIRF0caYxIS4UQ17a6olpj52x3qo36WcjZC8MMbftZw+xOd5O4mhD9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="360130832"
+  t=1663150186; x=1694686186;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SIVcQrh1gSIAZ845KvaUeIdpxkVqBq92ZOZjdm9+p6Q=;
+  b=XaJSS23ttzPlW+t4u7LEypC26n+q5+i9IUp/rBZi9ie7b2XSjWSeT2dj
+   TGZvvs9/e4y3ibJrOHQbF0rP/greTKLruth5CAQQYwNkmi2205bXa5NF5
+   nKcqwV/gBTv+uAogYW3PoKcMDHI0SUUcadksD9NUUY+hMfV9iIeaVpK/m
+   7WmNZzhjRM1nmMXX2ICpkmNx1m4ey9WBmEXG1y/Xn102LtRfOrFL40Uhq
+   K5g9Cqkd+EXz7wDzmJvq4255UgiguRyE9A28jh3stw409fOWhMH0XFFwn
+   yTpN1TEelkMhW83ZOyCs+5xPQLTXa/mENIbSdnNC2JthsE5/jbINowpH/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="298390540"
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="360130832"
+   d="scan'208";a="298390540"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:09:58 -0700
-X-ExtLoop1: 1
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:09:46 -0700
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594325009"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2022 03:09:57 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYPLA-00005a-0o;
-        Wed, 14 Sep 2022 10:09:56 +0000
-Date:   Wed, 14 Sep 2022 18:09:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [djbw-nvdimm:libnvdimm-pending 16/22] drivers/dax/mapping.c:646:
- warning: This comment starts with '/**', but isn't a kernel-doc comment.
- Refer Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202209141710.pI0d0v9N-lkp@intel.com>
+   d="scan'208";a="594324921"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:09:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oYPKv-0029B7-0z;
+        Wed, 14 Sep 2022 13:09:41 +0300
+Date:   Wed, 14 Sep 2022 13:09:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lennert Buytenhek <buytenh@wantstofly.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
+Message-ID: <YyGoZLTFhYQvlf+P@smile.fi.intel.com>
+References: <YyF/dogp/0C87zLb@wantstofly.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YyF/dogp/0C87zLb@wantstofly.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
++Cc: Ilpo
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+On Wed, Sep 14, 2022 at 10:15:02AM +0300, Lennert Buytenhek wrote:
+> Hi,
+> 
+> On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
+> can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
+> the UARTs and then re-open that UART.
+> 
+> Invoking TIOCVHANGUP appears to clear the MSI address/data registers
+> in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
+> uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
+> univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
+> __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
+> __pci_write_msi_msg():
+> 
+> [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
+> 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
+> 		Address: fee00278  Data: 0000
+> [root@icelake ~]# cat hangup.c
+> #include <stdio.h>
+> #include <sys/ioctl.h>
+> 
+> int main(int argc, char *argv[])
+> {
+> 	ioctl(1, TIOCVHANGUP);
+> 
+> 	return 0;
+> }
+> [root@icelake ~]# gcc -Wall -o hangup hangup.c
+> [root@icelake ~]# ./hangup > /dev/ttyS4
+> [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
+> 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
+> 		Address: 00000000  Data: 0000
+> [root@icelake ~]#
+> 
+> Opening the serial port device again while the UART is in this state
+> then appears to cause the UART to generate an interrupt
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
-head:   e27a0356de15f16934325784c6b1d89cf0f13458
-commit: 155ac6b670cf6385f6dd14910560d569560af889 [16/22] devdax: Move address_space helpers to the DAX core
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220914/202209141710.pI0d0v9N-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=155ac6b670cf6385f6dd14910560d569560af889
-        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
-        git fetch --no-tags djbw-nvdimm libnvdimm-pending
-        git checkout 155ac6b670cf6385f6dd14910560d569560af889
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
+Any of them can be possible, but to be sure, can you add:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+	dev_info(p->dev, "FISR: %x\n", fisr);
 
-All warnings (new ones prefixed by >>):
+into dnv_handle_irq() before any other code and see which bits we actually got
+there before the crash?
 
->> drivers/dax/mapping.c:646: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Return NULL if the entry is zapped and all pages in the entry are
+(If it floods the logs, dev_info_ratelimited() may help)
 
+> before the
+> MSI vector has been set up again, causing a DMA write to I/O virtual
+> address zero:
+> 
+> [root@icelake console]# echo > /dev/ttyS4
+> [  979.463307] DMAR: DRHD: handling fault status reg 3
+> [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
+> 
+> I'm guessing there's something under tty_open() -> uart_open() ->
+> tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
+> serial8250_do_startup() that triggers a UART interrupt before the
+> MSI vector has been set up again.
+> 
+> I did a quick search but it didn't seem like this is a known issue.
 
-vim +646 drivers/dax/mapping.c
+Thanks for your report and reproducer! Yes, I also never heard about such an
+issue before. Ilpo, who is doing more UART work nowadays, might have an idea,
+I hope.
 
-   644	
-   645	/**
- > 646	 * Return NULL if the entry is zapped and all pages in the entry are
-   647	 * idle, otherwise return the non-idle page in the entry
-   648	 */
-   649	static struct page *dax_zap_pages(struct xa_state *xas, void *entry)
-   650	{
-   651		struct page *ret = NULL;
-   652		unsigned long pfn;
-   653		bool zap;
-   654	
-   655		if (!dax_entry_size(entry))
-   656			return NULL;
-   657	
-   658		zap = !dax_is_zapped(entry);
-   659	
-   660		for_each_mapped_pfn(entry, pfn) {
-   661			struct page *page = pfn_to_page(pfn);
-   662	
-   663			if (zap)
-   664				page_ref_dec(page);
-   665	
-   666			if (!ret && !dax_page_idle(page))
-   667				ret = page;
-   668		}
-   669	
-   670		if (zap)
-   671			dax_zap_entry(xas, entry);
-   672	
-   673		return ret;
-   674	}
-   675	
+I'm a bit busy with other stuff right now.
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+
