@@ -2,131 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C76E5B8180
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10565B8187
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiINGYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 02:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        id S230046AbiINGgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 02:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiINGYV (ORCPT
+        with ESMTP id S229928AbiINGgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 02:24:21 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2485B7269E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:24:18 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id q9so4302657pgq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:24:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=fRKf+imVw7MttIFJnauud7q8IBR969IuIIWD8g4fCPA=;
-        b=PUXE6B3aPHP+SZGAuLS15FDgWLtMLluRF4EnRnapMrcQ/7eXfJhaqd6vSwaDNGravW
-         /Npbi5K0MPHIHcbnYARE1ZMDeGP2qJH6/1hfVOPuHui/wtwcCAbhbpVplIejXXxe1k67
-         EWO4k2b5toBpqgzKTMSwfHH0mnfQnCVygq3Yb/IOOfdfW8TzxuMZbn9z/FAJ48z2DTww
-         HwQZVPpv+XI8+8NqFX1QBcRZMRvVCGZUqvhne9x7Pqc/Lj1qRo1e9P8LzUFG8JLyvpJ1
-         3wOvrvNBboWiYlfZ1teVZXOucF2L/ff/0OeZiEhiHSuzp0xK1x1ml+1813aszt2UGqxX
-         iF9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=fRKf+imVw7MttIFJnauud7q8IBR969IuIIWD8g4fCPA=;
-        b=6Md9RacMXvexBuKmt4w1Y0aCM6A7vPxMSEB6YALXh9SpJIAEdls1p2iIEXxaPPgBzP
-         MN21aoAEuMXdYNF5D+ZEtJkaimImf8y9t1XUH2+ctaBnLDKqaxe8Bq23a9qzRwlBdOVt
-         5yM3kvleIOVEqY4IXFlqbnLMPSmI5Qibx4vw6vSoa8nytwVcJFkyo9zF/Zs/DBocCkcn
-         qAoLa44sWtj8AemBiAGMJBWOw2Q06nQen7/KLpUOdJYNe922FqyS6DeB5v9JFV8suT9z
-         oZ0P3cQ64x2SKA53wqQZ/XSzMnUoUnEpufsfx9dCwMVwHjJvZMIUzwR1jzvUs9rEHV9g
-         d55w==
-X-Gm-Message-State: ACgBeo3Agw7t1ZzKw13POSRiA8Zgoc0fOstaRGv5fU3r27O5ifsUobE7
-        ScxIETF6VoInMdKhaGrnTVODdMZa3WbebT4=
-X-Google-Smtp-Source: AA6agR4ZCZsGFPvSQBEvMKNXH7CVSjTn9MVPIP4sBKbe14FuFMLRYO5giCmz/5OT/5JZb4nHlql7iQ==
-X-Received: by 2002:a63:451a:0:b0:439:246e:807e with SMTP id s26-20020a63451a000000b00439246e807emr8559930pga.347.1663136657408;
-        Tue, 13 Sep 2022 23:24:17 -0700 (PDT)
-Received: from workstation ([117.202.184.122])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090322cc00b00177fb862a87sm9888045plg.20.2022.09.13.23.24.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Sep 2022 23:24:16 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 11:54:11 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Vidya Sagar <vidyas@nvidia.com>,
-        jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20220914062411.GD16459@workstation>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
+        Wed, 14 Sep 2022 02:36:48 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F22C38444;
+        Tue, 13 Sep 2022 23:36:46 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aef39.dynamic.kabel-deutschland.de [95.90.239.57])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id B8A2561EA192A;
+        Wed, 14 Sep 2022 08:36:43 +0200 (CEST)
+Message-ID: <0b67df9e-7f64-e710-5928-2098ed8d0f2d@molgen.mpg.de>
+Date:   Wed, 14 Sep 2022 08:36:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913200746.GA619956@bhelgaas>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/4] md/raid10: cleanup wait_barrier()
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
+ <20220914014914.398712-2-yukuai1@huaweicloud.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220914014914.398712-2-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > not having an endpoint connected to the slot is not an error.
-> > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > 
-> > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > returned. So I don't think the log severity should be changed.
-> > 
-> > Yes it is an error in the sense it is a timeout, but reporting an error
-> > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > that a similar change was made by the following commit and it also seems
-> > appropriate here ...
-> > 
-> > commit 4b16a8227907118e011fb396022da671a52b2272
-> > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > 
-> >     PCI: tegra: Change link retry log level to debug
-> > 
-> > 
-> > BTW, we check for error messages in the dmesg output and this is a new error
-> > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > error, but in this case it seem more appropriate to make this a info or
-> > debug level print.
+Dear Yu,
+
+
+Thank you for the improved patch. Three minor nits.
+
+Am 14.09.22 um 03:49 schrieb Yu Kuai:
+> From: Yu Kuai <yukuai3@huawei.com>
+
+In the summary/title, I’d spell *Clean up* with a space. Maybe even use:
+
+md/raid10: Factor out code from wait_barrier() to stop_waiting_barrier()
+
+> Currently the nasty condition is wait_barrier() is hard to read. This
+> patch factor out the condition into a function.
+
+The first *is* above can be removed, and factor*s* needs an s.
+> There are no functional changes.
 > 
-> Can you tell whether there's a device present, e.g., via Slot Status
-> Presence Detect?  If there's nothing in the slot, I don't know why we
-> would print anything at all.  If a card is present but there's no
-> link, that's probably worthy of dev_info() or even dev_err().
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   drivers/md/raid10.c | 56 ++++++++++++++++++++++++++-------------------
+>   1 file changed, 32 insertions(+), 24 deletions(-)
 > 
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 64d6e4cd8a3a..56458a53043d 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -957,44 +957,52 @@ static void lower_barrier(struct r10conf *conf)
+>   	wake_up(&conf->wait_barrier);
+>   }
+>   
+> +static bool stop_waiting_barrier(struct r10conf *conf)
+> +{
+> +	/* barrier is dropped */
+> +	if (!conf->barrier)
+> +		return true;
+> +
+> +	/*
+> +	 * If there are already pending requests (preventing the barrier from
+> +	 * rising completely), and the pre-process bio queue isn't empty, then
+> +	 * don't wait, as we need to empty that queue to get the nr_pending
+> +	 * count down.
+> +	 */
+> +	if (atomic_read(&conf->nr_pending)) {
+> +		struct bio_list *bio_list = current->bio_list;
+> +
+> +		if (bio_list && (!bio_list_empty(&bio_list[0]) ||
+> +				 !bio_list_empty(&bio_list[1])))
+> +			return true;
+> +	}
+> +
+> +	/* move on if recovery thread is blocked by us */
+> +	if (conf->mddev->thread->tsk == current &&
+> +	    test_bit(MD_RECOVERY_RUNNING, &conf->mddev->recovery) &&
+> +	    conf->nr_queued > 0)
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+>   static bool wait_barrier(struct r10conf *conf, bool nowait)
+>   {
+>   	bool ret = true;
+>   
+>   	spin_lock_irq(&conf->resync_lock);
+>   	if (conf->barrier) {
+> -		struct bio_list *bio_list = current->bio_list;
+> -		conf->nr_waiting++;
+> -		/* Wait for the barrier to drop.
+> -		 * However if there are already pending
+> -		 * requests (preventing the barrier from
+> -		 * rising completely), and the
+> -		 * pre-process bio queue isn't empty,
+> -		 * then don't wait, as we need to empty
+> -		 * that queue to get the nr_pending
+> -		 * count down.
+> -		 */
+>   		/* Return false when nowait flag is set */
+>   		if (nowait) {
+>   			ret = false;
+>   		} else {
+> +			conf->nr_waiting++;
+>   			raid10_log(conf->mddev, "wait barrier");
+>   			wait_event_lock_irq(conf->wait_barrier,
+> -					    !conf->barrier ||
+> -					    (atomic_read(&conf->nr_pending) &&
+> -					     bio_list &&
+> -					     (!bio_list_empty(&bio_list[0]) ||
+> -					      !bio_list_empty(&bio_list[1]))) ||
+> -					     /* move on if recovery thread is
+> -					      * blocked by us
+> -					      */
+> -					     (conf->mddev->thread->tsk == current &&
+> -					      test_bit(MD_RECOVERY_RUNNING,
+> -						       &conf->mddev->recovery) &&
+> -					      conf->nr_queued > 0),
+> +					    stop_waiting_barrier(conf),
+>   					    conf->resync_lock);
+> +			conf->nr_waiting--;
+>   		}
+> -		conf->nr_waiting--;
+>   		if (!conf->nr_waiting)
+>   			wake_up(&conf->wait_barrier);
+>   	}
 
-I don't think all form factors allow for the PRSNT pin to be wired up,
-so we cannot know if the device is actually present in the slot or not all
-the time. Maybe we should do if the form factor supports it?
+Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-> I guess if you can tell the slot is empty, there's no point in even
-> trying to start the link, so you could avoid both the message and the
-> timeout by not even calling dw_pcie_wait_for_link().
 
-Right. There is an overhead of waiting for ~1ms during boot.
+Kind regards,
 
-We workaround this issue by disabling the PCIe instances in devicetree
-for which there would be no devices connected.
-
-Thanks,
-Mani
-
-> 
-> Bjorn
+Paul
