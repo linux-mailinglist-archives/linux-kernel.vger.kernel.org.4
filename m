@@ -2,121 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A945B8CC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7865B8CC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiINQWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S229617AbiINQWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiINQWS (ORCPT
+        with ESMTP id S229822AbiINQW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:22:18 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9A1CDB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:22:17 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n23-20020a17090a091700b00202a51cc78bso13302524pjn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:22:17 -0700 (PDT)
+        Wed, 14 Sep 2022 12:22:26 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11A17A529
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:22:24 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id i19so11497504pgi.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=vSqGkij0iJ02LNmcxwO+X24LzA4vRR84QlahoRcoEUk=;
-        b=qDwmnr7yOYUEPiNILJjSYsaLa30cmMbxBEJSZzRMbMx5G0/4KajA69yKmAVfQp+Tmx
-         VEppdYXx2ij+1vOMreanK3SjSXs6Znqne8dN1Drd7f40qsSpbIoUpSNajl7FgM/vUrx+
-         /BMAHez+1J6GkqSA4A+glx2JfnNKOYvdls4OnCW1pBxYID09/vN7MHEasrQ2Q9BBPgf8
-         KSW+UC4hFxNSiy3o1hrOMYX6KbaLgtk+k/f5Y3AS4Nw3pCRncSeiBLo9ldFO50squcez
-         NYiDT5Ctf3kwOIVngBQKi8sqkXXWgULy6VGmlpHgIDtPQLa1oQCj1wdo/KZYilqpJaV6
-         ftoQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=QqY6zjkG7tOexQ+JjAZx9uwGMUGEwBPtZu3WWvYMDno=;
+        b=Js3JLJVwxW6aPUc2ShK4wv7Asbdt/viVK7yBFmCA7Vzi1h3NRWCV1b7+pyzu1ocgmi
+         yaoBZI6v+7FFkWivhycjh6Cb8zBuStOeDQtVo12O6qXycIKRrH61iDc999xoQCKv4ZMp
+         +j/KiKsQmDrhQvhvHcQUpu401lXswdiVtRewqoIWdWFmKCQaQL9nnQBeVMkcysPB2HQ3
+         LJOPWpgPO92uKaXam6YL1J1OOEI19DYABLjUs+5xPv9mTMCXXkcb3yOs8jJ13/YoXxZy
+         KykZzSLXXKPoffLpARaqo8eJAQtxyrqNSsJmC73ochewSEbMgANHABlEDIA7jllBFbgH
+         KSSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vSqGkij0iJ02LNmcxwO+X24LzA4vRR84QlahoRcoEUk=;
-        b=hS2ydUi02oUTTDzH4rOjUkbSg+eKfFy/9UYOmz/RJ3EWSsNivSsnlSb7iGtDDIgboN
-         1IAvNnMxWdQgvYx3ftS4xY7GS/f41O/iNnZSVzIvdxAFEZBrj/Ss7BGsHlQyOCEqRIiD
-         ezvCCnkn5qbYebGVWJ2nqHaqWBOtPm3eL4Y7OIL2dfCdVbONneE4KjOfb/HZTGgGq5Pi
-         pGzufI6u6phE94UOQMbejTNcSYeKkWakVn0QkwfqKtqKP1tSF/ZdTMa3Zmk5yz9LYjKC
-         weGn7YD61pOG5mZ0SlVOc2cZkKkVY0SrMRN/ZRQ4B87zZmxvS7H8CZC80th6pdN9S9px
-         9qVQ==
-X-Gm-Message-State: ACgBeo2XPc94HIUXgejA/vaLG9QABNR7lId5ABKP46Ijc05fZQqrTXKs
-        mNKFc7fHnUIhdEjaOMEiqgN+wA==
-X-Google-Smtp-Source: AA6agR6rRu5Esr/QftLs4NgvC2oASCOgWLDyAbveVyj+N+p6xnapdY9Xw5HMK9dDqvSwfRgWL69VgQ==
-X-Received: by 2002:a17:902:8486:b0:171:48cd:1356 with SMTP id c6-20020a170902848600b0017148cd1356mr35858433plo.153.1663172536881;
-        Wed, 14 Sep 2022 09:22:16 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j8-20020a17090a318800b002005114fbf5sm5302312pjb.22.2022.09.14.09.22.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=QqY6zjkG7tOexQ+JjAZx9uwGMUGEwBPtZu3WWvYMDno=;
+        b=LNOq8bEzY4ZLId14SFLMoOP7jXzKtZvnflLi1cHli8PZO2JVlxTqsXrImkHWWq4TF3
+         L+/QQ5GZkOVmcAhx2LSZHFT4ES95vTb0g2HdsxNjRB5slxNvvtc3I/VapH6DvQVRuaVV
+         UhVyNz+O1f6mz6sgVEBHc13/SSzZcHLYqZW69BS2UD5C/8a+3/gXuPgcEbJVr6xdYvf4
+         ucoNc8BwevKyNk+dCb7+Iq7O0XJSvC+RfL7OScEtvjWABOBAA8H8vv/wiiDn2f7R45du
+         KPMnicF+KpCejpK46JBMgkz5WC3Jq+cvPor/6P37+0l5TZEOcesdoPjYXoBd6Xfwoggj
+         jdDg==
+X-Gm-Message-State: ACgBeo2adHJHTPvKTfx69rm+3RMhVJ7w5N4melAGZCbTgHKOzp3GtvcO
+        EXTxfkT4rXtE36mOBey78m4=
+X-Google-Smtp-Source: AA6agR4X81GW/E4KDjaiut+rqrYIpZEF2/pQBOVAZbFy5EboxvbT4KLIY1sfWf8sZQMQouCyKpsliQ==
+X-Received: by 2002:a63:5244:0:b0:434:a3b1:bbe8 with SMTP id s4-20020a635244000000b00434a3b1bbe8mr33036980pgl.57.1663172543519;
+        Wed, 14 Sep 2022 09:22:23 -0700 (PDT)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id ik22-20020a170902ab1600b0016dc26c7d30sm5777187plb.164.2022.09.14.09.22.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:22:16 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 16:22:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Gonda <pgonda@google.com>, Adam Dunlap <acdunlap@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ben Dooks <ben-linux@fluff.org>,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Jacob Xu <jacobhxu@google.com>,
-        Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>
-Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
-Message-ID: <YyH/tOqrl8pZmoub@google.com>
-References: <20220812183501.3555820-1-acdunlap@google.com>
- <20220908170456.3177635-1-acdunlap@google.com>
- <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
- <2625dbfa-434c-7d55-6469-9d9e89397e8f@intel.com>
+        Wed, 14 Sep 2022 09:22:22 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     zokeefe@google.com, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable PATCH] mm: MADV_COLLAPSE: refetch vm_end after reacquiring mmap_lock
+Date:   Wed, 14 Sep 2022 09:22:20 -0700
+Message-Id: <20220914162220.787703-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2625dbfa-434c-7d55-6469-9d9e89397e8f@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022, Dave Hansen wrote:
-> On 9/14/22 04:13, Peter Gonda wrote:
-> > On Thu, Sep 8, 2022 at 6:05 PM Adam Dunlap <acdunlap@google.com> wrote:
-> >> Previously, when compiled with clang, native_apic_mem_read gets inlined
-> >> into __xapic_wait_icr_idle and optimized to a testl instruction. When
-> >> run in a VM with SEV-ES enabled, it attempts to emulate this
-> >> instruction, but the emulator does not support it. Instead, use inline
-> >> assembly to force native_apic_mem_read to use the mov instruction which
-> >> is supported by the emulator.
-> > This seems to be an issue with the SEV-ES in guest #VC handler's
-> > "emulator" right?
-> 
-> No.
-> 
-> It's not just an SEV-ES thing.  It's a problem for TDX and _probably_ a
-> problem for normal virtualization where it's a host-side issue.  Kirill
-> wrote a lot of great background information in here:
-> 
-> > https://lore.kernel.org/all/164946765464.4207.3715751176055921036.tip-bot2@tip-bot2/
-> 
-> So, the question is not "should we extend the MMIO instruction decoders
-> to handle one more instruction?".  It is "should we extend the MMIO
-> decoders to handle *ALL* memory read instructions?"
-> 
-> That's an even more emphatic "NO".
+The syzbot reported the below problem:
 
-+1, keep the guest-side decoding as simple as possible.
+BUG: Bad page map in process syz-executor198  pte:8000000071c00227 pmd:74b30067
+addr:0000000020563000 vm_flags:08100077 anon_vma:ffff8880547d2200 mapping:0000000000000000 index:20563
+file:(null) fault:0x0 mmap:0x0 read_folio:0x0
+CPU: 1 PID: 3614 Comm: syz-executor198 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_bad_pte.cold+0x2a7/0x2d0 mm/memory.c:565
+ vm_normal_page+0x10c/0x2a0 mm/memory.c:636
+ hpage_collapse_scan_pmd+0x729/0x1da0 mm/khugepaged.c:1199
+ madvise_collapse+0x481/0x910 mm/khugepaged.c:2433
+ madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1062
+ madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1236
+ do_madvise.part.0+0x24a/0x340 mm/madvise.c:1415
+ do_madvise mm/madvise.c:1428 [inline]
+ __do_sys_madvise mm/madvise.c:1428 [inline]
+ __se_sys_madvise mm/madvise.c:1426 [inline]
+ __x64_sys_madvise+0x113/0x150 mm/madvise.c:1426
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f770ba87929
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f770ba18308 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+RAX: ffffffffffffffda RBX: 00007f770bb0f3f8 RCX: 00007f770ba87929
+RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+RBP: 00007f770bb0f3f0 R08: 00007f770ba18700 R09: 0000000000000000
+R10: 00007f770ba18700 R11: 0000000000000246 R12: 00007f770bb0f3fc
+R13: 00007ffc2d8b62ef R14: 00007f770ba18400 R15: 0000000000022000
 
-> readl() seems to be the right thing to do.  Also, Dear TDX, SEV and virt
-> folks: please look for more of these.  They're going to bite you sooner
-> or later.  You should have caught this one before now.
+Basically the test program does the below conceptually:
+1. mmap 0x2000000 - 0x21000000 as anonymous region
+2. mmap io_uring SQ stuff at 0x20563000 with MAP_FIXED, io_uring_mmap()
+   actually remaps the pages with special PTEs
+3. call MADV_COLLAPSE for 0x20000000 - 0x21000000
+
+It actually triggered the below race:
+
+             CPU A                                          CPU B
+mmap 0x20000000 - 0x21000000 as anon
+                                           madvise_collapse is called on this area
+                                             Retrieve start and end address from the vma (NEVER updated later!)
+                                             Collapsed the first 2M area and dropped mmap_lock
+Acquire mmap_lock
+mmap io_uring file at 0x20563000
+Release mmap_lock
+                                             Reacquire mmap_lock
+                                             revalidate vma pass since 0x20200000 + 0x200000 > 0x20563000
+                                             scan the next 2M (0x20200000 - 0x20400000), but due to whatever reason it didn't release mmap_lock
+                                             scan the 3rd 2M area (start from 0x20400000)
+                                               get into the vma created by io_uring
+
+The hend should be updated after MADV_COLLAPSE reacquire mmap_lock since
+the vma may be shrunk.  We don't have to worry about shink from the
+other direction since it could be caught by hugepage_vma_revalidate().  Either no valid
+vma is found or the vma doesn't fit anymore.
+
+Reported-by: syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+Reviewed-by: Zach O'Keefe <zokeefe@google.com>
+---
+ mm/khugepaged.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index a3acd3e5e0f3..1860be232a26 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -2592,6 +2592,8 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 				last_fail = result;
+ 				goto out_nolock;
+ 			}
++
++			hend = vma->vm_end & HPAGE_PMD_MASK;
+ 		}
+ 		mmap_assert_locked(mm);
+ 		memset(cc->node_load, 0, sizeof(cc->node_load));
+-- 
+2.26.3
+
