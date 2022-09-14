@@ -2,62 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C755B8652
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBB75B8657
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiINK0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S229825AbiINK0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiINK0K (ORCPT
+        with ESMTP id S229812AbiINK0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:26:10 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B301D47B93;
-        Wed, 14 Sep 2022 03:26:07 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MSGf51m88z6S35b;
-        Wed, 14 Sep 2022 18:24:13 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgA3inM8rCFjb0JUAw--.56858S3;
-        Wed, 14 Sep 2022 18:26:05 +0800 (CST)
-Subject: Re: [PATCH v2 4/4] md/raid10: convert resync_lock to use seqlock
-To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
-        logang@deltatee.com, guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
- <20220914014914.398712-5-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <de93d898-c69d-95de-95bb-3b899ca9f5b9@huaweicloud.com>
-Date:   Wed, 14 Sep 2022 18:26:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 14 Sep 2022 06:26:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779BE6AA22;
+        Wed, 14 Sep 2022 03:26:34 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E9mte0007852;
+        Wed, 14 Sep 2022 10:26:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YEISDO6tRN2BKZmf1zGjPFjG8txfCf6PeSIqZVu3kcM=;
+ b=TL5yKDVh/yaeYS9WmvGBBuEyLl7zxW1h1w2itMnTjp2MMbbmyNtNDRpAOQT4fD6oUGrX
+ QusZ9K7oSTLIhWKOGalS9GhZUnznWfW2ue695Jfatf4geR8N5ykLIPgzh/fsu3BqFgwU
+ c4NTv5FiyFG0YpITSt6y9dPdAqPktgjGJaDIgzDzvXCdgFzi5kvzzxprZSW9iysxAHwF
+ ycxg2o+DVxOMNu2oK2n3wVmCZwBYDpD/D+CMVv3uAAlT1VMUF0ezrXdpjmNDd9udhU/Y
+ sh6TK6FnTZv+CXS5MMmnRvduwKigOCGxXDvxNAqT9xR5wWmNWTyIq7bO7ZSRh1XGlSYD Dg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxys27r0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:26:23 +0000
+Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28EAQLXV008247;
+        Wed, 14 Sep 2022 10:26:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jh430w719-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:26:21 +0000
+Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28EAQLQD008237;
+        Wed, 14 Sep 2022 10:26:21 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 28EAQLa0008236
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:26:21 +0000
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 03:26:17 -0700
+Subject: Re: [PATCH 3/4] slimbus: qcom-ngd-ctrl: Make QMI message rules const
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-2-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-3-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-4-quic_jjohnson@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <7237445c-98fa-ef2b-8cdb-75656a724422@quicinc.com>
+Date:   Wed, 14 Sep 2022 15:56:14 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220914014914.398712-5-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgA3inM8rCFjb0JUAw--.56858S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw45Gr43Cw45trWrZr4fKrg_yoWxuFy3pw
-        4aqr43tFWUXr9Iqrs8Ja1q9r1Fgw4kKFyUK392gan7ZFsYqryfCF1UGryFgryqvr9xJr1k
-        XFWrCFZ3GwnFyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220912232526.27427-4-quic_jjohnson@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iaPqmHGDL_hzox27I1LdgUEUrqf183jx
+X-Proofpoint-GUID: iaPqmHGDL_hzox27I1LdgUEUrqf183jx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_03,2022-09-14_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 impostorscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140050
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,216 +105,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-ÔÚ 2022/09/14 9:49, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
+
+On 9/13/22 4:55 AM, Jeff Johnson wrote:
+> Commit ff6d365898d ("soc: qcom: qmi: use const for struct
+> qmi_elem_info") allows QMI message encoding/decoding rules to be
+> const, so do that for qcom-ngd-ctrl.
 > 
-> Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
-> and io can't be dispatched until 'barrier' is dropped.
-> 
-> Since holding the 'barrier' is not common, convert 'resync_lock' to use
-> seqlock so that holding lock can be avoided in fast path.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+
 > ---
->   drivers/md/raid10.c | 85 +++++++++++++++++++++++++++++----------------
->   drivers/md/raid10.h |  2 +-
->   2 files changed, 57 insertions(+), 30 deletions(-)
+>   drivers/slimbus/qcom-ngd-ctrl.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 377d4641bb54..6c2396fe75a0 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -79,6 +79,21 @@ static void end_reshape(struct r10conf *conf);
+> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+> index 0aa8408464ad..931ab6317467 100644
+> --- a/drivers/slimbus/qcom-ngd-ctrl.c
+> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
+> @@ -220,7 +220,7 @@ struct slimbus_power_resp_msg_v01 {
+>   	struct qmi_response_type_v01 resp;
+>   };
 >   
->   #include "raid1-10.c"
+> -static struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_UNSIGNED_4_BYTE,
+>   		.elem_len   = 1,
+> @@ -262,7 +262,7 @@ static struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+>   	},
+>   };
 >   
-> +#define NULL_CMD
-> +#define cmd_before(conf, cmd) \
-> +	do { \
-> +		write_sequnlock_irq(&(conf)->resync_lock); \
-> +		cmd; \
-> +	} while (0)
-> +#define cmd_after(conf) write_seqlock_irq(&(conf)->resync_lock)
-> +
-> +#define wait_event_barrier_cmd(conf, cond, cmd) \
-> +	wait_event_cmd((conf)->wait_barrier, cond, cmd_before(conf, cmd), \
-> +		       cmd_after(conf))
-> +
-> +#define wait_event_barrier(conf, cond) \
-> +	wait_event_barrier_cmd(conf, cond, NULL_CMD)
-> +
->   /*
->    * for resync bio, r10bio pointer can be retrieved from the per-bio
->    * 'struct resync_pages'.
-> @@ -936,30 +951,29 @@ static void flush_pending_writes(struct r10conf *conf)
+> -static struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_STRUCT,
+>   		.elem_len   = 1,
+> @@ -284,7 +284,7 @@ static struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+>   	},
+>   };
 >   
->   static void raise_barrier(struct r10conf *conf, int force)
->   {
-> -	spin_lock_irq(&conf->resync_lock);
-> +	write_seqlock_irq(&conf->resync_lock);
->   	BUG_ON(force && !conf->barrier);
+> -static struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_UNSIGNED_4_BYTE,
+>   		.elem_len   = 1,
+> @@ -324,7 +324,7 @@ static struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+>   	},
+>   };
 >   
->   	/* Wait until no block IO is waiting (unless 'force') */
-> -	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
-> -			    conf->resync_lock);
-> +	wait_event_barrier(conf, force || !conf->nr_waiting);
->   
->   	/* block any new IO from starting */
-> -	conf->barrier++;
-> +	WRITE_ONCE(conf->barrier, conf->barrier + 1);
->   
->   	/* Now wait for all pending IO to complete */
-> -	wait_event_lock_irq(conf->wait_barrier,
-> -			    !atomic_read(&conf->nr_pending) && conf->barrier < RESYNC_DEPTH,
-> -			    conf->resync_lock);
-> +	wait_event_barrier(conf, !atomic_read(&conf->nr_pending) &&
-> +				 conf->barrier < RESYNC_DEPTH);
->   
-> -	spin_unlock_irq(&conf->resync_lock);
-> +	write_sequnlock_irq(&conf->resync_lock);
->   }
->   
->   static void lower_barrier(struct r10conf *conf)
->   {
->   	unsigned long flags;
-> -	spin_lock_irqsave(&conf->resync_lock, flags);
-> -	conf->barrier--;
-> -	spin_unlock_irqrestore(&conf->resync_lock, flags);
-> +
-> +	write_seqlock_irqsave(&conf->resync_lock, flags);
-> +	WRITE_ONCE(conf->barrier, conf->barrier - 1);
-> +	write_sequnlock_irqrestore(&conf->resync_lock, flags);
->   	wake_up_barrier(conf);
->   }
->   
-> @@ -992,11 +1006,29 @@ static bool stop_waiting_barrier(struct r10conf *conf)
->   	return false;
->   }
->   
-> +static bool wait_barrier_nolock(struct r10conf *conf)
-> +{
-> +	unsigned int seq = read_seqbegin(&conf->resync_lock);
-> +
-> +	if (READ_ONCE(conf->barrier))
-> +		return false;
-> +
-> +	atomic_inc(&conf->nr_pending);
-> +	if (!read_seqretry(&conf->resync_lock, seq))
-> +		return true;
-> +
-> +	atomic_dec(&conf->nr_pending);
-
-During pressure test, I found that this is problematic, raise_barrier()
-can wait for nr_pending to be zero, and the increase and decrease here
-will cause raise_barrier() hang if nr_pending is decreased to 0 here.
-
-I'll send to new version to fix this.
-
-Thanks,
-Kuai
-> +	return false;
-> +}
-> +
->   static bool wait_barrier(struct r10conf *conf, bool nowait)
->   {
->   	bool ret = true;
->   
-> -	spin_lock_irq(&conf->resync_lock);
-> +	if (wait_barrier_nolock(conf))
-> +		return true;
-> +
-> +	write_seqlock_irq(&conf->resync_lock);
->   	if (conf->barrier) {
->   		/* Return false when nowait flag is set */
->   		if (nowait) {
-> @@ -1004,9 +1036,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
->   		} else {
->   			conf->nr_waiting++;
->   			raid10_log(conf->mddev, "wait barrier");
-> -			wait_event_lock_irq(conf->wait_barrier,
-> -					    stop_waiting_barrier(conf),
-> -					    conf->resync_lock);
-> +			wait_event_barrier(conf, stop_waiting_barrier(conf));
->   			conf->nr_waiting--;
->   		}
->   		if (!conf->nr_waiting)
-> @@ -1015,7 +1045,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
->   	/* Only increment nr_pending when we wait */
->   	if (ret)
->   		atomic_inc(&conf->nr_pending);
-> -	spin_unlock_irq(&conf->resync_lock);
-> +	write_sequnlock_irq(&conf->resync_lock);
->   	return ret;
->   }
->   
-> @@ -1040,27 +1070,24 @@ static void freeze_array(struct r10conf *conf, int extra)
->   	 * must match the number of pending IOs (nr_pending) before
->   	 * we continue.
->   	 */
-> -	spin_lock_irq(&conf->resync_lock);
-> +	write_seqlock_irq(&conf->resync_lock);
->   	conf->array_freeze_pending++;
-> -	conf->barrier++;
-> +	WRITE_ONCE(conf->barrier, conf->barrier + 1);
->   	conf->nr_waiting++;
-> -	wait_event_lock_irq_cmd(conf->wait_barrier,
-> -				atomic_read(&conf->nr_pending) == conf->nr_queued+extra,
-> -				conf->resync_lock,
-> -				flush_pending_writes(conf));
-> -
-> +	wait_event_barrier_cmd(conf, atomic_read(&conf->nr_pending) ==
-> +			conf->nr_queued + extra, flush_pending_writes(conf));
->   	conf->array_freeze_pending--;
-> -	spin_unlock_irq(&conf->resync_lock);
-> +	write_sequnlock_irq(&conf->resync_lock);
->   }
->   
->   static void unfreeze_array(struct r10conf *conf)
->   {
->   	/* reverse the effect of the freeze */
-> -	spin_lock_irq(&conf->resync_lock);
-> -	conf->barrier--;
-> +	write_seqlock_irq(&conf->resync_lock);
-> +	WRITE_ONCE(conf->barrier, conf->barrier - 1);
->   	conf->nr_waiting--;
->   	wake_up_barrier(conf);
-> -	spin_unlock_irq(&conf->resync_lock);
-> +	write_sequnlock_irq(&conf->resync_lock);
->   }
->   
->   static sector_t choose_data_offset(struct r10bio *r10_bio,
-> @@ -4046,7 +4073,7 @@ static struct r10conf *setup_conf(struct mddev *mddev)
->   	INIT_LIST_HEAD(&conf->retry_list);
->   	INIT_LIST_HEAD(&conf->bio_end_io_list);
->   
-> -	spin_lock_init(&conf->resync_lock);
-> +	seqlock_init(&conf->resync_lock);
->   	init_waitqueue_head(&conf->wait_barrier);
->   	atomic_set(&conf->nr_pending, 0);
->   
-> @@ -4365,7 +4392,7 @@ static void *raid10_takeover_raid0(struct mddev *mddev, sector_t size, int devs)
->   				rdev->new_raid_disk = rdev->raid_disk * 2;
->   				rdev->sectors = size;
->   			}
-> -		conf->barrier = 1;
-> +		WRITE_ONCE(conf->barrier, 1);
->   	}
->   
->   	return conf;
-> diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
-> index 5c0804d8bb1f..8c072ce0bc54 100644
-> --- a/drivers/md/raid10.h
-> +++ b/drivers/md/raid10.h
-> @@ -76,7 +76,7 @@ struct r10conf {
->   	/* queue pending writes and submit them on unplug */
->   	struct bio_list		pending_bio_list;
->   
-> -	spinlock_t		resync_lock;
-> +	seqlock_t		resync_lock;
->   	atomic_t		nr_pending;
->   	int			nr_waiting;
->   	int			nr_queued;
+> -static struct qmi_elem_info slimbus_power_resp_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_power_resp_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_STRUCT,
+>   		.elem_len   = 1,
 > 
-
