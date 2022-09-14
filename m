@@ -2,143 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F1C5B82C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDF15B82CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiINIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S229725AbiINISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiINIPv (ORCPT
+        with ESMTP id S230008AbiINIRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:15:51 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A828710549;
-        Wed, 14 Sep 2022 01:15:50 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id y9so11155665qvo.4;
-        Wed, 14 Sep 2022 01:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=E3uwB8CqWVlPJdmYFGu1eVYpx1JpXqpegdhCF2Dn9pA=;
-        b=G2z63NBey6mFbnL8i3cvE83J02RhQqveqTl3DsSMswps6rOR1S+R32HI4mouP30Va9
-         FPdAZ7eSLooqa+81j0vK4CfzcQMic1WPM/hllalMM0TUO7d5MXvknHP+00ogn8uqIxlw
-         FqguQlFwXnV8gNoYShd2TWwXPOPPGXkG6cffddCojrNQeNzv6630pcr1ktrs/Azls8/U
-         mYl4XOEZNY1fbAI2JFYW2dHLjsRY3hd7gn0Gje5C2iMCOS9JMW0oAMAwRfPGSIUe2uwW
-         uYj9jFT2jPLRa79KEVigywAKb2naNzBZ4cyJ2tMilZEyrI5uslIlqtOK4Yr2NzVyoxpS
-         QrNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=E3uwB8CqWVlPJdmYFGu1eVYpx1JpXqpegdhCF2Dn9pA=;
-        b=l+M30Tf4Nj0NXqc7pLWNl3MkNZSj2/6JhqjGgxiPg1LG4Ab5Z5sXWZexdNF5A6jGrV
-         EN9ymc9++9H3FvXuepID1MZbjP6UN2RqGQhkJGkn0sWnwKFHNbI4cRw6wSXqgkV6Roao
-         mogJ8cLiWJxxUGA3eR9va08gmM0JxOXjOQcSKOd70G5iqRwBbnCp/CtKwWmt8nOIKRjd
-         iLwnQW+KNYuTRjBOF4mWHBi1wBhhzkPiDsnnEU7LzNISbD5tdZtWHCGKOsHUheEoW9uc
-         BEl+Y1btTHGb68l47yxQsB70TiuA1NmqcHbGgsKwgojnQARReIA477AxH9ZpGfRcoaSt
-         peHg==
-X-Gm-Message-State: ACgBeo0ikN0Sd8hwPKKfbbpPazaZsj2YxzitWG9AxRbKLZvSB3J+IG4F
-        AwGrR7+8ssBB45o2cmiMfg==
-X-Google-Smtp-Source: AA6agR7rdHdEUwpC6EDdkr/XMbUlHMbf7/uf60vpJEPcZOfplJpDoROA7mtkkbfAddJlh5KQMk38mQ==
-X-Received: by 2002:a05:6214:5181:b0:478:69bd:38c5 with SMTP id kl1-20020a056214518100b0047869bd38c5mr30478259qvb.59.1663143349792;
-        Wed, 14 Sep 2022 01:15:49 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006ce7cd81359sm1497995qkp.110.2022.09.14.01.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 01:15:47 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next 2/2] af_unix: Refactor unix_read_skb()
-Date:   Wed, 14 Sep 2022 01:15:41 -0700
-Message-Id: <6fd03b42db6b44142e517f85902e99c720277586.1663143016.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <03db9765fe1ef0f61bfc87fc68b5a95b4126aa4e.1663143016.git.peilin.ye@bytedance.com>
-References: <03db9765fe1ef0f61bfc87fc68b5a95b4126aa4e.1663143016.git.peilin.ye@bytedance.com>
+        Wed, 14 Sep 2022 04:17:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934F352DFA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:17:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF0AD660037C;
+        Wed, 14 Sep 2022 09:17:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663143460;
+        bh=HFEQ65O/mE3evHovBKdThpzSRkNG08TXQRM2aECKklU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H9hmToNizNS8Y2APOOTL4yzGIZXc7SvGyz/ZEea1Gh13MMaV/Q7RJkW7sb0ZQLExj
+         ip5wP8rDIFMeAp1h7Tun+ZDVrrkgFD/nAI7GSKh3bjIkQbk3T8jLENTml9qog51tDC
+         g9yemHzg37bQhBC/1mLsu1B1pk6BzPTXi9dfkALIQ+guZmvJs7KneFATdCFOGHyD72
+         8+H4GU+HXaB6M4PdxVUawUeIjEW7okQnIRTyHN0vN4faOOtglAoEZnFoBW/GGV4KUN
+         RAqxeqQT/kUe/SHR/GJy+QJBrKgrELz/5g2zupAncqJnq6wz0yXnQzy+2M9z4MAaNE
+         +weBYv+DU3GFg==
+Message-ID: <0723c329-475c-42a1-f6d5-f478d649aef1@collabora.com>
+Date:   Wed, 14 Sep 2022 10:17:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm: mediatek: Fix display vblank timeout when disable
+ dsi
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, jitao.shi@mediatek.com
+Cc:     rex-bc.chen@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1663136309-29491-1-git-send-email-xinlei.lee@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1663136309-29491-1-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+Il 14/09/22 08:18, xinlei.lee@mediatek.com ha scritto:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Dsi is turned off at bridge.disable, causing crtc to wait for vblank timeout.
+> It is necessary to add count protection to turn off dsi, and turn off at post_disable.
+> 
+> Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 
-Similar to udp_read_skb(), delete the unnecessary while loop in
-unix_read_skb() for readability.  Since recv_actor() cannot return a
-value greater than skb->len (see sk_psock_verdict_recv()), remove the
-redundant check.
+Hello Xinlei,
+which machine is this commit targeting?
 
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
- net/unix/af_unix.c | 34 ++++++++++------------------------
- 1 file changed, 10 insertions(+), 24 deletions(-)
+Can you please try to reproduce again the issue that you're seeing with my
+mtk_dsi fix [1], but without this commit?
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index dea2972c8178..c955c7253d4b 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -2536,32 +2536,18 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg, size_t si
- 
- static int unix_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
- {
--	int copied = 0;
--
--	while (1) {
--		struct unix_sock *u = unix_sk(sk);
--		struct sk_buff *skb;
--		int used, err;
--
--		mutex_lock(&u->iolock);
--		skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
--		mutex_unlock(&u->iolock);
--		if (!skb)
--			return err;
-+	struct unix_sock *u = unix_sk(sk);
-+	struct sk_buff *skb;
-+	int err, copied;
- 
--		used = recv_actor(sk, skb);
--		if (used <= 0) {
--			if (!copied)
--				copied = used;
--			kfree_skb(skb);
--			break;
--		} else if (used <= skb->len) {
--			copied += used;
--		}
-+	mutex_lock(&u->iolock);
-+	skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
-+	mutex_unlock(&u->iolock);
-+	if (!skb)
-+		return err;
- 
--		kfree_skb(skb);
--		break;
--	}
-+	copied = recv_actor(sk, skb);
-+	kfree_skb(skb);
- 
- 	return copied;
- }
--- 
-2.20.1
+Thanks,
+Angelo
+
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/
 
