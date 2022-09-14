@@ -2,166 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09225B8A72
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B245B8A7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiINO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S229818AbiINO2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiINO1e (ORCPT
+        with ESMTP id S230118AbiINO2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:27:34 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209CD264C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:27:33 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id k21so4766819pls.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:27:33 -0700 (PDT)
+        Wed, 14 Sep 2022 10:28:37 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C664660F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:28:35 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lc7so35228770ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=CamYkk6hyQ6W/FkGD4SGaKOkaQ0RW1D0VrreKLd+PLg=;
-        b=u56wYV3aH2fK+ZrJQ7oF8346nuZfmInRSgBL9Eje8NRerq3bY8k0Jh2pJg816PYes/
-         wEAvIXe9IfB4nfpjkFYTFzzS4O7vwVohql7MNPbovpQOTOZqThUOAD64Zm1DBJXLnV2w
-         LHCtank+3g29r4y919GrOShxdbBFa33PUjJ/scg3+/s22znmZTchZqmZ2xPchIM2rYPn
-         C5NWGITdMShhMfkUPVA1Lmqy2mbB0Jp0vQLHJ8vzsCx8X9QB8Rnj6lBSwHvTArzB8yND
-         9MSqnSGzoADtPGHzNdVTynGMpSLm/3rvfzs/QYFIwSBu9PQPV73gA6WEjk5dfxo83y9F
-         z21A==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7FXZIB5r2QHuGv36+dxkQHgOBeT7MiFKwzm4Bz7OlsM=;
+        b=gci4cmI8iUvjj6uqnkssrpEgSrL2tuueBA9uAmsi2VlkOSjxh4M7LjM02rs1zZnl3g
+         ZElH6j/IoUnh4hSRSUvaqQxcHJgtRbzMI7UDpZJ9xy0dhguyggn95JsArmL/GPl1h4VA
+         Jffzk0tCq4EaGThCrSjvL6fZsR1GV/YEKoJbw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=CamYkk6hyQ6W/FkGD4SGaKOkaQ0RW1D0VrreKLd+PLg=;
-        b=MAiVpz8FSitKAKca/8YdlotfO49Z4MY9eWrZwkjs+GgU22kuZidJBxiFW0Za/3Uhr8
-         BiKJf1Y9SBPXRM8XnTvgdNESzi/u2q1h3goWd87MBgAUlUaGArEQPBWeZGt9WMRsgBse
-         oSGQPxKmg+J6BeQQGXAgoEkkGZJ5CNLWe5qzGiplfZza2xNbtJ51CVE2xBjnVRHq0i5K
-         8+gyvY4Cv88xjOHntV/iMwERMgBAYyks5dwMp3Ywm5MGx/q6zRRO7CQylKJrm/m1BM2Y
-         AHTkhBRlhzoWQTwXLzVilLGJPdAVeauZ8V/akoSOr5ZyjMW1IKh9wzvJY4WG0huTWX3g
-         gk+Q==
-X-Gm-Message-State: ACgBeo1DVhN9NAWKI9Pee6KddZMAkA9eN0oFQSR/E3CozZtg4sKAIC3O
-        J3OAEyK16NDhuQQTzZbo3BLhMQ==
-X-Google-Smtp-Source: AA6agR7ddK1vjr6d4fM0btt2VKYOJv+hLk9FU08MkTY7GtSdpIPrZcYUITBky6DhvELRaz/2FyChNw==
-X-Received: by 2002:a17:902:ecd2:b0:178:3b53:ebf7 with SMTP id a18-20020a170902ecd200b001783b53ebf7mr11608823plh.28.1663165652471;
-        Wed, 14 Sep 2022 07:27:32 -0700 (PDT)
-Received: from leoy-yangtze.lan (n058152048222.netvigator.com. [58.152.48.222])
-        by smtp.gmail.com with ESMTPSA id c3-20020a654203000000b0042c0ffa0e62sm9857405pgq.47.2022.09.14.07.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:27:32 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 22:27:23 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, acme@kernel.org,
-        peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        james.clark@arm.com, will@kernel.org, mathieu.poirier@linaro.org,
-        mark.rutland@arm.com, suzuki.poulose@arm.com,
-        jonathan.cameron@huawei.com, mike.leach@linaro.org,
-        gregkh@linuxfoundation.org, helgaas@kernel.org,
-        lorenzo.pieralisi@arm.com, shameerali.kolothum.thodi@huawei.com,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, prime.zeng@huawei.com,
-        zhangshaokun@hisilicon.com, linuxarm@huawei.com,
-        yangyicong@hisilicon.com, liuqi6124@gmail.com
-Subject: Re: [RESEND PATCH v12 1/3] perf tool: arm: Refactor event list
- iteration in auxtrace_record__init()
-Message-ID: <YyHkywZUVPL3GNq8@leoy-yangtze.lan>
-References: <20220914075925.48549-1-yangyicong@huawei.com>
- <20220914075925.48549-2-yangyicong@huawei.com>
- <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7FXZIB5r2QHuGv36+dxkQHgOBeT7MiFKwzm4Bz7OlsM=;
+        b=ooyhSAr7zegkB0EU59dhKOIFk6FdBy/8w7C0wXZngSC8F2xWcj0tMe8KdhchqUy8vX
+         bYj8Cwt8uN9UhxbE4s0tN2u1XjrgEDZx8WLTbSIkGKm6jQVZcob8VWp6eFrh/4Gwp/fN
+         nzONpoyI1ywrpxicXUgVzDXk3GY4UBMZxRWyXB4tsjVPSdjqvjYkV6G8+rJByQ27whjz
+         GjwG9C21FZr6USzmlv4g8MxwWiplhY4R1hlbHXEks1h19PPVKwev1oOJLuKJGFudNF/A
+         ZACRKP9rd5Fwe5xPwo+NuEQiB6/Qjo4DpqCB1e3NdF7n7JkeQDMfSGbIGs3DA3aDApeC
+         +zqw==
+X-Gm-Message-State: ACgBeo2s8sGe9Q5AVO+r8YmvrbzslbokUhmKLUQLYzGjbYoq4ItLUyLI
+        ZItlzM0WJe+8LVW8MDMT/Rx4AGVB6dZvsc5RFpR5Iw==
+X-Google-Smtp-Source: AA6agR4IMX4D2vN/g8nezL/LZ5bc5r/c5LjAfvrvD3/AJ05vt1JS6e3muRvPfwHTOSV9LnFbI4XTU0do5zNGU9mlNL0=
+X-Received: by 2002:a17:906:9b8a:b0:77d:8add:3074 with SMTP id
+ dd10-20020a1709069b8a00b0077d8add3074mr10470334ejc.251.1663165714173; Wed, 14
+ Sep 2022 07:28:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220721083849.1571744-1-judyhsiao@chromium.org>
+In-Reply-To: <20220721083849.1571744-1-judyhsiao@chromium.org>
+From:   Judy Hsiao <judyhsiao@chromium.org>
+Date:   Wed, 14 Sep 2022 22:28:20 +0800
+Message-ID: <CAJXt+b_2XR6GEaAysYe=P_HsRjkmn5GeRi9s1RXTS-Od9RqbFA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] Add dtsi for sc7280 herobrine boards that using
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 02:47:43PM +0100, John Garry wrote:
+The dependencies of this series were just landed, please help to apply
+this series as well.
 
-[...]
-
-> >   struct auxtrace_record
-> >   *auxtrace_record__init(struct evlist *evlist, int *err)
-> >   {
-> > -	struct perf_pmu	*cs_etm_pmu;
-> > +	struct perf_pmu	*cs_etm_pmu = NULL;
-> > +	struct perf_pmu **arm_spe_pmus = NULL;
-> >   	struct evsel *evsel;
-> > -	bool found_etm = false;
-> > +	struct perf_pmu *found_etm = NULL;
-> >   	struct perf_pmu *found_spe = NULL;
-> > -	struct perf_pmu **arm_spe_pmus = NULL;
-> > +	int auxtrace_event_cnt = 0;
-> >   	int nr_spes = 0;
-> > -	int i = 0;
-> >   	if (!evlist)
-> >   		return NULL;
-> > @@ -68,24 +84,23 @@ struct auxtrace_record
-> >   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
-> >   	evlist__for_each_entry(evlist, evsel) {
-> > -		if (cs_etm_pmu &&
-> > -		    evsel->core.attr.type == cs_etm_pmu->type)
-> > -			found_etm = true;
-> > -
-> > -		if (!nr_spes || found_spe)
-> > -			continue;
-> > -
-> > -		for (i = 0; i < nr_spes; i++) {
-> > -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
-> > -				found_spe = arm_spe_pmus[i];
-> > -				break;
-> > -			}
-> > -		}
-> > +		if (cs_etm_pmu && !found_etm) +			found_etm =
-> > find_pmu_for_event(&cs_etm_pmu, 1, evsel);
-> > +
-> > +		if (arm_spe_pmus && !found_spe)
-> > +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
-> 
-> should you break if found_etm and found_spe are set? Or, indeed, error and
-> return directly as we do below? Indeed, I am not sure why you even require
-> auxtrace_event_cnt
-
-I think this was my suggestion :)
-
-We can check if both 'found_etm' and 'found_spe' are set and directly
-break (and bail out) for this case.  But it would introduce more complex
-checking if we connect with patch 2 with new flag 'found_ptt', something
-like:
-
-  if ((found_etm && found_spe) ||
-      (found_etm && found_ptt) ||
-      (found_spe && found_ptt))
-      break;
-
-This is hard for later's extension if we need to support a new auxtrace
-event, so using auxtrace_event_cnt would be easier to extend more
-auxtrace event on Arm platforms.
-
-Thanks,
-Leo
-
-> >   	}
-> > +
-> >   	free(arm_spe_pmus);
-> > -	if (found_etm && found_spe) {
-> > -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
-> > +	if (found_etm)
-> > +		auxtrace_event_cnt++;
-> > +
-> > +	if (found_spe)
-> > +		auxtrace_event_cnt++;
-> > +
-> > +	if (auxtrace_event_cnt > 1) {
-> > +		pr_err("Concurrent AUX trace operation not currently supported\n");
-> >   		*err = -EOPNOTSUPP;
-> >   		return NULL;
-> >   	}
-> 
+Thanks!
+Best regards,
+Judy
