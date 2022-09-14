@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3244F5B86F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06A55B86F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiINLDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S229766AbiINLEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiINLDi (ORCPT
+        with ESMTP id S229502AbiINLEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:03:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2BD3AE7D;
-        Wed, 14 Sep 2022 04:03:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 14 Sep 2022 07:04:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B82FFD7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:04:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 923B3660201C;
-        Wed, 14 Sep 2022 12:03:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663153416;
-        bh=+Kc1BTT+7JR7Q+bC90Z/3uuTzcHyB9pkIgoBxNhmiu4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=N6O6LPhipnVjR2hh/zZWKYkmyGNGkuXp5l0vo0pB4OkNjt2PcguMhAjSTzYag8LDd
-         zmzBnk5vdQ0V7FplA3myBJmalejHMuPTCT9FN5OtPyDTpPk7ZLt2W/VR7PvccCeXCB
-         FcTiGcpJfmBJRupnyxzaJIh/uP93zh+oeel3kmYpcTUZDpU3bUY6GLtyLMjaOzDHvY
-         Qtbyu4NhFIWvmJwfWJRzNdMmW48eBEykqGQVyOs0DtC+MIKIfVFn4vo9bU8/oqI6UI
-         InmhwT+tZrEd5DG8650i21+i6CZe2ijeBhG89DA6GPA81kppd64vnu/uL/qYV9SmDB
-         Yiqmyms4mDk0w==
-Message-ID: <aa144d4e-dd9f-2ead-9ab5-e519dfab7709@collabora.com>
-Date:   Wed, 14 Sep 2022 13:03:32 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B27DB81A3E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 244FBC433D6;
+        Wed, 14 Sep 2022 11:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663153469;
+        bh=tbx0ApNcuaaHnoKpUSFbEFs9vNYZFNnjuUmTNGNSz84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N6tuKtMG5Wmi2TiNPlqXNBlsCCM7q7I4weRyHU3u7SOpc+dpRiZWg/K4KmkjzcpRg
+         BCMAtkSNyStcTOmwtbpvDianxv2Te0aJjOemrRB3hCdd5piRmtOFvbr39TdCoxmphd
+         ytgetmLNAQ80hgq5GRNAjPy8rNeidiEdPsXEZVUeTR9PChFvfVrSyoU6rek9ZHflYe
+         JRQElf5dlxjXAHMTwF23DENQRw0hZTJTLAFn0Fxl1f3Cz8vFLYj0QnvlCVo4yhhLOF
+         U1hR0bUvrYkCgWQVZRJS7LMX7oNnAlwEacKl0afM8jxz4mvhIpomZoTNh+0c1ua5w4
+         7PZKF9/UM9V8g==
+Date:   Wed, 14 Sep 2022 13:04:26 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>, cl@linux.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v7 2/3] tick/sched: Ensure quiet_vmstat() is called when
+ the idle tick was stopped too
+Message-ID: <20220914110426.GD1936@lothringen>
+References: <20220817191346.287594886@redhat.com>
+ <20220817191524.201253713@redhat.com>
+ <20220909121224.GA220905@lothringen>
+ <YxuViCnKcIYVE02B@fuller.cnet>
+ <20220912143822.irn6xhs2etmumqlt@ava.usersys.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] dt-bindings: mfd: mt6370: fix the indentation in the
- example
-Content-Language: en-US
-To:     cy_huang <u0084500@gmail.com>, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-Cc:     cy_huang@richtek.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1663143803-28660-1-git-send-email-u0084500@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1663143803-28660-1-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912143822.irn6xhs2etmumqlt@ava.usersys.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/09/22 10:23, cy_huang ha scritto:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Mon, Sep 12, 2022 at 03:38:23PM +0100, Aaron Tomlin wrote:
+> On Fri 2022-09-09 16:35 -0300, Marcelo Tosatti wrote:
+> Hi Frederic,
 > 
-> Fix the indentation in the binding example. There're two redudant space
-> charactors need to be removed.
+> Sorry about that. How about the following:
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-
-This commit needs a Fixes tag, please add it:
-
-Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
-
-Regards,
-Angelo
-
-> ---
->   Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  - Note: CPU X is part of 'tick_nohz_full_mask'
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> index 410e2d4..250484d 100644
-> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -119,7 +119,7 @@ examples:
->         #address-cells = <1>;
->         #size-cells = <0>;
->   
-> -        pmic@34 {
-> +      pmic@34 {
->           compatible = "mediatek,mt6370";
->           reg = <0x34>;
->           wakeup-source;
+>     1.      CPU Y migrated running task A to CPU X that
+> 	    was in an idle state i.e. waiting for an IRQ;
+> 	    marked the current task on CPU X to need/or
+> 	    require a reschedule i.e., set TIF_NEED_RESCHED
+> 	    and invoked a reschedule IPI to CPU X
+> 	    (see sched_move_task())
 > 
+>     2.      CPU X acknowledged the reschedule IPI. Generic
+> 	    idle loop code noticed the TIF_NEED_RESCHED flag
+> 	    against the idle task and attempts to exit of the
+> 	    loop and calls the main scheduler function i.e.
+> 	    __schedule().
+> 
+> 	    Since the idle tick was previously stopped no
+> 	    scheduling-clock tick would occur.
+> 	    So, no deferred timers would be handled
+> 
+>     3.      Post transition to kernel execution Task A
+> 	    running on CPU X, indirectly released a few pages
+> 	    (e.g. see __free_one_page()); CPU X's
+> 	    'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
+> 	    specific 'vm_stat[]' update was deferred as per the
+> 	    CPU-specific stat threshold
+> 
+>     4.      Task A does invoke exit(2) and the kernel does
+> 	    remove the task from the run-queue; the idle task
+> 	    was selected to execute next since there are no
+> 	    other runnable tasks assigned to the given CPU
+> 	    (see pick_next_task() and pick_next_task_idle())
+> 
+>     5.      On return to the idle loop since the idle tick
+> 	    was already stopped and can remain so (see [1]
+> 	    below) e.g. no pending soft IRQs, no attempt is
+> 	    made to zero and fold CPU X's vmstat counters
+> 	    since reprogramming of the scheduling-clock tick
+> 	    is not required/or needed (see [2])
 
+Much better thanks.
 
+Please cut the patch in two patches: one that fixes the stuff in
+the idle path and another one that fixes the return to user path.
+
+The first one is definetly a fix, the second one is rather a feature
+that is definetly wanted as well but I need to think it through further.
+
+> 
+> 
+> 
+> Kind regards,
+> 
+> -- 
+> Aaron Tomlin
+> 
