@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE44E5B9027
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B77A5B902A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiINVlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 17:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S229615AbiINVnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 17:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiINVlk (ORCPT
+        with ESMTP id S229473AbiINVnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 17:41:40 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECC37E325
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:41:37 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bz13so27753821wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=dJBMWqAoD425WmZpBoL2iVG1R9TS8rIDI+wnZ+EHS08=;
-        b=crnKzEVwiNAICu1JTVyVuS8qkwtdrbZVF4fXL4lQiQcf1uf/m03DZ90Sbqu8XLQnCU
-         CtuhnRZbmY9frmlgrfrPaZY0MZVcfo+YTnKTlWCts1Y6xjtfOw/3vg18Z2D8v9uBaiwI
-         MkQkfmNyXhNtIJV3BRm3Ce3BQAvKuq9lEddpM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=dJBMWqAoD425WmZpBoL2iVG1R9TS8rIDI+wnZ+EHS08=;
-        b=OihwTM7VC+ScZSy/NFYTB3t3gkBUWE+LlV/XLKe2lFFnE9oWi3RTh86Jgf4ZQhoyQ+
-         +qHvD3dTo+XY2AqjXqx47B/olS4GdC+KQPgEFFTPPA5S1BrpyjJsnSpdwUb3JPuAzedp
-         DjDAPeW16Cc5wNW0Xprs42NkwwZvZFgPO39OXUqTrUvRbPiuyO3A8NZ6iWXcY4cFRbbN
-         7ZOPPtAcASFvUcb51+9aBw27uJTKrL1WrpSgc79RSxYkxHKJLrgtBXRMeL2JAjub757Q
-         j1p5tb9NlEVZIGPoeedSBUT86l001Epa+zPVbz5mHm2VphTcOu2euKrajoHzBNeF1Gmu
-         eDhQ==
-X-Gm-Message-State: ACgBeo1Wev/q6GAW3pdQtYCA7lfcOTvnboYaOy4Zxh/WnY4YZHVogenk
-        QuSBJ28wsuBDZZYFuhF3t0QYnQ==
-X-Google-Smtp-Source: AA6agR4AbWOEHie2xqoqLtD3nL+zuOB6oM2HbRcpPVp+Z0KnHfJaD12MLF4DRxtbqmt6fxXPQ7U5NA==
-X-Received: by 2002:a5d:628e:0:b0:228:6961:aa6f with SMTP id k14-20020a5d628e000000b002286961aa6fmr24027761wru.36.1663191696195;
-        Wed, 14 Sep 2022 14:41:36 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i ([93.107.34.250])
-        by smtp.gmail.com with ESMTPSA id az6-20020a05600c600600b003a5f54e3bbbsm308512wmb.38.2022.09.14.14.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 14:41:34 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 23:41:32 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] media: dt-bindings: ov5645: Convert OV5645 binding to a
- schema
-Message-ID: <20220914214132.GA2173@tom-ThinkPad-T14s-Gen-2i>
-References: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 14 Sep 2022 17:43:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D367E31B;
+        Wed, 14 Sep 2022 14:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663191785; x=1694727785;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=2lkQHmD5bo9pnv773sWW8cwWNIi3heVNLCQ8vVphs1Q=;
+  b=Jm+2m89q3CuMXqc7UOTSnGviyNV3Sm+73umWqbjIxfXp9AQV7mlHCHRD
+   WC699oiLZwa/8EvjqRb311Ai2OU71ht9Ki2LvAt67/E8HRXjGp8s3ONF+
+   m+groG7iqoLIJhH8/70L2Za3x2fE/MIGXKgLbAtrdByYBNbCiWRl4uwSf
+   F6Tov0kT+00qwW/Wg530E0aKbmIg4zJb+xEwYtImnSr3KOFhJfrwCXI9S
+   iDuf69ojgi09BeZMFvz3SNdzBBJQMueP2ImqELkSm8t7KjlpJWvOmKJh7
+   JkqijOGxsO+Nnby8Y651O/TJLB6saxA57OuASkhBeakxoPq2RFe/lGr8H
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384841386"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="384841386"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 14:43:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="706100523"
+Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 14:43:03 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 04/13] net/sched: taprio: allow user input of
+ per-tc max SDU
+In-Reply-To: <20220914153303.1792444-5-vladimir.oltean@nxp.com>
+References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
+ <20220914153303.1792444-5-vladimir.oltean@nxp.com>
+Date:   Wed, 14 Sep 2022 14:43:02 -0700
+Message-ID: <87k065iqe1.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,230 +86,281 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Vladimir Oltean <vladimir.oltean@nxp.com> writes:
 
-On Tue, Sep 13, 2022 at 05:02:24PM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> Convert the simple OV5645 Device Tree binding to json-schema.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> IEEE 802.1Q clause 12.29.1.1 "The queueMaxSDUTable structure and data
+> types" and 8.6.8.4 "Enhancements for scheduled traffic" talk about the
+> existence of a per traffic class limitation of maximum frame sizes, with
+> a fallback on the port-based MTU.
+>
+> As far as I am able to understand, the 802.1Q Service Data Unit (SDU)
+> represents the MAC Service Data Unit (MSDU, i.e. L2 payload), excluding
+> any number of prepended VLAN headers which may be otherwise present in
+> the MSDU. Therefore, the queueMaxSDU is directly comparable to the
+> device MTU (1500 means L2 payload sizes are accepted, or frame sizes of
+> 1518 octets, or 1522 plus one VLAN header). Drivers which offload this
+> are directly responsible of translating into other units of measurement.
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > ---
->  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 --------
->  .../bindings/media/i2c/ovti,ov5645.yaml       | 119 ++++++++++++++++++
->  2 files changed, 119 insertions(+), 54 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
-> deleted file mode 100644
-> index 72ad992f77be..000000000000
-> --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -* Omnivision 1/4-Inch 5Mp CMOS Digital Image Sensor
-> -
-> -The Omnivision OV5645 is a 1/4-Inch CMOS active pixel digital image sensor with
-> -an active array size of 2592H x 1944V. It is programmable through a serial I2C
-> -interface.
-> -
-> -Required Properties:
-> -- compatible: Value should be "ovti,ov5645".
-> -- clocks: Reference to the xclk clock.
-> -- clock-names: Should be "xclk".
-> -- clock-frequency: Frequency of the xclk clock.
-> -- enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
-> -  to the hardware pin PWDNB which is physically active low.
-> -- reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
-> -  the hardware pin RESETB.
-> -- vdddo-supply: Chip digital IO regulator.
-> -- vdda-supply: Chip analog regulator.
-> -- vddd-supply: Chip digital core regulator.
-> -
-> -The device node must contain one 'port' child node for its digital output
-> -video port, in accordance with the video interface bindings defined in
-> -Documentation/devicetree/bindings/media/video-interfaces.txt.
-> -
-> -Example:
-> -
-> -	&i2c1 {
-> -		...
-> -
-> -		ov5645: ov5645@3c {
-> -			compatible = "ovti,ov5645";
-> -			reg = <0x3c>;
-> -
-> -			enable-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
-> -			reset-gpios = <&gpio5 20 GPIO_ACTIVE_LOW>;
-> -			pinctrl-names = "default";
-> -			pinctrl-0 = <&camera_rear_default>;
-> -
-> -			clocks = <&clks 200>;
-> -			clock-names = "xclk";
-> -			clock-frequency = <24000000>;
-> -
-> -			vdddo-supply = <&camera_dovdd_1v8>;
-> -			vdda-supply = <&camera_avdd_2v8>;
-> -			vddd-supply = <&camera_dvdd_1v2>;
-> -
-> -			port {
-> -				ov5645_ep: endpoint {
-> -					clock-lanes = <1>;
-> -					data-lanes = <0 2>;
-> -					remote-endpoint = <&csi0_ep>;
-> -				};
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-> new file mode 100644
-> index 000000000000..7f407c988f87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-> @@ -0,0 +1,119 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5645.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  include/net/pkt_sched.h        |   1 +
+>  include/uapi/linux/pkt_sched.h |  11 +++
+>  net/sched/sch_taprio.c         | 122 ++++++++++++++++++++++++++++++++-
+>  3 files changed, 133 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+> index 29f65632ebc5..88080998557b 100644
+> --- a/include/net/pkt_sched.h
+> +++ b/include/net/pkt_sched.h
+> @@ -168,6 +168,7 @@ struct tc_taprio_qopt_offload {
+>  	ktime_t base_time;
+>  	u64 cycle_time;
+>  	u64 cycle_time_extension;
+> +	u32 max_sdu[TC_MAX_QUEUE];
+>  
+>  	size_t num_entries;
+>  	struct tc_taprio_sched_entry entries[];
+> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+> index f292b467b27f..000eec106856 100644
+> --- a/include/uapi/linux/pkt_sched.h
+> +++ b/include/uapi/linux/pkt_sched.h
+> @@ -1232,6 +1232,16 @@ enum {
+>  #define TCA_TAPRIO_ATTR_FLAG_TXTIME_ASSIST	_BITUL(0)
+>  #define TCA_TAPRIO_ATTR_FLAG_FULL_OFFLOAD	_BITUL(1)
+>  
+> +enum {
+> +	TCA_TAPRIO_TC_ENTRY_UNSPEC,
+> +	TCA_TAPRIO_TC_ENTRY_INDEX,		/* u32 */
+> +	TCA_TAPRIO_TC_ENTRY_MAX_SDU,		/* u32 */
 > +
-> +title: OmniVision OV5645 Image Sensor Device Tree Bindings
+> +	/* add new constants above here */
+> +	__TCA_TAPRIO_TC_ENTRY_CNT,
+> +	TCA_TAPRIO_TC_ENTRY_MAX = (__TCA_TAPRIO_TC_ENTRY_CNT - 1)
+> +};
 > +
-> +maintainers:
-> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>  enum {
+>  	TCA_TAPRIO_ATTR_UNSPEC,
+>  	TCA_TAPRIO_ATTR_PRIOMAP, /* struct tc_mqprio_qopt */
+> @@ -1245,6 +1255,7 @@ enum {
+>  	TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME_EXTENSION, /* s64 */
+>  	TCA_TAPRIO_ATTR_FLAGS, /* u32 */
+>  	TCA_TAPRIO_ATTR_TXTIME_DELAY, /* u32 */
+> +	TCA_TAPRIO_ATTR_TC_ENTRY, /* nest */
+>  	__TCA_TAPRIO_ATTR_MAX,
+>  };
+>  
+> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+> index 2a4b8f59f444..834cbed88e4f 100644
+> --- a/net/sched/sch_taprio.c
+> +++ b/net/sched/sch_taprio.c
+> @@ -79,6 +79,7 @@ struct taprio_sched {
+>  	struct sched_gate_list __rcu *admin_sched;
+>  	struct hrtimer advance_timer;
+>  	struct list_head taprio_list;
+> +	u32 max_sdu[TC_MAX_QUEUE];
+>  	u32 txtime_delay;
+>  };
+>  
+> @@ -416,6 +417,9 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>  			      struct Qdisc *child, struct sk_buff **to_free)
+>  {
+>  	struct taprio_sched *q = qdisc_priv(sch);
+> +	struct net_device *dev = qdisc_dev(sch);
+> +	int prio = skb->priority;
+> +	u8 tc;
+>  
+>  	/* sk_flags are only safe to use on full sockets. */
+>  	if (skb->sk && sk_fullsock(skb->sk) && sock_flag(skb->sk, SOCK_TXTIME)) {
+> @@ -427,6 +431,12 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>  			return qdisc_drop(skb, sch, to_free);
+>  	}
+>  
+> +	/* Devices with full offload are expected to honor this in hardware */
+> +	tc = netdev_get_prio_tc_map(dev, prio);
+> +	if (q->max_sdu[tc] &&
+> +	    q->max_sdu[tc] < max_t(int, 0, skb->len - skb_mac_header_len(skb)))
+> +		return qdisc_drop(skb, sch, to_free);
 > +
-> +allOf:
-> +  - $ref: /schemas/media/video-interface-devices.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov5645
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: XCLK Input Clock
-> +
-> +  clock-names:
-> +    const: xclk
-> +
-> +  clock-frequency:
-> +    description: Frequency of the xclk clock in Hz.
-> +
-> +  vdda-supply:
-> +    description: Analog voltage supply, 2.8 volts
-> +
-> +  vddd-supply:
-> +    description: Digital core voltage supply, 1.5 volts
-> +
-> +  vdddo-supply:
-> +    description: Digital I/O voltage supply, 1.8 volts
-> +
-> +  enable-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Reference to the GPIO connected to the PWDNB pin, if any.
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Reference to the GPIO connected to the RESETB pin, if any.
-> +
-> +  port:
-> +    description: Digital Output Port
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          clock-lanes:
-> +            const: 0
-> +
-> +          bus-type:
-> +            const: 4
-> +
-> +          data-lanes:
-> +            minItems: 1
-> +            maxItems: 2
-> +            items:
-> +              enum: [1, 2]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - clock-frequency
-> +  - vdda-supply
-> +  - vddd-supply
-> +  - vdddo-supply
-> +  - enable-gpios
-> +  - reset-gpios
-> +  - port
 
-I think we don't need all of these properties as required.
-The only "really" required are:
+One minor idea, perhaps if you initialize q->max_sdu[] with a value that
+you could use to compare here (2^32 - 1), this comparison could be
+simplified. The issue is that that value would become invalid for a
+maximum SDU, not a problem for ethernet.
 
-  - compatible
-  - reg
-  - clocks
-  - port
-
-Regards,
-Tommaso
-
+>  	qdisc_qstats_backlog_inc(sch, skb);
+>  	sch->q.qlen++;
+>  
+> @@ -761,6 +771,11 @@ static const struct nla_policy entry_policy[TCA_TAPRIO_SCHED_ENTRY_MAX + 1] = {
+>  	[TCA_TAPRIO_SCHED_ENTRY_INTERVAL]  = { .type = NLA_U32 },
+>  };
+>  
+> +static const struct nla_policy taprio_tc_policy[TCA_TAPRIO_TC_ENTRY_MAX + 1] = {
+> +	[TCA_TAPRIO_TC_ENTRY_INDEX]	   = { .type = NLA_U32 },
+> +	[TCA_TAPRIO_TC_ENTRY_MAX_SDU]	   = { .type = NLA_U32 },
+> +};
 > +
-> +additionalProperties: false
+>  static const struct nla_policy taprio_policy[TCA_TAPRIO_ATTR_MAX + 1] = {
+>  	[TCA_TAPRIO_ATTR_PRIOMAP]	       = {
+>  		.len = sizeof(struct tc_mqprio_qopt)
+> @@ -773,6 +788,7 @@ static const struct nla_policy taprio_policy[TCA_TAPRIO_ATTR_MAX + 1] = {
+>  	[TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME_EXTENSION] = { .type = NLA_S64 },
+>  	[TCA_TAPRIO_ATTR_FLAGS]                      = { .type = NLA_U32 },
+>  	[TCA_TAPRIO_ATTR_TXTIME_DELAY]		     = { .type = NLA_U32 },
+> +	[TCA_TAPRIO_ATTR_TC_ENTRY]		     = { .type = NLA_NESTED },
+>  };
+>  
+>  static int fill_sched_entry(struct taprio_sched *q, struct nlattr **tb,
+> @@ -1236,7 +1252,7 @@ static int taprio_enable_offload(struct net_device *dev,
+>  {
+>  	const struct net_device_ops *ops = dev->netdev_ops;
+>  	struct tc_taprio_qopt_offload *offload;
+> -	int err = 0;
+> +	int tc, err = 0;
+>  
+>  	if (!ops->ndo_setup_tc) {
+>  		NL_SET_ERR_MSG(extack,
+> @@ -1253,6 +1269,9 @@ static int taprio_enable_offload(struct net_device *dev,
+>  	offload->enable = 1;
+>  	taprio_sched_to_offload(dev, sched, offload);
+>  
+> +	for (tc = 0; tc < TC_MAX_QUEUE; tc++)
+> +		offload->max_sdu[tc] = q->max_sdu[tc];
 > +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/gpio/gpio.h>
+>  	err = ops->ndo_setup_tc(dev, TC_SETUP_QDISC_TAPRIO, offload);
+>  	if (err < 0) {
+>  		NL_SET_ERR_MSG(extack,
+> @@ -1387,6 +1406,73 @@ static int taprio_parse_clockid(struct Qdisc *sch, struct nlattr **tb,
+>  	return err;
+>  }
+>  
+> +static int taprio_parse_tc_entry(struct Qdisc *sch,
+> +				 struct nlattr *opt,
+> +				 unsigned long *seen_tcs,
+> +				 struct netlink_ext_ack *extack)
+> +{
+> +	struct nlattr *tb[TCA_TAPRIO_TC_ENTRY_MAX + 1] = { };
+> +	struct taprio_sched *q = qdisc_priv(sch);
+> +	struct net_device *dev = qdisc_dev(sch);
+> +	u32 max_sdu = 0;
+> +	int err, tc;
 > +
-> +      i2c {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
+> +	err = nla_parse_nested(tb, TCA_TAPRIO_TC_ENTRY_MAX, opt,
+> +			       taprio_tc_policy, extack);
+> +	if (err < 0)
+> +		return err;
 > +
-> +          camera@3c {
-> +              compatible = "ovti,ov5645";
-> +              pinctrl-names = "default";
-> +              pinctrl-0 = <&pinctrl_ov5645>;
-> +              reg = <0x3c>;
-> +              clocks = <&clks 1>;
-> +              clock-names = "xclk";
-> +              clock-frequency = <24000000>;
-> +              vdddo-supply = <&ov5645_vdddo_1v8>; /* 1.8v */
-> +              vdda-supply = <&ov5645_vdda_2v8>;  /* 2.8v */
-> +              vddd-supply = <&ov5645_vddd_1v5>;  /* 1.5v */
-> +              enable-gpios = <&gpio1 19 GPIO_ACTIVE_HIGH>;
-> +              reset-gpios = <&gpio1 20 GPIO_ACTIVE_LOW>;
+> +	if (!tb[TCA_TAPRIO_TC_ENTRY_INDEX]) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC entry index missing");
+> +		return -EINVAL;
+> +	}
 > +
-> +              port {
-> +                  ov5645_ep: endpoint {
-> +                      remote-endpoint = <&csi0_ep>;
-> +                      clock-lanes = <0>;
-> +                      data-lanes = <1 2>;
-> +                  };
-> +              };
-> +          };
-> +      };
-> +...
+> +	tc = nla_get_u32(tb[TCA_TAPRIO_TC_ENTRY_INDEX]);
+> +	if (tc >= TC_QOPT_MAX_QUEUE) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC entry index out of range");
+> +		return -ERANGE;
+> +	}
+> +
+> +	if (*seen_tcs & BIT(tc)) {
+> +		NL_SET_ERR_MSG_MOD(extack, "Duplicate TC entry");
+> +		return -EINVAL;
+> +	}
+> +
+> +	*seen_tcs |= BIT(tc);
+> +
+> +	if (tb[TCA_TAPRIO_TC_ENTRY_MAX_SDU])
+> +		max_sdu = nla_get_u32(tb[TCA_TAPRIO_TC_ENTRY_MAX_SDU]);
+> +
+> +	if (max_sdu > dev->max_mtu) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC max SDU exceeds device max MTU");
+> +		return -ERANGE;
+> +	}
+> +
+> +	q->max_sdu[tc] = max_sdu;
+> +
+> +	return 0;
+> +}
+> +
+> +static int taprio_parse_tc_entries(struct Qdisc *sch,
+> +				   struct nlattr *opt,
+> +				   struct netlink_ext_ack *extack)
+> +{
+> +	unsigned long seen_tcs = 0;
+> +	struct nlattr *n;
+> +	int err = 0, rem;
+> +
+> +	nla_for_each_nested(n, opt, rem) {
+> +		if (nla_type(n) != TCA_TAPRIO_ATTR_TC_ENTRY)
+> +			continue;
+> +
+> +		err = taprio_parse_tc_entry(sch, n, &seen_tcs, extack);
+> +		if (err)
+> +			break;
+> +	}
+> +
+> +	return err;
+> +}
+> +
+>  static int taprio_mqprio_cmp(const struct net_device *dev,
+>  			     const struct tc_mqprio_qopt *mqprio)
+>  {
+> @@ -1465,6 +1551,10 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
+>  	if (err < 0)
+>  		return err;
+>  
+> +	err = taprio_parse_tc_entries(sch, opt, extack);
+> +	if (err)
+> +		return err;
+> +
+>  	new_admin = kzalloc(sizeof(*new_admin), GFP_KERNEL);
+>  	if (!new_admin) {
+>  		NL_SET_ERR_MSG(extack, "Not enough memory for a new schedule");
+> @@ -1855,6 +1945,33 @@ static int dump_schedule(struct sk_buff *msg,
+>  	return -1;
+>  }
+>  
+> +static int taprio_dump_tc_entries(struct taprio_sched *q, struct sk_buff *skb)
+> +{
+> +	struct nlattr *n;
+> +	int tc;
+> +
+> +	for (tc = 0; tc < TC_MAX_QUEUE; tc++) {
+> +		n = nla_nest_start(skb, TCA_TAPRIO_ATTR_TC_ENTRY);
+> +		if (!n)
+> +			return -EMSGSIZE;
+> +
+> +		if (nla_put_u32(skb, TCA_TAPRIO_TC_ENTRY_INDEX, tc))
+> +			goto nla_put_failure;
+> +
+> +		if (nla_put_u32(skb, TCA_TAPRIO_TC_ENTRY_MAX_SDU,
+> +				q->max_sdu[tc]))
+> +			goto nla_put_failure;
+> +
+> +		nla_nest_end(skb, n);
+> +	}
+> +
+> +	return 0;
+> +
+> +nla_put_failure:
+> +	nla_nest_cancel(skb, n);
+> +	return -EMSGSIZE;
+> +}
+> +
+>  static int taprio_dump(struct Qdisc *sch, struct sk_buff *skb)
+>  {
+>  	struct taprio_sched *q = qdisc_priv(sch);
+> @@ -1894,6 +2011,9 @@ static int taprio_dump(struct Qdisc *sch, struct sk_buff *skb)
+>  	    nla_put_u32(skb, TCA_TAPRIO_ATTR_TXTIME_DELAY, q->txtime_delay))
+>  		goto options_error;
+>  
+> +	if (taprio_dump_tc_entries(q, skb))
+> +		goto options_error;
+> +
+>  	if (oper && dump_schedule(skb, oper))
+>  		goto options_error;
+>  
 > -- 
-> 2.25.1
-> 
+> 2.34.1
+>
 
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+Vinicius
