@@ -2,162 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564E55B8CBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950A15B8CC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiINQUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S229926AbiINQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiINQUJ (ORCPT
+        with ESMTP id S229538AbiINQVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:20:09 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4003E759;
-        Wed, 14 Sep 2022 09:20:06 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-127d10b4f19so42292303fac.9;
-        Wed, 14 Sep 2022 09:20:06 -0700 (PDT)
+        Wed, 14 Sep 2022 12:21:32 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D97E29C95;
+        Wed, 14 Sep 2022 09:21:31 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso14923895pjd.4;
+        Wed, 14 Sep 2022 09:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=shM0eqNoMydvRAfh5X2W/4dKK3wTBlBQ4aC9T4BQqfg=;
+        b=kcubW4pb2r1dEEI6wGBXa/T3e5Y3jn3NUoMTWrXy5lOGSJ7aG7+Fog+9DXpTCTssDj
+         fa/CAceoKm7llY8WVmV4FfEsuni/8b6xbyHHthtVtUZxDH5xMtMohcd6bdkEcYw3uBRA
+         cmWP776uBIEUm2vUWc1zfjm6lcukFaNsYXAfB3jv7T81oA/OaD8IQsTdi13zf0kWjdtC
+         /lvzIUXShE3F77HI58tO7+fyOBswkgEtS4dt9/p9T+dVpsAzsNxP5+gCkbWmwNay45Cn
+         vt24bXsq+Ht1XEUFrhlBu6CiVUERDJZelaXOlJKHXcSZynySClB/FXRkdDIj07Tg1ADe
+         Mizw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nXLhEVGz1qMo8aImbTGN6nLiSfBsJOREM/Vz/U5qmX8=;
-        b=b/aiH/LXrB96+WSTfnQZme2JgcaYpeDJ28PT381kMINMTaTM0Z4ApFiXBp9KtpuTMm
-         Lnj7HOj3n4M+phUOn8gZvG6BN+NhihCb2Jj9JupfvhLVBM0p100wApRX9FJqtvSg+Jl7
-         SQLvRzz50vWQcb2YqAJkf7ujtiCgevOu3G3tBt0tOb+QAURDlRlXTVf5y76VZ2juJ9yO
-         Asg2YK1a0QJxwWeOQc5CJVRK4bieTxbReN5lfAJez4taJjFCc84NK7/BM1snkk8NcAUG
-         Qn9uBdrVwZhtubbQ0f1TQ8Z6kt1JgXHOXc4PmxzIetfIBHxyFfsqV2cbt3fQUXbcm4Gl
-         FRlw==
-X-Gm-Message-State: ACgBeo37G1OP4RC0aTo/XSPPSaicGAavTyqGJUuhX/5inQdkWUDYgNE4
-        2Xn1L+7cROCo03XxOrivoA==
-X-Google-Smtp-Source: AA6agR5RYHCagG3o1f6+CTby/sjSQ+8CfTLBxsLk+r37c+5y+Q1ZyAWXz8zlIpAZlh7jKaNdGgEKXQ==
-X-Received: by 2002:a05:6870:82a8:b0:126:8942:24e3 with SMTP id q40-20020a05687082a800b00126894224e3mr2751959oae.133.1663172405607;
-        Wed, 14 Sep 2022 09:20:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z17-20020a9d62d1000000b00655d20b2b76sm6035651otk.33.2022.09.14.09.20.04
+        bh=shM0eqNoMydvRAfh5X2W/4dKK3wTBlBQ4aC9T4BQqfg=;
+        b=C0Bvm6b8Ljr5E5Q6yhoHwPLNujBgsHRTrmlkyJXbVE2JLjzxDW+bU4r4ckq9vHclbG
+         3wTgMjDoehDtDC3kGg4djMVMtPRuudBwcOgfs6JuHzqiSSJQvLiJinEl+qQo8gtw2O7q
+         hCy+lIJY8+tyZwYIGkt7GFxKNh5ewl6xNA+pK698nIJyxQxC5CwTdH0E49Z3WwfK9QHZ
+         Bu2eTBC6tgliUTgneX5qE/tY4pmnFxiKwN1sE3FFRZPPk6ccV6kOj8kUvTEUrDNcwx8p
+         dyMNTcUAL/10sUwafMw2neqfnGElKAnQMeHcoltDAS2S3Gkj18cPzlv29hj69jGdlevH
+         BjAA==
+X-Gm-Message-State: ACgBeo3h6DAZxAm+launElJs0ubZNm10MpSpN/rELOSb8RshvmGyb+GI
+        VWPpAyEbJRfGpglATwM4fyU=
+X-Google-Smtp-Source: AA6agR7uXLwWob9Fp5eAutVNUkTRWtusCfxZ6KXsndnXXc6s1vO+w3cPOE5XRwqeru5FHomSutm/ug==
+X-Received: by 2002:a17:902:f644:b0:172:b074:d1f5 with SMTP id m4-20020a170902f64400b00172b074d1f5mr37227188plg.29.1663172490861;
+        Wed, 14 Sep 2022 09:21:30 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b002006428f01esm9392891pjb.55.2022.09.14.09.21.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:20:05 -0700 (PDT)
-Received: (nullmailer pid 2461881 invoked by uid 1000);
-        Wed, 14 Sep 2022 16:20:04 -0000
-Date:   Wed, 14 Sep 2022 11:20:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, krzysztof.kozlowski@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
-        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kishon@ti.com
-Subject: Re: [PATCH 1/8] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
- bindings for J721e CPSW9G
-Message-ID: <20220914162004.GA2433106-robh@kernel.org>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-2-s-vadapalli@ti.com>
+        Wed, 14 Sep 2022 09:21:30 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 00:21:24 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpiolib: TODO: add an item about GPIO safe-state
+Message-ID: <YyH/hJMyPZSqyvQj@sol>
+References: <20220914151145.73253-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914095053.189851-2-s-vadapalli@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220914151145.73253-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 03:20:46PM +0530, Siddharth Vadapalli wrote:
-> Update bindings for TI K3 J721e SoC which contains 9 ports (8 external
-> ports) CPSW9G module and add compatible for it.
+On Wed, Sep 14, 2022 at 05:11:45PM +0200, Bartosz Golaszewski wrote:
+> This adds a new TODO item for gpiolib and can also be used to start
+> a discussion about the need for it and implementation details.
 > 
-> Changes made:
->     - Add new compatible ti,j721e-cpswxg-nuss for CPSW9G.
->     - Extend pattern properties for new compatible.
->     - Change maximum number of CPSW ports to 8 for new compatible.
-> 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 > ---
->  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 23 +++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
+>  drivers/gpio/TODO | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> index 821974815dec..868b7fb58b06 100644
-> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-> @@ -57,6 +57,7 @@ properties:
->        - ti,am654-cpsw-nuss
->        - ti,j7200-cpswxg-nuss
->        - ti,j721e-cpsw-nuss
-> +      - ti,j721e-cpswxg-nuss
->        - ti,am642-cpsw-nuss
->  
->    reg:
-> @@ -111,7 +112,7 @@ properties:
->          const: 0
->  
->      patternProperties:
-> -      "^port@[1-4]$":
-> +      "^port@[1-8]$":
->          type: object
->          description: CPSWxG NUSS external ports
->  
-> @@ -121,7 +122,7 @@ properties:
->          properties:
->            reg:
->              minimum: 1
-> -            maximum: 4
-> +            maximum: 8
->              description: CPSW port number
->  
->            phys:
-> @@ -181,6 +182,21 @@ required:
->    - '#size-cells'
->  
->  allOf:
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              const: ti,j721e-cpswxg-nuss
-> +    then:
-> +      properties:
-> +        ethernet-ports:
-> +          patternProperties:
-> +            "^port@[5-8]$": false
-> +            properties:
-> +              reg:
-> +                maximum: 4
-
-Your indentation is off. 'properties' here is under patternProperties 
-making it a DT property.
-
+> diff --git a/drivers/gpio/TODO b/drivers/gpio/TODO
+> index f87ff3fa8a53..6ab39c5cec9d 100644
+> --- a/drivers/gpio/TODO
+> +++ b/drivers/gpio/TODO
+> @@ -197,3 +197,25 @@ A small number of drivers have been converted (pl061, tegra186, msm,
+>  amd, apple), and can be used as examples of how to proceed with this
+>  conversion. Note that drivers using the generic irqchip framework
+>  cannot be converted yet, but watch this space!
 > +
->    - if:
->        not:
->          properties:
-> @@ -192,6 +208,9 @@ allOf:
->          ethernet-ports:
->            patternProperties:
->              "^port@[3-4]$": false
-> +            properties:
-> +              reg:
-> +                maximum: 2
+> +Safe-state of GPIOs
+> +
+> +During 2022 Linux Plumbers Conference's GPIO & pinctrl BOF it's been discussed
+> +that we don't have any middle ground between hogging GPIO lines and letting the
+> +user (either in-kernel or user-space) control them. Either the lines are forever
+> +reserved as hogs or their state is undefined unless requested.
+> +
+> +Currently the behavior of GPIOs that were not requested or were released is
+> +largely driver dependent (the provider driver decides whether the line's state
+> +is reverted to some predefined value or left as-is). This can be problematic
+> +as the output state of a line can damage physical hardware.
+> +
+> +This item is about proposing a solution, most likely in the form of a new device
+> +property called "safe-state" that would define the safe states of specific lines
+> +(e.g. output-high) but not block the line from being requested by users who 
+> +could then modify that default state. Once released the GPIO core would then
+> +put the line back into the "safe-state".
+> +
 
-Same here.
+Geert suggests idle-state, rather than safe-state, but you call it
+the "default state" here as well - pick one.
 
->  
->  additionalProperties: false
->  
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+So this idle-state would be another attribute on a line that the user
+could configure via the GPIO uAPI, and so replicate the "set and forget"
+sysfs behavior that we are currently missing, and which seems to be the
+biggest sticking point for a transition away from sysfs?
+
+For backward compatibility the default idle-state, i.e. the value the
+idle-state would take if not explicitly set, would map to existing
+behaviour, so let the driver decide?
+
+What happens when gpiolib frees the line?  Isn't the driver still able
+to do what it likes to the line at that point, no matter what GPIO core
+has set it to previously? e.g. gpio_sim_free() restores the line to its
+own internal pull value.
+ 
+Cheers,
+Kent.
+
