@@ -2,47 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD1D5B8656
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8E95B8659
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiINK0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S229812AbiINK1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiINK0m (ORCPT
+        with ESMTP id S229704AbiINK1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:26:42 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EA47C1F0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:26:41 -0700 (PDT)
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663151199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 14 Sep 2022 06:27:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528481A39A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:27:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D83C93388F;
+        Wed, 14 Sep 2022 10:27:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663151248; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lj2gDBWDxhbWfpJ3F2DuTG5OBZRpUdCDuERum2ovK+M=;
-        b=hi3QMYUHfOuFXdjn7Jj90aA+Gc8WFyhf8nuRHV+74HB/tNyT3LV3i6+Gsw71o0FMvw094B
-        T46x39QgtouHs46DDXcMBrAcRHg9wi2LiZQUdlakIHuX64XxSOjOKKY4Xa6GzOcMOD5ovV
-        nK9SK1GTc5h9GFctTL9sFh5S1a3jFDo=
-Date:   Wed, 14 Sep 2022 10:26:38 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <78c7cd3900e0a33da514be8799b35f9f@linux.dev>
-Subject: Re: [PATCH] mm/damon: fix missing damon_del_region()
-To:     "SeongJae Park" <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, sieberf@amazon.com, shakeelb@google.com,
-        foersleo@amazon.de, damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220914095206.70459-1-sj@kernel.org>
-References: <20220914095206.70459-1-sj@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+        bh=Bwrqe9juwWAngUflkbqX/hdbOSZnvvFPps+5b1Q+D74=;
+        b=XQqiHUQpe0B019/T76+hTeH4+0W8HviqY2hYFqLZrHwYApx+zhPHpqBoYGFkKhKc+duxYZ
+        el7VnnVeClFFGHwEqx8meweuWdnHHPVy8h4HR/OLPbx6ji3x1skEmUc1A6S+kmLMaG5af7
+        yf2FD0orQKpf7ZiTz/S33xFLoRD/0rE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663151248;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bwrqe9juwWAngUflkbqX/hdbOSZnvvFPps+5b1Q+D74=;
+        b=cTm91n7Al3Ll6ff/pdR3nNsXfPPYYJ4tJPNU7MHrDKm7tt/dYV3kMdprrjOkyuJ4y9ua2C
+        1OXk13mzFdWoEZCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A13B1134B3;
+        Wed, 14 Sep 2022 10:27:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oJC1JpCsIWOfSAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 14 Sep 2022 10:27:28 +0000
+Date:   Wed, 14 Sep 2022 12:27:28 +0200
+Message-ID: <87zgf2tfn3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, cezary.rojewski@intel.com,
+        tiwai@suse.com, ranjani.sridharan@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, perex@perex.cz,
+        liam.r.girdwood@linux.intel.com, kai.vehmanen@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] ASoC: Intel: fix unused-variable warning in probe_codec
+In-Reply-To: <166314841746.314266.6045600836637107787.b4-ty@kernel.org>
+References: <20220822035133.2147381-1-cuigaosheng1@huawei.com>
+        <166314841746.314266.6045600836637107787.b4-ty@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-7
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,22 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-September 14, 2022 5:52 PM, "SeongJae Park" <sj@kernel.org> wrote:=0A=0A>=
- Hi Yajun,=0A> =0A> On Wed, 14 Sep 2022 17:36:36 +0800 Yajun Deng <yajun.=
-deng@linux.dev> wrote:=0A> =0A>> It should be called damon_del_region() b=
-efore free each region, so use=0A>> damon_destroy_region() instead of dam=
-on_free_region().=0A> =0A> What 'damon_del_region()' does is deleting the=
- region from target's regions=0A> linked list so that nobody references i=
-t later after its freed. However, as=0A> each region is linked to one tar=
-get, and as we will free the target here, the=0A> list will also be freed=
-. Therefore, we don't need to worry about future=0A> references to the re=
-gion.=0A> =0A> Anything I'm missing?=0A> =0AOK, got it.=0A=0A> Thanks,=0A=
-> SJ=0A> =0A>> Fixes: f23b8eee1871 (mm/damon/core: implement region-based=
- sampling)=0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A>> ---=
-=0A>> mm/damon/core.c | 2 +-=0A>> 1 file changed, 1 insertion(+), 1 delet=
-ion(-)=0A>> =0A>> diff --git a/mm/damon/core.c b/mm/damon/core.c=0A>> ind=
-ex 0b1eb945c68a..e62e7ebf4b12 100644=0A>> --- a/mm/damon/core.c=0A>> +++ =
-b/mm/damon/core.c=0A>> @@ -361,7 +361,7 @@ void damon_free_target(struct =
-damon_target *t)=0A>> struct damon_region *r, *next;=0A>> =0A>> damon_for=
-_each_region_safe(r, next, t)=0A>> - damon_free_region(r);=0A>> + damon_d=
-estroy_region(r, t);=0A>> kfree(t);=0A>> }=0A>> =0A>> --=0A>> 2.25.1
+On Wed, 14 Sep 2022 11:40:17 +0200,
+Mark Brown wrote:
+> 
+> On Mon, 22 Aug 2022 11:51:33 +0800, Gaosheng Cui wrote:
+> > In configurations with CONFIG_SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC=n,
+> > gcc warns about an unused variable:
+> > 
+> > sound/soc/intel/skylake/skl.c: In function ¡probe_codec¢:
+> > sound/soc/intel/skylake/skl.c:729:18: error: unused variable ¡skl¢ [-Werror=unused-variable]
+> >   struct skl_dev *skl = bus_to_skl(bus);
+> >                   ^~~
+> > cc1: all warnings being treated as errors
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    broonie/sound.git for-next
+> 
+> Thanks!
+> 
+> [1/1] ASoC: Intel: fix unused-variable warning in probe_codec
+>       commit: 515626a33a194c4caaf2879dbf9e00e882582af0
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+
+I thought the buggy commit 3fd63658caed9 was present only in my tree
+for now, but if it's in your tree, that's fine to apply through
+yours.  Then I'll drop from mine.
+
+
+thanks,
+
+Takashi
