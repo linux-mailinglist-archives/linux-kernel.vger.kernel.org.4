@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D985B855A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4095B855B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiINJmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S229601AbiINJm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiINJm1 (ORCPT
+        with ESMTP id S231172AbiINJm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:42:27 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AE31B792;
-        Wed, 14 Sep 2022 02:42:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id c2-20020a1c3502000000b003b2973dafb7so15091217wma.2;
-        Wed, 14 Sep 2022 02:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=J0LC+Huazpj9YGje83L6Ih16ffsvRXN1EA4iW9igUKk=;
-        b=RQWliQxiog6x7JAou5Dp5ryYMEQPtDx5gNS5F4sLRFg81RCvUQiVfwUNu6i7QT97UI
-         tSt5k7QtApaQ49XecKqtm5pDc1PZE0lu1oa+bOI1e+L2ZE5WOfAC6e/VsM2eAyCuZg5/
-         QxTInx+cfyCJ+2GLdboHg8c6Eza+2lQlSqM/7+32BySyhc3YECXe8zzlCJcGYpxGrO1C
-         fSo0bviasEQjnn4Xm9E3itHLlJCqf7BJrTgmeFT5qy+fhN/xvOBTEozjOUBeIaFjq8L3
-         tg/hGtKGe1UNqiJiz3m7mGkqgthYMc/lqlJtaOIdR/4UQBrvb/q+Ft29gSqV+bC88snx
-         X4yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=J0LC+Huazpj9YGje83L6Ih16ffsvRXN1EA4iW9igUKk=;
-        b=Q3fg4vIVQ9CYAfEFimvOdoM21ixrSSJX6S61y5r+F3D9/jpw4Xd2sYpdZOPyFHjANu
-         hc4Hx6bU6Y2pqYiuM1SfQrG0BRfxXUe0jgaK3OGVKqp/jsJery9DLb9bkB9InmHGQDG4
-         uX0jZUIceGRZuKdBhPjW21RoeFJN/JEsJRlFONbV/DP9/0mYaWztkw/1FI51/Omi9q8L
-         B+mZCprIr3HQ5vwbIpBZH96CqjHgvFbT2oF9SJ+YrmP26tRPA2fWvVPMlXe4o4dPBs3l
-         ewJN8oeNN8XL+ZZivNs/hcDOYHQcizF3MnLN0hLga3qEvQ2G3KDiSv8W9CAyKnsZ9m25
-         lP3g==
-X-Gm-Message-State: ACgBeo0eHJIuv11Pvxts/Wwl3QXKB6EwOwYpgbkXdgLND+aqS9jXcD4Z
-        MEHOdzCo58ei4rGzmT6cOVc=
-X-Google-Smtp-Source: AA6agR4V+VTaO1TPY9VQQXvLfuqnMiOFq4PVE8jYus+mOXgoM0EYlNOw2+8htjLJn69RJrpUdxY2YQ==
-X-Received: by 2002:a7b:c2a9:0:b0:3a6:2400:722c with SMTP id c9-20020a7bc2a9000000b003a62400722cmr2353042wmk.108.1663148522165;
-        Wed, 14 Sep 2022 02:42:02 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id r9-20020a5d52c9000000b00229e0def760sm13154403wrv.88.2022.09.14.02.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 02:42:01 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 10:41:59 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
-Message-ID: <YyGh51eRAO+grbhk@debian>
-References: <20220913140410.043243217@linuxfoundation.org>
+        Wed, 14 Sep 2022 05:42:28 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258EB32AB5;
+        Wed, 14 Sep 2022 02:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663148528; x=1694684528;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KygSRb8RNrq6ueX2RVvRzI4GlM9IvgjpZfDFHSuvf9I=;
+  b=HD2cffVnRwWgEaSEMDuD4Ok07WPghqktwKfpdnGWMsXlXK6lBYSV2ooz
+   ndYfcn0HAx72JgbvVf1zQlguPxaplgAOR8zcH5NQzHhVJRbsKH/idNg7P
+   RW1Dxl2x8yEiD/439ZZYvf/LH5BvLiGY3KsgGGSjtvJWxBFmSylltCGYe
+   C3bNZJJD6U3xHkG0JTBdoxMhS8RsWb5/Zbh422ULWzvNvVwGD1X6KetbN
+   z8p9Hfq28aCLIdNX3IVGLXY1ncRPSvbJNsQ4R/HpOXMWgisWCBwRbXf3e
+   zmwdDDv2KeOM565P2YHjDrSTotx/cYGZKohfUu6LYoCUGWuYWs1hTu4n6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="278114977"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="278114977"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:42:07 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="685251593"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 02:42:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oYOu9-0028hA-2F;
+        Wed, 14 Sep 2022 12:42:01 +0300
+Date:   Wed, 14 Sep 2022 12:42:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set
+ wake_irq
+Message-ID: <YyGh6Yjbb/5rkh35@smile.fi.intel.com>
+References: <20220912221317.2775651-1-rrangel@chromium.org>
+ <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+ <YyC9N62JaMGaeanf@smile.fi.intel.com>
+ <CAHQZ30DAr_BwH03=bG9tfCSGW+-he-c-4PPeJMOqH28cVcKDoA@mail.gmail.com>
+ <YyDNAw+ur177ayY0@smile.fi.intel.com>
+ <CAHQZ30DP1asiMj7hoebQQvGqE36sBDjaFmp3ju3eUEF1PruFeg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHQZ30DP1asiMj7hoebQQvGqE36sBDjaFmp3ju3eUEF1PruFeg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, Sep 13, 2022 at 12:56:37PM -0600, Raul Rangel wrote:
+> On Tue, Sep 13, 2022 at 12:33 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Tue, Sep 13, 2022 at 12:07:53PM -0600, Raul Rangel wrote:
 
-On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.9 release.
-> There are 192 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+...
+
+> > This is similar to what of_i2c_get_board_info() does, no?
+> > Note: _get_ there.
 > 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
+> `*info` is an out parameter in that case. Ideally I would have
+> `i2c_acpi_get_irq`, `acpi_dev_gpio_irq_get_wake`,
+> `platform_get_irq_optional`, and `i2c_dev_irq_from_resources` all
+> return a `struct irq_info {int irq; bool wake_capable;}`. This would
+> be a larger change though.
 
-Build test (gcc version 12.2.1 20220819):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Seems the ACPI analogue is i2c_acpi_fill_info(). Can we do it there?
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+-- 
+With Best Regards,
+Andy Shevchenko
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1821
-[2]. https://openqa.qa.codethink.co.uk/tests/1826
-[3]. https://openqa.qa.codethink.co.uk/tests/1828
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
