@@ -2,185 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9335B8137
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A86E5B812D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiINGCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 02:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiINGCD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229560AbiINGCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 14 Sep 2022 02:02:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3861DB7;
-        Tue, 13 Sep 2022 23:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/AdvcLB/6Lq62F25dpNZjPyf+RkXKrtfVHPO5PSE7Z8=; b=YvwcNsYU3EvAkZm9GfLxM+lM+t
-        HXOtQOv+4Jx2cMnFleGlhr69M3+KXaO7vS3jOxN5ZlkVX34tIyl7rjzD9U4DkBOX2FLRlkU/LZ5TI
-        7Av1xS2jZQmW4Q/gtB/Dto8WjESCYp2jULocXq3Sb9OQiGUrnyf/bgKgV8h1Q09amwu2+3Yxq/U7e
-        cYxi8Lm0uBnFPcmXe+oWHMzlQw2coiYY4yufW4KsMWHKpDuMKTrzDBLYs+CuhzvUcHSfqL/l0SxMK
-        AGxUOS+iObhsF3iBOphHEyYTw73Wyvc/WOnhnnaeBqkbnNDjnHh0uxJzRiaya03YucdIXOE8VGL8Z
-        ZsXenlOw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYLT2-00879w-Dz; Wed, 14 Sep 2022 06:01:48 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org
-Cc:     joe@perches.com, mcgrof@kernel.org, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH v10 2/2] testing: use the copyleft-next-0.3.1 SPDX tag
-Date:   Tue, 13 Sep 2022 23:01:47 -0700
-Message-Id: <20220914060147.1934064-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220914060147.1934064-1-mcgrof@kernel.org>
-References: <20220914060147.1934064-1-mcgrof@kernel.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbiINGBz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 14 Sep 2022 02:01:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE5261DB6;
+        Tue, 13 Sep 2022 23:01:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72902B81261;
+        Wed, 14 Sep 2022 06:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E79C433D6;
+        Wed, 14 Sep 2022 06:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663135311;
+        bh=fYar8ghS4OUdVFgdAeY840z/WV0wqwrpaBV4nR+aLKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ltBdMgXO1PHwNLPbX63MHzNGNlpZM5ZfSGHmgXIxTclCem6qRPG190lfdxQMQ84Zk
+         XdgqMSY3Ge4OYq+cwwwFa/LF3Mjw6pnUw6OZcf9kRoHqNpWj0zb2w5rJGtX6mZ9VFj
+         y8EMDgNqjwCCW+LjNXkF0o+x/jOZiJyxOr+Q3XFTYyJDmoviyGZXWPPXlO6uJjVn8R
+         J6CEJMMQhBDN+pDN+4q2L9vqrLMQP6FSHAzVFqyrv4Ap5cHpmhxH08pIcUxvtahDB9
+         0qZGdFOGI+GwTj51TvD2fkCB0o1/C6qyWZREXXnkLhYuSKIlRc6viE7RNzGoEi4X+I
+         kOgofLNrZovcg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oYLT5-0002lj-Cy; Wed, 14 Sep 2022 08:01:51 +0200
+Date:   Wed, 14 Sep 2022 08:01:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
+Message-ID: <YyFuT9N0f8bg0epk@hovoldconsulting.com>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <ca6a97c5-1abe-b215-0ff2-443f4ed9a25f@kali.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca6a97c5-1abe-b215-0ff2-443f4ed9a25f@kali.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two selftests drivers exist under the copyleft-next license.
-These drivers were added prior to SPDX practice taking full swing
-in the kernel. Now that we have an SPDX tag for copylef-next-0.3.1
-documented, embrace it and remove the boiler plate.
+On Tue, Sep 13, 2022 at 03:23:10PM -0500, Steev Klimaszewski wrote:
+> Hi Johan,
+> 
+> On 9/13/22 3:53 AM, Johan Hovold wrote:
+> > The MSM DRM driver is currently broken in multiple ways with respect to
+> > probe deferral. Not only does the driver currently fail to probe again
+> > after a late deferral, but due to a related use-after-free bug this also
+> > triggers NULL-pointer dereferences.
 
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: Kuno Woudt <kuno@frob.nl>
-Cc: Richard Fontana <fontana@sharpeleven.org>
-Cc: copyleft-next@lists.fedorahosted.org
-Cc: Ciaran Farrell <Ciaran.Farrell@suse.com>
-Cc: Christopher De Nicolo <Christopher.DeNicolo@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- lib/test_kmod.c                          | 12 +-----------
- lib/test_sysctl.c                        | 12 +-----------
- tools/testing/selftests/kmod/kmod.sh     | 13 +------------
- tools/testing/selftests/sysctl/sysctl.sh | 12 +-----------
- 4 files changed, 4 insertions(+), 45 deletions(-)
+> > In some cases, such has for the DP IRQ, the above situation can also be
+> > avoided by moving the allocation in question to the platform driver
+> > probe (d0) or component bind (between d2 and d3). But as doing so is not
+> > a general fix, this can be done later as a cleanup/optimisation.
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index cb800b1d0d99..6423df9fa8dd 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * kmod stress test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 9a564971f539..e2a816d85ea2 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * proc sysctl test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- 
- /*
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..7189715d7960 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -1,18 +1,7 @@
- #!/bin/bash
--#
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
- #
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
--
- # This is a stress test script for kmod, the kernel module loader. It uses
- # test_kmod which exposes a series of knobs for the API for us so we can
- # tweak each test in userspace rather than in kernelspace.
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index f50778a3d744..bfc54b422f25 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -1,16 +1,6 @@
- #!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
- 
- # This performs a series tests against the proc sysctl interface.
- 
--- 
-2.35.1
+> I've tested this on both sc8180x (Lenovo Flex 5G) and sdm850 (Lenovo 
+> Yoga C630), and both of them show the same issue:
 
+[ Copied the below from IRC instead as the formatting in your mail was
+off. ]
+
+> [    7.449305] platform ae9a000.displayport-controller: Fixing up cyclic dependency with ae01000.mdp
+> [    7.454344] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+> [    7.454406] Mem abort info:
+> [    7.454423]   ESR = 0x0000000096000004
+> [    7.454446]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    7.454475]   SET = 0, FnV = 0
+> [    7.454494]   EA = 0, S1PTW = 0
+> [    7.454512]   FSC = 0x04: level 0 translation fault
+> [    7.454539] Data abort info:
+> [    7.454556]   ISV = 0, ISS = 0x00000004
+> [    7.454577]   CM = 0, WnR = 0
+> [    7.454595] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000101504000
+> [    7.454629] [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+> [    7.454669] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [    7.454700] Modules linked in: i2c_hid_of i2c_hid leds_qcom_lpg led_class_multicolor rtc_pm8xxx msm mdt_loader gpu_sched drm_dp_aux_bus drm_display_helper drm_kms_helper drm phy_qcom_edp llcc_qcom i2c_qcom_geni phy_qcom_qmp_combo phy_qcom_snps_femto_v2 phy_qcom_qmp_ufs phy_qcom_qmp_pcie ufs_qcom pwm_bl
+> [    7.454860] CPU: 2 PID: 76 Comm: kworker/u16:2 Not tainted 5.19.0-rc8-next-20220728 #26
+> [    7.454902] Hardware name: LENOVO 82AK/LNVNB161216, BIOS EACN43WW(V1.15) 09/13/2021
+> [    7.454941] Workqueue: events_unbound deferred_probe_work_func
+> [    7.454982] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    7.455020] pc : dp_display_request_irq+0x50/0xdc [msm]
+> [    7.455145] lr : dp_display_request_irq+0x2c/0xdc [msm]
+> [    7.455265] sp : ffff800008c1bb30
+> [    7.455285] x29: ffff800008c1bb30 x28: 0000000000000000 x27: 0000000000000000
+> [    7.455327] x26: ffffc9c918420000 x25: ffffc9c9186ec570 x24: 000000000000003a
+> [    7.455368] x23: ffffc9c918811d30 x22: ffff2a5806baa998 x21: ffff2a5806ba3410
+> [    7.455410] x20: ffff2a5806baa880 x19: ffff2a5806baa998 x18: ffffffffffffffff
+> [    7.455451] x17: 0000000000000038 x16: ffffc9c9164eeb24 x15: ffffffffffffffff
+> [    7.455492] x14: ffff2a5806bc3004 x13: ffff2a5806bc3000 x12: 0000000000000000
+> [    7.455533] x11: 0000000000000040 x10: ffffc9c918493080 x9 : ffffc9c918493078
+> [    7.455574] x8 : ffff2a5800681b88 x7 : 0000000000000000 x6 : ffff2a5806baa880
+> [    7.455616] x5 : ffffc9c8ca2de000 x4 : 0000000000080004 x3 : 0000000000000000
+> [    7.455656] x2 : ffffc9c8ca296000 x1 : 00000000000000a8 x0 : 0000000000000000
+> [    7.455698] Call trace:
+> [    7.455714]  dp_display_request_irq+0x50/0xdc [msm]
+> [    7.455834]  dp_display_probe+0xf8/0x4a4 [msm]
+> [    7.455950]  platform_probe+0x6c/0xc4
+> [    7.455976]  really_probe+0xbc/0x2d4
+> [    7.455999]  __driver_probe_device+0x78/0xe0
+> [    7.456025]  driver_probe_device+0x3c/0x13c
+> [    7.456051]  __device_attach_driver+0xb8/0x120
+> [    7.456077]  bus_for_each_drv+0x78/0xd0
+> [    7.456105]  __device_attach+0x9c/0x1a0
+> [    7.456129]  device_initial_probe+0x18/0x2c
+> [    7.456154]  bus_probe_device+0x9c/0xa4
+> [    7.456178]  deferred_probe_work_func+0x88/0xc0
+> [    7.456204]  process_one_work+0x1d4/0x330
+> [    7.456231]  worker_thread+0x70/0x42c
+> [    7.456255]  kthread+0x10c/0x110
+> [    7.456278]  ret_from_fork+0x10/0x20
+> [    7.456306] Code: aa1403e6 f2a00104 f0000225 f0ffffe2 (f9400400)
+> [    7.456341] ---[ end trace 0000000000000000 ]---
+
+> This is from the sc8180x, sdm850 is the same call stack, just with 
+> different addresses.
+> 
+> I do have 
+> https://lore.kernel.org/all/20220712132258.671263-1-dmitry.baryshkov@linaro.org/ 
+> applied here which makes the 10th patch not apply cleanly.
+
+Yeah, that is expected. You need to drop Dmitry's series first. Once you
+verified that this series works, you can add it back if you want but you
+then need to restore the device pointer used when allocating the irq in
+dp_display_request_irq():
+
+-       rc = devm_request_irq(dp_display->drm_dev->dev, dp->irq,
++       rc = devm_request_irq(&dp->pdev->dev, dp->irq,
+ 
+> It fails actually, but I applied it manually here.
+
+Please drop that series and give this one another spin.
+
+Johan
