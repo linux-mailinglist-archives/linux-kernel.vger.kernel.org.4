@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798EC5B854B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512885B854F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiINJlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S230128AbiINJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiINJkr (ORCPT
+        with ESMTP id S231343AbiINJlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:40:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EB050065;
-        Wed, 14 Sep 2022 02:40:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A5661ADA;
-        Wed, 14 Sep 2022 09:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D843BC433D6;
-        Wed, 14 Sep 2022 09:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663148423;
-        bh=ui4a4307ErOPtFPrDWbQDs8itl5K/H0TZiMAW9g5cJI=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=RthdDpg8Xyhwd8u568+xgwUj4PRMmUv1XKg3xc8PdASGHU+uUxe14wwHqaWJpS6ta
-         K7XeTMClkmYEYrgKm2bV545GrJBBt9O3mojUMp2vLChm6V/vF58NJS5CCHYpUxkosF
-         NBZj59B7f86GS2gZFB2hmkTHafjnAXwlaauUdvhYc/c0WCDJFLhlGS6qDrgU1YMtvv
-         88enqTA5Na95PY9YuWoFLh8PfiC9cFccKr2H3fYpPJPZWCNTv4KJ3T9xMEps6+BuKZ
-         czA+Zljc43KaXqoHoErBR8b0oIhLHkrKlxospBPSTKuF7/2xLlmatFyJix+HMJKUA/
-         7o+S6SZUIs+Zw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Banajit Goswami <bgoswami@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <20220910090856.49271-1-krzysztof.kozlowski@linaro.org>
-References: <20220910090856.49271-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: qcom,q6afe: remove binding
-Message-Id: <166314842061.314266.11703491169387696036.b4-ty@kernel.org>
-Date:   Wed, 14 Sep 2022 10:40:20 +0100
+        Wed, 14 Sep 2022 05:41:06 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ABB6257;
+        Wed, 14 Sep 2022 02:40:37 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r66-20020a1c4445000000b003b494ffc00bso2589865wma.0;
+        Wed, 14 Sep 2022 02:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=XD4iucFLxgzqc21UBjYM/+y/OF171eyd76SQF2Uz+Uo=;
+        b=Czzyg5Ii39bIdATod6MYoXL+0ce1NHBJMEk5TXZlBfgIm8ER3DsZC6h4FuXBm2TArw
+         ahIrgNi083lSn5WMJocUb612EwQfUxM/QifkRkx2M08u2VpJ0wQ8VjeE9YUHBR2vOesw
+         l1dxRUn6Haq+w0PZv2tSSi2mmwdZLIbmZxW5zf03GEYOZVfmnfDSWDF1cQE2FFcagrgO
+         ld62sKv5+mybj6HNRhW9L+yGTSriIKBHC1eHfgwUb71y3WS3s5g3Qugxq4cp51ThXNdz
+         CPWl+ebblrUq0EWj65OGURHb4M1+2/eRZv7HhWTiRvQ3oyrFfpHliFYZpWIBIEA/ULRn
+         cGSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=XD4iucFLxgzqc21UBjYM/+y/OF171eyd76SQF2Uz+Uo=;
+        b=yvIpADFUkSh1IriEnQlL4bLoYnWsHcnv842VxwXbZieAqK28njatYvEva1p7zRE5ea
+         m9GsANVWC2G0kLcdBTtr9pTBKV2nNqut8+Yk6Saj6X9ehPcefvu2+ALIy4GcykZ09bix
+         Kw+7JLOyyBaOYe2n8drao6yRqrUmX6cWiw028TaEv1N4ul7ec3fNlfib1ge/7rpaASNK
+         ++y3jNSqM5HvXdpvu1FZoBoP9r/hLSDVSKTNyLowiQx/IxzBHgAgVZA16DfovGhvIxnl
+         4QEq+miD5XQkT+O3K9WtvPSmQI30ab3ZrRQfLfraPnOYU2AIddNd53LOOADkBN40HnY/
+         jivA==
+X-Gm-Message-State: ACgBeo0cjSUrItdhppHwVJmv8TWshSP65R0dayiQSJ3RpNHnBzZhPU7J
+        RqHupPBe8KWEvihMAegqzu4z1Tovr6c=
+X-Google-Smtp-Source: AA6agR4a8T838OGuXPNJH58/mS7gzcHZP9BkO9ZJV29Q+dpwCsDZK5c2tOKebo4VXYuWV41KLkN6nA==
+X-Received: by 2002:a05:600c:1c05:b0:3b4:9504:9904 with SMTP id j5-20020a05600c1c0500b003b495049904mr2413030wms.69.1663148435548;
+        Wed, 14 Sep 2022 02:40:35 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id f7-20020a5d4dc7000000b00226dba960b4sm13107772wru.3.2022.09.14.02.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 02:40:35 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 10:40:33 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/121] 5.15.68-rc1 review
+Message-ID: <YyGhkWGp8w/Q1yif@debian>
+References: <20220913140357.323297659@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-7dade
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 11:08:56 +0200, Krzysztof Kozlowski wrote:
-> qcom,q6afe is already documented in soc/qcom/qcom,apr.yaml.  The
-> version-based compatibles ("qcom,q6afe-v<MAJOR-NUMBER>.<MINOR-NUMBER>")
-> are not used (neither in upstream nor in downstream DTS).
+Hi Greg,
+
+On Tue, Sep 13, 2022 at 04:03:11PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.68 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
 
-Applied to
+Build test (gcc version 12.2.1 20220819):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-   broonie/sound.git for-next
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
-Thanks!
+[1]. https://openqa.qa.codethink.co.uk/tests/1819
+[2]. https://openqa.qa.codethink.co.uk/tests/1825
+[3]. https://openqa.qa.codethink.co.uk/tests/1827
 
-[1/1] ASoC: dt-bindings: qcom,q6afe: remove binding
-      commit: 1c2d23fc6134fa72b040a36ae953e1a6614844f4
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--
+Regards
+Sudip
