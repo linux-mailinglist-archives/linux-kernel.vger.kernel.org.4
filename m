@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81AF5B7E5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806235B7E5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiINBfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S229940AbiINBgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiINBfM (ORCPT
+        with ESMTP id S229701AbiINBgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:35:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF251D0EC;
-        Tue, 13 Sep 2022 18:35:10 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MS2pq1CblzlVkT;
-        Wed, 14 Sep 2022 09:30:59 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 14 Sep 2022 09:34:56 +0800
-Message-ID: <7897d2c5-eb48-006f-5e7a-bf78e258dfc5@huawei.com>
-Date:   Wed, 14 Sep 2022 09:34:55 +0800
+        Tue, 13 Sep 2022 21:36:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514B06111F;
+        Tue, 13 Sep 2022 18:36:06 -0700 (PDT)
+X-UUID: 807153ac862c4a28b70411e296afe6d7-20220914
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=mSDfnV9Y8FokxfoaGAcr1iQVtsA9X7BYTGuDMzLt1yo=;
+        b=u6kH5y1fb/rxMAY08rm5Y3VcmDWR0NhtUadKeoLrVe2ufhWnxn15Q/7NV9oRiHetnkRLeljAtrvFtOcL2WDmUaXU4eLFNhLdxI14Y5BDZ5vFEQnn0AT+eLgnCctcarKgofQdobIbIn6mjiIbgbIP75Ol28euf2KrZImyZ3HlsW8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:42a2e703-798e-4ad8-b858-c7c80efd12bd,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:42a2e703-798e-4ad8-b858-c7c80efd12bd,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:cf1854ec-2856-4fce-b125-09d4c7ebe045,B
+        ulkID:220914093404SARCJUSD,BulkQuantity:2,Recheck:0,SF:28|17|19|48,TC:nil,
+        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 807153ac862c4a28b70411e296afe6d7-20220914
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 447566403; Wed, 14 Sep 2022 09:36:00 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 14 Sep 2022 09:35:58 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 14 Sep 2022 09:35:58 +0800
+Message-ID: <cd08cc1ed6765970ba0ad8590bebf7de651e68e3.camel@mediatek.com>
+Subject: Re: [PATCH v3 4/9] drm/mediatek: Add gamma support different
+ lut_size for other SoC
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Singo Chang" <singo.chang@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 14 Sep 2022 09:35:58 +0800
+In-Reply-To: <97ac2b35-bb3b-360a-4078-f72146136a7f@collabora.com>
+References: <20220911153734.24243-1-jason-jh.lin@mediatek.com>
+         <20220911153734.24243-5-jason-jh.lin@mediatek.com>
+         <97ac2b35-bb3b-360a-4078-f72146136a7f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH -next 1/2] Kconfig: remove unused argment 'ch'
-To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <liwei391@huawei.com>, "weiyongjun (A)" <weiyongjun1@huawei.com>
-References: <20220912094838.2398580-1-zengheng4@huawei.com>
- <20220912094838.2398580-2-zengheng4@huawei.com>
- <CAK7LNASrH740T45VvbOZyfxF3C8aqMesbMBkEyBsv78Sz4D1AQ@mail.gmail.com>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <CAK7LNASrH740T45VvbOZyfxF3C8aqMesbMBkEyBsv78Sz4D1AQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,54 +78,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, I would replace sym_set_choice_value with sym_set_tristate_value at v2.
+Hi Angelo,
 
+Thanks for the reviews.
 
-在 2022/9/14 0:35, Masahiro Yamada 写道:
-> On Mon, Sep 12, 2022 at 6:41 PM Zeng Heng <zengheng4@huawei.com> wrote:
->> Remove unused argment 'ch' in sym_set_choice_value
->>
->> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
->
-> Can you remove sym_set_choice_value() and
-> call sym_set_tristate_value(chval, yes) directly?
->
->
->
->
->
->> ---
->>   scripts/kconfig/conf.c | 2 +-
->>   scripts/kconfig/lkc.h  | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
->> index 4178065ca27f..635265a18a07 100644
->> --- a/scripts/kconfig/conf.c
->> +++ b/scripts/kconfig/conf.c
->> @@ -551,7 +551,7 @@ static int conf_choice(struct menu *menu)
->>                          print_help(child);
->>                          continue;
->>                  }
->> -               sym_set_choice_value(sym, child->sym);
->> +               sym_set_choice_value(child->sym);
->>                  for (child = child->list; child; child = child->next) {
->>                          indent += 2;
->>                          conf(child);
->> diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
->> index fa8c010aa683..279d56a44136 100644
->> --- a/scripts/kconfig/lkc.h
->> +++ b/scripts/kconfig/lkc.h
->> @@ -124,7 +124,7 @@ static inline struct symbol *sym_get_choice_value(struct symbol *sym)
->>          return (struct symbol *)sym->curr.val;
->>   }
->>
->> -static inline bool sym_set_choice_value(struct symbol *ch, struct symbol *chval)
->> +static inline bool sym_set_choice_value(struct symbol *chval)
->>   {
->>          return sym_set_tristate_value(chval, yes);
->>   }
->> --
->> 2.25.1
->>
->
+On Mon, 2022-09-12 at 12:24 +0200, AngeloGioacchino Del Regno wrote:
+> Il 11/09/22 17:37, Jason-JH.Lin ha scritto:
+> > 1. Add mtk_drm_gamma_get_lut_size() and remove MTK_LUT_SIZE macro.
+> > 2. Add lut_size to gamma driver data for different SoC.
+> > 
+> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > ---
+> >   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |  1 +
+> >   drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 22
+> > +++++++++++++++++++--
+> >   drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |  4 ++--
+> >   drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 -
+> >   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  9 +++++++++
+> >   5 files changed, 32 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> > b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> > index a83e5fbc8724..6a05bb56e693 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> > +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> > @@ -51,6 +51,7 @@ void mtk_gamma_clk_disable(struct device *dev);
+> >   void mtk_gamma_config(struct device *dev, unsigned int w,
+> >   		      unsigned int h, unsigned int vrefresh,
+> >   		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+> > +unsigned int mtk_gamma_get_lut_size(struct device *dev);
+> >   void mtk_gamma_set(struct device *dev, struct drm_crtc_state
+> > *state);
+> >   void mtk_gamma_set_common(struct device *dev, void __iomem *regs,
+> > struct drm_crtc_state *state);
+> >   void mtk_gamma_start(struct device *dev);
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> > b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> > index f54a6a618348..e69d0b205b9a 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> > @@ -24,10 +24,12 @@
+> >   #define DISP_GAMMA_LUT				0x0700
+> >   
+> >   #define LUT_10BIT_MASK				0x03ff
+> > +#define LUT_SIZE_DEFAULT			512 /* for setting
+> > gamma lut from AAL */
+> >   
+> >   struct mtk_disp_gamma_data {
+> >   	bool has_dither;
+> >   	bool lut_diff;
+> > +	u16 lut_size;
+> >   };
+> >   
+> >   /*
+> > @@ -54,18 +56,32 @@ void mtk_gamma_clk_disable(struct device *dev)
+> >   	clk_disable_unprepare(gamma->clk);
+> >   }
+> >   
+> > +unsigned int mtk_gamma_get_size(struct device *dev)
+> > +{
+> > +	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
+> > +	unsigned int lut_size = LUT_SIZE_DEFAULT;
+> > +
+> > +	if (gamma && gamma->data)
+> > +		lut_size = gamma->data->lut_size;
+> > +
+> > +	return lut_size;
+> > +}
+> > +
+> >   void mtk_gamma_set_common(struct device *dev, void __iomem *regs,
+> > struct drm_crtc_state *state)
+> >   {
+> >   	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
+> >   	bool lut_diff = false;
+> > +	u16 lut_size = LUT_SIZE_DEFAULT;
+> 
+> This makes us get a double assignment in case gamma->data is
+> populated.
+> 
+> >   	unsigned int i, reg;
+> >   	struct drm_color_lut *lut;
+> >   	void __iomem *lut_base;
+> >   	u32 word;
+> >   	u32 diff[3] = {0};
+> >   
+> > -	if (gamma && gamma->data)
+> > +	if (gamma && gamma->data) {
+> >   		lut_diff = gamma->data->lut_diff;
+> > +		lut_size = gamma->data->lut_size;
+> > +	}
+> 
+> ...you can avoid it like that:
+> 
+> } else {
+> 	lut_size = LUT_SIZE_DEFAULT;
+> }
+> 
+> 
+> Regards,
+> Angelo
+> 
+OK, I'll fix it, but I'll move the gamma priv data handling to the
+mtk_gamma_set.
+
+Regards,
+Jason-JH.Lin
+
+> 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
+
