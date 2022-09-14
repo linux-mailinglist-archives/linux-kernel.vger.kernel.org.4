@@ -2,107 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53EA5B860E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C59C5B867E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiINKPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S229940AbiINKiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiINKOp (ORCPT
+        with ESMTP id S229582AbiINKiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:14:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2582A5F6E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663150477;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zy+HcecB9X1fmoe+ZX8nNbCTxaTOZTGJoW+YzpIXLDQ=;
-        b=M3Z7JcjW7NrSyfbqZ/vi8X1Za3ZLc9ilgriin2kW6dhy8JF+cpWjaK9u80a1IsXgH3VbdS
-        jTH8hzKF0Aj8+tSc87G4TdgMtoBBnekAqo/fTf+A3pGQUUlMu7NAXmq5pNAiK6PEIHLBQz
-        60ttlDD7aj9PjAHGOZIBekTjClijCqE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-626-mWLjvtTGMVaBbolDTwV5fw-1; Wed, 14 Sep 2022 06:14:36 -0400
-X-MC-Unique: mWLjvtTGMVaBbolDTwV5fw-1
-Received: by mail-wm1-f71.google.com with SMTP id q16-20020a1cf310000000b003a626026ed1so5229003wmq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=zy+HcecB9X1fmoe+ZX8nNbCTxaTOZTGJoW+YzpIXLDQ=;
-        b=XmAf9+DhS7JFiV0S8kftTnVbxgWbORVgn7dJe2gNy2mdKqTKtC/B2j87ktzbWRRaxC
-         yI3OrCJxDKJnjdQKmgPJX/fe52z+jEsRmnhy/RaPwrcZ2ZyJ82hb4wowzdNA//AhAAGi
-         QazrNLcyqhRPPIu3z9VFIrb/ZFaJdzfM0U9OZtOtnATgDU0SlU5jk7ntBRMHFaN7j+Mo
-         BmjYj5jC3ukhfXSCrDe/pRzXSIfy+lwONt07W70N35Dof8eWAKPdsFNTGV/Xi5vNnVP1
-         eI+XGEvK0P2DgMeIpxF51VIO21y9l5tZ6AGvqb1HuIK6Bu7S1pT/9adzabyw/S8/LTEU
-         xTKQ==
-X-Gm-Message-State: ACgBeo3mdtEKwUBaAYt81nm5rhsKgfp5DfblXGirsq90Ol2+GPBU7PGq
-        SgSLD/iwOx5ZYtLS9tAKaLilH/f2fYBJK6FiuzpRob18gXIZHJsAA1HfxGSvxGR7I10BmVopO2B
-        mlQ0TQedWJDDUOb3Ks+qOE8MV
-X-Received: by 2002:a05:600c:35cc:b0:3a6:f08:9b1 with SMTP id r12-20020a05600c35cc00b003a60f0809b1mr2466544wmq.22.1663150475168;
-        Wed, 14 Sep 2022 03:14:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6tsbQzTZqxq9VBgBW8gyHvMcYArl5cDcuQG6dou43DSCrZ3irgtyQ51KtnTgmIsxZSJdl4Jw==
-X-Received: by 2002:a05:600c:35cc:b0:3a6:f08:9b1 with SMTP id r12-20020a05600c35cc00b003a60f0809b1mr2466520wmq.22.1663150474902;
-        Wed, 14 Sep 2022 03:14:34 -0700 (PDT)
-Received: from [10.119.22.46] ([89.101.193.71])
-        by smtp.gmail.com with ESMTPSA id m7-20020a5d6247000000b002258235bda3sm13171662wrv.61.2022.09.14.03.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 03:14:34 -0700 (PDT)
-Message-ID: <433f00b8-c860-e2ad-09ba-b1abd4dc6189@redhat.com>
-Date:   Wed, 14 Sep 2022 12:14:33 +0200
+        Wed, 14 Sep 2022 06:38:16 -0400
+X-Greylist: delayed 1318 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 03:38:15 PDT
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F377AC2B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:38:15 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 8E6DF717A2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:16:15 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YPRGosqBbgeGqYPRHoss1N; Wed, 14 Sep 2022 05:16:15 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ul6eVI37l13eLM15PAoxmkjLJvaiHfKifA3ANt/jytc=; b=yi8CDq3WzuP0JN3sC/xEQbLdhf
+        W5drxDnVRsCGWSopxdVjfxkA2Dti42jmLxePmHXxmCrD73DaISl+FQgyXxiLYWyv8yp5BQPYn9v9/
+        Qwm1ecs/5ASLAxN+NiH8YRa4D9M0hFFrdJ+H8mumshC1HZ+WI87JBFKwhqHt3zQNc5oEZ+Vk3Zk8+
+        ah674OXIai/OIA3dHusaUF/8MwswerqdADbzDsp3RGTHHqoypUp/6RHpQGG02crd7Lpr+nZFFUxv8
+        W70XgJw/XKANujc/tMGn8UcQs2EueRM02x5T6uv4EM2Xs3w/a1WBT7QNm1LppsJG+MYjtvwLxfCCi
+        I66aRkuQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39700 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oYPRG-003xUn-8u;
+        Wed, 14 Sep 2022 10:16:14 +0000
+Date:   Wed, 14 Sep 2022 03:16:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, stable@vger.kernel.org,
+        Arindam Nath <arindam.nath@amd.com>,
+        Chris Ball <cjb@laptop.org>,
+        Philip Rakity <prakity@marvell.com>,
+        Zhangfei Gao <zhangfei.gao@marvell.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH] mmd: core: Terminate infinite loop in SD-UHS voltage
+ switch
+Message-ID: <20220914101608.GA1325043@roeck-us.net>
+References: <20220914014010.2076169-1-briannorris@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/3] vmw_balloon: open-code vmballoon_compaction_init()
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
-References: <20220913094306.317734-1-namit@vmware.com>
- <20220913094306.317734-4-namit@vmware.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220913094306.317734-4-namit@vmware.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914014010.2076169-1-briannorris@chromium.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oYPRG-003xUn-8u
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:39700
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 11
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.09.22 11:43, Nadav Amit wrote:
-> From: Nadav Amit <namit@vmware.com>
+On Tue, Sep 13, 2022 at 06:40:10PM -0700, Brian Norris wrote:
+> This loop intends to retry a max of 10 times, with some implicit
+> termination based on the SD_{R,}OCR_S18A bit. Unfortunately, the
+> termination condition depends on the value reported by the SD card
+> (*rocr), which may or may not correctly reflect what we asked it to do.
 > 
-> Following commit 68f2736a85832 ("mm: Convert all PageMovable users to
-> movable_operations"), the code of vmballoon_compaction_init() is very
-> simple and does not worth a separate function.
+> Needless to say, it's not wise to rely on the card doing what we expect;
+> we should at least terminate the loop regardless. So, check both the
+> input and output values, so we ensure we will terminate regardless of
+> the SD card behavior.
 > 
-> Instead, open code vmballoon_compaction_init. As migratepage is always
-> defined, use IS_ENABLED(), which makes the code easier to read. No
-> functional change is intended.
+> Note that SDIO learned a similar retry loop in commit 0797e5f1453b
+> ("mmc: core: Fixup signal voltage switch"), but that used the 'ocr'
+> result, and so the current pre-terminating condition looks like:
 > 
-> Signed-off-by: Nadav Amit <namit@vmware.com>
+>     rocr & ocr & R4_18V_PRESENT
+> 
+> (i.e., it doesn't have the same bug.)
+> 
+> This addresses a number of crash reports seen on ChromeOS that look
+> like the following:
+> 
+>     ... // lots of repeated: ...
+>     <4>[13142.846061] mmc1: Skipping voltage switch
+>     <4>[13143.406087] mmc1: Skipping voltage switch
+>     <4>[13143.964724] mmc1: Skipping voltage switch
+>     <4>[13144.526089] mmc1: Skipping voltage switch
+>     <4>[13145.086088] mmc1: Skipping voltage switch
+>     <4>[13145.645941] mmc1: Skipping voltage switch
+>     <3>[13146.153969] INFO: task halt:30352 blocked for more than 122 seconds.
+>     ...
+> 
+> Fixes: f2119df6b764 mmc: sd: add support for signal voltage switch procedure
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+> 
+>  drivers/mmc/core/sd.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+> index 06aa62ce0ed1..3662bf5320ce 100644
+> --- a/drivers/mmc/core/sd.c
+> +++ b/drivers/mmc/core/sd.c
+> @@ -870,7 +870,8 @@ int mmc_sd_get_cid(struct mmc_host *host, u32 ocr, u32 *cid, u32 *rocr)
+>  	 * the CCS bit is set as well. We deliberately deviate from the spec in
+>  	 * regards to this, which allows UHS-I to be supported for SDSC cards.
+>  	 */
+> -	if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
+> +	if (!mmc_host_is_spi(host) && (ocr & SD_OCR_S18R) &&
+> +	    rocr && (*rocr & SD_ROCR_S18A)) {
+>  		err = mmc_set_uhs_voltage(host, pocr);
+>  		if (err == -EAGAIN) {
+>  			retries--;
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
