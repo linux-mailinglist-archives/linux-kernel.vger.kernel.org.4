@@ -2,163 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB545B81DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4825B81EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiINHN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 03:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S230176AbiINHN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 03:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiINHNX (ORCPT
+        with ESMTP id S230182AbiINHNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 03:13:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB7466110
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:13:21 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oYMa4-00055g-Tg; Wed, 14 Sep 2022 09:13:08 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oYMa5-000eMw-Jh; Wed, 14 Sep 2022 09:13:08 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oYMa3-00Duib-5f; Wed, 14 Sep 2022 09:13:07 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-gpio@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@pengutronix.de,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v3 2/2] dt-bindings: gpio: Add gpio-latch binding document
-Date:   Wed, 14 Sep 2022 09:13:06 +0200
-Message-Id: <20220914071306.3254881-3-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220914071306.3254881-1-s.hauer@pengutronix.de>
-References: <20220914071306.3254881-1-s.hauer@pengutronix.de>
+        Wed, 14 Sep 2022 03:13:49 -0400
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B8C72B52;
+        Wed, 14 Sep 2022 00:13:44 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAA3Pt4kfyFjLwWNAg--.39905S2;
+        Wed, 14 Sep 2022 15:13:41 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v5] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Wed, 14 Sep 2022 15:13:34 +0800
+Message-Id: <20220914071334.2820756-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-CM-TRANSID: zQCowAA3Pt4kfyFjLwWNAg--.39905S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1rJry3uryfCw48Cry8Xwb_yoWrCF1Dpa
+        yUXFWSqF4UJF4agFs8Ca1qgw1rCw4kKa9Ig3yxGw4FkF1fJ34Iqa4IyasYvry3tFykKFya
+        qrsaqrWqkF4xJrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a binding for a GPIO multiplexer driver based on latches
-connected to other GPIOs.
+The driver core supports the ability to handle the creation and removal
+of device-specific sysfs files in a race-free manner. Moreover, it can
+guarantee the success of creation. Therefore, it should be better to
+convert to use dev_groups.
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+Changelog:
 
-Notes:
-    Changes since v1:
-    - Add license to binding file
+v4 -> v5:
 
- .../devicetree/bindings/gpio/gpio-latch.yaml  | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/gpio-latch.yaml
+1. Use a forward declaration for ftdi_sio_groups.
+2. Correct ftdi_sio_attr_is_visible() implementation.
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-latch.yaml b/Documentation/devicetree/bindings/gpio/gpio-latch.yaml
-new file mode 100644
-index 0000000000000..856a9e1e43b45
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/gpio-latch.yaml
-@@ -0,0 +1,85 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/gpio-latch.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+v3 -> v4:
+
+1. Move the code and remove the pre-definitions.
+
+v2 -> v3:
+
+1. Add is_visible to filter the unneeded files.
+
+v1 -> v2:
+
+1. Change the title.
+2. Switch to use an attribute group.
+---
+ drivers/usb/serial/ftdi_sio.c | 60 +++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..660181064cda 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1108,10 +1108,13 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
+ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+ static u32 ftdi_2232h_baud_to_divisor(int baud);
+ 
++extern const struct attribute_group *ftdi_sio_groups[];
 +
-+title: GPIO latch controller
+ static struct usb_serial_driver ftdi_sio_device = {
+ 	.driver = {
+ 		.owner =	THIS_MODULE,
+ 		.name =		"ftdi_sio",
++		.dev_groups =	ftdi_sio_groups,
+ 	},
+ 	.description =		"FTDI USB Serial Device",
+ 	.id_table =		id_table_combined,
+@@ -1729,38 +1732,19 @@ static ssize_t event_char_store(struct device *dev,
+ }
+ static DEVICE_ATTR_WO(event_char);
+ 
+-static int create_sysfs_attrs(struct usb_serial_port *port)
++static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
++					 struct attribute *attr, int idx)
+ {
++	struct device *dev = kobj_to_dev(kobj);
++	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	int retval = 0;
++	umode_t mode = attr->mode;
+ 
+ 	/* XXX I've no idea if the original SIO supports the event_char
+ 	 * sysfs parameter, so I'm playing it safe.  */
+ 	if (priv->chip_type != SIO) {
+-		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
+-		retval = device_create_file(&port->dev, &dev_attr_event_char);
+-		if ((!retval) &&
+-		    (priv->chip_type == FT232BM ||
+-		     priv->chip_type == FT2232C ||
+-		     priv->chip_type == FT232RL ||
+-		     priv->chip_type == FT2232H ||
+-		     priv->chip_type == FT4232H ||
+-		     priv->chip_type == FT232H ||
+-		     priv->chip_type == FTX)) {
+-			retval = device_create_file(&port->dev,
+-						    &dev_attr_latency_timer);
+-		}
+-	}
+-	return retval;
+-}
+-
+-static void remove_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-
+-	/* XXX see create_sysfs_attrs */
+-	if (priv->chip_type != SIO) {
+-		device_remove_file(&port->dev, &dev_attr_event_char);
++		if (attr == &dev_attr_event_char.attr)
++			return mode;
+ 		if (priv->chip_type == FT232BM ||
+ 		    priv->chip_type == FT2232C ||
+ 		    priv->chip_type == FT232RL ||
+@@ -1768,12 +1752,29 @@ static void remove_sysfs_attrs(struct usb_serial_port *port)
+ 		    priv->chip_type == FT4232H ||
+ 		    priv->chip_type == FT232H ||
+ 		    priv->chip_type == FTX) {
+-			device_remove_file(&port->dev, &dev_attr_latency_timer);
++			if (attr == &dev_attr_latency_timer.attr)
++				return mode;
+ 		}
+ 	}
+-
++	return 0;
+ }
+ 
++static struct attribute *ftdi_sio_attrs[] = {
++	&dev_attr_event_char.attr,
++	&dev_attr_latency_timer.attr,
++	NULL,
++};
 +
-+maintainers:
-+  - Sascha Hauer <s.hauer@pengutronix.de>
++static const struct attribute_group ftdi_sio_group = {
++	.attrs = ftdi_sio_attrs,
++	.is_visible = ftdi_sio_attr_is_visible,
++};
 +
-+description: |
-+  This binding describes a GPIO multiplexer based on latches connected to
-+  other GPIOs, like this:
++const struct attribute_group *ftdi_sio_groups[] = {
++	&ftdi_sio_group,
++	NULL
++};
 +
-+  CLK0 ----------------------.        ,--------.
-+  CLK1 -------------------.  `--------|>    #0 |
-+                          |           |        |
-+  OUT0 ----------------+--|-----------|D0    Q0|-----|<
-+  OUT1 --------------+-|--|-----------|D1    Q1|-----|<
-+  OUT2 ------------+-|-|--|-----------|D2    Q2|-----|<
-+  OUT3 ----------+-|-|-|--|-----------|D3    Q3|-----|<
-+  OUT4 --------+-|-|-|-|--|-----------|D4    Q4|-----|<
-+  OUT5 ------+-|-|-|-|-|--|-----------|D5    Q5|-----|<
-+  OUT6 ----+-|-|-|-|-|-|--|-----------|D6    Q6|-----|<
-+  OUT7 --+-|-|-|-|-|-|-|--|-----------|D7    Q7|-----|<
-+         | | | | | | | |  |           `--------'
-+         | | | | | | | |  |
-+         | | | | | | | |  |           ,--------.
-+         | | | | | | | |  `-----------|>    #1 |
-+         | | | | | | | |              |        |
-+         | | | | | | | `--------------|D0    Q0|-----|<
-+         | | | | | | `----------------|D1    Q1|-----|<
-+         | | | | | `------------------|D2    Q2|-----|<
-+         | | | | `--------------------|D3    Q3|-----|<
-+         | | | `----------------------|D4    Q4|-----|<
-+         | | `------------------------|D5    Q5|-----|<
-+         | `--------------------------|D6    Q6|-----|<
-+         `----------------------------|D7    Q7|-----|<
-+                                      `--------'
-+
-+  The number of clk-gpios and latched-gpios is not fixed. The actual number
-+  of number of latches and the number of inputs per latch is derived from
-+  the number of GPIOs given in the corresponding device tree properties.
-+
-+properties:
-+  compatible:
-+    const: gpio-latch
-+  "#gpio-cells":
-+    const: 2
-+
-+  clk-gpios:
-+    description: Array of GPIOs to be used to clock a latch
-+
-+  latched-gpios:
-+    description: Array of GPIOs to be used as inputs per latch
-+
-+  gpio-controller: true
-+
-+  gpio-line-names: true
-+
-+required:
-+  - compatible
-+  - "#gpio-cells"
-+  - gpio-controller
-+  - clk-gpios
-+  - latched-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio-latch {
-+        #gpio-cells = <2>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_di_do_leds>;
-+        compatible = "gpio-latch";
-+        gpio-controller;
-+
-+        clk-gpios = <&gpio3 7 0>, <&gpio3 8 0>;
-+        latched-gpios = <&gpio3 21 0>, <&gpio3 22 0>,
-+                       <&gpio3 23 0>, <&gpio3 24 0>,
-+                       <&gpio3 25 0>, <&gpio3 26 0>,
-+                       <&gpio3 27 0>, <&gpio3 28 0>;
-+    };
+ #ifdef CONFIG_GPIOLIB
+ 
+ static int ftdi_set_bitmode(struct usb_serial_port *port, u8 mode)
+@@ -2251,7 +2252,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
+@@ -2377,8 +2377,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
+ 
+ 	ftdi_gpio_remove(port);
+ 
+-	remove_sysfs_attrs(port);
+-
+ 	kfree(priv);
+ }
+ 
 -- 
-2.30.2
+2.25.1
 
