@@ -2,70 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3695B8532
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199E45B8534
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiINJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S230361AbiINJjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiINJi2 (ORCPT
+        with ESMTP id S231623AbiINJih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:38:28 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC6A1CB17;
-        Wed, 14 Sep 2022 02:37:52 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bo13so8238307wrb.1;
-        Wed, 14 Sep 2022 02:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=9ICPhAk7WSUuojPvhuOrCs4K3x58Me7hs8cZWGyAJus=;
-        b=mk1Yv6cJkliM0V8wFmEUe/iffX+9lJuUXJQpCPcJz/NuiF4W5MCtQx/F5lKLsIf13N
-         qjDRKkRXb7Uz3h4Qwjvi3oNEW6UiaE46LHNo+q2md7D34mE943/oZjuWjuBlf80usrbf
-         jz+C6UXX3Ig4UPtDA+WDBjykKQafKKbYCNrwlhlugGru4i8+q/6Yu03bJ5Zl0XmugQu7
-         Sd64tw5QQgczkraFEHhHUxyCSv9LkqR6e85sZu5tWDmjl8LVS0w6+SRVaib5rLefGkp2
-         rycahVQpmz/0rNlrpebOb+XZL9qpIc/DG3KHMO6hLJ36lRGy9neM9QPiJM7bQkqLgIz/
-         IbkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=9ICPhAk7WSUuojPvhuOrCs4K3x58Me7hs8cZWGyAJus=;
-        b=UQ9E/HG8f6vQoLzPGWqDEQBk+FlGSk5yzc2COdD0Vc214YXIAcqIMfZFmq4zWsBFlS
-         qtOhczkoSxBLpxIHAp6jy2mTq270BdgsvN8qYT60a/Q4jCdXog3SvUmR5gnSswU8v6b1
-         IW5H2/hcVE7mrfneXW8iuP2vNJFrrSE0uDouZP1ltEt4QY7d0KxRjJgIdsascOq5Vf3p
-         u4VfLItAlQhv4hnqOXVsjubdyYrP+516Ev3DWvbnOGgQDBqqZCAgmXpXyksrtyIAebjt
-         9CPT/hQ1LCjkUNqRZCOjHGdOfHBy5JBOXkDlOTAYQYsVIAp0bZq2HuIr7XUsFI4YWhR6
-         2YBA==
-X-Gm-Message-State: ACgBeo0j+pIgj+nMS96AxV4b1ZjGXRoZci5+Ar3NAN12IDpVm19tT6Ro
-        c/BtA/NV+5juPwc4Gh/Ek/sjrnZ0HlA=
-X-Google-Smtp-Source: AA6agR41v9glYIS6dOa+YPWh2Bjpb9yAI3k4G9HdagQvZAFBM+A6DoViLRJ3lZac9fbXlFUnHJi69g==
-X-Received: by 2002:adf:d1ce:0:b0:22a:36d6:da05 with SMTP id b14-20020adfd1ce000000b0022a36d6da05mr17331989wrd.719.1663148270787;
-        Wed, 14 Sep 2022 02:37:50 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003a5f3f5883dsm18853027wmg.17.2022.09.14.02.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 02:37:50 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 10:37:48 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 000/108] 5.4.212-rc1 review
-Message-ID: <YyGg7KOjq6P4Gjkj@debian>
-References: <20220913140353.549108748@linuxfoundation.org>
+        Wed, 14 Sep 2022 05:38:37 -0400
+Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5061D30D;
+        Wed, 14 Sep 2022 02:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1663148294; i=@fujitsu.com;
+        bh=innjE3mvg9WVMWJzn0D35+35BLJpTlYCkV//jqcaPTo=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=eWRfEpTdDCcjBYExPlWkki9pEX4dQ84IDqVrLIhElUaMXjQXqS/Xu1KLHEbpiswOZ
+         WQqtQho3toovWzXIe02pKYbXt7iPQK2H2gq4v5I7f26uNQc8krUGr1hq3cQG2FB8AC
+         QFo6WcoAcLbE/GEDQnI8GsZofQ9Ugflh3i6owAYCCEfGnXmsHuWiuSdtnfKDxDB0T3
+         Xe72ZatvfhmeiylaNfGNaJmXyCIBvAC2I6x1mYs8DfeRc4DkywUYpHqBgBG+g5a7/w
+         hHEikKkwbO8qaOLu+r8DeQfs2ZrhJJe3rLNuVOgtVmzITT5NqS7irFAchd//4WR0l7
+         MQn6mRMAHZMYA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDKsWRWlGSWpSXmKPExsViZ8MxSZd1oWK
+  ywctGZYt3n6ssthy7x2hx+QmfxekJi5gs9uw9yWJxedccNotdf3awW6z88YfVgcPj1CIJj80r
+  tDw2repk83ixeSajx/t9V9k8Pm+SC2CLYs3MS8qvSGDNeHl2I2vBd/6KjT2LWRoYm3i6GLk4h
+  AS2MEocnveRHcJZziTReuw6I4SzjVFiz7oDzF2MHBy8AnYSh3uSuhg5OVgEVCUWbTjEBGLzCg
+  hKnJz5hAXEFhVIkri64S4riC0s4CuxdlMfM4jNJuAoMW/WRjaQMSICeRLTFiuBjGcW+MAk0fP
+  3NxPErgvMEnf33AZr5hSwl1g25xVYM7OAhcTiNwfZIWx5ieats8HiEgKKEm1L/rFD2BUSjdMh
+  DpIQUJO4em4T8wRGoVlI7puFZNQsJKMWMDKvYrRKKspMzyjJTczM0TU0MNA1NDTVNdE1MrbUS
+  6zSTdRLLdUtTy0u0TXUSywv1kstLtYrrsxNzknRy0st2cQIjLKUYpb3Oxib+n7qHWKU5GBSEu
+  X98FUhWYgvKT+lMiOxOCO+qDQntfgQowwHh5IE7/65islCgkWp6akVaZk5wIiHSUtw8CiJ8Or
+  NAUrzFhck5hZnpkOkTjEac5zfuX8vM8e82f/2Mwux5OXnpUqJ866cD1QqAFKaUZoHNwiWiC4x
+  ykoJ8zIyMDAI8RSkFuVmlqDKv2IU52BUEub9OA9oCk9mXgncvldApzABnWJkLQ9ySkkiQkqqg
+  UlM6q6KVGtzXo7vbLXDB/2mv1XRFLEuTpnhvN6v/v7cDYrmWyPTKndkl0kucZWoM7tfJXPdSU
+  RIqHjyI+m9Pw0f7y95Nyt1dpmAQM4N77pnP389W1+m7Fxb6tVq8fWATMOjvIby4O8Z3w2nHWq
+  qXDf91JrdVRnRc+Zs4NV73u7Q/jrolVFS+613shdlFHLVBY/z7+lW1i9ctnLzHZbW+gkfuRjs
+  H/3gzup4LJ+hkn2k7/+PQGPJH4+Ka3tOSPeoy7JOfT37M++p7Rx69wrsC1pYO7qXX9ggnBK5w
+  nZWlDOzyD3Tl8E2MaWOX7/mPjvCOzVX9qTE1e+XJpZcl8/6594Qa8fjduybN+sDxt/xSizFGY
+  mGWsxFxYkAcPuL/L8DAAA=
+X-Env-Sender: yangx.jy@fujitsu.com
+X-Msg-Ref: server-10.tower-585.messagelabs.com!1663148293!213906!1
+X-Originating-IP: [62.60.8.146]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 25920 invoked from network); 14 Sep 2022 09:38:13 -0000
+Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
+  by server-10.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 14 Sep 2022 09:38:13 -0000
+Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 27CF01000CC;
+        Wed, 14 Sep 2022 10:38:13 +0100 (BST)
+Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 1AAEB100078;
+        Wed, 14 Sep 2022 10:38:13 +0100 (BST)
+Received: from [10.167.215.54] (10.167.215.54) by
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Wed, 14 Sep 2022 10:38:09 +0100
+Message-ID: <76ea04b4-bad7-8cb3-d2c6-4ad49def4e05@fujitsu.com>
+Date:   Wed, 14 Sep 2022 17:38:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
+From:   =?UTF-8?B?WWFuZywgWGlhby/mnagg5pmT?= <yangx.jy@fujitsu.com>
+To:     Brian Foster <bfoster@redhat.com>,
+        =?UTF-8?B?UnVhbiwgU2hpeWFuZy/pmK4g5LiW6Ziz?= 
+        <ruansy.fnst@fujitsu.com>
+CC:     "Darrick J. Wong" <djwong@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>
+References: <20220609143435.393724-1-ruansy.fnst@fujitsu.com>
+ <Yr5AV5HaleJXMmUm@magnolia>
+ <74b0a034-8c77-5136-3fbd-4affb841edcb@fujitsu.com>
+ <Ytl7yJJL1fdC006S@magnolia>
+ <7fde89dc-2e8f-967b-d342-eb334e80255c@fujitsu.com>
+ <YuNn9NkUFofmrXRG@magnolia>
+ <0ea1cbe1-79d7-c22b-58bf-5860a961b680@fujitsu.com>
+ <YusYDMXLYxzqMENY@magnolia>
+ <dd363bd8-2dbd-5d9c-0406-380b60c5f510@fujitsu.com> <Yxs5Jb7Yt2c6R6eW@bfoster>
+ <7fdc9e88-f255-6edb-7964-a5a82e9b1292@fujitsu.com>
+In-Reply-To: <7fdc9e88-f255-6edb-7964-a5a82e9b1292@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.167.215.54]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,38 +108,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Sep 13, 2022 at 04:05:31PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.212 release.
-> There are 108 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2022/9/14 14:44, Yang, Xiao/杨 晓 wrote:
+> On 2022/9/9 21:01, Brian Foster wrote:
+>> Yes.. I don't recall all the internals of the tools and test, but IIRC
+>> it relied on discard to perform zeroing between checkpoints or some such
+>> and avoid spurious failures. The purpose of running on dm-thin was
+>> merely to provide reliable discard zeroing behavior on the target device
+>> and thus to allow the test to run reliably.
+> Hi Brian,
 > 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
+> As far as I know, generic/470 was original designed to verify
+> mmap(MAP_SYNC) on the dm-log-writes device enabling DAX. Due to the
+> reason, we need to ensure that all underlying devices under
+> dm-log-writes device support DAX. However dm-thin device never supports
+> DAX so
+> running generic/470 with dm-thin device always returns "not run".
+> 
+> Please see the difference between old and new logic:
+> 
+>            old logic                          new logic
+> ---------------------------------------------------------------
+> log-writes device(DAX)                 log-writes device(DAX)
+>              |                                       |
+> PMEM0(DAX) + PMEM1(DAX)       Thin device(non-DAX) + PMEM1(DAX)
+>                                            |
+>                                          PMEM0(DAX)
+> ---------------------------------------------------------------
+> 
+> We think dm-thin device is not a good solution for generic/470, is there
+> any other solution to support both discard zero and DAX?
 
-Build test (gcc version 11.3.1 20220819):
-mips: 65 configs -> no failure
-arm: 106 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Hi Brian,
 
+I have sent a patch[1] to revert your fix because I think it's not good 
+for generic/470 to use thin volume as my revert patch[1] describes:
+[1] 
+https://lore.kernel.org/fstests/20220914090625.32207-1-yangx.jy@fujitsu.com/T/#u
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+With the revert, generic/470 can always run successfully on my 
+environment so I wonder how to reproduce the out-of-order replay issue 
+on XFS v5 filesystem?
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1829
+PS: I want to reproduce the issue and try to find a better solution to 
+fix it.
 
+Best Regards,
+Xiao Yang
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+> 
+> BTW, only log-writes, stripe and linear support DAX for now.
