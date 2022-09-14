@@ -2,118 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2015B857B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D505A5B857E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiINJtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S231135AbiINJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiINJtu (ORCPT
+        with ESMTP id S229908AbiINJuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:49:50 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D82DFE3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:49:48 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id z12so6489281wrp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=bbq4/4T4JjPGUfth20drkaf18DSxlzxy1kFL2s5Skkk=;
-        b=ExcJVlbc0ZagiH+Rt7hA0bIVbTU/NxhHDjFnmOG97vfk7AfET8oP8YY+6s84+Q+Kob
-         AJ5rZVaCR4FSyyotJ+Um7fBWBWoMhnq6QmyyFF+rO62RqwDs2N4Cn46ksL+KGnpwh78j
-         S9EN8XhjlqB4zz8tP/9vhz/LY6UjBPfju8CSPIQ4BAqdnZkjw88ejZd09ya3aFzcPlFx
-         1+nPK7TEXW2EAEnjLYIuPT+P98eFpC+AhVnQvUCuPinG4F1UA1iUwSzMXBNZ6rOAIuA5
-         rt96dfG3b4g5SHEDUERGZ840y1RY/kPx0dSau+lT3vebZafJpjfn+RBOIRHaCUGx6/1o
-         JI8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=bbq4/4T4JjPGUfth20drkaf18DSxlzxy1kFL2s5Skkk=;
-        b=0tJbrU8kdJBGOI7x+ZJtaFyUrI/QnQv1npSddawhGceV8zNExDKKIHk28dajwLK7/l
-         +odth6r/Ej0lx8qp5fmxZqHD0ssUBxNBDMVcIcO0Br+8a3n/DB0zi9djjel1Ytzpy2n8
-         HbWXoJZ5rkodfFN9cxM2aZ3qr1aDVPvIdKVyQ3uNbEZ0gRmqT27gF3CSurB59+m45+Hh
-         6OjHN1UqxQHO2FVa96y/DrGLJL2YWK4r/BMqegE5vc+m2H81MlUacbKab+F9P2/2rjqw
-         sn/VppS5Lo5z9ATgRAKchurWIzCHrndcP/ULSZFQhyPQ30PMyUBxx9AyJd5JP8ux74HE
-         BI0g==
-X-Gm-Message-State: ACgBeo3Frbpp3ZuspL1pHr+5iWyITfZmwrATIwIuTIUxac4KYzyAACoT
-        vnYNU7GUFxEhzeqj9DSurgLrPw==
-X-Google-Smtp-Source: AA6agR44NE7mkRWSZbkSxz7tUVdtOhV3Q3E9t0A41MbdOWdyWfvzOmpa8UdB3Zu6U/6tZw10e5zx/A==
-X-Received: by 2002:adf:e199:0:b0:228:60f6:f775 with SMTP id az25-20020adfe199000000b0022860f6f775mr20581130wrb.478.1663148987482;
-        Wed, 14 Sep 2022 02:49:47 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id v12-20020adfe4cc000000b00228c8ed21c8sm13192128wrm.17.2022.09.14.02.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 02:49:47 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 10:49:42 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, will@kernel.org,
-        robin.murphy@arm.com, robdclark@gmail.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        matthias.bgg@gmail.com, heiko@sntech.de, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        thierry.reding@gmail.com, sricharan@codeaurora.org,
-        yong.wu@mediatek.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 4/5] iommu: Regulate errno in ->attach_dev callback
- functions
-Message-ID: <YyGjtsB2Yq4fQICS@myrica>
-References: <20220913082448.31120-1-nicolinc@nvidia.com>
- <20220913082448.31120-5-nicolinc@nvidia.com>
- <YyB3F/o3RfymqiFW@myrica>
- <YyGaqsXSDMn8R12R@nvidia.com>
+        Wed, 14 Sep 2022 05:50:20 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A3E1FCF0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:50:17 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 09:50:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1663149012; x=1663408212;
+        bh=6VovnvAvT7wB2LMpcTIS6rq0tvcrlTsBEIBwvJyaOr0=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=sPnuCl9H1XDQAYDW16m7Z6w8txbgbXzwm+GzI9H0R444QpWr5gScwlFtBZ3+8rahu
+         4PmyCCH/RJ6fEHcEF3GyUHWTavG3g3pVseOEeUXSL0AP6avrR2+s/QFluYau+iHvDo
+         9O1/pEx63zTcEBCKbhEBLQnpjmcRKtkXeKL1oEVi6cwIsuePDqsrAHJINjoy9KYVBx
+         6+FGcXlM0JjkXCWEeTSz+qtDIOah+dXI4RTMSgoGmaDlKwPDanOnBr74Xy7IYzPSLU
+         S8aK4iHQpww0mxFw2v4kBWhwp2xuA/bt/T77FRyMnlXkNM3Q3ox1h90DBaYtxpsH8f
+         Lp/5D9kjr293A==
+To:     Mario Limonciello <mario.limonciello@amd.com>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH] platform/x86/amd: pmc: Add sysfs files for SMU
+Message-ID: <-v-ziVgHRq7Du4eop0IF6fTMkTT8XCT7ZbcGnyIIppnBSAgjI1fUCsHCVrW7C3tcvj7_lXHjvAyjHmd8ksObYBoxp5c4A0nlFvOwGpO8Im4=@protonmail.com>
+In-Reply-To: <20220913142510.1612-1-mario.limonciello@amd.com>
+References: <20220913142510.1612-1-mario.limonciello@amd.com>
+Feedback-ID: 20568564:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyGaqsXSDMn8R12R@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 06:11:06AM -0300, Jason Gunthorpe wrote:
-> On Tue, Sep 13, 2022 at 01:27:03PM +0100, Jean-Philippe Brucker wrote:
-> > I think in the future it will be too easy to forget about the constrained
-> > return value of attach() while modifying some other part of the driver,
-> > and let an external helper return EINVAL. So I'd rather not propagate ret
-> > from outside of viommu_domain_attach() and finalise().
-> 
-> Fortunately, if -EINVAL is wrongly returned it only creates an
-> inefficiency, not a functional problem. So we do not need to be
-> precise here.
+Hi
 
-Ah fair. In that case the attach_dev() documentation should indicate that
-EINVAL is a hint, so that callers don't rely on it (currently words "must"
-and "exclusively" indicate that returning EINVAL for anything other than
-device-domain incompatibility is unacceptable). The virtio-iommu
-implementation may well return EINVAL from the virtio stack or from the
-host response.
+2022. szeptember 13., kedd 16:25 keltez=C3=A9ssel, Mario Limonciello =C3=
+=ADrta:
 
-Thanks,
-Jean
+> The CPU/APU SMU FW version and program is currently discoverable by
+> turning on dynamic debugging or examining debugfs for the amdgpu
+> driver. To make this more discoverable, create a dedicated sysfs
+> file for it that userspace can parse without debugging enabled.
+>=20
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  Documentation/ABI/testing/sysfs-amd-pmc | 13 ++++++++
+>  drivers/platform/x86/amd/pmc.c          | 44 +++++++++++++++++++++++++
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-amd-pmc
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-amd-pmc b/Documentation/ABI/=
+testing/sysfs-amd-pmc
+> new file mode 100644
+> index 000000000000..ff627b48c875
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-amd-pmc
+> @@ -0,0 +1,13 @@
+> +What:=09=09/sys/bus/platform/drivers/amd_pmc/*/smu_fw_version
+> +Date:=09=09October 2022
+> +Contact:=09Mario Limonciello <mario.limonciello@amd.com>
+> +Description:=09Reading this file reports the version of the firmware loa=
+ded to
+> +=09=09System Management Unit (SMU) contained in AMD CPUs and
+> +=09=09APUs.
+> +
+> +What:=09=09/sys/bus/platform/drivers/amd_pmc/*/smu_program
+> +Date:=09=09October 2022
+> +Contact:=09Mario Limonciello <mario.limonciello@amd.com>
+> +Description:=09Reading this file reports the program corresponding to th=
+e SMU
+> +=09=09firmware version.  The program field is used to disambiguate two
+> +=09=09APU/CPU models that can share the same firmware binary.
+> \ No newline at end of file
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-> 
-> > Since we can't guarantee that APIs like virtio or ida won't ever return
-> > EINVAL, we should set all return values:
-> 
-> I dislike this alot, it squashes all return codes to try to optimize
-> an obscure failure path :(
-> 
-> Jason
+
+> diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pm=
+c.c
+> index 700eb19e8450..4302e7662087 100644
+> --- a/drivers/platform/x86/amd/pmc.c
+> +++ b/drivers/platform/x86/amd/pmc.c
+> @@ -455,6 +455,49 @@ static int amd_pmc_get_smu_version(struct amd_pmc_de=
+v *dev)
+>  =09return 0;
+>  }
+>=20
+> +static ssize_t smu_fw_version_show(struct device *d, struct device_attri=
+bute *attr,
+> +=09=09=09=09   char *buf)
+> +{
+> +=09struct amd_pmc_dev *dev =3D dev_get_drvdata(d);
+> +
+> +=09if (!dev->major) {
+> +=09=09int rc =3D amd_pmc_get_smu_version(dev);
+> +
+> +=09=09if (rc)
+> +=09=09=09return rc;
+> +=09}
+> +=09return sysfs_emit(buf, "%u.%u.%u\n", dev->major, dev->minor, dev->rev=
+);
+> +}
+> +static DEVICE_ATTR_RO(smu_fw_version);
+> +
+> +static ssize_t smu_program_show(struct device *d, struct device_attribut=
+e *attr,
+> +=09=09=09=09   char *buf)
+> +{
+> +=09struct amd_pmc_dev *dev =3D dev_get_drvdata(d);
+> +
+> +=09if (!dev->major) {
+> +=09=09int rc =3D amd_pmc_get_smu_version(dev);
+> +
+> +=09=09if (rc)
+> +=09=09=09return rc;
+> +=09}
+> +=09return sysfs_emit(buf, "%u\n", dev->smu_program);
+> +}
+> +static DEVICE_ATTR_RO(smu_program);
+> +
+> +static struct attribute *pmc_attrs[] =3D {
+> +=09&dev_attr_smu_fw_version.attr,
+> +=09&dev_attr_smu_program.attr,
+> +};
+
+I believe this should be NULL-terminated.
+
+
+> +static struct attribute_group pmc_attr_group =3D {
+> +=09.attrs =3D pmc_attrs,
+> +};
+> +
+> +static const struct attribute_group *pmc_groups[] =3D {
+> +=09&pmc_attr_group,
+> +=09NULL,
+> +};
+
+I think you could use the ATTRIBUTE_GROUPS() macro to generate these two ob=
+jects.
+
+
+> +
+>  static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
+>  {
+>  =09struct amd_pmc_dev *dev =3D s->private;
+> @@ -935,6 +978,7 @@ static struct platform_driver amd_pmc_driver =3D {
+>  =09.driver =3D {
+>  =09=09.name =3D "amd_pmc",
+>  =09=09.acpi_match_table =3D amd_pmc_acpi_ids,
+> +=09=09.dev_groups =3D pmc_groups,
+>  =09},
+>  =09.probe =3D amd_pmc_probe,
+>  =09.remove =3D amd_pmc_remove,
+> --
+> 2.34.1
+>=20
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze
