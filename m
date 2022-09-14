@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DB75B8E4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373CC5B8E50
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiINRqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S229877AbiINRqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiINRqT (ORCPT
+        with ESMTP id S229809AbiINRqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:46:19 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70F45073C;
-        Wed, 14 Sep 2022 10:46:17 -0700 (PDT)
-Received: from [192.168.1.138] ([37.4.248.23]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MYvPq-1olo7U1w2K-00UrpC; Wed, 14 Sep 2022 19:45:52 +0200
-Message-ID: <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
-Date:   Wed, 14 Sep 2022 19:45:48 +0200
+        Wed, 14 Sep 2022 13:46:52 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21A252086;
+        Wed, 14 Sep 2022 10:46:51 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id 3so11069980qka.5;
+        Wed, 14 Sep 2022 10:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=8dCJBTzDwCYDG7yGJAzsA7Ppx1VJiWA7RssQ0rmRopw=;
+        b=UdH5qf8MZ2e8DzliUaez9f/wdBVh6xOrHKJ6RSuh3iuNj+30K04XKONiYHp2nvaH9w
+         kB2nFljOyIOijYSnY7gfTziaNMD8wRfnZFtGFcTHtY6JryMTw4g+p2u6Sl8mmDLQMn6c
+         LLJx2YcKpSPEjab6ejEM5aipT1eBi/RrHHbAzzQ9gKsqewFHQaTV26dR4iVx6wQCONx+
+         46I0e0bYkcPDlL6smO2u+tzYix+XVm5tdVQ4kbfvS+heTwNvYs4JNkzien6YG8ZpqCdQ
+         1wNJphsaFoHVxHsogS6Snr763o+ptofIAxwmDfpTSlpJbbzdt9V5ZNQ3/NItooCv/wOO
+         YJvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=8dCJBTzDwCYDG7yGJAzsA7Ppx1VJiWA7RssQ0rmRopw=;
+        b=GOuQbw9Nte+0O+3r6S2PWybvXLj2/6/GCMjgNe07cGpgaz9divVOJBPk8ks+W4W2Wo
+         0HXc2Yj2jyG1O1KtvA/rHOjcYXtTZlnEgcsHORvliMN2xuJMQAf4XEwUc96rxeLm/FSE
+         cTnjD/tDvYhsE+6oFjHVM7Rq/LYBAKNUkWUFylRV0ESHTghMgrHt6ArO8egQLJzpm+Pz
+         4Q91A9OFM1kFotGu4WH7rjYAP2nVsn0vHb0Q6paI4Ax8PbOMe6kGMmUuk7QLH26t9pYf
+         Osqbd+QLYCBCVovfZfhBKOJ5a8ysC/7kAPGYoBOJtjhh5BjPAgxkyUrO6XGvezUHgXBS
+         h88w==
+X-Gm-Message-State: ACgBeo2TZlv2pVHpLeO5KZbTInVvO0/axVWvFcCMAFGQAwRIB5iqNLAq
+        PZqlxOp7Jag9Rle7YiCUZM1OY0wmkaY=
+X-Google-Smtp-Source: AA6agR7x/L2mbGbY/RNHSUQU/dQgn5UQmEPcsTsBGs8qZ0AU5HVPVI+a7OliiCRlf42apGqrBDaM9Q==
+X-Received: by 2002:a05:620a:25c8:b0:6ae:ba71:ea7d with SMTP id y8-20020a05620a25c800b006aeba71ea7dmr27782097qko.547.1663177610901;
+        Wed, 14 Sep 2022 10:46:50 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h1-20020a05620a244100b006cbcdc6efedsm2313281qkn.41.2022.09.14.10.46.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 10:46:50 -0700 (PDT)
+Message-ID: <b2e81ab3-8bf7-d0e9-d046-9aa2eacda6f5@gmail.com>
+Date:   Wed, 14 Sep 2022 10:46:46 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the
- maximum
+Subject: Re: [PATCH 4.9 00/42] 4.9.328-rc1 review
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
- <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
- <20220914155035.88E45C433C1@smtp.kernel.org>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220914155035.88E45C433C1@smtp.kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220913140342.228397194@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:NxmKp1sm3LkRo0gbQqolm+Ng3QYvTq0dE10k8LSTyFXI7uBvR9L
- s5hckFHebakOcs104ZCgvCrlEuj5OaMMMU8u91qxu8uzxCWhOMMTMgNT2pfVgqMCDU04tNv
- ETMcutviYd2PCqME3OrNDd36R08HkblW30gCreMY53J03iIVLxq0ijo+VmzN0cZj8yRCO40
- T14gwc7qvXjAc6/+hOENQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rG3TX5fH2yQ=:8p8gryIqThUfAmWQxp9+kE
- pKa4fgzl8w4DWbiVDsgkZxHhupxyqwRuqdz+RK6rF4hxFAnE7O6XFl5cvv12yM5PEez+B4lcv
- ZA9CfZ+0zoX3cV1y3vefN5TT7lDS87oYUd+61gPHxEThTLzoRsLntTjjffSxqJzIGozWLuHu8
- 56uPS09N9Il5LnLtxZM51FirCbZxackYY7jU3JoBp+j9NuEAouI3Jgyt+HiENf8BRKSkNX9YU
- KlX92RDZnTEExYsoO1KhV7RTkQYbTJXzUQsARDJv55fak+LPFAsa4982pdWxDHzAu/0M/Cbgl
- LRZOczb5gKh/Cs8xS54ecj0jwZnzszQ2GkaCqfDba5PqhLhC3fcvqzG1JPqTo9uTTC9xPcW3n
- FXjE3GKicHiWUufpvqeqnsIhvnacxbHfHM8YNsSBTW9dOLN5iXc/WbCrHPtD70BKj+5JliOY/
- ZFbOwwd7pVIef2DzEzLpIFlrJZokgi1PJQtA5b/WGxcr78ioqiVu9fBDxKTt0b+K0aFZTPHBC
- wL2koBIsW+oZRIE75204Whm9H1y07++1zMdndLKkGaMl4OziLMZvrFh853THCl4/QnYuyKU4D
- U71C+JqX9Ba+y6nSZKw57WuQvKpJ0S/m5Mf9kL2rXyVDITfUwRz2DEQhjWRGTaQuCxiKN1n5V
- vcENMZWTUxkNUFWwyEYAnQY6jfDgwye7djPTxSQVJtuNCuxx5/UJE9S6cdLXW1atG5oNC5FLc
- ZKQ4817Bt0H4ZWSXMo3M2zpTRXb7ByAp10T8OjyUZuzDp2MG2s6HgFpYifmOCg6CcQqSkyPGE
- KJwLptFU2btO550BEZAs0+0/JI/lA==
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 9/13/22 07:07, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.328 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.328-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Am 14.09.22 um 17:50 schrieb Stephen Boyd:
-> Quoting Maxime Ripard (2022-08-15 08:31:24)
->> @@ -254,6 +255,33 @@ static int raspberrypi_fw_dumb_determine_rate(struct clk_hw *hw,
->>          return 0;
->>   }
->>   
->> +unsigned long rpi_firmware_clk_get_max_rate(struct clk *clk)
->> +{
->> +       const struct raspberrypi_clk_data *data;
->> +       struct raspberrypi_clk *rpi;
->> +       struct clk_hw *hw;
->> +       u32 max_rate;
->> +       int ret;
->> +
->> +       if (!clk)
->> +               return 0;
->> +
->> +       hw =  __clk_get_hw(clk);
-> Ideally we don't add more users of this API. I should document that :/
->
-> It begs the question though, why do we need this API to take a 'struct
-> clk'?  Can it simply hardcode the data->id value for the clk you care
-> about and call rpi_firmware_property() directly (or some wrapper of it)?
->
-> Furthermore, I wonder if even that part needs to be implemented.  Why
-> not make a direct call to rpi_firmware_property() and get the max rate?
-> All of that can live in the drm driver. Making it a generic API that
-> takes a 'struct clk' means that it looks like any clk can be passed,
-> when that isn't true. It would be better to restrict it to the one use
-> case so that the scope of the problem doesn't grow. I understand that it
-> duplicates a few lines of code, but that looks like a fair tradeoff vs.
-> exposing an API that can be used for other clks in the future.
-it would be nice to keep all the Rpi specific stuff out of the DRM 
-driver, since there more users of it.
->
->> +       if (!hw)
->> +               return 0;
->> +
->> +       data = clk_hw_to_data(hw);
->> +       rpi = data->rpi;
->> +       ret = raspberrypi_clock_property(rpi->firmware, data,
->> +                                        RPI_FIRMWARE_GET_MAX_CLOCK_RATE,
->> +                                        &max_rate);
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
