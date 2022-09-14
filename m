@@ -2,72 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A65B862D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5575B8637
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiINKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+        id S229727AbiINKWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiINKVi (ORCPT
+        with ESMTP id S229706AbiINKWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:21:38 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58F37AC00
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:21:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z13so7535748edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SPAF5hoaiFVAkY/WsLhdQk3BcWFtQ7a/5C8YkM1BjIw=;
-        b=QWnGv+shjcwg4W70DZrhq+r4hVhfMPl6BnIOdonFBtlS/Pk1/OelW0UBgPOV3vlACf
-         ioJ+jgAfsxpsVBPqopB+yMNroVNPF7GTbWgxkewFthBo2I7okCZhVrrnnptlb0vMlQU7
-         o0rXqEvaF2jA1EMvLx8W9CVarvtzmMv9kIvDuz30bNKYOHBH6rZcw4u26zQM4JXBTYZD
-         M4QH1IXNukGP4IWWrhPMZuSm9qA6CiKzWDh5ZCFnAd4akMnnrQyyzr8Rn+c8tCfY+L4s
-         Mx1bj1mcVOxBVG5HN2eJJyAUC/20eJ9KJuhR7YOk8Lp+pYh6PrpEW8DQ6rTH4jBp3LJ9
-         eCww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SPAF5hoaiFVAkY/WsLhdQk3BcWFtQ7a/5C8YkM1BjIw=;
-        b=tqqq6WFfb4XxDT1tZ8Lcnzz4glvpwGtgrUsaTsHV+Zk7RNNBWa9w3yXFpCw/QE6fSf
-         4UiSW+4MCVdqtjPpTK20/mfaxfyE5d7Vqzxja8RCCVrZ/vMYvmvtSblWBeYNxz737Evk
-         uaS5Q9MvE95PUbEPolUiT5F7HJQpCfWDgYsiKY4ikD6ie+Mx1H8g7EV0irUGRm17yJtH
-         zkz9tMYL07mH6Z5pTBr6Lu2ylVRAYN+du8dnTrCZWdAtWKL3PSSUcXQcGrGigS1NTHib
-         SKX/hwMdfyFcMwI375tqm783vYCNEDPhXskw9TkE4IQlPoy4qg9u4ADjUDA1wexYJdOW
-         d1Xw==
-X-Gm-Message-State: ACgBeo03GraP8kLTrgiS4m8Lo87CcceAAknek+i1G83Pv65czectKtLn
-        sj4KsZjLVHrLYDiq1Tzu8bx8XJYNCL9Jxco9jU0WVg==
-X-Google-Smtp-Source: AA6agR7wytS0FmUM8JeHLoMN29M+7pRVF7ZaiQjrJfdDoekZisRpa00u54sk9yuZ48m3e8UIOTsJ3+TLANFnZ7HydrI=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr29891214edb.133.1663150886861; Wed, 14
- Sep 2022 03:21:26 -0700 (PDT)
+        Wed, 14 Sep 2022 06:22:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3AD7A52B;
+        Wed, 14 Sep 2022 03:22:39 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E9SuJw008032;
+        Wed, 14 Sep 2022 10:22:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eEkLslpr+tNgGZKF+emI7z6RQzFcHb8DKHBoODfssng=;
+ b=DPbru+WzqsAQrA3Zt8Z1XhX+nT2lFWfDBWGPQsp9zZx9ZfwcEGKzFdj5HmIN7X5KWGlC
+ /eyF6J51bwzlxpTRSzBb5+BEE1m0pbzaLJlw85772vMhwGNKyGFWNI1lHpAtu2WgrZS9
+ VnLPk7Wt3q1FD07Z6G61TloY7HlVonLj4vgd5rmoLHouGdpsaoC0Yb9hjWDG3wNEi68a
+ gvDvJ5r3yULL/eK6kYdhqSfaG8V6LCF/mCN6TES6AfuNJbB1ybKjBZ51+V6uuFrqqEhD
+ 8Eba3+gK1kk+cjg78OiouFQJIYQ3/zor4Qnjw5KgaLxbJNoH7CKprxarPq9wsqnynsXx ZQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0c9ut7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:22:22 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28EAJMaC008864;
+        Wed, 14 Sep 2022 10:22:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jh45kn765-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:22:21 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28EAJigW009529;
+        Wed, 14 Sep 2022 10:22:21 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 28EAMK1V012539
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 10:22:20 +0000
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 03:22:15 -0700
+Subject: Re: [PATCH 1/4] net: ipa: Make QMI message rules const
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-2-quic_jjohnson@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <4fe0283d-d2f4-a593-0748-a180e3589832@quicinc.com>
+Date:   Wed, 14 Sep 2022 15:52:12 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220912061746.6311-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220912061746.6311-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 14 Sep 2022 12:21:14 +0200
-Message-ID: <CACRpkdZxhbjTCagG8s8veNLfMuwXt2RhPpZPL4gPuABV=jDj5g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/40] pinctrl/arm64: qcom: fix some of Qualcomm
- pinctrl schema warnings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220912232526.27427-2-quic_jjohnson@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WhKfS7_gS2wQmYILn1N4lixApnkS-2dD
+X-Proofpoint-GUID: WhKfS7_gS2wQmYILn1N4lixApnkS-2dD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_03,2022-09-14_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
+ phishscore=0 mlxscore=0 bulkscore=0 adultscore=0 impostorscore=0
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140050
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,15 +103,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 8:17 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
 
-> That's a set for some of arm64 pinctrl bindings fixing most common warnings.  I
-> have a plan to continue this for remaining arm64 (sm8250 needs updates) and for
-> arm.
 
-I applied patches 1-33 to the pinctrl tree after I saw Bjorn was happy
-and has applied the DTS changes.
+On 9/13/22 4:55 AM, Jeff Johnson wrote:
+> Commit ff6d365898d ("soc: qcom: qmi: use const for struct
+> qmi_elem_info") allows QMI message encoding/decoding rules to be
+> const, so do that for IPA.
+> 
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-Yours,
-Linus Walleij
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+
+> ---
+>   drivers/net/ipa/ipa_qmi_msg.c | 20 ++++++++++----------
+>   drivers/net/ipa/ipa_qmi_msg.h | 20 ++++++++++----------
+>   2 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/ipa/ipa_qmi_msg.c b/drivers/net/ipa/ipa_qmi_msg.c
+> index 6838e8065072..c5a5dac284a9 100644
+> --- a/drivers/net/ipa/ipa_qmi_msg.c
+> +++ b/drivers/net/ipa/ipa_qmi_msg.c
+> @@ -9,7 +9,7 @@
+>   #include "ipa_qmi_msg.h"
+>   
+>   /* QMI message structure definition for struct ipa_indication_register_req */
+> -struct qmi_elem_info ipa_indication_register_req_ei[] = {
+> +const struct qmi_elem_info ipa_indication_register_req_ei[] = {
+>   	{
+>   		.data_type	= QMI_OPT_FLAG,
+>   		.elem_len	= 1,
+> @@ -116,7 +116,7 @@ struct qmi_elem_info ipa_indication_register_req_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_indication_register_rsp */
+> -struct qmi_elem_info ipa_indication_register_rsp_ei[] = {
+> +const struct qmi_elem_info ipa_indication_register_rsp_ei[] = {
+>   	{
+>   		.data_type	= QMI_STRUCT,
+>   		.elem_len	= 1,
+> @@ -134,7 +134,7 @@ struct qmi_elem_info ipa_indication_register_rsp_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_driver_init_complete_req */
+> -struct qmi_elem_info ipa_driver_init_complete_req_ei[] = {
+> +const struct qmi_elem_info ipa_driver_init_complete_req_ei[] = {
+>   	{
+>   		.data_type	= QMI_UNSIGNED_1_BYTE,
+>   		.elem_len	= 1,
+> @@ -151,7 +151,7 @@ struct qmi_elem_info ipa_driver_init_complete_req_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_driver_init_complete_rsp */
+> -struct qmi_elem_info ipa_driver_init_complete_rsp_ei[] = {
+> +const struct qmi_elem_info ipa_driver_init_complete_rsp_ei[] = {
+>   	{
+>   		.data_type	= QMI_STRUCT,
+>   		.elem_len	= 1,
+> @@ -169,7 +169,7 @@ struct qmi_elem_info ipa_driver_init_complete_rsp_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_init_complete_ind */
+> -struct qmi_elem_info ipa_init_complete_ind_ei[] = {
+> +const struct qmi_elem_info ipa_init_complete_ind_ei[] = {
+>   	{
+>   		.data_type	= QMI_STRUCT,
+>   		.elem_len	= 1,
+> @@ -187,7 +187,7 @@ struct qmi_elem_info ipa_init_complete_ind_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_mem_bounds */
+> -struct qmi_elem_info ipa_mem_bounds_ei[] = {
+> +const struct qmi_elem_info ipa_mem_bounds_ei[] = {
+>   	{
+>   		.data_type	= QMI_UNSIGNED_4_BYTE,
+>   		.elem_len	= 1,
+> @@ -208,7 +208,7 @@ struct qmi_elem_info ipa_mem_bounds_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_mem_array */
+> -struct qmi_elem_info ipa_mem_array_ei[] = {
+> +const struct qmi_elem_info ipa_mem_array_ei[] = {
+>   	{
+>   		.data_type	= QMI_UNSIGNED_4_BYTE,
+>   		.elem_len	= 1,
+> @@ -229,7 +229,7 @@ struct qmi_elem_info ipa_mem_array_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_mem_range */
+> -struct qmi_elem_info ipa_mem_range_ei[] = {
+> +const struct qmi_elem_info ipa_mem_range_ei[] = {
+>   	{
+>   		.data_type	= QMI_UNSIGNED_4_BYTE,
+>   		.elem_len	= 1,
+> @@ -250,7 +250,7 @@ struct qmi_elem_info ipa_mem_range_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_init_modem_driver_req */
+> -struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+> +const struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+>   	{
+>   		.data_type	= QMI_OPT_FLAG,
+>   		.elem_len	= 1,
+> @@ -645,7 +645,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+>   };
+>   
+>   /* QMI message structure definition for struct ipa_init_modem_driver_rsp */
+> -struct qmi_elem_info ipa_init_modem_driver_rsp_ei[] = {
+> +const struct qmi_elem_info ipa_init_modem_driver_rsp_ei[] = {
+>   	{
+>   		.data_type	= QMI_STRUCT,
+>   		.elem_len	= 1,
+> diff --git a/drivers/net/ipa/ipa_qmi_msg.h b/drivers/net/ipa/ipa_qmi_msg.h
+> index 495e85abe50b..8dfac59ea0ed 100644
+> --- a/drivers/net/ipa/ipa_qmi_msg.h
+> +++ b/drivers/net/ipa/ipa_qmi_msg.h
+> @@ -242,15 +242,15 @@ struct ipa_init_modem_driver_rsp {
+>   };
+>   
+>   /* Message structure definitions defined in "ipa_qmi_msg.c" */
+> -extern struct qmi_elem_info ipa_indication_register_req_ei[];
+> -extern struct qmi_elem_info ipa_indication_register_rsp_ei[];
+> -extern struct qmi_elem_info ipa_driver_init_complete_req_ei[];
+> -extern struct qmi_elem_info ipa_driver_init_complete_rsp_ei[];
+> -extern struct qmi_elem_info ipa_init_complete_ind_ei[];
+> -extern struct qmi_elem_info ipa_mem_bounds_ei[];
+> -extern struct qmi_elem_info ipa_mem_array_ei[];
+> -extern struct qmi_elem_info ipa_mem_range_ei[];
+> -extern struct qmi_elem_info ipa_init_modem_driver_req_ei[];
+> -extern struct qmi_elem_info ipa_init_modem_driver_rsp_ei[];
+> +extern const struct qmi_elem_info ipa_indication_register_req_ei[];
+> +extern const struct qmi_elem_info ipa_indication_register_rsp_ei[];
+> +extern const struct qmi_elem_info ipa_driver_init_complete_req_ei[];
+> +extern const struct qmi_elem_info ipa_driver_init_complete_rsp_ei[];
+> +extern const struct qmi_elem_info ipa_init_complete_ind_ei[];
+> +extern const struct qmi_elem_info ipa_mem_bounds_ei[];
+> +extern const struct qmi_elem_info ipa_mem_array_ei[];
+> +extern const struct qmi_elem_info ipa_mem_range_ei[];
+> +extern const struct qmi_elem_info ipa_init_modem_driver_req_ei[];
+> +extern const struct qmi_elem_info ipa_init_modem_driver_rsp_ei[];
+>   
+>   #endif /* !_IPA_QMI_MSG_H_ */
+> 
