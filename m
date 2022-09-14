@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525FB5B8AD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CD55B8AD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiINOk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S229647AbiINOlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiINOky (ORCPT
+        with ESMTP id S229706AbiINOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:40:54 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CFD5B05F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:40:51 -0700 (PDT)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 14 Sep 2022 10:41:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED265EDD2;
+        Wed, 14 Sep 2022 07:41:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1C5D63F1F7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663166450;
-        bh=SIyAiZxHZhjhhg6XuK5Tq4n/RcjpHTbx2lOqKDUkWXs=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=fzjEi1CNOb/xrry9L3SMq9KJrNutbBFbbzkju/4h1OaA1BhY1KJ2ShcS/0I90129E
-         ODLXC0Qt5jgEgjVygx6P8undv4SDtd0adzqeJmt4xEquN/1jP/qCJdrxnXD9wVKy7U
-         AaZwE0gO1Z4qaQoE4CtS7eijOVA81NMQP5x7xQ1hsPJeiGNQa2+/Y2c/zOS8jOD29C
-         97aZFErKBTf5aZaKjwWnua3CEMJfAoTUfx0/t9IOTfDeLltgsj1zWsaea3u6ovKr3y
-         oDtu+LVZpwx1QP41LUjdldqGycjNxJVpW054Yzrs+VgoZ4F2gPrdTafa21wdxQ+RsF
-         fA0tO6AQlie5Q==
-Received: by mail-pg1-f197.google.com with SMTP id k16-20020a635a50000000b0042986056df6so7409806pgm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:40:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:content-transfer-encoding:content-id:mime-version
-         :comments:references:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SIyAiZxHZhjhhg6XuK5Tq4n/RcjpHTbx2lOqKDUkWXs=;
-        b=NOCNAEbnk4NuIglTtE81lYloDm9XXcEOf9iv/8YirT8xX63YMvh4RcED6Y9zuKQx2q
-         ZNZHysMBT32ZbKodkJmchQHlubMnrb6Fic/nwr5QTnhwKdmVDjroIBeTuBO9dcUUdBZn
-         O6NDlZeof3Lymn+P4BD03yCgcyaZiF3LdzUNmOSn/70gLAA8/i2Z5320u1OHRaLG8YLr
-         QokuPa+ni40KgCGOjHrXnPfc0lgDqGt3nUd2IYn4VWV7OX0e+TQvzli3HG9bqfjOIRjy
-         aV4bMK0Qf+vxmFgAzbR5LWLh2lwbT0L02raLp50eYYyIB89pcYIc1DlL+06T3iXzkeS/
-         sy7g==
-X-Gm-Message-State: ACrzQf0MEBPL7mMp12uI9fRJrui03n+5hEwX0i8Kdmlu33cTa3uWKOTn
-        htOADYYbtIUEw/khnn3c+6vPDgWuJjNVFNUjCMqGX8Q8WYcpJjSd+7OTJ3r2M4Snks/c2e3I+SC
-        xMrlj28gBOJ5GeYbR9YC3E5BruNFmRGizEuPEzZD75w==
-X-Received: by 2002:a17:90b:3e87:b0:203:b9c:f9b7 with SMTP id rj7-20020a17090b3e8700b002030b9cf9b7mr5101380pjb.93.1663166448748;
-        Wed, 14 Sep 2022 07:40:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4KcA/wDL2ETtUprVMLzZFQ9CJlYKiZHg134AU3wdDyb76XoU93l3Dr1YzrfPEQphivE/m/Hg==
-X-Received: by 2002:a17:90b:3e87:b0:203:b9c:f9b7 with SMTP id rj7-20020a17090b3e8700b002030b9cf9b7mr5101352pjb.93.1663166448389;
-        Wed, 14 Sep 2022 07:40:48 -0700 (PDT)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id g12-20020aa79f0c000000b005380c555ba1sm10626567pfr.13.2022.09.14.07.40.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Sep 2022 07:40:48 -0700 (PDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id 88E0860DBF; Wed, 14 Sep 2022 07:40:47 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id 82B38A0101;
-        Wed, 14 Sep 2022 07:40:47 -0700 (PDT)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-cc:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH] bonding: cause oops on aarch64 architecture in bond_rr_gen_slave_id
-In-reply-to: <7565deb870649ba6b5995034695f1b498245617a.1663042611.git.jtoppins@redhat.com>
-References: <7565deb870649ba6b5995034695f1b498245617a.1663042611.git.jtoppins@redhat.com>
-Comments: In-reply-to Jonathan Toppins <jtoppins@redhat.com>
-   message dated "Tue, 13 Sep 2022 00:16:51 -0400."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D8CDB81BB7;
+        Wed, 14 Sep 2022 14:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD45C433C1;
+        Wed, 14 Sep 2022 14:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663166459;
+        bh=TWVD90t16Cl0movMc47E4a7VMRO0iib3j6mMZIPWEy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hv6Q78z6Q2nIk33ayTd0SENgiMZAkQbK+662pi7q6PYJ8VAdnvxiPBuQJoLPM4vza
+         PeabpbDqHjj23HH1SgLFUMgqpcPH6+1c2CQHFEQJ2rk96xaOpYUNxMp8quRBL8XB4V
+         fEf2eJIcDr8S6vR8S0uXlQhnGzn4dEqgbMAPuDlxD80r0j46KnPmQ1XtCvKfvhu5vZ
+         wnZBTD4gUhr5lCrWbEEwMb6gLgc/X2BTRQlnQmp1RKxJ9Go7eIhtSbqLWxmZLOyPEQ
+         hV239TE/NRjWX7ttnxwkcO0pd7nbgPDdQMRoSqKXunH8gPzs99xgsywPRP6TSNFimC
+         /vWGTtutWNVHA==
+Date:   Wed, 14 Sep 2022 07:40:57 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        virtualization@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook>
+ <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+ <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <27974.1663166447.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Sep 2022 07:40:47 -0700
-Message-ID: <27975.1663166447@famine>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,203 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Toppins <jtoppins@redhat.com> wrote:
+On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> > >
+> > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > > [...]
+> > > > >         callq   *pv_ops+536(%rip)
+> > > >
+> > > > Do you know which pv_ops function is this? I can't figure out where
+> > > > pte_offset_kernel() gets converted into a pv_ops call....
+> > > >
+> > > This one is _paravirt_ident_64, I believe. I think that the original
+> > > issue Nathan was seeing was with another seemingly innocuous function.
+> > 
+> > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> > really needs to not be touched at all by the compiler for
+> > these...special features.
+> 
+> My source tree sayeth:
+> 
+>   u64 notrace _paravirt_ident_64(u64 x)
+> 
+> And that function is only ever called at boot, after alternatives runs
+> it's patched with:
+> 
+>   mov %_ASM_ARG1, %_ASM_AX
+> 
+> Anyway, if you want to take it away from the compiler, something like
+> so should do.
 
->This bonding selftest causes the following kernel oops on aarch64 and
->possibly ppc64le architectures. This was reproduced on net/master commit
->64ae13ed478428135cddc2f1113dff162d8112d4 net: core: fix flow symmetric ha=
-sh
->
->[  329.805838] kselftest: Running tests in drivers/net/bonding
->[  330.011028] eth0: renamed from link1_2
->[  330.220846] eth0: renamed from link1_1
->[  330.387755] bond0: (slave eth0): making interface the new active one
->[  330.394165] bond0: (slave eth0): Enslaving as an active interface with=
- an up link
->[  330.401867] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
->[  334.586619] bond0: (slave eth0): Releasing backup interface
->[  334.671065] bond0: (slave eth0): Enslaving as an active interface with=
- an up link
->[  334.686773] Unable to handle kernel paging request at virtual address =
-ffff2c91ac905000
->[  334.694703] Mem abort info:
->[  334.697486]   ESR =3D 0x0000000096000004
->[  334.701234]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
->[  334.706536]   SET =3D 0, FnV =3D 0
->[  334.709579]   EA =3D 0, S1PTW =3D 0
->[  334.712719]   FSC =3D 0x04: level 0 translation fault
->[  334.717586] Data abort info:
->[  334.720454]   ISV =3D 0, ISS =3D 0x00000004
->[  334.724288]   CM =3D 0, WnR =3D 0
->[  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D000008044d66=
-2000
->[  334.733944] [ffff2c91ac905000] pgd=3D0000000000000000, p4d=3D000000000=
-0000000
->[  334.740734] Internal error: Oops: 96000004 [#1] SMP
->[  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_=
-pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msg=
-handler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce a=
-st ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xg=
-ene_hwmon
->[  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g6=
-4ae13ed4784 #4
->[  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v=
- (SCP: 1.08.20211002) 12/01/2021
->[  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
->[  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
->[  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+This appears to work fine for me in QEMU, as I can still boot with
+CONFIG_ZERO_CALL_USED_REGS and spawn a nested guest without any issues.
 
-	What line in the source code is that?  Looking at the function,
-I don't really see anything that's arch specific, unless perhaps the
-rr_tx_counter assignment isn't visible for some ARM cache reason (i.e.,
-the dcache on the relevant cpu already had a populated cache line that's
-out of date, and wasn't flushed).
-
-	-J
-
->[  334.807962] sp : ffff8000221733e0
->[  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002=
-217357c
->[  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff9=
-80fa000
->[  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff9=
-81029c0
->[  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 000000000=
-0000014
->[  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaab=
-e2f5a62
->[  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 000000000=
-0000000
->[  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac8=
-57178ec
->[  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007=
-c2b3742
->[  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9=
-f554400
->[  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff9=
-81029c0
->[  334.882532] Call trace:
->[  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
->[  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
->[  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
->[  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
->[  334.905622]  dev_hard_start_xmit+0xb4/0x220
->[  334.909798]  __dev_queue_xmit+0x1a0/0x720
->[  334.913799]  arp_xmit+0x3c/0xbc
->[  334.916932]  arp_send_dst+0x98/0xd0
->[  334.920410]  arp_solicit+0xe8/0x230
->[  334.923888]  neigh_probe+0x60/0xb0
->[  334.927279]  __neigh_event_send+0x3b0/0x470
->[  334.931453]  neigh_resolve_output+0x70/0x90
->[  334.935626]  ip_finish_output2+0x158/0x514
->[  334.939714]  __ip_finish_output+0xac/0x1a4
->[  334.943800]  ip_finish_output+0x40/0xfc
->[  334.947626]  ip_output+0xf8/0x1a4
->[  334.950931]  ip_send_skb+0x5c/0x100
->[  334.954410]  ip_push_pending_frames+0x3c/0x60
->[  334.958758]  raw_sendmsg+0x458/0x6d0
->[  334.962325]  inet_sendmsg+0x50/0x80
->[  334.965805]  sock_sendmsg+0x60/0x6c
->[  334.969286]  __sys_sendto+0xc8/0x134
->[  334.972853]  __arm64_sys_sendto+0x34/0x4c
->[  334.976854]  invoke_syscall+0x78/0x100
->[  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
->[  334.985287]  do_el0_svc+0x38/0x4c
->[  334.988591]  el0_svc+0x34/0x10c
->[  334.991724]  el0t_64_sync_handler+0x11c/0x150
->[  334.996072]  el0t_64_sync+0x190/0x194
->[  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
->[  335.005810] ---[ end trace 0000000000000000 ]---
->[  335.010416] Kernel panic - not syncing: Oops: Fatal exception in inter=
-rupt
->[  335.017279] SMP: stopping secondary CPUs
->[  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
->[  335.027456] PHYS_OFFSET: 0x80000000
->[  335.030932] CPU features: 0x0000,0085c029,19805c82
->[  335.035713] Memory Limit: none
->[  335.038756] Rebooting in 180 seconds..
->
->Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->---
-> .../selftests/drivers/net/bonding/Makefile    |  1 +
-> .../bonding/bond-arp-interval-causes-panic.sh | 46 +++++++++++++++++++
-> 2 files changed, 47 insertions(+)
-> create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-arp-=
-interval-causes-panic.sh
->
->diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools=
-/testing/selftests/drivers/net/bonding/Makefile
->index ab6c54b12098..79bb06fd386a 100644
->--- a/tools/testing/selftests/drivers/net/bonding/Makefile
->+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
->@@ -2,5 +2,6 @@
-> # Makefile for net selftests
-> =
-
-> TEST_PROGS :=3D bond-break-lacpdu-tx.sh
->+TEST_PROGS +=3D bond-arp-interval-causes-panic.sh
-> =
-
-> include ../../../lib.mk
->diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-interva=
-l-causes-panic.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-i=
-nterval-causes-panic.sh
->new file mode 100755
->index 000000000000..0c3e5d486193
->--- /dev/null
->+++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-cause=
-s-panic.sh
->@@ -0,0 +1,46 @@
->+#!/bin/sh
->+
->+# cause kernel oops in bond_rr_gen_slave_id on aarch64 and ppcle
->+# architectures
->+DEBUG=3D${DEBUG:-0}
->+
->+set -e
->+test ${DEBUG} -ne 0 && set -x
->+
->+function finish()
->+{
->+	ip -all netns delete
->+	ip link del link1_1 || true
->+}
->+
->+trap finish EXIT
->+
->+client_ip4=3D192.168.1.198
->+server_ip4=3D192.168.1.254
->+
->+# setup kernel so it reboots after causing the panic
->+echo 180 >/proc/sys/kernel/panic
->+
->+# build namespaces
->+ip link add dev link1_1 type veth peer name link1_2
->+
->+ip netns add "server"
->+ip link set dev link1_2 netns server up name eth0
->+ip netns exec server ip addr add ${server_ip4}/24 dev eth0
->+
->+ip netns add "client"
->+ip link set dev link1_1 netns client down name eth0
->+ip netns exec client ip link add dev bond0 down type bond mode 1 miimon =
-100 all_slaves_active 1
->+ip netns exec client ip link set dev eth0 down master bond0
->+ip netns exec client ip link set dev bond0 up
->+ip netns exec client ip addr add ${client_ip4}/24 dev bond0
->+ip netns exec client ping -c 5 $server_ip4 >/dev/null
->+
->+ip netns exec client ip link set dev eth0 down nomaster
->+ip netns exec client ip link set dev bond0 down
->+ip netns exec client ip link set dev bond0 type bond mode 0 arp_interval=
- 1000 arp_ip_target "+${server_ip4}"
->+ip netns exec client ip link set dev eth0 down master bond0
->+ip netns exec client ip link set dev bond0 up
->+ip netns exec client ping -c 5 $server_ip4 >/dev/null
->+
->+exit 0
->-- =
-
->2.31.1
->
+> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+> index 7ca2d46c08cc..8922e2887779 100644
+> --- a/arch/x86/kernel/paravirt.c
+> +++ b/arch/x86/kernel/paravirt.c
+> @@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+>  }
+>  
+>  #ifdef CONFIG_PARAVIRT_XXL
+> -/* identity function, which can be inlined */
+> -u64 notrace _paravirt_ident_64(u64 x)
+> -{
+> -	return x;
+> -}
+> +extern u64 _paravirt_ident_64(u64 x);
+> +asm (".pushsection .entry.text, \"ax\"\n"
+> +     ".global _paravirt_ident_64\n"
+> +     "_paravirt_ident_64:\n\t"
+> +     ASM_ENDBR
+> +     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
+> +     ASM_RET
+> +     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
+> +     ".type _paravirt_ident_64, @function\n\t"
+> +     ".popsection");
+>  #endif
+>  
+>  DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> 
