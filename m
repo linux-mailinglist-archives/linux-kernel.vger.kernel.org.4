@@ -2,103 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F0F5B84F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F1C5B8504
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiINJ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S231194AbiINJcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiINJ2h (ORCPT
+        with ESMTP id S231140AbiINJcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:28:37 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F3A7DF6C;
-        Wed, 14 Sep 2022 02:17:29 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id d25-20020a9d72d9000000b00655d70a1aeaso6814118otk.3;
-        Wed, 14 Sep 2022 02:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=jCIOhLvVlvNV9HUxfecamktxgICT/5zf1IRbWZuyeiY=;
-        b=YTvc5L6w5aAWrmyBdY3nw/N7B+xVvMzdMLZrPugoPa0yCmTHuZfPxLpvc3UjWheYmA
-         LXcAbiY4XkL+8OevtSbLTgZbcxC6dPUMLYkkyRcNWTI+wQkA6Oba6EfSD49HitSTFhDi
-         VSX4k3c0hjnPYG/Omp5Xx+K9zgNwTuxj8Kzkw3hu/mUDNJJnjgtJRif4Rvg5rcKRghgJ
-         lpbM4x4dKXcVENLNlylRAlj0wD4KHWf98MolUbQG1q+w2PTvusOu6yc0OUODJVqO3n4C
-         bZ0gMq1iXkiy4cm5ikT/5ICzgYVc+1cTsJC90xXVgLbssYJuqqOd5BJUPTnmQDVAoH8A
-         VRFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=jCIOhLvVlvNV9HUxfecamktxgICT/5zf1IRbWZuyeiY=;
-        b=cJYuKQoKQXe3ZM1h5oNsu7+/CXJ2J3Ck8NefwqCCdnrKKGwcOwkantQDl/cqC0CHgq
-         FTyFO0AkUo6rZ1+jk9rVwJ4Kn/UEif0JzQTemn/w96mygAAGrDoVVC1sJ3QzdJm07X5u
-         BAhVU/sKWNe30tpYCttYv3ZT2XYlhcbgmBNAAQSXKdHaqmb+xlaT+haMj3S8mBS69VTR
-         yVY8JfKrZLHwlfp6Jw07kGgPyd5fe55e7uI+gFmulUOzEzV1ZgV5YuQlAqkxQ124GXdM
-         +/a6OR8I2jQInGBVoamzf4YYDjd7RIky7Tzicz3FOpX7uwv3+bgH2gKUaBf4Up69i6tK
-         V4vQ==
-X-Gm-Message-State: ACgBeo2uYCJ4Zpyvs0X8eR+5GL9fHVg2eTs2RNm6xYCF5AmHFlnT1n0Z
-        e7Uv2t/stnFBQM4kASmQR0u57WMlo+1HcUNIIFE=
-X-Google-Smtp-Source: AA6agR507+omkOoy6Eobpvj7z6t0NT9B9qdaVUmwFrPTtBPz0Sqn1vie6TfYUrdK1+KUiEUglrxPNs70gq8gwNW0amg=
-X-Received: by 2002:a05:6830:150e:b0:655:bc7d:1e5d with SMTP id
- k14-20020a056830150e00b00655bc7d1e5dmr8562142otp.272.1663147039255; Wed, 14
- Sep 2022 02:17:19 -0700 (PDT)
+        Wed, 14 Sep 2022 05:32:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836A8786E5;
+        Wed, 14 Sep 2022 02:23:09 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E4eaCi031819;
+        Wed, 14 Sep 2022 09:22:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=khRktGo8KDIaoO0/9D+gloBG8TjQU8wXhHec6gF9UIU=;
+ b=PVNSDKKwSaBPbhgSxR4taoTkwDl6REPO5VG7Ju8DUpjt6fYyMXmLOuEAhgeu1I1DcrWz
+ uYZSyxutdpwNwTc4bobNza2idd9VEFUkgp6dQxWeUFyCZOF3oNs2EG+qRWAmKjr4SDUQ
+ HRDUP4XKH5mAekNlryzIbFnSblShUJUU2VuH6gK+K+5Q3Kb5yyqx1Rk7lZdZjfiBTAKd
+ hBAelQScrDbvenBGP8fkfj1QeSATfBe2Hkojsd9NpcB/nttfaXBy0XVnDkqX4WvZq59+
+ Ge/Kv7IuRs9rqDr0mdolmxTXt6XlROQ903i1zZZ+WPVB/7f6o/VhMaAopK2boZ0lp5ll aA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymj13r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 09:22:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E9MPo8005192
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 09:22:25 GMT
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 02:22:20 -0700
+Subject: Re: [PATCH v6 3/8] remoteproc: qcom: Add compatible name for SC7280
+ ADSP
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com>
+ <1662643422-14909-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <cd745794-6325-e291-042d-f53f72abc5bf@quicinc.com>
+Date:   Wed, 14 Sep 2022 14:52:18 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-8-arinc.unal@arinc9.com>
-In-Reply-To: <20220914085451.11723-8-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 14 Sep 2022 11:17:08 +0200
-Message-ID: <CAMhs-H-XRGz5UCkEzOJtBSC9nH4kaw45ziaqfobt1wfo8gDjbw@mail.gmail.com>
-Subject: Re: [PATCH 07/10] mips: dts: ralink: mt7621: change phy-mode of gmac1
- to rgmii
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1662643422-14909-4-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EBeRvWhkkZCNh108YLbEaH1fyUlU2ZuN
+X-Proofpoint-GUID: EBeRvWhkkZCNh108YLbEaH1fyUlU2ZuN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_03,2022-09-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140045
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 10:56 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> Change phy-mode of gmac1 to rgmii on mt7621.dtsi. Same code path is
-> followed for delayed rgmii and rgmii phy-mode on mtk_eth_soc.c.
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+
+On 9/8/22 6:53 PM, Srinivasa Rao Mandadapu wrote:
+> Update adsp pil data and compatible name for loading ADSP
+> binary on SC7280 based platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 > ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Changes since V5:
+> 	-- Rename adsp_sandbox_needed to has_iommu.
+> 	-- Change adsp binary extention name.
+> Changes since V3:
+> 	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
+> 	-- Update sc7280 compatible name entry in sorted order.
+> Changes since V2:
+> 	-- Initialize is_adsp_sb_needed flag.
+> 	-- Remove empty proxy pds array.
+> 
+>   drivers/remoteproc/qcom_q6v5_adsp.c | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index fa2ccac..02d17b4 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -702,6 +702,21 @@ static const struct adsp_pil_data adsp_resource_init = {
+>   	},
+>   };
+>   
+> +static const struct adsp_pil_data adsp_sc7280_resource_init = {
+> +	.crash_reason_smem = 423,
+> +	.firmware_name = "adsp.pbn",
+> +	.load_state = "adsp",
+
+given that you mention load_state info please make sure you
+mention qcom,qmp as a required property in the bindings.
+
+> +	.ssr_name = "lpass",
+> +	.sysmon_name = "adsp",
+> +	.ssctl_id = 0x14,
+> +	.has_iommu = true,
+> +	.auto_boot = true,
+> +	.clk_ids = (const char*[]) {
+> +		"gcc_cfg_noc_lpass", NULL
+> +	},
+> +	.num_clks = 1,
+
+bindings seem to mention 6 other required clocks any reason why
+they were skipped?
+
+AFAIK you'll also need lmx so you'll have to mention proxy_pd_names
+as well.
+
+> +};
+> +
+>   static const struct adsp_pil_data cdsp_resource_init = {
+>   	.crash_reason_smem = 601,
+>   	.firmware_name = "cdsp.mdt",
+> @@ -740,6 +755,7 @@ static const struct adsp_pil_data wpss_resource_init = {
+>   
+>   static const struct of_device_id adsp_of_match[] = {
+>   	{ .compatible = "qcom,qcs404-cdsp-pil", .data = &cdsp_resource_init },
+> +	{ .compatible = "qcom,sc7280-adsp-pil", .data = &adsp_sc7280_resource_init },
+>   	{ .compatible = "qcom,sc7280-wpss-pil", .data = &wpss_resource_init },
+>   	{ .compatible = "qcom,sdm845-adsp-pil", .data = &adsp_resource_init },
+>   	{ },
+> 
