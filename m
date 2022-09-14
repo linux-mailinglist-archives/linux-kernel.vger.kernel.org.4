@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6210A5B8535
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3695B8532
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiINJjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S230058AbiINJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbiINJih (ORCPT
+        with ESMTP id S230214AbiINJi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:38:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1217518B21;
-        Wed, 14 Sep 2022 02:38:10 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E9FMYd011454;
-        Wed, 14 Sep 2022 09:37:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qu4GLI/njJfKV0SI3uET3HyX+CffqV0m05wMLvzRqEM=;
- b=L7J4s4CTqqn3Hf24PqCpCvpajIRDsB6CgIDeb+f9+4FO3nn4L1J7rjrCjlbazAbaKMyu
- 1xMCHKDT2crJBZlOc8l5F7XUYH9DbknLjfMlhkwvkD2MvufV0G577e4GDFV0Vb/HunDd
- 3992H1oQbh0fXOZ5Jgk7xjmEpH//B21ZjvaCuILBVg9mLOgFSDLYIoUaGWX0vSm6zFE7
- kFh3aOo4YRtMxBHzxO0oBsVmkr9+CmN5Do3KhTU+uFxa/4lcx6+5bbX2zbbw9JycWgdH
- Tx84ng8LxdsjW7HiK5A5Fei/O+AnEE5uQRszlysHMVwnkiuzNK7F4aQ0ZKXAUJ0MX9y2 Ug== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymj2fq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 09:37:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E9bR9f016195
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 09:37:27 GMT
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
- 2022 02:37:22 -0700
-Subject: Re: [PATCH v6 5/8] remoteproc: qcom: Replace hard coded values with
- macros
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
-References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com>
- <1662643422-14909-6-git-send-email-quic_srivasam@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <34b232a7-6f94-8f72-dde5-0a2dc2320ebb@quicinc.com>
-Date:   Wed, 14 Sep 2022 15:07:19 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 14 Sep 2022 05:38:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC6A1CB17;
+        Wed, 14 Sep 2022 02:37:52 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id bo13so8238307wrb.1;
+        Wed, 14 Sep 2022 02:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=9ICPhAk7WSUuojPvhuOrCs4K3x58Me7hs8cZWGyAJus=;
+        b=mk1Yv6cJkliM0V8wFmEUe/iffX+9lJuUXJQpCPcJz/NuiF4W5MCtQx/F5lKLsIf13N
+         qjDRKkRXb7Uz3h4Qwjvi3oNEW6UiaE46LHNo+q2md7D34mE943/oZjuWjuBlf80usrbf
+         jz+C6UXX3Ig4UPtDA+WDBjykKQafKKbYCNrwlhlugGru4i8+q/6Yu03bJ5Zl0XmugQu7
+         Sd64tw5QQgczkraFEHhHUxyCSv9LkqR6e85sZu5tWDmjl8LVS0w6+SRVaib5rLefGkp2
+         rycahVQpmz/0rNlrpebOb+XZL9qpIc/DG3KHMO6hLJ36lRGy9neM9QPiJM7bQkqLgIz/
+         IbkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9ICPhAk7WSUuojPvhuOrCs4K3x58Me7hs8cZWGyAJus=;
+        b=UQ9E/HG8f6vQoLzPGWqDEQBk+FlGSk5yzc2COdD0Vc214YXIAcqIMfZFmq4zWsBFlS
+         qtOhczkoSxBLpxIHAp6jy2mTq270BdgsvN8qYT60a/Q4jCdXog3SvUmR5gnSswU8v6b1
+         IW5H2/hcVE7mrfneXW8iuP2vNJFrrSE0uDouZP1ltEt4QY7d0KxRjJgIdsascOq5Vf3p
+         u4VfLItAlQhv4hnqOXVsjubdyYrP+516Ev3DWvbnOGgQDBqqZCAgmXpXyksrtyIAebjt
+         9CPT/hQ1LCjkUNqRZCOjHGdOfHBy5JBOXkDlOTAYQYsVIAp0bZq2HuIr7XUsFI4YWhR6
+         2YBA==
+X-Gm-Message-State: ACgBeo0j+pIgj+nMS96AxV4b1ZjGXRoZci5+Ar3NAN12IDpVm19tT6Ro
+        c/BtA/NV+5juPwc4Gh/Ek/sjrnZ0HlA=
+X-Google-Smtp-Source: AA6agR41v9glYIS6dOa+YPWh2Bjpb9yAI3k4G9HdagQvZAFBM+A6DoViLRJ3lZac9fbXlFUnHJi69g==
+X-Received: by 2002:adf:d1ce:0:b0:22a:36d6:da05 with SMTP id b14-20020adfd1ce000000b0022a36d6da05mr17331989wrd.719.1663148270787;
+        Wed, 14 Sep 2022 02:37:50 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003a5f3f5883dsm18853027wmg.17.2022.09.14.02.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 02:37:50 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 10:37:48 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.4 000/108] 5.4.212-rc1 review
+Message-ID: <YyGg7KOjq6P4Gjkj@debian>
+References: <20220913140353.549108748@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <1662643422-14909-6-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9Zc2hkvspJ6jsLysYZQSvI1DEm7HW9IB
-X-Proofpoint-GUID: 9Zc2hkvspJ6jsLysYZQSvI1DEm7HW9IB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_03,2022-09-14_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209140045
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
-
-On 9/8/22 6:53 PM, Srinivasa Rao Mandadapu wrote:
-> Replace hard coded values of QDSP6 boot control reg params
-> with appropriate macro names.
+On Tue, Sep 13, 2022 at 04:05:31PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.212 release.
+> There are 108 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+Build test (gcc version 11.3.1 20220819):
+mips: 65 configs -> no failure
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-> ---
->   drivers/remoteproc/qcom_q6v5_adsp.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-> index 207270d4..389b2c0 100644
-> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
-> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-> @@ -54,6 +54,9 @@
->   
->   #define QCOM_Q6V5_RPROC_PROXY_PD_MAX	3
->   
-> +#define LPASS_BOOT_CORE_START	BIT(0)
-> +#define LPASS_BOOT_CMD_START	BIT(0)
-> +
->   struct adsp_pil_data {
->   	int crash_reason_smem;
->   	const char *firmware_name;
-> @@ -366,10 +369,10 @@ static int adsp_start(struct rproc *rproc)
->   	writel(adsp->mem_phys >> 4, adsp->qdsp6ss_base + RST_EVB_REG);
->   
->   	/* De-assert QDSP6 stop core. QDSP6 will execute after out of reset */
-> -	writel(0x1, adsp->qdsp6ss_base + CORE_START_REG);
-> +	writel(LPASS_BOOT_CORE_START, adsp->qdsp6ss_base + CORE_START_REG);
->   
->   	/* Trigger boot FSM to start QDSP6 */
-> -	writel(0x1, adsp->qdsp6ss_base + BOOT_CMD_REG);
-> +	writel(LPASS_BOOT_CMD_START, adsp->qdsp6ss_base + BOOT_CMD_REG);
->   
->   	/* Wait for core to come out of reset */
->   	ret = readl_poll_timeout(adsp->qdsp6ss_base + BOOT_STATUS_REG,
-> 
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1829
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
