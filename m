@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDB45B87DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0935B87DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiINMK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
+        id S230194AbiINMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiINMKP (ORCPT
+        with ESMTP id S230192AbiINMKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:10:15 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE0025EA5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:10:13 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EBk1kY005558;
-        Wed, 14 Sep 2022 07:10:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=yCqiv1r5TnibYKQM5+i5j8eeVGTrJTXU8O1QHPF7Z2I=;
- b=gf2AxD5OTC7G3GhztMYKdNimLPzPnEkyTUbjoHnqMWecsWe1uy9UghC+EAP2xH+8kidN
- HORxaR56XcGIar+0CfYY7QORbL1MYQgH6m80jP7vkP60dLQBVGx0Un/VqMv5lSUy8aLV
- cgVvMaZHBOybuqKLup1CQ7V2hY9KBv0gMaL7ZvqvxxfXS7JsFaDPvAixnjmMs/n3YS1E
- tLX8/5dPG3BgnDCMHVU66S0644NMKrn1EHfI79nB1QaNjJXR855OBt/7SRzA/Zg9EQTw
- 5wKmcw5m+5OCzGgfSSGlXKHFrNWi5OCrBRE0g+9Vk0HZwF0ht42GnYjs+ivgxIty+Q0Y iw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jjy05gy54-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 07:10:00 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 14 Sep
- 2022 07:09:56 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
- Transport; Wed, 14 Sep 2022 07:09:56 -0500
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6595111C7;
-        Wed, 14 Sep 2022 12:09:56 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v3 5/5] soundwire: bus: Don't exit early if no device IDs were programmed
-Date:   Wed, 14 Sep 2022 13:09:49 +0100
-Message-ID: <20220914120949.747951-6-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220914120949.747951-1-rf@opensource.cirrus.com>
-References: <20220914120949.747951-1-rf@opensource.cirrus.com>
+        Wed, 14 Sep 2022 08:10:46 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55B27FFBF
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:10:34 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lc7so34290210ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FqrsaO7+mEwEpioRKATgloJ10+QM+/cB58bQ3+4dp5M=;
+        b=3ZzWtVRdsZPrUXGxn0Qt6WlAedOqYVxlPHkp6kNc9C3ddTB0szCRpmIDODQota/WGL
+         all8CziUkR78153lbchMPecG3kDeC3kZoAgFIYZKZRrzvDWq/b2p+wa9aBKBPgJvbH/0
+         TM30WUNl9iH1tcAqq7HwNkoliE76c6V+JvHrzBXha8xMzLJCz8raV0O2It47jJ9gvfJN
+         6LnfS8S/La2rMiNKpmivF3YJRzSJaZXFWTNOmRqV3oUA6VKKqacCGj4g8Zl2SdZs7igL
+         kin69leUUoCFCxja9ttW/w+K2rsiYYYt6edwlYRgmduSDMeVEoIbLp98YWKMXgBKggPR
+         Wtcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FqrsaO7+mEwEpioRKATgloJ10+QM+/cB58bQ3+4dp5M=;
+        b=DbCfHbLiTdzzLU45pC2z2DA9GJ7dBlFyqqCyQF2yhoL5qLFlAJrkfS5fJ+u8KLVuV1
+         UhoYJ4dL37MS6rZ2NWrFJhlXCEC28+X84JrDtJZK2g2FyshK218lDrKao6FPJQKMTUTc
+         jujfb/OLTZr4bfIMQtHQaiQS0hivGDabbBXeJyf91NUTDyB+Y//z0sOv9ERHVbd8D6PR
+         xAxPvMzdTOviKovYQN5BAll0D4BhuIlzp+qWMexeoDc40ncG+px2RAm1j+qRxD+q5eVc
+         9hu1KAYdbbUaNpctRPcFU1CAjrlJAw8vBlt7nSGF+i2PJ7z0kC/HRmg1ukC3Cv8WKDPo
+         uGSg==
+X-Gm-Message-State: ACgBeo3QZ2GtJ2XJQ0lNce/6otxQAkvB6ZzwvaZ9P0MRuTQ/oAvYlvsU
+        R7Zr8ip3uiUpK701+5hSLMj7mZqZDffUb7phmXTnYQ==
+X-Google-Smtp-Source: AA6agR6/wFqnDCY8DdjL30UHxs7x4T6E8GyHJaVBbU6IhFxLGUpqktPxpxHNPWftwHziaT0tpo4M0CONWbbdA0zPIDE=
+X-Received: by 2002:a17:907:3e07:b0:774:53ba:6b27 with SMTP id
+ hp7-20020a1709073e0700b0077453ba6b27mr20640334ejc.286.1663157432337; Wed, 14
+ Sep 2022 05:10:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: HLnUkiw2o-21EyAtIZDvd2eCz0AMuKrg
-X-Proofpoint-ORIG-GUID: HLnUkiw2o-21EyAtIZDvd2eCz0AMuKrg
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906204301.3736813-2-dmitry.torokhov@gmail.com> <20220906211628.6u4hbpn4shjcvqel@pali>
+ <Yxe7CJnIT5AiUilL@google.com> <20220906214114.vj3v32dzwxz6uqik@pali>
+ <YxfBKkqce/IQQLk9@google.com> <20220906220901.p2c44we7i4c35uvx@pali>
+ <YxfMkzW+5W3Hm1dU@google.com> <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
+In-Reply-To: <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 14 Sep 2022 14:10:21 +0200
+Message-ID: <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Kent Gibson <warthog618@gmail.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,104 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only exit sdw_handle_slave_status() right after calling
-sdw_program_device_num() if it actually programmed an ID into at
-least one device.
+On Wed, Sep 14, 2022 at 12:35 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Wed, Sep 7, 2022 at 12:41 AM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+>
+> > Linus, do you think we should introduce GPIOD_OUT_INACTIVE /
+> > GPIOD_OUT_ACTIVE or GPIOD_OUT_DEASSERTED / GPIOD_OUT_ASSERTED and
+> > deprecate existing GPIOD_OUT_LOW and GPIO_OUT_HIGH?
+>
+> They should rather be replaced everywhere in one go.
+>
+> I think it is just a half-measure unless we also add
+> #define GPIOD_ASSERTED 1
+> #define GPIOD_DEASSERTED 0
+> to be used instead of 1/0 in gpiod_set_value().
+>
 
-sdw_handle_slave_status() should protect itself against phantom
-device #0 ATTACHED indications. In that case there is no actual
-device still on #0. The early exit relies on there being a status
-change to ATTACHED on the reprogrammed device to trigger another
-call to sdw_handle_slave_status() which will then handle the status
-of all peripherals. If no device was actually programmed with an
-ID there won't be a new ATTACHED indication. This can lead to the
-status of other peripherals not being handled.
+We've had that discussion for libgpiod and went with
+GPIOD_VALUE_ACTIVE and GPIOD_VALUE_INACTIVE but...
 
-The status passed to sdw_handle_slave_status() is obviously always
-from a point of time in the past, and may indicate accumulated
-unhandled events (depending how the bus manager operates). It's
-possible that a device ID is reprogrammed but the last PING status
-captured state just before that, when it was still reporting on
-ID #0. Then sdw_handle_slave_status() is called with this PING info,
-just before a new PING status is available showing it now on its new
-ID. So sdw_handle_slave_status() will receive a phantom report of a
-device on #0, but it will not find one.
+> It would also imply changing the signature of the function
+> gpiod_set_value() to gpiod_set_state() as we are not
+> really setting a value but a state.
+>
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- drivers/soundwire/bus.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+... now that you've mentioned it it does seem like
+GPIOD_STATE_ACTIVE/INACTIVE makes much more sense as well as naming
+the relevant functions gpiod_line_request_set_line_state() etc.
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 6e569a875a9b..8eded1a55227 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -729,7 +729,7 @@ void sdw_extract_slave_id(struct sdw_bus *bus,
- }
- EXPORT_SYMBOL(sdw_extract_slave_id);
- 
--static int sdw_program_device_num(struct sdw_bus *bus)
-+static int sdw_program_device_num(struct sdw_bus *bus, bool *programmed)
- {
- 	u8 buf[SDW_NUM_DEV_ID_REGISTERS] = {0};
- 	struct sdw_slave *slave, *_s;
-@@ -739,6 +739,8 @@ static int sdw_program_device_num(struct sdw_bus *bus)
- 	int count = 0, ret;
- 	u64 addr;
- 
-+	*programmed = false;
-+
- 	/* No Slave, so use raw xfer api */
- 	ret = sdw_fill_msg(&msg, NULL, SDW_SCP_DEVID_0,
- 			   SDW_NUM_DEV_ID_REGISTERS, 0, SDW_MSG_FLAG_READ, buf);
-@@ -797,6 +799,8 @@ static int sdw_program_device_num(struct sdw_bus *bus)
- 					return ret;
- 				}
- 
-+				*programmed = true;
-+
- 				break;
- 			}
- 		}
-@@ -1756,7 +1760,7 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
- {
- 	enum sdw_slave_status prev_status;
- 	struct sdw_slave *slave;
--	bool attached_initializing;
-+	bool attached_initializing, id_programmed;
- 	int i, ret = 0;
- 
- 	/* first check if any Slaves fell off the bus */
-@@ -1787,14 +1791,23 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
- 
- 	if (status[0] == SDW_SLAVE_ATTACHED) {
- 		dev_dbg(bus->dev, "Slave attached, programming device number\n");
--		ret = sdw_program_device_num(bus);
--		if (ret < 0)
--			dev_err(bus->dev, "Slave attach failed: %d\n", ret);
-+
- 		/*
--		 * programming a device number will have side effects,
--		 * so we deal with other devices at a later time
-+		 * Programming a device number will have side effects,
-+		 * so we deal with other devices at a later time.
-+		 * This relies on those devices reporting ATTACHED, which will
-+		 * trigger another call to this function. This will only
-+		 * happen if at least one device ID was programmed.
-+		 * Error returns from sdw_program_device_num() are currently
-+		 * ignored because there's no useful recovery that can be done.
-+		 * Returning the error here could result in the current status
-+		 * of other devices not being handled, because if no device IDs
-+		 * were programmed there's nothing to guarantee a status change
-+		 * to trigger another call to this function.
- 		 */
--		return ret;
-+		sdw_program_device_num(bus, &id_programmed);
-+		if (id_programmed)
-+			return 0;
- 	}
- 
- 	/* Continue to check other slave statuses */
--- 
-2.30.2
+> I have thought about changing this, but the problem is that I felt
+> it should be accompanied with a change fixing as many users
+> as possible.
+>
+> I think this is one of those occasions where we should merge
+> the new defines, and then send Linus Torvalds a sed script
+> that he can run at the end of the merge window to change all
+> gpiod_set_value(...., 1) -> gpiod_set_state(...., GPIOD_ASSERTED);
+> everywhere.
+>
+> After all users are changed, the GPIOD_ASSERTED/DEASSERTED
+> defined can be turned into an enum.
+>
+> That would be the silver bullet against a lot of confusion IMO.
+>
+> We would need Bartosz' input on this.
+>
 
+We can also let Linus know that we'll do it ourselves late in the
+merge window and send a separate PR on Saturday before rc1?
+
+Bart
+
+> Yours,
+> Linus Walleij
