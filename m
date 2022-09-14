@@ -2,112 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD435B7ECC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560755B7EDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiINCAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 22:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S229929AbiINCSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 22:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiINCAT (ORCPT
+        with ESMTP id S229637AbiINCSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 22:00:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC2B3123D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:00:13 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3496e668a5dso49910607b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date;
-        bh=p6qCghWQbcRewzTnBFceTKv/Y60AI2F5NEC8++qJ2MI=;
-        b=FZxg7ZQVvBz9WmQks3L0S9UYycRMX6FNxeIoQWOixAv/JrYVUeom0YA+u4RqWdG96c
-         UwdDLEZHnTU9I9fz0Z4OhTcqYz8IgZPUx6E7lVUPz12DOMT5Zcg2kV0JLqQRW/Cp6/qK
-         X48Ieg6gkbDHfOqruPwUwzv/U/9v40R+iLCA+WAA6lhXI7bkNeyefyLGfffTwIcxRSCL
-         wQ6N8BDNCkqqQGI3bgOhAVcQHeGXF0u6Q97uk9y2UnlTFRG+43WFmAJpo2znrD/CzVAQ
-         hMun9nt9+jT4b7CdL/NtNJjSBK+19f/WqTZqzIlXWaWjGWXvHNqCFIFKmH/pwWgkPEbn
-         A7OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=p6qCghWQbcRewzTnBFceTKv/Y60AI2F5NEC8++qJ2MI=;
-        b=iCHTBKRPtXPy3vjDOjdxuTqLTVKPORQfQy9Kvmy6xG5Y1gmMYOCxwWifXIqIGPs5iY
-         NINYIUuWDpqm3JVey96B71cULBSK70PSRVGcQxE6dMC7Zj+CeoIL12HpIFLH/1mUsrRo
-         DFjUl3LEoLE0fyklPBRv4P9KdhmagD5hN5KGljyNQ5xxsuD2LxzTzmKWup7qEbWz78vn
-         ZzokVGpZuaiG27J9CVN6qeTfscannoPcXp6vb0t2cw0tFJZBs8k0o6mlRPDLblgl8kT5
-         bcftung/0L4djKaWxRv5e0ErIBp0sDeRqvAjzhqMraAgBul0NuJIpFdh2q0acvLBBPeE
-         P0xA==
-X-Gm-Message-State: ACgBeo3yL6hzcc4F2fygKlylDYPWf7clxSIT1MrftTComrQbOtqIFmbh
-        UZLMeA/jyt2i646ALWYsyoAS4Lg=
-X-Google-Smtp-Source: AA6agR4W0NwqBv0embkoehNEbFKrl95x/EFmpO/GESuyJ3JThH+BHAW+2aaI7Tl4bgr20j3mzjFMNac=
-X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:370d:f9c3:6198:7768])
- (user=pcc job=sendgmr) by 2002:a25:2687:0:b0:6a8:e551:b9d8 with SMTP id
- m129-20020a252687000000b006a8e551b9d8mr29117452ybm.472.1663120812652; Tue, 13
- Sep 2022 19:00:12 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 19:00:01 -0700
-Message-Id: <20220914020001.2846018-1-pcc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Subject: [PATCH] kasan: call kasan_malloc() from __kmalloc_*track_caller()
-From:   Peter Collingbourne <pcc@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 13 Sep 2022 22:18:46 -0400
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46077564D1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:18:44 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="76604947"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654527600"; 
+   d="scan'208";a="76604947"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 14 Sep 2022 10:55:07 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id D6F41D6252;
+        Wed, 14 Sep 2022 10:55:06 +0900 (JST)
+Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 2C70FD35C1;
+        Wed, 14 Sep 2022 10:55:06 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by oym-om3.fujitsu.com (Postfix) with ESMTP id F031F403E0598;
+        Wed, 14 Sep 2022 10:55:05 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH 4/5] selftests/resctrl: Kill the child process before exiting the parent process if an exception occurs
+Date:   Wed, 14 Sep 2022 10:51:46 +0900
+Message-Id: <20220914015147.3071025-6-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
+References: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We were failing to call kasan_malloc() from __kmalloc_*track_caller()
-which was causing us to sometimes fail to produce KASAN error reports
-for allocations made using e.g. devm_kcalloc(), as the KASAN poison was
-not being initialized. Fix it.
+After creating a child process with fork() in CAT test, if there is
+an exception occurs, the parent process will be terminated immediately,
+but the child process will not be killed and umount_resctrlfs() will not
+be called.
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Cc: <stable@vger.kernel.org> # 5.15
+When fork() is used in CMT/MBA/MBM tests.
+If an exception occurs, before parent process exiting,
+the child process is killed and umount_resctrlfs() is called.
+
+Kill the child process before exiting the parent process
+if an exception occurs in CAT test, like in CMT/MBA/MBM tests.
+
+Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
-The same problem is being fixed upstream in:
-https://lore.kernel.org/all/20220817101826.236819-6-42.hyeyoo@gmail.com/
-as part of a larger patch series, but this more targeted fix seems
-more suitable for the stable kernel. Hyeonggon, maybe you can add
-this patch to the start of your series and it can be picked up
-by the stable maintainers.
+ tools/testing/selftests/resctrl/cat_test.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
- mm/slub.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/mm/slub.c b/mm/slub.c
-index 862dbd9af4f5..875c569c5cbe 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4926,6 +4926,8 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc(caller, ret, s, size, s->size, gfpflags);
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index d1134f66469f..f62da445acbb 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -186,11 +186,11 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
-+
- 	return ret;
- }
- EXPORT_SYMBOL(__kmalloc_track_caller);
-@@ -4957,6 +4959,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
+ 	ret = cat_val(&param);
+ 	if (ret)
+-		return ret;
++		goto out;
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
-+
- 	return ret;
+ 	ret = check_results(&param);
+ 	if (ret)
+-		return ret;
++		goto out;
+ 
+ 	if (bm_pid == 0) {
+ 		/* Tell parent that child is ready */
+@@ -200,7 +200,8 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		    sizeof(pipe_message)) {
+ 			close(pipefd[1]);
+ 			perror("# failed signaling parent process");
+-			return errno;
++			ret = errno;
++			goto out;
+ 		}
+ 
+ 		close(pipefd[1]);
+@@ -218,11 +219,11 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 			}
+ 		}
+ 		close(pipefd[0]);
+-		kill(bm_pid, SIGKILL);
+ 	}
+ 
+-	if (bm_pid)
+-		umount_resctrlfs();
++out:
++	kill(bm_pid, SIGKILL);
++	umount_resctrlfs();
+ 
+-	return 0;
++	return ret;
  }
- EXPORT_SYMBOL(__kmalloc_node_track_caller);
 -- 
-2.37.2.789.g6183377224-goog
+2.27.0
 
