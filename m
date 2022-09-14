@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373CC5B8E50
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF215B8E56
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiINRqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S229864AbiINRtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiINRqw (ORCPT
+        with ESMTP id S229592AbiINRtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:46:52 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21A252086;
-        Wed, 14 Sep 2022 10:46:51 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id 3so11069980qka.5;
-        Wed, 14 Sep 2022 10:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8dCJBTzDwCYDG7yGJAzsA7Ppx1VJiWA7RssQ0rmRopw=;
-        b=UdH5qf8MZ2e8DzliUaez9f/wdBVh6xOrHKJ6RSuh3iuNj+30K04XKONiYHp2nvaH9w
-         kB2nFljOyIOijYSnY7gfTziaNMD8wRfnZFtGFcTHtY6JryMTw4g+p2u6Sl8mmDLQMn6c
-         LLJx2YcKpSPEjab6ejEM5aipT1eBi/RrHHbAzzQ9gKsqewFHQaTV26dR4iVx6wQCONx+
-         46I0e0bYkcPDlL6smO2u+tzYix+XVm5tdVQ4kbfvS+heTwNvYs4JNkzien6YG8ZpqCdQ
-         1wNJphsaFoHVxHsogS6Snr763o+ptofIAxwmDfpTSlpJbbzdt9V5ZNQ3/NItooCv/wOO
-         YJvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8dCJBTzDwCYDG7yGJAzsA7Ppx1VJiWA7RssQ0rmRopw=;
-        b=GOuQbw9Nte+0O+3r6S2PWybvXLj2/6/GCMjgNe07cGpgaz9divVOJBPk8ks+W4W2Wo
-         0HXc2Yj2jyG1O1KtvA/rHOjcYXtTZlnEgcsHORvliMN2xuJMQAf4XEwUc96rxeLm/FSE
-         cTnjD/tDvYhsE+6oFjHVM7Rq/LYBAKNUkWUFylRV0ESHTghMgrHt6ArO8egQLJzpm+Pz
-         4Q91A9OFM1kFotGu4WH7rjYAP2nVsn0vHb0Q6paI4Ax8PbOMe6kGMmUuk7QLH26t9pYf
-         Osqbd+QLYCBCVovfZfhBKOJ5a8ysC/7kAPGYoBOJtjhh5BjPAgxkyUrO6XGvezUHgXBS
-         h88w==
-X-Gm-Message-State: ACgBeo2TZlv2pVHpLeO5KZbTInVvO0/axVWvFcCMAFGQAwRIB5iqNLAq
-        PZqlxOp7Jag9Rle7YiCUZM1OY0wmkaY=
-X-Google-Smtp-Source: AA6agR7x/L2mbGbY/RNHSUQU/dQgn5UQmEPcsTsBGs8qZ0AU5HVPVI+a7OliiCRlf42apGqrBDaM9Q==
-X-Received: by 2002:a05:620a:25c8:b0:6ae:ba71:ea7d with SMTP id y8-20020a05620a25c800b006aeba71ea7dmr27782097qko.547.1663177610901;
-        Wed, 14 Sep 2022 10:46:50 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h1-20020a05620a244100b006cbcdc6efedsm2313281qkn.41.2022.09.14.10.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 10:46:50 -0700 (PDT)
-Message-ID: <b2e81ab3-8bf7-d0e9-d046-9aa2eacda6f5@gmail.com>
-Date:   Wed, 14 Sep 2022 10:46:46 -0700
+        Wed, 14 Sep 2022 13:49:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5841E30543;
+        Wed, 14 Sep 2022 10:49:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E00A761D12;
+        Wed, 14 Sep 2022 17:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1192AC433C1;
+        Wed, 14 Sep 2022 17:48:59 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hJMsYj5/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663177737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0iTYrs7mVlDybHNBhoUliYhRxu2aTv3ffXeBOI1/I4=;
+        b=hJMsYj5/Z0wWbkJBVJOUnImi6RgWweL0qRlunmtvKFedlscGDb8WXxPUOke7kqJ2JfPegv
+        4luRogQgJd3fkB5kS0ThYN7kNVlEeEBA7UHPy+ly0nxYQIZHBBjCbV5sdvh6lwg9JPEKAa
+        p6HpyFOLXOXuuKWR5fKqosNOzixqr40=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fc52c724 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 14 Sep 2022 17:48:57 +0000 (UTC)
+Date:   Wed, 14 Sep 2022 18:48:52 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     syzbot <syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Subject: Re: [syzbot] linux-next test error: WARNING in set_peer
+Message-ID: <YyIUBKYWJBilWK3A@zx2c4.com>
+References: <00000000000060a74405e8945759@google.com>
+ <202209131753.D1BDA803@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4.9 00/42] 4.9.328-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220913140342.228397194@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202209131753.D1BDA803@keescook>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 07:07, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.328 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.328-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+I think I'll open code it like below. I'll include this in my next push
+to net.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+From 19fb26af00a8266df65b706dc02727c6a608b1b6 Mon Sep 17 00:00:00 2001
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Wed, 14 Sep 2022 18:42:00 +0100
+Subject: [PATCH] wireguard: netlink: avoid variable-sized memcpy on sockaddr
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Doing a variable-sized memcpy is slower, and the compiler isn't smart
+enough to turn this into a constant-size assignment.
+
+Further, Kees' latest fortified memcpy will actually bark, because the
+destination pointer is type sockaddr, not explicitly sockaddr_in or
+sockaddr_in6, so it thinks there's an overflow:
+
+    memcpy: detected field-spanning write (size 28) of single field
+    "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+
+Fix this by just assigning by using explicit casts for each checked
+case.
+
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/net/wireguard/netlink.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
+index d0f3b6d7f408..5c804bcabfe6 100644
+--- a/drivers/net/wireguard/netlink.c
++++ b/drivers/net/wireguard/netlink.c
+@@ -436,14 +436,13 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
+ 	if (attrs[WGPEER_A_ENDPOINT]) {
+ 		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
+ 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
++		struct endpoint endpoint = { { { 0 } } };
+
+-		if ((len == sizeof(struct sockaddr_in) &&
+-		     addr->sa_family == AF_INET) ||
+-		    (len == sizeof(struct sockaddr_in6) &&
+-		     addr->sa_family == AF_INET6)) {
+-			struct endpoint endpoint = { { { 0 } } };
+-
+-			memcpy(&endpoint.addr, addr, len);
++		if (len == sizeof(struct sockaddr_in) && addr->sa_family == AF_INET) {
++			endpoint.addr4 = *(struct sockaddr_in *)addr;
++			wg_socket_set_peer_endpoint(peer, &endpoint);
++		} else if (len == sizeof(struct sockaddr_in6) && addr->sa_family == AF_INET6) {
++			endpoint.addr6 = *(struct sockaddr_in6 *)addr;
+ 			wg_socket_set_peer_endpoint(peer, &endpoint);
+ 		}
+ 	}
+--
+2.37.3
