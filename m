@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D84E5B89C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1225B89CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiINOC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S230006AbiINODD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiINOCR (ORCPT
+        with ESMTP id S229878AbiINOCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:02:17 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE413F10
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:01:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id u18so25354160lfo.8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:01:33 -0700 (PDT)
+        Wed, 14 Sep 2022 10:02:16 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64248792E4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:01:27 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1280590722dso41247736fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=CQjeMfDwFntWQm9a05PkWbLPryxYJltoZlwh5tZAobU=;
-        b=p/ixekQ7dm+pVuUqal2iNjjPgvi7AVWgQI/uKNZ6DBRcW8zFtM/K4ZQCdLq1nN3NjE
-         wCUGP04upvlanW3RG7PcQKWcGH9y3knnoB3dPW5HkHQN+EIcllL+vFL10yQyjX4yX8Lw
-         o+N26Fk/JksE42yxl4ZVhBXuz660cSG3bO84GWc/sZDtqLWVwqhOnhPqTKCpxGfxzj96
-         cs+ucS5RrIxrJ8PR46tGBac/XbLONdX6grwiNilK/0zn4Mb0AXJPt0TyKkPNKPUHEe1s
-         4Ix8khEtmCNRWUwqQR6diomyghIy2d8qO0iUoQqfkAFTiq2Fh0a0GNWYtCuOdNCB30Gr
-         GkKA==
+        bh=k8U95BumaTBbmAt9TrN0QV5NqfyKt6VN+p4d+At6nao=;
+        b=hZ4MyiYYZA17pWd2sXxCN3Y5eVcUpfNheChiC/xsUMCSQX25+naMAhm9L+g8SDlHpu
+         TXoBLEMSChC0+L/0AgvC1/IDp2dGJr/qjt9YYAIcmWBNGToE5Bv54rv3/oMxGY7ZtObU
+         GlqyvUmG9XenirplcDZzJpq/ywjUgtNfWkHtwZDon/Whh3PdUs4RezoNer3jDJusE7RK
+         RM75qEh9CJFLDdDkVn71KB8doMWnMBpMSRELmPPEw2FqyWRggYnbJQGPXg36OWhh997J
+         scIGVISsnhRWoF1wtHtBzx6V2pnTKod8bPxDzgE9I1K3hdEvdgMO3f5A/mltUyP0JTny
+         3AaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CQjeMfDwFntWQm9a05PkWbLPryxYJltoZlwh5tZAobU=;
-        b=O2W17jouEbXDND8WUvD8KSk8CGEjl5Wv7Wd+J2yNl1mIfuU7n5TuLEsypcRcHmKwJ4
-         A+tRdQv5oqIEpEhL2amWSPdFJl9oEnPpyDVraZ0TARqNwbYbCkYBV/T1DSzpCUUjJrip
-         k0fsDsQkpYdEtDtOkanzNYHuo1EDgyIbnoEoPaR4rwnE2lLknZBiTWdoRpZRgSjksyY9
-         avZCSd+hwkiqbb3PfSvpzJHj/nIGHL4qIRcYnNO8unSYkN7bjn/yZWxpu5y/GusHh1w1
-         ZoqeL3LG6DQGbnXhTJeC0Z279Koc7qk8x9qeHKZrbjJ+07Q9VhBOJ0/KqmOa0TsKynUD
-         +Jbw==
-X-Gm-Message-State: ACgBeo3bKmpiirM/M77JJXJpSG5WuxLPY463aqVE6KHxig8mVPrOU/su
-        8o6avkBLYZRxF9+1C1kSO7eZ6L0IGYSueGLDtEIUtg==
-X-Google-Smtp-Source: AA6agR6WyXBDRFbuI65gA1rXLh/luIbvyPLMNXN5XHAxLKNXhlzA+yGIFDQRTOBeyxgqkUpliZ5dXOpmMTTxMc+MmNc=
-X-Received: by 2002:a05:6512:280d:b0:498:fd40:51d4 with SMTP id
- cf13-20020a056512280d00b00498fd4051d4mr9246731lfb.167.1663164091519; Wed, 14
- Sep 2022 07:01:31 -0700 (PDT)
+        bh=k8U95BumaTBbmAt9TrN0QV5NqfyKt6VN+p4d+At6nao=;
+        b=4GweeD5w6cD++zZpblKKIfL3UTykKCPzC8f4UPj84P6g/JqnCY6lHlXpYaBUG3XHSl
+         KLNRCYCnGqxIjPGecv/v8bqmC4p7fHWH5O0MNnTN5CyjthwHyCjkbL2GjAUQKF0fjw1f
+         yyfqa7HV3ExI0qg/q/lzHPUMxeuw5afjb2pYhTsX8uMOWqYpTFsXyAHd+hKgJqbmiW1q
+         jCsLFjYxkqpLrNxlY4bcTlsDfy2OCqh6FDp2coDucEk73yAJi05ej7v/G4PDSweYsCk+
+         atphZHvX+6+1kEO0Cerus7zOgRAEfCuGixtgJHFxy+gh/F+shvMEe9MmYX5/BRG4GaBr
+         Vzuw==
+X-Gm-Message-State: ACgBeo0ZkTrl3gepgGNzcf5Dl5pBEKUmYfxHbGEKMkEo3WBWFnVXpTqp
+        x+ZfWeVKG1q6zqmWwHK9LI2KAOkIUf3H2whKFN4=
+X-Google-Smtp-Source: AA6agR5PKLMgPfNEM9I3tSJH5qiXe/xPWs362xf4K+HyW2wha0yujlDyMJ6JWeuG3zs8uWYjjMVFDkGlQYB/rYQgX1k=
+X-Received: by 2002:a05:6870:1783:b0:12a:f442:504d with SMTP id
+ r3-20020a056870178300b0012af442504dmr2648088oae.46.1663164086734; Wed, 14 Sep
+ 2022 07:01:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907035847.13783-1-wenchao.chen666@gmail.com>
-In-Reply-To: <20220907035847.13783-1-wenchao.chen666@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 14 Sep 2022 16:00:54 +0200
-Message-ID: <CAPDyKFpZN7=K2pTS2b0jsDp=uTVjTsQV+27e=rkGs_gMHfb97w@mail.gmail.com>
-Subject: Re: [PATCH Vx 5/5] mmc: sdhci: Fix host->cmd is null
-To:     Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhang.lyra@gmail.com,
-        lzx.stg@gmail.com
+References: <20220914075213.4998-1-hanyihao@vivo.com>
+In-Reply-To: <20220914075213.4998-1-hanyihao@vivo.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 14 Sep 2022 10:01:15 -0400
+Message-ID: <CADnq5_O8N-_kbYtsM0DMR+zDE+6wJ+gGQFUjYgUHkoZcaQJg9Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: fix boolconv.cocci warning
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Martin Leung <Martin.Leung@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 06:00, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
+Applied.  Thanks!
+
+On Wed, Sep 14, 2022 at 3:53 AM Yihao Han <hanyihao@vivo.com> wrote:
 >
-> From: Wenchao Chen <wenchao.chen@unisoc.com>
+> ./drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c:729:63-68:
+> WARNING: conversion to bool not needed here
 >
-> When data crc occurs, the kernel will panic because host->cmd is null.
->
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-
-Applied for fixes, thanks!
-
-Kind regards
-Uffe
-
-
+> Generated by: scripts/coccinelle/misc/boolconv.cocci
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 > ---
->  drivers/mmc/host/sdhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 7689ffe..2511728 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -3928,7 +3928,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> index f4bc77972c4e..4edd0655965b 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> @@ -726,7 +726,7 @@ static bool mpc32_program_shaper(
+>         else
+>                 next_mode = LUT_RAM_A;
 >
->         if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
->                 *cmd_error = -EILSEQ;
-> -               if (!mmc_op_tuning(host->cmd->opcode))
-> +               if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->                         sdhci_err_stats_inc(host, CMD_CRC);
->         } else if (intmask & SDHCI_INT_TIMEOUT) {
->                 *cmd_error = -ETIMEDOUT;
-> @@ -3938,7 +3938,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+> -       mpc32_configure_shaper_lut(mpc, next_mode == LUT_RAM_A ? true:false, mpcc_id);
+> +       mpc32_configure_shaper_lut(mpc, next_mode == LUT_RAM_A, mpcc_id);
 >
->         if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->                 *data_error = -EILSEQ;
-> -               if (!mmc_op_tuning(host->cmd->opcode))
-> +               if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->                         sdhci_err_stats_inc(host, DAT_CRC);
->         } else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->                 *data_error = -ETIMEDOUT;
+>         if (next_mode == LUT_RAM_A)
+>                 mpc32_program_shaper_luta_settings(mpc, params, mpcc_id);
 > --
-> 2.7.4
+> 2.17.1
 >
