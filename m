@@ -2,100 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BF95B87A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBEC5B87A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiINL4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S230006AbiINL5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiINL4v (ORCPT
+        with ESMTP id S229490AbiINL5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:56:51 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972482F03E;
-        Wed, 14 Sep 2022 04:56:49 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1274ec87ad5so40335254fac.0;
-        Wed, 14 Sep 2022 04:56:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JxLgOu6mpwnw6SY29Fdqty2Ik/m+3DmPqodTz8p4N7c=;
-        b=bcJEqOtNAatRINLla1+kNIoiKJNMMPW4lw+YuXyAnOKSP9Dij2+fySL9C4jk9kHzj/
-         6ZI5pUNbpXHvkr6z4PmlvTNOeyu2Cu00FbZQCng2PS14g0kzcGZUUAd/qs/rRJeEeMdL
-         NR9LgDTFpaOYMAFCI8i4QALlpr4sOCZtw+YyXf5dA63XwE6NAc95u7Vjkh+XGib1y6n0
-         PHrhwk9f6BrKQluZr077+fK2ZDVRYQJY5EpaEfhLn0HWZeCECEYnfLnxiBQ2swFcQDNM
-         aKMMv+sgEEe9udupLHagnPt8iG5xbMgxdkNc00MtYS8n9Ti3uO4RIeIvYHTmpLhWsYMf
-         DICw==
-X-Gm-Message-State: ACgBeo16XE7jYTBOm4iPvw/VwFeA9jO800syK3gGk9ftY6omCFkkob2B
-        yJ078+Qwb9hrjW9Sxvw+vQ==
-X-Google-Smtp-Source: AA6agR6iZ+uJtt57/qlMbscIjcVecG6JevOV1N1fEvnEnVqYWCqmEO8HGbz9r0g/xhTHzye7sagkSw==
-X-Received: by 2002:aca:add2:0:b0:34f:6883:5878 with SMTP id w201-20020acaadd2000000b0034f68835878mr1690227oie.260.1663156608789;
-        Wed, 14 Sep 2022 04:56:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y19-20020a4acb93000000b0044b02c62872sm6431880ooq.10.2022.09.14.04.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 04:56:48 -0700 (PDT)
-Received: (nullmailer pid 1837080 invoked by uid 1000);
-        Wed, 14 Sep 2022 11:56:47 -0000
-Date:   Wed, 14 Sep 2022 06:56:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 net-next] dt-bindings: net: dsa: convert ocelot.txt to
- dt-schema
-Message-ID: <20220914115647.GA1837019-robh@kernel.org>
-References: <20220913125806.524314-1-vladimir.oltean@nxp.com>
+        Wed, 14 Sep 2022 07:57:32 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E873FA09
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:57:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPnFGbQ_1663156646;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPnFGbQ_1663156646)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Sep 2022 19:57:27 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+To:     sj@kernel.org
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: [PATCH] mm/hugetlbfs: use macro SZ_1K to replace 1024
+Date:   Wed, 14 Sep 2022 19:57:23 +0800
+Message-Id: <20220914115723.38271-1-xhao@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913125806.524314-1-vladimir.oltean@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sep 2022 15:58:06 +0300, Vladimir Oltean wrote:
-> Replace the free-form description of device tree bindings for VSC9959
-> and VSC9953 with a YAML formatted dt-schema description. This contains
-> more or less the same information, but reworded to be a bit more
-> succint.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
-> v1->v2:
-> - provide a more detailed description of the DT binding
-> - allow little-endian and big-endian properties
-> - allow interrupts property and make it required for vsc9959
-> - describe the meaning of the interrupts property
-> - reduce indentation in examples from 8 spaces to 4
-> - change license so it matches the driver
-> 
->  .../bindings/net/dsa/mscc,ocelot.yaml         | 260 ++++++++++++++++++
->  .../devicetree/bindings/net/dsa/ocelot.txt    | 213 --------------
->  2 files changed, 260 insertions(+), 213 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
->  delete mode 100644 Documentation/devicetree/bindings/net/dsa/ocelot.txt
-> 
+Using macro SZ_1K in hugetlbfs_show_options() has no any functional
+changes, just makes code more readable.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+---
+ fs/hugetlbfs/inode.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index f7a5b5124d8a..9b9784ffe8de 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -1023,10 +1023,10 @@ static int hugetlbfs_show_options(struct seq_file *m, struct dentry *root)
+ 	if (sbinfo->max_inodes != -1)
+ 		seq_printf(m, ",nr_inodes=%lu", sbinfo->max_inodes);
+
+-	hpage_size /= 1024;
++	hpage_size /= SZ_1K;
+ 	mod = 'K';
+-	if (hpage_size >= 1024) {
+-		hpage_size /= 1024;
++	if (hpage_size >= SZ_1K) {
++		hpage_size /= SZ_1K;
+ 		mod = 'M';
+ 	}
+ 	seq_printf(m, ",pagesize=%lu%c", hpage_size, mod);
+--
+2.31.0
