@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA955B8688
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E995B8689
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiINKnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S229953AbiINKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiINKnA (ORCPT
+        with ESMTP id S229473AbiINKn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:43:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F5378581
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663152179; x=1694688179;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vp0eGXwV90GWfbMI665R9Cdn+zG5V4Ss1cf3iuS0xSQ=;
-  b=nYC4dhRmmc5ugUeDOwZMbAciHaeFZ4GVpYtrk0+KNmyUCkai4/m2Mt5T
-   dVEvQtSrcZ68hJ/GNcqsVVcCCYzDCJ/0B8sX6GmIrNfdl++QcdmV3T/5G
-   hDhojtSnWevPa9+EWUzWhC+V+gx0IPgjIEdZ3+sqmoyt9YXUqA+/gJuNu
-   GnIJpA42qMfO8KBuPXp3lhAgt+CgJ2cwngr7fmed6mkgz0l3D+0d4UwhM
-   rLsmfJALuGhFKdNov6QbiTFFscGG4OIfqHpRo+9yCWNXPIR8+3MFk+odM
-   ZZDc1jjNkJ2Nylm8F3s68SFf4jG5Xdy44SXh88idsT07KcK8Iyl476YSc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299754517"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="299754517"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:42:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="647343438"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Sep 2022 03:42:57 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYPr7-00006u-0D;
-        Wed, 14 Sep 2022 10:42:57 +0000
-Date:   Wed, 14 Sep 2022 18:42:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mcgrof:20220913-test-sysfs 9/11]
- fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect
-Message-ID: <202209141853.6zXXC9T7-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 06:43:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CFE78BF1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:43:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 034D11F74A;
+        Wed, 14 Sep 2022 10:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663152236; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PcVLr9WYJ9BVec82oUwDDAjvUYAC4fWLz+GAaqfWCXo=;
+        b=MgwbfYajHqSN62u/3AGxahwjTt1TldXfGpM2koBbr49QYqNgN4PbLDgwJD1bMrPrwp9xrK
+        cywZ4mjJZoiM/Q6M8V+kLrjoieGenMFOqkryYRvTVCyyiuRspwwbZM6s0X2lar8LC4/Cmg
+        3XXMJBaFhOatgqUUKx2bkgUdjvATm2M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663152236;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PcVLr9WYJ9BVec82oUwDDAjvUYAC4fWLz+GAaqfWCXo=;
+        b=NCWFoNLkoDIpPHVzpHZxyVCPGETTUuFog5S0yZTTyxUsC41ox0mcCjM5vC+OQfMg3Ug93d
+        jhzL03FOm67iaTBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB75013494;
+        Wed, 14 Sep 2022 10:43:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cSEHLWuwIWMhTwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 14 Sep 2022 10:43:55 +0000
+Date:   Wed, 14 Sep 2022 12:43:55 +0200
+Message-ID: <87v8pqtevo.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, cezary.rojewski@intel.com,
+        tiwai@suse.com, ranjani.sridharan@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, perex@perex.cz,
+        liam.r.girdwood@linux.intel.com, kai.vehmanen@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] ASoC: Intel: fix unused-variable warning in probe_codec
+In-Reply-To: <YyGte0fkdquTxLC4@sirena.org.uk>
+References: <20220822035133.2147381-1-cuigaosheng1@huawei.com>
+        <166314841746.314266.6045600836637107787.b4-ty@kernel.org>
+        <87zgf2tfn3.wl-tiwai@suse.de>
+        <YyGte0fkdquTxLC4@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20220913-test-sysfs
-head:   fd13723170f4a2381aab0b6449920c121f01a10a
-commit: 010fe7c173f104fbec6c1d56c3a92e2b88281ec8 [9/11] kernfs: add initial failure injection support
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220914/202209141853.6zXXC9T7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=010fe7c173f104fbec6c1d56c3a92e2b88281ec8
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20220913-test-sysfs
-        git checkout 010fe7c173f104fbec6c1d56c3a92e2b88281ec8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+On Wed, 14 Sep 2022 12:31:23 +0200,
+Mark Brown wrote:
+> 
+> On Wed, Sep 14, 2022 at 12:27:28PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
+> 
+> > > [1/1] ASoC: Intel: fix unused-variable warning in probe_codec
+> > >       commit: 515626a33a194c4caaf2879dbf9e00e882582af0
+> 
+> > I thought the buggy commit 3fd63658caed9 was present only in my tree
+> > for now, but if it's in your tree, that's fine to apply through
+> > yours.  Then I'll drop from mine.
+> 
+> Huh, right - I think you're right here and it is only in your
+> tree, it just didn't trigger any issues in my coverage tests
+> prior to merge.  Probably best to leave it in your tree and
+> either have a double apply or I'll revert it from mine.  Either
+> way it'll get fixed by the time it gets sent to Linus.
+>
+> I'd not remembered that you had any extra stuff for ASoC in your
+> tree, sorry.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+No problem, it was rather an exception.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/kernfs/file.c:19:
-   fs/kernfs/file.c: In function 'kernfs_fop_write_iter':
->> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
-     239 | #define may_wait_kernfs_debug(func, when) (false)
-         |                                           ^
-   fs/kernfs/file.c:320:9: note: in expansion of macro 'may_wait_kernfs_debug'
-     320 |         may_wait_kernfs_debug(kernfs_fop_write_iter, at_start);
-         |         ^~~~~~~~~~~~~~~~~~~~~
->> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
-     239 | #define may_wait_kernfs_debug(func, when) (false)
-         |                                           ^
-   fs/kernfs/file.c:343:9: note: in expansion of macro 'may_wait_kernfs_debug'
-     343 |         may_wait_kernfs_debug(kernfs_fop_write_iter, before_mutex);
-         |         ^~~~~~~~~~~~~~~~~~~~~
->> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
-     239 | #define may_wait_kernfs_debug(func, when) (false)
-         |                                           ^
-   fs/kernfs/file.c:351:9: note: in expansion of macro 'may_wait_kernfs_debug'
-     351 |         may_wait_kernfs_debug(kernfs_fop_write_iter, after_mutex);
-         |         ^~~~~~~~~~~~~~~~~~~~~
->> fs/kernfs/kernfs-internal.h:239:43: warning: statement with no effect [-Wunused-value]
-     239 | #define may_wait_kernfs_debug(func, when) (false)
-         |                                           ^
-   fs/kernfs/file.c:359:9: note: in expansion of macro 'may_wait_kernfs_debug'
-     359 |         may_wait_kernfs_debug(kernfs_fop_write_iter, after_active);
-         |         ^~~~~~~~~~~~~~~~~~~~~
+I don't mind to keep in both trees; it should be resolved at the merge
+of ASoC tree before the PR to Linus, if any.
 
 
-vim +239 fs/kernfs/kernfs-internal.h
+thanks,
 
-   233	
-   234	#define may_wait_kernfs_debug(func, when) \
-   235		__kernfs_debug_should_wait_func_name(func)(__kernfs_config_wait_var(func, when))
-   236	void __kernfs_debug_should_wait_kernfs_fop_write_iter(bool evaluate);
-   237	#else
-   238	static inline void kernfs_init_failure_injection(void) {}
- > 239	#define may_wait_kernfs_debug(func, when) (false)
-   240	#endif
-   241	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Takashi
