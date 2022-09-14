@@ -2,61 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFD25B8C1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19A05B8C19
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiINPlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S229997AbiINPlt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Sep 2022 11:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiINPl1 (ORCPT
+        with ESMTP id S229568AbiINPlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:41:27 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFCA31DD9;
-        Wed, 14 Sep 2022 08:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+/Tlbli6dmKOW4NjYwLwzvti9ZsiTxMiylOYMJbYirE=; b=xUmBi4TeHDhoq0VWrwV6lv8xN7
-        vbU2AJwVxEe//asqujXEXPLAOtceiFrdlXFvXlDjON9Dwqm7ku3QI0xKLY9zESr0+Tu9tbAVqVIwD
-        EszKmJzkpuo8poZ1uWdPNjVR+1qV9o2aIsRbkCMEMQ3CjnizPQY1QlL7+SXSsyiXA/Asi0gHtyHoe
-        zwq/GNHQVV/yIRUZzT8/g9RNz/JWDJXB4QZrk+X/nSCV3XYTJ8ErqCVXC7RGD4kWmCQ9rEuazV21t
-        csryCrrmKiOzwFCifRIWv/Fm8O7zinTIoDd4hUks/lU8zLJFInckCz5RO24mDPWF5T+vgFtZMTPuV
-        7eEymAqg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34322)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oYUVm-0004YW-H6; Wed, 14 Sep 2022 16:41:14 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oYUVl-0001lu-Pu; Wed, 14 Sep 2022 16:41:13 +0100
-Date:   Wed, 14 Sep 2022 16:41:13 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
-        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kishon@ti.com
-Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
- fixed-link configuration
-Message-ID: <YyH2GcLCAN+9GAn8@shell.armlinux.org.uk>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-6-s-vadapalli@ti.com>
+        Wed, 14 Sep 2022 11:41:36 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC05122BCC;
+        Wed, 14 Sep 2022 08:41:34 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id E3CEC4000C;
+        Wed, 14 Sep 2022 15:41:31 +0000 (UTC)
+Message-ID: <c56c4053388baa5ea3db8bc849c5a420859347f1.camel@hadess.net>
+Subject: Re: [PATCH v1] HID: logitech-hidpp: Detect hi-res scrolling support
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Date:   Wed, 14 Sep 2022 17:41:31 +0200
+In-Reply-To: <20220914132146.6435-1-hadess@hadess.net>
+References: <20220914132146.6435-1-hadess@hadess.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914095053.189851-6-s-vadapalli@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +43,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index 72b1df12f320..1739c389af20 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -1494,10 +1494,50 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
->  							  phylink_config);
->  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
->  	struct am65_cpsw_common *common = port->common;
-> +	struct fwnode_handle *fwnode;
-> +	bool fixed_link = false;
->  
->  	if (common->pdata.extra_modes & BIT(state->interface))
->  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
->  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
-> +
-> +	/* Detecting fixed-link */
-> +	fwnode = of_node_to_fwnode(port->slave.phy_node);
-> +	if (fwnode)
-> +		fixed_link = !!fwnode_get_named_child_node(fwnode, "fixed-link");
-> +
-> +	if (fixed_link) {
-> +		/* In fixed-link mode, mac_link_up is not invoked.
-> +		 * Therefore, the relevant mac_link_up operations
-> +		 * have to be moved to mac_config.
-> +		 */
+On Wed, 2022-09-14 at 15:21 +0200, Bastien Nocera wrote:
+> Rather than relying on a never-ending stream of patches for quirks.
+> 
+> This change will detect whether HID++ 1.0 hi-res scroll, HID++ 2.0
+> hi-res scroll or HID++ 2.0 hi-res scroll wheel is supported, and
+> enable
+> the feature without the need for quirks.
+> 
+> Tested on a Logitech M705 mouse that was unsupported before this
+> change.
+> 
+> [    9.365324] logitech-hidpp-device 0003:046D:406D.0006:
+> input,hidraw3: USB HID v1.11 Mouse [Logitech M705] on usb-
+> 0000:00:14.0-4/input2:3
+> [   57.472434] logitech-hidpp-device 0003:046D:406D.0006: HID++ 4.5
+> device connected.
+> [   57.616429] logitech-hidpp-device 0003:046D:406D.0006: Detected
+> HID++ 2.0 hi-res scroll wheel
+> [   57.712424] logitech-hidpp-device 0003:046D:406D.0006: wheel
+> multiplier = 8
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216480
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
 
-This seems very wrong. Why is mac_link_up() not invoked? Have you
-debugged this? It works for other people.
+For anyone on a recent version of Fedora that wants to test it, those
+packages should work:
+https://koji.fedoraproject.org/koji/taskinfo?taskID=92008550
 
-Please debug rather than adding hacks to drivers when you find
-things that don't seem to work.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Cheers
