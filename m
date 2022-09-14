@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080645B8298
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149DA5B8297
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 10:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiINIDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 04:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S230326AbiINICr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 04:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiINICb (ORCPT
+        with ESMTP id S230178AbiINICY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 04:02:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFAE72FDE
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663142529; x=1694678529;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sYDk3njobQPmmB4ASleMB/Ig33xRGDX/XnXmi4n6FGg=;
-  b=ngViOJf78NWAUP+FiTNRyKRPCQKNpAfDDZedL5W8T6fJiz+wdSzcwMoB
-   pZUkWbLmeUm0RO59V6kNudRIoHxa3i0keGx06pEXlGMyluKIk8pFDIdP6
-   jClGCzC8BQZKxBgOix4ZSUf0HnnYSMAnWZPILsoz+wF7MWwY1FkyJbE8o
-   a3VmWu/ZKyzjABDiTDKB5Ibewv76fJCAimWqvbndRsNaju3kJmsU1n4fd
-   8uTsEY1EANYWSAFO2D39aosC4M8zojiEqzVDL5P//JEn8WdsANIl2ITJ7
-   t6xpaaJ4XVcS8MxgrcoQHajy61vLBws2Q0knwlmsSkWJC19pFi7bXN8Xo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="295953256"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="295953256"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 01:02:07 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="678942523"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.32.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 01:02:05 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] perf test: waiting.sh: Parameterize timeouts
-Date:   Wed, 14 Sep 2022 11:01:50 +0300
-Message-Id: <20220914080150.5888-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914080150.5888-1-adrian.hunter@intel.com>
-References: <20220914080150.5888-1-adrian.hunter@intel.com>
+        Wed, 14 Sep 2022 04:02:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA6A6CF7A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 01:02:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C592615D9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:02:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2826CC433D7;
+        Wed, 14 Sep 2022 08:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663142524;
+        bh=Gb+UiMDJQOrLZOBOFvKO7hc50e8Wfw2fbwZ4a+0Jhhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AaIkyci8t2ooMQbr9h9k78gp0yMhS6aqvjyg5Npw9R98sEnih/9jPERR1/8oCy7uO
+         XPvw2a7og0Y5TH4ZzVylrrM1iLE6ZtbrjHfJnjMf0abP8PGzQwgpx7IIhmNEOavRUL
+         XHRgE6Xb8qG2Vq0vz2nMox4dfJ2ogwy9xDSWMZCI=
+Date:   Wed, 14 Sep 2022 10:02:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v3 1/2] staging: vt6655: remove unnecessary volatile
+ qualifier
+Message-ID: <YyGKlVbhFmrZ1lXK@kroah.com>
+References: <cover.1662724786.git.namcaov@gmail.com>
+ <c3a7d9963b1c38c5f493786d7268c430617412dd.1662724786.git.namcaov@gmail.com>
+ <Yxt/3FOysEbwCm9T@kroah.com>
+ <CA+sZ8B8Y1ZGou1Y4tQYJC1Wp_2MVdYKO0Bd3SfxMAU1DF+mz_g@mail.gmail.com>
+ <Yx2NY0RBWLqH3rDK@kroah.com>
+ <CA+sZ8B8-hsNXY-nFffvGMLJXmsAa9L+gnEK1ZdC7PztG1dd03Q@mail.gmail.com>
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+sZ8B8-hsNXY-nFffvGMLJXmsAa9L+gnEK1ZdC7PztG1dd03Q@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,97 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let helper functions accept a parameter to specify time out values in
-tenths of a second.
+On Tue, Sep 13, 2022 at 06:52:12PM +0200, Nam Cao wrote:
+> On Sun, Sep 11, 2022 at 9:25 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Sep 11, 2022 at 09:12:44AM +0200, Nam Cao wrote:
+> > > On Fri, Sep 9, 2022 at 8:03 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Fri, Sep 09, 2022 at 02:17:55PM +0200, Nam Cao wrote:
+> > > > > Remove volatile qualifier for the member rd0 of struct vnt_rx_desc,
+> > > > > because there is no reason it must be volatile.
+> > > > >
+> > > > > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > > > > ---
+> > > > >  drivers/staging/vt6655/desc.h | 2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/staging/vt6655/desc.h b/drivers/staging/vt6655/desc.h
+> > > > > index 17a40c53b8ff..3f0f287b1693 100644
+> > > > > --- a/drivers/staging/vt6655/desc.h
+> > > > > +++ b/drivers/staging/vt6655/desc.h
+> > > > > @@ -182,7 +182,7 @@ struct vnt_rdes1 {
+> > > > >
+> > > > >  /* Rx descriptor*/
+> > > > >  struct vnt_rx_desc {
+> > > > > -     volatile struct vnt_rdes0 rd0;
+> > > > > +     struct vnt_rdes0 rd0;
+> > > >
+> > > > You can not just remove this without describing _WHY_ it is ok to do so.
+> > > >
+> > > > Have you properly determined why it is, or is not, ok to use volatile
+> > > > here?
+> > >
+> > > I did not carefully look at the volatile usage here. After looking at it
+> > > again, using volatile is actually valid: the structure resides on coherent
+> > > memory.
+> >
+> > Are you sure?  That's a very odd thing for a driver to need.  Looks like
+> > they are allocating some dma memory and then pointing structures on top
+> > of that memory.  Why would you need to have "volatile" markings on a
+> > structure definition for that?
+> 
+> These structures are the ring buffer descriptors, which are dma-mapped and
+> their values may be changed by the hardware. For example, the field "owner" of
+> struct vnt_rdes0 is set to OWNED_BY_NIC by CPU, and then set to OWNED_BY_HOST
+> by hardware when new data arrives (at least that's why I can guess based on
+> the codes). So I think volatile is needed.
+> 
+> Please let me know if you think I'm wrong, because I have just recently
+> educated myself on DMA mapping.
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/tests/shell/lib/waiting.sh | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+With DMA mapping you shouldn't need "volatile" as it really doesn't do
+what people thought it did.  Other drivers don't use volatile for
+accessing memory this way, the device should have notified the driver
+that it is now safe to read from that memory through the DMA api.
 
-diff --git a/tools/perf/tests/shell/lib/waiting.sh b/tools/perf/tests/shell/lib/waiting.sh
-index dbd5bd90105e..e7a39134a68e 100644
---- a/tools/perf/tests/shell/lib/waiting.sh
-+++ b/tools/perf/tests/shell/lib/waiting.sh
-@@ -3,16 +3,18 @@
- tenths=date\ +%s%1N
- 
- # Wait for PID $1 to have $2 number of threads started
-+# Time out after $3 tenths of a second or 5 seconds if $3 is ""
- wait_for_threads()
- {
-+	tm_out=$3 ; [ -n "${tm_out}" ] || tm_out=50
- 	start_time=$($tenths)
- 	while [ -e "/proc/$1/task" ] ; do
- 		th_cnt=$(find "/proc/$1/task" -mindepth 1 -maxdepth 1 -printf x | wc -c)
- 		if [ "${th_cnt}" -ge "$2" ] ; then
- 			return 0
- 		fi
--		# Wait at most 5 seconds
--		if [ $(($($tenths) - start_time)) -ge 50 ] ; then
-+		# Wait at most tm_out tenths of a second
-+		if [ $(($($tenths) - start_time)) -ge $tm_out ] ; then
- 			echo "PID $1 does not have $2 threads"
- 			return 1
- 		fi
-@@ -22,8 +24,10 @@ wait_for_threads()
- 
- # Wait for perf record -vvv 2>$2 with PID $1 to start by looking at file $2
- # It depends on capturing perf record debug message "perf record has started"
-+# Time out after $3 tenths of a second or 5 seconds if $3 is ""
- wait_for_perf_to_start()
- {
-+	tm_out=$3 ; [ -n "${tm_out}" ] || tm_out=50
- 	echo "Waiting for \"perf record has started\" message"
- 	start_time=$($tenths)
- 	while [ -e "/proc/$1" ] ; do
-@@ -31,8 +35,8 @@ wait_for_perf_to_start()
- 			echo OK
- 			break
- 		fi
--		# Wait at most 5 seconds
--		if [ $(($($tenths) - start_time)) -ge 50 ] ; then
-+		# Wait at most tm_out tenths of a second
-+		if [ $(($($tenths) - start_time)) -ge $tm_out ] ; then
- 			echo "perf recording did not start"
- 			return 1
- 		fi
-@@ -41,12 +45,14 @@ wait_for_perf_to_start()
- }
- 
- # Wait for process PID %1 to exit
-+# Time out after $2 tenths of a second or 5 seconds if $2 is ""
- wait_for_process_to_exit()
- {
-+	tm_out=$2 ; [ -n "${tm_out}" ] || tm_out=50
- 	start_time=$($tenths)
- 	while [ -e "/proc/$1" ] ; do
--		# Wait at most 5 seconds
--		if [ $(($($tenths) - start_time)) -ge 50 ] ; then
-+		# Wait at most tm_out tenths of a second
-+		if [ $(($($tenths) - start_time)) -ge $tm_out ] ; then
- 			echo "PID $1 did not exit as expected"
- 			return 1
- 		fi
-@@ -54,13 +60,15 @@ wait_for_process_to_exit()
- 	return 0
- }
- 
--# Check if PID $1 is still running after 0.3 seconds
-+# Check if PID $1 is still running after $2 tenths of a second
-+# or 0.3 seconds if $2 is ""
- is_running()
- {
-+	tm_out=$2 ; [ -n "${tm_out}" ] || tm_out=3
- 	start_time=$($tenths)
- 	while [ -e "/proc/$1" ] ; do
--		# Check for at least 0.3s
--		if [ $(($($tenths) - start_time)) -gt 3 ] ; then
-+		# Check for at least tm_out tenths of a second
-+		if [ $(($($tenths) - start_time)) -gt $tm_out ] ; then
- 			return 0
- 		fi
- 	done
--- 
-2.25.1
+So try looking a bit closer and also look at the compiler output before
+and after your change to see if it actually did anything or not.
 
+thanks,
+
+greg k-h
