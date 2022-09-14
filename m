@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8613D5B7EC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B9B5B7EBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiINB4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S229768AbiINBzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiINB4G (ORCPT
+        with ESMTP id S229531AbiINBzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:56:06 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Sep 2022 18:56:05 PDT
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938A63FA04
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:56:05 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="76604921"
+        Tue, 13 Sep 2022 21:55:06 -0400
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA97822500;
+        Tue, 13 Sep 2022 18:55:04 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="67233255"
 X-IronPort-AV: E=Sophos;i="5.93,313,1654527600"; 
-   d="scan'208";a="76604921"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 14 Sep 2022 10:54:59 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id BBBB5D6253;
-        Wed, 14 Sep 2022 10:54:58 +0900 (JST)
+   d="scan'208";a="67233255"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP; 14 Sep 2022 10:55:01 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 761CDDA69A;
+        Wed, 14 Sep 2022 10:55:00 +0900 (JST)
 Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
-        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 179182757E;
-        Wed, 14 Sep 2022 10:54:58 +0900 (JST)
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id B355DD996F;
+        Wed, 14 Sep 2022 10:54:59 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om3.fujitsu.com (Postfix) with ESMTP id DC7E0403DF707;
-        Wed, 14 Sep 2022 10:54:57 +0900 (JST)
+        by oym-om3.fujitsu.com (Postfix) with ESMTP id 997BC403DF707;
+        Wed, 14 Sep 2022 10:54:59 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH 0/5] selftests/resctrl: Some improvements of resctrl selftest
-Date:   Wed, 14 Sep 2022 10:51:41 +0900
-Message-Id: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH 1/5] selftests/resctrl: Clear unused initalization code in MBM tests
+Date:   Wed, 14 Sep 2022 10:51:42 +0900
+Message-Id: <20220914015147.3071025-2-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
+References: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
@@ -52,45 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+There is a comment "Set up shemata with 100% allocation on the first run"
+in function mbm_setup(), but the condition "num_of_runs == 0" will
+never be met and write_schemata() will never be called to set schemata
+to 100%.
 
-The aim of this patch series is to improve the resctrl selftest.
-The first three patches clear redundant code. 
-The last two patches are bug fixes. Without the two fixes, 
-some unnecessary processing will be executed and test results 
-will be confusing. There is no behavior change in test themselves.
-[patch 1] Because the default schemata is 100% , in MBM test
-          it is not necessary to reset schemata by write_schemata().
-[patch 2] Delete CMT-related processing in write_schemata() which is 
-	  not called by CMT.
-[patch 3] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
-	  files function cat/cmt/mbm/mba_test_cleanup() are called twice. 
-	  Delete once.
-[patch 4] If there is an exception occurs after creating a child 
-	  process with fork() in the CAT test, kill the child process 
-	  before terminating the parent process.
-[patch 5] When a child process is created by fork(), the buffer of the 
-	  parent process is also copied. Flush the buffer before executing fork().
+Since umount/mount resctrl file system is run on each resctrl test,
+at the same time the default schemata will also be set to 100%.
 
-This patch series is based on Linux v6.0-rc5
+Clear unused initialization code in MBM test, such as CMT test.
 
-Shaopeng Tan (5):
-  selftests/resctrl: Clear unused initalization code in MBM tests
-  selftests/resctrl: Clear unused common codes called by CAT/MBA tests
-  testing/selftests: Remove duplicate codes that clear each test result
-    file
-  selftests/resctrl: Kill the child process before exiting the parent
-    process if an exception occurs
-  selftests/resctrl: Flush stdout file buffer before executing fork()
+Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+---
+ tools/testing/selftests/resctrl/mbm_test.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
- tools/testing/selftests/resctrl/cat_test.c    | 17 +++++++++--------
- tools/testing/selftests/resctrl/cmt_test.c    |  2 --
- tools/testing/selftests/resctrl/mba_test.c    |  2 --
- tools/testing/selftests/resctrl/mbm_test.c    | 19 ++++++-------------
- tools/testing/selftests/resctrl/resctrl_val.c |  1 +
- tools/testing/selftests/resctrl/resctrlfs.c   |  7 +++----
- 6 files changed, 19 insertions(+), 29 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 8392e5c55ed0..38a3b3ad1c76 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -89,24 +89,19 @@ static int check_results(int span)
+ static int mbm_setup(int num, ...)
+ {
+ 	struct resctrl_val_param *p;
+-	static int num_of_runs;
+ 	va_list param;
+-	int ret = 0;
+-
+-	/* Run NUM_OF_RUNS times */
+-	if (num_of_runs++ >= NUM_OF_RUNS)
+-		return -1;
+ 
+ 	va_start(param, num);
+ 	p = va_arg(param, struct resctrl_val_param *);
+ 	va_end(param);
+ 
+-	/* Set up shemata with 100% allocation on the first run. */
+-	if (num_of_runs == 0)
+-		ret = write_schemata(p->ctrlgrp, "100", p->cpu_no,
+-				     p->resctrl_val);
++	/* Run NUM_OF_RUNS times */
++	if (p->num_of_runs >= NUM_OF_RUNS)
++		return -1;
++
++	p->num_of_runs++;
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ void mbm_test_cleanup(void)
 -- 
 2.27.0
 
