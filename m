@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602B05B8795
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883465B87A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiINLxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S229861AbiINLzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiINLxO (ORCPT
+        with ESMTP id S229657AbiINLzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:53:14 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367DE7CB78;
-        Wed, 14 Sep 2022 04:53:13 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so14213789pjl.0;
-        Wed, 14 Sep 2022 04:53:12 -0700 (PDT)
+        Wed, 14 Sep 2022 07:55:08 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FDB17041;
+        Wed, 14 Sep 2022 04:55:07 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id az6so11436213wmb.4;
+        Wed, 14 Sep 2022 04:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date;
-        bh=zNTAPmubHkNZqERn8Ow0wjaXzc3lyqgqXMfCavEhJtY=;
-        b=XtZV7oNVYofg92Yb3OX3u7WO49325wE9x86I1EwJeDLpMyFVEI6aWEHF+F2CxM6zGf
-         d7b12ga77Yj10JAHy0RwKk6n+LzdcRI5lQKuI7JxBf9FPUhR6iDIdFQ3N61h64hS5Q51
-         BcS19VL8tkNUrGVXN06aoxuBoXoxyNRSrgQw+71JKgx0E7RCkiKjC9J5ks0alNkEJsCE
-         MaISpyXyfwKEldUldBEkOfhk3+wDXC1fj3EQmnZavxwK/dgQ1lR8cKAbI3w5XdnUu9Q6
-         AKb/Bu5LNiuiNRtkZG0SwJ1EZnU9yAuEP4ejK8/L/5S9Z02Y/ambZRUlZtjwLioRqRIj
-         vMww==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=SyPBTrJvHzMyaHLtvwyxvW+j90fbMR931wFMQdu37/o=;
+        b=BWHcjgqBlG2T3NBIzOfGGpZmejALUegR++FTvrF6X0D3HK8XJD04xKg9SN/VicszsD
+         yEu18tlS4LVLHvsP+1+w1ZSlWCCUft/xk38vFKFomHB55CPeQFzJd8wFJYJNGGrWJAui
+         6ifXPxDExUaYiYRJZhpgZlFeObvj76DWwHt/E8a/Y4mUKRuuGL0CubY3N2FItO5r4284
+         UFg4UEtGnJ6hLWVZ3S3h4RH9QiLA6xfqgvdM+82GhScwlbi22Pt5OxofzGDwVAuhT2a9
+         psCrmRLCu8NB0xZZyP1IONNj91J3WvPeRAruZkXvd43nEoHMVzDQQf47dLsZvvlFuepb
+         zEXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zNTAPmubHkNZqERn8Ow0wjaXzc3lyqgqXMfCavEhJtY=;
-        b=N1U35fPGpqWEdQgblWMDdbVZiyeJUsBl73ZHEkhSLtYN3fhVpLZlyVETAUcRlvg7bh
-         VA2XJUC9m3UXpHHJYhwe/0jR0feqS6a7D0b6lDwVi6EIg3d5Y+u5hNFrJxcCaYYDuNL5
-         RHnESva4+t4HFzHKHjHcRI3IzJO16jnusEXKFob3TMmwICSvvYn2+dnQT8+FHcR0ZZtX
-         dB4bLQ+7jOZsK8XUoFz6f9NKBK0C23aOZmUI8sJG6AWL23wCW/w90HiAhfhcWPviQeGq
-         yKbVCCH0NpnAnR2mtXY2tzVwdIKrX1JoRR8c25kSneihE7G0lbjHl+3Q0U1EZuODwdC+
-         gWag==
-X-Gm-Message-State: ACrzQf2WdVUMRSTFMz4uGAVc2yV+HlWn45dYEQ/b8PguTYZcZvkpM168
-        pppDbh+kInAZi2yGpBvfW+yChkoPp/A=
-X-Google-Smtp-Source: AMsMyM63y+ZAyDVuiNe57GaYzJpX0zfKOHIMdAmdRcLvqUT30aH7rhdhTFkoPlNGah14pDgMX8U/OQ==
-X-Received: by 2002:a17:90a:13c8:b0:200:17ca:f183 with SMTP id s8-20020a17090a13c800b0020017caf183mr4329771pjf.104.1663156392497;
-        Wed, 14 Sep 2022 04:53:12 -0700 (PDT)
-Received: from hcl-ThinkPad-T495 ([2401:4900:1ce3:4f78:48c4:2ac5:ccad:657d])
-        by smtp.gmail.com with ESMTPSA id f189-20020a6238c6000000b00540e3cbf6c1sm9809854pfa.180.2022.09.14.04.53.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 14 Sep 2022 04:53:12 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 17:23:07 +0530
-From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH v3] ARM: dts: aspeed: yosemit V2: Disable the EEPROM driver
-Message-ID: <20220914115307.GA339@hcl-ThinkPad-T495>
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=SyPBTrJvHzMyaHLtvwyxvW+j90fbMR931wFMQdu37/o=;
+        b=VAnjeW9IJRmSN3qFh9nk6ifmnlz/l4+KwhRr32pgY6lLgmfGWjkbY5hnc/7417R30Q
+         u6hr2pwxJuJc0qtDFiaFNxmRcQu/X2aiXmd6nGSImDphq7QIiTmCKVUkjw9Q+6yhKKJj
+         aFO5Tmad7uPYq/75IsTwrnKVRz5ZgIhDgnOodFOe/wbs+URfK216VPjeX09iGjtMF0Ho
+         0UO3EYnIZXl3UDST7SdSsWDNSQXK18kAtPfVMmWK94isYQ1LmVQ743+8BRBLkXNUng2D
+         3AA6xUduQ+zJTrAPIMkPq6P5YWK2zlzEm8pokfkQww9HqMOo2pcS6xWQhhmikble6ekh
+         IS1Q==
+X-Gm-Message-State: ACgBeo348A0Glh2Sng2Q2loplVa1ucZq5UBZVizuprjQ1ITt6whlZ6fD
+        2YdqU+pbuy/1VcFkqtYwfUc=
+X-Google-Smtp-Source: AA6agR7HMGDwDBAbBTgUT/pwa8dlEi72q6ixKfarSZZfGWkX7uH9vOdKskGexIeULnCicwW5B9SFbg==
+X-Received: by 2002:a05:600c:4a9a:b0:3b4:78ab:bae5 with SMTP id b26-20020a05600c4a9a00b003b478abbae5mr2918176wmp.114.1663156505798;
+        Wed, 14 Sep 2022 04:55:05 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600c47c400b003a541d893desm15968258wmo.38.2022.09.14.04.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 04:55:04 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 12:55:03 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-next@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: build failure of next-20220914 due to 64c11570d64d ("f2fs: fix to do
+ sanity check on summary info")
+Message-ID: <YyHBF99sC/vQdI3v@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removed NIC EEPROM driver IPMB-12 channel and enabled it as
-generic i2c EEPROM.
+Hi All,
 
----
---- v3- Updated the title and commit
---- v2- Updated the title
---- v1- Initial draft
----
+The builds of arm64 allmodconfig with clang have failed to build
+next-20220914 with the error:
 
-Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
----
- arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 6 ------
- 1 file changed, 6 deletions(-)
+fs/f2fs/recovery.c:509:17: error: variable 'ino' is uninitialized when used here [-Werror,-Wuninitialized]
+                        ofs_in_node, ino, nid, max_addrs);
+                                     ^~~
+fs/f2fs/f2fs.h:2376:35: note: expanded from macro 'f2fs_err'
+        f2fs_printk(sbi, KERN_ERR fmt, ##__VA_ARGS__)
+                                         ^~~~~~~~~~~
+fs/f2fs/recovery.c:475:11: note: initialize the variable 'ino' to silence this warning
+        nid_t ino, nid;
+                 ^
+                  = 0
+1 error generated.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-index 8864e9c312a8..2293f10e94d6 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-@@ -207,12 +207,6 @@
- 
- &i2c12 {
- 	status = "okay";
--	//MEZZ_FRU
--	eeprom@51 {
--		compatible = "atmel,24c64";
--		reg = <0x51>;
--		pagesize = <32>;
--	};
- };
- 
- &pwm_tacho {
+git bisect pointed to 64c11570d64d ("f2fs: fix to do sanity check on summary info").
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
 -- 
-2.17.1
-
+Regards
+Sudip
