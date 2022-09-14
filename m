@@ -2,115 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DDD5B896D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7325B8973
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiINNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S229847AbiINNsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiINNr3 (ORCPT
+        with ESMTP id S229824AbiINNsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:47:29 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC8B75FCD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663163243; x=1694699243;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AbbpJQRoHzCPC9FuDp2OOdePPV7CP5RMw0+tM19yp94=;
-  b=fNoxgeZ3yh3Tjkofrq1Uac1pVZRyuEACPAygx84Bsdi+6Rqm9Mo7OGC4
-   56CjZ56kK84RkcjTlVY8p7Mxl5EQnlV4pEZShcJS5wCVJjKga+sYg0ZLI
-   ljWRP8n/j+lRFBi3y6+FBFSyiM90TMjiklHkL+FVCeJvOUv2TSSTRnnvE
-   168Z4P30dNBpi8dDhcAPTNxZM1yKDmGtCs4yvoVQAjK0bS7zCR1VFH1Jm
-   UBp1PWMqjy3vP/64frhSUqWwGgQY3kWG884Po/dUxPgWMOrgrou8Tq4+F
-   IyRuS5APsUL/k7jsQZMr8d0D64byXxLiEsPeAZfiBSO2F5QOO7HD8z+tE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299245682"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="299245682"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:47:22 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="647396551"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.25.8]) ([10.213.25.8])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:47:19 -0700
-Message-ID: <acfbd345-e0e8-263c-ac7e-06d8419cdc90@intel.com>
-Date:   Wed, 14 Sep 2022 15:47:16 +0200
+        Wed, 14 Sep 2022 09:48:05 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F46A73918;
+        Wed, 14 Sep 2022 06:47:47 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MSM7v3WRLz67xfT;
+        Wed, 14 Sep 2022 21:46:51 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 14 Sep 2022 15:47:45 +0200
+Received: from [10.48.151.55] (10.48.151.55) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 14:47:43 +0100
+Message-ID: <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
+Date:   Wed, 14 Sep 2022 14:47:43 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Fix return type of mode_valid
- function hook
-Content-Language: en-US
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>, llvm@lists.linux.dev,
-        Dan Carpenter <error27@gmail.com>,
-        David Airlie <airlied@linux.ie>, Tom Rix <trix@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-References: <20220913205531.155046-1-nhuck@google.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20220913205531.155046-1-nhuck@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RESEND PATCH v12 1/3] perf tool: arm: Refactor event list
+ iteration in auxtrace_record__init()
+To:     Yicong Yang <yangyicong@huawei.com>, <acme@kernel.org>,
+        <peterz@infradead.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <mathieu.poirier@linaro.org>, <mark.rutland@arm.com>,
+        <suzuki.poulose@arm.com>, <jonathan.cameron@huawei.com>,
+        <mike.leach@linaro.org>
+CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <lorenzo.pieralisi@arm.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <mingo@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <prime.zeng@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>,
+        <liuqi6124@gmail.com>
+References: <20220914075925.48549-1-yangyicong@huawei.com>
+ <20220914075925.48549-2-yangyicong@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220914075925.48549-2-yangyicong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.48.151.55]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.09.2022 22:55, Nathan Huckleberry wrote:
-> All of the functions used for intel_dvo_dev_ops.mode_valid have a return
-> type of enum drm_mode_status, but the mode_valid field in the struct
-> definition has a return type of int.
+On 14/09/2022 08:59, Yicong Yang wrote:
+> From: Qi Liu <liuqi115@huawei.com>
 > 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definitions do not match the function hook definition.
+> Add find_pmu_for_event() and use to simplify logic in
+> auxtrace_record_init(). find_pmu_for_event() will be
+> reused in subsequent patches.
 > 
-> The return type of the mode_valid field should be changed from int to
-> enum drm_mode_status.
-> 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-
-Regards
-Andrzej
-
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->   drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   tools/perf/arch/arm/util/auxtrace.c | 53 ++++++++++++++++++-----------
+>   1 file changed, 34 insertions(+), 19 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> index d96c3cc46e50..50205f064d93 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> +++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> @@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
->   	 *
->   	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
->   	 */
-> -	int (*mode_valid)(struct intel_dvo_device *dvo,
-> -			  struct drm_display_mode *mode);
-> +	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
-> +					   struct drm_display_mode *mode);
+> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+> index 5fc6a2a3dbc5..384c7cfda0fd 100644
+> --- a/tools/perf/arch/arm/util/auxtrace.c
+> +++ b/tools/perf/arch/arm/util/auxtrace.c
+> @@ -50,16 +50,32 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>   	return arm_spe_pmus;
+>   }
 >   
->   	/*
->   	 * Callback for preparing mode changes on an output
+> +static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
+> +					   int pmu_nr, struct evsel *evsel)
+> +{
+> +	int i;
+> +
+> +	if (!pmus)
+> +		return NULL;
+> +
+> +	for (i = 0; i < pmu_nr; i++) {
+> +		if (evsel->core.attr.type == pmus[i]->type)
+> +			return pmus[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>   struct auxtrace_record
+>   *auxtrace_record__init(struct evlist *evlist, int *err)
+>   {
+> -	struct perf_pmu	*cs_etm_pmu;
+> +	struct perf_pmu	*cs_etm_pmu = NULL;
+> +	struct perf_pmu **arm_spe_pmus = NULL;
+>   	struct evsel *evsel;
+> -	bool found_etm = false;
+> +	struct perf_pmu *found_etm = NULL;
+>   	struct perf_pmu *found_spe = NULL;
+> -	struct perf_pmu **arm_spe_pmus = NULL;
+> +	int auxtrace_event_cnt = 0;
+>   	int nr_spes = 0;
+> -	int i = 0;
+>   
+>   	if (!evlist)
+>   		return NULL;
+> @@ -68,24 +84,23 @@ struct auxtrace_record
+>   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+>   
+>   	evlist__for_each_entry(evlist, evsel) {
+> -		if (cs_etm_pmu &&
+> -		    evsel->core.attr.type == cs_etm_pmu->type)
+> -			found_etm = true;
+> -
+> -		if (!nr_spes || found_spe)
+> -			continue;
+> -
+> -		for (i = 0; i < nr_spes; i++) {
+> -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
+> -				found_spe = arm_spe_pmus[i];
+> -				break;
+> -			}
+> -		}
+> +		if (cs_etm_pmu && !found_etm) 
+> +			found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
+> +
+> +		if (arm_spe_pmus && !found_spe)
+> +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
+
+should you break if found_etm and found_spe are set? Or, indeed, error 
+and return directly as we do below? Indeed, I am not sure why you even 
+require auxtrace_event_cnt
+
+>   	}
+> +
+>   	free(arm_spe_pmus);
+>   
+> -	if (found_etm && found_spe) {
+> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> +	if (found_etm)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (found_spe)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (auxtrace_event_cnt > 1) {
+> +		pr_err("Concurrent AUX trace operation not currently supported\n");
+>   		*err = -EOPNOTSUPP;
+>   		return NULL;
+>   	}
 
