@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9515B8CEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088745B8CF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiINQ13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S229864AbiINQ1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiINQ0n (ORCPT
+        with ESMTP id S229962AbiINQ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A0A7E037;
-        Wed, 14 Sep 2022 09:26:41 -0700 (PDT)
+        Wed, 14 Sep 2022 12:26:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95A761B28;
+        Wed, 14 Sep 2022 09:26:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43EF4B8171B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 520F3B81729;
         Wed, 14 Sep 2022 16:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F08C4315F;
-        Wed, 14 Sep 2022 16:26:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D955C43163;
+        Wed, 14 Sep 2022 16:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663172798;
-        bh=paVqUMRBQw9kTTDsBjch9ckYDPbckCXhP60LUyZoBiE=;
+        s=k20201202; t=1663172799;
+        bh=gyqKYHrvHRnv0O3jGyy9VqESKScQm5ejKkMljOJbTww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s52mFYDnriTA62zIeNSjL/p+m9YQAw/9vZE4YGuphHL6NP6yDaAKrOJ53dAicmj46
-         pK+Y10NAiojuETsnqfUtuBZ0/KSS6B9R66Goq0k5CSwtuSqbTLKey/A68o2E/z2yd8
-         y7wCnfN9vverKdJ0MSZJjTf14nPtRpoH7xqI7z0yMinuqUP3ctDZDMpAGQqUDqoAwq
-         j/0OXLX00tBebvbPyz2DogdhS0sJqAqLUKMPtSzwt0Qt8ssxXVmJFyybB3ZstcqLs1
-         wBq8r6JaWADW/9y9KJOl6QTYCY1r0VBCKS/KHXSNy+jQkC5/d8w2vO+yC5a3N4hGNG
-         x8pcINVAV4rlg==
+        b=b/oZe0stNZf80i61FN7tDobvN/UpkiE4wYo9iNgM+S9wOmlQVfNzYlm3SVOeSw9gu
+         WW7wNop9wrnZ3jlblS8pUB/aj+nAtpJkkrq5cRiNYxZclqlLAJMp5XVsqhGh2Y1Dg1
+         PQhOOy3TPrYwA+Mqe6hTxFBnFE/IviqdOule94TuA64k6+hTio61VE3oOLhAcI4W6m
+         wjiqA7jVIj/To2FYtBjsl3RQvnhbyTET0J0PjcjgrY+XIwv7/seSMpGCFaxP23raRB
+         Fq31qvopjxnpNHSVMPx15wY/5WhBjhw4GiJmbHPw+J5HIy3VZkz92yiHSNICNqeWEh
+         ZLcTXYIwQ2/1A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oYVDk-0001ep-3H; Wed, 14 Sep 2022 18:26:40 +0200
+        id 1oYVDk-0001et-5X; Wed, 14 Sep 2022 18:26:40 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -45,9 +45,9 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 08/11] phy: qcom-qmp-pcie: drop unused legacy DT workaround
-Date:   Wed, 14 Sep 2022 18:25:42 +0200
-Message-Id: <20220914162545.6289-9-johan+linaro@kernel.org>
+Subject: [PATCH 09/11] phy: qcom-qmp-combo: drop unused legacy DT workaround
+Date:   Wed, 14 Sep 2022 18:25:43 +0200
+Message-Id: <20220914162545.6289-10-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220914162545.6289-1-johan+linaro@kernel.org>
 References: <20220914162545.6289-1-johan+linaro@kernel.org>
@@ -69,23 +69,23 @@ specify register regions for the second lane of some dual-lane PHYs.
 
 At the time, the only two dual-lane PHYs supported by mainline were
 "qcom,sdm845-qmp-usb3-phy" and "qcom,sdm845-qmp-ufs-phy", neither
-of which is a PCIe PHY.
+of which is a combo PHY.
 
 Drop the workaround for malformed devicetrees, which should no longer be
 needed since the QMP driver split.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 27 ++++++------------------
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 27 +++++------------------
  1 file changed, 6 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index e6636700871c..4939edcd8cb1 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -38,9 +38,6 @@
- 
- #define PHY_INIT_COMPLETE_TIMEOUT		10000
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index 1d55892c6575..b5dde7f06ea9 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -66,9 +66,6 @@
+ #define POWER_DOWN_DELAY_US_MIN			10
+ #define POWER_DOWN_DELAY_US_MAX			11
  
 -/* Define the assumed distance between lanes for underspecified device trees. */
 -#define QMP_PHY_LEGACY_LANE_STRIDE		0x400
@@ -93,9 +93,9 @@ index e6636700871c..4939edcd8cb1 100644
  struct qmp_phy_init_tbl {
  	unsigned int offset;
  	unsigned int val;
-@@ -2270,28 +2267,16 @@ static int qmp_pcie_create(struct device *dev, struct device_node *np, int id,
- 	if (IS_ERR(qphy->pcs))
- 		return PTR_ERR(qphy->pcs);
+@@ -2729,28 +2726,16 @@ static int qmp_combo_create(struct device *dev, struct device_node *np, int id,
+ 	if (cfg->pcs_usb_offset)
+ 		qphy->pcs_usb = qphy->pcs + cfg->pcs_usb_offset;
  
 -	/*
 -	 * If this is a dual-lane PHY, then there should be registers for the
