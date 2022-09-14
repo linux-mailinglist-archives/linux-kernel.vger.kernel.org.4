@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE815B8E82
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3DE5B8E86
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiINSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S229925AbiINSFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINSCr (ORCPT
+        with ESMTP id S229457AbiINSFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:02:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B09F85FC5;
-        Wed, 14 Sep 2022 11:02:46 -0700 (PDT)
+        Wed, 14 Sep 2022 14:05:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437A5C46;
+        Wed, 14 Sep 2022 11:05:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F798B81263;
-        Wed, 14 Sep 2022 18:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A323AC433C1;
-        Wed, 14 Sep 2022 18:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663178564;
-        bh=DFrj65FfhHvaGVV8MOsLEULW7fyDhsFLLDg8lIAW9Yg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OdbzzXcdA1LfDCQ3uEOQzDAqFKHpCSJioMRbi5O1uJCY+jOl36WeskkZVPrxuJjQ7
-         nX5bPnEmDUCyOHa3ZbnWIoPSGxITtORllMgFDSDuuhjC9OL0tD3l5UvwPM4bpmjI38
-         CzCASrPRC3sp7mDkj4h6MZD/DQQGIhDNHFmathRg=
-Date:   Wed, 14 Sep 2022 20:03:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     mw@semihalf.com, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        stable <stable@kernel.org>
-Subject: Re: [PATCH net] net: mvpp2: debugfs: fix memory leak when using
- debugfs_lookup()
-Message-ID: <YyIXXJmEmKEBtvYy@kroah.com>
-References: <20220902134111.280657-1-gregkh@linuxfoundation.org>
- <YyC2GGbzEuCuZzMk@shell.armlinux.org.uk>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF54161DD9;
+        Wed, 14 Sep 2022 18:05:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EDD9C433D6;
+        Wed, 14 Sep 2022 18:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663178708;
+        bh=e2slHSgeoUgIh3zoiTFJXIXJMSZ4aPFjE289S3cMQXc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=CtRKZzYcmdo9mBSod6ZxSQ9g/KI0FkHzt63GRo9Z5DDOVT5i9b/Gz3YIRgJvTb+V+
+         I0wtOcGf5epD8SP8k63ozUjFRZe39PFNghx5I+UYQa1nmthhRT0bOZZ3q82isApGL1
+         /xyvHo5LZMTR9y4dapbH32H8Y29c7n1kH4cAh2IOo/Vm7Kx2XiZA6mM6tZHpQqu6/p
+         uYlXXcVqpYyI0aVHJT0oTej5Heg9JyY+do6Qz9p68+nNA7+WdjJcWqHdN2LiPCgFQr
+         xomfQcBAI0WsHa8zm2gETtS7zRs0e24stjyb4zwiPcC2eq5p2HvTeFiK5+kH1dGYKW
+         F1gcNlftXe4pw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyC2GGbzEuCuZzMk@shell.armlinux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech> <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech> <20220914155035.88E45C433C1@smtp.kernel.org> <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the maximum
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Date:   Wed, 14 Sep 2022 11:05:06 -0700
+User-Agent: alot/0.10
+Message-Id: <20220914180508.0EDD9C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,49 +67,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 05:55:52PM +0100, Russell King (Oracle) wrote:
-> On Fri, Sep 02, 2022 at 03:41:11PM +0200, Greg Kroah-Hartman wrote:
-> > When calling debugfs_lookup() the result must have dput() called on it,
-> > otherwise the memory will leak over time.  Fix this up to be much
-> > simpler logic and only create the root debugfs directory once when the
-> > driver is first accessed.  That resolves the memory leak and makes
-> > things more obvious as to what the intent is.
-> 
-> To clarify a bit more on the original patch rather than one of the
-> backported stable patches of this.
-> 
-> This patch introduces a bug, whereby if the driver is a module, and
-> is inserted, binds to a device, then is removed and re-inserted,
-> mvpp2_root will be NULL on the first call to mvpp2_dbgfs_init(),
-> so we will attempt to call debugfs_create_dir(). However, the
-> directory was already previously created, so this will fail, and
-> mvpp2_root will be the EEXIST error pointer.
-> 
-> Since we never clean up this directory, the original code does NOT
-> result in a memory leak - since the increase in refcount caused by
-> debugfs_lookup() has absolutely no effect - because we never remove
-> this directory once it's been created.
-> 
-> If the driver /did/ remove the directory when the module is removed,
-> then yes, maybe there's an argument for this fix. However, as things
-> currently stand, this is in no way a fix, but actually introduces a
-> debugfs regression.
-> 
-> Please can the change be reverted in mainline and all stable trees.
+Quoting Stefan Wahren (2022-09-14 10:45:48)
+> Am 14.09.22 um 17:50 schrieb Stephen Boyd:
+> >
+> > Furthermore, I wonder if even that part needs to be implemented.  Why
+> > not make a direct call to rpi_firmware_property() and get the max rate?
+> > All of that can live in the drm driver. Making it a generic API that
+> > takes a 'struct clk' means that it looks like any clk can be passed,
+> > when that isn't true. It would be better to restrict it to the one use
+> > case so that the scope of the problem doesn't grow. I understand that it
+> > duplicates a few lines of code, but that looks like a fair tradeoff vs.
+> > exposing an API that can be used for other clks in the future.
+> it would be nice to keep all the Rpi specific stuff out of the DRM=20
+> driver, since there more users of it.
 
-I never considered the 'rmmod the driver and then load it again' as a
-valid thing to worry about.  And I doubt that many others would either :)
-
-Given that the current code does NOT clean up when it is removed, I
-assumed that no one cared abou this, but yes, it is crazy but the
-current code does work, but it leaks a dentry.  I'll send a follow-on
-patch to do this "correctly" when I return from the Plumbers conference
-next week.
-
-But for now, this patch is correct, and does not leak memory anymore
-like the code without this change currently does, so I think it should
-stay.
-
-thanks,
-
-greg k-h
+Instead of 'all' did you mean 'any'?
