@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4A45B8CF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF4E5B8CFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiINQ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S229916AbiINQ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiINQ0o (ORCPT
+        with ESMTP id S229528AbiINQ2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:26:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFED7D1F3;
-        Wed, 14 Sep 2022 09:26:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6ECFEB81722;
-        Wed, 14 Sep 2022 16:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE82C433D6;
-        Wed, 14 Sep 2022 16:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663172799;
-        bh=tfnzETXoL46I+0ZYezuq5oXUjRiOihWdORJPeaCzAyI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KhaU5K1gDUrpxdV/q6Zxk4Ux1LjfBb5W3CP0WzGxQT43dqN1pgL5JoBwnsCxlGwXd
-         EPHdZd7NbF0CQy/LeYABk1uAyDmAi2DGiMMC8xs/QBQxhKjgJywUlhZJf6yVgAR+bd
-         jPEQGVQwojvWV7ZYmemAeS+QDaHXCwlgnMO7WBE410t9hAiVrLpruJp+c5dQMCz+2D
-         hya+U8WT7NqkIzNKxsYH/FVHcGyLZSM80kDbtyHqeZME5sxhYoCZhyW30POyGl0id3
-         +Pkx7k+IekskzX4XFmYf6q4CFUv1sX4rKL1U7D+/4xIXJ5q4in+oIAdRra7vHIhq/D
-         3XqhqMiyIj/Tg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oYVDk-0001f0-Ad; Wed, 14 Sep 2022 18:26:40 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 11/11] phy: qcom-qmp-usb: drop legacy DT workaround
-Date:   Wed, 14 Sep 2022 18:25:45 +0200
-Message-Id: <20220914162545.6289-12-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220914162545.6289-1-johan+linaro@kernel.org>
-References: <20220914162545.6289-1-johan+linaro@kernel.org>
+        Wed, 14 Sep 2022 12:28:05 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D01E844F4;
+        Wed, 14 Sep 2022 09:27:26 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1225219ee46so42432499fac.2;
+        Wed, 14 Sep 2022 09:27:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zZD8tJ7NCtrHJsbCaNSP87Y3qe7OynbxFKCss/jxB3I=;
+        b=bLDYu1JGbEvYJN7uMWfR1S0F9M66PQD3EL094y77Gs2LGAeM28pvRPEKVSzeCfjkvA
+         YlIizg67ks5xulJq2zWSxRT05VMuflKI4KSYmb1KXyK0jLF4nSUjZLKKzb4Jew1libA8
+         hDy5X+jAD50eUoLx80G4N0DZbwHGMcGDm/FkB10+snerpKeh2IaW5x0B2CpT1/pCOOGl
+         +wisL5b3ak8iVW0BlOIJNpITi8P1K9t+7CRFtAd69HeIWoHfqNlsduP9s2tPaunFMTfp
+         Vk3OQCSNL23znCqg9+aKrHPeBUqJMp8wmYzIkasdZ9WTbP5ZaC3gAHetucCYa8UItJWt
+         gAJA==
+X-Gm-Message-State: ACgBeo25sYwWWC0mWGi4vsqW00RJzJW/fPHiZqV9y328GNbd/WAB5kka
+        74k8fvqQvwxGtqLl53BuJA==
+X-Google-Smtp-Source: AA6agR508A59RRasBqGG0pg5H5/FqMmo9DiIAClotXDA1a4zQTOyhkP1kMxVLkm7CrmxQf7x66/I2A==
+X-Received: by 2002:a05:6870:34d:b0:127:cb87:a169 with SMTP id n13-20020a056870034d00b00127cb87a169mr2787895oaf.87.1663172845636;
+        Wed, 14 Sep 2022 09:27:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g9-20020a056830160900b00655d9ea896bsm5587940otr.47.2022.09.14.09.27.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 09:27:25 -0700 (PDT)
+Received: (nullmailer pid 2501100 invoked by uid 1000);
+        Wed, 14 Sep 2022 16:27:24 -0000
+Date:   Wed, 14 Sep 2022 11:27:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        chen.zhong@mediatek.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: input: Convert mtk-pmic-keys to DT
+ schema
+Message-ID: <20220914162724.GA2500989-robh@kernel.org>
+References: <20220914103021.43593-1-angelogioacchino.delregno@collabora.com>
+ <20220914103021.43593-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914103021.43593-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,73 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5e17b95d9893 ("phy: qcom-qmp: Utilize fully-specified DT
-registers") added a workaround for legacy devicetrees which did not
-specify register regions for the second lane of some dual-lane PHYs.
+On Wed, 14 Sep 2022 12:30:20 +0200, AngeloGioacchino Del Regno wrote:
+> Convert the mtk-pmic-keys to DT schema format.
+> 
+> The old binding was missing documentation for key press/release
+> interrupts, even though it was supported in hardware and driver,
+> so support for the same was added during the conversion.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/input/mediatek,pmic-keys.yaml    | 113 ++++++++++++++++++
+>  .../bindings/input/mtk-pmic-keys.txt          |  46 -------
+>  2 files changed, 113 insertions(+), 46 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+> 
 
-At the time, the only two dual-lane PHYs supported by mainline were
-"qcom,sdm845-qmp-usb3-phy" and "qcom,sdm845-qmp-ufs-phy" and they had
-been added to the binding less than six months before the binding was
-fixed.
-
-Presumably no one is using four-year old SDM845 dtbs with mainline
-anymore so drop the workaround for malformed devicetrees. In the
-unlikely event that anyone complains, we can consider reverting.
-
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 27 ++++++-------------------
- 1 file changed, 6 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 768ece8e9076..93f2c7428ac7 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -66,9 +66,6 @@
- #define POWER_DOWN_DELAY_US_MIN			10
- #define POWER_DOWN_DELAY_US_MAX			11
- 
--/* Define the assumed distance between lanes for underspecified device trees. */
--#define QMP_PHY_LEGACY_LANE_STRIDE		0x400
--
- struct qmp_phy_init_tbl {
- 	unsigned int offset;
- 	unsigned int val;
-@@ -2642,28 +2639,16 @@ int qmp_usb_create(struct device *dev, struct device_node *np, int id,
- 	if (cfg->pcs_usb_offset)
- 		qphy->pcs_usb = qphy->pcs + cfg->pcs_usb_offset;
- 
--	/*
--	 * If this is a dual-lane PHY, then there should be registers for the
--	 * second lane. Some old device trees did not specify this, so fall
--	 * back to old legacy behavior of assuming they can be reached at an
--	 * offset from the first lane.
--	 */
- 	if (cfg->is_dual_lane_phy) {
- 		qphy->tx2 = devm_of_iomap(dev, np, 3, NULL);
--		qphy->rx2 = devm_of_iomap(dev, np, 4, NULL);
--		if (IS_ERR(qphy->tx2) || IS_ERR(qphy->rx2)) {
--			dev_warn(dev,
--				 "Underspecified device tree, falling back to legacy register regions\n");
-+		if (IS_ERR(qphy->tx2))
-+			return PTR_ERR(qphy->tx2);
- 
--			/* In the old version, pcs_misc is at index 3. */
--			qphy->pcs_misc = qphy->tx2;
--			qphy->tx2 = qphy->tx + QMP_PHY_LEGACY_LANE_STRIDE;
--			qphy->rx2 = qphy->rx + QMP_PHY_LEGACY_LANE_STRIDE;
--
--		} else {
--			qphy->pcs_misc = devm_of_iomap(dev, np, 5, NULL);
--		}
-+		qphy->rx2 = devm_of_iomap(dev, np, 4, NULL);
-+		if (IS_ERR(qphy->rx2))
-+			return PTR_ERR(qphy->rx2);
- 
-+		qphy->pcs_misc = devm_of_iomap(dev, np, 5, NULL);
- 	} else {
- 		qphy->pcs_misc = devm_of_iomap(dev, np, 3, NULL);
- 	}
--- 
-2.35.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
