@@ -2,315 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA565B8FD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 22:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A105B8FDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiINU7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 16:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S229608AbiINVA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 17:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiINU7n (ORCPT
+        with ESMTP id S229498AbiINVAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 16:59:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A25DF99;
-        Wed, 14 Sep 2022 13:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663189181; x=1694725181;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GMGUF2YUT7R8DDXSnvaI+2DZGCJatg+6nd152nyIvcg=;
-  b=E68YEXYJt/Cfe9xqLT7KrS6zWp/7UW2+6l1MRxkmiolNR67HWqweeSpb
-   dINE5SKQOL2nWD7ejtXEPaxYNRZpf86SAbmSatXLYt85SYPkEAN9C3INR
-   WHwKqKsKyDM2qLgwa3DA+qSZlMfEYUDqkwEyi9q15w+FMdJW92UUSyujY
-   2X7ELWOsWERPyNzF64VU9B2ZYTB4snXe4nKaLWdyvZjHtfBm/OD3Iaoab
-   VaMyrP+sM7O6uzW/i6tOpHCD3c8MSfI/SjyzLF1rHRBZTzd6mskBlgmbh
-   WgM3XOgTu08EburZ1+KEREZN48V0+HG5KlGwwtkG/5sJkKQ0vcjSP8LR9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324797640"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="324797640"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 13:59:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="612642821"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 14 Sep 2022 13:59:41 -0700
-Received: from jtlang-mobl.amr.corp.intel.com (unknown [10.209.111.79])
-        by linux.intel.com (Postfix) with ESMTP id 0EC10580C37;
-        Wed, 14 Sep 2022 13:59:41 -0700 (PDT)
-Message-ID: <c3f69569e7693ec9e04c388ee6c2456c3cbccde0.camel@linux.intel.com>
-Subject: Re: [PATCH V6 3/3] PCI: vmd: Configure PCIe ASPM and LTR
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com,
-        michael.a.bottini@linux.intel.com, rafael@kernel.org,
-        me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 14 Sep 2022 13:59:35 -0700
-In-Reply-To: <20220826170133.GA2933821@bhelgaas>
-References: <20220826170133.GA2933821@bhelgaas>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 14 Sep 2022 17:00:52 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CCF754B1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:00:50 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id n81so12927497iod.6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=F0XVjfoKHP+OTYQ82bFgm1NTW9Uts87VD6ivnlOEVVk=;
+        b=T828Zm1P4W0m3y/FZrxNIRdJ04GyBvfBtyrjBpQ6PS3iRh4EoUYJ33eF85iXwdakkb
+         Lor83qEZOLy8+rL0dFH3dXrcjWptShSbcG1g4/T30sJkXkwoNkZshdhhgXfX38SzxOea
+         /nl5dOJNmmr4aBteO5lEgPZaqG+rXsJ7HEOmU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=F0XVjfoKHP+OTYQ82bFgm1NTW9Uts87VD6ivnlOEVVk=;
+        b=TednCabewwK359Noxjr5QuZ1apYF7X1oeaDb0eua1OaSP/NXm+ZUInBrgOedctAM2k
+         3yAN7E8RwICisqy96ycLiUhy52pC4C+7O26iK8RBOqI6pvmPwFRudg13mg8pDv8Z+MW6
+         PGzLt4x0NENfnNMyUzhxTomYMrmZEzRdx88VmkH7E9U3Uev2GqtOV3m2HKQAn3FqevTu
+         CiVnluZpI08iRjZSMSmYmUC/9UwOyABy6xtP88GYQHiDAjWnlGQH01F1THRj0RERUfyT
+         JLxgjFPhmmd3cpFrKVZ/Lyvfx91C9s17CeOph46qR74Xy+wnlT7j2czaaWNyAM9TydU6
+         zoWw==
+X-Gm-Message-State: ACgBeo3uOdbIu97w36f/o7v13vim6YBPqNLM5J54wT8PZpSk25VTEKVb
+        K3v3NPxCZlE/UR1X7WerxOEz1Vmze1l4dQ==
+X-Google-Smtp-Source: AA6agR4bSReYD27/P6jXziR2Vao7kJEaLk/xlaEnCthSbxXiLrugPfOExyHz60PiCpWFK90imBbgwQ==
+X-Received: by 2002:a02:84ab:0:b0:34c:d88d:f5b5 with SMTP id f40-20020a0284ab000000b0034cd88df5b5mr19433706jai.200.1663189249083;
+        Wed, 14 Sep 2022 14:00:49 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id p5-20020a022905000000b0034c0dc8b107sm132676jap.84.2022.09.14.14.00.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 14:00:45 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id b23so13224164iof.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:00:45 -0700 (PDT)
+X-Received: by 2002:a05:6638:4110:b0:35a:6d6b:57f7 with SMTP id
+ ay16-20020a056638411000b0035a6d6b57f7mr1984073jab.134.1663189244533; Wed, 14
+ Sep 2022 14:00:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220912221317.2775651-1-rrangel@chromium.org>
+ <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <YyFslxMchzntebVb@black.fi.intel.com>
+In-Reply-To: <YyFslxMchzntebVb@black.fi.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Wed, 14 Sep 2022 15:00:20 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30AhQOxUBtbs8enUnGkBbtPYAN=_6vDV-9CcuMLMypZhtg@mail.gmail.com>
+Message-ID: <CAHQZ30AhQOxUBtbs8enUnGkBbtPYAN=_6vDV-9CcuMLMypZhtg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-Sorry for the delay. I'm just back from an extended leave.
-
-On Fri, 2022-08-26 at 12:01 -0500, Bjorn Helgaas wrote:
-> On Mon, Feb 28, 2022 at 08:19:43PM -0800, David E. Box wrote:
-> > PCIe ports reserved for VMD use are not visible to BIOS and therefore not
-> > configured to enable PCIE ASPM.
-> > Additionally, PCIE LTR values may be left unset since BIOS will set
-> > a default maximum LTR value on endpoints to ensure that they don't
-> > block SoC power management.
-> 
-> If the ports aren't visible to BIOS, I assume BIOS doesn't configure
-> *anything*, including LTR.  This sentence seems like it has a little
-> too much information; if BIOS doesn't see the ports, LTR, SoC power
-> management, etc., is not relevant.
-
-It's mentioned as an explanation for why the patch also programs LTR values.
-
-> 
-> > Lack of this programming results in high power consumption on
-> > laptops as reported in bugzilla [1].
-> > For currently affected products, use pci_enable_default_link_state to set
-> > the allowed link states for devices on the root ports.
-> 
-> "Currently affected products" makes me wonder about the *other*
-> products?  Seems like we should handle *all* VMD devices the same way.
-
-Well it affects Rocket Lake, Tiger Lake, and Alder Lake. It partially affects
-Raptor Lake because we were able to have BIOS implement a solution to program
-the LTR values. The plan is to use the same method to also program ASPM by
-Meteor Lake and future products. So we do intend this to be a quirk for current
-platforms, not a permanent solution.
-
-> > Also set the LTR value to the maximum value needed for the SoC. Per
-> > the VMD hardware team future products using VMD will enable BIOS
-> > configuration of these capabilities. This solution is a workaround
-> > for current products that mainly targets laptops.
-> 
-> I guess the cover letter has a little more background on this,
-> although I don't understand how talking to the Intel BIOS team can
-> solve this for *all* vendors using these parts.
-> 
-> > Support is not provided if a switch used nor for hotplug.
-> 
-> What switch are you referring to?
-
-An expansion switch added between the root port and the downstream device.
-
->   What is the hotplug scenario?  Are
-> VMD ports hot-pluggable? I assumed they were built into the Root
-> Complex and not hot-pluggable.
-
-I understand that they can be hot-pluggable. But the focus of the patch is to
-address high power consumption on laptop systems since this is where we have
-bugs reported. I don't know that it's worth the effort to make this work with
-hot-plug.
-
-> 
-> s/PCIE/PCIe/ several times above so they're all consistent.
-> 
-> s/pci_enable_default_link_state/pci_enable_default_link_state()/ so it
-> looks like a function.
-> 
-> That's a big block of text; maybe could be 2-3 paragraphs.
-
-Ack
-
-> 
-> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
-> > 
-> > Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+On Tue, Sep 13, 2022 at 11:54 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Mon, Sep 12, 2022 at 04:13:11PM -0600, Raul E Rangel wrote:
+> > Device tree already has a mechanism to pass the wake_irq. It does this
+> > by looking for the wakeup-source property and setting the
+> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> > ACPI interrupt wake flag to determine if the interrupt can be used to
+> > wake the system. Previously the i2c drivers had to make assumptions and
+> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> > If there is a device with an Active Low interrupt and the device gets
+> > powered off while suspending, the interrupt line will go low since it's
+> > no longer powered and wakes the system. For this reason we should
+> > respect the board designers wishes and honor the wake bit defined on the
+> > interrupt.
+> >
+> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 > > ---
-> >  V6
-> >   - Set ASPM first before setting LTR. This is needed because some
-> >     devices may only have LTR set by BIOS and not ASPM
-> >   - Skip setting the LTR if the current LTR in non-zero.
-> >  V5
-> >   - Provide the LTR value as driver data.
-> >   - Use DWORD for the config space write to avoid PCI WORD access bug.
-> >   - Set ASPM links firsts, enabling all link states, before setting a
-> >     default LTR if the capability is present
-> >   - Add kernel message that VMD is setting the device LTR.
-> >  V4
-> >   - Refactor vmd_enable_apsm() to exit early, making the lines shorter
-> >     and more readable. Suggested by Christoph.
-> >  V3
-> >   - No changes
-> >  V2
-> >   - Use return status to print pci_info message if ASPM cannot be enabled.
-> >   - Add missing static declaration, caught by lkp@intel.com
-> > 
-> >  drivers/pci/controller/vmd.c | 66 +++++++++++++++++++++++++++++++++---
-> >  1 file changed, 62 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> > index cde6e2cba210..8525bb8312f2 100644
-> > --- a/drivers/pci/controller/vmd.c
-> > +++ b/drivers/pci/controller/vmd.c
-> > @@ -67,10 +67,19 @@ enum vmd_features {
-> >  	 * interrupt handling.
-> >  	 */
-> >  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-> > +
-> > +	/*
-> > +	 * Enable ASPM on the PCIE root ports and set the default LTR of the
-> > +	 * storage devices on platforms where these values are not configured by
-> > +	 * BIOS. This is needed for laptops, which require these settings for
-> > +	 * proper power management of the SoC.
-> > +	 */
-> > +	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
+> >
+> > Changes in v2:
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> >
+> >  drivers/i2c/i2c-core-acpi.c | 37 ++++++++++++++++++++++++++++---------
+> >  drivers/i2c/i2c-core-base.c |  6 +++++-
+> >  drivers/i2c/i2c-core.h      |  4 ++--
+> >  3 files changed, 35 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > index c762a879c4cc6b..c3d69b287df824 100644
+> > --- a/drivers/i2c/i2c-core-acpi.c
+> > +++ b/drivers/i2c/i2c-core-acpi.c
+> > @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
+> >       {}
 > >  };
-> >  
-> >  struct vmd_device_data {
-> >  	enum vmd_features features;
-> > +	u16 ltr;
-> >  };
-> >  
-> >  static DEFINE_IDA(vmd_instance_ida);
-> > @@ -714,6 +723,45 @@ static void vmd_copy_host_bridge_flags(struct
-> > pci_host_bridge *root_bridge,
-> >  	vmd_bridge->native_dpc = root_bridge->native_dpc;
-> >  }
-> >  
-> > +/*
-> > + * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-> > + */
-> > +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
-> > +{
-> > +	struct vmd_device_data *info = userdata;
-> > +	u32 ltr_reg;
-> > +	int pos;
-> > +
-> > +	if (!(info->features & VMD_FEAT_BIOS_PM_QUIRK))
-> > +		return 0;
-> > +
-> > +	pci_enable_default_link_state(pdev, PCIE_LINK_STATE_ALL);
-> > +
-> > +	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-> > +	if (!pos)
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-> > +	 * so the LTR quirk is not needed.
-> > +	 */
-> > +	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
-> > +	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * Set the default values to the maximum required by the platform to
-> > +	 * allow the deepest power management savings. Write as a DWORD where
-> > +	 * the lower word is the max snoop latency and the upper word is the
-> > +	 * max non-snoop latency.
-> > +	 */
-> > +	ltr_reg = (info->ltr << 16) | info->ltr;
-> 
-> The fact that you have to hard-code the LTR values in the driver seems
-> problematic because it requires updates for every new device.  I guess
-> you have to update the driver anyway to add Device IDs.
-> 
-> But surely there should be a firmware interface to discover this
-> platform-specific information?  Does the _DSM for Latency Tolerance
-> Reporting (PCI Firmware spec r3.3, sec 4.6.6) supply this?
-> 
-> We badly need generic support for that _DSM, but the documentation is
-> somewhat lacking.
+> >
 
-Looking at the spec (and at current DSDTs) it looks like that _DSM can be used
-for exactly this purpose. However, proper VMD ACPI support is yet another
-headache for Linux. The AML exists, but uses a different addressing scheme in
-order to hide the devices from normal enumeration. Because of this, there are no
-ACPI companion devices associated with the PCI devices.
+> > +struct i2c_acpi_irq_context {
+> > +     int irq;
+> > +     int wake_capable;
+>
+> Why not bool?
+>
+SGTM
 
-David
 
-> 
-> > +	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
-> > +	pci_info(pdev, "VMD: Default LTR set\n");
+> Also perhaps 'wakeable'?
+>
+
+I kept it as wake_capable since I want to keep some consistency with
+the ACPI nodes.
+
+> > +};
 > > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int vmd_enable_domain(struct vmd_dev *vmd, struct vmd_device_data
-> > *info)
+> >  static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >                             struct i2c_acpi_lookup *lookup)
 > >  {
-> >  	struct pci_sysdata *sd = &vmd->sysdata;
-> > @@ -867,6 +915,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, struct
-> > vmd_device_data *info)
-> >  		pci_reset_bus(child->self);
-> >  	pci_assign_unassigned_bus_resources(vmd->bus);
-> >  
-> > +	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, info);
+> > @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >
+> >  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  {
+> > -     int *irq = data;
+> > +     struct i2c_acpi_irq_context *irq_ctx = data;
+> >       struct resource r;
+> >
+> > -     if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
+> > -             *irq = i2c_dev_irq_from_resources(&r, 1);
+> > +     if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
+> > +             irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
+> > +             irq_ctx->wake_capable =
+> > +                     r.flags & IORESOURCE_IRQ_WAKECAPABLE ? 1 : 0;
+>
+> Then you can just do this:
+>
+>                 irq_ctx->wakeable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+>
+> > +     }
+> >
+> >       return 1; /* No need to add resource to the list */
+> >  }
+> > @@ -182,31 +190,42 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  /**
+> >   * i2c_acpi_get_irq - get device IRQ number from ACPI
+> >   * @client: Pointer to the I2C client device
+> > + * @wake_capable: Set to 1 if the IRQ is wake capable
+> >   *
+> >   * Find the IRQ number used by a specific client device.
+> >   *
+> >   * Return: The IRQ number or an error code.
+> >   */
+> > -int i2c_acpi_get_irq(struct i2c_client *client)
+> > +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+>
+> bool here too
+>
+> >  {
+> >       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+> >       struct list_head resource_list;
+> > -     int irq = -ENOENT;
+> > +     struct i2c_acpi_irq_context irq_ctx = {
+> > +             .irq = -ENOENT,
+> > +             .wake_capable = 0,
+> > +     };
+> >       int ret;
+> >
+> >       INIT_LIST_HEAD(&resource_list);
+> >
+> > +     if (wake_capable)
+> > +             *wake_capable = 0;
+>
+> I think it is better to touch this only after the function succeeds so..
+>
 > > +
-> >  	/*
-> >  	 * VMD root buses are virtual and don't return true on pci_is_pcie()
-> >  	 * and will fail pcie_bus_configure_settings() early. It can instead be
-> > @@ -1016,28 +1066,36 @@ static const struct pci_device_id vmd_ids[] = {
-> >  		(kernel_ulong_t)&(struct vmd_device_data) {
-> >  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> > +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > +				    VMD_FEAT_BIOS_PM_QUIRK,
-> > +			.ltr = 0x1003, /* 3145728 ns */
-> >  		},
-> >  	},
-> >  	{ PCI_VDEVICE(INTEL, 0x4c3d),
-> >  		(kernel_ulong_t)&(struct vmd_device_data) {
-> >  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> > +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > +				    VMD_FEAT_BIOS_PM_QUIRK,
-> > +			.ltr = 0x1003, /* 3145728 ns */
-> >  		},
-> >  	},
-> >  	{ PCI_VDEVICE(INTEL, 0xa77f),
-> >  		(kernel_ulong_t)&(struct vmd_device_data) {
-> >  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> > +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > +				    VMD_FEAT_BIOS_PM_QUIRK,
-> > +			.ltr = 0x1003, /* 3145728 ns */
-> >  		},
-> >  	},
-> >  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
-> >  		(kernel_ulong_t)&(struct vmd_device_data) {
-> >  			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >  				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > -				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> > +				    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > +				    VMD_FEAT_BIOS_PM_QUIRK,
-> > +			.ltr = 0x1003, /* 3145728 ns */
-> >  		},
-> >  	},
-> >  	{ }
-> > -- 
-> > 2.25.1
-> > 
+> >       ret = acpi_dev_get_resources(adev, &resource_list,
+> > -                                  i2c_acpi_add_resource, &irq);
+> > +                                  i2c_acpi_add_resource, &irq_ctx);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> >       acpi_dev_free_resource_list(&resource_list);
+> >
+> > -     if (irq == -ENOENT)
+> > -             irq = acpi_dev_gpio_irq_get(adev, 0);
+> > +     if (irq_ctx.irq == -ENOENT)
+> > +             irq_ctx.irq = acpi_dev_gpio_irq_get_wake(
+> > +                     adev, 0, &irq_ctx.wake_capable);
+> > +
+> > +     if (wake_capable)
+> > +             *wake_capable = irq_ctx.wake_capable;
+>
+> ... here only.
+>
+> >
+> > -     return irq;
+> > +     return irq_ctx.irq;
+> >  }
+> >
+> >  static int i2c_acpi_get_info(struct acpi_device *adev,
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 91007558bcb260..97315b41550213 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -468,6 +468,7 @@ static int i2c_device_probe(struct device *dev)
+> >       struct i2c_client       *client = i2c_verify_client(dev);
+> >       struct i2c_driver       *driver;
+> >       int status;
+> > +     int acpi_wake_capable = 0;
+>
+> You can declare this in the below block instead.
+>
+> >
+> >       if (!client)
+> >               return 0;
+> > @@ -487,7 +488,10 @@ static int i2c_device_probe(struct device *dev)
+> >                       if (irq == -EINVAL || irq == -ENODATA)
+> >                               irq = of_irq_get(dev->of_node, 0);
+> >               } else if (ACPI_COMPANION(dev)) {
+>
+>                         bool wakeable;
+>
+> > -                     irq = i2c_acpi_get_irq(client);
+> > +                     irq = i2c_acpi_get_irq(client, &acpi_wake_capable);
+> > +
+>                         if (irq > 0 && wakeable)
+>                                 client->flags |= I2C_CLIENT_WAKE;
+> >               }
+> >               if (irq == -EPROBE_DEFER) {
+> >                       status = irq;
+> > diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+> > index 87e2c914f1c57b..8e336638a0cd2e 100644
+> > --- a/drivers/i2c/i2c-core.h
+> > +++ b/drivers/i2c/i2c-core.h
+> > @@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
+> >  #ifdef CONFIG_ACPI
+> >  void i2c_acpi_register_devices(struct i2c_adapter *adap);
+> >
+> > -int i2c_acpi_get_irq(struct i2c_client *client);
+> > +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable);
+> >  #else /* CONFIG_ACPI */
+> >  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
+> >
+> > -static inline int i2c_acpi_get_irq(struct i2c_client *client)
+> > +static inline int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+> >  {
+> >       return 0;
+> >  }
+> > --
+> > 2.37.2.789.g6183377224-goog
 
+I'll push out another patch series with all the latest changes.
+
+Thanks for the reviews everyone.
