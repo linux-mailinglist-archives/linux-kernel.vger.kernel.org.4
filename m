@@ -2,71 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEECE5B87BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB3A5B87C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiINMBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        id S229607AbiINMCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiINMBG (ORCPT
+        with ESMTP id S230103AbiINMB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:01:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9544D7D7BF;
-        Wed, 14 Sep 2022 05:00:59 -0700 (PDT)
+        Wed, 14 Sep 2022 08:01:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA6A7EFDE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:01:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C18A961CBE;
-        Wed, 14 Sep 2022 12:00:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7541C433C1;
-        Wed, 14 Sep 2022 12:00:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8919B61591
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A6FC433C1;
+        Wed, 14 Sep 2022 12:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663156858;
-        bh=oKRFavWenN+ytzY8AzXRM7VfgxqFkGOUkxfCZUfKgBg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o8nmeF529De22eXTKQaRKmKJsE7Bsv7cH3fuLKVz7WSV1Fyx0+lvGz0gbNX6S8lGN
-         ie4eMBKADmJz5FD5xp4WNiPbk7K+lCBY0O7Pz7jwCNzyflHNupE28Bu1Ldxwr4QjiR
-         dqJAJ9dVvfxlPV3HepIGKJPHBGtzDVKTct6zebdTxXuYRfRQm4NZ2xH0HfEAnS9e84
-         cu0hwuyqjmqZZSWUfz8P6v9WL38xQ+4oMTjfEof2OFw9jP8M11uAw0NnDZvnSHCnfQ
-         pCyBUO7UKYTq7r82+YjKjOVCyxppNgcbx9kvi2nDjn1Yk7T6Aobo/JY93cQMY3SHRg
-         r1OT49LAe2/7w==
-Message-ID: <8cf54dbe-46af-44ed-8f52-321074912a15@kernel.org>
-Date:   Wed, 14 Sep 2022 20:00:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: build failure of next-20220914 due to 64c11570d64d ("f2fs: fix to
- do sanity check on summary info")
-Content-Language: en-US
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-next@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <YyHBF99sC/vQdI3v@debian>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YyHBF99sC/vQdI3v@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1663156912;
+        bh=zbU7V8GZUYZoodteNkKDgmV8Jfp8ZglHXbHFoYtzxS0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V1UAQySeXAwWk8LsfXZv8KwCxakQyIl0EVcNG1kFmhhe9E6iH5p1CYkSNJ3q+hJ8P
+         kUNsmFvu6mItnBGpJ5hmnV5zFhE4jvBGcgOWnZWUrjm+zaRpG115lmVDIKRm7269/O
+         sQgrDKw5/Ue1Ug2Abc7yTISoitWsx+4vDfpZWwp3cZ5s2LnDhgnjqQVEXkYF7rIlEd
+         emXMq3AYc2dzPMO5t6VcvzsvVaKu4zLBwZcKbS/izaIbPI0H9qP1JTWscT0KJcs9TY
+         ZPueFfgaCMug9t8xUH4naA+Z0Uy2jg/QtWco1ekYVkwx3Kep8tKoNzKybS2LnhkuCY
+         K9qrdQEi8zdXQ==
+Received: from [89.101.193.66] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oYR5S-00ABwB-OQ;
+        Wed, 14 Sep 2022 13:01:50 +0100
+Date:   Wed, 14 Sep 2022 13:01:50 +0100
+Message-ID: <87wna6kvv5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zhang Jianhua <chris.zjh@huawei.com>
+Cc:     <tglx@linutronix.de>, <samuel@sholland.org>, <brgl@bgdev.pl>,
+        <mark.rutland@arm.com>, <lvjianmin@loongson.cn>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] genirq: Change can_request_irq() return value type to bool
+In-Reply-To: <20220914110615.3570933-1-chris.zjh@huawei.com>
+References: <20220914110615.3570933-1-chris.zjh@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 89.101.193.66
+X-SA-Exim-Rcpt-To: chris.zjh@huawei.com, tglx@linutronix.de, samuel@sholland.org, brgl@bgdev.pl, mark.rutland@arm.com, lvjianmin@loongson.cn, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/14 19:55, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
+On Wed, 14 Sep 2022 12:06:15 +0100,
+Zhang Jianhua <chris.zjh@huawei.com> wrote:
 > 
-> The builds of arm64 allmodconfig with clang have failed to build
-> next-20220914 with the error:
+> The function can_request_irq() is used to judge whether the irq can be
+> allocated, so bool type would be more suitable for it.
+> 
+> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+> ---
+>  include/linux/irq.h | 2 +-
+>  kernel/irq/manage.c | 8 ++++----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index c3eb89606c2b..3a60c2313fb9 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -707,7 +707,7 @@ extern void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret);
+>  extern int noirqdebug_setup(char *str);
+>  
+>  /* Checks whether the interrupt can be requested by request_irq(): */
+> -extern int can_request_irq(unsigned int irq, unsigned long irqflags);
+> +extern bool can_request_irq(unsigned int irq, unsigned long irqflags);
+>  
+>  /* Dummy irq-chip implementations: */
+>  extern struct irq_chip no_irq_chip;
+> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+> index 40fe7806cc8c..d6940d15bf56 100644
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -925,19 +925,19 @@ EXPORT_SYMBOL(irq_set_irq_wake);
+>   * particular irq has been exclusively allocated or is available
+>   * for driver use.
+>   */
+> -int can_request_irq(unsigned int irq, unsigned long irqflags)
+> +bool can_request_irq(unsigned int irq, unsigned long irqflags)
+>  {
+>  	unsigned long flags;
+>  	struct irq_desc *desc = irq_get_desc_lock(irq, &flags, 0);
+> -	int canrequest = 0;
+> +	bool canrequest = false;
+>  
+>  	if (!desc)
+> -		return 0;
+> +		return false;
+>  
+>  	if (irq_settings_can_request(desc)) {
+>  		if (!desc->action ||
+>  		    irqflags & desc->action->flags & IRQF_SHARED)
+> -			canrequest = 1;
+> +			canrequest = true;
+>  	}
+>  	irq_put_desc_unlock(desc, flags);
+>  	return canrequest;
 
-My bad, I've fixed this issue in v2:
+I'm sorry, but this is a very pointless change. Not only this doesn't
+change anything for this particular code other than being cosmetic,
+but it also doesn't help any of the callers which are still using an
+int.
 
-https://lore.kernel.org/linux-f2fs-devel/20220914115151.2994632-1-chao@kernel.org/T/#u
+In general, this sort of patch only adds noise, and I'd like to see
+less of them.
 
 Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
