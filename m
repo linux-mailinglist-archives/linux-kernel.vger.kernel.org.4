@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFFF5B88C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE69D5B88C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiINNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S229872AbiINNCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiINNCC (ORCPT
+        with ESMTP id S229714AbiINNC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:02:02 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EA95FF68;
-        Wed, 14 Sep 2022 06:02:01 -0700 (PDT)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28ED1R4a014976;
-        Wed, 14 Sep 2022 22:01:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28ED1R4a014976
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1663160488;
-        bh=GHK0IfYXttT8oUk7P8LGQ/L+MqLy4KjmkGPRYqdgRGk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WKYNzDVf3KqZhgFkD9Y6UYk9SCHF937eL8esdN5TTBJNHhIfcmGH5kM3LuywhJcKw
-         Y8bYjthrzs7+QxegaAf+jWoPOobGAECcnwVyQB2C7c9qFZyzaoV5PvAw9R3W1V/sSY
-         RPHLZ2lshfolLD5HLO0oVIIs60EKtMH/hG/7Xr+HjWdV3CWkijCMNBL/lk6WYXejdD
-         TWtEpCosBegRH2Gf1Aun5i9vHMmFq6aUYZS+wmAfmPi0RL/KMJBYkELafZO/vvlHtY
-         k4PltKgIJ6Gx41BWVJQOlAZnp+o3G9iijlmj6ytSZ3CCM5iWHufwUOOFtONP7NGqXT
-         F+jlNa3N1TPrw==
-X-Nifty-SrcIP: [209.85.210.49]
-Received: by mail-ot1-f49.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10258410otb.6;
-        Wed, 14 Sep 2022 06:01:28 -0700 (PDT)
-X-Gm-Message-State: ACgBeo25jCg+5AzclDjNBix+LhHt6xeXRdjbuUZcmoFjEkQk7VcpGRCE
-        gUgctkv2dzK7BpIaLsyFk558rAuEizVfhv4GKP4=
-X-Google-Smtp-Source: AA6agR4cg3jwwz2A4UjnKmkW0MBA79aiJh/S5irfGe0u9ixCJS4JHA0qwPYTgg+9UtO/x8BpQjZlS1xcfY6pcFqLo8c=
-X-Received: by 2002:a05:6830:3111:b0:655:bf20:250 with SMTP id
- b17-20020a056830311100b00655bf200250mr8795042ots.225.1663160487192; Wed, 14
- Sep 2022 06:01:27 -0700 (PDT)
+        Wed, 14 Sep 2022 09:02:28 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4169B60524
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:02:27 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z13so8150835edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nggFlyUvQYs7kmnA4dMoS3/ODlgPJKnMU4CNmsB3Hcs=;
+        b=JkM1QUk1pnFBFpGEVOEVLdMsMLqrNrczqCtXvhxVu3UiT0//DUuQX8DAX2/tfRcWtg
+         GVFxZ1RPpO0KEwUKYh3s0+H0OmeIzdWz38944Zz8OghYlsegxPCL0repD8O7SbJS0G1K
+         z0vE4vuYzA9ZkIP9Ofbs0KpSKHPv/trM2c0bOcsTbNXwL7ELBU3iLkl20LiT2Pn/h8Xv
+         vn0DgjA/YuFPCWeCzoLIJ/RYS9tuDjwhzbGuHww1DfjuBhzvogSLUb/WiupD0zYBi5VE
+         944RgWQK5IAvyfstOd+tNREIOe3FzHZvpPPQY8T3YCqrNwMTqqjiFAbcKfespDrFaPXM
+         iB3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nggFlyUvQYs7kmnA4dMoS3/ODlgPJKnMU4CNmsB3Hcs=;
+        b=gnbroZf4LY4T0veBqD7m9TGamnEPNo2M42Xw3UaSymgsS4HU4BC/uXgDpDEuhAcMEE
+         7y2GLnxqDKAF2S0UaAlBv8cOSrf/vvHbW4lTOIyC9ckY4blVWgNDT5OX/OdtTNz4E7r3
+         1KBASvod5ZTX1y8kEInHX1tQMearcmVEqHufjCxU6dU3teNgU8ZkNF/6PxhhDi6zhW9y
+         eFr20DPKd2OsEEE2lzMOJXiEdstmWJmzmls3U11JxYPuQt+i9z5yULnZfTszFvp1+skM
+         /2rOpz//Sg3d/At675gC2IqJ+m4b1CiE1UqkTBj+0Qa6KbnlxGhjQe8jaXPcT8xdjGi9
+         gPuQ==
+X-Gm-Message-State: ACgBeo0wX2oFNtMLlxHXF2NCaaH9BKdg7gqxdXb6ZUqbHbKX1vLrA8Gk
+        M6q7WVrONDAPbSx1dug94ZhYfcXDdT4zeDnK2zKZ4QVGP+8=
+X-Google-Smtp-Source: AA6agR7iZTPSanpIBz20rZA3HaV9DSMJnNr4+QN/AbJ3QvTXv0wgBteqQE3GdTA9EC1iVDm9MiX/9o5pxixrbQW8340=
+X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
+ w16-20020a056402269000b004523a858b28mr8420541edd.158.1663160545711; Wed, 14
+ Sep 2022 06:02:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
- <YyBAFL9CBsM9gl38@dev-arch.thelio-3990X> <87548726b6cc4f518836db38d45a04f2@AcuMS.aculab.com>
-In-Reply-To: <87548726b6cc4f518836db38d45a04f2@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 14 Sep 2022 22:00:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR7uYWKza4ZSHegJjBhvj7ToOg6kUpa3Mf9hRgAg3xtcA@mail.gmail.com>
-Message-ID: <CAK7LNAR7uYWKza4ZSHegJjBhvj7ToOg6kUpa3Mf9hRgAg3xtcA@mail.gmail.com>
-Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220909145942.844102-1-horatiu.vultur@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 14 Sep 2022 15:02:14 +0200
+Message-ID: <CACRpkdYWP4ASoO4wWSEgdCPbNLsx8fuHn_-oqnD+ff1TU84ieQ@mail.gmail.com>
+Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andy.shevchenko@gmail.com, UNGLinuxDriver@microchip.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 6:46 PM David Laight <David.Laight@aculab.com> wrote:
+On Fri, Sep 9, 2022 at 4:55 PM Horatiu Vultur
+<horatiu.vultur@microchip.com> wrote:
+
+> When an external device generated a level based interrupt then the
+> interrupt controller could miss the interrupt. The reason is that the
+> interrupt controller can detect only link changes.
 >
-> ...
-> > > +VERSION=$(cat .version) 2>/dev/null &&
-> > > +VERSION=$(expr $VERSION + 1) 2>/dev/null ||
-> > > +VERSION=1
+> In the following example, if there is a PHY that generates an interrupt
+> then the following would happen. The GPIO detected that the interrupt
+> line changed, and then the 'ocelot_irq_handler' was called. Here it
+> detects which GPIO line saw the change and for that will call the
+> following:
+> 1. irq_mask
+> 2. phy interrupt routine
+> 3. irq_eoi
+> 4. irq_unmask
 >
-> What's wrong with:
-> VERSION=$(($(cat .version 2>/dev/null) + 1))
-
-
-One reason was, the original code used 'expr'.
-
-
-
-> If you are worried about .version not containing a valid
-> number and $((...)) failing then use ${VERSION:-1} later.
-
-
-Maybe another reason is,
-I want to make the behavior deterministic when
-the .version file contains a non-integer string.
-
-
-
-
-$ unset FOO
-$ echo FOO > .version
-$ echo $(($(cat .version 2>/dev/null) + 1))
-1
-
-
-$ export FOO=100
-$ echo FOO > .version
-$ echo $(($(cat .version 2>/dev/null) + 1))
-101
-
-
-
-
-I want the script to consistently return 1
-whether or not 'FOO' is available in the user's environment.
-
-
-
-
-
-
->         David
+> And this works fine for simple cases, but if the PHY generates many
+> interrupts, for example when doing PTP timestamping, then the following
+> could happen. Again the function 'ocelot_irq_handler' will be called
+> and then from here the following could happen:
+> 1. irq_mask
+> 2. phy interrupt routine
+> 3. irq_eoi
+> 4. irq_unmask
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> Right before step 3(irq_eoi), the PHY will generate another interrupt.
+> Now the interrupt controller will acknowledge the change in the
+> interrupt line. So we miss the interrupt.
 >
+> A solution will be to use 'handle_level_irq' instead of
+> 'handle_fasteoi_irq', because for this will change routine order of
+> handling the interrupt.
+> 1. irq_mask
+> 2. irq_ack
+> 3. phy interrupt routine
+> 4. irq_unmask
+>
+> And now if the PHY will generate a new interrupt before irq_unmask, the
+> interrupt controller will detect this because it already acknowledge the
+> change in interrupt line at step 2(irq_ack).
+>
+> But this is not the full solution because there is another issue. In
+> case there are 2 PHYs that share the interrupt line. For example phy1
+> generates an interrupt, then the following can happen:
+> 1.irq_mask
+> 2.irq_ack
+> 3.phy0 interrupt routine
+> 4.phy1 interrupt routine
+> 5.irq_unmask
+>
+> In case phy0 will generate an interrupt while clearing the interrupt
+> source in phy1, then the interrupt line will be kept down by phy0. So
+> the interrupt controller will not see any changes in the interrupt line.
+> The solution here is to update 'irq_unmask' such that it can detect if
+> the interrupt line is still active or not. And if it is active then call
+> again the procedure to clear the interrupts. But we don't want to do it
+> every time, only if we know that the interrupt controller has not seen
+> already that the interrupt line has changed.
+>
+> While at this, add support also for IRQ_TYPE_LEVEL_LOW.
+>
+> Fixes: be36abb71d878f ("pinctrl: ocelot: add support for interrupt controller")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
+This v3 patch applied for fixes so we get some rotation in linux-next
+and get the Ocelot kernel in working order.
+Should it even be tagged for stable?
 
--- 
-Best Regards
-Masahiro Yamada
+Andy had some further things to think about, consider these
+for possible further patching.
+
+Yours,
+Linus Walleij
