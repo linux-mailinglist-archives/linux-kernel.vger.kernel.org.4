@@ -2,120 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B105B8922
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BD25B8928
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiINN1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S229630AbiINN22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiINN10 (ORCPT
+        with ESMTP id S229491AbiINN2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:27:26 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3472B6D9EE
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:27:23 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id b5so25666254wrr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8KUXcLjtkVihtg11T3oMt0vYyGo5xNo18xehwjt6aQM=;
-        b=d0YJHn4cl28LBNrFF2Jacudh0DH+lp8gvP4kqahW8yoym8X30qfMq9xOV1VrDFMtLL
-         +Qp5qIAsAYCUzQDPvkkNOBJrG3yiouopMdMBUZAYieEoHCSdl4k0DjgkcKYf8pCqg/69
-         OFnkAafaqoXnKOXKpwfSJDJE3HXsAZC5CYh5j8AzL3TwM/WksIx65zOSFThNRAXC57jO
-         qOeZnadSPmxZ3bhrA68xOCUcERLU+r9NvOqlY6Mf61VUvqmTyoqL8b31yQRP7JLoGe0X
-         fk9NM5uN8BY4HiK2qqyj1tLYHLhlwBtFunBY3cSzJRlZfq2vroy/vrIO7I6l1Ccc0Fy7
-         onFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8KUXcLjtkVihtg11T3oMt0vYyGo5xNo18xehwjt6aQM=;
-        b=CkyxB7aY4/KAo1j+lWvyQGs5m9QKVGkKkR+VSx9vKGtcb54YtZE+O4dr+ohcQ/WLzD
-         mp4SoFT0ixC8HovP+2hBEZL/t3RzHuL9h0WCTPqtlp2MSLHZ83gnQzBoFJTG1mQLyqqE
-         8rnE6CxIh3wL3oxplV3gc5PcBB171Q4An+iuiOUNdhrkVBmWiY9xVkC1/AaIjbAz5NNR
-         wxlCYS7+4IYywD/6fvaGp8H+4igGRXy8D3w41IS4SzNYOujN1uan+FMtpp+JhOUT14Z3
-         cXYcXplpfSjxaYcUXBFq2BkIDi7tktRLlgPbCefMoTsBbhIuYi9W6uOZgV84T/g8EYQA
-         T/sQ==
-X-Gm-Message-State: ACgBeo2FHfbCmaf0C7wOvok8N14CLxESLK5qyVE7NTdPEWfblzWzf3ku
-        RmwTUC9PYNPsuNOnicEwIcRKvA==
-X-Google-Smtp-Source: AA6agR6TPMPPsLlhAtiQsyA/yLJqtqEhq4K5gfSRuANSt5F79zP1ztVc47OyVeBgOoCioZNHWtccbw==
-X-Received: by 2002:a5d:6986:0:b0:228:60f9:b013 with SMTP id g6-20020a5d6986000000b0022860f9b013mr20518582wru.102.1663162041670;
-        Wed, 14 Sep 2022 06:27:21 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05600c12c800b003a844885f88sm16243456wmd.22.2022.09.14.06.27.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 06:27:21 -0700 (PDT)
-Message-ID: <bfce8af1-8826-be59-437f-0982c14f6d24@baylibre.com>
-Date:   Wed, 14 Sep 2022 15:27:19 +0200
+        Wed, 14 Sep 2022 09:28:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0566A4B4;
+        Wed, 14 Sep 2022 06:28:22 -0700 (PDT)
+Received: from [IPv6:2a00:23c6:c311:3401:435d:1590:4ce7:da62] (unknown [IPv6:2a00:23c6:c311:3401:435d:1590:4ce7:da62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 03F226601F88;
+        Wed, 14 Sep 2022 14:28:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663162101;
+        bh=8gAdOKSbEb1lIvZUbCLlNMdTh2S9J6j+Bys/GGRrHE0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lA5uoGr90t3Lu3MvAc3ctlHEyzFla+TeCrmD5IggaLHAqKcR9iNG84KSIYJbhW2r8
+         B69Is0PMBUe4ZOMgincMtTxRONsSnK7A6/3CPHs8yWDf1fnjll+LM3IeRFCphBjT9J
+         /JuWoeco7zpZRaWEyVZOlq5rN/Cw0gM47GdzctK74FNQ1fBpzP/x0FcJxgiBZ82IQB
+         GJofroLuWo2d9SlmPZeITl7UDxmb3fyEhzhD43gYsJV3rbHiiwhRidwDada5uMU7eQ
+         QeXFPDRf72yudptANW++6JImRB+A8SmeRY0bV/5XTpOC/8Mt1QTf5Q7L3fYH1tpzut
+         eFpGrND3ycQ4w==
+Message-ID: <fe67869043408328e6cb91a64781f30ed7b71e5b.camel@collabora.com>
+Subject: Re: [PATCH v4 2/5] dt-bindings: gpio: pca95xx: add entry for
+ pcal6534 and PI4IOE5V6534Q
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 14 Sep 2022 14:28:18 +0100
+In-Reply-To: <CAMRc=MdSsLfQDGHD0w5GwvYQMZWteY_vwbLB6Y=urVpzNhQJGA@mail.gmail.com>
+References: <20220913155348.38716-1-martyn.welch@collabora.co.uk>
+         <20220913155348.38716-2-martyn.welch@collabora.co.uk>
+         <CAMRc=MdSsLfQDGHD0w5GwvYQMZWteY_vwbLB6Y=urVpzNhQJGA@mail.gmail.com>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.3-2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
-        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
-        vkoul@kernel.org, wim@linux-watchdog.org
-References: <20220531135026.238475-17-fparent@baylibre.com>
- <20220720131257.530168-1-aouledameur@baylibre.com>
-In-Reply-To: <20220720131257.530168-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabien,
+On Wed, 2022-09-14 at 14:43 +0200, Bartosz Golaszewski wrote:
+> On Tue, Sep 13, 2022 at 5:54 PM Martyn Welch
+> <martyn.welch@collabora.co.uk> wrote:
+> >=20
+> > From: Martyn Welch <martyn.welch@collabora.com>
+> >=20
+> > The NXP PCAL6534 is a 34-bit I2C I/O expander similar to the
+> > PCAL6524. The
+> > Diodes PI4IOE5V6534Q is a functionally identical chip provided by
+> > Diodes
+> > Inc.
+> >=20
+> > Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> >=20
+>=20
+> Can you rebase this on top of my for-next branch[1]? We've had some
+> new models added and the patch no longer applies.
 
-On 7/20/22 15:12, Amjad Ouled-Ameur wrote:
-> Hi Fabien,
->
->> +		tzts4: tzts4-thermal {
->> +			polling-delay-passive = <0>;
->> +			polling-delay = <0>;
->> +			thermal-sensors = <&thermal 4>;
->> +			trips {};
->> +			cooling-maps {};
->> +		};
-> AFAIK mt8365 has only 3 thermal sensors, therefore tzts4 should not be
-> added.
+Sure, no worries,
 
-I discussed this further with MediaTek. tzts1, tzts2, tzts3 and tzts4 
-are used
+Martyn
 
-for test-purpose only. Since they do not have trip points, thermal core 
-wouldn't
+>=20
+> Bart
+>=20
+> [1] git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
 
-register them anyway. Thus, I think we should remove them altogether. Only
-
-cpu_thermal zone is relevant and should remain.
-
-
-Regards,
-
-Amjad
-
-> Regards,
-> Amjad
