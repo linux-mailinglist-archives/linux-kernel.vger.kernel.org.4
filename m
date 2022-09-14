@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4265B899A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A235B89AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiINN7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S229939AbiINOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiINN7g (ORCPT
+        with ESMTP id S229822AbiINOAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:59:36 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2852D1E8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:59:27 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 78so14371117pgb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:59:27 -0700 (PDT)
+        Wed, 14 Sep 2022 10:00:48 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE879A4D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:00:17 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-127dca21a7dso41143885fac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wavsrAyG6NiOWTam0JHv7PKYgavbpXhgMRnb2r58pdo=;
-        b=kH4L3gqh4xzjn+C8/0iA1Uc6n5BYUDTf66L2gvMLHiPbaL03lhM8U+vvbFU6sEp7kv
-         1mKFE3Mttqx8cGHXnYEBcLO+pObY56ATqdnlLUZWvRYItE2D58jJtYg4lTNIFXn1kw15
-         T1KkgtxGGBdDxPkiThQyvg8500khkMUeZL0Eg=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=Nhf4NUE5pNrO2iPn+duWxF+/BKciVlA3AuEHtMu2CkM=;
+        b=aLjXaqxm731w8pTsLIJqD/I2r3nY06kTldoBkhB+GTNaSahVvmr04XDUCNS2awKrsP
+         0sOo3DaKjjQXVYof4nLSJeFVwkH+VfffbTEjdfVu/wXmzrV9ILvlkVVe1s0QZC1QYHoT
+         rPA4VzvgvpygZ9DEZiyMu7kayNhTLP9MI4j1Wv95mqAxL7OxrgJa0zaBrM+dbHIG0UCc
+         dvsNAqvrRL8z++KlsXFsStXKaon9pqNvXrerCldvBwpOUKRXKKiore6NH93N6bRQHYiX
+         dpqqPZwiI7zZs0dJ6/NGm7q5XJrHuqyiYsbNc/CHDsIP0XhnBA6xbEWLVF57nwToWoHV
+         Nvgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wavsrAyG6NiOWTam0JHv7PKYgavbpXhgMRnb2r58pdo=;
-        b=Ccp5zmdzJ50qWdVmPJoZnGwJc1qcYnc0hhUpwpI8+inmzDpfthwJdapnoDrEJ+12zO
-         mNnZ2dm/wjk3z+rcwlHMfT30nDT4mf9kOA6MSSdepsw3irR76SIf7JAV0bT1S1r0eF5S
-         r8ySL59zhVIudnllkmnnbVP0sVFWZlHaROCQuBIg/4rYEnUZATmHODKWLjFxCFE8m8hx
-         qqNg/9IQd4i0bVSAjq3LedjJd0VkLFD9+FjBYO29Q7l0qbQBqPtDnTg11Vw7dC/c5rXr
-         0efU1juuKt6hku8l20L85YGuVvQZo1e0SbmhChQIwXvM5Z8J7u9XCY6OVAqIYzMAy6vT
-         3a/g==
-X-Gm-Message-State: ACgBeo38sr0Xzk07Efe0763GLJRFMrPbNf2aO6o7SdtVXlhYnpEnAWKe
-        z45+Z56lyG3b2Q+jx/UqeSQHOA==
-X-Google-Smtp-Source: AA6agR6y4ULei98zaMifYBH1DzZDIoH+v39NLO21Q/U5CM0RCjhTsjHyJqiAC+NtcWxFmIgg5xCBFQ==
-X-Received: by 2002:a62:5443:0:b0:53b:b934:ee8e with SMTP id i64-20020a625443000000b0053bb934ee8emr38389448pfb.10.1663163966560;
-        Wed, 14 Sep 2022 06:59:26 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b001780cdade11sm10653354pll.51.2022.09.14.06.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 06:59:25 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 06:59:24 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     linux-hardening@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] fortify: Adjust KUnit test for modular build
-Message-ID: <202209140658.A471548@keescook>
-References: <20220913173136.1926909-1-keescook@chromium.org>
- <CABVgOSnSsMxHQJNPs77rzA729wW1k6o17_ERqGvszFVkQ-hv_Q@mail.gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Nhf4NUE5pNrO2iPn+duWxF+/BKciVlA3AuEHtMu2CkM=;
+        b=7wF+ZjDViRKm0HKOgQqoLBepBnFYtbRjiaQkX/s5GfFlV01zBnzIHyNGio/D4B1nfT
+         e5+CCy5faDgiRvVS0YS6yQQ29P+cgssix7DE0/qbbpjBaKr1OslhFS9YEPpkIDoCGPYd
+         U6wGYS6/S4jE+mWZO/pdOznrJ+TQ6wsVB87SX4y/T+YEu48q2VyRvc5Z0oCit8XvsM5K
+         7hks2GsPwOTrZtO/BEhJOcomnyN68CF2l54cndnryqupUDlZeIfQEoM2ILUKqSsXO/db
+         26hqi1eNeeRIkO1en2/t6xnIocEpFzcJZIQmKP4JjpAhVVlbv/25eyhk93QG+/jOr5r7
+         jFbw==
+X-Gm-Message-State: ACgBeo0oSTkuiK0Ko8X12sgmjoSqeeMZqBYRgLbWKYhF4A2uiYvsGyml
+        aOGlXmwZuixV0wfKCVBgYuTJaujh7GnuJusgbD4=
+X-Google-Smtp-Source: AA6agR4+0HrSlOBJVxUZRMY+wQKkAqM7Lq8kfvW+Hf/8efKDYKhqKL0TNMJEugeMxOFKaXEotpqoHFiDtk0gYbgOf+U=
+X-Received: by 2002:a05:6870:1783:b0:12a:f442:504d with SMTP id
+ r3-20020a056870178300b0012af442504dmr2643357oae.46.1663164016167; Wed, 14 Sep
+ 2022 07:00:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABVgOSnSsMxHQJNPs77rzA729wW1k6o17_ERqGvszFVkQ-hv_Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220914052742.116297-1-jiapeng.chong@linux.alibaba.com> <20220914052742.116297-8-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220914052742.116297-8-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 14 Sep 2022 10:00:04 -0400
+Message-ID: <CADnq5_NmWKF+7UQov2oQ2JH5UW0Pzjw0bCUzhZWZQ=xH2mu17g@mail.gmail.com>
+Subject: Re: [PATCH 8/8] drm/amd/display: make optc32_phantom_crtc_post_enable,
+ optc32_setup_manual_trigger and optc32_set_drr static
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 06:13:59PM +0800, David Gow wrote:
-> On Wed, Sep 14, 2022 at 1:31 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > A much better "unknown size" string pointer is available directly from
-> > struct test, so use that instead of a global that isn't shared with
-> > modules.
-> >
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Link: https://lore.kernel.org/lkml/YyCOHOchVuE/E7vS@dev-arch.thelio-3990X
-> > Fixes: 875bfd5276f3 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
-> > Cc: linux-hardening@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > Whoops! Thanks Nathan! :) This fixes it for your reproducer.
-> 
-> Ah, this is better than saved_command_line, IMO. I don't think it'd
-> necessarily be a _disaster_ to just introduce a new dynamically-sized
-> string here, which would be more explicit, but test->name is at least
-> obviously related to this file anyway.
+Applied the series.  Thanks!
 
-Yeah, and I'm trying to explicitly use a string that the compiler won't
-immediately be able to see through, so best to get it from an external
-source.
+Alex
 
-> Reviewed-by: David Gow <davidgow@google.com>
-
-Thanks!
-
--Kees
-
--- 
-Kees Cook
+On Wed, Sep 14, 2022 at 1:29 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> These three functions are not used outside the function
+> dcn32_optc.c, so the modification is defined as static.
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:159:6: warnin=
+g: no previous prototype for function 'optc32_phantom_crtc_post_enable'.
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:218:6: warnin=
+g: no previous prototype for =E2=80=98optc32_set_drr=E2=80=99.
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:193:6: warnin=
+g: no previous prototype for =E2=80=98optc32_setup_manual_trigger=E2=80=99.
+>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2140
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c b/drivers/=
+gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
+> index 1fad7b48bd5b..ec3989d37086 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
+> @@ -156,7 +156,7 @@ static bool optc32_disable_crtc(struct timing_generat=
+or *optc)
+>         return true;
+>  }
+>
+> -void optc32_phantom_crtc_post_enable(struct timing_generator *optc)
+> +static void optc32_phantom_crtc_post_enable(struct timing_generator *opt=
+c)
+>  {
+>         struct optc *optc1 =3D DCN10TG_FROM_TG(optc);
+>
+> @@ -190,7 +190,7 @@ static void optc32_set_odm_bypass(struct timing_gener=
+ator *optc,
+>         optc1->opp_count =3D 1;
+>  }
+>
+> -void optc32_setup_manual_trigger(struct timing_generator *optc)
+> +static void optc32_setup_manual_trigger(struct timing_generator *optc)
+>  {
+>         struct optc *optc1 =3D DCN10TG_FROM_TG(optc);
+>         struct dc *dc =3D optc->ctx->dc;
+> @@ -215,7 +215,7 @@ void optc32_setup_manual_trigger(struct timing_genera=
+tor *optc)
+>         }
+>  }
+>
+> -void optc32_set_drr(
+> +static void optc32_set_drr(
+>         struct timing_generator *optc,
+>         const struct drr_params *params)
+>  {
+> --
+> 2.20.1.7.g153144c
+>
