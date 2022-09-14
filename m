@@ -2,111 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DECD5B860A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A0F5B860C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiINKNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S229635AbiINKOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiINKN2 (ORCPT
+        with ESMTP id S229734AbiINKON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:13:28 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019121267;
-        Wed, 14 Sep 2022 03:13:27 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h188so13859067pgc.12;
-        Wed, 14 Sep 2022 03:13:27 -0700 (PDT)
+        Wed, 14 Sep 2022 06:14:13 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850C21267
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:11 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id j7so9937527vsr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:14:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nqDHXaMoqwAdqve9DN0XCRy1SvZyapEecnjNuHOuRJ0=;
-        b=NgWYFQFfbabzpK6h9sQIfOCsPld4UUv7nWnR42C3GRnevDhggfcLb+cf/qBsRI9EiT
-         Vl+KfvlVBUjhp5gQoy/YYFvL57kM44ML6nXTWBVTwiBa/U26bhx3STM87vzDThmLf0gM
-         zlxPIOTcc52tHATSuRwR3dXtDLrLs4w/SNqvoq4bhjsqUCMZrUT7OmZdJ+hU7pBDiPrq
-         qEebouF1loKxp05bNZmGoFQ5v+DolCKaXUOJqnN13t1RUG4vsjZyWrwhMS4wGjcQ2mjn
-         OFx4FQZaOX4jlS0TYJsfZ5M/M3Iu77hLMwVi3Tzcbo2SXhQNbXdZYhKNCkz7foI4pl7P
-         N1Bg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=aVHGh2KXaAGeDBRMRckt00P09mGtnKYfnn7Un16et9k=;
+        b=fyFvrZ3JObd/xtxvG5Ow0U9li7MbmyuOhfuVYcFdexiTt688/Bd+KepOFtO6WI7k53
+         uvq6Og4MS4pY4OG2UojhtIlYM5kOk6tfs6ZD6venLIjryw2tUtBXnxW1rE9n5bNATZWp
+         zu9Z0bEPA98OgeHml0eR0TW5A/k2Pe+Obv1rpRGy3+nlomGS3TXFT8SHLklf7/jT7KG2
+         O0leXfG15LQrviHnoZ6vOs/FiCQejxIDJXzWOauQwLxnwtRir/bcabwX2G8x6J3SgMXG
+         KakGlgV+9aDtBKfYvDyPARU+oV5a3jzXVceHJB++z7dMF0TbgNuU8qmaNgT6iLIWPQjJ
+         T/Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nqDHXaMoqwAdqve9DN0XCRy1SvZyapEecnjNuHOuRJ0=;
-        b=mSfSkPsWXfSBHi1UHaz6u96Aoqx3mhurE4SJ+aYNpNTiXpFjuC8HeheRua4E73Nwxo
-         UsNenm44bmvSfuePWkqqgKjmhglJC3/vQzXpp4BM70si8Euya/0YPSLWHFWrgEtuhxGL
-         vywBXl8UI35OEV31Io5EHFf3ToIz05Wezut9ZV1ukWwe0MFja6wzJ1dI6ki/R5paSrMK
-         YCtopfZ0VBluyT+uXQ+73HaO/Z+/lSXpBDwXbFtF5cg+m3YtPqnlITzBshN+NUmWDy2W
-         9wohFGfiNB0/8q8Yfi5ATDtrCEjH25JrSF7i7DO0S84FzZaNHI1vKCUTothdcqDiTnxp
-         p/7g==
-X-Gm-Message-State: ACgBeo0c8IE0Ab0JVLMHx6aj0G7/STEPc7mNKTUsHhbE5BRjHyJHtHsN
-        VDMQJm0lOgHuqnaUeXTuNuU=
-X-Google-Smtp-Source: AA6agR5X6QkqG2WDMUOl/J0oljbi4kU3wXKMCs7FGCI1woadOffdhJ452ObTKgNp2FeBfeLWrfsdnA==
-X-Received: by 2002:a05:6a00:1781:b0:53a:8572:4453 with SMTP id s1-20020a056a00178100b0053a85724453mr37189032pfg.76.1663150406780;
-        Wed, 14 Sep 2022 03:13:26 -0700 (PDT)
-Received: from debian.me (subs10b-223-255-225-228.three.co.id. [223.255.225.228])
-        by smtp.gmail.com with ESMTPSA id x22-20020a1709027c1600b0016c5306917fsm10215939pll.53.2022.09.14.03.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 03:13:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4E093101BD5; Wed, 14 Sep 2022 17:13:21 +0700 (WIB)
-Date:   Wed, 14 Sep 2022 17:13:21 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
-Message-ID: <YyGpQcKoE60gCAXd@debian.me>
-References: <20220913140410.043243217@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=aVHGh2KXaAGeDBRMRckt00P09mGtnKYfnn7Un16et9k=;
+        b=bILoUJtrZnkT+a72fjCEJAmC1RkpH4/Hm0DCkzvibjBydeu82KXyTSq/tFJ+LLLYnl
+         /I7kR2UNMETpMUtn+Wmtb4joejyFs17cvAC/2jP2zQjIfZq6h3CamNAivjoHyQoJzRHo
+         7syFltkCzVWVNwu4gU0o9zQZB7AGux615um/7OLdv2+B2fQNr6l2Nj9UOTbcoCZLb78a
+         dYw21FTaYXvuaK0hQusu8iYcQWvEWEBRMCN5BXa9v8jlsGSOA1Z6PpLv6kHUc5mTcWAe
+         FixfVgye+RwvuwJuYJ7j4sBhb6q/9KISXmMED0pWKlxg+2KR5P2Qtd0i5Oni1DLsJ7M3
+         2ZbA==
+X-Gm-Message-State: ACgBeo24GGEv6FoFL4g2aroK+i2q6irYWmFlzsLdgXxblXkhMeWbakb+
+        zbwmQ8GL79VWo5HXc+kqjL5uu6T9FnsUD6MnhYMjRA==
+X-Google-Smtp-Source: AA6agR4bxwbfTAdlXC3065+Rj0FOZ3/0/EKkHVL8gqO4/u1CRlKPF0tDXfVxyEweZ5yqatpRrrTT+nzW/SfvGU4zcUo=
+X-Received: by 2002:a67:e04d:0:b0:397:f787:7880 with SMTP id
+ n13-20020a67e04d000000b00397f7877880mr12930358vsl.71.1663150450866; Wed, 14
+ Sep 2022 03:14:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="RW3R7vTjPwE0QZrs"
-Content-Disposition: inline
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220913173136.1926909-1-keescook@chromium.org>
+In-Reply-To: <20220913173136.1926909-1-keescook@chromium.org>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 14 Sep 2022 18:13:59 +0800
+Message-ID: <CABVgOSnSsMxHQJNPs77rzA729wW1k6o17_ERqGvszFVkQ-hv_Q@mail.gmail.com>
+Subject: Re: [PATCH] fortify: Adjust KUnit test for modular build
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 14, 2022 at 1:31 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> A much better "unknown size" string pointer is available directly from
+> struct test, so use that instead of a global that isn't shared with
+> modules.
+>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://lore.kernel.org/lkml/YyCOHOchVuE/E7vS@dev-arch.thelio-3990X
+> Fixes: 875bfd5276f3 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Whoops! Thanks Nathan! :) This fixes it for your reproducer.
 
---RW3R7vTjPwE0QZrs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, this is better than saved_command_line, IMO. I don't think it'd
+necessarily be a _disaster_ to just introduce a new dynamically-sized
+string here, which would be more explicit, but test->name is at least
+obviously related to this file anyway.
 
-On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.9 release.
-> There are 192 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Reviewed-by: David Gow <davidgow@google.com>
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+Cheers
+-- David
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---RW3R7vTjPwE0QZrs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYyGpPAAKCRD2uYlJVVFO
-o/RVAQCLWiFc5JdH9TyIJV209FazvhcwxbJxnZJOoL6Fq+juCwEA5Lt975pKxhPl
-ixUbdcqmp1m7utQhjIt3TbLY8LZjgQY=
-=hmgW
------END PGP SIGNATURE-----
-
---RW3R7vTjPwE0QZrs--
+> ---
+>  lib/fortify_kunit.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+> index 99bc0ea60d27..409af07f340a 100644
+> --- a/lib/fortify_kunit.c
+> +++ b/lib/fortify_kunit.c
+> @@ -17,7 +17,6 @@
+>
+>  #include <kunit/test.h>
+>  #include <linux/string.h>
+> -#include <linux/init.h>
+>
+>  static const char array_of_10[] = "this is 10";
+>  static const char *ptr_of_11 = "this is 11!";
+> @@ -31,7 +30,7 @@ static void known_sizes_test(struct kunit *test)
+>
+>         KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
+>         /* Externally defined and dynamically sized string pointer: */
+> -       KUNIT_EXPECT_EQ(test, __compiletime_strlen(saved_command_line), SIZE_MAX);
+> +       KUNIT_EXPECT_EQ(test, __compiletime_strlen(test->name), SIZE_MAX);
+>  }
+>
+>  /* This is volatile so the optimizer can't perform DCE below. */
+> --
+> 2.34.1
+>
