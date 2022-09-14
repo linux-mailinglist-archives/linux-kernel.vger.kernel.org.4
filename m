@@ -2,171 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8EE5B88C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFFF5B88C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiINNAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S229562AbiINNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiINNAp (ORCPT
+        with ESMTP id S229528AbiINNCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:00:45 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447F25F9B9;
-        Wed, 14 Sep 2022 06:00:44 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id b21so15057306plz.7;
-        Wed, 14 Sep 2022 06:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=E86UqW0NjXan1+5ekrU8xgvKtMBJZ+2zIIp8Nn+Sa48=;
-        b=MykP4eiQ2nzoFwKY+WdzqvOY2/brwsCFaPmAe24a14xGBSPD9wm5eaJW9EiTOWwJcP
-         qsqVWj7GOR7XIM2YOT97H9QsApnWjTT7979TBEk5xCyE5NclQbveQGEitsN2zIaxa6rP
-         OJQFFrQ4pLoH2hdSnzztkttCWmbezb+0IT431mwE/LAlksy5uKDVmtAGEGjP26KZIAFK
-         zbJp9HIHQVD9wfSMVlcOK3VZVn+mJ0LU6HSwr5UHoQ53g8FP0QmmKzk77PNqEK1T5I7f
-         4DBWtnaVk8GjRd74zCAcUPV7xMtuW5iP5IwjgeK+Xfck6+PmDENDf4ArqKVOGbRmPKo1
-         PgCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=E86UqW0NjXan1+5ekrU8xgvKtMBJZ+2zIIp8Nn+Sa48=;
-        b=ETNYd2SdFwtpXrLl0LIsefichNzFmOTqlqGvwuokRRNRSPF+JgXZv6YNG166+0uzA9
-         JAfWnOP5XGbx7muO5BXsrQDs4jodznHtKA1xsmqonon0VPabfUxOwjcjuqYc31aw4zvu
-         ubT1jgeDwGROqmlTRvgrMOid2XQV8nL4G3j93vHvzZ13mvBdTkzdAWjbMPedJBv/NcZb
-         d2N6WuhvKHdcmexntDTXi4ExyU2WDoSyQHCejR+tVAlEL+MRhhy3Sc93aEtXmcP5vua2
-         uBKMxwsC6YS+864Wvbti6nKpvZzDvrs2DhjxgLzwoQCtYxnNzObm2YvrWhs6tScjcnt2
-         Q1dw==
-X-Gm-Message-State: ACrzQf15bUsV/Mry9oERwUsc1B3cFpPpxF8nkuBj2COS7DQ4kqe8wTka
-        AQSFShTs92ZripjMm4MkxfU=
-X-Google-Smtp-Source: AMsMyM4jgLBKUPxVNHITlKs3mnFnoqFaqYuNHVi7Sacfdoh6eLUtvZFX56/q2Ak//FKe1/mgHWoqKg==
-X-Received: by 2002:a17:90b:4a03:b0:202:8495:627a with SMTP id kk3-20020a17090b4a0300b002028495627amr4793908pjb.186.1663160443729;
-        Wed, 14 Sep 2022 06:00:43 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id o187-20020a625ac4000000b00537e40747adsm10030558pfb.36.2022.09.14.06.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 06:00:43 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 21:00:36 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-Message-ID: <YyHQdN14bI4WeCKp@sol>
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
- <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
- <20220906211628.6u4hbpn4shjcvqel@pali>
- <Yxe7CJnIT5AiUilL@google.com>
- <20220906214114.vj3v32dzwxz6uqik@pali>
- <YxfBKkqce/IQQLk9@google.com>
- <20220906220901.p2c44we7i4c35uvx@pali>
- <YxfMkzW+5W3Hm1dU@google.com>
- <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
- <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
+        Wed, 14 Sep 2022 09:02:02 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EA95FF68;
+        Wed, 14 Sep 2022 06:02:01 -0700 (PDT)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28ED1R4a014976;
+        Wed, 14 Sep 2022 22:01:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28ED1R4a014976
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1663160488;
+        bh=GHK0IfYXttT8oUk7P8LGQ/L+MqLy4KjmkGPRYqdgRGk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WKYNzDVf3KqZhgFkD9Y6UYk9SCHF937eL8esdN5TTBJNHhIfcmGH5kM3LuywhJcKw
+         Y8bYjthrzs7+QxegaAf+jWoPOobGAECcnwVyQB2C7c9qFZyzaoV5PvAw9R3W1V/sSY
+         RPHLZ2lshfolLD5HLO0oVIIs60EKtMH/hG/7Xr+HjWdV3CWkijCMNBL/lk6WYXejdD
+         TWtEpCosBegRH2Gf1Aun5i9vHMmFq6aUYZS+wmAfmPi0RL/KMJBYkELafZO/vvlHtY
+         k4PltKgIJ6Gx41BWVJQOlAZnp+o3G9iijlmj6ytSZ3CCM5iWHufwUOOFtONP7NGqXT
+         F+jlNa3N1TPrw==
+X-Nifty-SrcIP: [209.85.210.49]
+Received: by mail-ot1-f49.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10258410otb.6;
+        Wed, 14 Sep 2022 06:01:28 -0700 (PDT)
+X-Gm-Message-State: ACgBeo25jCg+5AzclDjNBix+LhHt6xeXRdjbuUZcmoFjEkQk7VcpGRCE
+        gUgctkv2dzK7BpIaLsyFk558rAuEizVfhv4GKP4=
+X-Google-Smtp-Source: AA6agR4cg3jwwz2A4UjnKmkW0MBA79aiJh/S5irfGe0u9ixCJS4JHA0qwPYTgg+9UtO/x8BpQjZlS1xcfY6pcFqLo8c=
+X-Received: by 2002:a05:6830:3111:b0:655:bf20:250 with SMTP id
+ b17-20020a056830311100b00655bf200250mr8795042ots.225.1663160487192; Wed, 14
+ Sep 2022 06:01:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
+ <YyBAFL9CBsM9gl38@dev-arch.thelio-3990X> <87548726b6cc4f518836db38d45a04f2@AcuMS.aculab.com>
+In-Reply-To: <87548726b6cc4f518836db38d45a04f2@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 14 Sep 2022 22:00:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR7uYWKza4ZSHegJjBhvj7ToOg6kUpa3Mf9hRgAg3xtcA@mail.gmail.com>
+Message-ID: <CAK7LNAR7uYWKza4ZSHegJjBhvj7ToOg6kUpa3Mf9hRgAg3xtcA@mail.gmail.com>
+Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 02:10:21PM +0200, Bartosz Golaszewski wrote:
-> On Wed, Sep 14, 2022 at 12:35 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Wed, Sep 7, 2022 at 12:41 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> >
-> > > Linus, do you think we should introduce GPIOD_OUT_INACTIVE /
-> > > GPIOD_OUT_ACTIVE or GPIOD_OUT_DEASSERTED / GPIOD_OUT_ASSERTED and
-> > > deprecate existing GPIOD_OUT_LOW and GPIO_OUT_HIGH?
-> >
-> > They should rather be replaced everywhere in one go.
-> >
-> > I think it is just a half-measure unless we also add
-> > #define GPIOD_ASSERTED 1
-> > #define GPIOD_DEASSERTED 0
-> > to be used instead of 1/0 in gpiod_set_value().
-> >
-> 
-> We've had that discussion for libgpiod and went with
-> GPIOD_VALUE_ACTIVE and GPIOD_VALUE_INACTIVE but...
-> 
-> > It would also imply changing the signature of the function
-> > gpiod_set_value() to gpiod_set_state() as we are not
-> > really setting a value but a state.
-> >
-> 
+On Wed, Sep 14, 2022 at 6:46 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> ...
+> > > +VERSION=$(cat .version) 2>/dev/null &&
+> > > +VERSION=$(expr $VERSION + 1) 2>/dev/null ||
+> > > +VERSION=1
+>
+> What's wrong with:
+> VERSION=$(($(cat .version 2>/dev/null) + 1))
 
-I might be in the minority here, but in this context value and state mean
-the same thing to me, so changing from one to the other provides no
-additional clarity and is at best pointless.
 
-The key distinction is whether you are describing a physical or logical
-value/state.
-High/low should be reserved for physical.
-Active/inactive describe logical.
+One reason was, the original code used 'expr'.
 
-(I personally dislike "deassert" as it is a manufactured word that feels
-very awkward.)
 
-So for gpiod_set_value(), which expects a logical value, you would use
-ACTIVE/INACTIVE.  For gpiod_set_raw_value(), which expects a physical
-value, you would use HIGH/LOW.
 
-Given there are gpiod functions that expect both, there is a case for
-both to pairings exist, and for the caller to use the appropriate one
-for the call.
+> If you are worried about .version not containing a valid
+> number and $((...)) failing then use ${VERSION:-1} later.
 
-Changing gpiod_set_value() to gpiod_set_state(), while leaving
-gpiod_set_raw_value() as is, does not reduce confusion - at least not for
-me.
 
-Cheers,
-Kent.
+Maybe another reason is,
+I want to make the behavior deterministic when
+the .version file contains a non-integer string.
 
-> ... now that you've mentioned it it does seem like
-> GPIOD_STATE_ACTIVE/INACTIVE makes much more sense as well as naming
-> the relevant functions gpiod_line_request_set_line_state() etc.
-> 
-> > I have thought about changing this, but the problem is that I felt
-> > it should be accompanied with a change fixing as many users
-> > as possible.
-> >
-> > I think this is one of those occasions where we should merge
-> > the new defines, and then send Linus Torvalds a sed script
-> > that he can run at the end of the merge window to change all
-> > gpiod_set_value(...., 1) -> gpiod_set_state(...., GPIOD_ASSERTED);
-> > everywhere.
-> >
-> > After all users are changed, the GPIOD_ASSERTED/DEASSERTED
-> > defined can be turned into an enum.
-> >
-> > That would be the silver bullet against a lot of confusion IMO.
-> >
-> > We would need Bartosz' input on this.
-> >
-> 
-> We can also let Linus know that we'll do it ourselves late in the
-> merge window and send a separate PR on Saturday before rc1?
-> 
-> Bart
-> 
-> > Yours,
-> > Linus Walleij
+
+
+
+$ unset FOO
+$ echo FOO > .version
+$ echo $(($(cat .version 2>/dev/null) + 1))
+1
+
+
+$ export FOO=100
+$ echo FOO > .version
+$ echo $(($(cat .version 2>/dev/null) + 1))
+101
+
+
+
+
+I want the script to consistently return 1
+whether or not 'FOO' is available in the user's environment.
+
+
+
+
+
+
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
