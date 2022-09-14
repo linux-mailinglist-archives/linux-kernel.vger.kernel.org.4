@@ -2,63 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E85F5B8FC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 22:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0395B8FC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 22:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiINUtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 16:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S229604AbiINUvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 16:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiINUtc (ORCPT
+        with ESMTP id S229449AbiINUva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 16:49:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4011B3C;
-        Wed, 14 Sep 2022 13:49:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE60E61D3A;
-        Wed, 14 Sep 2022 20:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FAFDC433C1;
-        Wed, 14 Sep 2022 20:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663188568;
-        bh=gxi18X7LFH/rzmBn2mQG5Ml5iaadp1E8KUQNbCcmOCg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ak7zE0y0MZXOAPXK0wge44cCiiKzYa9if0LFLhCCq6RsPV5o9oSYnDid2X6mxW2zm
-         veNajCDmhp+Y/EBBadU7Y8Ld5EAAMcwA/tf6CwqajNJKOpFh1yPePlgejHkA9j7ntQ
-         Z/8Da/hLyefCb18wxNWThBSYjkYkpNT5wp7nQ3r8=
-Date:   Wed, 14 Sep 2022 13:49:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Doug Berger <opendmb@gmail.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Oscar Salvador <osalvador@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/hugetlb: correct demote page offset logic
-Message-Id: <20220914134927.16c229ccdc1a6b9da5d698c3@linux-foundation.org>
-In-Reply-To: <20220914190917.3517663-1-opendmb@gmail.com>
-References: <20220914190917.3517663-1-opendmb@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 16:51:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AE46C752;
+        Wed, 14 Sep 2022 13:51:28 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id s18so10370031plr.4;
+        Wed, 14 Sep 2022 13:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dlyCVmQYKvV9dtFJPrSziTcD5W40HZ0uDRKK1oXcTjY=;
+        b=nQ2uU+3R3PULyzrTap/XMmm6mJFph0hl/rwnZDVw4fHif64LfKbHO5rnhHo7ZBGOhY
+         Y+K6cgM4AMO5ADpYIlPnp0jr65QZdHHyYjxW3ZqMKO0iLcGO0nCwAHDEI3uBPvfrcl2j
+         49PHNjtCegfj1qk5vtGsD9x6EtUsobJDjYldgWkP8TeMOTJuNuXjCl3smhpkRV8//W9n
+         JZycJBfXGmUQJvbuV7hICwvCZYZNe39ycv/ITCW0Vu9F0iL+aJ5R386WELsGIzJjwDDp
+         81xNJ26VgXtES9YHUSfP0fRtEDxe2rjAbaQJ0oFLWXGODCW0tM2h8ClQBwclicg1Uuba
+         I+gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dlyCVmQYKvV9dtFJPrSziTcD5W40HZ0uDRKK1oXcTjY=;
+        b=CemdFBYWe45swy+IwXrCcX8OKXbtUqPwnh9FKZ8yzY5v3JRSAoMg0A/MagtkLrKZsU
+         gZirmqElYoQl0KnesYuI5ABt2ZLKQQnKYoAIHjZ9d5Ke1/giDvsAKzXqnhykWNZsgNAc
+         ph1+/+5fCF3xrmqm0vqwJOfPlhmOgVLCmiSq3re+K2VFdPaQe10SyjMcGQgdiSpFCW2L
+         9le797sfINPkRCR15uFUoHjUnY3Q3uzFLfcb87qfi+hX0j+nJqrbLTqzkDMMlokse6EE
+         ZwzM4ildaDVzONEN/ShyAvJHh6H3PlEUyxU9LOwGEHaOZGXwNp9+91OxgCGj0uwGoVdZ
+         E7PA==
+X-Gm-Message-State: ACrzQf1WTAbp1TzeCVgbnbEFZaog00asq1aqnxbsNjtC7yRXpx7rme3u
+        rCgut6l3QricJPx+bTpreljvOpBNgeTv3L7cIKM=
+X-Google-Smtp-Source: AMsMyM4KjrM0IM3832iUKTWtgifnk8PV7Aeeje1iXgE7szIfUB5EJlsMpXz2Wp+mJmuo+laDp3uhoy2nfimJMACoQmc=
+X-Received: by 2002:a17:90b:17cf:b0:202:95a2:e310 with SMTP id
+ me15-20020a17090b17cf00b0020295a2e310mr7000218pjb.76.1663188687895; Wed, 14
+ Sep 2022 13:51:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220914201049.3508104-1-han.xu@nxp.com>
+In-Reply-To: <20220914201049.3508104-1-han.xu@nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 14 Sep 2022 17:51:16 -0300
+Message-ID: <CAOMZO5AGxXqF8Q6jhfr7vbZmQd6MU4SzFpj5XQG7cPtmdFrFVQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: imx6sx: remove the SET_RATE_PARENT flag for
+ QSPI clocks
+To:     Han Xu <han.xu@nxp.com>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:NXP i.MX CLOCK DRIVERS" <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 12:09:17 -0700 Doug Berger <opendmb@gmail.com> wrote:
+Hi Han Xu,
 
-> With gigantic pages it may not be true that struct page structures
-> are contiguous across the entire gigantic page. The nth_page macro
-> is used here in place of direct pointer arithmetic to correct for
-> this.
+On Wed, Sep 14, 2022 at 5:11 PM Han Xu <han.xu@nxp.com> wrote:
+>
+> There is no dedicate parent clock for QSPI so SET_RATE_PARENT flag
+> should not be used. For instance, the default parent clock for QSPI is
+> pll2_bus, which is also the parent clock for quite a few modules, such
+> as MMDC, once GPMI NAND set clock rate for EDO5 mode can cause system
+> hang due to pll2_bus rate changed.
 
-What were the user-visible runtime effects of this bug?
+Thanks a lot for your patch.
+
+This fixes the kernel hang issue on a custom imx6sx board with NAND without the
+need of using the workaround found in the NXP kernel:
+
+https://source.codeaurora.org/external/imx/linux-imx/commit/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c?h=lf-5.15.y&id=d03eb99c393f8732f70a1d7d29a3b9c42cccbe48
+
+Tested-by: Fabio Estevam <festevam@denx.de>
