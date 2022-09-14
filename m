@@ -2,171 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53185B85F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8970B5B85F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiINKJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S229666AbiINKKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiINKJR (ORCPT
+        with ESMTP id S229575AbiINKJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:09:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B742540558
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663150155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tRy6NMXVqAdLaaelo9/KHPKagVual2K79eNRneTqSHA=;
-        b=EyQ9du6xRmFX7YB9MtOcw0ux1gbmZFbMa870f0cREnvSY2IrABqTEJKu1seMY5Z6ZTAgA0
-        BF8Gqmj8ht3sJ0Koqz7ckcfPs18wTEGvkTactiV0Ta1+Js/OVzQMzhGoQ1VJL8JT+taLEi
-        aBjTYbA9zjRHMMROLQ6qkJecchuWkfU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-JprccLpxP4GI8SHyI1Jy3Q-1; Wed, 14 Sep 2022 06:09:13 -0400
-X-MC-Unique: JprccLpxP4GI8SHyI1Jy3Q-1
-Received: by mail-wm1-f70.google.com with SMTP id k38-20020a05600c1ca600b003b49a809168so1982835wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:09:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=tRy6NMXVqAdLaaelo9/KHPKagVual2K79eNRneTqSHA=;
-        b=PKhM4nOrMfePV+OoAG6ZW6s5mDBs8zrhIkGDtUvF04cPEId9rRjoxHsWo1u7bI8eSb
-         XfLx7Vvbr0E1ARd+LfwEODXMcn8LINSIKxfKg5s9WGTi68DEdEy7i0sh7GH9BcWTaJCi
-         ujCEd367Necv171zwnFHPmCIc8VN2cYfdb3eBT6Bk/+wYZSTUOJ1JkLDlGusgPapiWkV
-         4hjqjm3YOFhmr65mnKnXjnLmJR9WCh2S7saj8eMg8yPiSowlPUsNruSGTGRuZx0gDCkS
-         X3rAK1vU13+bpaYjRtIY0QRe2Kd76q68XutUlHE+vw1uhhX2c1RF5h+wJd/Fa+NJNv5I
-         q3Vg==
-X-Gm-Message-State: ACgBeo2BEmNuX+jVDj+zCMldb6gEhFM4NvmBULdw/DmSe1vhvbGpcYd6
-        6fiyDLYemr9xp5LTYJHOaHJiO6GeVkxd1nI8Q10gl0U66y7iHaJ9FOjBkdLv5uZTDUpOmDFmS+s
-        r7vj27UBC5jWz4lK5HWUsvYhi
-X-Received: by 2002:a5d:47aa:0:b0:226:dbf6:680c with SMTP id 10-20020a5d47aa000000b00226dbf6680cmr20947372wrb.581.1663150152762;
-        Wed, 14 Sep 2022 03:09:12 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6mUE0OyqSCSCmqM4mki5eCHDSHXk9TWtC5yJAaN4TbupXuzHkSxN3OSWGQKjEVNQGAFCI3Hw==
-X-Received: by 2002:a5d:47aa:0:b0:226:dbf6:680c with SMTP id 10-20020a5d47aa000000b00226dbf6680cmr20947344wrb.581.1663150152500;
-        Wed, 14 Sep 2022 03:09:12 -0700 (PDT)
-Received: from [10.119.22.46] ([89.101.193.71])
-        by smtp.gmail.com with ESMTPSA id v2-20020adfe282000000b00228dff8d975sm12603941wri.109.2022.09.14.03.09.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 03:09:11 -0700 (PDT)
-Message-ID: <35003c8f-d777-b2b1-4d48-20f90ba66994@redhat.com>
-Date:   Wed, 14 Sep 2022 12:09:10 +0200
+        Wed, 14 Sep 2022 06:09:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5715FD5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663150197; x=1694686197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T5mSsgn3SuJh1F7VhaEowHn9W0M5YkG3gvnG6SSQlG4=;
+  b=m4YeTW3lRVQ7MTiAPLvH7V/VlLdVEQpNoWdFHLalMEwx7dABlp9dlKN+
+   WjdcOy6jRKCSYqyMWLe+/RCJD6l4CVT5G8IIyKvZbAKqYuezYsDqwclmV
+   JyDtG/INUy4tmzdiEob6fuR5QvANGNoSQWwtYQKjWbj/XKIUmWYP5I0Sc
+   euhwB5WaxJi0zDKt7uHjwvNY4ykJXBoddGmO9EBRPFAukraUHevbusq/R
+   GNCNe2b/OGWZlb5Jj1co5Hn7PfsKvjJ3iTBQYl6N1y0kA2B1vkbLXu3+K
+   rySYaH5D9UP+UoVZi/9r3oRf8qEy2Ruy3AbS1kg2k9PKzawp23tEcOvEm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="297120994"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="297120994"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 03:09:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="685259698"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Sep 2022 03:09:56 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYPLA-00005c-0r;
+        Wed, 14 Sep 2022 10:09:56 +0000
+Date:   Wed, 14 Sep 2022 18:09:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [djbw-nvdimm:libnvdimm-pending 9/22] fs/xfs/xfs_super.c:734:33:
+ warning: variable 'error' set but not used
+Message-ID: <202209141753.agkH4L40-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] hmm-tests: Fix migrate_dirty_page test
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <20220913052203.177071-1-apopple@nvidia.com>
- <53390539-cfa9-7498-5b69-8fb8b307182d@redhat.com>
- <878rmnn0jq.fsf@nvdebian.thelocal>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <878rmnn0jq.fsf@nvdebian.thelocal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.09.22 10:20, Alistair Popple wrote:
-> 
-> David Hildenbrand <david@redhat.com> writes:
-> 
->> On 13.09.22 07:22, Alistair Popple wrote:
->>> As noted by John Hubbard the original test relied on side effects of the
->>> implementation of migrate_vma_setup() to detect if pages had been
->>> swapped to disk or not. This is subject to change in future so
->>> explicitly check for swap entries via pagemap instead. Fix a spelling
->>> mistake while we're at it.
->>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
->>> Fixes: 5cc88e844e87 ("selftests/hmm-tests: add test for dirty bits")
->>> ---
->>>    tools/testing/selftests/vm/hmm-tests.c | 50 +++++++++++++++++++++++---
->>>    1 file changed, 46 insertions(+), 4 deletions(-)
->>> diff --git a/tools/testing/selftests/vm/hmm-tests.c
->>> b/tools/testing/selftests/vm/hmm-tests.c
->>> index 70fdb49b59ed..b5f6a7dc1f12 100644
->>> --- a/tools/testing/selftests/vm/hmm-tests.c
->>> +++ b/tools/testing/selftests/vm/hmm-tests.c
->>> @@ -1261,9 +1261,47 @@ static int destroy_cgroup(void)
->>>    	return 0;
->>>    }
->>>    +static uint64_t get_pfn(int fd, uint64_t ptr)
->>> +{
->>> +	uint64_t pfn;
->>> +	int ret;
->>> +
->>> +	ret = pread(fd, &pfn, sizeof(ptr),
->>> +		(uint64_t) ptr / getpagesize() * sizeof(ptr));
->>> +	if (ret != sizeof(ptr))
->>> +		return 0;
->>> +
->>> +	return pfn;
->>> +}
->>> +
->>> +#define PAGEMAP_SWAPPED (1ULL << 62)
->>> +
->>> +/* Returns true if at least one page in the range is on swap */
->>> +static bool pages_swapped(void *ptr, unsigned long pages)
->>> +{
->>> +	uint64_t pfn;
->>> +	int fd = open("/proc/self/pagemap", O_RDONLY);
->>> +	unsigned long i;
->>> +
->>> +	if (fd < 0)
->>> +		return false;
->>> +
->>> +	for (i = 0; i < pages; i++) {
->>> +		pfn = get_pfn(fd, (uint64_t) ptr + i * getpagesize());
->>> +
->>> +		if (pfn & PAGEMAP_SWAPPED) {
->>> +			close(fd);
->>> +			return true;
->>> +		}
->>
->> We do have pagemap_get_entry() in vm_util.c to query the pagemap entry.
-> 
-> Thanks. I'd missed that, although `grep pagemap
-> tools/testing/selftests/vm` suggests I'm not the first to follow a
-> tradition of open-coding this :-)
-> 
-> But there's no need to perpetuate that tradition, so will redo this to
-> use vm_util.c instead.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
+head:   e27a0356de15f16934325784c6b1d89cf0f13458
+commit: 7df6bd39bccceef2f90dec6027a5de5c2f485dac [9/22] xfs: Add xfs_break_layouts() to the inode eviction path
+config: arm-buildonly-randconfig-r003-20220914 (https://download.01.org/0day-ci/archive/20220914/202209141753.agkH4L40-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=7df6bd39bccceef2f90dec6027a5de5c2f485dac
+        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
+        git fetch --no-tags djbw-nvdimm libnvdimm-pending
+        git checkout 7df6bd39bccceef2f90dec6027a5de5c2f485dac
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/xfs/
 
-Yeah, we just recently factored stuff out into there. I'll be factoring 
-out more in my upcoming tests from the madv_populate tests.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/xfs/xfs_super.c: In function 'xfs_fs_evict_inode':
+>> fs/xfs/xfs_super.c:734:33: warning: variable 'error' set but not used [-Wunused-but-set-variable]
+     734 |         long                    error;
+         |                                 ^~~~~
+
+
+vim +/error +734 fs/xfs/xfs_super.c
+
+   727	
+   728	STATIC void
+   729	xfs_fs_evict_inode(
+   730		struct inode		*inode)
+   731	{
+   732		struct xfs_inode	*ip = XFS_I(inode);
+   733		uint			iolock = XFS_IOLOCK_EXCL | XFS_MMAPLOCK_EXCL;
+ > 734		long			error;
+   735	
+   736		xfs_ilock(ip, iolock);
+   737	
+   738		error = xfs_break_layouts(inode, &iolock, BREAK_UNMAP_FINAL);
+   739	
+   740		/* The final layout break is uninterruptible */
+   741		ASSERT(!error);
+   742	
+   743		truncate_inode_pages_final(&inode->i_data);
+   744		clear_inode(inode);
+   745	
+   746		xfs_iunlock(ip, iolock);
+   747	}
+   748	
 
 -- 
-Thanks,
-
-David / dhildenb
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
