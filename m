@@ -2,139 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74335B9096
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AAF5B9099
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiINWpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S229769AbiINWrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 18:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiINWpg (ORCPT
+        with ESMTP id S229735AbiINWra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:45:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6D422CC;
-        Wed, 14 Sep 2022 15:45:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3BA5033D6B;
-        Wed, 14 Sep 2022 22:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663195532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WrYI2akpyFGc973gFDZLeSpSTKSsio96AxzmoFqBEZc=;
-        b=O4JEJvUSBG/iz0aqWIc3jFihEuQnr5iNTcRbnWIfrOZ2B7JD+59PwdOnrKWR3y0adHORkD
-        +xPfhuJYotoG8E+PP1gDgPKDRFYBARV3myr4Kkj/GPoJFnxTmLSgAc5Edq6268ChL1I6GN
-        yA399nNlO1Gh118LF2tGqQW0A2AoY/0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663195532;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WrYI2akpyFGc973gFDZLeSpSTKSsio96AxzmoFqBEZc=;
-        b=R8LAajefsyTNx6If59Zi3oC+dC8ttmgAtr+3Cz+rfzpWzFyHg90I8T8jhfP/QBj5D46wP+
-        ltJnBA1wSEEi12Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27DF613494;
-        Wed, 14 Sep 2022 22:45:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xOSiNIRZImOSTQAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 14 Sep 2022 22:45:24 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 14 Sep 2022 18:47:30 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBE052477;
+        Wed, 14 Sep 2022 15:47:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CBtHyXwGY9buYfWRmp25XIjfNOeDQ0+KbOYAf4556RLqgZy6tPX8liwrPUaVVhDjbQywpYavyZOtvhDL488CA6hoTR3Fn57NDncQMmBCU9RGJLa6vG0tKoz30SKMudtS9A41FXlaxyn4G5DHNY83zjG6nqApjd05NX0tbPzgl5wrgfRdX7JvHT9xcF887+XqNmTE7xG+/p1tuO7VbwzChd8xeiRSu7lOuPJBatrm72SjSPjBblVafJqsP2LwQLIzRcOM6hnyUQKHKSddCRMRP6kbTvbl7scYkwAkfKZy8FwhXwpGc4FJjRAiCEoixeVH4/GLqQG4HuL6MwzHPXMCWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T1Z17oH30YZIqkLi55aRCdIMbRIUBM3HwoFr+KwEdk4=;
+ b=m/Vb+Y0A2gd7hiyh3NMk+lqFv2Da2DlOA2zSFs6v82suTSGtyz6MGMAxB1TRDalGsKTnLRPMJBS9DB//BWiDAqhu2sQYk4TMz+6W4XkajOdOUMOQU1nGYZLGFx8EB6IqoMedBLkyVqEwTG/R339lGP1FUjL7KCV3f7Symcp5ZCdV/21gH6QqOefcVJ0XOIy6gKmuQTz/+s76ASSzmR040ol1RvjZOfYu89xFhFZqkIhf99D7Q6ehW3wDvX55tyf72j/QojGhukrCG/EY+zHXZI8FEjwf21YLshSKZcDsVpqFUU2QcLAOpmUtBHdwZJ6B26levvRwQBVxZU7hWDiWWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T1Z17oH30YZIqkLi55aRCdIMbRIUBM3HwoFr+KwEdk4=;
+ b=cmNfeOoF/h4Uk8wQfy2Z+9aRzZdTLdPNj6tIod0/4Qx6iFIVoHaPePlR3PLHyF05h/zMLFvkYEemZTf/pwEWnNzkb332fPUa9NUP/K6U+VF1ShgTimC3bnPnRJqotoJnc00lcpUD1I9R2kriON7NnSV/eh6VUmYgO4ADZtZiuOsuS5xBrD7g44ow73UmCSKUA19H8coaoQpgEfYIV03sdKstZMJG491hxlAZOFUPwM9Icg1mJQodaN66Ab2SohnPN4XYW7khLeXaUvLNjDfhAHpIw3dQ+gqzYj317L84UERQoH6crHBDewTE644cHMxZsWqaetcpvX+El5xlFrYe8w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ BL1PR12MB5239.namprd12.prod.outlook.com (2603:10b6:208:315::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.23; Wed, 14 Sep
+ 2022 22:47:28 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::94df:bc2b:6294:8cc6]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::94df:bc2b:6294:8cc6%6]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
+ 22:47:28 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Doug Berger <opendmb@gmail.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/page_isolation: fix isolate_single_pageblock()
+ isolation behavior
+Date:   Wed, 14 Sep 2022 18:47:26 -0400
+X-Mailer: MailMate (1.14r5916)
+Message-ID: <04AD3C98-5BD5-47CB-8B26-945D03BAD9E5@nvidia.com>
+In-Reply-To: <20220914154225.e3f8ad4b076236c75705b0f9@linux-foundation.org>
+References: <20220914023913.1855924-1-zi.yan@sent.com>
+ <20220914154225.e3f8ad4b076236c75705b0f9@linux-foundation.org>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_48CBD3F5-ECD9-44E2-A294-23F37B607F8B_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR05CA0012.namprd05.prod.outlook.com
+ (2603:10b6:208:c0::25) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Dave Chinner" <david@fromorbit.com>,
-        "Trond Myklebust" <trondmy@hammerspace.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <f8a41b55efd1c59bc63950e8c1b734626d970a90.camel@kernel.org>
-References: <91e31d20d66d6f47fe12c80c34b1cffdfc202b6a.camel@hammerspace.com>,
- <166268467103.30452.1687952324107257676@noble.neil.brown.name>,
- <166268566751.30452.13562507405746100242@noble.neil.brown.name>,
- <29a6c2e78284e7947ddedf71e5cb9436c9330910.camel@hammerspace.com>,
- <8d638cb3c63b0d2da8679b5288d1622fdb387f83.camel@hammerspace.com>,
- <166270570118.30452.16939807179630112340@noble.neil.brown.name>,
- <33d058be862ccc0ccaf959f2841a7e506e51fd1f.camel@kernel.org>,
- <166285038617.30452.11636397081493278357@noble.neil.brown.name>,
- <2e34a7d4e1a3474d80ee0402ed3bc0f18792443a.camel@kernel.org>,
- <166302538820.30452.7783524836504548113@noble.neil.brown.name>,
- <20220913011518.GE3600936@dread.disaster.area>,
- <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>,
- <166311144203.20483.1888757883086697314@noble.neil.brown.name>,
- <f8a41b55efd1c59bc63950e8c1b734626d970a90.camel@kernel.org>
-Date:   Thu, 15 Sep 2022 08:45:21 +1000
-Message-id: <166319552167.15759.17894784385240679495@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|BL1PR12MB5239:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90281b8e-653a-450a-2a1a-08da96a319cf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SQBnIftHpF3A3gEEBgqsQhCuwa/iX/zpoHdLq+SsfWgMG2xoXqVhDuUVVxofOHesHZnATdJvwCKUQF9RRvZ7g5+FKZvSPby4ZIAc0F1eIV99Rcf1ejUQW7rKjkXXGpTthVu7fpqhJ01KiFsMFoR7yIMgHIu4p2XFBbDH8T0HZCbgNzvhOEsWgqNVERIa5y/36mVU9YKLiqAACNcCgKNmP1PDw6m0K0sjHurkViW9FHGnl20A8L1PiFKD0YUlPKtpQs9Kc5iyTD5mTCvNBZWrHIvdjkjH/SGjR2NHV6JwCVoblbjh24El8Xd0jdH3QWqmmT8V41T/e1aenTvh8h6cvrjZiIgDtBuFFSp1uAk2cy51uVpBZiL6D10uY1DrjwbZdNNTbecM2lDjfrI+a0wUiv3MRogSUSCHj/bRT70HnS53PDm4SUPV2Qkfab38oUy1bykhcNn19jGrfUF03mvpdiOEga0bSkgBIxAD4i2A3Ftb1W+YRYj1PiXYXdgrH/bvUTpsFIPNaFd0ffQz8psWUO9ZyEqAYul7IFssLS7mhD6jj+XB8AeNhksRDPt64ZeDz83bbx3XhAm/GS/fjF98kubljkBRAX3EthxW5TUwTkTnxtKnOJoHfjmIzd2XoO9tiweZFWMgmWM2+55JBOvoOpeELHNdJZwjGCjvAgTtMzAATAdd9zHuvamlXJtD38ZUg4X8+K7dMBwYncoFjvRWNyzG+R31tFqOsVN3fOmJRuSs1JMUxN8YJIfrXSvdPYaipysvNLo1LY1rgfP5hgOpo+xHUsEGBdal/ovtbWtq6ycYiJ1C4M3Y6Gr4clrbGsCteNIkGzrGMoMH89eROIBV9bH5Y2JaYxmgou0geKQd0/M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199015)(36756003)(33656002)(86362001)(38100700002)(53546011)(6506007)(235185007)(2906002)(478600001)(966005)(41300700001)(186003)(26005)(6512007)(2616005)(6486002)(83380400001)(66946007)(5660300002)(8676002)(4326008)(316002)(66476007)(8936002)(66556008)(54906003)(6916009)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5Q4NSTrXidHE1l9JE/xd6BhYqnaDtJaJtsO53cGXux6GJxkcnjyr9bAtyJaM?=
+ =?us-ascii?Q?c1xZtiCVqsv5DMhPFLh48BbzT4JlG+W93GbvdjHLym7hdoaM2VtgbaYiYhN5?=
+ =?us-ascii?Q?3eMcAbHsi7ieiMNhe9XZ7Us4sll+MN7LO9PPNn6cWQf+BumfxTVPACUfLQj2?=
+ =?us-ascii?Q?fdU04CoZg3WHvt1IZ13tHAWgsQTpNDp2j43YvGfAhhsiyHN19g52qj7JoHZM?=
+ =?us-ascii?Q?uJIrkdYjXFx2RL5YLZnOyEVwHe13OJ0K6W27EgZFzfRcp9GTAiuwU2gE9VVn?=
+ =?us-ascii?Q?2HUHnjIRVxUf1IuOcdSbrMq5nN3uA/1q6s877R6RG0hCZjxmhHtoIOgbmDDs?=
+ =?us-ascii?Q?MbzwvE8bVmtEnuh7pkGiDfreQheiFZ7qLSsARoLAawy6B2imBhQX7ev/gSFI?=
+ =?us-ascii?Q?Av7GUTOHMCVQFRdpzx63RmUkL2HM6k3TPpU2ibcGJt1/Qcg4L83V17iuGU/j?=
+ =?us-ascii?Q?9zecJwtqegdyJwp6Kqecr3GpC+ElelQwHFIky1mmagrBFtGwhcrI8Z3dJ3aN?=
+ =?us-ascii?Q?cUMou3/w0/byBvlFXB1v4XtKSKbL3JZwHDU49lBMLmCJZj7wdY3sETPbSIn9?=
+ =?us-ascii?Q?wwMtNfEKx4YiFE/HjZSsRXe3CHY9clAU5wiXaETuIMqoOW4PHmm6E2NVRLqy?=
+ =?us-ascii?Q?/MO0rH4xsS+tGF/rf6Ki8kIY2qytq8NA+t0bTcijPAW86RL5kZ7TgTI1BHFO?=
+ =?us-ascii?Q?yzyR0eCNIBLpEiilKLHYI2nxQRIRkTiwr19AjaKXg6MCzAuqC4X62edSHf1m?=
+ =?us-ascii?Q?aXC7MS0HFKQ/nSufUqa5PqRki+kLqC4nurgw1/NywyC2xKOV8iOms6lQ0gI7?=
+ =?us-ascii?Q?3IHq2hC7LUmLvYilr6097uj22Jocjxa2NL17O4jrOGsioCybzibUrv4ig6n2?=
+ =?us-ascii?Q?Zdu+Of3T0BR981E4NnZ7GF+yEqsbrdpLyonOJhkl9xbb8leeM7Gcp9dS9YCT?=
+ =?us-ascii?Q?GGS7TbqtqCzTeE8kNkcdxYpvymfpsQtZZGI807epCF+OVyYa7tIlgstx8uTv?=
+ =?us-ascii?Q?4noD69/Hk5QCtzgFo8eBFF88/6rIO0TblL+/MJiekMaahBXiZsK+xP1G+FvV?=
+ =?us-ascii?Q?/xNa6kXQmvXHn2rSeksr2GKWoSPNbxaJSE4IJtiJ7DokFeIHTBtfmL2YtdwV?=
+ =?us-ascii?Q?u+LXftlxBC80dT1DltuzcltyowS50PqFLZacQBEaYGhpIudApisQLGNm06Mi?=
+ =?us-ascii?Q?itkDAAsUvK1qr87D20MdUAMD3kZ7RyoSc62qTGejArttToaSI9WQRMJJmCKu?=
+ =?us-ascii?Q?kixI9GyBbFJ6wgbGW7quNtKPf9sDS5mqpj/qg86LeW3Qi8Ca6Z8PzMkiTUZg?=
+ =?us-ascii?Q?XjVGxkD3TDVUadbgR0Pt9xZBeBXQYy4BTbybiBi4EBWvEUj2Xyb3kLBhGrdK?=
+ =?us-ascii?Q?Vz6KwXDr5cpPs+v0lw4I5yd3Cp5v0+LZgepTiVxNdRT4cHJUWNGcDA7xLSZe?=
+ =?us-ascii?Q?16pzcPcyfOwM6CEJ0Iotj3A2SC50aGc96MzozzrkToYRKT3UQOudC7epruFe?=
+ =?us-ascii?Q?XS8uGwHqWWRJDU6Pu+ES66waUwkGmjea4U/wCHROR9Y7E+DGARH0+7JYUBXW?=
+ =?us-ascii?Q?MgVZAsL02NgVcuTTVX2AFSf4dtNvy5MC8VUyojPA?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90281b8e-653a-450a-2a1a-08da96a319cf
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 22:47:28.4439
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i6LPTU8jLQZaRSCkQylsF/zGY5q445Cy45VAs6Tl3SCEjSR4VDcvE8lkodmorToa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5239
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022, Jeff Layton wrote:
-> On Wed, 2022-09-14 at 09:24 +1000, NeilBrown wrote:
-> > On Wed, 14 Sep 2022, Jeff Layton wrote:
-> > > 
-> > > At that point, bumping i_version both before and after makes a bit more
-> > > sense, since it better ensures that a change will be noticed, whether
-> > > the related read op comes before or after the statx.
-> > 
-> > How does bumping it before make any sense at all?  Maybe it wouldn't
-> > hurt much, but how does it help anyone at all?
-> > 
-> 
-> My assumption (maybe wrong) was that timestamp updates were done before
-> the actual write by design. Does doing it before the write make increase
-> the chances that the inode metadata writeout will get done in the same
-> physical I/O as the data write? IDK, just speculating here.
+--=_MailMate_48CBD3F5-ECD9-44E2-A294-23F37B607F8B_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-When the code was written, the inode semaphore (before mutexes) was held
-over the whole thing, and timestamp resolution was 1 second.  So
-ordering didn't really matter.  Since then locking has bee reduced and
-precision increased but no-one saw any need to fix the ordering.  I
-think that is fine for timestamps.
+On 14 Sep 2022, at 18:42, Andrew Morton wrote:
 
-But i_version is about absolute precision, so we need to think carefully
-about what meets our needs.
+> On Tue, 13 Sep 2022 22:39:13 -0400 Zi Yan <zi.yan@sent.com> wrote:
+>
+>> set_migratetype_isolate() does not allow isolating MIGRATE_CMA pageblo=
+cks
+>> unless it is used for CMA allocation. isolate_single_pageblock() did n=
+ot
+>> have the same behavior when it is used together with
+>> set_migratetype_isolate() in start_isolate_page_range(). This allows
+>> alloc_contig_range() with migratetype other than MIGRATE_CMA, like
+>> MIGRATE_MOVABLE (used by alloc_contig_pages()), to isolate first and l=
+ast
+>> pageblock but fail the rest. The failure leads to changing migratetype=
 
-> 
-> If there's no benefit to doing it before then we should just move it
-> afterward.
+>> of the first and last pageblock to MIGRATE_MOVABLE from MIGRATE_CMA,
+>> corrupting the CMA region. This can happen during gigantic page
+>> allocations.
+>
+> How does this bug manifest itself as far as the user is concerned?
 
-Great!
-Thanks,
-NeilBrown
+Like Doug said here: https://lore.kernel.org/linux-mm/a3363a52-883b-dcd1-=
+b77f-f2bb378d6f2d@gmail.com/T/#u,
+for gigantic page allocations, the user would notice no difference, since=
+
+the allocation on CMA region will fail as well as it did before. But
+it might hurt the performance of device drivers that use CMA, since
+CMA region size decreases.
+
+
+>
+>> Fix it by passing migratetype into isolate_single_pageblock(), so that=
+
+>> set_migratetype_isolate() used by isolate_single_pageblock() will prev=
+ent
+>> the isolation happening.
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_48CBD3F5-ECD9-44E2-A294-23F37B607F8B_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmMiWf4PHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUSIIP/A5ykvtrYGUtcSQqhmUw80SccKZTg200z4eB
+cOLh4F1AeWky55IBlgaBATjKTxZoRXOI5h4lQtOiMgswuFaxB0kbEj1AbumwMn0t
+zb2tVlvDFPiILbDt3tpF7pZ73iNI9SJ1TS9aJFOEmXgVQBk8PwrRYZ0VQ4d1Cz3C
+vTYId8bs6ff4CVXoBhvKSHTfyX2s1ZGutTfj6xaKJwn4vuhrTFg2p1LNc55f/J/3
+DoKkEhNAtsWTq1jsWTL7JoNsri0Nq/FfMBpiA3Zwsl2Vrme0f43H5QXwZttx26MG
+Oq+s7NUOfZvM23MUDJC+qO736VDGn8XSMrDk6jb59lNQQqL0tDbEQsD9H5uP91FA
+QKFGlBxNBdUhDtNK6GKnpFYYAr1ru/7GlOTfa2YjkGO1WLM6NK8cOum/xlkfu+pK
+HnAEW6vkwp1umcRvlQ9hoeJmBrEH+uMAyRVR+7F/LCnxtJFPIpfQwQIZM20lzmAG
+BVJ2Mw57CEc5Bac3CyYcWn8UEhpyxLn/Be9lAz1gAEGlUh7o/leUfCXA4aiWae88
+RxlHofo1gxtAVu5lJOX3PSKY6I71Gajn1FU+CFkHAR7G1uKh2sMthGSbqhbP6EiD
+Y/FTlnY1WYcJ+eHmkE/h7qT5xxjmTdGscPtSHTdqWDu/s6X7SdY9m4ZEx8vnvGRm
+Gl7qtilu
+=XoYE
+-----END PGP SIGNATURE-----
+
+--=_MailMate_48CBD3F5-ECD9-44E2-A294-23F37B607F8B_=--
