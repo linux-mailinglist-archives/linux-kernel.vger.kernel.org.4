@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE985B8E9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A915B8EAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiINSJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S229831AbiINSNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiINSJa (ORCPT
+        with ESMTP id S229714AbiINSNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:09:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0561EC;
-        Wed, 14 Sep 2022 11:09:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB8ABB81C58;
-        Wed, 14 Sep 2022 18:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D4A6C433C1;
-        Wed, 14 Sep 2022 18:09:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663178963;
-        bh=2Vax29sc4ZSisv5YCVSdfRKAOSq8E9/1iuj8XUbl3q4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EsHCSiUbI1qgnhHLG1idfk2LDZW2y5wlqq6RPLuRhkUqSCQMq+p4V4JwgDebH8jRr
-         G216o+in0R2PwpYVv0Ahu6rocVSQKRLzRzp8k4P9ID0paeQG6E+kPASeuHviWCcEJl
-         wjeygFcKi5tqn2JxkSALd+OUvmimqXQSiOVyjgM34Mkds0vqv/OIxY+j5DC9h3Prhd
-         qgAQwISbu49tOwm2TM1MvscXv0XeQzeBr0JCOd9BrYQBwM8eacE3NC3k3SDnXXn2s5
-         iaYs/AxvyINJcFiiA4wam7OY/4BjEUyId+EAUgDGwISSBFGZmI5RnF07YdGxtcMxuC
-         p6Znf0+j3vh+w==
-Date:   Wed, 14 Sep 2022 11:09:23 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     dan.j.williams@intel.com, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, nvdimm@lists.linux.dev,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@infradead.org, david@fromorbit.com, jane.chu@oracle.com
-Subject: Re: [PATCH v8 0/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <YyIY0+8AzTIDKMVy@magnolia>
-References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
- <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
- <bf68da75-5b05-5376-c306-24f9d2b92e80@fujitsu.com>
+        Wed, 14 Sep 2022 14:13:33 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED39930F63;
+        Wed, 14 Sep 2022 11:13:32 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso15206719pjd.4;
+        Wed, 14 Sep 2022 11:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Z6XbQYQrL3hibLXcs9Qu2WQKlcrTEXAiBTewPjwbvI8=;
+        b=ZZFFOTNzRXOnjQm+TMxLNjuV0QU8eRzrmdrOZGtS1MBevBLNUOEg6BudAEsibqF+8z
+         tk0LCKUgi1WTarJREuQznibhsy7f5C/xagb3vVH5mz2duK9MhcI9nHS3gTywr5iNSVVM
+         Hf7S06uUBQRioFGdS7URdA2l/7eBi1l1fY1LtPtpYiHX9fxE7ZDl7d3L5kg42rX2dRt5
+         z8ULCWlONGQU4KxVWLLovHQvoPqk1x7aBXrSHgKFfHVkhjkDv5dF0lusXjQaB5WWyBn+
+         eZZR/WD6XzrQN1oVov7LYUeqjZAcgiA6MlOSqIIjmOK9FyuUMZUOuev/2q8XzbMh8EaA
+         PqtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Z6XbQYQrL3hibLXcs9Qu2WQKlcrTEXAiBTewPjwbvI8=;
+        b=eCi1iJAfpJ11IJ38AETm+eO/z5FdcAIsVUSIP1AuV7JeVaZxBZd+HgfPfFhdD0iQqi
+         Iyjn/UfFpFU3OaKyxqut2S5inD0jUpl3idMUDn01rHUf1PgfTOxFzOsPhgKfgt172eN5
+         rRGbR3G7JSok66dd4xYPcrtIxoAmk5uoCcq710bSZ79gKjFDCMoxeYVfepyMpcDCtVz/
+         wo3CJ1mYf3mfl9UAIexw4xrP4euhmBz8GSI82AtPTTAGL+2jrz4X7h6MbBFkSK9+f7t9
+         EkeaTXhOVktuJXMycgtmwwR7mBueKUqVVVzlpOzy86l5p2YxG5uDxoDSBHmI7FR2IUm3
+         0YaA==
+X-Gm-Message-State: ACgBeo1LZ2DAVuOiQti0GMb3p4sl85sWQd7/xayvbhTqqQPCJRHSvv9e
+        ktliZmDcoVWiVZ5bypB1u+I=
+X-Google-Smtp-Source: AMsMyM5fZthu4Ufl4nx1rAnN7OIJ9+p6ypeQYud2S/IB/+gY/0t6HXNQkPujoybWI4VEqBpsQ136qA==
+X-Received: by 2002:a17:90a:6401:b0:200:b8ed:ca6 with SMTP id g1-20020a17090a640100b00200b8ed0ca6mr6296772pjj.0.1663179212243;
+        Wed, 14 Sep 2022 11:13:32 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:2f68:fe7:a2e6:7595])
+        by smtp.gmail.com with ESMTPSA id y5-20020a17090a2b4500b00200b866d061sm9472692pjc.30.2022.09.14.11.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 11:13:31 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 11:13:27 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, chen.zhong@mediatek.com,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] MediaTek PMIC Keys - DT schema conversion
+Message-ID: <YyIZx9j6HCluvRW+@google.com>
+References: <20220914103021.43593-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bf68da75-5b05-5376-c306-24f9d2b92e80@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220914103021.43593-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 05:46:00PM +0800, Shiyang Ruan wrote:
-> ping
+On Wed, Sep 14, 2022 at 12:30:19PM +0200, AngeloGioacchino Del Regno wrote:
+> This series converts the old mtk-pmic-keys.txt binding to DT schema,
+> documents the missing support for key press/release interrupts and
+> adds a compatible for the newly introduced MT6331 keys.
 > 
-> 在 2022/9/2 18:35, Shiyang Ruan 写道:
-> > Changes since v7:
-> >    1. Add P1 to fix calculation mistake
-> >    2. Add P2 to move drop_pagecache_sb() to super.c for xfs to use
-> >    3. P3: Add invalidate all mappings after sync.
-> >    4. P3: Set offset&len to be start&length of device when it is to be removed.
-> >    5. Rebase on 6.0-rc3 + Darrick's patch[1] + Dan's patch[2].
-> > 
-> > Changes since v6:
-> >    1. Rebase on 6.0-rc2 and Darrick's patch[1].
-> > 
-> > [1]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
-> > [2]: https://lore.kernel.org/linux-xfs/166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com/
+> Changes in v2:
+>  - Removed tests leftover interrupts/interrupt-names from examples
+> 
+> AngeloGioacchino Del Regno (2):
+>   dt-bindings: input: Convert mtk-pmic-keys to DT schema
+>   dt-bindings: input: mediatek,pmic-keys: Add compatible for MT6331 keys
+> 
+>  .../bindings/input/mediatek,pmic-keys.yaml    | 114 ++++++++++++++++++
+>  .../bindings/input/mtk-pmic-keys.txt          |  46 -------
+>  2 files changed, 114 insertions(+), 46 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
 
-Just out of curiosity, is it your (or djbw's) intent to send all these
-as bugfixes for 6.0 via akpm like all the other dax fixen?
+Applied the lot, thank you.
 
---D
-
-> > 
-> > Shiyang Ruan (3):
-> >    xfs: fix the calculation of length and end
-> >    fs: move drop_pagecache_sb() for others to use
-> >    mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-> > 
-> >   drivers/dax/super.c         |  3 ++-
-> >   fs/drop_caches.c            | 33 ---------------------------------
-> >   fs/super.c                  | 34 ++++++++++++++++++++++++++++++++++
-> >   fs/xfs/xfs_notify_failure.c | 31 +++++++++++++++++++++++++++----
-> >   include/linux/fs.h          |  1 +
-> >   include/linux/mm.h          |  1 +
-> >   6 files changed, 65 insertions(+), 38 deletions(-)
-> > 
+-- 
+Dmitry
