@@ -2,298 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF695B7E01
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13B05B7E05
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiINAxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 20:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S229850AbiINAx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 20:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiINAxC (ORCPT
+        with ESMTP id S229790AbiINAxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 20:53:02 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B0371AF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663116781; x=1694652781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GZsboB/cmJ6HEuykGInXryBXTWwZdW9Ea7Z/o3r1/5I=;
-  b=a8ihswEt4Zrnj5DIvxk+iTNuVOs10JKgFGTMNYGroGtsBaZHaMLh4DAI
-   5WLqmHQAl06VaxAQM6mXFx2PYRNz+4UF8Thw1l7eoTNXvTx/1PGpXg8Cg
-   WexwAGv6SZi61EgnXyxYBv0Fcp9U7T+xGEsTtSww/aevIqIDU8V8JI0Qz
-   j6TVOMRkqj8eYh0orysW9ELsBDc8u2QcxVjGqsaL0hTBGryP/VBgkN+02
-   P/EGeLtzUvcSQWZD3vz7THTYJ2/GgyvcPZ/32fKsoclh1bhOwgpmjUs8n
-   lIWN0qNixUO8/nrLF2X1i7SBzGfu6gkJ2ZIwokiXESJMHRuPbcmKUL8ZO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="324545442"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="324545442"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 17:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="742368516"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Sep 2022 17:52:59 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYGeA-0004Az-16;
-        Wed, 14 Sep 2022 00:52:58 +0000
-Date:   Wed, 14 Sep 2022 08:52:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Tue, 13 Sep 2022 20:53:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65756171F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:53:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id s18so7581111plr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=s7D2/n8L9/xlIj+hVN8GIcFvSkrDNM1KPpmGzxvTo/g=;
+        b=MjaKzwDN2gr+IBBkEtU4oKISjvr8IhyssXGGoZPdWL2vQ+Kc+kf4lIHFyxRCWZxe/6
+         tPIKyV/waFHwFtUW/s0IxrR+yzMbZxhaCYWJUbDrsoCjVHcCT8QPKI5L2jMpyVKpqoLr
+         C+lgLIDjYk2a/JgjpmDcGPYLaDXheZQ/5h1PjIB5ZCKPvMRzfJ8fo/CVu5Fhg2mDsWUR
+         UX3ZA5bX0+YXd0G5eaOP85mFoLnXoI/CIQvXLbCSUCqTxwx4dyJ1Ml2KvZqi7Zryg82w
+         ONSiaucCEFXmPb67TjV6JShvU2ZWb80s5L/8+SL7vNTx5v4zxFiLIiEZ48eG+5CvZ1Ka
+         0Kwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=s7D2/n8L9/xlIj+hVN8GIcFvSkrDNM1KPpmGzxvTo/g=;
+        b=V4MTUcKOUoB/sHThHoE4W+O/ai/2Pof0aoCPqHxnydXU/ju/xRBgugew38BObEKFTO
+         4VsAejd6jBBhz4KtN1BAy9ovIZQ7/fG+BQagH3kE9DdTwFc8ykwb4Wgt90fqIn4jmQA1
+         Q/AmG5MRJmIh4a0c1qdNbnxU2btnwLx8sdKdpcqUWwjiLTR/j6BVVbGmpg7mFA1YG8qj
+         diCGrcrxGHGYQTzqIVmWGr0mkPTA1BJJfUk72G5Od0xxL/OGUesG1uDpekCMfxLTa9W7
+         OylSozz1B09KqiR+SwEpPUiM1jcWg/CSAGsy2MRj1eSRMAMirDgbItMJkfRlLE8xxiDs
+         PdsA==
+X-Gm-Message-State: ACgBeo3E+Q+O0/qh0Ldr150wU3C9UxzewEyWGGcF80XQ2xWVsftVQ7AL
+        sUAwyva1M/HTb3gZbAloJg35gA==
+X-Google-Smtp-Source: AA6agR4y+7kaPNq1wJxvL/FXkrUH4iSFTMmdqNsD7Bn0tcQWSLnAZOkP8N3MaRfk0obT8kJGNMdoFA==
+X-Received: by 2002:a17:902:b616:b0:178:2321:8dbb with SMTP id b22-20020a170902b61600b0017823218dbbmr17687773pls.47.1663116801745;
+        Tue, 13 Sep 2022 17:53:21 -0700 (PDT)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id 8-20020a621408000000b0053e85a4a2ccsm8532407pfu.26.2022.09.13.17.53.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 17:53:21 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 17:53:17 -0700
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:palmer/linux/riscv-hwprobe 4/4]
- arch/riscv/kernel/cpufeature.c:233:23: error: implicit declaration of
- function 'hartid_to_cpuid_map'
-Message-ID: <202209140832.Pk9wZRZU-lkp@intel.com>
+Subject: Re: [PATCH 11/14] KVM: arm64: Make changes block->table to leaf PTEs
+ parallel-aware
+Message-ID: <YyEl/UILu+OAP5zA@google.com>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
+ <20220830195102.964724-1-oliver.upton@linux.dev>
+ <YyElq0c6WD1zh7Lu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyElq0c6WD1zh7Lu@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-hwprobe
-head:   9be297f7ed349945cccc85f8df9d90e5ab68c1d9
-commit: 9be297f7ed349945cccc85f8df9d90e5ab68c1d9 [4/4] (WIP) RISC-V: hwprobe: Support probing of misaligned accesss performance
-config: riscv-randconfig-r042-20220911 (https://download.01.org/0day-ci/archive/20220914/202209140832.Pk9wZRZU-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/9be297f7ed349945cccc85f8df9d90e5ab68c1d9
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-hwprobe
-        git checkout 9be297f7ed349945cccc85f8df9d90e5ab68c1d9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+On Tue, Sep 13, 2022 at 05:51:55PM -0700, Ricardo Koller wrote:
+> On Tue, Aug 30, 2022 at 07:51:01PM +0000, Oliver Upton wrote:
+> > In order to service stage-2 faults in parallel, stage-2 table walkers
+> > must take exclusive ownership of the PTE being worked on. An additional
+> > requirement of the architecture is that software must perform a
+> > 'break-before-make' operation when changing the block size used for
+> > mapping memory.
+> > 
+> > Roll these two concepts together into helpers for performing a
+> > 'break-before-make' sequence. Use a special PTE value to indicate a PTE
+> > has been locked by a software walker. Additionally, use an atomic
+> > compare-exchange to 'break' the PTE when the stage-2 page tables are
+> > possibly shared with another software walker. Elide the DSB + TLBI if
+> > the evicted PTE was invalid (and thus not subject to break-before-make).
+> > 
+> > All of the atomics do nothing for now, as the stage-2 walker isn't fully
+> > ready to perform parallel walks.
+> > 
+> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> > ---
+> >  arch/arm64/kvm/hyp/pgtable.c | 87 +++++++++++++++++++++++++++++++++---
+> >  1 file changed, 82 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 61a4437c8c16..71ae96608752 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -49,6 +49,12 @@
+> >  #define KVM_INVALID_PTE_OWNER_MASK	GENMASK(9, 2)
+> >  #define KVM_MAX_OWNER_ID		1
+> >  
+> > +/*
+> > + * Used to indicate a pte for which a 'break-before-make' sequence is in
+> > + * progress.
+> > + */
+> > +#define KVM_INVALID_PTE_LOCKED		BIT(10)
+> > +
+> >  struct kvm_pgtable_walk_data {
+> >  	struct kvm_pgtable		*pgt;
+> >  	struct kvm_pgtable_walker	*walker;
+> > @@ -586,6 +592,8 @@ struct stage2_map_data {
+> >  
+> >  	/* Force mappings to page granularity */
+> >  	bool				force_pte;
+> > +
+> > +	bool				shared;
+> >  };
+> >  
+> >  u64 kvm_get_vtcr(u64 mmfr0, u64 mmfr1, u32 phys_shift)
+> > @@ -691,6 +699,11 @@ static bool stage2_pte_is_counted(kvm_pte_t pte)
+> >  	return kvm_pte_valid(pte) || kvm_invalid_pte_owner(pte);
+> >  }
+> >  
+> > +static bool stage2_pte_is_locked(kvm_pte_t pte)
+> > +{
+> > +	return !kvm_pte_valid(pte) && (pte & KVM_INVALID_PTE_LOCKED);
+> > +}
+> > +
+> >  static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bool shared)
+> >  {
+> >  	if (!shared) {
+> > @@ -701,6 +714,69 @@ static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bo
+> >  	return cmpxchg(ptep, old, new) == old;
+> >  }
+> >  
+> > +/**
+> > + * stage2_try_break_pte() - Invalidates a pte according to the
+> > + *			    'break-before-make' requirements of the
+> > + *			    architecture.
+> > + *
+> > + * @ptep: Pointer to the pte to break
+> > + * @old: The previously observed value of the pte
+> > + * @addr: IPA corresponding to the pte
+> > + * @level: Table level of the pte
+> > + * @shared: true if the stage-2 page tables could be shared by multiple software
+> > + *	    walkers
+> > + *
+> > + * Returns: true if the pte was successfully broken.
+> > + *
+> > + * If the removed pte was valid, performs the necessary serialization and TLB
+> > + * invalidation for the old value. For counted ptes, drops the reference count
+> > + * on the containing table page.
+> > + */
+> > +static bool stage2_try_break_pte(kvm_pte_t *ptep, kvm_pte_t old, u64 addr, u32 level,
+> > +				 struct stage2_map_data *data)
+> > +{
+> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
+> > +
+> > +	if (stage2_pte_is_locked(old)) {
+> > +		/*
+> > +		 * Should never occur if this walker has exclusive access to the
+> > +		 * page tables.
+> > +		 */
+> > +		WARN_ON(!data->shared);
+> > +		return false;
+> > +	}
+> 
+> The above check is not needed as the cmpxchg() will return false if the
+> old pte is equal to "new" (KVM_INVALID_PTE_LOCKED).
+> 
+> > +
+> > +	if (!stage2_try_set_pte(ptep, old, KVM_INVALID_PTE_LOCKED, data->shared))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * Perform the appropriate TLB invalidation based on the evicted pte
+> > +	 * value (if any).
+> > +	 */
+> > +	if (kvm_pte_table(old, level))
+> > +		kvm_call_hyp(__kvm_tlb_flush_vmid, data->mmu);
+> > +	else if (kvm_pte_valid(old))
+> > +		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, data->mmu, addr, level);
+> > +
+> > +	if (stage2_pte_is_counted(old))
+> > +		mm_ops->put_page(ptep);
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +static void stage2_make_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new,
+> > +			    struct stage2_map_data *data)
+> > +{
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+nit: old is not used
 
-All errors (new ones prefixed by >>):
-
-   arch/riscv/kernel/cpufeature.c: In function 'riscv_fill_hwcap':
->> arch/riscv/kernel/cpufeature.c:233:23: error: implicit declaration of function 'hartid_to_cpuid_map' [-Werror=implicit-function-declaration]
-     233 |                 cpu = hartid_to_cpuid_map(hartid);
-         |                       ^~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/hartid_to_cpuid_map +233 arch/riscv/kernel/cpufeature.c
-
-    74	
-    75	void __init riscv_fill_hwcap(void)
-    76	{
-    77		struct device_node *node;
-    78		const char *isa, *misaligned;
-    79		char print_str[NUM_ALPHA_EXTS + 1];
-    80		int i, j, rc;
-    81		static unsigned long isa2hwcap[256] = {0};
-    82		unsigned long hartid, cpu;
-    83	
-    84		isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
-    85		isa2hwcap['m'] = isa2hwcap['M'] = COMPAT_HWCAP_ISA_M;
-    86		isa2hwcap['a'] = isa2hwcap['A'] = COMPAT_HWCAP_ISA_A;
-    87		isa2hwcap['f'] = isa2hwcap['F'] = COMPAT_HWCAP_ISA_F;
-    88		isa2hwcap['d'] = isa2hwcap['D'] = COMPAT_HWCAP_ISA_D;
-    89		isa2hwcap['c'] = isa2hwcap['C'] = COMPAT_HWCAP_ISA_C;
-    90	
-    91		elf_hwcap = 0;
-    92	
-    93		bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
-    94	
-    95		for_each_of_cpu_node(node) {
-    96			unsigned long this_hwcap = 0;
-    97			DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
-    98			const char *temp;
-    99	
-   100			rc = riscv_of_processor_hartid(node, &hartid);
-   101			if (rc < 0)
-   102				continue;
-   103	
-   104			if (of_property_read_string(node, "riscv,isa", &isa)) {
-   105				pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-   106				continue;
-   107			}
-   108	
-   109			temp = isa;
-   110	#if IS_ENABLED(CONFIG_32BIT)
-   111			if (!strncmp(isa, "rv32", 4))
-   112				isa += 4;
-   113	#elif IS_ENABLED(CONFIG_64BIT)
-   114			if (!strncmp(isa, "rv64", 4))
-   115				isa += 4;
-   116	#endif
-   117			/* The riscv,isa DT property must start with rv64 or rv32 */
-   118			if (temp == isa)
-   119				continue;
-   120			bitmap_zero(this_isa, RISCV_ISA_EXT_MAX);
-   121			for (; *isa; ++isa) {
-   122				const char *ext = isa++;
-   123				const char *ext_end = isa;
-   124				bool ext_long = false, ext_err = false;
-   125	
-   126				switch (*ext) {
-   127				case 's':
-   128					/**
-   129					 * Workaround for invalid single-letter 's' & 'u'(QEMU).
-   130					 * No need to set the bit in riscv_isa as 's' & 'u' are
-   131					 * not valid ISA extensions. It works until multi-letter
-   132					 * extension starting with "Su" appears.
-   133					 */
-   134					if (ext[-1] != '_' && ext[1] == 'u') {
-   135						++isa;
-   136						ext_err = true;
-   137						break;
-   138					}
-   139					fallthrough;
-   140				case 'x':
-   141				case 'z':
-   142					ext_long = true;
-   143					/* Multi-letter extension must be delimited */
-   144					for (; *isa && *isa != '_'; ++isa)
-   145						if (unlikely(!islower(*isa)
-   146							     && !isdigit(*isa)))
-   147							ext_err = true;
-   148					/* Parse backwards */
-   149					ext_end = isa;
-   150					if (unlikely(ext_err))
-   151						break;
-   152					if (!isdigit(ext_end[-1]))
-   153						break;
-   154					/* Skip the minor version */
-   155					while (isdigit(*--ext_end))
-   156						;
-   157					if (ext_end[0] != 'p'
-   158					    || !isdigit(ext_end[-1])) {
-   159						/* Advance it to offset the pre-decrement */
-   160						++ext_end;
-   161						break;
-   162					}
-   163					/* Skip the major version */
-   164					while (isdigit(*--ext_end))
-   165						;
-   166					++ext_end;
-   167					break;
-   168				default:
-   169					if (unlikely(!islower(*ext))) {
-   170						ext_err = true;
-   171						break;
-   172					}
-   173					/* Find next extension */
-   174					if (!isdigit(*isa))
-   175						break;
-   176					/* Skip the minor version */
-   177					while (isdigit(*++isa))
-   178						;
-   179					if (*isa != 'p')
-   180						break;
-   181					if (!isdigit(*++isa)) {
-   182						--isa;
-   183						break;
-   184					}
-   185					/* Skip the major version */
-   186					while (isdigit(*++isa))
-   187						;
-   188					break;
-   189				}
-   190				if (*isa != '_')
-   191					--isa;
-   192	
-   193	#define SET_ISA_EXT_MAP(name, bit)						\
-   194				do {							\
-   195					if ((ext_end - ext == sizeof(name) - 1) &&	\
-   196					     !memcmp(ext, name, sizeof(name) - 1))	\
-   197						set_bit(bit, this_isa);			\
-   198				} while (false)						\
-   199	
-   200				if (unlikely(ext_err))
-   201					continue;
-   202				if (!ext_long) {
-   203					this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
-   204					set_bit(*ext - 'a', this_isa);
-   205				} else {
-   206					SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-   207					SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
-   208					SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
-   209					SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-   210					SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-   211				}
-   212	#undef SET_ISA_EXT_MAP
-   213			}
-   214	
-   215			/*
-   216			 * All "okay" hart should have same isa. Set HWCAP based on
-   217			 * common capabilities of every "okay" hart, in case they don't
-   218			 * have.
-   219			 */
-   220			if (elf_hwcap)
-   221				elf_hwcap &= this_hwcap;
-   222			else
-   223				elf_hwcap = this_hwcap;
-   224	
-   225			if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
-   226				bitmap_copy(riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-   227			else
-   228				bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-   229	
-   230			/*
-   231			 * Check for the performance of misaligned accesses.
-   232			 */
- > 233			cpu = hartid_to_cpuid_map(hartid);
-   234			if (cpu < 0)
-   235				continue;
-   236	
-   237			if (of_property_read_string(node, "riscv,misaligned-access-performance", &misaligned)) {
-   238				if (strcmp(misaligned, "emulated") == 0)
-   239					per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_EMULATED;
-   240				if (strcmp(misaligned, "slow") == 0)
-   241					per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_SLOW;
-   242				if (strcmp(misaligned, "fast") == 0)
-   243					per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_FAST;
-   244			}
-   245		}
-   246	
-   247		/* We don't support systems with F but without D, so mask those out
-   248		 * here. */
-   249		if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HWCAP_ISA_D)) {
-   250			pr_info("This kernel does not support systems with F but not D\n");
-   251			elf_hwcap &= ~COMPAT_HWCAP_ISA_F;
-   252		}
-   253	
-   254		memset(print_str, 0, sizeof(print_str));
-   255		for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
-   256			if (riscv_isa[0] & BIT_MASK(i))
-   257				print_str[j++] = (char)('a' + i);
-   258		pr_info("riscv: base ISA extensions %s\n", print_str);
-   259	
-   260		memset(print_str, 0, sizeof(print_str));
-   261		for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
-   262			if (elf_hwcap & BIT_MASK(i))
-   263				print_str[j++] = (char)('a' + i);
-   264		pr_info("riscv: ELF capabilities %s\n", print_str);
-   265	
-   266		for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
-   267			j = riscv_isa_ext2key(i);
-   268			if (j >= 0)
-   269				static_branch_enable(&riscv_isa_ext_keys[j]);
-   270		}
-   271	}
-   272	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > +	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
+> > +
+> > +	WARN_ON(!stage2_pte_is_locked(*ptep));
+> > +
+> > +	if (stage2_pte_is_counted(new))
+> > +		mm_ops->get_page(ptep);
+> > +
+> > +	smp_store_release(ptep, new);
+> > +}
+> > +
+> >  static void stage2_put_pte(kvm_pte_t *ptep, struct kvm_s2_mmu *mmu, u64 addr,
+> >  			   u32 level, struct kvm_pgtable_mm_ops *mm_ops)
+> >  {
+> > @@ -836,17 +912,18 @@ static int stage2_map_walk_leaf(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> >  	if (!childp)
+> >  		return -ENOMEM;
+> >  
+> > +	if (!stage2_try_break_pte(ptep, *old, addr, level, data)) {
+> > +		mm_ops->put_page(childp);
+> > +		return -EAGAIN;
+> > +	}
+> > +
+> >  	/*
+> >  	 * If we've run into an existing block mapping then replace it with
+> >  	 * a table. Accesses beyond 'end' that fall within the new table
+> >  	 * will be mapped lazily.
+> >  	 */
+> > -	if (stage2_pte_is_counted(pte))
+> > -		stage2_put_pte(ptep, data->mmu, addr, level, mm_ops);
+> > -
+> >  	new = kvm_init_table_pte(childp, mm_ops);
+> > -	mm_ops->get_page(ptep);
+> > -	smp_store_release(ptep, new);
+> > +	stage2_make_pte(ptep, *old, new, data);
+> >  	*old = new;
+> >  
+> >  	return 0;
+> > -- 
+> > 2.37.2.672.g94769d06f0-goog
+> > 
