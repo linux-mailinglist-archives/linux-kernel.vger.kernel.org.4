@@ -2,225 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D007A5B88ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CFA5B8913
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiINNPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S229557AbiINNZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiINNPW (ORCPT
+        with ESMTP id S229498AbiINNZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:15:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663EF558C2;
-        Wed, 14 Sep 2022 06:15:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38B2261D05;
-        Wed, 14 Sep 2022 13:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B99C433D7;
-        Wed, 14 Sep 2022 13:15:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663161316;
-        bh=LC/yaD2w8sEiDYhcM6gqXvtnA5PdZMjHegWYyYGmmwY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ojozldpLrFaLrBJaXV3hDNPauxhrZSeQtHYIWs+cWinfMJk8fxnVe3ESfAHk6Eu7p
-         elAYJ5vyc5+OQzwdG4k0HGURSPYvJ7pquvUT9LRbUHUHhTj3MwwdUYjE+f/5MdyYIf
-         dPJZpp+1ULEcgj8VUJXu+D1oIBEGeqeQbCswr1zmepnKvEyTRS+NrpcHXGdrZhaIhs
-         k/7YrI9jrKrSmLICCPumwcJj1ksY9KgPweiaJ/XWm+burfnHM3xvZ8VFNuV2ORvHvm
-         Xbp1XrR41xJDSqklg0Tv+bEPTOHvvga4dTHFsy+ve0SQbLi775aFhZ2nz0OpP1WLGT
-         M5buLuMiBS9jA==
-Message-ID: <b55bbba1-16ed-dbac-05e9-25ea4661efab@kernel.org>
-Date:   Wed, 14 Sep 2022 16:15:11 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 6/6] soc: ti: pruss: Add helper functions to get/set
- PRUSS_CFG_GPMUX
-Content-Language: en-US
-To:     Romain Naour <romain.naour@smile.fr>, linux-kernel@vger.kernel.org,
-        Md Danish Anwar <danishanwar@ti.com>
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, grygorii.strashko@ti.com,
-        vigneshr@ti.com, kishon@ti.com
-References: <20220418123004.9332-1-p-mohan@ti.com>
- <20220418123004.9332-7-p-mohan@ti.com>
- <94b57cbc-b865-e0b4-0d52-3da72f2dd026@smile.fr>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <94b57cbc-b865-e0b4-0d52-3da72f2dd026@smile.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 09:25:52 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 06:25:51 PDT
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D4661B20;
+        Wed, 14 Sep 2022 06:25:50 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 0DDB12B05DAE;
+        Wed, 14 Sep 2022 09:17:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 14 Sep 2022 09:17:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663161459; x=1663165059; bh=GdgMo8oW1+
+        2SMCLkBxj5GR3RIMNzrKHtUDN4Kx4rnvU=; b=oV2STMsFokkBLoSvn4LZ0bRXEy
+        PHOYPvTVkohPZ3QmjXZLv9j5XItd9ZNYiti3Wo4bAf2GM4x9AeypXkXC3LBsScan
+        Kmy9B8+xsVZr/vnEyYBcz21o9Yw88uaUeLjkqr74E7pCILyqReQ29e45Wa5acU3J
+        ho+vBjNlTfz6VOp/hN5SHKvU8cT2hJwBZjMD2XYx367k/jlYM/Z5veWFt3Fhg6fh
+        rbxmdolsi8GJbQn/KwhhogeJrfd1TMEsn8JPMEKFQMUVj0WpvLIMH6d4kDZWb04U
+        /PRpWHr6uHjcf0/3XhAOUqlKo/UfxA1K+lDQF6i1zuhT9mfv04hiddcn+cEg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663161459; x=1663165059; bh=GdgMo8oW1+2SMCLkBxj5GR3RIMNz
+        rKHtUDN4Kx4rnvU=; b=XCF+z87anTvBmL047FIOUpa6x9uESrqeWJ3cwS786o4z
+        xEAaXWiyDQjSXtwPo9X/c9XThNu3ZGvo2Or/gRR2LgdEdH28HJY6Q9bHHngv6Hgf
+        /UaaCIt+37K95+xGc58DX0sjTo3ddMtRgCXmpRjG/wZ24MvXETdwjenDrwzjLDAE
+        ER7Om+9EtMgd20C6baZSASSXID4sKdc8eZxcsx3O31RYU9M7A94Zc3uWvQC8XqA2
+        nagA+oi6svFbnoiY1GDTondJ6rcDHD7wCV8roRcRoFA2DjIJxPZNR+iY/NUpk/dy
+        tHgTNZRT7kSGcyTnz/pGCQsB2woNL2fQ10G9mfqF4Q==
+X-ME-Sender: <xms:c9QhYwNU1B3CFZ9FtJk6ZWvN6ycygvi59KycL-TIvj-wqmK2s4HCRw>
+    <xme:c9QhY2-TnMvcy_oJGJXZFzUg7HuEdflBSfav2AZZ2hm6CmLEpvQBiZrVZFi4l0ca5
+    sCsUUJTOBYqf5X01Go>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:c9QhY3TY1IEVSEOOna3_4PFQX1dFGTueXtVLfkWVexxdzCSgaYNYPg>
+    <xmx:c9QhY4vN6-ltPj0HDnOD-MOOZLIlkzPT2vypTCOvTWEeo9IUeE-2Sg>
+    <xmx:c9QhY4cqebahSOONM198AYIhlJN6sYnlngJHkdU8Eo012O3XVP9dKQ>
+    <xmx:c9QhYw70bq9fTuEpVjnaG2x6gUvgPPWuTqrV856AxnykH6fb2q9C_2kUGGU>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 48733B60086; Wed, 14 Sep 2022 09:17:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-934-g6274855a4c-fm-20220913.002-g6274855a
+Mime-Version: 1.0
+Message-Id: <28501fbf-3508-4afe-804d-fa5a3ccd4291@www.fastmail.com>
+In-Reply-To: <499f0940-3d7f-0ed5-e469-5c0979e6f761@baylibre.com>
+References: <20220913140303.437994-1-narmstrong@baylibre.com>
+ <667da463-1edc-4a99-9ac1-85303d9187c6@www.fastmail.com>
+ <499f0940-3d7f-0ed5-e469-5c0979e6f761@baylibre.com>
+Date:   Wed, 14 Sep 2022 15:17:17 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Neil Armstrong" <narmstrong@baylibre.com>,
+        "Mark Brown" <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: meson-spicc: add support for DMA
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Romain,
+On Wed, Sep 14, 2022, at 2:35 PM, Neil Armstrong wrote:
+> On 14/09/2022 13:19, Arnd Bergmann wrote:
+>> On Tue, Sep 13, 2022, at 4:03 PM, Neil Armstrong wrote:
+>> 
+>>> + /* Sometimes, TC gets triggered while the RX fifo isn't fully flushed *
+>>> + if (spicc->using_dma) {
+>>> +          unsigned int rxfifo_count = FIELD_GET(SPICC_RXCNT_MASK,
+>>> +                       readl_relaxed(spicc->base + SPICC_TESTREG));
+>> 
+>> Same here in the interrupt controller, I don't see anything enforcing
+>> the DMA to actually complete before the readl_relaxed().
+>
+> I don't see the relathionship between a register relaxed read and the 
+> DMA not finishing
+> writing the data in uncached memory, for me it's 2 unrelated things.
 
-On 12/09/2022 17:20, Romain Naour wrote:
-> +Danish
-> 
-> Hi Danish,
-> 
-> (Removed Puranjay (as he is no longer with TI) and adding Danish.)
-> 
-> Le 18/04/2022 à 14:30, Puranjay Mohan a écrit :
->> From: Tero Kristo <t-kristo@ti.com>
->>
->> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
->> to get and set the GP MUX mode for programming the PRUSS internal wrapper
->> mux functionality as needed by usecases.
-> 
-> Actually I'm curious about how the GP MUX mode are supposed to work in some
-> cases. The register mapping in the AM57xx TRM seems confusing.
-> 
-> See the "PRU-ICSS I/O Interface" part about the "PRU-ICSS Internal Wrapper
-> Multiplexing" [1].
-> 
-> The commit "ARM: dts: am57xx-idk: Add prueth on ICSS" [2] (only in the
-> TI kernel tree) adds pruss1 and pruss2 for the am571x-idk board.
-> 
-> But this commit doesn't really explain the ti,pruss-gp-mux-sel setting
-> from pruss1_eth and pruss2_eth:
-> 
->     /* Dual mac ethernet application node on icss1 */
->     pruss1_eth {
->     	status = "okay";
->     	compatible = "ti,am57-prueth";
-> 
->     	ti,pruss-gp-mux-sel = <0>,	/* GP, default */
->     			      <4>;	/* MII2, needed for PRUSS1_MII1 */
->     }
-> 
->     &pruss2_eth {
->     	ti,pruss-gp-mux-sel = <4>,	/* MII2, needed for PRUSS1_MII0 */
->     			      <4>;	/* MII2, needed for PRUSS1_MII1 */
->     };
-> 
-> At the first look, the two comments in pruss2_eth node about PRUSS1_MIIx seems
-> dubious. Indeed, it would means that the PRUSS2 setting (ti,pruss-gp-mux-sel) is
-> required to makes PRUSS1 work.
+The race is between the readl_relaxed() and a subsequent access
+to the data that is being transferred. On Arm processors you
+need a "dmb(oshld)" instruction to ensure that the CPU cannot
+prefetch data from the DMA buffer while it is waiting for the
+MMIO to complete.
 
-Yes, if I remember right this is only applicable to AM571 Soc which had
-an overloaded pinmuxing design and it resulted in this kind of weird constraint.
-i.e. gp-mux-sel of PRUSS2 needs to be set to get PRUSS1 MII to work.
+The __io_ar() in readl() exists specifically there for this race, and
+this is the reason that readl_relaxed() exists for drivers that
+do not do any DMA.
 
-> 
-> In my use case, only the pruss1 is expected to be used with the prueth driver.
-> 
-> Actually, the prueth on PRUSS1 partially works with only pruss1_eth's gp-mux
-> initialized:
-> 
->     pruss1_eth {
->             status = "okay";
->             compatible = "ti,am57-prueth";
-> 
->             ti,pruss-gp-mux-sel = <0>,      /* GP, default */
->                                   <4>;      /* MII2, needed for PRUSS1_MII1 */
->     }
-> 
->     pruss2_eth {
->             status = "disabled";
->     }
-> 
-> (Tests done with the ti-linux-kernel 5.10.y)
-> 
-> On wireshark I noticed ethernet frames (ping) sent from the board but the reply
-> from the remote PC is never received on the board.
-> 
-> It really seems we need pruss2_eth's gp-mux initialized.
-> The problem here is that I don't want to enable PRUSS2 just to
-> configure pruss2_eth's gp-mux for the sake of pruss1.
-> 
-> I had to write manually (using devmem2) the "good" value (0x10002003) in
-> PRUSS2_CFG0 and PRUSS2_CFG1 to configure entirely the PRUSS1_MII1.
-> 
-> I'm not sure how the driver should handle this register mapping properly.
-> 
-> [1] https://www.ti.com/lit/ds/symlink/am5749.pdf
-> 
-> [2]
-> https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?h=linux-5.10.y&id=2a3b089f5697fe2f9a9875b2fba1bef88d196a53
-> 
-> Best regards,
-> Romain
+Note that this prefetching can happen for uncached memory, but
+spe-meson-spicc uses cached memory.
 
-cheers,
--roger
-
-> 
->>
->> Co-developed-by: Suman Anna <s-anna@ti.com>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> ---
->>  include/linux/pruss_driver.h | 44 ++++++++++++++++++++++++++++++++++++
->>  1 file changed, 44 insertions(+)
->>
->> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
->> index e2d5477225c6..3312281ef4c1 100644
->> --- a/include/linux/pruss_driver.h
->> +++ b/include/linux/pruss_driver.h
->> @@ -35,4 +35,48 @@ struct pruss {
->>  	struct clk *iep_clk_mux;
->>  };
->>  
->> +/**
->> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
->> + * @pruss: pruss instance
->> + * @pru_id: PRU identifier (0-1)
->> + * @mux: pointer to store the current mux value into
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss,
->> +				      enum pruss_pru_id pru_id, u8 *mux)
->> +{
->> +	int ret = 0;
->> +	u32 val;
->> +
->> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
->> +		return -EINVAL;
->> +
->> +	ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
->> +	if (!ret)
->> +		*mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
->> +			    PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
->> +	return ret;
->> +}
->> +
->> +/**
->> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
->> + * @pruss: pruss instance
->> + * @pru_id: PRU identifier (0-1)
->> + * @mux: new mux value for PRU
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
->> +				      enum pruss_pru_id pru_id, u8 mux)
->> +{
->> +	if (mux >= PRUSS_GP_MUX_SEL_MAX ||
->> +	    pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
->> +		return -EINVAL;
->> +
->> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
->> +				PRUSS_GPCFG_PRU_MUX_SEL_MASK,
->> +				(u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
->> +}
->> +
->>  #endif	/* _PRUSS_DRIVER_H_ */
-> 
+     Arnd
