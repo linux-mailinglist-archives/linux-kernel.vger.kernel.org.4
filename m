@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9B95B7EAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AF65B7E69
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiINBsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S229569AbiINBi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiINBsv (ORCPT
+        with ESMTP id S229956AbiINBiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:48:51 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E86DFB5;
-        Tue, 13 Sep 2022 18:48:50 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E0vYIB004764;
-        Wed, 14 Sep 2022 01:48:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AnD8zG5EexPMoRYMrIEs798ifwPJnxwt5mBmLeK1BDk=;
- b=lsFznRVWyfIbHhNmIWTVXbHbnTp59oI0+vIKba3W88Aq7I0We8NQz+Cx4y0ZSDZ+ppQ/
- L66S8mLuUGjIE1foxGAKwOqPXwFOH71Juga9XXd6/D/JNzjZEGB2Wdpq9k7sY4mAnXsm
- AUkpx21zJw1Qovjw3f1L9IQxg1d3iX+Zhwox5M08E6JwYj21KjyD3q7fSIg0kf6IuE4U
- 5CoG4vXZy/JnxcGVBRzEhSYxvC8forZvNX1m8F5JhbkBGqp9mu/jZThzDw9ylnJHh5Gx
- R0ocMgJAXCrCMC+1bahWu9s0s2f8zLXbitE1mB8QXYmry2xXoBpw4U/8mhCjosuNevEF OQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy06gnsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 01:48:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E1mhmF011512
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 01:48:43 GMT
-Received: from [10.216.1.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
- 2022 18:48:35 -0700
-Message-ID: <847a3838-90b4-7368-9632-223bbd2468cc@quicinc.com>
-Date:   Wed, 14 Sep 2022 07:18:32 +0530
+        Tue, 13 Sep 2022 21:38:18 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFAB6C121;
+        Tue, 13 Sep 2022 18:38:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MS2x422Tfz6S2p1;
+        Wed, 14 Sep 2022 09:36:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgDHGXOGMCFj24dCAw--.23886S4;
+        Wed, 14 Sep 2022 09:38:16 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
+        pmenzel@molgen.mpg.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH v2 0/4] md/raid10: reduce lock contention for io
+Date:   Wed, 14 Sep 2022 09:49:10 +0800
+Message-Id: <20220914014914.398712-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 5/5] clk: qcom: Alwaya on pcie gdsc
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <quic_rjendra@quicinc.com>, <linux-pci@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mka@chromium.org>, <quic_vbadigan@quicinc.com>,
-        <quic_hemantk@quicinc.com>, <quic_nitegupt@quicinc.com>,
-        <quic_skananth@quicinc.com>, <quic_ramkri@quicinc.com>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
-References: <20220913163424.GA602259@bhelgaas>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20220913163424.GA602259@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SGsqD8RfEsjDjXsE12JNmUG-xY_FQ856
-X-Proofpoint-ORIG-GUID: SGsqD8RfEsjDjXsE12JNmUG-xY_FQ856
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_12,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
- spamscore=0 mlxlogscore=958 clxscore=1015 suspectscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209140006
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDHGXOGMCFj24dCAw--.23886S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrW7ur1fZrW8WrWkuFyxuFg_yoW8AryDpa
+        1fJF1SvFsFyr1IvrZIgr17Jry5Z3WrX398Cr97G34fZFW5ZFW8JF18JFWkWryDXF9aqa17
+        J3WUKayrWFyUAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yu Kuai <yukuai3@huawei.com>
 
-On 9/13/2022 10:04 PM, Bjorn Helgaas wrote:
-> On Mon, Sep 12, 2022 at 10:34:37PM +0530, Manivannan Sadhasivam wrote:
->> + Rajendra
->>
->> On Fri, Sep 09, 2022 at 02:14:44PM +0530, Krishna chaitanya chundru wrote:
->>> Make GDSC always on to ensure controller and its dependent clocks
->>> won't go down during system suspend.
->> You need to mention the SoC name in subject, otherwise one cannot know for
->> which platform this patch applies to.
-> Also:
->
-> s/Alwaya/Always/
-> s/pcie/PCIe/
-> s/gdsc/GDSC/ as you did in commit log
->
-> I might use "ALWAYS_ON" in the subject to make clear this refers to a
-> specific flag, not a change in the code logic, e.g.,
->
->    clk: qcom: gcc-sc7280: Mark PCIe GDSC clock ALWAYS_ON
-ok I will update the subject in next patch.
+Changes in v2:
+ - add patch 1, as suggested by Logan Gunthorpe.
+ - in patch 4, instead of use spin_lock/unlock in wait_event, which will
+ confuse lockdep, use write_seqlock/unlock instead.
+ - in patch 4, use read_seqbegin() to get seqcount instead of unusual
+ usage of raw_read_seqcount().
+ - test result is different from v1 in aarch64 due to retest from different
+ environment.
+
+Test environment:
+
+Architecture:
+aarch64 Huawei KUNPENG 920
+x86 Intel(R) Xeon(R) Platinum 8380
+
+Raid10 initialize:
+mdadm --create /dev/md0 --level 10 --bitmap none --raid-devices 4 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
+
+Test cmd:
+(task set -c 0-15) fio -name=0 -ioengine=libaio -direct=1 -group_reporting=1 -randseed=2022 -rwmixread=70 -refill_buffers -filename=/dev/md0 -numjobs=16 -runtime=60s -bs=4k -iodepth=256 -rw=randread
+
+Test result:
+
+aarch64:
+before this patchset:		3.2 GiB/s
+bind node before this patchset: 6.9 Gib/s
+after this patchset:		7.9 Gib/s
+bind node after this patchset:	8.0 Gib/s
+
+x86:(bind node is not tested yet)
+before this patchset: 7.0 GiB/s
+after this patchset : 9.3 GiB/s
+
+Please noted that in the test machine, memory access latency is very bad
+across nodes compare to local node in aarch64, which is why bandwidth
+while bind node is much better.
+
+Yu Kuai (4):
+  md/raid10: cleanup wait_barrier()
+  md/raid10: prevent unnecessary calls to wake_up() in fast path
+  md/raid10: fix improper BUG_ON() in raise_barrier()
+  md/raid10: convert resync_lock to use seqlock
+
+ drivers/md/raid10.c | 165 +++++++++++++++++++++++++++-----------------
+ drivers/md/raid10.h |   2 +-
+ 2 files changed, 104 insertions(+), 63 deletions(-)
+
+-- 
+2.31.1
+
