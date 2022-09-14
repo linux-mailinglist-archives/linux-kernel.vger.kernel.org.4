@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBCA5B8721
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0677C5B8722
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiINLTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S229711AbiINLUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiINLTL (ORCPT
+        with ESMTP id S229673AbiINLUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:19:11 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED7B4BD33
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:19:09 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bj14so25123479wrb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=T6Z1sxrsS/iEyWK4j442NiGqIJjiqn+hpIPVo9lGQ+0=;
-        b=EV9tuRTXpn8Dt09HoeSuTrAMldTw1Jim0+TnkCZoTrTuQZljmfH4bnbDpMRZ0sM8/w
-         huW2ANhWjq65n1bL6a2xixQGdmUrVHBvYfu6f1In6tjqW8zLYDSUjU0/p2siIduwpZji
-         6y48iiOUxomqn/0/bH2Z6M/f3dQgs9Rdasa5PFPT5QrFYMksvq9ph0boIPqHWKIaI2b7
-         a/0iU931cKjcDtU0MC7bZoduCBkoSMGxEK+0rSliHVOJj9HpiZgxAzfTQDdA9hx1bhu0
-         8QYvx4CqjDwYIHzMnsuRsShaBBumAApbESyxiBk43vaPlpBxva9kG41sg3x8mhA6RRKU
-         /xLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=T6Z1sxrsS/iEyWK4j442NiGqIJjiqn+hpIPVo9lGQ+0=;
-        b=201k2zszeUGpQ3790Fzcl3qumnbTRfPZbvf+aWeQ/6j0WYl5ShNfCdlYCBUzaa2U4y
-         OADVdyzp3ALFF8HlNnzeDJ4uE0+T/LwC14nflWZVoN+SAm8BgGbR3ueqTypeQikqv+8R
-         3/JYm7gpj3S+uJ9cTDX39vtGEY7CYq0H8GkdMjk1jX/2YTUoPwrGVWjgdnvx5lrWur88
-         OLQOO/7EJAhc09opVV++dAMpwGvD6eOMTK1xWs9CyGL+bNoeckdUDolfg2fwC+s29hDi
-         J9QummvAyfW5/hhhab1ok1B7it2ZjAyK80lX/zSftJXBTFD8JSZ6B/iV6/bh/NL9IQJF
-         fxrg==
-X-Gm-Message-State: ACgBeo1GKt1xf4r9+FBrrZ4AxRmz5gC2LsiVE1hUPtL9+JdVTckPcNrC
-        huAqcR1I+YxAXFX1ZqgARzsX
-X-Google-Smtp-Source: AA6agR6VGpioQ/8N5I56HuLuLO/P7B2PHYmZGZupIHqW8kM8FpOGbUMkgVsC8oAjqnbj2WsWtUrQ3A==
-X-Received: by 2002:a5d:564e:0:b0:228:d609:7ac3 with SMTP id j14-20020a5d564e000000b00228d6097ac3mr20736994wrw.27.1663154348174;
-        Wed, 14 Sep 2022 04:19:08 -0700 (PDT)
-Received: from workstation ([117.202.184.122])
-        by smtp.gmail.com with ESMTPSA id r15-20020a5d694f000000b00228c792aaaasm13110142wrw.100.2022.09.14.04.19.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 14 Sep 2022 04:19:07 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 16:48:57 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        treding@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20220914111857.GF16459@workstation>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
- <20220914062411.GD16459@workstation>
- <29b39edd-10ab-b679-f270-67b0b406ca2f@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <29b39edd-10ab-b679-f270-67b0b406ca2f@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 07:20:01 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F391A391
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:19:59 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 147325804BC;
+        Wed, 14 Sep 2022 07:19:57 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 14 Sep 2022 07:19:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663154397; x=1663157997; bh=WPw+PiU5QR
+        c8NpKWmsOZ9H1kA5iPdmxgIhIPlzrL/x4=; b=ZY2JOEQ+ocn2h4YTLt9zNsISZd
+        QoP8PvOsqSoSWWs46Yb6AKVhTiSt1E+K84Dyfxco3T2OxfhoZ8TIZNaqvA5CKFSA
+        N2BrpkcuKSPWfWwSwjH9Rr8Edwtk+u3FC0YW0iFBB6Aq3MYMBQU2SZ19t87KOwnv
+        9rRjg0Ol/l19GgasLe1MSAz0jD0U0X/X+XzhgVsJM7zw2GkPOe2rA+QDN/s7Mk5A
+        RMycQW2cMekE4Qqx2e9RHxqiiAiulZHLkSioVgFR1M4fz2TseQgV4WdrXLBDYz7O
+        VCvMXK1N05s7SXP1089knVxSKRxoBqxjBx2r6Rfp9iTHmWXCP4853J1/T51g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663154397; x=1663157997; bh=WPw+PiU5QRc8NpKWmsOZ9H1kA5iP
+        dmxgIhIPlzrL/x4=; b=D4xmSKhYamtg12c4QJxVfGEtsKaUzGYqWObXsIhI0IVP
+        qPOs/2vAJGY/x61C+EEag/kS0nwVcuAnjHt59NHkodIrN2M+jfEJTVy/kOLRb+Ub
+        PIPeVR6VUcskx4z1owCIikR9Pe1VjzKp08BXRhGSTXRVRwuOoiGs6BTr5Zes8hhE
+        gcD/hSUzfk4IcEukBrVxefD7My9FlndiZR6dw7ggbNX65OX0gzDblslTkL0tnqI8
+        PYFhUf+45eVCe69RgJ+/phkxS5PuKEAETuIJhbnAD9qT0seDQmFqMDJ7qzV7dCU2
+        qz6dgEoJ3kw6JII/X103g2Fs4Q/NOW94gGrcsl+k/g==
+X-ME-Sender: <xms:3LghY3N_U3sfIXArf24PyBSaSWJ94H5txe5rG_7W8wYQCVrjZ6lCBA>
+    <xme:3LghYx-yCAfhqVFM3k5vdjTxWqtA9qCw3-o8bAoi2Odwd9ixmZ22RWrHarPAy0AHu
+    XuCvO9s5dZOKVmmc-0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:3LghY2QJsNymS90o28QEi_V--Z7QEczBj06ZzJRIkUTGjT0IkvMInw>
+    <xmx:3LghY7tDd8R4-7cB0qRIrpGabxjwdiadj3OVcvabyLBiMoob2kuEAw>
+    <xmx:3LghY_ecSaQ7-Qdf6FC9Ui1lv8yscjgRDqet72orsvwlLFTaX_kSsw>
+    <xmx:3LghY77Tjx73JpkHvdmXZ3LVLRcz-vfJlTNLTKP_tSbdA_e65smpkw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9260EB60086; Wed, 14 Sep 2022 07:19:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-934-g6274855a4c-fm-20220913.002-g6274855a
+Mime-Version: 1.0
+Message-Id: <667da463-1edc-4a99-9ac1-85303d9187c6@www.fastmail.com>
+In-Reply-To: <20220913140303.437994-1-narmstrong@baylibre.com>
+References: <20220913140303.437994-1-narmstrong@baylibre.com>
+Date:   Wed, 14 Sep 2022 13:19:31 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Neil Armstrong" <narmstrong@baylibre.com>,
+        "Mark Brown" <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: meson-spicc: add support for DMA
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 04:32:10PM +0530, Vidya Sagar wrote:
-> Agree with Mani.
-> Not all form factors support PRSNT pin (Ex:- M.2 Key-M form factor) and even
-> if the slot form factor supports PRSNT, it is not mandatory to have a GPIO
-> routed to the PRSNT pin of the slot.
+On Tue, Sep 13, 2022, at 4:03 PM, Neil Armstrong wrote:
 
-Right.
+> +static void meson_spicc_setup_dma_burst(struct meson_spicc_device *spicc)
+> +{
+...
+> +	/* Setup burst length */
+> +	writel_relaxed(ld_ctr1, spicc->base + SPICC_LD_CNTL1);
+> +
+> +	writel_relaxed(SPICC_DMA_ENABLE | SPICC_DMA_URGENT |
+> +		       FIELD_PREP(SPICC_TXFIFO_THRESHOLD_MASK, txfifo_thres) |
+> +		       FIELD_PREP(SPICC_READ_BURST_MASK, read_req) |
+> +		       FIELD_PREP(SPICC_RXFIFO_THRESHOLD_MASK, rxfifo_thres) |
+> +		       FIELD_PREP(SPICC_WRITE_BURST_MASK, write_req),
+> +		       spicc->base + SPICC_DMAREG);
+> +}
 
-> Also, since these are development platforms, we wouldn't want to keep
-> changing a controller's status in the DT, instead want to know the device's
-> presence/absence (by way of link up) looking at the log.
-> In my honest opinion, I don't think the absence of a device in the slot
-> should be treated as an error.
-> 
+It looks like this last writel_relaxed() starts the DMA, but I don't
+see any barrier that serializes it against the memory access, which
+could still be in a store buffer.
 
-As I mentioned earlier, timeout can happen due to an issue with PHY layer
-also. In those cases, "dev_err()" is relevant.
+> + /* Sometimes, TC gets triggered while the RX fifo isn't fully flushed *
+> + if (spicc->using_dma) {
+> +          unsigned int rxfifo_count = FIELD_GET(SPICC_RXCNT_MASK,
+> +                       readl_relaxed(spicc->base + SPICC_TESTREG));
 
-And I also agree that absence of the device should not be treated as an
-error. But my question is, if you know that the slot is going to be
-empty always, why cannot you just disable it in dts?
+Same here in the interrupt controller, I don't see anything enforcing
+the DMA to actually complete before the readl_relaxed().
 
-Even if you make the log "dev_info()" there is the wait time for link up
-and I'm sure that you wouldn't want it either.
+At the very minimum, I think these two have to use non-relaxed
+accessors when adding DMA support, but an easier approach would
+be to use those consistently throughout the driver.
 
-Thanks,
-Mani
-
-> Thanks,
-> Vidya Sagar
-> 
-> On 9/14/2022 11:54 AM, Manivannan Sadhasivam wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > > not having an endpoint connected to the slot is not an error.
-> > > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > > 
-> > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > > > returned. So I don't think the log severity should be changed.
-> > > > 
-> > > > Yes it is an error in the sense it is a timeout, but reporting an error
-> > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > > > that a similar change was made by the following commit and it also seems
-> > > > appropriate here ...
-> > > > 
-> > > > commit 4b16a8227907118e011fb396022da671a52b2272
-> > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > > > 
-> > > >      PCI: tegra: Change link retry log level to debug
-> > > > 
-> > > > 
-> > > > BTW, we check for error messages in the dmesg output and this is a new error
-> > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > > > error, but in this case it seem more appropriate to make this a info or
-> > > > debug level print.
-> > > 
-> > > Can you tell whether there's a device present, e.g., via Slot Status
-> > > Presence Detect?  If there's nothing in the slot, I don't know why we
-> > > would print anything at all.  If a card is present but there's no
-> > > link, that's probably worthy of dev_info() or even dev_err().
-> > > 
-> > 
-> > I don't think all form factors allow for the PRSNT pin to be wired up,
-> > so we cannot know if the device is actually present in the slot or not all
-> > the time. Maybe we should do if the form factor supports it?
-> > 
-> > > I guess if you can tell the slot is empty, there's no point in even
-> > > trying to start the link, so you could avoid both the message and the
-> > > timeout by not even calling dw_pcie_wait_for_link().
-> > 
-> > Right. There is an overhead of waiting for ~1ms during boot.
-> > 
-> > We workaround this issue by disabling the PCIe instances in devicetree
-> > for which there would be no devices connected.
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > 
-> > > Bjorn
+     Arnd
