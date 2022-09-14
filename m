@@ -2,213 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B715B9024
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE44E5B9027
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiINVhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 17:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S229801AbiINVlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 17:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiINVhf (ORCPT
+        with ESMTP id S229473AbiINVlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 17:37:35 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E437557E0E;
-        Wed, 14 Sep 2022 14:37:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id k10so27240838lfm.4;
-        Wed, 14 Sep 2022 14:37:33 -0700 (PDT)
+        Wed, 14 Sep 2022 17:41:40 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECC37E325
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:41:37 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id bz13so27753821wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=chB+Lu6UnHCHH080s7HW8NVlIEEyU+gPJTweSWX9ogs=;
-        b=DQJ4rFtaPOZtzkgXxaNeKhheSHyPdrX3QivtYFhtE0SG1c9EuFaew8+AeNrLGvVAKY
-         SPOLd+MKlbV5O0NBkmsopNkp22E8NArHlCmijGu8SlHnt4ul5/5E9ZhfpHHbkKsabOA+
-         1OsFlGct2Au8/7PEEV0lcfAq/weCFOY6CP9istc/i5/zwTCyVC3Ivyw7ntB+jgsbBAA8
-         V2jxgGdMYQlZod1pbm575N+526WaIn+CIgga/LKwJxvwBXmdfnBQ/5Umc0wg+t3Jc2CB
-         uAPFCGCy+rIpUO25ZMgMP//89QcUNXHt+lL0MlnOmxeNQ4T1LGpmgDf+h0tppVsFT/u6
-         o7lw==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=dJBMWqAoD425WmZpBoL2iVG1R9TS8rIDI+wnZ+EHS08=;
+        b=crnKzEVwiNAICu1JTVyVuS8qkwtdrbZVF4fXL4lQiQcf1uf/m03DZ90Sbqu8XLQnCU
+         CtuhnRZbmY9frmlgrfrPaZY0MZVcfo+YTnKTlWCts1Y6xjtfOw/3vg18Z2D8v9uBaiwI
+         MkQkfmNyXhNtIJV3BRm3Ce3BQAvKuq9lEddpM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=chB+Lu6UnHCHH080s7HW8NVlIEEyU+gPJTweSWX9ogs=;
-        b=21PCi9rhSIB6KwfgAcNjvA/eoPIZp5yuhB4WAScR4vUTRzoOPLc212uPUTbNvSMihP
-         6PsmsAR1YIeVVgPTKFN9T6EhDLbpEY1lqMxI7DqBUVa4/RXdgmJhgPg6+5zhfI8sSc6j
-         1uoWW8MSgGs/X4sciwKmnXUfUca0g7e0vEwW41PkrAsqDjO3FYtbk11uy9cRb8BsZDv3
-         48OHkon2i5OxGcsk2JQ4OGdR4DJZEjqAfQpNJo3E9gQnt8KDuVjsB9l7CF4dLkfJ5vYh
-         QEOCPCiQzbOyd/xEq1rY1xwRde3JlNJx4DL7Gdmyx1c5fAdGjRNnmYvDrQW2YJJba5jx
-         ++bg==
-X-Gm-Message-State: ACgBeo0t1oHDDjO+g1wzBQY6lzjUH2GImywhkm+8wQ5VhzBmn+J1suEU
-        XNQiODdM2wAceC58izAb+ipQ/0omXU97mbhktOU=
-X-Google-Smtp-Source: AA6agR5eHNF9+/sozTIKo93t+FLVStOkqBL3q/bankcDHJXL21KqhuKdWDn52VHK91fa5zMqeDQ6M5EwXgBdziUjLcc=
-X-Received: by 2002:a05:6512:b81:b0:494:78cc:ca9c with SMTP id
- b1-20020a0565120b8100b0049478ccca9cmr12073587lfv.564.1663191452188; Wed, 14
- Sep 2022 14:37:32 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=dJBMWqAoD425WmZpBoL2iVG1R9TS8rIDI+wnZ+EHS08=;
+        b=OihwTM7VC+ScZSy/NFYTB3t3gkBUWE+LlV/XLKe2lFFnE9oWi3RTh86Jgf4ZQhoyQ+
+         +qHvD3dTo+XY2AqjXqx47B/olS4GdC+KQPgEFFTPPA5S1BrpyjJsnSpdwUb3JPuAzedp
+         DjDAPeW16Cc5wNW0Xprs42NkwwZvZFgPO39OXUqTrUvRbPiuyO3A8NZ6iWXcY4cFRbbN
+         7ZOPPtAcASFvUcb51+9aBw27uJTKrL1WrpSgc79RSxYkxHKJLrgtBXRMeL2JAjub757Q
+         j1p5tb9NlEVZIGPoeedSBUT86l001Epa+zPVbz5mHm2VphTcOu2euKrajoHzBNeF1Gmu
+         eDhQ==
+X-Gm-Message-State: ACgBeo1Wev/q6GAW3pdQtYCA7lfcOTvnboYaOy4Zxh/WnY4YZHVogenk
+        QuSBJ28wsuBDZZYFuhF3t0QYnQ==
+X-Google-Smtp-Source: AA6agR4AbWOEHie2xqoqLtD3nL+zuOB6oM2HbRcpPVp+Z0KnHfJaD12MLF4DRxtbqmt6fxXPQ7U5NA==
+X-Received: by 2002:a5d:628e:0:b0:228:6961:aa6f with SMTP id k14-20020a5d628e000000b002286961aa6fmr24027761wru.36.1663191696195;
+        Wed, 14 Sep 2022 14:41:36 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i ([93.107.34.250])
+        by smtp.gmail.com with ESMTPSA id az6-20020a05600c600600b003a5f54e3bbbsm308512wmb.38.2022.09.14.14.41.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 14:41:34 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 23:41:32 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: dt-bindings: ov5645: Convert OV5645 binding to a
+ schema
+Message-ID: <20220914214132.GA2173@tom-ThinkPad-T14s-Gen-2i>
+References: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20220913100244.23660-1-hildawu@realtek.com> <20220913100244.23660-3-hildawu@realtek.com>
-In-Reply-To: <20220913100244.23660-3-hildawu@realtek.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 14 Sep 2022 14:37:20 -0700
-Message-ID: <CABBYNZKCEs_2Jb1tPncekgxGtjkNkgew4hzdKktoQhvPkuR1Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] Bluetooth: btusb: Workaround for spotty SCO quality
-To:     hildawu@realtek.com
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        apusaka@chromium.org, yinghsu@chromium.org, max.chou@realtek.com,
-        alex_lu@realsil.com.cn, kidman@realtek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hilda,
+Hi Prabhakar,
 
-On Tue, Sep 13, 2022 at 3:02 AM <hildawu@realtek.com> wrote:
->
-> From: Hilda Wu <hildawu@realtek.com>
->
-> When streaming HFP, once a few minutes a brief pause in audio can be
-> heard on some platform with Realtek Bluetooth. When the issue occurs,
-> the system will see the SCO packet for unknown connection handle messages.
->
-> Note: This issue affects (e)SCO only, does not affect ACLs.
-> Because the duplicate packet causing the problem only occurs in Realtek BT.
-> This is to filter out duplicate packet for avoiding influence.
->
-> Signed-off-by: Hilda Wu <hildawu@realtek.com>
+On Tue, Sep 13, 2022 at 05:02:24PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Convert the simple OV5645 Device Tree binding to json-schema.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> Changes in v2:
->  - Seperate commits for functions
-> ---
-> ---
->  drivers/bluetooth/btrtl.c | 28 ++++++++++++++++++++++++++++
->  drivers/bluetooth/btrtl.h |  8 ++++++++
->  drivers/bluetooth/btusb.c | 14 ++++++++++++++
->  3 files changed, 50 insertions(+)
->
-> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-> index fb52313a1d45..15223b3ed94d 100644
-> --- a/drivers/bluetooth/btrtl.c
-> +++ b/drivers/bluetooth/btrtl.c
-> @@ -781,6 +781,7 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
->         case CHIP_ID_8852C:
->                 set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
->                 set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
-> +               btrealtek_set_flag(hdev, REALTEK_WBS_FILTER);
->                 hci_set_aosp_capable(hdev);
->                 break;
->         default:
-> @@ -937,6 +938,33 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
->  }
->  EXPORT_SYMBOL_GPL(btrtl_get_uart_settings);
->
-> +int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *p, int len,
-> +                       u16 wMaxPacketSize)
-> +{
-> +       u8 *prev;
+>  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 --------
+>  .../bindings/media/i2c/ovti,ov5645.yaml       | 119 ++++++++++++++++++
+>  2 files changed, 119 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> deleted file mode 100644
+> index 72ad992f77be..000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> +++ /dev/null
+> @@ -1,54 +0,0 @@
+> -* Omnivision 1/4-Inch 5Mp CMOS Digital Image Sensor
+> -
+> -The Omnivision OV5645 is a 1/4-Inch CMOS active pixel digital image sensor with
+> -an active array size of 2592H x 1944V. It is programmable through a serial I2C
+> -interface.
+> -
+> -Required Properties:
+> -- compatible: Value should be "ovti,ov5645".
+> -- clocks: Reference to the xclk clock.
+> -- clock-names: Should be "xclk".
+> -- clock-frequency: Frequency of the xclk clock.
+> -- enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
+> -  to the hardware pin PWDNB which is physically active low.
+> -- reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
+> -  the hardware pin RESETB.
+> -- vdddo-supply: Chip digital IO regulator.
+> -- vdda-supply: Chip analog regulator.
+> -- vddd-supply: Chip digital core regulator.
+> -
+> -The device node must contain one 'port' child node for its digital output
+> -video port, in accordance with the video interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -
+> -Example:
+> -
+> -	&i2c1 {
+> -		...
+> -
+> -		ov5645: ov5645@3c {
+> -			compatible = "ovti,ov5645";
+> -			reg = <0x3c>;
+> -
+> -			enable-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+> -			reset-gpios = <&gpio5 20 GPIO_ACTIVE_LOW>;
+> -			pinctrl-names = "default";
+> -			pinctrl-0 = <&camera_rear_default>;
+> -
+> -			clocks = <&clks 200>;
+> -			clock-names = "xclk";
+> -			clock-frequency = <24000000>;
+> -
+> -			vdddo-supply = <&camera_dovdd_1v8>;
+> -			vdda-supply = <&camera_avdd_2v8>;
+> -			vddd-supply = <&camera_dvdd_1v2>;
+> -
+> -			port {
+> -				ov5645_ep: endpoint {
+> -					clock-lanes = <1>;
+> -					data-lanes = <0 2>;
+> -					remote-endpoint = <&csi0_ep>;
+> -				};
+> -			};
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> new file mode 100644
+> index 000000000000..7f407c988f87
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5645.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +       if (pos >= HCI_SCO_HDR_SIZE && pos >= wMaxPacketSize &&
-> +           len == wMaxPacketSize && !(pos % wMaxPacketSize) &&
-> +           wMaxPacketSize >= 10 && p[0] == data[0] && p[1] == data[1]) {
-> +               prev = data + (pos - wMaxPacketSize);
+> +title: OmniVision OV5645 Image Sensor Device Tree Bindings
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/media/video-interface-devices.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov5645
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: XCLK Input Clock
+> +
+> +  clock-names:
+> +    const: xclk
+> +
+> +  clock-frequency:
+> +    description: Frequency of the xclk clock in Hz.
+> +
+> +  vdda-supply:
+> +    description: Analog voltage supply, 2.8 volts
+> +
+> +  vddd-supply:
+> +    description: Digital core voltage supply, 1.5 volts
+> +
+> +  vdddo-supply:
+> +    description: Digital I/O voltage supply, 1.8 volts
+> +
+> +  enable-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the PWDNB pin, if any.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the RESETB pin, if any.
+> +
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          clock-lanes:
+> +            const: 0
+> +
+> +          bus-type:
+> +            const: 4
+> +
+> +          data-lanes:
+> +            minItems: 1
+> +            maxItems: 2
+> +            items:
+> +              enum: [1, 2]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - clock-frequency
+> +  - vdda-supply
+> +  - vddd-supply
+> +  - vdddo-supply
+> +  - enable-gpios
+> +  - reset-gpios
+> +  - port
 
-Is this attempting to access before the skb-->data in case
-wMaxPacketSize is bigger than pos? Anyway I'm not really following the
-reasoning you are comparing the data like that, depending on the codec
-there could be frames that match exactly but doesn't necessarily means
-they are duplicated.
+I think we don't need all of these properties as required.
+The only "really" required are:
+
+  - compatible
+  - reg
+  - clocks
+  - port
+
+Regards,
+Tommaso
 
 > +
-> +               /* Detect the sco data of usb isoc pkt duplication. */
-> +               if (!memcmp(p + 2, prev + 2, 8))
-> +                       return -EILSEQ;
+> +additionalProperties: false
 > +
-> +               if (wMaxPacketSize >= 12 &&
-> +                   p[2] == prev[6] && p[3] == prev[7] &&
-> +                   p[4] == prev[4] && p[5] == prev[5] &&
-> +                   p[6] == prev[10] && p[7] == prev[11] &&
-> +                   p[8] == prev[8] && p[9] == prev[9]) {
-> +                       return -EILSEQ;
-> +               }
-> +       }
+> +examples:
+> +  - |
+> +      #include <dt-bindings/gpio/gpio.h>
 > +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(btrtl_usb_recv_isoc);
+> +      i2c {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
 > +
->  MODULE_AUTHOR("Daniel Drake <drake@endlessm.com>");
->  MODULE_DESCRIPTION("Bluetooth support for Realtek devices ver " VERSION);
->  MODULE_VERSION(VERSION);
-> diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-> index e2c99684799a..79e93a8b229f 100644
-> --- a/drivers/bluetooth/btrtl.h
-> +++ b/drivers/bluetooth/btrtl.h
-> @@ -84,6 +84,8 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
->                             struct btrtl_device_info *btrtl_dev,
->                             unsigned int *controller_baudrate,
->                             u32 *device_baudrate, bool *flow_control);
-> +int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *buffer, int len,
-> +                               u16 wMaxPacketSize);
->
->  #else
->
-> @@ -127,4 +129,10 @@ static inline int btrtl_get_uart_settings(struct hci_dev *hdev,
->         return -ENOENT;
->  }
->
-> +static inline int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *buffer, int len,
-> +                                 u16 wMaxPacketSize)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
+> +          camera@3c {
+> +              compatible = "ovti,ov5645";
+> +              pinctrl-names = "default";
+> +              pinctrl-0 = <&pinctrl_ov5645>;
+> +              reg = <0x3c>;
+> +              clocks = <&clks 1>;
+> +              clock-names = "xclk";
+> +              clock-frequency = <24000000>;
+> +              vdddo-supply = <&ov5645_vdddo_1v8>; /* 1.8v */
+> +              vdda-supply = <&ov5645_vdda_2v8>;  /* 2.8v */
+> +              vddd-supply = <&ov5645_vddd_1v5>;  /* 1.5v */
+> +              enable-gpios = <&gpio1 19 GPIO_ACTIVE_HIGH>;
+> +              reset-gpios = <&gpio1 20 GPIO_ACTIVE_LOW>;
 > +
->  #endif
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 4c3aed89ff05..8e595e03655a 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -961,6 +961,7 @@ static int btusb_recv_isoc(struct btusb_data *data, void *buffer, int count)
->         struct sk_buff *skb;
->         unsigned long flags;
->         int err = 0;
-> +       u16 wMaxPacketSize = le16_to_cpu(data->isoc_rx_ep->wMaxPacketSize);
->
->         spin_lock_irqsave(&data->rxlock, flags);
->         skb = data->sco_skb;
-> @@ -980,6 +981,19 @@ static int btusb_recv_isoc(struct btusb_data *data, void *buffer, int count)
->                 }
->
->                 len = min_t(uint, hci_skb_expect(skb), count);
-> +
-> +               /* Gaps in audio could be heard while streaming WBS using USB
-> +                * alt settings 3 on some platforms, since this is only used
-> +                * with RTK chips so let vendor function detect it.
-> +                */
-> +               if (test_bit(BTUSB_USE_ALT3_FOR_WBS, &data->flags) &&
-> +                       btrealtek_test_flag(data->hdev, REALTEK_WBS_FILTER)) {
-> +                       err = btrtl_usb_recv_isoc(skb->len, skb->data, buffer,
-> +                                                       len, wMaxPacketSize);
-> +                       if (err)
-> +                               break;
-> +               }
-
-If we really need to do this then we need a way for vendors to replace
-btus_recv_isoc with the vendor function.
-
->                 skb_put_data(skb, buffer, len);
->
->                 count -= len;
-> --
-> 2.17.1
->
-
+> +              port {
+> +                  ov5645_ep: endpoint {
+> +                      remote-endpoint = <&csi0_ep>;
+> +                      clock-lanes = <0>;
+> +                      data-lanes = <1 2>;
+> +                  };
+> +              };
+> +          };
+> +      };
+> +...
+> -- 
+> 2.25.1
+> 
 
 -- 
-Luiz Augusto von Dentz
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
