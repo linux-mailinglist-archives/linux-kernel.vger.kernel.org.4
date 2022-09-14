@@ -2,115 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41A95B7E9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192EB5B7E9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiINBrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S229924AbiINBrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiINBrF (ORCPT
+        with ESMTP id S229489AbiINBrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Sep 2022 21:47:05 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850306E881;
-        Tue, 13 Sep 2022 18:47:03 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-12b542cb1d3so27347767fac.13;
-        Tue, 13 Sep 2022 18:47:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=K8MoQkRZmi/LYNPtYXflW9XvtwbZnRwT9HzOjVCpu2I=;
-        b=ItRVdaMyWZBTVjZkrBOPBtnn43+SSCF7xnF0zw3R/2vlNmaTpg97ywN2vuKtHdg/b5
-         iSS6hxDOCPoBuq1ateMXukTJ3ZonIbcyIrWerdhbHgcr64jaZne4oa6eu47uMAzwZzpH
-         kJjUf8OwsCjxKOfeebJ4Zl2P19JQ07QZ6R4NZqlpm9f7qecs2jgURBRcu/4QMGgxbuW0
-         YZhzgvKYV3SRQthvLlu38N9JyeNggmjbOC9hnAp2cAK0PvQMqN1UI22uSP46onakhDpS
-         rwbpBKb4aJAMZqqSlcHL8LhiEWoPsrKDEwfE8ckMKjvRYnJxOdYlAaNLnCPCeNRxgE1X
-         YyzQ==
-X-Gm-Message-State: ACgBeo3qiTb59IemdpaxsDuj0Enm2Xsm9f+FsW2maK6rq7b8CQynhDfo
-        OF1e4gdr28OJwEboRhgynw==
-X-Google-Smtp-Source: AA6agR4/cxoFs9ujzvZIWMAn2AwSGI1SC0yWBkdjv34kuvc4s+2XIo9pRsbzsknDlY+3sLHnu4NQ6w==
-X-Received: by 2002:a05:6808:2190:b0:34d:8ea6:3e9d with SMTP id be16-20020a056808219000b0034d8ea63e9dmr997459oib.40.1663120022627;
-        Tue, 13 Sep 2022 18:47:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p7-20020a056870830700b0011d23ed5365sm7900993oae.43.2022.09.13.18.47.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 18:47:02 -0700 (PDT)
-Received: (nullmailer pid 909955 invoked by uid 1000);
-        Wed, 14 Sep 2022 01:47:01 -0000
-Date:   Tue, 13 Sep 2022 20:47:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH] dt-bindings: pci: qcom,pcie-ep: correct qcom,perst-regs
-Message-ID: <20220914014701.GA853152-robh@kernel.org>
-References: <20220911135547.23106-1-krzysztof.kozlowski@linaro.org>
- <11e61fa5-f770-9c9f-23b9-3d1dcb205bc5@linaro.org>
- <20220913152054.GA3736444-robh@kernel.org>
- <d22ed818-1a8d-4af8-d41d-2268806f3dea@linaro.org>
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CCE6DFB5;
+        Tue, 13 Sep 2022 18:47:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VPkNDRP_1663120016;
+Received: from 30.97.48.72(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VPkNDRP_1663120016)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Sep 2022 09:46:57 +0800
+Message-ID: <09e0937e-2b6c-24e4-b639-9aedbe78ee3d@linux.alibaba.com>
+Date:   Wed, 14 Sep 2022 09:47:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d22ed818-1a8d-4af8-d41d-2268806f3dea@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RESEND][PATCH V8 2/2] clk: sprd: Add clocks support for UMS512
+To:     Cixi Geng <gengcixi@gmail.com>, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, mturquette@baylibre.com, sboyd@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220909152421.278662-1-gengcixi@gmail.com>
+ <20220909152421.278662-3-gengcixi@gmail.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220909152421.278662-3-gengcixi@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 06:25:49PM +0200, Krzysztof Kozlowski wrote:
-> On 13/09/2022 17:20, Rob Herring wrote:
-> > On Sun, Sep 11, 2022 at 04:14:54PM +0200, Krzysztof Kozlowski wrote:
-> >> On 11/09/2022 15:55, Krzysztof Kozlowski wrote:
-> >>> qcom,perst-regs is an phandle array of one item with a phandle and its
-> >>> arguments.
-> >>>
-> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
-> >>>  1 file changed, 4 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> >>> index 3d23599e5e91..077e002b07d3 100644
-> >>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> >>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> >>> @@ -60,8 +60,10 @@ properties:
-> >>>                   enable registers
-> >>>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> >>>      items:
-> >>> -      minItems: 3
-> >>> -      maxItems: 3
-> >>> +      - items:
-> >>> +          - description: Syscon to TCSR system registers
-> >>> +          - description: Perst enable offset
-> >>> +          - description: Perst separateion enable offset
-> >>
-> >> Unfortunately this still complains:
-> >>
-> >> qcom-sdx55-t55.dtb: pcie-ep@40000000: qcom,perst-regs:0: [28] is too short
-> >>
-> >>
-> >> where 28 is the phandle...
-> > 
-> > Meaning the dt is wrong or there's a tooling issue?
+
+
+On 9/9/2022 11:24 PM, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> I think tooling issue. I looked at this many times and code (schema and
-> DTS) seems to be correct, but tool doesn't like it.
+> Add the list of clocks for the Unisoc UMS512, along with clock
+> initialization.
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 
-Okay, I found the issue. Will test it a bit more and apply it tomorrow.
-
-Rob
+Looks good to me. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
