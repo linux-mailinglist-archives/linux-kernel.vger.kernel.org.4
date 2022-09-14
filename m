@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD79A5B8C39
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0E95B8C3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiINPtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S230296AbiINPuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiINPtj (ORCPT
+        with ESMTP id S230267AbiINPuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:49:39 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72952101D3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:49:37 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id m3so3068137eda.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4dhFsHlPlvcgQnVjUa+mHnTzrJV68XTZuGnDxYxZSu4=;
-        b=IN4R36fVYPVs6/B3yawNpatvT0g56oTugoNv50vlbOXyXAsWcQoX74Glmu+xcRhOae
-         GvAaCg3MG/L8Q3tas9HwCOXN3WC128YoUW6cyI94sICqKBOFj+qu5Pqj+Xtjd7FCE/B9
-         KkxrkeW/KK4wmkj30T3mcNCqF/q+6LqDkPiPNAKPsxrctP5e4Kojgv2JnihFQoPjqdJ/
-         DM/T11hN+TzYjoppc5tkW7sVbID5LzLP59xDvMfco3TjvCbrG0Oq/OjRNaBHrGmkAU+U
-         11JcCqoTcYzdCIF31VPjJE7zXI8LZoG7BMP+YKmd9Nk/SlkVy6K+g49IFh1ZQOJfuSxr
-         8gXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4dhFsHlPlvcgQnVjUa+mHnTzrJV68XTZuGnDxYxZSu4=;
-        b=e5Z1hIXdlw/JCUExR7ksyjvO88KkmepYFu0G1ByGSkt7hcxeeEd/Eg8czuvbekycYK
-         G1DMqmzMvT65uQSwCKo7yzqGz3cOmSl5wcr7BqYE3AMKASGkb1Cxz1ypZ7+ig9Nk6RUI
-         O+eMUHHReVvZsp1lGR/UVgzQM5vQhCmO10WVJIACy/YS/xoAvIK6yMKt8yj0mPGP7R1+
-         YD2UAigimV9nELkoOH757E+HHGGljm8+YdL3zJ0NPaHj8LonxqcsPxS81ksriXPL4HVH
-         UGxTkUYw2EIBowelB3PeOpxNbH7FW57QgrkMbE4nQT670WnbuBxBfP2LQDs0VUjjfMNm
-         7PIA==
-X-Gm-Message-State: ACgBeo186Ft+1lH3BVttlYznAetEmiKoKX1svyLjWRfhuCqiMqWo68dG
-        uI8I9Hv1YO2TnqusvZu0m8X6pbZrHPe6Q8BAnYib
-X-Google-Smtp-Source: AA6agR6Z4Bn46EoUvSA1obe0hHw0oo1/HH93DbRoRMf9w53XlRDeYqGX/S8m5ayEPeAxSsXgKiop3kZAgsLMXX0XPUY=
-X-Received: by 2002:a05:6402:274c:b0:44f:334e:1e11 with SMTP id
- z12-20020a056402274c00b0044f334e1e11mr28344216edd.304.1663170575800; Wed, 14
- Sep 2022 08:49:35 -0700 (PDT)
+        Wed, 14 Sep 2022 11:50:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C813B5720F;
+        Wed, 14 Sep 2022 08:50:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A44261782;
+        Wed, 14 Sep 2022 15:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E45C433C1;
+        Wed, 14 Sep 2022 15:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663170635;
+        bh=S28EkrNLwS69diRhkX+rhYqUGi8w409B1c6Xk4uXdA4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=C1M6MQGrR9MJB1trIJC+waXGVZ4KZTTS+JTEOpiEsWCK7+PWOVMNeHPvSp5Zl4s8J
+         hHMEIylwNYQu3JpzME1k3+hI7h8ay3mg8Fyq4l/C+ahofwmf0Rn3jdPCSzhKqsnDrx
+         kysQUItpAD3rBHGQLray2SjAX1d2+eCxXKLh3tDQHNB9cyN3oCMEsDVHIY4mDkxNH6
+         anaFqGtVu5W6ZNvtaBld6rImlbyjnnJ9hJP5j/LOhvlg2dlMMqaT5gS/zFChRTCGrh
+         1ShOEbmH3O+HVdVPwSmLqlIKfrr+nNcBJclbNQrjDOz8WoD/FudG4ZvVFX0Tv2SM7J
+         CrNyxNvTJ96EQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220902213750.1124421-1-morbo@google.com> <20220902213750.1124421-3-morbo@google.com>
- <202209022251.B14BD50B29@keescook> <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
- <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
- <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net> <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
-In-Reply-To: <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
-From:   Bill Wendling <morbo@google.com>
-Date:   Wed, 14 Sep 2022 16:49:19 +0100
-Message-ID: <CAGG=3QVCH+Cgki8_Jvsj3Jz3=4Tpot4aHN_obY7Hy3wAwEODhA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        virtualization@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech> <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the maximum
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Date:   Wed, 14 Sep 2022 08:50:33 -0700
+User-Agent: alot/0.10
+Message-Id: <20220914155035.88E45C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 3:41 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
-> > On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
-> > > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
-> > > >
-> > > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
-> > > > >
-> > > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> > > > > > [...]
-> > > > > >         callq   *pv_ops+536(%rip)
-> > > > >
-> > > > > Do you know which pv_ops function is this? I can't figure out where
-> > > > > pte_offset_kernel() gets converted into a pv_ops call....
-> > > > >
-> > > > This one is _paravirt_ident_64, I believe. I think that the original
-> > > > issue Nathan was seeing was with another seemingly innocuous function.
-> > >
-> > > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
-> > > really needs to not be touched at all by the compiler for
-> > > these...special features.
-> >
-> > My source tree sayeth:
-> >
-> >   u64 notrace _paravirt_ident_64(u64 x)
-> >
-> > And that function is only ever called at boot, after alternatives runs
-> > it's patched with:
-> >
-> >   mov %_ASM_ARG1, %_ASM_AX
-> >
-> > Anyway, if you want to take it away from the compiler, something like
-> > so should do.
->
-> This appears to work fine for me in QEMU, as I can still boot with
-> CONFIG_ZERO_CALL_USED_REGS and spawn a nested guest without any issues.
->
-Thanks, Nathan. I much prefer to use this patch then and file a
-separate issue to investigate the clobbers issue for later.
+Quoting Maxime Ripard (2022-08-15 08:31:24)
+> @@ -254,6 +255,33 @@ static int raspberrypi_fw_dumb_determine_rate(struct=
+ clk_hw *hw,
+>         return 0;
+>  }
+> =20
+> +unsigned long rpi_firmware_clk_get_max_rate(struct clk *clk)
+> +{
+> +       const struct raspberrypi_clk_data *data;
+> +       struct raspberrypi_clk *rpi;
+> +       struct clk_hw *hw;
+> +       u32 max_rate;
+> +       int ret;
+> +
+> +       if (!clk)
+> +               return 0;
+> +
+> +       hw =3D  __clk_get_hw(clk);
 
--bw
+Ideally we don't add more users of this API. I should document that :/
 
-> > diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
-> > index 7ca2d46c08cc..8922e2887779 100644
-> > --- a/arch/x86/kernel/paravirt.c
-> > +++ b/arch/x86/kernel/paravirt.c
-> > @@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
-> >  }
-> >
-> >  #ifdef CONFIG_PARAVIRT_XXL
-> > -/* identity function, which can be inlined */
-> > -u64 notrace _paravirt_ident_64(u64 x)
-> > -{
-> > -     return x;
-> > -}
-> > +extern u64 _paravirt_ident_64(u64 x);
-> > +asm (".pushsection .entry.text, \"ax\"\n"
-> > +     ".global _paravirt_ident_64\n"
-> > +     "_paravirt_ident_64:\n\t"
-> > +     ASM_ENDBR
-> > +     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
-> > +     ASM_RET
-> > +     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
-> > +     ".type _paravirt_ident_64, @function\n\t"
-> > +     ".popsection");
-> >  #endif
-> >
-> >  DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
-> >
+It begs the question though, why do we need this API to take a 'struct
+clk'?  Can it simply hardcode the data->id value for the clk you care
+about and call rpi_firmware_property() directly (or some wrapper of it)?
+
+Furthermore, I wonder if even that part needs to be implemented.  Why
+not make a direct call to rpi_firmware_property() and get the max rate?
+All of that can live in the drm driver. Making it a generic API that
+takes a 'struct clk' means that it looks like any clk can be passed,
+when that isn't true. It would be better to restrict it to the one use
+case so that the scope of the problem doesn't grow. I understand that it
+duplicates a few lines of code, but that looks like a fair tradeoff vs.
+exposing an API that can be used for other clks in the future.
+
+> +       if (!hw)
+> +               return 0;
+> +
+> +       data =3D clk_hw_to_data(hw);
+> +       rpi =3D data->rpi;
+> +       ret =3D raspberrypi_clock_property(rpi->firmware, data,
+> +                                        RPI_FIRMWARE_GET_MAX_CLOCK_RATE,
+> +                                        &max_rate);
