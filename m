@@ -2,155 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0BE5B86CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17425B86D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiINKyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S230012AbiINK40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiINKxw (ORCPT
+        with ESMTP id S230154AbiINKz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:53:52 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60087.outbound.protection.outlook.com [40.107.6.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802DB7F0A0;
-        Wed, 14 Sep 2022 03:53:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XbP2TnQP0iXsWtBXyLEGwfQ1IjXGT1gy8clyd/p7chMMEHHuVgHK1N2m5NldOe/tOPs8eo1dPRA+orUWi61v26PFuy2SLUxNywW1Rpl9bPKAqTqsk8L+9iwVSpDgA0MZh7GrV2FTBbhDSFkpeOWfQlfFBZ3WKGzxZ87XNktt8EuccKWHzaxJtQ1SXhoBRAvwDIq08Lsrydpo9lCzshUhrVEpT0xPtZcC+Yy8tmSdi49dVFzc2G0ta4H462WO0H7WwE6QGQ/xkwjJPPWNwaBWkzkTeq4tTqrIdB6URi4YStH/c2HBYjc/60RJRKETJJ/JtTMXwT3U0xUF0eB0ae6zqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PxTQ7IVzde13UUXchPar1dvJ+XllS83LF43FxapAL3E=;
- b=fuZnNzNalix4Ij4FSEWgnThxQt8DKwtEP0RCJZj59cM0RCRnISA6kF1WLn7P2VINxB6lTzTDsG6e/Bn5GHElna8bfQdwoOcFPZVEvzqip/3x7xTr0tQnoOO/+Sz4+yf1fWaYr4D5DFolZ/OoiFO/BJ4vOfQv4qFneXfAFg2ctddMFID8qQ/Iiq3Ia/R+fiN8NnzW5ZjXjUQfD4Qvp1vvhr/P050jIFEcqrwF0Jd9hZRcuIQOB/zvqQcwA0hIXJFpIb/9zcIaeFSHft2KqKkVjkgBoV74vMNZYVj+tiavo3catumxz1tMNfuuirZ35ErRAX8POZn/UouW1tiPUDE69w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PxTQ7IVzde13UUXchPar1dvJ+XllS83LF43FxapAL3E=;
- b=D38spTBDRR796QMIzkyiS4w9EQsB4j/uYAPhz0UFbAiaCtU44I/uhMhsqvJq7loH7fZoy/BtTBi3sJEFIYP+g0Z96DCkDtHy9r6e6zF4kiKZDHYFBqV2su+EONZitBvOSTFy9k3QSYRl+jdnpRHTUIgRR3WDdXAMlBLNjsi+Y3c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
- by PA4PR04MB7773.eurprd04.prod.outlook.com (2603:10a6:102:cd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 10:53:11 +0000
-Received: from VI1PR04MB4222.eurprd04.prod.outlook.com
- ([fe80::7008:1596:bb4:d904]) by VI1PR04MB4222.eurprd04.prod.outlook.com
- ([fe80::7008:1596:bb4:d904%4]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 10:53:11 +0000
-From:   Chancel Liu <chancel.liu@nxp.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shengjiu.wang@gmail.com, shengjiu.wang@nxp.com,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     Chancel Liu <chancel.liu@nxp.com>
-Subject: [PATCH v2 7/7] ASoC: imx-rpmsg: Assign platform driver used by machine driver to link with
-Date:   Wed, 14 Sep 2022 18:51:45 +0800
-Message-Id: <20220914105145.2543646-8-chancel.liu@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914105145.2543646-1-chancel.liu@nxp.com>
-References: <20220914105145.2543646-1-chancel.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0017.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::10) To VI1PR04MB4222.eurprd04.prod.outlook.com
- (2603:10a6:803:46::19)
+        Wed, 14 Sep 2022 06:55:57 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78005F96
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:54:40 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 28EArwni072561
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Wed, 14 Sep 2022 18:53:58 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 14 Sep 2022 18:53:59 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
+Subject: [PATCH] mm: No need to check pcp page when free it to buddy
+Date:   Wed, 14 Sep 2022 18:53:40 +0800
+Message-ID: <1663152820-608-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4222:EE_|PA4PR04MB7773:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91ac7b32-99c2-4332-f937-08da963f50de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tJtzV7k7ktrr69yrqu9xHZ2hqNq28+hO/D21roToFEcA/NpsTi3l4HKM4TROk6IoTF/Fg7/enFre3/49VazrzkgxXvn9eibcb6NFwklBCga8g4vqUUPXQTWS2YNoMMUbtz1LCQMj86UUq7zbur4LdAPrpHZQKX3ou113juqpfCaHuVjJH11DryfaDHMKY3xzxW1lCC37OERLIVzY4n7Zc+rNKvJ/Ebpntx2CBAZNdm5qpoqvnSOcVseFOeLxetiYqd8mbKcObZ4ljNKkte3tPlnFJubEsO9VUkTn2G8/oLGqsAOrx4YTw8M8JQv/eVYFznDsHHBvdQeHANhoq4c0JmaNbE1yQSL+ojSaiVtLAo5JtKOhmqUpZqS0W1n5pvh3D4Axr1DIMH0/B1aj9aWIuCzc6t/7+CUFlUOJtJ1VYoSL02eMhFDiHhSPfB0rma6TEQ+/AZA1emlsODAKEeCigb2lvwku1SfEDxrAZ6iK3Tpa4U0MGQuwdLR9DlvqC7g7zibe26iFDe0h4IvRy4N1dVFxvRI2VbjREXvJ4K9zNhTQH0yXXzV7ea1BfvEPEt0aE5Sket+jzkPpq1vom7Jx1VmGT8532c292VFmfnpYlTr5RJ+tDD3ES8OVLOaguR9iR0sGcqtAse6rbb5ndvvtNIGnITEkU0gPCuw1HqmT/6kuUFGC4IvM0/KgiRy0QM9/LrDm9vWmj4f9Ts0Hf826vh1K8guzVg7S+biPFGMTqPCEQYcGIQFv1xA3fosLg3iswpeM4BRQOJrq8IAOTANbFIY+UUKJSWkz9sluasO+FyA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(39860400002)(366004)(136003)(451199015)(36756003)(66946007)(921005)(316002)(2616005)(6666004)(1076003)(8676002)(2906002)(186003)(52116002)(26005)(478600001)(83380400001)(86362001)(38350700002)(41300700001)(38100700002)(6512007)(7416002)(6506007)(44832011)(66556008)(66476007)(6486002)(5660300002)(4326008)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0H//9kjscboxctIrq6Ln6iD7iFBf9yo6VhK0VyEw3ua6ByvTDbRCJ3bnBlbU?=
- =?us-ascii?Q?OnBJl5yLm69zMdJbuLYFud9oJay77xFDYXSQyA31fB5gfqtoQfZt+vm5TjDv?=
- =?us-ascii?Q?CHUWPMB23mMCDV5xY18tC598lCr0sLszQNbV/Nyg9aoSUznXk3CMxFONkt5O?=
- =?us-ascii?Q?zHfhtvqV0vl81RGiD0EtsovEdqIwzBL87l6mklGIbJLOtzSJG9MDh5exppXY?=
- =?us-ascii?Q?Y8ngtXr1omEMmKIgwk5RqQ590Qiufihte84uFd3YEHTgMP1luhK0GYd1cnTG?=
- =?us-ascii?Q?my4XVZA66G/twgDxX3fdDbaZygrpCWknIiRaTdcUVw1T2fNVwdSZwJ+wrWnI?=
- =?us-ascii?Q?LugSBjQgpfyxqikaYw5W3x4Cp0JneOIh6WlTgoxfohvdisStia7ZN7hAMBro?=
- =?us-ascii?Q?UyJy06ejfMOaRwr3IRqchnbG3iAO+8nF+4HRyJN149MscFBHGtWAo+NLkpmz?=
- =?us-ascii?Q?hJFYQcuxDoGD5VlEoIAiGBP5fkj/EnJkpCX8Uuzvq6jaNYTCALKPuZ35A5Og?=
- =?us-ascii?Q?UTTsKsdAPxJVaONhzx1aXNKc2QlmELCDzmNS2VtgECqc6Ah3URnPnyH5J8zV?=
- =?us-ascii?Q?6vc1oxsU1+8LXGamAFENFOz1ZBAdA0mIBMW9HR3thHVKaYmc/ILVCbb23/iz?=
- =?us-ascii?Q?cHegmT++zxWwbdVCUP4470axZ5XRByyNEzxOO2dC+LkUP8pMos+8sZdEO5Fa?=
- =?us-ascii?Q?HqXcm3B/0kmiqtMui2r19tpTTFlpMxs+bUSS7e6Ofl/f2B7ZATGwhv/IJbDn?=
- =?us-ascii?Q?nlep2tEggSyFmpElB1SzQDgk+6CEaO2OpodiTmO2PANhJhxK47cpkGh5HzMi?=
- =?us-ascii?Q?i0kU2jJ2/nzQaPM0IYeYqCyNPucvMrcTjgEZBGNj9c95ae9RsI3HSxfOUAmW?=
- =?us-ascii?Q?+ElDPhd+Rszq4NwUjymrJVWHtJDXWceGGEnbjYOSmqb9DbKukdyTUuJqbpRD?=
- =?us-ascii?Q?89LFJUUmp58efn4o5MeYPwC9fzG2YufZZ9DNKz5Gtr1N1/ibVM22p5CtN3Om?=
- =?us-ascii?Q?Uzt+atqaxDy4xLOVId+be/vPLaqKeyfE6R87+w4iTkTdHMT7f8Py53blbkjA?=
- =?us-ascii?Q?b7ayvV6uY78BZPD9n1tg3g+8t4oW4j/OIPG0qvL5QOk8aUmEtILYofDFaeLL?=
- =?us-ascii?Q?Rssw1OaM0DFmjZhDsj810zJ6JN4k+t9dJMOwRI4wEi0WmW3diGvFoaVmBOb2?=
- =?us-ascii?Q?dc8xe476zg4o70u/Dp4vLDdYdbzzDRLd8NWJKF6Gd5F6p7w6g86Qo2hc0j8H?=
- =?us-ascii?Q?H+kEoT6UHkuO3MErxMWRzXuaIleXOT683VhuOAXtPBk84eoUCqPb7nLWsGY1?=
- =?us-ascii?Q?2irbXBnVWKA1rMDdcOEaHpV/25+unjKnD6EokGGQMLcHhCvBVrzd2GEAKkGv?=
- =?us-ascii?Q?aR0MdaubcgkHlPFgBt1WcVsqX5QehBhRFAcTiQ3KadynzLq01PAVqREvdSfG?=
- =?us-ascii?Q?TWlYDr+aJBszIl0/Qjsk+2xMKr5t9zPd3np+m4Iphvbpyx/p2Qga343dBsiq?=
- =?us-ascii?Q?RwBsAM3JscK1HvTYpDom10zHMbGkSLB84/aUyFugvJC+AkvpdI9CGlqGk/pK?=
- =?us-ascii?Q?NpBBO0JKN4ECZH4zbJfUxZpZFDI61ZzhoQKFq9xg?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91ac7b32-99c2-4332-f937-08da963f50de
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4222.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 10:53:11.3679
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Di8Mif1hC/yZVl0kpWRqUvV7CKCkQ63HHhOFQVKt1CBdncXaivyWfduWY2iaAjSyn7CHn+4YUyxB3qMZSSziYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7773
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 28EArwni072561
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each ASoC platform driver is named by rpmsg channel. ASoC machine
-driver can parse "fsl,rpmsg-channel-name" property to figure out which
-ASoC platform driver it should link with.
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+The pages on pcp list have been checked the validity from each entrance. It is
+no need to check it again when free them back to buddy.
+
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 ---
- sound/soc/fsl/imx-rpmsg.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ mm/page_alloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/fsl/imx-rpmsg.c b/sound/soc/fsl/imx-rpmsg.c
-index 2e117311e582..57684064c9da 100644
---- a/sound/soc/fsl/imx-rpmsg.c
-+++ b/sound/soc/fsl/imx-rpmsg.c
-@@ -36,6 +36,7 @@ static int imx_rpmsg_probe(struct platform_device *pdev)
- 	struct platform_device *rpmsg_pdev = to_platform_device(dev);
- 	struct device_node *np = rpmsg_pdev->dev.of_node;
- 	struct of_phandle_args args;
-+	const char *platform_name;
- 	struct imx_rpmsg *data;
- 	int ret = 0;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3d..131536e 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1445,7 +1445,7 @@ static bool free_pcp_prepare(struct page *page, unsigned int order)
  
-@@ -81,7 +82,10 @@ static int imx_rpmsg_probe(struct platform_device *pdev)
- 	}
+ static bool bulkfree_pcp_prepare(struct page *page)
+ {
+-	return check_free_page(page);
++	return false;
+ }
+ #endif /* CONFIG_DEBUG_VM */
  
- 	data->dai.cpus->dai_name = dev_name(&rpmsg_pdev->dev);
--	data->dai.platforms->name = IMX_PCM_DRV_NAME;
-+	if (!of_property_read_string(np, "fsl,rpmsg-channel-name", &platform_name))
-+		data->dai.platforms->name = platform_name;
-+	else
-+		data->dai.platforms->name = "rpmsg-audio-channel";
- 	data->dai.playback_only = true;
- 	data->dai.capture_only = true;
- 	data->card.num_links = 1;
 -- 
-2.25.1
+1.9.1
 
