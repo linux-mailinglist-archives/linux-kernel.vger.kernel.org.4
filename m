@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F4D5B8F67
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852CE5B8F69
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiINTyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 15:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S229708AbiINT4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 15:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiINTyl (ORCPT
+        with ESMTP id S229472AbiINT4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 15:54:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34AC2728
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:54:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oYYSu-0002uX-BS; Wed, 14 Sep 2022 21:54:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oYYSr-000krh-Ou; Wed, 14 Sep 2022 21:54:28 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oYYSp-000vzE-Kt; Wed, 14 Sep 2022 21:54:27 +0200
-Date:   Wed, 14 Sep 2022 21:54:21 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     xinlei.lee@mediatek.com
-Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH,1/2] dt-bindings: pwm: Add compatible for Mediatek MT8188
-Message-ID: <20220914195421.23z5r3notsmx4sdw@pengutronix.de>
-References: <1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com>
- <1661239875-19841-2-git-send-email-xinlei.lee@mediatek.com>
+        Wed, 14 Sep 2022 15:56:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AD463D3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC9D161EBA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E71C433C1;
+        Wed, 14 Sep 2022 19:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663185398;
+        bh=1DrhO9J6QoptsuptEgf0uLTwWzccKrsoDC0CgVBHBFk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AiojQUMqkHashxOR7ml2VpTipnwdPjbJUI6LJ9f3ZiTFndPx8DXl3z5j1RyHpM6aM
+         nuifkRvWDngygC3NWYkI5VGWjJbNVUdzTozwQQj+28BPQqxuYVmCEPaQVVLcZSfSN7
+         0ahzYcssRxvhLfEG3ZSogs+zYegUAomVRXSsRLxd8k7Mn1IVVfDPm7mdzTtImNF0p0
+         WcW7DwdSe/ozHTtAG12YS375kFDQXEv5DjL5nKa6NVLO6pDIFbSePqnQr6FI1yQ8qT
+         xKjBG8SKv5KgUCtp0lVMD3lrceb7jdoESdOMo92qSE4m0RYBI51WQgcIJBnVe0l61Z
+         ++gDpht0Ek8ag==
+Received: by pali.im (Postfix)
+        id F03A47B8; Wed, 14 Sep 2022 21:56:34 +0200 (CEST)
+Date:   Wed, 14 Sep 2022 21:56:34 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ash Logan <ash@heyquark.com>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "j.ne@posteo.net" <j.ne@posteo.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: Fragmented physical memory on powerpc/32
+Message-ID: <20220914195634.fumjtflzetvy52fl@pali>
+References: <20220908153511.57ceunyusziqfcav@pali>
+ <20220908201701.sd3zqn5hfixmjvhh@pali>
+ <9fbc5338-5e10-032a-8f55-e080bd93f74b@csgroup.eu>
+ <Yx9GpV1XT8r2a++R@kernel.org>
+ <20220912211623.djb7fckgknyfmof7@pali>
+ <1c95875c-29f8-68b7-e480-fed8614f3037@csgroup.eu>
+ <4f540391-37dc-8e22-be0a-74543082504d@csgroup.eu>
+ <YyGfkDKgeW7/nNlr@kernel.org>
+ <ed8ff681-4182-3f9f-a65f-21cf5012fff0@csgroup.eu>
+ <9779CA34-E40D-4035-A319-A92D2F6E4DDF@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="23bdvmkeqotnlzsg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1661239875-19841-2-git-send-email-xinlei.lee@mediatek.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9779CA34-E40D-4035-A319-A92D2F6E4DDF@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,43 +75,407 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wednesday 14 September 2022 16:55:04 Mike Rapoport wrote:
+> On September 14, 2022 10:43:52 AM GMT+01:00, Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+> >
+> >
+> >Le 14/09/2022 à 11:32, Mike Rapoport a écrit :
+> >> On Tue, Sep 13, 2022 at 02:36:13PM +0200, Christophe Leroy wrote:
+> >>>
+> >>>
+> >>> Le 13/09/2022 à 08:11, Christophe Leroy a écrit :
+> >>>>
+> >>>>
+> >>>> Le 12/09/2022 à 23:16, Pali Rohár a écrit :
+> >>>>>>
+> >>>>>> My guess would be that something went wrong in the linear map
+> >>>>>> setup, but it
+> >>>>>> won't hurt running with "memblock=debug" added to the kernel
+> >>>>>> command line
+> >>>>>> to see if there is anything suspicious there.
+> >>>>>
+> >>>>> Here is boot log on serial console with memblock=debug command line:
+> >>>>>
+> >>>> ...
+> >>>>>
+> >>>>> Do you need something more for debug?
+> >>>>
+> >>>> Can you send me the 'vmlinux' used to generate the above Oops so that I
+> >>>> can see exactly where we are in function mem_init().
+> >>>>
+> >>>> And could you also try without CONFIG_HIGHMEM just in case.
 
---23bdvmkeqotnlzsg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello! I disabled CONFIG_HIGHMEM and there is no crash anymore. But
+kernel see only 761160 kB of RAM, which is less than 3GB. I guess this
+is expected.
 
-Hello,
+> >>>>
+> >>>
+> >>> I looked at the vmlinux you sent me, the problem is in the loop for highmem
+> >>> in mem_init(). It crashes in the call to free_highmem_page()
+> >>>
+> >>> #ifdef CONFIG_HIGHMEM
+> >>> 	{
+> >>> 		unsigned long pfn, highmem_mapnr;
+> >>>
+> >>> 		highmem_mapnr = lowmem_end_addr >> PAGE_SHIFT;
+> >>> 		for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
+> >>> 			phys_addr_t paddr = (phys_addr_t)pfn << PAGE_SHIFT;
+> >>> 			struct page *page = pfn_to_page(pfn);
+> >>> 			if (!memblock_is_reserved(paddr))
+> >>> 				free_highmem_page(page);
+> >>> 		}
+> >>> 	}
+> >>> #endif /* CONFIG_HIGHMEM */
+> >>>
+> >>>
+> >>> As far as I can see in the memblock debug lines, the holes don't seem to be
+> >>> marked as reserved by memblock. So it is above valid ? Other architectures
+> >>> seem to do differently.
+> >>>
+> >>> Can you try by replacing !memblock_is_reserved(paddr) by
+> >>> memblock_is_memory(paddr) ?
 
-On Tue, Aug 23, 2022 at 03:31:14PM +0800, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
->=20
-> Add dt-binding documentation of pwm for MediaTek MT8188 SoC.
->=20
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+I enabled CONFIG_HIGHMEM again, applied this change and kernel does not
+crash too anymore. And it sees 3062896 kB of memory (in 'free' output).
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+So seems that this change fixed it.
 
-Best regards
-Uwe
+I tried simple C program for allocating memory via malloc() and it
+successfully allocated 2800 MB. If it tried to request/allocate more
+then kernel started OOM killer which killed that program gracefully.
+No kernel or HW crash.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Here is bootlog:
 
---23bdvmkeqotnlzsg
-Content-Type: application/pgp-signature; name="signature.asc"
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x4 nid=-1 from=0x00000000 max_addr=0x00000000 smp_setup_cpu_maps+0x40/0x2b4
+[    0.000000] memblock_reserve: [0x2fff5d74-0x2fff5d7b] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] CPU maps initialized for 1 thread per core
+[    0.000000]  (thread shift is 0)
+[    0.000000] memblock_phys_free: [0x2fff5d74-0x2fff5d7b] setup_arch+0x1bc/0x318
+[    0.000000] -----------------------------------------------------
+[    0.000000] phys_mem_size     = 0xbe500000
+[    0.000000] dcache_bsize      = 0x20
+[    0.000000] icache_bsize      = 0x20
+[    0.000000] cpu_features      = 0x0000000010010108
+[    0.000000]   possible        = 0x0000000010010108
+[    0.000000]   always          = 0x0000000010010108
+[    0.000000] cpu_user_features = 0x84e08000 0x08000000
+[    0.000000] mmu_features      = 0x00020010
+[    0.000000] -----------------------------------------------------
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2fff2000-0x2fff3fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2fff0000-0x2fff1fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffee000-0x2ffeffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffec000-0x2ffedfff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffea000-0x2ffebfff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe8000-0x2ffe9fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe6000-0x2ffe7fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe4000-0x2ffe5fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe2000-0x2ffe3fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe0000-0x2ffe1fff] memblock_alloc_range_nid+0xe8/0x1b0
+mpc85xx_rdb_setup_arch()
+[    0.000000] ioremap() called early from of_iomap+0x48/0x80. Use early_ioremap() instead
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
+[    0.000000] memblock_reserve: [0x2fff4000-0x2fff4fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] MPC85xx RDB board from Freescale Semiconductor
+[    0.000000] barrier-nospec: using isync; sync as speculation barrier
+[    0.000000] barrier-nospec: patched 182 locations
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
+[    0.000000] memblock_reserve: [0x2ffdf000-0x2ffdffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Top of RAM: 0xff700000, Total RAM: 0xbe500000
+[    0.000000] Memory hole size: 1042MB
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000000000000-0x000000002fffffff]
+[    0.000000]   HighMem  [mem 0x0000000030000000-0x00000000ff6fffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000007fffffff]
+[    0.000000]   node   0: [mem 0x00000000c0200000-0x00000000eeffffff]
+[    0.000000]   node   0: [mem 0x00000000f0000000-0x00000000ff6fffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000000ff6fffff]
+[    0.000000] memblock_alloc_try_nid_raw: 37675008 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 free_area_init+0x890/0xc94
+[    0.000000] memblock_reserve: [0x2dbf1000-0x2ffdefff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
+[    0.000000] memblock_reserve: [0x2fff5d00-0x2fff5d5f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 416 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
+[    0.000000] memblock_reserve: [0x2fff5b60-0x2fff5cff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x38/0x154
+[    0.000000] memblock_reserve: [0x2fff5b40-0x2fff5b5f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 1024 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x7c/0x154
+[    0.000000] memblock_reserve: [0x2fff5740-0x2fff5b3f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0xc4/0x154
+[    0.000000] memblock_reserve: [0x2fff5720-0x2fff573f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] MMU: Allocated 1088 bytes of context maps for 255 contexts
+[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x194/0x6d0
+[    0.000000] memblock_reserve: [0x2fff56a0-0x2fff570e] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x1c0/0x6d0
+[    0.000000] memblock_reserve: [0x2fff5620-0x2fff568e] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x314/0x7b4
+[    0.000000] memblock_reserve: [0x2dbf0000-0x2dbf0fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x4d4/0x7b4
+[    0.000000] memblock_reserve: [0x2dbef000-0x2dbeffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 90112 bytes align=0x1000 nid=-1 from=0x3fffffff max_addr=0x00000000 pcpu_embed_first_chunk+0x564/0x7b4
+[    0.000000] memblock_reserve: [0x2dbd9000-0x2dbeefff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_phys_free: [0x2dbe4000-0x2dbe3fff] pcpu_embed_first_chunk+0x680/0x7b4
+[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeefff] pcpu_embed_first_chunk+0x680/0x7b4
+[    0.000000] percpu: Embedded 11 pages/cpu s14196 r8192 d22668 u45056
+[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x37c/0x924
+[    0.000000] memblock_reserve: [0x2fff5d60-0x2fff5d63] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3a4/0x924
+[    0.000000] memblock_reserve: [0x2fff5600-0x2fff5603] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3cc/0x924
+[    0.000000] memblock_reserve: [0x2fff55e0-0x2fff55e7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3f4/0x924
+[    0.000000] memblock_reserve: [0x2fff55c0-0x2fff55c7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] pcpu-alloc: s14196 r8192 d22668 u45056 alloc=11*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 
+[    0.000000] memblock_alloc_try_nid: 136 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x7fc/0x924
+[    0.000000] memblock_reserve: [0x2fff5520-0x2fff55a7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
+[    0.000000] memblock_reserve: [0x2fff54c0-0x2fff551f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 384 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5340-0x2fff54bf] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 388 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
+[    0.000000] memblock_reserve: [0x2fff51a0-0x2fff5323] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5140-0x2fff519f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
+[    0.000000] memblock_reserve: [0x2fff50e0-0x2fff513f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 768 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
+[    0.000000] memblock_reserve: [0x2dbd8d00-0x2dbd8fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 772 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
+[    0.000000] memblock_reserve: [0x2dbd89e0-0x2dbd8ce3] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 192 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5020-0x2fff50df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_phys_free: [0x2dbf0000-0x2dbf0fff] pcpu_embed_first_chunk+0x744/0x7b4
+[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeffff] pcpu_embed_first_chunk+0x754/0x7b4
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 777792
+[    0.000000] Kernel command line: root=ubi0:rootfs rootfstype=ubifs ubi.mtd=rootfs rootflags=chk_data_crc rw console=ttyS0,115200 memblock=debug
+[    0.000000] memblock_alloc_try_nid: 524288 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
+[    0.000000] memblock_reserve: [0x2db589e0-0x2dbd89df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Dentry cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
+[    0.000000] memblock_alloc_try_nid: 262144 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
+[    0.000000] memblock_reserve: [0x2db189e0-0x2db589df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Kernel virtual memory layout:
+[    0.000000]   * 0xffbbf000..0xfffff000  : fixmap
+[    0.000000]   * 0xff400000..0xff800000  : highmem PTEs
+[    0.000000]   * 0xff3fe000..0xff400000  : early ioremap
+[    0.000000]   * 0xf1000000..0xff3fe000  : vmalloc & ioremap
+[    0.000000] Memory: 3062620K/3118080K available (10732K kernel code, 712K rwdata, 2044K rodata, 276K init, 287K bss, 55460K reserved, 0K cma-reserved, 2331648K highmem)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
 
------BEGIN PGP SIGNATURE-----
+> >> 
+> >> The holes should not be marked as reserved, we just need to loop over the
+> >> memory ranges rather than over pfns. Then the holes will be taken into
+> >> account.
+> >> 
+> >> I believe arm and xtensa got this right:
+> >> 
+> >> (from arch/arm/mm/init.c)
+> >> 
+> >> static void __init free_highpages(void)
+> >> {
+> >> #ifdef CONFIG_HIGHMEM
+> >> 	unsigned long max_low = max_low_pfn;
+> >> 	phys_addr_t range_start, range_end;
+> >> 	u64 i;
+> >> 
+> >> 	/* set highmem page free */
+> >> 	for_each_free_mem_range(i, NUMA_NO_NODE, MEMBLOCK_NONE,
+> >> 				&range_start, &range_end, NULL) {
+> >> 		unsigned long start = PFN_UP(range_start);
+> >> 		unsigned long end = PFN_DOWN(range_end);
+> >> 
+> >> 		/* Ignore complete lowmem entries */
+> >> 		if (end <= max_low)
+> >> 			continue;
+> >> 
+> >> 		/* Truncate partial highmem entries */
+> >> 		if (start < max_low)
+> >> 			start = max_low;
+> >> 
+> >> 		for (; start < end; start++)
+> >> 			free_highmem_page(pfn_to_page(start));
+> >> 	}
+> >> #endif
+> >> }
+> >> 
+> >
+> >
+> >And what about the way MIPS does it ?
+> >
+> >static inline void __init mem_init_free_highmem(void)
+> >{
+> >#ifdef CONFIG_HIGHMEM
+> >	unsigned long tmp;
+> >
+> >	if (cpu_has_dc_aliases)
+> >		return;
+> >
+> >	for (tmp = highstart_pfn; tmp < highend_pfn; tmp++) {
+> >		struct page *page = pfn_to_page(tmp);
+> >
+> >		if (!memblock_is_memory(PFN_PHYS(tmp)))
+> >			SetPageReserved(page);
+> >		else
+> >			free_highmem_page(page);
+> >	}
+> >#endif
+> >}
+> 
+> This iterates over all PFNs in the highmem range and skips those in holes.
+> for_each_free_mem_range() skips the holes altogether.
+> 
+> Largely, I think we need to move, say, arm's version to mm/ and use it everywhere, except, perhaps, x86.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMiMWsACgkQwfwUeK3K
-7AkHuAf/YbpnjsXH7ZSoZyTgl2dDDyrYOAiNHDLVW+9H2izU/kcIloGBS5Cifd88
-cf0jqYzIm6oF8Sfl6U8Bs6y38ug7Nb396Pg3RKTcDfkoTgo5fSvIBNcIEZhFWknB
-jIMGHvo0sG584nxnPGtc4qWiczVJjb7ETSG9LQH5hAZYCEPbVTAFlAkzwTlOFAXg
-JtViZbxO5bWiWoN4BZjMQW7DLIhP1S0rLBzLuIBjth6N8Z/jV0ySgrK/jJCbQ/fm
-J20NpniXnGVPIo7UFtI8YaCCw/deVgd7LlD2IVRU+DiXN/mrDhM710INLFkLNBG6
-+qnJwyVQncs6gTiC5UZXdaNtfWxhpA==
-=RVce
------END PGP SIGNATURE-----
+I tried to replace quoted powerpc CONFIG_HIGHMEM code by above arm code
+and it worked fine too! No kernel crash anymore. But 'free' see only
+3062888 kB of total memory. Which is less then with the first
+workaround.
 
---23bdvmkeqotnlzsg--
+Here is bootlog:
+
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x4 nid=-1 from=0x00000000 max_addr=0x00000000 smp_setup_cpu_maps+0x40/0x2b4
+[    0.000000] memblock_reserve: [0x2fff5d74-0x2fff5d7b] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] CPU maps initialized for 1 thread per core
+[    0.000000]  (thread shift is 0)
+[    0.000000] memblock_phys_free: [0x2fff5d74-0x2fff5d7b] setup_arch+0x1bc/0x318
+[    0.000000] -----------------------------------------------------
+[    0.000000] phys_mem_size     = 0xbe500000
+[    0.000000] dcache_bsize      = 0x20
+[    0.000000] icache_bsize      = 0x20
+[    0.000000] cpu_features      = 0x0000000010010108
+[    0.000000]   possible        = 0x0000000010010108
+[    0.000000]   always          = 0x0000000010010108
+[    0.000000] cpu_user_features = 0x84e08000 0x08000000
+[    0.000000] mmu_features      = 0x00020010
+[    0.000000] -----------------------------------------------------
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2fff2000-0x2fff3fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2fff0000-0x2fff1fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffee000-0x2ffeffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffec000-0x2ffedfff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffea000-0x2ffebfff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe8000-0x2ffe9fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe6000-0x2ffe7fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe4000-0x2ffe5fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe2000-0x2ffe3fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8192 bytes align=0x2000 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_stack+0x2c/0x60
+[    0.000000] memblock_reserve: [0x2ffe0000-0x2ffe1fff] memblock_alloc_range_nid+0xe8/0x1b0
+mpc85xx_rdb_setup_arch()
+[    0.000000] ioremap() called early from of_iomap+0x48/0x80. Use early_ioremap() instead
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
+[    0.000000] memblock_reserve: [0x2fff4000-0x2fff4fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] MPC85xx RDB board from Freescale Semiconductor
+[    0.000000] barrier-nospec: using isync; sync as speculation barrier
+[    0.000000] barrier-nospec: patched 182 locations
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 early_pte_alloc_kernel+0x3c/0x90
+[    0.000000] memblock_reserve: [0x2ffdf000-0x2ffdffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Top of RAM: 0xff700000, Total RAM: 0xbe500000
+[    0.000000] Memory hole size: 1042MB
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000000000000-0x000000002fffffff]
+[    0.000000]   HighMem  [mem 0x0000000030000000-0x00000000ff6fffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000007fffffff]
+[    0.000000]   node   0: [mem 0x00000000c0200000-0x00000000eeffffff]
+[    0.000000]   node   0: [mem 0x00000000f0000000-0x00000000ff6fffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000000ff6fffff]
+[    0.000000] memblock_alloc_try_nid_raw: 37675008 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 free_area_init+0x890/0xc94
+[    0.000000] memblock_reserve: [0x2dbf1000-0x2ffdefff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
+[    0.000000] memblock_reserve: [0x2fff5d00-0x2fff5d5f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 416 bytes align=0x20 nid=0 from=0x00000000 max_addr=0x00000000 setup_usemap+0x60/0xa0
+[    0.000000] memblock_reserve: [0x2fff5b60-0x2fff5cff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x38/0x154
+[    0.000000] memblock_reserve: [0x2fff5b40-0x2fff5b5f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 1024 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0x7c/0x154
+[    0.000000] memblock_reserve: [0x2fff5740-0x2fff5b3f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 mmu_context_init+0xc4/0x154
+[    0.000000] memblock_reserve: [0x2fff5720-0x2fff573f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] MMU: Allocated 1088 bytes of context maps for 255 contexts
+[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x194/0x6d0
+[    0.000000] memblock_reserve: [0x2fff56a0-0x2fff570e] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 111 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 start_kernel+0x1c0/0x6d0
+[    0.000000] memblock_reserve: [0x2fff5620-0x2fff568e] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x314/0x7b4
+[    0.000000] memblock_reserve: [0x2dbf0000-0x2dbf0fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4096 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_embed_first_chunk+0x4d4/0x7b4
+[    0.000000] memblock_reserve: [0x2dbef000-0x2dbeffff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 90112 bytes align=0x1000 nid=-1 from=0x3fffffff max_addr=0x00000000 pcpu_embed_first_chunk+0x564/0x7b4
+[    0.000000] memblock_reserve: [0x2dbd9000-0x2dbeefff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_phys_free: [0x2dbe4000-0x2dbe3fff] pcpu_embed_first_chunk+0x680/0x7b4
+[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeefff] pcpu_embed_first_chunk+0x680/0x7b4
+[    0.000000] percpu: Embedded 11 pages/cpu s14196 r8192 d22668 u45056
+[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x37c/0x924
+[    0.000000] memblock_reserve: [0x2fff5d60-0x2fff5d63] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3a4/0x924
+[    0.000000] memblock_reserve: [0x2fff5600-0x2fff5603] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3cc/0x924
+[    0.000000] memblock_reserve: [0x2fff55e0-0x2fff55e7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 8 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x3f4/0x924
+[    0.000000] memblock_reserve: [0x2fff55c0-0x2fff55c7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] pcpu-alloc: s14196 r8192 d22668 u45056 alloc=11*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 
+[    0.000000] memblock_alloc_try_nid: 136 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_setup_first_chunk+0x7fc/0x924
+[    0.000000] memblock_reserve: [0x2fff5520-0x2fff55a7] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
+[    0.000000] memblock_reserve: [0x2fff54c0-0x2fff551f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 384 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5340-0x2fff54bf] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 388 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
+[    0.000000] memblock_reserve: [0x2fff51a0-0x2fff5323] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5140-0x2fff519f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 96 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x64/0x2e0
+[    0.000000] memblock_reserve: [0x2fff50e0-0x2fff513f] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 768 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xc4/0x2e0
+[    0.000000] memblock_reserve: [0x2dbd8d00-0x2dbd8fff] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 772 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0xf0/0x2e0
+[    0.000000] memblock_reserve: [0x2dbd89e0-0x2dbd8ce3] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_alloc_try_nid: 192 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 pcpu_alloc_first_chunk+0x11c/0x2e0
+[    0.000000] memblock_reserve: [0x2fff5020-0x2fff50df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] memblock_phys_free: [0x2dbf0000-0x2dbf0fff] pcpu_embed_first_chunk+0x744/0x7b4
+[    0.000000] memblock_phys_free: [0x2dbef000-0x2dbeffff] pcpu_embed_first_chunk+0x754/0x7b4
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 777792
+[    0.000000] Kernel command line: root=ubi0:rootfs rootfstype=ubifs ubi.mtd=rootfs rootflags=chk_data_crc rw console=ttyS0,115200 memblock=debug
+[    0.000000] memblock_alloc_try_nid: 524288 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
+[    0.000000] memblock_reserve: [0x2db589e0-0x2dbd89df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Dentry cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
+[    0.000000] memblock_alloc_try_nid: 262144 bytes align=0x20 nid=-1 from=0x00000000 max_addr=0x00000000 alloc_large_system_hash+0x1a4/0x2ec
+[    0.000000] memblock_reserve: [0x2db189e0-0x2db589df] memblock_alloc_range_nid+0xe8/0x1b0
+[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Kernel virtual memory layout:
+[    0.000000]   * 0xffbbf000..0xfffff000  : fixmap
+[    0.000000]   * 0xff400000..0xff800000  : highmem PTEs
+[    0.000000]   * 0xff3fe000..0xff400000  : early ioremap
+[    0.000000]   * 0xf1000000..0xff3fe000  : vmalloc & ioremap
+[    0.000000] Memory: 3062612K/3118080K available (10732K kernel code, 712K rwdata, 2044K rodata, 276K init, 287K bss, 55468K reserved, 0K cma-reserved, 2331640K highmem)
+[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+
+> >Christophe
+> -- 
+> Sincerely yours,
+> Mike
