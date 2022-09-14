@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C5E5B900E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FBC5B9010
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 23:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiINVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 17:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S229796AbiINVYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 17:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiINVXF (ORCPT
+        with ESMTP id S229636AbiINVYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 17:23:05 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BBA861E4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:23:03 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id p3so3560881iof.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 14:23:03 -0700 (PDT)
+        Wed, 14 Sep 2022 17:24:07 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E2B861E9;
+        Wed, 14 Sep 2022 14:24:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so12430216wmb.4;
+        Wed, 14 Sep 2022 14:24:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=LIXlP1rfY2EhQ9T11PO6g9BCCdTts3DBlnC9m4eeMEc=;
-        b=g+GFnQF5Dn86BDPhwGcmFY3IalM8SsjmzwYSoXYvsdyg9zzOSVvzT2QEjKfU97xvk5
-         3oS4wPql1JZ2VeXkfe563tzYS024U2KbS+wOU2nNNUb0ITj6XGTpTZHNadTFNiTLJkHX
-         13ap+3WC2XDSBdjF3MacvOI3yXQxEiOwJBPO4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=cgZkkoB1Bz/RFAHmuKSBre2q5MgmdKHQaadiUhQuwwI=;
+        b=FdPcRIe2gfQoQCjx1QOFkmGSVgwgHEsr++MZRUCMzJE3Gcaf5+etZRi3EQbCidd10v
+         twQrXPlzLivRZUJ1R+dE/qZTWuiVHDGNr1ffeusOuRSHuCA831r6P5sya+sS7wXO6DLy
+         SgrqggAbmAZY6ydB3BLwpozplPD3Ts6GR2JPVAt6I80V7plsYzFai0lLopZcp60+Dji2
+         9eHgVLAXCCoRLe7zo6ZiFvzrmP89NLmmxtqP779jY8gMZcd+pPwc0NzBVDJuZ4g2ppRw
+         FULL20YpZmoqhpUD0AK7WVHOIYg4hBzRGEX0XcxR+alvdpo56XTcGW62njpb3ejILjOc
+         SG6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=LIXlP1rfY2EhQ9T11PO6g9BCCdTts3DBlnC9m4eeMEc=;
-        b=p7HZPWr4tUrXiXBv/gXqy7ts7ExKoB4UTZLkaw8VCKxO+rc2Kvd7T2CYvrszy/wJE+
-         v6Y5ujlgokV2ceAPu8j51P962FjlND60q33ERbKtBvnxikswdnTrZkWMzvOYjF359fT9
-         I9MzSIhh41bYaBlY+QUG0ygZV2gcxo25oKS7pAN5VDkr0sb7wFM92WYjT+9vvwT5Os6c
-         XsCjfX2amzsKh/lxUzXYwoHUx/KHaRALwwf/odSmd91JQK/8jb/RU7CHOo8sVutHRIKF
-         RaW0wk8ThBJfTNyqet6bG/+GiS0wf5fix8DoqreJFfy7yFk5wcI1PcIBym5zEjQEOPOd
-         4trw==
-X-Gm-Message-State: ACgBeo1vZ7JU7t8Ws7WHFa1uQbfaHYSd7mTLCWEaev21Tdv6ryhQieq0
-        iEeNFy9tRLIbEd7rOwc8J2Xn3kBdwIhiVw==
-X-Google-Smtp-Source: AA6agR4l0z8vb27/FApSfdN8Ue3XNHhBUvJHkgplPQNM3zH0WUtp9KQ+YA3BSuJiV/el2bkFGOtNvw==
-X-Received: by 2002:a05:6638:2607:b0:35a:4772:be26 with SMTP id m7-20020a056638260700b0035a4772be26mr7094923jat.267.1663190583105;
-        Wed, 14 Sep 2022 14:23:03 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id k2-20020a02a702000000b0034a5993e1b5sm146786jam.113.2022.09.14.14.23.01
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=cgZkkoB1Bz/RFAHmuKSBre2q5MgmdKHQaadiUhQuwwI=;
+        b=1XZVGCRpa2iTckCJfoVhfbbEzOPZzvGFVc9q9T/nLj4HPaQdjROwMnsK9YnZmPggdc
+         jFtUjA4m4wXr3I6U9j9Jt6D65pcNuJjeWR319LlHdy8YI7ZeGbYNFdGWh6xUruqAClLN
+         hic30aLbNd5jsAA7k07WEPxIb/m3QGHd/4yh8ffpAo4SQDemR+oSk9fuc1FFT9n/5lFi
+         YfXj97Trxm8Jx0unDNUWlWlbWeWAPyhf/RjU+liwMY/8mqTaL+QbxojzLLmD4eQoEVY1
+         rzqJDuz/FVAIIzhs0dyoYId1IAVxwW99JRp4tMqQcUwhGnZDo28WGvmtar/6qE5p+dcE
+         iK0Q==
+X-Gm-Message-State: ACgBeo3/YOtmoJBSfAifBaCqx+ECFxFYvAvEjpYYqHrdCzWM0BCDbAxH
+        c/RVm74YpSI+g92+jo+FeRY=
+X-Google-Smtp-Source: AA6agR6BDx5TGK4RjiRpwjFmyhCS3CrrcO0KEfqjytiVgYBb1lg3M4YSvUYYT25pLio+NHumVC6uEQ==
+X-Received: by 2002:a05:600c:6d2:b0:3b4:8361:6154 with SMTP id b18-20020a05600c06d200b003b483616154mr4648444wmn.89.1663190644349;
+        Wed, 14 Sep 2022 14:24:04 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id c18-20020adffb52000000b002252ec781f7sm317708wrs.8.2022.09.14.14.24.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 14:23:02 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 21:23:01 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, johan+linaro@kernel.org,
-        quic_kriskura@quicinc.com, dianders@chromium.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb
- gdsc
-Message-ID: <YyJGNR33JbHxWWYD@google.com>
-References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
- <20220901101756.28164-3-quic_rjendra@quicinc.com>
- <YxDYJ+ONryLROBhL@google.com>
- <YyF+5CQqcLQlXvzV@hovoldconsulting.com>
+        Wed, 14 Sep 2022 14:24:02 -0700 (PDT)
+Message-ID: <1b739216-8bb1-162b-1af5-24acba7324bf@gmail.com>
+Date:   Wed, 14 Sep 2022 23:24:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YyF+5CQqcLQlXvzV@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/5] dt-bindings: arm: mediatek: mmsys: change compatible
+ for MT8195
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
+ <20220914182331.20515-2-jason-jh.lin@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220914182331.20515-2-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 09:12:36AM +0200, Johan Hovold wrote:
-> On Thu, Sep 01, 2022 at 09:04:55AM -0700, Matthias Kaehlcke wrote:
-> > On Thu, Sep 01, 2022 at 03:47:56PM +0530, Rajendra Nayak wrote:
-> > > USB on sc7280 cannot support wakeups from low power states
-> > > if the GDSC is turned OFF. Update the .pwrsts for usb GDSC so it
-> > > only transitions to RET in low power.
-> > > 
-> > > Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> > 
-> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> > Tested-by: Matthias Kaehlcke <mka@chromium.org>
+
+
+On 14/09/2022 20:23, Jason-JH.Lin wrote:
+> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> pipelines binding to 1 mmsys with the same power domain, the same
+> clock driver and the same mediatek-drm driver.
 > 
-> Did you confirm that you actually hit the retention state?
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
+> 
+> Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture Quality)
+> and they makes VDOSYS0 supports PQ function while they are not
+> including in VDOSYS1.
+> 
+> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> component). It makes VDOSYS1 supports the HDR function while it's not
+> including in VDOSYS0.
+> 
+> To summarize0:
+> Only VDOSYS0 can support PQ adjustment.
+> Only VDOSYS1 can support HDR adjustment.
+> 
+> Therefore, we need to separate these two different mmsys hardwares to
+> 2 different compatibles for MT8195.
+> 
+> Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding")
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-No, how would I do that?
+I'm not sure Krzysztof gave his Acked-by tag.
 
-> IIUC, this series is equivalent to using ALWAYS_ON unless CX is actually
-> powered off during suspend.
+> ---
+>   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> index 6ad023eec193..a53b32c0a608 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> @@ -32,6 +32,8 @@ properties:
+>                 - mediatek,mt8186-mmsys
+>                 - mediatek,mt8192-mmsys
+>                 - mediatek,mt8195-mmsys
+> +              - mediatek,mt8195-vdosys0
 
-The count in /sys/kernel/debug/qcom_stats/cxsd increses with each suspend,
-however it also does that with the GDSC configured as ALWAYS_ON and with
-Rajendra's "arm64: dts: qcom: sc7280: Add required-opps for USB" [1], so
-I guess that isn't the correct signal.
+As I said in the last submission, we should make mediatek,mt8195-mmsys as a 
+fallback of vdosys0. Actually mediatek,mt8195-mmsys is only used for the 
+fallback of vdosys0.
 
-https://patchwork.kernel.org/project/linux-arm-msm/patch/20220914053017.23617-1-quic_rjendra@quicinc.com/
+Regards,
+Matthias
+
+> +              - mediatek,mt8195-vdosys1
+>                 - mediatek,mt8365-mmsys
+>             - const: syscon
+>         - items:
