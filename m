@@ -2,131 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77565B8177
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575445B817A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiINGS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 02:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S229800AbiINGVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 02:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiINGSn (ORCPT
+        with ESMTP id S229758AbiINGVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 02:18:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B4271730
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:18:41 -0700 (PDT)
-X-UUID: 63190785607141fe86f1c6d7e2674836-20220914
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=12q/9kAgDbtDNeYaVuoRij+LJ/FfRHkEvUxv5OfPjGI=;
-        b=THGett3rtiTyFyzMAKx7feTLWPRSuK/QIPzlSzNcpR+O+kdURXwHcyebwFzqKiR7Rm5O8/5aUDH7ZJqSE957pRy8a/6llykLNpCc3WgHwxd4jlEpJdxl71hyV9Rd9Kfn6AXIlQ+Yl2zgPPwKN48QgedMRhuleX/eclogkWDFwEE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:134cc709-dcf9-4873-be9e-fa65bd5f5aab,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.11,REQID:134cc709-dcf9-4873-be9e-fa65bd5f5aab,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:39a5ff1,CLOUDID:2efc965d-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:220914141837UPWPJ80P,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 63190785607141fe86f1c6d7e2674836-20220914
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 378197761; Wed, 14 Sep 2022 14:18:35 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 14 Sep 2022 14:18:33 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 14 Sep 2022 14:18:31 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
-        <jitao.shi@mediatek.com>, <angelogioacchino.delregno@collabora.com>
-CC:     <rex-bc.chen@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH] drm: mediatek: Fix display vblank timeout when disable dsi
-Date:   Wed, 14 Sep 2022 14:18:29 +0800
-Message-ID: <1663136309-29491-1-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
+        Wed, 14 Sep 2022 02:21:06 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7771739;
+        Tue, 13 Sep 2022 23:21:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS9FT0GQ1z4xD1;
+        Wed, 14 Sep 2022 16:21:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663136461;
+        bh=s8fMUb9zGfi7piJxreN/Y3Vnb/N+scSkvNoUAV1BKB8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iCrIdvtScY16V9gEhU4wFS0rB5zzQ6lewsGlZFcBy6IftRUUjwi/B+mCOkCMPMdbx
+         9d9nmN10ZlVrr+m1mF84MxSZK5nLQXv8xCx1ZvLcHmJD1UkbwT9uH7eLMTvhWLCRdM
+         8Im2ejl783RXrxTMReANCeCEv8sF+B/3ZlapsDRi87zhAGxTB9qIWuPtpq52lPklYt
+         JHfmLqX4LXtC8LBZi3NL1Q42xRN3mo6UvN0nxxAYkcKzgX7rFGo3XIFrovs8XWiBXH
+         p1WdT0bMhukXe2r9rtgZIuTEskCqeuFj8phA7ibZBPVlu5QLJfapszv0najnR6lhrG
+         UzzRyXzs3syVg==
+Date:   Wed, 14 Sep 2022 16:20:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Andrei Vagin <avagin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mm tree with the execve tree
+Message-ID: <20220914162059.731b0461@canb.auug.org.au>
+In-Reply-To: <20220913230302.00a8c826a2d4ae9a6ef2a90d@linux-foundation.org>
+References: <20220914155533.70c10493@canb.auug.org.au>
+        <20220913230302.00a8c826a2d4ae9a6ef2a90d@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KPkTiEwoE0n1ic_=ht096hX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+--Sig_/KPkTiEwoE0n1ic_=ht096hX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Dsi is turned off at bridge.disable, causing crtc to wait for vblank timeout.
-It is necessary to add count protection to turn off dsi, and turn off at post_disable.
+Hi Andrew,
 
-Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
----
-Base on linux-next.
----
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+[Readded cc's]
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 9cc406e1eee1..157248309c32 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -768,14 +768,6 @@ static void mtk_dsi_bridge_mode_set(struct drm_bridge *bridge,
- 	drm_display_mode_to_videomode(adjusted, &dsi->vm);
- }
- 
--static void mtk_dsi_bridge_atomic_disable(struct drm_bridge *bridge,
--					  struct drm_bridge_state *old_bridge_state)
--{
--	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
--
--	mtk_output_dsi_disable(dsi);
--}
--
- static void mtk_dsi_bridge_atomic_enable(struct drm_bridge *bridge,
- 					 struct drm_bridge_state *old_bridge_state)
- {
-@@ -803,12 +795,14 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
- {
- 	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
- 
-+	if (dsi->refcount == 1)
-+		mtk_output_dsi_disable(dsi);
-+
- 	mtk_dsi_poweroff(dsi);
- }
- 
- static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
- 	.attach = mtk_dsi_bridge_attach,
--	.atomic_disable = mtk_dsi_bridge_atomic_disable,
- 	.atomic_enable = mtk_dsi_bridge_atomic_enable,
- 	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
- 	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
-@@ -826,6 +820,9 @@ void mtk_dsi_ddp_stop(struct device *dev)
- {
- 	struct mtk_dsi *dsi = dev_get_drvdata(dev);
- 
-+	if (dsi->refcount == 1)
-+		mtk_output_dsi_disable(dsi);
-+
- 	mtk_dsi_poweroff(dsi);
- }
- 
--- 
-2.18.0
+On Tue, 13 Sep 2022 23:03:02 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> On Wed, 14 Sep 2022 15:55:33 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>=20
+> > Today's linux-next merge of the mm tree got a conflict in:
+> >=20
+> >   fs/exec.c
+> >=20
+> > between commit:
+> >=20
+> >   33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on =
+vfork+exec"")
+> >=20
+> > from the execve tree and commit:
+> >=20
+> >   33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on =
+vfork+exec"")
+> >=20
+> > from the mm tree. =20
+>=20
+> Confused.  They're the same commit?
 
+Sorry about that (still getting used to copy/paste in a VM on a Mac :-()
+
+The latter one should have been:
+
+  65d31cfbc445 ("mm: multi-gen LRU: support page table walks")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KPkTiEwoE0n1ic_=ht096hX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhcssACgkQAVBC80lX
+0GxMuAf+IX2p+j/qM0JF0IUR1G5vup6LlgQnsoaagfGVym3hC2J+cSTU162bXmkG
+rY7DCgjM3AiQFCCFTQnpPR0wflIlW8iMvooL6NdD95CHD2KXY5L4K63eeoxeQOmb
+Vf0m2gTtGEbusc+4L+yjApZcIytydOcjATkr8COT9aop7anAVlZu1sukWXotWnqz
+6pl2//YbqDjWzjin7ct2ThWOfgVzW7KihMSh55GekATH6aP87aoGhUeVHpyj3oC2
+2b7U/SUS95R/0kRDAnBIJOR/oxoeRLAwZpZmFXB5nVZi5foEFdT7pZt1Fo55KUZN
+91D+NzFGFhOTvmSyMzfGwfnkNxTMxA==
+=JaIK
+-----END PGP SIGNATURE-----
+
+--Sig_/KPkTiEwoE0n1ic_=ht096hX--
