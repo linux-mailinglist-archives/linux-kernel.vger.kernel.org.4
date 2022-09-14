@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8325B8AF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7049C5B8AF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiINOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S229954AbiINOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiINOsr (ORCPT
+        with ESMTP id S229931AbiINOtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:48:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8033127B21;
-        Wed, 14 Sep 2022 07:48:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF9F6190F;
-        Wed, 14 Sep 2022 14:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E5BC433C1;
-        Wed, 14 Sep 2022 14:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663166925;
-        bh=uG+AaPBxPtOjaUn3tEdoPZSA/SMlRErc0dXN6w/lBk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OEBP+Lyj0tCT+iwxhLGjDZnCD6dJSvUSptRQ3mAuWTSUzyM22ZpGsw/E4Gn+MywLb
-         DP3Fupq4Qyu+DXihLQh1aSVAKaG4GVCOoEBrM3rz7s60/MuMopplgdg7DSE5SFFp1G
-         Em087Yk/IIhlxuYVIwU5BzJmzaHXqsyX/rLvH9K8=
-Date:   Wed, 14 Sep 2022 16:49:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
-Message-ID: <YyHp5d4kqkNbgP1d@kroah.com>
-References: <20220913140410.043243217@linuxfoundation.org>
- <20220914142843.GA941669@roeck-us.net>
+        Wed, 14 Sep 2022 10:49:49 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A3195B9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:47 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id d74-20020a4a524d000000b004755f8aae16so1801474oob.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=kJ9cObmCfJy7zayueRZ8avT0ZkBC3fAXveiFVXW2d3c=;
+        b=BS8LjY8kVKMrnEmhnKSq83R4AizxpIgEbctiVDPMRcdKOmBMECLYxiTY+zmFs9d/Am
+         Zp0NwuDgfToaqteR8JP4GOo7qgCTMbz/9pw9grsuTo+3xmlA67gGc+c4tdcBdEslPqXQ
+         cRaJDWOIXWvkeLsBnVclQAgo7wJ+2Y1vkW7ukrDyi0pGUu0MEJ/TJ3U/zA9frXxZ4PXv
+         GHe9hetUR1JtaCPXOrjBKVVSSo21VdPcBI+zdw4jDL9mf3y4LWC4SClyIdaOKHqcNLVB
+         XmCBcN+UOk2lhGJVwc3JTraZmcdd1AvoTXZyS0XaryNrkZpovJOKgNS2SsofpJ1RR+40
+         2ocg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kJ9cObmCfJy7zayueRZ8avT0ZkBC3fAXveiFVXW2d3c=;
+        b=w54LWcckMPQfU69okPBlRUmqRINwabzxS7foRYNu6gdUIRjiVYt629/zt1fQjrH+Wf
+         j5kAWsNjtGC2LHmLq9E1AqXPXNXNZYkV1MbzRVx8DKrxBj3smwRyE4M7QUg+V3mZrXgw
+         7xnxs4idGZmQ3nQNRfZDXjakE1A2UbTmpWPbs2zJGi2poSAbUfU/2nMLr3CGDNugjvzI
+         +3bLd/gH0iLF9mXwbsnf/HMy2nkC4D7vQu2DY2Cs8vTngRBiVPh2ravoi+TjSgm5SBZf
+         dnjiQb8TAQcb2bkaF0BH8QLN5VKSK13tLJUJoLTsCGs+Xokq+IfIg+roZvGVsqKGEwLy
+         M/gg==
+X-Gm-Message-State: ACgBeo3uDf+5atBKDES0M81AgYPwoH4z7Y3jsM5EB1IVIgOdf62lN0wj
+        wsy0vi9ObtZoNzQUPcyJIr9Gwn1spa8E4kYN44c=
+X-Google-Smtp-Source: AA6agR5hbY7TnWmhNQMvFEFho6lqEUCWEj/P/ohu/W7QkUem154xEfPhzk+xspl1CmpWCz2IxmyClW+PwuQx7kBnhqA=
+X-Received: by 2002:a4a:bf11:0:b0:436:1611:6b51 with SMTP id
+ r17-20020a4abf11000000b0043616116b51mr12780772oop.18.1663166986819; Wed, 14
+ Sep 2022 07:49:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220914142843.GA941669@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220815072835.74876-1-yang.yang29@zte.com.cn>
+In-Reply-To: <20220815072835.74876-1-yang.yang29@zte.com.cn>
+From:   Joonsoo Kim <js1304@gmail.com>
+Date:   Wed, 14 Sep 2022 23:49:35 +0900
+Message-ID: <CAAmzW4ORH=kMbzMg7tpGTF_0Ky4Rb1TZ+W=q=pgppNaRxkScQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mm/page_io: count submission time as thrashing
+ delay for delayacct
+To:     cgel.zte@gmail.com
+Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 07:28:43AM -0700, Guenter Roeck wrote:
-> On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.19.9 release.
-> > There are 192 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.9-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> > -------------
-> > Pseudo-Shortlog of commits:
-> > 
-> [ ... ]
-> > Csókás Bence <csokas.bence@prolan.hu>
-> >     net: fec: Use a spinlock to guard `fep->ptp_clk_on`
-> > 
-> 
-> This commit is broken, will be reverted upstream, and should not be
-> applied to any stable releases.
+2022=EB=85=84 8=EC=9B=94 15=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 4:33, <=
+cgel.zte@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> From: Yang Yang <yang.yang29@zte.com.cn>
+>
+> Once upon a time, we only support accounting thrashing of page cache.
+> Then Joonsoo introduced workingset detection for anonymous pages and
+> we gained the ability to account thrashing of them[1].
+>
+> Likes PSI, we count submission time as thrashing delay because when
+> the device is congested, or the submitting cgroup IO-throttled,
+> submission can be a significant part of overall IO time.
 
-Already dropped from all queues, thanks.
+It's not the main purpose of this patch. Without this patch,
+swap thrashing through frontswap or some block device supporting rw_page
+operation isn't measured correctly. I think that description change is
+required. Please refer to commit 937790699be9c8100e
+(mm/page_io.c: annotate refault stalls from swap_readpage).
 
-greg k-h
+No objection on the code side.
+
+Thanks.
