@@ -2,117 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AC65B81AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2185B81A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 08:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiINGuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 02:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
+        id S230111AbiINGrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 02:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiINGuH (ORCPT
+        with ESMTP id S229543AbiINGrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 02:50:07 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Sep 2022 23:50:03 PDT
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E358347B93
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 23:50:03 -0700 (PDT)
-Received: (qmail 13895 invoked from network); 14 Sep 2022 06:43:39 -0000
-Received: from p200300cf07104d0076d435fffeb7be92.dip0.t-ipconnect.de ([2003:cf:710:4d00:76d4:35ff:feb7:be92]:42942 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <zeming@nfschina.com>; Wed, 14 Sep 2022 08:43:39 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     Li zeming <zeming@nfschina.com>,
-        James.Bottomley@hansenpartnership.com, Helge Deller <deller@gmx.de>
-Cc:     linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] parisc: Increase the usage check of kmalloc allocated object a
-Date:   Wed, 14 Sep 2022 08:43:13 +0200
-Message-ID: <1668528.WaZXzWfjLs@eto.sf-tec.de>
-In-Reply-To: <f346579c-e6a3-d2bb-1c21-d914aeb9a77d@gmx.de>
-References: <20220914060428.4039-1-zeming@nfschina.com> <f346579c-e6a3-d2bb-1c21-d914aeb9a77d@gmx.de>
+        Wed, 14 Sep 2022 02:47:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A8161726;
+        Tue, 13 Sep 2022 23:47:21 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MS9lV2t1mzmVGh;
+        Wed, 14 Sep 2022 14:43:34 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 14 Sep
+ 2022 14:47:19 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <jgross@suse.com>, <sstabellini@kernel.org>,
+        <oleksandr_tyshchenko@epam.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <xen-devel@lists.xenproject.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] xen-netfront: make bounce_skb static
+Date:   Wed, 14 Sep 2022 14:43:39 +0800
+Message-ID: <20220914064339.49841-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4636421.EM0ToxPilq"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart4636421.EM0ToxPilq
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 14 Sep 2022 08:43:13 +0200
-Message-ID: <1668528.WaZXzWfjLs@eto.sf-tec.de>
-In-Reply-To: <f346579c-e6a3-d2bb-1c21-d914aeb9a77d@gmx.de>
-MIME-Version: 1.0
+The symbol is not used outside of the file, so mark it static.
 
-Am Mittwoch, 14. September 2022, 08:18:19 CEST schrieb Helge Deller:
-> On 9/14/22 08:04, Li zeming wrote:
-> > In the case of memory allocation failure, no alignment operation is
-> > required.
-> > 
-> > Signed-off-by: Li zeming <zeming@nfschina.com>
-> > ---
-> > 
-> >   drivers/parisc/iosapic.c | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/parisc/iosapic.c b/drivers/parisc/iosapic.c
-> > index 3a8c98615634..33de438916d3 100644
-> > --- a/drivers/parisc/iosapic.c
-> > +++ b/drivers/parisc/iosapic.c
-> > @@ -229,7 +229,9 @@ static struct irt_entry *iosapic_alloc_irt(int
-> > num_entries)> 
-> >   	 * 4-byte alignment on 32-bit kernels
-> >   	 */
-> >   	
-> >   	a = (unsigned long)kmalloc(sizeof(struct irt_entry) * num_entries 
-+ 8,
-> >   	GFP_KERNEL);> 
-> > -	a = (a + 7UL) & ~7UL;
-> > +	if (a)
-> > +		a = (a + 7UL) & ~7UL;
-> > +
-> 
-> As you said, the adjustment isn't required, but it's still ok.
-> So I think the additional "if" isn't necessary and so I'm not
-> applying your patch.
-> 
-> Anyway, thanks for your help to try to improve the code!
+Fixes the following warning:
 
-I was about to say the same, but from looking at the code I don't think what 
-is in there is correct either. The comment seems outdated, because 
-__assume_kmalloc_alignment, which is __alignof__(unsigned long long). This 
-code is untouched for the entire git history, so maybe we can just change the 
-whole thing to
+./drivers/net/xen-netfront.c:676:16: warning: symbol 'bounce_skb' was not declared. Should it be static?
 
-  return kcalloc(num_entries, sizeof(struct irt_entry))
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+---
+ drivers/net/xen-netfront.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-now?
-
-And these functions end up propagating an allocation error in this file and it 
-will never reach kernel/setup.c, which seems bad. But I guess the only point 
-where this really can go wrong if the PDC returns an absurdly large number of 
-entries.
-
-Eike
---nextPart4636421.EM0ToxPilq
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCYyF4AQAKCRBcpIk+abn8
-TmMrAJ9tzLMJcya2N1PiOENzBvcMciMbwgCbByM94VXUSX7X4mawEGbzvvELeEg=
-=Lbg1
------END PGP SIGNATURE-----
-
---nextPart4636421.EM0ToxPilq--
-
-
+diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
+index 27a11cc08c61..2cb7e741e1a2 100644
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -673,7 +673,7 @@ static int xennet_xdp_xmit(struct net_device *dev, int n,
+ 	return nxmit;
+ }
+ 
+-struct sk_buff *bounce_skb(const struct sk_buff *skb)
++static struct sk_buff *bounce_skb(const struct sk_buff *skb)
+ {
+ 	unsigned int headerlen = skb_headroom(skb);
+ 	/* Align size to allocate full pages and avoid contiguous data leaks */
+-- 
+2.25.1
 
