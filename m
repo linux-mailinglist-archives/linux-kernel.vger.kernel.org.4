@@ -2,233 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA765B7EB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47095B7EAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiINBxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S229783AbiINBvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiINBxa (ORCPT
+        with ESMTP id S229550AbiINBvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:53:30 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D386CF55
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:53:29 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x1so13649396plv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:53:29 -0700 (PDT)
+        Tue, 13 Sep 2022 21:51:37 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322716B8E9;
+        Tue, 13 Sep 2022 18:51:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id t3so13653741ply.2;
+        Tue, 13 Sep 2022 18:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=RtBmjBNUZvS0RgMzRUDGO5THvzbS2zrx//6TWP3NPXc=;
-        b=qAnqAw8/L7vDPOoX7d4dRwgEvkS5SqRkYNqZSxJzz/qOBiv6K6P9XOAk1jnb8w9pYv
-         KcIVfxw1mdCmuvEYLVXJepszcF0735Uh1tIsQb59ZMTgp6/vivSpLmBi9FK7btWO089e
-         iATQ9exm0Wy9DdTte8mp+oy3Colw83lsiXrG8=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date;
+        bh=/WIYwNyx5Wu29EYSy/2Jrb2UOMIrmP6W19HsWBdfXxc=;
+        b=WM5xtV3vceALBvE0lUoU4kpxV8MOOlvjjYHEozJeuKfrKLcGJIGIGrhYO6B+iq3K+n
+         x6QkfRYxmfdZrtYOSmMPpGzsCcBCGHr8n++n8U7T1MHAeR5oJVoQjeOqQM1HcvKcixII
+         rOXmZEna7jDPMbtcrMfH8Q+rAW+sV1MEm2kzzB9J3k4ivxtYV1GZh2plWT1IhL2q7REL
+         B0KpMEFLtGeHeeg7k9A3P6lVaRyWqAPTuNXBrlRLbYdWi8K4A7g2iberUhz81cT4m68V
+         xd/RxAIMb7vu0S9rj34yNNUL+3ZHXSn3HmTJcl1E9SB4/bA10zWlW7pHuSKiPD/Sj2sz
+         06VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RtBmjBNUZvS0RgMzRUDGO5THvzbS2zrx//6TWP3NPXc=;
-        b=cL/tIukZIOFMstJlAg2S6//ao9+9L918f7XfDYUQAYJzrPFodXh13gd3+EpGoEW9l8
-         HLBvwUkBq4D84USAjbGlnMYmjfEJtDAOMMhVcMXI6VePUPKBvt1eVxEyQeq2hxSpC02y
-         fYctH7LxFD41s3f/ukzakH0VVxgPPtvEPJxdYPhi2naqrjTy2LYzsR0ZlJCX8vN11xSC
-         7XQryyqafHXoM1ONRGeD0X3cbGwzzgQzzjfIwa2/xOr2csL0MoyIwC/fLK3kaGAWcDnC
-         iFz9v/eaW5vRu8v2o4EwwwMbVmlcFHbBVboPvr4hg739smwz/Hlj+CDU7eATkwcflUwd
-         uiyg==
-X-Gm-Message-State: ACrzQf1HreAx3aXJp6trz4hCMA9wE0oNUnD8Zbe+IyfzTl+yDqlPw0xn
-        1Ddh3ineZ2gSYq+TMyBX/YiCTg==
-X-Google-Smtp-Source: AMsMyM6Su9yxFun7Jkm9+A/9QsApEWdfEMuQb4mxhuBiJWsJasvWOG2MtZ2+7066YGuhgR0KaxNDCQ==
-X-Received: by 2002:a17:90b:384b:b0:200:3215:878b with SMTP id nl11-20020a17090b384b00b002003215878bmr2152164pjb.176.1663120409407;
-        Tue, 13 Sep 2022 18:53:29 -0700 (PDT)
-Received: from localhost.localdomain (c-73-223-190-181.hsd1.ca.comcast.net. [73.223.190.181])
-        by smtp.gmail.com with ESMTPSA id w189-20020a627bc6000000b0053e61633057sm8524481pfc.132.2022.09.13.18.53.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Sep 2022 18:53:29 -0700 (PDT)
-From:   Joe Damato <jdamato@fastly.com>
-To:     x86@kernel.org, linux-mm@kvack.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Joe Damato <jdamato@fastly.com>
-Subject: [RFC 1/1] mm: Add per-task struct tlb counters
-Date:   Tue, 13 Sep 2022 18:51:09 -0700
-Message-Id: <1663120270-2673-2-git-send-email-jdamato@fastly.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
-References: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/WIYwNyx5Wu29EYSy/2Jrb2UOMIrmP6W19HsWBdfXxc=;
+        b=Muq3SbCGuCEZdHKQyvjUZQQh73OPq31r3lngqIh0++hQqSy9VfsLks76ndDdjVX7iR
+         1XERgVeoN1h4xp8YJNH+TjxYe0zHTszqTQO1aVu65KmHz1IOsXgqvN2VKI+1nFamF4yP
+         cRp/2oyaXTiouJTpRHtNs01qagswNHwRFRrBNedZNtoo/I34CiPc+xFfcumKAbYc8oEV
+         A/WZ9pTPwXXniPj9dFpNdscSn2dsZTZrMKp5ehieN/odIKVhm+2hrcwjCSq/3aev+HxI
+         MLqhMLNnd1zbMxR/QtonJ/FCnvgIPtStvDkUHVkn4dbaTxcA2m9upFl1ShBElUeTXqtU
+         P19g==
+X-Gm-Message-State: ACrzQf07Q6XrqWKYrLLnkvj+7wOLI44WOGzaE75Pfq0GEyb1mmg8ObGO
+        EINlREKpcPnEyiteZ2P3txU=
+X-Google-Smtp-Source: AMsMyM6g9yibw5BiATdzD4iYp2v8oqxw78nq7VZQH9hmv1lrA3BS03K/DL+KgFbpjre+EkNd3aVGrQ==
+X-Received: by 2002:a17:90b:3c8a:b0:200:b874:804 with SMTP id pv10-20020a17090b3c8a00b00200b8740804mr2201323pjb.151.1663120296643;
+        Tue, 13 Sep 2022 18:51:36 -0700 (PDT)
+Received: from localhost.localdomain ([104.28.240.137])
+        by smtp.gmail.com with ESMTPSA id s129-20020a625e87000000b00537b1aa9191sm8778989pfb.178.2022.09.13.18.51.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 18:51:36 -0700 (PDT)
+From:   Qingfang DENG <dqfext@gmail.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: stmmac: fix invalid usage of irq_set_affinity_hint
+Date:   Wed, 14 Sep 2022 09:51:20 +0800
+Message-Id: <20220914015120.3023123-1-dqfext@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TLB shootdowns are tracked globally, but on a busy system it can be
-difficult to disambiguate the source of TLB shootdowns.
+The cpumask should not be a local variable, since its pointer is saved
+to irq_desc and may be accessed from procfs.
+To fix it, store cpumask to the heap.
 
-Add two counter fields:
-	- nrtlbflush: number of tlb flush events received
-	- ngtlbflush: number of tlb flush events generated
-
-Expose those fields in /proc/[pid]/stat so that they can be analyzed
-alongside similar metrics (e.g. min_flt and maj_flt).
-
-Signed-off-by: Joe Damato <jdamato@fastly.com>
+Fixes: 8deec94c6040 ("net: stmmac: set IRQ affinity hint for multi MSI vectors")
+Signed-off-by: Qingfang DENG <dqfext@gmail.com>
 ---
- arch/x86/mm/tlb.c            | 2 ++
- fs/proc/array.c              | 9 +++++++++
- include/linux/sched.h        | 6 ++++++
- include/linux/sched/signal.h | 1 +
- kernel/exit.c                | 6 ++++++
- kernel/fork.c                | 1 +
- 6 files changed, 25 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 ++++++++-------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index c1e31e9..58f7c59 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -745,6 +745,7 @@ static void flush_tlb_func(void *info)
- 	if (!local) {
- 		inc_irq_stat(irq_tlb_count);
- 		count_vm_tlb_event(NR_TLB_REMOTE_FLUSH_RECEIVED);
-+		current->nrtlbflush++;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index bdbf86cb102a..720e9f2a40d8 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -77,6 +77,7 @@ struct stmmac_tx_queue {
+ 	dma_addr_t dma_tx_phy;
+ 	dma_addr_t tx_tail_addr;
+ 	u32 mss;
++	cpumask_t cpu_mask;
+ };
  
- 		/* Can only happen on remote CPUs */
- 		if (f->mm && f->mm != loaded_mm)
-@@ -895,6 +896,7 @@ STATIC_NOPV void native_flush_tlb_multi(const struct cpumask *cpumask,
- 	 * would not happen.
- 	 */
- 	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
-+	current->ngtlbflush++;
- 	if (info->end == TLB_FLUSH_ALL)
- 		trace_tlb_flush(TLB_REMOTE_SEND_IPI, TLB_FLUSH_ALL);
- 	else
-diff --git a/fs/proc/array.c b/fs/proc/array.c
-index 49283b81..435afdc 100644
---- a/fs/proc/array.c
-+++ b/fs/proc/array.c
-@@ -469,6 +469,7 @@ static int do_task_stat(struct seq_file *m, struct pid_namespace *ns,
- 	unsigned long long start_time;
- 	unsigned long cmin_flt = 0, cmaj_flt = 0;
- 	unsigned long  min_flt = 0,  maj_flt = 0;
-+	unsigned long ngtlbflush = 0, nrtlbflush = 0;
- 	u64 cutime, cstime, utime, stime;
- 	u64 cgtime, gtime;
- 	unsigned long rsslim = 0;
-@@ -530,11 +531,15 @@ static int do_task_stat(struct seq_file *m, struct pid_namespace *ns,
- 			do {
- 				min_flt += t->min_flt;
- 				maj_flt += t->maj_flt;
-+				ngtlbflush += t->ngtlbflush;
-+				nrtlbflush += t->nrtlbflush;
- 				gtime += task_gtime(t);
- 			} while_each_thread(task, t);
+ struct stmmac_rx_buffer {
+@@ -114,6 +115,7 @@ struct stmmac_rx_queue {
+ 		unsigned int len;
+ 		unsigned int error;
+ 	} state;
++	cpumask_t cpu_mask;
+ };
  
- 			min_flt += sig->min_flt;
- 			maj_flt += sig->maj_flt;
-+			ngtlbflush += sig->ngtlbflush;
-+			nrtlbflush += sig->nrtlbflush;
- 			thread_group_cputime_adjusted(task, &utime, &stime);
- 			gtime += sig->gtime;
- 
-@@ -554,6 +559,8 @@ static int do_task_stat(struct seq_file *m, struct pid_namespace *ns,
- 	if (!whole) {
- 		min_flt = task->min_flt;
- 		maj_flt = task->maj_flt;
-+		nrtlbflush = task->nrtlbflush;
-+		ngtlbflush = task->ngtlbflush;
- 		task_cputime_adjusted(task, &utime, &stime);
- 		gtime = task_gtime(task);
+ struct stmmac_channel {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 8418e795cc21..7b1c1be998e3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3469,7 +3469,6 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	enum request_irq_err irq_err;
+-	cpumask_t cpu_mask;
+ 	int irq_idx = 0;
+ 	char *int_name;
+ 	int ret;
+@@ -3580,9 +3579,10 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+ 			irq_idx = i;
+ 			goto irq_error;
+ 		}
+-		cpumask_clear(&cpu_mask);
+-		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
+-		irq_set_affinity_hint(priv->rx_irq[i], &cpu_mask);
++		cpumask_set_cpu(i % num_online_cpus(),
++				&priv->dma_conf.rx_queue[i].cpu_mask);
++		irq_set_affinity_hint(priv->rx_irq[i],
++				      &priv->dma_conf.rx_queue[i].cpu_mask);
  	}
-@@ -643,6 +650,8 @@ static int do_task_stat(struct seq_file *m, struct pid_namespace *ns,
- 	else
- 		seq_puts(m, " 0");
  
-+	seq_put_decimal_ull(m, " ", ngtlbflush);
-+	seq_put_decimal_ull(m, " ", nrtlbflush);
- 	seq_putc(m, '\n');
- 	if (mm)
- 		mmput(mm);
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 5cdf746..2a0d879 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1047,6 +1047,12 @@ struct task_struct {
- 	unsigned long			min_flt;
- 	unsigned long			maj_flt;
+ 	/* Request Tx MSI irq */
+@@ -3605,9 +3605,10 @@ static int stmmac_request_irq_multi_msi(struct net_device *dev)
+ 			irq_idx = i;
+ 			goto irq_error;
+ 		}
+-		cpumask_clear(&cpu_mask);
+-		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
+-		irq_set_affinity_hint(priv->tx_irq[i], &cpu_mask);
++		cpumask_set_cpu(i % num_online_cpus(),
++				&priv->dma_conf.tx_queue[i].cpu_mask);
++		irq_set_affinity_hint(priv->tx_irq[i],
++				      &priv->dma_conf.tx_queue[i].cpu_mask);
+ 	}
  
-+	/* Number of TLB flushes generated by this task */
-+	unsigned long			ngtlbflush;
-+
-+	/* Number of TLB flushes received by this task */
-+	unsigned long			nrtlbflush;
-+
- 	/* Empty if CONFIG_POSIX_CPUTIMERS=n */
- 	struct posix_cputimers		posix_cputimers;
- 
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 2009926..4e0b09c 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -189,6 +189,7 @@ struct signal_struct {
- 	struct prev_cputime prev_cputime;
- 	unsigned long nvcsw, nivcsw, cnvcsw, cnivcsw;
- 	unsigned long min_flt, maj_flt, cmin_flt, cmaj_flt;
-+	unsigned long ngtlbflush, nrtlbflush;
- 	unsigned long inblock, oublock, cinblock, coublock;
- 	unsigned long maxrss, cmaxrss;
- 	struct task_io_accounting ioac;
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 35e0a31..5a72755 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -141,6 +141,8 @@ static void __exit_signal(struct task_struct *tsk)
- 	sig->gtime += task_gtime(tsk);
- 	sig->min_flt += tsk->min_flt;
- 	sig->maj_flt += tsk->maj_flt;
-+	sig->ngtlbflush += tsk->ngtlbflush;
-+	sig->nrtlbflush += tsk->nrtlbflush;
- 	sig->nvcsw += tsk->nvcsw;
- 	sig->nivcsw += tsk->nivcsw;
- 	sig->inblock += task_io_get_inblock(tsk);
-@@ -1095,6 +1097,10 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
- 			p->min_flt + sig->min_flt + sig->cmin_flt;
- 		psig->cmaj_flt +=
- 			p->maj_flt + sig->maj_flt + sig->cmaj_flt;
-+		psig->ngtlbflush +=
-+			p->ngtlbflush + sig->ngtlbflush;
-+		psig->nrtlbflush +=
-+			p->nrtlbflush + sig->nrtlbflush;
- 		psig->cnvcsw +=
- 			p->nvcsw + sig->nvcsw + sig->cnvcsw;
- 		psig->cnivcsw +=
-diff --git a/kernel/fork.c b/kernel/fork.c
-index b339918..5fa9f64 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1555,6 +1555,7 @@ static int copy_mm(unsigned long clone_flags, struct task_struct *tsk)
- 	struct mm_struct *mm, *oldmm;
- 
- 	tsk->min_flt = tsk->maj_flt = 0;
-+	tsk->ngtlbflush = tsk->nrtlbflush = 0;
- 	tsk->nvcsw = tsk->nivcsw = 0;
- #ifdef CONFIG_DETECT_HUNG_TASK
- 	tsk->last_switch_count = tsk->nvcsw + tsk->nivcsw;
+ 	return 0;
 -- 
-2.7.4
+2.34.1
 
