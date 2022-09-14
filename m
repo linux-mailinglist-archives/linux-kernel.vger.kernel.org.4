@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5C05B86D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C224A5B86D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiINK6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S229936AbiINK6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiINK50 (ORCPT
+        with ESMTP id S229728AbiINK57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:57:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A3B140E3;
-        Wed, 14 Sep 2022 03:57:11 -0700 (PDT)
-Received: from mercury (unknown [185.122.133.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E0D9660201C;
-        Wed, 14 Sep 2022 11:57:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663153029;
-        bh=eRW+oofSSgXLYsJ21Z1vqonSBjJ5bDGljpa+Xtah7mI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MGjdPu/r/JqY4+IPFdf2khVBPmETCsmIoqyKnCG7wYy6kK3Tik72pg3FsWeuVWqrG
-         umwXCIXIu8Bh1hg1Q2jr4H9oFbY+DxXgWucIaileXyzkPB839VI8xWmijYysHvAF5m
-         YxFHJ7juo2DOOoGshvsHJknTkJkaU9tETcr6ykGwUiLu9ezFN8GY4Zh+PKxqO7bjFq
-         T/7SaAUsiOHwXOf8EYXkC5cIokPBwQbTw9Sk4LNPvFseQ0VX4eGKtAMdtAZOXxO3n0
-         bROuABocer0NtvXZ/lzQ+fxBk+oJnE6nBou7Q3wIPTi1eswCxKrqGVHvnYu3LPKcWm
-         STRrBhvkhoO9w==
-Received: by mercury (Postfix, from userid 1000)
-        id C6474106084A; Wed, 14 Sep 2022 12:56:59 +0200 (CEST)
-Date:   Wed, 14 Sep 2022 12:56:59 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH -next] power: supply: bq25890: Fix enum conversion in
- bq25890_power_supply_set_property()
-Message-ID: <20220914105659.ybfbcnrboahkkccm@mercury.elektranox.org>
-References: <20220912141553.1743568-1-nathan@kernel.org>
- <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
+        Wed, 14 Sep 2022 06:57:59 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D50B04;
+        Wed, 14 Sep 2022 03:57:57 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w2so7172993qtv.9;
+        Wed, 14 Sep 2022 03:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VXqeZNDwuddQ69zEr78QRQZs4hRIQp4UvJ0xD8IfB4E=;
+        b=ja16G3hlNROnLQ89Ts82e/sNzorvDWE0AzfoUXsW1n9Y4cpNqIG41Ss64donlVdhHo
+         32ClPPU1zP6hal/R1ZAcIEC0Y4tRgOZvmWv0b9pb/XqfsEz97SjGlfbLWwF4RiEbnR47
+         9Ol+bWCYf96FOA7KaMQ36MZ+pHSGW3d/quTF2BWW+wOpxhU8KbZetCRbB+ikgtT3Wnm1
+         UPBPuuRh+0UAuk7RKQ89ZF/ZVNn6U0eeZCPN8lXvSmPu3Yw7GPrkTJSCm62LP9/iyrZd
+         N57KsJ2ljvy5IasWSiZutN+TTkAgJrfmsDEgXVZC4AwBf2FljdtWBl4hwGmcOqRyEv5u
+         0Tkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VXqeZNDwuddQ69zEr78QRQZs4hRIQp4UvJ0xD8IfB4E=;
+        b=edku/LXIbBiAKYIgmLNGmEmkpQH/+TrG8g89KMXMES4+G1SwziCgCR1WG36V8X5bBL
+         rXO+W5iCKmqIjaxxX95/bma076lerNZUm2GQilfYU3pWXZwi6LBcpt0YS5hrUL1MIBeK
+         GaiWfTI6w0SrUA2vBE4sFgvZdo6NeVwpBwt8s0E5XEu6LKMurjO5LLm6kCiY1s8I3UXm
+         /2/FvUyUPK+vTBs2nlEprA80gvH0dexZDwLrnn9LRiIz2n8gQrwNo0WkL1onAvcgAUbs
+         11CeeyCTTVpiwhW39dUh7ttKhRa/P06vG4+d++3DtXXR1pLR97fz+n/MV4WP4TlEPRRq
+         0f3A==
+X-Gm-Message-State: ACgBeo0mNSOHASLRgh5nzGFvW+/KToQjqQxehOOCQb3Sy35K3lRS3zO+
+        cse8wbkfXH120orxJDrAwty0buVR5abQ/LiVKbs=
+X-Google-Smtp-Source: AA6agR7ACG2IpcCo/COMlzVhleq0fXRcR/7Ddpg9g1emjHR0DCb1yao5dwtqu4B+26ezK3zdONa1FUCvW1sMzvG2S+A=
+X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
+ n10-20020a05622a040a00b0034377ba727fmr32433810qtx.481.1663153076699; Wed, 14
+ Sep 2022 03:57:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fhz7znvdp57m6wa6"
-Content-Disposition: inline
-In-Reply-To: <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
+References: <20220912212743.37365-1-eajames@linux.ibm.com> <20220912212743.37365-3-eajames@linux.ibm.com>
+In-Reply-To: <20220912212743.37365-3-eajames@linux.ibm.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 14 Sep 2022 13:57:20 +0300
+Message-ID: <CAHp75Vfo4Ke9d-ZJ-BffYDbT9ppEQVOQbVpu1y_F2vXd+52YPQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] iio: pressure: dps310: Reset chip after timeout
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        joel@jms.id.au, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 13, 2022 at 12:27 AM Eddie James <eajames@linux.ibm.com> wrote:
+>
+> The DPS310 chip has been observed to get "stuck" such that pressure
+> and temperature measurements are never indicated as "ready" in the
+> MEAS_CFG register. The only solution is to reset the device and try
+> again. In order to avoid continual failures, use a boolean flag to
+> only try the reset after timeout once if errors persist.
 
---fhz7znvdp57m6wa6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Hi,
+> +static int dps310_ready_status(struct dps310_data *data, int ready_bit, int timeout)
+> +{
+> +       int ready;
+> +       int sleep = DPS310_POLL_SLEEP_US(timeout);
 
-On Mon, Sep 12, 2022 at 08:11:59PM +0200, Marek Vasut wrote:
-> On 9/12/22 16:15, Nathan Chancellor wrote:
-> > Clang warns:
-> >=20
-> >    drivers/power/supply/bq25890_charger.c:625:40: error: implicit conve=
-rsion from enumeration type 'enum bq25890_fields' to different enumeration =
-type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
-> >                    lval =3D bq25890_find_idx(val->intval, F_IINLIM);
-> >                           ~~~~~~~~~~~~~~~~              ^~~~~~~~
-> >    1 error generated.
-> >=20
-> > Use the proper value from the right enumerated type, TBL_IINLIM, so
-> > there is no more implcit conversion. The numerical values of F_IINLIM
-> > and TBL_IINLIM happen to be the same so there is no change in behavior.
-> >=20
-> > Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting I=
-INLIM")
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1707
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Reviewed-by: Marek Vasut <marex@denx.de>
+Longer line first?
 
-Thanks, queued.
+> +       return regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready, ready & ready_bit,
+> +                                       sleep, timeout);
+> +}
 
--- Sebastian
+...
 
---fhz7znvdp57m6wa6
-Content-Type: application/pgp-signature; name="signature.asc"
+> +static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
+> +{
+> +       int rc;
+> +
+> +       rc = dps310_ready_status(data, ready_bit, timeout);
+> +       if (rc) {
+> +               if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
+> +                       int rc2;
+> +
+> +                       /* Reset and reinitialize the chip. */
+> +                       rc2 = dps310_reset_reinit(data);
+> +                       if (rc2) {
 
------BEGIN PGP SIGNATURE-----
+With below in mind this might become
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMhs3cACgkQ2O7X88g7
-+prgxQ//SY0hFyUVsTnca13f27t5ESE7O5TjsvWonq9LhJrgpYtYNG7yLI4hHkRt
-mTSCQbO/GFu8HHkEl9CnGCMVQWMVtNCD7scU/zXzmxRYFp6BAmPHtvLeyiHInpbk
-KUzZ3RG56ah/Vxe96sc80GbYInBGMxCTNSBFPMID1VQ45+0AmMoSbEKZ9oKQ5ClK
-VVORhI2xh3O6TqrVOh5WzeNfMGRqzlRlhT9eyP2ZniUtzySlAB8WxUqGvRecZBS5
-nSbuvCPuxVkTQm1C41Rn0l4SwSYdFD97JmqYDioaQfCLdFzXzFzciQwash0hKu/x
-S4FGlUIz/m2e8UA4DNMTBYBPypdHQPNLXQDl9pDr1wv5eEtPLuios1OQRsGlaqKp
-pSMtJlXbyaJZP1ca44IiXEWxBPFj6QR9PLP3m4Djxq/SWSJN0nW6cF305dUz80s+
-Wc1JDtcHGvoX59CCEM8PL0JcQ+nMO6Zb7Vr+y9lDfJYieOTNltC22MQL7xU/rLqR
-tnx7XoKTwlIaLgX5QryXtCTbP8omSg8RlbZt/+0zqR8AVmnuHhbxdMRdXO3xQ1zY
-8rtpeRT1LrlYlg7kvr0oJ6U+HBfD6Otkz9lBAacCEQAIW78RsRbEYuKHDVSoBCl0
-UzW0sZO4eJOkAk9vi7D15dfUqIRL4IDcbGvFec1mwcMtVhaArVQ=
-=kLpH
------END PGP SIGNATURE-----
+  if (dps310_reset_init(...))
+    ... = true;
 
---fhz7znvdp57m6wa6--
+> +                               data->timeout_recovery_failed = true;
+> +                       } else {
+> +                               /* Try again to get sensor ready status. */
+
+> +                               rc2 = dps310_ready_status(data, ready_bit, timeout);
+> +                               if (rc2)
+> +                                       data->timeout_recovery_failed = true;
+
+Shouldn't you re-use rc here again?
+
+> +                               else
+> +                                       return 0;
+> +                       }
+> +               }
+> +
+> +               return rc;
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko
