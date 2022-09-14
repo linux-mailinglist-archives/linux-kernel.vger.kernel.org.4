@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A535B8A8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0DE5B8A93
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiINOcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S230091AbiINOcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiINOcJ (ORCPT
+        with ESMTP id S230079AbiINOcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:32:09 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3E12A27D;
-        Wed, 14 Sep 2022 07:32:08 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id cc5so16178573wrb.6;
-        Wed, 14 Sep 2022 07:32:08 -0700 (PDT)
+        Wed, 14 Sep 2022 10:32:33 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9941260683;
+        Wed, 14 Sep 2022 07:32:31 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id y17so30132275ejo.6;
+        Wed, 14 Sep 2022 07:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5fCS+f3KrgOmeVSjsMvV8OThDyXYF5+mHg0NkcRUCv4=;
-        b=gNoJ1sPZVhjF7qrOCXMvTGD8VX43VHozbigNPNJ1vr3YXaQwH+pq2ZieWrEmoIbUOZ
-         ekh6o5673RFANoU8UHmuKN4fLmfJPJB06M9a2T5a334B5dYk8jFb344QRwlrjZoXIdMZ
-         KAJBHrUgduhhWhrDfsERhGW9w+lfYcz/PnZm73/FMsBM89S3rFQOyBJAZovYkq/Nvu68
-         IMGGMJOpxv4Kqknv25T+1Kdk5Ma77ngYYytWVqLdzKe/pv9fn1ilkXlKPCGoONRrtEpU
-         0UxzAid+5r03Xru7cbFnUhb1pnAzWRstyzHYtTvP5HGeJQPHjN59NVcg1OeGYox1mxgJ
-         xmJA==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=obpBL4tXH1sXCwB3znFS3ftnJpOfWHD1vlSgHE1sTO0=;
+        b=RnY/da2khSpx9SztG92dT3sDg2Um5lICTU07D7G7jQ4qr3kqCxc5BsHiB/nniNzNlO
+         clKhEQgk8YkPi+sovxHlLkgaoJZ2PTGxE5yT6ntcQJRDWUVoUoRnkacGodvsa66P+vUd
+         JUMUKcxgwtIaNdKoRiKRBYsLUu9f18SA5CwuLvwI+k4j+N7bfvuQWP/65JYoqPmyv1lb
+         UdMA1vNjPN31erst3B0svx2HA2OIJDAkH4+1c/aObjCq+y5N6q1UuBR2iG9UjUP74MVO
+         8DQ2Z+Bn+Gqm3QEbhvJ5ga20IL8URZ6do9eEuCaUgGpLUdqPPGSVKNPf/3/GAzpCTNoS
+         ZNtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5fCS+f3KrgOmeVSjsMvV8OThDyXYF5+mHg0NkcRUCv4=;
-        b=DeCHlvCXu1ldukh7sNM9DYwFhJZRP/xRkaiIXUjcGMZ5yQb3kvwRP/TqcpGYPg6xvz
-         UPIGXopVwtZw+69aAL3lFjgp34V7Mp936H1pBaIoKqtKiIQe9joKk5FnkrIO41twskjS
-         PuYZqY4usrQlQ8usWk8uGp8/zjtoalBSFRxM96Rx81xXxTxm1+HTBErG9Z35oxZ7q4nr
-         ZnVm9MhWHhOLebyh8PuMBmusVu8zZdP9fwZYeKdFb2G/4H4mz71GiLe3sTTpHvHfh8Ee
-         PTHb+bf5solvJ3VsnHpVKhffDTmLTOggOYVBYhZ1KIJWkqsTZ0f5d9p4qLXFa+cxQnzN
-         lU9g==
-X-Gm-Message-State: ACgBeo0YgmPhlgf4M12DDxSUp9PAxkv3bEmc2K7vHXbsJQ7wY55mShWp
-        NK98GvipxRDOxouzs/adabw=
-X-Google-Smtp-Source: AA6agR7x9VBqWL/1tK3nx0tK1KRXlK/l6E8gqSjMHjpP7OBs5vcYmTE5hCQB4oFEVDPdWPJJaOGiyQ==
-X-Received: by 2002:a05:6000:2ab:b0:228:e3b1:c3b2 with SMTP id l11-20020a05600002ab00b00228e3b1c3b2mr20778234wry.313.1663165926675;
-        Wed, 14 Sep 2022 07:32:06 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id fc17-20020a05600c525100b003b46a882171sm17143847wmb.33.2022.09.14.07.32.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 07:32:05 -0700 (PDT)
-Message-ID: <463b0b0a-c1ec-0f89-45cf-50a7587db69b@gmail.com>
-Date:   Wed, 14 Sep 2022 16:32:03 +0200
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=obpBL4tXH1sXCwB3znFS3ftnJpOfWHD1vlSgHE1sTO0=;
+        b=sSm9yQl/MwsQqNlz7RPYdVVBAZAN2FF9b1OM8D/dCj48QR2RZkVUWdTjo6Af54wAdt
+         nKQbWIgkhCHXdTz8B1f484NetCOMBes/ipe8VpJVgzytzZAlxAiRi5n+PITTJg0q99e4
+         NFPfzlbwRdhuhmFPXCiPfs1tZ0/4ULdTZv9SScQhb+f+k8EUUtBPgKED599RnLdQK+e8
+         3Xx3tNTJxVnGfuU70FSmRpOn/wAqygb28LqtYpB32zBqk4E79LE4uA6fnOEX1qPZMZNl
+         PP84bZHD0kBjA41ZvPLcpWh2pTBcPBhhmXq+8jB3FOWQVI1b5UxxahyatnXC3kzpCYRd
+         eJqQ==
+X-Gm-Message-State: ACgBeo3PpM26qo0BIRZsTLVAxXwP2oSnfEynOUPmrSO34VA/fLd4g62y
+        kB5hWJdHpgG/kRBbn0NSnmY=
+X-Google-Smtp-Source: AMsMyM7Aq5Newj4kYD2Qa2UorKNFzxZO+0quOY6nNHKjVPm3cy8fDTs82LcImRO0vhWj5Sg/KcHqXA==
+X-Received: by 2002:a17:907:160d:b0:780:3d10:97a1 with SMTP id hb13-20020a170907160d00b007803d1097a1mr1558714ejc.346.1663165950003;
+        Wed, 14 Sep 2022 07:32:30 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cx24-20020a05640222b800b0044ec3285b23sm9974358edb.58.2022.09.14.07.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 07:32:29 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 16:32:27 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Sameer Pujar <spujar@nvidia.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-tegra@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>
+Subject: Re: [PATCH v2 3/8] dt-bindings: Add bindings for Tegra234 NVDEC
+Message-ID: <YyHl+4O56brs1Pik@orome>
+References: <20220913131447.2877280-1-cyndis@kapsi.fi>
+ <20220913131447.2877280-4-cyndis@kapsi.fi>
+ <20220914120840.GA1837218-robh@kernel.org>
+ <6d739e27-c41c-e18f-8d13-0c38b912aa86@kapsi.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2] dt-bindings: arm: mediatek: mmsys: change compatible
- for MT8195
-Content-Language: en-US
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20220825091448.14008-1-rex-bc.chen@mediatek.com>
- <3ed3d73a-1671-708e-7c42-498cca6aaf1d@gmail.com>
- <8f3dba943170361211d9bb4c8bf1be12bbfdec20.camel@mediatek.com>
- <adcbb2b7-cddd-4546-bdf2-66d056a40c1d@linaro.org>
- <916bd99bcc4fa77eae5734b22365ce73acd90d58.camel@mediatek.com>
- <efedfd3d-9779-514b-0481-f0b669d2e326@gmail.com>
-In-Reply-To: <efedfd3d-9779-514b-0481-f0b669d2e326@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aiVZA/HUjMlRw8xz"
+Content-Disposition: inline
+In-Reply-To: <6d739e27-c41c-e18f-8d13-0c38b912aa86@kapsi.fi>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,176 +84,222 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--aiVZA/HUjMlRw8xz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 26/08/2022 17:39, Matthias Brugger wrote:
-> 
-> 
-> On 26/08/2022 09:13, Bo-Chen Chen wrote:
->> On Fri, 2022-08-26 at 15:00 +0800, Krzysztof Kozlowski wrote:
->>> On 26/08/2022 05:07, Bo-Chen Chen wrote:
->>>> On Thu, 2022-08-25 at 22:57 +0800, Matthias Brugger wrote:
->>>>>
->>>>> On 25/08/2022 11:14, Bo-Chen Chen wrote:
->>>>>> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
->>>>>>
->>>>>> For previous MediaTek SoCs, such as MT8173, there are 2 display
->>>>>> HW
->>>>>> pipelines binding to 1 mmsys with the same power domain, the
->>>>>> same
->>>>>> clock driver and the same mediatek-drm driver.
->>>>>>
->>>>>> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
->>>>>> binding
->>>>>> to
->>>>>> 2 different power domains, different clock drivers and
->>>>>> different
->>>>>> mediatek-drm drivers.
->>>>>>
->>>>>> Moreover, Hardware pipeline of VDOSYS0 has these components:
->>>>>> COLOR,
->>>>>> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
->>>>>> Quality)
->>>>>> and they makes VDOSYS0 supports PQ function while they are not
->>>>>> including in VDOSYS1.
->>>>>>
->>>>>> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR
->>>>>> related
->>>>>> component). It makes VDOSYS1 supports the HDR function while
->>>>>> it's
->>>>>> not
->>>>>> including in VDOSYS0.
->>>>>>
->>>>>> To summarize0:
->>>>>> Only VDOSYS0 can support PQ adjustment.
->>>>>> Only VDOSYS1 can support HDR adjustment.
->>>>>>
->>>>>> Therefore, we need to separate these two different mmsys
->>>>>> hardwares
->>>>>> to
->>>>>> 2 different compatibles for MT8195.
->>>>>>
->>>>>> Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add
->>>>>> mt8195
->>>>>> SoC binding")
->>>>>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
->>>>>> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
->>>>>> ---
->>>>>> Changes for v2:
->>>>>> 1. Add hardware difference for VDOSYS0 and VDOSYS1 in commit
->>>>>> message.
->>>>>> ---
->>>>>> .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
->>>>>> |
->>>>>> 3 ++-
->>>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git
->>>>>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->>>>>> .yam
->>>>>> l
->>>>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->>>>>> .yam
->>>>>> l
->>>>>> index 6ad023eec193..bfbdd30d2092 100644
->>>>>> ---
->>>>>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->>>>>> .yam
->>>>>> l
->>>>>> +++
->>>>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->>>>>> .yam
->>>>>> l
->>>>>> @@ -31,7 +31,8 @@ properties:
->>>>>>                  - mediatek,mt8183-mmsys
->>>>>>                  - mediatek,mt8186-mmsys
->>>>>>                  - mediatek,mt8192-mmsys
->>>>>> -              - mediatek,mt8195-mmsys
->>>>>> +              - mediatek,mt8195-vdosys0
->>>>>
->>>>> Thanks for you patch. As I mentioned on v1, I propose to set
->>>>> mediatek,mt8195-mmsys as fallback for mediatek,mt8195-vdosys0 to
->>>>> not
->>>>> break
->>>>> backwards compatibility.
->>>>>
->>>>> Apart from that, the binding change will need some changes to
->>>>> support
->>>>> the new
->>>>> binding. Please provide these together with this patch.
->>>>>
->>>>> Regards,
->>>>> Matthias
->>>>>
->>>>
->>>> Hello Matthias,
->>>>
->>>> Thanks for your comments.
->>>> The purpose of this patch is to confirm we can separate mt8195
->>>> mmsys
->>>> into two compatibles. I think this modification is accepted.
->>>
->>> No, it is not accepted following Matthias comments. You received my
->>> ack
->>> based on assumption that ABI break is perfectly ok for platform
->>> maintainer, as he has decisive voice. If anyone is not happy with a
->>> ABI
->>> break, then his concerns must be addressed.
->>>
->>> So let it be specific:
->>> NAK.
->>>
->>>>
->>>> After this, I think Jason-JH will push another series with this
->>>> binding
->>>> patch.
->>>
->>> I don't know what do you mean here - another series on top of wrong
->>> patch?
->>>
->>
->> Hello Krzysztof,
->>
->> For this mt8195 mmsys binding separation, we still need to modify
->> driver for this. The reason I send this patch is to confirm we can do
->> this binding modification and I also think we can not pick this patch
->> here.
->>
->> We will push another series and it contains modification of binding and
->> drivers. (The series will push by Jason-JH Lin)
->>
-> 
-> Sounds good. So lets wait for Jason-JH Lin to send this series and we can go on 
-> with the review.
-> 
+On Wed, Sep 14, 2022 at 03:19:01PM +0300, Mikko Perttunen wrote:
+> On 9/14/22 15:08, Rob Herring wrote:
+> > On Tue, Sep 13, 2022 at 04:14:41PM +0300, Mikko Perttunen wrote:
+> > > From: Mikko Perttunen <mperttunen@nvidia.com>
+> > >=20
+> > > Update NVDEC bindings for Tegra234. This new engine version only has
+> > > two memory clients, but now requires three clocks, and as a bigger
+> > > change the engine loads firmware from a secure carveout configured by
+> > > the bootloader.
+> > >=20
+> > > For the latter, we need to add a phandle to the memory controller
+> > > to query the location of this carveout, and several other properties
+> > > containing offsets into the firmware inside the carveout. These
+> > > properties are intended to be populated through a device tree overlay
+> > > configured at flashing time, so that the values correspond to the
+> > > flashed NVDEC firmware.
+> > >=20
+> > > As the binding was getting large with many conditional properties,
+> > > also split the Tegra234 version out into a separate file.
+> > >=20
+> > > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> > > ---
+> > > v2:
+> > > - Split out into separate file to avoid complexity with
+> > >    conditionals etc.
+> > > ---
+> > >   .../gpu/host1x/nvidia,tegra234-nvdec.yaml     | 154 +++++++++++++++=
++++
+> > >   1 file changed, 154 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/gpu/host1x/nvi=
+dia,tegra234-nvdec.yaml
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegr=
+a234-nvdec.yaml b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra=
+234-nvdec.yaml
+> > > new file mode 100644
+> > > index 000000000000..eab0475ca983
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nv=
+dec.yaml
+> > > @@ -0,0 +1,154 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/gpu/host1x/nvidia,tegra234-nvdec=
+=2Eyaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > +
+> > > +title: Device tree binding for NVIDIA Tegra234 NVDEC
+> > > +
+> > > +description: |
+> > > +  NVDEC is the hardware video decoder present on NVIDIA Tegra210
+> > > +  and newer chips. It is located on the Host1x bus and typically
+> > > +  programmed through Host1x channels.
+> > > +
+> > > +maintainers:
+> > > +  - Thierry Reding <treding@gmail.com>
+> > > +  - Mikko Perttunen <mperttunen@nvidia.com>
+> > > +
+> > > +properties:
+> > > +  $nodename:
+> > > +    pattern: "^nvdec@[0-9a-f]*$"
+> > > +
+> > > +  compatible:
+> > > +    enum:
+> > > +      - nvidia,tegra234-nvdec
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    maxItems: 3
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: nvdec
+> > > +      - const: fuse
+> > > +      - const: tsec_pka
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  reset-names:
+> > > +    items:
+> > > +      - const: nvdec
+> > > +
+> > > +  power-domains:
+> > > +    maxItems: 1
+> > > +
+> > > +  iommus:
+> > > +    maxItems: 1
+> > > +
+> > > +  dma-coherent: true
+> > > +
+> > > +  interconnects:
+> > > +    items:
+> > > +      - description: DMA read memory client
+> > > +      - description: DMA write memory client
+> > > +
+> > > +  interconnect-names:
+> > > +    items:
+> > > +      - const: dma-mem
+> > > +      - const: write
+> > > +
+> > > +  nvidia,memory-controller:
+> > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > +    description:
+> > > +      phandle to the memory controller for determining carveout info=
+rmation.
+> > > +
+> > > +  nvidia,bl-manifest-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to bootloader manifest from beginning of firmware. Typi=
+cally set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> > > +
+> > > +  nvidia,bl-code-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to bootloader code section from beginning of firmware. =
+Typically set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> > > +
+> > > +  nvidia,bl-data-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to bootloader data section from beginning of firmware. =
+Typically set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> > > +
+> > > +  nvidia,os-manifest-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to operating system manifest from beginning of firmware=
+=2E Typically set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> > > +
+> > > +  nvidia,os-code-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to operating system code section from beginning of firm=
+ware. Typically set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> > > +
+> > > +  nvidia,os-data-offset:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Offset to operating system data section from beginning of firm=
+ware. Typically set as
+> > > +      part of a device tree overlay corresponding to flashed firmwar=
+e.
+> >=20
+> > I don't think DT is the place for describing your runtime loaded
+> > firmware layout.
+> >=20
+> > Rob
+>=20
+> The way I see it, from the kernel's point of view it's not runtime loaded
+> but a contract with the bootloader. Bootloader sets up hardware in a cert=
+ain
+> way the kernel doesn't otherwise know so the bootloader needs to tell the
+> kernel how the hardware is set up.
+>=20
+> The fact that the information is supplied through an overlay is accidental
+> -- equivalently the bootloader that sets up the firmware could adjust the
+> device tree like we do in other situations, but in this case an overlay is
+> an easier implementation method.
 
-Just to be sure, this has not happened yet, correct?
+I think the key bit of information to know here is that the kernel is
+not permitted to load this firmware. It's a bootloader early in the boot
+process that sets this up in a secure context and then needs to convey
+that information to the kernel.
 
-Regards,
-Matthias
+Perhaps a slightly more idiomatic way to pass this information would be
+using a reserved memory node? That could span the entirety of the secure
+carveout (therefore removing the need to query the memory controller for
+that information) and be identified with a compatible string that would
+allow custom properties for these various offsets. Yet another way would
+be to have each of the bootloader and OS regions (manifest, code and
+data) be their own reserved memory regions. But given that this is one
+chunk with different regions inside makes that seem excessive.
 
-> Thanks!
-> Matthias
-> 
->> Maybe I should use "RFC" for this series, and I think it's more
->> correct.
->>
->> BRs,
->> Bo-Chen
->>
->>>> In Jason-JH's series, we will modify mmsys driver based on this.
->>>> And I think we don't need to keep "mediatek,mt8195-mmsys" if we
->>>> also
->>>> modify mmsys drivers in the same series.
->>>
->>> This does not fux ABI break and broken bisectability.
->>>
->>>>
->>>> Is it ok that postpones to pick this patch until we finish review
->>>> follow-up series?
->>>>
->>>
->>> No. You got a clear review to fix.
->>>
->>> Best regards,
->>> Krzysztof
->>
+Rob, do you have any other ideas how this information could be passed to
+the kernel if not via DT?
+
+Thierry
+
+--aiVZA/HUjMlRw8xz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMh5fsACgkQ3SOs138+
+s6GUdA/9FYMasTSyIsmqzEkVvTBY4hSR6IFHJUAM8BCGeKD4iPjMG4b8AyzK/p8W
+6mI/8czyDPSXbd532BztgwUld3bOYgpORPz7EJzuNZ4GreHMLPj0Kg91LuwZKVw/
+p2P4/KkqhaAzfoR4QqpX8YjZCzvAD/0vP3VXDyLEY0zf68wJ0AovRBrwmxyzRqEA
+7KH+M2PMB2I6gJViLXLWFYGK3oqtwnFx0Knv5/6Wtcv2R9AnkBJdLYQ2hjvpWb5u
+BHXqy8xONScYFNlqgqR7a8aqQswLy4/WiRYFd6bQRHDcnlQtQIdkMXLFYVFlis6V
+Vi36rs+Blkud1K0SUp6ulq5+HxDf3pjk3eyprztwUYjsLGDZ5KxZ/6A87euToj4m
+NBtwq0lo3QRxSd6blac+5Qe1hcRdTU+pD1jW62JQT0N/mVqsGF0Poqf46900VO6n
+WMgAfYjisWl9736bV4l12ADxbo4gT/ImElJvTXhoH8vdw4iVz5Ztk9nPG4S+3oo+
+bvEv/hWyrLbdxY1yBkMZHN7Jbvxxwl+5Y3VlnaT0pqhdtTVRrT28Uf4Nz/qRGeHv
+5zz1l9pCZvi0kh2yCAHGVloRrqurF/krxt7xZRrUua+k3leRHwYs4YCwk1fnJwgp
+NU1uKKnAOPlE0eQvXn/DIpY3+FaEhOA2SnMlRW+v3IlmrjS0/Ok=
+=OaCY
+-----END PGP SIGNATURE-----
+
+--aiVZA/HUjMlRw8xz--
