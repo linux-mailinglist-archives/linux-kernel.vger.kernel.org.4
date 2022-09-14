@@ -2,134 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B1E5B87CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95CF5B87CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiINMHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
+        id S229890AbiINMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiINMHO (ORCPT
+        with ESMTP id S230025AbiINMIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:07:14 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64607FE54
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:07:12 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-127d10b4f19so40253453fac.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:07:12 -0700 (PDT)
+        Wed, 14 Sep 2022 08:08:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C917F26A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:08:33 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z13so7932350edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=Q+27K4r5oS0nyZYzQbGrXc1Sp0k9jMzZDh/vJFY9Rqo=;
-        b=WD9rBiy/FGY7Zx4rOdqynQR/5rHmYT/WtAG0NqDeCtm4UZ6cokOsd+zFbSjKNdZ/vW
-         hKqOCJBGdDPuHlhDiAT/2fU51WPHj3RA4/xP10lFolwkEacAcBg68cSkpA96DXgryCWC
-         oPDCVkv8i4STlPCQ2y8kS1dt3yED/GJ8+74KFmutT18rZCADnBumzY8ZlPWsDaqgECsQ
-         uc/U/0hCTPUmhWHFlOxJUzE6IPfrS5NRNGUDYvpJKN16/OGnTYZCqngX1at3JCwLle37
-         SQnrVcFKUTGoeu+b1og6UR8Ji9G4RpyBuuf8AS1Ins7cveUfUpgQ1qBv7DkZGuHxz7jf
-         WQqA==
+        bh=lZMFMwTKaDoN92TfUg4rhrK9/Vgy+4VnEfl6Q6soKkA=;
+        b=Hn/YxHcMcexyeCivKAehCl5/+na2OclQbiYfbBroysxs+34y+JauV0gR66de50jf/c
+         BG8n8xBxZ5rDZneFPm0vaT9F/oE++uMDLPL4JTlZ9goAhlCTw40ceZcM47ohFVSigADQ
+         OGpS372DBJnPvMiKx+1RDCbkYBDxrIiBdWzaGZqk9DJLtgPTnf4NqLUIKLAT5CAAu0zA
+         oZEbrSsKMMZwUdVwuQ23Tr4cXw7s90JBkBdbn7TWHPPtcAyRmBBeP07g78tuhhBjsr3E
+         mPDUkmAFxAKZDNxgnr3lK0p8ja/r97OpgeBrMKhRfEPHtAdGzOqunLGLlEPUK7eR5dk1
+         mWaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Q+27K4r5oS0nyZYzQbGrXc1Sp0k9jMzZDh/vJFY9Rqo=;
-        b=sdfT3YDF9UE8Oec+JqZQS6bwmdzst5G1pFJPjMBI6H457llWDypKbJCYk5kDExgAgy
-         L0o10zoa0c4RQZK2ruJdD8XSsez49hqoitF+K6cD0JL2BBxgpdOAnMS1f2Gb3vUcUouH
-         eziZYN09oFuxfy9YTKnrWldYPAldIsiaIdE7yRBZ5MilnetouF15RMZl7B8FzOiplnsj
-         g18Uba4axKLbaN2mAIXwUERUk4Aw1SvmBCyyOpZNX/RIKw9SjMjaq/9XIwuDVKC8Yl2h
-         DZOKTkCMlHCqC2W6Wf7yRxNW5Kqsoofo/WZcvTiysp0UFAL/FYzvE+LLx1dG6ReTDfY3
-         jwig==
-X-Gm-Message-State: ACgBeo1RbEo2iJ9yANsWfNRZluHlnkYjmZ5pY9sAUrskEhpmWCDhVi/t
-        /EYmkcU6gptdwS4L7FD96CAFu0Eh9oFJQKIje7I=
-X-Google-Smtp-Source: AA6agR71gd2wOjNZ+6ffiBJO6tK7kFNhKXxMAcj8atkt7k1k8Lid16IdghZfaSGjfPlYs3dDvFt28gYbAPxBpxySuyI=
-X-Received: by 2002:a05:6870:8912:b0:12b:3e64:e863 with SMTP id
- i18-20020a056870891200b0012b3e64e863mr2165214oao.26.1663157231696; Wed, 14
- Sep 2022 05:07:11 -0700 (PDT)
+        bh=lZMFMwTKaDoN92TfUg4rhrK9/Vgy+4VnEfl6Q6soKkA=;
+        b=57oSG0SeDDDH5t6m1rOxvbrs0Q188U7f6xfISBCb91uWgncI/GVwHsjzlWA7V5N6qR
+         F0dQ5m8h6tpNvsGgFSo8ESCQCAZorkp9J0DeUVahadlK7E2gPoy9narBIN+DYzatfTPB
+         g6nqYY9Tnaa0H9oH6dtCo2tfFILYNRcIlNqUB7hCg7jMLpNFbKjjyealvLyyDH+UuKrG
+         58VcxBl5452KlDdRzcq3m8c3QniooknjGxAubXE9tpjire1uI110oBnFyTt/2gMPMzeX
+         TETZIL8WwZ3T3Tsg7DsHuO/brMnEV8HIVY9AcvgseBdcTCPUPWjkBujRsKUnkTmJGc7f
+         j6cg==
+X-Gm-Message-State: ACgBeo0nMbtoqRfeaFfyQfdnlzL1mIHCNNfUsCeLwhmxVs1UHfacx0vU
+        jR7lizXidyngiL4z5ACL76vqTrREw6boR+5gXxiQ1Q==
+X-Google-Smtp-Source: AA6agR7brk1D9/tNrUFcM5Rdp/wqUtemwORlPUUMyoFV+2N+hxIAfa6fGua/P1lEfG96DCX0AFasYZeR5McMSqAIixI=
+X-Received: by 2002:aa7:cb87:0:b0:43b:e650:6036 with SMTP id
+ r7-20020aa7cb87000000b0043be6506036mr30833799edt.350.1663157311552; Wed, 14
+ Sep 2022 05:08:31 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac9:5ecb:0:0:0:0:0 with HTTP; Wed, 14 Sep 2022 05:07:10
- -0700 (PDT)
-Reply-To: philipsjohnsongoodone@gmail.com
-From:   philips <robertandersonhappy1@gmail.com>
-Date:   Wed, 14 Sep 2022 13:07:10 +0100
-Message-ID: <CAGRoA82mnnv1aNR4SuedNS8U2gFhsRMn0uyp5z9tEQxmZRdKdA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220913140348.835121645@linuxfoundation.org>
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Sep 2022 17:38:20 +0530
+Message-ID: <CA+G9fYu_SFbbkKThMQBob6cyGeYHdavxcO4uav0LsjWz_8OPAQ@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/79] 4.19.257-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0J/QntCS0JXQoNCV0J3QndCr0Jkg0Jgg0J3QntCi0JDQoNCY0KPQoQ0KINCb0J7QndCU0J7QnS3Q
-ktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGPDQoNCtCS0LDRiNC10LzRgyDQstC90LjQvNCw0L3Q
-uNGOOiDQtNC+0YDQvtCz0L7QuSDQtNGA0YPQsw0KDQrQn9C+0LbQsNC70YPQudGB0YLQsCwg0L3Q
-tSDQvtCx0LjQttCw0LnRgtC10YHRjCwg0LXRgdC70Lgg0Y3RgtC+INGB0L7QvtCx0YnQtdC90LjQ
-tSDQv9GA0LjQtNC10YIg0Log0LLQsNC8LCDQv9C+0YHQutC+0LvRjNC60YMNCtGPINC00L7Qu9C2
-0LXQvSDQsdGL0Lsg0L/QvtC70YPRh9C40YLRjCDQstCw0YjQtSDRgdC+0LPQu9Cw0YHQuNC1INC4
-INC+0LTQvtCx0YDQtdC90LjQtSwg0L/RgNC10LbQtNC1INGH0LXQvCDQvtGC0L/RgNCw0LLQuNGC
-0YwNCtGN0YLQviDQv9GA0LXQtNC70L7QttC10L3QuNC1INC/0L4g0Y3Qu9C10LrRgtGA0L7QvdC9
-0L7QuSDQv9C+0YfRgtC1LiDQryDQtNC10LnRgdGC0LLQvtCy0LDQuyDRgtCw0LosINC60LDQuiDR
-jyDRgdC00LXQu9Cw0LssDQrQuNC3LdC30LAg0LLQsNC20L3QvtGB0YLQuCDQuCDRgdGA0L7Rh9C9
-0L7RgdGC0Lgg0Y3RgtC+0LPQviDQtNC10LvQsC4g0KEg0LrQsNC60L7QuSDQsdGLINGB0YLQvtGA
-0L7QvdGLINCy0Ysg0L3QuA0K0YHQvNC+0YLRgNC10LvQuCDQvdCwINGN0YLQviwg0L/Rg9GB0YLR
-jCDQstCw0Lwg0LHRg9C00LXRgiDQv9GA0LjRj9GC0L3QviDQsdGL0YHRgtGA0L4g0L7RgtCy0LXR
-gtC40YLRjCDQu9C40LHQvg0K0L7RgtGA0LjRhtCw0YLQtdC70YzQvdC+LCDQu9C40LHQviDQv9C+
-0LvQvtC20LjRgtC10LvRjNC90L4uDQoNCtCc0LXQvdGPINC30L7QstGD0YIg0KTQuNC70LjQv9GB
-INCU0LbQvtC90YHQvtC9LiDQryDQvtGC0L/RgNCw0LLQuNC7INCy0LDQvCDRjdC70LXQutGC0YDQ
-vtC90L3QvtC1INC/0LjRgdGM0LzQviDRgNCw0L3QtdC1INCx0LXQtw0K0L7RgtCy0LXRgtCwLCDQ
-siDQvNC+0LXQvCDQv9C10YDQstC+0Lwg0Y3Qu9C10LrRgtGA0L7QvdC90L7QvCDQv9C40YHRjNC8
-0LUg0Y8g0YPQv9C+0LzRj9C90YPQuyDQviDQvNC+0LXQvCDQutC70LjQtdC90YLQtSwNCtC60L7R
-gtC+0YDRi9C5INGD0LzQtdGAIDE1INGB0LXQvdGC0Y/QsdGA0Y8gMjAxNSDQs9C+0LTQsC4g0K8g
-0YHQtNC10LvQsNC7INC90LXRgdC60L7Qu9GM0LrQviDQt9Cw0L/RgNC+0YHQvtCyLCDRh9GC0L7Q
-sdGLDQrQvdCw0LnRgtC4INC60L7Qs9C+LdC70LjQsdC+INC40Lcg0LTQsNC70YzQvdC40YUg0YDQ
-vtC00YHRgtCy0LXQvdC90LjQutC+0LIg0LzQvtC10LPQviDQutC70LjQtdC90YLQsCwg0L3QviDR
-jdGC0L4NCtC+0LrQsNC30LDQu9C+0YHRjCDQsdC10LfRg9GB0L/QtdGI0L3Ri9C8LCDRjyDRgtGA
-0LXQsdGD0Y4g0LLQsNGI0LXQs9C+INGB0L7Qs9C70LDRgdC40Y8g0L/RgNC10LTRgdGC0LDQstC4
-0YLRjCDQstCw0YEg0LrQsNC6DQrQsdC70LjQt9C60L7Qs9C+INGA0L7QtNGB0YLQstC10L3QvdC4
-0LrQsCDQkdCb0JjQltCd0JXQk9CeINCg0J7QlNCh0KLQktCV0J3QndCY0JrQkCDQnNCe0JXQk9Ce
-INCf0J7QkdCV0JTQndCV0JPQniDQmtCb0JjQldCd0KLQkCwNCtCf0J7QotCe0JzQoyDQp9Ci0J4g
-0KMg0JLQkNChINCe0JTQmNCd0JDQmtCe0JLQq9CVINCY0JzQldCd0JAg0YEg0L/QvtC60L7QudC9
-0YvQvCwg0YfRgtC+0LHRiyDRg9C90LDRgdC70LXQtNC+0LLQsNGC0YwNCtC00LXQv9C+0LfQuNGC
-0L3Ri9C5INGE0L7QvdC0INC90LAg0YHRg9C80LzRgyAyIDcwMCAwMDAsMDAg0YTRg9C90YLQvtCy
-INGB0YLQtdGA0LvQuNC90LPQvtCyICjRgtC+0LvRjNC60L4g0LTQstCwDQrQvNC40LvQu9C40L7Q
-vdCwINGB0LXQvNGM0YHQvtGCINGC0YvRgdGP0Ycg0LHRgNC40YLQsNC90YHQutC40YUg0YTRg9C9
-0YLQvtCyINGB0YLQtdGA0LvQuNC90LPQvtCyLCDQsiBGU1QtQkFOSw0KTG9uZG9uLCDQvtGB0YLQ
-sNCy0LvQtdC90L3Ri9C5INC60LvQuNC10L3RgtC+0Lwg0LTQviDRgtC+0LPQviwg0LrQsNC6INC+
-0L0g0LHRg9C00LXRgiDQutC+0L3RhNC40YHQutC+0LLQsNC9LA0KDQrQkdCw0L3QuiDQstGL0LTQ
-sNC7INC80L3QtSDRg9Cy0LXQtNC+0LzQu9C10L3QuNC1LCDRh9GC0L7QsdGLINGPINC/0YDQtdC0
-0L7RgdGC0LDQstC40Lsg0LXQs9C+INGA0L7QtNGB0YLQstC10L3QvdC40LrQvtCyINCyDQrQutCw
-0YfQtdGB0YLQstC1INGB0LLQvtC10LPQviDQsNC00LLQvtC60LDRgtCwLCDQuNC90LDRh9C1INC+
-0L3QuCDQv9GA0L7RgtC+0LvQutC90YPRgiDRhNC+0L3QtCDQsiDQs9C+0YHRg9C00LDRgNGB0YLQ
-stC10L3QvdGD0Y4NCtC60LDQt9C90YMg0LrQsNC6INC90LXQstC+0YHRgtGA0LXQsdC+0LLQsNC9
-0L3Ri9C5INCy0LXQutGB0LXQu9GMLiDQryDQvdCw0LTQtdGP0LvRgdGPLCDRh9GC0L4g0LLRiyDQ
-vdC1INGA0LDQt9C+0LHQu9Cw0YfQuNGC0LUNCtC4INC90LUg0L/RgNC10LTQsNC00LjRgtC1INGN
-0YLQviDQtNC+0LLQtdGA0LjQtSDQuCDRg9Cy0LXRgNC10L3QvdC+0YHRgtGMLCDQutC+0YLQvtGA
-0YvQtSDRjyDQv9GL0YLQsNGO0YHRjCDRg9GB0YLQsNC90L7QstC40YLRjA0K0YEg0LLQsNC80Lgg
-0LTQu9GPINC90LDRiNC10Lkg0LLQt9Cw0LjQvNC90L7QuSDQstGL0LPQvtC00YssINGPINC90LUg
-0YXQvtGH0YMsINGH0YLQvtCx0Ysg0YEg0L3QsNC80Lgg0LHRi9C70LAg0YLRgNC10YLRjNGPDQrR
-gdGC0L7RgNC+0L3QsCwg0Y3RgtC+INC00L7Qu9C20L3QviDQsdGL0YLRjCDRgdC10LrRgNC10YLQ
-vtC8INC80LXQttC00YMg0LzQvdC+0Lkg0Lgg0LLQsNC80LguINCvINC30LDQstC10YDRj9GOINC4
-DQrQs9Cw0YDQsNC90YLQuNGA0YPRjiwg0YfRgtC+INGN0YLQviDQsdGD0LTQtdGCINCy0YvQv9C+
-0LvQvdC10L3QviDQsiDRgdC+0L7RgtCy0LXRgtGB0YLQstC40Lgg0YEg0LfQsNC60L7QvdC90L7Q
-uQ0K0LTQvtCz0L7QstC+0YDQtdC90L3QvtGB0YLRjNGOLCDQutC+0YLQvtGA0LDRjyDQt9Cw0YnQ
-uNGC0LjRgiDQstCw0YEg0L7RgiDQu9GO0LHQvtCz0L4g0L3QsNGA0YPRiNC10L3QuNGPINC30LDQ
-utC+0L3QsC4g0JLRgdC1LA0K0YfRgtC+INGPINGC0YDQtdCx0YPRjiDQvtGCINCy0LDRgSwgLSDR
-jdGC0L4g0LLQsNGI0LUg0YfQtdGB0YLQvdC+0LUg0YHQvtGC0YDRg9C00L3QuNGH0LXRgdGC0LLQ
-viwg0YfRgtC+0LHRiyDQvNGLINC80L7Qs9C70LgNCtC/0YDQvtCy0LXRgdGC0Lgg0Y3RgtGDINGC
-0YDQsNC90LfQsNC60YbQuNGOLg0KDQrQlNC70Y8g0L/QvtC70YPRh9C10L3QuNGPINCx0L7Qu9C1
-0LUg0L/QvtC00YDQvtCx0L3QvtC5INC40L3RhNC+0YDQvNCw0YbQuNC4LCDQv9C+0LbQsNC70YPQ
-udGB0YLQsCwg0YHQstGP0LbQuNGC0LXRgdGMINGB0L4NCtC80L3QvtC5LCDQvtC20LjQtNCw0Y8g
-0LLQsNGI0LXQs9C+INGB0YDQvtGH0L3QvtCz0L4g0L7RgtCy0LXRgtCwLg0KDQrQl9Cw0YDQsNC9
-0LXQtSDRgdC/0LDRgdC40LHQviDQuCDRhdGA0LDQvdC4INCy0LDRgSDQkdC+0LMsDQoNCtCc0LjR
-gdGC0LXRgCDQpNC40LvQuNC/0YEg0JTQttC+0L3RgdC+0L0sINGN0YHQutCy0LDQudGALg0K0KPR
-gdCw0LTRjNCx0LAgMiwg0J3RjNGOLdCu0L3QuNC+0L0t0YHRgtGA0LjRgiwgTEQxIDJQRg0K0JvQ
-ntCd0JTQntCdLdCS0LXQu9C40LrQvtCx0YDQuNGC0LDQvdC40Y8NClBPVkVSRU5OWVkgSSBOT1RB
-UklVUw0KIExPTkRPTi1WZWxpa29icml0YW5peWENCg==
+On Tue, 13 Sept 2022 at 20:01, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.257 release.
+> There are 79 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.257-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.257-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: fb5836fc4e4c065ff678b2ce8f3bb039506bbd9b
+* git describe: v4.19.256-80-gfb5836fc4e4c
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.256-80-gfb5836fc4e4c
+
+## No test Regressions (compared to v4.19.256)
+
+## No metric Regressions (compared to v4.19.256)
+
+## No test Fixes (compared to v4.19.256)
+
+## No metric Fixes (compared to v4.19.256)
+
+## Test result summary
+total: 82375, pass: 71763, fail: 655, skip: 9554, xfail: 403
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 323 total, 318 passed, 5 failed
+* arm64: 61 total, 60 passed, 1 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 46 total, 46 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 54 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
