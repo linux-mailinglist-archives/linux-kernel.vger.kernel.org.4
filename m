@@ -2,82 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2E95B8627
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9925B8621
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiINKVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiINKVR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229728AbiINKVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 14 Sep 2022 06:21:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835F79EFB;
-        Wed, 14 Sep 2022 03:21:16 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229714AbiINKVO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 14 Sep 2022 06:21:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19FD7A537;
+        Wed, 14 Sep 2022 03:21:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C9212660201C;
-        Wed, 14 Sep 2022 11:21:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663150874;
-        bh=+t+eS5uIq7be1EAHToZiBnClNaJKjeBU4Ul3SPxFOAg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U8xUsm4llePZLK4+gmK9cVOZa6u5GdXx0q9y+xXYW7TEL8roG9249T7pQ7JKw/dth
-         aYI8FMx0mzU7dXn9er5jfyxsuef0HFjgEtRGAUqHLevq5MiAuiZt5tOSpvqqeuSOra
-         WLTuT2GAY6ngDengo2Ru4/uNr6jLALaTEGp3jIVxWZ51v7poOribtsURx90/5vJ/oo
-         125VMs0ilxUxlVkgiP9RcxCHTg+bSBsfwvqD08rsbzWo+VLiJIHarnd05rFIGZ6ZKd
-         ffp3ezY7Q/bWgTstgtFYwSh8f7+PmlxJqXkG2qNOvYfyfmeXu4G5OrwEylbYvC0tZ+
-         mrTGQLAUHdz1w==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     krzysztof.kozlowski+dt@linaro.org
-Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, chen.zhong@mediatek.com,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/2] dt-bindings: input: mediatek,pmic-keys: Add compatible for MT6331 keys
-Date:   Wed, 14 Sep 2022 12:20:59 +0200
-Message-Id: <20220914102059.41757-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220914102059.41757-1-angelogioacchino.delregno@collabora.com>
-References: <20220914102059.41757-1-angelogioacchino.delregno@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10B8B61B7A;
+        Wed, 14 Sep 2022 10:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A2FC433C1;
+        Wed, 14 Sep 2022 10:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663150870;
+        bh=DiPQNoNQNG+LQNzk/iOQ5X8mk924KHwwG68nSONOT+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LLIIKfyfTOvDZbH9wZaRqn8c0Jveo+TQ6Zt7JqKiPzkEsMLIQ2+OrSOPk+A75ttv9
+         cdYSrFuCTthS8RzN8Fv301CuEb8gxC/23zBONTWkIngBDkRj7kzEKYY+2WLrXUExAx
+         PB05AkMjWJbeZwNBT6PLMz3GsjFf5jQ9L0QBC4fsSAFVVO2vF9bL+DlurkFyPXHYJj
+         ExNEJTXC06DKdUMf1iLprTPmyOLqTvi1MjJX8basjkokHqeUbpyq3d2+r6WAKnnLav
+         k6tHWhkuTxHDL3h18VQp1RJwgEhAOREqBPIheMRG2gg2U6A8bvuQw8pkSRGvyp8jy+
+         LusWJ4Sfx2AIA==
+Date:   Wed, 14 Sep 2022 11:21:00 +0100
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>, x86@kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        linux-toolchains@vger.kernel.org,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "Jose E. Marchesi" <jemarch@gnu.org>, Michael Matz <matz@suse.de>
+Subject: Re: [RFC] Objtool toolchain proposal:
+ -fannotate-{jump-table,noreturn}
+Message-ID: <20220914102100.thl5ad35plvazark@treble>
+References: <20220909180704.jwwed4zhwvin7uyi@treble>
+ <20220912113114.GV25951@gate.crashing.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220912113114.GV25951@gate.crashing.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for the keys found on MT6331 PMIC.
+On Mon, Sep 12, 2022 at 06:31:14AM -0500, Segher Boessenkool wrote:
+> Hi!
+> 
+> On Fri, Sep 09, 2022 at 11:07:04AM -0700, Josh Poimboeuf wrote:
+> > 2) Noreturn functions:
+> >    
+> >    There's no reliable way to determine which functions are designated
+> >    by the compiler to be noreturn (either explictly via function
+> >    attribute, or implicitly via a static function which is a wrapper
+> >    around a noreturn function.)
+> 
+> Or just a function that does not return for any other reason.
+> 
+> The compiler makes no difference between functions that have the
+> attribute and functions that do not.  There are good reasons to not
+> have the attribute on functions that do in fact not return.  The
+> not-returningness of the function may be just an implementation
+> accident, something you do not want part of the API, so it *should* not
+> have that attribute; or you may want the callers to a function to not be
+> optimised according to this knowledge (you cannot *prevent* that, the
+> compiler can figure it out it other ways, but still) for any other
+> reason.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Yes, many static functions that are wrappers around noreturn functions
+have this "implicit noreturn" property.  I agree we would need to know
+about those functions (or, as Michael suggested, their call sites) as
+well.
 
-diff --git a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-index e33fdca50b16..358d027e3e81 100644
---- a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-+++ b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-@@ -25,6 +25,7 @@ properties:
-   compatible:
-     enum:
-       - mediatek,mt6323-keys
-+      - mediatek,mt6331-keys
-       - mediatek,mt6358-keys
-       - mediatek,mt6397-keys
- 
+> >    This information is needed because the
+> >    code after the call to such a function is optimized out as
+> >    unreachable and objtool has no way of knowing that.
+> 
+> Since June we (GCC) have -funreachable-traps.  This creates a trap insn
+> wherever control flow would otherwise go into limbo.
+
+Ah, that's interesting, though I'm not sure if we'd be able to
+distinguish between "call doesn't return" traps and other traps or
+reasons for UD2.
+
 -- 
-2.37.2
-
+Josh
