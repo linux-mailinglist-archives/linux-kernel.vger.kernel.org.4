@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190675B861C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F20E5B8629
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiINKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S229740AbiINKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiINKUx (ORCPT
+        with ESMTP id S229544AbiINKVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:20:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355391F62E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L9z2sWrZFpokxsnnYfIrgul/SSM9pIG5YuJ1FrDbZ6A=; b=XHE1YuJpF/XBiZvxZ6zm4SfEGS
-        YpXr7MLDXWtv7gu6SrlhrLggtgXn3KpD3Sw3c+PVcN04VtEW+vnjPuwXBSO5sJr3laq6QA3l/VuzS
-        UxdbSuAEt7WOQnR05Rj6dxHJ9I9bi/hCU3EpYPgLwtsvzte7PD9Pk8Z4+K6yVtkPQ2X5z/uCIoSlx
-        CV4GRM4UEPk4mD81CZVvkfLsd3Mvs3on+TyU82JdhyfTeJlZQsoOwnxZVmKlQP/34DG8LgywKjHnv
-        Dc4owYteBeksmTcI7b+m43mRgCcYLo/EMOvdhFubLYH56hN64n8e1jTMH7An3th6XETUSmMORJkEU
-        lRYqn5cA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYPVV-0005SJ-T4; Wed, 14 Sep 2022 10:20:37 +0000
-Date:   Wed, 14 Sep 2022 11:20:37 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Liam.Howlett@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] Maple Tree: Remove unused functions mte_set_full and
- mte_clear_full
-Message-ID: <YyGq9enhR3W2/MFi@casper.infradead.org>
-References: <20220914101829.82000-1-jiapeng.chong@linux.alibaba.com>
+        Wed, 14 Sep 2022 06:21:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D479ECC;
+        Wed, 14 Sep 2022 03:21:14 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4ADBD6601FAD;
+        Wed, 14 Sep 2022 11:21:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663150872;
+        bh=QdN2B3QibIErQYqVl05FBiGUQIidoGZDB5zsfyDeIhg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kuK208OdpKJ/ygCdBVc8RUw7xLAg1BYoyVlcDRodErz+0HWi7i/2l+mKeQKda9jne
+         3wwhPXTHqokS3xWX4655NL30hnW0ifZXEH85TTEKwFblrHpWgb2d2tXuulQYJwoglt
+         Zist/UvhMfPFDOOVSF1C3BAqaE63EJ1aSbfDBopCfszheoe1tATJDUSgJAZpENvifs
+         HmcH+gQ4bwSaSt1pFeUi+2EYNQR77nwX9L0l4CcgNUmLTDsJD6I03zJqucSpskx403
+         U9uvGpkrmdwRa51socFiI5tNYFBk7CILz/ObpKNO2LMBD/90zH4edl7X7ptdaohYwG
+         snREHz7IobqXg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     krzysztof.kozlowski+dt@linaro.org
+Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, chen.zhong@mediatek.com,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 0/2] MediaTek PMIC Keys - DT schema conversion
+Date:   Wed, 14 Sep 2022 12:20:57 +0200
+Message-Id: <20220914102059.41757-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914101829.82000-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 06:18:29PM +0800, Jiapeng Chong wrote:
-> mte_set_full and mte_clear_full are defined in the maple_tree.c file,
-> but not called elsewhere, so delete these unused function.
-> 
-> lib/maple_tree.c:330:20: warning: unused function 'mte_set_full'.
-> lib/maple_tree.c:335:20: warning: unused function 'mte_clear_full'.
+This series converts the old mtk-pmic-keys.txt binding to DT schema,
+documents the missing support for key press/release interrupts and
+adds a compatible for the newly introduced MT6331 keys.
 
-They're not used now, but they will be in a release or two.  They're
-static inline functions; keeping them as part of the orthogonal API
-costs nothing when they're not used.
+AngeloGioacchino Del Regno (2):
+  dt-bindings: input: Convert mtk-pmic-keys to DT schema
+  dt-bindings: input: mediatek,pmic-keys: Add compatible for MT6331 keys
+
+ .../bindings/input/mediatek,pmic-keys.yaml    | 118 ++++++++++++++++++
+ .../bindings/input/mtk-pmic-keys.txt          |  46 -------
+ 2 files changed, 118 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
+ delete mode 100644 Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+
+-- 
+2.37.2
+
