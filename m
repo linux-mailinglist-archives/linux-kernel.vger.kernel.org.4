@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD545B8202
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0E75B8212
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiINH10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 03:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S229935AbiINHgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 03:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiINH1X (ORCPT
+        with ESMTP id S229624AbiINHgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 03:27:23 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC146BD6F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:27:21 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 14 Sep 2022 03:36:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95126F578;
+        Wed, 14 Sep 2022 00:36:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 0B3B516AE;
-        Wed, 14 Sep 2022 09:27:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663140440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HLwD8obQ6Qt890iBeArYKjMU9g5TO/AqEdCfATpDT6U=;
-        b=Ad/dKRr2NUbPX1thLzfT8L6p6n6se2nT6bH9HclcRw3hlWtyEQoHLcRT76mGCGHfbnI/C4
-        nkG3mplSPe12ExgM7fUebzXlQQJNZqGTfqOuLuTZebwUzpxn+4N9DmgVU8LtAzHVLdilZi
-        5baAtkEqOZf+yhmFYHCRF3jwHJ9TQi3mbP6ZDcNP6l5Qknw3s6EAcVL0gWVnBvxXaBJSOh
-        YZa9spwwiZEiSSsusDCpe1LhOAFFle0Oi7DYZS2TxsI8odjhlZm/gs+5mog6GbZY7J1Vek
-        13c/GeRjGoEe/TBy45/CPS4CKblHrTECnT5ILStkJp3HjzFnIgZrqI3ACRLwJA==
-MIME-Version: 1.0
-Date:   Wed, 14 Sep 2022 09:27:19 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Yaliang Wang <Yaliang.Wang@windriver.com>
-Cc:     tudor.ambarus@microchip.com, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: gigadevice: gd25q256: replace
- gd25q256_default_init with gd25q256_post_bfpt
-In-Reply-To: <948d4846-dd7e-04a3-51e7-588d266cc28e@windriver.com>
-References: <20220913084023.2451929-1-yaliang.wang@windriver.com>
- <MN2PR17MB3375BC0E5878B19651475413B8479@MN2PR17MB3375.namprd17.prod.outlook.com>
- <948d4846-dd7e-04a3-51e7-588d266cc28e@windriver.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9b87331960933687145688308e2ab97a@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A4F61881;
+        Wed, 14 Sep 2022 07:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCBEC433C1;
+        Wed, 14 Sep 2022 07:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663140972;
+        bh=IK+sH3QSrIycceGMic8thKb+8m0Xw/BFicylOS/DMBU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VvMlry7C4hTs+P56PrpHDrb9Xv90qazfOIwbg3iluIxlPNMD0sdD/bx8lFQ9ekfXa
+         9Y6ClLjHHedmHlYSGLWdZJj/qUfd9Onvm4T0qa1gBQnpCge3P3rxqjLsrabghbffHY
+         33hFj7IyiXROpthcB/fwX+KCRJnhEE6isFzOTceJ3NagPkL0faQmi4JlETbgA14EZp
+         FHJMUKvfhm8SL8i3yjxd0cxxcptkco3QhqEY258s2v1JmUzDGCUTWbuVsxdue2bzXM
+         JBHkarUrFfw9aaPvAh3DSy80LYfwN5Jqsk038QBUxe8KVkBpmyRnsCENZ9CcKw8lFe
+         AOng625ITvMfA==
+Received: from [79.140.208.123] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oYMwM-00A7xy-7Y;
+        Wed, 14 Sep 2022 08:36:10 +0100
+Date:   Wed, 14 Sep 2022 08:35:22 +0100
+Message-ID: <87zgf2l879.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpio: tpmx86: fix uninitialized variable girq
+In-Reply-To: <20220914051842.69776-1-dzm91@hust.edu.cn>
+References: <20220914051842.69776-1-dzm91@hust.edu.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 79.140.208.123
+X-SA-Exim-Rcpt-To: dzm91@hust.edu.cn, linus.walleij@linaro.org, brgl@bgdev.pl, mudongliangabcd@gmail.com, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-14 05:05, schrieb Yaliang Wang:
-> In case the mail list can't receive the email, I'd like to send the 
-> email again.
+On Wed, 14 Sep 2022 06:18:42 +0100,
+Dongliang Mu <dzm91@hust.edu.cn> wrote:
 > 
-> Sorry, I didn't make it clear.
-> I'm doing this because the flash info member parse_sfdp is initialized
-> to "true" by PARSE_SFDP macro, as you can see below
->         { "gd25q256", INFO(0xc84019, 0, 64 * 1024, 512)
->                 PARSE_SFDP
->                 FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | 
-> SPI_NOR_TB_SR_BIT6)
->                 FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
->                 .fixups = &gd25q256_fixups },
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> And when parse_sfdp is true, the function spi_nor_init_params() will
-> call spi_nor_parse_sfdp() to initialize the parameters, and I can't
-> see any other place to call the original default_init() hook in the
-> fixups other than in spi_nor_init_params_deprecated()  ->
-> spi_nor_manufacturer_init_params().
+> The commit 924610607f19 ("gpio: tpmx86: Move PM device over to
+> irq domain") adds a dereference of girq that may be uninitialized.
 > 
-> After checking the history of why we are adding this, that is to say
-> the commit 48e4d973aefe ("mtd: spi-nor: Add a default_init() fixup
-> hook for gd25q256") and the corresponding disscusions, I believe it
-> was added for some reason, and we need to add back this function.
+> Fix this by initializing girq and checking irq before invoking
+> irq_domain_set_pm_device.
 > 
-> On 9/13/22 18:46, Vanessa Page wrote:
->> **[Please note: This e-mail is from an EXTERNAL e-mail address]
->> 
->> Why are you doing this?
+> Fixes: 924610607f19 ("gpio: tpmx86: Move PM device over to irq domain")
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/gpio/gpio-tqmx86.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-tqmx86.c b/drivers/gpio/gpio-tqmx86.c
+> index fa4bc7481f9a..bdef182c11c2 100644
+> --- a/drivers/gpio/gpio-tqmx86.c
+> +++ b/drivers/gpio/gpio-tqmx86.c
+> @@ -231,7 +231,7 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct tqmx86_gpio_data *gpio;
+>  	struct gpio_chip *chip;
+> -	struct gpio_irq_chip *girq;
+> +	struct gpio_irq_chip *girq = NULL;
+>  	void __iomem *io_base;
+>  	struct resource *res;
+>  	int ret, irq;
+> @@ -315,7 +315,9 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
+>  		goto out_pm_dis;
+>  	}
+>  
+> -	irq_domain_set_pm_device(girq->domain, dev);
+> +	if (girq) {
+> +		irq_domain_set_pm_device(girq->domain, dev);
+> +	}
+>  
+>  	dev_info(dev, "GPIO functionality initialized with %d pins\n",
+>  		 chip->ngpio);
 
-Vanessa Page is a bot/troll.
+I wonder if a better fix wouldn't be to directly hoist the
+irq_domain_set_pm_device() call into the 'if (irq > 0)' block.
 
--michael
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
