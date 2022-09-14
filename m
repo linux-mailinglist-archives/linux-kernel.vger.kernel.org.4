@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C871D5B8C11
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A08A5B8C0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiINPk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S230344AbiINPkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiINPkC (ORCPT
+        with ESMTP id S230305AbiINPj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:40:02 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8066AA3E;
-        Wed, 14 Sep 2022 08:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gOLBlb9Twt2TVyi5QU0OEVORWi4d1OG8YQSlE6qjmQI=; b=CNSOrwQV8vwpuT7NrFT64kb16a
-        84RpgkIOOH6vzLgiPVCttzaggrt7uDhdBHsZsSAIxqXyr8ONlD+ppRrBRZM9/t6owAuczFx017TbW
-        JwlHTWJOU8dtSaTvBVQ8XI+43bvv+EP4qocVXdfkuKGmgY353v1GK68IOfy1mdJ93dxLeuGBIt5Ed
-        6OO/MhlV8oVx7QeipfGSkMGVoRSuP2ApbHHcYD0Vg2N37+G9euMcfNPBDdNKcawcxYVkxPgIY8OmT
-        UiRm1QmfVzwlXgEQZeVokbab1Ss8GPe7gCNgwNC4pUIcxU5reS1sjRjL+F8LHA1T2HW9qNnIVdblj
-        D6o8Gy8Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34320)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oYUSW-0004Y6-Ol; Wed, 14 Sep 2022 16:37:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oYUSS-0001kz-Vo; Wed, 14 Sep 2022 16:37:48 +0100
-Date:   Wed, 14 Sep 2022 16:37:48 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
-        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kishon@ti.com
-Subject: Re: [PATCH 2/8] net: ethernet: ti: am65-cpsw: Add support for SERDES
- configuration
-Message-ID: <YyH1TH0UqCzN37J2@shell.armlinux.org.uk>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-3-s-vadapalli@ti.com>
+        Wed, 14 Sep 2022 11:39:57 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2543082766
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 08:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663169864; x=1694705864;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mp+Gy0qe2NXbWxeR7oFPdPYF1BnHp4QYcgJix1ZqC/U=;
+  b=OISA7zm99EtMt61ffME6IyAV/J5EOIUib6KQ6IP0qhaf37M7vNLeIfKO
+   N8G4vzsRgikcB6BAQQeoYgjv0W//PZtCcmJuh0PJ3vNKGhPRXtL+CB+c7
+   2AF/ea6xCQW6DzkfoEvNaPd+3hXlAbeW938gSy/bRUWFOYMtDbyS0moio
+   pkbgmF+BdLluanyY3xcjq6gJW4Q8pyl1hQOrCsIjpHM98k0M2UzxF2LAo
+   DLSbnZNIR5WTjb8A/ujjryCDCyRD6xEQo2FyYXm/IkVnYGa4ydxGmhmIJ
+   F3fGDnmY1WENpluegFf5ZSJN2OtoGh37oOuVbp9yLdkSqr0y8dXco5Hf9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324714760"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="324714760"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 08:37:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="650116641"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 14 Sep 2022 08:37:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 235DBF7; Wed, 14 Sep 2022 18:37:58 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH v1 1/1] HSI: nokia-modem: Replace of_gpio_count() by gpiod_count()
+Date:   Wed, 14 Sep 2022 18:37:55 +0300
+Message-Id: <20220914153755.37866-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914095053.189851-3-s-vadapalli@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,23 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 03:20:47PM +0530, Siddharth Vadapalli wrote:
-> @@ -1427,6 +1471,9 @@ static void am65_cpsw_nuss_mac_link_down(struct phylink_config *config, unsigned
->  	struct net_device *ndev = port->ndev;
->  	int tmo;
->  
-> +	/* disable phy */
-> +	am65_cpsw_disable_phy(port->slave.ifphy);
-> +
+As a preparation to unexport of_gpio_named_count(), convert the
+driver to use gpiod_count() instead.
 
-This seems really strange. If you have a serdes interface which
-presumably supports SGMII, 1000base-X etc, then link status is sent
-across the serdes interface. If you power down the serdes, then you
-can't receive the link status, and so mac_link_up() won't be called.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hsi/clients/nokia-modem.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Are you really sure you want to be enabling and disabling the PHY
-in mac_link_down()/mac_link_up() ?
-
+diff --git a/drivers/hsi/clients/nokia-modem.c b/drivers/hsi/clients/nokia-modem.c
+index cd7ebf4c2e2f..97ba59e60663 100644
+--- a/drivers/hsi/clients/nokia-modem.c
++++ b/drivers/hsi/clients/nokia-modem.c
+@@ -13,7 +13,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_gpio.h>
+ #include <linux/hsi/ssi_protocol.h>
+ 
+ static unsigned int pm = 1;
+@@ -75,8 +74,7 @@ static int nokia_modem_gpio_probe(struct device *dev)
+ 	struct nokia_modem_device *modem = dev_get_drvdata(dev);
+ 	int gpio_count, gpio_name_count, i, err;
+ 
+-	gpio_count = of_gpio_count(np);
+-
++	gpio_count = gpiod_count(dev, NULL);
+ 	if (gpio_count < 0) {
+ 		dev_err(dev, "missing gpios: %d\n", gpio_count);
+ 		return gpio_count;
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.35.1
+
