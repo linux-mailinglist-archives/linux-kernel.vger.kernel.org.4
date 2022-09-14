@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831815B864E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8485B8650
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiINKZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S229902AbiINKZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiINKZI (ORCPT
+        with ESMTP id S229913AbiINKZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:25:08 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277297C1E7;
-        Wed, 14 Sep 2022 03:25:01 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E8HCWA026887;
-        Wed, 14 Sep 2022 10:24:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=j3pw1Y0Ys1MP/+aw6F95BVTxpyNSJqiCaRwtAXg6jLM=;
- b=CWFBjVHEviOKEmLOpoV8FMjojkIAWPAGx6XpMTUzKi9Pb3MGpX+smh0nc2zNO7FkU/Do
- LwOuRzrh8lSn7Ki8ViursAeJA9eva9Vm1AkM1g5pWA3jIMNzWG+cZyQ9wptLHsDJPKcM
- VInvrMTqxTQpCJnmeAN2qFU8k+geqxZtghnkNTX002UDYqV2nfCORBnl8fz9AS6wvtfN
- 6xnGjl8Uk+Tia00q3lmGkgfzsgB/WGHDRA74nfSIpRAQfP038J4skA0Cl00+vikABwml
- AkS8i9OMAe4wd1sJ7Mww47vKIuF0LALdVSbq4SKXLYJry84HajAIw7LHfC7/lmM9ppln Uw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxyua6ev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 10:24:49 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28EAJq0H001035;
-        Wed, 14 Sep 2022 10:24:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jh430w6tp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 10:24:48 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28EAOm7o006620;
-        Wed, 14 Sep 2022 10:24:48 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 28EAOmXc006619
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 10:24:48 +0000
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
- 2022 03:24:43 -0700
-Subject: Re: [PATCH 2/4] remoteproc: sysmon: Make QMI message rules const
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
- <20220912232526.27427-2-quic_jjohnson@quicinc.com>
- <20220912232526.27427-3-quic_jjohnson@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <c98d4256-0650-a3b8-4be2-713e0e27d434@quicinc.com>
-Date:   Wed, 14 Sep 2022 15:54:41 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 14 Sep 2022 06:25:35 -0400
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907AB7CB73
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:25:32 -0700 (PDT)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 6F1D310046B2B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:25:18 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id YPa1oujQILQShYPa2oLJ2w; Wed, 14 Sep 2022 10:25:18 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=SZEyytdu c=1 sm=1 tr=0 ts=6321ac0e
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=m3B_eOHTikhj6PlMeNoA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lch9f7nRNSaxR8ZTH3Gya7AO/BKlFBXxTtcb2dgBa8Y=; b=wl/gbnfQPZx6PTJqHLnajfdH3L
+        lpQ8ODQsX63a2HCSVGsvGAqtm7ZGDdCkNgwgiJ18Bo0EB5b3w2g4UqEEXwzIAPaHx2hnRPI7NpQHz
+        8jptdIrygF5838gcJ9+27wiFW1+FxDYMGl3UOtnWWAQ/dOAvy0dxcWp++Q+r+fE1GhTiUxGhMNsCK
+        RDHNxpCzelOATqm9W7dzElpeE4NfqkZHZPY3QMx0OdSBcbwpijkojWF3y/lVGtm3l/VxOyH8HACwg
+        st2TFKbtZAE5vZ9vmw6w6uBUz8zvQDkoZ5qzgJ7PxLYzOcwhp/I4hR/0zjwfGryEPnmfTwZADgU2G
+        pPmMGXUQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:44396 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oYPa0-001o9R-DE;
+        Wed, 14 Sep 2022 04:25:16 -0600
+Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <ce98b3c6-109e-0d87-5412-3bdd4813e4ea@w6rz.net>
+Date:   Wed, 14 Sep 2022 03:25:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220912232526.27427-3-quic_jjohnson@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TsVRwISeSFi2adI5WPResEpo7xt3rCJ3
-X-Proofpoint-ORIG-GUID: TsVRwISeSFi2adI5WPResEpo7xt3rCJ3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_03,2022-09-14_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- spamscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209140050
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oYPa0-001o9R-DE
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:44396
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/13/22 7:01 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.9 release.
+> There are 192 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On 9/13/22 4:55 AM, Jeff Johnson wrote:
-> Commit ff6d365898d ("soc: qcom: qmi: use const for struct
-> qmi_elem_info") allows QMI message encoding/decoding rules to be
-> const, so do that for sysmon.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Tested-by: Ron Economos <re@w6rz.net>
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-
-> ---
->   drivers/remoteproc/qcom_sysmon.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-> index 57dde2a69b9d..3992bb61d2ec 100644
-> --- a/drivers/remoteproc/qcom_sysmon.c
-> +++ b/drivers/remoteproc/qcom_sysmon.c
-> @@ -190,7 +190,7 @@ struct ssctl_shutdown_resp {
->   	struct qmi_response_type_v01 resp;
->   };
->   
-> -static struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
-> +static const struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
->   	{
->   		.data_type	= QMI_STRUCT,
->   		.elem_len	= 1,
-> @@ -211,7 +211,7 @@ struct ssctl_subsys_event_req {
->   	u32 evt_driven;
->   };
->   
-> -static struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
-> +static const struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
->   	{
->   		.data_type	= QMI_DATA_LEN,
->   		.elem_len	= 1,
-> @@ -269,7 +269,7 @@ struct ssctl_subsys_event_resp {
->   	struct qmi_response_type_v01 resp;
->   };
->   
-> -static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
-> +static const struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
->   	{
->   		.data_type	= QMI_STRUCT,
->   		.elem_len	= 1,
-> @@ -283,7 +283,7 @@ static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
->   	{}
->   };
->   
-> -static struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
-> +static const struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
->   	{}
->   };
->   
-> 
