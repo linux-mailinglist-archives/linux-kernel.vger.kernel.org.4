@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB075B90AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289D65B90AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiINW77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S229648AbiINXAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 19:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiINW74 (ORCPT
+        with ESMTP id S229838AbiINXAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:59:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C6313D6F;
-        Wed, 14 Sep 2022 15:59:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8CA1B81D01;
-        Wed, 14 Sep 2022 22:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7998BC433C1;
-        Wed, 14 Sep 2022 22:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663196392;
-        bh=oWqqdyBXsokNJ3n9bzT2vkSRtqN+2pGUWbS5nYnQsTg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WpA7MwY3qrlIOvQJuzLzBuUA0PTGT9Lnje7tnXMz3DteGiR1yFr8oPSS1l4qf9Akr
-         UzUsjPljRzimjKGqUdTNGUtywUef0Bz9EZhHQYgOt1YyXB5dQ1+hq9jNM3dSO6/hop
-         Uo4/a8KV2ySCM1korX2pji1Eaz8L6hq1yL27ztqg2hLAiue7aOgaSmqL5n91DV+kmP
-         56k5gVZDiF7f+jbQ7LfiX71LEVZWfWLEFbQK2Yf4VZXvuI4quEwcFOqipgsrYhAmAJ
-         +0auUWHy1k+ksil4SS5MtvBmgB9pOgg67AVs0XXE1O/OW4haDwKsvARseas6eRwAQK
-         XMMrPzi1sLjtQ==
-Received: by mail-wm1-f43.google.com with SMTP id o5so8593638wms.1;
-        Wed, 14 Sep 2022 15:59:52 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3B2+Dj+IBhIFO0KOi3kw6N8x2XUDiSe/FihtWzClYU2ppGPW0o
-        WLHvzEfJbfi4K9pyguuueC7i3/AgxE0TTF/56eU=
-X-Google-Smtp-Source: AA6agR7qaHmVQJjOn3ABWhUEKPyB5dmh5/6FOPhCQ93FD/FBWSx3finiKnKlWC/6fdcKkqMYciv4HAmIrP/+z1PjHoo=
-X-Received: by 2002:a05:600c:22d3:b0:3a8:424d:f386 with SMTP id
- 19-20020a05600c22d300b003a8424df386mr4636751wmg.57.1663196390712; Wed, 14 Sep
- 2022 15:59:50 -0700 (PDT)
+        Wed, 14 Sep 2022 19:00:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1823C62ABE;
+        Wed, 14 Sep 2022 16:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663196409; x=1694732409;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Gy5Kr1K0CD2RjOuPjSjaim0htKIdr+oZcI5W0+mLzZA=;
+  b=ngEIPv9r90EBFK7C19tsn8Ge0MjdFUlZSaedgLSxsM8CpQeS3nSpuWl6
+   KdCXcZaTKxmHvP9vy3B1SO/APqaY2OaAgJYe/o5A9sDzX7Wr+rY7kb/br
+   wCKbyOekKchmZZJ/tDotsdbdFpAaHUxRStapNzZG9QpOCJfmJC04GCI+e
+   zWlUMracmp4Z+xS1MZFOD58/mwat/XosTlUkNQMpThB+uh2Sbq9kbCzMA
+   se7F3wx0Bwkurpc7dvNcoFotzeizVukkuaGYXCR4iGd2aga/82UeUshm+
+   GP8lUe6DJIa8Lk0vzD61SM2HlHA+hPWOdciSTHb56k2Bz8RKjHYJ6XLmM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="297288772"
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="297288772"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:00:07 -0700
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="594575591"
+Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:00:07 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 04/13] net/sched: taprio: allow user input of
+ per-tc max SDU
+In-Reply-To: <20220914221042.oenxhxacgt2xsb2k@skbuf>
+References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
+ <20220914153303.1792444-5-vladimir.oltean@nxp.com>
+ <87k065iqe1.fsf@intel.com> <20220914221042.oenxhxacgt2xsb2k@skbuf>
+Date:   Wed, 14 Sep 2022 16:00:07 -0700
+Message-ID: <871qsdimtk.fsf@intel.com>
 MIME-Version: 1.0
-References: <43b68b1f48c20b1dfcd7e6663c3dcb38e4e0648c.1663020936.git.objelf@gmail.com>
- <8c734b83-aa2a-83a6-cb12-28e36ace2bbb@collabora.com>
-In-Reply-To: <8c734b83-aa2a-83a6-cb12-28e36ace2bbb@collabora.com>
-From:   Sean Wang <sean.wang@kernel.org>
-Date:   Wed, 14 Sep 2022 15:59:38 -0700
-X-Gmail-Original-Message-ID: <CAGp9Lzq5LrDi0qgOOWFXtGJObYEyxsMz=M_UBObwstBc9p+1=g@mail.gmail.com>
-Message-ID: <CAGp9Lzq5LrDi0qgOOWFXtGJObYEyxsMz=M_UBObwstBc9p+1=g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] Bluetooth: btusb: mediatek: use readx_poll_timeout
- instead of open coding
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,86 +89,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Angelo,
+Vladimir Oltean <vladimir.oltean@nxp.com> writes:
 
-On Tue, Sep 13, 2022 at 1:04 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+> On Wed, Sep 14, 2022 at 02:43:02PM -0700, Vinicius Costa Gomes wrote:
+>> > @@ -416,6 +417,9 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>> >  			      struct Qdisc *child, struct sk_buff **to_free)
+>> >  {
+>> >  	struct taprio_sched *q = qdisc_priv(sch);
+>> > +	struct net_device *dev = qdisc_dev(sch);
+>> > +	int prio = skb->priority;
+>> > +	u8 tc;
+>> >  
+>> >  	/* sk_flags are only safe to use on full sockets. */
+>> >  	if (skb->sk && sk_fullsock(skb->sk) && sock_flag(skb->sk, SOCK_TXTIME)) {
+>> > @@ -427,6 +431,12 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>> >  			return qdisc_drop(skb, sch, to_free);
+>> >  	}
+>> >  
+>> > +	/* Devices with full offload are expected to honor this in hardware */
+>> > +	tc = netdev_get_prio_tc_map(dev, prio);
+>> > +	if (q->max_sdu[tc] &&
+>> > +	    q->max_sdu[tc] < max_t(int, 0, skb->len - skb_mac_header_len(skb)))
+>> > +		return qdisc_drop(skb, sch, to_free);
+>> > +
+>> 
+>> One minor idea, perhaps if you initialize q->max_sdu[] with a value that
+>> you could use to compare here (2^32 - 1), this comparison could be
+>> simplified. The issue is that that value would become invalid for a
+>> maximum SDU, not a problem for ethernet.
 >
-> Il 13/09/22 00:18, sean.wang@mediatek.com ha scritto:
-> > From: Sean Wang <sean.wang@mediatek.com>
-> >
-> > Use readx_poll_timeout instead of open coding to poll the hardware reset
-> > status until it is done.
-> >
-> > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->
-> Hello Sean, thanks for the patch!
-> However, there's something to improve...
->
-> > ---
-> >   drivers/bluetooth/btusb.c | 32 ++++++++++++++++++--------------
-> >   1 file changed, 18 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> > index c3daba17de7f..4dc9cae3e937 100644
-> > --- a/drivers/bluetooth/btusb.c
-> > +++ b/drivers/bluetooth/btusb.c
->
-> ..snip..
->
-> > @@ -2910,18 +2918,14 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
-> >       btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
-> >       btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
-> >
-> > -     /* Poll the register until reset is completed */
-> > -     do {
-> > -             btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
-> > -             if (val & MTK_BT_RST_DONE) {
-> > -                     bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
-> > -                     break;
-> > -             }
-> > +     err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
-> > +                              val & MTK_BT_RST_DONE,
-> > +                              100000, 1000000);
->
-> I agree with using readx_poll_timeout() instead of open coding the same, but
-> there's a catch: this macro uses usleep_range(), which is meant to be used
-> for sleeping less than ~20ms.
->
-> Even the kerneldoc at include/linux/iopoll.h advertises that:
->
->   * @sleep_us: Maximum time to sleep between reads in us (0
->   *            tight-loops).  Should be less than ~20ms since usleep_range
->   *            is used (see Documentation/timers/timers-howto.rst).
->
-> So, if there's any reason for which you can't sleep for less than 100ms
-> per iteration, I'm afraid that you can't use readx_poll_timeout()...
-> ...otherwise, please change sleep_us to 20000 and keep the timeout at 1 sec.
->
+> Could do (and the fact that U32_MAX becomes a reserved value shouldn't
+> be a problem for any linklayer), but if I optimize the code for this one
+> place, I need, in turn, to increase the complexity in the netlink dump
+> and in the offload procedures, to hide what I've done.
 
-It should be able to be done with polling in 20ms until 1 sec expires
-or it is done. It increases some cost in the bus transaction
-interacting with the device, but it seemed fine for me because the
-code path is cold, it is only working in the device reset which should
-rarely happen, and only involves when it is really necessary. That is
-a nice catch. I was trying not to break the existing logic
-but overlooked the requirements of the API.
+Hm, I just noticed something.
 
-    Sean
+During parse the user only sets the max-sdu for the traffic classes she
+is interested on. During dump you are showing all of them, the unset
+ones will be shown as zero, that seems a bit confusing, which could mean
+that you would have to add some checks anyway.
 
-> Regards,
-> Angelo
+For the offload side, you could just document that U32_MAX means unset.
+
 >
-> > +     if (err < 0)
-> > +             bt_dev_err(hdev, "Reset timeout");
-> >
-> > -             bt_dev_dbg(hdev, "Polling Bluetooth Reset CR");
-> > -             retry++;
-> > -             msleep(MTK_BT_RESET_WAIT_MS);
-> > -     } while (retry < MTK_BT_RESET_NUM_TRIES);
-> > +     if (val & MTK_BT_RST_DONE)
-> > +             bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
-> >
-> >       btusb_mtk_id_get(data, 0x70010200, &val);
-> >       if (!val)
->
+> If I look at the difference in generated code, maybe it's worth it
+> (I get rid of a "cbz" instruction). Maybe it's worth simply creating a
+> shadow array of q->max_sdu[], but which is also adjusted for something
+> like dev->hard_header_len (also a fast path invariant)? This way, we
+> could only check for q->max_frm_len[tc] > skb->len and save even more
+> checks in the fast path.
+
+-- 
+Vinicius
