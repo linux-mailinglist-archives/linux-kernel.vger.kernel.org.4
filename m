@@ -2,57 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7B35B86FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D525B8707
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 13:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiINLGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 07:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S229780AbiINLJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 07:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiINLFp (ORCPT
+        with ESMTP id S229657AbiINLJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 07:05:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20582EF1F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:05:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85BC7B819DC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD86C433D6;
-        Wed, 14 Sep 2022 11:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663153541;
-        bh=gsGR7uK+L91dwepl01aajzxbTPAj28CNr4QvBuBbOZc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b9ZZcpIBGW+YRWtWA6iJZw/yJM9Pdf5dyjp8rj0g9HUACJikOfGtjb671ufB7eMEU
-         bEO2bzcHnPfsreK5gugUEs7XD+vNyMD5F8ziE6IcvVTtsRR8b0sEikKFC2F69wQX5h
-         0viMgSglWioQrHmgYxj5VE02hcsPhjj7PXNz+9wh+DS8aRSngA7a+xzKCByx472+rt
-         2xHTcrCLo++71bfBiQTBOBOJOiS17kgPOft3ei88tBzqnTUgwiWMjl1em3CpFr91OA
-         u1E0T4EwgavnwRB0M3B8gELOpNKQJsKHef1L4BDy8WGIp+b6FLa/atluvHNJJWCVOC
-         Faf+HySCxIOuA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Brian Norris <briannorris@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-In-Reply-To: <20220914031234.2250298-1-judyhsiao@chromium.org>
-References: <20220914031234.2250298-1-judyhsiao@chromium.org>
-Subject: Re: [PATCH v2] ASoC: rockchip: i2s: use regmap_read_poll_timeout to poll I2S_CLR
-Message-Id: <166315353882.340317.4308348397044706944.b4-ty@kernel.org>
-Date:   Wed, 14 Sep 2022 12:05:38 +0100
+        Wed, 14 Sep 2022 07:09:48 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F57248C3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 04:09:48 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MSHZ42r71zlVkh;
+        Wed, 14 Sep 2022 19:05:48 +0800 (CST)
+Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 19:09:46 +0800
+From:   Zhang Jianhua <chris.zjh@huawei.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>, <samuel@sholland.org>,
+        <brgl@bgdev.pl>, <mark.rutland@arm.com>, <lvjianmin@loongson.cn>
+CC:     <chris.zjh@huawei.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] genirq: Change can_request_irq() return value type to bool
+Date:   Wed, 14 Sep 2022 19:06:15 +0800
+Message-ID: <20220914110615.3570933-1-chris.zjh@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-7dade
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.96]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,37 +46,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 03:12:34 +0000, Judy Hsiao wrote:
-> Use regmap_read_poll_timeout to poll I2S_CLR.
-> It also fixes the 'rockchip-i2s ff070000.i2s; fail to clear' when
-> the read of I2S_CLR exceeds the retry limit.
-> 
-> 
+The function can_request_irq() is used to judge whether the irq can be
+allocated, so bool type would be more suitable for it.
 
-Applied to
+Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+---
+ include/linux/irq.h | 2 +-
+ kernel/irq/manage.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-   broonie/sound.git for-next
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index c3eb89606c2b..3a60c2313fb9 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -707,7 +707,7 @@ extern void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret);
+ extern int noirqdebug_setup(char *str);
+ 
+ /* Checks whether the interrupt can be requested by request_irq(): */
+-extern int can_request_irq(unsigned int irq, unsigned long irqflags);
++extern bool can_request_irq(unsigned int irq, unsigned long irqflags);
+ 
+ /* Dummy irq-chip implementations: */
+ extern struct irq_chip no_irq_chip;
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 40fe7806cc8c..d6940d15bf56 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -925,19 +925,19 @@ EXPORT_SYMBOL(irq_set_irq_wake);
+  * particular irq has been exclusively allocated or is available
+  * for driver use.
+  */
+-int can_request_irq(unsigned int irq, unsigned long irqflags)
++bool can_request_irq(unsigned int irq, unsigned long irqflags)
+ {
+ 	unsigned long flags;
+ 	struct irq_desc *desc = irq_get_desc_lock(irq, &flags, 0);
+-	int canrequest = 0;
++	bool canrequest = false;
+ 
+ 	if (!desc)
+-		return 0;
++		return false;
+ 
+ 	if (irq_settings_can_request(desc)) {
+ 		if (!desc->action ||
+ 		    irqflags & desc->action->flags & IRQF_SHARED)
+-			canrequest = 1;
++			canrequest = true;
+ 	}
+ 	irq_put_desc_unlock(desc, flags);
+ 	return canrequest;
+-- 
+2.31.0
 
-Thanks!
-
-[1/1] ASoC: rockchip: i2s: use regmap_read_poll_timeout to poll I2S_CLR
-      commit: fbb0ec656ee5ee43b4b3022fd8290707265c52df
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
