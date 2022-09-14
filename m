@@ -2,157 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA355B88E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068025B88DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiINNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S229773AbiINNMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiINNNA (ORCPT
+        with ESMTP id S229510AbiINNMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:13:00 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464AE520A7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:58 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso2233474wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:58 -0700 (PDT)
+        Wed, 14 Sep 2022 09:12:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755994F3A6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:41 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y3so34668957ejc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=c+CXqJzxevLGaFZnXFMUkD0mAJpWpY3HHP1XZ4X/APE=;
-        b=u+XT01IjaCLCz8d+8m02RUkMURuAC7Y57T1yTElVAjMz9t6zu9QTskZ5/QAmrc65fk
-         lSi/+v5aP2KayImK4B6PQOyCfqr422Y/WnQZZMKdLnyBKnRaDW118CY5G8nnn4yzS84Y
-         F2ZQBm+0A+DPolf9fdy4KYUeGvJiBd7S5fkVlnJx1NoDK/vWe+/NqmcHWiWbtDq5OoiB
-         +/40yL0rksS9xZhUCsMiCJqryi6y50sPhTWQtMYdiRtei42pIpTMo9rmdope+0sUSVoV
-         f8582kLOEaWVVhco8EAP9WW3fKhgqLEBrj5NqpyEMw9ZT3waIpijMBbB5Hcv5/weOgm/
-         mgTw==
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ib5mswjR1x7cIBGgOeaYy3ofTlgkjtf1YQmH317wwYc=;
+        b=EyGvls+PPR5gSq51ImovQ9Aykw+f1UwYvKrRnvXUiUMLmdsoj3OZKautZPAbv6yI4S
+         c05fPCDH/izs82miJZsc7xYU6USh/RTsgrfHyuphN64PJYH3IwytNrBNkVgofyZ4MDix
+         +DVuyNg81rdHSCkfrAzOD4MJbUQ6lT2C4FvAI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=c+CXqJzxevLGaFZnXFMUkD0mAJpWpY3HHP1XZ4X/APE=;
-        b=qzNPBs3xfe1Zlxxnm0n38a2BfaxySeW+3fa6TwykpLMmlvgwnFeYsChVhkZ4Fe9n0f
-         jw8Wo7BOyQZ65OxKGy6LgVe2u6lnviSVUGYMJJCI9OcCt/hj/X5cusGg5mq7adkB3l7u
-         s9UqWXFLIrjbWYRJU2eT7S0u34T2moAJlhR/E1Xcpnwasp32fYdavk5KP2O6Hfilvvaf
-         n+ALRpZTXHIpYmPuwRi1sYZKFViDJIa9SMVfNAd9lzvEPbXhA1nZPuB7rJ9fq1FDeLr/
-         fB3F0kK6rEILSu27JO9y8IjRUimpl7Za7yGzj93rNLYAzuqYTklk2BcSLLzH363uMPJs
-         TbDg==
-X-Gm-Message-State: ACgBeo2c1bkKObm3XrWHxUivmVSnDiOORRc6akHr3dHL7R2PXIcTSH0x
-        oFou2eairUg2X7ADkoV04K9rDg==
-X-Google-Smtp-Source: AA6agR6AhmsKmw9U1RIEhuPZ5xg6Jj809FQ9MFO5psrfyvEWyVwyGP/mSb/5Gtm2SZ+pZAziD10o8A==
-X-Received: by 2002:a05:600c:1ca0:b0:3a8:41cf:a31f with SMTP id k32-20020a05600c1ca000b003a841cfa31fmr3115606wms.161.1663161176590;
-        Wed, 14 Sep 2022 06:12:56 -0700 (PDT)
-Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id c6-20020adffb46000000b0022acb7195aesm970605wrs.33.2022.09.14.06.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 06:12:56 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: 
-Date:   Wed, 14 Sep 2022 15:12:19 +0200
-Message-Id: <20220914131219.18236-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.3
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ib5mswjR1x7cIBGgOeaYy3ofTlgkjtf1YQmH317wwYc=;
+        b=DFquBvawVJJ2zJjBxl2BAzars3Nz5jTS5NF4dhPFQ3CpS400/ZGwl3OIsusvjbBBpC
+         ov+xrz+Tm0nZb2zscPwfGOhfIm5qQbmumdvjGvWeMHEsFZKz8wLNX936LMvwqg9K+J0J
+         sY2i+mY9x7j0CKBKrDBge51qBiBGWqTbX6DGrpFhb6WnOlcNVTrAkHFGrX3SRC3uKQCi
+         DUHKLbcIyCU0aO1MzrJvhQJi8MUeIzZZX3aSGDmO6Ij5r+m6hH+SKN4xaqUshnZuDltV
+         xmC4arCNfRIpqeFbAF4jX1e840X7L1GkezMR7NOK4CXOnFMHvUNEoYR0mQcbm6daFpZy
+         G7jg==
+X-Gm-Message-State: ACgBeo1qwtFhnlRtjzarvh2M4tmzLJzs1uHTRqHaINQNaHwvd4fJ8Ffh
+        Ruq2SdTutCCmT6uY5lum/Fh71bLYzq52Y9aSiWa3jw==
+X-Google-Smtp-Source: AA6agR7HbQRqYLgqzMyg41PD/aaS4tbp5xqGmUix+XS3s2ihXKF7L99Xf7M2vZLQ4r9NymjcYSMHaJ+RBBpZ6aWhRRE=
+X-Received: by 2002:a17:907:c23:b0:779:237a:4218 with SMTP id
+ ga35-20020a1709070c2300b00779237a4218mr19917347ejc.277.1663161159807; Wed, 14
+ Sep 2022 06:12:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220914122429.8770-1-adrian.hunter@intel.com>
+In-Reply-To: <20220914122429.8770-1-adrian.hunter@intel.com>
+From:   Daniel Dao <dqminh@cloudflare.com>
+Date:   Wed, 14 Sep 2022 14:12:29 +0100
+Message-ID: <CA+wXwBRN3kJLVxVupLLXTBC_GbSzvmDch4ry2jWW2aqZXJgp2w@mail.gmail.com>
+Subject: Re: [PATCH] perf kcore_copy: Do not check /proc/modules is unchanged
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones without
- trips.
+On Wed, Sep 14, 2022 at 1:24 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> /proc/kallsyms and /proc/modules are compared before and after the copy
+> in order to ensure no changes during the copy. However /proc/modules
+> also might change due to reference counts changing even though that
+> does not make any difference. Any modules loaded or unloaded should be
+> visible in changes to kallsyms, so it is not necessary to check
+> /proc/modules also anyway.
+>
+> Remove the comparison checking that /proc/modules is unchanged.
+>
+> Reported-by: Daniel Dao <dqminh@cloudflare.com>
+> Fixes: fc1b691d7651 ("perf buildid-cache: Add ability to add kcore to the cache")
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/util/symbol-elf.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+> index 75bec32d4f57..647b7dff8ef3 100644
+> --- a/tools/perf/util/symbol-elf.c
+> +++ b/tools/perf/util/symbol-elf.c
+> @@ -2102,8 +2102,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
+>   * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
+>   * is not the same for the kernel map and the modules map.  That happens because
+>   * the data is copied adjacently whereas the original kcore has gaps.  Finally,
+> - * kallsyms and modules files are compared with their copies to check that
+> - * modules have not been loaded or unloaded while the copies were taking place.
+> + * kallsyms file is compared with its copy to check that modules have not been
+> + * loaded or unloaded while the copies were taking place.
+>   *
+>   * Return: %0 on success, %-1 on failure.
+>   */
+> @@ -2166,9 +2166,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
+>                         goto out_extract_close;
+>         }
+>
+> -       if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
+> -               goto out_extract_close;
+> -
+>         if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
+>                 goto out_extract_close;
+>
+> --
+> 2.25.1
+>
+Thanks Adrian,
 
-Thermal zones without trip point are not registered by thermal core.
-
-tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
-only but are not supposed to remain on DT.
-
-Remove the zones above and keep only cpu_thermal.
-
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 57 ------------------------
- 1 file changed, 57 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 9d32871973a2..f65fae8939de 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1182,63 +1182,6 @@ THERMAL_NO_LIMIT
- 					};
- 				};
- 			};
--
--			/* The tzts1 ~ tzts6 don't need to polling */
--			/* The tzts1 ~ tzts6 don't need to thermal throttle */
--
--			tzts1: tzts1 {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 1>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
--
--			tzts2: tzts2 {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 2>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
--
--			tzts3: tzts3 {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 3>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
--
--			tzts4: tzts4 {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 4>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
--
--			tzts5: tzts5 {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 5>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
--
--			tztsABB: tztsABB {
--				polling-delay-passive = <0>;
--				polling-delay = <0>;
--				thermal-sensors = <&thermal 6>;
--				sustainable-power = <5000>;
--				trips {};
--				cooling-maps {};
--			};
- 		};
- 
- 		pwm0: pwm@1100e000 {
--- 
-2.37.3
-
+Tested-by: Daniel Dao <dqminh@cloudflare.com>
