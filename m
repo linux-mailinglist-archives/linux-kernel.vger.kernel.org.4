@@ -2,186 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C6E5B8F55
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467D95B8F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 21:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiINToe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 15:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S229673AbiINTrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 15:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiINToa (ORCPT
+        with ESMTP id S229539AbiINTq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 15:44:30 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28312B3E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:44:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id t14so27342636wrx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 12:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=YTsYGZzhaRMoDOgNfzuhnR52+qccmbYkM+d60yg4Y1o=;
-        b=rc+mHPUzZAS2vaOMbc+ho7YHBG6KDEr4WTDkzwNDL0gxKp6i5o6efQIKDl8MVjCkyp
-         SDdCy7XR0H1SXxE22Txl/z622N2tIr7mI4YdTIwEYE9Z1d3CoVS3404Dj1AGaLK4rTHy
-         fPXLz/c5SN7bK6yuNa42AWpsuABfsCuMl+aGIsABOLYcy9IVXfGmh9ztlUefWnX81bpG
-         xChKHRapSNO/RFnek90S91Lh6nm4jKMBAk812ZPbc8GM60idFsqF63UnRtL4adtHlBjt
-         lhKD8sJso61h70U78ySAd/CBrFkIE4KoSTVDd944h70BZbIdFr5BmqrYyEDrCxdWBKtG
-         SsZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=YTsYGZzhaRMoDOgNfzuhnR52+qccmbYkM+d60yg4Y1o=;
-        b=neZMarn3PzKwHXfCTghAGdt+PumW/1P97hBOanZfHWjwDNTv5NtFUul+gd3ZqpTNE5
-         H9biyr6rq9d4zpudge86MiWujw1xEeu6llLD7UA49EWAstqTXr34W8jxfJDSsRubLU3+
-         g7IQp1XvIXit+3TQ4eBB7JxrnwLmM5taAqc1sFtSA0MKettPbZyeBp7YTCjNrsjs+pCb
-         PxPUenKr1tzBubOKOwp2LE+aSlPDmyN5+r8UxpL/eq3ySrdZyT2YsVEuT/Caz0KgrMfs
-         y40RUcxMiHK03/6Y/8D6qc+troluPFI8LR9zpO66PopZZuWjsSin4s5nZ8Ci5QC4oa9T
-         lFHw==
-X-Gm-Message-State: ACgBeo2qGsJyqChHlDAxo1wUBwH92y3DHILivSaYL0I4BQsRfn72dD/b
-        a/i9s8Vc5CjHtJgFWj+uG+C73A==
-X-Google-Smtp-Source: AA6agR7EL+x8pNTKbWUf5+XEsJ9MrMWoqCeAkvA4m6JWQ59HbDf/+G5IzKtN54Lh5GYaFanSNTBEGA==
-X-Received: by 2002:a05:6000:1866:b0:228:e373:ad68 with SMTP id d6-20020a056000186600b00228e373ad68mr21165175wri.605.1663184666639;
-        Wed, 14 Sep 2022 12:44:26 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id bi6-20020a05600c3d8600b003b339438733sm53756wmb.19.2022.09.14.12.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 12:44:25 -0700 (PDT)
-Message-ID: <6e9c94e7-3f0b-83bd-b419-db6c002f7d98@baylibre.com>
-Date:   Wed, 14 Sep 2022 21:44:24 +0200
+        Wed, 14 Sep 2022 15:46:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D1E30F79;
+        Wed, 14 Sep 2022 12:46:56 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EIEBvq023126;
+        Wed, 14 Sep 2022 19:46:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xNiK3gZS3pLIKa9JSGntXOA2XCRU+i8Esq3R9aBNaxw=;
+ b=RM/MLbXUac6dS9GkcfBkZX47qJRtjMyC/0aidBIDxrGAuwee7shy7iAeH7Pz5ZUzwgmB
+ g6yA2jvCZbkb0LOPHkzmU9e8Rf3YPfFJk8hIJFDrxnvV9lGkcQ05hviHJ/0iWJbtkRtE
+ v4rQ4VXlJbOFk8kysYgViDx7A/sU95t9/uXgjA1y2HrfVr3Ix3Ts/f6Tk3U3lWcX4v03
+ 9UX2h1Go2QNpnsxAomIjnczk93Z3+DQ9TxrHuzHsoDKD2WT+KeBsjaaQYA2KjkErwaIF
+ xUc344NKbzIfiUBD1p3/tLMW9yGpcMV2UUWCreY4A8j1IbG1MoxURidZMG9tpyOtXUVK WA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jkm252jg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 19:46:44 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28EJZERg030370;
+        Wed, 14 Sep 2022 19:46:43 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma02wdc.us.ibm.com with ESMTP id 3jjy6jxqxt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 19:46:43 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28EJkg0J18219652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Sep 2022 19:46:42 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7B9328059;
+        Wed, 14 Sep 2022 19:46:42 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71FB22805E;
+        Wed, 14 Sep 2022 19:46:42 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Sep 2022 19:46:42 +0000 (GMT)
+Message-ID: <f8c8b3dd-f77b-7917-6029-a288255fee8a@linux.ibm.com>
+Date:   Wed, 14 Sep 2022 15:46:41 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones
- without trips.
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec
+ (ppc64)
 Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220914131339.18348-1-aouledameur@baylibre.com>
- <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Nayna Jain <nayna@linux.ibm.com>, nasastry@in.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+References: <20220901214610.768645-1-stefanb@linux.ibm.com>
+ <ce08b0af-fb1b-0ade-61ac-f66e95d6eb6a@linux.ibm.com>
+ <CAL_JsqJ+M6TP9kWXDAUqqh7wfPHkE8YfEU7j5HWqeGMhL=c6bg@mail.gmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CAL_JsqJ+M6TP9kWXDAUqqh7wfPHkE8YfEU7j5HWqeGMhL=c6bg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IbgHdEuAjcsALyOVikbmHIyCbQAUIW99
+X-Proofpoint-ORIG-GUID: IbgHdEuAjcsALyOVikbmHIyCbQAUIW99
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_08,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=932 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140095
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
 
-Thank you for your review.
 
-On 9/14/22 16:15, Matthias Brugger wrote:
->
->
-> On 14/09/2022 15:13, Amjad Ouled-Ameur wrote:
->> Thermal zones without trip point are not registered by thermal core.
+On 9/14/22 14:01, Rob Herring wrote:
+> On Mon, Sep 12, 2022 at 8:01 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
 >>
->> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
->> only but are not supposed to remain on DT.
 >>
->> Remove the zones above and keep only cpu_thermal.
+>> Hi Rob,
 >>
->
-> My understanding is that this thermal zones exist but are not used. 
-> DTS should describe the HW as it is, so I propose to add
-> status = "disabled";
-> to the zones.
->
-Correct, they are unused unless for testing purposes. Thus, your 
-suggestion of disabling them seems more relevant
+>>     can you take this series in your tree?
+> 
+> IMO, it should be someone that cares about TPM, kexec, or powerpc.
+> Yes, there's code in drivers/of/, but that is purely to avoid
+> duplication of code across powerpc and arm64.
 
-than removal.
+What about 1/4? Can someone else take it into their tree?
 
-
-Regards,
-
-Amjad
-
-> Regards,
-> Matthias
->
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 57 ------------------------
->>   1 file changed, 57 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi 
->> b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> index 9d32871973a2..f65fae8939de 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> @@ -1182,63 +1182,6 @@ THERMAL_NO_LIMIT
->>                       };
->>                   };
->>               };
->> -
->> -            /* The tzts1 ~ tzts6 don't need to polling */
->> -            /* The tzts1 ~ tzts6 don't need to thermal throttle */
->> -
->> -            tzts1: tzts1 {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 1>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->> -
->> -            tzts2: tzts2 {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 2>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->> -
->> -            tzts3: tzts3 {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 3>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->> -
->> -            tzts4: tzts4 {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 4>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->> -
->> -            tzts5: tzts5 {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 5>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->> -
->> -            tztsABB: tztsABB {
->> -                polling-delay-passive = <0>;
->> -                polling-delay = <0>;
->> -                thermal-sensors = <&thermal 6>;
->> -                sustainable-power = <5000>;
->> -                trips {};
->> -                cooling-maps {};
->> -            };
->>           };
->>             pwm0: pwm@1100e000 {
+    Stefan
+> 
+> Rob
