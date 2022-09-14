@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CA95B90BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772875B90C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiINXDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 19:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S229877AbiINXDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 19:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiINXDH (ORCPT
+        with ESMTP id S229863AbiINXDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 19:03:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7FC86C0D;
-        Wed, 14 Sep 2022 16:03:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4809E2254E;
-        Wed, 14 Sep 2022 23:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663196585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Der/yD5DoRhA+UaDEdoBo0c+TBGXF1b1eQeHUJoVn24=;
-        b=vUOyhbIqIdhUfwjGMcVp0bFWqzSxjg18Byf0Fw6V5BWUlJXfduvZU8AsGTsDkTCUQVX1DI
-        3ee//m67w0d3/IaK9foaigRlwNhudHM73ukohor5+efg5TY3is7z+cqHRkrfRs95WC7ga4
-        cSOwko1/rNviD4ShdiPw7JiSg1R8Z00=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663196585;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Der/yD5DoRhA+UaDEdoBo0c+TBGXF1b1eQeHUJoVn24=;
-        b=EUm8SOBHxcTunrnYlf/7AJ8WMe7OgCxbHb23+u0pbKckxSbiSnW5PX762kvLVY0BH2prcl
-        iOFuzg7VO/j6ODDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E124134B3;
-        Wed, 14 Sep 2022 23:02:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ssTxAKFdImMOUgAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 14 Sep 2022 23:02:57 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 14 Sep 2022 19:03:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9865A86C2A;
+        Wed, 14 Sep 2022 16:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663196608; x=1694732608;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=okFxm6J6JgAWD25P1QvzLpwm/ooPbFnL+ZgqoSOVW1s=;
+  b=TLiVU3vt+d/cwBFHkRur2nxyvHdTQpA+n4x4/hHEalf0VOvDXbnru1c0
+   OVd7aB+32yDy6uwLDBXZ7TxP7Z7fqyheBWeYxTrpTs1YxmzDgU921p7K2
+   CHk+KuMqbM7dMTC62G8buJ9hbZNuzj7E0G5oXRdxJ02eQ6KDaleFUR/3S
+   e8/Krxk6rIj3PydHgh84qdslTihFh55ViQCO0ongHR4D/qdQvzMzr6xuR
+   jK4GSSuJKwH8Yfr1PWNGCsRes29OX+CNINBneogmfUxriUi1Y1BMjI0u8
+   vSggDYgXA7xHGPnZgJKUq4g0fCK0StoWIVA/bNY947kb9dJHIowZOeInl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299374103"
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="299374103"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:03:28 -0700
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="945700062"
+Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:03:26 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 04/13] net/sched: taprio: allow user input of
+ per-tc max SDU
+In-Reply-To: <20220914153303.1792444-5-vladimir.oltean@nxp.com>
+References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
+ <20220914153303.1792444-5-vladimir.oltean@nxp.com>
+Date:   Wed, 14 Sep 2022 16:03:26 -0700
+Message-ID: <87r10dh83l.fsf@intel.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Dave Chinner" <david@fromorbit.com>,
-        "Trond Myklebust" <trondmy@hammerspace.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <166319552167.15759.17894784385240679495@noble.neil.brown.name>
-References: <91e31d20d66d6f47fe12c80c34b1cffdfc202b6a.camel@hammerspace.com>,
- <166268467103.30452.1687952324107257676@noble.neil.brown.name>,
- <166268566751.30452.13562507405746100242@noble.neil.brown.name>,
- <29a6c2e78284e7947ddedf71e5cb9436c9330910.camel@hammerspace.com>,
- <8d638cb3c63b0d2da8679b5288d1622fdb387f83.camel@hammerspace.com>,
- <166270570118.30452.16939807179630112340@noble.neil.brown.name>,
- <33d058be862ccc0ccaf959f2841a7e506e51fd1f.camel@kernel.org>,
- <166285038617.30452.11636397081493278357@noble.neil.brown.name>,
- <2e34a7d4e1a3474d80ee0402ed3bc0f18792443a.camel@kernel.org>,
- <166302538820.30452.7783524836504548113@noble.neil.brown.name>,
- <20220913011518.GE3600936@dread.disaster.area>,
- <b67fe8b26977dc1213deb5ec815a53a26d31fbc0.camel@kernel.org>,
- <166311144203.20483.1888757883086697314@noble.neil.brown.name>,
- <f8a41b55efd1c59bc63950e8c1b734626d970a90.camel@kernel.org>,
- <166319552167.15759.17894784385240679495@noble.neil.brown.name>
-Date:   Thu, 15 Sep 2022 09:02:53 +1000
-Message-id: <166319657348.15759.14602484394176375178@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,24 +86,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022, NeilBrown wrote:
->=20
-> When the code was written, the inode semaphore (before mutexes) was held
-> over the whole thing, and timestamp resolution was 1 second.  So
-> ordering didn't really matter.  Since then locking has bee reduced and
-> precision increased but no-one saw any need to fix the ordering.  I
-> think that is fine for timestamps.
+Vladimir Oltean <vladimir.oltean@nxp.com> writes:
 
-Actually it is much more complex than that, though the principle is
-still the same
+> IEEE 802.1Q clause 12.29.1.1 "The queueMaxSDUTable structure and data
+> types" and 8.6.8.4 "Enhancements for scheduled traffic" talk about the
+> existence of a per traffic class limitation of maximum frame sizes, with
+> a fallback on the port-based MTU.
+>
+> As far as I am able to understand, the 802.1Q Service Data Unit (SDU)
+> represents the MAC Service Data Unit (MSDU, i.e. L2 payload), excluding
+> any number of prepended VLAN headers which may be otherwise present in
+> the MSDU. Therefore, the queueMaxSDU is directly comparable to the
+> device MTU (1500 means L2 payload sizes are accepted, or frame sizes of
+> 1518 octets, or 1522 plus one VLAN header). Drivers which offload this
+> are directly responsible of translating into other units of measurement.
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
 
-https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?i=
-d=3D636b38438001a00b25f23e38747a91cb8428af29
+Could you please add an example of the 'tc' command syntax you are
+thinking about?
 
-shows i_mtime updates being moved from *after* a call to
-generic_file_write() in each filesystem to *early* in the body of
-generic_file_write().  Probably because that was just a convenient place
-to put it.
+Another point to think about: does it make sense to allow 'only' the
+max-sdu to be changed, i.e. the user doesn't set an a schedule, nor a
+map, only the max-sdu information.
 
-NeilBrown
+>  include/net/pkt_sched.h        |   1 +
+>  include/uapi/linux/pkt_sched.h |  11 +++
+>  net/sched/sch_taprio.c         | 122 ++++++++++++++++++++++++++++++++-
+>  3 files changed, 133 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+> index 29f65632ebc5..88080998557b 100644
+> --- a/include/net/pkt_sched.h
+> +++ b/include/net/pkt_sched.h
+> @@ -168,6 +168,7 @@ struct tc_taprio_qopt_offload {
+>  	ktime_t base_time;
+>  	u64 cycle_time;
+>  	u64 cycle_time_extension;
+> +	u32 max_sdu[TC_MAX_QUEUE];
+>  
+>  	size_t num_entries;
+>  	struct tc_taprio_sched_entry entries[];
+> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+> index f292b467b27f..000eec106856 100644
+> --- a/include/uapi/linux/pkt_sched.h
+> +++ b/include/uapi/linux/pkt_sched.h
+> @@ -1232,6 +1232,16 @@ enum {
+>  #define TCA_TAPRIO_ATTR_FLAG_TXTIME_ASSIST	_BITUL(0)
+>  #define TCA_TAPRIO_ATTR_FLAG_FULL_OFFLOAD	_BITUL(1)
+>  
+> +enum {
+> +	TCA_TAPRIO_TC_ENTRY_UNSPEC,
+> +	TCA_TAPRIO_TC_ENTRY_INDEX,		/* u32 */
+> +	TCA_TAPRIO_TC_ENTRY_MAX_SDU,		/* u32 */
+> +
+> +	/* add new constants above here */
+> +	__TCA_TAPRIO_TC_ENTRY_CNT,
+> +	TCA_TAPRIO_TC_ENTRY_MAX = (__TCA_TAPRIO_TC_ENTRY_CNT - 1)
+> +};
+> +
+>  enum {
+>  	TCA_TAPRIO_ATTR_UNSPEC,
+>  	TCA_TAPRIO_ATTR_PRIOMAP, /* struct tc_mqprio_qopt */
+> @@ -1245,6 +1255,7 @@ enum {
+>  	TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME_EXTENSION, /* s64 */
+>  	TCA_TAPRIO_ATTR_FLAGS, /* u32 */
+>  	TCA_TAPRIO_ATTR_TXTIME_DELAY, /* u32 */
+> +	TCA_TAPRIO_ATTR_TC_ENTRY, /* nest */
+>  	__TCA_TAPRIO_ATTR_MAX,
+>  };
+>  
+> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+> index 2a4b8f59f444..834cbed88e4f 100644
+> --- a/net/sched/sch_taprio.c
+> +++ b/net/sched/sch_taprio.c
+> @@ -79,6 +79,7 @@ struct taprio_sched {
+>  	struct sched_gate_list __rcu *admin_sched;
+>  	struct hrtimer advance_timer;
+>  	struct list_head taprio_list;
+> +	u32 max_sdu[TC_MAX_QUEUE];
+>  	u32 txtime_delay;
+>  };
+>  
+> @@ -416,6 +417,9 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>  			      struct Qdisc *child, struct sk_buff **to_free)
+>  {
+>  	struct taprio_sched *q = qdisc_priv(sch);
+> +	struct net_device *dev = qdisc_dev(sch);
+> +	int prio = skb->priority;
+> +	u8 tc;
+>  
+>  	/* sk_flags are only safe to use on full sockets. */
+>  	if (skb->sk && sk_fullsock(skb->sk) && sock_flag(skb->sk, SOCK_TXTIME)) {
+> @@ -427,6 +431,12 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
+>  			return qdisc_drop(skb, sch, to_free);
+>  	}
+>  
+> +	/* Devices with full offload are expected to honor this in hardware */
+> +	tc = netdev_get_prio_tc_map(dev, prio);
+> +	if (q->max_sdu[tc] &&
+> +	    q->max_sdu[tc] < max_t(int, 0, skb->len - skb_mac_header_len(skb)))
+> +		return qdisc_drop(skb, sch, to_free);
+> +
+>  	qdisc_qstats_backlog_inc(sch, skb);
+>  	sch->q.qlen++;
+>  
+> @@ -761,6 +771,11 @@ static const struct nla_policy entry_policy[TCA_TAPRIO_SCHED_ENTRY_MAX + 1] = {
+>  	[TCA_TAPRIO_SCHED_ENTRY_INTERVAL]  = { .type = NLA_U32 },
+>  };
+>  
+> +static const struct nla_policy taprio_tc_policy[TCA_TAPRIO_TC_ENTRY_MAX + 1] = {
+> +	[TCA_TAPRIO_TC_ENTRY_INDEX]	   = { .type = NLA_U32 },
+> +	[TCA_TAPRIO_TC_ENTRY_MAX_SDU]	   = { .type = NLA_U32 },
+> +};
+> +
+>  static const struct nla_policy taprio_policy[TCA_TAPRIO_ATTR_MAX + 1] = {
+>  	[TCA_TAPRIO_ATTR_PRIOMAP]	       = {
+>  		.len = sizeof(struct tc_mqprio_qopt)
+> @@ -773,6 +788,7 @@ static const struct nla_policy taprio_policy[TCA_TAPRIO_ATTR_MAX + 1] = {
+>  	[TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME_EXTENSION] = { .type = NLA_S64 },
+>  	[TCA_TAPRIO_ATTR_FLAGS]                      = { .type = NLA_U32 },
+>  	[TCA_TAPRIO_ATTR_TXTIME_DELAY]		     = { .type = NLA_U32 },
+> +	[TCA_TAPRIO_ATTR_TC_ENTRY]		     = { .type = NLA_NESTED },
+>  };
+>  
+>  static int fill_sched_entry(struct taprio_sched *q, struct nlattr **tb,
+> @@ -1236,7 +1252,7 @@ static int taprio_enable_offload(struct net_device *dev,
+>  {
+>  	const struct net_device_ops *ops = dev->netdev_ops;
+>  	struct tc_taprio_qopt_offload *offload;
+> -	int err = 0;
+> +	int tc, err = 0;
+>  
+>  	if (!ops->ndo_setup_tc) {
+>  		NL_SET_ERR_MSG(extack,
+> @@ -1253,6 +1269,9 @@ static int taprio_enable_offload(struct net_device *dev,
+>  	offload->enable = 1;
+>  	taprio_sched_to_offload(dev, sched, offload);
+>  
+> +	for (tc = 0; tc < TC_MAX_QUEUE; tc++)
+> +		offload->max_sdu[tc] = q->max_sdu[tc];
+> +
+>  	err = ops->ndo_setup_tc(dev, TC_SETUP_QDISC_TAPRIO, offload);
+>  	if (err < 0) {
+>  		NL_SET_ERR_MSG(extack,
+> @@ -1387,6 +1406,73 @@ static int taprio_parse_clockid(struct Qdisc *sch, struct nlattr **tb,
+>  	return err;
+>  }
+>  
+> +static int taprio_parse_tc_entry(struct Qdisc *sch,
+> +				 struct nlattr *opt,
+> +				 unsigned long *seen_tcs,
+> +				 struct netlink_ext_ack *extack)
+> +{
+> +	struct nlattr *tb[TCA_TAPRIO_TC_ENTRY_MAX + 1] = { };
+> +	struct taprio_sched *q = qdisc_priv(sch);
+> +	struct net_device *dev = qdisc_dev(sch);
+> +	u32 max_sdu = 0;
+> +	int err, tc;
+> +
+> +	err = nla_parse_nested(tb, TCA_TAPRIO_TC_ENTRY_MAX, opt,
+> +			       taprio_tc_policy, extack);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	if (!tb[TCA_TAPRIO_TC_ENTRY_INDEX]) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC entry index missing");
+> +		return -EINVAL;
+> +	}
+> +
+> +	tc = nla_get_u32(tb[TCA_TAPRIO_TC_ENTRY_INDEX]);
+> +	if (tc >= TC_QOPT_MAX_QUEUE) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC entry index out of range");
+> +		return -ERANGE;
+> +	}
+> +
+> +	if (*seen_tcs & BIT(tc)) {
+> +		NL_SET_ERR_MSG_MOD(extack, "Duplicate TC entry");
+> +		return -EINVAL;
+> +	}
+> +
+> +	*seen_tcs |= BIT(tc);
+> +
+> +	if (tb[TCA_TAPRIO_TC_ENTRY_MAX_SDU])
+> +		max_sdu = nla_get_u32(tb[TCA_TAPRIO_TC_ENTRY_MAX_SDU]);
+> +
+> +	if (max_sdu > dev->max_mtu) {
+> +		NL_SET_ERR_MSG_MOD(extack, "TC max SDU exceeds device max MTU");
+> +		return -ERANGE;
+> +	}
+> +
+> +	q->max_sdu[tc] = max_sdu;
+> +
+> +	return 0;
+> +}
+> +
+> +static int taprio_parse_tc_entries(struct Qdisc *sch,
+> +				   struct nlattr *opt,
+> +				   struct netlink_ext_ack *extack)
+> +{
+> +	unsigned long seen_tcs = 0;
+> +	struct nlattr *n;
+> +	int err = 0, rem;
+> +
+> +	nla_for_each_nested(n, opt, rem) {
+> +		if (nla_type(n) != TCA_TAPRIO_ATTR_TC_ENTRY)
+> +			continue;
+> +
+> +		err = taprio_parse_tc_entry(sch, n, &seen_tcs, extack);
+> +		if (err)
+> +			break;
+> +	}
+> +
+> +	return err;
+> +}
+> +
+>  static int taprio_mqprio_cmp(const struct net_device *dev,
+>  			     const struct tc_mqprio_qopt *mqprio)
+>  {
+> @@ -1465,6 +1551,10 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
+>  	if (err < 0)
+>  		return err;
+>  
+> +	err = taprio_parse_tc_entries(sch, opt, extack);
+> +	if (err)
+> +		return err;
+> +
+>  	new_admin = kzalloc(sizeof(*new_admin), GFP_KERNEL);
+>  	if (!new_admin) {
+>  		NL_SET_ERR_MSG(extack, "Not enough memory for a new schedule");
+> @@ -1855,6 +1945,33 @@ static int dump_schedule(struct sk_buff *msg,
+>  	return -1;
+>  }
+>  
+> +static int taprio_dump_tc_entries(struct taprio_sched *q, struct sk_buff *skb)
+> +{
+> +	struct nlattr *n;
+> +	int tc;
+> +
+> +	for (tc = 0; tc < TC_MAX_QUEUE; tc++) {
+> +		n = nla_nest_start(skb, TCA_TAPRIO_ATTR_TC_ENTRY);
+> +		if (!n)
+> +			return -EMSGSIZE;
+> +
+> +		if (nla_put_u32(skb, TCA_TAPRIO_TC_ENTRY_INDEX, tc))
+> +			goto nla_put_failure;
+> +
+> +		if (nla_put_u32(skb, TCA_TAPRIO_TC_ENTRY_MAX_SDU,
+> +				q->max_sdu[tc]))
+> +			goto nla_put_failure;
+> +
+> +		nla_nest_end(skb, n);
+> +	}
+> +
+> +	return 0;
+> +
+> +nla_put_failure:
+> +	nla_nest_cancel(skb, n);
+> +	return -EMSGSIZE;
+> +}
+> +
+>  static int taprio_dump(struct Qdisc *sch, struct sk_buff *skb)
+>  {
+>  	struct taprio_sched *q = qdisc_priv(sch);
+> @@ -1894,6 +2011,9 @@ static int taprio_dump(struct Qdisc *sch, struct sk_buff *skb)
+>  	    nla_put_u32(skb, TCA_TAPRIO_ATTR_TXTIME_DELAY, q->txtime_delay))
+>  		goto options_error;
+>  
+> +	if (taprio_dump_tc_entries(q, skb))
+> +		goto options_error;
+> +
+>  	if (oper && dump_schedule(skb, oper))
+>  		goto options_error;
+>  
+> -- 
+> 2.34.1
+>
 
+-- 
+Vinicius
