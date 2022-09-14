@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A235B89AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282505B89BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiINOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S229546AbiINOCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiINOAs (ORCPT
+        with ESMTP id S229987AbiINOB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:00:48 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE879A4D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:00:17 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-127dca21a7dso41143885fac.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=Nhf4NUE5pNrO2iPn+duWxF+/BKciVlA3AuEHtMu2CkM=;
-        b=aLjXaqxm731w8pTsLIJqD/I2r3nY06kTldoBkhB+GTNaSahVvmr04XDUCNS2awKrsP
-         0sOo3DaKjjQXVYof4nLSJeFVwkH+VfffbTEjdfVu/wXmzrV9ILvlkVVe1s0QZC1QYHoT
-         rPA4VzvgvpygZ9DEZiyMu7kayNhTLP9MI4j1Wv95mqAxL7OxrgJa0zaBrM+dbHIG0UCc
-         dvsNAqvrRL8z++KlsXFsStXKaon9pqNvXrerCldvBwpOUKRXKKiore6NH93N6bRQHYiX
-         dpqqPZwiI7zZs0dJ6/NGm7q5XJrHuqyiYsbNc/CHDsIP0XhnBA6xbEWLVF57nwToWoHV
-         Nvgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Nhf4NUE5pNrO2iPn+duWxF+/BKciVlA3AuEHtMu2CkM=;
-        b=7wF+ZjDViRKm0HKOgQqoLBepBnFYtbRjiaQkX/s5GfFlV01zBnzIHyNGio/D4B1nfT
-         e5+CCy5faDgiRvVS0YS6yQQ29P+cgssix7DE0/qbbpjBaKr1OslhFS9YEPpkIDoCGPYd
-         U6wGYS6/S4jE+mWZO/pdOznrJ+TQ6wsVB87SX4y/T+YEu48q2VyRvc5Z0oCit8XvsM5K
-         7hks2GsPwOTrZtO/BEhJOcomnyN68CF2l54cndnryqupUDlZeIfQEoM2ILUKqSsXO/db
-         26hqi1eNeeRIkO1en2/t6xnIocEpFzcJZIQmKP4JjpAhVVlbv/25eyhk93QG+/jOr5r7
-         jFbw==
-X-Gm-Message-State: ACgBeo0oSTkuiK0Ko8X12sgmjoSqeeMZqBYRgLbWKYhF4A2uiYvsGyml
-        aOGlXmwZuixV0wfKCVBgYuTJaujh7GnuJusgbD4=
-X-Google-Smtp-Source: AA6agR4+0HrSlOBJVxUZRMY+wQKkAqM7Lq8kfvW+Hf/8efKDYKhqKL0TNMJEugeMxOFKaXEotpqoHFiDtk0gYbgOf+U=
-X-Received: by 2002:a05:6870:1783:b0:12a:f442:504d with SMTP id
- r3-20020a056870178300b0012af442504dmr2643357oae.46.1663164016167; Wed, 14 Sep
- 2022 07:00:16 -0700 (PDT)
+        Wed, 14 Sep 2022 10:01:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740F25F1;
+        Wed, 14 Sep 2022 07:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6QAWxLdMZL2HrdyA2qxKWv8rmsu40qWwB6+Piak/frU=; b=grvdlhiDJot2FEpq+aFmAKpbVL
+        618tCmlcl9TPnZnLX8PT4AhesK8/j7mmZuPujaIwSXumYee6m/OP3I9Z8QFflX21DFKDV/1eCyZSO
+        1tXouQhREH2V6O6uTrrhCur9gYWzcDGFuM3KczBsBLsHjAH+g6vjLnj4+SbI8pdwWgVG/nIGTDvyD
+        DiHFFwPKYeMxg+uODtM74++NkL63AwP3uz/GHM1UJwCvDU+S0s8jHC8bfF+pJP8Ip02ArlO2XX031
+        PYJx514ksqOpuNFWFgGMNIp/Q19glVLvHb4u8/vmi0+mnjAgBbMDj0XzSWSfa/KX4gkD96/5qTrfO
+        EMxpDi1g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYSw9-000EDJ-E2; Wed, 14 Sep 2022 14:00:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A70D43002AE;
+        Wed, 14 Sep 2022 16:00:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8BBF52B8AD401; Wed, 14 Sep 2022 16:00:16 +0200 (CEST)
+Date:   Wed, 14 Sep 2022 16:00:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Michael Matz <matz@suse.de>, Borislav Petkov <bp@alien8.de>,
+        linux-toolchains@vger.kernel.org,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, "Jose E. Marchesi" <jemarch@gnu.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [RFC] Objtool toolchain proposal:
+ -fannotate-{jump-table,noreturn}
+Message-ID: <YyHecBM8D0i1lRu8@hirez.programming.kicks-ass.net>
+References: <20220909180704.jwwed4zhwvin7uyi@treble>
+ <Yx8PcldkdOLN8eaw@nazgul.tnic>
+ <alpine.LSU.2.20.2209121200120.8265@wotan.suse.de>
+ <20220914000416.daxbgccbxwpknn2q@treble>
 MIME-Version: 1.0
-References: <20220914052742.116297-1-jiapeng.chong@linux.alibaba.com> <20220914052742.116297-8-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220914052742.116297-8-jiapeng.chong@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 14 Sep 2022 10:00:04 -0400
-Message-ID: <CADnq5_NmWKF+7UQov2oQ2JH5UW0Pzjw0bCUzhZWZQ=xH2mu17g@mail.gmail.com>
-Subject: Re: [PATCH 8/8] drm/amd/display: make optc32_phantom_crtc_post_enable,
- optc32_setup_manual_trigger and optc32_set_drr static
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     alexander.deucher@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, christian.koenig@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914000416.daxbgccbxwpknn2q@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied the series.  Thanks!
+On Wed, Sep 14, 2022 at 01:04:16AM +0100, Josh Poimboeuf wrote:
 
-Alex
+> > I will mention that objtool's existence is based on mistrust, of persons 
+> > (not correctly annotating stuff) and of tools (not correctly heeding those 
+> > annotations).  The mistrust in persons is understandable and can be dealt 
+> > with by tools, but the mistrust in tools can't be fixed by making tools 
+> > more complicated by emitting even more information; there's no good reason 
+> > to assume that one piece of info can be trusted more than other pieces.  
+> > So, if you mistrust the tools you have already lost.  That's somewhat 
+> > philosophical, so I won't beat that horse much more either.
+> 
+> Maybe this is semantics, but I wouldn't characterize objtool's existence
+> as being based on the mistrust of tools.  It's main motivation is to
+> fill in the toolchain's blind spots in asm and inline-asm, which exist
+> by design.
 
-On Wed, Sep 14, 2022 at 1:29 AM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> These three functions are not used outside the function
-> dcn32_optc.c, so the modification is defined as static.
->
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:159:6: warnin=
-g: no previous prototype for function 'optc32_phantom_crtc_post_enable'.
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:218:6: warnin=
-g: no previous prototype for =E2=80=98optc32_set_drr=E2=80=99.
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_optc.c:193:6: warnin=
-g: no previous prototype for =E2=80=98optc32_setup_manual_trigger=E2=80=99.
->
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2140
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c b/drivers/=
-gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
-> index 1fad7b48bd5b..ec3989d37086 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c
-> @@ -156,7 +156,7 @@ static bool optc32_disable_crtc(struct timing_generat=
-or *optc)
->         return true;
->  }
->
-> -void optc32_phantom_crtc_post_enable(struct timing_generator *optc)
-> +static void optc32_phantom_crtc_post_enable(struct timing_generator *opt=
-c)
->  {
->         struct optc *optc1 =3D DCN10TG_FROM_TG(optc);
->
-> @@ -190,7 +190,7 @@ static void optc32_set_odm_bypass(struct timing_gener=
-ator *optc,
->         optc1->opp_count =3D 1;
->  }
->
-> -void optc32_setup_manual_trigger(struct timing_generator *optc)
-> +static void optc32_setup_manual_trigger(struct timing_generator *optc)
->  {
->         struct optc *optc1 =3D DCN10TG_FROM_TG(optc);
->         struct dc *dc =3D optc->ctx->dc;
-> @@ -215,7 +215,7 @@ void optc32_setup_manual_trigger(struct timing_genera=
-tor *optc)
->         }
->  }
->
-> -void optc32_set_drr(
-> +static void optc32_set_drr(
->         struct timing_generator *optc,
->         const struct drr_params *params)
->  {
-> --
-> 2.20.1.7.g153144c
->
+That and a fairly deep seated loathing for the regular CFI annotations
+and DWARF in general. Linus was fairly firm he didn't want anything to
+do with DWARF for in-kernel unwinding.
+
+That left us in a spot that we needed unwind information in a 'better'
+format than DWARF.
+
+Objtool was born out of those contraints. ORC not needing the CFI
+annotations and ORC being *much* faster at unwiding and generation
+(debug builds are slow) were all good.
+
+
