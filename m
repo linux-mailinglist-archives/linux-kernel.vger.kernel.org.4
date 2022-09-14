@@ -2,132 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0395B8EEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D114E5B8EED
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiINSdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S229822AbiINSd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiINSdg (ORCPT
+        with ESMTP id S229852AbiINSdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:33:36 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA7C7330A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:33:36 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id n81so12601880iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:33:36 -0700 (PDT)
+        Wed, 14 Sep 2022 14:33:50 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFD281693;
+        Wed, 14 Sep 2022 11:33:48 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so19906110pjq.3;
+        Wed, 14 Sep 2022 11:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vSj623uSHxO0oVI/Q9wO/OKZArt2x1BaVoPyjdenhVw=;
-        b=be+8kTLNJULJ2PK8PDlYNxkvOH9mMmtB2rahv3H4TKnEDphAAkmXCOE/IJeod6Hn7s
-         5bfrqzY55uo+WMDgfUuRTLnl3LQV0KqxaKo9Hoaec6URvxcr4+Uuej3n9eNHdHp4OrQy
-         hhupSd3M3qkMCC7pUEhaLICCpyPOIsfS/nENA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=iSoULPQWHCxzuyccY9QXbYwCw6NT6wZa9kyRRus/6yo=;
+        b=LuXH7/26EMAVjurSfaKGZztyeArTr4xXhVt4XGgBSiaMZUlCG+5kWMfNiLH8yj7tsD
+         P+g8fAa2XMWBk+qUI8Bk3s5PEEpnPko51UtwUeN/xQvrEz/X3Ux8bFiIJ8poxmOWbCc3
+         o1xyblaiZ0MCNo0oeb+ehiTEBbpUqxuCzwhZnXooYlr8rn5GQNBPYxJs0ptGLfaNptB+
+         sIl8/ry8bNH8WziTcSwzYIjdmueMh5uPg61OaNNFnYbmCbf6aCYJDJAdsMg2/GilIegf
+         jIU+bTVCfUStYzFuKaFm3Jtk/WCSNCfmHeemcMSTItSXA7MocnK55f0Iztomo2gT5cHV
+         uImQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vSj623uSHxO0oVI/Q9wO/OKZArt2x1BaVoPyjdenhVw=;
-        b=07jSOgkW7BpNXxkWouEQUy4Pj3Y1MMZgb+o6fFkZXAF4HuAhq5Ej8jP3QxdQcnzjTu
-         pH6MVGhfoCdvF9tjYx8lD1Qo9MEvbLX1NxVvgwdNHC6N6kjk05VyyvshCb7vVSUVpZ1F
-         7QuW5IRphdoSbqVumdS/ZFeAOsSRYQMvnvx2LeaW+h/4RUFlRWoRhheQKAo8gaAXfLS4
-         HBu2B09pP2lQ8NeiEe9TZ21jQdcgTea/wCa5dJlw+oP9Kct0/SM81GDDhRZ869Y3hHlH
-         mtuBSrWNVASyKmqexkt3xTNlVC+FGJP/ZW6jUeVG6L1gLhsQcf5/7tFKVfm2hk5EoIiq
-         tz7A==
-X-Gm-Message-State: ACgBeo0FZYuUImWVcJxSqNABjWDAC2cfLQF6dld5XAcqVkfkRIVKczjZ
-        EvDtELqdVFt3ycxTLlvX9Kr3stdL4q1DiA==
-X-Google-Smtp-Source: AA6agR523eCCt3hQQucYwv++rBFqXPD4RI6FwhB1alKebV/PK1NbqfS7oNbCss2oKednOp2Zq4XkJQ==
-X-Received: by 2002:a05:6638:134a:b0:35a:67e1:3ed3 with SMTP id u10-20020a056638134a00b0035a67e13ed3mr2447840jad.235.1663180415161;
-        Wed, 14 Sep 2022 11:33:35 -0700 (PDT)
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com. [209.85.166.171])
-        by smtp.gmail.com with ESMTPSA id i11-20020a056e020ecb00b002e8ea827aafsm6840971ilk.74.2022.09.14.11.33.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 11:33:31 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id b17so8472021ilh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 11:33:29 -0700 (PDT)
-X-Received: by 2002:a05:6e02:2189:b0:2f1:92d4:6b22 with SMTP id
- j9-20020a056e02218900b002f192d46b22mr14224475ila.210.1663180409089; Wed, 14
- Sep 2022 11:33:29 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=iSoULPQWHCxzuyccY9QXbYwCw6NT6wZa9kyRRus/6yo=;
+        b=cM/T8kzLMA/eVJwrwB7ILv0RaSSiK71aK/vogKH71/EOsg9gMRBQvRqMdvzwkVTOvR
+         1P4wLbfEbTVETjMi1G4akK67UtY1dhDYWTzI1bM8KG/M/A1qAUz0/VHWNzQ9Z4wTWT0A
+         d59zoXg9Vbs56sK4aoF+7Yw2sttyYLcekGm4ZmpV6P2IKpKQ5tjyO5F0g6hUEI3RN7fp
+         TJZepg9YnmriHL7GvjukrA+M2z2+OBI2DzjLSnzo9YoBjzb7uyl7f+SiFIR7vCaRu1X9
+         P42DdxSECoFK5rC38+K0PF74OwBckl1pEKPu4ijNRmXFi5+VyDi66UTT32qPl9IYKkL2
+         rIPg==
+X-Gm-Message-State: ACrzQf3mn24Hm0uzTDAzlwvNdTCau46jFpuigeIc6x2VTh8bBhka+hCM
+        I37QmA1PL4NRVgCOcaPSS7U=
+X-Google-Smtp-Source: AMsMyM4HnK9AwaGr5z5zDzKLgVhSIpGEQrcTg3ciEf0r1Te0S0qFmJEHDGfzEn/dtiyVb6IELzVq9A==
+X-Received: by 2002:a17:902:b692:b0:176:d346:b56f with SMTP id c18-20020a170902b69200b00176d346b56fmr315803pls.140.1663180428248;
+        Wed, 14 Sep 2022 11:33:48 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:ba6:e12b:9910:5ea])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b001728ac8af94sm11190842pla.248.2022.09.14.11.33.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 11:33:47 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: [PATCH] perf test: Skip wp modify test on old kernels
+Date:   Wed, 14 Sep 2022 11:33:38 -0700
+Message-Id: <20220914183338.546357-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-References: <20220912221317.2775651-1-rrangel@chromium.org>
- <20220912160931.v2.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YyC9N62JaMGaeanf@smile.fi.intel.com> <CAHQZ30DAr_BwH03=bG9tfCSGW+-he-c-4PPeJMOqH28cVcKDoA@mail.gmail.com>
- <YyDNAw+ur177ayY0@smile.fi.intel.com> <CAHQZ30DP1asiMj7hoebQQvGqE36sBDjaFmp3ju3eUEF1PruFeg@mail.gmail.com>
- <YyGh6Yjbb/5rkh35@smile.fi.intel.com>
-In-Reply-To: <YyGh6Yjbb/5rkh35@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Wed, 14 Sep 2022 12:33:17 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30Dsk2ikhctYSk_eP=1qcOOn_tjgtCftPOqQFkHNfQwBsg@mail.gmail.com>
-Message-ID: <CAHQZ30Dsk2ikhctYSk_eP=1qcOOn_tjgtCftPOqQFkHNfQwBsg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > This is similar to what of_i2c_get_board_info() does, no?
-> > > Note: _get_ there.
-> >
-> > `*info` is an out parameter in that case. Ideally I would have
-> > `i2c_acpi_get_irq`, `acpi_dev_gpio_irq_get_wake`,
-> > `platform_get_irq_optional`, and `i2c_dev_irq_from_resources` all
-> > return a `struct irq_info {int irq; bool wake_capable;}`. This would
-> > be a larger change though.
->
-> Seems the ACPI analogue is i2c_acpi_fill_info(). Can we do it there?
->
+It uses PERF_EVENT_IOC_MODIFY_ATTRIBUTES ioctl.	 The kernel would return
+ENOTTY if it's not supported.  Update the skip reason in that case.
 
-So I originally had that thought, but decided against it to avoid
-changing too many things,
-but since you brought it up, I thought I would try it.
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+I'd like to add Fixes: 2e85d5979e8d tag here but it'd conlict with the
+later change in e47c6ecaae1d.
 
-So I moved the GPIO lookup into `i2c_acpi_do_lookup`, but it failed
-spectacularly.
-I've linked some logs of both cases. grep for `RX:` to see my logging messages.
+ tools/perf/tests/wp.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-* https://0paste.com/393416 - Logs with IRQ lookup happening in
-`i2c_acpi_do_lookup`
-    * We can see that `i2c_acpi_do_lookup` gets called in three cases
-         1) Early on from i2c_acpi_notify when the I2C ACPI nodes are
-first created
-         2) From `i2c_dw_adjust_bus_speed` as part of `dw_i2c_plat_probe`
-         3) From `i2c_register_adapter` as part of `i2c_dw_probe_master`.
-    * What happens is that all of these calls happen before the GPIO
-chip has been registered.
-      This means that `acpi_dev_gpio_irq_get` will return `-EPROBE_DEFER`. This
-      messes something up in the i2c init sequence and the devices are never
-      probed again.
-    * You can see the `amd gpio driver loaded` message after all the
-i2c probing.
-* https://0paste.com/393420 - Logs of a normal boot
-    * Here we can see the GPIO controller registers early
-    * We can see the i2c devices being probed by `__driver_attach_async_helper`.
-      I'm guessing the device was enqueued as part of `i2c_acpi_register_device`
-      early on and it gets probed later.
+diff --git a/tools/perf/tests/wp.c b/tools/perf/tests/wp.c
+index 9d4c45184e71..99f048cd6faa 100644
+--- a/tools/perf/tests/wp.c
++++ b/tools/perf/tests/wp.c
+@@ -2,6 +2,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <errno.h>
+ #include <sys/ioctl.h>
+ #include <linux/hw_breakpoint.h>
+ #include <linux/kernel.h>
+@@ -137,8 +138,7 @@ static int test__wp_rw(struct test_suite *test __maybe_unused,
+ #endif
+ }
+ 
+-static int test__wp_modify(struct test_suite *test __maybe_unused,
+-			   int subtest __maybe_unused)
++static int test__wp_modify(struct test_suite *test, int subtest)
+ {
+ #if defined(__s390x__)
+ 	return TEST_SKIP;
+@@ -160,6 +160,11 @@ static int test__wp_modify(struct test_suite *test __maybe_unused,
+ 	new_attr.disabled = 1;
+ 	ret = ioctl(fd, PERF_EVENT_IOC_MODIFY_ATTRIBUTES, &new_attr);
+ 	if (ret < 0) {
++		if (errno == ENOTTY) {
++			test->test_cases[subtest].skip_reason = "missing kernel support";
++			ret = TEST_SKIP;
++		}
++
+ 		pr_debug("ioctl(PERF_EVENT_IOC_MODIFY_ATTRIBUTES) failed\n");
+ 		close(fd);
+ 		return ret;
+-- 
+2.37.2.789.g6183377224-goog
 
-I could try moving the gpio lookup into `i2c_acpi_get_info`, but I
-think that suffers from the
-same problem, the stack can't handle a PROBE_DEFER. So I think we need to keep
-the lookup in `i2c_device_probe` for the PROBE_DEFER logic to work correctly.
