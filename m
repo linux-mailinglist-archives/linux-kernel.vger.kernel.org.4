@@ -2,149 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEF85B8CD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929655B8CD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiINQZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S229824AbiINQZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiINQY6 (ORCPT
+        with ESMTP id S229615AbiINQZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:24:58 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A7B52DFD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:24:52 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a26so7236376ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:24:52 -0700 (PDT)
+        Wed, 14 Sep 2022 12:25:36 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253797D1DE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:25:34 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m1so23016955edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:25:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=iPvcRKQ3/RqRnb/KNOcwBsKTik/oM2E9btzJlJ3xtbw=;
-        b=UUW/XmCV1JYV8LfgqC/Yi2kUbkZfzbWyffYAPE5XdIdCMrNxQAvlr3wOP2Hzc6uACl
-         syl37yzz3CubUgn6U+5UnhQzmJf1voYR7fFNBFzhXNrWdK4xzmesc8AKheuoYDgus+3c
-         TqcxYBb4kdjzOcQxxc1kuSBpVrJkfGghOrocYl257Fw4moSaEviRq2ROpoHYe5OALvDL
-         jhZUWCKC32/Iutw6ZOZDZoACEINekhhh0ba8ayJSAilnYa7+YKqvr5tpKVyzrfPNdklL
-         eX/cwh0SaOCan4rKJ4OGUR0CecYOzwB0sWRYEHxSVzD+Dm7E4ujlAGJ3JJ+QiaRouMUU
-         wCcw==
+        bh=FodkllfW5mSVFcv5dyl2Dr5bB4IrI1aqYiKSRIoDQaw=;
+        b=R2eRbrqH1nc3Vp0QRlYBSW1CCbZ3AGGY+6y1IPAvAJCyznZe3OwPiBdtbV3LkNaEja
+         JCBYsEv8jJ7tSHkJou2v1wFSzj8RHp93ei5EcQM+t7qWTNta8RW43zykJhxiu8H+DDtr
+         7ce9IRwFxP18P/yanJo2JK7hTR2X2pTnpkr9Xa/6aCGyakxjvCN+7Sa2WCcJk0Zr9+eE
+         XOaQ5CVBeacnPtvw0/C6I37SBIGL7tE0Jh2O5KBuWhPCTtuguZdjINBYXKTimpVjisVU
+         rzI1h8tln71tPTfufHef7NLw6t7eXmc4ZszYFitRdGhqryil5k9aAeLgW374t+iMmtB0
+         zpWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=iPvcRKQ3/RqRnb/KNOcwBsKTik/oM2E9btzJlJ3xtbw=;
-        b=71bYgpakN9uDGxyvOnRyu0JzNXVI7ONq1t+43t99ihk0dH5dBVPaq2J6ksYJ7K+F7h
-         hBtDJgfVCXUjWM4uBijlfK4P0c/lx3FvzbW5HTUi8Wq2BD5rHUnOEoIyK9p9j8b3wjEn
-         q8FqrQA7BX6OvBPmmuKrO9biO+NQqMwvQL/rZiLedau3CxMYFO5who2/7BQMpYl7mqfY
-         f9mhFOrGBKrrAiOZvlXDF6YHzjB42BDcPDO0Zaf7DlHcqOpBycXKIWhWFrDaqzKXJJm0
-         4tVai0KQSNvj+r0IDcbUEwThSY6aF9rueP4YtAAdGaVauWpv2Drkv87orCVd/ke0kj2b
-         CxCQ==
-X-Gm-Message-State: ACgBeo2Qi2wQTz8X7er+MktZdvrRsPxczMDx0JQO7eCoLjDAOcxoXjDO
-        OdgobksjSRkZnAAVte65PLtadGUQVUTjA6k9xG6BMA==
-X-Google-Smtp-Source: AA6agR7BqJBqsWKt2M6q7i2A14Fsfv98BBM2NQBaW6bfjVBNdJDDAfqKYlb+MIOrQnSw7kuWVO3vrb/BkPMPvM0Nst4=
-X-Received: by 2002:a17:907:a0c7:b0:77f:a9d2:9be2 with SMTP id
- hw7-20020a170907a0c700b0077fa9d29be2mr7773678ejc.352.1663172690708; Wed, 14
- Sep 2022 09:24:50 -0700 (PDT)
+        bh=FodkllfW5mSVFcv5dyl2Dr5bB4IrI1aqYiKSRIoDQaw=;
+        b=H7fZ+PIVxDYrEcUjpsorxPQnLHZapvv0b/A4GHfQ8D23WFWBKtXZNiz+GENjTtKs1E
+         S/tLKIOgxnfyajQ6tlu2lnjCTEs8vd/floZnyYuhqFty1ipuMKf+xFG4t4NRmSLBZLoB
+         hSkQpho0ox5Ugkn8Pczr690zuRnd4OPt+gnrZoAS6VVpYADqWErvu57LXChzvt01vTkm
+         d149Aq5l5+dkemPzcQ0A0nAfCpCnn7R52coBkg866BKKrGSbiX+dwA+QoSGnTKQVkoNm
+         iDYNh3/lEG5NlLqkSm7xm2DQuLYhSrkdxRBMI4oa6LIATu9hf4HkLAP6PobxtnqUa1Ud
+         jHiA==
+X-Gm-Message-State: ACgBeo3Y4tQl2HD0OP8LAdbDoUv6XIYwd6zOuScJHaeY+gKpqrvIyfFF
+        aAbKIr74H4SqrqWK3QmkB3fU0hJsM3AI7icBff1Wjg==
+X-Google-Smtp-Source: AA6agR6/5sgTxAc62jLsnscMZnpHygzSfirD8uXrKdMgu/w+pO5mj6PzSFIsuL/wv0EJbA5x6VoePTJ6K2YulkpOm2w=
+X-Received: by 2002:aa7:dd02:0:b0:44e:f7af:b996 with SMTP id
+ i2-20020aa7dd02000000b0044ef7afb996mr31587967edv.422.1663172732652; Wed, 14
+ Sep 2022 09:25:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <YuqDMLF2AQyj4+N1@kroah.com> <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
- <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
- <YyCequVJnV3p0Cpw@kroah.com> <CAOesGMjQHhTUMBGHQcME4JBkZCof2NEQ4gaM1GWFgH40+LN9AQ@mail.gmail.com>
- <YyHehZ5hT8mXKoTX@kroah.com>
-In-Reply-To: <YyHehZ5hT8mXKoTX@kroah.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Wed, 14 Sep 2022 09:24:39 -0700
-Message-ID: <CAOesGMid4_pDeUQFwhfSwrBRGhGocA-73V83h5qOsmYg7gAWTA@mail.gmail.com>
-Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+References: <20220914151145.73253-1-brgl@bgdev.pl> <YyH/hJMyPZSqyvQj@sol>
+In-Reply-To: <YyH/hJMyPZSqyvQj@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 14 Sep 2022 18:25:21 +0200
+Message-ID: <CAMRc=McERgSkmpWv4k1eB1mtRU=jGhWiXYMdq72h9H9SYuF6Ng@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: TODO: add an item about GPIO safe-state
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Sep 14, 2022 at 7:00 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Wed, Sep 14, 2022 at 6:21 PM Kent Gibson <warthog618@gmail.com> wrote:
 >
-> On Tue, Sep 13, 2022 at 09:28:27AM -0700, Olof Johansson wrote:
-> > On Tue, Sep 13, 2022 at 8:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
-> > > > On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > > Saravana Kannan (11):
-> > > > > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > > > > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
-> > > > > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
-> > > > > >       driver core: Add wait_for_init_devices_probe helper function
-> > > > > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
-> > > > > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
-> > > > > >       driver core: Set fw_devlink.strict=1 by default
-> > > > > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
-> > > > > >       driver core: Delete driver_deferred_probe_check_state()
-> > > > > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
-> > > > > >       of: base: Avoid console probe delay when fw_devlink.strict=1
-> > > > >
-> > > > > The last patch in this list regresses my HoneyComb LX2K (ironically
-> > > > > the machine I do maintainer work on). It stops PCIe from probing, but
-> > > > > without a single message indicating why.
-> > > > >
-> > > > > The reason seems to be that the iommu-maps property doesn't get
-> > > > > patched up by my (older) u-boot, and thus isn't a valid reference.
-> > > > > System works fine without IOMMU, which is how I've ran it for a couple
-> > > > > of years.
-> > > > >
-> > > > > It's also extremely hard to diagnose out of the box because there are
-> > > > > *no error messages*. And there were no warnings leading up to this
-> > > > > strict enforcement.
-> > > > >
-> > > > > This "feature" seems to have been done backwards. The checks should
-> > > > > have been running (and not skipped due to the "optional" flag), but
-> > > > > also not causing errors, just warnings. That would have given users a
-> > > > > chance to know that this is something that needs to be fixed.
-> > > > >
-> > > > > And when you flip the switch, at least report what failed so that
-> > > > > people don't need to spend a whole night bisecting kernels, please.
-> > > > >
-> > > > > Greg, mind reverting just the last one? If I hit this, I presume
-> > > > > others would too.
-> > > >
-> > > > Apologies, wrong patch pointed out. The culprit is "driver core: Set
-> > > > fw_devlink.strict=1 by default", 71066545b48e42.
-> > >
-> > > Is this still an issue in -rc5?  A number of patches in the above series
-> > > was just reverted and hopefully should have resolved the issue you are
-> > > seeing.
+> On Wed, Sep 14, 2022 at 05:11:45PM +0200, Bartosz Golaszewski wrote:
+> > This adds a new TODO item for gpiolib and can also be used to start
+> > a discussion about the need for it and implementation details.
 > >
-> > Unfortunately, I discovered this regression with -rc5 in the first
-> > place, so it's still there.
+> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> > ---
+> >  drivers/gpio/TODO | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/gpio/TODO b/drivers/gpio/TODO
+> > index f87ff3fa8a53..6ab39c5cec9d 100644
+> > --- a/drivers/gpio/TODO
+> > +++ b/drivers/gpio/TODO
+> > @@ -197,3 +197,25 @@ A small number of drivers have been converted (pl061, tegra186, msm,
+> >  amd, apple), and can be used as examples of how to proceed with this
+> >  conversion. Note that drivers using the generic irqchip framework
+> >  cannot be converted yet, but watch this space!
+> > +
+> > +Safe-state of GPIOs
+> > +
+> > +During 2022 Linux Plumbers Conference's GPIO & pinctrl BOF it's been discussed
+> > +that we don't have any middle ground between hogging GPIO lines and letting the
+> > +user (either in-kernel or user-space) control them. Either the lines are forever
+> > +reserved as hogs or their state is undefined unless requested.
+> > +
+> > +Currently the behavior of GPIOs that were not requested or were released is
+> > +largely driver dependent (the provider driver decides whether the line's state
+> > +is reverted to some predefined value or left as-is). This can be problematic
+> > +as the output state of a line can damage physical hardware.
+> > +
+> > +This item is about proposing a solution, most likely in the form of a new device
+> > +property called "safe-state" that would define the safe states of specific lines
+> > +(e.g. output-high) but not block the line from being requested by users who
+> > +could then modify that default state. Once released the GPIO core would then
+> > +put the line back into the "safe-state".
+> > +
 >
-> Ick, ok, Saravana, any thoughts?  I know you're at the conference this
-> week with me, maybe you can give Olof a hint as to what to look for
-> here?
+> Geert suggests idle-state, rather than safe-state, but you call it
+> the "default state" here as well - pick one.
+>
 
-I'm not sure what you want me to look for. The patch turns on
-enforcement of DT contents that never used to be enforced, so now my
-computer no longer boots. And it does it in a way that makes it
-impossible for someone not rebuilding kernels to debug to figure out
-what happened.
+idle-state it is then.
 
-The patch needs to be reverted.
+> So this idle-state would be another attribute on a line that the user
+> could configure via the GPIO uAPI, and so replicate the "set and forget"
+> sysfs behavior that we are currently missing, and which seems to be the
+> biggest sticking point for a transition away from sysfs?
+>
 
+No, this should only be defined on the device tree or in ACPI. As the
+HW policy of a device. I don't think we should allow user-space to
+override this behavior.
 
--Olof
+> For backward compatibility the default idle-state, i.e. the value the
+> idle-state would take if not explicitly set, would map to existing
+> behaviour, so let the driver decide?
+>
+> What happens when gpiolib frees the line?  Isn't the driver still able
+> to do what it likes to the line at that point, no matter what GPIO core
+> has set it to previously? e.g. gpio_sim_free() restores the line to its
+> own internal pull value.
+>
+
+This "idle-state" property wouldn't be mandatory and normally would
+only be defined for a limited set of lines. I'd say we just override
+whatever the driver does in free() (most drivers don't implement it
+BTW) and do what the property says we should.
+
+Bart
