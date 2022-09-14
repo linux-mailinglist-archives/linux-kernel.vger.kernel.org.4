@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9555B8220
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B335B8224
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 09:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiINHlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 03:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
+        id S229811AbiINHmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 03:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINHlL (ORCPT
+        with ESMTP id S229484AbiINHmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 03:41:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB50972B53;
-        Wed, 14 Sep 2022 00:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663141269; x=1694677269;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=5rRWCvywlUXdhqWUteBuY+K68wd0DLGVaPN2d1JfXdw=;
-  b=I5cEfBhZd/yDrhA5KM3MAkpSq2FJSEBEt3jX64Y4axWju5ApT+r0zkjR
-   C3EV9qEYcWAhy3DjufuvX/+pk3Rdajg8yIFCZO6/6DbCJYN7w1nGRxR/B
-   5MQs+VBAVrP3I6JUVDfzmRGC8H68hkizF764eyvjsRztDJ4aonD9DRnmV
-   THl+jyGYL0dGipKldkJTeGuoQQ36LiU+ur6ZlGDjawXCuSrTevzZh555/
-   ZHDtD33XepYlH3NndcAIV03T9MzxJuTIi6q0rMHKLxv6dZAU8DNZ3FpG0
-   OLTeLnz10DBhZHEEKIyoHe8DyrhLueS/RoFp5dBsN62KMWJXuMLJaQrTB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="278749620"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="278749620"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 00:41:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="647283158"
-Received: from debbiedx-mobl.ger.corp.intel.com (HELO [10.213.238.97]) ([10.213.238.97])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 00:40:57 -0700
-Message-ID: <e0067441-19e2-2ae6-df47-2018672426be@intel.com>
-Date:   Wed, 14 Sep 2022 00:40:55 -0700
+        Wed, 14 Sep 2022 03:42:38 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E458C7287F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:42:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id f24so14298948plr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 00:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=c5ZYpTByncp5HN1cWQAD3FaVVr7mGXVV2XjTzUESKj0=;
+        b=BxaLnc1MXY1pE93RhGGQ/rxkxCg6rVjgniDvBvWlyWMsWQ/WkY0SZn2Dcd4Z8O9fQx
+         6WmxkwHh9sTJhHUuIXfiAqjBRVo8WAH+p1Ebmmewwt43D2CB+WjtwYDMgc7UBFUANuG7
+         IcoXy4jVuT9Xctl0icw8j9nU3ZaRKasYOKTIobMTWuws1M4lLhPquYty+k3tbkAER6C0
+         nAEdV24vO3920A4s8cQa19MoTnddBoWWP8ZQwqnwlgTuYxa1cUj8GnSYh1dawQSp7/4e
+         6EkjwQaJuRbLqQPN/TxkrVwhaOn3xnIGI5M2FSF1oKD1mLpgFPNjFTWR1XI08g9tVUa2
+         c1NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=c5ZYpTByncp5HN1cWQAD3FaVVr7mGXVV2XjTzUESKj0=;
+        b=xYnOsepjBCBaoAcaf93f6g/4HAKOEE2RtyS4l0GrLFnqZeZwA2THGAV8uW5Sg/QBlb
+         kQHpdJhEloyWoJXYXb+IMISG9jUvr1seMylnKg0YwmKU10NqMcdCN2I0c7GIlO4+3/2h
+         UZiHqhNlkyHOyrXzWXDdhF+Ga5ozjIJ8IaCTFzVxcEx5jTli9HkUzPxVvI+ReNgYEIXr
+         vptd65NHLBnv/cvmaTuY3Yr+OCdDLrifEW8N7VVuGFGk1c4EFZOWeu1mgjr/9l+l5CpK
+         yEIKLZ0iA+xWweks5RF68HidP/PpP6oZ4QCMj9b5pYi8jvRb54+bHr3e2WdXyOhiOJkx
+         6vAw==
+X-Gm-Message-State: ACgBeo1bR7+uG5pVM0oISJ40dN+raEeOn6quiHZSn+yCP67aknxzlQw2
+        J+ug5d7uGkH1WVd5cOvlxEqhHQ==
+X-Google-Smtp-Source: AA6agR4Bt9Eijo0k77CkX0XflkxEon8bq4pHXN/QXruP0B6PdzCMzu/U2fIL81611fkeu8WWH4k1nw==
+X-Received: by 2002:a17:902:ccc7:b0:16c:484f:4c69 with SMTP id z7-20020a170902ccc700b0016c484f4c69mr36564183ple.118.1663141356949;
+        Wed, 14 Sep 2022 00:42:36 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m6-20020a17090a2c0600b001faf7a88138sm8368043pjd.42.2022.09.14.00.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 00:42:36 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 07:42:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH v2 13/23] KVM: x86: Disable APIC logical map if vCPUs are
+ aliased in logical mode
+Message-ID: <YyGF6T/N1l3i7Ded@google.com>
+References: <20220903002254.2411750-1-seanjc@google.com>
+ <20220903002254.2411750-14-seanjc@google.com>
+ <aedb7677-528a-75b7-6517-ab1865515ad4@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC 1/1] mm: Add per-task struct tlb counters
-Content-Language: en-US
-To:     Joe Damato <jdamato@fastly.com>, x86@kernel.org,
-        linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <1663120270-2673-1-git-send-email-jdamato@fastly.com>
- <1663120270-2673-2-git-send-email-jdamato@fastly.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1663120270-2673-2-git-send-email-jdamato@fastly.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aedb7677-528a-75b7-6517-ab1865515ad4@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,34 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 18:51, Joe Damato wrote:
-> TLB shootdowns are tracked globally, but on a busy system it can be
-> difficult to disambiguate the source of TLB shootdowns.
+On Tue, Sep 13, 2022, Suthikulpanit, Suravee wrote:
+> Hi Sean
 > 
-> Add two counter fields:
-> 	- nrtlbflush: number of tlb flush events received
-> 	- ngtlbflush: number of tlb flush events generated
+> On 9/2/2022 7:22 PM, Sean Christopherson wrote:
+> > Disable the optimized APIC logical map if multiple vCPUs are aliased to
+> > the same logical ID.  Architecturally, all CPUs whose logical ID matches
+> > the MDA are supposed to receive the interrupt; overwriting existing map
+> > entries can result in missed IPIs.
+> > 
+> > Fixes: 1e08ec4a130e ("KVM: optimize apic interrupt delivery")
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   arch/x86/kvm/lapic.c | 5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index 6b2f538b8fd0..75748c380ceb 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -303,12 +303,13 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+> >   		if (!mask)
+> >   			continue;
+> > -		if (!is_power_of_2(mask)) {
+> > +		ldr = ffs(mask) - 1;
+> > +		if (!is_power_of_2(mask) || cluster[ldr]) {
 > 
-> Expose those fields in /proc/[pid]/stat so that they can be analyzed
-> alongside similar metrics (e.g. min_flt and maj_flt).
+> Should this be checking if the cluster[ldr] is pointing to the same struct
+> apic instead? For example:
+> 
+> 		if (!is_power_of_2(mask) || cluster[ldr] != apic)
+> 
+> From my observation, the kvm_recalculate_apic_map() can be called many
+> times, and the cluster[ldr] could have already been assigned from the
+> previous invocation. So, as long as it is the same, it should be okay.
 
-On x86 at least, we already have two other ways to count flushes.  You
-even quoted them with your patch:
+No, because cluster[ldr] can never match "apic".  kvm_recalculate_apic_map()
+creates and populates a _new_ kvm_apic_map every time, it doesn't do an in-place
+update of the current map.
 
->  	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
-> +	current->ngtlbflush++;
->  	if (info->end == TLB_FLUSH_ALL)
->  		trace_tlb_flush(TLB_REMOTE_SEND_IPI, TLB_FLUSH_ALL);
+The loop containing this code is:
 
-Granted, the count_vm_tlb...() one is debugging only.  But, did you try
-to use those other mechanisms?  For instance, could you patch
-count_vm_tlb_event()?  Why didn't the tracepoints work for you?
+	kvm_for_each_vcpu(i, vcpu, kvm) {
+		struct kvm_lapic *apic = vcpu->arch.apic;
 
-Can this be done in a more arch-generic way?  It's a shame to
-unconditionally add counters to the task struct and only use them on
-x86.  If someone wanted to generalize the x86 tracepoints, or make them
-available to other architectures, I think that would be fine even if
-they have to change a bit (queue the inevitable argument about
-tracepoint ABI).
+		...
+	}
 
-P.S. I'm not a fan of the structure member naming.
+so it's impossible for cluster[ldr] to hold the current "apic", because this is
+the first and only iteration that processes the current "apic".
