@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FE75B8003
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 06:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F115B8008
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 06:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiINEHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 00:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        id S229809AbiINEI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 00:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiINEHt (ORCPT
+        with ESMTP id S229647AbiINEIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 00:07:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7B551A0C;
-        Tue, 13 Sep 2022 21:07:47 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E472eT028147;
-        Wed, 14 Sep 2022 04:07:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cg5hk0sMZbzTKba6Tn/22wSERoQIy9AMI7eBhSapFRw=;
- b=h+rrwWEw3pFVPrmouDQliC8tjQ1WplNytVMappcNEY8x9i75Yt6OKsj5ZZXkVLdVWlD8
- sFCppdssRNltDkQtwvo0w9BrgjBiqARUpfUOucL/pnfJdfmx11oTKCFh6iaoQnyim7XW
- LVx74IqEn/wwtOLP13OvlprUS/aE1BRQ5L63WZl30TSMqfPZcRR/FImRFTQBk9RabW81
- 4qPd/70OpzxbTHF6F/8wp1b/VvWGDSeDWFjNscdIy6n3iAKWxxi6bfP9s3Cg9m97L0Ep
- pSL4BN1H5EH5ow2GhriXlwnDhWHbXZZkDCJQr4cYl3WsJex4kfvqObKYLGSFobKSgFQW 2w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymh5ag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 04:07:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E47b56008932
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 04:07:37 GMT
-Received: from [10.216.15.227] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
- 2022 21:07:32 -0700
-Message-ID: <273d4d8d-8ffd-8d7f-ef82-4287d6256fcc@quicinc.com>
-Date:   Wed, 14 Sep 2022 09:37:29 +0530
+        Wed, 14 Sep 2022 00:08:24 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DCB52821
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 21:08:22 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3321c2a8d4cso164994717b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 21:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SmSKuyvg1ON77pEQA9rZ6Akf1I0QxiG/P5GG1kyYPoI=;
+        b=JAqfZVNIPzZVCv/fn1fe79Hxz3WAgNPMNsSVFu1Ck8S0K2HQn65Sv8WQRZE7hQDZdb
+         TS7sblTsk2sfaqHAvRadRpAonhlUXKFCHF/iZCATAjVGhV2IM1RkPQji77S8geBS1Bpr
+         J6MLMfWli3M175g5b3vGhgNDLnFqFzPwxh9MYIOoKSeb6UnAXfSLPPCo2drVazdB9jWe
+         KHniu1ugMwQyL92uSJiDlcj6pqJcHjHrN+4C8TygMe39lvIKnPyHRrqyhFz9DxpZWBov
+         bMiKygU8IGK5ZoT+Y7nCXA0wSWysv4sYQfyIxgPTyj84CSsUfgTnQUasw3+3nvKljBYx
+         ngPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SmSKuyvg1ON77pEQA9rZ6Akf1I0QxiG/P5GG1kyYPoI=;
+        b=vhrsaWQm4x3kOWr11jPWtznUjCtFij4UHnm3vH6LIEKprD+lfjOkdhxOxhcgECspgG
+         pTxPMOIly7FCv4uGv/lwJhcSdKC2keHCi0e6gYuYVfINWCyPHzac2X+FXaNblch/DikJ
+         HVGMplZFV7at1TuiO47JrJ4DAnU5DreKJhSmQp1B8iDBuSpnSnIwJJ125hP38j9gcy5V
+         qzdMasOWmGftNOhQTjimp7agQuEXR0WrR+eRfRWQr8iMmjzZCwHzVpB8JyubdpqSPsXO
+         7+HWfH+75Ub0X+ISKKYu+YIdf+u2OUGXssDYRoJy8zbdv1TSbyU264UOIHisB+3KHvlk
+         0Zzg==
+X-Gm-Message-State: ACgBeo1BKUMGeXwiCNsvDKLbHQEOGKlmwOUjdF4Jl4p4ok6TwyP8PR5f
+        McCqpQwzv1oj50DZYCh2ff82l1BZtYHHIDKaTSZfhw==
+X-Google-Smtp-Source: AA6agR7hcP80WaVlNDrV9C8tgkC7vhRRPHhedBuWia5UOUxztGfiE6rw1jk2fP2eXv/ciI82RkgPUnv4V8nZ0F8fNxo=
+X-Received: by 2002:a81:d344:0:b0:345:1751:e648 with SMTP id
+ d4-20020a81d344000000b003451751e648mr30906671ywl.159.1663128501693; Tue, 13
+ Sep 2022 21:08:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
- support
-Content-Language: en-US
-To:     <andersson@kernel.org>, <agross@kernel.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <mka@chromium.org>
-CC:     <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
-        <dianders@chromium.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Krishna chaitanya chundru" <quic_krichai@quicinc.com>
-References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20220901101756.28164-1-quic_rjendra@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qjEILI_Ma_qUFtxfHSk9ir22duknpOkv
-X-Proofpoint-GUID: qjEILI_Ma_qUFtxfHSk9ir22duknpOkv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_12,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209140018
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20220829194905.81713-1-khuey@kylehuey.com>
+In-Reply-To: <20220829194905.81713-1-khuey@kylehuey.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Tue, 13 Sep 2022 21:08:02 -0700
+Message-ID: <CAP045ApCZhHZgr79iie-K=xxnkT-PQcy8CqNvGbPzODcCSWdfw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,89 +77,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/1/2022 3:47 PM, Rajendra Nayak wrote:
-> GDSCs cannot be transitioned into a Retention state in SW.
-> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
-> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
-> takes care of retaining the memory/logic for the domain when
-> the parent domain transitions to low power state.
-> The existing logic handling the PWRSTS_RET seems to set the
-> RETAIN_MEM/RETAIN_PERIPH bits but then explicitly turns the
-> GDSC OFF as part of _gdsc_disable(). Fix that by leaving the
-> GDSC in ON state.
-
-Any thoughts on this patch? We now have at-least one more user,
-PCIe [1] that wants to follow in the footsteps of USB and use RET
-state to support wake-ups from low power state.
-
-[1] https://lore.kernel.org/lkml/20220913164233.GF25849@workstation/
-
-> 
-> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Mon, Aug 29, 2022 at 12:49 PM Kyle Huey <me@kylehuey.com> wrote:
+>
+> From: Kyle Huey <me@kylehuey.com>
+>
+> When management of the PKRU register was moved away from XSTATE, emulation
+> of PKRU's existence in XSTATE was added for reading PKRU through ptrace,
+> but not for writing PKRU through ptrace. This can be seen by running gdb
+> and executing `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected
+> kernels (5.14+) the write to the PKRU register (which gdb performs through
+> ptrace) is ignored.
+>
+> There are three APIs that write PKRU: sigreturn, PTRACE_SETREGSET with
+> NT_X86_XSTATE, and KVM_SET_XSAVE. sigreturn still uses XRSTOR to write to
+> PKRU. KVM_SET_XSAVE has its own special handling to make PKRU writes take
+> effect (in fpu_copy_uabi_to_guest_fpstate). Push that down into
+> copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
+> a pointer to the appropriate PKRU slot. copy_sigframe_from_user_to_xstate
+> depends on copy_uabi_to_xstate populating the PKRU field in the task's
+> XSTATE so that __fpu_restore_sig can do a XRSTOR from it, so continue doing
+> that.
+>
+> This also adds code to initialize the PKRU value to the hardware init value
+> (namely 0) if the PKRU bit is not set in the XSTATE header provided to
+> ptrace, to match XRSTOR.
+>
+> Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
+> Signed-off-by: Kyle Huey <me@kylehuey.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: stable@vger.kernel.org # 5.14+
 > ---
-> There are a few existing users of PWRSTS_RET and I am not
-> sure if they would be impacted with this change
-> 
-> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
-> gdsc is actually transitioning to OFF and might be left
-> ON as part of this change, atleast till we hit system wide
-> low power state.
-> If we really leak more power because of this
-> change, the right thing to do would be to update .pwrsts for
-> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
-> I dont have a msm8974 hardware, so if anyone who has can report
-> any issues I can take a look further on how to fix it.
-> 
-> 2. gpu_gx_gdsc in gpucc-msm8998.c and
->     gpu_gx_gdsc in gpucc-sdm660.c
-> Both of these seem to add support for 3 power state
-> OFF, RET and ON, however I dont see any logic in gdsc
-> driver to handle 3 different power states.
-> So I am expecting that these are infact just transitioning
-> between ON and OFF and RET state is never really used.
-> The ideal fix for them would be to just update their resp.
-> .pwrsts to PWRSTS_OFF_ON only.
-> 
->   drivers/clk/qcom/gdsc.c | 10 ++++++++++
->   drivers/clk/qcom/gdsc.h |  5 +++++
->   2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index d3244006c661..ccf63771e852 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -368,6 +368,16 @@ static int _gdsc_disable(struct gdsc *sc)
->   	if (sc->pwrsts & PWRSTS_OFF)
->   		gdsc_clear_mem_on(sc);
->   
-> +	/*
-> +	 * If the GDSC supports only a Retention state, apart from ON,
-> +	 * leave it in ON state.
-> +	 * There is no SW control to transition the GDSC into
-> +	 * Retention state. This happens in HW when the parent
-> +	 * domain goes down to a Low power state
-> +	 */
-> +	if (sc->pwrsts == PWRSTS_RET_ON)
-> +		return 0;
+>  arch/x86/kernel/fpu/core.c   | 20 +++++++++-----------
+>  arch/x86/kernel/fpu/regset.c |  2 +-
+>  arch/x86/kernel/fpu/signal.c |  2 +-
+>  arch/x86/kernel/fpu/xstate.c | 25 ++++++++++++++++++++-----
+>  arch/x86/kernel/fpu/xstate.h |  4 ++--
+>  5 files changed, 33 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 3b28c5b25e12..c273669e8a00 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+>  {
+>         struct fpstate *kstate = gfpu->fpstate;
+>         const union fpregs_state *ustate = buf;
+> -       struct pkru_state *xpkru;
+> -       int ret;
+>
+>         if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+>                 if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
+> @@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+>         if (ustate->xsave.header.xfeatures & ~xcr0)
+>                 return -EINVAL;
+>
+> -       ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+> -       if (ret)
+> -               return ret;
+> +       /*
+> +        * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+> +        * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+> +        * case (all other components are eventually re-initialized).
+> +        * (Not clear that this is actually necessary for compat).
+> +        */
+> +       if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+> +               vpkru = NULL;
+>
+> -       /* Retrieve PKRU if not in init state */
+> -       if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+> -               xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+> -               *vpkru = xpkru->pkru;
+> -       }
+> -       return 0;
+> +       return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+>  }
+>  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+>  #endif /* CONFIG_KVM */
+> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> index 75ffaef8c299..6d056b68f4ed 100644
+> --- a/arch/x86/kernel/fpu/regset.c
+> +++ b/arch/x86/kernel/fpu/regset.c
+> @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+>         }
+>
+>         fpu_force_restore(fpu);
+> -       ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
+> +       ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+>
+>  out:
+>         vfree(tmpbuf);
+> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+> index 91d4b6de58ab..558076dbde5b 100644
+> --- a/arch/x86/kernel/fpu/signal.c
+> +++ b/arch/x86/kernel/fpu/signal.c
+> @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+>
+>         fpregs = &fpu->fpstate->regs;
+>         if (use_xsave() && !fx_only) {
+> -               if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
+> +               if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+>                         return false;
+>         } else {
+>                 if (__copy_from_user(&fpregs->fxsave, buf_fx,
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index c8340156bfd2..8f14981a3936 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+>
+>
+>  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+> -                              const void __user *ubuf)
+> +                              const void __user *ubuf, u32 *pkru)
+>  {
+>         struct xregs_state *xsave = &fpstate->regs.xsave;
+>         unsigned int offset, size;
+> @@ -1246,6 +1246,21 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>                 }
+>         }
+>
+> +       /*
+> +        * Update the user protection key storage. Allow KVM to
+> +        * pass in a NULL pkru pointer if the mask bit is unset
+> +        * for its legacy ABI behavior.
+> +        */
+> +       if (pkru)
+> +               *pkru = 0;
 > +
->   	ret = gdsc_toggle_logic(sc, GDSC_OFF);
->   	if (ret)
->   		return ret;
-> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> index 5de48c9439b2..981a12c8502d 100644
-> --- a/drivers/clk/qcom/gdsc.h
-> +++ b/drivers/clk/qcom/gdsc.h
-> @@ -49,6 +49,11 @@ struct gdsc {
->   	const u8			pwrsts;
->   /* Powerdomain allowable state bitfields */
->   #define PWRSTS_OFF		BIT(0)
-> +/*
-> + * There is no SW control to transition a GDSC into
-> + * PWRSTS_RET. This happens in HW when the parent
-> + * domain goes down to a low power state
-> + */
->   #define PWRSTS_RET		BIT(1)
->   #define PWRSTS_ON		BIT(2)
->   #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
+> +       if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> +               struct pkru_state *xpkru;
+> +
+> +               xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+> +               *pkru = xpkru->pkru;
+> +       }
+> +
+>         /*
+>          * The state that came in from userspace was user-state only.
+>          * Mask all the user states out of 'xfeatures':
+> @@ -1264,9 +1279,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>   * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
+>   * format and copy to the target thread. Used by ptrace and KVM.
+>   */
+> -int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
+> +int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
+>  {
+> -       return copy_uabi_to_xstate(fpstate, kbuf, NULL);
+> +       return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
+>  }
+>
+>  /*
+> @@ -1274,10 +1289,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
+>   * XSAVE[S] format and copy to the target thread. This is called from the
+>   * sigreturn() and rt_sigreturn() system calls.
+>   */
+> -int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
+> +int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
+>                                       const void __user *ubuf)
+>  {
+> -       return copy_uabi_to_xstate(fpstate, NULL, ubuf);
+> +       return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
+>  }
+>
+>  static bool validate_independent_components(u64 mask)
+> diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+> index 5ad47031383b..a4ecb04d8d64 100644
+> --- a/arch/x86/kernel/fpu/xstate.h
+> +++ b/arch/x86/kernel/fpu/xstate.h
+> @@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+>                                       u32 pkru_val, enum xstate_copy_mode copy_mode);
+>  extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+>                                     enum xstate_copy_mode mode);
+> -extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
+> -extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
+> +extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
+> +extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
+>
+>
+>  extern void fpu__init_cpu_xstate(void);
+> --
+> 2.37.2
+>
+> Changelog since v5:
+> - Avoids a second copy from the uabi buffer as suggested.
+> - Preserves old KVM_SET_XSAVE behavior where leaving the PKRU bit in the
+>   XSTATE header results in PKRU remaining unchanged instead of
+>   reinitializing it.
+> - Fixed up patch metadata as requested.
+>
+> Changelog since v4:
+> - Selftest additionally checks PKRU readbacks through ptrace.
+> - Selftest flips all PKRU bits (except the default key).
+>
+> Changelog since v3:
+> - The v3 patch is now part 1 of 2.
+> - Adds a selftest in part 2 of 2.
+>
+> Changelog since v2:
+> - Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
+>
+> Changelog since v1:
+> - Handles the error case of copy_to_buffer().
+
+tglx, could you look at this again?
+
+- Kyle
