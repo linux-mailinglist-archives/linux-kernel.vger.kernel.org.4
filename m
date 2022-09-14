@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03A55B905A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667AE5B9067
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiINWEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S229587AbiINWFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 18:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiINWET (ORCPT
+        with ESMTP id S229543AbiINWFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:04:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92321647FE;
-        Wed, 14 Sep 2022 15:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663193055; x=1694729055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p3oc3q2U/df+Y6Jf+6GoDWbjGub5SY7+B7D0sWSkZfM=;
-  b=PT/0I9fkSfPzCUOBtlvbzOyAZBjla1I4SgSjenYiHeqC6mVKU8P3vO2g
-   BKyVYq0I4F9lx3g+mPSu9lmOM+Lm+Zo9HyuYKDt1XsFQjGYHrsbvDf02+
-   dNyIUSd6a1AIG2KV0Si0InxpF+H8tJf6Lxrc6q2/pJro1mQMgQ3CEA7ZL
-   4nQjwpZbsssQlv/SxUEmuKm/PSNelaab2k6dJcQvRSjk7nzFCt0QMMMSG
-   xSoT8P3tMQO7qMZRw6Jc7mjfVco0TNaDgXdxj1pM8Lh7ONY70nd7NfNg5
-   9mJVJfxMMzB+Nn1LMaq5hB6CO+iukpUlxbw3QoUj9qjeAonwPWB0j/2xF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="278938286"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="278938286"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 15:04:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="720738892"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Sep 2022 15:04:09 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYaUK-0000bw-10;
-        Wed, 14 Sep 2022 22:04:08 +0000
-Date:   Thu, 15 Sep 2022 06:03:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Doug Berger <opendmb@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        - <devicetree-spec@vger.kernel.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 18/21] mm/cma: support CMA in Designated Movable Blocks
-Message-ID: <202209150503.AZYsY64p-lkp@intel.com>
-References: <20220913195508.3511038-19-opendmb@gmail.com>
+        Wed, 14 Sep 2022 18:05:32 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9274E855
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:05:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so24311426edj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Holejv5x4Ja/Ig/81V4R1f7COb2CYNqjVPz0cAvGiCM=;
+        b=ayCgX547FpPpZErSYJpswnBRNBxPeCchdn1sDtuf7WpoN6yxA6wfPKh/7XzmSdtryk
+         SDd3hv6hg6FZEgVnjWHg+z3GMhGjUQLVYMe0mx7GEn3K7Sk0nOfK1sL0m92yr1L8p+iv
+         YxSvHYNlDlZJe/MVbYHBpiWPMSS4ISSG1m/mAyaHJczvfFmqgSaehrwbqIJ3GPLlFExf
+         I9yeHzlEnPkd0RvqCa1vMIJFE4yy64YhBP314+l7jaSPoUbeoc2LtN0UFSaNtWAi0Y1n
+         gKoHu+iUukFsQsFDwNB+wJzFqdcQWgdjlmM7YsK7kOQtRxQVzGYf6lVMpQyWLliIKiWg
+         zQnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Holejv5x4Ja/Ig/81V4R1f7COb2CYNqjVPz0cAvGiCM=;
+        b=xyDNDhVaixtQuuSFTZmG2Tnf3rj6Upqq0c9UX/qnA94rEawcRAAKwGif0CCW2r5hrw
+         v0Fi9/CAsn9Fr7I9NyfRc9uAzuSvBKL1IJLQI/nVDv8vZAVE9ic1+p1Rg2LgOB8mturC
+         ZCSnxDopLa+W26GQwPe+nOwt31oBDsHon7tU1X1rpXAjyNm4IrnJ/K5QZKB0C0mDdqiq
+         AYiCaD7OMgnDkpB7cvStWgjZMhURuXPXLP0kdTjGxcaCMBRCRdmWm7x8Sdlq2m7niS3r
+         tOb/ZDI9t1xDfB+/50f+pHbwmchnESzwFqU0Ku/XUI3pl1ndFS5H/pQE7NtMun6DBkZv
+         +2yw==
+X-Gm-Message-State: ACgBeo1usDeaR+DOlMG91LjZWwl1cl9OWcv84soseUdvANfLkJ8c7l74
+        zeRBwyyS3QOYQzNgHVlmNUzT9w==
+X-Google-Smtp-Source: AA6agR6Um7EfAcKc/t5rmUVVmOpNYFWZ91NjX/7J8A4VMMJRacru6lx+Hj7znbWDiHemUG5SbN4LcA==
+X-Received: by 2002:a05:6402:90a:b0:443:8b10:bcad with SMTP id g10-20020a056402090a00b004438b10bcadmr32096151edz.416.1663193129021;
+        Wed, 14 Sep 2022 15:05:29 -0700 (PDT)
+Received: from [192.168.1.9] (hst-221-107.medicom.bg. [84.238.221.107])
+        by smtp.googlemail.com with ESMTPSA id gu2-20020a170906f28200b00718e4e64b7bsm8021631ejb.79.2022.09.14.15.05.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 15:05:28 -0700 (PDT)
+Message-ID: <5beecec3-b2f0-861e-d8bc-4f81ed355b6a@linaro.org>
+Date:   Thu, 15 Sep 2022 01:05:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913195508.3511038-19-opendmb@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] MAINTAINERS: Add Vikash as VENUS video driver
+ co-maintainer
+Content-Language: en-US
+To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1663070940-8165-1-git-send-email-quic_vgarodia@quicinc.com>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+In-Reply-To: <1663070940-8165-1-git-send-email-quic_vgarodia@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,91 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug,
+Hi Vikash,
 
-I love your patch! Yet something to improve:
+On 9/13/22 15:09, Vikash Garodia wrote:
+> For the past several amendments in video driver, I have been working
+> with Stanimir in multiple design discussions or handling a given
+> issue. With this, adding myself as a co-maintainer.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.0-rc5]
-[cannot apply to akpm-mm/mm-everything next-20220914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'd like to thank you for all your work on the Venus driver.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220915/202209150503.AZYsY64p-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/635e919c92ca242c4b900bdfc7e21529e76f2f8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
-        git checkout 635e919c92ca242c4b900bdfc7e21529e76f2f8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-All errors (new ones prefixed by >>):
-
-   mm/page_alloc.c:9236:5: warning: no previous prototype for '_alloc_contig_range' [-Wmissing-prototypes]
-    9236 | int _alloc_contig_range(unsigned long start, unsigned long end,
-         |     ^~~~~~~~~~~~~~~~~~~
-   mm/page_alloc.c: In function 'alloc_contig_range':
->> mm/page_alloc.c:9390:36: error: 'MIGRATE_CMA' undeclared (first use in this function); did you mean 'MIGRATE_SYNC'?
-    9390 |                 if (migratetype == MIGRATE_CMA)
-         |                                    ^~~~~~~~~~~
-         |                                    MIGRATE_SYNC
-   mm/page_alloc.c:9390:36: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +9390 mm/page_alloc.c
-
-  9361	
-  9362	/**
-  9363	 * alloc_contig_range() -- tries to allocate given range of pages
-  9364	 * @start:	start PFN to allocate
-  9365	 * @end:	one-past-the-last PFN to allocate
-  9366	 * @migratetype:	migratetype of the underlying pageblocks (either
-  9367	 *			#MIGRATE_MOVABLE or #MIGRATE_CMA).  All pageblocks
-  9368	 *			in range must have the same migratetype and it must
-  9369	 *			be either of the two.
-  9370	 * @gfp_mask:	GFP mask to use during compaction
-  9371	 *
-  9372	 * The PFN range does not have to be pageblock aligned. The PFN range must
-  9373	 * belong to a single zone.
-  9374	 *
-  9375	 * The first thing this routine does is attempt to MIGRATE_ISOLATE all
-  9376	 * pageblocks in the range.  Once isolated, the pageblocks should not
-  9377	 * be modified by others.
-  9378	 *
-  9379	 * Return: zero on success or negative error code.  On success all
-  9380	 * pages which PFN is in [start, end) are allocated for the caller and
-  9381	 * need to be freed with free_contig_range().
-  9382	 */
-  9383	int alloc_contig_range(unsigned long start, unsigned long end,
-  9384			       unsigned int migratetype, gfp_t gfp_mask)
-  9385	{
-  9386		switch (dmb_intersects(start, end)) {
-  9387		case DMB_DISJOINT:
-  9388			break;
-  9389		case DMB_INTERSECTS:
-> 9390			if (migratetype == MIGRATE_CMA)
-  9391				migratetype = MIGRATE_MOVABLE;
-  9392			else
-  9393				return -EBUSY;
-  9394			break;
-  9395		default:
-  9396			return -EBUSY;
-  9397		}
-  9398	
-  9399		return _alloc_contig_range(start, end, migratetype, gfp_mask);
-  9400	}
-  9401	EXPORT_SYMBOL(alloc_contig_range);
-  9402	
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 936490d..d3ef64f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16969,6 +16969,7 @@ F:	drivers/thermal/qcom/
+>  
+>  QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+>  M:	Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> +M:	Vikash Garodia <quic_vgarodia@quicinc.com>
+>  L:	linux-media@vger.kernel.org
+>  L:	linux-arm-msm@vger.kernel.org
+>  S:	Maintained
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+regards,
+Stan
