@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B44F5B8A0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0AD5B8A10
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiINOL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S229760AbiINOMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiINOL0 (ORCPT
+        with ESMTP id S229629AbiINOMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:11:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3BB1EAFC;
-        Wed, 14 Sep 2022 07:11:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2352561D93;
-        Wed, 14 Sep 2022 14:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC6C8C433D7;
-        Wed, 14 Sep 2022 14:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663164684;
-        bh=0BQtMOqfuwcRhZDwaTLdlh2kfu34FusybTj1iXVbtPE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VoCSG/FDLWCQC2l1VzPLrzSfHSEc+Ip5g3jmUe8gTiCR4IAP8F0vkjwZklCCtm4YN
-         nyxZbRxWZrRDVfQpjYnU+G9NkoFxMQkfP3wbwtNEzzVQvAql4hXOjjA2Kdu3ewgB9U
-         uNoFbVvQ3wQx5VQGs2Wo0Ps0UOpLqoU64ob38oDFW3vQeTSZv8aMV2Fry4n4PXeP+G
-         dhfdJooBWuOfz/n3+AoKEnuIWxBSdxhiJDl459+UDA7Mm+KR0mVcwKsf9jfuGqDz8u
-         hfVCMfPL6/Y/6+G0vJvUYqhl13SC4R/2WHsBMKUGQ6ewMWCYsGHf3Luv8UZz2wBoNP
-         KTsLqHxItJWJA==
-Date:   Wed, 14 Sep 2022 09:11:22 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: spmi: Add qcom,bus-id
-Message-ID: <20220914141122.td5y4dzp5ercuvpj@builder.lan>
-References: <20220914112139.3680354-1-vkoul@kernel.org>
- <20220914112139.3680354-2-vkoul@kernel.org>
+        Wed, 14 Sep 2022 10:12:52 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5734C20BC0;
+        Wed, 14 Sep 2022 07:12:47 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127d10b4f19so41228513fac.9;
+        Wed, 14 Sep 2022 07:12:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=SPyIRI2qTfSO2auACHjp148Yr0cJMKWfWPP3G131wXU=;
+        b=t96/vH5/9GB7Eta089omBEugVF5xihEsKoZAzr3U1yIJCcZUsXUFkpf1LsUm72X468
+         4RjA7kBiy+UnffeCkWNDckOL9lqQ5jDQ9YgNGHrvUy6tQN9LyxPk5sXKuvXfSk6LZiXD
+         f/RnDGwiDc4y+E6TVXlb5/5Tt/hpF+4HnKTs8BhKeycZ70Ezf1WqsdSqJWYdMaveZDsG
+         QoRQ77fPZR3zSQXGRp62mUzPCmbuN5YzVnBwOv3qShV1Ixi+tuKOWAep7z508m2IxNgh
+         3Vlm3yPdSoZHCtEd8keU47fr7a44Q4FKQlZ/RY8Gih7TB465GvXuXTB97+DowgZyFxl4
+         J+3Q==
+X-Gm-Message-State: ACgBeo1xN2kQu2nyIxgBAzyHCW5uhgGXsRdvjtMycTh/WPsx7aQlCEgR
+        McdwETqRF1tNvQslwRiMOw==
+X-Google-Smtp-Source: AA6agR7QeunMWJohZIlFuCMAfUkU6WKkOLpkzcAPqf/clN22a3MXHYUvpcOCZ79QPAgMSv29PpsnAA==
+X-Received: by 2002:aca:5b0b:0:b0:344:bea0:8c88 with SMTP id p11-20020aca5b0b000000b00344bea08c88mr1980979oib.225.1663164766562;
+        Wed, 14 Sep 2022 07:12:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t184-20020a4a54c1000000b0044b0465bd07sm6451845ooa.20.2022.09.14.07.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 07:12:46 -0700 (PDT)
+Received: (nullmailer pid 2131256 invoked by uid 1000);
+        Wed, 14 Sep 2022 14:12:45 -0000
+Date:   Wed, 14 Sep 2022 09:12:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     allen-kh.cheng@mediatek.com, devicetree@vger.kernel.org,
+        chunkuang.hu@kernel.org, rex-bc.chen@mediatek.com,
+        moudy.ho@mediatek.com, matthias.bgg@gmail.com,
+        jason-jh.lin@mediatek.com, linux-mediatek@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: soc: mediatek: Add display mutex
+ support for MT6795
+Message-ID: <20220914141245.GA2131194-robh@kernel.org>
+References: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
+ <20220913140121.403637-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914112139.3680354-2-vkoul@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220913140121.403637-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 04:51:38PM +0530, Vinod Koul wrote:
-> For PMIC arbiter version 7 and beyond we need to define if we are using
-> primary or secondary bus, so add a new property of qcom,bus-id
+On Tue, 13 Sep 2022 16:01:20 +0200, AngeloGioacchino Del Regno wrote:
+> Add compatible for MT6795 Helio X10 SoC.
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  .../devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml  | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> index fee4f0eb4665..aa8e891b2bb4 100644
-> --- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> +++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> @@ -85,6 +85,14 @@ properties:
->      description: >
->        which of the PMIC Arb provided channels to use for accesses
->  
-> +  qcom,bus-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 1
-> +    description: >
-> +      SPMI bus instance. only applicable to PMIC arbiter version 7 and beyond.
-> +      Supported values, 0 = primary bus, 1 = secondary bus
-> +
->  required:
->    - compatible
->    - reg-names
-> @@ -113,5 +121,8 @@ examples:
->  
->          interrupt-controller;
->          #interrupt-cells = <4>;
-> +
-> +        qcom,bus-id = <0>;
-> +
 
-As you correct the author on patch 2/2, please drop this last empty
-line.
-
-Thanks,
-Bjorn
-
->      };
->  
-> -- 
-> 2.37.3
-> 
+Acked-by: Rob Herring <robh@kernel.org>
