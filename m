@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A248D5B7DEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C80F5B7DF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiINAqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 20:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S229759AbiINAti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 20:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiINAqb (ORCPT
+        with ESMTP id S229521AbiINAtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 20:46:31 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95507543CD;
-        Tue, 13 Sep 2022 17:46:28 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3321c2a8d4cso161115707b3.5;
-        Tue, 13 Sep 2022 17:46:28 -0700 (PDT)
+        Tue, 13 Sep 2022 20:49:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BF9DEA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:49:31 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q3so12940632pjg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 17:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=ssjNpU+UnxocbCpKK/CIlUpi0g+9BuJEk9fqXvf4AYo=;
-        b=C5y+wEAtXvYoj9pZEXzozjeDzYsFxx/JVHiDyxJUihyC+IYwvaj1lPt3JyI9wv3RCR
-         a0wiv9Sc2EXbGZ1Xyaq3sH1XbQuJgv5Eje82wAHyCTIiHPYfYvsCP7C43EvM2FyhuiTH
-         0dR+br2dA+KFEfpx6ZAS1IoFEAi++n6lKY3f06uQjnFhDJBNQjs3ipt7Ja3MCKhGxaUV
-         6rJSyXCOIQXg6hEv/+qK5SOIiIScmWFXQQTL+9rho5nzovCAUjpKOX/T3y6L2mxssXg+
-         TQvlzw703c3tklBE5vhCEv25vHHxisStux8MrCNlYPrCSwgcNU1fpYuKilgkkTNBcp12
-         kL+A==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=VC9mI68no/Lhw0HfZpwkORWcc1RC3UZIYHwVkfGB/r4=;
+        b=hrIqf5MD/xB/9myyBeSm33TcaOokPoX7OBfouhtK+QYu3xN2uBJxyO2hwvyYtuh2W0
+         RdwXYSsNmn+DsH/Gpdq5vM3R8ZfCoKhKciL2HGbxoduQKF7c8ktRoTQjLfMESLPFpZyL
+         Ns0E2DVLJos2dtMmG5R41fTtTe3J/4Tlo1NyAQwzTGqI70CMfMYO11+ICelzhKCetwtW
+         SkPeKYcul80lg+mpqpXs6SCD0MpG3NKQFFzJeeWkjLD0aS7zcXg0vSm1kwe5vEoNUwPa
+         CPS85UG7CF4R83h+gydjSaaK82yV2BkpbSMULGBFAaCTe6LmRRsym1vdrmpcBBksyYr9
+         H8nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ssjNpU+UnxocbCpKK/CIlUpi0g+9BuJEk9fqXvf4AYo=;
-        b=X8c8tkLJMvEopFWwehQLkDqer9bRAPoL1rAx/Mwb8dtfaWE6jsUgB09Zyvt+ZvDbZZ
-         xhoD7HQlLrtknRwmQ9vRpkHlpLKIUMxSbj2BYci+NBTfCVtXl3rbY25T4EtL2wd2gtS5
-         UPJyRhLshYC9WtdFPlfYXalmjprUdDJtQraHv9U8ZyJNpACAtSfuslY/x/xaPCOVQ6Zh
-         TMRJKK5ZnbVvfZwpWmhXuRZh2nn38WtaS3Y4ZBRRzvxB0eusdX5vPksxePikG0yJnFjb
-         lQqPF+ABvFtw4y98KmFDcNyy5F6JOuqyK/S6r1qLskyZoZPpU+Uz8ZuCrBV8jjGkT9bA
-         Uf+g==
-X-Gm-Message-State: ACgBeo04CeAIxzRZhoRjBA07S2iNLE7D1ZsguKffEguFuIscKDVWEDx4
-        D30PSf3lwDgfgQn2BixFbaSJRTxJKKA/4xNxp0rkd87Cbe68+iTkLj8=
-X-Google-Smtp-Source: AA6agR78bIE/YKlBCZYmV5r7rdhZN37mXh8Kf9k4WtOGEKRfFqMqe6ps0bqbDRSrLyPmFRkeVl5DJOJtObbCtfWQgW4=
-X-Received: by 2002:a81:7756:0:b0:328:2dde:3336 with SMTP id
- s83-20020a817756000000b003282dde3336mr29336073ywc.81.1663116387853; Tue, 13
- Sep 2022 17:46:27 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=VC9mI68no/Lhw0HfZpwkORWcc1RC3UZIYHwVkfGB/r4=;
+        b=Qa4sKRciI2mKGj9ahZZ5X4zmX73n7EJJ+jOcgtXfqNMjGIeJppnhG8j891Xzv0myUp
+         MF1fBcEWbmwZcqI1xVRO5+h1v+KWqLMTkJj8pg4PTrS4Bxi/qw7GHpGhug9WltzqrY1O
+         YrN8K73xcXXwjPmE2/q0n2Zewxq1S/dmRNXf0bfM+8ySrYEiJB29GYqXdPhQ0OGXm50Y
+         FI9jqmBe1nddFkSCL1JgjM5wv9V2z4eN7Eh1VplJ8sl2h70qt4BDnk0dFAteDqY3jrF2
+         JZUyqQdSTF1u4x5wgw2s2aAF9pNheh0H3qyvt/zJ8aFxUrRi6s2g8o1Mkcb0PXpu0Ruc
+         dW0g==
+X-Gm-Message-State: ACrzQf3HAfaJo52XowaP60KGARF5D3vlJVLDrAkCwk23AeqfVhm/FaxB
+        N8e7Yjba4ejfDpCSbTP9fTQ39A==
+X-Google-Smtp-Source: AMsMyM526FQxM1WokLTXGOLY1vbfrlIhdoLZtMq7zQSlveMaKcR+WWo9mX4QO1UTnf2rxrP+iQLIoA==
+X-Received: by 2002:a17:90a:7006:b0:200:aabc:891 with SMTP id f6-20020a17090a700600b00200aabc0891mr1948603pjk.67.1663116571104;
+        Tue, 13 Sep 2022 17:49:31 -0700 (PDT)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id y186-20020a6232c3000000b00535e46171c1sm8503863pfy.117.2022.09.13.17.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 17:49:30 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 17:49:27 -0700
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/14] KVM: arm64: Free removed stage-2 tables in RCU
+ callback
+Message-ID: <YyElF+MMXSumzszf@google.com>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
+ <20220830194132.962932-10-oliver.upton@linux.dev>
 MIME-Version: 1.0
-References: <ab879545-d4b2-0cd8-3ae2-65f9f2baf2fe@gmail.com> <YyCLm0ws8qsiEcaJ@kroah.com>
-In-Reply-To: <YyCLm0ws8qsiEcaJ@kroah.com>
-From:   yong w <yongw.pur@gmail.com>
-Date:   Wed, 14 Sep 2022 08:46:15 +0800
-Message-ID: <CAOH5QeAUGBshLQdRCWLg9-Q3JvrqROLYW6uWr8a4TBKxwAOPaw@mail.gmail.com>
-Subject: Re: [PATCH v4] page_alloc: consider highatomic reserve in watermark fast
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jaewon31.kim@samsung.com, mhocko@kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        wang.yong12@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830194132.962932-10-oliver.upton@linux.dev>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +85,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=8813=E6=
-=97=A5=E5=91=A8=E4=BA=8C 21:54=E5=86=99=E9=81=93=EF=BC=9A
+Hi Oliver,
 
->
-> On Tue, Sep 13, 2022 at 09:09:47PM +0800, yong wrote:
-> > Hello,
-> > This patch is required to be patched in linux-5.4.y and linux-4.19.y.
->
-> What is "this patch"?  There is no context here :(
->
-Sorry, I forgot to quote the original patch. the patch is as follows
+On Tue, Aug 30, 2022 at 07:41:27PM +0000, Oliver Upton wrote:
+> There is no real urgency to free a stage-2 subtree that was pruned.
+> Nonetheless, KVM does the tear down in the stage-2 fault path while
+> holding the MMU lock.
+> 
+> Free removed stage-2 subtrees after an RCU grace period. To guarantee
+> all stage-2 table pages are freed before killing a VM, add an
+> rcu_barrier() to the flush path.
+> 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+>  arch/arm64/kvm/mmu.c | 35 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 91521f4aab97..265951c05879 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -97,6 +97,38 @@ static void *stage2_memcache_zalloc_page(void *arg)
+>  	return kvm_mmu_memory_cache_alloc(mc);
+>  }
+>  
+> +#define STAGE2_PAGE_PRIVATE_LEVEL_MASK	GENMASK_ULL(2, 0)
+> +
+> +static inline unsigned long stage2_page_private(u32 level, void *arg)
+> +{
+> +	unsigned long pvt = (unsigned long)arg;
+> +
+> +	BUILD_BUG_ON(KVM_PGTABLE_MAX_LEVELS > STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> +	WARN_ON_ONCE(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
 
-    f27ce0e page_alloc: consider highatomic reserve in watermark fast
+If the pgt pointer (arg) is not aligned for some reason, I think it
+might be better to BUG_ON(). Alternatively, why not trying to pass a new
+struct (with level and arg) that's freed by the rcu callback.
 
-> > In addition to that, the following two patches are somewhat related:
-> >
-> >       3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_idx
-> >       9282012 page_alloc: fix invalid watermark check on a negative val=
-ue
->
-> In what way?  What should be done here by us?
->
-
-I think these two patches should also be merged.
-
-    The classzone_idx  parameter is used in the zone_watermark_fast
-functionzone, and 3334a45 use ac->high_zoneidx for classzone_idx.
-    "9282012 page_alloc: fix invalid watermark check on a negative
-value"  fix f27ce0e introduced issues
-
-
-> confused,
->
-> greg k-h
+> +
+> +	return pvt | level;
+> +}
+> +
+> +static void stage2_free_removed_table_rcu_cb(struct rcu_head *head)
+> +{
+> +	struct page *page = container_of(head, struct page, rcu_head);
+> +	unsigned long pvt = page_private(page);
+> +	void *arg = (void *)(pvt & ~STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> +	u32 level = (u32)(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> +	void *pgtable = page_to_virt(page);
+> +
+> +	kvm_pgtable_stage2_free_removed(pgtable, level, arg);
+> +}
+> +
+> +static void stage2_free_removed_table(void *pgtable, u32 level, void *arg)
+> +{
+> +	unsigned long pvt = stage2_page_private(level, arg);
+> +	struct page *page = virt_to_page(pgtable);
+> +
+> +	set_page_private(page, (unsigned long)pvt);
+> +	call_rcu(&page->rcu_head, stage2_free_removed_table_rcu_cb);
+> +}
+> +
+>  static void *kvm_host_zalloc_pages_exact(size_t size)
+>  {
+>  	return alloc_pages_exact(size, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> @@ -627,7 +659,7 @@ static struct kvm_pgtable_mm_ops kvm_s2_mm_ops = {
+>  	.zalloc_page		= stage2_memcache_zalloc_page,
+>  	.zalloc_pages_exact	= kvm_host_zalloc_pages_exact,
+>  	.free_pages_exact	= free_pages_exact,
+> -	.free_removed_table	= kvm_pgtable_stage2_free_removed,
+> +	.free_removed_table	= stage2_free_removed_table,
+>  	.get_page		= kvm_host_get_page,
+>  	.put_page		= kvm_host_put_page,
+>  	.page_count		= kvm_host_page_count,
+> @@ -770,6 +802,7 @@ void kvm_free_stage2_pgd(struct kvm_s2_mmu *mmu)
+>  	if (pgt) {
+>  		kvm_pgtable_stage2_destroy(pgt);
+>  		kfree(pgt);
+> +		rcu_barrier();
+>  	}
+>  }
+>  
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 
