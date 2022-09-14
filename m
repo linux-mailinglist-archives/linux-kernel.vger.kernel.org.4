@@ -2,153 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BF15B7EF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4675B7F04
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 04:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiINC0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 22:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S229971AbiINCbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 22:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiINC0L (ORCPT
+        with ESMTP id S229846AbiINCa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 22:26:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8806CD12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663122367; x=1694658367;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iVO1iXmwwAwRil873bo9VEz2fyPCOv/614eIKjEfJWQ=;
-  b=hNWXc4DJcZEcQZzQLxUFVSDAcIBF5Zx+QGXE7W4UeJAMjmuntA2/MuSd
-   E41MWfjX9vXjdUdJI90yfM+sJUtQxcJrkPfGUoXLQQD9m73yRUCbGIwyy
-   JhAzqvp9xjq/a9ed5ytrITCpfve6bZeapIcFXFdu0NN364Qs1OtkHVd4X
-   D/6x1lpYJERAF2D5oRndouoom0x35EO+jihj6Vd2l5viXyrXJanlWlFmo
-   Gb/PYHQE1yopKbzvRtI7v4uuapsxjNQOp+BF/Hj1608C1z79IJjYWAGp1
-   1VKH/HtoOhs+qubxW2lffDx92Dkr/jUgdfK4/b+rxBGYQklS5Jfobyr34
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="362277593"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="362277593"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 19:26:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="594195001"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Sep 2022 19:26:02 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYI6D-0004FR-12;
-        Wed, 14 Sep 2022 02:26:01 +0000
-Date:   Wed, 14 Sep 2022 10:25:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: [asahilinux:bits/080-wifi 5/29]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning:
- format '%ld' expects argument of type 'long int', but argument 4 has type
- 'size_t' {aka 'unsigned int'}
-Message-ID: <202209141002.iqhnDHqB-lkp@intel.com>
+        Tue, 13 Sep 2022 22:30:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821556555C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 19:30:57 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MS44t4DP3znTTf;
+        Wed, 14 Sep 2022 10:28:14 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 14 Sep 2022 10:30:55 +0800
+Received: from [10.174.185.210] (10.174.185.210) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 14 Sep 2022 10:30:54 +0800
+Subject: Re: [PATCH] arm64: arch_timer: Fix the lack of set_next_event* for
+ workaround of Cortex-A73 erratum 858921
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Oliver Upton" <oupton@google.com>, <wanghaibin.wang@huawei.com>,
+        <yuzenghui@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220913104723.332-1-jiangkunkun@huawei.com>
+ <8735cvuzvv.wl-maz@kernel.org>
+From:   Kunkun Jiang <jiangkunkun@huawei.com>
+Message-ID: <f426bd71-e0aa-49ec-f649-c1627daaa504@huawei.com>
+Date:   Wed, 14 Sep 2022 10:30:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8735cvuzvv.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.185.210]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   64ef0b7532df23da62964c9247f2f914c1509f3e
-commit: e225a0ff03bd18a1e65c82b5773ccc7a56bd99ac [5/29] brcmfmac: pcie: Read Apple OTP information
-config: microblaze-allmodconfig (https://download.01.org/0day-ci/archive/20220914/202209141002.iqhnDHqB-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/e225a0ff03bd18a1e65c82b5773ccc7a56bd99ac
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout e225a0ff03bd18a1e65c82b5773ccc7a56bd99ac
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+Hi Marc,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you. I've modified it in v2.
+I'll pay more attention in the future.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Kunkun Jiang
 
-   In file included from drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:33:
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c: In function 'brcmf_pcie_parse_otp':
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~  ~~~~
-         |                                                 |
-         |                                                 size_t {aka unsigned int}
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:77:21: note: in definition of macro 'brcmf_dbg'
-      77 |                     fmt, ##__VA_ARGS__);                        \
-         |                     ^~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:43: note: format string is defined here
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                                         ~~^
-         |                                           |
-         |                                           long int
-         |                                         %d
-
-
-vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-
-  1842	
-  1843	static int
-  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
-  1845	{
-  1846		int p = 0;
-  1847		int ret = -EINVAL;
-  1848	
-> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-  1850	
-  1851		while (p < (size - 1)) {
-  1852			u8 type = otp[p];
-  1853			u8 length = otp[p + 1];
-  1854	
-  1855			if (type == 0)
-  1856				break;
-  1857	
-  1858			if ((p + 2 + length) > size)
-  1859				break;
-  1860	
-  1861			switch (type) {
-  1862			case BRCMF_OTP_SYS_VENDOR:
-  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
-  1864					  p, length);
-  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
-  1866								      &otp[p + 2],
-  1867								      length);
-  1868				break;
-  1869			case BRCMF_OTP_BRCM_CIS:
-  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
-  1871					  p, length);
-  1872				break;
-  1873			default:
-  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
-  1875					  p, length, type);
-  1876				break;
-  1877			}
-  1878	
-  1879			p += 2 + length;
-  1880		}
-  1881	
-  1882		return ret;
-  1883	}
-  1884	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 2022/9/13 22:12, Marc Zyngier wrote:
+> On Tue, 13 Sep 2022 11:47:23 +0100,
+> Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+>> The patch a38b71b0833e moves the programming of the timers from
+>> the countdown timer (TVAL) over to the comparator (CVAL). This
+>> makes it necessary to read the counter when setting next event.
+>> However, the workaround of Cortex-A73 erratum 858921 does not
+>> set the corresponding set_next_event_phys and set_next_event_virt.
+>> This patch fixes it.
+>>
+>> Fixes: a38b71b0833e ("clocksource/drivers/arm_arch_timer: Move system register timer programming over to CVAL")
+>> Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+>> ---
+>>   drivers/clocksource/arm_arch_timer.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+>> index 9ab8221ee3c6..ff935efb6a88 100644
+>> --- a/drivers/clocksource/arm_arch_timer.c
+>> +++ b/drivers/clocksource/arm_arch_timer.c
+>> @@ -473,6 +473,8 @@ static const struct arch_timer_erratum_workaround ool_workarounds[] = {
+>>   		.desc = "ARM erratum 858921",
+>>   		.read_cntpct_el0 = arm64_858921_read_cntpct_el0,
+>>   		.read_cntvct_el0 = arm64_858921_read_cntvct_el0,
+>> +		.set_next_event_phys = erratum_set_next_event_phys,
+>> +		.set_next_event_virt = erratum_set_next_event_virt,
+>>   	},
+>>   #endif
+>>   #ifdef CONFIG_SUN50I_ERRATUM_UNKNOWN1
+> With the fixed commit message as suggested by Oliver, and a subject
+> more conform to the style of previous commits (something like:
+> "clocksource/drivers/arm_arch_timer: Fix handling of ARM erratum 85821"):
+>
+> Acked-by: Marc Zyngier <maz@kernel.org>
+>
+> Daniel, I assume you'll pick this?
+>
+> Thanks,
+>
+> 	M.
+>
