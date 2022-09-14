@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89945B9084
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF775B9086
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 00:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiINWfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 18:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S229751AbiINWhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 18:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiINWfq (ORCPT
+        with ESMTP id S229650AbiINWhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 18:35:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE137EFE6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:35:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67B1BB81CE0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 22:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F73C433C1;
-        Wed, 14 Sep 2022 22:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663194943;
-        bh=V3UnjH8r8/HZCf/bUXEv6LLNwHtF7DQP1lCGuLGnSdc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BuIdCB2Dng/VZh/rE6kuH/hBzh9AoNuhbKvfiKDY76Tsl76mj9UVm+7dE7qLi0fqT
-         X8WEcEkV5ma5YeYJP+ZkT+5+gAg7jodnZakuRY66tb/J2kAdVOSnvZafZJ1TKgy1qU
-         0wU9+nOA78D4kzV6UZL6EgRZszStVxVumn2JCTnQ=
-Date:   Wed, 14 Sep 2022 15:35:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     naoya.horiguchi@nec.com, linmiaohe@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
-        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        Huang Ying <ying.huang@intel.com>
-Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
-Message-Id: <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
-In-Reply-To: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
-References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 14 Sep 2022 18:37:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF967F256
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 15:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663195056; x=1694731056;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YFXaXof79mww4Loh9N42gVv+6OfztCBM3O7BFT4aSe8=;
+  b=PRRhHJxvj0sOX6ZAwrr8xTNzI2FZSlefC6n16ubrUg9sCPFMAyGsYZBi
+   q42bSidnoIUdrwQfdkxNwFg7mn//a+a4rxU2b+Lv+v9cjuZ2VHguV7/Eq
+   vybO2M3Bbhvat4+iHim44q66OhSZdfsqCxBB5Sls/FXjliRP97VTxr16y
+   vPDDbEchkCwb2wUzSnCsM/PmkVfU9/0/OKDuDvuA611vZ9kqG8naoarci
+   SelSM6YKnUBEGCX9mFlI0eOAcmyuYZcsYA1RPwXSxPUzBKuokmoh1mVv4
+   xWZUQVR+DZZ1wkWB9SrvMbK+6oJJpICahWfc4D93dy+JWfSKEyaJQakWf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299916860"
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="299916860"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 15:37:34 -0700
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="594569094"
+Received: from schen9-mobl.amr.corp.intel.com ([10.209.26.213])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 15:37:34 -0700
+Message-ID: <3f4f98cf61e4b08dcc85e3ac308a80f0b9cf814e.camel@linux.intel.com>
+Subject: Re: [PATCH v5 3/5] sched/fair: Skip core update if task pending
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 14 Sep 2022 15:37:34 -0700
+In-Reply-To: <20220909055304.25171-4-wuyun.abel@bytedance.com>
+References: <20220909055304.25171-1-wuyun.abel@bytedance.com>
+         <20220909055304.25171-4-wuyun.abel@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 14:49:35 +0800 Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-
-> The GHES code calls memory_failure_queue() from IRQ context to queue work
-> into workqueue and schedule it on the current CPU. Then the work is
-> processed in memory_failure_work_func() by kworker and calls
-> memory_failure().
+On Fri, 2022-09-09 at 13:53 +0800, Abel Wu wrote:
+> The function __update_idle_core() considers this cpu is idle so
+> only checks its siblings to decide whether the resident core is
+> idle or not and update has_idle_cores hint if necessary. But the
+> problem is that this cpu might not be idle at that moment any
+> more, resulting in the hint being misleading.
 > 
-> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
-> SIGBUS with error virutal address") make memory_failure() call
-> kill_accessing_process() that:
+> It's not proper to make this check everywhere in the idle path,
+> but checking just before core updating can make the has_idle_core
+> hint more reliable with negligible cost.
 > 
->     - holds mmap locking of current->mm
->     - does pagetable walk to find the error virtual address
->     - and sends SIGBUS to the current process with error info.
+
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> ---
+>  kernel/sched/fair.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> However, the mm of kworker is not valid. Therefore, check mm when killing
-> accessing process.
-
-Thanks.
-
-When fixing a bug, please always describe the user-visible effects of
-tha bug.  I'm thinking "null pointer deref crashes the kernel".
-
-> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-
-I'll add cc:stable.
-
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->  	};
->  	priv.tk.tsk = p;
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7abe188a1533..fad289530e07 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6294,6 +6294,9 @@ void __update_idle_core(struct rq *rq)
+>  	int core = cpu_of(rq);
+>  	int cpu;
 >  
-> +	if (!p->mm)
-> +		return -EFAULT;
+> +	if (rq->ttwu_pending)
+> +		return;
 > +
->  	mmap_read_lock(p->mm);
->  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
->  			      (void *)&priv);
-> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->  	else
->  		ret = 0;
->  	mmap_read_unlock(p->mm);
-> +
->  	return ret > 0 ? -EHWPOISON : -EFAULT;
->  }
-
-This is an unrelated change which doesn't appear to match the style in
-memory-failure.c, so I'll drop this hunk.
+>  	rcu_read_lock();
+>  	if (test_idle_cores(core, true))
+>  		goto unlock;
 
