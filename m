@@ -2,181 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044185B8CAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1205B8CAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiINQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S229911AbiINQRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiINQPe (ORCPT
+        with ESMTP id S229725AbiINQQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:15:34 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A932A7436D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:15:33 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso14908226pjd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=8A1QBrYdNqwfKSHedR+VNWdvV9LDIo8DjOKUwjNPjrY=;
-        b=mvQUfDz6ojr7ZAMyHwdFbIr04Tib8sObkLdz585rF4NjcanR41FcX6tQ1gqbYu4Ttl
-         Fu0XNYqOA8b4p4ooruVgUBMH4SpJKWDKtJPt3NmQ5qog6dHoc6uVRsUrx/4AJhyTV8BP
-         hwwv0WhgV9E9N1JqLQqd/gOzzw/SfL68NBvgFd2yeSjoSquzbymUv9jmX+bDZCpbrcqE
-         IWV85+8F1DZwNxLu7gvOFZS12gaZb6YWoH30BucapjCD5UHnBfWByH/12R4gijybVh8Z
-         6rzxzDR1nASgbMYDhAOKQnFfdGeCOT2I1IGFSdLfRmwD7NpQfKB6kdhW0x/vCA2l/emH
-         spRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=8A1QBrYdNqwfKSHedR+VNWdvV9LDIo8DjOKUwjNPjrY=;
-        b=PawRkC0/crcXoca06w3rKG2MEDYdmYEeikIp9AbcM7y4F4BqGyYgEg5Z9EDEBLECqG
-         EpYTV2cfpOBMPfaemK84KBJdvehF6AqtWA21CdRZrkMViQzHgeXWARNigquwO/MPuYDW
-         Hqe2YtGuM0IQ8KcTqqTV0ZC9JCI7wWCzTCnXtFOotUgeKHRMF1yNgjYc9P2XBri8w/4X
-         /x/BlbqTcLNdl7Eu8H+mEnvAW5/sljX/5gFaBCgBj86TWhaE/0DkRrcOMumisPVtXXwM
-         wmTvXfEfOBscJ+y1a/Rt3LxvwAuOzzdpDcOy6Q6+HO41XMGK99FnmZwB5oVH8txwpGAu
-         zdeA==
-X-Gm-Message-State: ACrzQf1AkEfnECIqxQjInna0Hk0ms6OEb5DZu41hESGD/zJ56TCgqFst
-        SX809bd9DbkKjddV6eXQ9DNaoA==
-X-Google-Smtp-Source: AMsMyM6ZMbUkdU2hvrYoAOYSfAQjC5fDqY7KXcHPFAReC2+/kiHDQz57mmIFmmqzXPEbSlfzjbs+eA==
-X-Received: by 2002:a17:90b:1e0d:b0:202:91ec:e167 with SMTP id pg13-20020a17090b1e0d00b0020291ece167mr5542131pjb.174.1663172132830;
-        Wed, 14 Sep 2022 09:15:32 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m3-20020a638c03000000b0042bd73400b6sm9925334pgd.87.2022.09.14.09.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:15:32 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 16:15:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Marc Orr <marcorr@google.com>
-Cc:     Michael Roth <michael.roth@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>, x86 <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>, jarkko@profian.com
-Subject: Re: [PATCH Part2 v5 39/45] KVM: SVM: Introduce ops for the post gfn
- map and unmap
-Message-ID: <YyH+IGpBBsjfHdDC@google.com>
-References: <20210820155918.7518-1-brijesh.singh@amd.com>
- <20210820155918.7518-40-brijesh.singh@amd.com>
- <YWYm/Gw8PbaAKBF0@google.com>
- <YWc+sRwHxEmcZZxB@google.com>
- <4e41dcff-7c7b-cf36-434a-c7732e7e8ff2@amd.com>
- <YWm3bOFcUSlyZjNb@google.com>
- <20220908212114.sqne7awimfwfztq7@amd.com>
- <YyGLXXkFCmxBfu5U@google.com>
- <CAA03e5H-V+axMiXTLXi7bf+mBs8ZMvaFZTSHSfktZDTSfu=HZQ@mail.gmail.com>
+        Wed, 14 Sep 2022 12:16:58 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577A875FCD;
+        Wed, 14 Sep 2022 09:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=nxy9Jbp5GTwxPBiJKmfbVPecTADs9vQAWIAUvB3MVd4=; b=QU91CURp1MB5WBHbfGBG3nmJKB
+        ilIW0hPaJgD6mS4C86zeb0WH9Gxy+JI6GKMq0depsoKkGiqCPFmJj6w0xuSgrLznAuJdkHBpYgXuj
+        ve1MHZRBvO1TfzaBWz6776YDmWAqMhLKq/KqYn0yF83K/zHdRJVEysxlFD2piprqAAqtTN6nlI3CD
+        t2p13ROrPfvfN/fuMd68TuF9phZLtEbzqVuJs0Jb6X+khfyRuk/NIo6IjGxDWDaLCwkU32ERnVz9w
+        ds3TFOnWvF84joOESzJ8wLXoEVkcl/UZ5JmI7EpNaodG3XrwG48wyovmhOC7XKMSSMEMTDp1M0/b9
+        sv+3yTKg==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oYV3z-001g4o-Mb; Wed, 14 Sep 2022 10:16:36 -0600
+Message-ID: <f0dd9208-05ec-b2fa-4b29-5fa140486fa3@deltatee.com>
+Date:   Wed, 14 Sep 2022 10:16:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA03e5H-V+axMiXTLXi7bf+mBs8ZMvaFZTSHSfktZDTSfu=HZQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
+        guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
+ <20220914014914.398712-2-yukuai1@huaweicloud.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <20220914014914.398712-2-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: yukuai1@huaweicloud.com, song@kernel.org, guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de, linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v2 1/4] md/raid10: cleanup wait_barrier()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022, Marc Orr wrote:
-> On Wed, Sep 14, 2022 at 9:05 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Thu, Sep 08, 2022, Michael Roth wrote:
-> > > On Fri, Oct 15, 2021 at 05:16:28PM +0000, Sean Christopherson wrote:
-> > > So in the context of this interim solution, we're trying to look for a
-> > > solution that's simple enough that it can be used reliably, without
-> > > introducing too much additional complexity into KVM. There is one
-> > > approach that seems to fit that bill, that Brijesh attempted in an
-> > > earlier version of this series (I'm not sure what exactly was the
-> > > catalyst to changing the approach, as I wasn't really in the loop at
-> > > the time, but AIUI there weren't any showstoppers there, but please
-> > > correct me if I'm missing anything):
-> > >
-> > >  - if the host is writing to a page that it thinks is supposed to be
-> > >    shared, and the guest switches it to private, we get an RMP fault
-> > >    (actually, we will get a !PRESENT fault, since as of v5 we now
-> > >    remove the mapping from the directmap as part of conversion)
-> > >  - in the host #PF handler, if we see that the page is marked private
-> > >    in the RMP table, simply switch it back to shared
-> > >  - if this was a bug on the part of the host, then the guest will see
-> >
-> > As discussed off-list, attempting to fix up RMP violations in the host #PF handler
-> > is not a viable approach.  There was also extensive discussion on-list a while back:
-> >
-> > https://lore.kernel.org/all/8a244d34-2b10-4cf8-894a-1bf12b59cf92@www.fastmail.com
+
+
+On 2022-09-13 19:49, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> I mentioned this during Mike's talk at the micro-conference: For pages
-> mapped in by the kernel can we disallow them to be converted to
-> private?
-
-In theory, yes.  Do we want to do something like this?  No.  kmap() does something
-vaguely similar for 32-bit PAE/PSE kernels, but that's a lot of complexity and
-overhead to take on.  And this issue goes far beyond a kmap(); when the kernel gup()s
-a page, the kernel expects the pfn to be available, no exceptions (pun intended).
-
-> Note, userspace accesses are already handled by UPM.
-
-I'm confused by the UPM comment.  Isn't the gist of this thread about the ability
-to merge SNP _without_ UPM?  Or am I out in left field?
-
-> In pseudo-code, I'm thinking something like this:
+> Currently the nasty condition is wait_barrier() is hard to read. This
+> patch factor out the condition into a function.
 > 
-> kmap_helper() {
->   // And all other interfaces where the kernel can map a GPA
->   // into the kernel page tables
->   mapped_into_kernel_mem_set[hpa] = true;
-> }
+> There are no functional changes.
 > 
-> kunmap_helper() {
->   // And all other interfaces where the kernel can unmap a GPA
->   // into the kernel page tables
->   mapped_into_kernel_mem_set[hpa] = false;
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  drivers/md/raid10.c | 56 ++++++++++++++++++++++++++-------------------
+>  1 file changed, 32 insertions(+), 24 deletions(-)
 > 
->   // Except it's not this simple because we probably need ref counting
->   // for multiple mappings. Sigh. But you get the idea.
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 64d6e4cd8a3a..56458a53043d 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -957,44 +957,52 @@ static void lower_barrier(struct r10conf *conf)
+>  	wake_up(&conf->wait_barrier);
+>  }
+>  
+> +static bool stop_waiting_barrier(struct r10conf *conf)
+> +{
+> +	/* barrier is dropped */
+> +	if (!conf->barrier)
+> +		return true;
+> +
+> +	/*
+> +	 * If there are already pending requests (preventing the barrier from
+> +	 * rising completely), and the pre-process bio queue isn't empty, then
+> +	 * don't wait, as we need to empty that queue to get the nr_pending
+> +	 * count down.
+> +	 */
+> +	if (atomic_read(&conf->nr_pending)) {
+> +		struct bio_list *bio_list = current->bio_list;
 
-A few issues off the top of my head:
+I'd probably just put the bio_list declaration at the top of this
+function, then the nested if statements are not necessary. The compiler
+should be able to optimize the access just fine.
 
-  - It's not just refcounting, there would also likely need to be locking to
-    guarantee sane behavior.
-  - kmap() isn't allowed to fail and RMPUPDATE isn't strictly guaranteed to succeed,
-    which is problematic if the kernel attempts to kmap() a page that's already
-    private, especially for kmap_atomic(), which isn't allowed to sleep.
-  - Not all kernel code is well behaved and bounces through kmap(); undoubtedly
-    some of the 1200+ users of page_address() will be problematic.
-    
-    $ git grep page_address | wc -l
-    1267
-  - It's not sufficient for TDX.  Merging something this complicated when we know
-    we still need UPM would be irresponsible from a maintenance perspective.
-  - KVM would need to support two separate APIs for SNP, which I very much don't
-    want to do.
+>  	if (conf->barrier) {
+> -		struct bio_list *bio_list = current->bio_list;
+> -		conf->nr_waiting++;
+> -		/* Wait for the barrier to drop.
+> -		 * However if there are already pending
+> -		 * requests (preventing the barrier from
+> -		 * rising completely), and the
+> -		 * pre-process bio queue isn't empty,
+> -		 * then don't wait, as we need to empty
+> -		 * that queue to get the nr_pending
+> -		 * count down.
+> -		 */
+>  		/* Return false when nowait flag is set */
+>  		if (nowait) {
+>  			ret = false;
+>  		} else {
+> +			conf->nr_waiting++;
+
+Technically speaking, I think moving nr_waiting counts as a functional
+change. As best as I can see it is correct, but it should probably be at
+least mentioned in the commit message, or maybe done as a separate
+commit with it's own justification. That way if it causes problems down
+the road, a bisect will make the issue clearer.
+
+Thanks,
+
+Logan
