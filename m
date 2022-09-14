@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95CF5B87CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE265B87D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 14:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiINMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 08:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S230025AbiINMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 08:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiINMIf (ORCPT
+        with ESMTP id S229607AbiINMIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 08:08:35 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C917F26A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:08:33 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z13so7932350edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 05:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lZMFMwTKaDoN92TfUg4rhrK9/Vgy+4VnEfl6Q6soKkA=;
-        b=Hn/YxHcMcexyeCivKAehCl5/+na2OclQbiYfbBroysxs+34y+JauV0gR66de50jf/c
-         BG8n8xBxZ5rDZneFPm0vaT9F/oE++uMDLPL4JTlZ9goAhlCTw40ceZcM47ohFVSigADQ
-         OGpS372DBJnPvMiKx+1RDCbkYBDxrIiBdWzaGZqk9DJLtgPTnf4NqLUIKLAT5CAAu0zA
-         oZEbrSsKMMZwUdVwuQ23Tr4cXw7s90JBkBdbn7TWHPPtcAyRmBBeP07g78tuhhBjsr3E
-         mPDUkmAFxAKZDNxgnr3lK0p8ja/r97OpgeBrMKhRfEPHtAdGzOqunLGLlEPUK7eR5dk1
-         mWaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lZMFMwTKaDoN92TfUg4rhrK9/Vgy+4VnEfl6Q6soKkA=;
-        b=57oSG0SeDDDH5t6m1rOxvbrs0Q188U7f6xfISBCb91uWgncI/GVwHsjzlWA7V5N6qR
-         F0dQ5m8h6tpNvsGgFSo8ESCQCAZorkp9J0DeUVahadlK7E2gPoy9narBIN+DYzatfTPB
-         g6nqYY9Tnaa0H9oH6dtCo2tfFILYNRcIlNqUB7hCg7jMLpNFbKjjyealvLyyDH+UuKrG
-         58VcxBl5452KlDdRzcq3m8c3QniooknjGxAubXE9tpjire1uI110oBnFyTt/2gMPMzeX
-         TETZIL8WwZ3T3Tsg7DsHuO/brMnEV8HIVY9AcvgseBdcTCPUPWjkBujRsKUnkTmJGc7f
-         j6cg==
-X-Gm-Message-State: ACgBeo0nMbtoqRfeaFfyQfdnlzL1mIHCNNfUsCeLwhmxVs1UHfacx0vU
-        jR7lizXidyngiL4z5ACL76vqTrREw6boR+5gXxiQ1Q==
-X-Google-Smtp-Source: AA6agR7brk1D9/tNrUFcM5Rdp/wqUtemwORlPUUMyoFV+2N+hxIAfa6fGua/P1lEfG96DCX0AFasYZeR5McMSqAIixI=
-X-Received: by 2002:aa7:cb87:0:b0:43b:e650:6036 with SMTP id
- r7-20020aa7cb87000000b0043be6506036mr30833799edt.350.1663157311552; Wed, 14
- Sep 2022 05:08:31 -0700 (PDT)
+        Wed, 14 Sep 2022 08:08:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23FA7F272;
+        Wed, 14 Sep 2022 05:08:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 98EE41F88E;
+        Wed, 14 Sep 2022 12:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663157318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EROMvm9onlQ1pv6K+o0p8csnLRDwiei6BOviFGwrA7g=;
+        b=N6rGNIhNKxdXp806QI0zAk4xPAhf+SEyit3RuVKUnJWTuttnyMc/XWf4ndMQI1e25mB6Xy
+        w3n2Udc44IREotKfsObWytw9LP2JWoTa4JrdA/fpK10/bGM/9SF10Ddg58EgDLKASTNZpE
+        j0pdgUmJ6VEPjp3jycWUfmlpohhWukw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663157318;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EROMvm9onlQ1pv6K+o0p8csnLRDwiei6BOviFGwrA7g=;
+        b=vzhve7Qqk2E+FT99nQbYNPPECnhq+NbJpp9DLURo5qsFj7GVE1Y4WsygcjY8gIQs5BDi35
+        c3wm4mBhowD40ADw==
+Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E0D6F2C141;
+        Wed, 14 Sep 2022 12:08:37 +0000 (UTC)
+Received: by wotan.suse.de (Postfix, from userid 10510)
+        id B964D62AF; Wed, 14 Sep 2022 12:08:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by wotan.suse.de (Postfix) with ESMTP id B7682628B;
+        Wed, 14 Sep 2022 12:08:37 +0000 (UTC)
+Date:   Wed, 14 Sep 2022 12:08:37 +0000 (UTC)
+From:   Michael Matz <matz@suse.de>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>, x86@kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        linux-toolchains@vger.kernel.org,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "Jose E. Marchesi" <jemarch@gnu.org>
+Subject: Re: [RFC] Objtool toolchain proposal:
+ -fannotate-{jump-table,noreturn}
+In-Reply-To: <20220914102100.thl5ad35plvazark@treble>
+Message-ID: <alpine.LSU.2.20.2209141201400.8265@wotan.suse.de>
+References: <20220909180704.jwwed4zhwvin7uyi@treble> <20220912113114.GV25951@gate.crashing.org> <20220914102100.thl5ad35plvazark@treble>
+User-Agent: Alpine 2.20 (LSU 67 2015-01-07)
 MIME-Version: 1.0
-References: <20220913140348.835121645@linuxfoundation.org>
-In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 14 Sep 2022 17:38:20 +0530
-Message-ID: <CA+G9fYu_SFbbkKThMQBob6cyGeYHdavxcO4uav0LsjWz_8OPAQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/79] 4.19.257-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sept 2022 at 20:01, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.257 release.
-> There are 79 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.257-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello,
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Wed, 14 Sep 2022, Josh Poimboeuf wrote:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >    This information is needed because the
+> > >    code after the call to such a function is optimized out as
+> > >    unreachable and objtool has no way of knowing that.
+> > 
+> > Since June we (GCC) have -funreachable-traps.  This creates a trap insn
+> > wherever control flow would otherwise go into limbo.
+> 
+> Ah, that's interesting, though I'm not sure if we'd be able to
+> distinguish between "call doesn't return" traps and other traps or
+> reasons for UD2.
 
-## Build
-* kernel: 4.19.257-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: fb5836fc4e4c065ff678b2ce8f3bb039506bbd9b
-* git describe: v4.19.256-80-gfb5836fc4e4c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.256-80-gfb5836fc4e4c
+There are two reasons (which will turn out to be the same) for a trap (say 
+'UD2' on x86-64) directly after a call insn:
+1) "the call shall not have returned"
+2) something else jumps to that trap because it was __builtin_unreachable 
+   (or equivalent), and the compiler happened to put that ud2 directly 
+   after the call.  It could have done that only when the call itself was 
+   noreturn:
+     cmp $foo, %rax
+     jne do_trap
+     call noret
+    do_trap:
+     ud2
 
-## No test Regressions (compared to v4.19.256)
+So, it's all the same.  If there's an ud2 (or whatever the trap maker is) 
+after a call then it was because it's noreturn.
 
-## No metric Regressions (compared to v4.19.256)
+(But, of course this costs (little) code size, unlike the non-alloc 
+checker sections)
 
-## No test Fixes (compared to v4.19.256)
 
-## No metric Fixes (compared to v4.19.256)
-
-## Test result summary
-total: 82375, pass: 71763, fail: 655, skip: 9554, xfail: 403
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 323 total, 318 passed, 5 failed
-* arm64: 61 total, 60 passed, 1 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 46 total, 46 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 54 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Ciao,
+Michael.
