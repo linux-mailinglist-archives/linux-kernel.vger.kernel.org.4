@@ -2,63 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C156F5B8523
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4915D5B8529
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiINJgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S231574AbiINJhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiINJgP (ORCPT
+        with ESMTP id S230453AbiINJh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:36:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB822B1D;
-        Wed, 14 Sep 2022 02:34:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E3E6222522;
-        Wed, 14 Sep 2022 09:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663148051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mr7DJ+rONRlRTlvy+2ELh9/7A7OmuCGJ3+umwNNxXgM=;
-        b=tZzq81NRhCyFGpPkYMpW4W43Ly6vzEB2hgOXxn7bnVELKQ8dmLSKQbl9jYKSentCuH3lRE
-        ct3qtreOfAzXTSOAR95EOTP35/NEe3V6HmcxUK7FDtkDXx746sayJ3K8JlFP739GWppbv1
-        Qs7Knp/3YS1/fL3SjhQxyPboocM6Jz0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9900F134B3;
-        Wed, 14 Sep 2022 09:34:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id r2T8IxOgIWM/LQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 14 Sep 2022 09:34:11 +0000
-Message-ID: <739b7b48-c488-5216-064d-ff7fd77e76a6@suse.com>
-Date:   Wed, 14 Sep 2022 11:34:11 +0200
+        Wed, 14 Sep 2022 05:37:26 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EE314;
+        Wed, 14 Sep 2022 02:36:12 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E9SH3O026120;
+        Wed, 14 Sep 2022 09:35:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=P99DFL9RFG9Dhn5X+kTEl7SHgN2RMsqsNHhLlj3BOvY=;
+ b=Ip67EnXSsu0OqZvxyCab6StDZCc7eCpCM4KAMHsw2oEYpruz22Grm2jFpNn39A53m9xz
+ pfPjqI1O/v4j/YzvqAVuXpXd30T1Jdd0egcFb78RCT28WDFg8l7GNV5IR1VHillExCYk
+ PAnGeAwl7vywPl1+P7agEFSUlW6GchCDKQhsuNcprFWoA6ve0/jkpMttB3+YhOHrV9mz
+ ttkMjex+JlCB8gyccD9SIFI8qPbQkkfBdZyN4YrjojojfcNxa5IWswj60ZdAvKrJAt9T
+ PRTs7CdXxjQB5HZtEbdNFxLpAa4AggYLzVMFnx6S6RwnWr4WKKS3MjIWR7RQ5b+XYbGU WQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy06hr3k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 09:35:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E9ZuSl023166
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 09:35:56 GMT
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 02:35:51 -0700
+Subject: Re: [PATCH v6 4/8] remoteproc: qcom: Update rproc parse firmware
+ callback
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com>
+ <1662643422-14909-5-git-send-email-quic_srivasam@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <babd014c-bf8a-bbff-7bc7-fabeeb250d0d@quicinc.com>
+Date:   Wed, 14 Sep 2022 15:05:48 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH -next] xen-netfront: make bounce_skb static
+In-Reply-To: <1662643422-14909-5-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     ruanjinjie <ruanjinjie@huawei.com>, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220914064339.49841-1-ruanjinjie@huawei.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220914064339.49841-1-ruanjinjie@huawei.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------z297QInJ2eAbukrn83P9heiv"
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lrqwII24AonPRi-0_-ePwr6-l-A-3otU
+X-Proofpoint-ORIG-GUID: lrqwII24AonPRi-0_-ePwr6-l-A-3otU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_03,2022-09-14_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ spamscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140046
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,110 +87,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------z297QInJ2eAbukrn83P9heiv
-Content-Type: multipart/mixed; boundary="------------FTlzLylkOtqjiWteUcsK9JYi";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: ruanjinjie <ruanjinjie@huawei.com>, sstabellini@kernel.org,
- oleksandr_tyshchenko@epam.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, xen-devel@lists.xenproject.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <739b7b48-c488-5216-064d-ff7fd77e76a6@suse.com>
-Subject: Re: [PATCH -next] xen-netfront: make bounce_skb static
-References: <20220914064339.49841-1-ruanjinjie@huawei.com>
-In-Reply-To: <20220914064339.49841-1-ruanjinjie@huawei.com>
 
---------------FTlzLylkOtqjiWteUcsK9JYi
-Content-Type: multipart/mixed; boundary="------------EOkORFmsPIA8fXrPfo0M0WHn"
+On 9/8/22 6:53 PM, Srinivasa Rao Mandadapu wrote:
+> Change parse_fw callback in rproc ops from qcom_register_dump_segments
+> to rproc_elf_load_rsc_table, as section header to be parsed for memory
+> sandboxing required platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+>   drivers/remoteproc/qcom_q6v5_adsp.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index 02d17b4..207270d4 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -447,7 +447,7 @@ static unsigned long adsp_panic(struct rproc *rproc)
+>   	return qcom_q6v5_panic(&adsp->q6v5);
+>   }
+>   
+> -static const struct rproc_ops adsp_ops = {
+> +static struct rproc_ops adsp_ops = {
+>   	.start = adsp_start,
+>   	.stop = adsp_stop,
+>   	.da_to_va = adsp_da_to_va,
+> @@ -590,6 +590,9 @@ static int adsp_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	if (desc->has_iommu)
+> +		adsp_ops.parse_fw = rproc_elf_load_rsc_table;
+> +
 
---------------EOkORFmsPIA8fXrPfo0M0WHn
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+The parse_fw would still need to perform the register_dump_segments
+in addition to elf_load_rsc_table, otherwise you'll lose coredump
+functionality for ADSP on SC7280. You could perhaps just follow
+qcom_q6v5_mss parse_fw i.e. have a static func internal to adsp
+doing both and have it assigned to both wpss/adsp with the
+pre-existing has_iommu flag to differentiate between the two. With
+this you wouldn't need to remove the const in adsp_ops as well.
 
-T24gMTQuMDkuMjIgMDg6NDMsIHJ1YW5qaW5qaWUgd3JvdGU6DQo+IFRoZSBzeW1ib2wgaXMg
-bm90IHVzZWQgb3V0c2lkZSBvZiB0aGUgZmlsZSwgc28gbWFyayBpdCBzdGF0aWMuDQo+IA0K
-PiBGaXhlcyB0aGUgZm9sbG93aW5nIHdhcm5pbmc6DQo+IA0KPiAuL2RyaXZlcnMvbmV0L3hl
-bi1uZXRmcm9udC5jOjY3NjoxNjogd2FybmluZzogc3ltYm9sICdib3VuY2Vfc2tiJyB3YXMg
-bm90IGRlY2xhcmVkLiBTaG91bGQgaXQgYmUgc3RhdGljPw0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogcnVhbmppbmppZSA8cnVhbmppbmppZUBodWF3ZWkuY29tPg0KDQpSZXZpZXdlZC1ieTog
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg==
---------------EOkORFmsPIA8fXrPfo0M0WHn
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------EOkORFmsPIA8fXrPfo0M0WHn--
-
---------------FTlzLylkOtqjiWteUcsK9JYi--
-
---------------z297QInJ2eAbukrn83P9heiv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMhoBMFAwAAAAAACgkQsN6d1ii/Ey8a
-lwgAicNZRZqQAoZQeWQld5M/oFJQWydKiMEX0CTzhggmt6K5qGhDAh5S6fCjySBusrq2r9+q8U74
-SmBvrKl4QpI8CyBtPXAdQo5nWjab5N8gOC7crIWqYwCgQf2YOOXFbGz5m0b0ufm1rXaSP/3dapOT
-NTKjcRBBX9Zhr01eJ0Zwga3A7m17gc8eTmAlS5U2JKicbfKpywOeLgqfoQz5mxDuZWysjuPg3Twc
-xALkdxjYAHSKGlvs68GNzM5dwReCB6pSTsr21+xvX0afp+DJ7qE32A/p8aV1SQ0tguo9QyWSmNi/
-1MeYehvVMY5u1TMH5SCwtHiMsCMgG9U/V9iZNNdV3Q==
-=SRkQ
------END PGP SIGNATURE-----
-
---------------z297QInJ2eAbukrn83P9heiv--
+>   	rproc = rproc_alloc(&pdev->dev, pdev->name, &adsp_ops,
+>   			    firmware_name, sizeof(*adsp));
+>   	if (!rproc) {
+> 
