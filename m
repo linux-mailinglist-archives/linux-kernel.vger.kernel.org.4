@@ -2,143 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289D65B90AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF655B90B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 01:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiINXAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 19:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S229622AbiINXCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 19:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiINXAL (ORCPT
+        with ESMTP id S229603AbiINXCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 19:00:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1823C62ABE;
-        Wed, 14 Sep 2022 16:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663196409; x=1694732409;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=Gy5Kr1K0CD2RjOuPjSjaim0htKIdr+oZcI5W0+mLzZA=;
-  b=ngEIPv9r90EBFK7C19tsn8Ge0MjdFUlZSaedgLSxsM8CpQeS3nSpuWl6
-   KdCXcZaTKxmHvP9vy3B1SO/APqaY2OaAgJYe/o5A9sDzX7Wr+rY7kb/br
-   wCKbyOekKchmZZJ/tDotsdbdFpAaHUxRStapNzZG9QpOCJfmJC04GCI+e
-   zWlUMracmp4Z+xS1MZFOD58/mwat/XosTlUkNQMpThB+uh2Sbq9kbCzMA
-   se7F3wx0Bwkurpc7dvNcoFotzeizVukkuaGYXCR4iGd2aga/82UeUshm+
-   GP8lUe6DJIa8Lk0vzD61SM2HlHA+hPWOdciSTHb56k2Bz8RKjHYJ6XLmM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="297288772"
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="297288772"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:00:07 -0700
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="594575591"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 16:00:07 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 04/13] net/sched: taprio: allow user input of
- per-tc max SDU
-In-Reply-To: <20220914221042.oenxhxacgt2xsb2k@skbuf>
-References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
- <20220914153303.1792444-5-vladimir.oltean@nxp.com>
- <87k065iqe1.fsf@intel.com> <20220914221042.oenxhxacgt2xsb2k@skbuf>
-Date:   Wed, 14 Sep 2022 16:00:07 -0700
-Message-ID: <871qsdimtk.fsf@intel.com>
+        Wed, 14 Sep 2022 19:02:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760086C11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 16:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q0AmhJ66BcoKwGqCpa8ZnB7weX2R83u//PNx4e8dS3M=; b=MteI3Z/TAj+ZwVukeWG2feEHMF
+        Qpzh8HrZgnvFTR5zsNjRVulNtZ8hCMwyuY6FSXXO+3d7AYZQviIHGUeSCDwOkctmudC9s29IdW+j2
+        6A4BVItmE9jkFRTfNoOxgmF9bDoByuUSUBLuUxH7TiETTSD7HAKOH1uOWLFg7ykn5vcNuUW56LnNY
+        KaJr7StB3LlfTdmwpfZo2GBUFEJy7whNGMjSdbcbMsDMukl6saxCabDKq7KY2iVCKopWHf5gsEcSY
+        dT4HFYRZE9Fp/TldK90Z2sueUu06067tBzOEuRDlJryMM/arh/m7GzpDy6YX1Kf5CtStCVBUQXbOz
+        9rHsp7yQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYbOY-000Zq5-JW; Wed, 14 Sep 2022 23:02:14 +0000
+Date:   Thu, 15 Sep 2022 00:02:14 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Hongchen Zhang <zhanghongchen@loongson.cn>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
+ kswapd
+Message-ID: <YyJdds+Tv9oiAEjd@casper.infradead.org>
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+On Wed, Sep 14, 2022 at 03:51:42PM -0700, Andrew Morton wrote:
+> On Wed, 14 Sep 2022 10:33:18 +0800 Hongchen Zhang <zhanghongchen@loongson.cn> wrote:
+> 
+> > when a process falls into page fault and there is not enough free
+> > memory,it will do direct reclaim. At the same time,it is holding
+> > mmap_lock.So in case of multi-thread,it should exit from page fault
+> > ASAP.
+> > When reclaim memory,we do scan adjust between anon and file lru which
+> > may cost too much time and trigger hung task for other thread.So for a
+> > process which is not kswapd,it should just do a little scan adjust.
+> 
+> Well, that's a pretty nasty bug.  Before diving into a possible fix,
+> can you please tell us more about how this happens?  What sort of
+> machine, what sort of workload.  Can you suggest why others are not
+> experiencing this?
 
-> On Wed, Sep 14, 2022 at 02:43:02PM -0700, Vinicius Costa Gomes wrote:
->> > @@ -416,6 +417,9 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
->> >  			      struct Qdisc *child, struct sk_buff **to_free)
->> >  {
->> >  	struct taprio_sched *q = qdisc_priv(sch);
->> > +	struct net_device *dev = qdisc_dev(sch);
->> > +	int prio = skb->priority;
->> > +	u8 tc;
->> >  
->> >  	/* sk_flags are only safe to use on full sockets. */
->> >  	if (skb->sk && sk_fullsock(skb->sk) && sock_flag(skb->sk, SOCK_TXTIME)) {
->> > @@ -427,6 +431,12 @@ static int taprio_enqueue_one(struct sk_buff *skb, struct Qdisc *sch,
->> >  			return qdisc_drop(skb, sch, to_free);
->> >  	}
->> >  
->> > +	/* Devices with full offload are expected to honor this in hardware */
->> > +	tc = netdev_get_prio_tc_map(dev, prio);
->> > +	if (q->max_sdu[tc] &&
->> > +	    q->max_sdu[tc] < max_t(int, 0, skb->len - skb_mac_header_len(skb)))
->> > +		return qdisc_drop(skb, sch, to_free);
->> > +
->> 
->> One minor idea, perhaps if you initialize q->max_sdu[] with a value that
->> you could use to compare here (2^32 - 1), this comparison could be
->> simplified. The issue is that that value would become invalid for a
->> maximum SDU, not a problem for ethernet.
->
-> Could do (and the fact that U32_MAX becomes a reserved value shouldn't
-> be a problem for any linklayer), but if I optimize the code for this one
-> place, I need, in turn, to increase the complexity in the netlink dump
-> and in the offload procedures, to hide what I've done.
-
-Hm, I just noticed something.
-
-During parse the user only sets the max-sdu for the traffic classes she
-is interested on. During dump you are showing all of them, the unset
-ones will be shown as zero, that seems a bit confusing, which could mean
-that you would have to add some checks anyway.
-
-For the offload side, you could just document that U32_MAX means unset.
-
->
-> If I look at the difference in generated code, maybe it's worth it
-> (I get rid of a "cbz" instruction). Maybe it's worth simply creating a
-> shadow array of q->max_sdu[], but which is also adjusted for something
-> like dev->hard_header_len (also a fast path invariant)? This way, we
-> could only check for q->max_frm_len[tc] > skb->len and save even more
-> checks in the fast path.
-
--- 
-Vinicius
+One thing I'd like to know is whether the page fault is for an anonymous or
+file-backed page.  We already drop the mmap_lock for doing file I/O
+(or we should ...) and maybe we also need to drop the mmap_lock for
+doing direct reclaim?
