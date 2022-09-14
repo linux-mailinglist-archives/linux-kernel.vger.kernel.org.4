@@ -2,75 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860F55B8E1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD5C5B8E25
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 19:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiINRYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 13:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S229605AbiINR2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 13:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiINRYb (ORCPT
+        with ESMTP id S229528AbiINR2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 13:24:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DFD10B5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 10:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663176271; x=1694712271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d9Qn9xSx7QuWR+qPUQvfP6425XmAVcvn+4eSyDc/K0Y=;
-  b=Ey/uOtJWP5V2wRa7HPwM5hpruysiftPVQRJYjVdnCss/jmZYKwtfhAVC
-   u9dUUblIyvqiHtWhq84SCnfKPt2ZxflTpz7b6D5ubtyv7FuQ8SsiVmeSr
-   A0SjIyyeppgb58dWPJVtucEZ4hvEzZfGrcelRg1IN2avwgyTO1SGnLCkw
-   h+peDHijGMXCAES4ObKF33skuM5aOotGSFLoAlZlpBw0iGdwR6oGo3yb7
-   PlSbBxYPKBdw5G+WxyBBFXjbvULZh0St5Q4dxT8mpyRPWSTOaqUgWQuq8
-   nTk9rHi0sonOC5m14zjq5nXp0ES6qRorB9y3nhqNZwgXoG6dEP+DyUjt6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="296080923"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="296080923"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 10:24:30 -0700
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594468530"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 10:24:29 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oYW7f-002JVo-1I;
-        Wed, 14 Sep 2022 20:24:27 +0300
-Date:   Wed, 14 Sep 2022 20:24:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v1 1/1] Revert "kernel.h: Split out might_sleep() and
- friends"
-Message-ID: <YyIOS6mc9QJGjxH9@smile.fi.intel.com>
-References: <20220914170739.34600-1-andriy.shevchenko@linux.intel.com>
+        Wed, 14 Sep 2022 13:28:01 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638817647E;
+        Wed, 14 Sep 2022 10:27:57 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id u28so8472751qku.2;
+        Wed, 14 Sep 2022 10:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QyRGzlkoFcQG3CIMtJPpDZn+hUgACTBPPomMcutX19k=;
+        b=Pn4nqjxVEX/40MaS2pCNxckO6W0GVqjplLgc4YUpDc+NUzQMdvYp+h9a2SUbKePdNf
+         y8kZjtKbeOf8fVif7+dfDenYS/1jVYV5uoFoAs/cY4uIPSj19owpvWNd7wx/0m0l7rws
+         oecBLvmQr6nar/9/rUQmFR9ltOIqaaW68CcY5Kgo8ysxDTvO6RFaQqmmpD1CQ5gzcJXf
+         OFxlH1/pZ06zBltHk8fY4h1CK4yGsoQUovRnAPOdclXozylg4qtr0bgrQJa/egKMEPOb
+         B6ZmZiy3RVdEFGRF2KkrY1qTREOETvJsBmdX8yhjBlcH4gn8S8Vz2XX1XviQtC12zn6h
+         pu3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QyRGzlkoFcQG3CIMtJPpDZn+hUgACTBPPomMcutX19k=;
+        b=U5cvOve9nEyOkJ34gs/g/WjV4svgLRuWkMZ0KDu5Z32ClAimD30nqsQU6KRV+HRpBm
+         m3BxwmCkHY7Ls8YwPmZ9QtDdCwTopnV8vTfEmtntoSVN8qPQZ6IsJfUkNB5LZR9tHb7l
+         Bp+4YCjfLmhHNyUTnjOX19QAakubdieTSelgdsGet0QAJQv2KnyuNiNn8zJMWvYWDo+U
+         xHxchI6Ggy0QJcS2TMxrQ0AAAsOV1tRJh+MMp/kfdtlvW0sMpyUJMmWbNbHc1RIrV6Bl
+         ha70dqoCrB5vRsY/ulqODfPOw0yBOaEl7/8xzj8G2556yC1afgVI8hmZzq4XCDtSZdXP
+         FEcA==
+X-Gm-Message-State: ACgBeo27X7u847Z1/ZYhP+84LLRfTXRk+AFtqxFEAGkuWycOmysbCR1W
+        oGECaRHyM17zWUmN+qZQXyE=
+X-Google-Smtp-Source: AA6agR5pvM1OqTJhrtgIA3p55nJJ77rDjYUI3TvVtLJ4yP/4XiCqo9RIOd8UUqhIagFXgfBGt0vKFQ==
+X-Received: by 2002:a05:620a:24d6:b0:6cd:f96a:35b with SMTP id m22-20020a05620a24d600b006cdf96a035bmr15502737qkn.471.1663176476372;
+        Wed, 14 Sep 2022 10:27:56 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d1-20020ac85341000000b0035ba48c032asm1838553qto.25.2022.09.14.10.27.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 10:27:55 -0700 (PDT)
+Message-ID: <c4d40567-6ac6-d822-7098-a5ad1ae567ec@gmail.com>
+Date:   Wed, 14 Sep 2022 10:26:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914170739.34600-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 02/21] mm/hugetlb: correct max_huge_pages accounting on
+ demote
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Doug Berger <opendmb@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        - <devicetree-spec@vger.kernel.org>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux.dev
+References: <20220913195508.3511038-1-opendmb@gmail.com>
+ <20220913195508.3511038-3-opendmb@gmail.com> <YyIN+bpKdCb3JuuY@monkey>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YyIN+bpKdCb3JuuY@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 08:07:39PM +0300, Andy Shevchenko wrote:
-> This reverts commit e076cfdb3293a31b7d6cfc8d4a65355b0c9f82f4.
+On 9/14/22 10:23, Mike Kravetz wrote:
+> On 09/13/22 12:54, Doug Berger wrote:
+>> When demoting a hugepage to a smaller order, the number of pages
+>> added to the target hstate will be the size of the large page
+>> divided by the size of the smaller page.
+>>
+>> Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
+>> Signed-off-by: Doug Berger <opendmb@gmail.com>
+>> ---
+>>   mm/hugetlb.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index e070b8593b37..79949893ac12 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -3472,7 +3472,8 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
+>>   	 * based on pool changes for the demoted page.
+>>   	 */
+>>   	h->max_huge_pages--;
+>> -	target_hstate->max_huge_pages += pages_per_huge_page(h);
+>> +	target_hstate->max_huge_pages += pages_per_huge_page(h) /
+>> +					 pages_per_huge_page(target_hstate);
+>>   
+>>   	return rc;
+>>   }
+> 
+> This has already been fixed here,
+> 
+> https://lore.kernel.org/linux-mm/20220823030209.57434-2-linmiaohe@huawei.com/
+> 
 
-Sorry for this garbage. It wasn't expected to be here.
-
+Could we slap the Fixes tag when this Miaohe's patch series gets 
+accepted since the offending commit is in v5.16 and beyond. Thanks!
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Florian
