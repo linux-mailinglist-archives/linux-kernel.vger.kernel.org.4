@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A975B80FE
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF3B5B80FD
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiINFbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S229998AbiINFbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiINFbX (ORCPT
+        with ESMTP id S229941AbiINFbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Sep 2022 01:31:23 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1236F55A;
-        Tue, 13 Sep 2022 22:31:09 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 337475C00C1;
-        Wed, 14 Sep 2022 01:31:09 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7F6FA05;
+        Tue, 13 Sep 2022 22:31:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 953565C006A;
+        Wed, 14 Sep 2022 01:31:12 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 14 Sep 2022 01:31:09 -0400
+  by compute5.internal (MEProxy); Wed, 14 Sep 2022 01:31:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1663133469; x=
-        1663219869; bh=/oX6YkFh6Fla3S1U+ImlVkebmSqE9u/RwHU2MLtNHWQ=; b=C
-        9bnyTooKuyM32PqzvT8E+Q+R6UXLJN4qB+tcwohBtpItPakS7KPZiqTZoc1chdrD
-        F6/YXlZx2TdiGg+CvawWW1BktGN3KWEA9PJMpnZKTE85UO+hRUzLHp5MhBo9Arx6
-        RyxKv+S/BZoKbSOdrbkzofPYnfryJnMzWnzk8j2td3TzCcwdjq91Y7ss56iwx89d
-        hk1zR6oc63zEAEBHlWUBDNJVjBzWxW5kSqu+T3SZGxaClA6rBcO3c4Z3BJn5G+qg
-        uR61DJ7MuG09a+ilTzLbVQSD3Lo1glbH8pCcBrhG4Cf16TNVjNP5SJzIdiUvcbE+
-        z3rFgfx9sfybRqyukFd2w==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1663133472; x=
+        1663219872; bh=APxc/mSmgwWOZvUwfXzsxNO8MT7v2MA9SqTEW8ZVVuI=; b=d
+        Yx67sL465KSfwtsLGjd+N3XPhUi8e053DdlMuQao5aUkdhFikxdnVUj2+lTNGkfC
+        suLNSMG4SxQz1p+dSfrrh9mF3GNEMRg1gnth1YRw4ERJ+5q21hQ+Y5c076hNM8an
+        /9e5DAesU3HnJ197S4NDnGsE06ZxY/GCOYkJ1yxexReZBOFOUcvTLk66N3nOuVl/
+        mv7N9om2OBJpOhFJMM59sU8KeozCY/IDSGfatzMgytxcoAS6tC5LpUqScUFAeQrQ
+        ZhW9e7VgN7/man79/DxAIoMLxMLvwPDMCMjwQ5CtcMtHiL63hnHjafl3cNur7U4X
+        yvWkk3RwMjav7ecPjq4Yw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1663133469; x=1663219869; bh=/oX6YkFh6Fla3
-        S1U+ImlVkebmSqE9u/RwHU2MLtNHWQ=; b=PQ23vNMLYtMjUtCbWM2LAaLWvjRgW
-        cuwgDJLWnKIvNKa+leeadIiL/mjufNuv5dsh8cnbLcH+H4jCgDui41VFVR5j6bNA
-        pZR8j1o+vdB0oB7jyRNgi+w8o7OHmddI08iHCiqIu7fXHEz21F0Bq+SjN1816JkY
-        aE066j6TFg7m4r85h0w/6ftsXIQKFKs9LUf1MCEJcU4v4XhDMFsvwSWJJhQ2htvN
-        FnVTtvJGx6uU6yo181Ed/SxLOdRzGs8St5yAiup4eTXDn0ylu2q57K7QENipf3kb
-        g14RGbwZ7e03YkCPa4Qr0aPdCpOYJSfQIozc1ZL7JyZ3dJjlERBNQBOgQ==
-X-ME-Sender: <xms:HWchY7a8gFRPosjCvhC15pt64eMYDsDYxk0m_t7HXw1bE15PAlkdCg>
-    <xme:HWchY6b5GbjIBulYbMQCm85Xqd2EfB5roHH6gFzgQcNBRPlKcXw4TRt2pADjnl-Wx
-    ArO7_r9wmhGiU9xDbE>
-X-ME-Received: <xmr:HWchY9_HwsnUOzvxB8mSQgQhZDEuQiQjI7mbkz84K3tP1DRp3hNSQEQpU0s2bciziytpTRC7KwBRKiAjm94CP8pmP_2rzmM8LUyf7AX_iCvgecmh4kIP23gUd8_qMIg>
+        :x-sasl-enc; s=fm2; t=1663133472; x=1663219872; bh=APxc/mSmgwWOZ
+        vUwfXzsxNO8MT7v2MA9SqTEW8ZVVuI=; b=eC8TLuaym//VGKA7JMfz/yPn9Gk9F
+        +Lxw1ImHQB8AqcWdEHbso/vJT1TsoksScuPxXVJymdpTGI+aadfUvswrRjAWo8lT
+        AVBPEMqBof7W4q52Eou5bDtndWHN80Ic2X9d2Pfk8b24qB3ywaE+nvuPR2lwZRPr
+        yegZb/tp1k6rk7yY0GUri5Ko6rddGXwX4ZJXnkZ80VsFf7ujX75GHWp4DX9r40jx
+        y8lWN7rj+5Ih4Z69QKke2AEQt4tsZtpO0VkA4e6ypF3rxqbxyIYVXHatDyDWascq
+        ILZluQBaaJp2VI4l72X1P1BB0dtRhIyhYgnda/62kHqSClQ/3RpXuPMnA==
+X-ME-Sender: <xms:IGchY0TCAFc6WYn2v5edC8fblOUNZDau8_r2K3TmnwX_Nvgs8xebRA>
+    <xme:IGchYxzrgRD7y8sddyQCcGoewQ5ciHccvX9pJy2BSGEyg8RMLTACijlRp5ImOPwMM
+    MGyHbJKG8Hbb37bXFo>
+X-ME-Received: <xmr:IGchYx2bvL0VcXUJUEraF262PongCmQD8pZfYcbp9AYcn8p7s35c1UYlVNkHxwMbKXJqaIli3Z-JBa6HcrhlNYlKH_lnmkqRay6lovfoNXp2U5XMbKMzppv7Bah2NEI>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduhedgleeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeforghthhgvficuofgtuehrihguvgcuoehmrghtthesthhr
-    rghvvghrshgvrdgtohhmrdgruheqnecuggftrfgrthhtvghrnheptdetueejffeikeelve
-    ehvdekkefgfeevjeeiffeutdfffeejhfegteehgeefuddvnecuffhomhgrihhnpeguvghv
-    ihgtvghtrhgvvgdrohhrghdpmhhitghrohgthhhiphdrtghomhenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghtthesthhrrghvvghrshgv
-    rdgtohhmrdgruh
-X-ME-Proxy: <xmx:HWchYxrg-M8N-2Hhy6r0LDGBK7ykMMCS1NNN6tHBfct-ep__Kj4wLw>
-    <xmx:HWchY2qLioZ4-w-pe2_JKzshf3YKoMdajpuOjy5YhJJGWU-pldzT7g>
-    <xmx:HWchY3Q03bSkQktozdbU6sJaHAvFnoxtef8-aZCXcTc93C7dhQbtCw>
-    <xmx:HWchYydmvyiWEr2FI2IjfhZ4rW9y0LIHaBXEX6vgl2zTrrg8a_jrQQ>
+    rghvvghrshgvrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhephfffueehtedukeevje
+    dvieevffehjeeiteehhfefkeehgeffleefleejudekgfevnecuffhomhgrihhnpehtrhgr
+    vhgvrhhsvgdrtghomhdrrghunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomhdrrghu
+X-ME-Proxy: <xmx:IGchY4CFSaY1FH1So4XWsLQKT0-A_OQzwpTEomr2pe5hd01-ZLeOjQ>
+    <xmx:IGchY9ibgimoE-bzfQYxsXIZLtEoEd8JVAcl6IlysvehEBOTDy-Agg>
+    <xmx:IGchY0oHp4C9lDxv5EYlVlm60FTQEugrqwUV8kXOwm4MxeF6EKDm8Q>
+    <xmx:IGchY-WE7AbEtYaNHluRlqJXND1sJaCCvi5b3RA1t8EVM_4L7fYYsg>
 Feedback-ID: i426947f3:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 14 Sep 2022 01:31:06 -0400 (EDT)
+ 14 Sep 2022 01:31:09 -0400 (EDT)
 From:   Mathew McBride <matt@traverse.com.au>
 To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         jdelvare@suse.com, linux@roeck-us.net,
@@ -70,9 +69,9 @@ To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         leoyang.li@nxp.com, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Mathew McBride <matt@traverse.com.au>
-Subject: [PATCH 2/3] dt-bindings: add binding for Microchip EMC230X fan controller family
-Date:   Wed, 14 Sep 2022 05:30:29 +0000
-Message-Id: <20220914053030.8929-3-matt@traverse.com.au>
+Subject: [PATCH 3/3] arm64: dts: ten64: add configuration for fan controller
+Date:   Wed, 14 Sep 2022 05:30:30 +0000
+Message-Id: <20220914053030.8929-4-matt@traverse.com.au>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20220914053030.8929-1-matt@traverse.com.au>
 References: <20220914053030.8929-1-matt@traverse.com.au>
@@ -88,117 +87,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a binding for the Microchip EMC230X fan controller family,
-which is supported by the new "emc230x" hwmon driver.
+The Ten64 desktop appliance has a Noctua NF-A4x20 PWM fan,
+controlled by a Microchip EMC2301 PWM fan controller.
+
+This binding allows the fan speed to be slowed to a
+quieter level when the system is not busy.
+
+Reference: https://ten64doc.traverse.com.au/hardware/fan-control/
 
 Signed-off-by: Mathew McBride <matt@traverse.com.au>
 ---
- .../bindings/hwmon/microchip,emc2301.yaml     | 83 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 84 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
+ .../boot/dts/freescale/fsl-ls1088a-ten64.dts  | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
-new file mode 100644
-index 000000000000..1e5c7072caee
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/microchip,emc2301.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts b/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
+index ef6c8967533e..fd8261c9a186 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts
+@@ -87,6 +87,35 @@ sfp_xg1: dpmac1-sfp {
+ 		los-gpios = <&sfpgpio 7 GPIO_ACTIVE_HIGH>;
+ 		maximum-power-milliwatt = <2000>;
+ 	};
 +
-+title: Microchip EMC230X family RPM fan controller
++	thermal-zones {
++		soc {
++			trips {
++				fanmid0: fanmid0 {
++					temperature = <60000>;
++					hysteresis = <2000>;
++					type = "active";
++				};
 +
-+maintainers:
-+  - Mathew McBride <matt@traverse.com.au>
++				fanmax0: fanmax0 {
++					temperature = <70000>;
++					hysteresis = <2000>;
++					type = "active";
++				};
++			};
 +
-+description: |
-+  The Microchip EMC230X family (formerly produced by SMSC) is a family
-+  of fan controllers which can drive via a set PWM period or
-+  to a target RPM speed. They are available in variants from 1 to 5
-+  independent channels.
-+
-+  Product information:
-+  https://www.microchip.com/en-us/product/EMC2301
-+  https://www.microchip.com/en-us/product/EMC2302
-+  https://www.microchip.com/en-us/product/EMC2303
-+  https://www.microchip.com/en-us/product/EMC2305
-+
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,emc2301
-+      - microchip,emc2302
-+      - microchip,emc2303
-+      - microchip,emc2305
-+  reg:
-+    maxItems: 1
-+
-+  "#address-cells": true
-+
-+  "#size-cells": true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+patternProperties:
-+  "fan@[0-9]+$":
-+    type: object
-+    description: Fan channel properties for use as a thermal cooling device
-+
-+    properties:
-+      min-rpm:
-+        description: Minimum fan RPM when used as a cooling device
-+        maxItems: 1
-+      max-rpm:
-+        description: Maximum fan RPM when used as a cooling device
-+        maxItems: 1
-+      reg:
-+        description: Channel number on EMC230X device the fan is attached to
-+        maxItems: 1
-+      "#cooling-cells":
-+        const: 2
-+    required:
-+      - reg
-+      - min-rpm
-+      - max-rpm
-+      - "#cooling-cells"
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fanctrl@2f {
-+            compatible = "microchip,emc2301";
-+            reg = <0x2f>;
-+
-+            fan@0 {
-+              min-rpm = /bits/ 16 <3500>;
-+              max-rpm = /bits/ 16 <5000>;
-+              reg = <0>;
-+            }
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf3c6c3c0492..5938780abe20 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8046,6 +8046,7 @@ MICROCHIP EMC230X PWM-FAN CONTROLLER DRIVERS
- M:	Mathew McBride <matt@traverse.com.au>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
- F:	drivers/hwmon/emc230x.c
++			cooling-maps {
++				map2 {
++					trip = <&fanmid0>;
++					cooling-device = <&case_fan 0 6>;
++				};
++				map3 {
++					trip = <&fanmax0>;
++					cooling-device = <&case_fan 7 THERMAL_NO_LIMIT>;
++				};
++			};
++		};
++	};
+ };
  
- MICROCHIP POLARFIRE FPGA DRIVERS
+ /* XG1 - Upper SFP */
+@@ -231,6 +260,20 @@ at97sc: tpm@29 {
+ 		compatible = "atmel,at97sc3204t";
+ 		reg = <0x29>;
+ 	};
++
++	fanctrl: emc2301@2f {
++		reg = <0x2f>;
++		compatible = "microchip,emc2301";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		case_fan: fan@0 {
++			reg = <0>;
++			min-rpm = /bits/ 16 <3000>;
++			max-rpm = /bits/ 16 <5500>;
++			#cooling-cells = <2>;
++		};
++	};
+ };
+ 
+ &i2c2 {
 -- 
 2.30.1
 
