@@ -2,109 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4139D5B7E4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4C95B7E54
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiINBaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S229906AbiINBdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiINB37 (ORCPT
+        with ESMTP id S229599AbiINBdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:29:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5303A56B97;
-        Tue, 13 Sep 2022 18:29:58 -0700 (PDT)
-X-UUID: c6ca5fa26f4e4fe591cb2329e7507898-20220914
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jtf0pV6OTBxyNK49AbgnpY+uE7h7WetWSrNYxrsJuHU=;
-        b=f2fXZzjNKtadxACtMHBlNa47yRiQYPEXfl4BnWZyx9c11gaLPIndbgGaHmNcMD9BwCV64De28DfEL3MGobbowAgp+MTRD5EviwDRnuXsizF+mNf4ao57s7/bRc9B57Oef9XyjiRyGvwrDlMd8919s002+W5WqaUVwOlTn8I13bk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:091bb838-caae-45b3-9e76-6e1821553bae,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:091bb838-caae-45b3-9e76-6e1821553bae,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:67dc4bf6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:220914092955TAL2S8R3,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c6ca5fa26f4e4fe591cb2329e7507898-20220914
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1562391006; Wed, 14 Sep 2022 09:29:53 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 14 Sep 2022 09:29:51 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 14 Sep 2022 09:29:51 +0800
-Message-ID: <dccaa8ce9e3a494afb165d4b8ff02b7589241451.camel@mediatek.com>
-Subject: Re: [PATCH v3 3/9] drm/mediatek: Adjust mtk_drm_gamma_set_common
- parameters
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "Singo Chang" <singo.chang@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 14 Sep 2022 09:29:51 +0800
-In-Reply-To: <90908764-b5aa-34a0-74c8-9f9215dcb89b@collabora.com>
-References: <20220911153734.24243-1-jason-jh.lin@mediatek.com>
-         <20220911153734.24243-4-jason-jh.lin@mediatek.com>
-         <90908764-b5aa-34a0-74c8-9f9215dcb89b@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 13 Sep 2022 21:33:39 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD6056B8DF;
+        Tue, 13 Sep 2022 18:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KqodM
+        YrOFpEVlmPN5U59wZd+Mb7IJb+e/Mld+L/PKCU=; b=CPZrAAyhnjpBuCstJMvKh
+        ZWhHoSdrtYuYC0g6TuPzYYyQUsQ1YKD2qcroJOZJm2tIrpIh+IbeAbDipJzDSblJ
+        DVeRAG88NcK0/hEtbhRUFKjmG+Bg3soE576TdBTIlXBKoZxfFiNj5mqHayfwqJfr
+        7mzrcEbwn97/q2ym+oqxME=
+Received: from localhost.localdomain (unknown [36.112.3.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgDnUuVXLyFjD05gcg--.57701S4;
+        Wed, 14 Sep 2022 09:33:25 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com
+Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH v2] proc/vmcore: fix potential memory leak in vmcore_init()
+Date:   Wed, 14 Sep 2022 09:33:10 +0800
+Message-Id: <20220914013310.6386-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgDnUuVXLyFjD05gcg--.57701S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWUtFW5Gw4xXFWfXr17Awb_yoWfZwb_Aa
+        18tF4xXw4rJan3GrWUKFy5tw4akr1j9rs8XF1fGF9rGFyrtwsxW3s7ZrZ3Ar97XrsYvry5
+        uwsakFy2934rGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_sqWUUUUUU==
+X-Originating-IP: [36.112.3.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFQZ8jF5mMjllDAAAs5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
+kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
+predefined value. If parse_crash_elf_headers() gets some error and
+returns a negetive value, the elfcorehdr_addr should be released with
+elfcorehdr_free().
 
-Thanks for the reviews.
+Fix it by calling elfcorehdr_free() when parse_crash_elf_headers() fails.
 
-On Mon, 2022-09-12 at 12:12 +0200, AngeloGioacchino Del Regno wrote:
-> Il 11/09/22 17:37, Jason-JH.Lin ha scritto:
-> > Adjust the parameters in mtk_drm_gamma_set_common()
-> >    - add (struct device *dev) to get lut_diff from gamma's driver
-> > data
-> >    - remove (bool lut_diff) and use false as default value in the
-> > function
-> > 
-> > Fixes: 051524cbe62d ("FROMGIT: drm/mediatek: Add lut diff flag for
-> > new gamma hardware support")
-> 
-> This Fixes tag contains a commit from a downstream kernel, which is
-> useless
-> fo upstream. Please fix it.
-> 
-> Regards,
-> Angelo
+Acked-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ fs/proc/vmcore.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-OK, I'll fix this.
-
-Regards,
-Jason-JH.Lin
-
+diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+index f2aa86c421f2..74747571d58e 100644
+--- a/fs/proc/vmcore.c
++++ b/fs/proc/vmcore.c
+@@ -1567,6 +1567,7 @@ static int __init vmcore_init(void)
+ 		return rc;
+ 	rc = parse_crash_elf_headers();
+ 	if (rc) {
++		elfcorehdr_free(elfcorehdr_addr);
+ 		pr_warn("Kdump: vmcore not initialized\n");
+ 		return rc;
+ 	}
 -- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
+2.25.1
 
