@@ -2,119 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8385B8A78
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09225B8A72
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiINO16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229585AbiINO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiINO1r (ORCPT
+        with ESMTP id S229533AbiINO1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:27:47 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323A92646;
-        Wed, 14 Sep 2022 07:27:45 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id f20so18048112edf.6;
-        Wed, 14 Sep 2022 07:27:45 -0700 (PDT)
+        Wed, 14 Sep 2022 10:27:34 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209CD264C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:27:33 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id k21so4766819pls.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:27:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=JP95ma47qrdvlJsJm3fTS/uHsMwIKJEK/YCLI3Ebq8k=;
-        b=IVEuXnuTA8UzHQMeXwKt0RDG2RTegpBNa95gy7LChIIc1a6cuWpxAoDg3zSItZiWj6
-         TrtGrsJaWog/G7Z9f5WTgDFLHgUD8FKUyvZ6uX3Wqum7masupsarPkgxA5OQ1C3Nd6wl
-         4nyTGYLQTk199yhVI9YQwjJh91oVNWWssBjyFqNNSf1/xJfdTegvkLKm0FcDC66boYlE
-         2d/xv9oUvl7Sa3AayW3TAGr6KYBeaY/nTAV9RYCp+dvt+7V0qf0MfYy5NY5cU31DS61d
-         LuB3Q5ZZwEF93ne2HAES0BKJllANLIszmx3CdcF+IQPec5iWHuFKBpFob126Yf2oSYqo
-         IsaQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=CamYkk6hyQ6W/FkGD4SGaKOkaQ0RW1D0VrreKLd+PLg=;
+        b=u56wYV3aH2fK+ZrJQ7oF8346nuZfmInRSgBL9Eje8NRerq3bY8k0Jh2pJg816PYes/
+         wEAvIXe9IfB4nfpjkFYTFzzS4O7vwVohql7MNPbovpQOTOZqThUOAD64Zm1DBJXLnV2w
+         LHCtank+3g29r4y919GrOShxdbBFa33PUjJ/scg3+/s22znmZTchZqmZ2xPchIM2rYPn
+         C5NWGITdMShhMfkUPVA1Lmqy2mbB0Jp0vQLHJ8vzsCx8X9QB8Rnj6lBSwHvTArzB8yND
+         9MSqnSGzoADtPGHzNdVTynGMpSLm/3rvfzs/QYFIwSBu9PQPV73gA6WEjk5dfxo83y9F
+         z21A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JP95ma47qrdvlJsJm3fTS/uHsMwIKJEK/YCLI3Ebq8k=;
-        b=VDEL+QIRvdCKow9/b0db3u//28KwhUxgp8M0IJ4nuyL/H6+bUGCXK4fkJ5uOiaWzdi
-         XpGTevuwumi38eCfdKHwl05R9V3TYnS+yZrUyhs9k3r/CX458ayAJdv35XlnkZKvJ/5j
-         dTQmlcI2uW7uxIQVFsnXcqmKMwCHx4z/u+ymP4lkbbEBh89lZq9ckrq5r4Rp1imy3I97
-         pV1MdaR5kTM0XFs4QrQk6iVFXXGwSSKvo9+zX6RRn9hpDskPsPbjE7g49XNZVg3FtH2Q
-         BcUOMYFSvTwJRBJN206CrgOPGsS6EP/O7nFhVGF7KEPS+WsoSSmlfC3NvOmmFD+FY8RF
-         TfOA==
-X-Gm-Message-State: ACgBeo1YpAcfbOB3+YE1qpr8U1HJ+voJDU6eCP3R3Usd079NBC0ycKjJ
-        oILGCKd1NrndHmCMxooY/nc=
-X-Google-Smtp-Source: AA6agR7jrqjjbW1nGf4SWamFa9Q3aRZ4Nvb6DDs925fLoaNgiZdO+0utdRYQY1YV2FcBxWVywTEAHA==
-X-Received: by 2002:a05:6402:1655:b0:44e:b208:746d with SMTP id s21-20020a056402165500b0044eb208746dmr31218126edx.229.1663165663670;
-        Wed, 14 Sep 2022 07:27:43 -0700 (PDT)
-Received: from felia.fritz.box (200116b826cf470059b9799edefde240.dip.versatel-1u1.de. [2001:16b8:26cf:4700:59b9:799e:defd:e240])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906329200b007708635be05sm7661502ejw.4.2022.09.14.07.27.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=CamYkk6hyQ6W/FkGD4SGaKOkaQ0RW1D0VrreKLd+PLg=;
+        b=MAiVpz8FSitKAKca/8YdlotfO49Z4MY9eWrZwkjs+GgU22kuZidJBxiFW0Za/3Uhr8
+         BiKJf1Y9SBPXRM8XnTvgdNESzi/u2q1h3goWd87MBgAUlUaGArEQPBWeZGt9WMRsgBse
+         oSGQPxKmg+J6BeQQGXAgoEkkGZJ5CNLWe5qzGiplfZza2xNbtJ51CVE2xBjnVRHq0i5K
+         8+gyvY4Cv88xjOHntV/iMwERMgBAYyks5dwMp3Ywm5MGx/q6zRRO7CQylKJrm/m1BM2Y
+         AHTkhBRlhzoWQTwXLzVilLGJPdAVeauZ8V/akoSOr5ZyjMW1IKh9wzvJY4WG0huTWX3g
+         gk+Q==
+X-Gm-Message-State: ACgBeo1DVhN9NAWKI9Pee6KddZMAkA9eN0oFQSR/E3CozZtg4sKAIC3O
+        J3OAEyK16NDhuQQTzZbo3BLhMQ==
+X-Google-Smtp-Source: AA6agR7ddK1vjr6d4fM0btt2VKYOJv+hLk9FU08MkTY7GtSdpIPrZcYUITBky6DhvELRaz/2FyChNw==
+X-Received: by 2002:a17:902:ecd2:b0:178:3b53:ebf7 with SMTP id a18-20020a170902ecd200b001783b53ebf7mr11608823plh.28.1663165652471;
+        Wed, 14 Sep 2022 07:27:32 -0700 (PDT)
+Received: from leoy-yangtze.lan (n058152048222.netvigator.com. [58.152.48.222])
+        by smtp.gmail.com with ESMTPSA id c3-20020a654203000000b0042c0ffa0e62sm9857405pgq.47.2022.09.14.07.27.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 07:27:43 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 2/2] ata: make PATA_PLATFORM selectable only for suitable architectures
-Date:   Wed, 14 Sep 2022 16:27:13 +0200
-Message-Id: <20220914142713.29351-2-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220914142713.29351-1-lukas.bulwahn@gmail.com>
-References: <20220914142713.29351-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        Wed, 14 Sep 2022 07:27:32 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 22:27:23 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, acme@kernel.org,
+        peterz@infradead.org, alexander.shishkin@linux.intel.com,
+        james.clark@arm.com, will@kernel.org, mathieu.poirier@linaro.org,
+        mark.rutland@arm.com, suzuki.poulose@arm.com,
+        jonathan.cameron@huawei.com, mike.leach@linaro.org,
+        gregkh@linuxfoundation.org, helgaas@kernel.org,
+        lorenzo.pieralisi@arm.com, shameerali.kolothum.thodi@huawei.com,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, prime.zeng@huawei.com,
+        zhangshaokun@hisilicon.com, linuxarm@huawei.com,
+        yangyicong@hisilicon.com, liuqi6124@gmail.com
+Subject: Re: [RESEND PATCH v12 1/3] perf tool: arm: Refactor event list
+ iteration in auxtrace_record__init()
+Message-ID: <YyHkywZUVPL3GNq8@leoy-yangtze.lan>
+References: <20220914075925.48549-1-yangyicong@huawei.com>
+ <20220914075925.48549-2-yangyicong@huawei.com>
+ <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5577971-946e-405b-b0ee-23b556ea3f72@huawei.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is currently possible to select "Generic platform device PATA support"
-in two situations:
+On Wed, Sep 14, 2022 at 02:47:43PM +0100, John Garry wrote:
 
-  - architecture allows the generic platform device PATA support and
-    indicates that with "select HAVE_PATA_PLATFORM".
-  - if the user claims to be an EXPERT by setting CONFIG_EXPERT to yes
+[...]
 
-However, there is no use case to have Generic platform device PATA support
-in a kernel build if the architecture definition, i.e., the selection of
-configs by an architecture, does not support it.
+> >   struct auxtrace_record
+> >   *auxtrace_record__init(struct evlist *evlist, int *err)
+> >   {
+> > -	struct perf_pmu	*cs_etm_pmu;
+> > +	struct perf_pmu	*cs_etm_pmu = NULL;
+> > +	struct perf_pmu **arm_spe_pmus = NULL;
+> >   	struct evsel *evsel;
+> > -	bool found_etm = false;
+> > +	struct perf_pmu *found_etm = NULL;
+> >   	struct perf_pmu *found_spe = NULL;
+> > -	struct perf_pmu **arm_spe_pmus = NULL;
+> > +	int auxtrace_event_cnt = 0;
+> >   	int nr_spes = 0;
+> > -	int i = 0;
+> >   	if (!evlist)
+> >   		return NULL;
+> > @@ -68,24 +84,23 @@ struct auxtrace_record
+> >   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+> >   	evlist__for_each_entry(evlist, evsel) {
+> > -		if (cs_etm_pmu &&
+> > -		    evsel->core.attr.type == cs_etm_pmu->type)
+> > -			found_etm = true;
+> > -
+> > -		if (!nr_spes || found_spe)
+> > -			continue;
+> > -
+> > -		for (i = 0; i < nr_spes; i++) {
+> > -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
+> > -				found_spe = arm_spe_pmus[i];
+> > -				break;
+> > -			}
+> > -		}
+> > +		if (cs_etm_pmu && !found_etm) +			found_etm =
+> > find_pmu_for_event(&cs_etm_pmu, 1, evsel);
+> > +
+> > +		if (arm_spe_pmus && !found_spe)
+> > +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
+> 
+> should you break if found_etm and found_spe are set? Or, indeed, error and
+> return directly as we do below? Indeed, I am not sure why you even require
+> auxtrace_event_cnt
 
-If the architecture definition is wrong, i.e., it just misses a 'select
-HAVE_PATA_PLATFORM', then even an expert that configures the kernel build
-should not just fix that by overruling the claimed support by an
-architecture. If the architecture definition is wrong, the expert should
-just provide a patch to correct the architecture definition instead---in
-the end, if the user is an expert, sending a quick one-line patch should
-not be an issue.
+I think this was my suggestion :)
 
-In other words, I do not see the deeper why an expert can overrule the
-architecture definition in this case, as the expert may not overrule the
-config selections defined by the architecture in the large majority
----or probably all other (modulo some mistakes)---of similar cases.
+We can check if both 'found_etm' and 'found_spe' are set and directly
+break (and bail out) for this case.  But it would introduce more complex
+checking if we connect with patch 2 with new flag 'found_ptt', something
+like:
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/ata/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  if ((found_etm && found_spe) ||
+      (found_etm && found_ptt) ||
+      (found_spe && found_ptt))
+      break;
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index c93d97455744..fc11d9d30d72 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1102,7 +1102,7 @@ config PATA_PCMCIA
- 	  If unsure, say N.
- 
- config PATA_PLATFORM
--	tristate "Generic platform device PATA support" if EXPERT || HAVE_PATA_PLATFORM
-+	tristate "Generic platform device PATA support" if HAVE_PATA_PLATFORM
- 	help
- 	  This option enables support for generic directly connected ATA
- 	  devices commonly found on embedded systems.
--- 
-2.17.1
+This is hard for later's extension if we need to support a new auxtrace
+event, so using auxtrace_event_cnt would be easier to extend more
+auxtrace event on Arm platforms.
 
+Thanks,
+Leo
+
+> >   	}
+> > +
+> >   	free(arm_spe_pmus);
+> > -	if (found_etm && found_spe) {
+> > -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> > +	if (found_etm)
+> > +		auxtrace_event_cnt++;
+> > +
+> > +	if (found_spe)
+> > +		auxtrace_event_cnt++;
+> > +
+> > +	if (auxtrace_event_cnt > 1) {
+> > +		pr_err("Concurrent AUX trace operation not currently supported\n");
+> >   		*err = -EOPNOTSUPP;
+> >   		return NULL;
+> >   	}
+> 
