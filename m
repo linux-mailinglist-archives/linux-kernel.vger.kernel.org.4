@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B345B80F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538FF5B80FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 07:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiINFb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 01:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S229881AbiINFb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 01:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiINFbU (ORCPT
+        with ESMTP id S229919AbiINFbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 01:31:20 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A127F6E88B;
-        Tue, 13 Sep 2022 22:31:03 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28E4enP5000529;
-        Wed, 14 Sep 2022 05:30:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=n5rJAvQhwCq2T6m4EtpG3+YaK2yUFaiiXGtnycNXHnI=;
- b=B47aktkwtgcbR2tJHPgD0dcBXJkplB4VijJdrEI4fcbHF0r7NV/M7WUe2lnSQrcpjeB7
- l/wjXykSbc0835yPjHUqxmF6Fh+oVGLm9HaHt0acRmVG2KHg+Pubo0gI/kfOqO8wn29N
- K+7/QF6KX56c0FagRpyRsaoUv28tJyE6sa6oMNZLqpHRGNNxcUdUAqm3MEg1mJTpIVRr
- VSUMzVqJfut2Bodx082IiHBMWOUwAX6jzQ7CgKz3nWKD2Z97ndysgo2ujl9Gr6T8GMKj
- 0C1E5YkqG3snKEPx9hFy+9Eoz0GtHIxYtSUfmzvT7C/2k7NCspndlJccFaYNo79OSdjL dg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxyv9c37-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 05:30:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28E5UtK3025975
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Sep 2022 05:30:55 GMT
-Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 13 Sep 2022 22:30:51 -0700
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sboyd@kernel.org>,
-        <mka@chromium.org>, <johan+linaro@kernel.org>,
-        <quic_kriskura@quicinc.com>, <dianders@chromium.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sc7280: Add required-opps for USB
-Date:   Wed, 14 Sep 2022 11:00:17 +0530
-Message-ID: <20220914053017.23617-1-quic_rjendra@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 14 Sep 2022 01:31:21 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017686C745;
+        Tue, 13 Sep 2022 22:31:05 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2105F5C0067;
+        Wed, 14 Sep 2022 01:31:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 14 Sep 2022 01:31:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=traverse.com.au;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663133462; x=1663219862; bh=mT8Oy9Arlp
+        TGJR2YdOtkz3D8RzCOFiwRQCLe8Tog5gU=; b=q4fUvYElSSymRhlYxHC973G/E8
+        IZRRGwkUTKR/lXBdg3ZW92+XZuoGlBCd/cD/HKKA9X0CB85MvoGbYd7UySG/3rDM
+        r5CFuc+pzdwJQkeQSDH1WkGOQGsiWj5PErzDoPugWbwS7THDYtT14U+ee2ldNiwi
+        6e880f7QBvTEIafMHEUXZDL9bBdXJdPdFNEPDbWwbFy/YIFxcYLqwygWvEuWxexN
+        QkclBNbPzLBgVBefoENPFa0lOYEaUnDZJmsBCqX6Z8DDPbNeT8tw8gL80vOeDUM2
+        LfBIurqBRVnSJfaZsWOItu3V5LSXOJPqp2MS+m9OOv7vidUhmUszA7H9VB2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663133462; x=1663219862; bh=mT8Oy9ArlpTGJR2YdOtkz3D8RzCOFiwRQCL
+        e8Tog5gU=; b=vEB0w/FZ7dkHW3p87IheGNgqZWDVtAfMWHXGqYZ+CTCORtA541D
+        IU2HkxaqYNfZ8oZ85N843/QnKh4G2NUchTCxOb8ayeou4oocTLia50oEkRJReb55
+        LjXwIN33cGXcyabCxCU+KFeiySVSyUjJOCX1xRk+XV+EvUB9eAf95/EKKJq7CZKu
+        eXxD0eLtjdMYoC9o4LSGNv2blx0Yo+lUM+ff0d3uSELbCSzBpYMlAXsHxCQXaVJE
+        ANJ5xF4ODMlShP1Gvs8EhLNIf8A5/eZewj2N5psw8TCOV3isA2GjJ+c+a3aKeZnc
+        YmaT2tvx1mmcmvMX5H4XwSbLg+Yh0uftikA==
+X-ME-Sender: <xms:FWchY26rusUm6xQt7jLh2r6zFhzgRcih1lcSvd6e-fCXjuQ9xjSfhA>
+    <xme:FWchY_7t3ZuQS8aPLPHIk5KRQw8g07JQsnXPk0twh0Ir3cF36w9z_WvgIzRYeAjaK
+    Ja5Z2kr3NIYwIxvpIo>
+X-ME-Received: <xmr:FWchY1fh2GLxBR39DMIwrg2XvUkHNaaViF6NY1ECXTRUkdMTbYtiFSdSkMs62xRNrVy--xM2Iaa7kU0BjW_TaylLDUP2I_e6mQpmOZ5GPRI_MePRPPf8Tn5wNOHxt2s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduhedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeforghthhgvficuofgtuehrihguvgcuoehmrghtthesthhrrghv
+    vghrshgvrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepgfekteegudffgfdtvedvje
+    ejffdtgffhteefgfeuhefhleejfffgfeeuueejleffnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrthhtsehtrhgrvhgvrhhsvgdrtghomh
+    drrghu
+X-ME-Proxy: <xmx:FWchYzKI42PcGOmZuoQ84rZDIet4VUwtf80ML6sIAfia3lS93m3N9w>
+    <xmx:FWchY6KtmRqArsuDkNp49IzVF-Knm6OOnEJzP-xJTswo89Sf6jMLww>
+    <xmx:FWchY0wWrXPOE8XXmHkkxEx0M93JTmQa3FkUp7JqbtQ6UsG3k4z8sw>
+    <xmx:FmchY5_N7r2f-K_RIdbwDlerDedM-sUJrJRIbRu2cs0g20leW0MaQw>
+Feedback-ID: i426947f3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Sep 2022 01:30:58 -0400 (EDT)
+From:   Mathew McBride <matt@traverse.com.au>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        leoyang.li@nxp.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mathew McBride <matt@traverse.com.au>
+Subject: [PATCH 0/3] hwmon: add Microchip EMC230X fan controller driver
+Date:   Wed, 14 Sep 2022 05:30:27 +0000
+Message-Id: <20220914053030.8929-1-matt@traverse.com.au>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gb9cfLVGYkngCQiQw-ipGUC39ZD52gXD
-X-Proofpoint-ORIG-GUID: gb9cfLVGYkngCQiQw-ipGUC39ZD52gXD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_02,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 mlxscore=0 bulkscore=0 spamscore=0
- phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209140026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB has a requirement to put a performance state vote on 'cx'
-while active. Use 'required-opps' to pass this information from
-device tree, and since all the GDSCs in GCC (including USB) are
-sub-domains of cx, we also add cx as a power-domain for GCC.
-Now when any of the consumers of the GDSCs (in this case USB)
-votes on a perforamance state, genpd framework can identify that
-the GDSC itself does not support a performance state and it
-then propogates the vote to the parent, which in this case is cx.
+The Microchip EMC230X (formerly made by SMSC) family of fan controllers
+provide PWM control for up to 5 fans (in the EMC2305). The EMC230X is
+capable of maintaining (closed-loop) a target RPM speed through PWM.
 
-This change would also mean that any GDSC in GCC thats left enabled
-during low power state (perhaps because its marked with a
-ALWAYS_ON flag) can prevent the system from entering low power
-since that would prevent cx from transitioning to low power.
-Ideally any consumers that would need to have their devices
-(partially) powered to support wakeups should look at making the
-resp. GDSCs transtion to a Retention (PWRSTS_RET) state instead
-of leaving them ALWAYS_ON.
+This driver has been tested with the EMC2301 (on our Traverse Ten64
+appliance) and with the EMC2305 demo board (ADM00879).
 
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
----
-* This patch is a follow up based on the discussion on the previously
-  posted version to support USB performance state voting [1]
+The driver is by no means complete, for example, further work would
+be required to support the different PWM output frequencies for
+voltage-based fan speed control. (So far this driver has only been
+tested with direct PWM capable fans, like the 4 pin fans found
+in recent PCs)
 
-* Another patch that this approach depends on is the one to fix the
-  handling of PWRSTS_RET in the GDSC driver [2] so we can have USB
-  GDSC transtion to a RET state instead of marking it ALWAYS_ON
+The emc230x driver also has thermal subsystem integration which allows
+the emc230x-controlled fan(s) to be used as cooling devices.
 
-[1] https://lore.kernel.org/linux-usb/YTduDqCO9aUyAsw1@ripper/
-[2] https://lore.kernel.org/all/20220901101756.28164-1-quic_rjendra@quicinc.com/#t
+Mathew McBride (3):
+  hwmon: (emc230x) add Microchip (SMSC) EMC230X fan controller support
+  dt-bindings: add binding for Microchip EMC230X fan controller family
+  arm64: dts: ten64: add configuration for fan controller
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/hwmon/microchip,emc2301.yaml     |  83 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/freescale/fsl-ls1088a-ten64.dts  |  43 ++
+ drivers/hwmon/Kconfig                         |  13 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/emc230x.c                       | 587 ++++++++++++++++++
+ 6 files changed, 734 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2301.yaml
+ create mode 100644 drivers/hwmon/emc230x.c
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index ad04025a8a1a..8a21446738bf 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -828,6 +828,7 @@
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			power-domains = <&rpmhpd SC7280_CX>;
- 		};
- 
- 		ipcc: mailbox@408000 {
-@@ -3456,6 +3457,7 @@
- 					  "ss_phy_irq";
- 
- 			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-+			required-opps = <&rpmhpd_opp_svs>;
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
 -- 
-2.17.1
+2.30.1
 
