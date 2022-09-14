@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772B35B8AFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C9E5B8AB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiINOuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S229757AbiINOgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiINOt4 (ORCPT
+        with ESMTP id S230073AbiINOgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:49:56 -0400
-X-Greylist: delayed 1268 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 07:49:55 PDT
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5786712A8C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:49:55 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id B59DE21ABB2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:28:46 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YTNeo07bfCE4UYTNeorhTV; Wed, 14 Sep 2022 09:28:46 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2nbWnZpDqspK8M+l3wuY1LlZYNNNGLo4dDPJVIDYOn8=; b=pxGivBBmG7m2joqZGJWU1azhNw
-        mbZ02DgKrnei52l8GvUf5FLPmktwBrnYXPGjM7m4BQsovdRrN7BKKJyPqDNADXRar0w66xAvQuws7
-        v2p9r7IxAsE54R3UDuaMPbuTBxfAqIWgRrNwdXIFWNaWtrwowPwv7ocIvD5R9PzN6v5ye9kIj2Fw3
-        SVw3Ks6/nO344ycn6IH6puOeMX6YPsEyq8zh7Aln5RsFOn+/IBAf1LN9ngOjiRVhEehboKma3eSFp
-        blqvym236lbuRM0O9qRQU3VYtJrMltoP2CDLIs7nIPQwrhygruJlkjLVM329HcAPCsYmbrxguGL0l
-        v1dH3EFg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39584 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oYTNd-002R0A-9S;
-        Wed, 14 Sep 2022 14:28:45 +0000
-Date:   Wed, 14 Sep 2022 07:28:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
-Message-ID: <20220914142843.GA941669@roeck-us.net>
-References: <20220913140410.043243217@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oYTNd-002R0A-9S
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:39584
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 17
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 14 Sep 2022 10:36:02 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DB55F132;
+        Wed, 14 Sep 2022 07:35:50 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 8BD082B05FFC;
+        Wed, 14 Sep 2022 10:30:33 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 14 Sep 2022 10:30:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663165833; x=1663169433; bh=Wfzkst+YiM
+        JXs5sReQh7j9lQiYxOvqzMOth3P09VD2c=; b=dtA+6ioovLXgpnsW7bHMriT+T8
+        ob6iCcULhl0DryCUFjedfRzE3xsBbdbGgadlAVQ41Et76qFRqBCEJYxqTKLHFJYl
+        0mJp3SooHmD8Ak+7kZ6osWjGt2E1ap29T1ijHM027l7852BmXlU6gJ8/CtVM6jBs
+        StaP8gavbZhPuNkxDOsOw6TvXchoXrwgU8nFCxFYpRCewlGjxOdZ+RU0NGh39qKk
+        j5pVNaEUsGKo20ThJBJF+lFh5c2oVxJcH/n6QI+HCRvCLUTI5Z446aoyLA8zyJdn
+        wGwrIVOzAiYcS+AOxNasXtqqFx4vqYQW36WPLWoKvU4mok2sBMK9oqBlZP/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663165833; x=1663169433; bh=Wfzkst+YiMJXs5sReQh7j9lQiYxO
+        vqzMOth3P09VD2c=; b=itBX/aQz+iZxcv3EEVV/ixil/kcm2odCbKteXE91FORJ
+        F10Q6kjN0bF7iLCWnXo8b53kIL+qiogY4SmdzaSLeCOtVhgmS9WgC8pJpvxYXb4u
+        1luiubes8aQfEci56/Tv/RYJZM5e7WYdF0+fub403CkBQck0eJqfKkqnIDUquP7X
+        uqVOr1oZdo29LEgjRysnLwNfGW5WJ0ZRQgk9HG8WAtYgoFuNwP4BwZTBJ1GshKse
+        nyXTIamtSmUlGxeaofMa/5JcY+f+fxAHPhiXnRFgzQ9dmaO+4uWz4omrQcwSpRdK
+        /8vAOWsSjAqLDrD8YU1lsMAraUppR+3uY0m91jwF1g==
+X-ME-Sender: <xms:iOUhYzgn43n6ijqzs0nu3UeRdGFedbOa0iK7sc9buC6ZmND7X0EYBQ>
+    <xme:iOUhYwAfivpNqnWCUlHFfjD0ET_yfp_Zox3wtfHK4caoT9X9BqjhIa_etaoGbrdO5
+    4E_CB5j94mCYcUqey4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:iOUhYzGLCVDNglg0bGaMDQsLRwfzSKLFHFxG_iw8WkNEm_ptpLXWKw>
+    <xmx:iOUhYwS2LbvTNBEYW8Cj_d9VuXMh1Rw5K6MUBURJ0QljjWqayMdBmw>
+    <xmx:iOUhYwzc8UN1nshGPQZzriYzYzleWIfvRniDPa8-mJMVeaDcvcULeA>
+    <xmx:iOUhYzxpua_M0Wig_41mvemz8s8eNfDmiB0qqv8bREXQMrqoJ3p7Y0J_X6M>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4CA84B60086; Wed, 14 Sep 2022 10:30:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-934-g6274855a4c-fm-20220913.002-g6274855a
+Mime-Version: 1.0
+Message-Id: <ecd7e46c-4ed8-41b2-96b7-4f0a37f9d5df@www.fastmail.com>
+In-Reply-To: <20220914142713.29351-1-lukas.bulwahn@gmail.com>
+References: <20220914142713.29351-1-lukas.bulwahn@gmail.com>
+Date:   Wed, 14 Sep 2022 16:29:22 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ata: clean up how architectures enable PATA_PLATFORM and
+ PATA_OF_PLATFORM
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.9 release.
-> There are 192 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.9-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
-> 
-[ ... ]
-> Csókás Bence <csokas.bence@prolan.hu>
->     net: fec: Use a spinlock to guard `fep->ptp_clk_on`
-> 
+On Wed, Sep 14, 2022, at 4:27 PM, Lukas Bulwahn wrote:
+> There are two options for platform device PATA support:
+>
+>   PATA_PLATFORM: Generic platform device PATA support
+>   PATA_OF_PLATFORM: OpenFirmware platform device PATA support
+>
+> If an architecture allows the generic platform device PATA support, it
+> shall select HAVE_PATA_PLATFORM. Then, Generic platform device PATA support
+> is available and can be selected.
+>
+> If an architecture has OpenFirmware support, which it indicates by
+> selecting OF, OpenFirmware platform device PATA support is available
+> and can be selected.
+> If OpenFirmware platform device PATA support is selected, then the
+> functionality (code files) from Generic platform device PATA support needs
+> to be integrated in the kernel build for the OpenFirmware platform device
+> PATA support to work. Select PATA_PLATFORM in PATA_OF_PLATFORM to make sure
+> the needed files are added in the build.
+>
+> So, architectures with OpenFirmware support, do not need to additionally
+> select HAVE_PATA_PLATFORM. It is only needed by architecture that want the
+> non-OF pata-platform module.
+>
+> Reflect this way of intended use of config symbols in the ata Kconfig and
+> adjust all architecture definitions.
+>
+> This follows the suggestion from Arnd Bergmann (see Link).
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Link: 
+> https://lore.kernel.org/all/4b33bffc-2b6d-46b4-9f1d-d18e55975a5a@www.fastmail.com/
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-This commit is broken, will be reverted upstream, and should not be
-applied to any stable releases.
+Thanks for the follow-up, looks good.
 
-Guenter
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
