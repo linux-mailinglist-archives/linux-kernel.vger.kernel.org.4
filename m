@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BFD5B8962
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECADE5B8964
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 15:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiINNpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 09:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S229589AbiINNqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 09:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiINNpD (ORCPT
+        with ESMTP id S229487AbiINNp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:45:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4FA4DB02
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 06:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TTSHjTKDxa0+uN81bcecGYss8EXCJivksW8E6RaMxvE=; b=IGxCwamR3DmJNn2Uzt94OKzp0v
-        /FKThI/GzslKtp58fP/1VwCQ5tf5e3R6U/SL+e3cfyhuHpL6YQ0hKMDqFLitmCgNCcEGdUX7AEJf/
-        RKKIA0mzKUSCQX5sujDgiwNMWsxcmUtkhIwPdq+GiUawxogssMLJ2cgT+h+bRdqmxeP3KAINeGc8y
-        u4kqSnXbyD7PpP9w3EoZsnVcoXY5+MMOC0Kj01nMkgd2i7qHh28AYsa9KKct0Nrcd055UVe5Uw/He
-        ntW/6f1CKM7EhTmfkvKOAcYW5GerUQvlk2e4zydq1nVf8im3oOMTXgattJSh3yh5VRM2/dAyQxQR1
-        f5nmkYPA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYSgr-000DX6-CR; Wed, 14 Sep 2022 13:44:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D6A23002AE;
-        Wed, 14 Sep 2022 15:44:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18B1D2B8AD40C; Wed, 14 Sep 2022 15:44:29 +0200 (CEST)
-Date:   Wed, 14 Sep 2022 15:44:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 06/23] sched/core: Update the classification of the
- current task
-Message-ID: <YyHavf3rHNLOWF8Z@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-7-ricardo.neri-calderon@linux.intel.com>
+        Wed, 14 Sep 2022 09:45:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394AA5924B;
+        Wed, 14 Sep 2022 06:45:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF1D0B81B67;
+        Wed, 14 Sep 2022 13:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7332C433B5;
+        Wed, 14 Sep 2022 13:45:44 +0000 (UTC)
+Date:   Wed, 14 Sep 2022 19:15:39 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Vidya Sagar <vidyas@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
+        robh@kernel.org, bhelgaas@google.com, treding@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <20220914134539.GI16459@workstation>
+References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+ <20220913200746.GA619956@bhelgaas>
+ <20220914062411.GD16459@workstation>
+ <29b39edd-10ab-b679-f270-67b0b406ca2f@nvidia.com>
+ <20220914111857.GF16459@workstation>
+ <5ffe3dfa-28a5-a5fc-0ae2-28927c39dc03@nvidia.com>
+ <20220914114306.GG16459@workstation>
+ <YyHMvBhWgbDtv6V2@rocinante>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220909231205.14009-7-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YyHMvBhWgbDtv6V2@rocinante>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:11:48PM -0700, Ricardo Neri wrote:
+On Wed, Sep 14, 2022 at 09:44:44PM +0900, Krzysztof Wilczyński wrote:
+> Hello,
+> 
+> [...]
+> > Anyway, I don't strongly object the change and leave it to the
+> > maintainers to decide.
+> 
+> Perhaps it makes sense to make this a dev_dbg() over dev_info(), especially
+> since it appears that this information is of more use to the developer (who
+> most likely has the suitable log level set anyway), and given that there is
+> no way to reliably detect a presence in a slot on some platforms, this
+> might otherwise, add to the other messages that normal users don't pay
+> attention to usually - if this is not to be treated as an error.
+> 
 
-> +	if (sched_task_classes_enabled() && user_tick)
-> +		arch_update_task_class(curr, is_core_idle(cpu));
+No, this is clearly not a debug message. As I quoted above, the link up
+can fail due to an issue with PHY also. In that case, user has to see
+the log to debug/report the issue.
 
-This evaluates is_core_idle() even if the hardware improves.
+So, either dev_info() or dev_err().
 
+Thanks,
+Mani
+
+> 	Krzysztof
