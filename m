@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555425B8AC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDD45B8AC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 16:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiINOhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 10:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S229657AbiINOiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 10:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiINOhW (ORCPT
+        with ESMTP id S230214AbiINOh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 10:37:22 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8FBB51A1E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 07:37:21 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id BE4C120B929C;
-        Wed, 14 Sep 2022 07:37:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BE4C120B929C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1663166241;
-        bh=O9luLiBVjgQWpJE371/IjNbLRFrt0wEId7ZrqS0qPCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fhFQIgBIwTCduU7kpUy5IDeu8I1ZOsopfwsQ5f8s69y7DNeNlqeXEPdXGy407gdea
-         ZFy6AV5lmOwXeLkQyFoEStzXGkBSB/LCrjktvavOki0/cS8zWxc5WKvriIVQEi8X7X
-         9FqlXayLO41ODmL9InMmACypQRLuACyioGx0BD88=
-Date:   Wed, 14 Sep 2022 09:37:06 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] libnvdimm/region: Allow setting align attribute on
- regions without mappings
-Message-ID: <20220914143706.GA169602@sequoia>
-References: <20220830054505.1159488-1-tyhicks@linux.microsoft.com>
+        Wed, 14 Sep 2022 10:37:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76537F085;
+        Wed, 14 Sep 2022 07:37:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 69C09338DF;
+        Wed, 14 Sep 2022 14:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663166277; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HyODVLSVFuCohpp5lwAKav3Xdk0QKbprYIJKsk0h700=;
+        b=SSJYVE2jXQce2oku0AgwVT5gnfQv652Y8fWNUbYdUC7JA8/lDo8LWPFECQRxH/J2XU0yAD
+        XDlaSz/VB7OfKgxHTo43+B9MTtPrHocQF8ffeOxkKZy6Y/XT7lHQ04BDI9kJ/LIQpvvt0Z
+        BnoZNgJOHnlYaRog5IfjI+K5kxT32ls=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663166277;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HyODVLSVFuCohpp5lwAKav3Xdk0QKbprYIJKsk0h700=;
+        b=QVD3t3yJr6abdexusIKgp2qftokTHDmOAeJoPDMl3BMN3uJNQaiTr5C07uMYL3Y8VimS+m
+        fahoIDnv/RPEDVDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D211134B3;
+        Wed, 14 Sep 2022 14:37:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BpK4FkXnIWOWOQAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 14 Sep 2022 14:37:57 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D9448A0680; Wed, 14 Sep 2022 16:37:56 +0200 (CEST)
+Date:   Wed, 14 Sep 2022 16:37:56 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] ext4: fix miss release buffer head in
+ ext4_fc_write_inode
+Message-ID: <20220914143756.y5if4kllwi7mz67b@quack3>
+References: <20220914100859.1415196-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830054505.1159488-1-tyhicks@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220914100859.1415196-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-30 00:45:05, Tyler Hicks wrote:
-> The alignment constraint for namespace creation in a region was
-> increased, from 2M to 16M, for non-PowerPC architectures in v5.7 with
-> commit 2522afb86a8c ("libnvdimm/region: Introduce an 'align'
-> attribute"). The thought behind the change was that region alignment
-> should be uniform across all architectures and, since PowerPC had the
-> largest alignment constraint of 16M, all architectures should conform to
-> that alignment.
+On Wed 14-09-22 18:08:59, Ye Bin wrote:
+> In 'ext4_fc_write_inode' function first call 'ext4_get_inode_loc' get 'iloc',
+> after use it miss release 'iloc.bh'.
+> So just release 'iloc.bh' before 'ext4_fc_write_inode' return.
 > 
-> The change regressed namespace creation in pre-defined regions that
-> relied on 2M alignment but a workaround was provided in the form of a
-> sysfs attribute, named 'align', that could be adjusted to a non-default
-> alignment value.
-> 
-> However, the sysfs attribute's store function returned an error (-ENXIO)
-> when userspace attempted to change the alignment of a region that had no
-> mappings. This affected 2M aligned regions of volatile memory that were
-> defined in a device tree using "pmem-region" and created by the
-> of_pmem_region_driver, since those regions do not contain mappings
-> (ndr_mappings is 0).
-> 
-> Allow userspace to set the align attribute on pre-existing regions that
-> do not have mappings so that namespaces can still be within those
-> regions, despite not being aligned to 16M.
-> 
-> Link: https://lore.kernel.org/lkml/CA+CK2bDJ3hrWoE91L2wpAk+Yu0_=GtYw=4gLDDD7mxs321b_aA@mail.gmail.com
-> Fixes: 2522afb86a8c ("libnvdimm/region: Introduce an 'align' attribute")
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+
+Yes, nice. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
-
-Friendly ping. I'm hoping this fix can be considered for v6.1. Thanks!
-
-Tyler
-
+>  fs/ext4/fast_commit.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
 > 
-> While testing with a recent kernel release (6.0-rc3), I rediscovered
-> this bug and eventually realized that I never followed through with
-> fixing it upstream. After a year later, here's the v2 that Aneesh
-> requested. Sorry about that!
-> 
-> v2:
-> - Included Aneesh's feedback to ensure the val is a power of 2 and
->   greater than PAGE_SIZE even for regions without mappings
-> - Reused the max_t() trick from default_align() to avoid special
->   casing, with an if-else, when regions have mappings and when they
->   don't
->   + Didn't include Pavel's Reviewed-by since this is a slightly
->     different approach than what he reviewed in v1
-> - Added a Link commit tag to Pavel's initial problem description
-> v1: https://lore.kernel.org/lkml/20210326152645.85225-1-tyhicks@linux.microsoft.com/
-> 
->  drivers/nvdimm/region_devs.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-> index 473a71bbd9c9..550ea0bd6c53 100644
-> --- a/drivers/nvdimm/region_devs.c
-> +++ b/drivers/nvdimm/region_devs.c
-> @@ -509,16 +509,13 @@ static ssize_t align_store(struct device *dev,
->  {
->  	struct nd_region *nd_region = to_nd_region(dev);
->  	unsigned long val, dpa;
-> -	u32 remainder;
-> +	u32 mappings, remainder;
->  	int rc;
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index 2af962cbb835..b7414a5812f6 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -874,22 +874,25 @@ static int ext4_fc_write_inode(struct inode *inode, u32 *crc)
+>  	tl.fc_tag = cpu_to_le16(EXT4_FC_TAG_INODE);
+>  	tl.fc_len = cpu_to_le16(inode_len + sizeof(fc_inode.fc_ino));
 >  
->  	rc = kstrtoul(buf, 0, &val);
->  	if (rc)
->  		return rc;
+> +	ret = -ECANCELED;
+>  	dst = ext4_fc_reserve_space(inode->i_sb,
+>  			sizeof(tl) + inode_len + sizeof(fc_inode.fc_ino), crc);
+>  	if (!dst)
+> -		return -ECANCELED;
+> +		goto err;
 >  
-> -	if (!nd_region->ndr_mappings)
-> -		return -ENXIO;
+>  	if (!ext4_fc_memcpy(inode->i_sb, dst, &tl, sizeof(tl), crc))
+> -		return -ECANCELED;
+> +		goto err;
+>  	dst += sizeof(tl);
+>  	if (!ext4_fc_memcpy(inode->i_sb, dst, &fc_inode, sizeof(fc_inode), crc))
+> -		return -ECANCELED;
+> +		goto err;
+>  	dst += sizeof(fc_inode);
+>  	if (!ext4_fc_memcpy(inode->i_sb, dst, (u8 *)ext4_raw_inode(&iloc),
+>  					inode_len, crc))
+> -		return -ECANCELED;
 > -
->  	/*
->  	 * Ensure space-align is evenly divisible by the region
->  	 * interleave-width because the kernel typically has no facility
-> @@ -526,7 +523,8 @@ static ssize_t align_store(struct device *dev,
->  	 * contribute to the tail capacity in system-physical-address
->  	 * space for the namespace.
->  	 */
-> -	dpa = div_u64_rem(val, nd_region->ndr_mappings, &remainder);
-> +	mappings = max_t(u32, 1, nd_region->ndr_mappings);
-> +	dpa = div_u64_rem(val, mappings, &remainder);
->  	if (!is_power_of_2(dpa) || dpa < PAGE_SIZE
->  			|| val > region_size(nd_region) || remainder)
->  		return -EINVAL;
+> -	return 0;
+> +		goto err;
+> +	ret = 0;
+> +err:
+> +	brelse(iloc.bh);
+> +	return ret;
+>  }
+>  
+>  /*
 > -- 
-> 2.25.1
+> 2.31.1
 > 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
