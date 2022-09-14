@@ -2,81 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906085B8E93
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7695B8E96
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 20:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiINSIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 14:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S229889AbiINSIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 14:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiINSIC (ORCPT
+        with ESMTP id S229701AbiINSIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 14:08:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C603861DC;
-        Wed, 14 Sep 2022 11:08:01 -0700 (PDT)
+        Wed, 14 Sep 2022 14:08:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B1F7EFD9;
+        Wed, 14 Sep 2022 11:08:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F90461E6A;
-        Wed, 14 Sep 2022 18:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF6FC43147;
-        Wed, 14 Sep 2022 18:08:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84C5061E53;
+        Wed, 14 Sep 2022 18:08:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A65C433D7;
+        Wed, 14 Sep 2022 18:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663178880;
-        bh=8QO6bezE+2K66FghJrVXTS5RtL94PMOZ3HUJaLfntwk=;
+        s=k20201202; t=1663178919;
+        bh=q3lo6oX6Adw+l/aUZsSyNgyDa03KID4HkHE0P0JrSxY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HWyfrzoHehEIavhH0FSENC4JAl8tEfACVV0EcKmgJTzz5TmvQ2cnxAl5LY7uNl4mH
-         qdPv4Mb6NFc2gUWo4Alk3cKLUKviK5+TbwHcf8yRMl9SeSndcJf3rI2h4Gqq5G09d+
-         tkcML9ZrQS/FZ3M5vL3vUpIDA+zBy1/ts+GShucqdut5M28lSNmb8iUFoBgO1hnASQ
-         /4A39HsAYbSQ6Xjj1f3WduoaOq0vL47e2QOFlZQIQ3r7dCgw9Qj7sUPyHYd3vtgril
-         OwJ+wsy22o/ruYXmtJ2gRHucakBcnersIGClmLXVYJQTHVmx1AIlSF13n7u6pCqOoQ
-         k7t8lnGj+bDgg==
-Received: by mail-vk1-f176.google.com with SMTP id s192so7873704vkb.9;
-        Wed, 14 Sep 2022 11:07:59 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2HZwkPuRd3ZApxc+0IV2gCJ/ZjfpBkS09ldmseCL81WIGeaPui
-        3fmPYpONYux/4cyCM576PHjuPUkPh1dgva1OAg==
-X-Google-Smtp-Source: AA6agR5e7YhAc50wVpbeL+nwFLR7EEXrTzSrB3+SbLjm7qzwukA3T8qMv8Q9XbVsrcu5TfJXz1WuSkUl1XpmcLAHTDs=
-X-Received: by 2002:a1f:9e44:0:b0:39e:e4ff:1622 with SMTP id
- h65-20020a1f9e44000000b0039ee4ff1622mr11413773vke.15.1663178878750; Wed, 14
- Sep 2022 11:07:58 -0700 (PDT)
+        b=NNDmoiwVz4L5wIWHF8ajqUmcu/xx3YnLkVN0vtlOSfWVsmnx1mM6rY9p0ehiTtSiI
+         f3Gu4rvzgOBp4oM21e0o1byq04h1rkOKi4M8eRL+RWW3+rWbQKaIhSk2vfOZcAvl/x
+         mNM1oN+TFgGkDJtYCJrILLAkewkBOSLVYBKx9psnvLsTEjiGckhNK2VLauzqC9XJ15
+         Ax6idRcIks31L6Hw4WQNQ4FU/1aeqbZJn6gEyODng0NI4oAU3Uv2YKHfblxD5kn3hU
+         RaLJRFy8GUJmZZhiTTB5QE2MzVc3nVsyXQr3oYpcWdwgTZDaBmojqKQYekxGlGkGFU
+         BNtHv8fDndveg==
+Received: by mail-vk1-f169.google.com with SMTP id g185so7858306vkb.13;
+        Wed, 14 Sep 2022 11:08:39 -0700 (PDT)
+X-Gm-Message-State: ACgBeo19EJUIUKs3KSPV0RyiSIaXRY2GvjUySflUnYKQ0OHs6bnWRygE
+        kt1VQEDTt0sCMgML5VSt8tldUOR+Cvn97G4aqA==
+X-Google-Smtp-Source: AA6agR56p/Zoyk5JDNjqFjD+eS6WCbPqja/Ej889pLyBHGKPJcCXLE8GTZmxuug9cCFfWKPkI9PSnh8bxhtIzQE3ex0=
+X-Received: by 2002:ac5:c77a:0:b0:3a2:1e50:bc11 with SMTP id
+ c26-20020ac5c77a000000b003a21e50bc11mr6296626vkn.19.1663178918916; Wed, 14
+ Sep 2022 11:08:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220913195508.3511038-1-opendmb@gmail.com> <CAL_JsqLmJcLHViPaBPvkBhR4xi+ZQuAJQpXoiJLVRW9EH4EX0Q@mail.gmail.com>
- <1825234b-f17a-dea4-38f6-ba5881ab9a3d@gmail.com>
-In-Reply-To: <1825234b-f17a-dea4-38f6-ba5881ab9a3d@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 14 Sep 2022 13:07:36 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ6+uYf=Pb82j3CWC3iD=-hbnf3nj_TsHoQAUcLK3mKbg@mail.gmail.com>
-Message-ID: <CAL_JsqJ6+uYf=Pb82j3CWC3iD=-hbnf3nj_TsHoQAUcLK3mKbg@mail.gmail.com>
-Subject: Re: [PATCH 00/21] mm: introduce Designated Movable Blocks
-To:     Doug Berger <opendmb@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        - <devicetree-spec@vger.kernel.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com> <20220914133513.GA26840@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20220914133513.GA26840@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 14 Sep 2022 13:08:22 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJMJccbwH7tR0FwZpuxMgwmAt8ZmWCbt=rOLaM4RtH9wg@mail.gmail.com>
+Message-ID: <CAL_JsqJMJccbwH7tR0FwZpuxMgwmAt8ZmWCbt=rOLaM4RtH9wg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, PCI <linux-pci@vger.kernel.org>,
+        devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        iommu@lists.linux.dev
+        Frank Rowand <frowand.list@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        "Zhen, Max" <max.zhen@amd.com>,
+        "Santan, Sonal" <sonal.santan@amd.com>,
+        "Liu, Larry" <larry.liu@amd.com>, "Xu, Brian" <brian.xu@amd.com>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Tom Rix <trix@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -88,42 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 11:57 AM Doug Berger <opendmb@gmail.com> wrote:
+On Wed, Sep 14, 2022 at 8:35 AM Jeremi Piotrowski
+<jpiotrowski@linux.microsoft.com> wrote:
 >
-> On 9/14/2022 6:21 AM, Rob Herring wrote:
-> > On Tue, Sep 13, 2022 at 2:57 PM Doug Berger <opendmb@gmail.com> wrote:
-> >>
-> >> MOTIVATION:
-> >> Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
-> >> controllers with each mapped in a different address range within
-> >> a Uniform Memory Architecture. Some users of these systems have
-> >> expressed the desire to locate ZONE_MOVABLE memory on each
-> >> memory controller to allow user space intensive processing to
-> >> make better use of the additional memory bandwidth.
-> >> Unfortunately, the historical monotonic layout of zones would
-> >> mean that if the lowest addressed memory controller contains
-> >> ZONE_MOVABLE memory then all of the memory available from
-> >> memory controllers at higher addresses must also be in the
-> >> ZONE_MOVABLE zone. This would force all kernel memory accesses
-> >> onto the lowest addressed memory controller and significantly
-> >> reduce the amount of memory available for non-movable
-> >> allocations.
+> On Mon, Aug 29, 2022 at 02:43:35PM -0700, Lizhi Hou wrote:
+> > This patch series introduces OF overlay support for PCI devices which
+> > primarily addresses two use cases. First, it provides a data driven method
+> > to describe hardware peripherals that are present in a PCI endpoint and
+> > hence can be accessed by the PCI host. An example device is Xilinx/AMD
+> > Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
+> > driver -- often used in SoC platforms -- in a PCI host based system. An
+> > example device is Microchip LAN9662 Ethernet Controller.
 > >
-> > Why are you sending kernel patches to the Devicetree specification list?
+> > This patch series consolidates previous efforts to define such an
+> > infrastructure:
+> > https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
+> > https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
 > >
-> > Rob
-> My apologies if this is a problem. No offense was intended.
+> > Normally, the PCI core discovers PCI devices and their BARs using the
+> > PCI enumeration process. However, the process does not provide a way to
+> > discover the hardware peripherals that are present in a PCI device, and
+> > which can be accessed through the PCI BARs. Also, the enumeration process
+> > does not provide a way to associate MSI-X vectors of a PCI device with the
+> > hardware peripherals that are present in the device. PCI device drivers
+> > often use header files to describe the hardware peripherals and their
+> > resources as there is no standard data driven way to do so. This patch
+> > series proposes to use flattened device tree blob to describe the
+> > peripherals in a data driven way. Based on previous discussion, using
+> > device tree overlay is the best way to unflatten the blob and populate
+> > platform devices. To use device tree overlay, there are three obvious
+> > problems that need to be resolved.
+>
+> Hi Lizhi,
+>
+> We all *love* "have you thought about xxx" questions but I would really like to
+> get your thoughts on this. An approach to this problem that I have seen in
+> various devices is to emulate a virtual pcie switch, and expose the "sub
+> devices" behind that. That way you can carve up the BAR space, each device has
+> its own config space and mapping of MSI-X vector to device becomes clear. This
+> approach also integrates well with other kernel infrastructure (IOMMU, hotplug).
+>
+> This is certainly possible on reprogrammable devices but requires some more
+> FPGA resources - though I don't believe the added utilization would be
+> significant. What do you think of this kind of solution?
 
-None taken. Just trying to keep a low traffic list low traffic.
+It would integrate easily unless the sub-devices you are targeting
+have drivers already which are not PCI drivers. Sure, we could add PCI
+support to them, but that could be a lot of churn.
 
-> My process has been to run my patches through get_maintainers.pl to get
-> the list of addresses to copy on submissions and my
-> 0016-dt-bindings-reserved-memory-introduce-designated-mov.patch
-> solicited the
-> '- <devicetree-spec@vger.kernel.org>' address.
-
-Yeah, I see that now. That needs to be a person for a specific
-binding. The only bindings using the list should be targeting the
-dtschema repo. (And even those are a person ideally.)
+There are also usecases where we don't get to change the h/w.
 
 Rob
