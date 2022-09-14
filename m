@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507055B8B47
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE27F5B8B4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 17:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiINPGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 11:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S229989AbiINPHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 11:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiINPGX (ORCPT
+        with ESMTP id S229874AbiINPGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 11:06:23 -0400
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2502F74DF6;
-        Wed, 14 Sep 2022 08:06:22 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id k10-20020a4ad10a000000b004756ab911f8so1597732oor.2;
-        Wed, 14 Sep 2022 08:06:22 -0700 (PDT)
+        Wed, 14 Sep 2022 11:06:52 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DCA7757C;
+        Wed, 14 Sep 2022 08:06:51 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso10550800otv.1;
+        Wed, 14 Sep 2022 08:06:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DG8jK2VGVF6CoXW6DXySelXNuunB85oFke/oAJQGn7M=;
-        b=wVOliwZVEQI9pO23PMCDUuiPMOrSfmsFpFylZNZhzpR9IDQf3FSXZ5sLXeTbj50fzt
-         3EYUeFnvjlXkRcZToVcNYrtSZV4DAt9ND34Bu2AVK4y1P1x75A0Kqz4ureK45fDLytzx
-         5qhJG8yxhwD8zVZx/EGaCOZRi5KhV2/+2UPZcxCRqHVmKsz1qYGhbwsxdTOXBEcButud
-         F6VSik//BR5lG1Mpg5nGBJReABciRjR5q5r8EsilBb7gsT6KtLpaP2Q7rm/RKeIt9aZF
-         wThNAHZzLiHI90FTHRpcS313T+Dj61vGW46Xvf2y3azu9mqvRUPSqpAgvsa30Q2x20JV
-         JYIw==
-X-Gm-Message-State: ACgBeo3XV5xuCXpaxURU9E37svEj+1TVXikjtv4kQVsxhBO0NNPsPb1j
-        Ex786d2kc9kOeE7RhLG95w==
-X-Google-Smtp-Source: AA6agR77S+W1uvRmgcKfkwfbm9OYUUZIqqBM8PBzfVvughcMQPv55SChHWRW8CTOWrpBRsoJZsZ3vg==
-X-Received: by 2002:a4a:d41:0:b0:44a:8081:733c with SMTP id 62-20020a4a0d41000000b0044a8081733cmr12883364oob.71.1663167981347;
-        Wed, 14 Sep 2022 08:06:21 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DHDk+ujBwhDBhgTz7mEiQ8aG+EOFTq+3XFCnw+r6W5g=;
+        b=fb8oaCB0VDjVV/yaX79609SjkUhx29lqxhD1wutfMrND3E8LcGwR+3q0L0yE9iLurR
+         hWDrdSEIsc09YrzC1y4hMMJEjdzC4yiMGcRtNXhqkh7Ij4BZwnM0Q5Yc3uhnmq83hO8E
+         AjrgQ+aD1qYTJzB8E2b7R+jHZERbDsls8EQrkwyHnIhW8SZKvPI1XOF5Ci6Z3nyN/cqv
+         Olcf2uFM8jVsbR9GGYwbk2g7keL4+hxKG9Al5n65rsBeHltgCdnPhd6ApeZLaZhjSH+s
+         0wU37IALYC7YVsWjJ6VThxl/bay+zB0U6ef55Qi5CJW+20g74ZKc3zvxlOpdUowKRqPw
+         ALcg==
+X-Gm-Message-State: ACgBeo1KYNdoG8oMWGEucbc07/U25Ws0XOW/SvMU3Nh9QYXeTdGr0O95
+        IdF4rq1h30ORO3wGOEy/nw==
+X-Google-Smtp-Source: AA6agR792Z7UA4vog+YncnU/+uNb0qn6XVDArhATm/jBKo9QXacFuu0opFQm/3EpAA4itn5bYq/LIg==
+X-Received: by 2002:a05:6830:2645:b0:638:99dc:e5e0 with SMTP id f5-20020a056830264500b0063899dce5e0mr15510808otu.80.1663168010178;
+        Wed, 14 Sep 2022 08:06:50 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u22-20020a056871009600b0012b342d1125sm7788150oaa.13.2022.09.14.08.06.20
+        by smtp.gmail.com with ESMTPSA id p15-20020a0568301d4f00b006393ea22c1csm7399789oth.16.2022.09.14.08.06.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 08:06:20 -0700 (PDT)
-Received: (nullmailer pid 2221684 invoked by uid 1000);
-        Wed, 14 Sep 2022 15:06:20 -0000
-Date:   Wed, 14 Sep 2022 10:06:20 -0500
+        Wed, 14 Sep 2022 08:06:49 -0700 (PDT)
+Received: (nullmailer pid 2226063 invoked by uid 1000);
+        Wed, 14 Sep 2022 15:06:48 -0000
+Date:   Wed, 14 Sep 2022 10:06:48 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     cy_huang@richtek.com, robh+dt@kernel.org, chiaen_wu@richtek.com,
-        linux-mediatek@lists.infradead.org, alice_chen@richtek.com,
-        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: mt6370: fix the indentation in the
- example
-Message-ID: <20220914150620.GA2221443-robh@kernel.org>
-References: <1663143803-28660-1-git-send-email-u0084500@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Landen Chao <Landen.Chao@mediatek.com>, netdev@vger.kernel.org,
+        DENG Qingfang <dqfext@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/10] dt-bindings: net: drop old mediatek bindings
+Message-ID: <20220914150648.GA2225972-robh@kernel.org>
+References: <20220914085451.11723-1-arinc.unal@arinc9.com>
+ <20220914085451.11723-2-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1663143803-28660-1-git-send-email-u0084500@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220914085451.11723-2-arinc.unal@arinc9.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -66,16 +84,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 16:23:23 +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, 14 Sep 2022 11:54:42 +0300, Arınç ÜNAL wrote:
+> Remove these old mediatek bindings which are not used.
 > 
-> Fix the indentation in the binding example. There're two redudant space
-> charactors need to be removed.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/net/mediatek,mt7620-gsw.txt      | 24 --------
+>  .../bindings/net/ralink,rt2880-net.txt        | 59 -------------------
+>  .../bindings/net/ralink,rt3050-esw.txt        | 30 ----------
+>  3 files changed, 113 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/mediatek,mt7620-gsw.txt
+>  delete mode 100644 Documentation/devicetree/bindings/net/ralink,rt2880-net.txt
+>  delete mode 100644 Documentation/devicetree/bindings/net/ralink,rt3050-esw.txt
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
