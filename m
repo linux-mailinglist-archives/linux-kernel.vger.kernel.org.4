@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313015B7E41
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1115B7E48
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 03:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiINB0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 21:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S229945AbiINB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 21:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiINB0F (ORCPT
+        with ESMTP id S229923AbiINB03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 21:26:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006546B658;
-        Tue, 13 Sep 2022 18:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663118763; x=1694654763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mJVxyJFWo45bZ2CDtxtawCQCsQQ+ZLsf08JzYOfSQQI=;
-  b=UqktmH0IvfAOUoU3zfidqpawRlMMSY1XIMzhWyDUg5OS7/3rijUHsTSJ
-   C1v+3zHXyEdkevQVByr4ezhcJsA5TkQPEE/qim+UNfpZY7Go0s/BXD0Q8
-   csRXQ5MuCDt2KBgo1aLzjMA5MOTSXbnMLy2+UbuTaJAhvBHE6/nArt4fF
-   f3VzWxIX9YmA4YkYAhCZl8vqo4zFiZpRl+63T4Yuo0KlRcXt7J5bt+zjq
-   BW2VKAQyMVFDnwA/KdRRLBOIsWtLuNfnFxMDHJYqcCEtGDspp6j8SuZw6
-   G5EaY82tAetmP9qdEoc9FbKbJu2UY+ACuwrtsszonaLMzjjTaTibjbaCP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="362268333"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="362268333"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:26:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="594178545"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Sep 2022 18:25:59 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYHA7-0004Cn-0Q;
-        Wed, 14 Sep 2022 01:25:59 +0000
-Date:   Wed, 14 Sep 2022 09:25:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Akhil R <akhilrajeev@nvidia.com>, ldewangan@nvidia.com,
-        jonathanh@nvidia.com, vkoul@kernel.org, thierry.reding@gmail.com,
-        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, akhilrajeev@nvidia.com
-Subject: Re: [PATCH 3/3] dmaengine: tegra: Add support for dma-channel-mask
-Message-ID: <202209140942.NsWTm6xM-lkp@intel.com>
-References: <20220913155251.59375-4-akhilrajeev@nvidia.com>
+        Tue, 13 Sep 2022 21:26:29 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838B6B8C4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:26:27 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id v4so12913192pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Sep 2022 18:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=oGFQWiD9fL+FNWNuvlZs6HygR4mXZaszrHMNFbJR28M=;
+        b=Z9G+QLsfasWj+mAHLkqoHE7cyRvkZr7aPERz1zimh2bMLEqN6EGIVQfihP+zULoMn8
+         hmybiwRR5Xi4ouSU0e5fTvUObcxaDnSCy4uKdKer6dWvgUV1cph3eLihOt898zNZkHka
+         CpNJOWFKyfGQeYtmb5NBjc0qxMfwD743gUUGxZRK2Vw1w+Hu5+140Lqy2yvJ8mdFjqKF
+         kKUZNCkwTK/T8dfZe63eSmQIe+lNk5mtpXSYv2XHJ4r2fPCK4vkF2UXg7W2OpQ8gtchU
+         NrOlFJhAB+ldli5jbiknat8yu6J//x8Tv9QvA8gPwVibXrOW1NpNdScpD1yjc8VPKkzo
+         hcZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=oGFQWiD9fL+FNWNuvlZs6HygR4mXZaszrHMNFbJR28M=;
+        b=wQ9xdzlpbD2GdcWGDiHQBYi7hlCEqSC5JFuozicOVH387L39eAsAtfigzYCwMoKYoJ
+         X1dBp6sOLZpiC1cfg+zPRM3cWPlOFKwKUDLCJXmCvdYn4rhWx+p9v1ZcYldrUKHG1F17
+         KO2rGkOgap/1OHpBQPRmAk6bn2QW5CcuRiPA2DqB56Y0gXq837mPjdRX5apSTBGspCYp
+         AisYTOIKDFSGtBmOtxXstjdMDy649aDYWt3BENFV6gtvhqTPv3UWxD1jumIuAVQmmppY
+         ECgtmNLkk9YtdL/FJVyKPJJuPU+R/N/ai0ODdDQHeDyRmX9/Z5FPS/Ia1KEnowlrC5iH
+         np3g==
+X-Gm-Message-State: ACgBeo2mARtusLUNKfrsVROUHKofVHHONwvw4Apxzw4UWE/Idf4mzUEa
+        QwqOeQs0GQO+QoCJqiNlb2k=
+X-Google-Smtp-Source: AA6agR5Xd07MDO/3cCT8qLGefsCo0EhfpkYGDJ2VrdGeyIqE0XoMrJgDBFxXaHwG6EEgOkhIFi+eAA==
+X-Received: by 2002:a05:6a00:1f05:b0:540:6552:dfbf with SMTP id be5-20020a056a001f0500b005406552dfbfmr29551303pfb.65.1663118786757;
+        Tue, 13 Sep 2022 18:26:26 -0700 (PDT)
+Received: from octofox.metropolis (c-24-130-93-68.hsd1.ca.comcast.net. [24.130.93.68])
+        by smtp.gmail.com with ESMTPSA id x1-20020aa79a41000000b00536b2483aedsm6873603pfj.199.2022.09.13.18.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 18:26:26 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: add FDPIC and static PIE support for noMMU
+Date:   Tue, 13 Sep 2022 18:26:10 -0700
+Message-Id: <20220914012610.2734108-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913155251.59375-4-akhilrajeev@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,192 +72,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akhil,
+Define ELFOSABI_XTENSA_FDPIC and Use is as an OSABI tag in the ELF
+header to distinguish FDPIC ELF files from regular ELF files.
+Define ELF_FDPIC_PLAT_INIT and put executable map, interpreter map and
+executable dynamic section addresses into registers a4..a6.
+Update start_thread macro to preserve register values in the current
+register window.
+Add definitions for PTRACE_GETFDPIC, PTRACE_GETFDPIC_EXEC and
+PTRACE_GETFDPIC_INTERP.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/include/asm/elf.h         | 11 +++++++++++
+ arch/xtensa/include/asm/processor.h   |  3 +++
+ arch/xtensa/include/uapi/asm/ptrace.h |  4 ++++
+ fs/Kconfig.binfmt                     |  2 +-
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on vkoul-dmaengine/next linus/master v6.0-rc5 next-20220913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/Tegra-GCPDMA-Add-dma-channel-mask-support/20220914-010611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220914/202209140942.NsWTm6xM-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b760183e9631ceaf2f36072fc4a7438c3d62887b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Akhil-R/Tegra-GCPDMA-Add-dma-channel-mask-support/20220914-010611
-        git checkout b760183e9631ceaf2f36072fc4a7438c3d62887b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/dmaengine.h:8,
-                    from drivers/dma/tegra186-gpc-dma.c:9:
-   drivers/dma/tegra186-gpc-dma.c: In function 'tegra_dma_probe':
->> drivers/dma/tegra186-gpc-dma.c:1469:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'long unsigned int' [-Wformat=]
-    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                          ^~~~~~~
-   drivers/dma/tegra186-gpc-dma.c:1469:9: note: in expansion of macro 'dev_info'
-    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
-         |         ^~~~~~~~
-   drivers/dma/tegra186-gpc-dma.c:1469:56: note: format string is defined here
-    1469 |         dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
-         |                                                       ~^
-         |                                                        |
-         |                                                        int
-         |                                                       %ld
-
-
-vim +1469 drivers/dma/tegra186-gpc-dma.c
-
-ee17028009d49f Akhil R 2022-02-25  1346  
-ee17028009d49f Akhil R 2022-02-25  1347  static int tegra_dma_probe(struct platform_device *pdev)
-ee17028009d49f Akhil R 2022-02-25  1348  {
-ee17028009d49f Akhil R 2022-02-25  1349  	const struct tegra_dma_chip_data *cdata = NULL;
-ee17028009d49f Akhil R 2022-02-25  1350  	struct iommu_fwspec *iommu_spec;
-ee17028009d49f Akhil R 2022-02-25  1351  	unsigned int stream_id, i;
-ee17028009d49f Akhil R 2022-02-25  1352  	struct tegra_dma *tdma;
-ee17028009d49f Akhil R 2022-02-25  1353  	int ret;
-ee17028009d49f Akhil R 2022-02-25  1354  
-ee17028009d49f Akhil R 2022-02-25  1355  	cdata = of_device_get_match_data(&pdev->dev);
-ee17028009d49f Akhil R 2022-02-25  1356  
-ee17028009d49f Akhil R 2022-02-25  1357  	tdma = devm_kzalloc(&pdev->dev,
-ee17028009d49f Akhil R 2022-02-25  1358  			    struct_size(tdma, channels, cdata->nr_channels),
-ee17028009d49f Akhil R 2022-02-25  1359  			    GFP_KERNEL);
-ee17028009d49f Akhil R 2022-02-25  1360  	if (!tdma)
-ee17028009d49f Akhil R 2022-02-25  1361  		return -ENOMEM;
-ee17028009d49f Akhil R 2022-02-25  1362  
-ee17028009d49f Akhil R 2022-02-25  1363  	tdma->dev = &pdev->dev;
-ee17028009d49f Akhil R 2022-02-25  1364  	tdma->chip_data = cdata;
-ee17028009d49f Akhil R 2022-02-25  1365  	platform_set_drvdata(pdev, tdma);
-ee17028009d49f Akhil R 2022-02-25  1366  
-ee17028009d49f Akhil R 2022-02-25  1367  	tdma->base_addr = devm_platform_ioremap_resource(pdev, 0);
-ee17028009d49f Akhil R 2022-02-25  1368  	if (IS_ERR(tdma->base_addr))
-ee17028009d49f Akhil R 2022-02-25  1369  		return PTR_ERR(tdma->base_addr);
-ee17028009d49f Akhil R 2022-02-25  1370  
-ee17028009d49f Akhil R 2022-02-25  1371  	tdma->rst = devm_reset_control_get_exclusive(&pdev->dev, "gpcdma");
-ee17028009d49f Akhil R 2022-02-25  1372  	if (IS_ERR(tdma->rst)) {
-ee17028009d49f Akhil R 2022-02-25  1373  		return dev_err_probe(&pdev->dev, PTR_ERR(tdma->rst),
-ee17028009d49f Akhil R 2022-02-25  1374  			      "Missing controller reset\n");
-ee17028009d49f Akhil R 2022-02-25  1375  	}
-ee17028009d49f Akhil R 2022-02-25  1376  	reset_control_reset(tdma->rst);
-ee17028009d49f Akhil R 2022-02-25  1377  
-ee17028009d49f Akhil R 2022-02-25  1378  	tdma->dma_dev.dev = &pdev->dev;
-ee17028009d49f Akhil R 2022-02-25  1379  
-ee17028009d49f Akhil R 2022-02-25  1380  	iommu_spec = dev_iommu_fwspec_get(&pdev->dev);
-ee17028009d49f Akhil R 2022-02-25  1381  	if (!iommu_spec) {
-ee17028009d49f Akhil R 2022-02-25  1382  		dev_err(&pdev->dev, "Missing iommu stream-id\n");
-ee17028009d49f Akhil R 2022-02-25  1383  		return -EINVAL;
-ee17028009d49f Akhil R 2022-02-25  1384  	}
-ee17028009d49f Akhil R 2022-02-25  1385  	stream_id = iommu_spec->ids[0] & 0xffff;
-ee17028009d49f Akhil R 2022-02-25  1386  
-b760183e9631ce Akhil R 2022-09-13  1387  	ret = device_property_read_u32(&pdev->dev, "dma-channel-mask",
-b760183e9631ce Akhil R 2022-09-13  1388  				       &tdma->chan_mask);
-b760183e9631ce Akhil R 2022-09-13  1389  	if (ret) {
-b760183e9631ce Akhil R 2022-09-13  1390  		dev_warn(&pdev->dev,
-b760183e9631ce Akhil R 2022-09-13  1391  			 "Missing dma-channel-mask property, using default channel mask %#x\n",
-b760183e9631ce Akhil R 2022-09-13  1392  			 TEGRA_GPCDMA_DEFAULT_CHANNEL_MASK);
-b760183e9631ce Akhil R 2022-09-13  1393  		tdma->chan_mask = TEGRA_GPCDMA_DEFAULT_CHANNEL_MASK;
-b760183e9631ce Akhil R 2022-09-13  1394  	}
-b760183e9631ce Akhil R 2022-09-13  1395  
-ee17028009d49f Akhil R 2022-02-25  1396  	INIT_LIST_HEAD(&tdma->dma_dev.channels);
-ee17028009d49f Akhil R 2022-02-25  1397  	for (i = 0; i < cdata->nr_channels; i++) {
-ee17028009d49f Akhil R 2022-02-25  1398  		struct tegra_dma_channel *tdc = &tdma->channels[i];
-ee17028009d49f Akhil R 2022-02-25  1399  
-b760183e9631ce Akhil R 2022-09-13  1400  		/* Check for channel mask */
-b760183e9631ce Akhil R 2022-09-13  1401  		if (!((1 << i) & tdma->chan_mask))
-b760183e9631ce Akhil R 2022-09-13  1402  			continue;
-b760183e9631ce Akhil R 2022-09-13  1403  
-461cd3709f266d Akhil R 2022-05-05  1404  		tdc->irq = platform_get_irq(pdev, i);
-461cd3709f266d Akhil R 2022-05-05  1405  		if (tdc->irq < 0)
-461cd3709f266d Akhil R 2022-05-05  1406  			return tdc->irq;
-461cd3709f266d Akhil R 2022-05-05  1407  
-b760183e9631ce Akhil R 2022-09-13  1408  		tdc->chan_base_offset = TEGRA_GPCDMA_CHANNEL_BASE_ADDR_OFFSET +
-ee17028009d49f Akhil R 2022-02-25  1409  					i * cdata->channel_reg_size;
-ee17028009d49f Akhil R 2022-02-25  1410  		snprintf(tdc->name, sizeof(tdc->name), "gpcdma.%d", i);
-ee17028009d49f Akhil R 2022-02-25  1411  		tdc->tdma = tdma;
-ee17028009d49f Akhil R 2022-02-25  1412  		tdc->id = i;
-ee17028009d49f Akhil R 2022-02-25  1413  		tdc->slave_id = -1;
-ee17028009d49f Akhil R 2022-02-25  1414  
-ee17028009d49f Akhil R 2022-02-25  1415  		vchan_init(&tdc->vc, &tdma->dma_dev);
-ee17028009d49f Akhil R 2022-02-25  1416  		tdc->vc.desc_free = tegra_dma_desc_free;
-ee17028009d49f Akhil R 2022-02-25  1417  
-ee17028009d49f Akhil R 2022-02-25  1418  		/* program stream-id for this channel */
-ee17028009d49f Akhil R 2022-02-25  1419  		tegra_dma_program_sid(tdc, stream_id);
-ee17028009d49f Akhil R 2022-02-25  1420  		tdc->stream_id = stream_id;
-ee17028009d49f Akhil R 2022-02-25  1421  	}
-ee17028009d49f Akhil R 2022-02-25  1422  
-ee17028009d49f Akhil R 2022-02-25  1423  	dma_cap_set(DMA_SLAVE, tdma->dma_dev.cap_mask);
-ee17028009d49f Akhil R 2022-02-25  1424  	dma_cap_set(DMA_PRIVATE, tdma->dma_dev.cap_mask);
-ee17028009d49f Akhil R 2022-02-25  1425  	dma_cap_set(DMA_MEMCPY, tdma->dma_dev.cap_mask);
-ee17028009d49f Akhil R 2022-02-25  1426  	dma_cap_set(DMA_MEMSET, tdma->dma_dev.cap_mask);
-ee17028009d49f Akhil R 2022-02-25  1427  	dma_cap_set(DMA_CYCLIC, tdma->dma_dev.cap_mask);
-ee17028009d49f Akhil R 2022-02-25  1428  
-ee17028009d49f Akhil R 2022-02-25  1429  	/*
-ee17028009d49f Akhil R 2022-02-25  1430  	 * Only word aligned transfers are supported. Set the copy
-ee17028009d49f Akhil R 2022-02-25  1431  	 * alignment shift.
-ee17028009d49f Akhil R 2022-02-25  1432  	 */
-ee17028009d49f Akhil R 2022-02-25  1433  	tdma->dma_dev.copy_align = 2;
-ee17028009d49f Akhil R 2022-02-25  1434  	tdma->dma_dev.fill_align = 2;
-ee17028009d49f Akhil R 2022-02-25  1435  	tdma->dma_dev.device_alloc_chan_resources =
-ee17028009d49f Akhil R 2022-02-25  1436  					tegra_dma_alloc_chan_resources;
-ee17028009d49f Akhil R 2022-02-25  1437  	tdma->dma_dev.device_free_chan_resources =
-ee17028009d49f Akhil R 2022-02-25  1438  					tegra_dma_free_chan_resources;
-ee17028009d49f Akhil R 2022-02-25  1439  	tdma->dma_dev.device_prep_slave_sg = tegra_dma_prep_slave_sg;
-ee17028009d49f Akhil R 2022-02-25  1440  	tdma->dma_dev.device_prep_dma_memcpy = tegra_dma_prep_dma_memcpy;
-ee17028009d49f Akhil R 2022-02-25  1441  	tdma->dma_dev.device_prep_dma_memset = tegra_dma_prep_dma_memset;
-ee17028009d49f Akhil R 2022-02-25  1442  	tdma->dma_dev.device_prep_dma_cyclic = tegra_dma_prep_dma_cyclic;
-ee17028009d49f Akhil R 2022-02-25  1443  	tdma->dma_dev.device_config = tegra_dma_slave_config;
-ee17028009d49f Akhil R 2022-02-25  1444  	tdma->dma_dev.device_terminate_all = tegra_dma_terminate_all;
-ee17028009d49f Akhil R 2022-02-25  1445  	tdma->dma_dev.device_tx_status = tegra_dma_tx_status;
-ee17028009d49f Akhil R 2022-02-25  1446  	tdma->dma_dev.device_issue_pending = tegra_dma_issue_pending;
-ee17028009d49f Akhil R 2022-02-25  1447  	tdma->dma_dev.device_pause = tegra_dma_device_pause;
-ee17028009d49f Akhil R 2022-02-25  1448  	tdma->dma_dev.device_resume = tegra_dma_device_resume;
-ee17028009d49f Akhil R 2022-02-25  1449  	tdma->dma_dev.device_synchronize = tegra_dma_chan_synchronize;
-ee17028009d49f Akhil R 2022-02-25  1450  	tdma->dma_dev.residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
-ee17028009d49f Akhil R 2022-02-25  1451  
-ee17028009d49f Akhil R 2022-02-25  1452  	ret = dma_async_device_register(&tdma->dma_dev);
-ee17028009d49f Akhil R 2022-02-25  1453  	if (ret < 0) {
-ee17028009d49f Akhil R 2022-02-25  1454  		dev_err_probe(&pdev->dev, ret,
-ee17028009d49f Akhil R 2022-02-25  1455  			      "GPC DMA driver registration failed\n");
-ee17028009d49f Akhil R 2022-02-25  1456  		return ret;
-ee17028009d49f Akhil R 2022-02-25  1457  	}
-ee17028009d49f Akhil R 2022-02-25  1458  
-ee17028009d49f Akhil R 2022-02-25  1459  	ret = of_dma_controller_register(pdev->dev.of_node,
-ee17028009d49f Akhil R 2022-02-25  1460  					 tegra_dma_of_xlate, tdma);
-ee17028009d49f Akhil R 2022-02-25  1461  	if (ret < 0) {
-ee17028009d49f Akhil R 2022-02-25  1462  		dev_err_probe(&pdev->dev, ret,
-ee17028009d49f Akhil R 2022-02-25  1463  			      "GPC DMA OF registration failed\n");
-ee17028009d49f Akhil R 2022-02-25  1464  
-ee17028009d49f Akhil R 2022-02-25  1465  		dma_async_device_unregister(&tdma->dma_dev);
-ee17028009d49f Akhil R 2022-02-25  1466  		return ret;
-ee17028009d49f Akhil R 2022-02-25  1467  	}
-ee17028009d49f Akhil R 2022-02-25  1468  
-ee17028009d49f Akhil R 2022-02-25 @1469  	dev_info(&pdev->dev, "GPC DMA driver register %d channels\n",
-b760183e9631ce Akhil R 2022-09-13  1470  		 hweight_long(tdma->chan_mask));
-ee17028009d49f Akhil R 2022-02-25  1471  
-ee17028009d49f Akhil R 2022-02-25  1472  	return 0;
-ee17028009d49f Akhil R 2022-02-25  1473  }
-ee17028009d49f Akhil R 2022-02-25  1474  
-
+diff --git a/arch/xtensa/include/asm/elf.h b/arch/xtensa/include/asm/elf.h
+index 9c21897c6992..ffcf1ada19c6 100644
+--- a/arch/xtensa/include/asm/elf.h
++++ b/arch/xtensa/include/asm/elf.h
+@@ -93,6 +93,10 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+ #define elf_check_arch(x) ( ( (x)->e_machine == EM_XTENSA )  || \
+ 			    ( (x)->e_machine == EM_XTENSA_OLD ) )
+ 
++#define ELFOSABI_XTENSA_FDPIC 65
++#define elf_check_fdpic(x) ((x)->e_ident[EI_OSABI] == ELFOSABI_XTENSA_FDPIC)
++#define ELF_FDPIC_CORE_EFLAGS 0
++
+ /*
+  * These are used to set parameters in the core dumps.
+  */
+@@ -164,6 +168,13 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+ 		(_r)->areg[14] = 0; (_r)->areg[15] = 0; \
+ 	} while (0)
+ 
++#define ELF_FDPIC_PLAT_INIT(_r, _exec_map_addr, _interp_map_addr, dynamic_addr) \
++	do { \
++		(_r)->areg[4] = _exec_map_addr; \
++		(_r)->areg[5] = _interp_map_addr; \
++		(_r)->areg[6] = dynamic_addr; \
++	} while (0)
++
+ typedef struct {
+ 	xtregs_opt_t	opt;
+ 	xtregs_user_t	user;
+diff --git a/arch/xtensa/include/asm/processor.h b/arch/xtensa/include/asm/processor.h
+index 76bc63127c66..b75ba16ec080 100644
+--- a/arch/xtensa/include/asm/processor.h
++++ b/arch/xtensa/include/asm/processor.h
+@@ -205,9 +205,12 @@ struct thread_struct {
+ #define start_thread(regs, new_pc, new_sp) \
+ 	do { \
+ 		unsigned long syscall = (regs)->syscall; \
++		unsigned long current_aregs[16]; \
++		memcpy(current_aregs, (regs)->areg, sizeof(current_aregs)); \
+ 		memset((regs), 0, sizeof(*(regs))); \
+ 		(regs)->pc = (new_pc); \
+ 		(regs)->ps = USER_PS_VALUE; \
++		memcpy((regs)->areg, current_aregs, sizeof(current_aregs)); \
+ 		(regs)->areg[1] = (new_sp); \
+ 		(regs)->areg[0] = 0; \
+ 		(regs)->wmask = 1; \
+diff --git a/arch/xtensa/include/uapi/asm/ptrace.h b/arch/xtensa/include/uapi/asm/ptrace.h
+index 50db3e0a6341..9115e86ebc75 100644
+--- a/arch/xtensa/include/uapi/asm/ptrace.h
++++ b/arch/xtensa/include/uapi/asm/ptrace.h
+@@ -37,6 +37,10 @@
+ #define PTRACE_SETXTREGS	19
+ #define PTRACE_GETHBPREGS	20
+ #define PTRACE_SETHBPREGS	21
++#define PTRACE_GETFDPIC		22
++
++#define PTRACE_GETFDPIC_EXEC	0
++#define PTRACE_GETFDPIC_INTERP	1
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index 21e154516bf2..9d131a54226f 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
+ config BINFMT_ELF_FDPIC
+ 	bool "Kernel support for FDPIC ELF binaries"
+ 	default y if !BINFMT_ELF
+-	depends on ARM || ((M68K || SUPERH) && !MMU)
++	depends on ARM || ((M68K || SUPERH || XTENSA) && !MMU)
+ 	select ELFCORE
+ 	help
+ 	  ELF FDPIC binaries are based on ELF, but allow the individual load
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+
