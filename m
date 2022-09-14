@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B015B7DE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0988F5B7DE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 02:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiINAXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Sep 2022 20:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S229665AbiINAdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Sep 2022 20:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiINAXD (ORCPT
+        with ESMTP id S229487AbiINAdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Sep 2022 20:23:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308616C11B;
-        Tue, 13 Sep 2022 17:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663114982; x=1694650982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BEZbqskRU3Qqoaap6epCX9f3SVPC24cLFK4ZgsHlh98=;
-  b=fk6V6L8TyH685FCTW2RkKrZiGJW0katNyIWSU2jbeutzlbVripC1EymN
-   FTDxlSBN7b2FprA1K7Azxhx7ZvzsK21HyZ1RGZlPcacMwBsWSeg7ovAzs
-   zxQSvnaZ026oyWJ8FuaLJ5UXRf6fzVN5WoSLCkNxfvlWFu1cvXeDsEyuX
-   eL592D4LgX21gzo24MYWJhEnOc+LaWrrGGizFqWkehfZc+Y0QsS2wITTg
-   MptdFB4TY924ttPbnYZJxXe9XMiUbz3aFeKSESN1jOYsnAmIyps/xooG+
-   4DE3zKUC+5Kt7c5pt0hrJFV6stVqktrdir4/kX6YGlbyOCPeRKNk3SAzc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="285334574"
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="285334574"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 17:23:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="792130674"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Sep 2022 17:22:58 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYGB7-00049f-1f;
-        Wed, 14 Sep 2022 00:22:57 +0000
-Date:   Wed, 14 Sep 2022 08:22:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        robh@kernel.org, andersson@kernel.org, rafael@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm8150: Add qmi cooling device
- nodes
-Message-ID: <202209140842.dk0QBtpI-lkp@intel.com>
-References: <20220912091643.3537857-2-bhupesh.sharma@linaro.org>
+        Tue, 13 Sep 2022 20:33:12 -0400
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694AB56BBA;
+        Tue, 13 Sep 2022 17:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1663115586;
+        bh=mntmAyFdC2kyLkanzymJFmnOFp0qNaHrcUQTPCMpG28=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=V6bm5WGzVreuvA7AYf5vRmz7jsldQgO1UvYL6iXAq6myOLr9tyfgcTgPy/pl2BStL
+         YERL3xlN90bWJPxnAG3BIipKEnSYhR8+VOPsDBH9Ye1s7c3OiGS4aILvOGsj3ICRd7
+         tztAkFbQM3mh13nV+EIzB+o8uuaJgzHWI8kZunWs=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
+        id 84205884; Wed, 14 Sep 2022 08:33:02 +0800
+X-QQ-mid: xmsmtpt1663115582t5axw7rw4
+Message-ID: <tencent_924BF0B25425E2D5673409D1CF604F682505@qq.com>
+X-QQ-XMAILINFO: MiE+axgVDEQLWWkhp1lRvcfi5FbXGdA445Ps8MQjTuekCzkHfUvIAKKjakqpLP
+         PFWgq/KhkOTK5dutedYvfYn4CbeUNn4iShbVBDTxfsGSfyYptGxqeX8LCrl2s0e3xkp1sN6/x/a5
+         oUUBgKChmK4fb3v9j3/DrlHFKlmAeiUXa3F+QWIUxT5D84w31Q63hJz357E/R+mLLLqJMPDGlgRz
+         QnC9UmjzVfAD6+3rWLiZkFlY1HV7ZLtVqS52kvB0uae99JVdSNzT+ngvSJGdyP0Y5uoaXnAghGPG
+         NbIHfyprsOmwSFY12sKh5Dmn0ixmiqUwZQee21zjiltmBd9Z3yjVyCs96bsszwq4Ou+Wn3fqPfG+
+         zExOgH7glJqMxjgmfIuUTQP7y5nSTvT4Heezy91GWe79Wxx/O0/0S3YOUPRLQamcDp540df01qG8
+         O3VWaIf/flYMwcmieBvChA63X/JLFM7Q7ijG68K8qa3jBL/cEvi+kbuuuYsh7rzD0SuSEiM7c+OB
+         TzBGzP2vWEdjYRbUiZmfLl2ZMvtjssCMyc9edl87wdjtW+lGrHxy+LVP0m4nRpz9Hp4mmKz6d/jQ
+         aaeWAx5WftOzzJwIvFjwt56EL4F692R/j5FLP8mHk2rSe6TOZA5wJZ1hE4j6uyqBX0lKV00zjVbE
+         x7uBAzNr9v1jpnfzXXRQK/JJP/Gxd1re/05UItqZ7cIkqvJ7MSJlzagFqaFI3Wm52Eu/t+VE9kWQ
+         xLkob1WZ8JU/6jx6Mo6tuz5i3YO70Eh4bxTC/DJr5R9iQryebgBzjist/RQURpoL2Zj9lhC1bcbk
+         C0f2G5/uJQGW7XW0pt/LGhScU8yIWrQWPfTa55+vUsT6jPhhJtx9ASF5W+WHfRFVgEXZHB/M8vYp
+         6G1fGQz3KHst9yBw9sWCmmneT8ovJILGkgSQq4dfyIeY1H9xCm47QA29P9EvsfZqt8CLMFOMP2vY
+         PTnRBZ4f4+y46PzTnZfyblU290riRK
+From:   Rong Tao <rtoax@foxmail.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     corbet@lwn.net, erik@kryo.se, jkosina@suse.cz,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@leemhuis.info, lkp@intel.com,
+        ojeda@kernel.org, rdunlap@infradead.org, rongtao@cestc.cn,
+        rtoax@foxmail.com, tglx@linutronix.de,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v2] Documentation: process/submitting-patches: misspelling "mesages"
+Date:   Wed, 14 Sep 2022 08:33:00 +0800
+X-OQ-MSGID: <20220914003300.13421-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <2e4c52b5-85e8-6951-8248-961c2cdb13e7@linaro.org>
+References: <2e4c52b5-85e8-6951-8248-961c2cdb13e7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912091643.3537857-2-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
+Fix spelling mistakes, "mesages" should be spelled "messages".
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Rong Tao <rtoax@foxmail.com>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/process/submitting-patches.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on arm64/for-next/core clk/clk-next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master v6.0-rc5 next-20220913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/arm64-qcom-Introduce-Qualcomm-Cooling-Driver-suppport/20220912-171936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220914/202209140842.dk0QBtpI-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/34ee1e982e105446a5f8ec8d41381f38a9c8bf0b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bhupesh-Sharma/arm64-qcom-Introduce-Qualcomm-Cooling-Driver-suppport/20220912-171936
-        git checkout 34ee1e982e105446a5f8ec8d41381f38a9c8bf0b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/boot/dts/qcom/sa8155p-adp.dts:10:
->> arch/arm64/boot/dts/qcom/sm8150.dtsi:16:10: fatal error: dt-bindings/thermal/qcom,tmd.h: No such file or directory
-      16 | #include <dt-bindings/thermal/qcom,tmd.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +16 arch/arm64/boot/dts/qcom/sm8150.dtsi
-
-  > 16	#include <dt-bindings/thermal/qcom,tmd.h>
-    17	#include <dt-bindings/thermal/thermal.h>
-    18	
-
+diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+index be49d8f2601b..7dc94555417d 100644
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -715,8 +715,8 @@ references.
+ 
+ .. _backtraces:
+ 
+-Backtraces in commit mesages
+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++Backtraces in commit messages
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ Backtraces help document the call chain leading to a problem. However,
+ not all backtraces are helpful. For example, early boot call chains are
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+
