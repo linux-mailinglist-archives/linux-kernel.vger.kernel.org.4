@@ -2,131 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEE45B84FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AAE5B84E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 11:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiINJbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 05:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S231356AbiINJXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiINJbB (ORCPT
+        with ESMTP id S230487AbiINJXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:31:01 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::619])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7449743E57
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:20:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ks6kwu3jLh1rKRLd0O4YWhhaNsb1CKhpUnZyUXTiA6y0ip6ZFP+1pUxkLP5rIl7u0yJNFzVHBdR94jgqEEFbOAaQgFvbpsfEZ+aAb7nyWnTymqjNFKO5k5uCcykJccpi6j3s/moK9EYIZKiguw5Bze2TD5mdJCEXLaRPx9i/77AV75nl2Y93J41t9M+oFkRozDCijFu7fIPTPAwM0l2tDflfzMPHkxpDn9qn7AhYou+bdg+QsLX/1yB0fMI9ps746EkJXNoeAmRulbbjL2IYt9sdjWZ3g7oe1wNsYnndRClS4ISHH3LrCSDz6N1Bo65bW82GM69WX5R5nwHXyLmseg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hcBz27dx0k6tZLhoNzFfz1l1Z+o3ywvQ68rCVs+p9UM=;
- b=EoSjocsXKRlEQ7KTzhjzRNs3YbhE84v6sBPk+TCAxuE58zQcoGL8kOUhdETxuHTDbVnO05iwQaQH9rtAQI28D/UDUlgWa6KQLJ8OOcd+JaDQQvyTAAH6MLeUQzQk3SZkg/+D9y7RQ5ywTsnHq8/OZ2KCbjfnQ8TUpzuGAsr5x6zc2EhgjqHA0PTFLbGRgTQuPAmjaLL5//Uin5bZicD8JU/TqX4edop53RVif41aoxWqNtA6JKhtQBqjsNhpdbOZ54jCIIycOVCZfnjXz3Sss767rqLlHWovkMoxceTYP6h7qLPbStVFImxB+oNoygW80nKNgnvQwuq4T3Cd9vfwZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hcBz27dx0k6tZLhoNzFfz1l1Z+o3ywvQ68rCVs+p9UM=;
- b=jQlm5UOI2YgCiWTUiucS04yEMKDuddu+cz0Tq/oauFYGbqZxhSduYaimHbAOEZMvTf6XOUaAE/5kz1Qvk9f8zUHftQiznUR+AzhsUCA45djXztdlei4LbYhcl+LkGdgRQshT01J8Bq7JPZLJ8Id6T7RVUKvvvRcqth/G71oTQSjlCCYB4lT6thO4L7USP7rqfz9Vd01NRIg/0tgOrf6yv6ylzJdGmDuxZnX8VoRy6hBTQA55nqx9XQnD/HRGjlWaqR2a2md0cYk2RricL4UGkxIZWcjylnmTYIgJ/d5qzdB922NhaR1Q178i/3eMjE8+n/pT7SlBuexTllmKiDneWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DM6PR12MB4894.namprd12.prod.outlook.com (2603:10b6:5:209::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 14 Sep
- 2022 09:12:28 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::243c:a9ba:2442:8974]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::243c:a9ba:2442:8974%6]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 09:12:28 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Alistair Popple <apopple@nvidia.com>,
-        =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>
-Subject: [PATCH v2] hmm-tests: Fix migrate_dirty_page test
-Date:   Wed, 14 Sep 2022 19:12:05 +1000
-Message-Id: <20220914091205.557676-1-apopple@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SY5PR01CA0075.ausprd01.prod.outlook.com
- (2603:10c6:10:1f4::11) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Wed, 14 Sep 2022 05:23:06 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8879EDE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:13:24 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id m3so1422803eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 02:13:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=RHEDsrlxShrh7zHYIRwxWCYxPujfLW+vY6ddPLI+O08=;
+        b=ylZtMhybLAFnr9CLxoXAALJomzPRGWH6Tl5UH6zYmKkFM6vVE0dPz804ww4WAsXGM7
+         2ESOED7xp7mVz3vcZgJEP/bUE3uH75NeuH0wpipvt7ZaMa+xmNouttnjROmvB6j1PNwU
+         vwO5Ax5Vsugsirk6wcZbiIqxsLSLlajueFeUQCHMDXmjmNkb++sIzlkeDieSw4jj588g
+         Ma17pnS/7hCfe4HK14VmBHnmd0fH3trhf0MCSFz/7H5xo1idrn7lnx9uftjOJcFeAXD6
+         Atr72a41iJwAe1RP5y+zGt0eX4Z5X0NdRWS937QpjUln1ECe8+xt7EH0YjigRs3g4txN
+         SBlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=RHEDsrlxShrh7zHYIRwxWCYxPujfLW+vY6ddPLI+O08=;
+        b=4tFeNpZ8oNgK1GhqBWW7pTEmu2KLCCv73O2bXXhDTxgIh5cxKH12uUy1sSCqNT9YwO
+         PTaX6UQDmox4AijZ0fVnojPgqB0uqy8Gv3Zzjq606mm3Ef0DLCzd4zChgLkQyC/3WnT2
+         QyLvv1MpecfZsIfy5cBWJDq2PjZ4E22F48CS/kJHKYNZ08DbSN+zGybD4D5Y0g1ZrhCR
+         ezksP34KiM3FeiLU1KS3SSJGkxctYhjqQLnFFZAB2Telq6QE6jtpmMSpoBxvGuleOz+h
+         NgvMIeHV+wVCnFNLVqXIQr4Ry/TxmBjkE508uBMe+pEMYXpgcJjoYDiGyzFr6qFzkUvS
+         a71Q==
+X-Gm-Message-State: ACgBeo0XjzgBrexmvFgKdIPw8xjUIOeQtktEastD3wX9DxgPFQBpsyRu
+        wvtNSl1vT6BWedJhSRlWpmkfrofXTz+zDV7opKNF+A==
+X-Google-Smtp-Source: AA6agR6bXyIwGGxz+ub3ZwwhgT5zuHZFKdGZZSM4YfTF7fyYM066w+a3wpDI5fJNpTsOdwYxR5FTi6afjxayNO16owU=
+X-Received: by 2002:aa7:cb87:0:b0:43b:e650:6036 with SMTP id
+ r7-20020aa7cb87000000b0043be6506036mr30230697edt.350.1663146737437; Wed, 14
+ Sep 2022 02:12:17 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DM6PR12MB4894:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e82983c-b49a-4333-c9b6-08da96313f32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A6J0mOkAZnyILdNuznvGKatngcgWPB9PWVgGO76gPFDQtC8jGRqKdPZD4q3AqHFyrHZgoAHdyLTgHBwB/jPHlBrRCwo+MYGckIDDyFsU5ch8Q4hc8exfgRBu1v/7r26etmlvDazZbDHNf6AJtxVr+VXAqgUjBfvjIaO72zUm03cKs9/9tNrpqK1h6I0WeFhtuwCIBxX8bIz7YinRxURCQ9ISg8ULBROoA3roRvjBNPhRI3cTE6wDB2IkmXJsWdTH9zTuJJSXqxseZSooZ6xp+IVfNabVFmy4b9Kx7vxQD1PhTnujgmqrfQqR9F38hZHzHfSP/F22Jxu/XD03xIzUCJ5MzdNEFAe5yE1+aKF6Zt7FDpsfObhRfIi73zbi75DMRcK/02JCKKjg0orIgEwWS4WntqGqqaoLnikLqTFv82oL71Ouw24pGww9Bdss0B0qqzAI6TD4dTgBeZj+9YbpHNFIi9lBPzA2lg4eF5QA8EeBbRnF3keuGLmAVlf0D7GjZ7Cf0XI8LXZ8radjRJTSFDRSAieDg+Dor1PETOLCFRryloKfi1Go9gz6Dszix1F15a5SxENod95zFo+o3JK1nbgRU+YAIwr39TF4UWgf7lzclOZeez2ANvwSeB4Ezl3ks8743yS5IuCLeifAcfqTvba6IXV66Hkgx2hzhF15Z3YFqGiHhK944hMKvclTjDcDJ2vQFEzyR6bQf0RyEIoqBryG5kooecyI/cIqwQM/CCfo8lt5dLTfQ3yVLrfHInRa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199015)(5660300002)(4326008)(8936002)(1076003)(2616005)(6666004)(2906002)(8676002)(36756003)(66946007)(316002)(38100700002)(41300700001)(6512007)(86362001)(54906003)(66556008)(6506007)(66476007)(6486002)(7416002)(186003)(83380400001)(478600001)(26005)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TlM0eXFGMDVyY2NOYTI4MDBJVmpudkY0Y1NJN3RKWEk2Si9YajczVDVBWXp1?=
- =?utf-8?B?RlIxWUxwbVYwQkJnWU9COWhqa3lBSHBUMGh5dTRuQlFydFhLejZ4cWlZdVh2?=
- =?utf-8?B?c002ZXdEa1YzQ0dxSTg1TXRWKzJVUmlEL3hqZG9WL0IrUzVTQ3ZpUGlkdWlV?=
- =?utf-8?B?c0RqalJ2bzEzd0hXMzJKL2ZvendsajlwZCtJMk1SQ1o3V2hnM25uaDV0U29v?=
- =?utf-8?B?aE9mMG9XZWZWNFhCdHcwdnZKVTFaM2JHUmZDT2dqclhsay9Ray9oVFVkbWlk?=
- =?utf-8?B?QXRnU2xDQy9TNElCN0pibjV4T3YrRUtxTVNsTHAyMk9leTh4V1V1RXY3WU50?=
- =?utf-8?B?RUxadnpZalk4d2doSlhPaThCSUk2OGFOUWlVY0NqVFFvZWhZTXdxTUlHTzBm?=
- =?utf-8?B?SmNWUldaaERhSnNjUlMxY1hjOVFsYlNuVjc0ZFdjWVR3UFhvWS82c3c3OE5a?=
- =?utf-8?B?QzRBR2M5c2NobG9oQnh6bXRIWmlDbjFUT2h5YkQwMWJwdjk1M3MwYUU1eUtm?=
- =?utf-8?B?YTVOeHdyaGdDQzRubERGNjBBSzhKWk9RRzM4dEM3dTBpOUhadVgxTXdBYzM4?=
- =?utf-8?B?eTZqYmNtNHphRDBFcWJUemNXeldqSDFIVTNNMzdXYWFnaURuT1gyQU0yckZi?=
- =?utf-8?B?bktIdDlBS0ZCV0tmRkQ4MUU1V2pHNkFFSFRoUjhPWER6dzNudW05OW8zR1VG?=
- =?utf-8?B?Z0hZMWE5eEF1VzNZSGluVWxQMVIxcjlpc0FNZ2pLMTB0VEVrWnRCN2ttNTJU?=
- =?utf-8?B?emF3eTJHZnZtK0hvczdBMllicXRoQWY5MWh1dEhEbGVtY3ZSNFE2S1ZHVlIv?=
- =?utf-8?B?WVpJN0RzaWo2bjJVcVZSNnlNWWFXM2dnbWdMU2JnMjI3NUpqMS81YUFUK1o2?=
- =?utf-8?B?V1pJeTkwRE1YTHlLb09hUVpkRnBZZWlUaUZkNlkzZlpaRUNiT0ZjUStBc0xK?=
- =?utf-8?B?czlFaWdMTWc1aGRWUUhIUVQxUjRyVTRPUVYxU3dMRXJpSmxTbDVmYWVPbVZq?=
- =?utf-8?B?VTFkQXUycDhnbDFTd29NWE9oK3NTUXY5aUFzb2gvcC9McnQ5LzEvVzBqSndP?=
- =?utf-8?B?S2p2OUtJazlQUXkzQkpDd3BCWWlRb0VHVkNZMXhmSmQvaWNGT1hzbk4wTnMv?=
- =?utf-8?B?T2pncWN4OHNYdUpRNnZmT1psY05BU1NkZkNYcVVMeXRtSTlDUnc2RjluV1Q4?=
- =?utf-8?B?cDB5cjFBVzBUR0EycGZISjNiVXQzdWI5OW5vcnhyNitpTURGRkVjQUNXNE1B?=
- =?utf-8?B?Qkc4VWdWRmNNdlU1d3M4SWppMWZvT1VxVTUzY2thWG5VZTVxYTlLRHVxbTMz?=
- =?utf-8?B?S1pZaWY3QVZVaW05cCtpaGxXaCt1TmdoQXdOZG96WjV1ekpqcHduMDNuK0tW?=
- =?utf-8?B?cFpRTTU2bXF2ZUVvUkpVYlZ2cDcrWnA0akZMUEFMNHd4K01HeUc4cW5NVEdD?=
- =?utf-8?B?MTFsRkJWVFQzRFBuV1RDbGIyNWJ6Mjl3T2RsQy9jcWRQbEZDU294SzQ5d2Fh?=
- =?utf-8?B?OGE3NmFRZVVzTmlPR2NZMXpNOENTclk3bjZSbkliWEpxWUptR0RGcXhvWHJD?=
- =?utf-8?B?VkRMTW03T3BwanZIYXBIcEZXWG9ibWg1Q1VYSldxQWY4bWhrWktPc3ZEMzNr?=
- =?utf-8?B?L3dmM0x0ZjFjbkdncXhRUE8zdmJuNjBKQU8xNlhpcFRMdmMzT0FQZWFmeG5N?=
- =?utf-8?B?Y2VqSjdsWEt6ZG5zTkpFclJua2hnN0FUSitRV2UrY0pJT2dFeEhKZ3hMSHZk?=
- =?utf-8?B?NmFhckx2blcycEtpTm50UWIyKzJZeWdJZWh6T1l6RWNlSnl3YkxPNUFUWUZT?=
- =?utf-8?B?T0tGelZ3NUtYTWdrYjRwZ0FnWFR2dFRIVG1weTB0TGpNSWJuOU12MHpKdFBq?=
- =?utf-8?B?b2o5cDZNZ3VkUmZHbVZlRkY4WHJhWUVNTUtqUUtIa2gyRTFGTzhLaSs0UDlT?=
- =?utf-8?B?THppUGliMGpxemdRWVFTUWVrS3dOeFkzaEJxdjNGc3o2V3NKSDJVRWR5aS9N?=
- =?utf-8?B?TkJDTlRuSTMvY0diQVBPODMwNGtndHpQM2ZZdFFMcndqUURyUmxvdTdIMVB3?=
- =?utf-8?B?QS9XSGhpWENpcmtHWlJCanF3eHVSc2ZVYk5Od2w2YVpIM3hkcXYzejdzM2lz?=
- =?utf-8?Q?QvyGJ2DR0BUusMp+rd31eYki5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e82983c-b49a-4333-c9b6-08da96313f32
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 09:12:28.5140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lokocAU/u/Fcw++SXbSifRWfXD2CN2BPSUH5hha1YAhFW4ObrMZki2veBuOd2r0NsvSxiKQ72Ejmdoiwuq0nHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4894
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220913140410.043243217@linuxfoundation.org>
+In-Reply-To: <20220913140410.043243217@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Sep 2022 14:42:05 +0530
+Message-ID: <CA+G9fYvWbO+x9rPjhgL5XPmQqk8z=5yqutg7qgwP-+iqLAccqQ@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,162 +70,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As noted by John Hubbard the original test relied on side effects of the
-implementation of migrate_vma_setup() to detect if pages had been
-swapped to disk or not. This is subject to change in future so
-explicitly check for swap entries via pagemap instead. Fix a spelling
-mistake while we're at it.
+On Tue, 13 Sept 2022 at 19:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.9 release.
+> There are 192 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.9-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Fixes: 5cc88e844e87 ("selftests/hmm-tests: add test for dirty bits")
-Reviewed-by: Mika Penttilä <mpenttil@redhat.com>
 
----
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Changes for v2:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
- - Added Mika's Reviewed-by (Thanks!)
- - Moved pagemap checks into vm_util.c as suggested by David H.
----
- tools/testing/selftests/vm/Makefile    |  1 +
- tools/testing/selftests/vm/hmm-tests.c | 28 ++++++++++++++++++++++----
- tools/testing/selftests/vm/vm_util.c   | 22 ++++++++++++++++++++
- tools/testing/selftests/vm/vm_util.h   |  2 ++
- 4 files changed, 49 insertions(+), 4 deletions(-)
+NOTE:
+Following Warning noticed on bcm2711-rpi-4-b while running LTP fs iogen01 tests
+and this kernel built with 64k Page size with NFS mounted file system.
+   - CONFIG_ARM64_64K_PAGES=y
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d9fa6a9ea584..17e36129efd2 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -100,6 +100,7 @@ include ../lib.mk
- $(OUTPUT)/madv_populate: vm_util.c
- $(OUTPUT)/soft-dirty: vm_util.c
- $(OUTPUT)/split_huge_page_test: vm_util.c
-+$(OUTPUT)/hmm-tests: vm_util.c
- 
- ifeq ($(MACHINE),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
-diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftests/vm/hmm-tests.c
-index 70fdb49b59ed..509fe8c5158e 100644
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@ -37,6 +37,7 @@
-  */
- #include "../../../../lib/test_hmm_uapi.h"
- #include "../../../../mm/gup_test.h"
-+#include "vm_util.h"
- 
- struct hmm_buffer {
- 	void		*ptr;
-@@ -1261,9 +1262,24 @@ static int destroy_cgroup(void)
- 	return 0;
- }
- 
-+/* Returns true if at least one page in the range is on swap */
-+static bool pages_swapped(void *ptr, size_t size)
-+{
-+	int fd = open("/proc/self/pagemap", O_RDONLY);
-+	bool ret;
-+
-+	if (fd < 0)
-+		return false;
-+
-+	ret = pagemap_range_some_swapped(fd, ptr, size);
-+	close(fd);
-+
-+	return ret;
-+}
-+
- /*
-  * Try and migrate a dirty page that has previously been swapped to disk. This
-- * checks that we don't loose dirty bits.
-+ * checks that we don't lose dirty bits.
-  */
- TEST_F(hmm, migrate_dirty_page)
- {
-@@ -1300,6 +1316,10 @@ TEST_F(hmm, migrate_dirty_page)
- 
- 	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
- 
-+	/* Make sure at least some pages got paged to disk. */
-+	if (!pages_swapped(buffer->ptr, size))
-+		SKIP(return, "Pages weren't swapped when they should have been");
-+
- 	/* Fault pages back in from swap as clean pages */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		tmp += ptr[i];
-@@ -1309,10 +1329,10 @@ TEST_F(hmm, migrate_dirty_page)
- 		ptr[i] = i;
- 
- 	/*
--	 * Attempt to migrate memory to device, which should fail because
--	 * hopefully some pages are backed by swap storage.
-+	 * Attempt to migrate memory to device. This might fail if some pages
-+	 * are/were backed by swap but that's ok.
- 	 */
--	ASSERT_TRUE(hmm_migrate_sys_to_dev(self->fd, buffer, npages));
-+	hmm_migrate_sys_to_dev(self->fd, buffer, npages);
- 
- 	ASSERT_FALSE(write_cgroup_param(cgroup, "memory.reclaim", 1UL<<30));
- 
-diff --git a/tools/testing/selftests/vm/vm_util.c b/tools/testing/selftests/vm/vm_util.c
-index b58ab11a7a30..2768d4f3de4c 100644
---- a/tools/testing/selftests/vm/vm_util.c
-+++ b/tools/testing/selftests/vm/vm_util.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <unistd.h>
- #include <string.h>
- #include <fcntl.h>
- #include "../kselftest.h"
-@@ -20,6 +21,14 @@ uint64_t pagemap_get_entry(int fd, char *start)
- 	return entry;
- }
- 
-+bool pagemap_is_swapped(int fd, char *start)
-+{
-+	uint64_t entry = pagemap_get_entry(fd, start);
-+
-+	// Check if swap entry bit (62nd bit) is set
-+	return entry & 0x4000000000000000ull;
-+}
-+
- bool pagemap_is_softdirty(int fd, char *start)
- {
- 	uint64_t entry = pagemap_get_entry(fd, start);
-@@ -28,6 +37,19 @@ bool pagemap_is_softdirty(int fd, char *start)
- 	return entry & 0x0080000000000000ull;
- }
- 
-+/* Returns true if at least one page in the range is in swap */
-+bool pagemap_range_some_swapped(int fd, char *start, size_t len)
-+{
-+	unsigned long i;
-+	unsigned long npages = len / getpagesize();
-+
-+	for (i = 0; i < npages; i++)
-+		if (pagemap_is_swapped(fd, start + i * getpagesize()))
-+			return true;
-+
-+	return false;
-+}
-+
- void clear_softdirty(void)
- {
- 	int ret;
-diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-index 2e512bd57ae1..307e11f72341 100644
---- a/tools/testing/selftests/vm/vm_util.h
-+++ b/tools/testing/selftests/vm/vm_util.h
-@@ -4,6 +4,8 @@
- 
- uint64_t pagemap_get_entry(int fd, char *start);
- bool pagemap_is_softdirty(int fd, char *start);
-+bool pagemap_is_swapped(int fd, char *start);
-+bool pagemap_range_some_swapped(int fd, char *start, size_t len);
- void clear_softdirty(void);
- uint64_t read_pmd_pagesize(void);
- uint64_t check_huge(void *addr);
--- 
-2.35.1
+This warning is not always reproducible.
 
+[ 1152.014544] ------------[ cut here ]------------
+[ 1152.019249] WARNING: CPU: 3 PID: 56 at net/sunrpc/clnt.c:2521
+call_decode+0x210/0x240
+[ 1152.027211] Modules linked in: algif_hash aes_neon_bs aes_neon_blk
+xhci_pci xhci_pci_renesas snd_soc_hdmi_codec raspberrypi_cpufreq
+hci_uart brcmfmac btqca brcmutil btbcm bluetooth cfg80211 vc4
+raspberrypi_hwmon rfkill cec reset_raspberrypi clk_raspberrypi
+bcm2711_thermal iproc_rng200 rng_core drm_display_helper i2c_bcm2835
+drm_cma_helper pwm_bcm2835 drm_kms_helper pcie_brcmstb crct10dif_ce
+fuse drm
+[ 1152.063204] CPU: 3 PID: 56 Comm: kworker/u8:3 Not tainted 5.19.9-rc1 #1
+[ 1152.069920] Hardware name: Raspberry Pi 4 Model B (DT)
+[ 1152.075131] Workqueue: rpciod rpc_async_schedule
+[ 1152.079826] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[ 1152.086894] pc : call_decode+0x210/0x240
+[ 1152.090874] lr : call_decode+0xd8/0x240
+[ 1152.094766] sp : ffff80000bcefca0
+[ 1152.098123] x29: ffff80000bcefca0 x28: ffff800009285500 x27: ffff80000aa78a70
+[ 1152.105378] x26: 0000000004248160 x25: ffff80000a110008 x24: 0000000000000001
+[ 1152.112630] x23: ffff80000a110008 x22: ffff80000aa78000 x21: ffff00004ca1c050
+[ 1152.119880] x20: ffff00004ca1c000 x19: ffff00004d270f90 x18: 0000000000000000
+[ 1152.127129] x17: 00d0070000000000 x16: 0000000000000000 x15: ffff0000fba2b000
+[ 1152.134378] x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+[ 1152.141626] x11: 0000000000000000 x10: 0000000000000be0 x9 : ffff8000092a15ec
+[ 1152.148874] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff00004d271238
+[ 1152.156123] x5 : 800aad4b0000ffff x4 : ffff00004d271238 x3 : 0000000000000000
+[ 1152.163371] x2 : 0000000000000008 x1 : ffff00004ca1c160 x0 : 00000000ffffffff
+[ 1152.170620] Call trace:
+[ 1152.173098]  call_decode+0x210/0x240
+[ 1152.176725]  __rpc_execute+0xac/0x6a4
+[ 1152.180443]  rpc_async_schedule+0x34/0x5c
+[ 1152.184512]  process_one_work+0x1dc/0x450
+[ 1152.188583]  worker_thread+0x154/0x450
+[ 1152.192385]  kthread+0xfc/0x110
+[ 1152.195578]  ret_from_fork+0x10/0x20
+[ 1152.199207] ---[ end trace 0000000000000000 ]---
+
+https://lkft.validation.linaro.org/scheduler/job/5525031#L1343
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.8-193-g318d4f28213a/testrun/11883336/suite/log-parser-test/tests/
+
+## Build
+* kernel: 5.19.9-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: 318d4f28213a0b7494405e08920cdd5e649199eb
+* git describe: v5.19.8-193-g318d4f28213a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.8-193-g318d4f28213a
+
+## No test Regressions (compared to v5.19.8)
+
+## No metric Regressions (compared to v5.19.8)
+
+## No test Fixes (compared to v5.19.8)
+
+## No metric Fixes (compared to v5.19.8)
+
+
+## Test result summary
+total: 113663, pass: 100760, fail: 903, skip: 11686, xfail: 314
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 69 total, 63 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
