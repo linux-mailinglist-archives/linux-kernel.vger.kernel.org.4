@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266A95B8D34
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6D75B8D33
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 18:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiINQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S229513AbiINQgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 12:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiINQhN (ORCPT
+        with ESMTP id S229449AbiINQgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 12:37:13 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710D75AA38
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 09:37:12 -0700 (PDT)
+        Wed, 14 Sep 2022 12:36:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C0C5AA37;
+        Wed, 14 Sep 2022 09:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663173432; x=1694709432;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l7sMrbj/Jo9zP60pNDWgBmP8LvBsIxR4ppehGzT0yaI=;
-  b=fLWOSnkp9mLn7hWXaNEHwdNE+D0GrGeB4rVRnZM+ny6/C/tg3CW0SyWz
-   oLYVh4PQmnUY2ykl2yF4lnqLYvzSqhRWMHDi9qopH6KjTEXmegze7IJgS
-   9vKK3J4oeU77RMrLtJeNScV3dvIM3ssCmOX9bq262nRovRXAaaKCcixtC
-   FcXKvkXlsQOgBt3r/nqO2AhgxsAh+cUWZtZuXzSi6s8jFGRZ9M1P+qjT6
-   t2B2HJgpqsHA4kuwikwiiQbYu+wna5kQ1zZatZ3oxZKxhE7WZCHST2aDB
-   2SOUZV4xpco3d2zBNrB8iRFXws9rzTizR0Cp+SNYnZE2BexwWVQ4WIUmb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324733696"
+  t=1663173400; x=1694709400;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4U1YjzC+0xLrJidlsZUbIKBB4tLP05miuKWoZOpNP18=;
+  b=aOAUxVo34n3xwKoCnCTZjAoNRn+/ul8p/h3orC4a3O/RCOmbZOmcx3/0
+   spiCg5flG0sdKYlChxvOSQ0Pgk9mKGuA9lVu5gw0aIn+Q90nfZI8VR1s9
+   NRJRLgtvDRvVOcoiQZTtkPG/WytNFK00lTINrnSrn/Wl8ZdEutjVpbxOO
+   FE6zmhZa4K6T5xZnuxtwCVUF09iOBcYjhsoEV+hFb+XjLaemBx5/4MMki
+   5NUoN0SE7OAod9Ti8RKcj1J4AcyKAWh1100BZvOYuF+K+Ueq5d1iuCjgf
+   OgBXIsNDvUQy15ju9lxj8gKGYoDh6GQuoa96eRZhwPFXTya02qrR9amMK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="278865135"
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="324733696"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 09:37:02 -0700
+   d="scan'208";a="278865135"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 09:36:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="945575789"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Sep 2022 09:37:01 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYVNk-0000No-24;
-        Wed, 14 Sep 2022 16:37:00 +0000
-Date:   Thu, 15 Sep 2022 00:36:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mcgrof:20220913-test-sysfs 8/11] lib/test_sysfs.c:26:10: fatal
- error: linux/genhd.h: No such file or directory
-Message-ID: <202209150012.nsTINDjx-lkp@intel.com>
+   d="scan'208";a="568074886"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 14 Sep 2022 09:36:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D5871F7; Wed, 14 Sep 2022 19:36:46 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <damm+renesas@opensource.se>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] TODO: serdev: Replace poll loop by readx_poll_timeout() macro
+Date:   Wed, 14 Sep 2022 19:36:40 +0300
+Message-Id: <20220914163640.38003-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20220913-test-sysfs
-head:   fd13723170f4a2381aab0b6449920c121f01a10a
-commit: 1fd6d0dd327560b281f4b77ff3a400be3ec9efde [8/11] selftests: add tests_sysfs module
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220915/202209150012.nsTINDjx-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=1fd6d0dd327560b281f4b77ff3a400be3ec9efde
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20220913-test-sysfs
-        git checkout 1fd6d0dd327560b281f4b77ff3a400be3ec9efde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The readx_poll_timeout() consolidates the necessary code under
+macro. Replace current code with it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/serdev.h | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> lib/test_sysfs.c:26:10: fatal error: linux/genhd.h: No such file or directory
-      26 | #include <linux/genhd.h>
-         |          ^~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +26 lib/test_sysfs.c
-
-    12	
-    13	#include <linux/init.h>
-    14	#include <linux/list.h>
-    15	#include <linux/module.h>
-    16	#include <linux/printk.h>
-    17	#include <linux/fs.h>
-    18	#include <linux/miscdevice.h>
-    19	#include <linux/slab.h>
-    20	#include <linux/uaccess.h>
-    21	#include <linux/async.h>
-    22	#include <linux/delay.h>
-    23	#include <linux/vmalloc.h>
-    24	#include <linux/debugfs.h>
-    25	#include <linux/rtnetlink.h>
-  > 26	#include <linux/genhd.h>
-    27	#include <linux/blkdev.h>
-    28	
-
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 66f624fc618c..69d9c3188065 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -7,9 +7,11 @@
+ 
+ #include <linux/types.h>
+ #include <linux/device.h>
++#include <linux/iopoll.h>
+ #include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/delay.h>
++#include <vdso/time64.h>
+ 
+ struct serdev_controller;
+ struct serdev_device;
+@@ -279,18 +281,10 @@ static inline bool serdev_device_get_cts(struct serdev_device *serdev)
+ 
+ static inline int serdev_device_wait_for_cts(struct serdev_device *serdev, bool state, int timeout_ms)
+ {
+-	unsigned long timeout;
+ 	bool signal;
+ 
+-	timeout = jiffies + msecs_to_jiffies(timeout_ms);
+-	while (time_is_after_jiffies(timeout)) {
+-		signal = serdev_device_get_cts(serdev);
+-		if (signal == state)
+-			return 0;
+-		usleep_range(1000, 2000);
+-	}
+-
+-	return -ETIMEDOUT;
++	return readx_poll_timeout(serdev_device_get_cts, serdev, signal, signal == state,
++				  2000, timeout_ms * USEC_PER_MSEC);
+ }
+ 
+ static inline int serdev_device_set_rts(struct serdev_device *serdev, bool enable)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
