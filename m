@@ -2,141 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DC45B861A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190675B861C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Sep 2022 12:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiINKUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 06:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S229705AbiINKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 06:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiINKUB (ORCPT
+        with ESMTP id S229544AbiINKUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:20:01 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3816EBB;
-        Wed, 14 Sep 2022 03:20:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPn2uAR_1663150790;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VPn2uAR_1663150790)
-          by smtp.aliyun-inc.com;
-          Wed, 14 Sep 2022 18:19:58 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     peter.ujfalusi@gmail.com
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] dmaengine: ti: edma: Remove some unused functions
-Date:   Wed, 14 Sep 2022 18:19:43 +0800
-Message-Id: <20220914101943.83929-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 14 Sep 2022 06:20:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355391F62E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 03:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L9z2sWrZFpokxsnnYfIrgul/SSM9pIG5YuJ1FrDbZ6A=; b=XHE1YuJpF/XBiZvxZ6zm4SfEGS
+        YpXr7MLDXWtv7gu6SrlhrLggtgXn3KpD3Sw3c+PVcN04VtEW+vnjPuwXBSO5sJr3laq6QA3l/VuzS
+        UxdbSuAEt7WOQnR05Rj6dxHJ9I9bi/hCU3EpYPgLwtsvzte7PD9Pk8Z4+K6yVtkPQ2X5z/uCIoSlx
+        CV4GRM4UEPk4mD81CZVvkfLsd3Mvs3on+TyU82JdhyfTeJlZQsoOwnxZVmKlQP/34DG8LgywKjHnv
+        Dc4owYteBeksmTcI7b+m43mRgCcYLo/EMOvdhFubLYH56hN64n8e1jTMH7An3th6XETUSmMORJkEU
+        lRYqn5cA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYPVV-0005SJ-T4; Wed, 14 Sep 2022 10:20:37 +0000
+Date:   Wed, 14 Sep 2022 11:20:37 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Liam.Howlett@oracle.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] Maple Tree: Remove unused functions mte_set_full and
+ mte_clear_full
+Message-ID: <YyGq9enhR3W2/MFi@casper.infradead.org>
+References: <20220914101829.82000-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914101829.82000-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These functions are defined in the edma.c file, but not called elsewhere,
-so delete these unused functions.
+On Wed, Sep 14, 2022 at 06:18:29PM +0800, Jiapeng Chong wrote:
+> mte_set_full and mte_clear_full are defined in the maple_tree.c file,
+> but not called elsewhere, so delete these unused function.
+> 
+> lib/maple_tree.c:330:20: warning: unused function 'mte_set_full'.
+> lib/maple_tree.c:335:20: warning: unused function 'mte_clear_full'.
 
-drivers/dma/ti/edma.c:746:31: warning: unused function 'to_edma_cc'.
-drivers/dma/ti/edma.c:420:20: warning: unused function 'edma_param_or'.
-drivers/dma/ti/edma.c:414:20: warning: unused function 'edma_param_and'.
-drivers/dma/ti/edma.c:402:20: warning: unused function 'edma_param_write'.
-drivers/dma/ti/edma.c:373:28: warning: unused function 'edma_shadow0_read'.
-drivers/dma/ti/edma.c:396:28: warning: unused function 'edma_param_read'.
-drivers/dma/ti/edma.c:355:20: warning: unused function 'edma_or_array'.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2152
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/dma/ti/edma.c | 40 ----------------------------------------
- 1 file changed, 40 deletions(-)
-
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index 4cbca80ee16e..fa06d7e6d8e3 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -352,12 +352,6 @@ static inline void edma_modify_array(struct edma_cc *ecc, int offset, int i,
- 	edma_modify(ecc, offset + (i << 2), and, or);
- }
- 
--static inline void edma_or_array(struct edma_cc *ecc, int offset, int i,
--				 unsigned or)
--{
--	edma_or(ecc, offset + (i << 2), or);
--}
--
- static inline void edma_or_array2(struct edma_cc *ecc, int offset, int i, int j,
- 				  unsigned or)
- {
-@@ -370,11 +364,6 @@ static inline void edma_write_array2(struct edma_cc *ecc, int offset, int i,
- 	edma_write(ecc, offset + ((i * 2 + j) << 2), val);
- }
- 
--static inline unsigned int edma_shadow0_read(struct edma_cc *ecc, int offset)
--{
--	return edma_read(ecc, EDMA_SHADOW0 + offset);
--}
--
- static inline unsigned int edma_shadow0_read_array(struct edma_cc *ecc,
- 						   int offset, int i)
- {
-@@ -393,36 +382,12 @@ static inline void edma_shadow0_write_array(struct edma_cc *ecc, int offset,
- 	edma_write(ecc, EDMA_SHADOW0 + offset + (i << 2), val);
- }
- 
--static inline unsigned int edma_param_read(struct edma_cc *ecc, int offset,
--					   int param_no)
--{
--	return edma_read(ecc, EDMA_PARM + offset + (param_no << 5));
--}
--
--static inline void edma_param_write(struct edma_cc *ecc, int offset,
--				    int param_no, unsigned val)
--{
--	edma_write(ecc, EDMA_PARM + offset + (param_no << 5), val);
--}
--
- static inline void edma_param_modify(struct edma_cc *ecc, int offset,
- 				     int param_no, unsigned and, unsigned or)
- {
- 	edma_modify(ecc, EDMA_PARM + offset + (param_no << 5), and, or);
- }
- 
--static inline void edma_param_and(struct edma_cc *ecc, int offset, int param_no,
--				  unsigned and)
--{
--	edma_and(ecc, EDMA_PARM + offset + (param_no << 5), and);
--}
--
--static inline void edma_param_or(struct edma_cc *ecc, int offset, int param_no,
--				 unsigned or)
--{
--	edma_or(ecc, EDMA_PARM + offset + (param_no << 5), or);
--}
--
- static void edma_assign_priority_to_queue(struct edma_cc *ecc, int queue_no,
- 					  int priority)
- {
-@@ -743,11 +708,6 @@ static void edma_free_channel(struct edma_chan *echan)
- 	edma_setup_interrupt(echan, false);
- }
- 
--static inline struct edma_cc *to_edma_cc(struct dma_device *d)
--{
--	return container_of(d, struct edma_cc, dma_slave);
--}
--
- static inline struct edma_chan *to_edma_chan(struct dma_chan *c)
- {
- 	return container_of(c, struct edma_chan, vchan.chan);
--- 
-2.20.1.7.g153144c
-
+They're not used now, but they will be in a release or two.  They're
+static inline functions; keeping them as part of the orthogonal API
+costs nothing when they're not used.
