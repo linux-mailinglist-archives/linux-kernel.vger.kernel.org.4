@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95EE5BA04F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 19:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BA05BA045
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 19:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiIORUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 13:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S229846AbiIORMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 13:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiIORU0 (ORCPT
+        with ESMTP id S229629AbiIORMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 13:20:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3B73C8D8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663262425; x=1694798425;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2WLOCR8nEHkIsfVkGyX+fsuayLLsJnENsO67vUDUfdA=;
-  b=nOBL+r0ALBdPyR3nm9a7XOV1dyZxQZY797OahD82UhfaD98rh8IurMzB
-   V3eULzd79EKdyRo8n7/Aze3EaVC9UeC++L65ruOm3H9fsaOEGsBmHL+HG
-   EH2N7aJwkN4g5bUayMYjnMDQBzaPA26xJLm7kjJI3ebKVLuIu+VN/ckNU
-   dVgJBaeNm11fvFkKHWfhS1Okbf2wBvvrEIHoLMHJHw//F6zfrD3ijT/ya
-   PZc0ZR0EZeS2VBEhJ8/azYxh87++4PJNdyHrkkxCSuReNmqtw34AqnbAJ
-   /+GAssXLw9YcSDkBTCSIf7z6/MKElUCqKR1W7lVHhnRPrMh4v9LFsVi1N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="278511417"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="278511417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 10:10:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="721087639"
-Received: from schen9-mobl.amr.corp.intel.com ([10.212.178.221])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 10:10:26 -0700
-Message-ID: <bb7dd6ac32403e96943a6e51c60e72960c2942fd.camel@linux.intel.com>
-Subject: Re: [RFC PATCH] sched/fair: Choose the CPU where short task is
- running during wake up
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 15 Sep 2022 10:10:25 -0700
-In-Reply-To: <20220915165407.1776363-1-yu.c.chen@intel.com>
-References: <20220915165407.1776363-1-yu.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Thu, 15 Sep 2022 13:12:14 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B2997ED1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:12:10 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bq9so31887086wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2l+yAhDGJcVHWRPAUd5IGqWQpdGPXrRqo+Mo7rCnu9g=;
+        b=qYLUuKwg7TmcQaCUmiqbSOSwWPHJ7BOSf7OUqyRyJ3RDJwhbXvpzzUvwOJ2LS2xjI5
+         /H82/CJ4BtXEjNcjgJVECsKq+Ld49iUvTQspx5JGfaQiA/oi3e/BocD+gFhSI8btsLbU
+         Ss7yyFQKAwTvDkeV8GbLErQaCpNuTrMsJU0jKKQS0DF2qqzAxS9A5al/VX+0ACp89cdB
+         2BNcfghBBQfbqvq7o5SHdTQhYFUjjxNUFFuRmL5Cc6zCH7kybyjMPUot0CyYkFWxPPfa
+         KgaCspXXxXrNPZXRTaAKfo80+mBYKf6AE9XM+95iIAqhT5J2QaQ6e1WioRNqewpeCdsC
+         L6Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2l+yAhDGJcVHWRPAUd5IGqWQpdGPXrRqo+Mo7rCnu9g=;
+        b=JtuVsG5kAVtNzu3uNUiXtOrnVJKq4hrB98NsSER/N6cdWYeGlb7cQuSj5N6MLRQvhz
+         DVc7irsu/159CCr4Vl0hYZtiBNipL5lgJpG3YdERmv3L7ksuGABifZWSbhTaIJApBSs3
+         /SbR+L7cgm6haNkRh1KGfhi5cM8udQAxujvW0yiPTfMuKj8iY9T64UpcXspnbUMZKxW3
+         HC3TyKTBrjgj5OybJdpvrkjm4ZPBQniI+nPWe+uDpLOZmMNPC0tQz9Ta3ArIGOkVWD5C
+         2dxeCQDTdGCDkM1geZu8Hj5YDqRqH3RXsTWS0DWKkqIxvELqXd39MU0qZU7vlu7PfaQX
+         KgTQ==
+X-Gm-Message-State: ACrzQf0Y4wd4keMdrPvLgBfOBfggVD9sOCuiuT0MzE7KAUE+8h9QdD6y
+        7m41aRxXJav82oxDPD6ixuS6vw==
+X-Google-Smtp-Source: AMsMyM70kaWkZlnA6Fn5V8cPrO3Vg61CS3ixMnGXXYV5uT8dD90iLhhDw+2OMvK97nrOmKmG8UpJsg==
+X-Received: by 2002:a5d:58f1:0:b0:22a:dab5:9aa0 with SMTP id f17-20020a5d58f1000000b0022adab59aa0mr459058wrd.28.1663261928744;
+        Thu, 15 Sep 2022 10:12:08 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q1-20020a056000136100b00228c2462a78sm3171395wrz.24.2022.09.15.10.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 10:12:08 -0700 (PDT)
+Message-ID: <da17f8f0-8800-e459-e145-58a296296031@linaro.org>
+Date:   Thu, 15 Sep 2022 19:11:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/core: Add a check before calling set_trip_temp()
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-16 at 00:54 +0800, Chen Yu wrote:
+On 08/09/2022 19:46, Lad Prabhakar wrote:
+> The thermal driver [0] for Renesas RZ/G2L SoC does not implement
+> set_trip_temp() callback but has trips commit 9326167058e8
+> ("thermal/core: Move set_trip_temp ops to the sysfs code") changed
+> the behaviour which causes the below panic when trying to set the
+> trip temperature:
 > 
-> +/*
-> + * If a task switches in and then voluntarily relinquishes the
-> + * CPU quickly, it is regarded as a short running task.
-> + * sysctl_sched_min_granularity is chosen as the threshold,
-> + * as this value is the minimal slice if there are too many
-> + * runnable tasks, see __sched_period().
-> + */
-> +static int is_short_task(struct task_struct *p)
-> +{
-> +	return (p->se.sum_exec_runtime <=
-> +		(p->nvcsw * sysctl_sched_min_granularity));
-> +}
-> +
->  /*
->   * The purpose of wake_affine() is to quickly determine on which CPU we can run
->   * soonest. For the purpose of speed we only consider the waking and previous
-> @@ -6050,7 +6063,8 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
->  	if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
->  		return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
->  
-> -	if (sync && cpu_rq(this_cpu)->nr_running == 1)
-> +	if ((sync && cpu_rq(this_cpu)->nr_running == 1) ||
-> +	    is_short_task(cpu_curr(this_cpu)))
->  		return this_cpu;
->  
->  	if (available_idle_cpu(prev_cpu))
-> @@ -6434,6 +6448,21 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->  			/* overloaded LLC is unlikely to have idle cpu/core */
->  			if (nr == 1)
->  				return -1;
-> +
-> +			/*
-> +			 * If nr is smaller than 60% of llc_weight, it
-> +			 * indicates that the util_avg% is higher than 50%.
-> +			 * This is calculated by SIS_UTIL in
-> +			 * update_idle_cpu_scan(). The 50% util_avg indicates
-> +			 * a half-busy LLC domain. System busier than this
-> +			 * level could lower its bar to choose a compromised
-> +			 * "idle" CPU. If the waker on target CPU is a short
-> +			 * task and the wakee is also a short task, pick
-> +			 * target directly.
-> +			 */
-> +			if (!has_idle_core && (5 * nr < 3 * sd->span_weight) &&
-> +			    is_short_task(p) && is_short_task(cpu_curr(target)))
 
-Should we check if target's rq's nr_running is 1, and if there's pending waking
-task before picking it?
+[ ... ]
 
-> +				return target;
->  		}
->  	}
->  
+> Fixes: 9326167058e8 ("thermal/core: Move set_trip_temp ops to the sysfs code")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Thanks.
+Applied, thanks for sending this fix
 
-Tim
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
