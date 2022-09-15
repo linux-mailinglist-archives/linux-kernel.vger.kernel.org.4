@@ -2,43 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A3F5B95A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158B45B95AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIOHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S230079AbiIOHqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIOHpQ (ORCPT
+        with ESMTP id S229809AbiIOHqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:45:16 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7744B24BDD
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:44:58 -0700 (PDT)
-Received: from localhost (unknown [185.122.133.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Sep 2022 03:46:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA4226AEE
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:46:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0597477D;
-        Thu, 15 Sep 2022 07:44:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0597477D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1663227892; bh=cRUlwF+s0iJ7JuhPvZh6GgbN8BxpSN3iwOamz7holVk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LnCRZcuRboCJy88Js1WALxuTtdXpvkfPqHQUk1H1MMlC39l3k/3M9BoEZMZCFpFFM
-         tFXLBnF3ZG0TE+doFD0+VAAmgPw/MbgK0Dvj51+fOdukwPmOddWxnHJl8UKz4otr4I
-         X8NzoeZR60PF/f3kr9S9gdl7DE1H4q/qQqiqbZPfI8GhJKc2x/nneLmMwTxxl8wf2Q
-         U7B/Vi1rbyiHo0zbPFqSfPIqPxWwIviFGsBmjxjNqMcb3KT5qDgGoMMdWChQDqk/l0
-         TEdPM+ImpMLIB2bm/0s1fiZ+5jjO/q/jl7G4OX7JyuQ7LYnQPfPVfbJy5dTPp6MRqn
-         7B9vtgco71U3w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-kernel@vger.kernel.org, ksummit@lists.linux.dev
-Cc:     tab-elections@lists.linuxfoundation.org,
-        tech-board@lists.linuxfoundation.org
-Subject: Results from the 2022 LF TAB election
-Date:   Thu, 15 Sep 2022 01:44:49 -0600
-Message-ID: <87h71984jy.fsf@meer.lwn.net>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8DF2C33732;
+        Thu, 15 Sep 2022 07:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663227961; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EnoU/oELLwx7p7FCDzEhUZP1vg7QCXH0MU0bcZrnfVo=;
+        b=stb3TERw1nqdrOz8v4GoQVB1Ctk1dyt5BukieX68jy2Z9lMoIZKC8+odVpz0f4c1kC/ZhU
+        FNl8Ir+D3LGQf4zVcpfUcNM8oAAJqG5LAWTAar7FLTCnoXOMc5suJtcJvKLukZ3Owh46aZ
+        oTTRHbObzO9JHSIHoXKF/P5AWTZv2QQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663227961;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EnoU/oELLwx7p7FCDzEhUZP1vg7QCXH0MU0bcZrnfVo=;
+        b=GTQpKi4wGUMEvaTnuTnr7Bp1kLM28ZxxfF2RW+t1dIrXf9wYL0A7YMBcPJXCX1XxWVPXSm
+        wZ320PlCvWzO7kCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31C61133A7;
+        Thu, 15 Sep 2022 07:46:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qtlHCTnYImOwaQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Thu, 15 Sep 2022 07:46:01 +0000
+Date:   Thu, 15 Sep 2022 09:45:59 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/16] mm/page_alloc: use costly_order in
+ WARN_ON_ONCE_GFP()
+Message-ID: <YyLYN5uMIQw3UFnP@localhost.localdomain>
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-15-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909092451.24883-15-linmiaohe@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -48,24 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were 960 eligible voters for the 2022 Linux Foundation Technical
-Advisory Board election, of whom 267 cast ballots.  The results were:
+On Fri, Sep 09, 2022 at 05:24:49PM +0800, Miaohe Lin wrote:
+> There's no need to check whether order > PAGE_ALLOC_COSTLY_ORDER again.
+> Minor readability improvement.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-1. Kees Cook
-2. Christian Brauner
-3. Jakub Kicinski
-4. Dan Williams
-5. Dave Hansen
----
-6. Chris Mason
-7. KP Singh
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-The top five candidates will serve two-year terms on the TAB.  Thanks to
-all who participated in this years election; please reach out to
-tab-elections@lists.linuxfoundation.org if you have any questions.
+> ---
+>  mm/page_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 63ad25e86010..262e8972e019 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5272,7 +5272,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+>  		 * so that we can identify them and convert them to something
+>  		 * else.
+>  		 */
+> -		WARN_ON_ONCE_GFP(order > PAGE_ALLOC_COSTLY_ORDER, gfp_mask);
+> +		WARN_ON_ONCE_GFP(costly_order, gfp_mask);
+>  
+>  		/*
+>  		 * Help non-failing allocations by giving them access to memory
+> -- 
+> 2.23.0
+> 
 
-jon
-
-P.S. On a personal note: a special "thank you" to Chris Mason, who has
-     led the TAB well for many years.
-
+-- 
+Oscar Salvador
+SUSE Labs
