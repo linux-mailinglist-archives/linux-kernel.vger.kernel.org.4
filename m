@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2486E5B954E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5FA5B9553
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiIOHZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S229942AbiIOHZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiIOHZV (ORCPT
+        with ESMTP id S229779AbiIOHZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:25:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15257E35;
-        Thu, 15 Sep 2022 00:25:11 -0700 (PDT)
+        Thu, 15 Sep 2022 03:25:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBC62AB1;
+        Thu, 15 Sep 2022 00:25:18 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A469C6601FC7;
-        Thu, 15 Sep 2022 08:25:09 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1B076601FF1;
+        Thu, 15 Sep 2022 08:25:10 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663226710;
-        bh=78egXpcwYI0LobAOtW6zrOMH4zDX0mRd/unB/BTkHWw=;
+        s=mail; t=1663226711;
+        bh=U0W/o4wRU8Wehp4YXbC2Ill8pHldHdAIiV0c7iykL4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CcqqYUxd23wXDO/PMP8P6pVxTGqgIjbg8z3+BjTYLRW2FTWRiL+2EHxxwgMLA3xrQ
-         WFYcsBZipLCSHQH7lFEEQHD9gGSaGX26S55KaS+z+C3JikynwGn4yNhP3YLJbobcsS
-         Z4kUG/lvZHwGvuR6753SXtR1ScX3fcJH1CrVw8e5x2fLtyJHaikVA8ZwtYrDj9mQQv
-         qr084HTM9O1TBoKYCatkqxuk8lYj5ih04h3lX1CV7wwdUi121d3W4s6DpF/Z53Wzrr
-         3Q+kjdFiOpeZ6SeIG7bnHYKaeV3v3xlf21Dyp641hSUGp8MG8T66AIlo571mVoYLH4
-         Mzw8Yw7aX9ilg==
+        b=WncQq0NUEBwVuR0en5cOVJreTJbFEHZ08D6FApbOmyxKEyVx2rHcdCOg7l2Ip4pRP
+         OUPSF25gh2mfwh3KRo+Pi2YZMee++b3Y4La3dT9xdSYMgisFqJPJR0eyaYvs3kiO4C
+         bwHV9OlpkjbvzPNgiRb+Im7uOGRGft8z0mXnNFgCX7LM24as4MUVLUlBMdCmyHWRsB
+         LwmtpsH4gQgiKompQP8nRfhay3i83vo9WtIditYsWRXxMKiGF+FPUqNZMqe5xpyM3W
+         LaMtu/g87OfQWfE2TlluRQGsIlA/23buM954kwSI1/E30/uS1mAynVn3A2iW0ZMZ3b
+         UGzx+r718T+CA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -45,9 +45,9 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
-Subject: [PATCH v2 04/10] clk: mediatek: mt8183: Add clk mux notifier for MFG mux
-Date:   Thu, 15 Sep 2022 09:24:52 +0200
-Message-Id: <20220915072458.18232-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 05/10] clk: mediatek: clk-mt8195-mfg: Reparent mfg_bg3d and propagate rate changes
+Date:   Thu, 15 Sep 2022 09:24:53 +0200
+Message-Id: <20220915072458.18232-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220915072458.18232-1-angelogioacchino.delregno@collabora.com>
 References: <20220915072458.18232-1-angelogioacchino.delregno@collabora.com>
@@ -62,78 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+The MFG_BG3D is a gate to enable/disable clock output to the GPU,
+but the actual output is decided by multiple muxes; in particular:
+mfg_ck_fast_ref muxes between "slow" (top_mfg_core_tmp) and
+"fast" (MFGPLL) clock, while top_mfg_core_tmp muxes between the
+26MHz clock and various system PLLs.
 
-When the MFG PLL clock, which is upstream of the MFG clock, is changed,
-the downstream clock and consumers need to be switched away from the PLL
-over to a stable clock to avoid glitches.
+This also implies that "top_mfg_core_tmp" is a parent of the
+"mfg_ck_fast_ref" mux (and not vice-versa), so reparent the
+MFG_BG3D gate to the latter and add the CLK_SET_RATE_PARENT
+flag to it: this way we ensure propagating rate changes that
+are requested on MFG_BG3D along its entire clock tree.
 
-This is done through the use of the newly added clk mux notifier. The
-notifier is set on the mux itself instead of the upstream PLL, but in
-practice this works, as the rate change notifitcations are propogated
-throughout the sub-tree hanging off the PLL. Just before rate changes,
-the MFG mux is temporarily and transparently switched to the 26 MHz
-main crystal. After the rate change, the mux is switched back.
-
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-[Angelo: Rebased to assign clk_ops in mtk_mux_nb]
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- drivers/clk/mediatek/clk-mt8183.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/clk/mediatek/clk-mt8195-mfg.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 8512101e1189..1860a35a723a 100644
---- a/drivers/clk/mediatek/clk-mt8183.c
-+++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -1198,10 +1198,33 @@ static void clk_mt8183_top_init_early(struct device_node *node)
- CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
- 			clk_mt8183_top_init_early);
+diff --git a/drivers/clk/mediatek/clk-mt8195-mfg.c b/drivers/clk/mediatek/clk-mt8195-mfg.c
+index 9411c556a5a9..c94cb71bd9b9 100644
+--- a/drivers/clk/mediatek/clk-mt8195-mfg.c
++++ b/drivers/clk/mediatek/clk-mt8195-mfg.c
+@@ -17,10 +17,12 @@ static const struct mtk_gate_regs mfg_cg_regs = {
+ };
  
-+/* Register mux notifier for MFG mux */
-+static int clk_mt8183_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
-+{
-+	struct mtk_mux_nb *mfg_mux_nb;
-+	int i;
-+
-+	mfg_mux_nb = devm_kzalloc(dev, sizeof(*mfg_mux_nb), GFP_KERNEL);
-+	if (!mfg_mux_nb)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ARRAY_SIZE(top_muxes); i++)
-+		if (top_muxes[i].id == CLK_TOP_MUX_MFG)
-+			break;
-+	if (i == ARRAY_SIZE(top_muxes))
-+		return -EINVAL;
-+
-+	mfg_mux_nb->ops = top_muxes[i].ops;
-+	mfg_mux_nb->bypass_index = 0; /* Bypass to 26M crystal */
-+
-+	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
-+}
-+
- static int clk_mt8183_top_probe(struct platform_device *pdev)
- {
- 	void __iomem *base;
- 	struct device_node *node = pdev->dev.of_node;
-+	int ret;
+ #define GATE_MFG(_id, _name, _parent, _shift)			\
+-	GATE_MTK(_id, _name, _parent, &mfg_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
++	GATE_MTK_FLAGS(_id, _name, _parent, &mfg_cg_regs,	\
++		       _shift, &mtk_clk_gate_ops_setclr,	\
++		       CLK_SET_RATE_PARENT)
  
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
-@@ -1227,6 +1250,11 @@ static int clk_mt8183_top_probe(struct platform_device *pdev)
- 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
- 		top_clk_data);
+ static const struct mtk_gate mfg_clks[] = {
+-	GATE_MFG(CLK_MFG_BG3D, "mfg_bg3d", "top_mfg_core_tmp", 0),
++	GATE_MFG(CLK_MFG_BG3D, "mfg_bg3d", "mfg_ck_fast_ref", 0),
+ };
  
-+	ret = clk_mt8183_reg_mfg_mux_notifier(&pdev->dev,
-+					      top_clk_data->hws[CLK_TOP_MUX_MFG]->clk);
-+	if (ret)
-+		return ret;
-+
- 	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
- 				      top_clk_data);
- }
+ static const struct mtk_clk_desc mfg_desc = {
 -- 
 2.37.2
 
