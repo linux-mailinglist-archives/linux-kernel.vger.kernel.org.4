@@ -2,290 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202D05B95E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB265B95E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiIOIBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S230137AbiIOICV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiIOIBJ (ORCPT
+        with ESMTP id S229826AbiIOICT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:01:09 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D0D4D170
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:01:04 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id v1so17577888plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:01:04 -0700 (PDT)
+        Thu, 15 Sep 2022 04:02:19 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0169F6B;
+        Thu, 15 Sep 2022 01:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=Uz6OOQGn2ojsoy4NxY6r+ZIL82T2lAVU3OWCDkI7HIk=;
-        b=FYvuPdzBSIdK7mGtbn5oflgjSb2mpir/rNfKSdUY0XNIVfXdcaZXsX3KfSyK3x4yhP
-         xUr7kY6JF+0zWablNOH0kgV6ZYDOqS95hJERCIbozhKzUJgj38Sq9QnbcrQK+S8fiONg
-         kps7HWm0muoS8peoR46bcMweeSiCvE55cS2kLJNsyD2D2d+sBuZwgaKu6G4ECOyuoJ4T
-         TaX3dgQHXFLZUAHQW7USRDV7wPnrSJu2qSIScIqhnyTl8d9Hwe6o2Kq4Dq7JDx+qFtTu
-         IHY5Ipkk2UxgBUnxLpa+zeGi+UBf3cTReLiv3Bn/U0/auxDJaOzVf6puvfMspJf1FrCV
-         00ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=Uz6OOQGn2ojsoy4NxY6r+ZIL82T2lAVU3OWCDkI7HIk=;
-        b=szJGhiGoC5V3UsRsUm/mJiWeix3zsqHNExaGUtxv6HXxG72qfsNlrB1z/lVbn3SrCy
-         xASpUPD3+hz6i+u+sM1E662P3yJxvLi1p+Nvrnhanrepdk5PcvPsSyQWrQA7jUNi2eU+
-         hVbNxKNpJMhKNtt+b85TiJ1eSwo+WRQRANiDBXmtiBqBEkD7ikF5r7WA7BZLAEUCV6wD
-         zxLn/nj0FxlVMhcUjWPc+0SvO/FCj4enkr02Gcgp3Lx2PLuIdrBB5zurStE/PoWhzJLN
-         yiEsgnx3quoRnBjNa80BgQihPk1Im8NJ8XDCuflpxxPjHAlTxHvwpKTThffU8vPmcyKK
-         HEbg==
-X-Gm-Message-State: ACrzQf3wlmdG7YvSFuQTJUUnWUWMYxPZduePRWsadReQXBo+geTeZCPZ
-        xEC5EGP36f3tSBxJbZrSgB/O4Q==
-X-Google-Smtp-Source: AMsMyM6s1VythNV5AWnn4wFPgqpNcp0ig4hXS8XsbLDwtOWOVMsNCx/FWLVIgO2kydIUeEL9PgPZGw==
-X-Received: by 2002:a17:902:6b0b:b0:178:3a78:811d with SMTP id o11-20020a1709026b0b00b001783a78811dmr3062739plk.157.1663228864256;
-        Thu, 15 Sep 2022 01:01:04 -0700 (PDT)
-Received: from [10.76.37.214] ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id z14-20020aa79e4e000000b00537eb0084f9sm11898989pfq.83.2022.09.15.01.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 01:01:03 -0700 (PDT)
-Message-ID: <748071b4-446a-410e-6c75-e8846b990c47@bytedance.com>
-Date:   Thu, 15 Sep 2022 16:00:58 +0800
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663228938; x=1694764938;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ybAfiFs8eUgGnH4G//19S9jDye+SzwnhGZadHt7eQ0U=;
+  b=Ueqeo7fuhWFl5/D5JTlpk2ZBnn9DhhYbs4DCAoiuFEj0rdfdEbkXXS8F
+   x34DcY0Mlq7dSX+TX/m2SAu6AKvXF16se1yLQ6QxfVpYJ0PSWYpMDV6dD
+   ugz4lP/efDHEqqJUZDfjD9jIeIBd3/D1ZkCyVnm9b113xWSmiifXgMrnT
+   PTmoL1qozrkDHKRy4A0kfS+csceJhGsujAzN5YIGg02uGpWzU+cCGlnp6
+   sY3x4QdhYg8N8IipSjEE9GPXUUBSJu08T096CwAj5QxVESVjjCet5tfCb
+   hlq8Yxafm5ZWv6y1JIg2NIRghWUxr+PR0yoQT8DX4iZH/qAlitgBQDMMi
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
+   d="scan'208";a="26194008"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 15 Sep 2022 10:02:16 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 15 Sep 2022 10:02:16 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 15 Sep 2022 10:02:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663228936; x=1694764936;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ybAfiFs8eUgGnH4G//19S9jDye+SzwnhGZadHt7eQ0U=;
+  b=cSAaWru0nDubmmWhr0zTwPPyhJFQNXWGn1Ak09iS/SKA8F6uBKpMzntp
+   vIa7oGoW/lxSIMKvWrwSeNh6GXjfmubq5XTt7qw7kHHIdlIR7r4I0Cou+
+   Wry+N9NQw0mLjbB3OrBZ/kBIajMOulxaCY+XuQa93rVBioUkBM2ji2sYm
+   Fd91o+B7BgsRpzezFrhhhYxQGzv9KhEkk0FgVTqt+ZRIEh7cBJ/nKatlB
+   jE7MFGre/SfDFYHiVEQeRz8u2Ash9DaB+hXbbmrKVkiSWRb0oJXHRExyD
+   92FT5avEHCeL6qssvQxuILKRjtPIx6TAR+7L82jLPVZdI/yxXPtKDTJsq
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
+   d="scan'208";a="26194007"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 15 Sep 2022 10:02:16 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id C9CD5280056;
+        Thu, 15 Sep 2022 10:02:15 +0200 (CEST)
+Message-ID: <a959cfe90356b702727413e7c14b246875eb88b6.camel@ew.tq-group.com>
+Subject: Re: [PATCH 0/9] Input: synaptics-rmi4 - Bootloader v7/v8 firmware
+ update improvements
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 15 Sep 2022 10:02:13 +0200
+In-Reply-To: <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
+References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+         <26790cfecb827245187233bc81f9fb89553bb4a7.camel@ew.tq-group.com>
+         <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [External] Re: [PATCH V3 4/6] erofs: introduce fscache-based
- domain
-To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
-        huyue2@coolpad.com
-References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
- <20220914105041.42970-5-zhujia.zj@bytedance.com>
- <YyHVQGftl/0Bf4kW@B-P7TQMD6M-0146.lan>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <YyHVQGftl/0Bf4kW@B-P7TQMD6M-0146.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-08-15 at 09:43 +0200, Matthias Schiffer wrote:
+> On Mon, 2022-06-27 at 10:31 +0200, Matthias Schiffer wrote:
+> > On Wed, 2022-06-08 at 14:47 +0200, Matthias Schiffer wrote:
+> > > This fixes the firmware update function with bootloader v8, allows to
+> > > recover from interrupted updates with v7/v8, and does some code cleanup.
+> > > 
+> > > I believe that the code that allows to recover from a broken partition
+> > > table is also necessary to make flashing a different partition table
+> > > work at all, but I wasn't able to verify that, as I don't have any firmware
+> > > images with different partition tables to test with. In any case, I'm
+> > > pretty sure that it is working correctly now, as recovery from a mostly
+> > > empty flash without partition table has been tested successfully.
+> > > 
+> > > I have only tested the new code with bootloader v8, and I don't have the
+> > > documentation / interfacing guide for v7, so it would be great if anyone
+> > > could check that I didn't break updates for v7.
+> > 
+> > Hi everyone,
+> > 
+> > any news regarding this patch series?
+> > 
+> > 
+> > Kind regards,
+> > Matthias
+> 
+> Ping - can we get this applied, or at least any kind of feedback?
+> 
+> 
+> Kind regards,
+> Matthias
 
 
-在 2022/9/14 21:21, Gao Xiang 写道:
-> On Wed, Sep 14, 2022 at 06:50:39PM +0800, Jia Zhu wrote:
->> A new fscache-based shared domain mode is going to be introduced for
->> erofs. In which case, same data blobs in same domain will be shared
->> and reused to reduce on-disk space usage.
->>
->> As the first step, we use pseudo mnt to manage and maintain domain's
->> lifecycle.
->>
->> The implementation of sharing blobs will be introduced in subsequent
->> patches.
->>
->> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
->> ---
->>   fs/erofs/fscache.c  | 134 ++++++++++++++++++++++++++++++++++++++------
->>   fs/erofs/internal.h |   9 +++
->>   2 files changed, 127 insertions(+), 16 deletions(-)
->>
->> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
->> index 4159cf781924..b2100dc67cde 100644
->> --- a/fs/erofs/fscache.c
->> +++ b/fs/erofs/fscache.c
->> @@ -1,10 +1,14 @@
->>   // SPDX-License-Identifier: GPL-2.0-or-later
->>   /*
->>    * Copyright (C) 2022, Alibaba Cloud
->> + * Copyright (C) 2022, Bytedance Inc. All rights reserved.
->>    */
->>   #include <linux/fscache.h>
->>   #include "internal.h"
->>   
->> +static DEFINE_MUTEX(erofs_domain_list_lock);
->> +static LIST_HEAD(erofs_domain_list);
->> +
->>   static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
->>   					     loff_t start, size_t len)
->>   {
->> @@ -417,6 +421,106 @@ const struct address_space_operations erofs_fscache_access_aops = {
->>   	.readahead = erofs_fscache_readahead,
->>   };
->>   
->> +static
->> +struct erofs_domain *erofs_fscache_domain_get(struct erofs_domain *domain)
->> +{
->> +	refcount_inc(&domain->ref);
->> +	return domain;
->> +}
+Ping - another month has passed.
+
+Should I resend the series? Not much has happened in the RMI4 driver,
+so the patches still apply cleanly to latest linux-next.
+
+Kind regards,
+Matthias
+
+
+
 > 
-> We can just open-code that.
-Thanks, I'll revise it.
 > 
->> +
->> +static void erofs_fscache_domain_put(struct erofs_domain *domain)
->> +{
->> +	if (!domain)
->> +		return;
->> +	if (refcount_dec_and_test(&domain->ref)) {
->> +		fscache_relinquish_volume(domain->volume, NULL, false);
->> +		mutex_lock(&erofs_domain_list_lock);
->> +		list_del(&domain->list);
->> +		mutex_unlock(&erofs_domain_list_lock);
->> +		kfree(domain->domain_id);
->> +		kfree(domain);
->> +	}
->> +}
->> +
->> +static int erofs_fscache_register_volume(struct super_block *sb)
->> +{
->> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +	char *domain_id = sbi->opt.domain_id;
->> +	struct fscache_volume *volume;
->> +	char *name;
->> +	int ret = 0;
->> +
->> +	if (domain_id)
->> +		name = kasprintf(GFP_KERNEL, "erofs,%s", domain_id);
->> +	else
->> +		name = kasprintf(GFP_KERNEL, "erofs,%s", sbi->opt.fsid);
 > 
-> I think we could just use
-> 
-> 	name = kasprintf(GFP_KERNEL, "erofs,%s",
-> 			 domain_id ? domain_id : sbi->opt.fsid);
-> 
-> here.
-Thanks.
-> 
->> +	if (!name)
->> +		return -ENOMEM;
->> +
->> +	volume = fscache_acquire_volume(name, NULL, NULL, 0);
->> +	if (IS_ERR_OR_NULL(volume)) {
->> +		erofs_err(sb, "failed to register volume for %s", name);
->> +		ret = volume ? PTR_ERR(volume) : -EOPNOTSUPP;
->> +		volume = NULL;
->> +	}
->> +
->> +	sbi->volume = volume;
->> +	kfree(name);
->> +	return ret;
->> +}
->> +
->> +static int erofs_fscache_init_domain(struct super_block *sb)
->> +{
->> +	int err;
->> +	struct erofs_domain *domain;
->> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +
->> +	domain = kzalloc(sizeof(struct erofs_domain), GFP_KERNEL);
->> +	if (!domain)
->> +		return -ENOMEM;
->> +
->> +	domain->domain_id = kstrdup(sbi->opt.domain_id, GFP_KERNEL);
->> +	if (!domain->domain_id) {
->> +		kfree(domain);
->> +		return -ENOMEM;
->> +	}
->> +	sbi->domain = domain;
->> +	err = erofs_fscache_register_volume(sb);
->> +	if (err)
->> +		goto out;
->> +
->> +	domain->volume = sbi->volume;
->> +	refcount_set(&domain->ref, 1);
->> +	mutex_init(&domain->mutex);
->> +	list_add(&domain->list, &erofs_domain_list);
->> +	return 0;
->> +out:
->> +	kfree(domain->domain_id);
->> +	kfree(domain);
->> +	sbi->domain = NULL;
->> +	return err;
->> +}
->> +
->> +static int erofs_fscache_register_domain(struct super_block *sb)
->> +{
->> +	int err;
->> +	struct erofs_domain *domain;
->> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +
->> +	mutex_lock(&erofs_domain_list_lock);
->> +	list_for_each_entry(domain, &erofs_domain_list, list) {
->> +		if (!strcmp(domain->domain_id, sbi->opt.domain_id)) {
->> +			sbi->domain = erofs_fscache_domain_get(domain);
->> +			sbi->volume = domain->volume;
->> +			mutex_unlock(&erofs_domain_list_lock);
->> +			return 0;
->> +		}
->> +	}
->> +	err = erofs_fscache_init_domain(sb);
-> 
-> why introduce erofs_fscache_init_domain?
-> 
-To make error handling path simpler, avoid lots of 'goto' and 'unlock'
->> +	mutex_unlock(&erofs_domain_list_lock);
->> +	return err;
->> +}
->> +
->>   struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
->>   						     char *name, bool need_inode)
->>   {
->> @@ -486,24 +590,16 @@ void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
->>   int erofs_fscache_register_fs(struct super_block *sb)
->>   {
->>   	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> -	struct fscache_volume *volume;
->>   	struct erofs_fscache *fscache;
->> -	char *name;
->> -	int ret = 0;
->> +	int ret;
->>   
->> -	name = kasprintf(GFP_KERNEL, "erofs,%s", sbi->opt.fsid);
->> -	if (!name)
->> -		return -ENOMEM;
->> +	if (sbi->opt.domain_id)
->> +		ret = erofs_fscache_register_domain(sb);
->> +	else
->> +		ret = erofs_fscache_register_volume(sb);
->>   
->> -	volume = fscache_acquire_volume(name, NULL, NULL, 0);
->> -	if (IS_ERR_OR_NULL(volume)) {
->> -		erofs_err(sb, "failed to register volume for %s", name);
->> -		ret = volume ? PTR_ERR(volume) : -EOPNOTSUPP;
->> -		volume = NULL;
->> -	}
->> -
->> -	sbi->volume = volume;
->> -	kfree(name);
->> +	if (ret)
->> +		return ret;
->>   
->>   	fscache = erofs_fscache_register_cookie(sb, sbi->opt.fsid, true);
->>   	if (IS_ERR(fscache))
->> @@ -518,7 +614,13 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
->>   	struct erofs_sb_info *sbi = EROFS_SB(sb);
->>   
->>   	erofs_fscache_unregister_cookie(sbi->s_fscache);
->> -	fscache_relinquish_volume(sbi->volume, NULL, false);
->>   	sbi->s_fscache = NULL;
->> +
->> +	if (sbi->domain)
->> +		erofs_fscache_domain_put(sbi->domain);
->> +	else
->> +		fscache_relinquish_volume(sbi->volume, NULL, false);
->> +
-> 
-> How about using one helper and pass in sb directly instead?
-Thanks for your suggestion, I'll revise it in next version.
-> 
-> Thanks,
-> Gao Xiang
+> > 
+> > 
+> > > Matthias Schiffer (9):
+> > >   Input: synaptics-rmi4 - fix firmware update operations with bootloader
+> > >     v8
+> > >   Input: synaptics-rmi4 - introduce rmi_f34v7_check_command_status()
+> > >     helper
+> > >   Input: synaptics-rmi4 - fix command completion check for bootloader
+> > >     v7/v8
+> > >   Input: synaptics-rmi4 - rewrite partition table unconditionally
+> > >   Input: synaptics-rmi4 - reset after writing partition table
+> > >   Input: synaptics-rmi4 - make rmi_f34v7_erase_all() use the "erase all"
+> > >     command
+> > >   Input: synaptics-rmi4 - remove unneeded struct register_offset
+> > >   Input: synaptics-rmi4 - simplify rmi_f34v7_start_reflash()
+> > >   Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
+> > > 
+> > >  drivers/input/rmi4/rmi_f34.c   |  16 +-
+> > >  drivers/input/rmi4/rmi_f34.h   |  17 --
+> > >  drivers/input/rmi4/rmi_f34v7.c | 349 +++++++--------------------------
+> > >  3 files changed, 81 insertions(+), 301 deletions(-)
+> > > 
+
