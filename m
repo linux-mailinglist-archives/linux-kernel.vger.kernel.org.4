@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8F25B9CF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81F15B9CFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIOOX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S230179AbiIOOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiIOOXq (ORCPT
+        with ESMTP id S229913AbiIOOXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:23:46 -0400
+        Thu, 15 Sep 2022 10:23:48 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1A324958;
-        Thu, 15 Sep 2022 07:23:45 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 14:23:42 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9693041D11;
+        Thu, 15 Sep 2022 07:23:46 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:23:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663251824;
+        s=2020; t=1663251825;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EZi+lu5Eqhg5mHLXKWBgYIAlgzIj4opQNwT9tCgnZ/U=;
-        b=SivsOrmxfzncYPO/0EBPgquaEqwgZhUX4k7kaPzvJkf0VUPfj/+zCCpbbMJTqJLchtJhAO
-        C5fWKvn1UNSpGDqAHbI5euHykAJqr6U+dzt1JgETONj3QjCal1n10dkzOBM+WeikIp+Nth
-        XVx8RYGy9KEnyOj/IyTRO0EjlJcpjyqZBDJepcZ+/SUcR8oxH7e3334RcHAh+6K7h19FUi
-        hpC/yZpfieu6+T/XieiiciJUPPzZrxu/gHIp25QX/Tu0WMO1z4Sk8T3xyAsCVoE1RLxJ4Z
-        vHge/sZhWq7nllcrcn0HrSeO1HeuAGdRGUJ7940Da3x9p0H2Itdw0N0X+5z57w==
+        bh=6fqgj6qZwblSD7CJXVafHPWquRZrtVqqXkwzgyNPlC8=;
+        b=bBOnSm0eRu9KDAXWvFrxYsCXieYlX7shXVTGj85kREbZw8xwXeKcsuWZCCY43Uz2p3GELc
+        hNUHTOdsALOyjBfIlowYZGdPhgR3+AhVkuMil8ao/AZ+0BxzzQZjYxa99CuO9abKczOxws
+        kDwAmLGXC8EMfwvKVpxlF5tr8La0vv5feWusLteatPH8OkFCHrJ75kx5rrcq4e2G/x1io/
+        MmTjaWltI5HTpWlx5wZsth5GQq54FjMXmDzO1ViK8IPWWhzLERiYrJuPZeGWOMtEmLp6zD
+        inAY3Qs5mIK0We4l5IM2BkJJovGu4t0hfMfnR5pWgDnoNXxkpIEehWEZ9GbUvQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663251824;
+        s=2020e; t=1663251825;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EZi+lu5Eqhg5mHLXKWBgYIAlgzIj4opQNwT9tCgnZ/U=;
-        b=jr+Eq1dBLoon5woyQ4tuYj/K7TRu4y2PCRDoYE1W5gXiW/pkh2RuBlTnxwsZWWjIM5beH+
-        bofQ4lpdPuE3QhCQ==
-From:   "tip-bot2 for Gokul krishna Krishnakumar" <tip-bot2@linutronix.de>
+        bh=6fqgj6qZwblSD7CJXVafHPWquRZrtVqqXkwzgyNPlC8=;
+        b=t4WtuLq+NPVTJKFHpydmnaQzfFpqKqTpk3BWRiLPkuiSXVB3DDNeO7gsBhlW+4W274s0zg
+        wy3J5LKKHyuR/eAQ==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/rwsem: Disable preemption while trying
- for rwsem lock
-Cc:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>, x86@kernel.org,
+Subject: [tip: locking/core] locking: Detect includes rwlock.h outside of spinlock.h
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <1662661467-24203-1-git-send-email-quic_mojha@quicinc.com>
-References: <1662661467-24203-1-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <YweemHxJx7O8rjBx@linutronix.de>
+References: <YweemHxJx7O8rjBx@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166325182289.401.441252209836174142.tip-bot2@tip-bot2>
+Message-ID: <166325182404.401.6620593298875827411.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,95 +67,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     48dfb5d2560d36fb16c7d430c229d1604ea7d185
-Gitweb:        https://git.kernel.org/tip/48dfb5d2560d36fb16c7d430c229d1604ea7d185
-Author:        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-AuthorDate:    Thu, 08 Sep 2022 23:54:27 +05:30
+Commit-ID:     2747b93ebbede2af2d7bb088b9ddae3193ceede8
+Gitweb:        https://git.kernel.org/tip/2747b93ebbede2af2d7bb088b9ddae3193ceede8
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Thu, 25 Aug 2022 18:08:56 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Thu, 15 Sep 2022 16:14:02 +02:00
 
-locking/rwsem: Disable preemption while trying for rwsem lock
+locking: Detect includes rwlock.h outside of spinlock.h
 
-Make the region inside the rwsem_write_trylock non preemptible.
+From: Michael S. Tsirkin <mst@redhat.com>
 
-We observe RT task is hogging CPU when trying to acquire rwsem lock
-which was acquired by a kworker task but before the rwsem owner was set.
+The check for __LINUX_SPINLOCK_H within rwlock.h (and other files)
+detects the direct include of the header file if it is at the very
+beginning of the include section.
+If it is listed later then chances are high that spinlock.h was already
+included (including rwlock.h) and the additional listing of rwlock.h
+will not cause any failure.
 
-Here is the scenario:
-1. CFS task (affined to a particular CPU) takes rwsem lock.
+On PREEMPT_RT this additional rwlock.h will lead to compile failures
+since it uses a different rwlock implementation.
 
-2. CFS task gets preempted by a RT task before setting owner.
+Add __LINUX_INSIDE_SPINLOCK_H to spinlock.h and check for this instead
+of __LINUX_SPINLOCK_H to detect wrong includes. This will help detect
+direct includes of rwlock.h with without PREEMPT_RT enabled.
 
-3. RT task (FIFO) is trying to acquire the lock, but spinning until
-RT throttling happens for the lock as the lock was taken by CFS task.
+[ bigeasy: add remaining __LINUX_SPINLOCK_H user and rewrite
+  commit description. ]
 
-This patch attempts to fix the above issue by disabling preemption
-until owner is set for the lock. While at it also fix the issues
-at the places where rwsem_{set,clear}_owner() are called.
-
-This also adds lockdep annotation of preemption disable in
-rwsem_{set,clear}_owner() on Peter Z. suggestion.
-
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Waiman Long <longman@redhat.com>
-Link: https://lore.kernel.org/r/1662661467-24203-1-git-send-email-quic_mojha@quicinc.com
+Link: https://lkml.kernel.org/r/YweemHxJx7O8rjBx@linutronix.de
 ---
- kernel/locking/rwsem.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ include/linux/rwlock.h           | 2 +-
+ include/linux/spinlock.h         | 2 ++
+ include/linux/spinlock_api_smp.h | 2 +-
+ include/linux/spinlock_api_up.h  | 2 +-
+ include/linux/spinlock_rt.h      | 2 +-
+ include/linux/spinlock_up.h      | 2 +-
+ 6 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 65f0262..4487359 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -133,14 +133,19 @@
-  * the owner value concurrently without lock. Read from owner, however,
-  * may not need READ_ONCE() as long as the pointer value is only used
-  * for comparison and isn't being dereferenced.
-+ *
-+ * Both rwsem_{set,clear}_owner() functions should be in the same
-+ * preempt disable section as the atomic op that changes sem->count.
-  */
- static inline void rwsem_set_owner(struct rw_semaphore *sem)
- {
-+	lockdep_assert_preemption_disabled();
- 	atomic_long_set(&sem->owner, (long)current);
- }
+diff --git a/include/linux/rwlock.h b/include/linux/rwlock.h
+index 8f416c5..c0ef596 100644
+--- a/include/linux/rwlock.h
++++ b/include/linux/rwlock.h
+@@ -1,7 +1,7 @@
+ #ifndef __LINUX_RWLOCK_H
+ #define __LINUX_RWLOCK_H
  
- static inline void rwsem_clear_owner(struct rw_semaphore *sem)
- {
-+	lockdep_assert_preemption_disabled();
- 	atomic_long_set(&sem->owner, 0);
- }
+-#ifndef __LINUX_SPINLOCK_H
++#ifndef __LINUX_INSIDE_SPINLOCK_H
+ # error "please don't include this file directly"
+ #endif
  
-@@ -251,13 +256,16 @@ static inline bool rwsem_read_trylock(struct rw_semaphore *sem, long *cntp)
- static inline bool rwsem_write_trylock(struct rw_semaphore *sem)
- {
- 	long tmp = RWSEM_UNLOCKED_VALUE;
-+	bool ret = false;
- 
-+	preempt_disable();
- 	if (atomic_long_try_cmpxchg_acquire(&sem->count, &tmp, RWSEM_WRITER_LOCKED)) {
- 		rwsem_set_owner(sem);
--		return true;
-+		ret = true;
- 	}
- 
--	return false;
-+	preempt_enable();
-+	return ret;
- }
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 5c0c517..1341f7d 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __LINUX_SPINLOCK_H
+ #define __LINUX_SPINLOCK_H
++#define __LINUX_INSIDE_SPINLOCK_H
  
  /*
-@@ -1352,8 +1360,10 @@ static inline void __up_write(struct rw_semaphore *sem)
- 	DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) &&
- 			    !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE), sem);
+  * include/linux/spinlock.h - generic spinlock/rwlock declarations
+@@ -492,4 +493,5 @@ int __alloc_bucket_spinlocks(spinlock_t **locks, unsigned int *lock_mask,
  
-+	preempt_disable();
- 	rwsem_clear_owner(sem);
- 	tmp = atomic_long_fetch_add_release(-RWSEM_WRITER_LOCKED, &sem->count);
-+	preempt_enable();
- 	if (unlikely(tmp & RWSEM_FLAG_WAITERS))
- 		rwsem_wake(sem);
- }
+ void free_bucket_spinlocks(spinlock_t *locks);
+ 
++#undef __LINUX_INSIDE_SPINLOCK_H
+ #endif /* __LINUX_SPINLOCK_H */
+diff --git a/include/linux/spinlock_api_smp.h b/include/linux/spinlock_api_smp.h
+index 51fa0da..89eb6f4 100644
+--- a/include/linux/spinlock_api_smp.h
++++ b/include/linux/spinlock_api_smp.h
+@@ -1,7 +1,7 @@
+ #ifndef __LINUX_SPINLOCK_API_SMP_H
+ #define __LINUX_SPINLOCK_API_SMP_H
+ 
+-#ifndef __LINUX_SPINLOCK_H
++#ifndef __LINUX_INSIDE_SPINLOCK_H
+ # error "please don't include this file directly"
+ #endif
+ 
+diff --git a/include/linux/spinlock_api_up.h b/include/linux/spinlock_api_up.h
+index b8ba00c..819aeba 100644
+--- a/include/linux/spinlock_api_up.h
++++ b/include/linux/spinlock_api_up.h
+@@ -1,7 +1,7 @@
+ #ifndef __LINUX_SPINLOCK_API_UP_H
+ #define __LINUX_SPINLOCK_API_UP_H
+ 
+-#ifndef __LINUX_SPINLOCK_H
++#ifndef __LINUX_INSIDE_SPINLOCK_H
+ # error "please don't include this file directly"
+ #endif
+ 
+diff --git a/include/linux/spinlock_rt.h b/include/linux/spinlock_rt.h
+index 835aeda..61c49b1 100644
+--- a/include/linux/spinlock_rt.h
++++ b/include/linux/spinlock_rt.h
+@@ -2,7 +2,7 @@
+ #ifndef __LINUX_SPINLOCK_RT_H
+ #define __LINUX_SPINLOCK_RT_H
+ 
+-#ifndef __LINUX_SPINLOCK_H
++#ifndef __LINUX_INSIDE_SPINLOCK_H
+ #error Do not include directly. Use spinlock.h
+ #endif
+ 
+diff --git a/include/linux/spinlock_up.h b/include/linux/spinlock_up.h
+index 1652107..c872042 100644
+--- a/include/linux/spinlock_up.h
++++ b/include/linux/spinlock_up.h
+@@ -1,7 +1,7 @@
+ #ifndef __LINUX_SPINLOCK_UP_H
+ #define __LINUX_SPINLOCK_UP_H
+ 
+-#ifndef __LINUX_SPINLOCK_H
++#ifndef __LINUX_INSIDE_SPINLOCK_H
+ # error "please don't include this file directly"
+ #endif
+ 
