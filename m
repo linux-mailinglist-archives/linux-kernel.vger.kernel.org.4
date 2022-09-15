@@ -2,187 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1BC5B9F70
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF605B9F75
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiIOQMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S229552AbiIOQPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIOQMF (ORCPT
+        with ESMTP id S229735AbiIOQPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:12:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DABB915D8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE8866252D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 16:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AEBC4347C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 16:12:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663258323;
-        bh=biii+7n43gDq9XV3lLWEwCgiBUcjGdS9pCCJ+UVSt80=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XD60SOBgjmqG2oE/hYFdoVR/0o9EqUozlXe2HtAuCRzaStarFf8z/YDdABs3Q1Utf
-         8jfXldXFUyy6syrxYUcjYHYL1mZXQsrS3GRRcCNsWeBwQ5jsVG3gX0iZBzWRo7whTy
-         Slcc+9a3Y/Q5kRflAZB23mYWDRktGAiKJxRxVihqcJEyjjo6H2l9i/H5PCbec12NSt
-         Er+zMu9vwqZAwy5AfnXQNEDcFtfzOovBS6tAehYkYNiBMi05FZv5RpUMykkRoMAS4B
-         V1jvalmzh0SH9DwhfQyWUv2dqbg3YB8Wp6Iz0y476MmivxD2t9cDcDjgpOgQIPjFEH
-         tbpNB1W2HLICA==
-Received: by mail-lf1-f44.google.com with SMTP id f14so30199711lfg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:12:03 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0RuFhnhhxpLN23q9nESGw40lR1WC7mS/JwoNAkbFs66zcpKUMV
-        f8zlAus6PapCp5Y68Ox0CaznN1lF1V5+QpBBMWVB6g==
-X-Google-Smtp-Source: AMsMyM6A+1amQaBgdn6PNz6+7XLx4sQcOmwWWgNA8pV7010ZefQzIPoOFXBCHMTh3iKNuMgzYaiNCa6qWPB+3IVAEF8=
-X-Received: by 2002:a17:906:9bd3:b0:778:c8e0:fcee with SMTP id
- de19-20020a1709069bd300b00778c8e0fceemr471268ejc.275.1663258310370; Thu, 15
- Sep 2022 09:11:50 -0700 (PDT)
+        Thu, 15 Sep 2022 12:15:14 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B441985F84;
+        Thu, 15 Sep 2022 09:15:08 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sb3so13644221ejb.9;
+        Thu, 15 Sep 2022 09:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v2ge41u1gkNzSONdXiyudp7Lzl9Dg/unbQXBLoKq9hU=;
+        b=iTCO8J125qCrTxA0iFg+H1CARAxPJgyE9NsRJLpA9r9D8bUaWWeCK6S9k7gqxcj3Nm
+         Mu7zY/+rEaZgFvF3wjEs/FobHCbKxmsrSWVf9uhjW17ucx/0cyp/Q1ib2FTk8xzczHyY
+         ywJAEAqZ07B2QbbqEHtOqHcHlhepNzIDpIuWqG5sVY/6MsZdOJTd9iu6/71j0DNuiYCD
+         enZgampz2rDAFbxE+wZj6ogxF96aNxELSuA1qe30H78lJ2taZaCIVIZS+CG8+ggfmQc1
+         cyqx6sWFRvF8/8pLFsW8rTlRDV9dcEw+dm2byuljsDKAO+PVEInoQ4LjchdJHhRI/ul9
+         ktjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v2ge41u1gkNzSONdXiyudp7Lzl9Dg/unbQXBLoKq9hU=;
+        b=l7IiitGP5ga1vkWiNwLI2WDd8SzrRRqHLYWpg7pTshdqzldo84jGwrmsdwt6iW0ncj
+         A/cLhCHRDoqhKH1l8XAtfq/zVj/pUWwm+XNYUsd75wH5KegWnMU9ee1YNd8t6hVRLGCf
+         Q/SMZyoX7c738uRGmQbhMSwBucWVnst+FdiPzKzX3YhifPHD8oqtlCHSmhzSOtR2t77t
+         Rqun7XBz2o+5fYmVztD0GfGwnSp9qXZKxonRgCUN/m//QwFsiIaJ8vV6jveZrEAQFmGZ
+         SvZbBi4V7oC0dE/SXHVBMvbiCNTGqd2B9BW/rBRB8v875g0dzXAf59x86xlvXI+AtMkN
+         O+cg==
+X-Gm-Message-State: ACrzQf2VX2KSPNAL681E0Jlk5CEyzLf5ybbWQfWAfpdWXLBKgohMkxUZ
+        BJehxnjhJXfiAleRlVEB2Gg=
+X-Google-Smtp-Source: AMsMyM5GrGz4GNx2hR374vuxPTyGV4EiiDxDSFGeIzTW/B5ABJzPFHP6RC1/GJ37AU08z/DjL8FVuA==
+X-Received: by 2002:a17:907:3e89:b0:779:4869:b799 with SMTP id hs9-20020a1709073e8900b007794869b799mr467545ejc.91.1663258507015;
+        Thu, 15 Sep 2022 09:15:07 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b007413360a48fsm9224878ejg.50.2022.09.15.09.15.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 09:15:05 -0700 (PDT)
+Message-ID: <1fd48fa0-66eb-5af9-6168-d1df602216a5@gmail.com>
+Date:   Thu, 15 Sep 2022 18:15:04 +0200
 MIME-Version: 1.0
-References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com> <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 15 Sep 2022 17:11:39 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
-Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
-Subject: Re: [PATCH v17 11/12] selftests/bpf: Add test for bpf_verify_pkcs7_signature()
- kfunc
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
-        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 4/5] arm64: dts: change compatible of vdosys0 and vdosys1
+ for mt8195
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
+ <20220914182331.20515-5-jason-jh.lin@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220914182331.20515-5-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 9, 2022 at 1:10 PM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
 
-[...]
 
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-> new file mode 100644
-> index 000000000000..4ceab545d99a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +#define MAX_DATA_SIZE (1024 * 1024)
-> +#define MAX_SIG_SIZE 1024
-> +
-> +typedef __u8 u8;
-> +typedef __u16 u16;
-> +typedef __u32 u32;
-> +typedef __u64 u64;
+On 14/09/2022 20:23, Jason-JH.Lin wrote:
+> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> pipelines binding to 1 mmsys with the same power domain, the same
+> clock driver and the same mediatek-drm driver.
+> 
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
+> 
+> Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture Quality)
+> and they makes VDOSYS0 supports PQ function while they are not
+> including in VDOSYS1.
+> 
+> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> component). It makes VDOSYS1 supports the HDR function while it's not
+> including in VDOSYS0.
+> 
+> To summarize0:
+> Only VDOSYS0 can support PQ adjustment.
+> Only VDOSYS1 can support HDR adjustment.
+> 
+> Therefore, we need to separate these two different mmsys hardwares to
+> 2 different compatibles for MT8195.
+> 
+> Fixes: b852ee68fd72 ("arm64: dts: mt8195: Add display node for vdosys0")
 
-I think you can avoid this and just use u32 and u64 directly.
+No fixes tag needed, there is no runtime bug.
 
-> +
-> +struct bpf_dynptr {
-> +       __u64 :64;
-> +       __u64 :64;
-> +} __attribute__((aligned(8)));
-> +
+Regards,
+Matthias
 
-I think you are doing this because including the uapi headers causes
-type conflicts.
-This does happen quite often. What do other folks think about doing
-something like
-
-#define DYNPTR(x) ((void *)x)
-
-It seems like this will be an issue anytime we use the helpers with
-vmlinux.h and users
-will always have to define this type in their tests.
-
-- KP
-
-> +extern struct bpf_key *bpf_lookup_user_key(__u32 serial, __u64 flags) __ksym;
-> +extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
-> +extern void bpf_key_put(struct bpf_key *key) __ksym;
-> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
-> +                                     struct bpf_dynptr *sig_ptr,
-> +                                     struct bpf_key *trusted_keyring) __ksym;
-> +
-> +u32 monitored_pid;
-> +u32 user_keyring_serial;
-> +u64 system_keyring_id;
-> +
-> +struct data {
-> +       u8 data[MAX_DATA_SIZE];
-> +       u32 data_len;
-> +       u8 sig[MAX_SIG_SIZE];
-> +       u32 sig_len;
-> +};
-> +
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> +       __uint(max_entries, 1);
-> +       __type(key, __u32);
-> +       __type(value, struct data);
-> +} data_input SEC(".maps");
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +SEC("lsm.s/bpf")
-> +int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
-> +{
-> +       struct bpf_dynptr data_ptr, sig_ptr;
-> +       struct data *data_val;
-> +       struct bpf_key *trusted_keyring;
-> +       u32 pid;
-> +       u64 value;
-> +       int ret, zero = 0;
-> +
-> +       pid = bpf_get_current_pid_tgid() >> 32;
-> +       if (pid != monitored_pid)
-> +               return 0;
-> +
-> +       data_val = bpf_map_lookup_elem(&data_input, &zero);
-> +       if (!data_val)
-> +               return 0;
-> +
-> +       bpf_probe_read(&value, sizeof(value), &attr->value);
-> +
-> +       bpf_copy_from_user(data_val, sizeof(struct data),
->
-
-[...]
-
-> --
-> 2.25.1
->
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 905d1a90b406..6ec6d59a16ec 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -1966,7 +1966,7 @@
+>   		};
+>   
+>   		vdosys0: syscon@1c01a000 {
+> -			compatible = "mediatek,mt8195-mmsys", "syscon";
+> +			compatible = "mediatek,mt8195-vdosys0", "syscon";
+>   			reg = <0 0x1c01a000 0 0x1000>;
+>   			mboxes = <&gce0 0 CMDQ_THR_PRIO_4>;
+>   			#clock-cells = <1>;
+> @@ -2101,7 +2101,7 @@
+>   		};
+>   
+>   		vdosys1: syscon@1c100000 {
+> -			compatible = "mediatek,mt8195-mmsys", "syscon";
+> +			compatible = "mediatek,mt8195-vdosys1", "syscon";
+>   			reg = <0 0x1c100000 0 0x1000>;
+>   			#clock-cells = <1>;
+>   		};
