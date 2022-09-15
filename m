@@ -2,162 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1103E5BA270
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4162F5BA277
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiIOVwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 17:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S229541AbiIOVx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 17:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIOVwb (ORCPT
+        with ESMTP id S229462AbiIOVxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 17:52:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCDB5071C;
-        Thu, 15 Sep 2022 14:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663278751; x=1694814751;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=aC8XDko2Od/oVihXmArEE30uN77ZIMmtAMndXQ2rO3A=;
-  b=UBiuXLFKz7UeArYnrImTVwfdwN0dD/qNcUar7BxO8RMJ1drvmEJDrf0H
-   ZQ0FsMjvyB+TBuzRmGiCD12ALBL6LQz1JDCbYSaNTRaR4HfK8O1u5Hda+
-   Yru8OPcgujS65zgzYffLj65TE9N5Kra/Tfi3ye9M8xB3N+30mcUh+lXcB
-   Oaj7VwXf5be/0Bpftu8GIigSqRASW/eZNRukuKKoLP+GXI87iQZfcuIXx
-   8IpUAdcpr5yMHizps5x7g5oJbjEk///+RAu2iERdolODYzmRB2pgihkQq
-   5T1f5vCKde7TjktDqBKpz67VlidBD/c+wjBglPAKCYqMhW/PD6xJK3HBp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="281876910"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="281876910"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:52:30 -0700
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="862510330"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:52:29 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 1/2] net/sched: taprio: avoid disabling offload
- when it was never enabled
-In-Reply-To: <20220915100802.2308279-2-vladimir.oltean@nxp.com>
-References: <20220915100802.2308279-1-vladimir.oltean@nxp.com>
- <20220915100802.2308279-2-vladimir.oltean@nxp.com>
-Date:   Thu, 15 Sep 2022 14:52:29 -0700
-Message-ID: <877d24gvaa.fsf@intel.com>
+        Thu, 15 Sep 2022 17:53:55 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9F05A8BC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:53:54 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id a67so29782469ybb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FAlU1of09I0TtyPSb8nI7+Yal20j3EXvCGA6NT/FrL0=;
+        b=AfZuTRV4qIib4IuXwKzLoeTAFrkWZLTtUup0MlnvCitSehSg3jqtHQFO8bmynaDW3l
+         9GEG16w44KjstI3RmBcGoVuKiR1Umv+v8jVNwwgW5m85uHecEJFYEKuqAktqTja54hQr
+         DoviuF6txy/jMcjz1BoV4vjCdv5KHPL9p1zqsMsaas2a3ypaEy5xKqpDuD3W8i3qzwFQ
+         yZ0mBvZHT7e0aCmUvDBZG365TEJqMQ+CjzJ4nfhiz+IAfUVLzX7atl1EsjIasYz5Gi9P
+         nKDX8hmbcJ7gLB55aJm/1YEXE0qgVJuUTsw3uFTRzDCBiJ3iI4VhnAJn7ergLRYqFFNT
+         XWTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FAlU1of09I0TtyPSb8nI7+Yal20j3EXvCGA6NT/FrL0=;
+        b=rWpxvq5HpqWy90SsEpuWCCfwhRR3Hfg43cLw7Ib+wVWpTxQ7WrQLOPWr/sXqiIYM3x
+         z4yYPhJK0zkGI02fk1tm38pu6/JIelqsm5LiZ6zEO6SCuUEx2yGTTGudV16z31lYDY3u
+         QPVq3/bpXE8s3goESv0oII8SNf7b2r9wm89Gajk2ayxGBXIN/2RW2LNar6AlO8R13Uqu
+         pXZYHenyn9mrkCm7mUCPUctPHvO6aYNZsUxqiK/hMKxFO5my/L23CMl8Mq+PI0nSih5d
+         HKK0a1rsxhVWLqg3BEzMECM1xixTTHCYNCQ7A77aGE8oqixbJXHHSr3q5sl5l7mz6tOJ
+         nSEg==
+X-Gm-Message-State: ACrzQf1ihQ48RX0T+9pEt7BqHmtXbJFKhAKUmuDYZLut1inhen+tq5NP
+        GUfQOXgZ0MSb3+SravA+MXzPs85PngSy8VO03EMoeCJ1VyU=
+X-Google-Smtp-Source: AMsMyM534IJbImH3Ol9YVPB8Abj280Fxq/iOUwHG+8Y4m+vJtUvPGRsqe9ay35n6VGrjMivGXmM9cvjyJRZPO4MAtDM=
+X-Received: by 2002:a25:3182:0:b0:676:e9d3:3d16 with SMTP id
+ x124-20020a253182000000b00676e9d33d16mr1736404ybx.275.1663278833798; Thu, 15
+ Sep 2022 14:53:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220810030500.2793882-1-bjorn.andersson@linaro.org>
+ <20220810030500.2793882-3-bjorn.andersson@linaro.org> <20220913104545.2u6mcyy3bg4dp6ly@mercury.elektranox.org>
+ <20220915212545.q6vxcnrffwr3buq2@builder.lan>
+In-Reply-To: <20220915212545.q6vxcnrffwr3buq2@builder.lan>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 16 Sep 2022 00:53:42 +0300
+Message-ID: <CAA8EJpoNyc1_eM7mi3D3s4voqLZFHvJtiBd_TOB4dmxcSpwdWg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] power: supply: Add Lenovo Yoga C630 EC driver
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+On Fri, 16 Sept 2022 at 00:25, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Tue, Sep 13, 2022 at 12:45:45PM +0200, Sebastian Reichel wrote:
+> > Hi,
+> >
+> > [+Cc Lee Jones, DRI devel]
+> >
+> > On Tue, Aug 09, 2022 at 10:05:00PM -0500, Bjorn Andersson wrote:
+> > > The Qualcomm Snapdragon-based Lenovo Yoga C630 has some sort of EC
+> > > providing AC-adapter and battery status, as well as USB Type-C altmode
+> > > notifications for Displayport operation.
+> > >
+> > > The Yoga C630 ships with Windows, where these operations primarily are
+> > > implemented in ACPI, but due to various issues with the hardware
+> > > representation therein it's not possible to run Linux on this
+> > > information. As such this is a best-effort re-implementation of these
+> > > operations, based on the register map expressed in ACPI and a fair
+> > > amount of trial and error.
+> > >
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > > [...]
+> > > +   val = yoga_c630_ec_read8(ec, LENOVO_EC_BAT_ATTRIBUTES);
+> > > +   if (val < 0)
+> > > +           goto out_unlock;
+> > > +   ec->unit_ma = val & LENOVO_EC_BAT_ATTR_UNIT_IS_MA;
+> > > +   if (!ec->unit_ma)
+> > > +           ec->scale = 1000;
+> > > +   else
+> > > +           ec->scale = 1;
+> >
+> > Since I'm not sure how much of information was gained by reverse
+> > engineering: Is this really milliamps vs microamps and not milliamps
+> > vs milliwatt? SBS batteries usually report either mA or mW.
+> >
+>
+> Unfortunately I don't know the answer to this.
+>
+> > > [...]
+> > > +   case POWER_SUPPLY_PROP_SERIAL_NUMBER:
+> > > +           val->strval = "05072018";
+> > > +           break;
+> >
+> > why is this hardcoded? :)
+> >
+>
+> I don't know, but as Daniel suggests, it would make sense to just drop
+> it.
+>
+> > > [...]
+> > > +   device_for_each_child_node(dev, fwnode) {
+> > > +           ret = fwnode_property_read_u32(fwnode, "reg", &port);
+> > > +           if (ret < 0)
+> > > +                   continue;
+> > > +
+> > > +           /* Got multiple ports, but altmode is only possible on port 1 */
+> > > +           if (port != 1)
+> > > +                   continue;
+> > > +
+> > > +           ec->bridge.funcs = &yoga_c630_ec_bridge_funcs;
+> > > +           ec->bridge.of_node = to_of_node(fwnode);
+> > > +           ec->bridge.ops = DRM_BRIDGE_OP_HPD;
+> > > +           ec->bridge.type = DRM_MODE_CONNECTOR_USB;
+> > > +
+> > > +           ret = devm_drm_bridge_add(dev, &ec->bridge);
+> > > +           if (ret) {
+> > > +                   dev_err(dev, "failed to register drm bridge\n");
+> > > +                   fwnode_handle_put(fwnode);
+> > > +                   return ret;
+> > > +           }
+> >
+> > I wonder if DRM people want to see this in drivers/gpu/drm/bridge.
+> > Maybe it's better to make this a MFD driver?
+> >
+>
+> I did consider it, but it adds a whole bunch of boiler plate code
+> without a lot of benefit.
+>
+> There are a few other cases where I think it would make sense to have
+> drm bridges outside of drivers/gpu/drm, such as
+> drivers/usb/typec/altmodes/ and drivers/platform/chrome/...
 
-> In an incredibly strange API design decision, qdisc->destroy() gets
-> called even if qdisc->init() never succeeded, not exclusively since
-> commit 87b60cfacf9f ("net_sched: fix error recovery at qdisc creation"),
-> but apparently also earlier (in the case of qdisc_create_dflt()).
->
-> The taprio qdisc does not fully acknowledge this when it attempts full
-> offload, because it starts off with q->flags = TAPRIO_FLAGS_INVALID in
-> taprio_init(), then it replaces q->flags with TCA_TAPRIO_ATTR_FLAGS
-> parsed from netlink (in taprio_change(), tail called from taprio_init()).
->
-> But in taprio_destroy(), we call taprio_disable_offload(), and this
-> determines what to do based on FULL_OFFLOAD_IS_ENABLED(q->flags).
->
-> But looking at the implementation of FULL_OFFLOAD_IS_ENABLED()
-> (a bitwise check of bit 1 in q->flags), it is invalid to call this macro
-> on q->flags when it contains TAPRIO_FLAGS_INVALID, because that is set
-> to U32_MAX, and therefore FULL_OFFLOAD_IS_ENABLED() will return true on
-> an invalid set of flags.
->
-> As a result, it is possible to crash the kernel if user space forces an
-> error between setting q->flags = TAPRIO_FLAGS_INVALID, and the calling
-> of taprio_enable_offload(). This is because drivers do not expect the
-> offload to be disabled when it was never enabled.
->
-> The error that we force here is to attach taprio as a non-root qdisc,
-> but instead as child of an mqprio root qdisc:
->
-> $ tc qdisc add dev swp0 root handle 1: \
-> 	mqprio num_tc 8 map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0
-> $ tc qdisc replace dev swp0 parent 1:1 \
-> 	taprio num_tc 8 map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 base-time 0 \
-> 	sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
-> 	flags 0x0 clockid CLOCK_TAI
-> Unable to handle kernel paging request at virtual address fffffffffffffff8
-> [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
-> Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> Call trace:
->  taprio_dump+0x27c/0x310
->  vsc9959_port_setup_tc+0x1f4/0x460
->  felix_port_setup_tc+0x24/0x3c
->  dsa_slave_setup_tc+0x54/0x27c
->  taprio_disable_offload.isra.0+0x58/0xe0
->  taprio_destroy+0x80/0x104
->  qdisc_create+0x240/0x470
->  tc_modify_qdisc+0x1fc/0x6b0
->  rtnetlink_rcv_msg+0x12c/0x390
->  netlink_rcv_skb+0x5c/0x130
->  rtnetlink_rcv+0x1c/0x2c
->
-> Fix this by keeping track of the operations we made, and undo the
-> offload only if we actually did it.
->
-> I've added "bool offloaded" inside a 4 byte hole between "int clockid"
-> and "atomic64_t picos_per_byte". Now the first cache line looks like
-> below:
->
-> $ pahole -C taprio_sched net/sched/sch_taprio.o
-> struct taprio_sched {
->         struct Qdisc * *           qdiscs;               /*     0     8 */
->         struct Qdisc *             root;                 /*     8     8 */
->         u32                        flags;                /*    16     4 */
->         enum tk_offsets            tk_offset;            /*    20     4 */
->         int                        clockid;              /*    24     4 */
->         bool                       offloaded;            /*    28     1 */
->
->         /* XXX 3 bytes hole, try to pack */
->
->         atomic64_t                 picos_per_byte;       /*    32     0 */
->
->         /* XXX 8 bytes hole, try to pack */
->
->         spinlock_t                 current_entry_lock;   /*    40     0 */
->
->         /* XXX 8 bytes hole, try to pack */
->
->         struct sched_entry *       current_entry;        /*    48     8 */
->         struct sched_gate_list *   oper_sched;           /*    56     8 */
->         /* --- cacheline 1 boundary (64 bytes) --- */
->
-> Fixes: 9c66d1564676 ("taprio: Add support for hardware offloading")
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
-
-Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+What about a solution which might sound simpler than MFD: from your
+driver's probe() register a platform device which represents a drm
+bridge. Add drm_bridge driver for it into drivers/gpu/drm/bridges/.
 
 
-Cheers,
+
 -- 
-Vinicius
+With best wishes
+Dmitry
