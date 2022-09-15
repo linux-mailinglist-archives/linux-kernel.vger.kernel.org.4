@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FC65B97F5
+	by mail.lfdr.de (Postfix) with ESMTP id 09B8F5B97F3
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiIOJrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 05:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S230137AbiIOJrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiIOJpp (ORCPT
+        with ESMTP id S230060AbiIOJpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Sep 2022 05:45:45 -0400
 Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B206D99B6B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21B399B6D;
         Thu, 15 Sep 2022 02:45:41 -0700 (PDT)
 From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1663235137; bh=RYvMqhdnzL8RPlR9TpcOtA7UqSXk+T+8HMSs+nwHUT4=;
+        t=1663235138; bh=cW5w38A8GLInG+MinVkl6F+e++EU/JdqSt9RzpfaksU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cFhRzEkoYwohnQsDEnr6aUWMfMKipUR8Feq3jxl40+gC6PjMguEAK/PFnqbft3/oI
-         mcqLjLhoX/Ls1umQzkw5gT9hVnfudMaW/qAmIBI0UZYz0EvpNjWP9MIOnJQbCkg3Bd
-         bbZ21Kxxj2ZGj/XdWbnvZRH1jQmdqWO2TVpOAggU=
+        b=gb+bXPbLB9YOA2ZndnvlCuK62asG96OLytjqpzjFrTgE1DVS18ds4rVYtgdOpecbx
+         7a5pk6VpIgyFXcREdSV24QKrvsrX6DfaF/H6X9qicskfheJMuY9ttmqTs/fUNPCDQ1
+         YnvPXUTUMpeL/c8fvRSuJyMYGgqsBaZIuH0FQeAY=
 To:     James Schulman <james.schulman@cirrus.com>,
         David Rhodes <david.rhodes@cirrus.com>,
         Lucas Tanure <tanureal@opensource.cirrus.com>,
@@ -39,9 +39,9 @@ Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
         - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         asahi@lists.linux.dev
-Subject: [PATCH v2 10/11] ASoC: cs42l42: Implement 'set_bclk_ratio'
-Date:   Thu, 15 Sep 2022 11:44:43 +0200
-Message-Id: <20220915094444.11434-11-povik+lin@cutebit.org>
+Subject: [PATCH v2 11/11] ASoC: cs42l42: Switch to dev_err_probe() helper
+Date:   Thu, 15 Sep 2022 11:44:44 +0200
+Message-Id: <20220915094444.11434-12-povik+lin@cutebit.org>
 In-Reply-To: <20220915094444.11434-1-povik+lin@cutebit.org>
 References: <20220915094444.11434-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
@@ -56,71 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver wants to know the bit rate on the serial bus and takes that
-to be the value set by 'set_sysclk'. The 'set_bclk_ratio' op is a better
-fit for figuring out the clocking parameters of the serial bus, so
-implement that and give it precedence over the prior methods.
+Replace dev_err() with dev_err_probe() in the probe path for consistency
+with cs42l83-i2c.c.
 
 Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- sound/soc/codecs/cs42l42.c | 17 ++++++++++++++++-
- sound/soc/codecs/cs42l42.h |  1 +
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ sound/soc/codecs/cs42l42-i2c.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index c1d7eb12b0ba..05995ed1d3f5 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -898,7 +898,10 @@ static int cs42l42_pcm_hw_params(struct snd_pcm_substream *substream,
+diff --git a/sound/soc/codecs/cs42l42-i2c.c b/sound/soc/codecs/cs42l42-i2c.c
+index 35fecff0f74f..1900ec75576e 100644
+--- a/sound/soc/codecs/cs42l42-i2c.c
++++ b/sound/soc/codecs/cs42l42-i2c.c
+@@ -25,11 +25,9 @@ static int cs42l42_i2c_probe(struct i2c_client *i2c_client)
+ 		return -ENOMEM;
  
- 	cs42l42->srate = params_rate(params);
+ 	regmap = devm_regmap_init_i2c(i2c_client, &cs42l42_regmap);
+-	if (IS_ERR(regmap)) {
+-		ret = PTR_ERR(regmap);
+-		dev_err(&i2c_client->dev, "regmap_init() failed: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(regmap))
++		return dev_err_probe(&i2c_client->dev, PTR_ERR(regmap),
++				     "regmap_init() failed\n");
  
--	if (cs42l42->sclk) {
-+	if (cs42l42->bclk_ratio) {
-+		/* machine driver has set the BCLK/samp-rate ratio */
-+		bclk = cs42l42->bclk_ratio * params_rate(params);
-+	} else if (cs42l42->sclk) {
- 		/* machine driver has set the SCLK */
- 		bclk = cs42l42->sclk;
- 	} else {
-@@ -984,6 +987,17 @@ static int cs42l42_set_sysclk(struct snd_soc_dai *dai,
- 	return -EINVAL;
- }
- 
-+static int cs42l42_set_bclk_ratio(struct snd_soc_dai *dai,
-+				unsigned int bclk_ratio)
-+{
-+	struct snd_soc_component *component = dai->component;
-+	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
-+
-+	cs42l42->bclk_ratio = bclk_ratio;
-+
-+	return 0;
-+}
-+
- static int cs42l42_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
- {
- 	struct snd_soc_component *component = dai->component;
-@@ -1087,6 +1101,7 @@ static const struct snd_soc_dai_ops cs42l42_ops = {
- 	.hw_params	= cs42l42_pcm_hw_params,
- 	.set_fmt	= cs42l42_set_dai_fmt,
- 	.set_sysclk	= cs42l42_set_sysclk,
-+	.set_bclk_ratio	= cs42l42_set_bclk_ratio,
- 	.mute_stream	= cs42l42_mute_stream,
- };
- 
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index bc51bb09da5c..a72136664112 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -35,6 +35,7 @@ struct  cs42l42_private {
- 	int irq;
- 	int pll_config;
- 	u32 sclk;
-+	u32 bclk_ratio;
- 	u32 srate;
- 	u8 plug_state;
- 	u8 hs_type;
+ 	cs42l42->devid = CS42L42_CHIP_ID;
+ 	cs42l42->dev = dev;
 -- 
 2.33.0
 
