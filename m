@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D485B9E9D
+	by mail.lfdr.de (Postfix) with ESMTP id 87A455B9E9C
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiIOPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S230457AbiIOPUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiIOPTz (ORCPT
+        with ESMTP id S230182AbiIOPT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:19:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F208A6C2;
-        Thu, 15 Sep 2022 08:14:21 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FEj96e002132;
-        Thu, 15 Sep 2022 15:14:09 GMT
+        Thu, 15 Sep 2022 11:19:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5CA90C77;
+        Thu, 15 Sep 2022 08:14:25 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FF2GHm018031;
+        Thu, 15 Sep 2022 15:14:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=iBlK6fyWcdkdv2FYQJ8VkvugQqpCAa9nQWW5xvOgCf8=;
- b=CKCoRVjroykVNMExUni7lBMrkI8p81I0BKLKf381xb4ErcQZRTd36pI5x5eYJla8HrrD
- 990SbvZnsEmP6aaTl/JbQGLEFD8+9EfC85HL+OxuXDOxeO/7m6oHsTluYnrXqK0Afoh7
- 2O53lV5FU9VM7lwaFgoH8y3vsf9RchDAQwS7t6jDSJISjGv22H8MmQJW++pSkHHosEtS
- DK5X4hd/diKcAsknsJKLIMdjoP0cQ7RGSry7pvO6C+4wngMm/efleUMaNHB/sXGOnxK3
- SpvY4ey/CE7EKogFw2uVHQuiqaFiaImVtunwdMB33ut+yZVVoqmhR9EanteaqW64Npo8 mQ== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6331878-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=9g9fTZ+qsfNqdsQyxDmdlflS+F/f6ED2oz+Ff2v70a4=;
+ b=DtoGrrkk92pe91uSlNikrdkjjOnGiwFEicd0leW0XjaUN2AbQCq4+VINdT4X/33KQArd
+ xGH25xLwX5o8hCQP9cjT7iEBEfBnuxrdoJzkTTVmcXtfvB5aFwLC9NZX981qBQADcdwF
+ LAusByI5UoKUWDx9aa2UMvjkLkK3/ZP6gzTU6nDvvwO8wJFpYhoupm5aN2I8WK5xGOUn
+ qaRlu2XCiwPnw7t3nCQwiGRM+J19JF3R96J1iv9zPCf2YJWUdtCYBhe1PdETCm6TqE7G
+ EBP639euDAZrBuUpYDVbbfleVGcz5ET8rn9NTiQDlqI1AAiKecRTY+6evkEw8Tq7IxHf og== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6b9rjpe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 15 Sep 2022 15:14:08 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FF84TT028185;
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FF7JoM004731;
         Thu, 15 Sep 2022 15:14:06 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3jjy25sydg-1
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jjy95tk18-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 15 Sep 2022 15:14:06 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FFE2SZ41157080
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FFE3cb39911928
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Sep 2022 15:14:02 GMT
+        Thu, 15 Sep 2022 15:14:03 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB5BD5204F;
-        Thu, 15 Sep 2022 15:14:02 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3A03F52050;
+        Thu, 15 Sep 2022 15:14:03 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 48CFC52050;
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BD67452051;
         Thu, 15 Sep 2022 15:14:02 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Matthew Rosato <mjrosato@linux.ibm.com>,
@@ -55,23 +56,24 @@ Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
         gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
         svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
         robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] iommu/s390: Fixes related to repeat attach_dev calls
-Date:   Thu, 15 Sep 2022 17:13:59 +0200
-Message-Id: <20220915151402.121032-1-schnelle@linux.ibm.com>
+Subject: [PATCH 1/3] iommu/s390: Fix duplicate domain attachments
+Date:   Thu, 15 Sep 2022 17:14:00 +0200
+Message-Id: <20220915151402.121032-2-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mnO0t2SfbGSFof-WqI4BQQ9qpwbxWkIt
-X-Proofpoint-GUID: mnO0t2SfbGSFof-WqI4BQQ9qpwbxWkIt
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20220915151402.121032-1-schnelle@linux.ibm.com>
+References: <20220915151402.121032-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 13gusAirV4Hokwh3nn92iFuH2lqGk5bn
+X-Proofpoint-ORIG-GUID: 13gusAirV4Hokwh3nn92iFuH2lqGk5bn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-15_09,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- adultscore=0 malwarescore=0 bulkscore=0 mlxlogscore=579 spamscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=980 clxscore=1011 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2208220000 definitions=main-2209150085
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -82,41 +84,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Since commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+calls") we can end up with duplicates in the list of devices attached to
+a domain. This is inefficient and confusing since only one domain can
+actually be in control of the IOMMU translations for a device. Fix this
+by detaching the device from the previous domain, if any, on attach.
+This also makes the restore behavior analogous between IOMMU and DMA API
+control.
 
-This is a follow up to Matt's recent series[0] where he tackled a race that
-turned out to be outside of the s390 IOMMU driver itself as well as duplicate
-device attachments. After an internal discussion we came up with what I believe
-is a cleaner fix. Instead of actively checking for duplicates we instead detach
-from any previous domain on attach. From my cursory reading of the code this
-seems to be what the Intel IOMMU driver is doing as well.
+Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/iommu/s390-iommu.c | 82 ++++++++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 35 deletions(-)
 
-During development of this fix we realized that we can get rid of struct
-s390_domain_device entirely if we instead thread the list through the attached
-struct zpci_devs. This saves us from having to allocate during attach and gets
-rid of one level of indirection during IOMMU operations. Coincidentally
-I discovered that a previous list_head in struct zpci_dev is unused so this is
-removed and then replaced.
-
-The duplicate entry fix is the first patch of this series and the only one
-which carries a Fixes tag. It may be applied alone or together with patches
-2 and 3 which are followup clean ups.
-
-
-Best regards,
-Niklas
-
-[0] https://lore.kernel.org/linux-iommu/20220831201236.77595-1-mjrosato@linux.ibm.com/
-
-Niklas Schnelle (3):
-  iommu/s390: Fix duplicate domain attachments
-  s390/pci: remove unused bus_next field from struct zpci_dev
-  iommu/s390: Get rid of s390_domain_device
-
- arch/s390/include/asm/pci.h |   2 +-
- drivers/iommu/s390-iommu.c  | 110 +++++++++++++++++++-----------------
- 2 files changed, 59 insertions(+), 53 deletions(-)
-
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index c898bcbbce11..de8f76775240 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -83,14 +83,41 @@ static void s390_domain_free(struct iommu_domain *domain)
+ 	kfree(s390_domain);
+ }
+ 
++static bool __s390_iommu_detach_device(struct s390_domain *s390_domain,
++				     struct zpci_dev *zdev)
++{
++	struct s390_domain_device *domain_device, *tmp;
++	unsigned long flags;
++	bool found = false;
++
++	spin_lock_irqsave(&s390_domain->list_lock, flags);
++	list_for_each_entry_safe(domain_device, tmp, &s390_domain->devices,
++				 list) {
++		if (domain_device->zdev == zdev) {
++			list_del(&domain_device->list);
++			kfree(domain_device);
++			found = true;
++			break;
++		}
++	}
++	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
++
++	if (found) {
++		zdev->s390_domain = NULL;
++		zpci_unregister_ioat(zdev, 0);
++	}
++	return found;
++}
++
+ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 				    struct device *dev)
+ {
+ 	struct s390_domain *s390_domain = to_s390_domain(domain);
+ 	struct zpci_dev *zdev = to_zpci_dev(dev);
+ 	struct s390_domain_device *domain_device;
++	struct s390_domain *prev_domain = NULL;
+ 	unsigned long flags;
+-	int cc, rc;
++	int cc, rc = 0;
+ 
+ 	if (!zdev)
+ 		return -ENODEV;
+@@ -99,16 +126,16 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	if (!domain_device)
+ 		return -ENOMEM;
+ 
+-	if (zdev->dma_table && !zdev->s390_domain) {
+-		cc = zpci_dma_exit_device(zdev);
+-		if (cc) {
++	if (zdev->s390_domain) {
++		prev_domain = zdev->s390_domain;
++		if (!__s390_iommu_detach_device(zdev->s390_domain, zdev))
++			rc = -EIO;
++	} else if (zdev->dma_table) {
++		if (zpci_dma_exit_device(zdev))
+ 			rc = -EIO;
+-			goto out_free;
+-		}
+ 	}
+-
+-	if (zdev->s390_domain)
+-		zpci_unregister_ioat(zdev, 0);
++	if (rc)
++		goto out_free;
+ 
+ 	zdev->dma_table = s390_domain->dma_table;
+ 	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+@@ -129,7 +156,7 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 		   domain->geometry.aperture_end != zdev->end_dma) {
+ 		rc = -EINVAL;
+ 		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+-		goto out_restore;
++		goto out_unregister_restore;
+ 	}
+ 	domain_device->zdev = zdev;
+ 	zdev->s390_domain = s390_domain;
+@@ -138,14 +165,15 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 
+ 	return 0;
+ 
++out_unregister_restore:
++	zpci_unregister_ioat(zdev, 0);
+ out_restore:
+-	if (!zdev->s390_domain) {
++	zdev->dma_table = NULL;
++	if (prev_domain)
++		s390_iommu_attach_device(&prev_domain->domain,
++					 dev);
++	else
+ 		zpci_dma_init_device(zdev);
+-	} else {
+-		zdev->dma_table = zdev->s390_domain->dma_table;
+-		zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+-				   virt_to_phys(zdev->dma_table));
+-	}
+ out_free:
+ 	kfree(domain_device);
+ 
+@@ -157,30 +185,14 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
+ {
+ 	struct s390_domain *s390_domain = to_s390_domain(domain);
+ 	struct zpci_dev *zdev = to_zpci_dev(dev);
+-	struct s390_domain_device *domain_device, *tmp;
+-	unsigned long flags;
+-	int found = 0;
++	bool detached;
+ 
+ 	if (!zdev)
+ 		return;
+ 
+-	spin_lock_irqsave(&s390_domain->list_lock, flags);
+-	list_for_each_entry_safe(domain_device, tmp, &s390_domain->devices,
+-				 list) {
+-		if (domain_device->zdev == zdev) {
+-			list_del(&domain_device->list);
+-			kfree(domain_device);
+-			found = 1;
+-			break;
+-		}
+-	}
+-	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+-
+-	if (found && (zdev->s390_domain == s390_domain)) {
+-		zdev->s390_domain = NULL;
+-		zpci_unregister_ioat(zdev, 0);
++	detached = __s390_iommu_detach_device(s390_domain, zdev);
++	if (detached)
+ 		zpci_dma_init_device(zdev);
+-	}
+ }
+ 
+ static struct iommu_device *s390_iommu_probe_device(struct device *dev)
 -- 
 2.34.1
 
