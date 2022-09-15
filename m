@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F395B96C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660265B96CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiIOI7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S229862AbiIOJAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIOI7j (ORCPT
+        with ESMTP id S229912AbiIOJAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:59:39 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CE56357;
-        Thu, 15 Sep 2022 01:59:34 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28F8x8TW046686;
-        Thu, 15 Sep 2022 03:59:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663232348;
-        bh=40RIuyJ2v1HtbWXuDnlrnW8RPk37ZglF34ofD503bS4=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=e6bzabUStOo5T8yO8QyySkKPtyAhaLQOdu0IzNLPYPl6WThhdxkxO3CvyMuESRKUr
-         HBgzIoe13+R+HH+bj5pDYLr3ycGz1gLDzQjQmEo0LBIcg4TrFB5pmJaGbCEG4Mpmjd
-         is+d28/hY8zW1pv6W+daAhYeMAyZTQvDqSVEIE4E=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28F8x7GY066923
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Sep 2022 03:59:07 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 15
- Sep 2022 03:59:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 15 Sep 2022 03:59:06 -0500
-Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28F8x1kZ032248;
-        Thu, 15 Sep 2022 03:59:01 -0500
-Message-ID: <1c3facf9-1ecf-f090-e800-803d83a89e4b@ti.com>
-Date:   Thu, 15 Sep 2022 14:29:00 +0530
+        Thu, 15 Sep 2022 05:00:01 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CA62B634;
+        Thu, 15 Sep 2022 01:59:54 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 78so16690781pgb.13;
+        Thu, 15 Sep 2022 01:59:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LgyjDSHm06cPee7hqq0YhgTi9iCJukSRg0rhaRDNcHk=;
+        b=QEh3Wa7oETLzEJVYfPdZq+coHi82ecqj0dGk9ICEMhD/J/t6WAjPzFBRV8qbi5gebe
+         VF+H1k2Rz6h3h9JiJtYksmqAAnHleI+uxnyq0LM8E73J6u53FFc6SKJBaS2bZNJwH7lF
+         I3AZ3J2+iOldDE/HtlMtEEvaW6Bwl4ORxwrkQYrdQibgJwXix1Q7YobpDL9UAQeq1BHd
+         /CovHybA/DBORCeflx18aP0Nopj6cCbjVNCpX0Lx5lZPV6HUAoq5GKrRVmAG6x6cOb8l
+         kqXSj/FE4LYYJbHoTO4R+bCMhM6VFLh5Q/zkOMLhNHlEneyJdxbTzRMxkMWW4C2+lr8A
+         9nDQ==
+X-Gm-Message-State: ACgBeo0bdk6AIAExC9AkGiUxbIuiCmpcCzmwZy7NxwYxpgJQffKV1wFJ
+        ogBHru7BIcnpD+k77Fg4W3EGNDi7QAywKN4w
+X-Google-Smtp-Source: AA6agR4WU7ZFHbHVFtlrqh6Z/nov+94pXR2gXasc4E3LWh/IVzcVIhhv4YrnTj6lp0euM6VzNvlMaw==
+X-Received: by 2002:a63:ff59:0:b0:439:db5:5da9 with SMTP id s25-20020a63ff59000000b004390db55da9mr15350857pgk.88.1663232393120;
+        Thu, 15 Sep 2022 01:59:53 -0700 (PDT)
+Received: from [192.168.123.231] (144.34.241.68.16clouds.com. [144.34.241.68])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa79717000000b0053e3112e84bsm11908800pfg.50.2022.09.15.01.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 01:59:52 -0700 (PDT)
+Message-ID: <1a2ac6fb-1a02-de99-1b4e-18360bd34d55@kylinos.cn>
+Date:   Thu, 15 Sep 2022 16:59:46 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vladimir.oltean@nxp.com>,
-        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
- fixed-link configuration
+Subject: Re: [PATCH] mm/filemap: Make folio_put_wait_locked static
 Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-6-s-vadapalli@ti.com>
- <YyH2GcLCAN+9GAn8@shell.armlinux.org.uk>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <YyH2GcLCAN+9GAn8@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>,
+        linux-fsdevel@vger.kernel.org
+References: <20220914015836.3193197-1-sunke@kylinos.cn>
+ <44af62e3-8f51-bf0a-509e-4a5fdbf62b29@kylinos.cn>
+ <YyLUlQbQi3O0ntwY@casper.infradead.org>
+From:   Ke Sun <sunke@kylinos.cn>
+In-Reply-To: <YyLUlQbQi3O0ntwY@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
 
-On 14/09/22 21:11, Russell King (Oracle) wrote:
-> On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
->> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->> index 72b1df12f320..1739c389af20 100644
->> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->> @@ -1494,10 +1494,50 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
->>  							  phylink_config);
->>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
->>  	struct am65_cpsw_common *common = port->common;
->> +	struct fwnode_handle *fwnode;
->> +	bool fixed_link = false;
->>  
->>  	if (common->pdata.extra_modes & BIT(state->interface))
->>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
->>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
->> +
->> +	/* Detecting fixed-link */
->> +	fwnode = of_node_to_fwnode(port->slave.phy_node);
->> +	if (fwnode)
->> +		fixed_link = !!fwnode_get_named_child_node(fwnode, "fixed-link");
->> +
->> +	if (fixed_link) {
->> +		/* In fixed-link mode, mac_link_up is not invoked.
->> +		 * Therefore, the relevant mac_link_up operations
->> +		 * have to be moved to mac_config.
->> +		 */
-> 
-> This seems very wrong. Why is mac_link_up() not invoked? Have you
-> debugged this? It works for other people.
-> 
-> Please debug rather than adding hacks to drivers when you find
-> things that don't seem to work.
-
-I will debug and find out. I had assumed that mac_link_up() is not
-invoked in fixed-link mode. Thank you for clarifying.
-
-Regards,
-Siddharth.
+On 2022/9/15 15:30, Matthew Wilcox wrote:
+> On Thu, Sep 15, 2022 at 08:45:33AM +0800, Ke Sun wrote:
+>> Ping.
+> Don't be rude.  I'm at a conference this week and on holiday next week.
+> This is hardly an urgent patch.
+So sorry to bother you. Some duplicate emails were sent due to issues 
+with mailbox app settings.
+>> On 2022/9/14 09:58, Ke Sun wrote:
+>>> It's only used in mm/filemap.c, since commit <ffa65753c431>
+>>> ("mm/migrate.c: rework migration_entry_wait() to not take a pageref").
+>>>
+>>> Make it static.
+>>>
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> Cc: linux-mm@kvack.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Reported-by: k2ci <kernel-bot@kylinos.cn>
+>>> Signed-off-by: Ke Sun <sunke@kylinos.cn>
+>>> ---
+>>> include/linux/pagemap.h | 1 -
+>>> mm/filemap.c | 2 +-
+>>> 2 files changed, 1 insertion(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+>>> index 0178b2040ea3..82880993dd1a 100644
+>>> --- a/include/linux/pagemap.h
+>>> +++ b/include/linux/pagemap.h
+>>> @@ -1042,7 +1042,6 @@ static inline int
+>>> wait_on_page_locked_killable(struct page *page)
+>>> return folio_wait_locked_killable(page_folio(page));
+>>> }
+>>> -int folio_put_wait_locked(struct folio *folio, int state);
+>>> void wait_on_page_writeback(struct page *page);
+>>> void folio_wait_writeback(struct folio *folio);
+>>> int folio_wait_writeback_killable(struct folio *folio);
+>>> diff --git a/mm/filemap.c b/mm/filemap.c
+>>> index 15800334147b..ade9b7bfe7fc 100644
+>>> --- a/mm/filemap.c
+>>> +++ b/mm/filemap.c
+>>> @@ -1467,7 +1467,7 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
+>>> *
+>>> * Return: 0 if the folio was unlocked or -EINTR if interrupted by a
+>>> signal.
+>>> */
+>>> -int folio_put_wait_locked(struct folio *folio, int state)
+>>> +static int folio_put_wait_locked(struct folio *folio, int state)
+>>> {
+>>> return folio_wait_bit_common(folio, PG_locked, state, DROP);
+>>> }
