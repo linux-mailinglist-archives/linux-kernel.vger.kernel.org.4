@@ -2,154 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82F95B9367
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601F05B9368
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIODzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S229587AbiIOD4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIODzF (ORCPT
+        with ESMTP id S229536AbiIOD4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:55:05 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2139.outbound.protection.outlook.com [40.107.244.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03561FCC3;
-        Wed, 14 Sep 2022 20:55:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CWe1taXkaFWTZZOBUKIew+bncz1kQrKqL7tz4V4iDqz/IUOP0nNBlo2Hif15k6leBUKa65Ufcn2xxmH8M6/pn55nNWKSdfTX5QyW6oIIeSdS20JU3u5FzA40hgDkIckMpdHj2PP9yvSxdKXZQJZFZYAilc1tWpVvJFMIca4TX1TdhLimq73WJAMbsFrwPSIe5cw3ysXNpSdbZ8WIN4XzgZEJh9j3heSV+wZkiTA3sLbIZQ0vY0djqgDIWrqISHEwCi1JXxsZbBbgodgx7rW1BhmiE1uDdOUnSog1RiJ7wGcmwBgwHQlVkYFYJuEtzuTXifOuC6ahWkULkn0n+R60kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ta21anwT4ysG1gPKKJskzXOOFKKj5bTxyb99fh0IzNw=;
- b=bauoreQcUvOWVJLGq4RKlE+1vqNaks9+RphwTeYaqw+nA4fINNnJh9rFQOl3B1oGtWP41w5Wt6N+kqJA2Ngf93zACye7nedOoVsA5JfToAfQpDJXMkUaUc9ssZ0CM9MNC+J9ajU34mE3Zjrw1m6VjJvxcTzVEpK8Ojm7WLLgsW4EvoJH6ifSTC8W1/NdczDok4rDv+5fNif6aQbHcwygcpcFBoYj2YPV64L35ye0XBaf9UkKRUnixrUaPsFHAKH8ZJEBSxTYvxij4/yfWlUyGRlxSkzTag7bx1FlLBRLfqoXNQjIQGf+13aTVawvnDJuA5JiZhj52QlKkktOH9lD2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        Wed, 14 Sep 2022 23:56:19 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB376F257
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:56:18 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sb3so9576516ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ta21anwT4ysG1gPKKJskzXOOFKKj5bTxyb99fh0IzNw=;
- b=bLt4MbUr7bxNSFqxqoPpEdHcYfA1qHFeL58+pNQ0pkRkjIg3RruCJcOioEQQS3vvvkZs4D2VhTIgEtbPRavWCjcHf+6VBG+GuztBX4bK0gKNtNkrmwPgukf1T2/2NvhmdFpmSjjOY2gZ4FTKXuX15p7od0RSrvovV1VRlH87ysM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- MN0PR01MB7659.prod.exchangelabs.com (2603:10b6:208:37a::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.22; Thu, 15 Sep 2022 03:54:58 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::48f7:ac49:a2f8:614e]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::48f7:ac49:a2f8:614e%5]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 03:54:57 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     quan@os.amperecomputing.com,
-        Phong Vo <phong@os.amperecomputing.com>,
-        Thang Nguyen <thang@os.amperecomputing.com>
-Subject: [PATCH] docs: i2c: slave-interface: return errno when handle I2C_SLAVE_WRITE_REQUESTED
-Date:   Thu, 15 Sep 2022 10:54:40 +0700
-Message-Id: <20220915035440.2862532-1-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0029.apcprd02.prod.outlook.com
- (2603:1096:4:195::6) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=AATR5Vi84utBn0tLSt7uf9CLWfaKHdrblcotY/Zmy9A=;
+        b=ND/txL1/+xjMLDu0aIdccxW60RK8u7870i1GIIuyQKxphQzcP0TfddcsLd1MzrgnLT
+         GKtjVX1JQbAqGRhp5jha+MaVq07U85m+h+xVUvNcloa2GVDXilU51Br/KvH/g1MucqRh
+         bZh03gEbldXqVsaaxQNmcdckzW99ZtHgNkLl+DmUH48fx+vkDz7A2a7Sf1wHbJVj2cTx
+         ub0MgXAmYuWslGh2/YvLHDH7rko4xDKo6S3UixZuSF5PXpNwlZYSjAx3oXY3+et1mPLq
+         ORyvaTe8yaasLjnGnR0OeAQipCE4tc2n0aVp3T5wJqWjXSQdafKujm9YNk8Gse7TYmUb
+         w2hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=AATR5Vi84utBn0tLSt7uf9CLWfaKHdrblcotY/Zmy9A=;
+        b=d+ACzdAvez1IIPcx3+CVdYvww5pxpzEPFVKpsm9WPiqmJGCJ/JmYrZwvXB5sm6Suri
+         pehLLg4mpRjcYzgdK7GUvB9XY96TpVaYJ5h6tbHRZUnD1cSrWJ9aOinZwM533NcHgUiJ
+         rNf2aeRM7dQXUNiiqfAPQZce+vN5gbh8WgXVqNp+f3Oq3Nmoesx6gvF9nkzbzVlHV9Gm
+         wt89/rCBbNJGm2Le7PBXKOebApO+LhAr21H1OSJMUmtxgqq9xcRPs3+99rLQNP7zauft
+         DAPOZKBl9n0XT1J+8QySYpN94gF/uospKkKvAL3/UXkmX6N0RqMQJH06SoBYSKpaacZU
+         ToMA==
+X-Gm-Message-State: ACgBeo1yuUOXkpgPRc6M15K4Sgq8iNoClikJU+u5+Nw/JASLUhd8XOQU
+        /d1xJtYo0BvyuHML+J1FV7yNQozmTYiO2SpIwRYm7Q==
+X-Google-Smtp-Source: AA6agR4osRYEVoTdOQ8rBO9HBExukcN1jUj15ovpiQwllRhupuOoXzzWoWRJ7k5rooxb3ZPVIefxFl2GpMlNu4Sbpus=
+X-Received: by 2002:a17:907:2da6:b0:73d:d587:6213 with SMTP id
+ gt38-20020a1709072da600b0073dd5876213mr28200738ejc.5.1663214176661; Wed, 14
+ Sep 2022 20:56:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR01MB7282:EE_|MN0PR01MB7659:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff7a5dee-d77c-48ef-4071-08da96ce0e65
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J+scuXP6P2VMB2Fhhu3n89YST0yLxG+FJlKJ1mYQyUn3n35ICA2eHKONVC8GaXiUqLlt/atkDRDVM10lTX93Yd0IZKFzYHKiP7BHQiGMENjRt/02EqQZRX3l1JcS2KsTF/EJdMhhlf9rb4Fga6fBsuu+sKlPutLBFL0GIE0azFuNHofTlT0cXOet0/CIt+k/UqzmQb7DiI6Tf5PbscXEVYXrMDljqkJ5a7SgZv09T4tEpmKWQ50LGfksRqyNUN3vCu3bdLiB1A+tAT9+iYaClgwQ6F6wkMtU7UjD8SU8nwemuX+tdEFzJfjkl6pbf7lXAxwQhrRJP0hl/3hPzZ3c1ZFQIzGR+aufMtz6cpK6OHg7u2A0yQnwKJ2UTRyAmlcB8FK1uszw1Z3jAWs4dhplw/N3Cl7OjArT01h6mX6FIUeh1XcqqRu/Mq5tfOZ84ZINyvh7GSxCTWyLFvMi3Jc5UFcFJW5AoeWFSIieXegYnjxpZsEPvnQ16ZQZDiFAx2h8J3XEJV/NZ+71HY+SWLxvcFoInmGtjHSiGtNvgQddefR6mGp0ls/0TxUGg7D1VEc+1mFaGQoOm3Bko6tov1bXuqwWyk5qozA4l4zDE4iTk9tcHK8ZX8DPmu0i7ukRDZnqB3TqfJNkw6pH9MykRJrKoY8KBaJj51K9wHShRqfRTcgvRavf80RBtLRiQ0gs/jRdw45Y3j4dShlLuLho2gf8aMG129iEOyvWPrTaGzdsIbzMjdQJ4Swzk5EL12IaBSy3g0taZ+eg3cuR2/wfRyKA5LMxW1Eu2tIi0TV1bJo1Fq4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(346002)(39850400004)(366004)(451199015)(41300700001)(4326008)(6506007)(6512007)(8676002)(6666004)(54906003)(52116002)(6486002)(83380400001)(478600001)(26005)(66476007)(110136005)(38350700002)(316002)(2906002)(66946007)(38100700002)(107886003)(2616005)(8936002)(5660300002)(66556008)(186003)(1076003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LcEi+/JfA86hMnpaTf2H0AgvGlTTWny3THSKcIPZCd5j9o1bUcsIWpiEVVra?=
- =?us-ascii?Q?sbpaNkQsOJ3cK++u+/jxqdh2yaedGqKRdvrdjIRKixTDjK2UEJbXyP9BZihF?=
- =?us-ascii?Q?2rkixplDxQlgiTyJWvSG6NY/NX7yoBSGOJazSGb7w5eAjpspWJx3ks/u4GxI?=
- =?us-ascii?Q?xq/DHzAKhFzPc7f3KZPGDNq1+JBQP8BrvSsT84H6I62ckQLVRh2uT03Gtk2Z?=
- =?us-ascii?Q?XSLXnbw1PfHvUJQ5HmQC06MWuHADt0Js25gq2VyKeBkz8FfPrpyG/AJQjDGI?=
- =?us-ascii?Q?m9p4WcxB6VlzO9ENYBDXT8mgFLYxbmtid/KyEE3cHCydEnTNNpbZcBj+EsnF?=
- =?us-ascii?Q?aVIJ5IiKIjQP6gVpFtkny06GbN3AQBBnhcCslqbBWvOA1yXQE9fUZZl3HzzX?=
- =?us-ascii?Q?pPSA8NszgWY+xm9qltGXjvX4vc6hmAUgGniC5YYYG0QTAo045rXTH4itw1/q?=
- =?us-ascii?Q?GXY1BybIHlGpbZ0PfgoEsifJGs5j9JLkfK9Xf4LiOR7Nvoh7iHIsPso5csGn?=
- =?us-ascii?Q?sfjqbc3XQfzHw1Ycs3ILQIuSUrWcGq5HJdiQTN3Djp4nH62TpsALneGN/K7J?=
- =?us-ascii?Q?0FzSHi+EEAkBqUkqvxO7eyIMyciC3un8neG13IbRL7CdU0z45wg8duNHEEHI?=
- =?us-ascii?Q?vwWPodo8Tp1+HL9E2em71kgKb4tKbxDHDJ9qOL/+7R7RPcAMSmhD1VhesnGC?=
- =?us-ascii?Q?fqe76ZBawyUnlk3FgHnZQaBsXOvKFI94ELenldc1K4rxKmin8jLIzrQ9g+rZ?=
- =?us-ascii?Q?6OOrt/HqpvsdnFmULzv0E7ROeG1pUKEZk+rOl6kLPJAUgp6VaxfU0JwLufvQ?=
- =?us-ascii?Q?Z6fJR9vWuTuXqj7K2JxYwEW8NJJQaVAJx11PhVjMnoXdUqdKlqN9f3epGbbP?=
- =?us-ascii?Q?E4yEPJ73UiSo9Lc07x0QQozWyCSzAPYb8cYI4bIUuEw3WXKVpJZJzm+kNl3S?=
- =?us-ascii?Q?2ZNrM5AWdkHqvfwRK8mYNXSIL+nFWohvkCKGgyKsPfW9mtQoErig5ZrXwekj?=
- =?us-ascii?Q?jtfk9A6NJbsdFKkYL8EA1ePiNymf7+cfxY4LVITGB83dcQo9a1ycwnDUMhzT?=
- =?us-ascii?Q?S504WCRxg4IuqggAOhScZ7h+/h6WACDbHwEyjhK1us4r7ZCIWxQZqkiSKhAa?=
- =?us-ascii?Q?bEvF0IyphA5ZQ6VNgOL+cu8rN7Oz7BJCPBbUsDqtJvW5ECuaiejc+kEUv4Wf?=
- =?us-ascii?Q?eDUGUGADiEcM5OAaIoZl4VJZLeZ/uM/myIQ1/+dTFjc78uekNr6ldDhn+nnN?=
- =?us-ascii?Q?Zh6vBglAD5mxKZr2+t8qtsDfm7oGC/bNq5+cHBgsIFZCV8H4yWivjbJ0/UZS?=
- =?us-ascii?Q?bw8S4HZmQW6PVvgfZz5XOy75zj1iSu8zaSTUVbBO6LhQuAY9poYG3jL9GKlN?=
- =?us-ascii?Q?lolYi03N1qPCS7KdBl3fWF4T/H8B4jWwZgUx0v+Dj8pVgn/kDAFLG1FjKKzS?=
- =?us-ascii?Q?kmLA45ZXqATOzVoLmCqPs6tVhUWQNlYpVmZ2FNS8HNC4pizpY38XhlbujGDN?=
- =?us-ascii?Q?x9jow1EmIJqSX0/koGaO26iSgRZtXwHDbSoWdCxNGNtQ9hi6Z0y+DMv/TlLO?=
- =?us-ascii?Q?88iB9Lew3NA7l+qoF79sLFVgCiT254TNoTikkdzt5F3v+ebYu/q0XdLgscfG?=
- =?us-ascii?Q?3VsbaqHoeKz+52QesBJxRt8=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff7a5dee-d77c-48ef-4071-08da96ce0e65
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 03:54:57.8885
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tXODtYV4G81oLXCiaftw3huX3lgDSHCERp3TDy22JCPBluR+SUz+5sCSJ96McEO+1O93ths7h7NWPN7Bn0et0tdVjM/Eq8fK5hR3J37C0Fk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR01MB7659
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YuqDMLF2AQyj4+N1@kroah.com> <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
+ <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
+ <YyCequVJnV3p0Cpw@kroah.com> <CAOesGMjQHhTUMBGHQcME4JBkZCof2NEQ4gaM1GWFgH40+LN9AQ@mail.gmail.com>
+ <YyHehZ5hT8mXKoTX@kroah.com> <CAOesGMid4_pDeUQFwhfSwrBRGhGocA-73V83h5qOsmYg7gAWTA@mail.gmail.com>
+ <CAGETcx9Ha+akkuqzanGH9vrCnFQT_zTmezAHwtMhpxsQa=mwjg@mail.gmail.com>
+In-Reply-To: <CAGETcx9Ha+akkuqzanGH9vrCnFQT_zTmezAHwtMhpxsQa=mwjg@mail.gmail.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Wed, 14 Sep 2022 20:56:04 -0700
+Message-ID: <CAOesGMgpJQjMvo6m7on+27F8REiHaVSRL6HBjiRPVDM9Jscnrg@mail.gmail.com>
+Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case backend is not ready, ie: fail to wakeup or initialization, on
-the returning of the I2C_SLAVE_WRITE_REQUESTED event, bus driver should
-aware the backend status and might auto sending NACK on the next
-incoming bytes for I2C master to retry.
+On Wed, Sep 14, 2022 at 10:36 AM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, Sep 14, 2022 at 9:24 AM Olof Johansson <olof@lixom.net> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Sep 14, 2022 at 7:00 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Sep 13, 2022 at 09:28:27AM -0700, Olof Johansson wrote:
+> > > > On Tue, Sep 13, 2022 at 8:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
+> > > > > > On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
+> > > > > > >
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > >
+> > > > > > > > Saravana Kannan (11):
+> > > > > > > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > >       driver core: Add wait_for_init_devices_probe helper function
+> > > > > > > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+> > > > > > > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
+> > > > > > > >       driver core: Set fw_devlink.strict=1 by default
+> > > > > > > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > >       driver core: Delete driver_deferred_probe_check_state()
+> > > > > > > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
+> > > > > > > >       of: base: Avoid console probe delay when fw_devlink.strict=1
+> > > > > > >
+> > > > > > > The last patch in this list regresses my HoneyComb LX2K (ironically
+> > > > > > > the machine I do maintainer work on). It stops PCIe from probing, but
+> > > > > > > without a single message indicating why.
+> > > > > > >
+> > > > > > > The reason seems to be that the iommu-maps property doesn't get
+> > > > > > > patched up by my (older) u-boot, and thus isn't a valid reference.
+> > > > > > > System works fine without IOMMU, which is how I've ran it for a couple
+> > > > > > > of years.
+> > > > > > >
+> > > > > > > It's also extremely hard to diagnose out of the box because there are
+> > > > > > > *no error messages*. And there were no warnings leading up to this
+> > > > > > > strict enforcement.
+> > > > > > >
+> > > > > > > This "feature" seems to have been done backwards. The checks should
+> > > > > > > have been running (and not skipped due to the "optional" flag), but
+> > > > > > > also not causing errors, just warnings. That would have given users a
+> > > > > > > chance to know that this is something that needs to be fixed.
+> > > > > > >
+> > > > > > > And when you flip the switch, at least report what failed so that
+> > > > > > > people don't need to spend a whole night bisecting kernels, please.
+> > > > > > >
+> > > > > > > Greg, mind reverting just the last one? If I hit this, I presume
+> > > > > > > others would too.
+> > > > > >
+> > > > > > Apologies, wrong patch pointed out. The culprit is "driver core: Set
+> > > > > > fw_devlink.strict=1 by default", 71066545b48e42.
+> > > > >
+> > > > > Is this still an issue in -rc5?  A number of patches in the above series
+> > > > > was just reverted and hopefully should have resolved the issue you are
+> > > > > seeing.
+> > > >
+> > > > Unfortunately, I discovered this regression with -rc5 in the first
+> > > > place, so it's still there.
+> > >
+> > > Ick, ok, Saravana, any thoughts?  I know you're at the conference this
+> > > week with me, maybe you can give Olof a hint as to what to look for
+> > > here?
+> >
+> > I'm not sure what you want me to look for. The patch turns on
+> > enforcement of DT contents that never used to be enforced, so now my
+> > computer no longer boots. And it does it in a way that makes it
+> > impossible for someone not rebuilding kernels to debug to figure out
+> > what happened.
+>
+> Hi Olof,
+>
+> Sorry for the trouble. It doesn't print any error messages because
+> there are cases where it's block the probe where it wouldn't be an
+> error. If I printed it every time fw_devlink blocked a probe, it'd be
+> a ton of messages.
+>
+> Btw, when I enabled fw_devlink.strict=1, it was AFTER making changes
+> that'll stop indefinitely blocking probes. So what you are seeing
+> shouldn't be happening. After about 10 seconds (configurable), it
+> should stop blocking the probes.
 
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-Links:https://lore.kernel.org/linux-arm-kernel/556fa9e1-c54b-8370-4de7-c2d3ec7d6906@os.amperecomputing.com/
----
- Documentation/i2c/slave-interface.rst | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+"Shouldn't be happening" is a pretty bold statement. It's not actually
+stuck on timeout in my case, and doesn't recover.
 
-diff --git a/Documentation/i2c/slave-interface.rst b/Documentation/i2c/slave-interface.rst
-index 82ea3e1d6fe4..03b15b21d392 100644
---- a/Documentation/i2c/slave-interface.rst
-+++ b/Documentation/i2c/slave-interface.rst
-@@ -72,12 +72,15 @@ Event types:
- 
-   'val': unused
- 
--  'ret': always 0
-+  'ret': 0 if backend ready, otherwise, returns some errno
- 
- Another I2C master wants to write data to us. This event should be sent once
- our own address and the write bit was detected. The data did not arrive yet, so
--there is nothing to process or return. Wakeup or initialization probably needs
--to be done, though.
-+there is nothing to process or return. After returning, the bus driver should
-+always ack on this address phase. If 'ret' is zero, backend initialization or
-+wakeup is done and ready. If 'ret' is an errno, bus driver should aware the
-+backend status and might need to nack all next incoming bytes for I2C master to
-+retry.
- 
- * I2C_SLAVE_READ_REQUESTED (mandatory)
- 
--- 
-2.35.1
+Instead, what seems to be happening is that the PCIe driver, which
+registers as a platform_driver here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/mobiveil/pcie-layerscape-gen4.c#n255
 
+ends up registering, and the driver core now refuses to try to probe
+the device matches, since they no longer have their suppliers
+fulfilled (the smmu suppliers would not be tracked since they are
+optional here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/of/property.c#n1449
+
+So what happens is that the driver registration succeeds, but there
+have been no devices matched to it. So when it returns to the platform
+core, it thinks there are no devices bound to this driver, so it
+should be unregistered:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/platform.c#n951
+
+That explains why the pcie core doesn't retry and just disappears, and
+stops retrying.
+
+This is what it looks like with CONFIG_DEBUG_DRIVER and CONFIG_DEBUG_DEVRES:
+[    5.178538] bus: 'platform': add driver layerscape-pcie-gen4
+[    5.184301] bus: 'platform': __driver_probe_device: matched device
+3600000.pcie with driver layerscape-pcie-gen4
+[    5.194498] platform 3600000.pcie: error -EPROBE_DEFER: supplier
+5000000.iommu not ready
+[    5.202607] platform 3600000.pcie: Added to deferred list
+[    5.208024] bus: 'platform': __driver_probe_device: matched device
+3800000.pcie with driver layerscape-pcie-gen4
+[    5.218227] platform 3800000.pcie: error -EPROBE_DEFER: supplier
+5000000.iommu not ready
+[    5.226333] platform 3800000.pcie: Added to deferred list
+[    5.231814] bus: 'platform': remove driver layerscape-pcie-gen4
+[    5.237761] driver: 'layerscape-pcie-gen4': driver_release
+
+Note that the platform driver registration sets flags to disable async
+probing, supposedly so it can assume that any matching devices would
+be found by the time registration returns:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/platform.c#n917
+:
+
+/*
+* We have to run our probes synchronously because we check if
+* we find any devices to bind to and exit with error if there
+* are any.
+*/
+drv->driver.probe_type = PROBE_FORCE_SYNCHRONOUS;
+
+/*
+* Prevent driver from requesting probe deferral to avoid further
+* futile probe attempts.
+*/
+drv->prevent_deferred_probe = true;
+
+
+
+
+Bottom line: How was this code tested? This seems far from mature,
+this doesn't seem like that of an obscure condition to occur and it
+could create minefields for others down the road if it's fragile.
+
+
+-Olof
+
+
+>
+> If you actually want to see the reasons the probe is being blocked,
+> you can enable the existing dbg messages in drivers/base/core.c.
+>
+> Would you mind pointing me to the dts (not dtsi) file that corresponds
+> to this board please? And which specific PCI device is being blocked
+> from probing? I'll can try to debug it further. Also, can you try to
+> see why it doesn't get unblocked when driver_deferred_probe_timeout
+> expires? Or why that's not helping here?
+>
+> In the meantime, if you want this patch reverted, I'm not opposed to
+> that. But if you can use fw_devlinks.strict=0 in your commandline for
+> now and give me time to debug, that'd be nicer.
+>
+> Thanks,
+> Saravana
