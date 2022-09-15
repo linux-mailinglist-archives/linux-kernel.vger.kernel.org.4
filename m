@@ -2,305 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFFB5B930D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8235B9310
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiIOD13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S230114AbiIOD3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiIOD1Z (ORCPT
+        with ESMTP id S229539AbiIOD3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:27:25 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD24DF37;
-        Wed, 14 Sep 2022 20:27:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPqzn4n_1663212439;
-Received: from 30.221.129.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPqzn4n_1663212439)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 11:27:20 +0800
-Message-ID: <55a00d7f-bb9d-b59b-9af6-db7f2601c453@linux.alibaba.com>
-Date:   Thu, 15 Sep 2022 11:27:19 +0800
+        Wed, 14 Sep 2022 23:29:19 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08BC923DD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:29:18 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id go34so39158493ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=aDnRL1ZmQxOMFMNGZoJPqBH20uB7idv9vdFa8r24GwU=;
+        b=BIEvIqpeauLfLrfn2NJ3V9fmkkluSa7ifdKnINVa0FuH/hof7BYwLiLs7cfsH3OhAP
+         9lxWsGd4vfMb9OtaXfZVslJ8FkD+73neujZgd2TfRD5FvJ2hrG9bfKDigpBlncmB7ftc
+         syTeds4YHFgjZCiGi3+7pOn/jFMzXaIbGMfuhtERG5ytgwuRTnyIRCbCTLVvCED2xB+F
+         juxn7WaE0qWoe1C4FEwd49qxVWWcHjOXpx1ieL0nu+409onKeh5K5A2kpwthXZ4xCU6u
+         6oTpELQl8h0YfWzMrhCbRZSPoI1Qwr2iGFooqPqWbiPdp2ixAVkQaoXAnt6GlLbrUoLr
+         k49A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=aDnRL1ZmQxOMFMNGZoJPqBH20uB7idv9vdFa8r24GwU=;
+        b=RqgErumh1u1C5aFb5Fk+InaNta6hnGY1COcUVagOkrh7fmxTVeWh6wpRSvlEI+yFJw
+         qvr7KkVrpMMIqghpB6F5CWQVZdD47iWC8Cq3isWD4TuPjzoLaCxIwl0HnKoyE2U8SU1w
+         PolJbgKXwut5MsW87kKl0QrnV49QZL1VsPcsmZnIuPKWctQTY3kJP9RWy+jawm95RVVf
+         BH9MJs7wvcPuPoayTT3f1fbsHIce2dl73ekARiY6u+YYhhFLz+pyKqagOLLgJLiV6amZ
+         Z1E32ZMG4YGY3rJ6wf7yx7FgkVytagg8GYunvu59bpaLc4oK0YTdiJH8tSRNYbrb5smb
+         edOg==
+X-Gm-Message-State: ACgBeo2A8BqfqSxM9tz2DyZDnnBz5bewMoTQbnEpf+DWJteuxL5cXWZP
+        XAB1TeDAz0ulaoXD+Hkx+R0HETBXdF00fF2u0DM=
+X-Google-Smtp-Source: AA6agR7aXCQraSLRzTTJb0s6HNgIEyTjp+ZsItD3EIMi4h7+yiD7fKo0eUZmXAkME0JnFfQl8HJpKSkV27vW9su/vsU=
+X-Received: by 2002:a17:907:802:b0:73d:c710:943e with SMTP id
+ wv2-20020a170907080200b0073dc710943emr27540333ejb.214.1663212557521; Wed, 14
+ Sep 2022 20:29:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V3 4/6] erofs: introduce fscache-based domain
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
- <20220914105041.42970-5-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220914105041.42970-5-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6f02:a053:b0:24:3aff:af78 with HTTP; Wed, 14 Sep 2022
+ 20:29:16 -0700 (PDT)
+Reply-To: ninacoulibaly04@hotmail.com
+From:   nina coulibaly <coulibalynina107@gmail.com>
+Date:   Thu, 15 Sep 2022 03:29:16 +0000
+Message-ID: <CA+4vKanjRNwSyCTeKUeBt4hri7yqAWXqANTyX=mrkPsAsrfTAw@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:642 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6239]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [coulibalynina107[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [coulibalynina107[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ninacoulibaly04[at]hotmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/14/22 6:50 PM, Jia Zhu wrote:
-> A new fscache-based shared domain mode is going to be introduced for
-> erofs. In which case, same data blobs in same domain will be shared
-> and reused to reduce on-disk space usage.
-> 
-> As the first step, we use pseudo mnt to manage and maintain domain's
-> lifecycle.
-
-The commit message needs to be updated, since the pseudo mnt is not
-introduced yet in this patch.
-
-> 
-> The implementation of sharing blobs will be introduced in subsequent
-> patches.
-> 
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> ---
->  fs/erofs/fscache.c  | 134 ++++++++++++++++++++++++++++++++++++++------
->  fs/erofs/internal.h |   9 +++
->  2 files changed, 127 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index 4159cf781924..b2100dc67cde 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -1,10 +1,14 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
->   * Copyright (C) 2022, Alibaba Cloud
-> + * Copyright (C) 2022, Bytedance Inc. All rights reserved.
->   */
->  #include <linux/fscache.h>
->  #include "internal.h"
->  
-> +static DEFINE_MUTEX(erofs_domain_list_lock);
-> +static LIST_HEAD(erofs_domain_list);
-> +
->  static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
->  					     loff_t start, size_t len)
->  {
-> @@ -417,6 +421,106 @@ const struct address_space_operations erofs_fscache_access_aops = {
->  	.readahead = erofs_fscache_readahead,
->  };
->  
-> +static
-> +struct erofs_domain *erofs_fscache_domain_get(struct erofs_domain *domain)
-> +{
-> +	refcount_inc(&domain->ref);
-
-refcount_inc_not_zero() is prefered here.
-
-Considering the following time sequence:
-
-CPU1				CPU2
-------				------
-erofs_fscache_domain_put
-  refcount decreased to 0
-  				erofs_fscache_register_domain
-				  mutex_lock
-				  erofs_fscache_domain_get
-				    inc refcount to 1
-				  mutex_unlock
-  mutex_lock
-  remove the domain from list
-  mutex_unlock
-
-
-
-> +	return domain;
-> +}
-> +
-> +static void erofs_fscache_domain_put(struct erofs_domain *domain)
-> +{
-> +	if (!domain)
-> +		return;
-> +	if (refcount_dec_and_test(&domain->ref)) {
-> +		fscache_relinquish_volume(domain->volume, NULL, false);
-> +		mutex_lock(&erofs_domain_list_lock);
-> +		list_del(&domain->list);
-> +		mutex_unlock(&erofs_domain_list_lock);
-
-We need to delete the domain from the list first, and then calling
-fscache_relinquish_volume(), so that others won't race with this.
-
-
-> +		kfree(domain->domain_id);
-> +		kfree(domain);
-> +	}
-> +}
-> +
-> +static int erofs_fscache_register_volume(struct super_block *sb)
-> +{
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	char *domain_id = sbi->opt.domain_id;
-> +	struct fscache_volume *volume;
-> +	char *name;
-> +	int ret = 0;
-> +
-> +	if (domain_id)
-> +		name = kasprintf(GFP_KERNEL, "erofs,%s", domain_id);
-> +	else
-> +		name = kasprintf(GFP_KERNEL, "erofs,%s", sbi->opt.fsid);
-> +	if (!name)
-> +		return -ENOMEM;
-> +
-> +	volume = fscache_acquire_volume(name, NULL, NULL, 0);
-> +	if (IS_ERR_OR_NULL(volume)) {
-> +		erofs_err(sb, "failed to register volume for %s", name);
-> +		ret = volume ? PTR_ERR(volume) : -EOPNOTSUPP;
-> +		volume = NULL;
-> +	}
-> +
-> +	sbi->volume = volume;
-> +	kfree(name);
-> +	return ret;
-> +}
-> +
-> +static int erofs_fscache_init_domain(struct super_block *sb)
-> +{
-> +	int err;
-> +	struct erofs_domain *domain;
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +
-> +	domain = kzalloc(sizeof(struct erofs_domain), GFP_KERNEL);
-> +	if (!domain)
-> +		return -ENOMEM;
-> +
-> +	domain->domain_id = kstrdup(sbi->opt.domain_id, GFP_KERNEL);
-> +	if (!domain->domain_id) {
-> +		kfree(domain);
-> +		return -ENOMEM;
-> +	}
-> +	sbi->domain = domain;
-
-Why bothering setting sbi->domain here? Can't we set sbi->domain finnaly
-when the domain has been fully initialized?
-
-
-> +	err = erofs_fscache_register_volume(sb);
-> +	if (err)
-> +		goto out;
-> +
-> +	domain->volume = sbi->volume;
-> +	refcount_set(&domain->ref, 1);
-> +	mutex_init(&domain->mutex);
-> +	list_add(&domain->list, &erofs_domain_list);
-> +	return 0;
-> +out:
-> +	kfree(domain->domain_id);
-> +	kfree(domain);
-> +	sbi->domain = NULL;
-> +	return err;
-> +}
-> +
-> +static int erofs_fscache_register_domain(struct super_block *sb)
-> +{
-> +	int err;
-> +	struct erofs_domain *domain;
-> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +
-> +	mutex_lock(&erofs_domain_list_lock);
-> +	list_for_each_entry(domain, &erofs_domain_list, list) {
-> +		if (!strcmp(domain->domain_id, sbi->opt.domain_id)) {
-> +			sbi->domain = erofs_fscache_domain_get(domain);
-> +			sbi->volume = domain->volume;
-> +			mutex_unlock(&erofs_domain_list_lock);
-> +			return 0;
-> +		}
-> +	}
-> +	err = erofs_fscache_init_domain(sb);
-> +	mutex_unlock(&erofs_domain_list_lock);
-> +	return err;
-> +}
-> +
->  struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
->  						     char *name, bool need_inode)
->  {
-> @@ -486,24 +590,16 @@ void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
->  int erofs_fscache_register_fs(struct super_block *sb)
->  {
->  	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> -	struct fscache_volume *volume;
->  	struct erofs_fscache *fscache;
-> -	char *name;
-> -	int ret = 0;
-> +	int ret;
->  
-> -	name = kasprintf(GFP_KERNEL, "erofs,%s", sbi->opt.fsid);
-> -	if (!name)
-> -		return -ENOMEM;
-> +	if (sbi->opt.domain_id)
-> +		ret = erofs_fscache_register_domain(sb);
-> +	else
-> +		ret = erofs_fscache_register_volume(sb);
->  
-> -	volume = fscache_acquire_volume(name, NULL, NULL, 0);
-> -	if (IS_ERR_OR_NULL(volume)) {
-> -		erofs_err(sb, "failed to register volume for %s", name);
-> -		ret = volume ? PTR_ERR(volume) : -EOPNOTSUPP;
-> -		volume = NULL;
-> -	}
-> -
-> -	sbi->volume = volume;
-> -	kfree(name);
-> +	if (ret)
-> +		return ret;
->  
->  	fscache = erofs_fscache_register_cookie(sb, sbi->opt.fsid, true);
->  	if (IS_ERR(fscache))
-> @@ -518,7 +614,13 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
->  	struct erofs_sb_info *sbi = EROFS_SB(sb);
->  
->  	erofs_fscache_unregister_cookie(sbi->s_fscache);
-> -	fscache_relinquish_volume(sbi->volume, NULL, false);
->  	sbi->s_fscache = NULL;
-> +
-> +	if (sbi->domain)
-> +		erofs_fscache_domain_put(sbi->domain);
-> +	else
-> +		fscache_relinquish_volume(sbi->volume, NULL, false);
-> +
->  	sbi->volume = NULL;
-> +	sbi->domain = NULL;
->  }
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 2d129c6b3027..5ce6889d6f1d 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -99,6 +99,14 @@ struct erofs_sb_lz4_info {
->  	u16 max_pclusterblks;
->  };
->  
-> +struct erofs_domain {
-> +	refcount_t ref;
-> +	struct mutex mutex;
-> +	struct list_head list;
-> +	struct fscache_volume *volume;
-> +	char *domain_id;
-> +};
-> +
->  struct erofs_fscache {
->  	struct fscache_cookie *cookie;
->  	struct inode *inode;
-> @@ -158,6 +166,7 @@ struct erofs_sb_info {
->  	/* fscache support */
->  	struct fscache_volume *volume;
->  	struct erofs_fscache *s_fscache;
-> +	struct erofs_domain *domain;
->  };
->  
->  #define EROFS_SB(sb) ((struct erofs_sb_info *)(sb)->s_fs_info)
-
 -- 
-Thanks,
-Jingbo
+Dear,
+
+Please grant me the permission to share important discussion with you.
+I am looking forward to hearing from you at your earliest convenience.
+
+Best Regards.
+
+Mrs. Nina Coulibaly
