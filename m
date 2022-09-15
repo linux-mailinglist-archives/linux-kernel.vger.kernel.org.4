@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69A75B9E02
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFF85B9DF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiIOPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S230032AbiIOPEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiIOPEo (ORCPT
+        with ESMTP id S230339AbiIOPDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:04:44 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8E013E26
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:42 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id s17-20020a056402521100b004511c8d59e3so12871479edd.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=H32LKJ4QtRE8PW83scu/rnCN+O5l16ld3Egd+3MOYzM=;
-        b=Z7D99KP/7kWnl5znToFpIf1yzLMq5Rl3cXYi/b07RUB4TDuaBOLLDYgebb40CGKG1L
-         1zCtTBptLWIIE71BCILie+2r2YL30vZTv1M14oRjoZ84j37Qthbws8lENFDUTapFncHJ
-         GMI/2NU3SzeX/kyx6KcZupV7AUQ3Ko6hrXIbFcW2S2DctuOcOUUhJU0Oim0IOCNK3Slv
-         Et5wtGOTIMIY7gHgozwd25lD6l/zq9vpBHfdJEacezGicwlEFZgMQl9USowxIbe0UN9j
-         WdCBEXFJTDUn1l0slw3ikke8yuPA7OPiHXDy0H4dUNtcUVd45sUoy/2pJE+/EkYb0XKl
-         u/lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H32LKJ4QtRE8PW83scu/rnCN+O5l16ld3Egd+3MOYzM=;
-        b=CFQnMTrUAOeOdkWoaaIOvPwTbtMHy9BsE6+7a33EfDDTZ0jIeebmWvuHH0vkCuVbDF
-         Rv0r8j32jDw5ILGyPaBRc55pF5cj1dAOH+G4AgqaE202+8tjdXdVfFzEnoXagVHBwXpn
-         wGW2RFTmOnV66JhZhGa7EAGFej98qM0CL8Za4ILbbg7iJip7QxVPQ1DhXRQRY4ixUN7e
-         VpEoULGV7Mar5w6naf6Ku43cdQt7mIyH9ke3OtVpEcvHQsScj+H2RRhRDHv0giMXoYDG
-         Nvt7O1u61ILyHQtUTNIRxY5jinuvx2ZLa9xH0Bm3SZlvTRgnmJGYRNhRhRh57ZXXpIQJ
-         Mg0A==
-X-Gm-Message-State: ACrzQf1VsC73ZAeaHLMMbGuCW0tRVEIgsDQkjzBOFQ9RR0+Ajdya/0yg
-        B9Ip2aOENG/WyiY9DLSFOIFZ3Ga0eGA=
-X-Google-Smtp-Source: AMsMyM5VSJ+y4oAY1cflJUKFEYKa2sNeJCpwHsdxCsIQ76K48TJwXnK+HBA3EP0jw8zgl0gp6zWhdtm0Ih0=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id
- ev6-20020a056402540600b004521560f9d4mr246547edb.333.1663254280120; Thu, 15
- Sep 2022 08:04:40 -0700 (PDT)
+        Thu, 15 Sep 2022 11:03:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E7585FD4;
+        Thu, 15 Sep 2022 08:03:51 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FE0oGw025208;
+        Thu, 15 Sep 2022 15:03:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=lN36wMv+b1e3Y0jJ3JfDDlO8HJyvghRjKzs9dtd5UhY=;
+ b=o0T2AWFb6UaloaVp7o32Yx/PmuefGHcQEzQwD4RPkuNAsB9av18yaY5xU8pnhJs1XIrP
+ rEkiqZS4vsdGl1Ar1Y/qfNmbQ0O1Jgchfjst71pTBrOUIimvEfJ/4OFdSHxlwYqzBKtn
+ O1Ewgk0ERj3yUv7QNc9rwxua7i7EQYanREJDVAwr3Sq2S0I7d9BmlwCgv60U6AVdRL9W
+ 84CwpcflcdkF6MaLXZU3hesU3kHxelQetPvwvR9UC51oh6SCdYJe/FXxLuPdjgXwC4VK
+ SW6QCXp7B6BfpUhA6gSF6XZiN8lvCGJXpRW8kogPh9MDVcvoHivENGo2QKHEYvkrxAcP RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm5em2cr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 15:03:50 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FExldw010170;
+        Thu, 15 Sep 2022 15:03:50 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm5em2cpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 15:03:49 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FEpulu015877;
+        Thu, 15 Sep 2022 15:03:48 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3jjy25sy5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 15:03:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FF49nv33423626
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Sep 2022 15:04:09 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA1F2AE056;
+        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45676AE051;
+        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.145.93.150])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
 Date:   Thu, 15 Sep 2022 17:03:35 +0200
-In-Reply-To: <20220915150417.722975-1-glider@google.com>
-Mime-Version: 1.0
-References: <20220915150417.722975-1-glider@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-2-glider@google.com>
-Subject: [PATCH v7 01/43] x86: add missing include to sparsemem.h
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        jjherne@linux.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, stable@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v3 1/2] s390/vfio-ap: bypass unnecessary processing of
+ AP resources
+Message-ID: <20220915170335.1743b645.pasic@linux.ibm.com>
+In-Reply-To: <4e89ff00-aac2-7c8e-14cf-add426853e9d@de.ibm.com>
+References: <20220823150643.427737-1-akrowiak@linux.ibm.com>
+        <20220823150643.427737-2-akrowiak@linux.ibm.com>
+        <20220915050018.37d21083.pasic@linux.ibm.com>
+        <4e89ff00-aac2-7c8e-14cf-add426853e9d@de.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6GOZBM6ibUtGtEuFU0JMkLYPIiPSrKcb
+X-Proofpoint-ORIG-GUID: MbnveZ2oYLDj_JsQOBmm5ayM9fPBSNRb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_08,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=838 spamscore=0
+ clxscore=1015 bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
+ definitions=main-2209150085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Vyukov <dvyukov@google.com>
+On Thu, 15 Sep 2022 16:53:51 +0200
+Christian Borntraeger <borntraeger@de.ibm.com> wrote:
 
-Including sparsemem.h from other files (e.g. transitively via
-asm/pgtable_64_types.h) results in compilation errors due to unknown
-types:
+> > Reviewed-by: Halil Pasic <pasic@linux.ibm.com>  
+> 
+> Shall the patch go via the s390 tree (still into 6.0 I guess)?
 
-sparsemem.h:34:32: error: unknown type name 'phys_addr_t'
-extern int phys_to_target_node(phys_addr_t start);
-                               ^
-sparsemem.h:36:39: error: unknown type name 'u64'
-extern int memory_add_physaddr_to_nid(u64 start);
-                                      ^
+Yes please! 
 
-Fix these errors by including linux/types.h from sparsemem.h
-This is required for the upcoming KMSAN patches.
-
-Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
-Link: https://linux-review.googlesource.com/id/Ifae221ce85d870d8f8d17173bd44d5cf9be2950f
----
- arch/x86/include/asm/sparsemem.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-index 6a9ccc1b2be5d..64df897c0ee30 100644
---- a/arch/x86/include/asm/sparsemem.h
-+++ b/arch/x86/include/asm/sparsemem.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_SPARSEMEM_H
- #define _ASM_X86_SPARSEMEM_H
- 
-+#include <linux/types.h>
-+
- #ifdef CONFIG_SPARSEMEM
- /*
-  * generic non-linear memory support:
--- 
-2.37.2.789.g6183377224-goog
 
