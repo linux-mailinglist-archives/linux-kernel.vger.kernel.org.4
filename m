@@ -2,315 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DA75BA46C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E2C5BA488
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIPCBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S229452AbiIPCHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiIPCBb (ORCPT
+        with ESMTP id S229515AbiIPCHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:01:31 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E386FE5;
-        Thu, 15 Sep 2022 19:01:23 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h194so14588891iof.4;
-        Thu, 15 Sep 2022 19:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vUOZTBGoBv99MDEQndk9eXZRqRCGzryyELAstPK3MfY=;
-        b=GwuL35qvgBHdK8reXlxhq9kUhkxy22VNoi7FENABZhBHXm1ErcmRPEwQoNe4KXX1nf
-         pFcPJxhpAkzmYJ0hTVe2bEWWZmT5nKE0HzUwkVKV+7Ef19swp5AXl7VpM9+siW2yADTT
-         Us/ZcayNlJXAl1Fg3pk8xIjelVz3Ip9EXtLIA+bO1jtOEjRChoA2/sgvpv47YQevOhAO
-         yspl7n3ocg1LIZGxpYB1V/H859ZxLQbUDdIJrTJ4oxauJSUDO6vaToDErYHC9hc/v9cj
-         OsJY7phQKC2ovUFbZfyLTX0DA8bFToeCZ+mkvtlsEPxrBDGFxQzfqk0MwFHstNEMU5Y4
-         PVUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vUOZTBGoBv99MDEQndk9eXZRqRCGzryyELAstPK3MfY=;
-        b=WJl5EAO+ulHrUZrDycWIxre51qoDjlcu0IwELsNXz0vcaDtBVqN25rPM8Rg7slALa6
-         Qreo7rIYqRVEeu5laaTmh1UrWEU5EHyBR9Def2W0CecXHzNb2s/M3zBzbrQI2K/LFBlV
-         7I+/C0J7o3vmvvP+u8fEJkoqFccCybZb5F3EK7nQBmr1Un7MHMXbHJkzGXaJs76h2Okf
-         Un926t+5axO5m81QLoT7zN6qZYyvvwT34tuaFzsIlHL0sbiI1xFLDDnJX5PJ0Dv7QmZG
-         PoJpP0QI2/45NQUR/H4TK3IelB2GUrOlG2m8RIYB3eKbMR62FFVrU4bxZ11KLEnXINyU
-         +CHQ==
-X-Gm-Message-State: ACrzQf2FogidwNuiXJRibnBSKqJ3MGTcLiEjXm3FSBbVIYoKied22EmR
-        twE2j0/qof+jVT8FlO5lXi4=
-X-Google-Smtp-Source: AMsMyM4XoQt4fRUDgMoNCX19tFY6eJqLtNQViE+ucF/8vsrlU/ea8IfcT5fHBeQjpsxmpJdi/Pvc+A==
-X-Received: by 2002:a02:85a1:0:b0:349:2e9f:794 with SMTP id d30-20020a0285a1000000b003492e9f0794mr1400822jai.113.1663293682109;
-        Thu, 15 Sep 2022 19:01:22 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00::af41])
-        by smtp.gmail.com with UTF8SMTPSA id i2-20020a056e02152200b002eb255d81b0sm8502497ilu.65.2022.09.15.19.01.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 19:01:21 -0700 (PDT)
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH 2/2] pinctrl: qcom: add sdm670 pinctrl
-Date:   Thu, 15 Sep 2022 22:01:17 -0400
-Message-Id: <20220916020117.227480-1-mailingradian@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220914023900.z64wugbq7p2gfb32@builder.lan>
-References: 
+        Thu, 15 Sep 2022 22:07:08 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1E746239
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:07:06 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220916020704epoutp01f3e9a6a078226db6ed7818e17c456e4d~VNRpA7-8o0144501445epoutp01C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:07:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220916020704epoutp01f3e9a6a078226db6ed7818e17c456e4d~VNRpA7-8o0144501445epoutp01C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663294024;
+        bh=dIE6n6B/JTYadhxIQ3uaS2kqdQe8Fv4KYHNiQIu+LxA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=XayJD26hfMinfLgAEY3LmPZe3VMkruP9NqsfxG2uUHyqw8gwPgiXq2wFXX44hl9vK
+         Ix1DPDOEkwAYVqtzxO4DmDUgZ7GuHl0aDh1zgPJfAEKeOBJxVLkf5IMFeYB+hM4M4b
+         /tmJRUuNxVIpPJIKYDv2C6jRReUvLSVB/DodgyJ4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220916020703epcas2p104c73e4cc0fc9a23e9727f6f8eff7e46~VNRofYr-80916609166epcas2p1T;
+        Fri, 16 Sep 2022 02:07:03 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4MTHWW1FlHz4x9QR; Fri, 16 Sep
+        2022 02:07:03 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8F.A5.06255.74AD3236; Fri, 16 Sep 2022 11:07:03 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9~VNRndE7Gc1762517625epcas2p2s;
+        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220916020702epsmtrp208c5667f05db7b731aaa3056a670f1ae~VNRnb-Rlq1884618846epsmtrp2o;
+        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
+X-AuditID: b6c32a48-f77ff7000000186f-0e-6323da4780ee
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        31.96.18644.64AD3236; Fri, 16 Sep 2022 11:07:02 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220916020702epsmtip26a609f5b3c8775b019cf720184bf757c~VNRnPsiL52062520625epsmtip2J;
+        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
+From:   SEO HOYOUNG <hy50.seo@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
+        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
+Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: [PATCH v3] scsi: ufs: add a variant operation in struct
+ ufs_hba_variant_ops
+Date:   Thu, 15 Sep 2022 22:49:56 +0900
+Message-Id: <20220915134956.90086-1-hy50.seo@samsung.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmqa77LeVkgxO72C0ezNvGZvHy51U2
+        i4MPO1ksvi59xmox7cNPZovVix+wWCy6sY3J4uaWoywWl3fNYbPovr6DzWL58X9MDtwel694
+        e0xYdIDR4/v6DjaPj09vsXj0bVnF6PF5k5xH+4FupgD2qGybjNTElNQihdS85PyUzLx0WyXv
+        4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKAblRTKEnNKgUIBicXFSvp2NkX5pSWpChn5
+        xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGR/mf2Aq2CBT8fjDO9YGxpPiXYyc
+        HBICJhJ3vi9h72Lk4hAS2MEoMXlaBwuE84lR4tj3G1CZz4wS3We2McG07LjdzgqR2MUocWvt
+        CUYI5wejxIV5D1hBqtgENCTWHDvEBJIQAUl8vbgCrJ1ZQE3i891lLCC2sECYxMOmFewgNouA
+        qsSJ3TfAmnkFLCUebzwDtU5eYlHDbyaIuKDEyZlPWCDmyEs0b53NDLJAQuAvu8SJJZ+BHA4g
+        x0XiTX8cRK+wxKvjW9ghbCmJz+/2skHYxRI/3qxmguhtYJRY2n6MGSJhLDHrWTsjyBxmAU2J
+        9bv0IUYqSxy5BbWWT6Lj8F92iDCvREebEESjksSZubehwhISB2fnQJgeEtNeioBUCAnESsw9
+        eIx1AqP8LCSvzELyyiyErQsYmVcxiqUWFOempxYbFZjA4zQ5P3cTIziVannsYJz99oPeIUYm
+        DsZDjBIczEoivH0hCslCvCmJlVWpRfnxRaU5qcWHGE2BgTuRWUo0OR+YzPNK4g1NLA1MzMwM
+        zY1MDcyVxHldtBmThQTSE0tSs1NTC1KLYPqYODilGphEjoZucnMrftuhY3/G5vPtiUlFl+q9
+        JPJln87z+LS+riSl3/V5bNltU++rXK45zlzZFowcR40Tkh0v7ePytXHWn1x67vm7q9o9B5Mi
+        mIUdSif3yOk4e31+sC/8RG9Q86/Fr45P+7mQdcniM/fauLP2vAkRuemplOf/xnBieWRJ5IRf
+        38VTZCaK3tt08b68A8u0Fe8LjohoJPJJPIjps/XerVR4YsIafr1LConhbQWf9pUdPNi7TdSe
+        dV9ppehK7rcb+q3lpojL84SXP5Tza/zSKBA0vV9Coel+sfeUC8fY5yXvD1qisWqSQsjvzZME
+        PuSKOpz9t5fjQdP9zzesg08Fbb6QfT/1R7rhFOENMUosxRmJhlrMRcWJAESem4AuBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSvK7bLeVkg4YlshYP5m1js3j58yqb
+        xcGHnSwWX5c+Y7WY9uEns8XqxQ9YLBbd2MZkcXPLURaLy7vmsFl0X9/BZrH8+D8mB26Py1e8
+        PSYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7FJdNSmpOZllqkb5dAlfGh/kfmAo2
+        yFQ8/vCOtYHxpHgXIyeHhICJxI7b7axdjFwcQgI7GCV6Gl+yQyQkJP4vbmKCsIUl7rccYQWx
+        hQS+MUp8+lgPYrMJaEisOXaICaRZRKCFSaL19StmkASzgJrE57vLWEBsYYEQiaYJu8GaWQRU
+        JU7svgFm8wpYSjzeeAZqgbzEoobfTBBxQYmTM5+wQMyRl2jeOpt5AiPfLCSpWUhSCxiZVjFK
+        phYU56bnFhsWGOWllusVJ+YWl+al6yXn525iBAe4ltYOxj2rPugdYmTiYDzEKMHBrCTC2xei
+        kCzEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU1jOahMR
+        zYwFXHvecp2U+parn5nxa9nD11POlUyuXnnrwH2L4y+WnTwTLZ2y0zGuyrT5wPHoyr3fcpNe
+        /nnPJ7IoKvZ42Yyjofyhzr8s16hcmLHR/c6KW3q9F1bzRF44myRm/G++dUj0s2U3ZzI+ezEz
+        YJ6emHDm6SNWVyNN1S68c9grrTLF+OPttolFn5RMDBYWX9PJnrtlp6bG4eWdbsKTnn2t5r/C
+        u+tJ4xFlDm41DmvdnovXbdfdTpMo9UgvXvy6f07Iql7NkzUfucM1+nZfWPD6t0qoysN3F2R3
+        7Snim+7T8NpSaWGijz9L4auXCSXyx8qvu22cMrF4QoI9r0NtfYzJolmKZ89KGd8Ve6jEUpyR
+        aKjFXFScCADIRe9s3wIAAA==
+X-CMS-MailID: 20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9
+References: <CGME20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfi=
-g=0D
-> > index 2961b5eb8e10..7aba4188110c 100644=0D
-> > --- a/drivers/pinctrl/qcom/Kconfig=0D
-> > +++ b/drivers/pinctrl/qcom/Kconfig=0D
-> > @@ -283,6 +283,15 @@ config PINCTRL_SDM660=0D
-> >  	 Qualcomm Technologies Inc TLMM block found on the Qualcomm=0D
-> >  	 Technologies Inc SDM660 platform.=0D
-> >  =0D
-> > +config PINCTRL_SDM670=0D
-> > +	tristate "Qualcomm Technologies Inc SDM670 pin controller driver"=0D
-> > +	depends on (OF || ACPI)=0D
-> =0D
-> I believe you can drop ACPI from this?=0D
-=0D
-Yes, I adapted this driver from the SDM845 driver and removed the ACPI=0D
-features but forgot to remove the config dependency.=0D
-=0D
-> > +	depends on PINCTRL_MSM=0D
-> > +	help=0D
-> > +	 This is the pinctrl, pinmux, pinconf and gpiolib driver for the=0D
-> > +	 Qualcomm Technologies Inc TLMM block found on the Qualcomm=0D
-> > +	 Technologies Inc SDM670 platform.=0D
-> > +=0D
-> >  config PINCTRL_SDM845=0D
-> >  	tristate "Qualcomm Technologies Inc SDM845 pin controller driver"=0D
-> >  	depends on (OF || ACPI)=0D
-=0D
-> > +/* Every pin is maintained as a single group, and missing or non-exist=
-ing pin=0D
-> > + * would be maintained as dummy group to synchronize pin group index w=
-ith=0D
-> > + * pin descriptor registered with pinctrl core.=0D
-> > + * Clients would not be able to request these dummy pin groups.=0D
-> =0D
-> The client wouldn't be able to define pinmux/pinconf, but I'm not able=0D
-> to spot anything that would prevent a client from referencing the gpio?=0D
-> =0D
-> Perhaps I'm missing something?=0D
-=0D
-No, you're not. I kept this comment because I saw it in other pinctrl=0D
-drivers and thought it was standard:=0D
-=0D
-    ~/linux $ grep dummy -RC1 drivers/pinctrl/qcom/=0D
-    drivers/pinctrl/qcom/pinctrl-qcs404.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-qcs404.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-qcs404.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-qcs404.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-qcs404.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sc7180.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sc7180.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sc7180.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sc7180.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sc7180.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sc7280.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sc7280.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sc7280.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sc7280.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sc7280.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sdx55.c-/* Every pin is maintained as a si=
-ngle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sdx55.c: * would be maintained as dummy gr=
-oup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sdx55.c- * pin descriptor registered with =
-pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sdx55.c: * Clients would not be able to re=
-quest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sdx55.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sdx65.c-/* Every pin is maintained as a si=
-ngle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sdx65.c: * would be maintained as dummy gr=
-oup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sdx65.c- * pin descriptor registered with =
-pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sdx65.c: * Clients would not be able to re=
-quest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sdx65.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm6115.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm6115.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm6115.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6115.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6115.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm8350.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm8350.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm8350.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8350.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8350.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-qcm2290.c-/* Every pin is maintained as a =
-single group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-qcm2290.c: * would be maintained as dummy =
-group to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-qcm2290.c- * pin descriptor registered wit=
-h pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-qcm2290.c: * Clients would not be able to =
-request these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-qcm2290.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm6125.c- * Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm6125.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm6125.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6125.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6125.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm6350.c- * Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm6350.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm6350.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6350.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6350.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm8150.c- * Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm8150.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm8150.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8150.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8150.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm8450.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm8450.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm8450.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8450.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8450.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sdm845.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sdm845.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sdm845.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sdm845.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sdm845.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm6375.c- * Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm6375.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm6375.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6375.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm6375.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sm8250.c-/* Every pin is maintained as a s=
-ingle group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sm8250.c: * would be maintained as dummy g=
-roup to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sm8250.c- * pin descriptor registered with=
- pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8250.c: * Clients would not be able to r=
-equest these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sm8250.c- */=0D
-    --=0D
-    drivers/pinctrl/qcom/pinctrl-sc8180x.c-/* Every pin is maintained as a =
-single group, and missing or non-existing pin=0D
-    drivers/pinctrl/qcom/pinctrl-sc8180x.c: * would be maintained as dummy =
-group to synchronize pin group index with=0D
-    drivers/pinctrl/qcom/pinctrl-sc8180x.c- * pin descriptor registered wit=
-h pinctrl core.=0D
-    drivers/pinctrl/qcom/pinctrl-sc8180x.c: * Clients would not be able to =
-request these dummy pin groups.=0D
-    drivers/pinctrl/qcom/pinctrl-sc8180x.c- */=0D
-=0D
-Since this driver has dummy pingroups, it is a bit confusing to see this=0D
-inaccurate information because it is relevant. I'll rewrite the comment so=
-=0D
-that it makes sense.=0D
-=0D
-> Otherwise, I think you should be able to specify reserved_gpios in=0D
-> sdm670_pinctrl and list the dummy items. This would ensure that the gpio=
-=0D
-> code as well treat them as absent.=0D
-=0D
-Yes, as long as I can reserve pins 0, 1, 2, 3, 81, 82, 83, and 84 for the=0D
-Pixel 3a. However, I think reserved_gpios overrides the DT schema where it=
-=0D
-would be sensible to add it:=0D
-=0D
-drivers/pinctrl/qcom/pinctrl-msm.c:690:=0D
-=0D
-	/* Driver provided reserved list overrides DT and ACPI */=0D
-=0D
-Perhaps I should omit the dummy pingroups from the driver and try to handle=
-=0D
-the gpio numbers discrepency on the DT side, like:=0D
-=0D
-    gpio-ranges =3D <&tlmm 0 0 58>, <&tlmm 65 59 4>, ...=0D
-=0D
-I don't see this being done anywhere else but it should clear up the=0D
-debugfs problems I was having.=0D
-=0D
-> > + */=0D
-> > +static const struct msm_pingroup sdm670_groups[] =3D {=0D
-> > +	PINGROUP(0, SOUTH, qup0, _, _, _, _, _, _, _, _),=0D
-> > +	PINGROUP(1, SOUTH, qup0, _, _, _, _, _, _, _, _),=0D
+Add ufs_hba_variant_ops about vendor error in check_error.
+It need to reset when occurred ah8 related error.
+At that time could not recovery with pwr cmd.
+So add vendor error check function at ufs_hba_variant_ops.
+
+v1->v2
+fixed warm message of auto build test
+
+v2->v3
+fixed operator error
+
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+---
+ drivers/ufs/core/ufshcd-priv.h |  7 +++++++
+ drivers/ufs/core/ufshcd.c      |  2 ++
+ drivers/ufs/host/ufs-exynos.c  | 20 ++++++++++++++++++++
+ include/ufs/ufshcd.h           |  1 +
+ 4 files changed, 30 insertions(+)
+
+diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+index d00dba17297d..a615f3533d75 100644
+--- a/drivers/ufs/core/ufshcd-priv.h
++++ b/drivers/ufs/core/ufshcd-priv.h
+@@ -221,6 +221,13 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
+ 		hba->vops->config_scaling_param(hba, p, data);
+ }
+ 
++static inline void ufshcd_vops_check_int_error(struct ufs_hba *hba,
++					       bool *queue_eh_work)
++{
++	if (hba->vops && hba->vops->check_int_error)
++		hba->vops->check_int_error(hba, queue_eh_work);
++}
++
+ extern const struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+ 
+ /**
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 7c15cbc737b4..39ee5192f26a 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -6542,6 +6542,8 @@ static irqreturn_t ufshcd_check_errors(struct ufs_hba *hba, u32 intr_status)
+ 		queue_eh_work = true;
+ 	}
+ 
++	ufshcd_vops_check_int_error(hba, &queue_eh_work);
++
+ 	if (queue_eh_work) {
+ 		/*
+ 		 * update the transfer error masks to sticky bits, let's do this
+diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
+index eced97538082..5d9db6870a66 100644
+--- a/drivers/ufs/host/ufs-exynos.c
++++ b/drivers/ufs/host/ufs-exynos.c
+@@ -67,6 +67,10 @@
+ #define CLK_CTRL_EN_MASK	(REFCLK_CTRL_EN |\
+ 				 UNIPRO_PCLK_CTRL_EN |\
+ 				 UNIPRO_MCLK_CTRL_EN)
++
++#define HCI_AH8_STATE		0x50C
++#define HCI_AH8_STATE_ERROR	BIT(16)
++
+ /* Device fatal error */
+ #define DFES_ERR_EN		BIT(31)
+ #define DFES_DEF_L2_ERRS	(UIC_DATA_LINK_LAYER_ERROR_RX_BUF_OF |\
+@@ -1376,6 +1380,21 @@ static void exynos_ufs_hibern8_notify(struct ufs_hba *hba,
+ 	}
+ }
+ 
++static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
++{
++	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
++	u32 val;
++
++	if (ufshcd_is_auto_hibern8_supported(hba)) {
++		val = hci_readl(ufs, HCI_AH8_STATE);
++
++		if (val & HCI_AH8_STATE_ERROR) {
++			ufshcd_set_link_broken(hba);
++			*queue_eh_work = true;
++		}
++	}
++}
++
+ static int exynos_ufs_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+ 	enum ufs_notify_change_status status)
+ {
+@@ -1569,6 +1588,7 @@ static const struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.setup_xfer_req			= exynos_ufs_specify_nexus_t_xfer_req,
+ 	.setup_task_mgmt		= exynos_ufs_specify_nexus_t_tm_req,
+ 	.hibern8_notify			= exynos_ufs_hibern8_notify,
++	.check_int_error		= exynos_ufs_check_int_error,
+ 	.suspend			= exynos_ufs_suspend,
+ 	.resume				= exynos_ufs_resume,
+ };
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 24c97e0772bb..40078c4b9f55 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -335,6 +335,7 @@ struct ufs_hba_variant_ops {
+ 			       const union ufs_crypto_cfg_entry *cfg, int slot);
+ 	void	(*event_notify)(struct ufs_hba *hba,
+ 				enum ufs_event_type evt, void *data);
++	void	(*check_int_error)(struct ufs_hba *hba, bool *queue_eh_work);
+ };
+ 
+ /* clock gating state  */
+-- 
+2.26.0
+
