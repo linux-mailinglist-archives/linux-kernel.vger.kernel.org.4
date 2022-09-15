@@ -2,143 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91BC5B9A77
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E615B9A5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiIOMJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S229781AbiIOMIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiIOMIg (ORCPT
+        with ESMTP id S229499AbiIOMIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:08:36 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511787F100;
-        Thu, 15 Sep 2022 05:08:29 -0700 (PDT)
+        Thu, 15 Sep 2022 08:08:04 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AC7549E;
+        Thu, 15 Sep 2022 05:08:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IAOWkmNA22cJjsbpS2Iez2/yBiUswzXO5/aBcMZeTccvD5NuuFyQGrZi3A2YdUmMFL9jw4z80wNUqkbYB+sFkcIBGCXxI6rl9CBsVw+5CiBx0P83IuVTRTtd3XmDkoGMks1U/wIzlR/q/c6oQxwGSzOAt6AYOyds894No468rD+d7bWF/RN5+UWZa8NU77mWn+F7x9/KQmSXpuLMjPu1kw1I/aS5ow0SiQ7N4TP3v+idkxU9wvQj05pr5VqnrT9t4tZHlKiy3GbNaT02ktJdly1cKtl+NR6WrP0YruLTLSWGL4pmXzJYQZtsC8jis41NANQ9nVrJD2JvTfex0HlD9Q==
+ b=HnS0nWOePm5hZUi1igPtKAUysgnjC984SB+x0htjhPWAIOJ4KseCC3VpGHZZTdWz8v2MNAxruUFfAdIxiDhq6EnaQgKnJpmuNBmExnBfNwdKg1UvjipERgLMPpjOpU3oXSFETSJBo9L+kX7wDn2ewqmXkjJlRIrFA8sgcCRU3sZl5OZ+0YyEA/jq34we8Z6FvWA9uHUD6n8EXjcziS3tmdQdo7yYXtpop7IG6rj+Aq3bCbal4HGAnZnj5vRRduJhh6StS6ZOOwEj8UtE1kLLLp8fhBm6G5uQan0OhwVxvaU5BGf0tvf2xDQkUm1+ypz4sQxVIEFGdvAJ9CO3bL5ywQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cIXtmoreUwJdEoRPBDZTZoiftr8lP7JPs55YuXXKbMc=;
- b=bE5imhxveHYC9IeWFR4IlG/iWAwTE3mnDVJt0oMMN2Gw556g7l+6+XkkFOcxI05jG7bVL3U4f52yTihn0JYJDR8HIUEufSVCgCtP0jXHIdLhDNz2ivnFz5wdWRd5HFvnABqY2SmcAvcJ3RYhBjTiEjjHgSRag5m/XKciYHaoGCoBKejLvS+tYZVsptRfIgCuzpbI+Nr85VMmq7SCQ9AiV76hQw7PrXgyIJJDQDyrYWr2LiFe4fu6j4rtApBr6UTgpCYfffR89Pj8pRdWzYLNLKLJdj7HqeHaUoGsLzzLz2YxLtg4iRvOeBBTyU6dlnPc/djOHfKfmrzNM5pF41FplA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ bh=KKfNewo7p1swdCx9Uf3kkmyPujqvC0E6CyVu3eHDtrw=;
+ b=RxOP+9FFw53qzS3twSRLLNhtBgjH6AQPCe9KjLhIbBfD37++qMeTgc4PjpuASO7foTJgJlSegVT4QOckUXHXizmdUB6ZyJJV40m3ZGN8+Xz2qHMZEWn02+OISKZidYehdS3q3y0nwZYhv1g+cOT1vy+yaTO9gttQEAv38MoSsnEWXUW0jEBZGPsimFpRYRABiTUjtyj1NONmDKEm36CKaTFJ/AnomhDolkiGGK5nizp3YCPa4A0xmRiBc3xySq9+4esImz0ApA4RW30eMGpxDYm6GINE6SwwYHygqZegep/+K1YGuD+HtC2TAvP6OFaI2VibHX+eyr+pP641bpyziw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cIXtmoreUwJdEoRPBDZTZoiftr8lP7JPs55YuXXKbMc=;
- b=eD/cxCsH93y+jvNeDoM6e6UVbexWOw5+SIRnV8sLbhbAiO5jJmzpm5J/qft9yRFD/q810kp6NjWYipTpoLACDi09kUVuO2oe2Fg5RvjSJxUNzq70NtfvLgQ0WMjk/UlclA24voRT4zR6iH4FIzS2+VQr55fnz83NfhDNjtxocM0=
-Received: from DM6PR01CA0025.prod.exchangelabs.com (2603:10b6:5:296::30) by
- DM6PR02MB6843.namprd02.prod.outlook.com (2603:10b6:5:21e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.20; Thu, 15 Sep 2022 12:08:27 +0000
-Received: from DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:296:cafe::9f) by DM6PR01CA0025.outlook.office365.com
- (2603:10b6:5:296::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15 via Frontend
- Transport; Thu, 15 Sep 2022 12:08:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT032.mail.protection.outlook.com (10.13.5.65) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5632.12 via Frontend Transport; Thu, 15 Sep 2022 12:08:27 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Thu, 15 Sep 2022 05:08:15 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.9 via Frontend Transport; Thu, 15 Sep 2022 05:08:15 -0700
-Envelope-to: broonie@kernel.org,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- git@amd.com,
- michal.simek@amd.com,
- linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- akumarma@amd.com
-Received: from [10.140.6.39] (port=33420 helo=xhdsgoud40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1oYnfD-000Fci-A0; Thu, 15 Sep 2022 05:08:15 -0700
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <akumarma@amd.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH v2 6/7] dt-bindings: spi: spi-zynqmp-qspi: Add support for Xilinx Versal QSPI
-Date:   Thu, 15 Sep 2022 17:37:49 +0530
-Message-ID: <20220915120750.1424984-7-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220915120750.1424984-1-amit.kumar-mahapatra@xilinx.com>
-References: <20220915120750.1424984-1-amit.kumar-mahapatra@xilinx.com>
-MIME-Version: 1.0
+ bh=KKfNewo7p1swdCx9Uf3kkmyPujqvC0E6CyVu3eHDtrw=;
+ b=sIODtFjJMDj4UTykY2Dmhea4uXIGJF+ZuD9ViMTk0l5JFq9jCM1Um6l3gsVkSSJ5WXaHYx2oXKMA42fkMzqmvADRhE6udhomwxT78AWkQYoAtLy/B6uLS8zWfdsLPkumvaf3677hUhgEHtangd1DA6Lo/lETefhkFngMcdUaMfA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MW5PR12MB5599.namprd12.prod.outlook.com (2603:10b6:303:194::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Thu, 15 Sep
+ 2022 12:07:56 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5632.015; Thu, 15 Sep 2022
+ 12:07:56 +0000
+Message-ID: <d2d81ffd-2269-bdc6-0daa-8f3a99306e46@amd.com>
+Date:   Thu, 15 Sep 2022 14:07:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/6] dma-buf: Check status of enable-signaling bit on
+ debug
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220914164321.2156-1-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220914164321.2156-1-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: FR0P281CA0132.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3NAM02FT032:EE_|DM6PR02MB6843:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4fe0b0ff-b1f8-46b9-a3ef-08da9712ff33
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW5PR12MB5599:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9affd3a7-5bb2-497d-aac5-08da9712ec5e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A80+SxMIPm9Kfr+WB2FS0uxXVOh9EYehm8Tzs/++Oe8QBUmCvOMqWLA4CMuS1qEd0Z35utNK9zQ0wf+c0AwQ2i6USdTh7SuuTErbtbJnqYwuseWuW8vC42Gf5g9LQC1/3PDAVU8d5LeP07+P0g1jdchsqHjeeXXdNtNFpcLtvH78iZYBg1plPAkng4U2UTf1e3hqvs6UPAbpSv9g7olNSt9BpAlsU1IEKvhawo1R57gyoFPyBJM7uwizItxEd3I379rIrl191Ta/crK0+tx2wUEDotvlDkT6JAvLPo6o3aahA8w7tNDNscVArj4dHZTWuxudkN1GVK0R99Whbl5423aKcPPkaQLf3Ri0GgJ34TUhtQzv+RZAMR44MGFovsbkXiA5Uy2pDm66fP4mJHP1K0DyQb2gbP9AjjanBfdq3MZjuDT5ViC1OaSqJFkTTG6w5HUm+d/RHqwFxvMBR5QXKO0AYecAmu7aVUbEv4Y/YMHS+gISgnXhScOwwEkbOAOxbXd1N/VBzsKM7flSSmLzUaC3rZdvZyw34RH8jbsTmCFNbE6b7wqwuOoeE6HBqp+Vul21XdSAyt5risZuqIz9an1beMLC+fqanUh+tSj/decaW8su3xi3wB/5Uvb/GC3zWlgtOaMwQMqQEbmd+2wXl8MPjluOis+nHOuZAoXM5hn3iN2aINtmqrvtspbnOUBmYp7t8zLBZ+Irx4tf1CaZnvE9Syp+ebuvtfOhniMNS+ZnOoPL40pYsdN0Jdo6c13i4hGCY0eGS8XYA8Gz+Q/br5ps0T0rtaaIlqeYDEmXIaU=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(356005)(316002)(426003)(40480700001)(186003)(4326008)(9786002)(47076005)(36860700001)(2616005)(70586007)(82310400005)(107886003)(70206006)(41300700001)(7696005)(82740400003)(110136005)(336012)(54906003)(7636003)(8676002)(2906002)(1076003)(8936002)(36756003)(6666004)(40460700003)(4744005)(7416002)(5660300002)(83380400001)(478600001)(26005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 12:08:27.2188
+X-Microsoft-Antispam-Message-Info: VGH4/p8D/s30e9H18s4SJ6fqkmvJ49om/wYY7No08rjJdpo9gOmnJBQrTgN06z4TcRwtblHuL4aerToMc5uYtTWUEO3ZZMmYZS7bWcWlO3BV/VjTbBSorJ1lD64fE3GJC3l0XcH33BSjHp1pM4Ubp0rlHCO/WEZcZQE62T1kAmfzRFIV6ytxkuPBpoD73XAfEynD4NOlM8X1nvhXff5ncUUi+IPz7CDxTYQvSLl0c7pryKYszbzS+SlJArEwNerVyClE1CRPMzHdnvtu5e6ccQo/sG3ivL0C9/CRGnEtG9rf+hHndHzzU7FjWX0zdPBV2Uav7vdOUi9ij5yovjY8Y9qX5jfpXEcV86R/fwMl9tpcdrqnz7HrOkCdNC5rYDIvj1zyEjWijy2fa7x7bzA6/GQq0L5xiF53RkCyUbPnrFbrx5oAMBB32X5E5f692FUuy2MTTi7/pbe5eQeGo6crDCE7OeW/XuM2HUAYsPk/OkVSm7tOwN/clUnAJ6qF6Kysrd9OZSWEc9bDdhC8zTtIM+xZeBXAET/dR5cLx/M/qZmBvUk+G35UN9mW6cFioZCSidL5w6GNQ4B/5a83IeJdhQCvYq2mKSA6pahFurQlM7EW+v9kgtICoygxdozYnbYkT8Ig7DM82wy0wQAT614Zvub1caDxv8uuC04Ap/KpUgwLFwtwz7ks4b1Gt0wDEwv4AmEU5txDAuB1JGLD5SlX86C5MLGyWvlDEy3Kixt45x4hhjxdOUaC26n8Gv1zD1vjvnQxsSvmRRP8GMjh5i/fAmg3Txm9mNusr8dx2ZFp6SqD74PUMIac2cMsRRdDHhFj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199015)(6512007)(26005)(6666004)(6506007)(41300700001)(36756003)(31686004)(38100700002)(8676002)(66556008)(66476007)(66946007)(921005)(31696002)(86362001)(316002)(478600001)(2616005)(83380400001)(6486002)(186003)(8936002)(2906002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDNzV1JML0dLd0YvSEpobmFhSzBiL1VyZmdTREFoSFF5bjlUbGVCWS8yMUdJ?=
+ =?utf-8?B?N2R1T25xUFlSNjR1UDVMZVZCZElYS0IyeWdqbGl6SVFVTGNUalNiVnBPcGxn?=
+ =?utf-8?B?b29ydXVObmhORi9jSkZqK2IvRER3S2dhbUJTaFhMM0J4V3hZNloreDBhT04x?=
+ =?utf-8?B?djNZY1Z4TFJROS9ubDFDYmJKQ3RqZnB0NEw4SjV6aSszYnlSYXdQRWUyalJT?=
+ =?utf-8?B?NEtvT3k2WG1sdmFVNStrd2M1VkFkYStOUGlzOTRaaEl3MWNreElab0NxT0tl?=
+ =?utf-8?B?WjRWU3A0bDVWRVdHdHk3Y1R5UlFGRGRTRUhidHdsbU9MZmdTT2ZiM1dnUE05?=
+ =?utf-8?B?VEV4eFZ1cEk0T1VlekxFdUs3WTZBRVczUTN4VXZ0WitQWnRkano5NU1BL2sv?=
+ =?utf-8?B?K2NSblZuKzkyY2xTRERvUkxKYjFJc1daeklFb1NFYml0MkhxdDkvRFRlZm5L?=
+ =?utf-8?B?Ry9qY3ZFZlFDeGg3K3hkWXZOYmloR0RzSlByQnZKdUdmc3Y4aUlsY0lNcTY4?=
+ =?utf-8?B?T2Nqc2tzUThOdE1xOFRMekFmSlltZFAvOGpnRDltR3EzK1BuZTkyeGErVVBn?=
+ =?utf-8?B?UjBKVFdOTnFZZDVTdzNqZkMyTE1mM2hRZG54ZVc3WWxRbjcyQ0x5UlZzZ0xH?=
+ =?utf-8?B?U00rV29EMHNpYVNITllrc0hXdlJzdExGZ0k5ZjFNSU5DdFo3VGZtTVlpTmtM?=
+ =?utf-8?B?MU1wenJ6bFlGcWRuUE9kdnREZXlya3lqbkRBdVc2a0pTamV3UVQ3N3d0M3F5?=
+ =?utf-8?B?bkQ1bzdDNGsxTnhKVjZjQlRVTVB6T2pJbmlsMWdQRmtlWEtTMFJuQ2x5b1ht?=
+ =?utf-8?B?dnk3UURzQzJTUHlNOUVRME0rZHRzWitLV0J5aFAwVjNoVWZQTHZqN0Y0T1dw?=
+ =?utf-8?B?elBjU2RpTm5Zejh1OXg0QTZrbFltODlnbmRXR1pyb2xuRG1nTE1Hc1ZQT2Qr?=
+ =?utf-8?B?OUFzL256WUl5aFM3dW5kTnNKMEhad1VKTTZpZ0JQMHpua29TcXNEaDAvNG5o?=
+ =?utf-8?B?d0FBc3BoR1JLRXZmMWxUSTlMdEpJQktTb0x0cHlmN1VwNmxFSzJwWlJiaCt6?=
+ =?utf-8?B?am5kVzRFb1F0citnUnMwSERaK29VQ20yNkt2SWVKblBKcnlCaVVXSnptRExk?=
+ =?utf-8?B?eW16cnBhengreFlhV2YxRWIyMFNqZDl6cXZYUnJUZGRLMHgrbk94azBKNWhF?=
+ =?utf-8?B?Z3ZuZWZPdXowd21ESzJlUFZZUlJ4NVBVaWFCcVN4SkZxalZCTy9JYWFkU2di?=
+ =?utf-8?B?VzdiRGNmOEJYMlZjOVNTL1A1cy82WU1odmJjKzc5dFQ5c01PQTdHUk5tSEtE?=
+ =?utf-8?B?REhFS3I0NjVNUUZWR2J6UVJsWThKZUNKelVDbDBpNFd3VTVYVndCVkdEVEI1?=
+ =?utf-8?B?S3BlZkdKaHkvSjlsOWk4SXlqSE1DNEM2KzlnMUQ4b1B1ZWpzQzdjTGdmcnpN?=
+ =?utf-8?B?M0x6blJ2bDRYOVpiVWZkN1JVK0ovdDJGVysxQU9YUy9PVXNnMGhOOVZ1a3h4?=
+ =?utf-8?B?dVFWSHJ0VFljU2xmbUtXamhrRFJsSWJPdGlaMEMzTUc3ejRyVVlDNE1UamhS?=
+ =?utf-8?B?SzQwTVRkZGJPTU50Qk13dDJEazJxSG9vMWt1eUJnWnVWLzBWQmtTYVJ4dUJC?=
+ =?utf-8?B?SDdUYTZxb2hzZzdsUDRlOG5xakVvWjZYUHkrU2pNN1BBOHpRTlY3S0FwcHF2?=
+ =?utf-8?B?L2M5MzlJeXR5eEc4RFVFSWxTbW4wTFhKVUVLdnphcHdBK0Q4VEgzdUhKYzhC?=
+ =?utf-8?B?M2xaUjJNalJ3MFVvZnMveFVTMUF2WWtLVncwbVNMZnJnRC9sSG9EbFQxQ1Ax?=
+ =?utf-8?B?eFdNNjZ0QTk2ZU1HL05SL01TS2ZTbmxJNC9VMWh6YSs1S2l0cUpkeGRYSGtl?=
+ =?utf-8?B?dE0rbjJDeEhidHZEdkJha0RlVS9waTZYQ3FTUWlrR3hHNXN2bXpvZUtpNjhi?=
+ =?utf-8?B?bzJMM1RBVjVkOERGaFlDV3dkMG9mQm1xemFXZVlMQVNDNWNmWHB0dFJGVGxv?=
+ =?utf-8?B?SGd0TXNBc2tHWjZHWi9MNG4xSWNOOTZQOTZjVWo4K3JSOXZFTUJ3V3FkNFJy?=
+ =?utf-8?B?Ny9YWEZOSGhIcVZaU2NRVG5GWldXZ01sNHViNVNrbzJtRG1xcGFoWUErcWlY?=
+ =?utf-8?Q?jZxZTgGmCsRQwVVL2QcN3pp/z?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9affd3a7-5bb2-497d-aac5-08da9712ec5e
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 12:07:55.9835
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fe0b0ff-b1f8-46b9-a3ef-08da9712ff33
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6843
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pxFw5PZGRmFjhXHOmymmQ09FSSQri3+LhR5t/RygvO5NnntqHiTuWNVR+qrFQkVO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5599
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new compatible to support QSPI controller on Xilinx Versal SoCs.
+Is that sufficient to allow running a desktop on amdgpu with the extra 
+check enabled? If yes that would be quite a milestone.
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
- Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+What's left is checking the userspace IGT tests. Especially the 
+sync_file and drm_syncobj tests I would expect to have problems with 
+this extra check.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-index ea72c8001256..37108bfdcd81 100644
---- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-@@ -14,7 +14,9 @@ allOf:
- 
- properties:
-   compatible:
--    const: xlnx,zynqmp-qspi-1.0
-+    enum:
-+      - xlnx,zynqmp-qspi-1.0
-+      - xlnx,versal-qspi-1.0
- 
-   reg:
-     maxItems: 2
--- 
-2.25.1
+Thanks,
+Christian.
+
+Am 14.09.22 um 18:43 schrieb Arvind Yadav:
+> Fence signaling must be enabled to make sure that
+> the dma_fence_is_signaled() function ever returns true.
+> Since drivers and implementations sometimes mess this up,
+> this ensures correct behaviour when DEBUG_WW_MUTEX_SLOWPATH
+> is used during debugging.
+> This should make any implementation bugs resulting in not
+> signaled fences much more obvious.
+>
+> Arvind Yadav (6):
+>    [PATCH v4 1/6] dma-buf: Remove the signaled bit status check
+>    [PATCH v4 2/6] dma-buf: set signaling bit for the stub fence
+>    [PATCH v4 3/6] dma-buf: Enable signaling on fence for selftests
+>    [PATCH v4 4/6] dma-buf: dma_fence_wait must enable signaling
+>    [PATCH v4 5/6] drm/sched: Use parent fence instead of finished
+>    [PATCH v4 6/6] dma-buf: Check status of enable-signaling bit on debug
+>
+>   drivers/dma-buf/Kconfig                |  7 +++++++
+>   drivers/dma-buf/dma-fence.c            | 16 ++++++++++------
+>   drivers/dma-buf/st-dma-fence-chain.c   |  4 ++++
+>   drivers/dma-buf/st-dma-fence-unwrap.c  | 22 ++++++++++++++++++++++
+>   drivers/dma-buf/st-dma-fence.c         | 16 ++++++++++++++++
+>   drivers/dma-buf/st-dma-resv.c          | 10 ++++++++++
+>   drivers/gpu/drm/scheduler/sched_main.c |  4 ++--
+>   include/linux/dma-fence.h              |  5 +++++
+>   8 files changed, 76 insertions(+), 8 deletions(-)
+>
 
