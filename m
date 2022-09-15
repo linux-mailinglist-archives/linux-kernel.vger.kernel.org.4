@@ -2,81 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AA05B9DB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70605B9DB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiIOOtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S230288AbiIOOuV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 10:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiIOOtl (ORCPT
+        with ESMTP id S229863AbiIOOuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:49:41 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A81FB7EA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 07:49:40 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id k9so31312592wri.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 07:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=u+MEx5X3tH0fljhxGvHQehUVImd5GhUM1h1Z4SXLLYI=;
-        b=JCVUvByF49G5XLnjbdd4yUFKZVdv/7edOBeVAAqmyxi2aqpjJoG/hDEIvfD6bm1Orm
-         luepYghg92YFh+ykjBbDhZqOEbL5pIQHuAKOeVdKC3tB1B/T/SYAKLNHMiDR+9gz9jrG
-         Tsb65OBW715HfOtzLuCSWkXA3y+Wjc6BmHNkoEg8+e5NpLnXx5TtOH4UTc3YKAJGDnRI
-         9HJgNgiH3VyBOTBEaYK2Rnn52WTFBQRkUsWlvSaa5J9AN5GSRMUhIoC6YXaKEA3fLHlc
-         RzkQ1zwrHdSHSmhakhnHA2aMI80k7fMg+FnChWOQlUujQqIFLMXMusrKg8C0NpJTFj27
-         8Utw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=u+MEx5X3tH0fljhxGvHQehUVImd5GhUM1h1Z4SXLLYI=;
-        b=EWqaEGZhfYIacIm9ROaoon/LVgKU6H4FfqVybEqCtw5NxckjPFrln9KFWgmujVcFJF
-         W/OvjORCxG+mNyBW94s8/CegVvNBVc+UzftPdTF5vHp1G8Xf3hLucLPz2ufurIj/ur5O
-         dRFSu8C5QCNq34HW7m5kY5KZN7DTAeJsF1hrQ4Z7GzJBYSsfLDs8sVyjiaK1Ug5qzXOi
-         Yba+mAnrQAjM0x87ruUv/UkGnAmbmdRXZNnap0xQEzFxI5UXKMBN0gfM9Ps8rPCv1KS2
-         EoDE9QyH8AeUjzgY9jk7KVjT4KpylbAB8EdHY9zdlzDd4GdhnWJFdmiNvACVy3s9G6R+
-         r2CQ==
-X-Gm-Message-State: ACrzQf0mrOd433OQpUv8SP17TFa3jXIfGCtUOOaeZs5QXefxIuMBuXND
-        ewVbtSclAi5w5PJqIQ6E4oKGbA==
-X-Google-Smtp-Source: AMsMyM5XOGsqrjqboyvXUIJfpP7pyqYRF4cq1JP8xx8yhipEVSCPdpV3hhNdVUJhIN58nfUGXwHOhA==
-X-Received: by 2002:a5d:5a0d:0:b0:228:da3f:738 with SMTP id bq13-20020a5d5a0d000000b00228da3f0738mr22398wrb.526.1663253378697;
-        Thu, 15 Sep 2022 07:49:38 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.72])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05600c420a00b003b4935f04aasm3157668wmh.10.2022.09.15.07.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 07:49:38 -0700 (PDT)
-Message-ID: <79889adc-9224-c257-3957-3a02ec55f091@linaro.org>
-Date:   Thu, 15 Sep 2022 15:49:37 +0100
+        Thu, 15 Sep 2022 10:50:17 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEAA15827;
+        Thu, 15 Sep 2022 07:50:13 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0E26B1C0012;
+        Thu, 15 Sep 2022 14:50:09 +0000 (UTC)
+Message-ID: <5d890576d10cda7dbeef48f0eb13aa6860ab7d44.camel@hadess.net>
+Subject: Re: [PATCH v1] HID: logitech-hidpp: Detect hi-res scrolling support
+From:   Bastien Nocera <hadess@hadess.net>
+To:     "Peter F. Patel-Schneider" <pfpschneider@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Date:   Thu, 15 Sep 2022 16:50:09 +0200
+In-Reply-To: <e9526860-b77e-8cc0-7421-91fe5370918d@gmail.com>
+References: <20220914132146.6435-1-hadess@hadess.net>
+         <c56c4053388baa5ea3db8bc849c5a420859347f1.camel@hadess.net>
+         <e9526860-b77e-8cc0-7421-91fe5370918d@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 10/15] ARM: dts: qcom: msm8974: split TCSR halt regs
- out of mutex
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
- <20220909092035.223915-11-krzysztof.kozlowski@linaro.org>
- <20220913224418.jvvguc66y5le7qjo@builder.lan>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220913224418.jvvguc66y5le7qjo@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,68 +44,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/09/2022 23:44, Bjorn Andersson wrote:
-> On Fri, Sep 09, 2022 at 11:20:30AM +0200, Krzysztof Kozlowski wrote:
-> [..]
->> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
->> index 90a6d4b7605c..ada232bed2c8 100644
->> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
->> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
->> @@ -1189,7 +1189,7 @@ remoteproc_mss: remoteproc@fc880000 {
->>  			resets = <&gcc GCC_MSS_RESTART>;
->>  			reset-names = "mss_restart";
->>  
->> -			qcom,halt-regs = <&tcsr_mutex_block 0x1180 0x1200 0x1280>;
->> +			qcom,halt-regs = <&tcsr_1 0x180 0x200 0x280>;
->>  
->>  			qcom,smem-states = <&modem_smp2p_out 0>;
->>  			qcom,smem-state-names = "stop";
->> @@ -1230,10 +1230,15 @@ smd-edge {
->>  
->>  		tcsr_mutex_block: syscon@fd484000 {
->>  			compatible = "syscon";
->> -			reg = <0xfd484000 0x2000>;
->> +			reg = <0xfd484000 0x1000>;
->>  		};
->>  
->> -		tcsr: syscon@fd4a0000 {
->> +		tcsr_1: syscon@fd485000 {
+On Thu, 2022-09-15 at 10:23 -0400, Peter F. Patel-Schneider wrote:
 > 
-> While the accessed registers look general purpose in nature, I would
-> prefer that we stick with naming it based on the register blocks - and
-> this is part of what's named "tcsr_mutex".
-
-Then everything would be like:
-
-tcsr_mutex_1: syscon@fd484000
-tcsr_mutex_2: syscon@fd485000
-tcsr: syscon@fd4a0000
-?
-
+> On 9/14/22 11:41, Bastien Nocera wrote:
+> > On Wed, 2022-09-14 at 15:21 +0200, Bastien Nocera wrote:
+> > > Rather than relying on a never-ending stream of patches for
+> > > quirks.
+> > > 
+> > > This change will detect whether HID++ 1.0 hi-res scroll, HID++
+> > > 2.0
+> > > hi-res scroll or HID++ 2.0 hi-res scroll wheel is supported, and
+> > > enable
+> > > the feature without the need for quirks.
+> > > 
+> > > Tested on a Logitech M705 mouse that was unsupported before this
+> > > change.
+> > > 
+> > > [    9.365324] logitech-hidpp-device 0003:046D:406D.0006:
+> > > input,hidraw3: USB HID v1.11 Mouse [Logitech M705] on usb-
+> > > 0000:00:14.0-4/input2:3
+> > > [   57.472434] logitech-hidpp-device 0003:046D:406D.0006: HID++
+> > > 4.5
+> > > device connected.
+> > > [   57.616429] logitech-hidpp-device 0003:046D:406D.0006:
+> > > Detected
+> > > HID++ 2.0 hi-res scroll wheel
+> > > [   57.712424] logitech-hidpp-device 0003:046D:406D.0006: wheel
+> > > multiplier = 8
+> > > 
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216480
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > For anyone on a recent version of Fedora that wants to test it,
+> > those
+> > packages should work:
+> > https://koji.fedoraproject.org/koji/taskinfo?taskID=92008550
+> > 
+> > Cheers
 > 
-> Is it not possible to claim that this region is a
-> "qcom,msm8974-tcsr-mutex" and a "syscon"?
-
-Hm, yes, that's another approach. We can go this way, but it has one
-drawback - you could have two different devices (mutex and syscon user)
-poking to the same registers. The regmap makes it safe from concurrency
-point of view, but not safe from logic point of view.
-
-Splitting these makes it sure, that no one touches hwlock registers,
-except the hwlock driver.
-
-Any preference?
-
 > 
->> +			compatible = "qcom,tcsr-msm8974", "syscon";
->> +			reg = <0xfd485000 0x1000>;
->> +		};
->> +
->> +		tcsr_2: syscon@fd4a0000 {
 > 
-> And I would like to keep this as "tcsr".
+> Using this kernel I tested several Logitech mice - an MX Master 3,
+> which 
+> already supported hi-res scrolling in Linux; an M310 and an M185,
+> which have 
+> features but no feature for hi-res scrolling; and an old-style M510,
+> which 
+> does not have features.  I used evtest to show the events that were 
+> generated.   For these mice the patch does not produce any change in
+> events 
+> generated, as expected, both REL_WHEEL and REL_WHEEL_HI_RES events.
 
+In the future, it would be awesome if you could mention the tested-by
+tag as mentioned here:
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
 
+As the tree maintainer can then use it directly when merging the patch
+in their tree.
 
-Best regards,
-Krzysztof
+So, for Jiri or Benjamin:
+
+Tested-by: Peter F. Patel-Schneider <pfpschneider@gmail.com>
+
+:)
+
+Thanks for the testing, much appreciated!
+
