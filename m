@@ -2,194 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A585B9E7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CCB5B9E83
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiIOPMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S231228AbiIOPOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiIOPKe (ORCPT
+        with ESMTP id S231497AbiIOPON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:10:34 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B2E501B0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:37 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso7721627ejb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:37 -0700 (PDT)
+        Thu, 15 Sep 2022 11:14:13 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCBD9F8FE
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:08:19 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so3956439wmr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
-        b=BdvNjfu5VP4f5tWEwqi8xdnrQQzMfo1UN5bQGxgPeuYIRiSF6R+M9tMaqYwiS2tecV
-         O8LqTtykzfkn0aNHdYp3DfA09eKoKkOI/meN41FcTkWmKDI6Mlw1uBbBDJ5ItwRLsI99
-         fu9mFtJanTVQjiray0U8TbivD9S30FZLPiX0FzoqX/uQC4kH7HtwMZ/blaYA0jDerrjW
-         aPeP8F3DEIDRdPbDMG4HF5n1PQvJNaW7R/M0TYz0hhV4XUWjPxlr/ASgkKiR/2NytbwG
-         /9KCbWlhcUnlvPN/s95vfn0Q7Y+MSgUo6FfARpJ1769HCSJLQ4f+8vfKDIdzDiQ+Hfop
-         cqfQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=9mQUaPNceis8qparWDkrLv2BKnQ9SmM81stuAhhbzew=;
+        b=LsQo2JpTUkhTzfuDrJ9y/4GnGKTFwHW/PSWLYrWtomRbBWYjPZM14GvphXRuD7cPBp
+         k3JZ+7US/WNPMpgGXXwWecEDpG/BAvoYLpVJKNKVvQr+ezEuGx4gzqSMsVaF/Uotbwpj
+         dF3HxM8tD1HpTdAuiw4AdS00lvRWOBZP/FAQ1ekdtvTTikxyAoXPGZT/ocVSemAbMnV+
+         XFbG2AKYu/mvIPw9EgzPG2cLjvqbHSDNeXELIuoYPpjCeehPx5EN7xVHiyZDO/J8ArY7
+         iPln6G8fXhIaBuBbEARnBetbMcZrFpMkLXHmfmpqC3fCdbp0gi6CVp9TCgKi0/CLPxg9
+         vk8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
-        b=7+czDd5qJUx35IaTpwkBodCZEbzYsVFlOv6kr1ksI16VkkBQpq0AeqqPDSG2buiNoJ
-         E35Xn0k6WeRtR/Df0Q7mLepRno8CMoe7Bmq4qpgJlcAe6zoc9L82qy/lXOdtycdoJTMS
-         EJ+5IkFpnDHi1SUnKHH5RMwbPc6pLFy/EQVsbPhqQRaZ32KJ33NJp7ZR78meqiXFNtfb
-         ndPkwPA7xry+LlIhCHdoiUrkeDV2lVbndQVIOfe/Uij0OYfnHLLi9v/nmcdmjoRVmD+Y
-         lSjFr4FLQGhroWJ2DQoDrP54KQgnjtBT/dOdPZ6d8qdAlnzfVXuO5U1m4TBwbMGKDBdz
-         Zbng==
-X-Gm-Message-State: ACrzQf1gmLUggo7/gMKW7go6+jTNR+QDUaLXvaMRTkvwE4yfFx25/zbr
-        UxVDj+2UQPVTAOydPoMSLgcldzI4Mgw=
-X-Google-Smtp-Source: AMsMyM6ZSkiMDie9cIFnYKrzA4Gojr+aLMK8obg1m96Wr/dl+paR5zDF6a+Yr1FIkBtdJbuKIaikj76ZeVI=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a17:907:a0e:b0:780:72bb:5ce4 with SMTP id
- bb14-20020a1709070a0e00b0078072bb5ce4mr321825ejc.234.1663254395778; Thu, 15
- Sep 2022 08:06:35 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:17 +0200
-In-Reply-To: <20220915150417.722975-1-glider@google.com>
-Mime-Version: 1.0
-References: <20220915150417.722975-1-glider@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-44-glider@google.com>
-Subject: [PATCH v7 43/43] x86: kmsan: enable KMSAN builds for x86
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=9mQUaPNceis8qparWDkrLv2BKnQ9SmM81stuAhhbzew=;
+        b=kQXSEJAzFAkpdmNfSRISsOWmAqZujcvvXpA6BYK5SnxAXfXaX3ti8LQhxlWlyxlitz
+         pyrOt9rQBehRAenWm2dulCg6c45Y57iWpo7+HMxWr6NvPwErafpcBONoLp0JKB06v9Zk
+         WZQbr1uWKB5ZvWgA/Qx2ma2RU3U5a83Vp5qlP6CGu1GhXOayMnpVvyyMPt9/tFjvCWTE
+         k7G+NXz+Uqv0SeWpdnuc0poO8D0w6SmRBVyB5qSAK1CxTK4r09tGbD3svZckJwtu7Mcb
+         2T7nsvbfacXc3BMuQUF1FdrctAQ6E4dhns5Zu+MbXkFYYAPKA9dyCErTej8UAU3b17qS
+         6qdA==
+X-Gm-Message-State: ACgBeo2SU3MF8AemqqxD8qqKpMOsTxefs3OgtLsXSjqkKFJ3baNQJc9a
+        hhstPzU/xWUKzhcIhwWTZDB4eg==
+X-Google-Smtp-Source: AA6agR7MonZjlHNMXwe0IaiZO8G7Nw83j+6yzFvN9UU8Qb8D8xG5Ma8HaDtaJ4b0KHXmzJd/VpiUAw==
+X-Received: by 2002:a05:600c:4c22:b0:3b4:766a:4f76 with SMTP id d34-20020a05600c4c2200b003b4766a4f76mr6708741wmp.101.1663254475376;
+        Thu, 15 Sep 2022 08:07:55 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.72])
+        by smtp.gmail.com with ESMTPSA id h4-20020a5d5044000000b00228d67db06esm2904974wrt.21.2022.09.15.08.07.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:07:54 -0700 (PDT)
+Message-ID: <c46fd424-3517-9f66-dc8c-ed10ca3ef622@linaro.org>
+Date:   Thu, 15 Sep 2022 16:07:54 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] Changes phy configuration to expose sata in place of usb3
+ on quartz64-a board
+Content-Language: en-US
+To:     Alessandro Carminati <alessandro.carminati@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <YyIyo42QWvgJTBjL@lab.hqhome163.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YyIyo42QWvgJTBjL@lab.hqhome163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make KMSAN usable by adding the necessary Kconfig bits.
+On 14/09/2022 20:59, Alessandro Carminati wrote:
+> The Quartz64 board is built upon Rockchip RK3566.
+> Rockchip RK3566 has two combo phys.
+> The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
+> ctrl2.
+> The second combo phy is hardwired to the PCIe slot, where for the first,
+> the hardware on the board provides both the USB3 connector and the SATA
+> connector.
+> This DT allows the users to switch the combo phy to the SATA connector.
+> 
+> Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+> ---
+>  .../dts/rockchip/rk3566-quartz64-a.sata.dts   | 839 ++++++++++++++++++
+>  1 file changed, 839 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
+> new file mode 100644
+> index 000000000000..6ac21b729be7
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
+> @@ -0,0 +1,839 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/soc/rockchip,vop2.h>
+> +#include "rk3566.dtsi"
+> +
+> +/ {
+> +	model = "Pine64 RK3566 Quartz64-A Board";
+> +	compatible = "pine64,quartz64-a", "rockchip,rk3566";
+> +
+> +	aliases {
+> +		ethernet0 = &gmac1;
+> +		mmc0 = &sdmmc0;
+> +		mmc1 = &sdhci;
+> +	};
+> +
+> +	chosen: chosen {
+> +		stdout-path = "serial2:1500000n8";
+> +	};
+> +
+> +	gmac1_clkin: external-gmac1-clock {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <125000000>;
+> +		clock-output-names = "gmac1_clkin";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	fan: gpio_fan {
 
-Also declare x86-specific functions checking address validity
-in arch/x86/include/asm/kmsan.h.
+No underscores in node names. Node name just "fan"
 
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
-v4:
- -- per Marco Elver's request, create arch/x86/include/asm/kmsan.h
-    and move arch-specific inline functions there.
+> +		compatible = "gpio-fan";
+> +		gpios = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;
+> +		gpio-fan,speed-map = <0    0
+> +				      4500 1>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&fan_en_h>;
+> +		#cooling-cells = <2>;
+> +	};
+> +
+> +	hdmi-con {
 
-Link: https://linux-review.googlesource.com/id/I1d295ce8159ce15faa496d20089d953a919c125e
----
- arch/x86/Kconfig             |  1 +
- arch/x86/include/asm/kmsan.h | 55 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 arch/x86/include/asm/kmsan.h
+Node name: connector
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 697da8dae1418..bd9436cd0f29b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -168,6 +168,7 @@ config X86
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
- 	select HAVE_ARCH_KFENCE
-+	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
-diff --git a/arch/x86/include/asm/kmsan.h b/arch/x86/include/asm/kmsan.h
-new file mode 100644
-index 0000000000000..a790b865d0a68
---- /dev/null
-+++ b/arch/x86/include/asm/kmsan.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * x86 KMSAN support.
-+ *
-+ * Copyright (C) 2022, Google LLC
-+ * Author: Alexander Potapenko <glider@google.com>
-+ */
-+
-+#ifndef _ASM_X86_KMSAN_H
-+#define _ASM_X86_KMSAN_H
-+
-+#ifndef MODULE
-+
-+#include <asm/processor.h>
-+#include <linux/mmzone.h>
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.h to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_phys_addr_valid(unsigned long addr)
-+{
-+	if (IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
-+		return !(addr >> boot_cpu_data.x86_phys_bits);
-+	else
-+		return true;
-+}
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.c to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_virt_addr_valid(void *addr)
-+{
-+	unsigned long x = (unsigned long)addr;
-+	unsigned long y = x - __START_KERNEL_map;
-+
-+	/* use the carry flag to determine if x was < __START_KERNEL_map */
-+	if (unlikely(x > y)) {
-+		x = y + phys_base;
-+
-+		if (y >= KERNEL_IMAGE_SIZE)
-+			return false;
-+	} else {
-+		x = y + (__START_KERNEL_map - PAGE_OFFSET);
-+
-+		/* carry flag will be set if starting x was >= PAGE_OFFSET */
-+		if ((x > y) || !kmsan_phys_addr_valid(x))
-+			return false;
-+	}
-+
-+	return pfn_valid(x >> PAGE_SHIFT);
-+}
-+
-+#endif /* !MODULE */
-+
-+#endif /* _ASM_X86_KMSAN_H */
--- 
-2.37.2.789.g6183377224-goog
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_con_in: endpoint {
+> +				remote-endpoint = <&hdmi_out_con>;
+> +			};
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-work {
+> +			label = "work-led";
+> +			default-state = "off";
+> +			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&work_led_enable_h>;
+> +			retain-state-suspended;
+> +		};
+> +
+> +		led-diy {
+> +			label = "diy-led";
+> +			default-state = "on";
+> +			gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&diy_led_enable_h>;
+> +			retain-state-suspended;
+> +		};
+> +	};
+> +
+> +	rk817-sound {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,format = "i2s";
+> +		simple-audio-card,name = "Analog RK817";
+> +		simple-audio-card,mclk-fs = <256>;
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&i2s1_8ch>;
+> +		};
+> +
+> +		simple-audio-card,codec {
+> +			sound-dai = <&rk817>;
+> +		};
+> +	};
+> +
+> +	sdio_pwrseq: sdio-pwrseq {
+> +		compatible = "mmc-pwrseq-simple";
+> +		clocks = <&rk817 1>;
+> +		clock-names = "ext_clock";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wifi_enable_h>;
+> +		post-power-on-delay-ms = <100>;
+> +		power-off-delay-us = <5000000>;
+> +		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
+> +	};
+> +
+> +	spdif_dit: spdif-dit {
+> +		compatible = "linux,spdif-dit";
+> +		#sound-dai-cells = <0>;
+> +	};
+> +
+> +	spdif_sound: spdif-sound {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,name = "SPDIF";
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&spdif>;
+> +		};
+> +
+> +		simple-audio-card,codec {
+> +			sound-dai = <&spdif_dit>;
+> +		};
+> +	};
+> +
+> +	vcc12v_dcin: vcc12v_dcin {
 
+No underscores in node names, generic node name, so at least with
+regulator prefix or suffix.
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc12v_dcin";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +	};
+> +
+> +	/* vbus feeds the rk817 usb input.
+> +	 * With no battery attached, also feeds vcc_bat+
+> +	 * via ON/OFF_BAT jumper
+> +	 */
+> +	vbus: vbus {
+
+Ditto
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vbus";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc12v_dcin>;
+> +	};
+> +
+> +	vcc3v3_pcie_p: vcc3v3-pcie-p-regulator {
+
+And here you have suffix...
+
+> +		compatible = "regulator-fixed";
+> +		enable-active-high;
+> +		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pcie_enable_h>;
+> +		regulator-name = "vcc3v3_pcie_p";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc_3v3>;
+> +	};
+> +
+> +	vcc5v0_usb: vcc5v0_usb {
+
+Ditto
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc5v0_usb";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc12v_dcin>;
+> +	};
+> +
+> +	/* all four ports are controlled by one gpio
+> +	 * the host ports are sourced from vcc5v0_usb
+> +	 * the otg port is sourced from vcc5v0_midu
+> +	 */
+> +	vcc5v0_usb20_host: vcc5v0_usb20_host {
+
+and in other places as well
+
+
+
+> +		compatible = "regulator-fixed";
+> +		enable-active-high;
+> +		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vcc5v0_usb20_host_en>;
+> +		regulator-name = "vcc5v0_usb20_host";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc5v0_usb>;
+> +	};
+> +
+> +	vcc5v0_usb20_otg: vcc5v0_usb20_otg {
+> +		compatible = "regulator-fixed";
+> +		enable-active-high;
+> +		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
+> +		regulator-name = "vcc5v0_usb20_otg";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&dcdc_boost>;
+> +	};
+> +
+> +	vcc3v3_sd: vcc3v3_sd {
+> +		compatible = "regulator-fixed";
+> +		enable-active-low;
+> +		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vcc_sd_h>;
+> +		regulator-boot-on;
+> +		regulator-name = "vcc3v3_sd";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc_3v3>;
+> +	};
+> +
+> +	/* sourced from vbus and vcc_bat+ via rk817 sw5 */
+> +	vcc_sys: vcc_sys {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc_sys";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <4400000>;
+> +		regulator-max-microvolt = <4400000>;
+> +		vin-supply = <&vbus>;
+> +	};
+> +
+> +	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
+> +	vcc_wl: vcc_wl {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc_wl";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc_sys>;
+> +	};
+> +};
+> +
+> +&combphy1 {
+> +	status = "okay";
+> +};
+> +
+> +&combphy2 {
+> +	status = "okay";
+> +};
+> +
+> +&cpu0 {
+> +	cpu-supply = <&vdd_cpu>;
+> +};
+> +
+> +&cpu1 {
+> +	cpu-supply = <&vdd_cpu>;
+> +};
+> +
+> +&cpu2 {
+> +	cpu-supply = <&vdd_cpu>;
+> +};
+> +
+> +&cpu3 {
+> +	cpu-supply = <&vdd_cpu>;
+> +};
+> +
+> +&cpu_thermal {
+> +	trips {
+> +		cpu_hot: cpu_hot {
+
+No underscores in node names. Are you sure bindings/schema do not expect
+some specific name?
+
+> +			temperature = <55000>;
+> +			hysteresis = <2000>;
+> +			type = "active";
+> +		};
+> +	};
+
+
+Best regards,
+Krzysztof
