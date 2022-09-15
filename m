@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D285B9E77
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16B85B9E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiIOPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S231193AbiIOPMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiIOPKZ (ORCPT
+        with ESMTP id S231174AbiIOPKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:10:25 -0400
+        Thu, 15 Sep 2022 11:10:34 -0400
 Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3F67A515
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:31 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id e15-20020a056402190f00b0044f41e776a0so13141586edz.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B1D6745E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:34 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id m3-20020a056402430300b004512f6268dbso12395433edc.23
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=63Lbiss0mCSaP/JatuEwb7Qda7JVHXONR7b7gS/f0zw=;
-        b=ldGNVPhue592Z38Ppx+dvuU/+jjZ3WM5nm+z0BSSu9h8ezP13vV/Wl1kx9FDE2kM00
-         8hlbbp5debq2zMwyccXnSok/EFGYS9mlFPQu03BoXGKQ1tNoqAxco9vd+gOKziowlAx1
-         960aMn5I15aiY7e/E9EZ/LgBtgV+tt97K0u4asdoScfhlsL/hbGWoqJyRe6AmibNWTiq
-         J5lFB1m0MSx5XYBhZJDDB1ZWprW7OT9cPgi73vgc4CYvrUnMokBrBHdVIT4OYBHWdzX6
-         Wx/pz4G0JRiQM/VifFqL0HQwwn8gpGYoshZYX49Ahm0NtbyPpOr/BuoO7lm2mFArdxjX
-         g3qg==
+        bh=RV5QTvMygwcM31S/hyrs6MnTkve28DlweGTrQchhxXo=;
+        b=iXaNCvcxi4+6qBN7tuBlJCkmsRSEsjGSfB3SfZeymm0XXHHMDLmZS5purDypcnvs9C
+         VSctdYvWkvSVdi7VcQVA/jXEY/asOBe0sjr7IHcePpfoj8cjbpyxzwMKoub6Mbfbj/u3
+         hdcX9KTPHnInN6LBhE2giGnIHgk4ArxBm8oNZQjrxTqj6l10QwAzi4OrPQG/dmLjnKeM
+         uG5cIFQDMadCU8TrBcbzjSQl+YJOZv/uTPg3+I9KzZbdQlENHqwWW95ACZVZT9BbHfi5
+         bSJ9Yx8C2yAe2rvI5sDbQK6kyk//DTTYryP9Ky1nwr9gD2c+Xh/G4lERiS/g/gDCekau
+         srrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=63Lbiss0mCSaP/JatuEwb7Qda7JVHXONR7b7gS/f0zw=;
-        b=bSY4v3uEhhmVwVkmzHEzrQVfXdhVN1dMjqu+ZpZTRtow80EUPRq23roP0s7Qm8/Gx0
-         vqKA3w0NFA/kti/rUNiIYAEoMLmkFIHAAnMuXTmC7jhMHv8z1zMEbJu3GL/8o6tbZwuB
-         mqqYjWDC09Jf9J5REEqVa80D0Uw1kB1EWkMlct/OUDH84a4zC+y/pBVPOajxqbVuG5a7
-         GCgWzUyWbx4CC0rJgSQSwFrnIBBZUaxRiWZSOMkWercpXMzRzlhldrLtGAhyojYk/QKl
-         94uIV5+wxlb3CqVBDqW81H+AdIMwWL18UWEd+yAgKhFwg59hC15Dt+gxmrILNYiMmxe4
-         HRUg==
-X-Gm-Message-State: ACrzQf1NJomge0J678xsHfWFfW97WFTqTAY5FrfEqmLFZomFzjg/nV1q
-        XpSSO5bPVXjdsJHCaSgjz/z+WmSY1RA=
-X-Google-Smtp-Source: AMsMyM7rMyupFoo64/C2rdfMBkqr7i79dpaceIzsK7wAJRHKNpXAyoVQnsUTDRv/eo0QEd57U+v7OZRoLF0=
+        bh=RV5QTvMygwcM31S/hyrs6MnTkve28DlweGTrQchhxXo=;
+        b=AclS1xQdY9pti+HXJ1oZhtkHfUv03Yg3K2mXsxWjt2k4LaqgDspXBgWtJ51Bnh//cq
+         +cZcOhxzn4b10FBZrk2MLlTnE17tN8RCFNJY+8sXBsAVYQholCgW3r/0uY4BcF4Gwuzm
+         PYI+B4tUOv3ODRFzdXovfGpRme92pUJO3scNYzgZ8xBJgE5hkhU5LUOWyIrwSZiHsvDM
+         1ljwj6bxfCGdM+LuknTrLsCuii8kKFNb3G5DezYpp3ltt2728xjewBYBgOmzVnVIWSrW
+         hwQhJYSgO5+UrBrkSiu09dcrHkttZgv9L+Dxmrlfs0VrfndsiYIg0Z20qKFoHWqo2sSF
+         8A/g==
+X-Gm-Message-State: ACrzQf20CDQq59U3IRIrh3uORGvLCWSmQvl6DVVzIKvlPfOOwXCkcpg3
+        LT+9/q//XiDo3VGxTB5G2XS6v1WwNs4=
+X-Google-Smtp-Source: AMsMyM7bqtOZHqD5TLNiPJxrMbK30CsOC2CMkBTDAk4Y4jRe7EslTuJmgx6bYvgk5Yw3mmLO7YowFoN6c2M=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:aa7:c1c4:0:b0:44e:b39e:2a54 with SMTP id
- d4-20020aa7c1c4000000b0044eb39e2a54mr259911edp.139.1663254390559; Thu, 15 Sep
- 2022 08:06:30 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:15 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:4306:b0:451:8034:bcb6 with SMTP id
+ m6-20020a056402430600b004518034bcb6mr291044edc.198.1663254393224; Thu, 15 Sep
+ 2022 08:06:33 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:04:16 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-42-glider@google.com>
-Subject: [PATCH v7 41/43] bpf: kmsan: initialize BPF registers with zeroes
+Message-ID: <20220915150417.722975-43-glider@google.com>
+Subject: [PATCH v7 42/43] mm: fs: initialize fsdata passed to
+ write_begin/write_end interface
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -99,35 +100,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When executing BPF programs, certain registers may get passed
-uninitialized to helper functions. E.g. when performing a JMP_CALL,
-registers BPF_R1-BPF_R5 are always passed to the helper, no matter how
-many of them are actually used.
+Functions implementing the a_ops->write_end() interface accept the
+`void *fsdata` parameter that is supposed to be initialized by the
+corresponding a_ops->write_begin() (which accepts `void **fsdata`).
 
-Passing uninitialized values as function parameters is technically
-undefined behavior, so we work around it by always initializing the
-registers.
+However not all a_ops->write_begin() implementations initialize `fsdata`
+unconditionally, so it may get passed uninitialized to a_ops->write_end(),
+resulting in undefined behavior.
+
+Fix this by initializing fsdata with NULL before the call to
+write_begin(), rather than doing so in all possible a_ops
+implementations.
+
+This patch covers only the following cases found by running x86 KMSAN
+under syzkaller:
+
+ - generic_perform_write()
+ - cont_expand_zero() and generic_cont_expand_simple()
+ - page_symlink()
+
+Other cases of passing uninitialized fsdata may persist in the codebase.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I8ef9dbe94724cee5ad1e3a162f2b805345bc0586
+Link: https://linux-review.googlesource.com/id/Ie300c21bbe9dea69a730745bd3c6d2720953bf41
 ---
- kernel/bpf/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/buffer.c  | 4 ++--
+ fs/namei.c   | 2 +-
+ mm/filemap.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3d9eb3ae334ce..21c74fac5131c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2002,7 +2002,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
- { \
- 	u64 stack[stack_size / sizeof(u64)]; \
--	u64 regs[MAX_BPF_EXT_REG]; \
-+	u64 regs[MAX_BPF_EXT_REG] = {}; \
- \
- 	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
- 	ARG1 = (u64) (unsigned long) ctx; \
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 55e762a58eb65..e1198f4b28c8f 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -2352,7 +2352,7 @@ int generic_cont_expand_simple(struct inode *inode, loff_t size)
+ 	struct address_space *mapping = inode->i_mapping;
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	int err;
+ 
+ 	err = inode_newsize_ok(inode, size);
+@@ -2378,7 +2378,7 @@ static int cont_expand_zero(struct file *file, struct address_space *mapping,
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	unsigned int blocksize = i_blocksize(inode);
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	pgoff_t index, curidx;
+ 	loff_t curpos;
+ 	unsigned zerofrom, offset, len;
+diff --git a/fs/namei.c b/fs/namei.c
+index 53b4bc094db23..076ae96ca0b14 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -5088,7 +5088,7 @@ int page_symlink(struct inode *inode, const char *symname, int len)
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	bool nofs = !mapping_gfp_constraint(mapping, __GFP_FS);
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	int err;
+ 	unsigned int flags;
+ 
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 15800334147b3..ada25b9f45ad1 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3712,7 +3712,7 @@ ssize_t generic_perform_write(struct kiocb *iocb, struct iov_iter *i)
+ 		unsigned long offset;	/* Offset into pagecache page */
+ 		unsigned long bytes;	/* Bytes to write to page */
+ 		size_t copied;		/* Bytes copied from user */
+-		void *fsdata;
++		void *fsdata = NULL;
+ 
+ 		offset = (pos & (PAGE_SIZE - 1));
+ 		bytes = min_t(unsigned long, PAGE_SIZE - offset,
 -- 
 2.37.2.789.g6183377224-goog
 
