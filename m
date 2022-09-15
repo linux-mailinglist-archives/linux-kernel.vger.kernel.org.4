@@ -2,78 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54BC5B9903
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FA45B9907
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiIOKnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 06:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S229946AbiIOKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 06:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOKnm (ORCPT
+        with ESMTP id S229838AbiIOKov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:43:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BF958DCE;
-        Thu, 15 Sep 2022 03:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663238620; x=1694774620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wLWgR64O2sMHHi4b8YpQoNd7rQDRs8Hs5xyjBuOfPko=;
-  b=mdalCxHl3qLFn7p3gofcLV9SZQHcVV2Lj37cQCBRXdM+PyeSO5l/KtH8
-   FqEspZKgB/6eod178qrPtSMM1XjMNOejny5gch+TF8Eib40d79vEe/f8H
-   Dx/3sPwNALQT3T6Txc+MXCeNT/OL9afw/CXk8eOcberxBb3SA1McUl1vh
-   CKnB4TrTtW3Quua4OZP6hJCKG5AITJqssQo1VGaHZk+ZlUiIoNteP/Pgv
-   cFkRDDO2iI+wv5rQfV5CSRYdPnDMcY21qY0sUf82boejXqJOb1xinJgYh
-   X5JpyZxlsQwI2c6TedYOfscI420xdz/I2WCGNfrXaHawjzP4oppS01MTy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362638027"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="362638027"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 03:43:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="647779489"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2022 03:43:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 1CE3F235; Thu, 15 Sep 2022 13:43:52 +0300 (EEST)
-Date:   Thu, 15 Sep 2022 13:43:52 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        jingle.wu@emc.com.tw, rafael@kernel.org,
-        andriy.shevchenko@linux.intel.com, mario.limonciello@amd.com,
-        hdegoede@redhat.com, linus.walleij@linaro.org, timvp@google.com,
-        dmitry.torokhov@gmail.com, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Len Brown <lenb@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/13] gpiolib: acpi: Add wake_capable variants of
- acpi_dev_gpio_irq_get
-Message-ID: <YyMB6Nnp8A8HBeAZ@black.fi.intel.com>
-References: <20220914235801.1731478-1-rrangel@chromium.org>
- <20220914155914.v3.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
+        Thu, 15 Sep 2022 06:44:51 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4B912A81
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 03:44:50 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso21990356pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 03:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=07v4zbEzufVQlHmt2+/sJ50/ZMRE6Qz6ji3huDCoe+c=;
+        b=XPSq37HbUwRk6/ZKqfzw7fC79WapQcJu3974uXF2r2vuDx32u5kKSAirqz6ZfRqDaq
+         bJ3CnVfjUMk+VIYF2TMbLLkEWBi2YjaXqlU74E/qjbYEHjOSekBuS/t/MEWv12E8AnBU
+         d7BLJzH3stGHBOG2IDxhP+Z5dx2qDu2+ltg5wewWxv5S+NHX7pCrDLJfRnkhQrmNmGXU
+         fljn6LAubpnyyc5sfXlSbaoSU8O3fMH7i2hifO9Xf05exReevm56IKaSwJeo26JvwFW1
+         5WxBZUhB4V/6Q9B5kIKuEYl5tw+709wGmurvSWT5G2jLgyLPjvugMYyb6gIeK3Qb1YA9
+         vVrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=07v4zbEzufVQlHmt2+/sJ50/ZMRE6Qz6ji3huDCoe+c=;
+        b=Ny9x/U797Q7a+nmrYuoh993NQ0sdp1HP37fcQkeAPVZLGg7T6KedSrGU9hI9eErF5q
+         HcqN36BtYatdFPcoXD09eqjl1OkTNLR3djzbem3AsZeYYSzcKubfMQHZ0WPmjYC2vs6s
+         JXZ8yo1cE5l7eQkxxoKeF/xFDNfFIauMBaeXRgdVJNZSL+pPwGQyggkeWlYYkeUnx0yb
+         N7soJyfYfxDUxGhDePCPxeeZeCdxVe8fg2FH1yRWPQH7fTMlY9XzZH6sVqB39PpOADXF
+         1QqdsAyS4av4Bfh+EiOsnQmOlmoI9H/mEnXf/ndMQqoz2hqCygrXTIM66EQgmESOvP9L
+         pR5g==
+X-Gm-Message-State: ACrzQf0jLx96JDHcgJmM2r+1HzM/uAQl+dVhMTOnlEt9YbXBTlOytiMR
+        p9xIrTHNatAtv/nChLgI0kjZ
+X-Google-Smtp-Source: AMsMyM7VBmu9USW8hF859gkazJNpshvgjoy7xHkTmzeVjnr2Qx0mWMBDhaNX1AHTrh7RIjnGYRsg+w==
+X-Received: by 2002:a17:903:41c9:b0:176:b9df:c743 with SMTP id u9-20020a17090341c900b00176b9dfc743mr3706763ple.162.1663238689598;
+        Thu, 15 Sep 2022 03:44:49 -0700 (PDT)
+Received: from workstation ([117.217.189.193])
+        by smtp.gmail.com with ESMTPSA id w20-20020a1709027b9400b001750361f430sm12525172pll.155.2022.09.15.03.44.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 15 Sep 2022 03:44:48 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 16:14:43 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, treding@nvidia.com, jonathanh@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <20220915104443.GC4550@workstation>
+References: <20220913101237.4337-1-vidyas@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914155914.v3.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220913101237.4337-1-vidyas@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 05:57:53PM -0600, Raul E Rangel wrote:
-> The ACPI spec defines the SharedAndWake and ExclusiveAndWake share type
-> keywords. This is an indication that the GPIO IRQ can also be used as a
-> wake source. This change exposes the wake_capable bit so drivers can
-> correctly enable wake functionality instead of making an assumption.
+On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
+> Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> not having an endpoint connected to the slot is not an error.
+> So, changing the macro from dev_err to dev_info to log the event.
 > 
-> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Since the PHY issue that could happen during boot up is rare, it looks
+okay to me treating the log as INFO.
+
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 650a7f22f9d0..25154555aa7a 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+>  	}
+>  
+>  	if (retries >= LINK_WAIT_MAX_RETRIES) {
+> -		dev_err(pci->dev, "Phy link never came up\n");
+> +		dev_info(pci->dev, "Phy link never came up\n");
+>  		return -ETIMEDOUT;
+>  	}
+>  
+> -- 
+> 2.17.1
+> 
