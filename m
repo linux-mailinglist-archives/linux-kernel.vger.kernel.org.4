@@ -2,209 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5455B9DD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490A75B9DE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIOOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S230003AbiIOO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIOOzz (ORCPT
+        with ESMTP id S229698AbiIOO5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:55:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA5E8003D;
-        Thu, 15 Sep 2022 07:55:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 15 Sep 2022 10:57:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62EB83042;
+        Thu, 15 Sep 2022 07:57:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 456F01F8D4;
-        Thu, 15 Sep 2022 14:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663253753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Up584H0P24z3r3gFq4EXpD2t/lW/iWfr0mZFDdcmhXw=;
-        b=BIFkM/hGv7VK2WLEAZHdqcYlEqZ+Eyiir8loQuZ+t5qFCrF3oP/WK5y9zaSUmuUgp2Sxw0
-        hBnrUpOfbkkWVl3WrmeCu06qSM4jf/g+nfB5YzpU96SOf1FiuAy3tTW8N+mLKbsgcOikdk
-        YzQY44yYWMugyAemhGzoKdYkgem4FLI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 06CDC133B6;
-        Thu, 15 Sep 2022 14:55:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id s3gpO/g8I2MnBgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 15 Sep 2022 14:55:52 +0000
-Message-ID: <643ef313-b9a8-e6ab-4dcb-43919f4d7af6@suse.com>
-Date:   Thu, 15 Sep 2022 16:55:52 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDFBBB8212E;
+        Thu, 15 Sep 2022 14:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FAE5C433C1;
+        Thu, 15 Sep 2022 14:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663253862;
+        bh=zC/4TNClKqfGeJHSvCyVQfKIVXftcz349TXx7htkS8w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AQNA5VkxHaWz6DX1kzzHJwvTZHDcjtM/3dkft2IS55EwOzvIPpqIN4Jj1BN8G3w8G
+         7wTNC/hJj+ZT+ObEGB9eo49erg7nL5hvKhe7aj534JacA5eSxVRCjv+YErbwHlToDR
+         u3Z9r7ITVE4YI7FO2WpBIH+5TpXKrXlOLoDrLvwP4Kv6h0jkwHKZe4M3dfLP9gsgYC
+         fLraSuhz0ZS530CYskF5S/XZRKZrW/YoYnn2O7TEZHQusaTS4xF/EZOkFXz8Y1lHtv
+         Tlja/Shf3xyGIREaka5qV1vs10BwD8cF7soOYJJ0/ottt5X3c8x6VKIY7RBvpYOH3d
+         I3xZf8qDzOG6g==
+Date:   Thu, 15 Sep 2022 15:57:41 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/9] iio: pressure: bmp280: Simplify bmp280
+ calibration data reading
+Message-ID: <20220915155741.2c19e927@jic23-huawei>
+In-Reply-To: <96d81282c95006d857f4d836d2ff3ee0740a85a0.1663025017.git.ang.iglesiasg@gmail.com>
+References: <cover.1663025017.git.ang.iglesiasg@gmail.com>
+        <96d81282c95006d857f4d836d2ff3ee0740a85a0.1663025017.git.ang.iglesiasg@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] xen/xenbus: fix xenbus_setup_ring()
-Content-Language: en-US
-To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Sander Eikelenboom <linux@eikelenboom.it>
-References: <20220915143137.1763-1-jgross@suse.com>
- <34c9a80d-3a9d-cd51-32d2-cf778c981107@epam.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <34c9a80d-3a9d-cd51-32d2-cf778c981107@epam.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------wFpgqiE47FhWtDq0JbwO0ovi"
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------wFpgqiE47FhWtDq0JbwO0ovi
-Content-Type: multipart/mixed; boundary="------------crtVEa6kfQw0NU0tyzTzdGi9";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
- "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: Stefano Stabellini <sstabellini@kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- Sander Eikelenboom <linux@eikelenboom.it>
-Message-ID: <643ef313-b9a8-e6ab-4dcb-43919f4d7af6@suse.com>
-Subject: Re: [PATCH] xen/xenbus: fix xenbus_setup_ring()
-References: <20220915143137.1763-1-jgross@suse.com>
- <34c9a80d-3a9d-cd51-32d2-cf778c981107@epam.com>
-In-Reply-To: <34c9a80d-3a9d-cd51-32d2-cf778c981107@epam.com>
+On Tue, 13 Sep 2022 01:46:42 +0200
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
---------------crtVEa6kfQw0NU0tyzTzdGi9
-Content-Type: multipart/mixed; boundary="------------IS3EwCOGghcUGT2zkq73JJEK"
+> On bmp280 and bme280, the temperature and pressure calibration parameters
+> are available on a contiguous memory region. Considering this arrangement,
+> simplified the calibration reading function by using only one buffer
+> to read in batch temperature and pressure registers.
+> 
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+Applied.  Apparently we have a plane, so I'll stop here for now...
 
---------------IS3EwCOGghcUGT2zkq73JJEK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Jonathan
 
-T24gMTUuMDkuMjIgMTY6NDcsIE9sZWtzYW5kciBUeXNoY2hlbmtvIHdyb3RlOg0KPiANCj4g
-T24gMTUuMDkuMjIgMTc6MzEsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IA0KPiBIZWxsbyBK
-dWVyZ2VuDQo+IA0KPj4gQ29tbWl0IDQ1NzMyNDBmMDc2NCAoInhlbi94ZW5idXM6IGVsaW1p
-bmF0ZSB4ZW5idXNfZ3JhbnRfcmluZygpIikNCj4+IGludHJvZHVjZWQgYW4gZXJyb3IgZm9y
-IGluaXRpYWxpemF0aW9uIG9mIG11bHRpLXBhZ2UgcmluZ3MuDQo+Pg0KPj4gQ2M6IHN0YWJs
-ZUB2Z2VyLmtlcm5lbC5vcmcNCj4+IEZpeGVzOiA0NTczMjQwZjA3NjQgKCJ4ZW4veGVuYnVz
-OiBlbGltaW5hdGUgeGVuYnVzX2dyYW50X3JpbmcoKSIpDQo+PiBSZXBvcnRlZC1ieTogU2Fu
-ZGVyIEVpa2VsZW5ib29tIDxsaW51eEBlaWtlbGVuYm9vbS5pdD4NCj4+IFNpZ25lZC1vZmYt
-Ynk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4+IC0tLQ0KPj4gICAgZHJp
-dmVycy94ZW4veGVuYnVzL3hlbmJ1c19jbGllbnQuYyB8IDkgKysrKysrLS0tDQo+PiAgICAx
-IGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4NCj4+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL3hlbi94ZW5idXMveGVuYnVzX2NsaWVudC5jIGIvZHJp
-dmVycy94ZW4veGVuYnVzL3hlbmJ1c19jbGllbnQuYw0KPj4gaW5kZXggZDVmM2Y3NjM3MTdl
-Li5jYWE1YzVjMzJmOGUgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL3hlbi94ZW5idXMveGVu
-YnVzX2NsaWVudC5jDQo+PiArKysgYi9kcml2ZXJzL3hlbi94ZW5idXMveGVuYnVzX2NsaWVu
-dC5jDQo+PiBAQCAtMzgyLDkgKzM4MiwxMCBAQCBpbnQgeGVuYnVzX3NldHVwX3Jpbmcoc3Ry
-dWN0IHhlbmJ1c19kZXZpY2UgKmRldiwgZ2ZwX3QgZ2ZwLCB2b2lkICoqdmFkZHIsDQo+PiAg
-ICAJdW5zaWduZWQgbG9uZyByaW5nX3NpemUgPSBucl9wYWdlcyAqIFhFTl9QQUdFX1NJWkU7
-DQo+PiAgICAJZ3JhbnRfcmVmX3QgZ3JlZl9oZWFkOw0KPj4gICAgCXVuc2lnbmVkIGludCBp
-Ow0KPj4gKwl2b2lkICphZGRyOw0KPj4gICAgCWludCByZXQ7DQo+PiAgICANCj4+IC0JKnZh
-ZGRyID0gYWxsb2NfcGFnZXNfZXhhY3QocmluZ19zaXplLCBnZnAgfCBfX0dGUF9aRVJPKTsN
-Cj4+ICsJYWRkciA9ICp2YWRkciA9IGFsbG9jX3BhZ2VzX2V4YWN0KHJpbmdfc2l6ZSwgZ2Zw
-IHwgX19HRlBfWkVSTyk7DQo+PiAgICAJaWYgKCEqdmFkZHIpIHsNCj4+ICAgIAkJcmV0ID0g
-LUVOT01FTTsNCj4+ICAgIAkJZ290byBlcnI7DQo+PiBAQCAtNDAxLDEzICs0MDIsMTUgQEAg
-aW50IHhlbmJ1c19zZXR1cF9yaW5nKHN0cnVjdCB4ZW5idXNfZGV2aWNlICpkZXYsIGdmcF90
-IGdmcCwgdm9pZCAqKnZhZGRyLA0KPj4gICAgCQl1bnNpZ25lZCBsb25nIGdmbjsNCj4+ICAg
-IA0KPj4gICAgCQlpZiAoaXNfdm1hbGxvY19hZGRyKCp2YWRkcikpDQo+PiAtCQkJZ2ZuID0g
-cGZuX3RvX2dmbih2bWFsbG9jX3RvX3Bmbih2YWRkcltpXSkpOw0KPj4gKwkJCWdmbiA9IHBm
-bl90b19nZm4odm1hbGxvY190b19wZm4oYWRkcikpOw0KPj4gICAgCQllbHNlDQo+PiAtCQkJ
-Z2ZuID0gdmlydF90b19nZm4odmFkZHJbaV0pOw0KPj4gKwkJCWdmbiA9IHZpcnRfdG9fZ2Zu
-KGFkZHIpOw0KPj4gICAgDQo+PiAgICAJCWdyZWZzW2ldID0gZ250dGFiX2NsYWltX2dyYW50
-X3JlZmVyZW5jZSgmZ3JlZl9oZWFkKTsNCj4+ICAgIAkJZ250dGFiX2dyYW50X2ZvcmVpZ25f
-YWNjZXNzX3JlZihncmVmc1tpXSwgZGV2LT5vdGhlcmVuZF9pZCwNCj4+ICAgIAkJCQkJCWdm
-biwgMCk7DQo+PiArDQo+PiArCQlhZGRyICs9IFBBR0VfU0laRTsNCj4gDQo+IFhFTl9QQUdF
-X1NJWkU/DQoNCk9oLCBpbmRlZWQhIFdpbGwgY2hhbmdlIG9uIGNvbW1pdC4NCg0KPiANCj4g
-DQo+IFJldmlld2VkLWJ5OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hj
-aGVua29AZXBhbS5jb20+DQoNClRoYW5rcywNCg0KDQpKdWVyZ2VuDQo=
---------------IS3EwCOGghcUGT2zkq73JJEK
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> ---
+>  drivers/iio/pressure/bmp280-core.c | 58 ++++++++++++------------------
+>  drivers/iio/pressure/bmp280.h      |  3 ++
+>  2 files changed, 26 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+> index 0ba4ff999f33..4793bcd9f0b3 100644
+> --- a/drivers/iio/pressure/bmp280-core.c
+> +++ b/drivers/iio/pressure/bmp280-core.c
+> @@ -128,8 +128,7 @@ struct bmp280_chip_info {
+>   * These enums are used for indexing into the array of compensation
+>   * parameters for BMP280.
+>   */
+> -enum { T1, T2, T3 };
+> -enum { P1, P2, P3, P4, P5, P6, P7, P8, P9 };
+> +enum { T1, T2, T3, P1, P2, P3, P4, P5, P6, P7, P8, P9 };
+>  
+>  static const struct iio_chan_spec bmp280_channels[] = {
+>  	{
+> @@ -153,8 +152,7 @@ static int bmp280_read_calib(struct bmp280_data *data,
+>  			     struct bmp280_calib *calib,
+>  			     unsigned int chip)
+>  {
+> -	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
+> -	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
+> +	__le16 c_buf[BMP280_CONTIGUOUS_CALIB_REGS / 2];
+>  	struct device *dev = data->dev;
+>  	unsigned int tmp;
+>  	__le16 l16;
+> @@ -162,43 +160,33 @@ static int bmp280_read_calib(struct bmp280_data *data,
+>  	int ret;
+>  
+>  
+> -	/* Read temperature calibration values. */
+> +	/* Read temperature and pressure calibration values. */
+>  	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_TEMP_START,
+> -			       t_buf, BMP280_COMP_TEMP_REG_COUNT);
+> +			       c_buf, sizeof(c_buf));
+>  	if (ret < 0) {
+>  		dev_err(data->dev,
+> -			"failed to read temperature calibration parameters\n");
+> +			"failed to read temperature and pressure calibration parameters\n");
+>  		return ret;
+>  	}
+>  
+> -	/* Toss the temperature calibration data into the entropy pool */
+> -	add_device_randomness(t_buf, sizeof(t_buf));
+> -
+> -	calib->T1 = le16_to_cpu(t_buf[T1]);
+> -	calib->T2 = le16_to_cpu(t_buf[T2]);
+> -	calib->T3 = le16_to_cpu(t_buf[T3]);
+> -
+> -	/* Read pressure calibration values. */
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_PRESS_START,
+> -			       p_buf, BMP280_COMP_PRESS_REG_COUNT);
+> -	if (ret < 0) {
+> -		dev_err(data->dev,
+> -			"failed to read pressure calibration parameters\n");
+> -		return ret;
+> -	}
+> -
+> -	/* Toss the pressure calibration data into the entropy pool */
+> -	add_device_randomness(p_buf, sizeof(p_buf));
+> -
+> -	calib->P1 = le16_to_cpu(p_buf[P1]);
+> -	calib->P2 = le16_to_cpu(p_buf[P2]);
+> -	calib->P3 = le16_to_cpu(p_buf[P3]);
+> -	calib->P4 = le16_to_cpu(p_buf[P4]);
+> -	calib->P5 = le16_to_cpu(p_buf[P5]);
+> -	calib->P6 = le16_to_cpu(p_buf[P6]);
+> -	calib->P7 = le16_to_cpu(p_buf[P7]);
+> -	calib->P8 = le16_to_cpu(p_buf[P8]);
+> -	calib->P9 = le16_to_cpu(p_buf[P9]);
+> +	/* Toss the temperature and pressure calibration data into the entropy pool */
+> +	add_device_randomness(c_buf, sizeof(c_buf));
+> +
+> +	/* Parse temperature calibration values. */
+> +	calib->T1 = le16_to_cpu(c_buf[T1]);
+> +	calib->T2 = le16_to_cpu(c_buf[T2]);
+> +	calib->T3 = le16_to_cpu(c_buf[T3]);
+> +
+> +	/* Parse pressure calibration values. */
+> +	calib->P1 = le16_to_cpu(c_buf[P1]);
+> +	calib->P2 = le16_to_cpu(c_buf[P2]);
+> +	calib->P3 = le16_to_cpu(c_buf[P3]);
+> +	calib->P4 = le16_to_cpu(c_buf[P4]);
+> +	calib->P5 = le16_to_cpu(c_buf[P5]);
+> +	calib->P6 = le16_to_cpu(c_buf[P6]);
+> +	calib->P7 = le16_to_cpu(c_buf[P7]);
+> +	calib->P8 = le16_to_cpu(c_buf[P8]);
+> +	calib->P9 = le16_to_cpu(c_buf[P9]);
+>  
+>  	/*
+>  	 * Read humidity calibration values.
+> diff --git a/drivers/iio/pressure/bmp280.h b/drivers/iio/pressure/bmp280.h
+> index 4a501836d27a..03a539223417 100644
+> --- a/drivers/iio/pressure/bmp280.h
+> +++ b/drivers/iio/pressure/bmp280.h
+> @@ -37,6 +37,9 @@
+>  
+>  #define BMP280_COMP_H5_MASK		GENMASK(15, 4)
+>  
+> +#define BMP280_CONTIGUOUS_CALIB_REGS	(BMP280_COMP_TEMP_REG_COUNT + \
+> +					 BMP280_COMP_PRESS_REG_COUNT)
+> +
+>  #define BMP280_FILTER_MASK		GENMASK(4, 2)
+>  #define BMP280_FILTER_OFF		0
+>  #define BMP280_FILTER_2X		1
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------IS3EwCOGghcUGT2zkq73JJEK--
-
---------------crtVEa6kfQw0NU0tyzTzdGi9--
-
---------------wFpgqiE47FhWtDq0JbwO0ovi
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMjPPgFAwAAAAAACgkQsN6d1ii/Ey9N
-XAf/bpqthZlSl1ixQKVVr9dS8fNG2tPVotRcLlJFDxlqzhiVrOdrcyL7dzDcyMRgMOJPzuz9CJYV
-yGfwD3XPNLLJ1qNdn7lY57i6bj1ZrcjwzqHbU69jXqbUUzHGpiTC0ivSLiByoNNGQp1KJ8Ld4hSX
-MDlOFL5H40DvovwXvdOIp8wAJosY4Xj6oxixVKP3B2nK2PehZ0/RUvWRj3eZB0D36HUXgMxfM4r4
-+WtS6ZI0bEBh/70CGKBY6X8XH2et07lxa5HA3nbSrxMxpFaZAbdKgop61Xi7htlrUGHp6Dj3Oktz
-rHryOTk3wojNRZ9ECsEF3Tvfw8N7bsX/b5f686okaQ==
-=RHQ7
------END PGP SIGNATURE-----
-
---------------wFpgqiE47FhWtDq0JbwO0ovi--
