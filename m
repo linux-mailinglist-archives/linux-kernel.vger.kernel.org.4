@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4C75B955B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52885B9559
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiIOH1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S230039AbiIOH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIOH1G (ORCPT
+        with ESMTP id S229916AbiIOH07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:27:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61B28E999
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:26:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3AD7C22BFB;
-        Thu, 15 Sep 2022 07:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663226777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OP4fCqJiZrcUBoKZtnNq2ubY4gQ9sGvrUFWRv/Jwd/8=;
-        b=K6GXXjYpighhPMObs6jla85a3QvKkacXUh11NLyl+oTFryVPxyaw8fj1E3ROZ48YWBp4GD
-        ylKX5OP5dqK92ul5gys/9sQXX8/ocD+vvqd9gBXmGP1z3BusRqurtGncmiDQ+xbDe0QQYK
-        ZKIZHW5Un18Ef3+6uRc1X5WSWINm9Jk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663226777;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OP4fCqJiZrcUBoKZtnNq2ubY4gQ9sGvrUFWRv/Jwd/8=;
-        b=IC79jF+zy7RedPVgN783FEHhP5C2PJJNjw0IdxBcm21zLn4/8gkp4iSripdalf5Hdxuwdn
-        3Bp/9HEokb2bgkCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA629133A7;
-        Thu, 15 Sep 2022 07:26:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SSmoLpjTImOfYQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 15 Sep 2022 07:26:16 +0000
-Date:   Thu, 15 Sep 2022 09:26:15 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/16] mm/page_alloc: add missing is_migrate_isolate()
- check in set_page_guard()
-Message-ID: <YyLTl8FvmcRuUYi9@localhost.localdomain>
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-9-linmiaohe@huawei.com>
+        Thu, 15 Sep 2022 03:26:59 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE0B8E998
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:26:48 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t65so16536174pgt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=LIWBWWFb8yy1MssxtI6bn2YpTDb4Q6/dddLLzhJ4bpQ=;
+        b=wNo7hBk9fMWUOj/3ynTodNOVDRJXMwJmtYMzu04+LkzdaP8h61LFrdZcor4jT7Jgpn
+         GVtl/I+x5gEYJoKS/hILQc4cQC/gdv2L15Aeke7THm1rbLKET+QYlZT4sWxZTbnSYmFC
+         DkNUc2Wnppf+b2eMb6jyQL5PKRw+6meelewWknLf/YQBdlrdPaGKyC6KyfLXR/QfbIeH
+         G4AibeCjUYLsGX9KHjadMcHPHcO/v9NyIbCZn6Me1c8AgmJSOjNI5Fhulf6SOBTage9N
+         4WkFmgh8JyxyMYpm4xuRrmb+5IQj7gGiZXXVcu+OILkMHcVx+5Ir8Zf60WNFYcivJ/Uw
+         9q9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=LIWBWWFb8yy1MssxtI6bn2YpTDb4Q6/dddLLzhJ4bpQ=;
+        b=PaeLs9IZbqEcYTpVclmZO4BznH/ApDaq2w8CM2qjT01WNVQ4Sztcbp7vVs4rkehW8r
+         pFq6q49+j5z9cjYkalwScvCwHU+vNucWsjsKTUvoRjfzfFPMw88kFaXoFGM0Omb3adTA
+         4t3HMkr48c1MkIAz1+h/4Myusls5lygnTbKH5LKFJXszE5dzl1AkaN/TX+of7XrlflOx
+         zPP5DIkJc9lG63Af71N9jATWBv5T7QrS+iBIQ1g53fP5v5xJBWE+xOh6Suumm2qRvJPr
+         X3HVL9NYQEHoCZuGThgVx245uEtkQFusEJYVvsZLJDoC5E8InSVOWGsJ8PwisZeeQYQx
+         nTMA==
+X-Gm-Message-State: ACgBeo1nBbZLRuRfgFJgq87W3THTBcKYIslAnZ7bePO5GdqbIxTTfPaw
+        a0L6JojQBci1UN1+0Y7OCAg5LA==
+X-Google-Smtp-Source: AA6agR7SguljpcebTu70uYUSvx77z7+wrSQ9Blo2OucBtIKVi31yByPXunvFvYqh3JBw4vm3ltSiLw==
+X-Received: by 2002:a63:e25:0:b0:41c:30f7:c39c with SMTP id d37-20020a630e25000000b0041c30f7c39cmr34809101pgl.147.1663226802094;
+        Thu, 15 Sep 2022 00:26:42 -0700 (PDT)
+Received: from [10.76.37.214] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id h29-20020a056a00001d00b0053e9ecf58f0sm11715954pfk.20.2022.09.15.00.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 00:26:41 -0700 (PDT)
+Message-ID: <c6da4306-a89f-ff28-920c-4fc3f12b55e3@bytedance.com>
+Date:   Thu, 15 Sep 2022 15:26:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909092451.24883-9-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [External] Re: [PATCH V3 6/6] erofs: Support sharing cookies in
+ the same domain
+To:     JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
+ <20220914105041.42970-7-zhujia.zj@bytedance.com>
+ <82473542-7810-3474-3f78-b61f9927d682@linux.alibaba.com>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <82473542-7810-3474-3f78-b61f9927d682@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +76,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 05:24:43PM +0800, Miaohe Lin wrote:
-> In MIGRATE_ISOLATE case, zone freepage state shouldn't be modified as
-> caller will take care of it. Add missing is_migrate_isolate() here to
-> avoid possible unbalanced freepage state.
+
+
+在 2022/9/15 14:53, JeffleXu 写道:
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Ok, I gave it some thought and I guess it's safe to assume that this would happen if
-someone isolates the block, and then we face an MCE failure/soft-offline on a page
-within that block.
-
-take_page_off_buddy
- break_down_buddy_pages
-  set_page_guard
-
-will trigger __mod_zone_freepage_state(), which already had been triggered back
-when the block was isolated.
-
-I think the changelog could grow fatter to better explain the issue.
-
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-
-> ---
->  mm/page_alloc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index a35ef385d906..94baf33da865 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -873,7 +873,8 @@ static inline bool set_page_guard(struct zone *zone, struct page *page,
->  	INIT_LIST_HEAD(&page->buddy_list);
->  	set_page_private(page, order);
->  	/* Guard pages are not available for any usage */
-> -	__mod_zone_freepage_state(zone, -(1 << order), migratetype);
-> +	if (!is_migrate_isolate(migratetype))
-> +		__mod_zone_freepage_state(zone, -(1 << order), migratetype);
->  
->  	return true;
->  }
-> -- 
-> 2.23.0
+> On 9/14/22 6:50 PM, Jia Zhu wrote:
+>> Several erofs filesystems can belong to one domain, and data blobs can
+>> be shared among these erofs filesystems of same domain.
+>>
+>> Users could specify domain_id mount option to create or join into a
+>> domain.
+>>
+>> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+>> ---
+>>   fs/erofs/fscache.c  | 89 +++++++++++++++++++++++++++++++++++++++++++--
+>>   fs/erofs/internal.h |  4 +-
+>>   2 files changed, 89 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+>> index 4e0a441afb7d..e9ae1ee963e2 100644
+>> --- a/fs/erofs/fscache.c
+>> +++ b/fs/erofs/fscache.c
+>> @@ -7,6 +7,7 @@
+>>   #include "internal.h"
+>>   
+>>   static DEFINE_MUTEX(erofs_domain_list_lock);
+>> +static DEFINE_MUTEX(erofs_domain_cookies_lock);
+>>   static LIST_HEAD(erofs_domain_list);
+>>   static struct vfsmount *erofs_pseudo_mnt;
+>>   
+>> @@ -504,7 +505,6 @@ static int erofs_fscache_init_domain(struct super_block *sb)
+>>   
+>>   	domain->volume = sbi->volume;
+>>   	refcount_set(&domain->ref, 1);
+>> -	mutex_init(&domain->mutex);
 > 
-
--- 
-Oscar Salvador
-SUSE Labs
+> This needs to be folded into patch 4.
+Thanks.
+> 
+> 
+>>   	list_add(&domain->list, &erofs_domain_list);
+>>   	return 0;
+>>   out:
+>> @@ -534,8 +534,8 @@ static int erofs_fscache_register_domain(struct super_block *sb)
+>>   	return err;
+>>   }
+>>   
+>> -struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+>> -						     char *name, bool need_inode)
+>> +struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
+>> +						    char *name, bool need_inode)
+>>   {
+>>   	struct fscache_volume *volume = EROFS_SB(sb)->volume;
+>>   	struct erofs_fscache *ctx;
+>> @@ -585,13 +585,96 @@ struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+>>   	return ERR_PTR(ret);
+>>   }
+>>   
+>> +static
+>> +struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
+>> +							char *name, bool need_inode)
+>> +{
+>> +	struct inode *inode;
+>> +	struct erofs_fscache *ctx;
+>> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>> +	struct erofs_domain *domain = sbi->domain;
+>> +
+>> +	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
+>> +	if (IS_ERR(ctx))
+>> +		return ctx;
+>> +
+>> +	ctx->name = kstrdup(name, GFP_KERNEL);
+>> +	if (!ctx->name)
+>> +		return ERR_PTR(-ENOMEM);
+> 
+> The previously registered erofs_fscache needs to be cleaned up in the
+> error path.
+Thanks for catching this. I'll fix it in next version.
+> 
+>> +
+>> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
+>> +	if (!inode) {
+>> +		kfree(ctx->name);
+>> +		return ERR_PTR(-ENOMEM);
+>> +	}
+> 
+> Ditto.
+> 
+>> +
+>> +	ctx->domain = domain;
+>> +	ctx->anon_inode = inode;
+>> +	inode->i_private = ctx;
+>> +	erofs_fscache_domain_get(domain);
+>> +	return ctx;
+>> +}
+>> +
+>> +static
+>> +struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
+>> +						    char *name, bool need_inode)
+>> +{
+>> +	struct inode *inode;
+>> +	struct erofs_fscache *ctx;
+>> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>> +	struct erofs_domain *domain = sbi->domain;
+>> +	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
+>> +
+>> +	mutex_lock(&erofs_domain_cookies_lock);
+>> +	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
+>> +		ctx = inode->i_private;
+>> +		if (!ctx)
+>> +			continue;
+>> +		if (ctx->domain == domain && !strcmp(ctx->name, name)) {
+>> +			igrab(inode);
+>> +			mutex_unlock(&erofs_domain_cookies_lock);
+>> +			return ctx;
+>> +		}
+>> +	}
+>> +	ctx = erofs_fscache_domain_init_cookie(sb, name, need_inode);
+>> +	mutex_unlock(&erofs_domain_cookies_lock);
+>> +	return ctx;
+>> +}
+>> +
+>> +struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+>> +						     char *name, bool need_inode)
+>> +{
+>> +	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>> +
+>> +	if (sbi->opt.domain_id)
+>> +		return erofs_domain_register_cookie(sb, name, need_inode);
+>> +	else
+>> +		return erofs_fscache_acquire_cookie(sb, name, need_inode);
+>> +}
+>> +
+>>   void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
+>>   {
+>> +	struct erofs_domain *domain;
+>> +
+>>   	if (!ctx)
+>>   		return;
+>> +	domain = ctx->domain;
+>> +	if (domain) {
+>> +		mutex_lock(&erofs_domain_cookies_lock);
+>> +		/* Cookie is still in use */
+>> +		if (atomic_read(&ctx->anon_inode->i_count) > 1) {
+>> +			iput(ctx->anon_inode);
+>> +			mutex_unlock(&erofs_domain_cookies_lock);
+>> +			return;
+>> +		}
+>> +		iput(ctx->anon_inode);
+>> +		kfree(ctx->name);
+>> +		mutex_unlock(&erofs_domain_cookies_lock);
+> 
+> 		mutex_lock(&erofs_domain_cookies_lock);
+> 		drop = atomic_read(&ctx->anon_inode->i_count) == 1;
+> 		iput(ctx->anon_inode);
+> 		mutex_unlock(&erofs_domain_cookies_lock);
+> 
+> 		if (!drop)
+> 			return;
+This code style is more intuitive, I'll revise it, thanks.
+>> +	}
+>>   >  	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
+>>   	fscache_relinquish_cookie(ctx->cookie, false);
+>> +	erofs_fscache_domain_put(domain);
+>>   	ctx->cookie = NULL;
+> 
+> 	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
+> 	fscache_relinquish_cookie(ctx->cookie, false);
+> 	erofs_fscache_domain_put(domain);
+> 	kfree(ctx->name);
+> 
+>>   
+>>   	iput(ctx->inode);
+>> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+>> index 4dd0b545755a..8a6f94b27a23 100644
+>> --- a/fs/erofs/internal.h
+>> +++ b/fs/erofs/internal.h
+>> @@ -101,7 +101,6 @@ struct erofs_sb_lz4_info {
+>>   
+>>   struct erofs_domain {
+>>   	refcount_t ref;
+>> -	struct mutex mutex;
+>>   	struct list_head list;
+>>   	struct fscache_volume *volume;
+>>   	char *domain_id;
+>> @@ -110,6 +109,9 @@ struct erofs_domain {
+>>   struct erofs_fscache {
+>>   	struct fscache_cookie *cookie;
+>>   	struct inode *inode;
+>> +	struct inode *anon_inode;
+>> +	struct erofs_domain *domain;
+>> +	char *name;
+>>   };
+>>   
+>>   struct erofs_sb_info {
+> 
