@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5055B99E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4055B99CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiIOLmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S229998AbiIOLke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiIOLki (ORCPT
+        with ESMTP id S229818AbiIOLkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:40:38 -0400
+        Thu, 15 Sep 2022 07:40:08 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBADF4BD16
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B1D44555
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=LME5focdSzJ5De+xp1zvzMFJmKhIAe15paOq2fqAc04=; b=mLaZD07mNbpA6Hu6Nkr2inMjSG
-        TmYtuV41j5/Z06g3ayJPyIS9XhkSbWoLiuhu6vGn1gvlsNtH+5MgrnrE2l67Ii1WcoPCDjurHuoQx
-        sBsy6TT7x3UJGW4hbai92wsr6KI1kPQgv68wrRsXzug1ziIJ2MDuM5u/hsFddiQVsqEDqTbNMhjsr
-        BMzXVUKfkfKdQ7q5yBrJZsVefooNjFsGculBjNreaivPC0KLtFuIaHZNrAVLf/Ov2kfcnJcImu4E8
-        LebduAN1jZCJf/GDVMVv662quVypvU23Vpgg1oJC2ajzXe6xuF2B/UCCQwkIsj2IqqmeLRL4rok86
-        /LGlirmg==;
+        bh=KqaDozNK5h/Os0p9USJOHPsjw+JZHJxcCJnx+VmNqrU=; b=YIFt/HXZ8+bcaSx0X8G2YB8zVi
+        v1CRhZaZMPWGLtjR3QfM+t+ot4Uv/RzST6R25OZpD1DpjsymN/thiaf0EFKfwRqx2xwdoB0Z9jjwa
+        BjjXqVQAvMrtZ/i+FymNUHcrZKiapmHmxDFOAw5bzomRlaS59Dcd16nP9VOfCuvldtp22xmDwggmp
+        adkEOrJzHr9jTjs8pt6sK0qaKTUcpH4QaUcaJ8+9zdisS/tjeJKcBQrbzoz5MdsDZ12r7dYke7Ym8
+        ijfrOWEzz8zITReF3xnEc4SElpzNvpT1yDZD/C41yM6TXu1r3EV6C1/IPf2gsjGUzt62aX4g6fG/M
+        vmzodN3Q==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYnDi-0012Qg-W0; Thu, 15 Sep 2022 11:39:51 +0000
+        id 1oYnDe-0012Nv-FQ; Thu, 15 Sep 2022 11:39:46 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0DC4302D92;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F314A302E9F;
         Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id B327E29AADBE4; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
-Message-ID: <20220915111146.643451455@infradead.org>
+        id B552A2BA7B114; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
+Message-ID: <20220915111146.746429822@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Sep 2022 13:11:15 +0200
+Date:   Thu, 15 Sep 2022 13:11:16 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v3 36/59] ftrace: Add HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+Subject: [PATCH v3 37/59] x86/putuser: Provide room for padding
 References: <20220915111039.092790446@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,81 +72,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-x86 will shortly start using -fpatchable-function-entry for purposes
-other than ftrace, make sure the __patchable_function_entry section
-isn't merged in the mcount_loc section.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/asm-generic/vmlinux.lds.h |   11 ++++++++++-
- kernel/trace/Kconfig              |    6 ++++++
- tools/objtool/check.c             |    3 ++-
- 3 files changed, 18 insertions(+), 2 deletions(-)
+ arch/x86/lib/putuser.S |   62 ++++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 49 insertions(+), 13 deletions(-)
 
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -159,6 +159,14 @@
- #define MEM_DISCARD(sec) *(.mem##sec)
+--- a/arch/x86/lib/putuser.S
++++ b/arch/x86/lib/putuser.S
+@@ -47,8 +47,6 @@ SYM_FUNC_START(__put_user_1)
+ 	LOAD_TASK_SIZE_MINUS_N(0)
+ 	cmp %_ASM_BX,%_ASM_CX
+ 	jae .Lbad_put_user
+-SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
+-	ENDBR
+ 	ASM_STAC
+ 1:	movb %al,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -56,54 +54,87 @@ SYM_INNER_LABEL(__put_user_nocheck_1, SY
+ 	RET
+ SYM_FUNC_END(__put_user_1)
+ EXPORT_SYMBOL(__put_user_1)
++
++SYM_FUNC_START(__put_user_nocheck_1)
++	ENDBR
++	ASM_STAC
++2:	movb %al,(%_ASM_CX)
++	xor %ecx,%ecx
++	ASM_CLAC
++	RET
++SYM_FUNC_END(__put_user_nocheck_1)
+ EXPORT_SYMBOL(__put_user_nocheck_1)
+ 
+ SYM_FUNC_START(__put_user_2)
+ 	LOAD_TASK_SIZE_MINUS_N(1)
+ 	cmp %_ASM_BX,%_ASM_CX
+ 	jae .Lbad_put_user
+-SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
+-	ENDBR
+ 	ASM_STAC
+-2:	movw %ax,(%_ASM_CX)
++3:	movw %ax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+ 	ASM_CLAC
+ 	RET
+ SYM_FUNC_END(__put_user_2)
+ EXPORT_SYMBOL(__put_user_2)
++
++SYM_FUNC_START(__put_user_nocheck_2)
++	ENDBR
++	ASM_STAC
++4:	movw %ax,(%_ASM_CX)
++	xor %ecx,%ecx
++	ASM_CLAC
++	RET
++SYM_FUNC_END(__put_user_nocheck_2)
+ EXPORT_SYMBOL(__put_user_nocheck_2)
+ 
+ SYM_FUNC_START(__put_user_4)
+ 	LOAD_TASK_SIZE_MINUS_N(3)
+ 	cmp %_ASM_BX,%_ASM_CX
+ 	jae .Lbad_put_user
+-SYM_INNER_LABEL(__put_user_nocheck_4, SYM_L_GLOBAL)
+-	ENDBR
+ 	ASM_STAC
+-3:	movl %eax,(%_ASM_CX)
++5:	movl %eax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+ 	ASM_CLAC
+ 	RET
+ SYM_FUNC_END(__put_user_4)
+ EXPORT_SYMBOL(__put_user_4)
++
++SYM_FUNC_START(__put_user_nocheck_4)
++	ENDBR
++	ASM_STAC
++6:	movl %eax,(%_ASM_CX)
++	xor %ecx,%ecx
++	ASM_CLAC
++	RET
++SYM_FUNC_END(__put_user_nocheck_4)
+ EXPORT_SYMBOL(__put_user_nocheck_4)
+ 
+ SYM_FUNC_START(__put_user_8)
+ 	LOAD_TASK_SIZE_MINUS_N(7)
+ 	cmp %_ASM_BX,%_ASM_CX
+ 	jae .Lbad_put_user
+-SYM_INNER_LABEL(__put_user_nocheck_8, SYM_L_GLOBAL)
+-	ENDBR
+ 	ASM_STAC
+-4:	mov %_ASM_AX,(%_ASM_CX)
++7:	mov %_ASM_AX,(%_ASM_CX)
+ #ifdef CONFIG_X86_32
+-5:	movl %edx,4(%_ASM_CX)
++8:	movl %edx,4(%_ASM_CX)
  #endif
- 
-+#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
-+#define KEEP_PATCHABLE		KEEP(*(__patchable_function_entries))
-+#define PATCHABLE_DISCARDS
-+#else
-+#define KEEP_PATCHABLE
-+#define PATCHABLE_DISCARDS	*(__patchable_function_entries)
+ 	xor %ecx,%ecx
+ 	ASM_CLAC
+ 	RET
+ SYM_FUNC_END(__put_user_8)
+ EXPORT_SYMBOL(__put_user_8)
++
++SYM_FUNC_START(__put_user_nocheck_8)
++	ENDBR
++	ASM_STAC
++9:	mov %_ASM_AX,(%_ASM_CX)
++#ifdef CONFIG_X86_32
++10:	movl %edx,4(%_ASM_CX)
 +#endif
-+
- #ifdef CONFIG_FTRACE_MCOUNT_RECORD
- /*
-  * The ftrace call sites are logged to a section whose name depends on the
-@@ -177,7 +185,7 @@
- #define MCOUNT_REC()	. = ALIGN(8);				\
- 			__start_mcount_loc = .;			\
- 			KEEP(*(__mcount_loc))			\
--			KEEP(*(__patchable_function_entries))	\
-+			KEEP_PATCHABLE				\
- 			__stop_mcount_loc = .;			\
- 			ftrace_stub_graph = ftrace_stub;	\
- 			ftrace_ops_list_func = arch_ftrace_ops_list_func;
-@@ -1029,6 +1037,7 @@
++	xor %ecx,%ecx
++	ASM_CLAC
++	RET
++SYM_FUNC_END(__put_user_nocheck_8)
+ EXPORT_SYMBOL(__put_user_nocheck_8)
  
- #define COMMON_DISCARDS							\
- 	SANITIZER_DISCARDS						\
-+	PATCHABLE_DISCARDS						\
- 	*(.discard)							\
- 	*(.discard.*)							\
- 	*(.modinfo)							\
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -51,6 +51,12 @@ config HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 	 This allows for use of regs_get_kernel_argument() and
- 	 kernel_stack_pointer().
- 
-+config HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
-+	bool
-+	help
-+	  If the architecture generates __patchable_function_entries sections
-+	  but does not want them included in the ftrace locations.
-+
- config HAVE_FTRACE_MCOUNT_RECORD
- 	bool
- 	help
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4196,7 +4196,8 @@ static int validate_ibt(struct objtool_f
- 		    !strcmp(sec->name, "__bug_table")			||
- 		    !strcmp(sec->name, "__ex_table")			||
- 		    !strcmp(sec->name, "__jump_table")			||
--		    !strcmp(sec->name, "__mcount_loc"))
-+		    !strcmp(sec->name, "__mcount_loc")			||
-+		    strstr(sec->name, "__patchable_function_entries"))
- 			continue;
- 
- 		list_for_each_entry(reloc, &sec->reloc->reloc_list, list)
+ SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
+@@ -117,6 +148,11 @@ SYM_CODE_END(.Lbad_put_user_clac)
+ 	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
+ 	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
+ 	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
+-#ifdef CONFIG_X86_32
+ 	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
++#ifdef CONFIG_X86_32
++	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
+ #endif
 
 
