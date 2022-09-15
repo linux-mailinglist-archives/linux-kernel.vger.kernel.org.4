@@ -2,113 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFF85B9DF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1175B9E03
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiIOPEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S230249AbiIOPE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiIOPDw (ORCPT
+        with ESMTP id S230083AbiIOPEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:03:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E7585FD4;
-        Thu, 15 Sep 2022 08:03:51 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FE0oGw025208;
-        Thu, 15 Sep 2022 15:03:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=lN36wMv+b1e3Y0jJ3JfDDlO8HJyvghRjKzs9dtd5UhY=;
- b=o0T2AWFb6UaloaVp7o32Yx/PmuefGHcQEzQwD4RPkuNAsB9av18yaY5xU8pnhJs1XIrP
- rEkiqZS4vsdGl1Ar1Y/qfNmbQ0O1Jgchfjst71pTBrOUIimvEfJ/4OFdSHxlwYqzBKtn
- O1Ewgk0ERj3yUv7QNc9rwxua7i7EQYanREJDVAwr3Sq2S0I7d9BmlwCgv60U6AVdRL9W
- 84CwpcflcdkF6MaLXZU3hesU3kHxelQetPvwvR9UC51oh6SCdYJe/FXxLuPdjgXwC4VK
- SW6QCXp7B6BfpUhA6gSF6XZiN8lvCGJXpRW8kogPh9MDVcvoHivENGo2QKHEYvkrxAcP RQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm5em2cr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 15:03:50 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FExldw010170;
-        Thu, 15 Sep 2022 15:03:50 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm5em2cpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 15:03:49 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FEpulu015877;
-        Thu, 15 Sep 2022 15:03:48 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3jjy25sy5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 15:03:48 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FF49nv33423626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Sep 2022 15:04:09 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA1F2AE056;
-        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45676AE051;
-        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.145.93.150])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Sep 2022 15:03:44 +0000 (GMT)
-Date:   Thu, 15 Sep 2022 17:03:35 +0200
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        jjherne@linux.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
+        Thu, 15 Sep 2022 11:04:46 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7146E9FF5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:44 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id du20-20020a17090772d400b0077df99c5ab3so5450990ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=myl6nRKQ/2lBkAfAPAxtf2MFDBMrGN4kiGAEDqUjhHA=;
+        b=gS6j99y09BMp9BDjMRS1RUcbMakKgpTeqeZX6PzPrFgNC6JUyxdSvKRCjzIAswJzFY
+         RACNurD1UwAw++C5CP/8IVwFLhwKh6jwIU1EimPsdHz7lSOgoWBUNH7rd2WrZNpDm2OE
+         SKlmmmiGBzBNa7fDj8PHiGO2iT7RaZ12zTCZWYSTNArLj8SV2RvSCJhna5aBD06OlEsK
+         MYVW63jPXWNru9dTAIlZZzh9S7iv3j2jcZqjzbtOPGMy+DXVJjDMb9AzkTghV1DwnKI/
+         qubMAz4mMwtItFPbaU7zU0DcS9Lc1NXUE92xo2vdruTx6cGeJ7VV8XEa8cy4Yoam+vkP
+         l4cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=myl6nRKQ/2lBkAfAPAxtf2MFDBMrGN4kiGAEDqUjhHA=;
+        b=4Pt6jsXykdUHNgTs6A6uCOZP2qJv/l9URGA8f1MYE9mXh1Bi+e5MDS27gam2LZ5bBf
+         9Xr71GvBCRQpue3+dT3cLHo1otUT4RTBlqV62t9LHpIlklyQI1ccVNmQQdSlnub3HWTe
+         fRjQiRwDa6cItZWZRg9qdJspoTG1X1F5qJLKAEz32Hkhs1ih3icqkWnUZ2PwU8YiRBuU
+         bP95MNHywFmz797VjNlaa60/4igBczmldgKe1eKBy9Qb9taL0ydeoAlz+2qjnxhwBQ0e
+         VkrusIBVFHwN/Zc83JcGleO9f9DQjzaUsx2MrL1RIIMdiFyL4xJpFK03U2/J8KByQVJ0
+         vrDQ==
+X-Gm-Message-State: ACrzQf20GcaKm4W352gme0zeq1/0dy0xLm3CX51Jwh4kpQJcsxuQE4/J
+        R3k3AXzFPSX+6jaTjzDqjEqygprQT44=
+X-Google-Smtp-Source: AMsMyM5cIaAUAU3AA+LWPRVGPrLc1LHdkwZUDXgPvqFuYO3BlghU78yjZTOSc74hno8rab0+nl/oMOdeVBQ=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
+ (user=glider job=sendgmr) by 2002:a05:6402:43cc:b0:451:129e:1b1e with SMTP id
+ p12-20020a05640243cc00b00451129e1b1emr273421edc.258.1663254282917; Thu, 15
+ Sep 2022 08:04:42 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:03:36 +0200
+In-Reply-To: <20220915150417.722975-1-glider@google.com>
+Mime-Version: 1.0
+References: <20220915150417.722975-1-glider@google.com>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220915150417.722975-3-glider@google.com>
+Subject: [PATCH v7 02/43] stackdepot: reserve 5 extra bits in depot_stack_handle_t
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v3 1/2] s390/vfio-ap: bypass unnecessary processing of
- AP resources
-Message-ID: <20220915170335.1743b645.pasic@linux.ibm.com>
-In-Reply-To: <4e89ff00-aac2-7c8e-14cf-add426853e9d@de.ibm.com>
-References: <20220823150643.427737-1-akrowiak@linux.ibm.com>
-        <20220823150643.427737-2-akrowiak@linux.ibm.com>
-        <20220915050018.37d21083.pasic@linux.ibm.com>
-        <4e89ff00-aac2-7c8e-14cf-add426853e9d@de.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6GOZBM6ibUtGtEuFU0JMkLYPIiPSrKcb
-X-Proofpoint-ORIG-GUID: MbnveZ2oYLDj_JsQOBmm5ayM9fPBSNRb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_08,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=838 spamscore=0
- clxscore=1015 bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
- definitions=main-2209150085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 16:53:51 +0200
-Christian Borntraeger <borntraeger@de.ibm.com> wrote:
+Some users (currently only KMSAN) may want to use spare bits in
+depot_stack_handle_t. Let them do so by adding @extra_bits to
+__stack_depot_save() to store arbitrary flags, and providing
+stack_depot_get_extra_bits() to retrieve those flags.
 
-> > Reviewed-by: Halil Pasic <pasic@linux.ibm.com>  
-> 
-> Shall the patch go via the s390 tree (still into 6.0 I guess)?
+Also adapt KASAN to the new prototype by passing extra_bits=0, as KASAN
+does not intend to store additional information in the stack handle.
 
-Yes please! 
+Signed-off-by: Alexander Potapenko <glider@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
 
+---
+v4:
+ -- per Marco Elver's request, fold "kasan: common: adapt to the new
+    prototype of __stack_depot_save()" into this patch to prevent
+    bisection breakages.
+
+Link: https://linux-review.googlesource.com/id/I0587f6c777667864768daf07821d594bce6d8ff9
+---
+ include/linux/stackdepot.h |  8 ++++++++
+ lib/stackdepot.c           | 29 ++++++++++++++++++++++++-----
+ mm/kasan/common.c          |  2 +-
+ 3 files changed, 33 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+index bc2797955de90..9ca7798d7a318 100644
+--- a/include/linux/stackdepot.h
++++ b/include/linux/stackdepot.h
+@@ -14,9 +14,15 @@
+ #include <linux/gfp.h>
+ 
+ typedef u32 depot_stack_handle_t;
++/*
++ * Number of bits in the handle that stack depot doesn't use. Users may store
++ * information in them.
++ */
++#define STACK_DEPOT_EXTRA_BITS 5
+ 
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
++					unsigned int extra_bits,
+ 					gfp_t gfp_flags, bool can_alloc);
+ 
+ /*
+@@ -59,6 +65,8 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+ 			       unsigned long **entries);
+ 
++unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
++
+ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+ 		       int spaces);
+ 
+diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+index e73fda23388d8..79e894cf84064 100644
+--- a/lib/stackdepot.c
++++ b/lib/stackdepot.c
+@@ -43,7 +43,8 @@
+ #define STACK_ALLOC_OFFSET_BITS (STACK_ALLOC_ORDER + PAGE_SHIFT - \
+ 					STACK_ALLOC_ALIGN)
+ #define STACK_ALLOC_INDEX_BITS (DEPOT_STACK_BITS - \
+-		STACK_ALLOC_NULL_PROTECTION_BITS - STACK_ALLOC_OFFSET_BITS)
++		STACK_ALLOC_NULL_PROTECTION_BITS - \
++		STACK_ALLOC_OFFSET_BITS - STACK_DEPOT_EXTRA_BITS)
+ #define STACK_ALLOC_SLABS_CAP 8192
+ #define STACK_ALLOC_MAX_SLABS \
+ 	(((1LL << (STACK_ALLOC_INDEX_BITS)) < STACK_ALLOC_SLABS_CAP) ? \
+@@ -56,6 +57,7 @@ union handle_parts {
+ 		u32 slabindex : STACK_ALLOC_INDEX_BITS;
+ 		u32 offset : STACK_ALLOC_OFFSET_BITS;
+ 		u32 valid : STACK_ALLOC_NULL_PROTECTION_BITS;
++		u32 extra : STACK_DEPOT_EXTRA_BITS;
+ 	};
+ };
+ 
+@@ -77,6 +79,14 @@ static int next_slab_inited;
+ static size_t depot_offset;
+ static DEFINE_RAW_SPINLOCK(depot_lock);
+ 
++unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
++{
++	union handle_parts parts = { .handle = handle };
++
++	return parts.extra;
++}
++EXPORT_SYMBOL(stack_depot_get_extra_bits);
++
+ static bool init_stack_slab(void **prealloc)
+ {
+ 	if (!*prealloc)
+@@ -140,6 +150,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
+ 	stack->handle.slabindex = depot_index;
+ 	stack->handle.offset = depot_offset >> STACK_ALLOC_ALIGN;
+ 	stack->handle.valid = 1;
++	stack->handle.extra = 0;
+ 	memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
+ 	depot_offset += required_size;
+ 
+@@ -382,6 +393,7 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  *
+  * @entries:		Pointer to storage array
+  * @nr_entries:		Size of the storage array
++ * @extra_bits:		Flags to store in unused bits of depot_stack_handle_t
+  * @alloc_flags:	Allocation gfp flags
+  * @can_alloc:		Allocate stack slabs (increased chance of failure if false)
+  *
+@@ -393,6 +405,10 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  * If the stack trace in @entries is from an interrupt, only the portion up to
+  * interrupt entry is saved.
+  *
++ * Additional opaque flags can be passed in @extra_bits, stored in the unused
++ * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
++ * without calling stack_depot_fetch().
++ *
+  * Context: Any context, but setting @can_alloc to %false is required if
+  *          alloc_pages() cannot be used from the current context. Currently
+  *          this is the case from contexts where neither %GFP_ATOMIC nor
+@@ -402,10 +418,11 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  */
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
++					unsigned int extra_bits,
+ 					gfp_t alloc_flags, bool can_alloc)
+ {
+ 	struct stack_record *found = NULL, **bucket;
+-	depot_stack_handle_t retval = 0;
++	union handle_parts retval = { .handle = 0 };
+ 	struct page *page = NULL;
+ 	void *prealloc = NULL;
+ 	unsigned long flags;
+@@ -489,9 +506,11 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 		free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
+ 	}
+ 	if (found)
+-		retval = found->handle.handle;
++		retval.handle = found->handle.handle;
+ fast_exit:
+-	return retval;
++	retval.extra = extra_bits;
++
++	return retval.handle;
+ }
+ EXPORT_SYMBOL_GPL(__stack_depot_save);
+ 
+@@ -511,6 +530,6 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ 				      unsigned int nr_entries,
+ 				      gfp_t alloc_flags)
+ {
+-	return __stack_depot_save(entries, nr_entries, alloc_flags, true);
++	return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_save);
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 69f583855c8be..94caa2d46a327 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -36,7 +36,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+ 	unsigned int nr_entries;
+ 
+ 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+-	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
++	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
+ }
+ 
+ void kasan_set_track(struct kasan_track *track, gfp_t flags)
+-- 
+2.37.2.789.g6183377224-goog
 
