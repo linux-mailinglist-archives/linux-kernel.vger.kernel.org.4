@@ -2,238 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832ED5B93BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 06:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646E35B93BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 06:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiIOEwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 00:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S229613AbiIOExV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 00:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiIOEv6 (ORCPT
+        with ESMTP id S229498AbiIOExT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 00:51:58 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D607326540;
-        Wed, 14 Sep 2022 21:51:55 -0700 (PDT)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28F4pJsh012735;
-        Thu, 15 Sep 2022 13:51:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28F4pJsh012735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1663217480;
-        bh=LokpXFM+jKjnxi3CKS4674Efn0BVYhL63eu/XEV6zfo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZRmdAKrFegaRJAVTjyJd+dXa6SuuzpxvPgtblIdRYwewtVbS8kflY7ZQWEMqd43Sw
-         V59IapXq5RnGXiodLwuHTkY/D9/I+e02jd3RwIC8cJj86s1opWTH1W66GQBqTDDU4g
-         PLsFB9jZVBJoLNd82pm1B0ZuwcFutUnKTHeZKpJ+Oas8BC39iqmXSVF238u8VPtFdJ
-         GZzBwjcct/0aa3n4FnfNTKDh+GsBCa2/Cii0s0A/jKUHYaiwHlvIpa+VorK+Oa/uhj
-         Ci50p+kT2E2HgJV5yh4YBSs1GtPiVGvprmZd0Hzb/qcjBKp74pwEsZziscRbiBvYfA
-         CTV4yKdTHZR8g==
-X-Nifty-SrcIP: [209.85.210.49]
-Received: by mail-ot1-f49.google.com with SMTP id v14-20020a9d69ce000000b00658f339b0a3so411038oto.1;
-        Wed, 14 Sep 2022 21:51:20 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3MYNTOLyWULnBbpKJE1KjY/kCDi7dRYtTXUuBXHv5gwo46qAxx
-        EcLGQPy2cB8Xo9Bmqtk7Ch2TLS+dKF4Zjvp8TKY=
-X-Google-Smtp-Source: AA6agR49F9OnVykDVvTYWEHonilGPnu1xqf+S3Mf77s9iGVXAiFgX06TR8u3Z8OijDUueGQprpmXtzz8+2/xr+C/yxA=
-X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
- cn11-20020a056830658b00b0063b35017167mr16204558otb.343.1663217479180; Wed, 14
- Sep 2022 21:51:19 -0700 (PDT)
+        Thu, 15 Sep 2022 00:53:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890CC92F66
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 21:53:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 49B1C1FA8D;
+        Thu, 15 Sep 2022 04:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663217597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yp5m+Hr4qr576DrNyvsj++WSaXFTSF+h11ngNHuL2BQ=;
+        b=U9tQsEykO643mz8CIF4D/QKjHaYSxvUbY7HdEx2WcICL35fHPsC7EAXDYeqK4xLbSGB1yE
+        kAeSIUby5ut42I2vD3cCaihSrFQQj8mom0gIug9q3Avvyvu33dbSp9fyBJkYBaDn+VPLAw
+        uge1cXgJrJpnSpJfT4qTTVDAZsULxE0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663217597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yp5m+Hr4qr576DrNyvsj++WSaXFTSF+h11ngNHuL2BQ=;
+        b=4dgn8pcX5wftxBjmHtDN0caGySjEY6HnCta3HnPGzfxRParnxyd+WK0s0NiHAhmTy/2FHv
+        tafEOTCmjkmi27Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E720E139B3;
+        Thu, 15 Sep 2022 04:53:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dlKwNbyvImN5LQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Thu, 15 Sep 2022 04:53:16 +0000
+Date:   Thu, 15 Sep 2022 06:53:15 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/16] mm/page_alloc: fix freeing static percpu memory
+Message-ID: <YyKvu17xGNgBwMLV@localhost.localdomain>
+References: <20220909092451.24883-1-linmiaohe@huawei.com>
+ <20220909092451.24883-7-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20220727100615.638072-1-dmitry.baryshkov@linaro.org>
- <CAL_JsqJjLn8ypBo+bBoO+CE-si7gemP02fi8EWk97QRPPpNoVg@mail.gmail.com>
- <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
- <CAA8EJprM4WAgfVTJ15azFtSH6POL5uuseHO=zVxRd44RmqKZjw@mail.gmail.com>
- <CAK7LNAQU42fpqPqUipZYx+685B+Rc8JGdaKcP3TdfQWUept1nQ@mail.gmail.com>
- <CAA8EJprMsEE-fkpP=QGgpCga5rb9_mJF51cvRjeWsG7NBeijSA@mail.gmail.com>
- <CAL_JsqLptaL_Uv++dEzUx83n3c+AAu9rYUv6Zbb7sLbJE35wWA@mail.gmail.com> <CAA8EJprBAtdWAGG=a7BYc_Zwx9B5Dqsy4n3dhvP5cA40agR8ew@mail.gmail.com>
-In-Reply-To: <CAA8EJprBAtdWAGG=a7BYc_Zwx9B5Dqsy4n3dhvP5cA40agR8ew@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 15 Sep 2022 13:50:43 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARpPvBH0i55nD0v+8KDeqy2eK996TRhwE-KNAF+8mG3xQ@mail.gmail.com>
-Message-ID: <CAK7LNARpPvBH0i55nD0v+8KDeqy2eK996TRhwE-KNAF+8mG3xQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: take into account DT_SCHEMA_FILES changes while
- checking dtbs
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909092451.24883-7-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 2:36 AM Dmitry Baryshkov
+On Fri, Sep 09, 2022 at 05:24:41PM +0800, Miaohe Lin wrote:
+> The size of struct per_cpu_zonestat can be 0 on !SMP && !NUMA. In that
+> case, zone->per_cpu_zonestats will always equal to boot_zonestats. But
+> in zone_pcp_reset(), zone->per_cpu_zonestats is freed via free_percpu()
+> directly without checking against boot_zonestats first. boot_zonestats
+> will be released by free_percpu() unexpectedly.
+> 
+> Fixes: 28f836b6777b ("mm/page_alloc: split per cpu page lists and zone stats")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Thu, 4 Aug 2022 at 18:27, Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Fri, Jul 29, 2022 at 1:46 AM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Fri, 29 Jul 2022 at 10:05, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > > On Fri, Jul 29, 2022 at 3:53 PM Dmitry Baryshkov
-> > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > >
-> > > > > On Fri, 29 Jul 2022 at 08:55, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Jul 28, 2022 at 2:36 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Wed, Jul 27, 2022 at 4:06 AM Dmitry Baryshkov
-> > > > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > It is useful to be able to recheck dtbs files against a limited set of
-> > > > > > > > DT schema files. This can be accomplished by using differnt
-> > > > > > > > DT_SCHEMA_FILES argument values while rerunning make dtbs_check. However
-> > > > > > > > for some reason if_changed_rule doesn't pick up the rule_dtc changes
-> > > > > > > > (and doesn't retrigger the build).
-> > > > > > > >
-> > > > > > > > Fix this by changing if_changed_rule to if_changed_dep and squashing DTC
-> > > > > > > > and dt-validate into a single new command. Then if_changed_dep triggers
-> > > > > > > > on DT_SCHEMA_FILES changes and reruns the build/check.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > > ---
-> > > > > > > >  scripts/Makefile.lib | 14 ++++++--------
-> > > > > > > >  1 file changed, 6 insertions(+), 8 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > > > > > > > index c88b98b5dc44..3df470289382 100644
-> > > > > > > > --- a/scripts/Makefile.lib
-> > > > > > > > +++ b/scripts/Makefile.lib
-> > > > > > > > @@ -383,17 +383,15 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
-> > > > > > > >  DT_BINDING_DIR := Documentation/devicetree/bindings
-> > > > > > > >  DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
-> > > > > > > >
-> > > > > > > > -quiet_cmd_dtb_check =  CHECK   $@
-> > > > > > > > -      cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
-> > > > > > > > +quiet_cmd_dtb =        DTC/CHECK   $@
-> > > > > > >
-> > > > > > > This is supposed to be 7 chars or less. DTCCHK or DTC_CHK perhaps. Or
-> > > > > > > always do just 'DTC'. I can fixup when applying.
-> > > > > > >
-> > > > > > > I'll give it a few days for other comments.
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > > > When you change DT_SCHEMA_FILES, re-running dt-validate should be enough.
-> > > > > > You do not need to re-run dtc.
-> > > > > >
-> > > > > > I guess the strangeness comes from the fact that you are trying to do the
-> > > > > >  two different things in a single rule.
-> > > > >
-> > > > > The issue is that with the current rules the dt-validate isn't
-> > > > > re-executed on DT_SCHEMA_FILES changes. Thus comes my proposal.
-> > > >
-> > > > Correct.
-> > > >
-> > > > What I said is like this.
-> > > >
-> > > > # touch the timestamp file, %.dtb.checked
-> > > > $(obj)/%.dtb.checked: $(obj)/%.dtb $(DT_TMP_SCHEMA) FORCE
-> >
-> > Not really a fan of the thousands of files that creates. Maybe if it
-> > was turned into something useful like a list of schemas that apply to
-> > the dtb. IOW, a dependency list. That would speed up re-running after
-> > a schema change. Though if a schema change created new dependencies,
-> > that wouldn't work.
-> >
-> > > >         $(call if_changed_rule,dtb_check)
-> > > >
-> > > > $(obj)/%.dtb: $(src)/%.dts $(DTC) $FORCE
-> > > >         $(call if_changed_rule,dtc)
-> > > >
-> > > > $(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-> > > >         $(call if_changed_dep,dtc)
-> > > >
-> > > >
-> > > > With the dtc/check split, we can avoid unneeded regeneration of
-> > > > %.dtb when DT_TMP_SCHEMA or DT_SCHEMA_FILES is
-> > > > changed.
-> > > >
-> > > >
-> > > > One drawback is we track %.dtb.checked and and %.dtb separately,
-> > > > so something like 53182e81f47d4ea0c727c49ad23cb782173ab849
-> > > > may come back.
-> > >
-> > > It's up to you and Rob, but I'd really prefer a simpler solution here.
-> > > Regenerating dtbs sounds like a minor pain compared to hacking the
-> > > top-level Makefile again. What I really like is that if one has
-> > > CHECK_DTBS=y (for whatever reason), he can not generate dtb without
-> > > validation.
-> >
-> > I lean towards just rebuilding the dtbs. That's pretty quick and
-> > ensures we get dtc warnings with schema warnings. In the long run, I
-> > would like to make the schema checks not optional to run. The
-> > impediment to doing that is lots of warnings (but not not some
-> > platforms), adding a tool dependency, and validation time.
->
-> Rob, Masahiro, do we have any conclusion here? I can change my patch,
-> but I'd like to understand in which way I should change it.
-> Fixing/testing yaml changes is a bit painful w/o this change.
->
-> --
-> With best wishes
-> Dmitry
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
 
-
-
-I am fine with the patch as long as you fix DTC/CHECK to DTC.
-
-
-
-
-
-Another idea is to re-check the schema every time,
-like this:
-
-
-
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 3fb6a99e78c4..9fc9f39fb12e 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -375,13 +375,9 @@ quiet_cmd_dtb_check =      CHECK   $@
-       cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u
-$(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA
-) $@ || true
- endif
-
--define rule_dtc
--       $(call cmd_and_fixdep,dtc)
--       $(call cmd,dtb_check)
--endef
--
- $(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
--       $(call if_changed_rule,dtc)
-+       $(call if_changed_dep,dtc)
-+       $(call cmd,dtb_check)
-
- $(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-        $(call if_changed_dep,dtc)
-
-
-
-
-
-Whatever.
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+Oscar Salvador
+SUSE Labs
