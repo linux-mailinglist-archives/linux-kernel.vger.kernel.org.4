@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08DF5B9D02
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4643E5B9D05
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiIOOYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S230163AbiIOOYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiIOOYU (ORCPT
+        with ESMTP id S230221AbiIOOYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:24:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150749D660;
-        Thu, 15 Sep 2022 07:24:14 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 14:24:12 -0000
+        Thu, 15 Sep 2022 10:24:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E170E26;
+        Thu, 15 Sep 2022 07:24:30 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:24:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663251853;
+        s=2020; t=1663251869;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sYLTbk1pAEcT6Czyezu6IS/EnqxfSbnZwJ7B0GvN8Rs=;
-        b=2p9hRwEJJkJVUsqcQ53sUbQ+Tp0wGWVgjuR2Nc8kTqTe1IjFJ0eTGZrj2jc8yXjOdi/Yjb
-        WS7NTiAIRstmhR+FyTEu0TLl86DM7RtPj4AzvQPVh09ddDuQUy4Ay0fXAy83hPWdwnv79F
-        JTYji7Hb1t8wPLD5XgrSPclfTnMRnp4bPGbQQhOhZWt91AKiw6n3fVtFKRk9jdRpRMnL21
-        gh0/uMOJeIJsj+hkH3eN8DdcENhNWjs3e+lyLsV5QC2p1sW+NjDMgqr8Gv0rbWHJCqHnnG
-        TtlcyHEKeBMrp86cF8C6FvZbm5I7exyAkRNFJr8S5v0iecv3GIoIs6YRX/ME5w==
+        bh=vBd6yEFA9UE4AU7nqoRBCyulonFC7sO1lnx9vBfRkfs=;
+        b=I0rKnvvURuBsuqRxdiEt8nQQAXqkfG0fjFh4EDB2MYVUEhK+BzcURjWvTh4BiG8MPApk4/
+        mMyOLdvtvLCUNpi7Z41SN73pP3A+h7WMZZpa7Y0PbSVKHLSEu1jLxrXuM72YPip8/lQKro
+        vELlkzQxXdfowuJU4qoAPGeINlLnrZxj7CpLMRK76BBoUa6riEmOZkxweo2/vB/XbcyEbz
+        FnRGfPTwTvCUqUdJ0Wp4YQh2xvAG9IC4DVMb8fAabO0ffAXDpCYwYDmpUgPLy5apUxuKqy
+        P5Q6qZC1nCaWYi79aHgAFXlKm2rZRWK5iL9ifshP3dq+sDmsKPIadTY/MRorzA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663251853;
+        s=2020e; t=1663251869;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sYLTbk1pAEcT6Czyezu6IS/EnqxfSbnZwJ7B0GvN8Rs=;
-        b=Gr5sWrGNBoZiUz/GLzkLeWtK77nps+41kZk+AV0s4diYwXFRu1i3fR5lEt/GQmnMXRzu0Q
-        4/ZdrnfO4wM8lUCw==
-From:   "tip-bot2 for Vincent Guittot" <tip-bot2@linutronix.de>
+        bh=vBd6yEFA9UE4AU7nqoRBCyulonFC7sO1lnx9vBfRkfs=;
+        b=MkdDLCGmGpXwwvRYvjmESUMaiCeJL1Z6NK40VPKTC6Bm3el2oojWknDNEH94J9lMgCz2bW
+        FyUOtukAifwbyyBg==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Make sure to try to detach at least one
- movable task
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+Subject: [tip: objtool/core] objtool,x86: Teach decode about LOOP* instructions
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220825122726.20819-2-vincent.guittot@linaro.org>
-References: <20220825122726.20819-2-vincent.guittot@linaro.org>
+In-Reply-To: <Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net>
+References: <Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <166325185230.401.16508642684014916444.tip-bot2@tip-bot2>
+Message-ID: <166325186772.401.11612053064323908718.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,58 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     b0defa7ae03ecf91b8bfd10ede430cff12fcbd06
-Gitweb:        https://git.kernel.org/tip/b0defa7ae03ecf91b8bfd10ede430cff12fcbd06
-Author:        Vincent Guittot <vincent.guittot@linaro.org>
-AuthorDate:    Thu, 25 Aug 2022 14:27:23 +02:00
+Commit-ID:     7a7621dfa417aa3715d2a3bd1bdd6cf5018274d0
+Gitweb:        https://git.kernel.org/tip/7a7621dfa417aa3715d2a3bd1bdd6cf5018274d0
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Wed, 07 Sep 2022 11:01:20 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 15 Sep 2022 16:13:51 +02:00
+CommitterDate: Thu, 15 Sep 2022 16:13:55 +02:00
 
-sched/fair: Make sure to try to detach at least one movable task
+objtool,x86: Teach decode about LOOP* instructions
 
-During load balance, we try at most env->loop_max time to move a task.
-But it can happen that the loop_max LRU tasks (ie tail of
-the cfs_tasks list) can't be moved to dst_cpu because of affinity.
-In this case, loop in the list until we found at least one.
+When 'discussing' control flow Masami mentioned the LOOP* instructions
+and I realized objtool doesn't decode them properly.
 
-The maximum of detached tasks remained the same as before.
+As it turns out, these instructions are somewhat inefficient and as
+such unlikely to be emitted by the compiler (a few vmlinux.o checks
+can't find a single one) so this isn't critical, but still, best to
+decode them properly.
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Reported-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220825122726.20819-2-vincent.guittot@linaro.org
+Link: https://lkml.kernel.org/r/Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net
 ---
- kernel/sched/fair.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/objtool/arch/x86/decode.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4e5b171..dae3bfa 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8049,8 +8049,12 @@ static int detach_tasks(struct lb_env *env)
- 		p = list_last_entry(tasks, struct task_struct, se.group_node);
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index c260006..1c253b4 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -635,6 +635,12 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 		*type = INSN_CONTEXT_SWITCH;
+ 		break;
  
- 		env->loop++;
--		/* We've more or less seen every task there is, call it quits */
--		if (env->loop > env->loop_max)
-+		/*
-+		 * We've more or less seen every task there is, call it quits
-+		 * unless we haven't found any movable task yet.
-+		 */
-+		if (env->loop > env->loop_max &&
-+		    !(env->flags & LBF_ALL_PINNED))
- 			break;
- 
- 		/* take a breather every nr_migrate tasks */
-@@ -10179,7 +10183,9 @@ more_balance:
- 
- 		if (env.flags & LBF_NEED_BREAK) {
- 			env.flags &= ~LBF_NEED_BREAK;
--			goto more_balance;
-+			/* Stop if we tried all running tasks */
-+			if (env.loop < busiest->nr_running)
-+				goto more_balance;
- 		}
- 
++	case 0xe0: /* loopne */
++	case 0xe1: /* loope */
++	case 0xe2: /* loop */
++		*type = INSN_JUMP_CONDITIONAL;
++		break;
++
+ 	case 0xe8:
+ 		*type = INSN_CALL;
  		/*
