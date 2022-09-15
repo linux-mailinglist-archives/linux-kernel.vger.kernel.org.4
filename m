@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8B75B96D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677675B96F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIOJBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 05:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S229604AbiIOJFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIOJBm (ORCPT
+        with ESMTP id S229452AbiIOJFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 05:01:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C596513E13;
-        Thu, 15 Sep 2022 02:01:41 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.122.187])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 14A926601DA4;
-        Thu, 15 Sep 2022 10:01:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663232500;
-        bh=Lg8x2KaZ7hVZZk80CwF+sAIarPY10iBqx4YldrZ0lBQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JClQMzpdHP5zg2xtxTM+w95zpFhhIREXMToaD23kFIwHp1JCmWip+il2XKCaUmZcj
-         jWyD4qWzvBj4sGQb8sSsKzR1HKnjiqXlezttVC8ksv85MqZBpgxcJCpKlnO8plI6im
-         A5BE7+2yj93Anf2p80UA3eYnrlDSUhYjForHis3jqP9K0RDlLnX8Wi+AnP5GSw6izW
-         V9w4mJt1NYi2hJQC7sh2Cqw5Vo56nvpAmCf16oL1Sq7dRV2jvcMt0DJtoTN+FfwM1P
-         RvJYem2xKo6dZPWXh0kWc6Gv626UTH5TvKSQDhnBWfUDHAT7O6vCszM7m/khU2kVun
-         wOX7Cd/Z67l7g==
-Message-ID: <f0e66966-b1c5-f130-54a4-ad63b77e1f26@collabora.com>
-Date:   Thu, 15 Sep 2022 12:01:36 +0300
+        Thu, 15 Sep 2022 05:05:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6688795AC1;
+        Thu, 15 Sep 2022 02:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663232738; x=1694768738;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PQd9NG7r7Qh0xrNlLQSODxX4esx5SIk8ks2+Gn/DQwQ=;
+  b=KfPdLIr+BFwpyRNqB5cPfftsyc3zS7TRFers/ZXkwm6XfqyvRFyJjRtS
+   tnYKZR4KogyoWkoo83swzz1Vm2DL1gXJvejAMfhM/oC/uCZIAXegwP2E6
+   IBUM56sAJJ17RSPfNlSSFG7BaGvCIexcAUQg1iLx+zskK9QdklSrbcdI1
+   lFjZNiuGwbMBYdHpV9GuNO734vTSOkcHb1Hq0rbvhd6mEcmoaVgXdtg26
+   zfwq0EYnXXl4JIxPD4tfpKrTzmAvnBXKUCoNtCzWEuUedEvdGXhQRZTVW
+   0Yy/+v2gogzMbz/68jH/lR6L1v0vJKzYVRd5ahwd+WncfsBeC/T5vwi78
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299471889"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="299471889"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 02:05:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="679424415"
+Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Sep 2022 02:05:33 -0700
+From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Dan Murphy <dmurphy@ti.com>
+Cc:     Song Yoong Siang <yoong.siang.song@intel.com>,
+        Cacho Gerome <g-cacho@ti.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net 1/1] net: phy: dp83867: perform phy reset after modifying auto-neg setting
+Date:   Thu, 15 Sep 2022 05:02:58 -0400
+Message-Id: <20220915090258.2154767-1-yong.liang.choong@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v1] ARM: dts: sun8i: h3: orangepi-pc: Add CMA reserved
- memory node
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220914151125.212876-1-dmitry.osipenko@collabora.com>
- <CAJiuCcefkre611=1UXEkwScN+bYSBhE_ivGzTK7ZMvp-j4MbRQ@mail.gmail.com>
- <1826631.tdWV9SEqCh@jernej-laptop>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <1826631.tdWV9SEqCh@jernej-laptop>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Song Yoong Siang <yoong.siang.song@intel.com>
 
-On 9/14/22 21:34, Jernej Škrabec wrote:
-> Dne sreda, 14. september 2022 ob 17:33:27 CEST je Clément Péron napisal(a):
->> Hi Dmitry,
->>
->> On Wed, 14 Sept 2022 at 17:12, Dmitry Osipenko
->>
->> <dmitry.osipenko@collabora.com> wrote:
->>> Add 256MB CMA node to the Orange Pi PC board. This fixes memory allocation
->>> failures for Cedrus video decoder on trying to play a 1080p video with
->>> gstreamer.
->>>
->>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>> ---
->>>
->>>  arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts | 14 ++++++++++++++
->>>  1 file changed, 14 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
->>> b/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts index
->>> b96e015f54ee..e655346a9fb4 100644
->>> --- a/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
->>> +++ b/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dts
->>> @@ -60,6 +60,20 @@ chosen {
->>>
->>>                 stdout-path = "serial0:115200n8";
->>>         
->>>         };
->>>
->>> +       reserved-memory {
->>> +               #address-cells = <1>;
->>> +               #size-cells = <1>;
->>> +               ranges;
->>> +
->>> +               linux,cma@40000000 {
->>> +                       compatible = "shared-dma-pool";
->>> +                       alloc-ranges = <0x40000000 0x40000000>;
->>> +                       size = <0x10000000>; /* 256MiB */
->>> +                       linux,cma-default;
->>> +                       reusable;
->>> +               };
->>> +       };
->>> +
->>
->> This change seems legit for all H3 boards and could be moved to the H3 dtsi,
->> no?
-> 
-> That's true. However, there is a reason why this node doesn't exist. One or 
-> two H2+ boards (which use H3 dtsi) have only 256 MiB of RAM, so this can't 
-> work with them. A few H3 boards have 512 MiB of RAM, so you eat basically half 
-> of the RAM with that.
+In the case where TI DP83867 is connected back-to-back with another TI
+DP83867, SEEDs match will occurs when advertised link speed is changed from
+100 Mbps to 1 Gbps, which causing Master/Slave resolution fails and restart
+of the auto-negotiation. As a result, TI DP83867 copper auto-negotiation
+completion will takes up to 15 minutes.
 
-It's a "reusable" CMA, hence it won't be eaten. System is free to use
-the reusable CMA. In practice, CMA may get populated with a pinned pages
-over time, hence system will work fine, but CMA will get fragmented and
-this may cause problems for a larger CMA allocations.
+To resolve the issue, this patch implemented phy reset (software restart
+which perform a full reset, but not including registers) immediately after
+modifying auto-negotiation setting. By applying reset to the phy, it would
+also reset the lfsr which would increase the probability of SEEDS being
+different and help in Master/Slave resolution. Gerome from TI has confirmed
+that there is no harm in adding soft restart in auto-negotiation
+programming flow, even though the system is not facing SEEDs match issue.
 
-The main problem with 512M boards should be that they may not have a
-suitable area for 256M CMA because it should be only either a low or
-high part of the memory that might be busy at a boot time, and then
-kernel will fail to boot.
+Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+Reviewed-by: Cacho Gerome <g-cacho@ti.com>
+Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+---
+ drivers/net/phy/dp83867.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-> Additionally, contrary to A20 and similar SoCs, which 
-> have such node, Cedrus can address whole RAM, so this is not strictly needed. 
-> It's better to leave this decision to distribution. Some don't care about 
-> Cedrus and some do a lot. Default size can be set via kernel config and it can 
-> be overriden by kernel argument if necessary.
-
-In my experience generic distributions usually don't care about
-particular boards/devices. They ship a multiplatform kernel using
-default config that has 64M for CMA and Cedrus doesn't work well with that.
-
-BTW, the sunxi_defconfig doesn't specify CMA size at all, so it defaults
-to 16M.
-
+diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+index 6939563d3b7c..6e4b10f35696 100644
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -925,6 +925,17 @@ static void dp83867_link_change_notify(struct phy_device *phydev)
+ 	}
+ }
+ 
++static int dp83867_config_aneg(struct phy_device *phydev)
++{
++	int err;
++
++	err = genphy_config_aneg(phydev);
++	if (err < 0)
++		return err;
++
++	return dp83867_phy_reset(phydev);
++}
++
+ static struct phy_driver dp83867_driver[] = {
+ 	{
+ 		.phy_id		= DP83867_PHY_ID,
+@@ -951,6 +962,7 @@ static struct phy_driver dp83867_driver[] = {
+ 		.resume		= genphy_resume,
+ 
+ 		.link_change_notify = dp83867_link_change_notify,
++		.config_aneg	= dp83867_config_aneg,
+ 	},
+ };
+ module_phy_driver(dp83867_driver);
 -- 
-Best regards,
-Dmitry
+2.25.1
 
