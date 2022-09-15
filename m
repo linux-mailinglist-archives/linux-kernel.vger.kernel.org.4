@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B27A5B9EA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F8D5B9EA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiIOPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S229876AbiIOPWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiIOPVK (ORCPT
+        with ESMTP id S231179AbiIOPVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:21:10 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A1A9F8F5;
-        Thu, 15 Sep 2022 08:16:49 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A87445802F7;
-        Thu, 15 Sep 2022 11:16:46 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 15 Sep 2022 11:16:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663255006; x=1663258606; bh=iyfcgLT49L
-        WSRff5Kts3C38d2554ZyUqP/64q59S5es=; b=W4TR4q+Dd0PqyZ/30nmu36Fr7i
-        TSksvzLjmVIjZ+CSNgQdnADbEKSPqivzfMvKx6Bod07yFXxuIJVr2oz7v02ed130
-        8znPURVzseoVO3T/aUfoRUcV6M6x8VXtVG84PvMfX25FxRDv94nw9VdLu1U3tJLp
-        UGKIA0TIidS5y1QxDVjpTP2bzsMnz/ElL+N9QT0dWnvrZUoYw8u0aceIjKvuXVUF
-        ZTzJeCuiv+BbF0j9uhkK0UcZeVRoCUP89Wl6xcqbfXq6sCcZNpvFoKUjEMkcUxW0
-        ebz+nEmLHkObmKDmG/cfXcdPA8Q8z5h/TFBEnwDQ3zUWyFDS4lgHqOC1YGOA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663255006; x=1663258606; bh=iyfcgLT49LWSRff5Kts3C38d2554
-        ZyUqP/64q59S5es=; b=DXOEfnQrCvp+dWZ0aS1+kLO+aXvqp4oHRwqiR0UJJsbu
-        WRyMDwQHtJrMvHpObfPrH6rWG2+mawyUyQiLS2PVYGZgB9VM8f51Zj89U96w6jFt
-        IfK23yDXab185lAGsbSZc8yeAohlhNk9jhUqLkQNPeOVRnOBSjmQJtYspfiPsEmr
-        DdDte64EyF8l98PljFHTKn/NcgM863PfO0VACcWybNQ4Vl+wHJfV1Qen8XOPQC6X
-        XDZDKX5Qs2f4wg6QH1YUAZdvhYDkB6TSOjH23pYoevULaLPr9waNuSA9O34Vd2pR
-        CEQH3L0uN6fNpir/k7x1r5vRKq3zjPRxwZAqsgaFJA==
-X-ME-Sender: <xms:3UEjY09qQYbq2GKMLRt7VQKM6kdkLzSrgY6lrcp4POVR68WGZRX5wQ>
-    <xme:3UEjY8tZJ7rpdhsu7Q_zlAhEABhEzexTXM5ZH7d0sYEredBiBBGiI8Agk7ySdreys
-    yc-0KMmIwFKk7G9wOk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffgeffuddtvdehffefleethfejjeegvdelffejieegueetledvtedtudelgfdu
-    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3UEjY6D18WUTQxnHEpy3Lbd6vBH6lKBQJANfA0EBFD21gaJlfPHvSQ>
-    <xmx:3UEjY0fBFj8fliwQPArf20JI9bQ-a9c9_AdV7SyiA4TbN-eiwNCKcA>
-    <xmx:3UEjY5PZDUo3q16ogJEDGuALwDQnK7E5lTllcoBOA2e6hp8xgx431A>
-    <xmx:3kEjY6sqpQ6DgGZds5TQPZPEA4soUV9HpsQXsLzBUFoqyZUIqc8gAA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1CE8CB60086; Thu, 15 Sep 2022 11:16:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <a8ee97f5-b92f-47a6-9b50-197974738ff7@www.fastmail.com>
-In-Reply-To: <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <20220915050106.650813-1-parav@nvidia.com>
- <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
- <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
-Date:   Thu, 15 Sep 2022 17:16:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Parav Pandit" <parav@nvidia.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "Dan Lustig" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH] locking/memory-barriers.txt: Improve documentation for writel()
- usage
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 11:21:47 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C772143633;
+        Thu, 15 Sep 2022 08:18:08 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t7so31349666wrm.10;
+        Thu, 15 Sep 2022 08:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date;
+        bh=Ws/FvdgxS6QqVnLaYHYxhUMc/MoFSD9Yx4sONyAg3gk=;
+        b=fbsyZ+8SZ0Q8iY+QZUwIN7WquJo3UTOPbFkrI2YjE5fbUeH8K2XArhax97vPZIKP3A
+         pW/oCXUHitI5QnfjVpfeU1sAsZCFZMGCUCM6kshQKBwuUDUs9XjwSQ8LWphKSJZjJtiX
+         TgPt2PGgIZnHs9Pbe/jStej0B0Q/KA9PGMggQLwWg3wQTTr+sZ6+HxHNry3VUUzSQwSR
+         0JSDgtOpr8MEl8cxo51v4nkUPLt1CZW3powoafI48G1HGYmxpdgTqc+ewqcS4XQLVrUV
+         YX/ax620OiPuM7po7hQq61jLKt5WF9WZWyrz95S3TRNx1oV+D1M9szqtWf3DK6aM5oWo
+         U1og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Ws/FvdgxS6QqVnLaYHYxhUMc/MoFSD9Yx4sONyAg3gk=;
+        b=V1xaNlLAB6/K5x9nIB6/tTcm3HLfJGf7L9EZhh0DSzD+zt/wbxXzaYzC7sBPWj5LfW
+         PW6K5Q+N+u5UbV4y41IjYlR12LbRDgv9pLJTF5TH9D4hlkqJFCD1jpva/hB6qUMb61FY
+         ABsiNuYtg2dcMJ+45fBXHSDPMpUSy82q8ouleniKQgmtPhYzZEtuO0T0bnbOLpJNLOoa
+         cSZDoXGb0s+SgQ2tfbKv8klktu4qNAh4m5+rUfX4q7oBmGLeJeNvMwZphKZ+iyUzO4T0
+         JI19F+TzbuQzPhaRW8pfRvW5q8fsM4tNg2btSkMIw07Ns8AVHj9cYm4zwqYeYkha27Jd
+         oXjw==
+X-Gm-Message-State: ACrzQf1QC90jAGPKx2RNMJ92prFLuCvRXSd11R7pUW9SKYdaByw5u3Vb
+        dSc8Gal9FTm0c/RP5pOt6QjW69PNR3w=
+X-Google-Smtp-Source: AMsMyM64rbdTUv7JkuKifgXu1WKnzOewmvZ93U0Dlz6/ujDx/Rg8jA4rDhgYkUl11mIAOx2yeh7y2Q==
+X-Received: by 2002:adf:e781:0:b0:228:b44c:d0f7 with SMTP id n1-20020adfe781000000b00228b44cd0f7mr92481wrm.243.1663255087151;
+        Thu, 15 Sep 2022 08:18:07 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05600c358800b003b341a2cfadsm3548407wmq.17.2022.09.15.08.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:18:06 -0700 (PDT)
+Subject: Re: [PATCH] sfc: fix repeated words in comments
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>, habetsm.xilinx@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220915075411.33059-1-yuanjilin@cdjrlc.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <11efcaf5-a24f-3e38-945c-005187eba092@gmail.com>
+Date:   Thu, 15 Sep 2022 16:18:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220915075411.33059-1-yuanjilin@cdjrlc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022, at 4:18 PM, Parav Pandit wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> Sent: Thursday, September 15, 2022 8:38 AM
->> 
->> On Thu, Sep 15, 2022, at 7:01 AM, Parav Pandit wrote:
->> > The cited commit [1] describes that when using writel(), explcit wmb()
->> > is not needed. However, it should have said that dma_wmb() is not
->> > needed.
->> 
->> Are you sure? As I understand it, the dma_wmb() only serializes a set of
->> memory accesses, but does not serialized against an MMIO access, which
->> depending on the CPU architecture may require a different type of barrier.
->> 
->> E.g. on arm, writel() uses __iowmb(), which like wmb() is defined as "dsb(x);
->> arm_heavy_mb();", while dma_wmb() is a "dmb(oshst)".
->
-> You are right, on arm heavy barrier dsb() is needed, while on arm64, 
-> dmb(oshst) is sufficient.
->
-> So more accurate documentation is to say that 
-> 'when using writel() a prior IO barrier is not needed ...'
->
-> How about that?
+On 15/09/2022 08:54, Jilin Yuan wrote:
+> Delete the redundant word 'in'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/sfc/bitfield.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/bitfield.h b/drivers/net/ethernet/sfc/bitfield.h
+> index 1f981dfe4bdc..0b502d1c3c9e 100644
+> --- a/drivers/net/ethernet/sfc/bitfield.h
+> +++ b/drivers/net/ethernet/sfc/bitfield.h
+> @@ -117,7 +117,7 @@ typedef union efx_oword {
+>   *
+>   *   ( element ) << 4
+>   *
+> - * The result will contain the relevant bits filled in in the range
+> + * The result will contain the relevant bits filled in the range
+>   * [0,high-low), with garbage in bits [high-low+1,...).
+>   */
+>  #define EFX_EXTRACT_NATIVE(native_element, min, max, low, high)		\
+> 
 
-That's probably fine, not sure if it's worth changing.
+NACK, per [1].
+Please stop using whatever tool is finding these, or find someone who can
+ filter out the false positives.
 
-> It started with my cleanup efforts to two drivers [1] and [2] that had 
-> difficulty in using writel() on 32-bit system, and it ended up open 
-> coding writel() as wmb() + mlx5_write64().
->
-> I am cleaning up the repetitive pattern of, 
-> wmb();
-> mlx5_write64()
->
-> Before I fix drivers, I thought to improve the documentation that I can 
-> follow. :)
+-ed
 
-Right, that is definitely a good idea.
-
-I see that there is more going on with that function, at least
-the loop in post_send_nop() probably just wants to use
-__iowrite64_copy(), but that also has no barrier in it, while
-changing mlx5_write64() to use iowrite64be() or similar would
-of course add excessive barriers inside of the loop.
-
-       Arnd
+[1]: https://lore.kernel.org/netdev/30f2488d-9af3-fe8d-6e6f-713a7d38800b@gmail.com/
