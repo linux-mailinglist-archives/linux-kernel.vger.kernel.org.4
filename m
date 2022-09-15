@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064C55B9F03
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AED15B9F02
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiIOPiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S229735AbiIOPiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIOPiB (ORCPT
+        with ESMTP id S229501AbiIOPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Sep 2022 11:38:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EE782768
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E7B82D09
         for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1663256276;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yWvXjU22B2a+CJZc9xqXnahaTSnreVnQQz8zOTHm+5E=;
-        b=VDn4NCxzf6E98+sfvou1bRekLIuc2Hj+VQ/xj3qXtl6IZh0mubiDljgGSFlWQCaHtm9wfy
-        M4ZwjeQVvJTF59gZZy2VI6RM2hPcc9jnWZ+oJlh6diaOszD5iquJuSBJybo10PK03zxV56
-        qVF0dprb+tTgyJ16FQBUN5fKf2YdUBA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GXoqsn/bnF/+v01p/YrE+6QGhTzDYbDEdVNXy7Olx1g=;
+        b=PtzzjgO8cmEwx4MLrJJ+9Jpt00U5x1mYhAYO4BMLyX1FYvjKWVI8k/VdEjEZslLJ68FMo8
+        ZkOTXykN2IH6W1rk6K9AP9SbYVLvc7CJv1j8sWESyswMbP8uBIhLfHtU887feGjErcspBN
+        hPUGLHLSQRyQDgixXqddmefpZiVtPtg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-c2gjJMrvPtep94woJ0YCVA-1; Thu, 15 Sep 2022 11:37:53 -0400
-X-MC-Unique: c2gjJMrvPtep94woJ0YCVA-1
+ us-mta-654-9-u4PCpoPOe5J9RS1KHPUA-1; Thu, 15 Sep 2022 11:37:53 -0400
+X-MC-Unique: 9-u4PCpoPOe5J9RS1KHPUA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD8EA801231;
-        Thu, 15 Sep 2022 15:37:52 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2523B29324B3;
+        Thu, 15 Sep 2022 15:37:53 +0000 (UTC)
 Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 862632166B26;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E69002166B29;
         Thu, 15 Sep 2022 15:37:52 +0000 (UTC)
 From:   Phil Auld <pauld@redhat.com>
 To:     linux-kernel@vger.kernel.org
@@ -45,9 +46,11 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Steven Price <steven.price@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Frederic Weisbecker <frederic@kernel.org>
-Subject: [RESEND PATCH v4 0/2] cpuhp: fix some st->target issues
-Date:   Thu, 15 Sep 2022 11:37:49 -0400
-Message-Id: <20220915153751.2123654-1-pauld@redhat.com>
+Subject: [RESEND PATCH v4 1/2] cpuhp: make target_store() a nop when target == state
+Date:   Thu, 15 Sep 2022 11:37:50 -0400
+Message-Id: <20220915153751.2123654-2-pauld@redhat.com>
+In-Reply-To: <20220915153751.2123654-1-pauld@redhat.com>
+References: <20220915153751.2123654-1-pauld@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -61,31 +64,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a couple of cpuhp inconsistencies.
+Writing the current state back in hotplug/target calls cpu_down()
+which will set cpu dying even when it isn't and then nothing will
+ever clear it. A stress test that reads values and writes them back
+for all cpu device files in sysfs will trigger the BUG() in
+select_fallback_rq once all cpus are marked as dying.
 
-The first prevents target_store() from calling cpu_down() when
-target == state which prevents the cpu being incorrectly marked
-as dying.  The second just makes the boot cpu have a valid cpuhp
-target rather than 0 (CPU_OFFLINE) while being in state
-CPU_ONLINE.
+kernel/cpu.c::target_store()
+	...
+        if (st->state < target)
+                ret = cpu_up(dev->id, target);
+        else
+                ret = cpu_down(dev->id, target);
 
-A further issue which these two patches don't address is that
-the cpuX/online file looks at the device->offline state and can
-thus get out of sync with the actual cpuhp state if the cpuhp
-target is used to change state.
+cpu_down() -> cpu_set_state()
+	 bool bringup = st->state < target;
+	 ...
+	 if (cpu_dying(cpu) != !bringup)
+		set_cpu_dying(cpu, !bringup);
 
-v3: Added code to make sure st->target == target in the nop case.
+Fix this by letting state==target fall through in the target_store()
+conditional. Also make sure st->target == target in that case.
 
-v4: Use WARN_ON in the case where state == target but st->target does
-not.
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+Fixes: 757c989b9994 ("cpu/hotplug: Make target state writeable")
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Steven Price <steven.price@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/cpu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Phil Auld (2):
-  cpuhp: make target_store() a nop when target == state
-  cpuhp: Set cpuhp target for boot cpu
-
- kernel/cpu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index bbad5e375d3b..979de993f853 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+ 
+ 	if (st->state < target)
+ 		ret = cpu_up(dev->id, target);
+-	else
++	else if (st->state > target)
+ 		ret = cpu_down(dev->id, target);
++	else if (WARN_ON(st->target != target))
++		st->target = target;
+ out:
+ 	unlock_device_hotplug();
+ 	return ret ? ret : count;
 -- 
 2.31.1
 
