@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24315B9A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91125B99BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiIOL4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S229457AbiIOLiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiIOLzh (ORCPT
+        with ESMTP id S229448AbiIOLiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:55:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53D674DC2;
-        Thu, 15 Sep 2022 04:52:04 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FANc7b010427;
-        Thu, 15 Sep 2022 11:41:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DAnz4pV9055iwiJRXdjzLG69R7F5vLigA60QAxEPUO4=;
- b=QW17VKFbVmz8Xj1tGunzjQGLtlLHOOWvrl2VpOijH88USnNyWcx/FN8OeBdSZdOtwNLf
- mVL5R50CteCfIImxo+vpbu8qXi6954w01D5XiGGgwoxGIoeDzcxivFTMqyy1xwIg0mT8
- E9QTcPh7Zin4MSrZAGdj5DRros6xWvdAkT6TLLwBiFT+cwWmo9WDCGXjDXQSWGpZL0dX
- YoI4wtlu3rJrqyUJ6DV+CpGLsuqJ2AvW0g8O2ihVG0MqmTkSLOyBfJYL/NoiYDDMHT46
- 7end8MS9pAXzZ5Jw8T8bsAVoETinuTF0rSly13iQrISF3RVsPWAPGL+kygQF3x6Uwl3R jg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0gmuf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 11:41:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28FBaZD1030514
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 11:36:35 GMT
-Received: from [10.79.142.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 15 Sep
- 2022 04:36:31 -0700
-Message-ID: <00b01df4-232b-24d4-7339-0fcfa6b210a9@quicinc.com>
-Date:   Thu, 15 Sep 2022 17:06:29 +0530
+        Thu, 15 Sep 2022 07:38:10 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED2E9677C;
+        Thu, 15 Sep 2022 04:38:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C53BC320093A;
+        Thu, 15 Sep 2022 07:38:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 15 Sep 2022 07:38:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1663241883; x=1663328283; bh=8vGl18zUEz
+        /iIgj+M69ANQDlvR4SWi2QgpZ/g//S4YU=; b=ITqNmb5WtI6yg1dqxM3kcqS0YA
+        /T7Vs+LjCviej2KhTws2y6EFNvCWBsM/UAZRboUh63Jj9xq/vBy26zu/dwWhHz63
+        k99DG7HGYjSFY2UBVphgOAYTsLrt1fZLcJYgzkekKJ3nom4I2frCVsr32wzobtRQ
+        441QXRkyaCx2kogarxH7vW9foqDEm20Dir33qujn2DnOyygicNqQsLjhna/yJiwV
+        U54s/lyKEuUysIpXC0m5CLBq3GSX1I+D/VlV39EzelZWJS2jYSIn3MpJtOs+F6rr
+        AthqPrXrbW48pcIqy9wsUNybuNjTio4MQOe5nTbZV/Mj3HO/wKn7y/Zodh8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663241883; x=1663328283; bh=8vGl18zUEz/iIgj+M69ANQDlvR4S
+        Wi2QgpZ/g//S4YU=; b=OxZDnry1n6jlK5gZmTYmCYmLKCOIuiBn3PxuQyx22ZJr
+        HqTLRCK6V6qnR2Y8qF7rx8bcM/pQE/4YNIPKwcdkP+ZogxCtvDVs8Aj5PjX5id1g
+        r84IFh3AQi4NP7DogMobQzZKExhs6Q2QRUVyVsgOf6y8ldf3c7b7XcfHQo9PmaL/
+        KVL6NEHlEWmksAHrThcAEd2PKjGnX4w9auQPnimJ+6JjfrNYGT7ML3D1nm8NjGBj
+        V9lc5x6aiWiZpXq/EzInIiOUauReHVt5AYa9FYKg7nwlgti3RiMM9+OX3CoTbntG
+        9HW7eHY3EX+MaD/REkl0dA1AW0dGrKJu6RV/Jg06Iw==
+X-ME-Sender: <xms:mg4jY8GLIKkPXBbt717vBai-y2TJ64hDKv1zx4_jjhhzoUUUzNxnLg>
+    <xme:mg4jY1UDTbxoGT4SruTcMl17rkftnNJPCymibiPRCm9b_QlFLz8ku7JOyYiW93pLv
+    9RIUVeCMaUjUjWUa4w>
+X-ME-Received: <xmr:mg4jY2IhhR1Tayl8xZz32ZeTzIEKp8gyY9AR8QsEIWjWaM1jxt6MAHgaEnQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:mg4jY-Gu6DTkXzqpDDElETSN02LYKKV-PqbPaxgdJa70qmjAAVeGUQ>
+    <xmx:mg4jYyVg4CU92QNzyKzS3h0MrRUIHiu1oqogOYCbmncukvQHZKxotw>
+    <xmx:mg4jYxPK7O9ryE5_AvLvT-9AbFP9PkWDPFj2ri1sylvxFid8AhK_CQ>
+    <xmx:mw4jYzux676vScOaTbyNTEtqYHyZ-hNcg6cjInQXmgUGY8YnbdSNow>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Sep 2022 07:38:02 -0400 (EDT)
+Date:   Thu, 15 Sep 2022 12:38:01 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the
+ maximum
+Message-ID: <20220915113801.hexlaer3sp725co5@penduick>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
+ <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
+ <20220914155035.88E45C433C1@smtp.kernel.org>
+ <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
+ <20220914180508.0EDD9C433D6@smtp.kernel.org>
+ <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
+ <20220914181458.C6FCCC433C1@smtp.kernel.org>
+ <ecfe17be-5d81-3456-9a86-77acc848f95f@i2se.com>
+ <20220915075459.d2snlbwkingwnbh3@penduick>
+ <ebb86dfa-2f89-dddc-0864-42fc4d2e9386@i2se.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V9 1/7] dt-bindings: Added the yaml bindings for DCC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        Alex Elder <elder@ieee.org>, "Andy Gross" <agross@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <cover.1663173477.git.quic_schowdhu@quicinc.com>
- <41b94746e1560d63f16fb5dc965042ec496aeaf1.1663173478.git.quic_schowdhu@quicinc.com>
- <20220915093715.ednaqtx7ko6f5zlw@krzk-bin>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <20220915093715.ednaqtx7ko6f5zlw@krzk-bin>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: K7LwKWzMOdMiZQ8y1hgzZYbrs3XPU0cW
-X-Proofpoint-GUID: K7LwKWzMOdMiZQ8y1hgzZYbrs3XPU0cW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_06,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 mlxlogscore=814 spamscore=0
- malwarescore=0 suspectscore=0 clxscore=1011 adultscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209150065
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xs5treb6qglpqv3x"
+Content-Disposition: inline
+In-Reply-To: <ebb86dfa-2f89-dddc-0864-42fc4d2e9386@i2se.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,48 +106,103 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 9/15/2022 3:07 PM, Krzysztof Kozlowski wrote:
-> On Wed, 14 Sep 2022 22:31:11 +0530, Souradeep Chowdhury wrote:
->> Documentation for Data Capture and Compare(DCC) device tree bindings
->> in yaml format.
->>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   .../devicetree/bindings/arm/msm/qcom,dcc.yaml      | 43 ++++++++++++++++++++++
->>   1 file changed, 43 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
->>
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+--xs5treb6qglpqv3x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Stefan,
+
+On Thu, Sep 15, 2022 at 01:30:02PM +0200, Stefan Wahren wrote:
+> Am 15.09.22 um 09:54 schrieb Maxime Ripard:
+> > On Wed, Sep 14, 2022 at 08:26:55PM +0200, Stefan Wahren wrote:
+> > > Am 14.09.22 um 20:14 schrieb Stephen Boyd:
+> > > > Quoting Stefan Wahren (2022-09-14 11:09:04)
+> > > > > Am 14.09.22 um 20:05 schrieb Stephen Boyd:
+> > > > > > Quoting Stefan Wahren (2022-09-14 10:45:48)
+> > > > > > > Am 14.09.22 um 17:50 schrieb Stephen Boyd:
+> > > > > > > > Furthermore, I wonder if even that part needs to be impleme=
+nted.  Why
+> > > > > > > > not make a direct call to rpi_firmware_property() and get t=
+he max rate?
+> > > > > > > > All of that can live in the drm driver. Making it a generic=
+ API that
+> > > > > > > > takes a 'struct clk' means that it looks like any clk can b=
+e passed,
+> > > > > > > > when that isn't true. It would be better to restrict it to =
+the one use
+> > > > > > > > case so that the scope of the problem doesn't grow. I under=
+stand that it
+> > > > > > > > duplicates a few lines of code, but that looks like a fair =
+tradeoff vs.
+> > > > > > > > exposing an API that can be used for other clks in the futu=
+re.
+> > > > > > > it would be nice to keep all the Rpi specific stuff out of th=
+e DRM
+> > > > > > > driver, since there more users of it.
+> > > > > > Instead of 'all' did you mean 'any'?
+> > > > > yes
+> > > > Why?
+> > > This firmware is written specific for the Raspberry Pi and not stable=
+ from
+> > > interface point of view. So i'm afraid that the DRM driver is only us=
+able
+> > > for the Raspberry Pi at the end with all these board specific depende=
+ncies.
+> > I'm open for suggestions there, but is there any other bcm2711 device
+> > that we support upstream?
 >
-> yamllint warnings/errors:
+> I meant the driver as a whole. According to the vc4 binding there are thr=
+ee
+> compatibles bcm2835-vc4, cygnus-vc4 and bcm2711-vc5. Unfortunately i don't
+> have access to any of these Cygnus boards, so i cannot do any regression
+> tests or provide more information to your question.
+
+I don't have access to these boards either, and none of them are
+upstream, so I'm not sure what we can do to improve their support by then.
+
+> > If not, I'm not sure what the big deal is at this point. Chances are the
+> > DRM driver won't work as is on a different board.
+> >=20
+> > Plus, such a board wouldn't be using config.txt at all, so this whole
+> > dance to find what was enabled or not wouldn't be used at all.
 >
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: Unevaluated properties are not allowed ('dma-channels', 'dma-masters', 'dma-requests' were unexpected)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+> My concern is that we reach some point that we need to say this kernel
+> version requires this firmware version. In the Raspberry Pi OS world this=
+ is
+> not a problem, but not all distributions has this specific knowledge.
+
+The recent mess with the Intel GPU firmware
+(https://lore.kernel.org/dri-devel/CAPM=3D9txdca1VnRpp-oNLXpBc2UWq3=3Dceeim=
+5+Gw4N9tAriRY6A@mail.gmail.com/)
+makes it fairly clear that such a situation should be considered a
+regression and fixed. So it might be a situation that the downstream
+tree will end up in, but it's not something we will allow to happen
+upstream.
+
+> > > Emma invested a lot of time to make this open source and now it looks=
+ that
+> > > like that more and more functionality moves back to firmware.
+> > What functionality has been moved back to firmware?
 >
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/patch/
->
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit.
-This reported error is unrelated to my yaml file. Kindly check from your 
-end.
+> This wasn't a offense against your great work. Just a slight warning that
+> some functions of clock or power management moved back into firmware. We
+> should watch out, but maybe i emote here.
+
+Yeah, I guess we'll want to consider it on a case per case basis but
+it's not like we merged fkms either :)
+
+Maxime
+
+--xs5treb6qglpqv3x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYyMOmQAKCRCIQ8rmN6G3
+yzvJAPwKk8+UrDedXR/g/u2ZIO5AIjut1nI9dgfrrrWkK0RQlgEArw3quF8AQM7i
+9sixZ2c+3u47BA4XoYYV+m3tgqLRKPk=
+=3a4F
+-----END PGP SIGNATURE-----
+
+--xs5treb6qglpqv3x--
