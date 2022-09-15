@@ -2,61 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F411F5B9C5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6325B9C61
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIONwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S229688AbiIONxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 09:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIONw1 (ORCPT
+        with ESMTP id S229885AbiIONxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 09:52:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E97D98D2F;
-        Thu, 15 Sep 2022 06:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663249947; x=1694785947;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DPl8JULjiE6znvBSZ8XCagbyNoT+W5D+8RTaxBC14CU=;
-  b=EEjcmOPeHpvXCoMf38dRsop01r5uQRL0ggCQ3qW6TDfjJSqd7McEFReW
-   1j/pcOgAOB2Nw7KSEwXDTzvMXnHQNAHH3YRxk+ZcGWy6wuuTvKlLfHTiW
-   JRWkahZCNbUiHKxEqn7+uwoHMqcd9dsrPsbnW8rk+qv64Y9X6RdF+azqu
-   9xJy3rCCX2Cvn6w+KmvWK9NEL7Pgx7xKdkQtzXUdXCXkuvi3NIK4ABtoz
-   pWritBpTlpZvT2PPlBmUYFf204qQYfJdzNbzMejz8FfGxhFLRfko68kpI
-   Cb1TDXlTb0iOKsYnXg/SmNvCNIhEx7DeRCOgHdGzX7n2GV2J/8RgLMwnN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324978888"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="324978888"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 06:52:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="619700757"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Sep 2022 06:52:23 -0700
-From:   wen.ping.teh@intel.com
-To:     dmitry.baryshkov@linaro.org
-Cc:     bjorn.andersson@linaro.org, catalin.marinas@arm.com,
-        davem@davemloft.net, dinguyen@kernel.org,
-        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        wen.ping.teh@intel.com, will@kernel.org
-Subject: Re: [PATCH 0/2] crypto: intel-fcs: Add crypto service driver for Intel SoCFPGA
-Date:   Thu, 15 Sep 2022 21:52:19 +0800
-Message-Id: <20220915135219.670329-1-wen.ping.teh@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2d24ed07-5501-5ee9-e2a9-34ef15216e28@linaro.org>
-References: <2d24ed07-5501-5ee9-e2a9-34ef15216e28@linaro.org>
+        Thu, 15 Sep 2022 09:53:31 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 870E599240;
+        Thu, 15 Sep 2022 06:53:28 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1131)
+        id 21E452057C45; Thu, 15 Sep 2022 06:53:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 21E452057C45
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1663250008;
+        bh=sZTMQwJc76ykomIDWKwnb/MXKHCZeEUd7Mg/6F2abu8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=De6wYUr8L8HHFQlD+2Z29i5fEqavZtAWWTN04QSm6wnQjmVYC+iu+UXwKyToogTB7
+         wsUMRhbMgeXDg+351Ogxtj9KzT2i823x1g6tY5C6UV5f1PP42ikUAzGAbZN9pi/XjQ
+         +fjGoUow5z0/lzNu3NilF5AMcYnBnyoMeDakNpkc=
+Date:   Thu, 15 Sep 2022 06:53:28 -0700
+From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/121] 5.15.68-rc1 review
+Message-ID: <20220915135328.GB7523@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20220913140357.323297659@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913140357.323297659@linuxfoundation.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,42 +52,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wen.ping.teh@intel.com=0D
+On Tue, Sep 13, 2022 at 04:03:11PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.68 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
 
->From: Dmitry Baryshkov @ 2022-09-15 11:46 UTC (permalink / raw)=0D
->> From: wen.ping.teh@intel.com=0D
->> =0D
->>> This patch introduces a crypto service driver for Intel SoCFPGA=0D
->>> family. The FPGA Crypto Service (FCS) includes a large set of security=
-=0D
->>> features that are provided by the Secure Device Manager(SDM) in FPGA.=0D
->>> The driver provide IOCTL interface for user to call the crypto services=
-=0D
->>> and send them to SDM's mailbox.=0D
->>>=0D
->>> Teh Wen Ping (2):=0D
->>>   crypto: intel-fcs: crypto service driver for Intel SoCFPGA family=0D
->>>   arm64: defconfig: add CRYPTO_DEV_INTEL_FCS=0D
->> Hi,=0D
->> =0D
->> I just found out that there was a previous attempt to upstream this driv=
-er=0D
->> 2 years ago. It was NACK because it did not implement crypto API. Please=
-=0D
->> drop this review.=0D
->> https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg44701.html=
-=0D
->> =0D
->> I will move this driver to drivers/misc.=0D
->=0D
->I think the proper solution would be to implement the existing API first =
-=0D
->rather than adding a set of custom proprietary IOCTLs that nobody else =0D
->is going to use.=0D
-=0D
-Could you explain what are the existing API that you are referring? =0D
-The FCS driver doesn't have API. Instead it uses IOCTLs to interact with us=
-er-space application to perform Intel SoCFPGA crypto features. =0D
-=0D
-Thanks=0D
-Wen Ping=
+Built and tested on WSL x86 and WSL arm64 - no regressions found. 
+
+Tested-by: Kelsey Steele <kelseysteele@linux.microsoft.com>
