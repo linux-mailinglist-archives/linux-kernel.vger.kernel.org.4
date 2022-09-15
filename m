@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2655BA288
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368F35BA28B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiIOWDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S229637AbiIOWDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIOWDD (ORCPT
+        with ESMTP id S229538AbiIOWDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:03:03 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51288459A6;
-        Thu, 15 Sep 2022 15:03:02 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id i26so32546222lfp.11;
-        Thu, 15 Sep 2022 15:03:02 -0700 (PDT)
+        Thu, 15 Sep 2022 18:03:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2DC459A6;
+        Thu, 15 Sep 2022 15:03:45 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id l12so23856088ljg.9;
+        Thu, 15 Sep 2022 15:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:from:to:cc:subject:date;
-        bh=H5ThD9BKTz5vBT4VzVyJZJQec8PcnYIVup07wh2iD1Q=;
-        b=LHyTLGYjynWOWEWcvC/ImquPZ8TIZBoOGaA5Y0VE2YuX7vvpc4Jlqm7lMxuzWpwI3M
-         qHFLaaQoCtwgQSPz5igkwfLgUdTk5ndmSr7i7jLwV4Xy+DzUI+rJqeXzCttTDUj2xecl
-         WB6mtZVGfSUqDxB/grzZwd85PWXn0G9xO5OL8/I0l/2cGeyWT0iY9WkBZ3EtN397HmFg
-         1ar50iHFiRUTn4ZJ024Uw/w730c0XfVrHu4rwI2EbU1cYyNy0KUKWsVgu+tmcwgkUAdR
-         sE14OyxamgMPuBatCZPcaVmyCZRs+8jHAI2GOrklTB5H1RoWZlEfJQjqeFtymQUIZlJV
-         2mIA==
+        bh=TFtx1KDgtTM0guPlXqDPIbAnzqs4tdXSSSFU0BK0QIk=;
+        b=eQaqn3UIwD/aaMwup1N1iDKN9tv4h4gzHYmvGWpPS+xJ7Dqpr5ECPmzuBXNUyZDQd2
+         v+WVEQRsGPV+LYpLrb4psQDKPgxsUFE9zTle5miaKDF8qs0orJFst6wcjsC3ewgmg9s2
+         0zsA0npFZcsGTh+1dwiJKi0OUR/JCmYyYUo6lE89u559BCfvX63Wf0NDQ0tqVFkcdyzY
+         mlvegw2InqU31U0yPKXWyfuTSjPAdIG/6ugFjM4TX2bVQY5sub8WXW22GxTExQyJxBvy
+         ujhtkifuc2JCOyeJIRyZ4dz3Dcksa3vBxork8+FtPUEl9yHZ4Atx4h64xAMyvyDzIHKs
+         h0rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:x-gm-message-state:from:to:cc:subject:date;
-        bh=H5ThD9BKTz5vBT4VzVyJZJQec8PcnYIVup07wh2iD1Q=;
-        b=ubgdzMnybnbgz4aRNLhGTllMHO+g/VY+efCLsWEyyc6fKkc7njrdnUrYj7huylvbg3
-         yEpfan5UHTUr7AGaaUBhEGB+BHj3MNUbvnkr09B/osegRJ1LN9CjS5ncCaD0ec1Z/5VZ
-         yijHwhkUlQ8jI2mEaBqIkvdhXA2g0isuBkEAKnLM+4qx3MlYonxfrDJte/oTdEPtu1zQ
-         4/7EjJAdtVrbll1OXrAa5r4iFMd2scG1qDi9SW88kSuEI0b4M7LSARoO5dRTFQR0svt8
-         ssd/HhT+YC9Fl3VW+4bKfbt36QUz2IDVN5pi3ReJNLGJq9R5LNtFYiAS3KBzJDVfSALw
-         1E/Q==
-X-Gm-Message-State: ACrzQf0KWEkwvjpHNpnE4dCdfec2l42sFn8/LXKiK4drsEKvtkRcvb62
-        +t5W5tvKstlu9q4l/up7fpYOLmkg/F84oQ==
-X-Google-Smtp-Source: AMsMyM5FeCIP4QXA/+Xr53/EMAn27RC2IYVpcm+aNtsvvkzH4cniuXWBrYCyHdAKtCRi8ODG/zXp0g==
-X-Received: by 2002:a05:6512:1107:b0:49a:d211:bb3c with SMTP id l7-20020a056512110700b0049ad211bb3cmr582980lfg.423.1663279380090;
-        Thu, 15 Sep 2022 15:03:00 -0700 (PDT)
+        bh=TFtx1KDgtTM0guPlXqDPIbAnzqs4tdXSSSFU0BK0QIk=;
+        b=TRqBrohc7CUtK9EYiI+wdS9vKQLgH8xUEvh5EDOj/spxPkAeamc5rhSJPhhYIOnpEs
+         B+9sOXRA3kCy5P47GUQozgtDghnMMk5DfWlkVM5OLMAUqKlqLQTbX2mGhqZvnW0hbX97
+         zkwy0+GkNj2FgYr0R8uhYZCkYMnslUqorTftDEzAoaSPLdKeRmJnHJ8dAIO5sfAlJ05f
+         9dax8Sn9u/xfF18LQsDa7dcN1YHtcOp2dfshwNwnhE+o8fMMNUI1SiLQXKMs0Lss4Ro7
+         9oqeVM3wGw9Jzg8KtXEbIIlq0ODRw3oZ+2VAlkVo5W481BRf30rlKWhCA6i2LT460+P2
+         4Prg==
+X-Gm-Message-State: ACrzQf3qy8Vh9mXAVVlbwItE+VASNgx/ASpSHq4V7O/RBRc0+KGMoMmP
+        uGDyVThCokRZ+8+2GSgR6z/PLZPrKM5Mnw==
+X-Google-Smtp-Source: AMsMyM5RDu0Pj3rd8qFwmSRkhUvB4T7QYx+2GZe1R24VPtpEQcLqtINoA1CSln1aA/U1I+mDZ8cJiw==
+X-Received: by 2002:a2e:86c9:0:b0:26c:2f32:e4fa with SMTP id n9-20020a2e86c9000000b0026c2f32e4famr533418ljj.389.1663279423110;
+        Thu, 15 Sep 2022 15:03:43 -0700 (PDT)
 Received: from razdolb (95-31-185-216.broadband.corbina.ru. [95.31.185.216])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b0049476667228sm3156957lfr.65.2022.09.15.15.02.58
+        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026c34bed71csm371203ljc.87.2022.09.15.15.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 15:02:59 -0700 (PDT)
+        Thu, 15 Sep 2022 15:03:42 -0700 (PDT)
 References: <20220911200147.375198-1-mike.rudenko@gmail.com>
  <20220911200147.375198-2-mike.rudenko@gmail.com>
- <cd363d98-74be-b42f-b1e1-c0f7e79f6011@linaro.org>
+ <20220913140553.GA2735@tom-ThinkPad-T14s-Gen-2i>
 User-agent: mu4e 1.9.0; emacs 28.1
 From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -69,14 +69,14 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/2] media: dt-bindings: media: i2c: document OV4689
  DT bindings
-Date:   Thu, 15 Sep 2022 15:16:24 +0300
-In-reply-to: <cd363d98-74be-b42f-b1e1-c0f7e79f6011@linaro.org>
-Message-ID: <87zgf0pa7i.fsf@gmail.com>
+Date:   Thu, 15 Sep 2022 23:11:57 +0300
+In-reply-to: <20220913140553.GA2735@tom-ThinkPad-T14s-Gen-2i>
+Message-ID: <87sfkspa6b.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,25 +84,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-On 2022-09-12 at 12:55 +02, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> On 11/09/2022 22:01, Mikhail Rudenko wrote:
+Hi Tommaso,
+
+On 2022-09-13 at 16:05 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
+> Hi Mikhail,
+>
+> On Sun, Sep 11, 2022 at 11:01:34PM +0300, Mikhail Rudenko wrote:
 >> Add device-tree binding documentation for OV4689 image sensor driver,
 >> and the relevant MAINTAINERS entries.
 >>
 >> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
->
-> Too many "media" prefixes in the subject.
-
-I see, will drop the first "media:" in v3.
-
-> Also you duplicated dt
-> bindings as prefix and commit msg (skip the latter).
-
-Just to be clear, do you mean dropping "device-tree binding" phrase from
-the commit message?
-
 >> ---
 >>  .../bindings/media/i2c/ovti,ov4689.yaml       | 141 ++++++++++++++++++
 >>  MAINTAINERS                                   |   7 +
@@ -149,13 +141,6 @@ the commit message?
 >> +    maxItems: 1
 >> +
 >> +  clock-names: true
->
-> This has to be strictly defined - which name you expect.
-
-Will fix in v3. Or maybe we should drop clock-names altogether and use
-devm_clk_get(&client->dev, NULL) in the driver instead (I've seen this
-approach in some existing drivers)?
-
 >> +
 >> +  dovdd-supply:
 >> +    description:
@@ -171,11 +156,6 @@ approach in some existing drivers)?
 >> +
 >> +  powerdown-gpios:
 >> +    maxItems: 1
->
-> You can skip here maxItems - it is defined by gpio-consumer-common.
-
-Ack, will fix in v3. Does this also apply to reset-gpios?
-
 >> +    description:
 >> +      GPIO connected to the powerdown pin (active low)
 >> +
@@ -184,11 +164,69 @@ Ack, will fix in v3. Does this also apply to reset-gpios?
 >> +    description:
 >> +      GPIO connected to the reset pin (active low)
 >> +
+>> +  orientation: true
+>> +
+>> +  rotation: true
+>> +
+>> +  port:
+>> +    $ref: /schemas/graph.yaml#/$defs/port-base
+>> +    additionalProperties: false
+>> +    description:
+>> +      Output port node, single endpoint describing the CSI-2 transmitter
+>> +
+>> +    properties:
+>> +      endpoint:
+>> +        $ref: /schemas/media/video-interfaces.yaml#
+>> +        unevaluatedProperties: false
+>> +
+>> +        properties:
+>> +          data-lanes:
+>> +            oneOf:
+>> +              - items:
+>> +                  - const: 1
+>> +                  - const: 2
+>> +                  - const: 3
+>> +                  - const: 4
+>> +              - items:
+>> +                  - const: 1
+>> +                  - const: 2
+>> +              - items:
+>> +                  - const: 1
+>> +          link-frequencies: true
+>> +
+>> +        required:
+>> +          - data-lanes
+>> +          - link-frequencies
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - dovdd-supply
+>> +  - avdd-supply
+>> +  - dvdd-supply
+>> +  - powerdown-gpios
+>> +  - reset-gpios
+>> +  - port
 >
-> Best regards,
-> Krzysztof
+> I think we don't need all of these entries as required.
+> The only let me say "really" required are:
+>
+> - compatible
+> - reg
+> - clocks
+> - port
 
-Thanks for review,
+Thanks for the review! I agree that the driver may be modified to work
+without powerdown and reset gpios and they are not required for sensor
+operation. On contrary, supplies are obviously required. Of course, linux
+provides dummy regulators if supplies are missing from device tree, but
+I though the intention was to document hardware, not implementation
+details. What do think of this?
+
+> Regards,
+> Tommaso
 
 --
 Best regards,
