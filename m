@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B225B99B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24315B9A2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiIOLgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S229852AbiIOL4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiIOLgA (ORCPT
+        with ESMTP id S230402AbiIOLzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:36:00 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AA49A993
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:35:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bj12so41364884ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=d1PF4A4boDjofVzPABAZCXmsEh3HYlGwljIdr1GvZSY=;
-        b=otFuK1b0JYh824F62FadqTGHIlSv28ORFGj0Po+O5iD4qf/XgeaA1TBuw5AX+BvMX1
-         S0zbhI1+R5Zv/fazlRyvkjWZpSoatyoievQ/ZlnlTl2son/8Af0xNHSMGcg4rxh1gvMK
-         QQW+8YukXq5F2H8dftQlqSF7ouXyxB4qGZzI64IwI3mqYhk6pYwTqaMhwEpA2awQvmd1
-         Cju+K2AI4ZzdqjrxizSSoE3CJmhUZzm6x4gBlOxc2irPdpPcb7kcIV5XaNag9ZCtAdKL
-         nuDO8DxvuO7dYLlwkkzlmuW8FzWIYyf2WpF5N+BZyrRnYxBwHJA+3Ih9prqfWyGtE/Mg
-         3gPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=d1PF4A4boDjofVzPABAZCXmsEh3HYlGwljIdr1GvZSY=;
-        b=hEsya1VdbLhHNsFrcomJjYAdUXkAXD4lby2nqnbHhzvRFC+asykadB5K/S6L4d8Wi3
-         VjZPy5S8Ayh4EIuweAtrELaExxFske4GKLLCM6L+EbHesGNuFSXSRrkTAwK2golt7l2X
-         Rh/w7utff4VT9bO22bx941zrOlx+0DHIvBuKQ1g0Q92iYsM6jY+y/rAcFDrgcik/2Tw6
-         ORhfLdMLt0h4umbIYe9H3pymS2ahK1mRzGMPtYcI+v2RMXlDcGG7bpWnFSKQw6qFJWkl
-         l/pnRyAbfljUgmaX1C4E97fdq7XzUlgFkKzVESQB50KCv+FL6+TFDn1ahrCVSL3cKpN8
-         ApqA==
-X-Gm-Message-State: ACgBeo193PqCU6bzjG6GKnSq3vbPUTXPtec0aZIwFbqbyOLJDdvkClI8
-        CasJWaCX+CdOYkmI5+AGn6Tmwg==
-X-Google-Smtp-Source: AA6agR6uIndMgHYkaS4uybZJbwSLEfFeKw1jYmyds8Mv50OPSJUBarei9PR9ooqlse+45+4k5Lx9Bw==
-X-Received: by 2002:a17:907:9603:b0:742:9ed3:3af2 with SMTP id gb3-20020a170907960300b007429ed33af2mr28653453ejc.510.1663241757579;
-        Thu, 15 Sep 2022 04:35:57 -0700 (PDT)
-Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id fi24-20020a1709073ad800b0072af4af2f46sm8910424ejc.74.2022.09.15.04.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 04:35:57 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] mfd: qcom-spmi-pmic: Add more PMIC SUBTYPE IDs
-Date:   Thu, 15 Sep 2022 13:35:21 +0200
-Message-Id: <20220915113523.44074-2-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220915113523.44074-1-luca.weiss@fairphone.com>
-References: <20220915113523.44074-1-luca.weiss@fairphone.com>
+        Thu, 15 Sep 2022 07:55:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53D674DC2;
+        Thu, 15 Sep 2022 04:52:04 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FANc7b010427;
+        Thu, 15 Sep 2022 11:41:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DAnz4pV9055iwiJRXdjzLG69R7F5vLigA60QAxEPUO4=;
+ b=QW17VKFbVmz8Xj1tGunzjQGLtlLHOOWvrl2VpOijH88USnNyWcx/FN8OeBdSZdOtwNLf
+ mVL5R50CteCfIImxo+vpbu8qXi6954w01D5XiGGgwoxGIoeDzcxivFTMqyy1xwIg0mT8
+ E9QTcPh7Zin4MSrZAGdj5DRros6xWvdAkT6TLLwBiFT+cwWmo9WDCGXjDXQSWGpZL0dX
+ YoI4wtlu3rJrqyUJ6DV+CpGLsuqJ2AvW0g8O2ihVG0MqmTkSLOyBfJYL/NoiYDDMHT46
+ 7end8MS9pAXzZ5Jw8T8bsAVoETinuTF0rSly13iQrISF3RVsPWAPGL+kygQF3x6Uwl3R jg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjy0gmuf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 11:41:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28FBaZD1030514
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 11:36:35 GMT
+Received: from [10.79.142.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 15 Sep
+ 2022 04:36:31 -0700
+Message-ID: <00b01df4-232b-24d4-7339-0fcfa6b210a9@quicinc.com>
+Date:   Thu, 15 Sep 2022 17:06:29 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V9 1/7] dt-bindings: Added the yaml bindings for DCC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        Alex Elder <elder@ieee.org>, "Andy Gross" <agross@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <cover.1663173477.git.quic_schowdhu@quicinc.com>
+ <41b94746e1560d63f16fb5dc965042ec496aeaf1.1663173478.git.quic_schowdhu@quicinc.com>
+ <20220915093715.ednaqtx7ko6f5zlw@krzk-bin>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <20220915093715.ednaqtx7ko6f5zlw@krzk-bin>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: K7LwKWzMOdMiZQ8y1hgzZYbrs3XPU0cW
+X-Proofpoint-GUID: K7LwKWzMOdMiZQ8y1hgzZYbrs3XPU0cW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_06,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 mlxlogscore=814 spamscore=0
+ malwarescore=0 suspectscore=0 clxscore=1011 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209150065
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +87,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add more IDs that are found in the downstream msm-4.19 kernel under the
-path include/linux/qpnp/qpnp-revid.h.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
-Changes since v2:
-* Convert hex numbers lowercase
-* Remove SMB* IDs added in v1, given it's not sure they're actually spmi
-  pmics or just i2c pmics (keep SMB2351 because it supports spmi)
-
- include/soc/qcom/qcom-spmi-pmic.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/include/soc/qcom/qcom-spmi-pmic.h b/include/soc/qcom/qcom-spmi-pmic.h
-index fde0148d0077..c47cc71a999e 100644
---- a/include/soc/qcom/qcom-spmi-pmic.h
-+++ b/include/soc/qcom/qcom-spmi-pmic.h
-@@ -26,6 +26,8 @@
- #define PM8901_SUBTYPE		0x0f
- #define PM8950_SUBTYPE		0x10
- #define PMI8950_SUBTYPE		0x11
-+#define PMK8001_SUBTYPE		0x12
-+#define PMI8996_SUBTYPE		0x13
- #define PM8998_SUBTYPE		0x14
- #define PMI8998_SUBTYPE		0x15
- #define PM8005_SUBTYPE		0x18
-@@ -36,8 +38,17 @@
- #define PM8150B_SUBTYPE		0x20
- #define PMK8002_SUBTYPE		0x21
- #define PM8009_SUBTYPE		0x24
-+#define PMI632_SUBTYPE		0x25
- #define PM8150C_SUBTYPE		0x26
-+#define PM6150_SUBTYPE		0x28
- #define SMB2351_SUBTYPE		0x29
-+#define PM8008_SUBTYPE		0x2c
-+#define PM6125_SUBTYPE		0x2d
-+#define PM7250B_SUBTYPE		0x2e
-+#define PMK8350_SUBTYPE		0x2f
-+#define PMR735B_SUBTYPE		0x34
-+#define PM6350_SUBTYPE		0x36
-+#define PM2250_SUBTYPE		0x37
- 
- #define PMI8998_FAB_ID_SMIC	0x11
- #define PMI8998_FAB_ID_GF	0x30
--- 
-2.37.3
-
+On 9/15/2022 3:07 PM, Krzysztof Kozlowski wrote:
+> On Wed, 14 Sep 2022 22:31:11 +0530, Souradeep Chowdhury wrote:
+>> Documentation for Data Capture and Compare(DCC) device tree bindings
+>> in yaml format.
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/arm/msm/qcom,dcc.yaml      | 43 ++++++++++++++++++++++
+>>   1 file changed, 43 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
+>>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: Unevaluated properties are not allowed ('dma-channels', 'dma-masters', 'dma-requests' were unexpected)
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/patch/
+>
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit.
+This reported error is unrelated to my yaml file. Kindly check from your 
+end.
