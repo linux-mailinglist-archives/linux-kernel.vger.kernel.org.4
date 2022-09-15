@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC595B9196
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD1D5B9197
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiIOAU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S230045AbiIOAWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiIOAUY (ORCPT
+        with ESMTP id S229586AbiIOAWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:20:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A54D804;
-        Wed, 14 Sep 2022 17:20:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSdBr0XmXz4x1T;
-        Thu, 15 Sep 2022 10:20:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663201220;
-        bh=gnGui/z0Z0qQeqJQvLvMOfV3VcFbb7V/C7qu0wIP4MM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rwbZQ35L0uePD3q0IILydINIZ+iiRaKsoRQIP74lVf/criwGXZlMPyVrjiG82g0g8
-         15V/qlSowydMDMrT7d/DcUmKPBUtBAq747H1b4enIhdHDQ2dy/iXtlNFX2XQ5WCimz
-         yOnsEMbEUWUCoawvB19xKgZieHyVO8Sz4ytCO1J6R4YWzOPxbFlpYvOFoN09gUuikp
-         UvYuyc917doia43At0RMJIsSyPAlNz0taYTxJGk4SXto35+4rRNmuuGwg+YIcmIDiK
-         UHQh/OQs/V/lw7b1MhA9lVMZ53gpG1YuafekpmpT/lJTy8a14e5Rym9WdrxrxevoM+
-         h2svVmXG7LYHw==
-Date:   Thu, 15 Sep 2022 10:20:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Leon Romanovsky <leon@kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Aurelien Aptel <aaptel@nvidia.com>,
-        Ben Ben-Ishay <benishay@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Or Gerlitz <ogerlitz@nvidia.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: linux-next: manual merge of the mlx5-next tree with the net-next
- tree
-Message-ID: <20220915102018.795c4a55@canb.auug.org.au>
+        Wed, 14 Sep 2022 20:22:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C5B6C126
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663201330; x=1694737330;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DwH6r7kSYgXKu31Svcb7eDa7neWtWKabWhTS1u3DP5E=;
+  b=k85wRzoLQXs9BGUDTz68vDHXfuDnD+usFjlTVohSK0Gn1S6ngkrgj1vP
+   FgYdDBWKsV3idYdwx1SwllG/BYGPoU+XA8uO7aIooI53Xiq37uz5kSuiq
+   Tftm91nwA9g2Cg5gidZsxoJPVO4dz23YzCyXOBmjZ4F52EM8iOBjLIBkZ
+   e36uZXXUiJHEu+azZJxhnjRKxsn5nyFmYbvFIQQxa1Of25mbtOa1FTzTm
+   OPheoHoTnYMcnzgDIzJksQSEAezq5y/8bw3aQ+cLdEWFZ7hSebfAKCtdW
+   j1wovRClPFOjYRriXI0pQ0xc054f/gAA81cS7eGkaLtMs6Riti07ZCUv1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299387625"
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="299387625"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:22:09 -0700
+X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
+   d="scan'208";a="594599391"
+Received: from schen9-mobl.amr.corp.intel.com ([10.209.26.213])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:22:09 -0700
+Message-ID: <95bbbc9b927abf3c756e6cce810be69e85985541.camel@linux.intel.com>
+Subject: Re: [PATCH v5 4/5] sched/fair: Skip SIS domain scan if fully busy
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 14 Sep 2022 17:22:09 -0700
+In-Reply-To: <20220909055304.25171-5-wuyun.abel@bytedance.com>
+References: <20220909055304.25171-1-wuyun.abel@bytedance.com>
+         <20220909055304.25171-5-wuyun.abel@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D5qb6bUYOjLrNQ6THHsn8k2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,84 +66,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/D5qb6bUYOjLrNQ6THHsn8k2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 2022-09-09 at 13:53 +0800, Abel Wu wrote:
+> If a full domain scan failed, then no unoccupied cpus available
+> and the LLC is fully busy.  In this case we'd better use cpus
+> more wisely, rather than wasting it trying to find an idle cpu
+> that probably not exist. The fully busy status will be cleared
+> when any cpu of that LLC goes idle and everything goes back to
+> normal again.
+> 
+> Make the has_idle_cores boolean hint more rich by turning it
+> into a state machine.
+> 
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> ---
+>  include/linux/sched/topology.h | 35 +++++++++++++++++-
+>  kernel/sched/fair.c            | 67 ++++++++++++++++++++++++++++------
+>  2 files changed, 89 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 816df6cc444e..cc6089765b64 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -77,10 +77,43 @@ extern int sched_domain_level_max;
+>  
+>  struct sched_group;
+>  
+> +/*
+> + * States of the sched-domain
+> + *
+> + * - sd_has_icores
+> + *	This state is only used in LLC domains to indicate worthy
+> + *	of a full scan in SIS due to idle cores available.
+> + *
+> + * - sd_has_icpus
+> + *	This state indicates that unoccupied (sched-idle/idle) cpus
+> + *	might exist in this domain. For the LLC domains it is the
+> + *	default state since these cpus are the main targets of SIS
+> + *	search, and is also used as a fallback state of the other
+> + *	states.
+> + *
+> + * - sd_is_busy
+> + *	This state indicates there are no unoccupied cpus in this
 
-Hi all,
+Suggest reword to
 
-Today's linux-next merge of the mlx5-next tree got a conflict in:
+.. indicates that all cpus are occupied in this ...
 
-  drivers/net/ethernet/mellanox/mlx5/core/fw.c
+> + *	domain. So for LLC domains, it gives the hint on whether
+> + *	we should put efforts on the SIS search or not.
+> + *
+> 
 
-between commit:
+Tim
 
-  8ff0ac5be144 ("net/mlx5: Add MACsec offload Tx command support")
-
-from the net-next tree and commits:
-
-  939838632b91 ("net/mlx5: Query ADV_VIRTUALIZATION capabilities")
-  6182534c2678 ("net/mlx5: Add NVMEoTCP caps, HW bits, 128B CQE and enumera=
-tions")
-
-from the mlx5-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/fw.c
-index c63ce03e79e0,2140bf161c90..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/fw.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fw.c
-@@@ -273,13 -273,18 +273,25 @@@ int mlx5_query_hca_caps(struct mlx5_cor
-  			return err;
-  	}
- =20
- +	if (MLX5_CAP_GEN_64(dev, general_obj_types) &
- +	    MLX5_GENERAL_OBJ_TYPES_CAP_MACSEC_OFFLOAD) {
- +		err =3D mlx5_core_get_caps(dev, MLX5_CAP_MACSEC);
- +		if (err)
- +			return err;
- +	}
- +
-+ 	if (MLX5_CAP_GEN(dev, adv_virtualization)) {
-+ 		err =3D mlx5_core_get_caps(dev, MLX5_CAP_ADV_VIRTUALIZATION);
-+ 		if (err)
-+ 			return err;
-+ 	}
-+=20
-+ 	if (MLX5_CAP_GEN(dev, nvmeotcp)) {
-+ 		err =3D mlx5_core_get_caps(dev, MLX5_CAP_DEV_NVMEOTCP);
-+ 		if (err)
-+ 			return err;
-+ 	}
-+=20
-  	return 0;
-  }
- =20
-
---Sig_/D5qb6bUYOjLrNQ6THHsn8k2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMib8IACgkQAVBC80lX
-0GyFywgAkZdlOT75c5isIubKOOQPttiFJdr3TYp2S5rktSZrAu8ZZX0A7Pey5coO
-N41MQxKV22jD0UybU5zlLsTIrdvKihXY8VkDUutB31q512+KDdFEYuXs+1rLGCAj
-B2L4ChcZlkMt31dISE6PL6tlmZuZA1L4fc0O3xRG9YZOFle6tdiMS+NcrRkNZd4C
-5ADQp7LL4AR36uHYaYktYEGKhueQDtCUN6XCF5LxGzPDH72s9VyNusC4b7Rjoi0W
-AVxi1iuTW1Shr6cCQaoHueZcYuCIzhoKWeQbgLA8FWauBOlnI4TPE8r/PnT2XSW3
-iBCZxn093OH/TRGRKqRZ59XTl+hNXw==
-=cxZN
------END PGP SIGNATURE-----
-
---Sig_/D5qb6bUYOjLrNQ6THHsn8k2--
