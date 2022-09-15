@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495A85BA04D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 19:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A155BA052
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 19:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiIORTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 13:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S229980AbiIORUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 13:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIORTB (ORCPT
+        with ESMTP id S229898AbiIORUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 13:19:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5617182F95;
-        Thu, 15 Sep 2022 10:19:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D18AE62598;
-        Thu, 15 Sep 2022 17:18:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 318DCC433C1;
-        Thu, 15 Sep 2022 17:18:57 +0000 (UTC)
-Date:   Thu, 15 Sep 2022 18:18:53 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Eric Biggers <ebiggers@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adam Langley <agl@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: Should Linux set the new constant-time mode CPU flags?
-Message-ID: <YyNefT72+OqkaPMS@arm.com>
-References: <YwgCrqutxmX0W72r@gmail.com>
- <CAK8P3a3LnqdJ7bp+wjwUyb=7rQqL7W4nina-yQ5_Ff=XtaTr+A@mail.gmail.com>
+        Thu, 15 Sep 2022 13:20:36 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A9E44540
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:20:34 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso4943648wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=GMQu+Y5MmIbydykdiifw+beEBbT3HPvfrEgmPiWWPA4=;
+        b=C9sQs9sk1ckiPcvzOIsgVxkZl7PhKg8R3xxYZG8w1Re81id1DuBl24tWMV6fJIMuAh
+         7Jh1BUO+vpE+d7M09+aeNubo5Qou7BItDPmnhLpbMYIOULmwHvCgwHNqOVJBWXsGFD4R
+         8xQIVU9cqnq4pqvoBwKJip18cRkUIwqHffNJ27LOtjuw8Dd0JCVr3YV0QpfhaGXK2uHd
+         Vsgsi0YLbgVVOgP3oIglxUNHlBE06zfkDFvattpKst0rAlk8aez4WGJmLXHnIpG/7cyv
+         2Ri4Q3fekfYMye/xvD4nmOShZfj6zfpqOCiYP9wHQ19lrOmnjAg5o8CJmY5pvU91xjdo
+         osUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=GMQu+Y5MmIbydykdiifw+beEBbT3HPvfrEgmPiWWPA4=;
+        b=LJtYJ9qtVWLG0ZIJOBS4qsTNoA4EpmHPX+42+decx/gevEJFwP37w7qyoPIBl5esU+
+         auXLIOC0euIIGiiabpgRFITV4yhYWIZR8uSGJblwmNylikUwgGMXDmiAJp912vB4I9Rb
+         wEB133jO4ZPJ+RKZUWep48+SvN/DKqrdrd8PCxbbfczF3aNQLQ8Ikn5cPzWt2lRg13zJ
+         zTeDxwoOS/IJeSzhP2Kvz9flwinTw0kCUkLHA75W+M+JCWrEskS3lDum8fDHiHNl4wDa
+         R708Fb/P6t+irOTCRXda1FsKzaNzVUokYASTPgSand/bl/91Z6rOJaAXD5eq05tLiNAf
+         jP4Q==
+X-Gm-Message-State: ACrzQf10wzEE/Gs/HgV06UujiBLs0BkkeVSaoh0kGH9gUIAfz0Je3r9B
+        EOuwTzTVaS3gCjeU8uzGcudk1Q==
+X-Google-Smtp-Source: AMsMyM6G4CD/tMHlq2tzVSbpToSXOyOrtSoAAC5uClinvbXwxCGIVWwya+GRyFBf6LQxfXbbcQ914Q==
+X-Received: by 2002:a05:600c:5122:b0:3b4:768d:f491 with SMTP id o34-20020a05600c512200b003b4768df491mr680108wms.68.1663262432570;
+        Thu, 15 Sep 2022 10:20:32 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id o11-20020a05600c510b00b003a845621c5bsm3408304wms.34.2022.09.15.10.20.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 10:20:32 -0700 (PDT)
+Message-ID: <789f2638-b4da-146d-64ce-3e156428bcd7@linaro.org>
+Date:   Thu, 15 Sep 2022 19:20:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3LnqdJ7bp+wjwUyb=7rQqL7W4nina-yQ5_Ff=XtaTr+A@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/4] thermal: mediatek: Add support for MT8365 SoC
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com
+References: <20220909073609.32337-1-aouledameur@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220909073609.32337-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(catching up with this thread)
-
-On Fri, Aug 26, 2022 at 10:45:07AM +0200, Arnd Bergmann wrote:
-> On Fri, Aug 26, 2022 at 1:15 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> > For arm64, it's not clear to me whether the DIT flag is privileged or not.  If
-> > privileged, I expect it would need to be set by the kernel just like the Intel
-> > flag.  If unprivileged, I expect there will still be work to do in the kernel,
-> > as the flag will need to be set when running any crypto code in the kernel.
+On 09/09/2022 09:36, Amjad Ouled-Ameur wrote:
+> This patchset adds thermal support for MT8365 SoC which contains three
+> thermal sensors.
 > 
-> 7206dc93a58f ("arm64: Expose Arm v8.4 features") added the feature bit for
-> Armv8.4+ processors. From what I can tell from the documentation and the
-> kernel source, I see:
+> Changes in V4:
+> - rebased on thermal/linux-next
+> - Use callback for raw_to_mcelsius()
+> - Use struct 'struct thermal_zone_device_ops' instead of
+> no longer existent 'struct thermal_zone_of_device_ops'
 > 
-> - if the feature is set in HWCAP (or /proc/cpuinfo), then the instruction DIT
->   register is available in user space, and sensitive code can set or clear the
->   constant-time mode for the local thread.
+> Amjad Ouled-Ameur (1):
+>    thermal: mediatek: add another get_temp ops for thermal sensors
+> 
+> Fabien Parent (2):
+>    dt-bindings: thermal: mediatek: add binding documentation for MT8365
+>      SoC
+>    thermal: mediatek: add support for MT8365 SoC
+> 
+> Markus Schneider-Pargmann (1):
+>    thermal: mediatek: control buffer enablement tweaks
+> 
+>   .../bindings/thermal/mediatek-thermal.txt     |   1 +
+>   drivers/thermal/mtk_thermal.c                 | 197 +++++++++++++++---
+>   2 files changed, 166 insertions(+), 32 deletions(-)
 
-Indeed, the arm64 DIT feature can be enabled in user space, subject to
-checking the HWCAP bit or the CPUID regs (via kernel trapping and
-emulation). The expectation was that some crypto routines would set it
-on function entry, restore it on return but...
+The series does not apply on the thermal tree.
 
-> - On CPUs without the feature (almost all ARMv8 ones), the register should
->   not betouched.
+Please refresh the series against:
 
-That's one of the drawbacks of using the features in user-space (the
-instruction is not in the hint/nop space). It can be worked around with
-ifunc resolvers but with a slight overhead on function calling.
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
 
-> - The bit is context switched on kernel entry, so setting the bit in user space
->   does not change the behavior inside of a syscall
-> - If we add a user space interface for setting the bit per thread on x86,
->   the same interface could be supported to set the bit on arm64 to save
->   user space implementations the trouble of checking the feature bits
+Thanks
 
-A prctl() would do here but I think the default should be off or at
-least allow a sysctl to control this. Enabling DIT could have a small
-performance impact while lots of (most?) apps don't need such
-guarantees.
-
-For arm64, my preference is to have this option per-thread and even be
-able to toggle it within a thread (not sure that's possible on x86
-without a syscall).
-
-Other random ideas of deploying this (for arm64): have an ELF annotation
-that data independent timing is required. If that's on the main
-executable, the kernel could turn it on for the app. If it's on a
-(crypto) library, it's up to the dynamic loader to either turn it on for
-the whole app or just use some function veneers to save/restore it when
-the library code is executed.
-
-I assume having this per-thread would work on x86 as well but I'm not
-sure about the context switching cost.
-
-> - the in-kernel crypto code does not set the bit today but could be easily
->   changed to do this for CPUs that support it, if we can decide on a policy
->   for when to enable or disable it.
-
-In the kernel it's easier, at least for arm64, to enable it for specific
-functions (we can do boot-time code patching).
-
-Whichever way we support it, I'd rather not turn it on by default.
-Talking to some of the Arm microarchitects, such feature may prevent
-certain hardware optimisations.
+   -- D.
 
 -- 
-Catalin
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
