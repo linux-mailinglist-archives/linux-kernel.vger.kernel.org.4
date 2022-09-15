@@ -2,151 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E002D5B943A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535E05B9443
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiIOGUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S229625AbiIOGZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIOGUh (ORCPT
+        with ESMTP id S229436AbiIOGZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:20:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107A786C12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:20:36 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28F4fTj5027215;
-        Thu, 15 Sep 2022 06:20:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=0QCkSf6gFwxLMIZPx2yxReIVBzztJVmr8VKWdZE286E=;
- b=UOWDyaiNRww9eK/j3dO/1kBE3YgT9lXeRkv3fDsqw/lTpSimKhUMAGWf4yOuXC5FtVAF
- ymrqZmx2XTGY+VTETxF21FrlRHYcGqoOq+Y4fhu6n4JhRfi3gQiVj90BYKWH09V2livF
- wpZ//PANXmbjgzkvv6a18du9XzwcHB5cLn/DBsO5GMHizNy1v0YoreV0ncK7Su4wbaXB
- oLJn32tb9K8X1htVkceVnEo2ZLPbUOdtaEcsLK/lI0LONeeEetO8Gs5AXWhNwwxCsksW
- v1dsu+KPJQhkYUQz8kF0vzmhvUDSf4FOZwDrAHZx1I0U3Z7eaJ6XrpOBRjHd1EvGm7nm UQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jkd9hu5vb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 06:20:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28F6KXG3025600
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 06:20:33 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 14 Sep 2022 23:20:31 -0700
-Date:   Thu, 15 Sep 2022 11:50:27 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <quic_charante@quicinc.com>
-Subject: Re: PSI idle-shutoff
-Message-ID: <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com>
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+        Thu, 15 Sep 2022 02:25:20 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA767677C;
+        Wed, 14 Sep 2022 23:25:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663223085; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=QhT+tIPCFvVSGigO6Bnk6e6Bh2/EWYUf/infZjmQGj6iO1TGNFp9mXguDuOUm/DpWvf1OgKkKfqzIb7ZN6l9ctq0lWG5/c7d1CSAjTq9cvsm/EE5alr2+5SNHKUxhuVbtlW8IBJ9ao1FlLD5+bECDV2zoGW0ERjC6wFnGpVteZ0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663223085; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=SaIR9ac/WNESLZgIJ7NfWDPlOEsbmM5EMrQeBc4rRcQ=; 
+        b=GuqatCqi3aNs0LWmQ5GNwlHSYYwAWDsF+H0n4REekizZUb117F/XuatyMC2g/jcD0YiW3vzn3hJN0FaaKwBPpjtMyOueJBdmUDuH34d8RrIXUsWSeagJIFN/B5GVfqb3tgRyCWelbulAdkRevrMZE3eXoEl767I/gNWhoQyVQ4Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663223085;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=SaIR9ac/WNESLZgIJ7NfWDPlOEsbmM5EMrQeBc4rRcQ=;
+        b=XDIDPnVMmzMdjdr4PWLtYOkpEuSco+I7L4NEGf6+WLphaJt9VGVtFjp9BCrmtJuU
+        7ij/J6uM1EF/jrYfl1rkVfuPnaeTFjQfXrlAeYxX/MKVqAxa1Ngir6nbwhzyqohMOwn
+        1gQDBTSmHpK+ZKrFbJ0+d3Q77xQtFQSvBjt7EQxw=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1663223084388940.7928349747789; Wed, 14 Sep 2022 23:24:44 -0700 (PDT)
+Message-ID: <aca736cd-a2f9-2af9-df59-7f8be7c991b6@arinc9.com>
+Date:   Thu, 15 Sep 2022 09:24:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AyIrcLYdueU_5JJqEPFa0cOwIXdh6XgJ
-X-Proofpoint-GUID: AyIrcLYdueU_5JJqEPFa0cOwIXdh6XgJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_02,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 phishscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209150033
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 04/10] dt-bindings: memory: mt7621: add syscon as
+ compatible string
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
+        netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+References: <20220914085451.11723-1-arinc.unal@arinc9.com>
+ <20220914085451.11723-5-arinc.unal@arinc9.com>
+ <20220914151414.GA2233841-robh@kernel.org>
+ <44045164-692d-c8f5-3216-b043fb821634@arinc9.com>
+ <CAMhs-H-0XV9ocrG3_MuVc3Q=o8HnYso2CqUURjVR3OMc=dAMYg@mail.gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CAMhs-H-0XV9ocrG3_MuVc3Q=o8HnYso2CqUURjVR3OMc=dAMYg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
-> Hi
+On 15.09.2022 06:21, Sergio Paracuellos wrote:
+> On Wed, Sep 14, 2022 at 5:19 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>
+>> On 14.09.2022 18:14, Rob Herring wrote:
+>>> On Wed, Sep 14, 2022 at 11:54:45AM +0300, Arınç ÜNAL wrote:
+>>>> Add syscon as a constant string on the compatible property as it's required
+>>>> for the SoC to work. Update the example accordingly.
+>>>
+>>> It's not required. It's required to automagically create a regmap. That
+>>> can be done yourself as well. The downside to adding 'syscon' is it
+>>> requires a DT update. Maybe that's fine for this platform? I don't know.
+>>
+>> My GB-PC2 won't boot without syscon on mt7621.dtsi. This string was
+>> always there on the memory controller node on mt7621.dtsi.
 > 
-> The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
-> run from a kworker thread, PSI_NONIDLE condition would be observed as
-> there is a RUNNING task. So we would always end up re-arming the work.
-> 
-> If the work is re-armed from the psi_avgs_work() it self, the backing off
-> logic in psi_task_change() (will be moved to psi_task_switch soon) can't
-> help. The work is already scheduled. so we don't do anything there.
-> 
-> Probably I am missing some thing here. Can you please clarify how we
-> shut off re-arming the psi avg work?
-> 
+> The string was introduced because the mt7621 clock driver needs to
+> read some registers creating a regmap from the syscon. The bindings
+> were added before the clock driver was properly mainlined and at first
+> the clock driver was using ralink architecture dependent operations
+> rt_memc_* defined in
+> 'arch/mips/include/asm/mach-ralink/ralink_regs.h'. I forgot to update
+> the mem controller binding when memc became a syscon so I think this
+> patch is correct. I also think the sample should use 'syscon' in the
+> node name instead of memory-controller.
 
-I have collected traces on an idle system (running android12-5.10 with minimal
-user space). This is a older kernel, however the issue remain on latest kernel
-as per code inspection.
+Will change to syscon in v2.
 
-I have eliminated noise created by other work items. For example, vmstat_work.
-This is a deferrable work but gets executed since this is queued on the same
-CPU on which PSI work timer is queued. So I have increased
-sysctl_stat_interval to 60 * HZ to supress this work.
-
-As we can see from the traces, CPU#7 comes out of idle only to execute PSI
-work for every 2 seconds. The work is always re-armed from the psi_avgs_work()
-as it finds PSI_NONIDLE condition. The non-idle time is essentially
-
-non_idle_time = (work_start_now - wakeup_now) + (sleep_prev - work_end_prev)
-
-The first term accounts the non-idle time since the task woken up (queued) to
-the execution of the work item. It is around ~4 usec (54.119420 - 54.119416)
-
-The second term account for the previous update. ~2 usec (52.135424 -
-52.135422).
-
-PSI work needs to be run when there is some activity after the last update is done
-i.e last time the work is run. Since we use non-deferrable timer, the other
-deferrable timers gets woken up and they might queue work or wakeup other threads
-and creates activity which inturn makes PSI work to be scheduled.
-
-PSI work can't just be made deferrable work. Because, it is a system level
-work and if the CPU on which it is queued is idle for longer duration but the
-other CPUs are active, we miss PSI updates. What we probably need is a global
-deferrable timers [1] i.e this timer should not be bound to any CPU but
-run when any of the CPU comes out of idle. As long as one CPU is busy, we keep
-running the PSI but if the whole system is idle, we never wakeup.
-
-          <idle>-0     [007]    52.135402: cpu_idle:             state=4294967295 cpu_id=7
-          <idle>-0     [007]    52.135415: workqueue_activate_work: work struct 0xffffffc011bd5010
-          <idle>-0     [007]    52.135417: sched_wakeup:         comm=kworker/7:3 pid=196 prio=120 target_cpu=007
-          <idle>-0     [007]    52.135421: sched_switch:         prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/7:3 next_pid=196 next_prio=120
-     kworker/7:3-196   [007]    52.135421: workqueue_execute_start: work struct 0xffffffc011bd5010: function psi_avgs_work
-     kworker/7:3-196   [007]    52.135422: timer_start:          timer=0xffffffc011bd5040 function=delayed_work_timer_fn expires=4294905814 [timeout=494] cpu=7 idx=123 flags=D|P|I
-     kworker/7:3-196   [007]    52.135422: workqueue_execute_end: work struct 0xffffffc011bd5010: function psi_avgs_work
-     kworker/7:3-196   [007]    52.135424: sched_switch:         prev_comm=kworker/7:3 prev_pid=196 prev_prio=120 prev_state=I ==> next_comm=swapper/7 next_pid=0 next_prio=120
-          <idle>-0     [007]    52.135428: cpu_idle:             state=0 cpu_id=7
-
-	  <system is idle and gets woken up after 2 seconds due to PSI work>
-
-          <idle>-0     [007]    54.119402: cpu_idle:             state=4294967295 cpu_id=7
-          <idle>-0     [007]    54.119414: workqueue_activate_work: work struct 0xffffffc011bd5010
-          <idle>-0     [007]    54.119416: sched_wakeup:         comm=kworker/7:3 pid=196 prio=120 target_cpu=007
-          <idle>-0     [007]    54.119420: sched_switch:         prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/7:3 next_pid=196 next_prio=120
-     kworker/7:3-196   [007]    54.119420: workqueue_execute_start: work struct 0xffffffc011bd5010: function psi_avgs_work
-     kworker/7:3-196   [007]    54.119421: timer_start:          timer=0xffffffc011bd5040 function=delayed_work_timer_fn expires=4294906315 [timeout=499] cpu=7 idx=122 flags=D|P|I
-     kworker/7:3-196   [007]    54.119422: workqueue_execute_end: work struct 0xffffffc011bd5010: function psi_avgs_work
-
-[1]
-https://lore.kernel.org/lkml/1430188744-24737-1-git-send-email-joonwoop@codeaurora.org/
-
-Thanks,
-Pavan
+Arınç
