@@ -2,153 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBB05B9949
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B0A5B994D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiIOLEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S229804AbiIOLE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIOLEW (ORCPT
+        with ESMTP id S229636AbiIOLE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:04:22 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B819926F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:04:21 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3450990b0aeso214994817b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:04:21 -0700 (PDT)
+        Thu, 15 Sep 2022 07:04:56 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A74B5C950;
+        Thu, 15 Sep 2022 04:04:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z13so12413771edb.13;
+        Thu, 15 Sep 2022 04:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Fjdmt49Ip6IrMmuwN3vP4Pv2wpYe0K89XUz1Xteq1mY=;
-        b=Kb++79upi6ZTFZJV2hwSGbfOJio8ZRLuBoYUkuGjepiU/FlyqLePo7fQ6FO6XQKPuq
-         TwY/2NUsz2viNbON85Vpb2sXvMrUnuRyovsqd7JhCVPlgQwCBDmYVJQSZNLoW8Tt/BLJ
-         959QybdG+5G6VrQs9VUFjjHm5IDWMWp118ByJ23G1U3rzfFVHYQSkIOVMgnXncGnplUP
-         wQUN4MQMezpJTsFXOffMasb9m3LYQrqzuXMwSzArM3TqWH/ldnp3VmzGrH9/LcC6hygR
-         1h6/eTvdz/48wYADMpO3IXE5xcyzld/QNuh6BUH1MVdnjbExQoGlF4iRvwv766fxFrqS
-         dSMg==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=epQ8InS75MD280wupDQB3IBzd82ZH3sQJKCVkfM2TGg=;
+        b=ciDGfT7HtzQDgSHYqWXlOO/+arroyPF21ToQUqDajPdpqQm1ZoGZdZmzbfqZ5lePxi
+         jlyWDf0dlHru/Ip9EF6gRjb0syWftBFbkmjFlkIxvyVaQog3MfIrMyEPMoJj1RPihfbw
+         4SL2WK+l4bns8g+KkMUctmZ4MhgDsUSRt02N8rrFb66mWjouPb/B7e2muf589amzbB+A
+         BtmE6NUIBcaHz8XS6R8jpqsrQ1UfGUK8cSjr45Cu5+vCsdtPI+z9NDeaDB9w++jKyzYp
+         BUKypeMc5+cGZUxYryldVNCyquhXIJRYQC/BiqQ6LTCiADFqscc4XekxpMHw6yFLfwOJ
+         uo4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Fjdmt49Ip6IrMmuwN3vP4Pv2wpYe0K89XUz1Xteq1mY=;
-        b=0M7SglAx/OoeMFudpAzNWULtJJxARXNJ9cRGVtDla36Y+q10hHPothN1442r1vrJ6V
-         SuIOJqdbiWwmNJX9zNwYvXO+pyeWttG2sfJJcvh6bk/FzcvK/mK7zsppK6eBl+BGFnuZ
-         dKWhMdhAyDAyWJiWB7pALR8/WECHnXzIyj+lSAAWhRJu+yh+Z9WpJ/qH0DNp+RGHrMbo
-         7pN/jMM5bjh/GEaN/TzOnqB3UVIsgTKk2rG88hBN1Q7FzuoaQ33Jz1KsUwOKk7LrGSB7
-         d7FoBXcXF1Py4YdqFrbBMdmUpiEvpTqp9me9pO6lZ5hUyozQ81LilhGKzFkY9rd6nS+K
-         Ediw==
-X-Gm-Message-State: ACgBeo3DJp335RPbZ0fbsytVaOtqXDBnnkjZPZ0RQZcwmscFVm0nC0zB
-        F3QX7kohlXf3saVICqtajD6GtCgy/++9U4TRDS5Lvg==
-X-Google-Smtp-Source: AA6agR4GL88S9tVhRmjA6i/uTEy7NyuRQAaU9cz/cIZdqHJpBAPT5tAcPdAYvuxOxAY+H8MVrip6/s9i3CauqquYrGE=
-X-Received: by 2002:a81:1988:0:b0:345:11a6:fa56 with SMTP id
- 130-20020a811988000000b0034511a6fa56mr34928167ywz.138.1663239860269; Thu, 15
- Sep 2022 04:04:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220915085733.20290-1-luca.weiss@fairphone.com>
-In-Reply-To: <20220915085733.20290-1-luca.weiss@fairphone.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 15 Sep 2022 14:04:09 +0300
-Message-ID: <CAA8EJppkPgNpiyVW+JGzPTzC2wW0Z+qv1DRMWWTYv=p6x0mH7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] mfd: qcom-spmi-pmic: Add more PMIC SUBTYPE IDs
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=epQ8InS75MD280wupDQB3IBzd82ZH3sQJKCVkfM2TGg=;
+        b=0kmQbVW3855xcUkt881oRXLH81hm/hXTSrL6XhLGwH034U3AdHXvJ/74G3BGB1TvLx
+         8NeHVPv9e7mosRXkPqdFlmaAPE6zp3GM3favSyy+2YWNgt1Grrwm5gOCPC0Z4FmoGK4n
+         AQfmgE75nGutdViO3j/svvGBfwL7osemeyf85zmlTu5FmwxHWJF25SIqbviiZ/hITJLo
+         B07dzE5o1HwE6hqo+fbD0hed48Xr033j6uaGqV5NW6MqgFKj7b3tsBSAjm5yWat6UX12
+         wJHYSuLrFSlKLd8JZGS4xAcW/72+DR7t35Ltdn722pfogkE+LXAJ9wmK2uy6Wuhv0fgD
+         G32Q==
+X-Gm-Message-State: ACgBeo2InFfZNq+7Hz5rSxJZJp+mAKB2rsFmt6welsJa/V8G4qE8n7GU
+        +f+FHpIvwttZhBDC2iJD08Q=
+X-Google-Smtp-Source: AA6agR4/jmZ6j70+E1u5vwISD+3igDZWFjvJ41mlLCc9W3Rx1k2I6VMawVE/+rA8V8wsI8982zq3OA==
+X-Received: by 2002:aa7:da4f:0:b0:44e:864b:7a3e with SMTP id w15-20020aa7da4f000000b0044e864b7a3emr35151743eds.378.1663239893690;
+        Thu, 15 Sep 2022 04:04:53 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa7c90d000000b0044eda621b08sm11784112edt.54.2022.09.15.04.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 04:04:52 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 13:04:51 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] cpuidle: tegra: Fix comment typo
+Message-ID: <YyMG0xBCp3j21vxP@orome>
+References: <20220715050144.24638-1-wangborong@cdjrlc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wjX9SZ+Gk/1NXCEd"
+Content-Disposition: inline
+In-Reply-To: <20220715050144.24638-1-wangborong@cdjrlc.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sept 2022 at 11:58, Luca Weiss <luca.weiss@fairphone.com> wrote:
->
-> Add more IDs that are found in the downstream msm-4.19 kernel under the
-> path include/linux/qpnp/qpnp-revid.h.
->
-> While we're at it, make sure all hex numbers are uppercase and
-> consistent in this file.
 
-Please make all hex numbers lowercase. If they are uppercase
-somewhere, it's worth fixing.
+--wjX9SZ+Gk/1NXCEd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Additionally, it would be better to split this patch. One fixes the
-case, another one adds the new IDs. It would help the review a lot.
-
->
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+On Fri, Jul 15, 2022 at 01:01:44PM +0800, Jason Wang wrote:
+> The double `that' is duplicated in line 275, remove one.
+>=20
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 > ---
-> Changes in v2:
-> * Convert existing lowercase hex numbers to uppercase
->
->  include/soc/qcom/qcom-spmi-pmic.h | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
->
-> diff --git a/include/soc/qcom/qcom-spmi-pmic.h b/include/soc/qcom/qcom-spmi-pmic.h
-> index 72398ff44719..f1c9f1676fb4 100644
-> --- a/include/soc/qcom/qcom-spmi-pmic.h
-> +++ b/include/soc/qcom/qcom-spmi-pmic.h
-> @@ -18,26 +18,40 @@
->  #define PMI8962_SUBTYPE                0x07
->  #define PMD9635_SUBTYPE                0x08
->  #define PM8994_SUBTYPE         0x09
-> -#define PMI8994_SUBTYPE                0x0a
-> -#define PM8916_SUBTYPE         0x0b
-> -#define PM8004_SUBTYPE         0x0c
-> -#define PM8909_SUBTYPE         0x0d
-> -#define PM8028_SUBTYPE         0x0e
-> -#define PM8901_SUBTYPE         0x0f
-> +#define PMI8994_SUBTYPE                0x0A
-> +#define PM8916_SUBTYPE         0x0B
-> +#define PM8004_SUBTYPE         0x0C
-> +#define PM8909_SUBTYPE         0x0D
-> +#define PM8028_SUBTYPE         0x0E
-> +#define PM8901_SUBTYPE         0x0F
->  #define PM8950_SUBTYPE         0x10
->  #define PMI8950_SUBTYPE                0x11
-> +#define PMK8001_SUBTYPE                0x12
-> +#define PMI8996_SUBTYPE                0x13
->  #define PM8998_SUBTYPE         0x14
->  #define PMI8998_SUBTYPE                0x15
-> +#define SMB1381_SUBTYPE                0x17
->  #define PM8005_SUBTYPE         0x18
->  #define PM660L_SUBTYPE         0x1A
->  #define PM660_SUBTYPE          0x1B
-> +#define SMB1355_SUBTYPE                0x1C
->  #define PM8150_SUBTYPE         0x1E
-> -#define PM8150L_SUBTYPE                0x1f
-> +#define PM8150L_SUBTYPE                0x1F
->  #define PM8150B_SUBTYPE                0x20
->  #define PMK8002_SUBTYPE                0x21
-> +#define SMB1390_SUBTYPE                0x23
->  #define PM8009_SUBTYPE         0x24
-> +#define PMI632_SUBTYPE         0x25
->  #define PM8150C_SUBTYPE                0x26
-> +#define PM6150_SUBTYPE         0x28
->  #define SMB2351_SUBTYPE                0x29
-> +#define PM8008_SUBTYPE         0x2C
-> +#define PM6125_SUBTYPE         0x2D
-> +#define PM7250B_SUBTYPE                0x2E
-> +#define PMK8350_SUBTYPE                0x2F
-> +#define PMR735B_SUBTYPE                0x34
-> +#define PM6350_SUBTYPE         0x36
-> +#define PM2250_SUBTYPE         0x37
->
->  #define PMI8998_FAB_ID_SMIC    0x11
->  #define PMI8998_FAB_ID_GF      0x30
-> --
-> 2.37.3
->
+>  drivers/cpuidle/cpuidle-tegra.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Acked-by: Thierry Reding <treding@nvidia.com>
 
--- 
-With best wishes
-Dmitry
+--wjX9SZ+Gk/1NXCEd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjBtIACgkQ3SOs138+
+s6GtVg/+PGXrwMBuRguZzhdIsG0XLqZ3sNbquJjNzLboECmthcYlKyi5d2xUNxNp
+wf2CiMw95KgAxeLrqGI6c5ClWlkp8RJ6AcRNSUe/FRk5KCRJDEaELP/QeL71Xpo6
+7HFUHXzXLxATtqn78Mm4Z25N8YMVQebfb6Zd4QqN5U7R1n+Psej1WStKUJs373H8
+1XokCQBgI6x6fxN4d5KnULepFiwj/OxUIHCHVWYO6CQgH2RsXYg7/HtNoZ4doDAz
+0/lDjM7xkwLZNdyMv5yYKM5ZXyHBiFQ9x3DOPEufKGdhB/hInravhqjKqWXeKcQ0
+VL2QYNEXm9L4/lYrK3pp4eUPO3E+/L1+KT/RMJetYAL6VrXvucwWLbkdL40y5QeN
+T1twnwbXGiZcp28X4KDc0W136Xia6VU0anmD4SVDQmCm0TLGW4qyBbF/J3Avt11v
+7CtqTEgL37XQ47jstaKWcYC45KKWpuZg4IBFox0Sh+wmsOA3cuICJeKZn6uk33kD
+HVF03XeKFq4qt0KI/CV5WzlVY1x0Gq6P7cmSMf04fWPULYsG1EIjg2wKi1ILmxOv
+WHZEw5jS7Gx/Oe2Dcmc31uK/pgfHBeBW4oDDSyuOwLakBuq/wcwrKZZqjDvjIbrh
+2SGoY3gvRiDc3VAQlJEzgTIeE/6dNdVS48QE5Wudx41y6Wqm9xM=
+=V2qv
+-----END PGP SIGNATURE-----
+
+--wjX9SZ+Gk/1NXCEd--
