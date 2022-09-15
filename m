@@ -2,296 +2,459 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C31C5BA08F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 19:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC535BA091
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiIOR5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 13:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S229939AbiIOSC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIOR5h (ORCPT
+        with ESMTP id S229484AbiIOSCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 13:57:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAE4491E1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 10:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663264656; x=1694800656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TpS2tPZdLSnp5+iWuiwtpvbZrLKT16mqrgl6PYqXofs=;
-  b=gxP0d5eGsxumi85I/Pn+WR39PoPagU8h062si5osLk0i/YBq7Q5NVn+/
-   CmArAEg7nvkZHRtx/nCWCgVAO86Z4BFwaYUVTpvSFtSZH5P9q6Lm5F/n5
-   x7V7i+0aEwrbUY4CIcbN5zx1PX40EgY6OooVX6QxnhR2dHALxwfQSonFO
-   Q3bxLKIRMepQufpXKn9Esg8MnR0mBi5fl8ZEhFgFI6SgVPlD5aBakHPdz
-   NCDXf/5yY5TO+lAVudqay78aqBWizy6uUv+6Wwz4cGiSunHxnJJurDqlm
-   5YaUDPcHb0crshoYu6XuTVs5dFWCJgj3QecznQLaOzlFLoSUPwvT+h4wH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="296383560"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="296383560"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 10:57:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="594930606"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Sep 2022 10:57:30 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYt7B-0000oV-1h;
-        Thu, 15 Sep 2022 17:57:29 +0000
-Date:   Fri, 16 Sep 2022 01:56:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>
-Subject: drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202209160154.prhjF2zM-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 14:02:22 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A507D9F1A9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 11:02:20 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-11eab59db71so48554974fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 11:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date;
+        bh=ss3eRaL0gXeJrn3R7HYYgXhJN6Op+KXgjz9KZlNBKgg=;
+        b=Ju5qn1qJsLmcNJn6qlbitaXay1It2cWK6SOKyu5QVWmGCEj6GWi/9/cSW7Y91hJost
+         91tXtQ76Q0nYx6+SV852O8XEAbooNezG79fZH2zA6Dv7a42BO3z1pzrArmMcpLrrxMLn
+         uZ0A0YzCA9gWeVI/VacFj7dwDdv8BJQaBrcuWmNowuNHdkHddhVzTysrRbW0UbplcXyA
+         MY41oMJRh7hFceBtAtQMGSYjTBtufqyQDVwSqq2aS3YeRhj2VdHtC15rWHT8nzhVt65x
+         ww6+9z53lrbuMkCo3Ce+aVLAxKiSwrV/HrWmIwTBU0pj18+UVTmUGb602EiH9y/3eeiQ
+         eJWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ss3eRaL0gXeJrn3R7HYYgXhJN6Op+KXgjz9KZlNBKgg=;
+        b=UoWpgyEnvpD70YWklh9k8R7UNIeahvGTkrm8bHprAGQfZ9WfAhnGuBbZaRI7z3fDiD
+         JYTxlyf1AIUv3obf8dTScK65v+Br7ou4qYoBs5ePSDqlm+rqCnVEb9nTd/u05xSa6BU0
+         X6NemZpUzjp2pOA16ORBdSjGte2qqVQwUxhUqTdjZ+qU+wc/ztao3+bPV+FL9aMQ6i6Z
+         hsHSc+6obrR4o8FGFtzhz3+/zes+ve0ChzjhQK9VcufZwv1p4Rbfm28eUtFDZgj8XckX
+         hceIwzsyslhB1VeJrtIlez3xzzGssEFsMGJz2owD6XVj8aeRu0SDW8oI9g2/atAfL7ON
+         ITMw==
+X-Gm-Message-State: ACgBeo1SoyjJjAX8Lm6q1bwsI26oxHtAl0JVkh89u4ECzGlYWivu0p4l
+        orhyd+18GjYwN6dnlT4dOCG0Dw==
+X-Google-Smtp-Source: AA6agR6TMq6OnJEm3t+FkQ2H3n+rsevs7EYSKjo2sNA+izpxPGxHoB9x/ba0VfEKaekuLeL5yOSEng==
+X-Received: by 2002:a05:6870:f721:b0:12b:f4bc:9ee3 with SMTP id ej33-20020a056870f72100b0012bf4bc9ee3mr6184464oab.106.1663264939734;
+        Thu, 15 Sep 2022 11:02:19 -0700 (PDT)
+Received: from localhost ([172.58.176.196])
+        by smtp.gmail.com with ESMTPSA id l14-20020a056830054e00b00655dda40f54sm6702018otb.78.2022.09.15.11.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 11:02:19 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 11:02:19 -0700 (PDT)
+X-Google-Original-Date: Thu, 15 Sep 2022 10:59:54 PDT (-0700)
+Subject:     Re: [PATCH v2] riscv: vdso: fix NULL deference in vdso_join_timens() when vfork
+In-Reply-To: <20220908150421.323-1-jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        guoren@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-25f0a2ef-5eea-4567-95ff-438c2285c7ee@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Thu, 08 Sep 2022 08:04:21 PDT (-0700), jszhang@kernel.org wrote:
+> Testing tools/testing/selftests/timens/vfork_exec.c got below
+> kernel log:
+>
+> [    6.838454] Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000020
+> [    6.842255] Oops [#1]
+> [    6.842871] Modules linked in:
+> [    6.844249] CPU: 1 PID: 64 Comm: vfork_exec Not tainted 6.0.0-rc3-rt15+ #8
+> [    6.845861] Hardware name: riscv-virtio,qemu (DT)
+> [    6.848009] epc : vdso_join_timens+0xd2/0x110
+> [    6.850097]  ra : vdso_join_timens+0xd2/0x110
+> [    6.851164] epc : ffffffff8000635c ra : ffffffff8000635c sp : ff6000000181fbf0
+> [    6.852562]  gp : ffffffff80cff648 tp : ff60000000fdb700 t0 : 3030303030303030
+> [    6.853852]  t1 : 0000000000000030 t2 : 3030303030303030 s0 : ff6000000181fc40
+> [    6.854984]  s1 : ff60000001e6c000 a0 : 0000000000000010 a1 : ffffffff8005654c
+> [    6.856221]  a2 : 00000000ffffefff a3 : 0000000000000000 a4 : 0000000000000000
+> [    6.858114]  a5 : 0000000000000000 a6 : 0000000000000008 a7 : 0000000000000038
+> [    6.859484]  s2 : ff60000001e6c068 s3 : ff6000000108abb0 s4 : 0000000000000000
+> [    6.860751]  s5 : 0000000000001000 s6 : ffffffff8089dc40 s7 : ffffffff8089dc38
+> [    6.862029]  s8 : ffffffff8089dc30 s9 : ff60000000fdbe38 s10: 000000000000005e
+> [    6.863304]  s11: ffffffff80cc3510 t3 : ffffffff80d1112f t4 : ffffffff80d1112f
+> [    6.864565]  t5 : ffffffff80d11130 t6 : ff6000000181fa00
+> [    6.865561] status: 0000000000000120 badaddr: 0000000000000020 cause: 000000000000000d
+> [    6.868046] [<ffffffff8008dc94>] timens_commit+0x38/0x11a
+> [    6.869089] [<ffffffff8008dde8>] timens_on_fork+0x72/0xb4
+> [    6.870055] [<ffffffff80190096>] begin_new_exec+0x3c6/0x9f0
+> [    6.871231] [<ffffffff801d826c>] load_elf_binary+0x628/0x1214
+> [    6.872304] [<ffffffff8018ee7a>] bprm_execve+0x1f2/0x4e4
+> [    6.873243] [<ffffffff8018f90c>] do_execveat_common+0x16e/0x1ee
+> [    6.874258] [<ffffffff8018f9c8>] sys_execve+0x3c/0x48
+> [    6.875162] [<ffffffff80003556>] ret_from_syscall+0x0/0x2
+> [    6.877484] ---[ end trace 0000000000000000 ]---
+>
+> This is because the mm->context.vdso_info is NULL in vfork case. From
+> another side, mm->context.vdso_info either points to vdso info
+> for RV64 or vdso info for compat, there's no need to bloat riscv's
+> mm_context_t, we can handle the difference when setup the additional
+> page for vdso.
 
-First bad commit (maybe != root cause):
+Makes sense, but I think there's a lot more diff here than we need in 
+order to just fix the bug.  Does something like the following still fix 
+it?  Also at kernel.org/palmer/vdso-fix-v3 .  Maybe it's a bit pedantic 
+, but this late in the cycle with everyone traveling I'd prefer to keep 
+the fixes smaller when possible.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-commit: b3ed524f84f573ece1aa2f26e9db3c34a593e0d1 drm/msm: allow compile_test on !ARM
-date:   12 months ago
-config: mips-randconfig-s041-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160154.prhjF2zM-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3ed524f84f573ece1aa2f26e9db3c34a593e0d1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b3ed524f84f573ece1aa2f26e9db3c34a593e0d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/msm/
+diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+index cedcf8ea3c76..0099dc116168 100644
+--- a/arch/riscv/include/asm/mmu.h
++++ b/arch/riscv/include/asm/mmu.h
+@@ -16,7 +16,6 @@ typedef struct {
+ 	atomic_long_t id;
+ #endif
+ 	void *vdso;
+-	void *vdso_info;
+ #ifdef CONFIG_SMP
+ 	/* A local icache flush is needed before user execution can resume. */
+ 	cpumask_t icache_stale_mask;
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index 69b05b6c181b..58b8d73a4b1f 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -23,8 +23,10 @@ struct vdso_data {
+ #endif
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ extern char vdso_start[], vdso_end[];
++static struct __vdso_info vdso_info;
+ #ifdef CONFIG_COMPAT
+ extern char compat_vdso_start[], compat_vdso_end[];
++static struct __vdso_info compat_vdso_info;
+ #endif
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     got void *
->> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c: note: in included file:
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     expected void [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:34: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     expected void [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:34: sparse: sparse: dereference of noderef expression
---
->> drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     got void *
->> drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse:     expected void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse:     expected void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] mmio @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse:     got void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] rscc @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse:     got void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[noderef] mmio @@     got void [noderef] __iomem * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse:     expected void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse:     got void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[noderef] rscc @@     got void [noderef] __iomem * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse:     expected void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse:     got void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] mmio @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse:     got void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] rscc @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse:     got void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c: note: in included file (through drivers/gpu/drm/msm/adreno/a6xx_gpu.h):
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:93:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got void * @@
+ enum vvar_pages {
+@@ -114,15 +116,18 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ {
+ 	struct mm_struct *mm = task->mm;
+ 	struct vm_area_struct *vma;
+-	struct __vdso_info *vdso_info = mm->context.vdso_info;
 
-vim +104 drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+ 	mmap_read_lock(mm);
 
-4b565ca5a2cbbb Jordan Crouse  2018-08-06   95  
-df0dff13290597 Jordan Crouse  2018-09-20   96  static int a6xx_hfi_wait_for_ack(struct a6xx_gmu *gmu, u32 id, u32 seqnum,
-df0dff13290597 Jordan Crouse  2018-09-20   97  		u32 *payload, u32 payload_size)
-df0dff13290597 Jordan Crouse  2018-09-20   98  {
-df0dff13290597 Jordan Crouse  2018-09-20   99  	struct a6xx_hfi_queue *queue = &gmu->queues[HFI_RESPONSE_QUEUE];
-df0dff13290597 Jordan Crouse  2018-09-20  100  	u32 val;
-df0dff13290597 Jordan Crouse  2018-09-20  101  	int ret;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  102  
-df0dff13290597 Jordan Crouse  2018-09-20  103  	/* Wait for a response */
-df0dff13290597 Jordan Crouse  2018-09-20 @104  	ret = gmu_poll_timeout(gmu, REG_A6XX_GMU_GMU2HOST_INTR_INFO, val,
-df0dff13290597 Jordan Crouse  2018-09-20  105  		val & A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ, 100, 5000);
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  106  
-df0dff13290597 Jordan Crouse  2018-09-20  107  	if (ret) {
-6a41da17e87dee Mamta Shukla   2018-10-20  108  		DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  109  			"Message %s id %d timed out waiting for response\n",
-df0dff13290597 Jordan Crouse  2018-09-20  110  			a6xx_hfi_msg_id[id], seqnum);
-df0dff13290597 Jordan Crouse  2018-09-20  111  		return -ETIMEDOUT;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  112  	}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  113  
-df0dff13290597 Jordan Crouse  2018-09-20  114  	/* Clear the interrupt */
-df0dff13290597 Jordan Crouse  2018-09-20  115  	gmu_write(gmu, REG_A6XX_GMU_GMU2HOST_INTR_CLR,
-df0dff13290597 Jordan Crouse  2018-09-20  116  		A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ);
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  117  
-df0dff13290597 Jordan Crouse  2018-09-20  118  	for (;;) {
-df0dff13290597 Jordan Crouse  2018-09-20  119  		struct a6xx_hfi_msg_response resp;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  120  
-df0dff13290597 Jordan Crouse  2018-09-20  121  		/* Get the next packet */
-8167e6fa76c8f7 Jonathan Marek 2020-04-23  122  		ret = a6xx_hfi_queue_read(gmu, queue, (u32 *) &resp,
-df0dff13290597 Jordan Crouse  2018-09-20  123  			sizeof(resp) >> 2);
-df0dff13290597 Jordan Crouse  2018-09-20  124  
-df0dff13290597 Jordan Crouse  2018-09-20  125  		/* If the queue is empty our response never made it */
-df0dff13290597 Jordan Crouse  2018-09-20  126  		if (!ret) {
-6a41da17e87dee Mamta Shukla   2018-10-20  127  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  128  				"The HFI response queue is unexpectedly empty\n");
-df0dff13290597 Jordan Crouse  2018-09-20  129  
-df0dff13290597 Jordan Crouse  2018-09-20  130  			return -ENOENT;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  131  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  132  
-df0dff13290597 Jordan Crouse  2018-09-20  133  		if (HFI_HEADER_ID(resp.header) == HFI_F2H_MSG_ERROR) {
-df0dff13290597 Jordan Crouse  2018-09-20  134  			struct a6xx_hfi_msg_error *error =
-df0dff13290597 Jordan Crouse  2018-09-20  135  				(struct a6xx_hfi_msg_error *) &resp;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  136  
-6a41da17e87dee Mamta Shukla   2018-10-20  137  			DRM_DEV_ERROR(gmu->dev, "GMU firmware error %d\n",
-df0dff13290597 Jordan Crouse  2018-09-20  138  				error->code);
-df0dff13290597 Jordan Crouse  2018-09-20  139  			continue;
-df0dff13290597 Jordan Crouse  2018-09-20  140  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  141  
-df0dff13290597 Jordan Crouse  2018-09-20  142  		if (seqnum != HFI_HEADER_SEQNUM(resp.ret_header)) {
-6a41da17e87dee Mamta Shukla   2018-10-20  143  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  144  				"Unexpected message id %d on the response queue\n",
-df0dff13290597 Jordan Crouse  2018-09-20  145  				HFI_HEADER_SEQNUM(resp.ret_header));
-df0dff13290597 Jordan Crouse  2018-09-20  146  			continue;
-df0dff13290597 Jordan Crouse  2018-09-20  147  		}
-df0dff13290597 Jordan Crouse  2018-09-20  148  
-df0dff13290597 Jordan Crouse  2018-09-20  149  		if (resp.error) {
-6a41da17e87dee Mamta Shukla   2018-10-20  150  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  151  				"Message %s id %d returned error %d\n",
-df0dff13290597 Jordan Crouse  2018-09-20  152  				a6xx_hfi_msg_id[id], seqnum, resp.error);
-df0dff13290597 Jordan Crouse  2018-09-20  153  			return -EINVAL;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  154  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  155  
-df0dff13290597 Jordan Crouse  2018-09-20  156  		/* All is well, copy over the buffer */
-df0dff13290597 Jordan Crouse  2018-09-20  157  		if (payload && payload_size)
-df0dff13290597 Jordan Crouse  2018-09-20  158  			memcpy(payload, resp.payload,
-df0dff13290597 Jordan Crouse  2018-09-20  159  				min_t(u32, payload_size, sizeof(resp.payload)));
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  160  
-df0dff13290597 Jordan Crouse  2018-09-20  161  		return 0;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  162  	}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  163  }
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  164  
+ 	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+ 		unsigned long size = vma->vm_end - vma->vm_start;
 
-:::::: The code at line 104 was first introduced by commit
-:::::: df0dff132905974697e2a19aa8bcc0ecc447c00e drm/msm/a6xx: Poll for HFI responses
+-		if (vma_is_special_mapping(vma, vdso_info->dm))
++		if (vma_is_special_mapping(vma, vdso_info.dm))
+ 			zap_page_range(vma, vma->vm_start, size);
++#ifdef CONFIG_COMPAT
++		if (vma_is_special_mapping(vma, compat_vdso_info.dm))
++			zap_page_range(vma, vma->vm_start, size);
++#endif
+ 	}
 
-:::::: TO: Jordan Crouse <jcrouse@codeaurora.org>
-:::::: CC: Rob Clark <robdclark@gmail.com>
+ 	mmap_read_unlock(mm);
+@@ -264,7 +269,6 @@ static int __setup_additional_pages(struct mm_struct *mm,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ 	vdso_base += VVAR_SIZE;
+ 	mm->context.vdso = (void *)vdso_base;
+-	mm->context.vdso_info = (void *)vdso_info;
+
+ 	ret =
+ 	   _install_special_mapping(mm, vdso_base, vdso_text_len,
+
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Fixes: 3092eb456375 ("riscv: compat: vdso: Add setup additional pages implementation")
+> ---
+>
+> since v1:
+>  - add "Fixes" tag
+>  - fix build error when CONFIG_COMPAT is enabled.
+>
+>  arch/riscv/include/asm/mmu.h |   1 -
+>  arch/riscv/kernel/vdso.c     | 178 +++++++++++++++++++----------------
+>  2 files changed, 95 insertions(+), 84 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+> index cedcf8ea3c76..0099dc116168 100644
+> --- a/arch/riscv/include/asm/mmu.h
+> +++ b/arch/riscv/include/asm/mmu.h
+> @@ -16,7 +16,6 @@ typedef struct {
+>  	atomic_long_t id;
+>  #endif
+>  	void *vdso;
+> -	void *vdso_info;
+>  #ifdef CONFIG_SMP
+>  	/* A local icache flush is needed before user execution can resume. */
+>  	cpumask_t icache_stale_mask;
+> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+> index 69b05b6c181b..8ca3b821e1b5 100644
+> --- a/arch/riscv/kernel/vdso.c
+> +++ b/arch/riscv/kernel/vdso.c
+> @@ -27,6 +27,11 @@ extern char vdso_start[], vdso_end[];
+>  extern char compat_vdso_start[], compat_vdso_end[];
+>  #endif
+>
+> +enum vdso_abi {
+> +	VDSO_ABI_RV64,
+> +	VDSO_ABI_RV32,
+> +};
+> +
+>  enum vvar_pages {
+>  	VVAR_DATA_PAGE_OFFSET,
+>  	VVAR_TIMENS_PAGE_OFFSET,
+> @@ -68,67 +73,7 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
+>  	return 0;
+>  }
+>
+> -static void __init __vdso_init(struct __vdso_info *vdso_info)
+> -{
+> -	unsigned int i;
+> -	struct page **vdso_pagelist;
+> -	unsigned long pfn;
+> -
+> -	if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
+> -		panic("vDSO is not a valid ELF object!\n");
+> -
+> -	vdso_info->vdso_pages = (
+> -		vdso_info->vdso_code_end -
+> -		vdso_info->vdso_code_start) >>
+> -		PAGE_SHIFT;
+> -
+> -	vdso_pagelist = kcalloc(vdso_info->vdso_pages,
+> -				sizeof(struct page *),
+> -				GFP_KERNEL);
+> -	if (vdso_pagelist == NULL)
+> -		panic("vDSO kcalloc failed!\n");
+> -
+> -	/* Grab the vDSO code pages. */
+> -	pfn = sym_to_pfn(vdso_info->vdso_code_start);
+> -
+> -	for (i = 0; i < vdso_info->vdso_pages; i++)
+> -		vdso_pagelist[i] = pfn_to_page(pfn + i);
+> -
+> -	vdso_info->cm->pages = vdso_pagelist;
+> -}
+> -
+>  #ifdef CONFIG_TIME_NS
+> -struct vdso_data *arch_get_vdso_data(void *vvar_page)
+> -{
+> -	return (struct vdso_data *)(vvar_page);
+> -}
+> -
+> -/*
+> - * The vvar mapping contains data for a specific time namespace, so when a task
+> - * changes namespace we must unmap its vvar data for the old namespace.
+> - * Subsequent faults will map in data for the new namespace.
+> - *
+> - * For more details see timens_setup_vdso_data().
+> - */
+> -int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+> -{
+> -	struct mm_struct *mm = task->mm;
+> -	struct vm_area_struct *vma;
+> -	struct __vdso_info *vdso_info = mm->context.vdso_info;
+> -
+> -	mmap_read_lock(mm);
+> -
+> -	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+> -		unsigned long size = vma->vm_end - vma->vm_start;
+> -
+> -		if (vma_is_special_mapping(vma, vdso_info->dm))
+> -			zap_page_range(vma, vma->vm_start, size);
+> -	}
+> -
+> -	mmap_read_unlock(mm);
+> -	return 0;
+> -}
+> -
+>  static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+>  {
+>  	if (likely(vma->vm_mm == current->mm))
+> @@ -197,13 +142,6 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+>  	},
+>  };
+>
+> -static struct __vdso_info vdso_info __ro_after_init = {
+> -	.name = "vdso",
+> -	.vdso_code_start = vdso_start,
+> -	.vdso_code_end = vdso_end,
+> -	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> -	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> -};
+>
+>  #ifdef CONFIG_COMPAT
+>  static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+> @@ -216,21 +154,97 @@ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+>  		.mremap = vdso_mremap,
+>  	},
+>  };
+> +#endif
+>
+> -static struct __vdso_info compat_vdso_info __ro_after_init = {
+> -	.name = "compat_vdso",
+> -	.vdso_code_start = compat_vdso_start,
+> -	.vdso_code_end = compat_vdso_end,
+> -	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+> -	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+> +static struct __vdso_info vdso_info[] __ro_after_init = {
+> +	[VDSO_ABI_RV64] = {
+> +		.name = "vdso",
+> +		.vdso_code_start = vdso_start,
+> +		.vdso_code_end = vdso_end,
+> +		.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> +		.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> +	},
+> +#ifdef CONFIG_COMPAT
+> +	[VDSO_ABI_RV32] = {
+> +		.name = "compat_vdso",
+> +		.vdso_code_start = compat_vdso_start,
+> +		.vdso_code_end = compat_vdso_end,
+> +		.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+> +		.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+> +	},
+> +#endif
+>  };
+> +
+> +static void __init __vdso_init(enum vdso_abi abi)
+> +{
+> +	unsigned int i;
+> +	struct page **vdso_pagelist;
+> +	unsigned long pfn;
+> +
+> +	if (memcmp(vdso_info[abi].vdso_code_start, "\177ELF", 4))
+> +		panic("vDSO is not a valid ELF object!\n");
+> +
+> +	vdso_info[abi].vdso_pages = (
+> +		vdso_info[abi].vdso_code_end -
+> +		vdso_info[abi].vdso_code_start) >>
+> +		PAGE_SHIFT;
+> +
+> +	vdso_pagelist = kcalloc(vdso_info[abi].vdso_pages,
+> +				sizeof(struct page *),
+> +				GFP_KERNEL);
+> +	if (vdso_pagelist == NULL)
+> +		panic("vDSO kcalloc failed!\n");
+> +
+> +	/* Grab the vDSO code pages. */
+> +	pfn = sym_to_pfn(vdso_info[abi].vdso_code_start);
+> +
+> +	for (i = 0; i < vdso_info[abi].vdso_pages; i++)
+> +		vdso_pagelist[i] = pfn_to_page(pfn + i);
+> +
+> +	vdso_info[abi].cm->pages = vdso_pagelist;
+> +}
+> +
+> +#ifdef CONFIG_TIME_NS
+> +struct vdso_data *arch_get_vdso_data(void *vvar_page)
+> +{
+> +	return (struct vdso_data *)(vvar_page);
+> +}
+> +
+> +/*
+> + * The vvar mapping contains data for a specific time namespace, so when a task
+> + * changes namespace we must unmap its vvar data for the old namespace.
+> + * Subsequent faults will map in data for the new namespace.
+> + *
+> + * For more details see timens_setup_vdso_data().
+> + */
+> +int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+> +{
+> +	struct mm_struct *mm = task->mm;
+> +	struct vm_area_struct *vma;
+> +
+> +	mmap_read_lock(mm);
+> +
+> +	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+> +		unsigned long size = vma->vm_end - vma->vm_start;
+> +
+> +		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV64].dm))
+> +			zap_page_range(vma, vma->vm_start, size);
+> +#ifdef CONFIG_COMPAT
+> +		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV32].dm))
+> +			zap_page_range(vma, vma->vm_start, size);
+> +#endif
+> +	}
+> +
+> +	mmap_read_unlock(mm);
+> +	return 0;
+> +}
+>  #endif
+>
+>  static int __init vdso_init(void)
+>  {
+> -	__vdso_init(&vdso_info);
+> +	__vdso_init(VDSO_ABI_RV64);
+>  #ifdef CONFIG_COMPAT
+> -	__vdso_init(&compat_vdso_info);
+> +	__vdso_init(VDSO_ABI_RV32);
+>  #endif
+>
+>  	return 0;
+> @@ -240,14 +254,14 @@ arch_initcall(vdso_init);
+>  static int __setup_additional_pages(struct mm_struct *mm,
+>  				    struct linux_binprm *bprm,
+>  				    int uses_interp,
+> -				    struct __vdso_info *vdso_info)
+> +				    enum vdso_abi abi)
+>  {
+>  	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
+>  	void *ret;
+>
+>  	BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
+>
+> -	vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
+> +	vdso_text_len = vdso_info[abi].vdso_pages << PAGE_SHIFT;
+>  	/* Be sure to map the data page */
+>  	vdso_mapping_len = vdso_text_len + VVAR_SIZE;
+>
+> @@ -258,18 +272,17 @@ static int __setup_additional_pages(struct mm_struct *mm,
+>  	}
+>
+>  	ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
+> -		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
+> +		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info[abi].dm);
+>  	if (IS_ERR(ret))
+>  		goto up_fail;
+>
+>  	vdso_base += VVAR_SIZE;
+>  	mm->context.vdso = (void *)vdso_base;
+> -	mm->context.vdso_info = (void *)vdso_info;
+>
+>  	ret =
+>  	   _install_special_mapping(mm, vdso_base, vdso_text_len,
+>  		(VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
+> -		vdso_info->cm);
+> +		vdso_info[abi].cm);
+>
+>  	if (IS_ERR(ret))
+>  		goto up_fail;
+> @@ -291,8 +304,7 @@ int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+>  	if (mmap_write_lock_killable(mm))
+>  		return -EINTR;
+>
+> -	ret = __setup_additional_pages(mm, bprm, uses_interp,
+> -							&compat_vdso_info);
+> +	ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV32);
+>  	mmap_write_unlock(mm);
+>
+>  	return ret;
+> @@ -307,7 +319,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+>  	if (mmap_write_lock_killable(mm))
+>  		return -EINTR;
+>
+> -	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
+> +	ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV64);
+>  	mmap_write_unlock(mm);
+>
+>  	return ret;
