@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DB45B9FF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF455B9FFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiIOQuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S229833AbiIOQwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiIOQt0 (ORCPT
+        with ESMTP id S230137AbiIOQwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:49:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CAD74366
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:48:58 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id go6so14154303pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:48:58 -0700 (PDT)
+        Thu, 15 Sep 2022 12:52:21 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F195A45D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:52:03 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11e9a7135easo48342390fac.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=CC2AT69XGg5wm3bSeW54GIGYiTC1rZqaZVqT6NInl68=;
-        b=mu3+zu2fHkK18fyK8GquthMgCh0knmNuo1AuOv6/5p4XsIu5amJTOn6ebMi5f22/na
-         PdmtAwktXThz7euWyzkdNELKrfRtOJwgowVocLAbaPOqQuLnlvONAH9Ktcv8xh5VTMrL
-         zfixw/KKn7UoVL8Jol7k9Cf7o8+gbedJGP27U=
+        d=sifive.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tOtVH4ixRGCe5uqoihAe8MK5fBynZJb5fcnks2GXImY=;
+        b=TvLczY1t4EDKLbg08MYFD6pN8vktVGlKuT2XDNIfqwh/OI5WLnvWo3tm5sKdeb/7u1
+         PBmQGDRthHxMtYgvWysJqnCLh0sbmX8zGc0MAhGvMV2hoCbRU4aSJSOamAplXO+T8j7N
+         vtD8WR5GrRP59RXwiSqZE8J56o6Jp5InqFC02ROSmdYML7wHoIuTy7bYW0INETyz7fU+
+         GGnI06U1rh3QnfdBiE5K6hm0NtXjhuV1D5ik3mmZznK6T+DMMN2Xw2ZJhPAbFPfCOxsa
+         JuSasCv3MqcDhJH5NQhzxoRXJpjhEifZdbGDAX+ahd98Z/apViNuOzUAUfWvQUMREBz3
+         IUEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=CC2AT69XGg5wm3bSeW54GIGYiTC1rZqaZVqT6NInl68=;
-        b=CqPOCQl70cJRSB+wk4yjcRU39VmxOlga53OuRNb9vAp2i8724YD15n1E417S3ciEXV
-         M2Yk/BK2mySv7izQOUXYgstyzUSIlYRbPF0rQuQUzAIAG/hgWs58F1/wg1iv50QDvGg+
-         aWC1pXg5TDNX6xMAJllB66gbVTxbSI8aLIlMvGv6HqaW7fJSsMavi8LwyMT9emfCVMrA
-         c0dISwkNy6MCtlNvPD19tNDvBZpk7Jq4urVSOVJfzPNvgwMeQ+akAvifTQ5WmPAu2jyg
-         o9aiBGF2Jek3zJPbv/J/FH/1QnzxB8YNi3u9OZiaZaqK7PJ9QYLBCxsp9iAtopytIUw5
-         79IQ==
-X-Gm-Message-State: ACrzQf3wD9TxQJyBFKQSAR/gJHug8fDVi0FaR0mwzIup34HRflBK2rFk
-        J+EQqs3tiZWKyBe9ECwSgcyk9A==
-X-Google-Smtp-Source: AMsMyM7xQDECJlshM1y7hrMSNYPc8bpR0IMtAX/vgFfB37FWYtZxA5MaaTnkclE6b1SXhntNfjnk0g==
-X-Received: by 2002:a17:902:b7c3:b0:176:b7e6:ae6c with SMTP id v3-20020a170902b7c300b00176b7e6ae6cmr292383plz.163.1663260537835;
-        Thu, 15 Sep 2022 09:48:57 -0700 (PDT)
-Received: from sarthakkukreti-glaptop.hsd1.ca.comcast.net ([2601:647:4200:b5b0:3af2:34b2:a98a:a652])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b00177ee563b6dsm13174970pls.33.2022.09.15.09.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 09:48:56 -0700 (PDT)
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-X-Google-Original-From: Sarthak Kukreti <sarthakkukreti@google.com>
-To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>
-Subject: [PATCH RFC 8/8] ext4: Add a per-file provision override xattr
-Date:   Thu, 15 Sep 2022 09:48:26 -0700
-Message-Id: <20220915164826.1396245-9-sarthakkukreti@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220915164826.1396245-1-sarthakkukreti@google.com>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tOtVH4ixRGCe5uqoihAe8MK5fBynZJb5fcnks2GXImY=;
+        b=vwMYIcP4BqZAkcj4lqXplYFnuw3Stj82jXNULjWmqu5eXu/U26AZhOo8S2Yrd1Y0ft
+         bITgh0dPjcsabrTbaCWdePMt6uXgw6qGszMIoQvZ+Wzi7JYJCJVfgjz1i7HwuVlF0T8h
+         6IdujzC2Ryq6v1wxVcI+GrObCNzJxgVDAWcwg1FLdKsBo0wlhdQ/f455q2Hx4QOSIHiG
+         7E+Lp/XR0gEGiBDVSjv/Mc+TBOTjEKw3M+g9QxHv76bjqb2ypVW5FfC4WTJkEU2+33ft
+         dkWM/FrmvbnJRZdyGmdYrBgnO3xTT20D7CvUqJ52ykW7P0G+6Od9t/s2gEFkayqZQPn6
+         9cNA==
+X-Gm-Message-State: ACrzQf2gjLxqIj1KFWZZ7m6CWgU1HCor2Ajp0ZO0vR213TdlkN6zVelV
+        Dm+wdSzgcY5Prv6W8aTMu3eipNWgW5vadzqPi8ZZ1Q==
+X-Google-Smtp-Source: AMsMyM5SnZ8boja/eEQ65OZdUWRxu9Wq37qnXSNoTu87ivkLR6L3NK1Q4FF12nTu+0vua12P6qkAyirrVmf6vW/G32I=
+X-Received: by 2002:a05:6870:3448:b0:12b:1a11:e868 with SMTP id
+ i8-20020a056870344800b0012b1a11e868mr345228oah.198.1663260722395; Thu, 15 Sep
+ 2022 09:52:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
+ <20220809201428.118523-2-sudip.mukherjee@sifive.com> <2a50d782-ff21-91af-8488-503168e29867@microchip.com>
+In-Reply-To: <2a50d782-ff21-91af-8488-503168e29867@microchip.com>
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Date:   Thu, 15 Sep 2022 17:51:51 +0100
+Message-ID: <CAHyZL-fdW-r_6Tfx+jCiMip7XN-GWZ0PYAfLCrexoq8ayLdiyA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
+To:     Tudor.Ambarus@microchip.com
+Cc:     pratyush@kernel.org, michael@walle.cc, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, greentime.hu@sifive.com,
+        jude.onyenegecha@sifive.com, william.salmon@sifive.com,
+        adnan.chowdhury@sifive.com, ben.dooks@sifive.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,89 +69,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sarthak Kukreti <sarthakkukreti@chromium.org>
+Hi Tudor,
 
-Adds a per-file provision override that allows select files to
-override the per-mount setting for provisioning blocks on allocation.
+On Wed, Aug 10, 2022 at 8:55 AM <Tudor.Ambarus@microchip.com> wrote:
+>
+> On 8/9/22 23:14, Sudip Mukherjee wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > The datasheet of is25wp256 says it supports SFDP. Get rid of the static
+> > initialization of the flash parameters and init them when parsing SFDP.
+> >
+> > Testing showed the flash using SPINOR_OP_READ_1_1_4_4B 0x6c,
+> > SPINOR_OP_PP_4B 0x12 and SPINOR_OP_BE_4K_4B 0x21 before enabling SFDP.
+> > After this patch, it parses the SFDP information and still uses the
+> > same opcodes.
+> >
+> > Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> > ---
+> >  drivers/mtd/spi-nor/issi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+> > index 89a66a19d754..8b48459b5054 100644
+> > --- a/drivers/mtd/spi-nor/issi.c
+> > +++ b/drivers/mtd/spi-nor/issi.c
+> > @@ -71,7 +71,7 @@ static const struct flash_info issi_nor_parts[] = {
+> >         { "is25wp128",  INFO(0x9d7018, 0, 64 * 1024, 256)
+> >                 NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+> >         { "is25wp256", INFO(0x9d7019, 0, 64 * 1024, 512)
+> > -               NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+> > +               PARSE_SFDP
+> >                 FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
+> >                 .fixups = &is25lp256_fixups },
+> >
+> > --
+> > 2.30.2
+> >
+>
+> Looks good to me.
+> When submitting flash updates or new flash additions, we require contributors
+> to do a little test using mtd-utils and to dump the SPI NOR sysfs entries.
+> Would you please do that?
+>
+> Here's the simple test:
 
-This acts as a mechanism to allow mounts using provision to
-replicate the current behavior for fallocate() and only preserve
-space at the filesystem level.
+Here is the test result with only the PARSE_SFDP change. I can resend
+the patch if you want.
+I will work on the other patch enabling Quad PP now and send that
+along with its own test result.
 
-Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
----
- fs/ext4/extents.c | 32 ++++++++++++++++++++++++++++++++
- fs/ext4/xattr.h   |  1 +
- 2 files changed, 33 insertions(+)
+# dd if=/dev/urandom of=./qspi_test bs=1M count=6
+6+0 records in
+6+0 records out
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index 746213b5ec3d..a9ed908b2ebe 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -4424,6 +4424,26 @@ int ext4_ext_truncate(handle_t *handle, struct inode *inode)
- 	return err;
- }
- 
-+int ext4_provision_support(struct inode *inode)
-+{
-+	char provision;
-+	int ret =
-+		ext4_xattr_get(inode, EXT4_XATTR_INDEX_TRUSTED,
-+			       EXT4_XATTR_NAME_PROVISION_POLICY, &provision, 1);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (provision) {
-+	case 'y':
-+		return 1;
-+	case 'n':
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- static int ext4_alloc_file_blocks(struct file *file, ext4_lblk_t offset,
- 				  ext4_lblk_t len, loff_t new_size,
- 				  int flags)
-@@ -4436,12 +4456,24 @@ static int ext4_alloc_file_blocks(struct file *file, ext4_lblk_t offset,
- 	struct ext4_map_blocks map;
- 	unsigned int credits;
- 	loff_t epos;
-+	bool provision = false;
-+	int file_provision_override = -1;
- 
- 	/*
- 	 * Attempt to provision file blocks if the mount is mounted with
- 	 * provision.
- 	 */
- 	if (test_opt2(inode->i_sb, PROVISION))
-+		provision = true;
-+
-+	/*
-+	 * Use file-specific override, if available.
-+	 */
-+	file_provision_override = ext4_provision_support(inode);
-+	if (file_provision_override >= 0)
-+		provision &= file_provision_override;
-+
-+	if (provision)
- 		flags |= EXT4_GET_BLOCKS_PROVISION;
- 
- 	BUG_ON(!ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS));
-diff --git a/fs/ext4/xattr.h b/fs/ext4/xattr.h
-index 824faf0b15a8..69e97f853b0c 100644
---- a/fs/ext4/xattr.h
-+++ b/fs/ext4/xattr.h
-@@ -140,6 +140,7 @@ extern const struct xattr_handler ext4_xattr_security_handler;
- extern const struct xattr_handler ext4_xattr_hurd_handler;
- 
- #define EXT4_XATTR_NAME_ENCRYPTION_CONTEXT "c"
-+#define EXT4_XATTR_NAME_PROVISION_POLICY "provision"
- 
- /*
-  * The EXT4_STATE_NO_EXPAND is overloaded and used for two purposes.
--- 
-2.31.0
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
 
+# mtd_debug erase /dev/mtd4 0 6291456
+Erased 6291456 bytes from address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# hexdump qspi_read
+0000000 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+0600000
+
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# sha1sum qspi_test qspi_read
+57f8d4fee65622104e24276e865f662844f12242  qspi_test
+57f8d4fee65622104e24276e865f662844f12242  qspi_read
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+is25wp256
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+9d7019
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+issi
+
+# xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+ffffffffffffffffffffffffffffffffffffe520f9ffffffff0f44eb086b
+083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+11cecccd68467a757a75f7aed55c4a422cfff030faa9ffffffffffffffff
+ffffffffffffffff501950169ff9c0648fefffff
+
+# md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+ba14818b9ec42713f24d94d66bb90ba0  /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+
+
+--
+Regards
+Sudip
