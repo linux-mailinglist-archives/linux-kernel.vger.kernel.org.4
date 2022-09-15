@@ -2,184 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F23D5BA196
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 21:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B10D5BA19E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 21:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIOTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 15:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S229906AbiIOTxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 15:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIOTsq (ORCPT
+        with ESMTP id S229515AbiIOTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 15:48:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6779A6F253
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 12:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663271325; x=1694807325;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GvBM4vE56s/h3Ixl3i/+pdA4YobjgEyHegkWBAXY8aM=;
-  b=FQ49B7Zs7S6nwTAniDoalTTZQ1MIYO4+rcc1fbz5qAGvhVsR4T2Q6cdb
-   zdU1iD6gUjiHvK98R0BUO9E6Vdnp6z5nJaeFdNOOj+KwAEQS4J9snfL0L
-   vMF1KA9cet5FtBciA60zuT1GUsZNA4KO2GOkyAT2Y9s6I/8ufDahWXIov
-   9HaM+P2voDEPrf/ttFe2eIOfnClDJdaDPY4AMHg+E7Wz35gWbXvwyA7Vx
-   tTNncP+b9XHCLWOXu2Ev+BMkYrgxHPXUgsDSONRln3Be0kEQdMqmD3zll
-   TjD5uMFtawitPm6MjBRAyU4yxxIQu1/k67QI9rZhIhfdO6i1cifuQ6T7R
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360563488"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="360563488"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 12:48:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="568568178"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Sep 2022 12:48:42 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYuqo-0000w1-0j;
-        Thu, 15 Sep 2022 19:48:42 +0000
-Date:   Fri, 16 Sep 2022 03:48:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: crypto/crypto_engine.c:56:9: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202209160355.6tyYIizw-lkp@intel.com>
+        Thu, 15 Sep 2022 15:52:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A628895E4;
+        Thu, 15 Sep 2022 12:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1663271565;
+        bh=ibEywUFeGjMC1iHdJne53rTsiI2aVS6FyLrY0lHBEPM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=dzHhNHvjJG4m8g+GALiIw4IIx5X1XoXjZD9jiqWHbJHIUokepFdyu8x0f0iMOr+b7
+         tvfoTIoS/3WoT8vel8iFrjvP+WL+YrvOfjHiHVjvPHF9/rTu+GnyB30TCYSGIpG2Q6
+         Nljve7Z6QeySDcictGdjL5SR66cR9IqY853EQ/Ow=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.163]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MEm2D-1oVx3931sx-00GM0K; Thu, 15 Sep 2022 21:52:44 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     linux-wireless@vger.kernel.org
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] wifi: mac80211: minstrel_ht: remove unused has_mrr member from struct minstrel_priv
+Date:   Thu, 15 Sep 2022 21:52:43 +0200
+Message-Id: <20220915195243.17142-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:mqjVT6CYjUqic2ZPH1el64YRyCMQ7w1WOQx458k6wCLCibkvvIH
+ oVoRL+soDNfiBz4HpXdE2zE6NUlVviZVrTtDsu9RS3IXE3mMKqCzOUj6ZYg7sr9pj9nfaQk
+ 7CLQhHXkxdBuI9RjbGGqEYnMiEaFwyXYnIUe5eCp7g+dVO1iIRLwH9oRO+mcB9zMes4nPHd
+ 5Kne2wbJavMTnkLoDA2NA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I2geNFE7cy8=:Dj5dZMM58zLi6Nb9Ein4vB
+ o2hW3RtlAc/07XUNJ01rkxCMp4Ox4GXsDpF5HrPRfIUAT4TS7wZK1bObimqw4cLOi5NrI0xlQ
+ bCun07LozjeY5jNTLxLBwI3/T0KKSKfL2T7yL2Npmte0HKoorS/FrEi/9l9TUg5tS1x0+c3v2
+ FL1V2gnILAj+nm+RAjTqSxply7YO1FIXSmpCudv3o9LWEhCxggpYLUFVHYnl3gipHrf3Jf3Qx
+ DZiNl3sTkTVSSvoy28u2Pn3NvKmXatMXjZx8zRPH84mGnTsd1oGnvzqtDRIiLmipoAVnLiFUZ
+ q3eX/dtHCQAnIIPfsAnEuvKLnjyYRWRa2/lSIIaejASj7OtUy9ENToNu/qs2uIRuU/JC24ina
+ rh3KcPWzvSziSc6qT8KEJhTG73djr1Ztzjt2XoPKQ/rC2JG1lQBcECpuvHOpYuVDgz9Xyr0v8
+ LOY92AbjEdSo/UDSeANxbyzWjjJsM5PEvE75lP8YTCFSTZhvSEDHBgJ0KMdCvuZb3dQqiz67f
+ Whlr11Jy28QVg83p952D3wMBunHEgrEReG5O6WLegHXDQBPykasxtz4VJtOIJN9ilKyfoYKjw
+ alZobCkfs0pr2wLBwTRjDvDJO9/nP/ZU014iALrKn7jJtpVzSRnhhynzI1Z9xfgoT+U0sicNY
+ VpNoe8y3hFvgpc4vKeqIgkMDrkfXCdJ94G2gaT9Vep2wmdCc0Cn2a5rvVmMyb06kx6TST4nJ/
+ 4Wwm6OagstHLZjaYUMx08eaJsx61HdPj+yQsxVXfILncR/AhcDAeBVuJKBaggNHWyIVqCQOK+
+ FrtyEi36JzrDaKfAJjga8iHKb+mOBdRCkCCPkyJhYE2SLJxVRcZ9P8w6UyVEAAOU/Wi9EfIPW
+ 1McDJqzpOr0A3qkdB6SiHm04lJXqAJ09HnJ5yM3djqcBWaKe5ob/gCboEpT/e9aSlagI1pWub
+ 5L1mYvpAeRWZHOlbE/Vcorp0ms8SxWq+XCiYPgnIqZz5Y1x6knmq0nnqD/JU8RMzrF8F96GxE
+ 9CncWTvOuF/sascLky9OlwyiiOZn7aucavVZcmkL3BAZdCFg4JW2jTunKJIsZmyXtcQ4zdEZW
+ dudHbwxBn3CoG8xQC3896RaUCWYiHw9fm2FVyniO7v6rnxCqR48jQXRznxpJni+gxX2JA/2X1
+ bB5mi6d4VrChIzg+syrmZ2noct
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qing,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-commit: 93a4fa622eb061f75f87f0cf9609ab4e69c67d01 LoongArch: Add STACKTRACE support
-date:   5 weeks ago
-config: loongarch-randconfig-s043-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160355.6tyYIizw-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash crypto/ drivers/perf/ drivers/soc/qcom/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
->> crypto/crypto_engine.c:56:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   crypto/crypto_engine.c:56:9: sparse:     expected void *ptr
-   crypto/crypto_engine.c:56:9: sparse:     got unsigned int [noderef] __percpu *
->> crypto/crypto_engine.c:56:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   crypto/crypto_engine.c:56:9: sparse:     expected void *ptr
-   crypto/crypto_engine.c:56:9: sparse:     got unsigned int [noderef] __percpu *
->> crypto/crypto_engine.c:56:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   crypto/crypto_engine.c:56:9: sparse:     expected void *ptr
-   crypto/crypto_engine.c:56:9: sparse:     got unsigned int [noderef] __percpu *
->> crypto/crypto_engine.c:56:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   crypto/crypto_engine.c:56:9: sparse:     expected void *ptr
-   crypto/crypto_engine.c:56:9: sparse:     got unsigned int [noderef] __percpu *
---
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
-
-vim +56 crypto/crypto_engine.c
-
-735d37b5424b27 Baolin Wang    2016-01-26  18  
-218d1cc1860c45 Corentin LABBE 2018-01-26  19  /**
-218d1cc1860c45 Corentin LABBE 2018-01-26  20   * crypto_finalize_request - finalize one request if the request is done
-218d1cc1860c45 Corentin LABBE 2018-01-26  21   * @engine: the hardware engine
-218d1cc1860c45 Corentin LABBE 2018-01-26  22   * @req: the request need to be finalized
-218d1cc1860c45 Corentin LABBE 2018-01-26  23   * @err: error number
-218d1cc1860c45 Corentin LABBE 2018-01-26  24   */
-218d1cc1860c45 Corentin LABBE 2018-01-26  25  static void crypto_finalize_request(struct crypto_engine *engine,
-218d1cc1860c45 Corentin LABBE 2018-01-26  26  				    struct crypto_async_request *req, int err)
-218d1cc1860c45 Corentin LABBE 2018-01-26  27  {
-218d1cc1860c45 Corentin LABBE 2018-01-26  28  	unsigned long flags;
-6a89f492f8e509 Iuliana Prodan 2020-04-28  29  	bool finalize_req = false;
-218d1cc1860c45 Corentin LABBE 2018-01-26  30  	int ret;
-218d1cc1860c45 Corentin LABBE 2018-01-26  31  	struct crypto_engine_ctx *enginectx;
-218d1cc1860c45 Corentin LABBE 2018-01-26  32  
-6a89f492f8e509 Iuliana Prodan 2020-04-28  33  	/*
-6a89f492f8e509 Iuliana Prodan 2020-04-28  34  	 * If hardware cannot enqueue more requests
-6a89f492f8e509 Iuliana Prodan 2020-04-28  35  	 * and retry mechanism is not supported
-6a89f492f8e509 Iuliana Prodan 2020-04-28  36  	 * make sure we are completing the current request
-6a89f492f8e509 Iuliana Prodan 2020-04-28  37  	 */
-6a89f492f8e509 Iuliana Prodan 2020-04-28  38  	if (!engine->retry_support) {
-218d1cc1860c45 Corentin LABBE 2018-01-26  39  		spin_lock_irqsave(&engine->queue_lock, flags);
-6a89f492f8e509 Iuliana Prodan 2020-04-28  40  		if (engine->cur_req == req) {
-6a89f492f8e509 Iuliana Prodan 2020-04-28  41  			finalize_req = true;
-6a89f492f8e509 Iuliana Prodan 2020-04-28  42  			engine->cur_req = NULL;
-6a89f492f8e509 Iuliana Prodan 2020-04-28  43  		}
-218d1cc1860c45 Corentin LABBE 2018-01-26  44  		spin_unlock_irqrestore(&engine->queue_lock, flags);
-6a89f492f8e509 Iuliana Prodan 2020-04-28  45  	}
-218d1cc1860c45 Corentin LABBE 2018-01-26  46  
-6a89f492f8e509 Iuliana Prodan 2020-04-28  47  	if (finalize_req || engine->retry_support) {
-218d1cc1860c45 Corentin LABBE 2018-01-26  48  		enginectx = crypto_tfm_ctx(req->tfm);
-6a89f492f8e509 Iuliana Prodan 2020-04-28  49  		if (enginectx->op.prepare_request &&
-218d1cc1860c45 Corentin LABBE 2018-01-26  50  		    enginectx->op.unprepare_request) {
-218d1cc1860c45 Corentin LABBE 2018-01-26  51  			ret = enginectx->op.unprepare_request(engine, req);
-218d1cc1860c45 Corentin LABBE 2018-01-26  52  			if (ret)
-218d1cc1860c45 Corentin LABBE 2018-01-26  53  				dev_err(engine->dev, "failed to unprepare request\n");
-218d1cc1860c45 Corentin LABBE 2018-01-26  54  		}
-218d1cc1860c45 Corentin LABBE 2018-01-26  55  	}
-4058cf08945c18 Corentin Labbe 2022-02-21 @56  	lockdep_assert_in_softirq();
-218d1cc1860c45 Corentin LABBE 2018-01-26  57  	req->complete(req, err);
-218d1cc1860c45 Corentin LABBE 2018-01-26  58  
-218d1cc1860c45 Corentin LABBE 2018-01-26  59  	kthread_queue_work(engine->kworker, &engine->pump_requests);
-218d1cc1860c45 Corentin LABBE 2018-01-26  60  }
-218d1cc1860c45 Corentin LABBE 2018-01-26  61  
-
-:::::: The code at line 56 was first introduced by commit
-:::::: 4058cf08945c18a6de193f4118fd05d83d3d4285 crypto: engine - check if BH is disabled during completion
-
-:::::: TO: Corentin Labbe <clabbe@baylibre.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+UmVtb3ZlIHVudXNlZCBoYXNfbXJyIChoYXMgbXVsdGktcmF0ZSByZXRyeSBjYXBhYmlsaXRpZXMp
+IG1lbWJlcgpmcm9tIHN0cnVjdCBtaW5zdHJlbF9wcml2IChvbmx5IHNldCBvbmNlIGluIG1pbnN0
+cmVsX2h0X2FsbG9jLCBuZXZlcgp1c2VkIGFnYWluKS4KClNpZ25lZC1vZmYtYnk6IFBldGVyIFNl
+aWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCiBuZXQvbWFjODAyMTEvcmM4MDIxMV9taW5z
+dHJlbF9odC5jIHwgMyAtLS0KIG5ldC9tYWM4MDIxMS9yYzgwMjExX21pbnN0cmVsX2h0LmggfCAx
+IC0KIDIgZmlsZXMgY2hhbmdlZCwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9uZXQvbWFj
+ODAyMTEvcmM4MDIxMV9taW5zdHJlbF9odC5jIGIvbmV0L21hYzgwMjExL3JjODAyMTFfbWluc3Ry
+ZWxfaHQuYwppbmRleCAyNGMzYzA1NWRiNmQuLmQyNjJhNjE5OWRkNSAxMDA2NDQKLS0tIGEvbmV0
+L21hYzgwMjExL3JjODAyMTFfbWluc3RyZWxfaHQuYworKysgYi9uZXQvbWFjODAyMTEvcmM4MDIx
+MV9taW5zdHJlbF9odC5jCkBAIC0xOTYxLDkgKzE5NjEsNiBAQCBtaW5zdHJlbF9odF9hbGxvYyhz
+dHJ1Y3QgaWVlZTgwMjExX2h3ICpodykKIAkJLyogc2FmZSBkZWZhdWx0LCBkb2VzIG5vdCBuZWNl
+c3NhcmlseSBoYXZlIHRvIG1hdGNoIGh3IHByb3BlcnRpZXMgKi8KIAkJbXAtPm1heF9yZXRyeSA9
+IDc7CiAKLQlpZiAoaHctPm1heF9yYXRlcyA+PSA0KQotCQltcC0+aGFzX21yciA9IHRydWU7Ci0K
+IAltcC0+aHcgPSBodzsKIAltcC0+dXBkYXRlX2ludGVydmFsID0gSFogLyAyMDsKIApkaWZmIC0t
+Z2l0IGEvbmV0L21hYzgwMjExL3JjODAyMTFfbWluc3RyZWxfaHQuaCBiL25ldC9tYWM4MDIxMS9y
+YzgwMjExX21pbnN0cmVsX2h0LmgKaW5kZXggMTc2NmZmMGM3OGQzLi40YmUwNDAxZjc3MjEgMTAw
+NjQ0Ci0tLSBhL25ldC9tYWM4MDIxMS9yYzgwMjExX21pbnN0cmVsX2h0LmgKKysrIGIvbmV0L21h
+YzgwMjExL3JjODAyMTFfbWluc3RyZWxfaHQuaApAQCAtNzQsNyArNzQsNiBAQAogCiBzdHJ1Y3Qg
+bWluc3RyZWxfcHJpdiB7CiAJc3RydWN0IGllZWU4MDIxMV9odyAqaHc7Ci0JYm9vbCBoYXNfbXJy
+OwogCXVuc2lnbmVkIGludCBjd19taW47CiAJdW5zaWduZWQgaW50IGN3X21heDsKIAl1bnNpZ25l
+ZCBpbnQgbWF4X3JldHJ5OwotLSAKMi4zNy4zCgo=
