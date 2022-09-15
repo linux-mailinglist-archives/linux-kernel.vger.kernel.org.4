@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293AF5B968A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3C45B9692
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiIOIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S229711AbiIOIrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOIon (ORCPT
+        with ESMTP id S229561AbiIOIrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:44:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18951901B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:44:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FD8EB81EA9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5D5C433D6;
-        Thu, 15 Sep 2022 08:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663231480;
-        bh=R6Rl/OlvLJIZv5HR2mE5eYVhd7/iw8En0Km8/MsF17c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qnKtqTjuYbMLQID9jKK84B6m8uVE2TN6PNBwzUVIx/kR1jahm5gUUh2EBhloDoxPg
-         3w6/bXToHADlvNNZzDDub8QY18UIOTI1cZmeNnJRim2bdGw8aDn9Jq4W7QVjN9B8m5
-         p+3kQ/9dYTX+hnpkSOPxWcRmqObedFhnDktiklrU=
-Date:   Thu, 15 Sep 2022 10:45:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     forest@alittletooquiet.net, philipp.g.hortmann@gmail.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: vt6655: replace spin_lock_irqsave with spin_lock
-Message-ID: <YyLmEpJBG7fPZ8iN@kroah.com>
-References: <20220914080016.67951-1-namcaov@gmail.com>
+        Thu, 15 Sep 2022 04:47:05 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811A98355;
+        Thu, 15 Sep 2022 01:47:03 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso21710745pjk.0;
+        Thu, 15 Sep 2022 01:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=kIrxc8mci/RrccREvho+GVT4skHCcg6IezHj6tnw+KY=;
+        b=SBYpsSl9fOw8/p/KkQdvUfe9JAQhZm4PYBYdKgUhhEQrwSAn2iM6DS7mJllJZ/1BmA
+         zqQxgEi/EpSZ0b1IIjLKggWnpzocI21uPbHOmcP++LnfoufLPDB2yMCWk4UC5+3TZ3sK
+         kBiDsIB/NVFToUCFtzVrLzPJ8iU6pxFt9jzsyGFADdSYbrhmK+AtzZRvzWdmsE3qY73r
+         5+kqJA8foHdbZu4JUDQaDrCyvBICFe4t27tHNFRmTM4pYmkVAzRhm5qehX7ZAymmOZa/
+         gJgzNiFqcBv897/UvotDDrpGRb18DogUL7OQ3LDbZleQtwENn2MrSNLpX2LEyWtGyU0P
+         juIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kIrxc8mci/RrccREvho+GVT4skHCcg6IezHj6tnw+KY=;
+        b=piIVZBSCjRSl1nQi5rQyUtKBBcXBrYtfV7N+4iWWfABe2NkHBYH+UDIpnwn99nAvzu
+         w8Jn7m7djWyX8AXrrC9GZTcaUhNMc5R7pEoStq+viLp/IFq129+XD3tP1m/DWH2QAUkJ
+         PjHS3ftL3PMbAfwzTF8LnOy+7mS7Uq7OmWrvK743xC68asxeAb1Jn4soG4xrJMbYo6iO
+         C23XLBazycOvA/INwrPOXKGOZYG7xCvZaDW8mW9SllbNEoJ2Pfo3qREsXVeZ2aalDtoa
+         M+jFlWse//sWy+ly03zZXtFm94uoAjkfxxEuqep79X9heDVhtN7qeSmN/uys2GxJIU2c
+         WGgQ==
+X-Gm-Message-State: ACrzQf0jSSOtGLpaBjNGYhQhYJYnUXvM7VViLQsZfYSkxZ9xA3EJ3Jmx
+        EkYtX8Dbh3Ov0S/j3oFpoo4=
+X-Google-Smtp-Source: AMsMyM6Hq3pRrhVhSs8UeW+cR4B9UQMXekV08nHvh/4has3YMzt6rrads3ck5L1/0xKd8cFBktoj/Q==
+X-Received: by 2002:a17:903:32c4:b0:178:5206:b396 with SMTP id i4-20020a17090332c400b001785206b396mr365736plr.99.1663231622799;
+        Thu, 15 Sep 2022 01:47:02 -0700 (PDT)
+Received: from rfl-device.localdomain ([110.11.251.111])
+        by smtp.gmail.com with ESMTPSA id p4-20020aa79e84000000b0053ea0e55574sm11670126pfq.187.2022.09.15.01.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 01:47:02 -0700 (PDT)
+From:   Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
+X-Google-Original-From: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+To:     Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] liquidio: CN23XX: delete repeated words
+Date:   Thu, 15 Sep 2022 17:46:36 +0900
+Message-Id: <20220915084637.5165-1-RuffaloLavoisier@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914080016.67951-1-namcaov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 10:00:17AM +0200, Nam Cao wrote:
-> In vt6655 driver, there is a single interrupt handler: vnt_interrupt(),
-> and it does not take the spinlock. The interrupt handler only schedules
-> a workqueue, and the spinlock is taken in this workqueue. Thus, there is
-> no need to use spin_lock_irqsave, as the spinlock is never taken by an
-> interrupt. Replace spin_lock_irqsave (and spin_unlock_irqsave) with
-> spin_lock (and spin_unlock).
+- Delete the repeated word 'to' in the comment
 
-What is the speed difference before and after this change?  And how are
-interrupts properly handled anymore in this driver if you took away the
-lock that was being accessed in the irq?
+Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+---
+ drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
+ drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+index 3f1c189646f4..9a994b5bfff5 100644
+--- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
++++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+@@ -88,7 +88,7 @@
+ #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
+ /* The input jabber is used to determine the TSO max size.
+  * Due to H/W limitation, this need to be reduced to 60000
+- * in order to to H/W TSO and avoid the WQE malfarmation
++ * in order to H/W TSO and avoid the WQE malfarmation
+  * PKO_BUG_24989_WQE_LEN
+  */
+ #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+index d33dd8f4226f..19894b7c1ce8 100644
+--- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
++++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+@@ -37,7 +37,7 @@
+ 
+ /* The input jabber is used to determine the TSO max size.
+  * Due to H/W limitation, this need to be reduced to 60000
+- * in order to to H/W TSO and avoid the WQE malfarmation
++ * in order to H/W TSO and avoid the WQE malfarmation
+  * PKO_BUG_24989_WQE_LEN
+  */
+ #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+-- 
+2.25.1
 
-greg k-h
