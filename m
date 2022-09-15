@@ -2,156 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA3A5BA0CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3E25BA0D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIOSUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 14:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
+        id S229570AbiIOSXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiIOST6 (ORCPT
+        with ESMTP id S229501AbiIOSXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 14:19:58 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2053.outbound.protection.outlook.com [40.107.20.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12E19FA83;
-        Thu, 15 Sep 2022 11:19:17 -0700 (PDT)
+        Thu, 15 Sep 2022 14:23:31 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2075.outbound.protection.outlook.com [40.107.92.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C2C1D0;
+        Thu, 15 Sep 2022 11:23:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lXpYP39nqcrjXq8YOHT1pFDg7yPOhgUPeXG1UGiScqghywDq6E1KFwTkClTQBSmd4jk4x/fMjLp7ySSPMLJuO7NrN/SKUglRxj/oYHQ+OPvry1z8d3ecibiWdXAWlRPv8vDpHwWblobu0FHDg4suFuSHtM+Q5jr/xJb5QWJ1Jkx2ubtEckqXokFs4GTt+7Rh6PWcgIoyShQPMsICOkHTODmD/YNf2dCh+9InfQfAcnIrZvn0X9ns0SIeX8Ixef0b/YvJLANHapzARar/WPQFxyllB3WXzIAG3pJsq/z+7oMfKSWntkVCvVt6T7Vw4iZkMntAJ8dADZ/71d4OKT7TzQ==
+ b=C2/ZuSI3mnZ6DVJ4REnMbJwgDSqZdv1OhRPOEAz3ZHFLV+Wy5GknaBq9B+N9JXitAdtc1loTQdFEF3R38oe8pnmZDdVB9i5E2xIp4khSfxDYgiQJPGbcpuXkeYAa9ghNQNtmKq+uP47r9duj9/iMtJcxuvIxyrCs6yVdSdS5EHD03PWiDrPnOnZbIHRysTHAigvJ5K1YIiLvAtPz0OwuyoKs5j8hbYtBeF+GuXXiYp+EHGfacWqs+mkbLDXjRe2MuCy1az3Cqemm8ADWsOibOV1hWwipngBjMLHVnw3vlwGRSb5MT0xR3uLekNqC3pnpW0Rpq9ebkiiw+9QOM5WuCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9R32mGIv4qJ4yhb46PF3+ELONbRhPx5WWN6AM/T2ppI=;
- b=O9KTcsoJccB8dti8rrJkrgMaAQfdMoz+a7A+Nz0lcNrZH3KMlA5qGv3jBZNGPXQk6ROhHcpbStbWpkqvbG+iPlN4EPTUyaQaf02M6yw6O2YLmiSfmEBL6t7bzBtSZTymn3QJIb28LZ5BUeetWZ6Hqdr/XC7ObtWWMarqWPBhperwZpkRAFaL9CrsHQZVvAKFBoQw8J0cQwZ/KW4hhZMQaYS+rpRyu9jhHRB8xOoc5AVVjt5LxJtgc4MwI3mNqZhkInXsGY6fNwegOVz3Q9H9qZhYDOO21IJovbNG3NLs8u2wGeDA0gJ/Uj2tFcqRX/ghLNb0DU9vUkO2zLXY4rpxew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ bh=b45p/arZe3QwMBsG0aylw02+MUnkRzkTnZVNSRYZ0tY=;
+ b=inLg82uogtoUM9u02iXZ/ukfqTOvXPMVqqS73oJ8VpY1wIoxAmeZsjGJd8uDp4F2W0hYa8/V3uXQmBJEHsxUppGQ93NJ1OR/zM2z2NXJ+t0WaqS7GjdXDbPM0BwR6QWV7yQKMyB39dn87w06md7V9SrCSWzzYygk4wifLxZQ9Nv1VeN8MYSPq+ym2r00aOt0IFJwYTg9OZnbvED4BF5pogoMWQioPHsFoCw9CH7JVbqK0TUSbXj4in71iiPXSCxUccPLdZ+eUdjATksor1ARqH8yUA4VDq01N28jFfevs27tlQNSFCOaahcY0UC7l4PW8Jv2VfKKUUHN7ZpXzvtCBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9R32mGIv4qJ4yhb46PF3+ELONbRhPx5WWN6AM/T2ppI=;
- b=mpWFJ5pNmAj9MZHf//JIgZkkHAXRtIppyrL+4tbkcS4ibTiZCSt6l84O9LpKkTmygWnmece1n4V/I7tNzW9b4yIjLyao8HYhuRgXoYd/sGtCgz81nCEP/ZFQRIf7NUQ+oMz4JxCcEF9jahODdv6clYyPEUQkPGWkU2qBqAgqG4E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by PA4PR04MB7998.eurprd04.prod.outlook.com (2603:10a6:102:c5::15) with
+ bh=b45p/arZe3QwMBsG0aylw02+MUnkRzkTnZVNSRYZ0tY=;
+ b=x57ElTVQMKOpOfvGA5+tYVe9EkE8mFMzRk7O0K7rEpKecXNJHxXg6fPabgEk9JJMas63mtLyvJfZLbrMPLVGcyEYWQge3dtxZDqMclKzV9131Zvtmv8HfX1EPz0X4WXGHQaA+Abn0YGvGZbEMwDfXPaNPO7kUHg7e+GDg0Wd22U=
+Received: from MW4PR03CA0164.namprd03.prod.outlook.com (2603:10b6:303:8d::19)
+ by SJ0PR12MB6927.namprd12.prod.outlook.com (2603:10b6:a03:483::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Thu, 15 Sep
- 2022 18:19:01 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::9466:d44b:804:72ef]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::9466:d44b:804:72ef%5]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 18:19:01 +0000
-From:   "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viorel Suman <viorel.suman@nxp.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 2/2] clk: imx8qm: sync with SCFW kit v1.13.0
-Date:   Thu, 15 Sep 2022 21:18:05 +0300
-Message-Id: <20220915181805.424670-3-viorel.suman@oss.nxp.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220915181805.424670-1-viorel.suman@oss.nxp.com>
-References: <20220915181805.424670-1-viorel.suman@oss.nxp.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Thu, 15 Sep
+ 2022 18:23:28 +0000
+Received: from CO1NAM11FT091.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::d6) by MW4PR03CA0164.outlook.office365.com
+ (2603:10b6:303:8d::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15 via Frontend
+ Transport; Thu, 15 Sep 2022 18:23:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT091.mail.protection.outlook.com (10.13.175.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5632.12 via Frontend Transport; Thu, 15 Sep 2022 18:23:27 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 15 Sep
+ 2022 13:23:26 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>, <linux-kernel@vger.kernel.org>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Luya Tshimbalanga <luya@fedoraproject.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
+Subject: [PATCH] ACPI / x86: Add a quirk for Dell Inspiron 14 2-in-1 for StorageD3Enable
+Date:   Thu, 15 Sep 2022 13:23:14 -0500
+Message-ID: <20220915182315.276-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: VI1PR07CA0284.eurprd07.prod.outlook.com
- (2603:10a6:800:130::12) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5005:EE_|PA4PR04MB7998:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8dad174f-db92-4a2e-11dc-08da9746c367
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT091:EE_|SJ0PR12MB6927:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f2b3373-c0bb-4801-dace-08da97476299
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fPmB8vyzKuh7ly98bZAJ3WAZhEQHghZ0nvhVkgEL0B9mY+l4T5snFY0aERNenURBw1zrhcUrxhDaMbRZNf1/wGIkAmcnH6L2THG6uqKGG5ikbSTocZkSczQwv02r+lnqXQIB9N1STc85EwIADvRR5YZxFif0Oi7wdZpJPd/Gq8aXfd8FptfDJeNaTmJycEUn6zkSU6vYBURBKxxdT4X5UOPUs7uv+kXoTqCEcR8sJf/Guc5Xb87pGsktTxvkfPgCZwN5KcrtIRpVjNKlHSZZbsKo7pO33GbnJ7Kr/p/J8K9gil1Vn6DJXYrQ2TM/Y2jlOSUsTHcmMg0PpntYoFAH1vYMS6ijz7SYXtRlxF8ru5drQgfN8FFEFAVbMpO3l1Hn5T/7oqF+AEGz/2RDPYRNEKgMWtXuDwTktBgLpFTdN0i8L80PvOvyPWJm4K+0unwrV3opBNM2cnyLxZohNct1DD83e+SzIpIxvYs1c2pjUaiiC+amgb2MpYEvUCXHH7rDZ5Puu5CK7Ygdu3xL+rt6t8Rbs6O4SJUKBSNqvBiwbPA82Ax+yKO28g1DxNK5WD5e787arNX842r9BGbRHCdc1plovTgjNacpd2WoIYtE/ZtJ7Lcj6whM1NFZGP5pdZi81oyPvhVer1TT6XOej4LqfuOO6dMbJWccpBWMLyDwYDJ9kCYG2i9uHE82EBQBpbOKsKVh5yw05CkcrvPYZ5ovtEpjApgE8AO6cCxNFkdtQ88qTpfXSGcM54gl00AtowdELkK4fXUcbadC8Euzur61w7qV5zDnBkjtfEmscGcl/jIKmZjxZ3wIkGjIWJ2PflDTU9l1u9Q9nA4AAZRCnOwiJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(451199015)(5660300002)(8936002)(4744005)(2616005)(8676002)(966005)(2906002)(921005)(316002)(66946007)(110136005)(41300700001)(6512007)(86362001)(66556008)(38350700002)(6486002)(66476007)(1076003)(6506007)(38100700002)(83380400001)(52116002)(186003)(26005)(478600001)(7416002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6cmFmwrNqbGGUY9kr19eYqrUNwXomH54kZkXmZ+h5nDsJIS5Rz/a8uF8olz5?=
- =?us-ascii?Q?I0WPj9G121hP06FGoKGJGfsZdjBseq85iTBYgf1kYMHmAZu1XCxnmtKYp8u2?=
- =?us-ascii?Q?q1P5iUC0DvVExq6JqRmSVq8945qMs+J9X7uT6MAfwuDc7gJL/mL1b4Vid1ab?=
- =?us-ascii?Q?qESgrc8K/So8qqEMyV6hw4gzygZ5QLa+YY8jjWbOOytJBYVzXT2kDkTE9cDz?=
- =?us-ascii?Q?Tq+ID3o6sc+HkVbXq/Ob+iX8eF8wkqejmjko7jxmoU8WhmKC/RVcSpuAI2gR?=
- =?us-ascii?Q?1MDfBc3roimbzoTDLQOjUJ0KdUEPkcQF2rksusHGxdp0Lk7BuecSBW8Xnmh8?=
- =?us-ascii?Q?INBbshkQ32CuVb4+q28rncJqxtTSmbIN9KVLq+p5L9j76a32IkGxv+RzqNCK?=
- =?us-ascii?Q?KzN2ngRu0iXMVh0UNpWWERKnGXlYqALkyiV8cgOc5NVEGM5Qfu8JTSzww0rv?=
- =?us-ascii?Q?xsHxxgNVnDGUjv8KdwRdDXjUW58ia/Kzs8P/w9N1fHh2+yYnVAjqqScYKkba?=
- =?us-ascii?Q?+bkyA9kVgxwLP7gNzduWTpqlMXxauJLH7VewNd/3ws8uXwOyck232kqzxAYG?=
- =?us-ascii?Q?uy6J9yklWc4ELad83f4z+ZRY0XAkTLK6DB6iezcQd0Y2I3F074FLPWxw7mU7?=
- =?us-ascii?Q?YD7+QGwy7JCSjPJorRPj4YmH4U/8Oy9/JxLQ1/i+SyqcbT2OSI6yCOknIKGd?=
- =?us-ascii?Q?ZwxDnusdhtkyAm1dkpkFAMMGOmSpQNNYhGsLiygJ/zPzEk1JKinWkFWgBPrC?=
- =?us-ascii?Q?vuLrsRquewJxQ+J7/0i3fTm2WeMsXHvOFI5DyMMHf+wTaKzZYbGVjZt06+nn?=
- =?us-ascii?Q?nz7CASK/VGhQD2gJ8pZzuEAf226ALa9DU7TX1I/uLtlzPoHJejg5h2gQXFpL?=
- =?us-ascii?Q?Bc+8iw7QFCODYpt5XzDNM0ovUNnazvz23UNK7hkOtVKlApVsLrU6+19x1rRp?=
- =?us-ascii?Q?zD0B7JTcv3IuHjoc3VTuj4pHOtX7MTNKXDaQ1+9/WPfByn42EEYQ9ErFmK43?=
- =?us-ascii?Q?V456ey1E0zZTeuUKumz++nFVzquqWd5nJpitN2RpuXusjLx7mIuFkpOa8gXl?=
- =?us-ascii?Q?nnPSOkDkdM23PMJi2jPXmEannVJyNvyLxwBacBzvAx6vtw6RT4p5VlAASKZa?=
- =?us-ascii?Q?mPPUN26/LxrNyj8TZK6MhY3keHTb0TfVEGZ0v92PoX1kEnXUvebzFpD+RFcn?=
- =?us-ascii?Q?NUG8QuTRxCeMohGaS934XaEm0evUALPXMLDKEaQYReDS+FPaa04UJphuTXR7?=
- =?us-ascii?Q?tD9+a4rK6GT62/V0LNd0sxHM0R52kWoB8bfnArbw1XRZT/p8o6hq4Wp6e0+0?=
- =?us-ascii?Q?BnN7oBunsZg5393BEOSXwsglJQ1ty1ONde85ao3FPemvQoMwvKHrlJF8dJ7w?=
- =?us-ascii?Q?Dk9U+PvLg7SPxAG4jiNC8cKVZiZqDivgJEd1YbTPRVPBaNHUOdwB/zLs1gIR?=
- =?us-ascii?Q?iZzxHZ9+ZXpGbvx7+vRKk5g0onbEGRFeZgAK/3O0rNzR0y14OHM4G2xkcne2?=
- =?us-ascii?Q?GFC+Xz8q0CpumFt18F5j3lS3Bb+Av15fZSE8skUsPXrFJCM1h9ttYhj/W0/9?=
- =?us-ascii?Q?cToxR2b5j+KLRUFL7wmEQ2Q9hRor9qPyGlJL97kB?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8dad174f-db92-4a2e-11dc-08da9746c367
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 18:19:00.9881
+X-Microsoft-Antispam-Message-Info: hWkxrLM1SmX0sDDSpROshjdFpw1AfUSvhKkGhmNXAYzdwz0pTJsb1bmgHVmsN+MjDkYSBo1GTFN8vCxugBw1LY5eEuv8A/aDSSinrNDrb86hJnpDtMD4p7n+DL1+FsFWXYmi6zPV5zscJM9QrWuN09iYnfrjc7uHMahRRA+mB/41lcLh/J8Aq8phBvFVcxSXp747F0K/OMgPdyOJ+myxdCFtPrzerVpx1L0tFjJZ4GdCbbgobTkiQ+6a22CImpHjNCIzxlhB8a4zxrutHIh59Uu5vopEzGF1sgfDynJxqgYH3bWDNgEaFAieqqdX/YyVEVXjihB0S6Q1EHJRYebky7kRWYIlRksWqg4nRBTfvPhJP0bgXL3LUms6rSDKMedmMSFpx6yj1o1sfsIABp+EXGAs8JH0GZgODTqhq3c9Nu4YW5D9ak69JziFWEabNrgS/Cmj88teMup1UEgRp+X9wpglxDjolvFnt78p4okBWFXeD2JfFJazG5VKS8YKetSjk1AvJrkMbpTe94X0GVZpDfSzihmzXtEAI5p+Tm6mdDsbSQGOQEcHESTlytLKTL1gR5bzFIbeENlMggz8p05X3uoXkWtxbl6b/zdNqt0hDYv0ghn6GB8OFQv/w8YOB0yaMY6/2ACpsZwKo089akcmDlzCzrwdyv9WaLHioSm4nx68U6YntISTENcfcVPiQJkX4Cmnh34cMNi7w0PC4srfo94lJS0TuQGF1ubs5vis4VrAa9Gx/y/INj2RP6SE1kgbBKYdIN1IwRt7YsH9685gWcFGgTPYas3+sT/x7LOTKzG1GqKWzx50QGOFn6ZpXc1s2LdIqHtzy85q3PqfWh4kvw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(26005)(41300700001)(7696005)(6666004)(44832011)(5660300002)(186003)(40460700003)(82740400003)(86362001)(4326008)(81166007)(2906002)(426003)(16526019)(36756003)(478600001)(336012)(83380400001)(54906003)(1076003)(8676002)(966005)(47076005)(82310400005)(70206006)(2616005)(8936002)(70586007)(356005)(40480700001)(110136005)(36860700001)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 18:23:27.7194
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uXZ0lcQUGF4sngxOc6v4Pm1STqf0ZQ5/6N5FunABMrlz/+48oSGR2Qpr4HnExe9DeBujU8ZN+ZAs89n09ttfBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7998
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f2b3373-c0bb-4801-dace-08da97476299
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT091.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6927
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Viorel Suman <viorel.suman@nxp.com>
+Dell Inspiron 14 2-in-1 has two ACPI nodes under GPP1 both with _ADR of
+0, both without _HID.  It's ambiguous which the kernel should take, but
+it seems to take "DEV0".  Unfortunately "DEV0" is missing the device
+property `StorageD3Enable` which is present on "NVME".
 
-Sync clock resources with the latest available SCFW kit version 1.13.0,
-may be found at the address below:
+To avoid this causing problems for suspend, add a quirk for this system
+to behave like `StorageD3Enable` property was found.
 
-https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
-
-Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216440
+Reported-and-tested-by: Luya Tshimbalanga <luya@fedoraproject.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/clk/imx/clk-imx8qm-rsrc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I had attempted to modify the heuristics for when two ACPI devices
+have the same _ADR to prefer the one with a _DSD, but this wasn't enough
+of a help. As the ACPI node doesn't contain anything valuable besides
+the _DSD, it seems that a quirk for the system is a fine enough solution.
 
-diff --git a/drivers/clk/imx/clk-imx8qm-rsrc.c b/drivers/clk/imx/clk-imx8qm-rsrc.c
-index 87e0b6ac027e..ee01acd1a181 100644
---- a/drivers/clk/imx/clk-imx8qm-rsrc.c
-+++ b/drivers/clk/imx/clk-imx8qm-rsrc.c
-@@ -79,8 +79,8 @@ static const u32 imx8qm_clk_scu_rsrc_table[] = {
- 	IMX_SC_R_M4_0_I2C,
- 	IMX_SC_R_M4_1_I2C,
- 	IMX_SC_R_AUDIO_PLL_0,
--	IMX_SC_R_VPU_UART,
--	IMX_SC_R_VPUCORE,
-+	IMX_SC_R_ENET_0_A2,
-+	IMX_SC_R_ENET_1_A0,
- 	IMX_SC_R_MIPI_0,
- 	IMX_SC_R_MIPI_0_PWM_0,
- 	IMX_SC_R_MIPI_0_I2C_0,
+ drivers/acpi/x86/utils.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index 664070fc8349..d7cdd8406c84 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -207,9 +207,26 @@ static const struct x86_cpu_id storage_d3_cpu_ids[] = {
+ 	{}
+ };
+ 
++static const struct dmi_system_id force_storage_d3_dmi[] = {
++	{
++		/*
++		 * _ADR is ambiguous between GPP1.DEV0 and GPP1.NVME
++		 * but .NVME is needed to get StorageD3Enable node
++		 * https://bugzilla.kernel.org/show_bug.cgi?id=216440
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
++		}
++	},
++	{}
++};
++
+ bool force_storage_d3(void)
+ {
+-	return x86_match_cpu(storage_d3_cpu_ids);
++	const struct dmi_system_id *dmi_id = dmi_first_match(force_storage_d3_dmi);
++
++	return dmi_id || x86_match_cpu(storage_d3_cpu_ids);
+ }
+ 
+ /*
 -- 
-2.37.2
+2.34.1
 
