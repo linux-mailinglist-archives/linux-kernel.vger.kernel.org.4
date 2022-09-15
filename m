@@ -2,193 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEB05B9182
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1D05B91CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiIOAMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S230137AbiIOAhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiIOAMq (ORCPT
+        with ESMTP id S230111AbiIOAhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:12:46 -0400
-Received: from spamfilter.jmicron.com (spamfilter.jmicron.com [220.130.51.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA294454D;
-        Wed, 14 Sep 2022 17:12:43 -0700 (PDT)
-Received: from JMEH602.jmicron.com (jmeh602.jmicron.com [10.88.10.18])
-        by spamfilter.jmicron.com with ESMTP id 28F0CioR002300;
-        Thu, 15 Sep 2022 08:12:44 +0800 (+08)
-        (envelope-from mdlin@jmicron.com)
-Received: from JMEH601.jmicron.com (10.88.10.17) by JMEH602.jmicron.com
- (10.88.10.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.28; Thu, 15
- Sep 2022 08:12:27 +0800
-Received: from localhost.localdomain (10.88.20.234) by JMEH601.jmicron.com
- (10.88.10.17) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Thu, 15 Sep 2022 08:12:27 +0800
-From:   MD Lin <mdlin@jmicron.com>
-To:     <damien.lemoal@opensource.wdc.com>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mdlin@jmicron.com>, <kevinliu@jmicron.com>,
-        <charonchen@jmicron.com>, <corahuang@jmicron.com>,
-        <mhchen@jmicron.com>, <georgechao@jmicron.com>,
-        <banks@jmicron.com>, <tzuwei@jmicron.com>
-Subject: [PATCH] ata: ahci: Add initialization quirk for JMicron JMB585/JMB582 controllers
-Date:   Thu, 15 Sep 2022 00:11:49 +0000
-Message-ID: <20220915001149.24241-1-mdlin@jmicron.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Sep 2022 20:37:34 -0400
+X-Greylist: delayed 1340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 17:37:33 PDT
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E092D72
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:37:32 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 881CF47206
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:13:32 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YcVYoir6kQLX5YcVYoaqUy; Wed, 14 Sep 2022 19:13:32 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=I36WnZ63D/mULay/sD5tEqwT2kxeAhKIhlJbB7iRBjs=; b=1aiq33rXIKxS9LBqxz2DPkOmbo
+        xS7F0ek5DBB8RY0ulFNJ9WIGXDfT2xzIQuXsmhgzwv/EvgXl5njQ2h0zZRglDPrfG5ME71hB/4MPW
+        xpmNm0o9nRSbNyJLoxCpR7QBp8+ooZRTDNY+tGV6coJfKBSs7Fsx27xeyZO93vg9gijCIChyC3u3L
+        eQk9Id+2NHL5XIaaz3sqLZUyyJIdnW8SoOQWjuH75gQw75b0vgQ4tsruSybo+DlQjQOJrW2K1katH
+        aH6HIbTyiWAsoNAfRaCpF+T9EoiOXtP8ly/xVGM0JW3gPoTpALw5hvRb/BU1IjuHTwTTs4FATM59C
+        KOxArnoA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:39608 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oYcVX-003KS6-C1;
+        Thu, 15 Sep 2022 00:13:31 +0000
+Date:   Wed, 14 Sep 2022 17:13:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/79] 5.10.143-rc1 review
+Message-ID: <20220915001327.GC603793@roeck-us.net>
+References: <20220913140350.291927556@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-DNSRBL: 
-X-MAIL: spamfilter.jmicron.com 28F0CioR002300
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oYcVX-003KS6-C1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:39608
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 38
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JMicron JMB585/JMB582 does not enable specific error bit handling functions
-by default so this patch enable these functions for better compatibility.
-Besides, these patches also adjust SATA RX/TX_GEN1/TX_GEN2 parameters for
-better compatibility. These patches had been tested in JMicron Test
-Laboratory and been implemented to our customers.
+On Tue, Sep 13, 2022 at 04:04:05PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.143 release.
+> There are 79 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+> 
 
-Signed-off-by: MD Lin <mdlin@jmicron.com>
----
- drivers/ata/ahci.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++
- drivers/ata/ahci.h | 23 +++++++++++++++
- 2 files changed, 94 insertions(+)
- mode change 100755 => 100644 drivers/ata/ahci.h
+Build results:
+	total: 163 pass: 163 fail: 0
+Qemu test results:
+	total: 475 pass: 475 fail: 0
 
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 505920d45..3e9e3b8f8 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -1657,6 +1657,75 @@ static void ahci_intel_pcs_quirk(struct pci_dev *pdev, struct ahci_host_priv *hp
- 	}
- }
- 
-+static void ahci_jmb58x_write_sata(void __iomem *mmio, u32 addr, u32 data)
-+{
-+	writel((addr & 0x01FFFUL) + (1UL << 18UL), mmio + 0xC0);
-+	writel(data, mmio + 0xC8);
-+}
-+
-+static void ahci_jmb58x_quirk(void __iomem *mmio)
-+{
-+	u32 pi = readl(mmio + HOST_PORTS_IMPL);
-+	u32 b8_data;
-+
-+	/*
-+	 * JMB582: PI is 0x03
-+	 * JMB585: PI is 0x1f
-+	 */
-+
-+	/*
-+	 * enable error bit handling functions, these might overwrite
-+	 * the setting which loads from external SPI flash.
-+	 * the address and value are defined in adapter specs.
-+	 */
-+	b8_data = (pi > 3) ? 0x13 : 0x92;
-+	writel(JMB58X_EH_MODIFY_ON + b8_data,  mmio + 0xB8);
-+	writel(JMB58X_EH_GENERAL,              mmio + 0x30);
-+	writel(JMB58X_EH_CFIS_RETRY,           mmio + 0x34);
-+	writel(JMB58X_EH_DROP_D2H,             mmio + 0x38);
-+	writel(JMB58X_EH_MODIFY_OFF + b8_data, mmio + 0xB8);
-+	writel(JMB58X_EH_TX_LOCK,              mmio + 0xB0);
-+
-+	/*
-+	 * set SATA configuration, these might overwrite
-+	 * the setting which loads from external SPI flash.
-+	 * the address and value are defined in adapter specs.
-+	 */
-+	ahci_jmb58x_write_sata(mmio, 0x06, JMB58X_SATA0_RX);
-+	ahci_jmb58x_write_sata(mmio, 0x13, JMB58X_SATA1_RX);
-+	ahci_jmb58x_write_sata(mmio, 0x73, JMB58X_SATA0_TX_GEN2);
-+	ahci_jmb58x_write_sata(mmio, 0x75, JMB58X_SATA1_TX_GEN2);
-+	ahci_jmb58x_write_sata(mmio, 0x74, JMB58X_SATA0_TX_GEN1);
-+	ahci_jmb58x_write_sata(mmio, 0x80, JMB58X_SATA1_TX_GEN1);
-+	if (pi > 3) {
-+		ahci_jmb58x_write_sata(mmio, 0x20, JMB58X_SATA2_RX);
-+		ahci_jmb58x_write_sata(mmio, 0x2D, JMB58X_SATA3_RX);
-+		ahci_jmb58x_write_sata(mmio, 0x3A, JMB58X_SATA4_RX);
-+		ahci_jmb58x_write_sata(mmio, 0x79, JMB58X_SATA3_TX_GEN2);
-+		ahci_jmb58x_write_sata(mmio, 0x83, JMB58X_SATA3_TX_GEN2_EXT);
-+		ahci_jmb58x_write_sata(mmio, 0x7A, JMB58X_SATA3_TX_GEN1);
-+		ahci_jmb58x_write_sata(mmio, 0x84, JMB58X_SATA3_TX_GEN1_EXT);
-+	}
-+}
-+
-+static void ahci_jmicron_quirk(struct pci_dev *pdev,
-+			struct ahci_host_priv *hpriv)
-+{
-+	void __iomem *mmio = hpriv->mmio;
-+	u8 tmp8;
-+
-+	if (pdev->vendor != PCI_VENDOR_ID_JMICRON)
-+		return;
-+
-+	switch (pdev->device) {
-+	case 0x585:
-+		tmp8 = readb(mmio + 0x44);
-+		if (tmp8)  /* check controller version */
-+			ahci_jmb58x_quirk(mmio);
-+		break;
-+	}
-+}
-+
- static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
- 	unsigned int board_id = ent->driver_data;
-@@ -1775,6 +1844,8 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	 */
- 	ahci_intel_pcs_quirk(pdev, hpriv);
- 
-+	ahci_jmicron_quirk(pdev, hpriv);
-+
- 	/* prepare host */
- 	if (hpriv->cap & HOST_CAP_NCQ) {
- 		pi.flags |= ATA_FLAG_NCQ;
-diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-old mode 100755
-new mode 100644
-index 9290e787a..82ecc6f2c
---- a/drivers/ata/ahci.h
-+++ b/drivers/ata/ahci.h
-@@ -52,6 +52,29 @@
- #define EM_MSG_LED_VALUE_OFF          0xfff80000
- #define EM_MSG_LED_VALUE_ON           0x00010000
- 
-+/* JMicron JMB585/JMB582 Error Bit Handling Register Value */
-+#define JMB58X_EH_MODIFY_ON           0x03060004
-+#define JMB58X_EH_MODIFY_OFF          0x03060000
-+#define JMB58X_EH_GENERAL             0x00FF0B01
-+#define JMB58X_EH_CFIS_RETRY          0x0000003F
-+#define JMB58X_EH_DROP_D2H            0x0000001F
-+#define JMB58X_EH_TX_LOCK             0xF9E4EFBF
-+
-+/* JMicron JMB585/JMB582 SATA PHY Register Value */
-+#define JMB58X_SATA0_RX               0x70005BE3
-+#define JMB58X_SATA1_RX               0x70005BE3
-+#define JMB58X_SATA2_RX               0x70005BE3
-+#define JMB58X_SATA3_RX               0x70005BE3
-+#define JMB58X_SATA4_RX               0x70005BE3
-+#define JMB58X_SATA0_TX_GEN1          0x00000024
-+#define JMB58X_SATA1_TX_GEN1          0x250B0003
-+#define JMB58X_SATA3_TX_GEN1          0x00000024
-+#define JMB58X_SATA3_TX_GEN1_EXT      0x250B0003
-+#define JMB58X_SATA0_TX_GEN2          0x000001E5
-+#define JMB58X_SATA1_TX_GEN2          0x000001E5
-+#define JMB58X_SATA3_TX_GEN2          0x000001E5
-+#define JMB58X_SATA3_TX_GEN2_EXT      0x250B0003
-+
- enum {
- 	AHCI_MAX_PORTS		= 32,
- 	AHCI_MAX_CLKS		= 5,
--- 
-2.17.1
+As with 5.15.y and 5.19.y, new runtime warning:
 
+BUG: sleeping function called from invalid context at drivers/clk/imx/clk-pllv3.c:68
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
