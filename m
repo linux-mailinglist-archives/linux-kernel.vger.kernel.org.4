@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18705B9B06
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16D75B9B0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiIOMja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S230152AbiIOMjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiIOMjG (ORCPT
+        with ESMTP id S229986AbiIOMjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:39:06 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3607B844DD
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:39:01 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id az6so13829899wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:39:01 -0700 (PDT)
+        Thu, 15 Sep 2022 08:39:07 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67049844CB;
+        Thu, 15 Sep 2022 05:39:02 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id e18so7626791wmq.3;
+        Thu, 15 Sep 2022 05:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=IeAgNZtS8X1tLcgH+uLrT6e6JPredzlWXqw/7cX/H9c=;
-        b=NpEnD4+5UvjApkez7BQRb2H/jI+T6RSMCDPJAnkFcvgXSPoETTKktjQDdmNcFHKOu7
-         4wZwR0mf9x+JYp5535hBJcYkUgxbr1Fjqll2o8Iz3WrqhfAGa3H1i+HYFrOw/kkKKAtg
-         K1TvILDY1H6J7y8oJG+7RNhKJHm5ueTYTl+RW3+OtXg9lRXESR7fj2V2FskBqsppVz/F
-         LOXuolIGk5olSXyopf2OwoJt1uzFmu6ywiWuU0RQTsmBhQwpZ3oxDk/yPgyAl5ZCvUHd
-         Evf2/6ARERpQn+ZYEbPh7zoMRUQ8pBD/hGEchnASctsbydhzlkJZWORHqCJHjbXE9asX
-         roKA==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JowbcqaoSeHYfBdTSmK7yPgn5pXXbUiwgqBzQ++Q3hY=;
+        b=Zds6NGqWZZ8qjwOAkmr3ltzpBLskhG8fdSr3MDcQ2Y9bwqVzgQcnifi7N3M1lTlk5V
+         PxmB/A8BKT3rs4TZogzc8BG8tw76D3WstQAobiHRlCJ5HhxKRnJxaemiTP6jT8+Zxcfs
+         BtTsNSKXvFryyTsvhw8Q7uBJLlsXZPRF5A4Bc/cCR/xcQtny7OqCcgPfzPFZihXLi73F
+         SCKiP1FiM0dpH4LH2yyWNrxZNkI9D0M5tJrFx7sEmDLWUHWy6ul6cO3y7ys24eGdPU0F
+         2XWgSxU57fF7M/eZBmj3dYfKXIaB+rPXIwof6BTYBm/D+wEWRb52UqAAkqSRL4vSV3NS
+         wHCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=IeAgNZtS8X1tLcgH+uLrT6e6JPredzlWXqw/7cX/H9c=;
-        b=aAWOnwIl7T361J9qBFPVXRk364/HkZ1KA5yPmUCOgAkpgF/87pEnQEmGGrsvYVr133
-         kwDR65vmDgr3GvRcLR5EUrmu+1KP3cGVlmflBzunj+m5tPgrlI+6ZpA+5l59HI2ely7A
-         RKA1l+Cqp7pOaUM3BsQiYRtVTq9WMLinoY6VlPYkWHX+aDawaPHoXt4azL83VkSBM4mF
-         XnDO1a86CkknMypRCHa/XCHy34fLBvF8ErCrTGVw65N85fmoA3Z0UL2v7AcckTxemma7
-         o4PoT7xj5JgIEExeszW0Om6z71sDZ95y8Bc0OYV4zGBLXVAXbuJ4NgvWJo05tO/lc+qm
-         1Wyg==
-X-Gm-Message-State: ACgBeo2bsDxEi9qvtXVEA5ZatbsXGtsm0RwUkYN3QOtAK+t61+Cjuo/3
-        j0um+nQVxEJHQSFJJ2T4vVC9HQ==
-X-Google-Smtp-Source: AA6agR64FpbnVidcThBa1wrEKVXvNGP2DM9m3fJynJiGl7+Y0Kee97YdzuC6a+BOEeZEPauV0G4Nbw==
-X-Received: by 2002:a05:600c:4f53:b0:3b4:9aad:7845 with SMTP id m19-20020a05600c4f5300b003b49aad7845mr6561451wmq.159.1663245540816;
-        Thu, 15 Sep 2022 05:39:00 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id bg13-20020a05600c3c8d00b003a5f4fccd4asm3112559wmb.35.2022.09.15.05.38.59
+        bh=JowbcqaoSeHYfBdTSmK7yPgn5pXXbUiwgqBzQ++Q3hY=;
+        b=ldB3dYE9AbgLbF8Wet9EtYjPl7ZWaC8L9ahav+SBgipvI3c9TrBs3ioQKacIm+Xgy0
+         /NqbkhW+I1+PcnGvw2UBziBhb/euUWJGXcvSMPZzBkKEs4WoaLa/1/3YN3nvOyOFM/A8
+         MvPIR4W4bWY309VIxh0/1CwxJR0e9ORSrsCyuLhzFxRY/WASn9eyqtnH83WlRPMN4Cit
+         HFeZwjxJ9KRe2ylxJFBj/RuX/HdnmK1cB69dzhXoDX6kjMRU+UjsMjFz7mWVwnabsROD
+         Lcu8CHnRUhoUpZj6jE20zRr0r1rO8+QrspJttkkZ9z+AVB77A3+ea0qUX5Rn9gcb52E8
+         wNAw==
+X-Gm-Message-State: ACgBeo3f/ljQwvrrs6WFRy6mF7lANmHn6GsadWNWphsSiiDxjPfE0yXJ
+        SbzG6dtYeslvWsGK4NGkeBg=
+X-Google-Smtp-Source: AA6agR6p+cQR2KXMA9mKPBtsRgWmraQ/EvHReKZd5/k0gahtz19cEOPpIXYgYOGYaCCdfCyrrcA5ag==
+X-Received: by 2002:a1c:7315:0:b0:3a5:ff61:4080 with SMTP id d21-20020a1c7315000000b003a5ff614080mr6482824wmb.196.1663245541937;
+        Thu, 15 Sep 2022 05:39:01 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id fc8-20020a05600c524800b003b48dac344esm3199521wmb.43.2022.09.15.05.38.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:39:00 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 9/9] ASoC: qdsp6: audioreach: add support to enable module command
-Date:   Thu, 15 Sep 2022 13:38:37 +0100
-Message-Id: <20220915123837.11591-10-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220915123837.11591-1-srinivas.kandagatla@linaro.org>
-References: <20220915123837.11591-1-srinivas.kandagatla@linaro.org>
+        Thu, 15 Sep 2022 05:38:57 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:38:56 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
+        smangipudi@nvidia.com, Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: Re: [PATCH v2] gpio: tegra186: add Tegra234 PMC compatible in GPIO
+ driver
+Message-ID: <YyMc4OkYLLXjiHmL@orome>
+References: <Yhe0pCpfeCpyfPWg@orome>
+ <20220816102725.14708-1-pshete@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ObJgmcXHiByHBDO8"
+Content-Disposition: inline
+In-Reply-To: <20220816102725.14708-1-pshete@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to enable Module command which is required for logging
-module to be able to debug.
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/qdsp6/audioreach.c | 37 +++++++++++++++++++++++++++++++
- sound/soc/qcom/qdsp6/audioreach.h |  5 +++++
- 2 files changed, 42 insertions(+)
+--ObJgmcXHiByHBDO8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
-index 05b58239cab6..e88ace794d4f 100644
---- a/sound/soc/qcom/qdsp6/audioreach.c
-+++ b/sound/soc/qcom/qdsp6/audioreach.c
-@@ -729,6 +729,42 @@ static int audioreach_sal_set_media_format(struct q6apm_graph *graph,
- 	return rc;
- }
- 
-+static int audioreach_module_enable(struct q6apm_graph *graph,
-+				    struct audioreach_module *module,
-+				    bool enable)
-+{
-+	struct apm_module_param_data *param_data;
-+	struct param_id_module_enable *param;
-+	int payload_size;
-+	struct gpr_pkt *pkt;
-+	int rc;
-+	void *p;
-+
-+	payload_size = sizeof(*param) + APM_MODULE_PARAM_DATA_SIZE;
-+
-+	pkt = audioreach_alloc_apm_cmd_pkt(payload_size, APM_CMD_SET_CFG, 0);
-+	if (IS_ERR(pkt))
-+		return PTR_ERR(pkt);
-+
-+	p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
-+
-+	param_data = p;
-+	param_data->module_instance_id = module->instance_id;
-+	param_data->error_code = 0;
-+	param_data->param_id = PARAM_ID_MODULE_ENABLE;
-+	param_data->param_size = sizeof (*param);
-+	p = p + APM_MODULE_PARAM_DATA_SIZE;
-+	param = p;
-+
-+	param->enable = enable;
-+
-+	rc = q6apm_send_cmd_sync(graph->apm, pkt, 0);
-+
-+	kfree(pkt);
-+
-+	return rc;
-+}
-+
- static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
- 					   struct audioreach_module *module,
- 					   struct audioreach_module_config *cfg)
-@@ -1075,6 +1111,7 @@ int audioreach_set_media_format(struct q6apm_graph *graph, struct audioreach_mod
- 
- 	switch (module->module_id) {
- 	case MODULE_ID_DATA_LOGGING:
-+		audioreach_module_enable(graph, module, true);
- 		rc = audioreach_logging_set_media_format(graph, module);
- 		break;
- 	case MODULE_ID_PCM_DEC:
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index 707dfbdbc156..1d1d47d47d40 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -537,6 +537,11 @@ struct payload_media_fmt_pcm {
- 	uint8_t channel_mapping[];
- } __packed;
- 
-+#define PARAM_ID_MODULE_ENABLE			0x08001026
-+struct param_id_module_enable {
-+	uint32_t enable;
-+} __packed;
-+
- #define PARAM_ID_CODEC_DMA_INTF_CFG		0x08001063
- 
- struct param_id_codec_dma_intf_cfg {
--- 
-2.21.0
+On Tue, Aug 16, 2022 at 03:57:25PM +0530, Prathamesh Shete wrote:
+> Using this patch we are adding PMC compatible string for
+> Tegra234 in GPIO driver so the IRQ hierarchy can be set.
+>=20
+> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> ---
+>  drivers/gpio/gpio-tegra186.c | 1 +
+>  1 file changed, 1 insertion(+)
 
+I already acked this on v1, but here goes again, for patchwork:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--ObJgmcXHiByHBDO8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjHOAACgkQ3SOs138+
+s6Hy/Q//dhxKqkvTQwx5kDgrAsB3vWecsum9vMvaN3wqNcheDRlhaNuVY2Q+j2nF
+qNZGvIDjJofnu7TNuCgZE/Kzmtla36JZxLwP1z8u4a5S8F7urkb4jHIJSIwROKfi
+mFFx0Dhf0h1/48xmI1S0M3gf/cX78gLMoMRsZ2tRb8oaMxIrvrBI8Q/6kcQXHi5s
+Ru3U918eU4sVeM3s6WhQHd14ynzkDTuALOOGWP0n1ouSnU0yClSxv8oxfnhdBqDr
+FtNh1DaKDRGVRp0w/jbNFUJaPKBOuEHw2f8wRYAo4TqSFHqVfSfMlHwcbRyNR3JC
+WjBo4ieXw6TPLHVHmeV0ol9+1oPUxevafOpxQk1IlZKXfzah2twdeR+HVhsV+3+B
+0o6v6O43SomBnz1pzRTmBy73p4LdWGLd/Vx+42+1Bipl53vriWmjaAiapScJt+fK
+wvGfeerLeZoUiEicL3y7PYQrhRF5ExAtvgICo2ndGhjDl0enPWUl+kYRchv4yDXE
+oCJTONfKvoJDn7ttMGcM1Ar15p8E32GRhrHxIrYfkYGE6oklZFzQDWeTxvms+8YJ
+bGZsj3kNSC7x1E2PxoRR+6ckGSB+fm5fuJiWl9mTfU/zocWYsINM3kGl1SzCV+ZZ
+S+IbJWLrBm2blnEZhXAVCL0DOzUkl7hwqF8yc3+BKTxvKM9026M=
+=wZRJ
+-----END PGP SIGNATURE-----
+
+--ObJgmcXHiByHBDO8--
