@@ -2,99 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB695BA1B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D455BA1B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiIOUG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 16:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S229602AbiIOUGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 16:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIOUGy (ORCPT
+        with ESMTP id S229562AbiIOUGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 16:06:54 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C0F4663A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:06:52 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y17so39548295ejo.6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=vycmJ4KaZAk7CzlOuVCprBT5/i/n7HJryZHYZXyoNN0=;
-        b=adNAW5/TlO/J8iQyzUdXEzXa1JMG9pFDJXH/9iQ2WhCMDJYjaguJVelnsuKv1fuOOX
-         kRIBY/+EAaQ65G+ZO2mPbt5KoNjJ6Xv7hOdD2Hal0o+1Aa6oNiRgMYVq4/1n4WRCjoO+
-         hnnsaSu4zExf0cko2bHrZsGJRE+HQnHhFcRomprYMQ6GdrA6m/LMeSpOb66MF1uTcHIh
-         dGONwK4CmCZZZOnxQPoqANcBFnxCaJNuyTC6AR/kUVpfI6MuxlCOJ8hfQHK1KGYngmC/
-         bnZdc1Fri9Wpr0N7JfLHh3kyPTeFYQrdSjvRZJo3c6NvN+3BwzaDtD+HSRaKq2eRx8TI
-         merA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vycmJ4KaZAk7CzlOuVCprBT5/i/n7HJryZHYZXyoNN0=;
-        b=W8J1tIJIfQV90gCGj7+oUXQR8tJHqMlW2kRtyfDqVN0Qtkqodr/3xL06r0Xpm93I/Z
-         kkwcxSAzgyk8SkiQZq26Cy5vRa6M+8CIQ2v6p37jb084nvlCiwKmUP+jRax8z8HuC4wj
-         AqqiX/X+vgj2QOfm4B2MJw2CVC43V12a6InjXksRXRmv4Lm66l+kMpM06pa+at/plEaQ
-         bwaPtkWlB5iz+w2zkmUap/DVyyBqhv+txNMUX7YASgYOaz3Z/qPPrLeQCeoYxLcsUcF+
-         93p63FZk4INqZurMR8VxgbK6px1XpCmkmKg/FkZ//ijzbWRNgf1NURk09bDvcDH6XmSW
-         cdhA==
-X-Gm-Message-State: ACrzQf1vtT0QtIC9TcvLprhD7QiHCXDOplyzBsOcuGELPmKuq5wjjEHS
-        gLg+1tpxttJrhKa/AG9FBug=
-X-Google-Smtp-Source: AMsMyM5mQDXzHK6KUdvG+weZB9xH81LSJyAp98vY/CykfCpwBs5YqTDDymHQg6sOlWQiiHN6X8DL0w==
-X-Received: by 2002:a17:906:845b:b0:770:86da:9702 with SMTP id e27-20020a170906845b00b0077086da9702mr1086554ejy.244.1663272410566;
-        Thu, 15 Sep 2022 13:06:50 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id i20-20020aa7c9d4000000b00448176872f7sm12212147edt.81.2022.09.15.13.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 13:06:50 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Tom Rini <trini@konsulko.com>, Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] nvmem: u-boot-env: find Device Tree nodes for NVMEM cells
-Date:   Thu, 15 Sep 2022 22:06:29 +0200
-Message-Id: <20220915200629.10270-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 16:06:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270E83FA3D;
+        Thu, 15 Sep 2022 13:06:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC04162651;
+        Thu, 15 Sep 2022 20:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C0DC433D6;
+        Thu, 15 Sep 2022 20:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663272401;
+        bh=de7jzm93A3T+Xyc6RXxLW+F0i/C5VJ38aJEFDi9L3so=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qgiRHoEIAC0V5qvPL+C0yZCzzWDEHEFYgKtbkuTkKy03ayJTMrK5oFhtrqnEqqevV
+         +1/MGnvKkzvj3yCAFJ4rPAL2PUHLfpA6NXfL5GO096QeI+cBQEJQ0HUYi3dHUC4o32
+         U5heB67UUVl2haE/M/lsGD6c0hoRMZ+h7olYvxx4=
+Date:   Thu, 15 Sep 2022 13:06:40 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-Id: <20220915130640.cec443b3ffb6650e16d9e610@linux-foundation.org>
+In-Reply-To: <YyNUtA1vRASOE4+M@monkey>
+References: <20220915170758.71068f92@canb.auug.org.au>
+        <YyNUtA1vRASOE4+M@monkey>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Thu, 15 Sep 2022 09:37:08 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
 
-DT binding allows specifying NVMEM cells as NVMEM device (provider)
-subnodes. Looks for such subnodes when building NVMEM cells.
+> Andrew, the following change to 47bc61e7caf9 ("hugetlb: add vma based lock for
+> pmd sharing") will fix the issue.  Would you like to just add the fix, or
+> would you like another version of 47bc61e7caf9, or perhaps another version of
+> the series?  Happy to do whatever is easier for you.
 
-This allows NVMEM consumers to use U-Boot environment variables.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/nvmem/u-boot-env.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-index 9b9abfb8f187..d17a164ae705 100644
---- a/drivers/nvmem/u-boot-env.c
-+++ b/drivers/nvmem/u-boot-env.c
-@@ -92,6 +92,7 @@ static int u_boot_env_add_cells(struct u_boot_env *priv, uint8_t *buf,
- 			return -ENOMEM;
- 		priv->cells[idx].offset = data_offset + value - data;
- 		priv->cells[idx].bytes = strlen(value);
-+		priv->cells[idx].np = of_get_child_by_name(dev->of_node, priv->cells[idx].name);
- 	}
- 
- 	if (WARN_ON(idx != priv->ncells))
--- 
-2.34.1
-
+This simple fix is easiest for me.  More importantly, I think it's
+easier for reviewers, who don't have to plough through a whole new
+series unsure what might have changed.
