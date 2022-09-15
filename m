@@ -2,137 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B043C5B956A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662A95B956F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiIOH3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
+        id S230015AbiIOHa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiIOH3R (ORCPT
+        with ESMTP id S230009AbiIOH35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:29:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E727397D48
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jZjXacIHtf71qVEc6F7nmis+mD+u/JEdyW+ir9p4QvI=; b=Tm1mpm+PSptPgt+Dy3cmUPgS4x
-        i+lGxOmra5kHPfQdRFZIZqfmRGLc5RvWdhltMtOpgbU04M+XF2jiFII3ziIRrDPufwmFeIk9RGCyx
-        V0WbPfCdylvwuQYj2TFMh87T329sKOh3U/sp2DsebspDEj3y89jjiCFBj7SyZMiuX4ntEE+cpp01h
-        4k9HSaYH3kjmFiUIQtE/1LcdyHOd98v97UB9shIhRXxZaP2U6YFUEwGGK+AJuR8Gdkc1X7L9r+UaE
-        cViwxmw4IX9usMVcvkDLbNqK3HlVjhfAjxOJTLmH5CKaDOs2jLBQN0KRq1lyX/qRTG4KPyZ3nfxwE
-        F4Fk60DA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYjIQ-000tE2-Ad; Thu, 15 Sep 2022 07:28:26 +0000
-Date:   Thu, 15 Sep 2022 08:28:26 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
- kswapd
-Message-ID: <YyLUGnqtZXn4MjJF@casper.infradead.org>
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+        Thu, 15 Sep 2022 03:29:57 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367CD13E12;
+        Thu, 15 Sep 2022 00:29:42 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28F7T0Dv004698;
+        Thu, 15 Sep 2022 02:29:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663226940;
+        bh=kK3MFPKNCAR0l9Tkn5PBHDwUH9L6G+mhGZnNZrSdX1A=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=x8uvcSgB81Unk5UGB9mpQOB66hsSep6s8mt1L6w8k+X8tHXkOgwvwDvHiKdRFuZCD
+         a5KYW/7lhG2fEqkvkDT5gBixwb/0eo7exnmH4sMwIlAZWCQgC12auNUca1qVAZ13j2
+         He1KUrB8hobi49LvXtFQ2pYSuU8Q3UeGMTs+iT2I=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28F7T0af017667
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Sep 2022 02:29:00 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 15
+ Sep 2022 02:28:59 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 15 Sep 2022 02:28:59 -0500
+Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28F7SrQY016573;
+        Thu, 15 Sep 2022 02:28:54 -0500
+Message-ID: <2b21b163-0a70-4786-4314-20743178a2e2@ti.com>
+Date:   Thu, 15 Sep 2022 12:58:53 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 1/8] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J721e CPSW9G
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+References: <20220914095053.189851-1-s-vadapalli@ti.com>
+ <20220914095053.189851-2-s-vadapalli@ti.com>
+ <20220914162004.GA2433106-robh@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20220914162004.GA2433106-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
-> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
-> seconds.
-> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
-> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> this message.
-> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
-> 77327 flags:0x00004002
-> [ 3748.483358] Call Trace:
-> [ 3748.485964]  <TASK>
-> [ 3748.488150]  __schedule+0x23d/0x590
-> [ 3748.491804]  schedule+0x4e/0xc0
-> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
-> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
-> [ 3748.505181]  down_read+0x43/0xa0
-> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
-> [ 3748.512799]  exc_page_fault+0x77/0x170
-> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
-> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
-> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
-> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
-> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
-> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
-> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
-> 0000000000000010
-> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
-> 00007f99faa1a000
-> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
-> 0000000000000014
-> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
-> 0000000000001000
-> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
-> ffffaa9248fffd98
-> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
-> [ 3748.592614]  filemap_read+0x174/0x3e0
+Hello Rob,
 
-Interesting; it wasn't the process itself which triggered the page
-fault; the process called read() and the kernel took the page fault to
-satisfy the read() call.
+On 14/09/22 21:50, Rob Herring wrote:
+> On Wed, Sep 14, 2022 at 03:20:46PM +0530, Siddharth Vadapalli wrote:
+>> Update bindings for TI K3 J721e SoC which contains 9 ports (8 external
+>> ports) CPSW9G module and add compatible for it.
+>>
+>> Changes made:
+>>     - Add new compatible ti,j721e-cpswxg-nuss for CPSW9G.
+>>     - Extend pattern properties for new compatible.
+>>     - Change maximum number of CPSW ports to 8 for new compatible.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 23 +++++++++++++++++--
+>>  1 file changed, 21 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> index 821974815dec..868b7fb58b06 100644
+>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> @@ -57,6 +57,7 @@ properties:
+>>        - ti,am654-cpsw-nuss
+>>        - ti,j7200-cpswxg-nuss
+>>        - ti,j721e-cpsw-nuss
+>> +      - ti,j721e-cpswxg-nuss
+>>        - ti,am642-cpsw-nuss
+>>  
+>>    reg:
+>> @@ -111,7 +112,7 @@ properties:
+>>          const: 0
+>>  
+>>      patternProperties:
+>> -      "^port@[1-4]$":
+>> +      "^port@[1-8]$":
+>>          type: object
+>>          description: CPSWxG NUSS external ports
+>>  
+>> @@ -121,7 +122,7 @@ properties:
+>>          properties:
+>>            reg:
+>>              minimum: 1
+>> -            maximum: 4
+>> +            maximum: 8
+>>              description: CPSW port number
+>>  
+>>            phys:
+>> @@ -181,6 +182,21 @@ required:
+>>    - '#size-cells'
+>>  
+>>  allOf:
+>> +  - if:
+>> +      not:
+>> +        properties:
+>> +          compatible:
+>> +            contains:
+>> +              const: ti,j721e-cpswxg-nuss
+>> +    then:
+>> +      properties:
+>> +        ethernet-ports:
+>> +          patternProperties:
+>> +            "^port@[5-8]$": false
+>> +            properties:
+>> +              reg:
+>> +                maximum: 4
+> 
+> Your indentation is off. 'properties' here is under patternProperties 
+> making it a DT property.
+> 
+>> +
+>>    - if:
+>>        not:
+>>          properties:
+>> @@ -192,6 +208,9 @@ allOf:
+>>          ethernet-ports:
+>>            patternProperties:
+>>              "^port@[3-4]$": false
+>> +            properties:
+>> +              reg:
+>> +                maximum: 2
+> 
+> Same here.
 
-> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
-> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
-> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
-> [ 3748.609164]  ? aa_file_perm+0x102/0x250
-> [ 3748.613125]  new_sync_read+0x10d/0x1a0
-> [ 3748.617009]  vfs_read+0x103/0x1a0
-> [ 3748.620423]  ksys_read+0x67/0xf0
-> [ 3748.623743]  __x64_sys_read+0x19/0x20
-> [ 3748.627511]  do_syscall_64+0x59/0xc0
-> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
-> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
-> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
-> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
-> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
-> [ 3748.653737]  ? exc_page_fault+0x89/0x170
-> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> [ 3748.663030] RIP: 0033:0x7f9a852989cc
-> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000000
-> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
-> 00007f9a852989cc
-> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
-> 0000000000000061
-> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
-> 00007f99faa18010
-> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
-> 00007f99faa18010
-> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
-> 0000000000027100
+Thank you for reviewing the patch. Sorry for the indentation errors. I
+will fix them in the v2 series.
 
-ORIG_RAX is 0, which matches sys_read.
-RDI is file descriptor 0x61
-RSI is plausibly a userspace pointer, 0x7f99faa18010
-RDX is the length, 0x27100 or 160kB.
-
-That all seems reasonable.
-
-What I really want to know is who is _holding_ the lock.  We stash
-a pointer to the task_struct in 'owner', so we could clearly find this
-out in the 'blocked for too long' report, and print their stack trace.
-
-You must have done something like this already in order to deduce that
-it was the direct reclaim path that was the problem?
-
+Regards,
+Siddharth.
