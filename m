@@ -2,218 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21925BA016
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50345BA017
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiIOQ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
+        id S229714AbiIOQ4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiIOQ4b (ORCPT
+        with ESMTP id S230077AbiIOQ4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:56:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F316886FEA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:56:29 -0700 (PDT)
+        Thu, 15 Sep 2022 12:56:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B709910AA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663260989; x=1694796989;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6USo/iagqykRvBsqqn9ihf0ihfxYVw9lyeFR58FlBfg=;
-  b=NHL+MuZRhDoK/AG7QsI3PLlV/4gkDA8eoHq/RUxnjOpWy1of8lf0l6r5
-   zuGE2HlsdGgt+UNoy5wRwoF6XgvT6qWYx/N7RJTGIduD7G9c/3P1hkPr0
-   bX6h0TlRz6JvZnbjpb1s8pyh1WXd/XZwrish5Yhl7BDh/n80AR9cXaP98
-   9oWXZrMSIT5R8/3Mr2bJf5ufJpBrxPDxqInqAxTspdnayDvShL47l9sXS
-   0qg3bdZWCSjHhl19Ndgqik/nvnQjC2u4Gg5aSX335tFNro875WthVOflV
-   AwufAkfkQm1qGda5q/IYrJVe2hcOnvnUvWHL3zoyBdJS2OmWOEfUjfAU3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="298767732"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663261001; x=1694797001;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=BThzje0XGv3cfJC3lq/eOosE7rHgQeW7GuI2s30mkaU=;
+  b=cpHk3nxMlSMzNWeBr0izscBQevXtGaPZ0GWiE1ibxXw4cTXMwco+l8bq
+   4tjYVJ7oR5GbYx/oVmLawdZVyecCpf9zVW4h+V+GmTwoDHQgteFc9P914
+   JG+XdF9zrB8+hd5rT+4xfsbwdARspOpNsK/2OrBPBrALjqF5I0K6ptl0v
+   bp9tO+6z8jpTbS3GBrGHBesdzuBLLU5c1FNu1fMZvjMfbB0503/ls7T44
+   6XNXUQehUJAeGm2b60o1oimiwkjAtJgpAPR77CLdiXgmicLf2u9Ahb9Mq
+   AbHfgwBcilTSyBj60GfY2uZ8ReJb4QZslq0ppDu17aR0EngX3p8xXD6Sa
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="298767732"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:56:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="617351758"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Sep 2022 09:56:27 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYsA6-0000lT-39;
-        Thu, 15 Sep 2022 16:56:26 +0000
-Date:   Fri, 16 Sep 2022 00:55:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr'
- is less than 4
-Message-ID: <202209160050.pf9YjRLA-lkp@intel.com>
+   d="scan'208";a="177351035"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 09:56:39 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 15 Sep 2022 09:56:39 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Thu, 15 Sep 2022 09:56:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c3N+NUkBwghVdbb3EDZZ2L0sj6PKEOtQIqMRIAxPKvL+Nj6P8W8Q1uLNNClDpp9pKGGdWV4oErVhFy8ggxwkLy7ymtZcuYk4F+uWlOQ7NNeTVm6SXgJjOodVQUD3EpWBJGEiM0CYLIq+A0l2L/K0/QXYPUyj0h2e0Eyb5+f8HgnP7FzfnVDMfkyWD5Y9ei06CdHiF0g/vj1H1+YcFKUWV5sCrylA5LTSn6mMhuw0X0eRvIY9+BgS0q8mcdXsYeaEWbOoehvYGTIVLE+KMRUluuE6zrmpFXA43+3pdijQj/sZyVP2HkQrlUKzrd8HYFRHAngfqKTzRvLHkjZombh9aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BThzje0XGv3cfJC3lq/eOosE7rHgQeW7GuI2s30mkaU=;
+ b=lS0ZRbWimmRPMK4kG9gdO1BfMtu8/2P9H8B34EkAsAxIzMXyBWZx8qwkAXuJUjKRFiE8O5SZAIoBAfiiCZjBk8EImbIRDvJcHozQ7kAoJt9NIFehMNeVWeq1baciOkkUBXSwFMeWHNKlLp15lDT8Qoi5Chjcb7GJp+DnR7B8+C1OxhiMEx3EUeFpFOEFZnm662uCri/q749SXA1CVrato78u4PKLJhMr3IdOymZvxWZuhdk2i0U87JoQWU2sDdcFw2dDBvQS8c1HFX4qR7gNz7QiQe2j5O14TTKUU07BBoOOrDwxGDzu4l32N/eTll+jza4hBmJi+iIgf35kxZHfOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BThzje0XGv3cfJC3lq/eOosE7rHgQeW7GuI2s30mkaU=;
+ b=cFRTp8SBQDDaZX7uNntoPTrK7L1Kp6TuJLMEw+FtNpg/FlP7wZ7ujywfTIM9GgvgdRUA1MZ3ZgbP8ZXcf50vnSeTJdpbh/YGKpgDahvBFWwOpcvOUlXwyrArqbqpZ3QlIGjM0kod2axcvaZ8BgJ1Hw4oOyKIJiw3AmYFMkw8q2E=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by DM4PR11MB5280.namprd11.prod.outlook.com (2603:10b6:5:38b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Thu, 15 Sep
+ 2022 16:56:36 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5632.015; Thu, 15 Sep 2022
+ 16:56:36 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <abrestic@rivosinc.com>, <palmer@dabbelt.com>
+CC:     <paul.walmsley@sifive.com>, <coelacanthus@outlook.com>,
+        <dramforever@live.com>, <c141028@gmail.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <atishp@rivosinc.com>
+Subject: Re: [PATCH v3 2/2] riscv: Allow PROT_WRITE-only mmap()
+Thread-Topic: [PATCH v3 2/2] riscv: Allow PROT_WRITE-only mmap()
+Thread-Index: AQHYxJMWnJEOeg8890KCWf/MA/STJq3gvxUA
+Date:   Thu, 15 Sep 2022 16:56:36 +0000
+Message-ID: <d46d6340-b985-49b2-babb-0082f1759c7b@microchip.com>
+References: <20220909212731.1373355-1-abrestic@rivosinc.com>
+ <20220909212731.1373355-2-abrestic@rivosinc.com>
+In-Reply-To: <20220909212731.1373355-2-abrestic@rivosinc.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR11MB5154:EE_|DM4PR11MB5280:EE_
+x-ms-office365-filtering-correlation-id: 2f53d54c-1b11-45fe-57a6-08da973b4067
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ELf2VC9KyjnFjDFPZ5NHhDgScLVIjs92qK+ub28e20o1KSUB91dg10i44o00HR8j/BLtWwE+K0QLXQCLKb57qu2QisFvjqF+Ck7StiaEb+vZ7t1rDiROZFlGvMV1oQF8iivNDm+7MKatRjcsBn/tDS0zhgdqd694vhkfQ0wNFiYevAH9mnd0ObFbkpz1e+2noy4S25jZaoPQUR6Eab08OMRm1JO3gtNz277n36r81RPhy1Fkgekkj34t0Vofn043jgRP1THvoQ/ImqTEGxZyOtc/2qKPgx5f2akVCbZtzwtDsf70WtA0lbVlohcZZiCUWWc6L0e0e5ziyVgSLVZFHdPhCneFURYn1RPpleEdzDd8fWOxlDA0NDhjFUbpJbYwyPqP6nwAy7UfLYgLZtpnioTk2C05tq1r2Fk2B2B6V80qErNlDG0IE2upcEPwb0L16+IBE+PtP1iKHCddhb++y+dTMMpeuw+bPVY5eXSbwCe0RXiCs1C3JuG2tq3fCEMAJBAQ01OGRo4Y6ugeRsAU7ALzVodyAAaw3BWyvfTI6bE+NdFwXY0Lu39jtDDbns2xytU/lETOolLqPKgfmwVMlbFGLJmQ8jYC6zVExFeIqTQbjYztGwxmkLEXaHk0mDgwWuXla4GqS3nsXq9878/xCjgNJEg9mTFGqkqSHHU4xmWxfrtUH92Q1+zHIMiV6q51mwbBp1FhXa+f9CFewuLhg0coBsjV2iQbGSWsjKMctkMzsmk4Q2MkNrXgLbnbC2NwYaeftpKCdVIL/LoMdrIAcOyHjctuucZ8ISn+8STdEvhWjHmT6rzNYhJ6E2HwcUgr0Ys4K9o1ugAUlZjO3MZefWMfLppu4X7jy3+gUvXOUi0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(39860400002)(366004)(136003)(451199015)(86362001)(41300700001)(8676002)(2616005)(5660300002)(6512007)(76116006)(91956017)(4326008)(8936002)(66446008)(66556008)(66946007)(66476007)(26005)(54906003)(316002)(110136005)(64756008)(31696002)(83380400001)(53546011)(36756003)(186003)(2906002)(6506007)(38070700005)(6486002)(122000001)(966005)(38100700002)(478600001)(31686004)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OCtUclhKUzltQlNZRWdYbFhoN0ZQZzZvWlVvMEVwcjc3akR0VERoRDcyaURD?=
+ =?utf-8?B?ZWZnZ20wKzJZM2szS25ZeHpEZFRyckVITEdqZDRHRDJBZ1hDM1ZZZ0hMLy9v?=
+ =?utf-8?B?bWhuUTIvd2JzSlVhOFAxcm1RZmlFUHdjZWYyOEdYcWdpZlVVQzB6ZlhCaE5z?=
+ =?utf-8?B?OWRpd0RKak1ybXF3RmhRSnVZdHR0azRUREdRS2FBbVhSSElJRzI0TlBlRnhB?=
+ =?utf-8?B?c1ZBbzNjdUJidktDT281WUNscG1rNWtqVjQrd0o0ekM3RnZncmR1VTRyTmJJ?=
+ =?utf-8?B?WWJrU1luMitRZVlIbE0xVEtXMzI4bjhIRVQzdWltT3QyaXo5RE83emMzZ2Js?=
+ =?utf-8?B?TzFqLzZKL1NEanVQenJwSEhqV0RWbHpSWlRBaERjOWltcW9jZ2dtUVgwY1VR?=
+ =?utf-8?B?NW83RkhmRmtUaFRiTGd5ZDFBSFNmczB0SlZHQWJ1VlNjQnFHOXo1dGJGWjNm?=
+ =?utf-8?B?SDJGZTdwd3ZyaXNpR3E1cmZvTGVtU1duTzByb2RCYjlqSWVtVVhnbzJPdW1n?=
+ =?utf-8?B?S0RWRXJKOUpyZDBtNzZyVlg5Y0RkM3FLbm9rT0FIdWIya3hxZjlQVkRmSnpX?=
+ =?utf-8?B?OWtaS1o2ZWZqdVRDa0N1aVF6UlJmY0JKQlZQNXVMZWluNHBQbmUvNmhTRDRi?=
+ =?utf-8?B?aUZOYVVLWWFObElqK0NhVktPL0ZOaFVzUnpJQmV1bmsySzRLTmxQcFZWSFNO?=
+ =?utf-8?B?Nmhmdk1ic2hENm91ajB1VmZRenNuTG5kY0MvQkVmaEY5STRlbzl6VHlaekkx?=
+ =?utf-8?B?Z1B4VGs1K0NoYnRiKzhQSmlBVVNBNmtGNW0rN1pSaGJlSjZCV3hLOVIxT0d4?=
+ =?utf-8?B?UEprTXkya081L3lrRm1EeTVVQVVVV2xHYjdLeGhITnAwNkxNb3NrbEU2aGhX?=
+ =?utf-8?B?dFZWQVRYQytqRW1lWEVqQWZsY2N3QkMzVFlVM2pMOFBWT29nbktoMWtQTis1?=
+ =?utf-8?B?MkQ0UDZydE1KY1lCZXZiaDlrL1Y5ODBGSjNqODdPNTNMaHJ0STc0MGRvYXdT?=
+ =?utf-8?B?cFNTaE55TklmSFlTYmNHMTNhWG1nM1Q2MXdpOFMzS2labTV1U3NnZktpcVIr?=
+ =?utf-8?B?OUl3aEo0K3huaytlTy92a0tJNlp2TEkyRzJwV1NlWjAwK1YwZ3pGQVBCZ2pH?=
+ =?utf-8?B?cnR1aXloeHB5NVdJZjVBalRkVndFMmR5NkU5amxZVXRiSXMrKytIZXBVVkxD?=
+ =?utf-8?B?RXpza0dkaVZCRFRCNGN2YlV6WWt1TTM3UVdQRGRXS0l0QjQzdkY0RG5oSGNu?=
+ =?utf-8?B?QXZkOHR0RzA0bjNCSXg4KyszcFdPbERzbzdBbFdTUkx3eFlSU2ovTFNFVVBZ?=
+ =?utf-8?B?VG96WTdPcS80MkRsTXZwNklpTytvM3FZMHk3azZ0ekI0OHRCS3R4b2tEbFdz?=
+ =?utf-8?B?U0wrTHExUlRCdWVjeXY3UU9sVjhDUlNNRHVWRzdGSFNpeVFnRE9xdG5HbXZh?=
+ =?utf-8?B?Vk45RkxHcVRCcm9kMXBkMFN1QmhxWU82WEJDZ1BBekRuQ01CdkxTbkh6OFpu?=
+ =?utf-8?B?cmdiSG03U3RoSVRmQk95eWc0OXNiNWZYREM5WG9ScVUzUEFYM2hFSWNRVGpz?=
+ =?utf-8?B?YTg5bng5UmVjdnQ0ZExVK1BGRDBvd3hOMTdrVTh2dTZGWmxITTRrMjRXM0J1?=
+ =?utf-8?B?RVY0RnVHeHZGSUZFdXVxdTZobnJZdFNJMlkwcWVXVHdvVmhwclJqS0VzQUpr?=
+ =?utf-8?B?THQ1VmJDK1ZvSWF6TUFaRmRLaURnQi9lamlsMGpCZzlyYjdBMFhoYUdJM2p2?=
+ =?utf-8?B?T05IQ24vWUc1dUpLdExvK0pkc3JRbmYrQkZSYUluZTlwUjl2MVB0YmVCekZw?=
+ =?utf-8?B?ZzNsMFhzNHZ6RWdqaTNsUVJUMWZRRS9iV09BdnN5NW03MnF3ZFhwSnpjY1BI?=
+ =?utf-8?B?RzRlVG9rc2FzTTQ0cVFiSkQ2Vi9vUGtrZk1zMXBQcEhodWozTVU4RjdmSi9y?=
+ =?utf-8?B?NmdYTVIxalVHanFOSGpucUZibFNkMGdKRG5VdUVVNXlXOU1SRWxpbC9WU25m?=
+ =?utf-8?B?MStxQ3BuUy9VRnhycnppRFlFVjF2eGN1QUV4ak05eGhZLzdiVXdFT2hJSnFX?=
+ =?utf-8?B?YithR0FvQno1aDlSRGg5NDhEQ0RsN1pDZ2d3d01WZ1RnRXNHN0pWeDJ2YjNZ?=
+ =?utf-8?B?NElYWnBvbzh4ZVlndDNNcG4vZnlEcm9JVWZ0TEMyd0QvZ0tZTXpteXN0MFlK?=
+ =?utf-8?B?Z3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <361874E3E0DFFE48A10D7132A1C40ED5@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f53d54c-1b11-45fe-57a6-08da973b4067
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2022 16:56:36.5100
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6X9qgLrxKc1FMJm8+9NBINzhXf5J3W+C0zWDEn0KTfGQRpkdASCxsEPxUXNfbno6CyEqvpgUmE5beTAZ1tWUgigc3kQcfDyQx0qw8bazHL4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5280
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karsten,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
-date:   11 months ago
-config: arm-randconfig-r035-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160050.pf9YjRLA-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/omapdrm/ net/smc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr' is less than 4 [-Wpacked-not-aligned]
-      40 | } __packed;             /* format defined in
-         | ^
-   In file included from <command-line>:
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_test_link' at net/smc/smc_llc.c:736:7,
-       inlined from 'smc_llc_testlink_work' at net/smc/smc_llc.c:2094:2:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_564' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_565' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_message' at net/smc/smc_llc.c:760:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_564' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_565' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_confirm_rkey' at net/smc/smc_llc.c:492:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_564' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_565' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-
-
-vim +40 net/smc/smc_llc.c
-
-    23	
-    24	struct smc_llc_hdr {
-    25		struct smc_wr_rx_hdr common;
-    26		union {
-    27			struct {
-    28				u8 length;	/* 44 */
-    29		#if defined(__BIG_ENDIAN_BITFIELD)
-    30				u8 reserved:4,
-    31				   add_link_rej_rsn:4;
-    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
-    33				u8 add_link_rej_rsn:4,
-    34				   reserved:4;
-    35	#endif
-    36			};
-    37			u16 length_v2;	/* 44 - 8192*/
-    38		};
-    39		u8 flags;
-  > 40	} __packed;		/* format defined in
-    41				 * IBM Shared Memory Communications Version 2
-    42				 * (https://www.ibm.com/support/pages/node/6326337)
-    43				 */
-    44	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+T24gMDkvMDkvMjAyMiAyMjoyNywgQW5kcmV3IEJyZXN0aWNrZXIgd3JvdGU6DQo+IEVYVEVSTkFM
+IEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gQ29tbWl0IDIxMzk2MTliY2FkNyAoInJp
+c2N2OiBtbWFwIHdpdGggUFJPVF9XUklURSBidXQgbm8gUFJPVF9SRUFEIGlzDQo+IGludmFsaWQi
+KSBtYWRlIG1tYXAoKSByZXR1cm4gRUlOVkFMIGlmIFBST1RfV1JJVEUgd2FzIHNldCB3aWh0b3V0
+DQo+IFBST1RfUkVBRCB3aXRoIHRoZSBqdXN0aWZpY2F0aW9uIHRoYXQgYSB3cml0ZS1vbmx5IFBU
+RSBpcyBjb25zaWRlcmVkIGENCj4gcmVzZXJ2ZWQgUFRFIHBlcm1pc3Npb24gYml0IHBhdHRlcm4g
+aW4gdGhlIHByaXZpbGVnZWQgc3BlYy4gVGhpcyBjaGVjaw0KPiBpcyB1bm5lY2Vzc2FyeSBzaW5j
+ZSB3ZSBsZXQgVk1fV1JJVEUgaW1wbHkgVk1fUkVBRCBvbiBSSVNDLVYsIGFuZCBpdCBpcw0KPiBp
+bmNvbnNpc3RlbnQgd2l0aCBvdGhlciBhcmNoaXRlY3R1cmVzIHRoYXQgZG9uJ3Qgc3VwcG9ydCB3
+cml0ZS1vbmx5IFBURXMsDQo+IGNyZWF0aW5nIGEgcG90ZW50aWFsIHNvZnR3YXJlIHBvcnRhYmls
+aXR5IGlzc3VlLiBKdXN0IHJlbW92ZSB0aGUgY2hlY2sNCj4gYWx0b2dldGhlciBhbmQgbGV0IFBS
+T1RfV1JJVEUgaW1wbHkgUFJPVF9SRUFEIGFzIGlzIHRoZSBjYXNlIG9uIG90aGVyDQo+IGFyY2hp
+dGVjdHVyZXMuDQo+IA0KPiBOb3RlIHRoYXQgdGhpcyBhbHNvIGFsbG93cyBQUk9UX1dSSVRFfFBS
+T1RfRVhFQyBtYXBwaW5ncyB3aGljaCB3ZXJlDQo+IGRpc2FsbG93ZWQgcHJpb3IgdG8gdGhlIGFm
+b3JlbWVudGlvbmVkIGNvbW1pdDsgUFJPVF9SRUFEIGlzIGltcGxpZWQgaW4NCj4gc3VjaCBtYXBw
+aW5ncyBhcyB3ZWxsLg0KPiANCj4gRml4ZXM6IDIxMzk2MTliY2FkNyAoInJpc2N2OiBtbWFwIHdp
+dGggUFJPVF9XUklURSBidXQgbm8gUFJPVF9SRUFEIGlzIGludmFsaWQiKQ0KDQpGb3IgdGhlIG5h
+aXZlIG1lbWJlcnMgb2YgdGhlIGF1ZGllbmNlIHN1Y2ggYXMgbXlzZWxmLCB0aGlzIHBhdGNoDQpj
+YW1lIGFmdGVyIGEgbm9uLWZpeGVzIHBhdGNoIGluIHRoZSBzZXJpZXMuIFdoYXQgaXMgdGhlIGRl
+cGVuZGVuY2UNCm9mIHRoaXMgcGF0Y2ggb24gdGhlIG90aGVyIG9uZSAoaWYgYW55KT8NClRoYW5r
+cywNCkNvbm9yLg0KDQo+IFJldmlld2VkLWJ5OiBBdGlzaCBQYXRyYSA8YXRpc2hwQHJpdm9zaW5j
+LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogQW5kcmV3IEJyZXN0aWNrZXIgPGFicmVzdGljQHJpdm9z
+aW5jLmNvbT4NCj4gLS0tDQo+IHYxIC0+IHYyOiBVcGRhdGUgYWNjZXNzX2Vycm9yKCkgdG8gYWNj
+b3VudCBmb3Igd3JpdGUtaW1wbGllcy1yZWFkDQo+IHYyIC0+IHYzOiBTZXBhcmF0ZSBpbnRvIHR3
+byBjb21taXRzDQo+IC0tLQ0KPiAgYXJjaC9yaXNjdi9rZXJuZWwvc3lzX3Jpc2N2LmMgfCAzIC0t
+LQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9yaXNjdi9rZXJuZWwvc3lzX3Jpc2N2LmMgYi9hcmNoL3Jpc2N2L2tlcm5lbC9zeXNfcmlz
+Y3YuYw0KPiBpbmRleCA1NzE1NTZiYjkyNjEuLjVkM2YyZmJlYjMzYyAxMDA2NDQNCj4gLS0tIGEv
+YXJjaC9yaXNjdi9rZXJuZWwvc3lzX3Jpc2N2LmMNCj4gKysrIGIvYXJjaC9yaXNjdi9rZXJuZWwv
+c3lzX3Jpc2N2LmMNCj4gQEAgLTE4LDkgKzE4LDYgQEAgc3RhdGljIGxvbmcgcmlzY3Zfc3lzX21t
+YXAodW5zaWduZWQgbG9uZyBhZGRyLCB1bnNpZ25lZCBsb25nIGxlbiwNCj4gICAgICAgICBpZiAo
+dW5saWtlbHkob2Zmc2V0ICYgKH5QQUdFX01BU0sgPj4gcGFnZV9zaGlmdF9vZmZzZXQpKSkNCj4g
+ICAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiANCj4gLSAgICAgICBpZiAodW5saWtl
+bHkoKHByb3QgJiBQUk9UX1dSSVRFKSAmJiAhKHByb3QgJiBQUk9UX1JFQUQpKSkNCj4gLSAgICAg
+ICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiAtDQo+ICAgICAgICAgcmV0dXJuIGtzeXNfbW1h
+cF9wZ29mZihhZGRyLCBsZW4sIHByb3QsIGZsYWdzLCBmZCwNCj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIG9mZnNldCA+PiAoUEFHRV9TSElGVCAtIHBhZ2Vfc2hpZnRfb2Zmc2V0KSk7
+DQo+ICB9DQo+IC0tDQo+IDIuMjUuMQ0KPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fDQo+IGxpbnV4LXJpc2N2IG1haWxpbmcgbGlzdA0KPiBs
+aW51eC1yaXNjdkBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQu
+b3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtcmlzY3YNCg0K
