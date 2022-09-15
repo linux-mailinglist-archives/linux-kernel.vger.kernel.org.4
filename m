@@ -2,258 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8055B94F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6095B9504
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiIOG6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S230026AbiIOHBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiIOG54 (ORCPT
+        with ESMTP id S229641AbiIOHA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:57:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110A08F96D;
-        Wed, 14 Sep 2022 23:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663225041; x=1694761041;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pcuBA04pMa+w0kvtxkfNnWWdPOgAe6w6ZWPrwimj9Zk=;
-  b=IA+pYdzKbUPqxcIjb1fNeJucr89b7xj+ObccwLioeVMx8mcRIqskG1Qn
-   e8o8wTg7wpVJg1kQxQ280QmsY+at823MduT0oWF2/HzTAoVV4IZsGPXnR
-   4o74FsbIGKcCPUIxx+q0W1Yfnnsw0LXhiYHAkayAf2qVsdGbOGNXVdEAm
-   rlCfRcOIH2yhtSViUH8CgnhiEcz6KTHfLpJOwHvNLjdKtUDK0PPQ/ea1G
-   0WWOvAivtxc3TfeeeChXkI1BvEBkgD54aFMIS8ykfspKHf9SaamIgR3Af
-   BH/1B0OZIL8JiEZSqfx89woR2TRXQM03PTMKhlleKkDvIAZwEaARAk7Hp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384924026"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="384924026"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 23:57:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="679384001"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Sep 2022 23:57:20 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 23:57:19 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 23:57:18 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 14 Sep 2022 23:57:18 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 14 Sep 2022 23:57:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YsW0qevao8xYRclgD5HR/oWi8bXeLfpgaHObemgs8gyEr2XvNXY0caFINCu4vu8im7hCJ8JOKJt8UsyVVuq+7B5oOsNWXmPfrMsnIBScBPKleQJij1Z2iguhIk2oef0v64gb18oLBhCIcoS2rcnyRcXVo7R7FAYj5Y0tVvRotBbLKlkC7V5g+2oE1QCCQ3CsbAj2n4O45LeZRYdBnn/tgk6b7E2BQmpSWz7auZtAuEJClVxbusbNiBTZuBQeCgfjOKCzrOk/uTm7a5f0C6ZL+mwtHGSqc4fHX/8CDt/C48wzvs6bG2I9CmvWu4iUh+8aKW12hxx2UFNv/7dozaKMWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p8pHCvB5l+y3r1QuRwQnNFvMRP038CerPREq/6k1KyU=;
- b=QjQBfJtmwV/vwDIhmzZa9eMKpdjMRrf6VBnz1xmcOU9XxMcqc+mJGCZ+Nabo+ow6B5S+B7sHAzKyuxk7qxm8L/zLMyn/Lh2YmKiD4XDcuXL67sh7RftdsOplbN9R4ihdQeojRjzA5m4DJCssHkHDg8KKbexnt8Xr7FcOE69Jl2xJgwYSCxZ9xk3yyHEfwZCFO5gJ7O/fLHnMR2idpovh6p0cjBq/U08vwsiQL9nV48qMhva1sy9B+C8U0N8DTql/lvnUebcvzB8bUW15ncM72pOM3sLSjyQjfcGYqyFOhXThUtQLuZmT35hgXSztBWhB3U4/EYyvV09rtD3laq4gXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4348.namprd11.prod.outlook.com (2603:10b6:5:1db::18)
- by IA1PR11MB6372.namprd11.prod.outlook.com (2603:10b6:208:3ac::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Thu, 15 Sep
- 2022 06:57:16 +0000
-Received: from DM6PR11MB4348.namprd11.prod.outlook.com
- ([fe80::48:7f55:58c5:3343]) by DM6PR11MB4348.namprd11.prod.outlook.com
- ([fe80::48:7f55:58c5:3343%6]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 06:57:16 +0000
-From:   "Jamaluddin, Aminuddin" <aminuddin.jamaluddin@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Tan, Tee Min" <tee.min.tan@intel.com>,
-        "Zulkifli, Muhammad Husaini" <muhammad.husaini.zulkifli@intel.com>
-Subject: RE: [PATCH net 1/1] net: phy: marvell: add link status check before
- enabling phy loopback
-Thread-Topic: [PATCH net 1/1] net: phy: marvell: add link status check before
- enabling phy loopback
-Thread-Index: AQHYuFxMKg+SoAedC0ayqAwz26yoSq2/m/mAgAd8s1CAAEtqAIAYyijg
-Date:   Thu, 15 Sep 2022 06:57:16 +0000
-Message-ID: <DM6PR11MB43489B7C27B0A3F3EA18909B81499@DM6PR11MB4348.namprd11.prod.outlook.com>
-References: <20220825082238.11056-1-aminuddin.jamaluddin@intel.com>
- <Ywd4oUPEssQ+/OBE@lunn.ch>
- <DM6PR11MB43480C1D3526031F79592A7F81799@DM6PR11MB4348.namprd11.prod.outlook.com>
- <Yw3/vIDAr9W7zZwv@lunn.ch>
-In-Reply-To: <Yw3/vIDAr9W7zZwv@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.500.17
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4348:EE_|IA1PR11MB6372:EE_
-x-ms-office365-filtering-correlation-id: 656df1cb-2de5-432e-539f-08da96e7867b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jwwGt5TWb4ujBuwz8yzG+kObF3S0gu4ktC0d4ZlAmqNIoeWlzze8o78mmBzZ9lWho1nEkKVDmGbZudIW99UsSekAPx9Nk+qUAMojpbaZq58rGciPesaKI69wn2hFZaP4du6fGfyabdlwPOHISQj4vbUkVipz/iR+zPBUuN66MoM3s5HwX6LFbFQJJIoNKug/mmdjGjTboTAB+Qm6lHLDIonux47cWntyokFuyclveXxVu1qskjrq19KtwddavqdqDQ55WbQK9hY+ngKnxFEK5O0WOrxBhsKGTIFjZbyoM7FQulfVe/cIsAqv/VHFN2C18YBXNeup9CEGy12b/6YCGJNjZ5FfG9HXYxpqtFxhb2grPWBJo9PrX/939qNxvGHj7ywCaRzZk/oEVfV2JMQs21dMF6/Nk2zK+3z+JxXYUzy27LSYp2TKPDqDXYIjtzn7czf78bglaT//d+j+K7aaKGnRDN6VrMF0ZQXttED4NVTQqueGbodvfjO2OkBhue93UQiC4B1Exd12vZF++JpYzZuDSaU/ReeoDNfAW5q1KLFKbn5yIvIOEmwa8opzlkpg1FmQLEH6fel1DqGRn1Fwp/0tSsXtXf4JNw8qXNFKShzcNaQB2k+D2miCVudbxzONGUtBlk5U7vML6BwxA4NRCSlNFwgH2ZAv6BG4zsA39D/TXXlxkKHuk0pNncb8Y+gzcP9w2k46p+DYe4oqNH1FwJTQ9vxU80LXmNEbiao4WDD/mJJQbnAKgq98E6SiZ0IOgcsoFzHK9+h3NH8bulXAf2WBLkX6Ff4ZVQsqPtiYZZx4d8NTOzH0ZTfNWcrqMnn4e7Wio7wFmeWjWIfADj1Sfw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4348.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199015)(52536014)(478600001)(186003)(8676002)(66446008)(107886003)(83380400001)(6506007)(38070700005)(86362001)(64756008)(66556008)(38100700002)(55016003)(53546011)(6916009)(7696005)(2906002)(26005)(9686003)(82960400001)(7416002)(966005)(316002)(76116006)(66946007)(8936002)(54906003)(33656002)(122000001)(71200400001)(5660300002)(41300700001)(66476007)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ITeqO4F8PgSN0EjI2wg9dty2dOYHN81GHSvdztVKiQ/Kvj9VRzQNKpQ9maon?=
- =?us-ascii?Q?pqNw+YI6JtR4EbjC4I7hIA9vx/Bgnel/wuNnU5iS19hfNFzoDk8dRWNTGOyS?=
- =?us-ascii?Q?YI7fsPVR+EFHqW3m0Ear7bUhEmj8xTR7fEIUiwEbzjTW5yF7+jjto+Et+hH2?=
- =?us-ascii?Q?qHZfGKutCpJK1fe4T6rTzKjEOR5qi5QiXcD72zJjRpmPCtBeY1B459Q3Voin?=
- =?us-ascii?Q?PmbavQIHcZvc8Tn015dwKj+dSSA8A3BeJWnCUaTfxUjS+TVbYq6QjrWWGldD?=
- =?us-ascii?Q?WoaIpnLe5EfLGnEENXLL83jZCI/BbuLBO6TPwjcW5yEJ6Tkw0wYEVYWyRSqT?=
- =?us-ascii?Q?k3ahF6uN+M2SMeJ3PtBrqr7wjOH8I0MFOHg2uZYHeB0rH1hdJcAK8F0mGU4B?=
- =?us-ascii?Q?5ccz6joP3E0olpYoUPv4w8Z49PVw8SzstzwpdUDAMX3QFi05rASG1HVm7WWl?=
- =?us-ascii?Q?D85783cDPTTcBSbWTPxaVOsJFOZH0bXDaNKDA+O6AoEUul870NhZmw/9urNX?=
- =?us-ascii?Q?mKNpKefrmBm7tFQ5VedrojQZjaF4KKlUVh4Ya7ompnvVZMiJJNxe4Vjp+Iee?=
- =?us-ascii?Q?f4XrjSqa3dGZ66CijeoN6MDGvv2JNV8g00N5MPybpmgkKLNd+Eq5U1T81Bpj?=
- =?us-ascii?Q?WBu1cJpFKfPZOlRAGHYOaCyuPFs024Yow1xmVm4edOcv5YKIgNyigbrwY5m7?=
- =?us-ascii?Q?qZgKflr+O/Zc/Q9vtngefr3lvIWUfTSw2Wo/qw0+1AFej4BAi15xNNo2h572?=
- =?us-ascii?Q?8yfhDQIMpYPuqgEzkIDyF36EAlYCDObSgO+p6MoIXf/ivQpUGTD9I5h2S5tt?=
- =?us-ascii?Q?jDHumcb2Ptp8R/JQ57TbP/MAEGyLUmSFnlb8Xg6vqkLTjVi2AWnesFXIVZT+?=
- =?us-ascii?Q?OmpPaTqK6HT8vc5008EtMj5d1OcPGa63qvrbrKGqMaJ1btdcDkhMYn/PJ1TI?=
- =?us-ascii?Q?5oMCHIvrlUyEBTypAbtZ1hBZVGsymPzLrA1V+oE2MU+vviA6LwOcXzoQb9Ig?=
- =?us-ascii?Q?Ce1jr+3OtfuQ//sDNm9ypUwBtkbnhEmM6Ae3AH3C7VC7zvS6glkTIHl8u41u?=
- =?us-ascii?Q?URVDCFK/8FhWFpjXwq4Bzu29QPcZXPqUc0AjiCTh/M48AXC3nXs27PJctyTy?=
- =?us-ascii?Q?sKjBn2/XZY2QW8Q2G4/sCp7IU2S6D87tJ6/4+dlpae+7m61hC0nvnMgcL/za?=
- =?us-ascii?Q?/XGxQAS+ThgYhlf4w2cWJ7QuwU75Ux6qG33WhEEq5anZ/FSy4lt8HZhfgsmT?=
- =?us-ascii?Q?daoMopAb1uz18RdTfz005hJbAFyQDiLHX1lzJqRnJcc3gcx3ZhAf4STYNDXu?=
- =?us-ascii?Q?GSMBUkLz8T9JvCN57Y49J5wjdjc7L5A+9FdfVIN35qVn29N3vLe2/0k25hkA?=
- =?us-ascii?Q?9BBTpTlsXYu8rx2ql+B7u8LmQKupM6j8XQyrOLcqgCyWySKEbp06rECvGbSF?=
- =?us-ascii?Q?tdZMnHw6/apYniZSNifpxED4gq9jtqihMioePGX/LTzoLMvzqgmKeySj8z7U?=
- =?us-ascii?Q?oGfZwwkeHMVDHJjlhXsYCsdqSSh7Taa2ZGLDhplp5C/X33VYrsDoWSqh2rxX?=
- =?us-ascii?Q?ky34RHIvSurNPr5wvwiXFwtBFV5l1+qRb3l4fyBIpcKbEChOVjg/+jmxfYxK?=
- =?us-ascii?Q?Sg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 15 Sep 2022 03:00:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754CB6EF24;
+        Wed, 14 Sep 2022 23:59:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2FE6834408;
+        Thu, 15 Sep 2022 06:59:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663225184; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kdnXllucHTBxA/9FI9xK/SZO/LJMpNDoSBwXpB+lP/U=;
+        b=iij8+nSqwufZdvdJ2t334oHkzyxe58whIyBuaEg0+Bsh+w9NBTymS7lTSjW35nSwVIkcYN
+        jW7kBeB1HQmshMtjLZuMFzf1TvvTBcHe0HVncT3ZvjlYH1htoPbfVSElrmDjwvyc1nWFTp
+        LeyZlh5G4xs1eL+OuFdwF+ON3WYeA1I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF2F2139C8;
+        Thu, 15 Sep 2022 06:59:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4k04NF/NImN8VQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 15 Sep 2022 06:59:43 +0000
+Message-ID: <fa6df43b-8a1a-8ad1-0236-94d2a0b588fa@suse.com>
+Date:   Thu, 15 Sep 2022 08:59:43 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4348.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 656df1cb-2de5-432e-539f-08da96e7867b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2022 06:57:16.4031
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: e4fgZxUVKoGNgmnVfwV55HUvif5KLRjoIJiGe+FKDXWBOe4iKJ50j4QyLgZlB8rENDErBiHcP+2ttir9SlNEcreDLs5pB+GSrbEyuHCzPzM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6372
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/1] x86/paravirt: write paravirt ident function in
+ assembly
+Content-Language: en-US
+To:     Bill Wendling <morbo@google.com>, linux-hardening@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        x86@kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220914162149.71271-1-morbo@google.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220914162149.71271-1-morbo@google.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0vgYhJCAdT99yLwH4iU1YHhU"
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Andrew Lunn <andrew@lunn.ch>
-> Sent: Tuesday, 30 August, 2022 8:17 PM
-> To: Jamaluddin, Aminuddin <aminuddin.jamaluddin@intel.com>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>; Russell King
-> <linux@armlinux.org.uk>; David S . Miller <davem@davemloft.net>; Eric
-> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
-> Paolo Abeni <pabeni@redhat.com>; Ismail, Mohammad Athari
-> <mohammad.athari.ismail@intel.com>; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org; stable@vger.kernel.org; Tan, Tee Min
-> <tee.min.tan@intel.com>; Zulkifli, Muhammad Husaini
-> <muhammad.husaini.zulkifli@intel.com>
-> Subject: Re: [PATCH net 1/1] net: phy: marvell: add link status check bef=
-ore
-> enabling phy loopback
->=20
-> > > > @@ -2015,14 +2016,23 @@ static int m88e1510_loopback(struct
-> > > phy_device *phydev, bool enable)
-> > > >  		if (err < 0)
-> > > >  			return err;
-> > > >
-> > > > -		/* FIXME: Based on trial and error test, it seem 1G need to
-> > > have
-> > > > -		 * delay between soft reset and loopback enablement.
-> > > > -		 */
-> > > > -		if (phydev->speed =3D=3D SPEED_1000)
-> > > > -			msleep(1000);
-> > > > +		if (phydev->speed =3D=3D SPEED_1000) {
-> > > > +			err =3D phy_read_poll_timeout(phydev, MII_BMSR,
-> > > val, val & BMSR_LSTATUS,
-> > > > +						    PHY_LOOP_BACK_SLEEP,
-> > > > +
-> > > PHY_LOOP_BACK_TIMEOUT, true);
-> > >
-> > > Is this link with itself?
-> >
-> > Its required cabled plug in, back to back connection.
->=20
-> Loopback should not require that. The whole point of loopback in the PHY =
-is
-> you can do it without needing a cable.
->=20
-> > >
-> > > Have you tested this with the cable unplugged?
-> >
-> > Yes we have and its expected to have the timeout. But the self-test
-> > required the link to be up first before it can be run.
->=20
-> So you get an ETIMEDOUT, and then skip the code which actually sets the
-> LOOPBACK bit?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0vgYhJCAdT99yLwH4iU1YHhU
+Content-Type: multipart/mixed; boundary="------------xYaDk5VXNS0yYjga337i39Ay";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Bill Wendling <morbo@google.com>, linux-hardening@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+ Alexey Makhalov <amakhalov@vmware.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, x86@kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>
+Message-ID: <fa6df43b-8a1a-8ad1-0236-94d2a0b588fa@suse.com>
+Subject: Re: [PATCH v2 1/1] x86/paravirt: write paravirt ident function in
+ assembly
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220914162149.71271-1-morbo@google.com>
+In-Reply-To: <20220914162149.71271-1-morbo@google.com>
 
-If cable unplugged, test result will be displayed as 1. See comments below.
+--------------xYaDk5VXNS0yYjga337i39Ay
+Content-Type: multipart/mixed; boundary="------------auY0lbM04uuXeWa1GPAl40xG"
 
->=20
-> Please look at this again, and make it work without a cable.
+--------------auY0lbM04uuXeWa1GPAl40xG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Related to this the flow without cable, what we see in the codes during deb=
-ugging.
-After the phy loopback bit was set.
-The test will be run through this __stmmac_test_loopback()
-https://elixir.bootlin.com/linux/v5.19.8/source/drivers/net/ethernet/stmicr=
-o/stmmac/stmmac_selftests.c#L320
-Here, it will have another set of checking in dev_direct_xmit(), __dev_dire=
-ct_xmit().
-returning value 1(NET_XMIT_DROP)
-https://elixir.bootlin.com/linux/v5.19.8/source/net/core/dev.c#L4288
-Which means the interface is not available or the interface link status is =
-not up.
-For this case the interface link status is not up.=20
-Thus failing the phy loopback test.
-https://elixir.bootlin.com/linux/v5.19.8/source/net/core/dev.c#L4296
-Since we don't own this __stmmac_test_loopback(), we conclude the behaviour=
- was as expected.
+T24gMTQuMDkuMjIgMTg6MjEsIEJpbGwgV2VuZGxpbmcgd3JvdGU6DQo+IFRoZSBaRVJPX0NB
+TExfVVNFRF9SRUdTIGZlYXR1cmUgbWF5IHplcm8gb3V0IGNhbGxlci1zYXZlZCByZWdpc3Rl
+cnMNCj4gYmVmb3JlIHJldHVybmluZy4gSG93ZXZlciwgYWx0ZXJuYXRlIGNvZGUgbWF5IGNh
+bGwgdGhpcyBmdW5jdGlvbiB3aXRob3V0DQo+IGZpcnN0IHNhdmluZyAlW3JlXWRpLCBiZWNh
+dXNlIHRoZSBwcm9wZXIgY2xvYmJlcnMgYXJlbid0IHRha2VuIGludG8NCj4gYWNjb3VudC4N
+Cj4gDQo+IFRoaXMgc2hvd3MgdXAgaW4gc3B1cmlvdXNfa2VybmVsX2ZhdWx0KCkgd2hlcmUg
+dGhlICJwdGVfb2Zmc2V0X2tlcm5lbCgpIg0KPiBjYWxsIHJlc3VsdHMgaW4gdGhpcyBhc3Nl
+bWJseSBjb2RlOg0KPiANCj4gLkx0bXAxNTE6DQo+ICAgICAgICAgICNBUFANCj4gICAgICAg
+ICAgIyBBTFQ6IG9sZG5zdHINCj4gLkx0bXAxNTI6DQo+IC5MdG1wMTUzOg0KPiAuTHRtcDE1
+NDoNCj4gICAgICAgICAgLnNlY3Rpb24gICAgICAgIC5kaXNjYXJkLnJldHBvbGluZV9zYWZl
+LCIiLEBwcm9nYml0cw0KPiAgICAgICAgICAucXVhZCAgIC5MdG1wMTU0DQo+ICAgICAgICAg
+IC50ZXh0DQo+IA0KPiAgICAgICAgICBjYWxscSAgICpwdl9vcHMrNTM2KCVyaXApDQo+IA0K
+PiAuTHRtcDE1NToNCj4gICAgICAgICAgLnNlY3Rpb24gICAgICAgIC5wYXJhaW5zdHJ1Y3Rp
+b25zLCJhIixAcHJvZ2JpdHMNCj4gICAgICAgICAgLnAyYWxpZ24gICAgICAgIDMsIDB4MA0K
+PiAgICAgICAgICAucXVhZCAgIC5MdG1wMTUzDQo+ICAgICAgICAgIC5ieXRlICAgNjcNCj4g
+ICAgICAgICAgLmJ5dGUgICAuTHRtcDE1NS0uTHRtcDE1Mw0KPiAgICAgICAgICAuc2hvcnQg
+IDENCj4gICAgICAgICAgLnRleHQNCj4gLkx0bXAxNTY6DQo+ICAgICAgICAgICMgQUxUOiBw
+YWRkaW5nDQo+ICAgICAgICAgIC56ZXJvICAgKC0oKCguTHRtcDE1Ny0uTHRtcDE1OCktKC5M
+dG1wMTU2LS5MdG1wMTUyKSk+MCkpKigoLkx0bXAxNTctLkx0bXAxNTgpLSguTHRtcDE1Ni0u
+THRtcDE1MikpLDE0NA0KPiAuTHRtcDE1OToNCj4gICAgICAgICAgLnNlY3Rpb24gICAgICAg
+IC5hbHRpbnN0cnVjdGlvbnMsImEiLEBwcm9nYml0cw0KPiAuTHRtcDE2MDoNCj4gICAgICAg
+ICAgLmxvbmcgICAuTHRtcDE1Mi0uTHRtcDE2MA0KPiAuTHRtcDE2MToNCj4gICAgICAgICAg
+LmxvbmcgICAuTHRtcDE1OC0uTHRtcDE2MQ0KPiAgICAgICAgICAuc2hvcnQgIDMzMDQwDQo+
+ICAgICAgICAgIC5ieXRlICAgLkx0bXAxNTktLkx0bXAxNTINCj4gICAgICAgICAgLmJ5dGUg
+ICAuTHRtcDE1Ny0uTHRtcDE1OA0KPiAgICAgICAgICAudGV4dA0KPiANCj4gICAgICAgICAg
+LnNlY3Rpb24gICAgICAgIC5hbHRpbnN0cl9yZXBsYWNlbWVudCwiYXgiLEBwcm9nYml0cw0K
+PiAgICAgICAgICAjIEFMVDogcmVwbGFjZW1lbnQgMQ0KPiAuTHRtcDE1ODoNCj4gICAgICAg
+ICAgbW92cSAgICAlcmRpLCAlcmF4DQo+IC5MdG1wMTU3Og0KPiAgICAgICAgICAudGV4dA0K
+PiAgICAgICAgICAjTk9fQVBQDQo+IC5MdG1wMTYyOg0KPiAgICAgICAgICB0ZXN0YiAgICQt
+MTI4LCAlZGlsDQo+IA0KPiBUaGUgJWRpbCByZWdpc3RlciB3YXMgemVyb2VkIG91dCBieSB0
+aGUgY2FsbCB0byAiKnB2X29wcys1MzYoJXJpcCkiLg0KPiANCj4gSW4gZ2VuZXJhbCwgdGhl
+IF9wYXJhdmlydF9pZGVudF82NCgpIGZ1bmN0aW9uIGFwcGVhcnMgbGlrZSBpdCBzaG91bGRu
+J3QNCj4gaGF2ZSBhbnkgaW5zdHJ1bWVudGF0aW9uIG9yIG90aGVyIG1vZGlmaWNhdGlvbnMg
+YXBwbGllZCB0byBpdC4gVGh1cyBqdXN0DQo+IHdyaXRlIGl0IGluIGFzc2VtYmx5IHRvIGF2
+b2lkIGhhdmluZyB0byBjb250aW51YWxseSBtb2RpZnkgaXQgd2hlbmV2ZXIgYQ0KPiBuZXcg
+ZmVhdHVyZSBjb21lcyBhbG9uZy4NCj4gDQo+IExpbms6IGh0dHBzOi8vZ2l0aHViLmNvbS9L
+U1BQL2xpbnV4L2lzc3Vlcy8xOTINCj4gQ2M6IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hyb21p
+dW0ub3JnPg0KPiBDYzogTmljayBEZXNhdWxuaWVycyA8bmRlc2F1bG5pZXJzQGdvb2dsZS5j
+b20+DQo+IENjOiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IENjOiAiU3Jp
+dmF0c2EgUy4gQmhhdCAoVk13YXJlKSIgPHNyaXZhdHNhQGNzYWlsLm1pdC5lZHU+DQo+IENj
+OiBBbGV4ZXkgTWFraGFsb3YgPGFtYWtoYWxvdkB2bXdhcmUuY29tPg0KPiBDYzogVGhvbWFz
+IEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9uaXguZGU+DQo+IENjOiBJbmdvIE1vbG5hciA8bWlu
+Z29AcmVkaGF0LmNvbT4NCj4gQ2M6IEJvcmlzbGF2IFBldGtvdiA8YnBAYWxpZW44LmRlPg0K
+PiBDYzogRGF2ZSBIYW5zZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4NCj4gQ2M6
+ICJILiBQZXRlciBBbnZpbiIgPGhwYUB6eXRvci5jb20+DQo+IENjOiBWTXdhcmUgUFYtRHJp
+dmVycyBSZXZpZXdlcnMgPHB2LWRyaXZlcnNAdm13YXJlLmNvbT4NCj4gQ2M6IHg4NkBrZXJu
+ZWwub3JnDQo+IENjOiB2aXJ0dWFsaXphdGlvbkBsaXN0cy5saW51eC1mb3VuZGF0aW9uLm9y
+Zw0KPiBDYzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGx2bUBsaXN0
+cy5saW51eC5kZXYNCj4gU2lnbmVkLW9mZi1ieTogQmlsbCBXZW5kbGluZyA8bW9yYm9AZ29v
+Z2xlLmNvbT4NCj4gU3VnZ2VzdGVkLWJ5OiBQZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJh
+ZGVhZC5vcmc+DQo+IFJlcG9ydGVkLWFuZC10ZXN0ZWQtYnk6IE5hdGhhbiBDaGFuY2VsbG9y
+IDxuYXRoYW5Aa2VybmVsLm9yZz4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpn
+cm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
+--------------auY0lbM04uuXeWa1GPAl40xG
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
->=20
-> Maybe you are addressing the wrong issue? Is the PHY actually performing
-> loopback, but reporting the link is down? Maybe you need to fake a link u=
-p?
-> Maybe you need the self test to not care about the link state, all it rea=
-lly
-> needs is that packets get looped?
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-When bit 14 was set, the link will be broken.=20
-But before the self-test was triggered it requires link to be up as stated =
-above comments.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
->=20
-Amin
+--------------auY0lbM04uuXeWa1GPAl40xG--
+
+--------------xYaDk5VXNS0yYjga337i39Ay--
+
+--------------0vgYhJCAdT99yLwH4iU1YHhU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMizV8FAwAAAAAACgkQsN6d1ii/Ey+S
+ngf6AiUmo44nTAiwuyj5V7vut20xvukrRy36fFE4rN0XcEe+T7S2FyXNgKHuFyg8yhBDQYJRPk1k
+vh399GNEFTCZv2N+OoNydC9GbUnjoI1bc7u1ePak3ECVuJhsuqN7S+8DjSBaIBMY6zevMo/lj0fc
+h6SakTejcSXZHV59n8cNvSqXdRPL4OlhN8uu2SlF2kJh3fadPlixGLFJ7x5HtV4fAe0JQoEDPjGa
+1YJyLUoT1p1qxb1kpSRy4z0ivyGug02xUILR2NLB2AjdXYz5fHEDrt+cfW83Mlbex+ldx9016e8J
+EXjNCdMhgQ3G7MUobi7lmvDZRY+oR6EXJ7Itd5zSpw==
+=MqkD
+-----END PGP SIGNATURE-----
+
+--------------0vgYhJCAdT99yLwH4iU1YHhU--
