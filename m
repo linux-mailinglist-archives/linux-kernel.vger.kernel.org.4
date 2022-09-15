@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE05B99C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46935B99F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiIOLkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S230199AbiIOLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiIOLkF (ORCPT
+        with ESMTP id S230092AbiIOLlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:40:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898BE422E4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:03 -0700 (PDT)
+        Thu, 15 Sep 2022 07:41:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670156CF43
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=GP9RQ5R7xsKdkjMYemE/9mRCoebu4tK80lw9bb9cJCs=; b=LK4EKfYtkKPpnggPAvwPyhSnfN
-        G74vExjiNB7mVcBJhW6SDABP2NwNyGAcjoMjkCg8+wiZL9y4Q1Y+O4f9Ofhx8A8ko9dmYeeZaA4dH
-        1Jxz3Kdv/xMeSH+z83PrVuJCKxwHsC9cGHEP8mNyl0Bu4wfJ/DMtaSt02QzqWSDfzIPjVLjHxb/K6
-        lBB8cBtrbztJYk+LJCeF3AFxIXmowO6xCfGsGSTfZlDm2vc7StD+FP6PQ/6mGOdGFhVK1otM3WqYQ
-        24syf8XA2MBa10CTOuXyAur5vp+DjsLEz6bIaWchMqTedOM1XQyhXxqXlk1Ol6wyV8jBh7Q0U6ODp
-        4fER/Nmw==;
+        bh=xQuJtl6Oe7h8UkTWqXBwC3SMQ2iiCp9oKrM8vI/KEDI=; b=AzImx4suApGQts42JXatUI1VN/
+        n5iIVz5DqK0cBMj8cshaY05zoP6fahgX7atUd+0TyYCsFIYtYbLGkCbtAOHh7Sz9bw/D+dxkRPFE1
+        WQWZcChQod96HSkemfn3AM4GbhWU5z4KkeAzvwVo9K6qLAA7SyDg2B7eMPdKS/w68Hpk2TBsbA3Dg
+        uFM0inKPNy0Yh9NnGgwiSHKTQEN1am+xY/F6jxo1Z6tv6+ROrHEbMHfaDipe/uDJxm6DaPtr1EMit
+        G4HAohMpQyN7wtS2PhKPIxHoemmyplAgCKYuyn/UAe/zoZAUOK8fwo33FFw8CllMHyvtH1tlY4Elq
+        ftqP5h7g==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYnDc-0012NG-VZ; Thu, 15 Sep 2022 11:39:45 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYnDa-00Caar-MC; Thu, 15 Sep 2022 11:39:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DD596302A1D;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DD585302911;
         Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 5F2B529AADBFD; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
-Message-ID: <20220915111145.179707194@infradead.org>
+        id 6567229AADBFF; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
+Message-ID: <20220915111145.284170644@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Sep 2022 13:11:01 +0200
+Date:   Thu, 15 Sep 2022 13:11:02 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v3 22/59] x86: Put hot per CPU variables into a struct
+Subject: [PATCH v3 23/59] x86/percpu: Move preempt_count next to current_task
 References: <20220915111039.092790446@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -74,124 +74,162 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-The layout of per-cpu variables is at the mercy of the compiler. This
-can lead to random performance fluctuations from build to build.
-
-Create a structure to hold some of the hottest per-cpu variables,
-starting with current_task.
+Add preempt_count to pcpu_hot, since it is once of the most used
+per-cpu variables.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/current.h |   19 ++++++++++++++++---
- arch/x86/kernel/cpu/common.c   |   14 +++++---------
- arch/x86/kernel/process_32.c   |    2 +-
- arch/x86/kernel/process_64.c   |    2 +-
- arch/x86/kernel/smpboot.c      |    2 +-
- 5 files changed, 24 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/current.h |    1 +
+ arch/x86/include/asm/preempt.h |   27 ++++++++++++++-------------
+ arch/x86/kernel/cpu/common.c   |    8 +-------
+ 3 files changed, 16 insertions(+), 20 deletions(-)
 
 --- a/arch/x86/include/asm/current.h
 +++ b/arch/x86/include/asm/current.h
-@@ -3,16 +3,29 @@
- #define _ASM_X86_CURRENT_H
+@@ -15,6 +15,7 @@ struct pcpu_hot {
+ 	union {
+ 		struct {
+ 			struct task_struct	*current_task;
++			int			preempt_count;
+ 		};
+ 		u8	pad[64];
+ 	};
+--- a/arch/x86/include/asm/preempt.h
++++ b/arch/x86/include/asm/preempt.h
+@@ -4,11 +4,11 @@
  
- #include <linux/compiler.h>
--#include <asm/percpu.h>
- 
- #ifndef __ASSEMBLY__
+ #include <asm/rmwcc.h>
+ #include <asm/percpu.h>
++#include <asm/current.h>
 +
-+#include <linux/cache.h>
-+#include <asm/percpu.h>
-+
- struct task_struct;
+ #include <linux/thread_info.h>
+ #include <linux/static_call_types.h>
  
--DECLARE_PER_CPU(struct task_struct *, current_task);
-+struct pcpu_hot {
-+	union {
-+		struct {
-+			struct task_struct	*current_task;
-+		};
-+		u8	pad[64];
-+	};
-+};
-+static_assert(sizeof(struct pcpu_hot) == 64);
-+
-+DECLARE_PER_CPU_ALIGNED(struct pcpu_hot, pcpu_hot);
+-DECLARE_PER_CPU(int, __preempt_count);
+-
+ /* We use the MSB mostly because its available */
+ #define PREEMPT_NEED_RESCHED	0x80000000
  
- static __always_inline struct task_struct *get_current(void)
+@@ -24,7 +24,7 @@ DECLARE_PER_CPU(int, __preempt_count);
+  */
+ static __always_inline int preempt_count(void)
  {
--	return this_cpu_read_stable(current_task);
-+	return this_cpu_read_stable(pcpu_hot.current_task);
+-	return raw_cpu_read_4(__preempt_count) & ~PREEMPT_NEED_RESCHED;
++	return raw_cpu_read_4(pcpu_hot.preempt_count) & ~PREEMPT_NEED_RESCHED;
  }
  
- #define current get_current()
+ static __always_inline void preempt_count_set(int pc)
+@@ -32,10 +32,10 @@ static __always_inline void preempt_coun
+ 	int old, new;
+ 
+ 	do {
+-		old = raw_cpu_read_4(__preempt_count);
++		old = raw_cpu_read_4(pcpu_hot.preempt_count);
+ 		new = (old & PREEMPT_NEED_RESCHED) |
+ 			(pc & ~PREEMPT_NEED_RESCHED);
+-	} while (raw_cpu_cmpxchg_4(__preempt_count, old, new) != old);
++	} while (raw_cpu_cmpxchg_4(pcpu_hot.preempt_count, old, new) != old);
+ }
+ 
+ /*
+@@ -44,7 +44,7 @@ static __always_inline void preempt_coun
+ #define init_task_preempt_count(p) do { } while (0)
+ 
+ #define init_idle_preempt_count(p, cpu) do { \
+-	per_cpu(__preempt_count, (cpu)) = PREEMPT_DISABLED; \
++	per_cpu(pcpu_hot.preempt_count, (cpu)) = PREEMPT_DISABLED; \
+ } while (0)
+ 
+ /*
+@@ -58,17 +58,17 @@ static __always_inline void preempt_coun
+ 
+ static __always_inline void set_preempt_need_resched(void)
+ {
+-	raw_cpu_and_4(__preempt_count, ~PREEMPT_NEED_RESCHED);
++	raw_cpu_and_4(pcpu_hot.preempt_count, ~PREEMPT_NEED_RESCHED);
+ }
+ 
+ static __always_inline void clear_preempt_need_resched(void)
+ {
+-	raw_cpu_or_4(__preempt_count, PREEMPT_NEED_RESCHED);
++	raw_cpu_or_4(pcpu_hot.preempt_count, PREEMPT_NEED_RESCHED);
+ }
+ 
+ static __always_inline bool test_preempt_need_resched(void)
+ {
+-	return !(raw_cpu_read_4(__preempt_count) & PREEMPT_NEED_RESCHED);
++	return !(raw_cpu_read_4(pcpu_hot.preempt_count) & PREEMPT_NEED_RESCHED);
+ }
+ 
+ /*
+@@ -77,12 +77,12 @@ static __always_inline bool test_preempt
+ 
+ static __always_inline void __preempt_count_add(int val)
+ {
+-	raw_cpu_add_4(__preempt_count, val);
++	raw_cpu_add_4(pcpu_hot.preempt_count, val);
+ }
+ 
+ static __always_inline void __preempt_count_sub(int val)
+ {
+-	raw_cpu_add_4(__preempt_count, -val);
++	raw_cpu_add_4(pcpu_hot.preempt_count, -val);
+ }
+ 
+ /*
+@@ -92,7 +92,8 @@ static __always_inline void __preempt_co
+  */
+ static __always_inline bool __preempt_count_dec_and_test(void)
+ {
+-	return GEN_UNARY_RMWcc("decl", __preempt_count, e, __percpu_arg([var]));
++	return GEN_UNARY_RMWcc("decl", pcpu_hot.preempt_count, e,
++			       __percpu_arg([var]));
+ }
+ 
+ /*
+@@ -100,7 +101,7 @@ static __always_inline bool __preempt_co
+  */
+ static __always_inline bool should_resched(int preempt_offset)
+ {
+-	return unlikely(raw_cpu_read_4(__preempt_count) == preempt_offset);
++	return unlikely(raw_cpu_read_4(pcpu_hot.preempt_count) == preempt_offset);
+ }
+ 
+ #ifdef CONFIG_PREEMPTION
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -2000,18 +2000,16 @@ static __init int setup_clearcpuid(char
- }
- __setup("clearcpuid=", setup_clearcpuid);
+@@ -2002,6 +2002,7 @@ static __init int setup_clearcpuid(char
  
-+DEFINE_PER_CPU_ALIGNED(struct pcpu_hot, pcpu_hot) = {
-+	.current_task	= &init_task,
-+};
-+EXPORT_PER_CPU_SYMBOL(pcpu_hot);
-+
- #ifdef CONFIG_X86_64
- DEFINE_PER_CPU_FIRST(struct fixed_percpu_data,
+ DEFINE_PER_CPU_ALIGNED(struct pcpu_hot, pcpu_hot) = {
+ 	.current_task	= &init_task,
++	.preempt_count	= INIT_PREEMPT_COUNT,
+ };
+ EXPORT_PER_CPU_SYMBOL(pcpu_hot);
+ 
+@@ -2010,13 +2011,9 @@ DEFINE_PER_CPU_FIRST(struct fixed_percpu
  		     fixed_percpu_data) __aligned(PAGE_SIZE) __visible;
  EXPORT_PER_CPU_SYMBOL_GPL(fixed_percpu_data);
  
--/*
-- * The following percpu variables are hot.  Align current_task to
-- * cacheline size such that they fall in the same cacheline.
-- */
--DEFINE_PER_CPU(struct task_struct *, current_task) ____cacheline_aligned =
--	&init_task;
--EXPORT_PER_CPU_SYMBOL(current_task);
- 
+-
  DEFINE_PER_CPU(void *, hardirq_stack_ptr);
  DEFINE_PER_CPU(bool, hardirq_stack_inuse);
-@@ -2071,8 +2069,6 @@ void syscall_init(void)
+ 
+-DEFINE_PER_CPU(int, __preempt_count) = INIT_PREEMPT_COUNT;
+-EXPORT_PER_CPU_SYMBOL(__preempt_count);
+-
+ DEFINE_PER_CPU(unsigned long, cpu_current_top_of_stack) = TOP_OF_INIT_STACK;
+ 
+ static void wrmsrl_cstar(unsigned long val)
+@@ -2069,9 +2066,6 @@ void syscall_init(void)
  
  #else	/* CONFIG_X86_64 */
  
--DEFINE_PER_CPU(struct task_struct *, current_task) = &init_task;
--EXPORT_PER_CPU_SYMBOL(current_task);
- DEFINE_PER_CPU(int, __preempt_count) = INIT_PREEMPT_COUNT;
- EXPORT_PER_CPU_SYMBOL(__preempt_count);
- 
---- a/arch/x86/kernel/process_32.c
-+++ b/arch/x86/kernel/process_32.c
-@@ -207,7 +207,7 @@ EXPORT_SYMBOL_GPL(start_thread);
- 	if (prev->gs | next->gs)
- 		loadsegment(gs, next->gs);
- 
--	this_cpu_write(current_task, next_p);
-+	raw_cpu_write(pcpu_hot.current_task, next_p);
- 
- 	switch_fpu_finish();
- 
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -616,7 +616,7 @@ void compat_start_thread(struct pt_regs
- 	/*
- 	 * Switch the PDA and FPU contexts.
- 	 */
--	this_cpu_write(current_task, next_p);
-+	raw_cpu_write(pcpu_hot.current_task, next_p);
- 	this_cpu_write(cpu_current_top_of_stack, task_top_of_stack(next_p));
- 
- 	switch_fpu_finish();
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1046,7 +1046,7 @@ int common_cpu_up(unsigned int cpu, stru
- 	/* Just in case we booted with a single CPU. */
- 	alternatives_enable_smp();
- 
--	per_cpu(current_task, cpu) = idle;
-+	per_cpu(pcpu_hot.current_task, cpu) = idle;
- 	cpu_init_stack_canary(cpu, idle);
- 
- 	/* Initialize the interrupt stack(s) */
+-DEFINE_PER_CPU(int, __preempt_count) = INIT_PREEMPT_COUNT;
+-EXPORT_PER_CPU_SYMBOL(__preempt_count);
+-
+ /*
+  * On x86_32, vm86 modifies tss.sp0, so sp0 isn't a reliable way to find
+  * the top of the kernel stack.  Use an extra percpu variable to track the
 
 
