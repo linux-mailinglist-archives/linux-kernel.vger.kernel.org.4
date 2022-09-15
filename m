@@ -2,54 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422FC5B9774
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A795B9776
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiIOJb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 05:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S229832AbiIOJbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiIOJbW (ORCPT
+        with ESMTP id S229814AbiIOJbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 05:31:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB359675F;
-        Thu, 15 Sep 2022 02:31:20 -0700 (PDT)
+        Thu, 15 Sep 2022 05:31:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4662A97512;
+        Thu, 15 Sep 2022 02:31:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88CCC62245;
-        Thu, 15 Sep 2022 09:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F950C433C1;
-        Thu, 15 Sep 2022 09:31:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1533B81F06;
+        Thu, 15 Sep 2022 09:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7CEC433D6;
+        Thu, 15 Sep 2022 09:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663234280;
-        bh=b3yoajN2tS9K2V4FVmNAQPYuhL3f6oCbNn9iOEv9S7o=;
+        s=k20201202; t=1663234291;
+        bh=lBKPmLbjzFxuJu62Vh8rf5713uoi9Z/o9W5MVo7ErJk=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=kPQp6MOmi56yTOqy4z9eaTamTfWOQYv2XAwbLjY//ynzz2xIMog5rT3dGytTm76g8
-         14UVrIAYYINPsuwezbjiaTjoT2D8Eltkv41YNOzovoP2v+UDeUZ7N2Z4GDNqBMuoKq
-         EMatOaYkQhHAt9NeiK4N7GVO+6qTpwl0ZM28xgSYs0ta8oMYPrJ3059R0F/VcBenUO
-         VkyXhL8o3IlxA6Od+YCas7G8Pn7xp0QUHdc+NbH7O/PQyzg4w5hXvhVATaWLLEv51Q
-         33w7OhpUlwDy9UfRnNghWakMaTJhA97ESC4vI6SsrVpwIPXQw9GQQT6dch6UTJu1uW
-         WhBem6d7ZxB2A==
+        b=OBVnYl4sASrxWbDpDP4Z23YBu3TFec6cKPFZdUMgJUOnz1iFXP5dVawW4N1zTzTTe
+         KpjKJE0ibvVI0EZISBmwVsAeN7SehWWqCbiP1odPMEzqCOaaRUKdv/krLXCTqPGN+X
+         O9SXC17thuZma+znDsfzB6Ll536kIGRa0r1laYA9a0HHu0bGDVLxqD2pKhr34rWALx
+         /QANPTR1iYBdPCvehZUp9m9ZjQUwUL3ZGHfd02HXa/Bvz0D1bsmcWJ8etpVLwBr0F6
+         /O6uWRDJoiRhaGBdQfOOG2H9byRD2RlYGCtGlx1SDJmdZyWlBpxlLORmv9XqYC75a/
+         xwlAcJUFT3M6A==
 From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220910091428.50418-1-krzysztof.kozlowski@linaro.org>
-References: <20220910091428.50418-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v4 00/15] ASoC/qcom/arm64: Qualcomm ADSP DTS and binding fixes
-Message-Id: <166323427717.2395893.6929759615552147148.b4-ty@kernel.org>
-Date:   Thu, 15 Sep 2022 10:31:17 +0100
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220914153333.37701-1-andriy.shevchenko@linux.intel.com>
+References: <20220914153333.37701-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: mpc52xx: Replace of_gpio_count() by gpiod_count()
+Message-Id: <166323429089.2397913.15544119703242117517.b4-ty@kernel.org>
+Date:   Thu, 15 Sep 2022 10:31:30 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,42 +53,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sep 2022 11:14:13 +0200, Krzysztof Kozlowski wrote:
-> Dependencies/merging
-> ====================
-> 1. The DTS patches are independent.
-> 2. The binding patches should come together, because of context changes. Could
->    be one of: Qualcomm SoC, ASoC or DT tree.
+On Wed, 14 Sep 2022 18:33:33 +0300, Andy Shevchenko wrote:
+> As a preparation to unexport of_gpio_named_count(), convert the
+> driver to use gpiod_count() instead.
 > 
-> Changes since v3
-> ================
-> 1. Patch 9-10: re-order, so first apr.yaml is corrected and then we convert to
->    DT schema. This makes patchset fully bisectable in expense of changing the same
->    lines twice.
-> 2. Patch 11: New patch.
 > 
-> [...]
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/spi.git for-next
 
 Thanks!
 
-[09/15] dt-bindings: soc: qcom: apr: correct service children
-        commit: b2496de1dfdddfceb87e7a7b791c3a249c860682
-[10/15] ASoC: dt-bindings: qcom,q6asm: convert to dtschema
-        commit: 7b0ad4629d1fb719ae71a8f2968e8c6268ab1709
-[11/15] ASoC: dt-bindings: qcom,q6adm: convert to dtschema
-        commit: 301628d805019999f1ae9764aadfcface9c4e309
-[12/15] ASoC: dt-bindings: qcom,q6dsp-lpass-ports: cleanup example
-        commit: 0630efc3b849f65ef3bad803b84bc0819591dac9
-[13/15] ASoC: dt-bindings: qcom,q6dsp-lpass-clocks: cleanup example
-        commit: 7af18f4efd85c2e85458e3f504e129a97f6baaf2
-[14/15] ASoC: dt-bindings: qcom,q6apm-dai: adjust indentation in example
-        commit: 5f170e21fe96fbd1f81ace9ec6e6b695e1098733
-[15/15] dt-bindings: soc: qcom: apr: add missing properties
-        commit: b2d7616e13c4eb766f5e2f6568c2e746e76b7b53
+[1/1] spi: mpc52xx: Replace of_gpio_count() by gpiod_count()
+      commit: a0c4b120431172490793fb21d43c908b35fd3e50
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
