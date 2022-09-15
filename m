@@ -2,133 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0D05B93FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621515B9400
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiIOFli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 01:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S229521AbiIOFnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 01:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIOFlg (ORCPT
+        with ESMTP id S229523AbiIOFnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 01:41:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411F47CB4D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 22:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663220495; x=1694756495;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z5WtDjDuYhTg3gF+Ikc62wOFipSSQ6UZbUEy6e0JmUY=;
-  b=BDYbevSLCosCj4i/zmvI7jAUhqE22Lhbs7BdXBvmoeZz+z3wu8LDlhvw
-   b+bCD1ucfn03CPUGkB/C15bSsL/qsHt8XHY9SxVGp44Dte5AtsZPR9w5/
-   JUZBK8LTklrcPPUuUt9TzlSetr7eUPLNxxYyK03CYS4ECCtrrbIlrid8C
-   Bs9Msmz+slus+4lULgOkMEbBn0/y+W2puQkzYoOMAoN0OFFOLL7aV36ta
-   bjFDwSPHEp2iNsi4DDMSR1drHIxFMGns78VXVJhSsSY/FED52uWGwHrLS
-   pnAhzF6X4/Z6nsjnsCQImwEXhye18NRN5+KBRD+EqLzj1b7Zf2yk5Au1J
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="360358007"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="360358007"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 22:41:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="617140700"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Sep 2022 22:41:33 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYhcz-00002J-0C;
-        Thu, 15 Sep 2022 05:41:33 +0000
-Date:   Thu, 15 Sep 2022 13:40:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/reset/reset-ti-sci.c:229: undefined reference to
- `devm_ti_sci_get_handle'
-Message-ID: <202209151325.MvDE41LH-lkp@intel.com>
+        Thu, 15 Sep 2022 01:43:49 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0327CB4D;
+        Wed, 14 Sep 2022 22:43:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPrVL78_1663220621;
+Received: from 30.221.129.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPrVL78_1663220621)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 13:43:42 +0800
+Message-ID: <c566e53c-a27a-9c5a-0b19-c55f6cf45d78@linux.alibaba.com>
+Date:   Thu, 15 Sep 2022 13:43:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 5/6] erofs: introduce a pseudo mnt to manage shared
+ cookies
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
+        xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
+ <20220914105041.42970-6-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220914105041.42970-6-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-commit: a6af504184c981efd253f986e6fc54db57b1d39f reset: ti-sci: Allow building under COMPILE_TEST
-date:   5 months ago
-config: arm-buildonly-randconfig-r004-20220914 (https://download.01.org/0day-ci/archive/20220915/202209151325.MvDE41LH-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6af504184c981efd253f986e6fc54db57b1d39f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a6af504184c981efd253f986e6fc54db57b1d39f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arm-linux-gnueabi-ld: drivers/reset/reset-ti-sci.o: in function `ti_sci_reset_probe':
->> drivers/reset/reset-ti-sci.c:229: undefined reference to `devm_ti_sci_get_handle'
 
 
-vim +229 drivers/reset/reset-ti-sci.c
+On 9/14/22 6:50 PM, Jia Zhu wrote:
+> Use a pseudo mnt to manage shared cookies.
+> 
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+> ---
+>  fs/erofs/fscache.c  | 13 +++++++++++++
+>  fs/erofs/internal.h |  1 +
+>  fs/erofs/super.c    | 31 +++++++++++++++++++++++++++++--
+>  3 files changed, 43 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index b2100dc67cde..4e0a441afb7d 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -8,6 +8,7 @@
+>  
+>  static DEFINE_MUTEX(erofs_domain_list_lock);
+>  static LIST_HEAD(erofs_domain_list);
+> +static struct vfsmount *erofs_pseudo_mnt;
+>  
+>  static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
+>  					     loff_t start, size_t len)
+> @@ -436,6 +437,10 @@ static void erofs_fscache_domain_put(struct erofs_domain *domain)
+>  		fscache_relinquish_volume(domain->volume, NULL, false);
+>  		mutex_lock(&erofs_domain_list_lock);
+>  		list_del(&domain->list);
+> +		if (list_empty(&erofs_domain_list)) {
+> +			kern_unmount(erofs_pseudo_mnt);
+> +			erofs_pseudo_mnt = NULL;
+> +		}
+>  		mutex_unlock(&erofs_domain_list_lock);
+>  		kfree(domain->domain_id);
+>  		kfree(domain);
+> @@ -489,6 +494,14 @@ static int erofs_fscache_init_domain(struct super_block *sb)
+>  	if (err)
+>  		goto out;
+>  
+> +	if (!erofs_pseudo_mnt) {
+> +		erofs_pseudo_mnt = kern_mount(&erofs_fs_type);
+> +		if (IS_ERR(erofs_pseudo_mnt)) {
+> +			err = PTR_ERR(erofs_pseudo_mnt);
+> +			goto out;
 
-28df169b9afa12 Andrew F. Davis 2017-05-24  217  
-28df169b9afa12 Andrew F. Davis 2017-05-24  218  static int ti_sci_reset_probe(struct platform_device *pdev)
-28df169b9afa12 Andrew F. Davis 2017-05-24  219  {
-28df169b9afa12 Andrew F. Davis 2017-05-24  220  	struct ti_sci_reset_data *data;
-28df169b9afa12 Andrew F. Davis 2017-05-24  221  
-28df169b9afa12 Andrew F. Davis 2017-05-24  222  	if (!pdev->dev.of_node)
-28df169b9afa12 Andrew F. Davis 2017-05-24  223  		return -ENODEV;
-28df169b9afa12 Andrew F. Davis 2017-05-24  224  
-28df169b9afa12 Andrew F. Davis 2017-05-24  225  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-28df169b9afa12 Andrew F. Davis 2017-05-24  226  	if (!data)
-28df169b9afa12 Andrew F. Davis 2017-05-24  227  		return -ENOMEM;
-28df169b9afa12 Andrew F. Davis 2017-05-24  228  
-28df169b9afa12 Andrew F. Davis 2017-05-24 @229  	data->sci = devm_ti_sci_get_handle(&pdev->dev);
-28df169b9afa12 Andrew F. Davis 2017-05-24  230  	if (IS_ERR(data->sci))
-28df169b9afa12 Andrew F. Davis 2017-05-24  231  		return PTR_ERR(data->sci);
-28df169b9afa12 Andrew F. Davis 2017-05-24  232  
-28df169b9afa12 Andrew F. Davis 2017-05-24  233  	data->rcdev.ops = &ti_sci_reset_ops;
-28df169b9afa12 Andrew F. Davis 2017-05-24  234  	data->rcdev.owner = THIS_MODULE;
-28df169b9afa12 Andrew F. Davis 2017-05-24  235  	data->rcdev.of_node = pdev->dev.of_node;
-28df169b9afa12 Andrew F. Davis 2017-05-24  236  	data->rcdev.of_reset_n_cells = 2;
-28df169b9afa12 Andrew F. Davis 2017-05-24  237  	data->rcdev.of_xlate = ti_sci_reset_of_xlate;
-28df169b9afa12 Andrew F. Davis 2017-05-24  238  	data->dev = &pdev->dev;
-28df169b9afa12 Andrew F. Davis 2017-05-24  239  	idr_init(&data->idr);
-28df169b9afa12 Andrew F. Davis 2017-05-24  240  
-28df169b9afa12 Andrew F. Davis 2017-05-24  241  	platform_set_drvdata(pdev, data);
-28df169b9afa12 Andrew F. Davis 2017-05-24  242  
-28df169b9afa12 Andrew F. Davis 2017-05-24  243  	return reset_controller_register(&data->rcdev);
-28df169b9afa12 Andrew F. Davis 2017-05-24  244  }
-28df169b9afa12 Andrew F. Davis 2017-05-24  245  
+Comment like "sbi->volume will be cleaned up in .kill_sb() in the error
+path" is needed here. But personally I prefer the function is
+self-maintained, i.e. the error path is handled locally, which is more
+intuitive. The same with the error path handling I had pointed in patch 2.
 
-:::::: The code at line 229 was first introduced by commit
-:::::: 28df169b9afa121153ef2a3ef4ceae72512cde6d reset: Add the TI SCI reset driver
-
-:::::: TO: Andrew F. Davis <afd@ti.com>
-:::::: CC: Philipp Zabel <p.zabel@pengutronix.de>
+> +		}
+> +	}
+> +
+>  	domain->volume = sbi->volume;
+>  	refcount_set(&domain->ref, 1);
+>  	mutex_init(&domain->mutex);
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 5ce6889d6f1d..4dd0b545755a 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -403,6 +403,7 @@ struct page *erofs_grab_cache_page_nowait(struct address_space *mapping,
+>  }
+>  
+>  extern const struct super_operations erofs_sops;
+> +extern struct file_system_type erofs_fs_type;
+>  
+>  extern const struct address_space_operations erofs_raw_access_aops;
+>  extern const struct address_space_operations z_erofs_aops;
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 856758ee4869..ced1d2fd6e4b 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -688,6 +688,13 @@ static const struct export_operations erofs_export_ops = {
+>  	.get_parent = erofs_get_parent,
+>  };
+>  
+> +static int erofs_fc_fill_pseudo_super(struct super_block *sb, struct fs_context *fc)
+> +{
+> +	static const struct tree_descr empty_descr = {""};
+> +
+> +	return simple_fill_super(sb, EROFS_SUPER_MAGIC, &empty_descr);
+> +}
+> +
+>  static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+>  	struct inode *inode;
+> @@ -789,6 +796,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	return 0;
+>  }
+>  
+> +static int erofs_fc_anon_get_tree(struct fs_context *fc)
+> +{
+> +	return get_tree_nodev(fc, erofs_fc_fill_pseudo_super);
+> +}
+> +
+>  static int erofs_fc_get_tree(struct fs_context *fc)
+>  {
+>  	struct erofs_fs_context *ctx = fc->fs_private;
+> @@ -858,10 +870,20 @@ static const struct fs_context_operations erofs_context_ops = {
+>  	.free		= erofs_fc_free,
+>  };
+>  
+> +static const struct fs_context_operations erofs_anon_context_ops = {
+> +	.get_tree       = erofs_fc_anon_get_tree,
+> +};
+> +
+>  static int erofs_init_fs_context(struct fs_context *fc)
+>  {
+> -	struct erofs_fs_context *ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+> +	struct erofs_fs_context *ctx;
+> +
+> +	if (fc->sb_flags & SB_KERNMOUNT) {
+> +		fc->ops = &erofs_anon_context_ops;
+> +		return 0;
+> +	}
+>  
+> +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+>  	if (!ctx)
+>  		return -ENOMEM;
+>  	ctx->devs = kzalloc(sizeof(struct erofs_dev_context), GFP_KERNEL);
+> @@ -888,6 +910,11 @@ static void erofs_kill_sb(struct super_block *sb)
+>  
+>  	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
+>  
+> +	if (sb->s_flags & SB_KERNMOUNT) {
+> +		kill_litter_super(sb);
+> +		return;
+> +	}
+> +
+>  	if (erofs_is_fscache_mode(sb))
+>  		kill_anon_super(sb);
+>  	else
+> @@ -923,7 +950,7 @@ static void erofs_put_super(struct super_block *sb)
+>  	sbi->s_fscache = NULL;
+>  }
+>  
+> -static struct file_system_type erofs_fs_type = {
+> +struct file_system_type erofs_fs_type = {
+>  	.owner          = THIS_MODULE,
+>  	.name           = "erofs",
+>  	.init_fs_context = erofs_init_fs_context,
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Jingbo
