@@ -2,163 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE505BA276
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01AB5BA279
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiIOVyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 17:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S229713AbiIOVz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 17:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiIOVyQ (ORCPT
+        with ESMTP id S229553AbiIOVzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 17:54:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F35071C;
-        Thu, 15 Sep 2022 14:54:15 -0700 (PDT)
+        Thu, 15 Sep 2022 17:55:52 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64054883DC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663278855; x=1694814855;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=7pY0xV07EAduso1MOQg/k77RZEBE43kmtmng6uKuueI=;
-  b=UlHjPc83CgcQ2wDIu1IhmW7dMtXBwGWS0raxluaYrFyxL2Vm+iKfQngr
-   6zmI5GJCxHfgR9jqrlI9Ewoy9QDyidFgeUBea3Ywz1U5gwWddSglIWS/6
-   2+3KoJKNQVEg9C3P6c5tiHNyYgKi73MxxrrE6pQ2qrwhTA0FbsduiumPH
-   v7aH4YjHmyjsDINCyq+lEO4DTbZoVk2PdvDGB88PB5iGWCak519VmB1Da
-   v8/tesnsKdlN/NugaBG/gWlHwzMfE7NX/5LzIVHtAp/zstaf8246+7wf9
-   Ey5vP0ojIEf3f7VacTO8zOz9ImB+laCctFwu+x4ylu6/It+2FgJXGH2mU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="278576999"
+  t=1663278950; x=1694814950;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PsazF88m8J9KxJRqmIFocp56MNGhfFqNtrzAxZb3oDw=;
+  b=GIg9p+ymG+iiLgkHtxN+vPxlBDhAgNRTeP518KueC0/v+8vHZqPxp4dc
+   JSlXge4waNP45/fVtCbkkW64VXee4vcirXuJv0g2QzaW+v8B1NYEmPhEW
+   invTCH5rOkH/+8Chhsf5DT6fUQpopO5I3I7FQsVIotYFU7ID3f1KCrd8V
+   o0pjDWdhjMSIxlCUG6gMmcijeXCv3gR8e+jeV9vGRx0DTFu78O22k3/Wp
+   WE8zn0StUh/2RAyKjdlQg8WO1iUVTaPWzvUKkh500qzc3ZxrgKCFh7M3Q
+   dK/CRBDJujQyjHXulw6+e8GneDuCeEuaSfhJZr3Znh+ezXbgIiOcv/SAb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="362813370"
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="278576999"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:54:15 -0700
+   d="scan'208";a="362813370"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:55:49 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="679716984"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:54:14 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 2/2] net/sched: taprio: make qdisc_leaf() see the
- per-netdev-queue pfifo child qdiscs
-In-Reply-To: <20220915100802.2308279-3-vladimir.oltean@nxp.com>
-References: <20220915100802.2308279-1-vladimir.oltean@nxp.com>
- <20220915100802.2308279-3-vladimir.oltean@nxp.com>
-Date:   Thu, 15 Sep 2022 14:54:14 -0700
-Message-ID: <87wna4fgmx.fsf@intel.com>
+   d="scan'208";a="759812092"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Sep 2022 14:55:47 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYwpn-00013y-0J;
+        Thu, 15 Sep 2022 21:55:47 +0000
+Date:   Fri, 16 Sep 2022 05:54:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xin Hao <xhao@linux.alibaba.com>, sj@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: Re: [PATCH V1 2/2] mm/damon/core: remove duplicate check about THP
+Message-ID: <202209160528.6z2rUbjZ-lkp@intel.com>
+References: <20220915142237.92529-2-xhao@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915142237.92529-2-xhao@linux.alibaba.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+Hi Xin,
 
-> taprio can only operate as root qdisc, and to that end, there exists the
-> following check in taprio_init(), just as in mqprio:
->
-> 	if (sch->parent != TC_H_ROOT)
-> 		return -EOPNOTSUPP;
->
-> And indeed, when we try to attach taprio to an mqprio child, it fails as
-> expected:
->
-> $ tc qdisc add dev swp0 root handle 1: mqprio num_tc 8 \
-> 	map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0
-> $ tc qdisc replace dev swp0 parent 1:2 taprio num_tc 8 \
-> 	map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
-> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
-> 	flags 0x0 clockid CLOCK_TAI
-> Error: sch_taprio: Can only be attached as root qdisc.
->
-> (extack message added by me)
->
-> But when we try to attach a taprio child to a taprio root qdisc,
-> surprisingly it doesn't fail:
->
-> $ tc qdisc replace dev swp0 root handle 1: taprio num_tc 8 \
-> 	map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
-> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
-> 	flags 0x0 clockid CLOCK_TAI
-> $ tc qdisc replace dev swp0 parent 1:2 taprio num_tc 8 \
-> 	map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
-> 	base-time 0 sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
-> 	flags 0x0 clockid CLOCK_TAI
->
-> This is because tc_modify_qdisc() behaves differently when mqprio is
-> root, vs when taprio is root.
->
-> In the mqprio case, it finds the parent qdisc through
-> p = qdisc_lookup(dev, TC_H_MAJ(clid)), and then the child qdisc through
-> q = qdisc_leaf(p, clid). This leaf qdisc q has handle 0, so it is
-> ignored according to the comment right below ("It may be default qdisc,
-> ignore it"). As a result, tc_modify_qdisc() goes through the
-> qdisc_create() code path, and this gives taprio_init() a chance to check
-> for sch_parent != TC_H_ROOT and error out.
->
-> Whereas in the taprio case, the returned q = qdisc_leaf(p, clid) is
-> different. It is not the default qdisc created for each netdev queue
-> (both taprio and mqprio call qdisc_create_dflt() and keep them in
-> a private q->qdiscs[], or priv->qdiscs[], respectively). Instead, taprio
-> makes qdisc_leaf() return the _root_ qdisc, aka itself.
->
-> When taprio does that, tc_modify_qdisc() goes through the qdisc_change()
-> code path, because the qdisc layer never finds out about the child qdisc
-> of the root. And through the ->change() ops, taprio has no reason to
-> check whether its parent is root or not, just through ->init(), which is
-> not called.
->
-> The problem is the taprio_leaf() implementation. Even though code wise,
-> it does the exact same thing as mqprio_leaf() which it is copied from,
-> it works with different input data. This is because mqprio does not
-> attach itself (the root) to each device TX queue, but one of the default
-> qdiscs from its private array.
->
-> In fact, since commit 13511704f8d7 ("net: taprio offload: enforce qdisc
-> to netdev queue mapping"), taprio does this too, but just for the full
-> offload case. So if we tried to attach a taprio child to a fully
-> offloaded taprio root qdisc, it would properly fail too; just not to a
-> software root taprio.
->
-> To fix the problem, stop looking at the Qdisc that's attached to the TX
-> queue, and instead, always return the default qdiscs that we've
-> allocated (and to which we privately enqueue and dequeue, in software
-> scheduling mode).
->
-> Since Qdisc_class_ops :: leaf  is only called from tc_modify_qdisc(),
-> the risk of unforeseen side effects introduced by this change is
-> minimal.
->
-> Fixes: 5a781ccbd19e ("tc: Add support for configuring the taprio scheduler")
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
+Thank you for the patch! Yet something to improve:
 
-I spent a long time trying to think of cases that this would break,
-could not think of anything:
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Hao/mm-damon-sysfs-avoid-call-damon_target_has_pid-repeatedly/20220915-230635
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r002-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160528.6z2rUbjZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7902790b04d0eb74686b55218e8ead191ba5c003
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xin-Hao/mm-damon-sysfs-avoid-call-damon_target_has_pid-repeatedly/20220915-230635
+        git checkout 7902790b04d0eb74686b55218e8ead191ba5c003
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash mm/damon/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/damon/vaddr.c:451:7: error: call to undeclared function 'pmd_young'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   if (pmd_young(*pmd) || !page_is_idle(page) ||
+                       ^
+   mm/damon/vaddr.c:451:7: note: did you mean 'pte_young'?
+   arch/hexagon/include/asm/pgtable.h:273:19: note: 'pte_young' declared here
+   static inline int pte_young(pte_t pte)
+                     ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PROC_CHILDREN
+   Depends on [n]: PROC_FS [=n]
+   Selected by [y]:
+   - CHECKPOINT_RESTORE [=y]
 
 
-Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+vim +/pmd_young +451 mm/damon/vaddr.c
 
+3f49584b262cf8f SeongJae Park 2021-09-07  428  
+3f49584b262cf8f SeongJae Park 2021-09-07  429  static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+3f49584b262cf8f SeongJae Park 2021-09-07  430  		unsigned long next, struct mm_walk *walk)
+3f49584b262cf8f SeongJae Park 2021-09-07  431  {
+3f49584b262cf8f SeongJae Park 2021-09-07  432  	pte_t *pte;
+3f49584b262cf8f SeongJae Park 2021-09-07  433  	spinlock_t *ptl;
+3f49584b262cf8f SeongJae Park 2021-09-07  434  	struct page *page;
+3f49584b262cf8f SeongJae Park 2021-09-07  435  	struct damon_young_walk_private *priv = walk->private;
+3f49584b262cf8f SeongJae Park 2021-09-07  436  
+72c33ef4c02e32e Baolin Wang   2022-08-18  437  	if (pmd_trans_huge(*pmd)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  438  		ptl = pmd_lock(walk->mm, pmd);
+c8b9aff419303e4 Baolin Wang   2022-08-18  439  		if (!pmd_present(*pmd)) {
+c8b9aff419303e4 Baolin Wang   2022-08-18  440  			spin_unlock(ptl);
+c8b9aff419303e4 Baolin Wang   2022-08-18  441  			return 0;
+c8b9aff419303e4 Baolin Wang   2022-08-18  442  		}
+c8b9aff419303e4 Baolin Wang   2022-08-18  443  
+72c33ef4c02e32e Baolin Wang   2022-08-18  444  		if (!pmd_trans_huge(*pmd)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  445  			spin_unlock(ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  446  			goto regular_page;
+3f49584b262cf8f SeongJae Park 2021-09-07  447  		}
+3f49584b262cf8f SeongJae Park 2021-09-07  448  		page = damon_get_page(pmd_pfn(*pmd));
+3f49584b262cf8f SeongJae Park 2021-09-07  449  		if (!page)
+3f49584b262cf8f SeongJae Park 2021-09-07  450  			goto huge_out;
+3f49584b262cf8f SeongJae Park 2021-09-07 @451  		if (pmd_young(*pmd) || !page_is_idle(page) ||
+3f49584b262cf8f SeongJae Park 2021-09-07  452  					mmu_notifier_test_young(walk->mm,
+3f49584b262cf8f SeongJae Park 2021-09-07  453  						addr)) {
+02e34fff195d3a5 Kefeng Wang   2022-05-17  454  			*priv->page_sz = HPAGE_PMD_SIZE;
+3f49584b262cf8f SeongJae Park 2021-09-07  455  			priv->young = true;
+3f49584b262cf8f SeongJae Park 2021-09-07  456  		}
+3f49584b262cf8f SeongJae Park 2021-09-07  457  		put_page(page);
+3f49584b262cf8f SeongJae Park 2021-09-07  458  huge_out:
+3f49584b262cf8f SeongJae Park 2021-09-07  459  		spin_unlock(ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  460  		return 0;
+3f49584b262cf8f SeongJae Park 2021-09-07  461  	}
+3f49584b262cf8f SeongJae Park 2021-09-07  462  
+3f49584b262cf8f SeongJae Park 2021-09-07  463  regular_page:
+3f49584b262cf8f SeongJae Park 2021-09-07  464  
+3f49584b262cf8f SeongJae Park 2021-09-07  465  	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
+3f49584b262cf8f SeongJae Park 2021-09-07  466  		return -EINVAL;
+3f49584b262cf8f SeongJae Park 2021-09-07  467  	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  468  	if (!pte_present(*pte))
+3f49584b262cf8f SeongJae Park 2021-09-07  469  		goto out;
+3f49584b262cf8f SeongJae Park 2021-09-07  470  	page = damon_get_page(pte_pfn(*pte));
+3f49584b262cf8f SeongJae Park 2021-09-07  471  	if (!page)
+3f49584b262cf8f SeongJae Park 2021-09-07  472  		goto out;
+3f49584b262cf8f SeongJae Park 2021-09-07  473  	if (pte_young(*pte) || !page_is_idle(page) ||
+3f49584b262cf8f SeongJae Park 2021-09-07  474  			mmu_notifier_test_young(walk->mm, addr)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  475  		*priv->page_sz = PAGE_SIZE;
+3f49584b262cf8f SeongJae Park 2021-09-07  476  		priv->young = true;
+3f49584b262cf8f SeongJae Park 2021-09-07  477  	}
+3f49584b262cf8f SeongJae Park 2021-09-07  478  	put_page(page);
+3f49584b262cf8f SeongJae Park 2021-09-07  479  out:
+3f49584b262cf8f SeongJae Park 2021-09-07  480  	pte_unmap_unlock(pte, ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  481  	return 0;
+3f49584b262cf8f SeongJae Park 2021-09-07  482  }
+3f49584b262cf8f SeongJae Park 2021-09-07  483  
 
-Cheers,
 -- 
-Vinicius
+0-DAY CI Kernel Test Service
+https://01.org/lkp
