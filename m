@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4505B96AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F90D5B96B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiIOIv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S229698AbiIOIyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiIOIvR (ORCPT
+        with ESMTP id S229570AbiIOIye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:51:17 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBB58C03C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:51:16 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id v16so40471124ejr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=pVEAPr9uFJXoigY4S3Caia0V9hvOwsnD7u1cGE+06fg=;
-        b=lQ3J36OOZC+3AWHtJgFIWkMKS2XenwMASaLdlbMcfGiHgwBZPp4D7FdJA+OItxRkDb
-         Js/Q03BFOS1N3FBMZogWUbgVzYhdy0UremJzkm3RxoeVIKUJkg2XthrxPq8oquNl3MdN
-         0o8wYJ+w6/u8wZK9GhZeyvUkd3l+PklON2jOefy+wvlfK2xkABNacMpczhCkYQIrJkQD
-         labgVa0aoMtnvT62KbzBqwzSu4FkNyOOnVXnqYMYe7vkqZsfz9uysFTEbeZuqmK2EpwO
-         L6oBZ6RqC+bpKpYyRS6whdkA0bWnOUfLZ1pP1S4wpmj0HXEW9ogvtmRaXtV5ZUgqFrey
-         rKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=pVEAPr9uFJXoigY4S3Caia0V9hvOwsnD7u1cGE+06fg=;
-        b=D98y2znrr6jNGBGgM82RLGExxL+LHy2OzitWXsc/QocQzXI/SN/eJ/uLYTD0GLBAXT
-         GAcSciNUUceUegzAEshDUPYiVwpEicSLLdnbmcIyo+faRhMrlMB9Q9/mvIykCZPA+POR
-         uhh3ni8cLfAND8ixpcpaww0t4IybPNpqEkZhgrBimaK0OfLcmEjk0lE03BibfM5JHQMH
-         J4LueeSP/FrUy2EU5BN2IDYdOF1P7rCijuXc8sCcf20PmZne4UD1QjskcTo6hK3q77Wb
-         ra14+vyCE1Dpny8KwbllXs13WK5jSTuF1CSuFpTjouiaWJmBatu+F4gIWIKZm7RJstxb
-         9Jsw==
-X-Gm-Message-State: ACrzQf2Zeiy+ydY63piNqY8g8igRk+lJq3Tfv+kdmRxXzPSFgyZ3nJov
-        S+O2D2KVA1ktHvZ3seya4OwKqEfekihVyorwFKlUUw==
-X-Google-Smtp-Source: AA6agR5IIQ8Zwh5tQ7qnWm4dlNi83Gdb5MN9DKY6CarxNu1pm/YdJDXGPnF2czFgQFPqDbWv3OpyIQ3aYY//Ztdh3zM=
-X-Received: by 2002:a17:907:7f19:b0:780:375d:61ec with SMTP id
- qf25-20020a1709077f1900b00780375d61ecmr4696000ejc.203.1663231874698; Thu, 15
- Sep 2022 01:51:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
- <20220906204301.3736813-2-dmitry.torokhov@gmail.com> <20220906211628.6u4hbpn4shjcvqel@pali>
- <Yxe7CJnIT5AiUilL@google.com> <20220906214114.vj3v32dzwxz6uqik@pali>
- <YxfBKkqce/IQQLk9@google.com> <20220906220901.p2c44we7i4c35uvx@pali>
- <YxfMkzW+5W3Hm1dU@google.com> <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
- <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com> <YyKMsyI961Mo1EQE@sol>
-In-Reply-To: <YyKMsyI961Mo1EQE@sol>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Sep 2022 10:51:02 +0200
-Message-ID: <CACRpkdYB6dZf4TBhfXB2Z5E2PJ46ctAM_QKLiW-fykbCopcVGQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thu, 15 Sep 2022 04:54:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D150CCA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:54:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3ED1621E4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:54:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045A4C43470;
+        Thu, 15 Sep 2022 08:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663232068;
+        bh=ezS2lgaFF108n/giCRbF0oi94X5dtCC3EP8mut0wgrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BOGmUssV5DfD20VkfAp5LmgUGPYty6ZLI3TjbfDTLo+Y6kCBgEwlKnSkivJKy4E6W
+         PH2qmbl5dCXjV2VkfITTN+foDhIXsyjtZQM1FnT6IHojXNT9QYccnCBfH6qEn37r7q
+         EOsXsQOPusr6NzbuSDNXMo2RLnvpe146g84zTkAGDGJ/31CM2HnH0Dx4YdZKAQthh4
+         W+7IiK+vPfUN/JR7M+EmvH7gU5Z4po7b16Fmpal2YGrjpnwe9Dvy8TaqCDq6xE6fVy
+         IE7U02M0wdPdh8kaeuMcDvCbAekyyCS5h26AzuljZ1OpuopkR+xkd3rwno4eu5x0iK
+         ZvvnNUmRyEatQ==
+Received: from [185.122.133.20] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oYkdd-00ANdj-Nf;
+        Thu, 15 Sep 2022 09:54:25 +0100
+Date:   Thu, 15 Sep 2022 09:54:25 +0100
+Message-ID: <87v8ppkofy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v2 2/4] irqdomain: Fix mapping-creation race
+In-Reply-To: <20220901142816.13731-3-johan+linaro@kernel.org>
+References: <20220901142816.13731-1-johan+linaro@kernel.org>
+        <20220901142816.13731-3-johan+linaro@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.122.133.20
+X-SA-Exim-Rcpt-To: johan+linaro@kernel.org, tglx@linutronix.de, gregkh@linuxfoundation.org, robh@kernel.org, linux-kernel@vger.kernel.org, dtor@chromium.org, jonathanh@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,45 +69,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 4:23 AM Kent Gibson <warthog618@gmail.com> wrote:
+Johan,
 
-> After sleeping on this, I'm even more in disagreement with renaming
-> value to state.
+On Thu, 01 Sep 2022 15:28:14 +0100,
+Johan Hovold <johan+linaro@kernel.org> wrote:
+> 
+> Parallel probing (e.g. due to asynchronous probing) of devices that share
+> interrupts can currently result in two mappings for the same hardware
+> interrupt to be created.
+> 
+> Add a serialising mapping mutex so that looking for an existing mapping
+> before creating a new one is done atomically.
+> 
+> Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> Cc: Dmitry Torokhov <dtor@chromium.org>
+> Cc: Jon Hunter <jonathanh@nvidia.com>
+> Link: https://lore.kernel.org/r/YuJXMHoT4ijUxnRb@hovoldconsulting.com
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  include/linux/irqdomain.h |  2 ++
+>  kernel/irq/irqdomain.c    | 33 ++++++++++++++++++++++++---------
+>  2 files changed, 26 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> index 00d577f90883..8df9b9586e29 100644
+> --- a/include/linux/irqdomain.h
+> +++ b/include/linux/irqdomain.h
+> @@ -144,6 +144,7 @@ struct irq_domain_chip_generic;
+>   *             core code.
+>   * @flags: host per irq_domain flags
+>   * @mapcount: The number of mapped interrupts
+> + * @map_mutex: Mapping lock
+>   *
+>   * Optional elements
+>   * @fwnode: Pointer to firmware node associated with the irq_domain. Pretty easy
+> @@ -168,6 +169,7 @@ struct irq_domain {
+>  	void *host_data;
+>  	unsigned int flags;
+>  	unsigned int mapcount;
+> +	struct mutex map_mutex;
+>  
+>  	/* Optional data */
+>  	struct fwnode_handle *fwnode;
+> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> index 24ddd8d9b597..1af1d141e165 100644
+> --- a/kernel/irq/irqdomain.c
+> +++ b/kernel/irq/irqdomain.c
+> @@ -215,6 +215,7 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+>  	/* Fill structure */
+>  	INIT_RADIX_TREE(&domain->revmap_tree, GFP_KERNEL);
+>  	mutex_init(&domain->revmap_mutex);
+> +	mutex_init(&domain->map_mutex);
+>  	domain->ops = ops;
+>  	domain->host_data = host_data;
+>  	domain->hwirq_max = hwirq_max;
+> @@ -721,14 +722,20 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+>  		return 0;
+>  	}
+>  
+> +	mutex_lock(&domain->map_mutex);
+> +
 
-OK let's not do that then.
+I must confess I have a hard time figuring out the semantic difference
+between map_mutex and revmap_mutex. or rather, what is the use of
+revmap_mutex once map_mutex is taken. They fundamentally overlap, and
+I have the feeling one should eventually replace the other.
 
-> OTOH, I totally agree with the addition of GPIOD_ACTIVE/INACTIVE to be
-> used for the logical cases, and even a script to apply it globally.
-> Ideally that script would change both the calls to the logical functions
-> to use ACTIVE/INACTIVE, and the physical to HIGH/LOW.
+If anything, you should absolutely define/document how these two locks
+interact.
 
-OK we have consensus on this.
+Thanks,
 
-> Introducing enums for those, and changing the function signatures to
-> use those rather than int makes sense to me too.
+	M.
 
-Either they can be enum or defined to bool true/false. Not really
-sure what is best. But intuitively enum "feels better" for me.
-
-> Though I'm not sure
-> why that has to wait until after all users are changed to the new macros.
-> Would that generate lint warnings?
-
-I rather want it all to happen at once. One preparatory commit
-adding the new types and one sed script to refactor the whole
-lot. Not gradual switchover.
-
-The reason is purely administrative: we have too many refactorings
-lagging behind, mainly the GPIO descriptors that have been
-lagging behind for what is it? 5 years? 10? GPIO irqchips also dragged
-out for way too long. We can't keep doing things gradually like
-this, it takes too much time and effort.
-
-I don't want any more "in-transition-indefinitely" stuff in the GPIO
-subsystem if I can avoid it.
-
-Therefore I would advice to switch it all over at the end of a merge
-window and be done with it.
-
-Yours,
-Linus Walleij
+-- 
+Without deviation from the norm, progress is not possible.
