@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0642B5B923E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510635B924C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiIOBky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        id S229744AbiIOBpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIOBkv (ORCPT
+        with ESMTP id S229911AbiIOBpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:40:51 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972D32A25B;
-        Wed, 14 Sep 2022 18:40:48 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663206046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aHrMqKnOhvrceoKDNwr4kJF7nEDwLaJAxZRfEElDacM=;
-        b=NOK9QL6c//UcrFx6c0l7e3u6T3ikeR3S7RiyaScZazN8wsGha6NRbAbuzX4Cfw2v+zq51Y
-        7CWGErYlPAkwbIO4kuO4+cMqn8M24j/UIslfY4vEJndq6Dr5HZHgWQgt5QZbpKCgE0E2+f
-        vqonwUNyZXx1RB2YKrAjmb9GjSVqg5M=
+        Wed, 14 Sep 2022 21:45:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D6A75CDA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:45:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSfzX6mKjzNm7G;
+        Thu, 15 Sep 2022 09:40:40 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 09:45:16 +0800
+Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <cuibixuan@linux.alibaba.com>, <baolin.wang@linux.alibaba.com>,
+        <zhuo.song@linux.alibaba.com>, <naoya.horiguchi@nec.com>,
+        <akpm@linux-foundation.org>
+References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <51eb9735-349e-db8b-fa1c-096a924ef520@huawei.com>
+Date:   Thu, 15 Sep 2022 09:45:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Subject: Re: [PATCH 03/21] mm/hugetlb: correct demote page offset logic
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220913195508.3511038-4-opendmb@gmail.com>
-Date:   Thu, 15 Sep 2022 09:40:34 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        - <devicetree-spec@vger.kernel.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux MM <linux-mm@kvack.org>, iommu@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1CA76834-D826-4799-A114-0E27A10D062F@linux.dev>
-References: <20220913195508.3511038-1-opendmb@gmail.com>
- <20220913195508.3511038-4-opendmb@gmail.com>
-To:     Doug Berger <opendmb@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/9/14 14:49, Shuai Xue wrote:
+> The GHES code calls memory_failure_queue() from IRQ context to queue work
+> into workqueue and schedule it on the current CPU. Then the work is
+> processed in memory_failure_work_func() by kworker and calls
+> memory_failure().
+> 
+> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
+> SIGBUS with error virutal address") make memory_failure() call
+> kill_accessing_process() that:
+> 
+>     - holds mmap locking of current->mm
+>     - does pagetable walk to find the error virtual address
+>     - and sends SIGBUS to the current process with error info.
+> 
+> However, the mm of kworker is not valid. Therefore, check mm when killing
+> accessing process.
+> 
+> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks for fixing.
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks,
+Miaohe Lin
 
 
-> On Sep 14, 2022, at 03:54, Doug Berger <opendmb@gmail.com> wrote:
->=20
-> With gigantic pages it may not be true that struct page structures
-> are contiguous across the entire gigantic page. The mem_map_offset
-> function is used here in place of direct pointer arithmetic to
-> correct for this.
->=20
-> Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
-
-With Matthew=E2=80=99s suggestion.
-
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
+> ---
+>  mm/memory-failure.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 14439806b5ef..7553917ce820 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>  	};
+>  	priv.tk.tsk = p;
+>  
+> +	if (!p->mm)
+> +		return -EFAULT;
+> +
+>  	mmap_read_lock(p->mm);
+>  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
+>  			      (void *)&priv);
+> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>  	else
+>  		ret = 0;
+>  	mmap_read_unlock(p->mm);
+> +
+>  	return ret > 0 ? -EHWPOISON : -EFAULT;
+>  }
+>  
+> 
 
