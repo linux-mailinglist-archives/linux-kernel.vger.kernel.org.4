@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16EC5BA256
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389F15BA25D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiIOVdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 17:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
+        id S229727AbiIOVfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 17:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIOVdn (ORCPT
+        with ESMTP id S229749AbiIOVex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 17:33:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0BF753A4;
-        Thu, 15 Sep 2022 14:33:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 690F1626AA;
-        Thu, 15 Sep 2022 21:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEEDC433B5;
-        Thu, 15 Sep 2022 21:33:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663277621;
-        bh=s40+g/crwq1I2vJ8w7LiVAh9DCAgzPt0b4Ee7q8s0r8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rRxulAlbxdOqg4gW7VA89ev50Pa7VTg3cXQVIvArvDCL9yEFO+TdDE4lzmqkIzPu/
-         wRPVvo81ns86PPXZkjuiuN0tds9qcQpypkrjP5yCpDxDVoDfDrnZDltOlC9fnDnvU5
-         w5GLqbBSKBwYJjGymIrpQmQGoztjwvi4XeNkoH0g=
-Date:   Thu, 15 Sep 2022 14:33:40 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     <viro@zeniv.linux.org.uk>, <yangyicong@hisilicon.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andriy.shevchenko@intel.com>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>
-Subject: Re: [PATCH] libfs: fix error format in simple_attr_write()
-Message-Id: <20220915143340.eeb3a8ca0bf50df1cd6359f9@linux-foundation.org>
-In-Reply-To: <20220915091544.42767-1-farbere@amazon.com>
-References: <20220915091544.42767-1-farbere@amazon.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 17:34:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3506E1EEFD;
+        Thu, 15 Sep 2022 14:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663277691; x=1694813691;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+xOQJjCjAfBBlD4eU1rtK/BvZIL6XiJTkIajamNFl0M=;
+  b=LDB44zzAH5/9vP8D4uk6yGV1Uj+p28/H3OcVnYd1DvEuV/jpjWjR9Aym
+   gNO6NzbU6nNSd1hKWgvc40dNFXTBv/F6c2Vf04ri4cBuWrgLKYUU4Zm9E
+   Vql7GxHUvp0XgYHhXIa0SPh2JXNDjYCVtCtpowPThqNff7siVyhHtAaTC
+   IW0brCyu6EX8YXROsOuM9/4IxvDyhhYJska7rXT+4OD0LktRqX/K0qTpn
+   pBnSbS5vqW+izk2exht/vJQ/4iQNEb/K6fg/tMzd7NFkT+r+ezVdAvqKF
+   UlQQjMyVmjWuDoSCSHsE6cVHi0D8d9qT5n8Ca5nzBcVK1sZFyAhD9+jwy
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="279224780"
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="279224780"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:34:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="594993849"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Sep 2022 14:34:47 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYwVS-00012t-1r;
+        Thu, 15 Sep 2022 21:34:46 +0000
+Date:   Fri, 16 Sep 2022 05:33:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Appana Durga Kedareswara rao 
+        <appana.durga.kedareswara.rao@amd.com>, appanad@amd.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        git@amd.com
+Subject: Re: [PATCH v4 2/4] drivers: misc: Add Support for TMR Manager
+Message-ID: <202209160529.6bwqp0xx-lkp@intel.com>
+References: <20220909061916.2935431-3-appana.durga.kedareswara.rao@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909061916.2935431-3-appana.durga.kedareswara.rao@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 09:15:44 +0000 Eliav Farber <farbere@amazon.com> wrote:
+Hi Appana,
 
-> In commit 488dac0c9237 ("libfs: fix error cast of negative value in
-> simple_attr_write()"), simple_attr_write() was changed to use kstrtoull()
-> instead of simple_strtoll() to convert a string got from a user.
-> A user trying to set a negative value will get an error.
-> 
-> This is wrong since it breaks all the places that use
-> DEFINE_DEBUGFS_ATTRIBUTE() with format of a signed integer.
-> 
-> For the record there are 43 current users of signed integer which are
-> likely to be effected by this:
-> 
-> $ git grep -n -A1 -w DEFINE_DEBUGFS_ATTRIBUTE | grep ');' |
-> sed 's,.*\(".*%.*"\).*,\1,' | sort | uniq -c
->   1 "%08llx\n"
->   5 "0x%016llx\n"
->   5 "0x%02llx\n"
->   5 "0x%04llx\n"
->  13 "0x%08llx\n"
->   1 "0x%4.4llx\n"
->   3 "0x%.4llx\n"
->   4 "0x%llx\n"
->   1 "%1lld\n"
->  40 "%lld\n"
->   2 "%lli\n"
-> 129 "%llu\n"
->   1 "%#llx\n"
->   2 "%llx\n"
-> 
-> u64 is not an issue for negative numbers.
-> The %lld and %llu in any case are for 64-bit value, representing it as
-> unsigned simplifies the generic code, but it doesn't mean we can't keep
-> their signed value if we know that.
-> 
-> This change uses sscanf() to fix the problem since it does the conversion
-> based on the supplied format string.
-> 
-> Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
+I love your patch! Perhaps something to improve:
 
-488dac0c9237 was two years ago, so I'm assuming that this error isn't
-causing a lot of trouble out there.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on soc/for-next linus/master v6.0-rc5]
+[cannot apply to char-misc/char-misc-testing xilinx-xlnx/master next-20220915]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In which I may be totally wrong.  Do you see a reason for backporting
-this fix into earlier kernels?  If so, what is it?
+url:    https://github.com/intel-lab-lkp/linux/commits/Appana-Durga-Kedareswara-rao/drivers-misc-Add-support-for-TMR-Manager-and-Inject-IPs/20220909-142639
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/fc425525cf8bef991de7374dd46cb69ed6b67961
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Appana-Durga-Kedareswara-rao/drivers-misc-Add-support-for-TMR-Manager-and-Inject-IPs/20220909-142639
+        git checkout fc425525cf8bef991de7374dd46cb69ed6b67961
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-Thanks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
+>> Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager:2: WARNING: Unexpected indentation.
+
+vim +2 Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager
+
+   > 2	Date:		Sep 2022
+     3	Contact:	appana.durga.kedareswara.rao@amd.com
+     4	Description:	This control file provides the fault detection count.
+     5			This file cannot be written.
+     6			Example:
+     7			# cat /sys/devices/platform/amba_pl/44a10000.tmr_manager/errcnt
+     8			  1
+     9	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
