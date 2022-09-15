@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB165BA1D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D435BA1F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiIOUa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 16:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S229696AbiIOUtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 16:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiIOUaE (ORCPT
+        with ESMTP id S229497AbiIOUtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 16:30:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0D03ED53
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:30:01 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bj12so44644486ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:30:01 -0700 (PDT)
+        Thu, 15 Sep 2022 16:49:03 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF26A9AFC3;
+        Thu, 15 Sep 2022 13:49:02 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z21so28745065edi.1;
+        Thu, 15 Sep 2022 13:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=EUHm5YwqUsut8vOCDG8gUqHimnptxihIuTZPupLKd+w=;
-        b=oIsRIL7UHb5uy1H8a7ihPHy/irgQmUeLrHpYfS62aKWb2o/bCxHIE9WPyF8VzZdomb
-         wZ5KoUxZNkcXT2QeXaqZKZ+UJlRUPHNxXRHIwzInSaLL0KI3q/mb7mF8Z5wRRiuV5eUD
-         D7FCoOdc8jROfJuLlV5uA+KgtIKNXa/dn5oYXNR8k1XsXq/ZYW4ZQ1YluyGJgVUU6ZJ3
-         po+mLGWVk5f2/6hZPL5pt9a2MpaMx7E9cm6+2gapZfsFfEN8NF0cPQlq9zb2Mqgrbfry
-         nhajo4cRNX5XDG196iI3bxK/LIyKBJXZobuOuf2jd+wYuWih9l+HDqxOwQmD3VE7Dub4
-         7Dcg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=k8iJ7L9yaA7qD0s2nB5tW0Kqk0H2NxzybAr7hwW0qQ8=;
+        b=Gt7WXplca5WSGjFg8coRd5SWUVMnfGgQ1FpG6lk28KeHhcPKsC6SCG3MwF1hCqd6v5
+         siQSRouNdzko/OR9BWe3hk13CE8On8O13XWxocmI7fCoJX1+mUI0e5pxPfF+gfLX4QJN
+         PfDrkyauVy+UAvKlV9zsBA1AFR5SGUVnFUoXTDc1dMiZcPOFqD2SL/k2uNVgHo7skDvJ
+         +WwsRGGKIm4ZsqK9UoyW9NoKoeUD5C1sXhJi9IF585eYpkoOwDyA2kihHQ1977Uvh2AC
+         w9ZW3aTvtHpigb1W10Oup3TViHNy/fwiZMJOofhTZzfvvh4U+XJ6XNBXwfB0SkWSQj7k
+         w4Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=EUHm5YwqUsut8vOCDG8gUqHimnptxihIuTZPupLKd+w=;
-        b=d0Mmz3bqOiRhgAwRd+KprQtvOMiVovbQgPQCBhpvH7KHzMZZZBC+UepB4weZm0XYsh
-         0wE6cBQkuBUGNj5W0EtkgrYbyFgd3b2wxVbWlqpZO5NkRrVNjMfF2UB4E0UTei+2FY7y
-         I6n0YuI3Be9fgY3kpC3ErS3old1kHc1Yyv7dnWk9BaDNZlc/r88P8UGR+ssgwYPPMJeH
-         jI+DxRqj4S/I7tknw3XDTzt4rc3Is3PEd4GFxbmH/Hda+UuWaXMHha5ftEEKO87bbgsl
-         zMuU35cAnYfKKp4nHqmPfrutagX/I5NikxeKKh8udIMKoY3FvRLSCLbZhQIg9lj3T3JT
-         xKmA==
-X-Gm-Message-State: ACrzQf2zAJd/D4ZhlaAnIs4TCGTOGtoq8sbtLDOZuQ9nui9cbRkbFB8B
-        /ijSrNj6+/vJ+ZMYU859mn0=
-X-Google-Smtp-Source: AMsMyM6s9925GGiS4XIQLJDs2LHEhvI9/OQ12/6LogfvtbqAUEhF5PB9+dgHAJ5gZamzhCHPYFc0tA==
-X-Received: by 2002:a17:906:ef90:b0:77c:7227:705 with SMTP id ze16-20020a170906ef9000b0077c72270705mr1117401ejb.565.1663273799789;
-        Thu, 15 Sep 2022 13:29:59 -0700 (PDT)
-Received: from localhost.localdomain (ip-217-105-46-43.ip.prioritytelecom.net. [217.105.46.43])
-        by smtp.gmail.com with ESMTPSA id ci25-20020a170906c35900b0072b3406e9c2sm9607295ejb.95.2022.09.15.13.29.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=k8iJ7L9yaA7qD0s2nB5tW0Kqk0H2NxzybAr7hwW0qQ8=;
+        b=yJ2xtpIslewsoVzhdLkx2s9W/h1r7ltAUpIMYrl98WqQqm0irazg/zZ91+c3S01aZL
+         +M6c3GLj/YsDQJVHtZZPFuPPX3o7OP7z5Tb2XuuGDcisf5LLKiQri8i3nAmxptYNmAtC
+         11aeQTv9hXx6MnYlWxEmhDMNyTzO41SnC0h4Y+tZqIH0CGFR1f7rD0WPNbImUkCjd0ZF
+         3pgvBOyDhGD6Z2dXwBc15l3Ph9El2PbeofvFuNOLy1m7lB1tFhNTRDoph+9ilK/UjsvN
+         7zpkubfbxmGa8sgzuNCBbDgvIhbUBkLnujWjznovhBOk9MQQLXDBvlqSkiNx3UgVm4Pl
+         3VJw==
+X-Gm-Message-State: ACrzQf2I+GoSxHt6z1FoQHndjyDz21E2Z2zTNQf5Qkc7ahYIfvodnS3g
+        GY4UBNWGykPlYByTHg8Vgfg=
+X-Google-Smtp-Source: AMsMyM5nuZewDVYKx1wSQhUz89PC5Qkx7BMd/9JOZT+MXGvT+rvDEJGDlHCun7Xqgz4b4XQAh7DfLA==
+X-Received: by 2002:a05:6402:50ca:b0:451:a711:1389 with SMTP id h10-20020a05640250ca00b00451a7111389mr1330023edb.239.1663274941019;
+        Thu, 15 Sep 2022 13:49:01 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.googlemail.com with ESMTPSA id u2-20020a1709061da200b00764a76d5888sm9504846ejh.27.2022.09.15.13.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 13:29:59 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     forest@alittletooquiet.net, gregkh@linuxfoundation.org
-Cc:     namcaov@gmail.com, philipp.g.hortmann@gmail.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [RFC PATCH 5/5] staging: vt6655: implement allocation failure handling
-Date:   Thu, 15 Sep 2022 22:29:36 +0200
-Message-Id: <dd63998765f1ea1bf507a94c2d49317b36b5f32c.1663273218.git.namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1663273218.git.namcaov@gmail.com>
-References: <cover.1663273218.git.namcaov@gmail.com>
+        Thu, 15 Sep 2022 13:49:00 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] dmaengine: qcom-adm: fix wrong sizeof config in slave_config
+Date:   Thu, 15 Sep 2022 22:48:44 +0200
+Message-Id: <20220915204844.3838-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,68 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function device_rx_srv does not handle allocation failure very well.
-Currently, it performs these steps:
-        - Unmap DMA buffer and hand over the buffer to mac80211
-        - Allocate and dma-map new buffer
-        - If allocation fails, abort
+Fix broken slave_config function that uncorrectly compare the
+peripheral_size with the size of the config pointer instead of the size
+of the config struct. This cause the crci value to be ignored and cause
+a kernel panic on any slave that use adm driver.
 
-The problem is that, it aborts while still marking the buffer as
-OWNED_BY_HOST. So when this function is called again in the future, it
-incorrectly perceives the same buffer as valid and dma-unmap and hand
-over this buffer to mac80211 again.
+To fix this, compare to the size of the struct and NOT the size of the
+pointer.
 
-Re-implement this function to do things in a different order:
-        - Allocate and dma-map new buffer
-        - If allocation fails, abort and give up the ownership of the
-          buffer (so that the device can re-use this buffer)
-        - If allocation does not fail: unmap dma buffer and hand over
-          the buffer to mac80211
-
-Thus, when the driver cannot allocate new buffer, it simply discards the
-received data and re-use the current buffer.
-
-Signed-off-by: Nam Cao <namcaov@gmail.com>
+Fixes: 03de6b273805 ("dmaengine: qcom-adm: stop abusing slave_id config")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Cc: stable@vger.kernel.org # v5.17+
 ---
- drivers/staging/vt6655/device_main.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/dma/qcom/qcom_adm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index ca6c4266f010..8ae4ecca2ee3 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -826,6 +826,7 @@ static void device_free_td1_ring(struct vnt_private *priv)
- static int device_rx_srv(struct vnt_private *priv, unsigned int idx)
- {
- 	struct vnt_rx_desc *rd;
-+	struct vnt_rd_info new_info;
- 	int works = 0;
+diff --git a/drivers/dma/qcom/qcom_adm.c b/drivers/dma/qcom/qcom_adm.c
+index facdacf8aede..c77d9de853de 100644
+--- a/drivers/dma/qcom/qcom_adm.c
++++ b/drivers/dma/qcom/qcom_adm.c
+@@ -494,7 +494,7 @@ static int adm_slave_config(struct dma_chan *chan, struct dma_slave_config *cfg)
  
- 	for (rd = priv->pCurrRD[idx];
-@@ -837,16 +838,18 @@ static int device_rx_srv(struct vnt_private *priv, unsigned int idx)
- 		if (!rd->rd_info->skb)
- 			break;
- 
--		vnt_receive_frame(priv, rd);
--
--		if (!device_alloc_rx_buf(priv, rd->rd_info)) {
-+		if (!device_alloc_rx_buf(priv, &new_info)) {
- 			dev_err(&priv->pcid->dev,
- 				"can not allocate rx buf\n");
-+			rd->rd0.owner = OWNED_BY_NIC;
- 			break;
--		} else {
--			device_init_rx_desc(priv, rd);
- 		}
- 
-+		vnt_receive_frame(priv, rd);
-+
-+		memcpy(rd->rd_info, &new_info, sizeof(new_info));
-+		device_init_rx_desc(priv, rd);
-+
- 		rd->rd0.owner = OWNED_BY_NIC;
- 	}
+ 	spin_lock_irqsave(&achan->vc.lock, flag);
+ 	memcpy(&achan->slave, cfg, sizeof(struct dma_slave_config));
+-	if (cfg->peripheral_size == sizeof(config))
++	if (cfg->peripheral_size == sizeof(*config))
+ 		achan->crci = config->crci;
+ 	spin_unlock_irqrestore(&achan->vc.lock, flag);
  
 -- 
-2.25.1
+2.37.2
 
