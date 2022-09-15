@@ -2,168 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D985BA291
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAC75BA293
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiIOWFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S229613AbiIOWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOWFW (ORCPT
+        with ESMTP id S229628AbiIOWFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:05:22 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3017C46D94;
-        Thu, 15 Sep 2022 15:05:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MTB8S2PyKz4x1T;
-        Fri, 16 Sep 2022 08:05:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663279513;
-        bh=g2lRrfc+ipUqMgCDu/ebew79wbtTs6dEfUbKvYiwa4U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UYTUYi5dImAQ9n0mN2uS2OnJcEBQvc3VNlQb57/th+7tqsrt5djV26rzA9yC23GqT
-         MJStj/p08JGk6SGWBZb/YyRLkZerdWuxLjq1E6f0uh1UQoFwDle3SDR++d6DCGt6dm
-         9uJLl75Hb2t6DhLp7XUOSj1RuqPOI7aSTd9RnBis8oWaFzI+4Z1eftypODgytHV6OQ
-         +orVTf/lI1hUz03I0WHj5P+HG5XmKHH9oYXKl3ZIM6bXnJhy4oUPT0uwGaUxTF+0Ib
-         SlYAL9MTBkqNBaZe13JpkwmnIachv7ktk7ZQs/QPXCPzJSWkSYHJcZetQufTe2HXnc
-         HyiJUBOH0PA4Q==
-Date:   Fri, 16 Sep 2022 08:05:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Steven Price <steven.price@arm.com>,
-        Vladimir Isaev <vladimir.isaev@syntacore.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: linux-next: manual merge of the risc-v-fixes tree with Linus' tree
-Message-ID: <20220916080510.359a8e3a@canb.auug.org.au>
+        Thu, 15 Sep 2022 18:05:43 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDA64BD15;
+        Thu, 15 Sep 2022 15:05:38 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id x14so95379wrv.2;
+        Thu, 15 Sep 2022 15:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=zpqoR6zYZaDbnVePsdH4FdM+xRD3zWKF1Haict6bhus=;
+        b=XsVZUp1G1GndrcNDmonhqsYyg8HENAjE19GNzlYPa/9kJbmBwf5y8+EJXbj0+cAhPJ
+         K/d+4UWOFoDSxeoGXdWIdcZR/FU8eOo0ROvShTuaP1k0e9WN9d9NxzdivNQz1SyuC1s0
+         HFknvEWVqwQWonj6Hjtb2csapqZ8tthlClB/YlLzrIPHCGItCQSFE+PoO6evABmQEIL6
+         0cXE5lJQ/WGwcjbX8iAqVaG+8Ae5a3o16RGAV+/bFA27j1PzMp2FoCDIx8yMhVjblA2Y
+         fao53K60h9ADNAbZt+b5wHD7mhvKx+8h3JPGzSkufm6Rixa6jeUaX0bsQyWwPVD1Cx7Y
+         DhOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=zpqoR6zYZaDbnVePsdH4FdM+xRD3zWKF1Haict6bhus=;
+        b=1OTQ/pzZvp6RKoGc1oAizfChnEXyoiyjAdDFThZJ/7FrnGO5uoUPvigJ/hZ3FLa36h
+         fjsfifcwNBXrV2trZnK4N1wU/PECcIljlvB8n8E8s6A7lhQFRsCFeuZjJ7XmWVnWBlxx
+         a0YyYXANSO2QvpSR2etmu5nG8Q9SC/2pg8BytVYIDDpVrjCSrI3Jof5BmAi4mFPUhNsE
+         wm57R6O2Bigkx4Xxu19gRC7M3a3KVGUDCu1fUx20nwZI0NoPtkLpXxq1BqPAIZRZ9lxx
+         ePvNMW718L9qUmf3x8P0KRlHyS9/5/JAznV9/9CdO4mCaTeEV6YkUGwiM7O5NHWv/Wz7
+         G3kg==
+X-Gm-Message-State: ACrzQf2BY2ScjnkzF3N5VfW03z1dj3Zeh+w0cx7jchsyV2YbdbDTqeQV
+        B3MYE4AUocoq3jt8ZTMbTrk=
+X-Google-Smtp-Source: AMsMyM5AwDHR+8oZ+u3KaLAwxnWLC8Cjl6pFCJwRn0zoZVRLZeruSgKYx2FpwJShdi51jWomIYHDfQ==
+X-Received: by 2002:a5d:5963:0:b0:22a:47ed:f98f with SMTP id e35-20020a5d5963000000b0022a47edf98fmr1022216wri.155.1663279536730;
+        Thu, 15 Sep 2022 15:05:36 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003b33943ce5esm217457wmq.32.2022.09.15.15.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 15:05:35 -0700 (PDT)
+Message-ID: <e6921ed7-a14c-aadb-abd4-1e7ee0a63be9@gmail.com>
+Date:   Fri, 16 Sep 2022 00:05:34 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+a=Ie7xUWXT/D=PInVtkAU7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 1/6] dt-bindings: arm: mediatek: mmsys: change
+ compatible for MT8195
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220915161817.10307-1-jason-jh.lin@mediatek.com>
+ <20220915161817.10307-2-jason-jh.lin@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220915161817.10307-2-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+a=Ie7xUWXT/D=PInVtkAU7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the risc-v-fixes tree got a conflict in:
+On 15/09/2022 18:18, Jason-JH.Lin wrote:
+> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> pipelines binding to 1 mmsys with the same power domain, the same
+> clock driver and the same mediatek-drm driver.
+> 
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
+> 
+> Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture Quality)
+> and they makes VDOSYS0 supports PQ function while they are not
+> including in VDOSYS1.
+> 
+> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> component). It makes VDOSYS1 supports the HDR function while it's not
+> including in VDOSYS0.
+> 
+> To summarize0:
+> Only VDOSYS0 can support PQ adjustment.
+> Only VDOSYS1 can support HDR adjustment.
+> 
+> Therefore, we need to separate these two different mmsys hardwares to
+> 2 different compatibles for MT8195.
+> 
+> Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding")
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> index 6ad023eec193..0e267428eaa6 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> @@ -31,7 +31,7 @@ properties:
+>                 - mediatek,mt8183-mmsys
+>                 - mediatek,mt8186-mmsys
+>                 - mediatek,mt8192-mmsys
+> -              - mediatek,mt8195-mmsys
+> +              - mediatek,mt8195-vdosys0
 
-  arch/riscv/mm/pageattr.c
+Nack, we miss the fallback compatible, as I already said twice.
 
-between commit:
+Regards,
+Matthias
 
-  8782fb61cc84 ("mm: pagewalk: Fix race between unmap and page walker")
-
-from Linus' tree and commit:
-
-  92c5738923f9 ("riscv: Fix permissions for all mm's during mm init")
-
-from the risc-v-fixes tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/riscv/mm/pageattr.c
-index 86c56616e5de,74b8107ac743..000000000000
---- a/arch/riscv/mm/pageattr.c
-+++ b/arch/riscv/mm/pageattr.c
-@@@ -115,6 -115,55 +115,55 @@@ static int __set_memory_mm(struct mm_st
-  		.clear_mask =3D clear_mask
-  	};
- =20
- -	mmap_read_lock(mm);
-++	mmap_write_lock(mm);
-+ 	ret =3D walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
-+ 				    &masks);
- -	mmap_read_unlock(mm);
-++	mmap_write_unlock(mm);
-+=20
-+ 	return ret;
-+ }
-+=20
-+ void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
-+ 			  pgprot_t clear_mask)
-+ {
-+ 	struct task_struct *t, *s;
-+=20
-+ 	unsigned long start =3D (unsigned long)startp;
-+ 	unsigned long end =3D PAGE_ALIGN((unsigned long)endp);
-+=20
-+ 	/*
-+ 	 * In the SYSTEM_FREEING_INITMEM state we expect that all async code
-+ 	 * is done and no new userspace task can be created.
-+ 	 * So rcu_read_lock() should be enough here.
-+ 	 */
-+ 	WARN_ON(system_state !=3D SYSTEM_FREEING_INITMEM);
-+=20
-+ 	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
-+ 	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
-+=20
-+ 	rcu_read_lock();
-+ 	for_each_process(t) {
-+ 		if (t->flags & PF_KTHREAD)
-+ 			continue;
-+ 		for_each_thread(t, s) {
-+ 			if (s->mm) {
-+ 				__set_memory_mm(s->mm, start, end, set_mask,
-+ 						clear_mask);
-+ 			}
-+ 		}
-+ 	}
-+ 	rcu_read_unlock();
-+=20
-+ 	flush_tlb_kernel_range(start, end);
-+ }
-+=20
-+ static int __set_memory(unsigned long addr, int numpages, pgprot_t set_ma=
-sk,
-+ 			pgprot_t clear_mask)
-+ {
-+ 	int ret;
-+ 	unsigned long start =3D addr;
-+ 	unsigned long end =3D start + PAGE_SIZE * numpages;
-+=20
-  	if (!numpages)
-  		return 0;
- =20
-
---Sig_/+a=Ie7xUWXT/D=PInVtkAU7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMjoZYACgkQAVBC80lX
-0GyaCgf/eXd6HYw9pjBMNRRUH/p67g02tyUtk1TEntWOq+85OVgSgXXvYRRLl2Da
-KRwjda2t1+l95B69/EaX9iiBeCUCzoLai49j2z22HS5gN0GhQHnbQopfGTus2kh2
-0oRhkWFn30M3RHGD1TrJiZn7WtrADu6MHDvaDE8amqnX+jqglJrTj5paY8pswJYD
-W1ZePpVQT74SRdywtuqPEBjS7icZDaJo+iptYG81z+YrkHQPOchs8Bz8jWY3KN4m
-zswL4S3jS6sXYpI3nojMQwPzgZcDgFq8IXn7e7fPG8YnUb0CR7tcLWO16Qwkvrvs
-TN5j2fINRhFw2ePL8KCoqjWHW30srw==
-=rOE8
------END PGP SIGNATURE-----
-
---Sig_/+a=Ie7xUWXT/D=PInVtkAU7--
+>                 - mediatek,mt8365-mmsys
+>             - const: syscon
+>         - items:
