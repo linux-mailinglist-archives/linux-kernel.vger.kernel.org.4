@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B7F5B9A83
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EF55B9A80
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiIOMK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S230361AbiIOMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiIOMKB (ORCPT
+        with ESMTP id S230287AbiIOMJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:10:01 -0400
+        Thu, 15 Sep 2022 08:09:59 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E738A3AB12;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3169E1403F;
         Thu, 15 Sep 2022 05:09:45 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 813EB6601DA4;
-        Thu, 15 Sep 2022 13:09:27 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2EF626601FC1;
+        Thu, 15 Sep 2022 13:09:28 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1663243768;
-        bh=HWBn/M52pLNG9jF9V0WnYR9GDulkLMEO1gk39KXryO0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CGOQFirTY6hJdv+pca94IvXspPFLIWe8jJbMe6BrycEJwUI7vtF3U/R84Ux9Rk42F
-         FdL1CKpZt/NbNNWIE1Vdk8qjZD7rQlJuZahFnCDIg9afB+hZ8mzXmpktj9UefE8gRm
-         HWl1grFjaE/SRSE7G7YJ1hSCeOz5W6cSBg8YRJw/ye8SE7DM9Q7Pj7Z0TVysOaJcAC
-         HYyeH2kujmfJg7jQjPcNFOWowMzH4DFUisTJS4MqghCqtKug6Wt5gkzVKDHuNbSERO
-         32J8hQ3jCkPTR8VrcUj7qvlqp5YxOy7TELG54d7EXPqR3Zf5eGlu30+ENjlOyDe/a3
-         MDp0kBu/7fcSw==
+        bh=b73S+v63Xy5BcQgYOj0NF2u+G+p7Y8haQ0o9DBpBNoo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=D6nmdEHXzI73VmsbQxijOWkBdeBWwRT6BWYcbtc7uZfmH+Dg2SyWaHUWIwt33jVb5
+         LrG06HM4uz7HdNcYMKBowQwLwOXMF+QqKmHNGECNSvJr2kWulQkDIwf4KTadEE5KP6
+         qEJxdrNCWvEoClcYWrE5NOeFqT6h697HfAbH8VkJLg/rTRLxJ8NpL9KYSr/gR/J2Yl
+         Jfq65yKhp47fxkZdDScoSFCJl+GLFa7b+Hu2b1ScctDBurR+9VxXRsNgYs/OX9ht/p
+         09HVSGChBj5WmjlDzhS/dyOfykyRYsNQtOqD4hROUAcXx1pFRCulox0qkZzz81wqIl
+         Zuwgh6TO18V4g==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     chaotian.jing@mediatek.com
@@ -40,10 +40,12 @@ Cc:     ulf.hansson@linaro.org, matthias.bgg@gmail.com,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 0/2] MMC/SD support for MediaTek MT6795 Helio X10
-Date:   Thu, 15 Sep 2022 14:09:21 +0200
-Message-Id: <20220915120923.86038-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/2] mmc: mtk-sd: Reorder of_device_id and platform data by name
+Date:   Thu, 15 Sep 2022 14:09:22 +0200
+Message-Id: <20220915120923.86038-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220915120923.86038-1-angelogioacchino.delregno@collabora.com>
+References: <20220915120923.86038-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,25 +57,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the MMC/SD controller found on the
-MediaTek Helio X10 (MT6795).
-While at it, I've also made the compatibles and plat data ordering
-consistent.
+Both of_device_id compatible strings and platform data were partially
+ordered by name. Fix the ordering.
 
-P.S.: There's no dt-bindings addition because that was already merged
-      and it's present [1] in next-20220915
+This commit brings no functional changes.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220915&id=55e7dceee83ca6584a08bd876ed0ec38de5b13ce
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/mmc/host/mtk-sd.c | 99 ++++++++++++++++++++-------------------
+ 1 file changed, 50 insertions(+), 49 deletions(-)
 
-Tested on a MT6795 Sony Xperia M5 smartphone
-
-AngeloGioacchino Del Regno (2):
-  mmc: mtk-sd: Reorder of_device_id and platform data by name
-  mmc: mtk-sd: Add support for MT6795 Helio X10
-
- drivers/mmc/host/mtk-sd.c | 109 ++++++++++++++++++++++----------------
- 1 file changed, 62 insertions(+), 47 deletions(-)
-
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 69d78604d1fc..572eb5d48813 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -474,33 +474,20 @@ struct msdc_host {
+ 	struct cqhci_host *cq_host;
+ };
+ 
+-static const struct mtk_mmc_compatible mt8135_compat = {
+-	.clk_div_bits = 8,
++static const struct mtk_mmc_compatible mt2701_compat = {
++	.clk_div_bits = 12,
+ 	.recheck_sdio_irq = true,
+ 	.hs400_tune = false,
+-	.pad_tune_reg = MSDC_PAD_TUNE,
+-	.async_fifo = false,
+-	.data_tune = false,
+-	.busy_check = false,
+-	.stop_clk_fix = false,
+-	.enhance_rx = false,
+-	.support_64g = false,
+-};
+-
+-static const struct mtk_mmc_compatible mt8173_compat = {
+-	.clk_div_bits = 8,
+-	.recheck_sdio_irq = true,
+-	.hs400_tune = true,
+-	.pad_tune_reg = MSDC_PAD_TUNE,
+-	.async_fifo = false,
+-	.data_tune = false,
++	.pad_tune_reg = MSDC_PAD_TUNE0,
++	.async_fifo = true,
++	.data_tune = true,
+ 	.busy_check = false,
+ 	.stop_clk_fix = false,
+ 	.enhance_rx = false,
+ 	.support_64g = false,
+ };
+ 
+-static const struct mtk_mmc_compatible mt8183_compat = {
++static const struct mtk_mmc_compatible mt2712_compat = {
+ 	.clk_div_bits = 12,
+ 	.recheck_sdio_irq = false,
+ 	.hs400_tune = false,
+@@ -513,20 +500,7 @@ static const struct mtk_mmc_compatible mt8183_compat = {
+ 	.support_64g = true,
+ };
+ 
+-static const struct mtk_mmc_compatible mt2701_compat = {
+-	.clk_div_bits = 12,
+-	.recheck_sdio_irq = true,
+-	.hs400_tune = false,
+-	.pad_tune_reg = MSDC_PAD_TUNE0,
+-	.async_fifo = true,
+-	.data_tune = true,
+-	.busy_check = false,
+-	.stop_clk_fix = false,
+-	.enhance_rx = false,
+-	.support_64g = false,
+-};
+-
+-static const struct mtk_mmc_compatible mt2712_compat = {
++static const struct mtk_mmc_compatible mt6779_compat = {
+ 	.clk_div_bits = 12,
+ 	.recheck_sdio_irq = false,
+ 	.hs400_tune = false,
+@@ -539,6 +513,19 @@ static const struct mtk_mmc_compatible mt2712_compat = {
+ 	.support_64g = true,
+ };
+ 
++static const struct mtk_mmc_compatible mt7620_compat = {
++	.clk_div_bits = 8,
++	.recheck_sdio_irq = true,
++	.hs400_tune = false,
++	.pad_tune_reg = MSDC_PAD_TUNE,
++	.async_fifo = false,
++	.data_tune = false,
++	.busy_check = false,
++	.stop_clk_fix = false,
++	.enhance_rx = false,
++	.use_internal_cd = true,
++};
++
+ static const struct mtk_mmc_compatible mt7622_compat = {
+ 	.clk_div_bits = 12,
+ 	.recheck_sdio_irq = true,
+@@ -552,31 +539,33 @@ static const struct mtk_mmc_compatible mt7622_compat = {
+ 	.support_64g = false,
+ };
+ 
+-static const struct mtk_mmc_compatible mt8516_compat = {
+-	.clk_div_bits = 12,
++static const struct mtk_mmc_compatible mt8135_compat = {
++	.clk_div_bits = 8,
+ 	.recheck_sdio_irq = true,
+ 	.hs400_tune = false,
+-	.pad_tune_reg = MSDC_PAD_TUNE0,
+-	.async_fifo = true,
+-	.data_tune = true,
+-	.busy_check = true,
+-	.stop_clk_fix = true,
++	.pad_tune_reg = MSDC_PAD_TUNE,
++	.async_fifo = false,
++	.data_tune = false,
++	.busy_check = false,
++	.stop_clk_fix = false,
++	.enhance_rx = false,
++	.support_64g = false,
+ };
+ 
+-static const struct mtk_mmc_compatible mt7620_compat = {
++static const struct mtk_mmc_compatible mt8173_compat = {
+ 	.clk_div_bits = 8,
+ 	.recheck_sdio_irq = true,
+-	.hs400_tune = false,
++	.hs400_tune = true,
+ 	.pad_tune_reg = MSDC_PAD_TUNE,
+ 	.async_fifo = false,
+ 	.data_tune = false,
+ 	.busy_check = false,
+ 	.stop_clk_fix = false,
+ 	.enhance_rx = false,
+-	.use_internal_cd = true,
++	.support_64g = false,
+ };
+ 
+-static const struct mtk_mmc_compatible mt6779_compat = {
++static const struct mtk_mmc_compatible mt8183_compat = {
+ 	.clk_div_bits = 12,
+ 	.recheck_sdio_irq = false,
+ 	.hs400_tune = false,
+@@ -589,16 +578,28 @@ static const struct mtk_mmc_compatible mt6779_compat = {
+ 	.support_64g = true,
+ };
+ 
++static const struct mtk_mmc_compatible mt8516_compat = {
++	.clk_div_bits = 12,
++	.recheck_sdio_irq = true,
++	.hs400_tune = false,
++	.pad_tune_reg = MSDC_PAD_TUNE0,
++	.async_fifo = true,
++	.data_tune = true,
++	.busy_check = true,
++	.stop_clk_fix = true,
++};
++
+ static const struct of_device_id msdc_of_ids[] = {
+-	{ .compatible = "mediatek,mt8135-mmc", .data = &mt8135_compat},
+-	{ .compatible = "mediatek,mt8173-mmc", .data = &mt8173_compat},
+-	{ .compatible = "mediatek,mt8183-mmc", .data = &mt8183_compat},
+ 	{ .compatible = "mediatek,mt2701-mmc", .data = &mt2701_compat},
+ 	{ .compatible = "mediatek,mt2712-mmc", .data = &mt2712_compat},
++	{ .compatible = "mediatek,mt6779-mmc", .data = &mt6779_compat},
++	{ .compatible = "mediatek,mt7620-mmc", .data = &mt7620_compat},
+ 	{ .compatible = "mediatek,mt7622-mmc", .data = &mt7622_compat},
++	{ .compatible = "mediatek,mt8135-mmc", .data = &mt8135_compat},
++	{ .compatible = "mediatek,mt8173-mmc", .data = &mt8173_compat},
++	{ .compatible = "mediatek,mt8183-mmc", .data = &mt8183_compat},
+ 	{ .compatible = "mediatek,mt8516-mmc", .data = &mt8516_compat},
+-	{ .compatible = "mediatek,mt7620-mmc", .data = &mt7620_compat},
+-	{ .compatible = "mediatek,mt6779-mmc", .data = &mt6779_compat},
++
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, msdc_of_ids);
 -- 
 2.37.2
 
