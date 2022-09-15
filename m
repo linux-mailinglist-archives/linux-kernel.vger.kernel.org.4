@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0775B9E4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6154F5B9E50
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiIOPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S230470AbiIOPIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiIOPGn (ORCPT
+        with ESMTP id S230475AbiIOPHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:06:43 -0400
+        Thu, 15 Sep 2022 11:07:13 -0400
 Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F58915C5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:05:34 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id r11-20020a05640251cb00b004516feb8c09so10385366edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:05:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4F894111
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:05:37 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id r11-20020a05640251cb00b004516feb8c09so10385466edd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=ZKRhstpgJFHnwQb7wa4PSp1fP2zpnAEklrA/+6U+C6A=;
-        b=ThD5yyzHqBsvDfd8Iyv19jyZ2sM12IYTnbGoqnXN5npRxs4Zmln7VoA0117GVlyvP+
-         L1Rc2EkzfIcjXC3nUcY1fYQ+w1h7v1L8lLr+gl/b+Stf6tF7TTC0ieLLTB5H9+8MJwTV
-         cPTvprpV3Hin238+XDy2bE/nJu/b+H/Bo1Gl9VC7zPy+I29iyDswAthi3+gScTUunW0f
-         D99hzKEENBt+eup4SX3Ru+YBC5gcmF6lpKUFHmW/SZGEqpj0JNmM0Xg4CfE2Gt4d5QDl
-         B5MQFU94qthIy3W4Vl2BeQjxRVxR6rhsIvHEco9D+hMSTS0FjckD4QYWcZtWhUe10Los
-         eI6A==
+        bh=oN1DmmB5hIGSextjMwU3Vnw2pm00V4zpd8aSRnyHf0Q=;
+        b=HBcCaYgx3GOtGCD6vnRBTt3kop2ZY2C8h5F9Ts8g8FkVWY7Gs7+q7OujqY0j58mgyQ
+         PpKv7dBrhRa+ULEFZpq6YIT9w4lLPJ3o23t1xy0FoDWMsuNH+5woxQMACI2EuJ0T06Fk
+         TQpHI9dVcGN06VXZ17nt89f3hGpMkQO1B4jODqCAJBkjoP8KIDq6UcAT4rCV9jZa2ghf
+         6IC/hqZCHCxTjCfjDa3/RbfIoLX91TF8zSHe2qs82MOMbXBLbenq9eBUsVb3VSvh8+SB
+         RdQyFUC4o4BFHFnVb96baewEylVhQuM+iDRPQR9M1/qp1ZO94YJAenY82wc+l2ZQVZqV
+         A61g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZKRhstpgJFHnwQb7wa4PSp1fP2zpnAEklrA/+6U+C6A=;
-        b=iXZHyfKWtNl/JZEu3gcqfQa+tJNq+rIqIT8SezuTo2ZIh/iHOr+0JR0OgU3/evylBC
-         IqYT3vuTZoBJgUjjMtQqSqyJ+Ot4c9iiCi10QcJ90u5hwC8y1gwasc25BXoO59vy4d9n
-         XJGLg0XFo7cGb8gagqzVkEK79SPZDOgPietOe/lLh9yByIKlWqPQZdyvVV3BxnCPLhkG
-         s6lXV9fkOU44y7L53ULbTwsFAVELpUqIQAPq5x6XAjmDpnBgvOU/Br6oYdsVvfkAhWaq
-         uzRyPpbRObqp8WNckCoq2N07KzvdDoErrMf8XGVZeh5Ma/czTTy8mIRxmoZzmethrxzl
-         Dh6A==
-X-Gm-Message-State: ACrzQf3feXcMvAoJpGMijcZ7lGA9/Pkx1arHWvfOh2dgvHjGlCVMUQaU
-        hxvnEWTTo7+cwuvOLumNhCddWDbKO+8=
-X-Google-Smtp-Source: AMsMyM4m3KxavKH5nPSgfXzlvt1xeKFIhjuoRkROmKkrPr/lpTSHT0pnpGf9Q4HdyY1KjTTGhTSnJGDa6K8=
+        bh=oN1DmmB5hIGSextjMwU3Vnw2pm00V4zpd8aSRnyHf0Q=;
+        b=2xkVNdEUWUCLF7z+6pNiVsPm3yiy/MkLVGZW+Wvg0n+u0GThg0dxE29dAWGqLyU9a5
+         H7JmX5bLqQhSUTbeYR9oM/d5xBYf558afd+ABQkpO4ulSGgXZ7z1evF0tcJTk0ql3F2u
+         TW97rIjNGSQYN6W3MRix1OnJuHG61rwaDrssTBM8VSt6t4/bCTBSriDpLOegS5qGAOph
+         kanoUEGepCE4Go7/MMBmrq0iHahXLtHVNuKKDc/R6myhw4W0ZbsXJfjrb48L+2i22yGN
+         xtG+0thEQRl1CD8kgA1w5YNJns2EsTVGVN+yK4i7tBUq4IaBlEieSYwn+DGxAlhRUxA8
+         EVEw==
+X-Gm-Message-State: ACrzQf12PBPyCBBwYzGLDet3cV06uiYRT17ePd4h/vkWB+/1c18jNONQ
+        IyCCTSzgXzgxJtl5YL9LNzgR8S2tECQ=
+X-Google-Smtp-Source: AMsMyM6lsL6b9WP5OjlGGCg3dKk2Bj9nZi0tLG7AoCO3goElJf/yGauNpy2SVmCPAv5cw8xVUpzz1lwDIpM=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a05:6402:3509:b0:452:20c7:5a95 with SMTP id
- b9-20020a056402350900b0045220c75a95mr237534edd.427.1663254333337; Thu, 15 Sep
- 2022 08:05:33 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:03:54 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:2694:b0:450:d537:f6d6 with SMTP id
+ w20-20020a056402269400b00450d537f6d6mr275499edd.344.1663254335996; Thu, 15
+ Sep 2022 08:05:35 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:03:55 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-21-glider@google.com>
-Subject: [PATCH v7 20/43] Input: libps2: mark data received in __ps2_command()
- as initialized
+Message-ID: <20220915150417.722975-22-glider@google.com>
+Subject: [PATCH v7 21/43] dma: kmsan: unpoison DMA mappings
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -100,42 +99,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN does not know that the device initializes certain bytes in
-ps2dev->cmdbuf. Call kmsan_unpoison_memory() to explicitly mark them as
-initialized.
+KMSAN doesn't know about DMA memory writes performed by devices.
+We unpoison such memory when it's mapped to avoid false positive
+reports.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I2d26f6baa45271d37320d3f4a528c39cb7e545f0
----
- drivers/input/serio/libps2.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+v2:
+ -- move implementation of kmsan_handle_dma() and kmsan_handle_dma_sg() here
 
-diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
-index 250e213cc80c6..3e19344eda93c 100644
---- a/drivers/input/serio/libps2.c
-+++ b/drivers/input/serio/libps2.c
-@@ -12,6 +12,7 @@
- #include <linux/sched.h>
- #include <linux/interrupt.h>
- #include <linux/input.h>
-+#include <linux/kmsan-checks.h>
- #include <linux/serio.h>
- #include <linux/i8042.h>
- #include <linux/libps2.h>
-@@ -294,9 +295,11 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
+v4:
+ -- swap dma: and kmsan: int the subject
+
+v5:
+ -- do not export KMSAN hooks that are not called from modules
+
+v6:
+ -- add a missing #include <linux/kmsan.h>
+
+Link: https://linux-review.googlesource.com/id/Ia162dc4c5a92e74d4686c1be32a4dfeffc5c32cd
+---
+ include/linux/kmsan.h | 41 ++++++++++++++++++++++++++++++
+ kernel/dma/mapping.c  | 10 +++++---
+ mm/kmsan/hooks.c      | 59 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 107 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
+index e00de976ee438..dac296da45c55 100644
+--- a/include/linux/kmsan.h
++++ b/include/linux/kmsan.h
+@@ -9,6 +9,7 @@
+ #ifndef _LINUX_KMSAN_H
+ #define _LINUX_KMSAN_H
  
- 	serio_pause_rx(ps2dev->serio);
++#include <linux/dma-direction.h>
+ #include <linux/gfp.h>
+ #include <linux/kmsan-checks.h>
+ #include <linux/types.h>
+@@ -16,6 +17,7 @@
+ struct page;
+ struct kmem_cache;
+ struct task_struct;
++struct scatterlist;
  
--	if (param)
-+	if (param) {
- 		for (i = 0; i < receive; i++)
- 			param[i] = ps2dev->cmdbuf[(receive - 1) - i];
-+		kmsan_unpoison_memory(param, receive);
+ #ifdef CONFIG_KMSAN
+ 
+@@ -172,6 +174,35 @@ void kmsan_ioremap_page_range(unsigned long addr, unsigned long end,
+  */
+ void kmsan_iounmap_page_range(unsigned long start, unsigned long end);
+ 
++/**
++ * kmsan_handle_dma() - Handle a DMA data transfer.
++ * @page:   first page of the buffer.
++ * @offset: offset of the buffer within the first page.
++ * @size:   buffer size.
++ * @dir:    one of possible dma_data_direction values.
++ *
++ * Depending on @direction, KMSAN:
++ * * checks the buffer, if it is copied to device;
++ * * initializes the buffer, if it is copied from device;
++ * * does both, if this is a DMA_BIDIRECTIONAL transfer.
++ */
++void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
++		      enum dma_data_direction dir);
++
++/**
++ * kmsan_handle_dma_sg() - Handle a DMA transfer using scatterlist.
++ * @sg:    scatterlist holding DMA buffers.
++ * @nents: number of scatterlist entries.
++ * @dir:   one of possible dma_data_direction values.
++ *
++ * Depending on @direction, KMSAN:
++ * * checks the buffers in the scatterlist, if they are copied to device;
++ * * initializes the buffers, if they are copied from device;
++ * * does both, if this is a DMA_BIDIRECTIONAL transfer.
++ */
++void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
++			 enum dma_data_direction dir);
++
+ #else
+ 
+ static inline void kmsan_init_shadow(void)
+@@ -254,6 +285,16 @@ static inline void kmsan_iounmap_page_range(unsigned long start,
+ {
+ }
+ 
++static inline void kmsan_handle_dma(struct page *page, size_t offset,
++				    size_t size, enum dma_data_direction dir)
++{
++}
++
++static inline void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
++				       enum dma_data_direction dir)
++{
++}
++
+ #endif
+ 
+ #endif /* _LINUX_KMSAN_H */
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 27f272381cf27..33437d6206445 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -10,6 +10,7 @@
+ #include <linux/dma-map-ops.h>
+ #include <linux/export.h>
+ #include <linux/gfp.h>
++#include <linux/kmsan.h>
+ #include <linux/of_device.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+@@ -156,6 +157,7 @@ dma_addr_t dma_map_page_attrs(struct device *dev, struct page *page,
+ 		addr = dma_direct_map_page(dev, page, offset, size, dir, attrs);
+ 	else
+ 		addr = ops->map_page(dev, page, offset, size, dir, attrs);
++	kmsan_handle_dma(page, offset, size, dir);
+ 	debug_dma_map_page(dev, page, offset, size, dir, addr, attrs);
+ 
+ 	return addr;
+@@ -194,11 +196,13 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
+ 	else
+ 		ents = ops->map_sg(dev, sg, nents, dir, attrs);
+ 
+-	if (ents > 0)
++	if (ents > 0) {
++		kmsan_handle_dma_sg(sg, nents, dir);
+ 		debug_dma_map_sg(dev, sg, nents, ents, dir, attrs);
+-	else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
+-			      ents != -EIO && ents != -EREMOTEIO))
++	} else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
++				ents != -EIO && ents != -EREMOTEIO)) {
+ 		return -EIO;
 +	}
  
- 	if (ps2dev->cmdcnt &&
- 	    (command != PS2_CMD_RESET_BAT || ps2dev->cmdcnt != 1)) {
+ 	return ents;
+ }
+diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
+index 5c0eb25d984d7..563c09443a37a 100644
+--- a/mm/kmsan/hooks.c
++++ b/mm/kmsan/hooks.c
+@@ -10,10 +10,12 @@
+  */
+ 
+ #include <linux/cacheflush.h>
++#include <linux/dma-direction.h>
+ #include <linux/gfp.h>
+ #include <linux/kmsan.h>
+ #include <linux/mm.h>
+ #include <linux/mm_types.h>
++#include <linux/scatterlist.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ 
+@@ -243,6 +245,63 @@ void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
+ }
+ EXPORT_SYMBOL(kmsan_copy_to_user);
+ 
++static void kmsan_handle_dma_page(const void *addr, size_t size,
++				  enum dma_data_direction dir)
++{
++	switch (dir) {
++	case DMA_BIDIRECTIONAL:
++		kmsan_internal_check_memory((void *)addr, size, /*user_addr*/ 0,
++					    REASON_ANY);
++		kmsan_internal_unpoison_memory((void *)addr, size,
++					       /*checked*/ false);
++		break;
++	case DMA_TO_DEVICE:
++		kmsan_internal_check_memory((void *)addr, size, /*user_addr*/ 0,
++					    REASON_ANY);
++		break;
++	case DMA_FROM_DEVICE:
++		kmsan_internal_unpoison_memory((void *)addr, size,
++					       /*checked*/ false);
++		break;
++	case DMA_NONE:
++		break;
++	}
++}
++
++/* Helper function to handle DMA data transfers. */
++void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
++		      enum dma_data_direction dir)
++{
++	u64 page_offset, to_go, addr;
++
++	if (PageHighMem(page))
++		return;
++	addr = (u64)page_address(page) + offset;
++	/*
++	 * The kernel may occasionally give us adjacent DMA pages not belonging
++	 * to the same allocation. Process them separately to avoid triggering
++	 * internal KMSAN checks.
++	 */
++	while (size > 0) {
++		page_offset = addr % PAGE_SIZE;
++		to_go = min(PAGE_SIZE - page_offset, (u64)size);
++		kmsan_handle_dma_page((void *)addr, to_go, dir);
++		addr += to_go;
++		size -= to_go;
++	}
++}
++
++void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
++			 enum dma_data_direction dir)
++{
++	struct scatterlist *item;
++	int i;
++
++	for_each_sg(sg, item, nents, i)
++		kmsan_handle_dma(sg_page(item), item->offset, item->length,
++				 dir);
++}
++
+ /* Functions from kmsan-checks.h follow. */
+ void kmsan_poison_memory(const void *address, size_t size, gfp_t flags)
+ {
 -- 
 2.37.2.789.g6183377224-goog
 
