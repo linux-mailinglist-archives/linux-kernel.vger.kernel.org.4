@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395C05B9357
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB51D5B934F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiIODiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S230349AbiIODht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiIODhp (ORCPT
+        with ESMTP id S230303AbiIODhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:37:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCE39321A;
+        Wed, 14 Sep 2022 23:37:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E042793214;
         Wed, 14 Sep 2022 20:37:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB528B81D09;
-        Thu, 15 Sep 2022 03:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550A3C43152;
-        Thu, 15 Sep 2022 03:37:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3213A62082;
+        Thu, 15 Sep 2022 03:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AFAC43470;
+        Thu, 15 Sep 2022 03:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663213036;
-        bh=HRk4TI/jrSBRyB95U3j2n9f8xwzK0CzqkaoD0MH3gjw=;
+        s=k20201202; t=1663213037;
+        bh=hXo8PbklUD4P7mwRU94L4ijc/+r0ea3knn93F9DL5NU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m9xwAtsfEwJ9R5xsuGnP0xsyhE+MOObYZagyyQcd5e96vRUmgsaiU7y4ftOTLbUqV
-         bFWXPBoTBG7j9ng3SWgki7h18m9+fAaKxoP6+AUNq/Gl/pyCsskhSIQ2ar34IpFTJL
-         y4i24ZlvY1meSYlgJRfyJHaLbPdQEjEh4+J94G7NPCaofdo+wvo1b1pMl+ToZsdcfH
-         cpl1JaOdvOpW/Gbh2wGJ2pIbQX9f3x3eE185V7fF+8FTDZqpSp+r8WfEBwP2TByadQ
-         l2oS1JqsiaBvEHZeRVv0vbe3stipwJB1UruzoWee2Boxh2y8rfFEeRx9ShCgA6+9Du
-         XKvYc0eB32xfg==
+        b=fN5OnTN27Qym2fGhL8dkz8BCao1+NYI3gARhELO5AuHPtBdzPlvBv0Nz3Jm31AHAr
+         eF34y7xDTLIG+TGxQ8dS8AMclzvY5rQUJJiP+f91wVQKDKUPvZIjEVPPCTenizncnP
+         O6Mbo4sAdM9W6iz/elTttBXT4KefdIm0f92HRWy308W4mbI1+U/w3A0WyvUHml+Jdc
+         Ng4o7sKuYtl3gJt7TCwY/CtUx33lchZ9qnLSx7sSlV7EVD8HNq2iEzvNQgCveyWdsc
+         oZQOZc9SmMG5XTI+m/zE6X/5RpR7UdeTnBOPJqwe91J+znfBc2lthLlofaD874/nWt
+         0BMvpNyu5edXw==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     mailingradian@gmail.com, linux-arm-msm@vger.kernel.org
-Cc:     mturquette@baylibre.com, agross@kernel.org, sboyd@kernel.org,
-        konrad.dybcio@somainline.org, jo@jsfamily.in,
+Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        jo@jsfamily.in, konrad.dybcio@somainline.org,
         linux-clk@vger.kernel.org, robh+dt@kernel.org, caleb@connolly.tech,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org
-Subject: Re: [PATCH v3 0/3] SDM670 Global Clocks
-Date:   Wed, 14 Sep 2022 22:36:58 -0500
-Message-Id: <166321302049.788007.6695561688193069480.b4-ty@kernel.org>
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v4 0/3] SDM670 Global Clocks
+Date:   Wed, 14 Sep 2022 22:36:59 -0500
+Message-Id: <166321302049.788007.6905629348240646404.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220908231224.209020-1-mailingradian@gmail.com>
-References: <20220908231224.209020-1-mailingradian@gmail.com>
+In-Reply-To: <20220914013922.198778-1-mailingradian@gmail.com>
+References: <20220914013922.198778-1-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,19 +59,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sep 2022 19:12:21 -0400, Richard Acayan wrote:
+On Tue, 13 Sep 2022 21:39:19 -0400, Richard Acayan wrote:
+> Changes since v3:
+>  - rebase onto next-20220913
+>  - accumulate review tags
+> 
 > Changes since v2:
 >  - drop GCC_SDCC1_BCR reset
 >  - reorder gcc-sdm845 and gcc-sdm670 if statements in bindings
 >  - add space
 >  - accumulate review tags
-> 
-> Changes since v1:
->  - regenerate patches to fixed malformed patch
->  - fix schema so that the parent clocks are specified correctly
->  - remove core_bi_test_pll_se from new parent_data to match array sizes
->  - reference correct frequency table for gcc_sdm670_cpuss_rbcpr_clk_src
->  - set correct index for sdcc1_ice_core_clk_src
 > 
 > [...]
 
