@@ -2,74 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602DE5B92EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D8A5B92EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiIODLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S229498AbiIODLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiIODLg (ORCPT
+        with ESMTP id S229920AbiIODLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:11:36 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D32910BD;
-        Wed, 14 Sep 2022 20:11:34 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1663211456twhryh5c
-Received: from localhost.localdomain ( [125.70.163.64])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 15 Sep 2022 11:10:55 +0800 (CST)
-X-QQ-SSF: 01000000000000E0G000000A0000000
-X-QQ-FEAT: //oo7IHNoNUzSTuAFG0KH3gdhvbfbUZ/KgztgKTIOYFtNQJr6yO8+QPsPi5WB
-        kX9G3chCOVOWp/3Ixwc7xSFvbPGlm63f0kCbnYmnLfWHuekTSih08n5NebUZRy0nl9RwqxE
-        wiE3947GKhjyhC+U5zS/KFs6FfJp5g2eyaFw0CmTkORHO80MeTZx+ttigencZJwUXf8Nhww
-        YGfyY2FPQfVNUFd9YgZkr2JBKqVRCrh42SG218zPR9f+YK/08qtNDjZLk9mQGNB4iCuNoiO
-        vrZJF9WotiIfsK/qJ8PAiYcVbo+rCW3Y1NR8TDtwXhrII1rbt561EMZXgu8VnqtM5vtYE6r
-        nOco2lgZ2G6wrN23lysTRmOxRtudPqMZMgrAFbKPEDyNn700jB9rBGFAvCN2rB6CszTn0LS
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] iwlwifi: fix repeated words in comments
-Date:   Thu, 15 Sep 2022 11:10:49 +0800
-Message-Id: <20220915031049.47298-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 14 Sep 2022 23:11:17 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAC1910B1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:11:11 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id l65so16713919pfl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Df4Q+p21i6BAOOxlyeKYbdBPwLSo5on6XAFItnq9J4g=;
+        b=dmLow7cHYA2K37pcmPrH+JGrq2Z60p4HWDZLEWZWnvBjiqRP8ugHXXDURmE8yy/wpu
+         sXzy/ur6rVh9gZwl0tiHyhLnd6LCSO28lwm0M4igEkqyWT1ERr8yhOmMv+JOy00mesUY
+         xfNM9llme21N9zKlWGpTXMT46nLmsyH6MI6AfG6NqSeDD3jGZhLGIej7YmGBTNsDLZ5f
+         Fm/Vm73MHGWCRSH4GWloXSRQOcr90xq0VFWkvgyoOpELp8VPbniIILWZBu7xuEo536rr
+         hP5+wBupIFwoxagNT0z5FVt4rE9coenAPzj+8mV+JnSuqpqWbI/oXLxUyl23yLeeAmfG
+         js0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Df4Q+p21i6BAOOxlyeKYbdBPwLSo5on6XAFItnq9J4g=;
+        b=QjvQQUwZkDzBSt275OvvhAoSYEWUFm0PGTK3JxLv8pP4w+m1qOM4TcMQEcfwPuxwdl
+         hozUeiNnG55f90YWeHrD5zNaXXYp09WzjaDO5oqFmOdNZ6UDjFDyFzwm8YEvQOwzLASU
+         Wv/DPoIw2b6QVQOqrdcMRnJKyJrywhUWxNOLqGbdS7wl8HCOfCNgLbuZfvGqxdxiaSJy
+         P0ieIlYo6ld8fxP7/BCgD1NUHUn8/acRLn3C9pEBJLsgPdI82kE0eLkw57dTpXXpJso9
+         jSJUKNs8KgFlYKpW9C4/g9rXCIevgKxst81tvm2GIXGFDS/DlrrIgRY8blXC4daBUrXt
+         u10g==
+X-Gm-Message-State: ACgBeo15jOu/o2ql5C7xVOFaOZSNJ8hzbrbCxIuigaURzRuxCN07hIWv
+        RcklPyw+zhtmm6KoNoC+2jKdwQ==
+X-Google-Smtp-Source: AA6agR4t1QcHo1qc8Cw0CuyaOB37e6/cBNVlJKDMMK9qtYgNPGwvEme1XQi0aVNVFBXwiq5YgQoNaA==
+X-Received: by 2002:a63:5915:0:b0:438:d560:c4d3 with SMTP id n21-20020a635915000000b00438d560c4d3mr18364128pgb.240.1663211470897;
+        Wed, 14 Sep 2022 20:11:10 -0700 (PDT)
+Received: from [10.255.16.83] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id y34-20020a631822000000b0041d6d37deb5sm10427311pgl.81.2022.09.14.20.11.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Sep 2022 20:11:10 -0700 (PDT)
+Message-ID: <ad2af462-8984-f83a-c9df-d8bf66fbee89@bytedance.com>
+Date:   Thu, 15 Sep 2022 11:11:05 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH v5 4/5] sched/fair: Skip SIS domain scan if fully busy
+Content-Language: en-US
+To:     Tim Chen <tim.c.chen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel@vger.kernel.org
+References: <20220909055304.25171-1-wuyun.abel@bytedance.com>
+ <20220909055304.25171-5-wuyun.abel@bytedance.com>
+ <95bbbc9b927abf3c756e6cce810be69e85985541.camel@linux.intel.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <95bbbc9b927abf3c756e6cce810be69e85985541.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On 9/15/22 8:22 AM, Tim Chen wrote:
+> On Fri, 2022-09-09 at 13:53 +0800, Abel Wu wrote:
+>> If a full domain scan failed, then no unoccupied cpus available
+>> and the LLC is fully busy.  In this case we'd better use cpus
+>> more wisely, rather than wasting it trying to find an idle cpu
+>> that probably not exist. The fully busy status will be cleared
+>> when any cpu of that LLC goes idle and everything goes back to
+>> normal again.
+>>
+>> Make the has_idle_cores boolean hint more rich by turning it
+>> into a state machine.
+>>
+>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>> ---
+>>   include/linux/sched/topology.h | 35 +++++++++++++++++-
+>>   kernel/sched/fair.c            | 67 ++++++++++++++++++++++++++++------
+>>   2 files changed, 89 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+>> index 816df6cc444e..cc6089765b64 100644
+>> --- a/include/linux/sched/topology.h
+>> +++ b/include/linux/sched/topology.h
+>> @@ -77,10 +77,43 @@ extern int sched_domain_level_max;
+>>   
+>>   struct sched_group;
+>>   
+>> +/*
+>> + * States of the sched-domain
+>> + *
+>> + * - sd_has_icores
+>> + *	This state is only used in LLC domains to indicate worthy
+>> + *	of a full scan in SIS due to idle cores available.
+>> + *
+>> + * - sd_has_icpus
+>> + *	This state indicates that unoccupied (sched-idle/idle) cpus
+>> + *	might exist in this domain. For the LLC domains it is the
+>> + *	default state since these cpus are the main targets of SIS
+>> + *	search, and is also used as a fallback state of the other
+>> + *	states.
+>> + *
+>> + * - sd_is_busy
+>> + *	This state indicates there are no unoccupied cpus in this
+> 
+> Suggest reword to
+> 
+> .. indicates that all cpus are occupied in this ...
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/wireless/intel/iwlwifi/iwl-trans.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+OK, I will make a update in next version!
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-trans.h b/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
-index d659ccd065f7..e6adc2dc0485 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
-@@ -490,7 +490,7 @@ struct iwl_trans_rxq_dma_data {
-  *	return -ERFKILL straight away.
-  *	May sleep only if CMD_ASYNC is not set
-  * @tx: send an skb. The transport relies on the op_mode to zero the
-- *	the ieee80211_tx_info->driver_data. If the MPDU is an A-MSDU, all
-+ *	ieee80211_tx_info->driver_data. If the MPDU is an A-MSDU, all
-  *	the CSUM will be taken care of (TCP CSUM and IP header in case of
-  *	IPv4). If the MPDU is a single MSDU, the op_mode must compute the IP
-  *	header if it is IPv4.
--- 
-2.36.1
-
+Thanks,
+Abel
