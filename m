@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FA95B91E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5215B91E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiIOApv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S229650AbiIOAqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiIOAps (ORCPT
+        with ESMTP id S230223AbiIOAqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:45:48 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3009356C0;
-        Wed, 14 Sep 2022 17:45:47 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id bh13so15860519pgb.4;
-        Wed, 14 Sep 2022 17:45:47 -0700 (PDT)
+        Wed, 14 Sep 2022 20:46:12 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E656D9D8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:06 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id b11-20020a170902d50b00b0017828988079so8456252plg.21
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=o0TKZg1V+iwVMAhcvK219IOXYb7az/U83DvEghII4Dw=;
+        b=ixIlbiWjYVB7lleKcOS25U/195trOCFFYYTNY2ArRn6K/NXN4jKkbx8xqVv40XOYwc
+         gzOAoHFIZ5nYNTfyaobW0eR/pRWG25686m9JNJWBrr+6XN1RIF81EpUMZ2WjcMFCwhSm
+         8Gb5q+USrZHuvbc4jRv89+/+mSkgNgiHosn5pQFsAnbd1C2Dv7ogkJvH1mC5lGrL+dPr
+         bnDcostykRNUl2cropFFiaYmIcz4a5CirfMwmfwgNqHM/EqMlJz/pmNv4Ugl2f1MNawE
+         jIGBZhIlX4HrU621pf9P/4CGXhHLBZxK7w0Dp2p+dDVn1hB+Jl5575zzcLF/aRyRy4zu
+         UhiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=n05HjcTTlTQT7owpfGLGmfiA73hG6sYlZ2pnjGc9I30=;
-        b=lZcbZe+MT0nu4mgrEfOK3CnqVTprLZCEADfd+Yi10o+U33xJ8hd/VDSF6Cz+hRZn1P
-         2bJbPOjVxey0hBO21ERXFHr33plHIBlxqM4RSJslr7sRfWp+z23xI9snWp8Tuv1jEbRE
-         +NRXehpYnc/qzatQ5w5/AdZF3C9JzR3jqJmeHtbh9y+EdmFdtfvhx1maBZq/vs9osZpY
-         poYVQ9GKXXUZVocawb2GP2RsEwDLRzZHWeoEF7SH8zi5vligwa17fEZEoLIZT4qgXg0B
-         4xaIO91ZWfeM2bc5jgrAkh7yOSNHG8eeOdr5r70ndgCyGmwPmXC03rAXbp4dFcjKbHjm
-         bYlA==
-X-Gm-Message-State: ACgBeo3P75INW4+D+ygcaFBknw2M/JOvVeuS4kvCxId1P14U6W0kf2ki
-        F4asE3c3NQd5PbZyOhY857E=
-X-Google-Smtp-Source: AA6agR7OUk1btd2IJ6tSFOA3HxLtLLbIojIYWD6zfrKjJ4mcN0cqytEeSz5/Ar49RMNHPPoLUXbJRg==
-X-Received: by 2002:a65:638d:0:b0:420:849f:77ed with SMTP id h13-20020a65638d000000b00420849f77edmr34202536pgv.523.1663202747475;
-        Wed, 14 Sep 2022 17:45:47 -0700 (PDT)
-Received: from [10.8.0.3] (144.34.241.68.16clouds.com. [144.34.241.68])
-        by smtp.gmail.com with ESMTPSA id k29-20020aa7999d000000b00537b6bfab7fsm11144548pfh.177.2022.09.14.17.45.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 17:45:46 -0700 (PDT)
-Message-ID: <44af62e3-8f51-bf0a-509e-4a5fdbf62b29@kylinos.cn>
-Date:   Thu, 15 Sep 2022 08:45:33 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Ke Sun <sunke@kylinos.cn>
-Subject: Re: [PATCH] mm/filemap: Make folio_put_wait_locked static
-To:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        k2ci <kernel-bot@kylinos.cn>, linux-fsdevel@vger.kernel.org
-References: <20220914015836.3193197-1-sunke@kylinos.cn>
-Content-Language: en-US
-In-Reply-To: <20220914015836.3193197-1-sunke@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=o0TKZg1V+iwVMAhcvK219IOXYb7az/U83DvEghII4Dw=;
+        b=aInIiI0Rp/AMElN7KzvktQHcUVOm4l1pU2mhRBLt35R9/TDfMcqxXiD/DAN8ToHvKN
+         wDOWkgkUobYxRu94Aecn2JpEs7146aHjojJTC7Osq7HWzD0iZaGX4PHu5Aw3iMUPNvZS
+         3ujOx/RsWXQs1545i031MDXdFLu768WkCOhJF+D+MpM0MS/kOYw9Ro8NqZudlVwS9ZBU
+         lBzVrV+iB/z9jCnmoDOrQFKTIajzYGLxV+wH/udp1anW7gkB7rjKhYjBLhTn9FoV8new
+         Io/EBHVfGlkfEEXO0qk1qu8+o4hHR4LNLl5L0IVTY+MusNMa+vMNTmZBm+mP8CM0w4vK
+         EfgA==
+X-Gm-Message-State: ACrzQf3T8HDZyU+0WB4Ygf+EEEvmYAUsLDuBdiKNWrM5+cvUVBgjsDO0
+        jltcEFI+5IG8oYIaJxVjJwwKxW0FRBUU22c=
+X-Google-Smtp-Source: AMsMyM7cpjC0UvYeAkGaQWcCbIFCVaxS58PZrp3VQQ5nzbzNbiesGmVdHmcPLBDxn84TmNTXrfnoS9iOMdHYeok=
+X-Received: from pceballos.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:128c])
+ (user=pceballos job=sendgmr) by 2002:a17:90a:5aa2:b0:200:30aa:c773 with SMTP
+ id n31-20020a17090a5aa200b0020030aac773mr7466200pji.182.1663202766080; Wed,
+ 14 Sep 2022 17:46:06 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 00:46:01 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220915004601.320198-1-pceballos@google.com>
+Subject: [PATCH] drm/i915/display/lspcon: Increase LSPCON mode settle timeout
+From:   Pablo Ceballos <pceballos@google.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?=" 
+        <ville.syrjala@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Pablo Ceballos <pceballos@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping.
+On some devices the Parade PS175 takes more than 400ms to settle in PCON
+mode.
 
-On 2022/9/14 09:58, Ke Sun wrote:
-> It's only used in mm/filemap.c, since commit <ffa65753c431>
-> ("mm/migrate.c: rework migration_entry_wait() to not take a pageref").
->
-> Make it static.
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Ke Sun <sunke@kylinos.cn>
-> ---
-> include/linux/pagemap.h | 1 -
-> mm/filemap.c | 2 +-
-> 2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index 0178b2040ea3..82880993dd1a 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -1042,7 +1042,6 @@ static inline int 
-> wait_on_page_locked_killable(struct page *page)
-> return folio_wait_locked_killable(page_folio(page));
-> }
-> -int folio_put_wait_locked(struct folio *folio, int state);
-> void wait_on_page_writeback(struct page *page);
-> void folio_wait_writeback(struct folio *folio);
-> int folio_wait_writeback_killable(struct folio *folio);
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 15800334147b..ade9b7bfe7fc 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -1467,7 +1467,7 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
-> *
-> * Return: 0 if the folio was unlocked or -EINTR if interrupted by a 
-> signal.
-> */
-> -int folio_put_wait_locked(struct folio *folio, int state)
-> +static int folio_put_wait_locked(struct folio *folio, int state)
-> {
-> return folio_wait_bit_common(folio, PG_locked, state, DROP);
-> }
+Signed-off-by: Pablo Ceballos <pceballos@google.com>
+---
+ drivers/gpu/drm/i915/display/intel_lspcon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_lspcon.c b/drivers/gpu/drm/i915/display/intel_lspcon.c
+index 15d59de8810e..b4cbade13ee5 100644
+--- a/drivers/gpu/drm/i915/display/intel_lspcon.c
++++ b/drivers/gpu/drm/i915/display/intel_lspcon.c
+@@ -166,7 +166,7 @@ static enum drm_lspcon_mode lspcon_wait_mode(struct intel_lspcon *lspcon,
+ 	drm_dbg_kms(&i915->drm, "Waiting for LSPCON mode %s to settle\n",
+ 		    lspcon_mode_name(mode));
+ 
+-	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 400);
++	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 800);
+ 	if (current_mode != mode)
+ 		drm_err(&i915->drm, "LSPCON mode hasn't settled\n");
+ 
+-- 
+2.37.2.789.g6183377224-goog
+
