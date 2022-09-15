@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8D05B954C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2486E5B954E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiIOHZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S229758AbiIOHZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiIOHZU (ORCPT
+        with ESMTP id S229751AbiIOHZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:25:20 -0400
+        Thu, 15 Sep 2022 03:25:21 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DD53F1CB;
-        Thu, 15 Sep 2022 00:25:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15257E35;
+        Thu, 15 Sep 2022 00:25:11 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C6B66601FC5;
-        Thu, 15 Sep 2022 08:25:08 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A469C6601FC7;
+        Thu, 15 Sep 2022 08:25:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663226709;
-        bh=5taqdJni3v9MTETZZQrSrsVMS+J9z4yESK9uElqm7Ss=;
+        s=mail; t=1663226710;
+        bh=78egXpcwYI0LobAOtW6zrOMH4zDX0mRd/unB/BTkHWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X79806TcrrWh+bCR1DrvTXCe2aulBbEchnG7U9SGDD4EcvLgTZbcSF1n8Bi6NOS7b
-         RsiImcsqIfbK/XZrsn1zeUc7dM0XUZFKptSzrF2Rr8OtWUqzsoiUubZzX2VFthS3PP
-         3X9A8tLSYNwfcdauE3uY4XDlEenr7L+RmQJPgU4vB6RJtyc3xrl99HEbD7/YdrzxbF
-         v4ap9kAw0vPxQ0E4ztQN5nadBY7Kdr9pqZox1pn/zMB8nZFZLuhzU1DOr0sy3vcIpl
-         Lvhov2R+cFaF7GlQseTTBV0v1V6cU0LumRhvNzsqXKKrf3DeI9/MVar7z5LSkWld4K
-         shTxq+1SBm0BQ==
+        b=CcqqYUxd23wXDO/PMP8P6pVxTGqgIjbg8z3+BjTYLRW2FTWRiL+2EHxxwgMLA3xrQ
+         WFYcsBZipLCSHQH7lFEEQHD9gGSaGX26S55KaS+z+C3JikynwGn4yNhP3YLJbobcsS
+         Z4kUG/lvZHwGvuR6753SXtR1ScX3fcJH1CrVw8e5x2fLtyJHaikVA8ZwtYrDj9mQQv
+         qr084HTM9O1TBoKYCatkqxuk8lYj5ih04h3lX1CV7wwdUi121d3W4s6DpF/Z53Wzrr
+         3Q+kjdFiOpeZ6SeIG7bnHYKaeV3v3xlf21Dyp641hSUGp8MG8T66AIlo571mVoYLH4
+         Mzw8Yw7aX9ilg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -45,9 +45,9 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
-Subject: [PATCH v2 03/10] clk: mediatek: mux: add clk notifier functions
-Date:   Thu, 15 Sep 2022 09:24:51 +0200
-Message-Id: <20220915072458.18232-4-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 04/10] clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+Date:   Thu, 15 Sep 2022 09:24:52 +0200
+Message-Id: <20220915072458.18232-5-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220915072458.18232-1-angelogioacchino.delregno@collabora.com>
 References: <20220915072458.18232-1-angelogioacchino.delregno@collabora.com>
@@ -64,124 +64,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chen-Yu Tsai <wenst@chromium.org>
 
-With device frequency scaling, the mux clock that (indirectly) feeds the
-device selects between a dedicated PLL, and some other stable clocks.
+When the MFG PLL clock, which is upstream of the MFG clock, is changed,
+the downstream clock and consumers need to be switched away from the PLL
+over to a stable clock to avoid glitches.
 
-When a clk rate change is requested, the (normally) upstream PLL is
-reconfigured. It's possible for the clock output of the PLL to become
-unstable during this process.
-
-To avoid causing the device to glitch, the mux should temporarily be
-switched over to another "stable" clock during the PLL rate change.
-This is done with clk notifiers.
-
-This patch adds common functions for notifiers to temporarily and
-transparently reparent mux clocks.
-
-This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
-clk notifier functions").
+This is done through the use of the newly added clk mux notifier. The
+notifier is set on the mux itself instead of the upstream PLL, but in
+practice this works, as the rate change notifitcations are propogated
+throughout the sub-tree hanging off the PLL. Just before rate changes,
+the MFG mux is temporarily and transparently switched to the 26 MHz
+main crystal. After the rate change, the mux is switched back.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-[Angelo: Changed mtk_mux_nb to hold a pointer to clk_ops instead of mtk_mux]
-Co-Developed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+[Angelo: Rebased to assign clk_ops in mtk_mux_nb]
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- drivers/clk/mediatek/clk-mux.c | 38 ++++++++++++++++++++++++++++++++++
- drivers/clk/mediatek/clk-mux.h | 15 ++++++++++++++
- 2 files changed, 53 insertions(+)
+ drivers/clk/mediatek/clk-mt8183.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-index cd5f9fd8cb98..4421e4859257 100644
---- a/drivers/clk/mediatek/clk-mux.c
-+++ b/drivers/clk/mediatek/clk-mux.c
-@@ -4,6 +4,7 @@
-  * Author: Owen Chen <owen.chen@mediatek.com>
-  */
+diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
+index 8512101e1189..1860a35a723a 100644
+--- a/drivers/clk/mediatek/clk-mt8183.c
++++ b/drivers/clk/mediatek/clk-mt8183.c
+@@ -1198,10 +1198,33 @@ static void clk_mt8183_top_init_early(struct device_node *node)
+ CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
+ 			clk_mt8183_top_init_early);
  
-+#include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/compiler_types.h>
- #include <linux/container_of.h>
-@@ -259,4 +260,41 @@ void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
++/* Register mux notifier for MFG mux */
++static int clk_mt8183_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
++{
++	struct mtk_mux_nb *mfg_mux_nb;
++	int i;
++
++	mfg_mux_nb = devm_kzalloc(dev, sizeof(*mfg_mux_nb), GFP_KERNEL);
++	if (!mfg_mux_nb)
++		return -ENOMEM;
++
++	for (i = 0; i < ARRAY_SIZE(top_muxes); i++)
++		if (top_muxes[i].id == CLK_TOP_MUX_MFG)
++			break;
++	if (i == ARRAY_SIZE(top_muxes))
++		return -EINVAL;
++
++	mfg_mux_nb->ops = top_muxes[i].ops;
++	mfg_mux_nb->bypass_index = 0; /* Bypass to 26M crystal */
++
++	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
++}
++
+ static int clk_mt8183_top_probe(struct platform_device *pdev)
+ {
+ 	void __iomem *base;
+ 	struct device_node *node = pdev->dev.of_node;
++	int ret;
+ 
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+@@ -1227,6 +1250,11 @@ static int clk_mt8183_top_probe(struct platform_device *pdev)
+ 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
+ 		top_clk_data);
+ 
++	ret = clk_mt8183_reg_mfg_mux_notifier(&pdev->dev,
++					      top_clk_data->hws[CLK_TOP_MUX_MFG]->clk);
++	if (ret)
++		return ret;
++
+ 	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
+ 				      top_clk_data);
  }
- EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
- 
-+/*
-+ * This clock notifier is called when the frequency of the parent
-+ * PLL clock is to be changed. The idea is to switch the parent to a
-+ * stable clock, such as the main oscillator, while the PLL frequency
-+ * stabilizes.
-+ */
-+static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
-+				   unsigned long event, void *_data)
-+{
-+	struct clk_notifier_data *data = _data;
-+	struct clk_hw *hw = __clk_get_hw(data->clk);
-+	struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
-+	int ret = 0;
-+
-+	switch (event) {
-+	case PRE_RATE_CHANGE:
-+		mux_nb->original_index = mux_nb->ops->get_parent(hw);
-+		ret = mux_nb->ops->set_parent(hw, mux_nb->bypass_index);
-+		break;
-+	case POST_RATE_CHANGE:
-+	case ABORT_RATE_CHANGE:
-+		ret = mux_nb->ops->set_parent(hw, mux_nb->original_index);
-+		break;
-+	}
-+
-+	return notifier_from_errno(ret);
-+}
-+
-+int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-+				       struct mtk_mux_nb *mux_nb)
-+{
-+	mux_nb->nb.notifier_call = mtk_clk_mux_notifier_cb;
-+
-+	return devm_clk_notifier_register(dev, clk, &mux_nb->nb);
-+}
-+EXPORT_SYMBOL_GPL(devm_mtk_clk_mux_notifier_register);
-+
- MODULE_LICENSE("GPL");
-diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
-index 6539c58f5d7d..83ff420f4ebe 100644
---- a/drivers/clk/mediatek/clk-mux.h
-+++ b/drivers/clk/mediatek/clk-mux.h
-@@ -7,12 +7,14 @@
- #ifndef __DRV_CLK_MTK_MUX_H
- #define __DRV_CLK_MTK_MUX_H
- 
-+#include <linux/notifier.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
- struct clk;
- struct clk_hw_onecell_data;
- struct clk_ops;
-+struct device;
- struct device_node;
- 
- struct mtk_mux {
-@@ -89,4 +91,17 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
- void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
- 			      struct clk_hw_onecell_data *clk_data);
- 
-+struct mtk_mux_nb {
-+	struct notifier_block	nb;
-+	const struct clk_ops	*ops;
-+
-+	u8	bypass_index;	/* Which parent to temporarily use */
-+	u8	original_index;	/* Set by notifier callback */
-+};
-+
-+#define to_mtk_mux_nb(_nb)	container_of(_nb, struct mtk_mux_nb, nb)
-+
-+int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-+				       struct mtk_mux_nb *mux_nb);
-+
- #endif /* __DRV_CLK_MTK_MUX_H */
 -- 
 2.37.2
 
