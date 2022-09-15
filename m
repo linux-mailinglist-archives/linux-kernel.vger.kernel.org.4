@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09425B9585
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE645B9586
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIOHjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
+        id S229695AbiIOHjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiIOHjA (ORCPT
+        with ESMTP id S229570AbiIOHjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:39:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5171D89930
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:38:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B9B95CEDA;
-        Thu, 15 Sep 2022 07:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663227538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TUTn+3IKELwrL18ONW8FbXabDVSGLwZ+kOCiDmQzLsw=;
-        b=eWvoVjda073CwhGyDL5Dnpq4emHru90vr3ozC3wfVS9Af0gNe2FqigIgzh44wJylHnEyc/
-        acrcoAE28NUOH1e5H8Hr2ZRdbZOmhbUr8cRc7JQt/zYE5hiJmRjVYA6HDkxG0E45Yniybu
-        ScT9S/DdzSnC4C2kwbujCZOmx8nHz2M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663227538;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TUTn+3IKELwrL18ONW8FbXabDVSGLwZ+kOCiDmQzLsw=;
-        b=o0EeACMOD6WBpd4tluWlGsCjwOW8ZBjI7YrT1VpxJoJFooAs9aRhFTg4dHlJwVWLoNtdKz
-        aEdTDQ+6TcqjhYDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A64AB133A7;
-        Thu, 15 Sep 2022 07:38:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id h17jJZHWImOIZgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 15 Sep 2022 07:38:57 +0000
-Date:   Thu, 15 Sep 2022 09:38:55 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
+        Thu, 15 Sep 2022 03:39:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCD9DF99
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663227578; x=1694763578;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=qT4pK26WhnKxnisAOU+dg9Nial+Fkme5ipurw767x5k=;
+  b=IeXPL+g6LkiE3ky06mbajqHhnyRl+evOsBJwu8Q2cFB5DDLdesShFKsF
+   G6SOMMUrwmoNYdTx02L18Vx1QVQdXA/r9ofnxm/VPilluqsP+f/LKSlCx
+   8F+BcdkzBHbCnZ2xVzIiVPhEeiRRhuFBt9MFqyG3V1MW0jLJMOzzWKyor
+   zWV0MvLcFIdDNjhNXvDXslokqOJBwYlxOQGdNkXMrtgb91zglhblFnT5W
+   l6iPNY/LIiAhOFyB+XZhbFRvKmaSyMv3e6KXvy6iUcwwYFU18PX+5BSvl
+   Vj+1tb2kvUbVVtFXdbItc0nFby4vPvUEWP50JMe8CJmrOqc8ChemNEoGh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384932868"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="384932868"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 00:39:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="685618048"
+Received: from edgarisx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.58.204])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 00:39:33 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Nathan Huckleberry <nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/16] mm/page_alloc: make boot_nodestats static
-Message-ID: <YyLWjwwocpMb4tsX@localhost.localdomain>
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-12-linmiaohe@huawei.com>
+Subject: Re: [PATCH] drm/i915: Fix return type of mode_valid function hook
+In-Reply-To: <YyEP7W/yZAyhNtTX@dev-arch.thelio-3990X>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220913205531.155046-1-nhuck@google.com>
+ <YyEP7W/yZAyhNtTX@dev-arch.thelio-3990X>
+Date:   Thu, 15 Sep 2022 10:39:26 +0300
+Message-ID: <87v8pp13yp.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909092451.24883-12-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 05:24:46PM +0800, Miaohe Lin wrote:
-> It's only used in mm/page_alloc.c now. Make it static.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Tue, 13 Sep 2022, Nathan Chancellor <nathan@kernel.org> wrote:
+> On Tue, Sep 13, 2022 at 01:55:27PM -0700, Nathan Huckleberry wrote:
+>> All of the functions used for intel_dvo_dev_ops.mode_valid have a return
+>> type of enum drm_mode_status, but the mode_valid field in the struct
+>> definition has a return type of int.
+>> 
+>> The mismatched return type breaks forward edge kCFI since the underlying
+>> function definitions do not match the function hook definition.
+>> 
+>> The return type of the mode_valid field should be changed from int to
+>> enum drm_mode_status.
+>> 
+>> Reported-by: Dan Carpenter <error27@gmail.com>
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+>> Cc: llvm@lists.linux.dev
+>> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Thanks for the patch and reviews, pushed to drm-intel-next.
 
-> ---
->  mm/internal.h   | 2 --
->  mm/page_alloc.c | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 2424fcde6538..43a441d35baf 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -864,8 +864,6 @@ int migrate_device_coherent_page(struct page *page);
->   */
->  struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
->  
-> -DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
-> -
->  extern bool mirrored_kernelcore;
->  
->  static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3417232afa45..7a8a6bb08a15 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6571,7 +6571,7 @@ static void per_cpu_pages_init(struct per_cpu_pages *pcp, struct per_cpu_zonesta
->  #define BOOT_PAGESET_BATCH	1
->  static DEFINE_PER_CPU(struct per_cpu_pages, boot_pageset);
->  static DEFINE_PER_CPU(struct per_cpu_zonestat, boot_zonestats);
-> -DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
-> +static DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
->  
->  static void __build_all_zonelists(void *data)
->  {
-> -- 
-> 2.23.0
-> 
+BR,
+Jani.
+
+>
+>> ---
+>>  drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
+>> index d96c3cc46e50..50205f064d93 100644
+>> --- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
+>> +++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
+>> @@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
+>>  	 *
+>>  	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
+>>  	 */
+>> -	int (*mode_valid)(struct intel_dvo_device *dvo,
+>> -			  struct drm_display_mode *mode);
+>> +	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
+>> +					   struct drm_display_mode *mode);
+>>  
+>>  	/*
+>>  	 * Callback for preparing mode changes on an output
+>> -- 
+>> 2.37.2.789.g6183377224-goog
+>> 
 
 -- 
-Oscar Salvador
-SUSE Labs
+Jani Nikula, Intel Open Source Graphics Center
