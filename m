@@ -2,128 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A245B9F65
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1BC5B9F70
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIOQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S229911AbiIOQMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIOQLf (ORCPT
+        with ESMTP id S229824AbiIOQMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:11:35 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFEA915D8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:11:34 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 78so17707619pgb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=qabPFsKsVzBs/IAmyQMB7q/BmTmNWLyFuHa1qxS6Sh0=;
-        b=qKZ4uhroibyA/kbyJWXPnExJXjgtUGAwIBN9HJmGnAYuFHc9pHofi0mFV6R7LAQa6+
-         69Fc5SVxfAgQRJNI8H9DU3S+4ByKwkBcDuTArTdgUrk7xdy0t5tJ0D369UnyNPCRbcmR
-         cgCEyq0OfpckdJ5wt1Axz6umAj0yfGG7d6F92tzKjWXNpk2v6AHTX5jP8n9XBS59uc8P
-         sa/3823e0flLKONJIPvHIPpJnwv6nk0gnVc3z/GbsXwX/egPY70fjaYF88o3Qo40l1a9
-         RZq1hQdKI0+Z5qxMlE51mLHBl4uQUPs21hfCXkmLARaLY1SD3UWKFd8moNekhop6Tng0
-         /ekw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=qabPFsKsVzBs/IAmyQMB7q/BmTmNWLyFuHa1qxS6Sh0=;
-        b=8JkLleIKEMOLcmOqd7HgBqiUBTIIO2Y3Lw6IC68Kz+6bVQQcbj4lIXUfzIwDSezkqh
-         KHQvrUvKBkOySwIxTxxqZvSLmDaREGaZJf02Vb6GAAJNDULycXS6Xgl65bvOVKpy5UG8
-         htoOvYHgTxFgzLBHZScdkZq2rlAJl0bntaQcw0tEOU9j1gclvq+HEsKVWnhYbUZDFzNY
-         TzdkPA2AzuKt6iD/QVzsq/Y37MWMLioStKpkJZxtQt3hhfh3K3OGemrOZx8gTdMpmOYy
-         7aO7TKVrQPbn/zara42PGlFcPNgHfRPLQ5dPVilD6OXSHoq826nrksnu0WY1uuLCvIv6
-         t28Q==
-X-Gm-Message-State: ACrzQf0JshibJlRLJVqpwVhOCjEN61pe6nLTAqSnhcdcyGqJKvS1jv/0
-        QVQe5hDcjXXayN8/hWi3bH8MPYdSA9+vvZDCBFo=
-X-Google-Smtp-Source: AMsMyM6+ZRoMxZaiuT/EK7sOt4bZSW5rcp+f670tgtTFsKu8gQ6/Ns2qfdTeJv4CSbOPUPfIXHZ1DTzV2E14qlpbII4=
-X-Received: by 2002:a65:63c3:0:b0:42b:5b03:ce57 with SMTP id
- n3-20020a6563c3000000b0042b5b03ce57mr522542pgv.436.1663258293835; Thu, 15 Sep
- 2022 09:11:33 -0700 (PDT)
+        Thu, 15 Sep 2022 12:12:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DABB915D8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:12:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE8866252D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 16:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AEBC4347C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 16:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663258323;
+        bh=biii+7n43gDq9XV3lLWEwCgiBUcjGdS9pCCJ+UVSt80=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XD60SOBgjmqG2oE/hYFdoVR/0o9EqUozlXe2HtAuCRzaStarFf8z/YDdABs3Q1Utf
+         8jfXldXFUyy6syrxYUcjYHYL1mZXQsrS3GRRcCNsWeBwQ5jsVG3gX0iZBzWRo7whTy
+         Slcc+9a3Y/Q5kRflAZB23mYWDRktGAiKJxRxVihqcJEyjjo6H2l9i/H5PCbec12NSt
+         Er+zMu9vwqZAwy5AfnXQNEDcFtfzOovBS6tAehYkYNiBMi05FZv5RpUMykkRoMAS4B
+         V1jvalmzh0SH9DwhfQyWUv2dqbg3YB8Wp6Iz0y476MmivxD2t9cDcDjgpOgQIPjFEH
+         tbpNB1W2HLICA==
+Received: by mail-lf1-f44.google.com with SMTP id f14so30199711lfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:12:03 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0RuFhnhhxpLN23q9nESGw40lR1WC7mS/JwoNAkbFs66zcpKUMV
+        f8zlAus6PapCp5Y68Ox0CaznN1lF1V5+QpBBMWVB6g==
+X-Google-Smtp-Source: AMsMyM6A+1amQaBgdn6PNz6+7XLx4sQcOmwWWgNA8pV7010ZefQzIPoOFXBCHMTh3iKNuMgzYaiNCa6qWPB+3IVAEF8=
+X-Received: by 2002:a17:906:9bd3:b0:778:c8e0:fcee with SMTP id
+ de19-20020a1709069bd300b00778c8e0fceemr471268ejc.275.1663258310370; Thu, 15
+ Sep 2022 09:11:50 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:902:ce8b:b0:177:eb6c:b271 with HTTP; Thu, 15 Sep 2022
- 09:11:33 -0700 (PDT)
-From:   moonlee park <moonleepark4@gmail.com>
-Date:   Thu, 15 Sep 2022 09:11:33 -0700
-Message-ID: <CAK1kscZ7rpXdXSVafoHYVO3H8PH3mSgE=73BL-eB5JpzT7Pf5g@mail.gmail.com>
-Subject: LOOKING FOWARD TO YOUR RESPOND
-To:     undisclosed-recipients:;
+References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com> <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220909120736.1027040-12-roberto.sassu@huaweicloud.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 15 Sep 2022 17:11:39 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
+Message-ID: <CACYkzJ7uraUdmGV9gMmTZs1OMb_3Q2DttoaxU-irmrXFudOweQ@mail.gmail.com>
+Subject: Re: [PATCH v17 11/12] selftests/bpf: Add test for bpf_verify_pkcs7_signature()
+ kfunc
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
+        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FORM_FRAUD_5,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,MONEY_FORM_SHORT,
-        MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,UNDISC_MONEY,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8153]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [moonleepark4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [moonleepark4[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  1.4 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.2 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: *****
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please let me use this medium to create a mutual conversation with you
-seeking for your acceptance on investing in your country under your
-management as my  business partner, My name is Aisha  Gaddafi and
-presently living in Oman, i am a Widow and single Mother with three
-Children, the only biological Daughter of late Libyan President (Late
-Colonel Muammar Gaddafi) and presently i am under political asylum
-protection by the Omani Government.
+On Fri, Sep 9, 2022 at 1:10 PM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
 
-I have funds worth " Seven Million Five Hundred Thousand United State
-Dollars" [$7.500.000.00 US Dollars] which I want to entrust to you for
-investment projects in your country. If you are willing to handle this
-project on my behalf, kindly reply urgent to enable me provide you
-more details to start the transfer process, I will appreciate your
-urgent response through my private email address below:
+[...]
 
-aishagaddafiaisha20@gmail.com
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+> new file mode 100644
+> index 000000000000..4ceab545d99a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+> @@ -0,0 +1,100 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +#define MAX_DATA_SIZE (1024 * 1024)
+> +#define MAX_SIG_SIZE 1024
+> +
+> +typedef __u8 u8;
+> +typedef __u16 u16;
+> +typedef __u32 u32;
+> +typedef __u64 u64;
 
-You can know more through the BBC news links below:
+I think you can avoid this and just use u32 and u64 directly.
 
-http://www.bbc.com/news/world-africa-19966059
+> +
+> +struct bpf_dynptr {
+> +       __u64 :64;
+> +       __u64 :64;
+> +} __attribute__((aligned(8)));
+> +
 
+I think you are doing this because including the uapi headers causes
+type conflicts.
+This does happen quite often. What do other folks think about doing
+something like
 
-Thanks
-Yours Truly Aisha
-aishagaddafiaisha20@gmail.com
+#define DYNPTR(x) ((void *)x)
+
+It seems like this will be an issue anytime we use the helpers with
+vmlinux.h and users
+will always have to define this type in their tests.
+
+- KP
+
+> +extern struct bpf_key *bpf_lookup_user_key(__u32 serial, __u64 flags) __ksym;
+> +extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
+> +extern void bpf_key_put(struct bpf_key *key) __ksym;
+> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> +                                     struct bpf_dynptr *sig_ptr,
+> +                                     struct bpf_key *trusted_keyring) __ksym;
+> +
+> +u32 monitored_pid;
+> +u32 user_keyring_serial;
+> +u64 system_keyring_id;
+> +
+> +struct data {
+> +       u8 data[MAX_DATA_SIZE];
+> +       u32 data_len;
+> +       u8 sig[MAX_SIG_SIZE];
+> +       u32 sig_len;
+> +};
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __type(key, __u32);
+> +       __type(value, struct data);
+> +} data_input SEC(".maps");
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("lsm.s/bpf")
+> +int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
+> +{
+> +       struct bpf_dynptr data_ptr, sig_ptr;
+> +       struct data *data_val;
+> +       struct bpf_key *trusted_keyring;
+> +       u32 pid;
+> +       u64 value;
+> +       int ret, zero = 0;
+> +
+> +       pid = bpf_get_current_pid_tgid() >> 32;
+> +       if (pid != monitored_pid)
+> +               return 0;
+> +
+> +       data_val = bpf_map_lookup_elem(&data_input, &zero);
+> +       if (!data_val)
+> +               return 0;
+> +
+> +       bpf_probe_read(&value, sizeof(value), &attr->value);
+> +
+> +       bpf_copy_from_user(data_val, sizeof(struct data),
+>
+
+[...]
+
+> --
+> 2.25.1
+>
