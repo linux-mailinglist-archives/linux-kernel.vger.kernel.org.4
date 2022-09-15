@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA295BA1C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD335BA1CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiIOUVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 16:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S229637AbiIOUZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 16:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIOUVr (ORCPT
+        with ESMTP id S229459AbiIOUZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 16:21:47 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EBF4E86D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663273306; x=1694809306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zGB4O8y2Kn3B1oD7+r9Z0eZwgWbllku8Rol6jHyBNQE=;
-  b=ZYwBM9M8JH98jhtLdcn98MyaFMdsizGgXK0NOzk2jOtzHMzUkJeipxuh
-   nZZH/8w2kcpNxcx0ZpG5b2IhijGgScSd+z/a7S6ui/Pc85xu9UZOcmEt4
-   AzwNpo+eB2kapVWT6yv6zT3VvN8vnALegOSc2AksSkDllpm+yDr6CWd5g
-   bN0XXOj5bw0L0+rwjUTsdJ89fJOeaTjm7069fepT4uh+Rd9SU8pSd+Oy6
-   gAsc05Em8BDIR53ww2YGiZ6GVNGeb3+AYCO+NVbIqPfTHz60BzqrmIKXx
-   kBMQdqf1r2Po6I8O8w81TfMWO0l4UndAbuXmIb0hp4aFJgptXMs6Vgnni
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360570408"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="360570408"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 13:21:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="650620907"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Sep 2022 13:21:44 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYvMl-0000xh-1Z;
-        Thu, 15 Sep 2022 20:21:43 +0000
-Date:   Fri, 16 Sep 2022 04:21:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gianfranco <gianfranco.dutka@arista.com>,
-        hirofumi@mail.parknet.co.jp
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        gianfranco.dutka@arista.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]     fat: device-level-flush-after-sync
-Message-ID: <202209160411.466veQ09-lkp@intel.com>
-References: <20220914174015.7158-1-gianfranco.dutka@arista.com>
+        Thu, 15 Sep 2022 16:25:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC65725E;
+        Thu, 15 Sep 2022 13:25:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A00E862446;
+        Thu, 15 Sep 2022 20:25:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA742C433D6;
+        Thu, 15 Sep 2022 20:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663273503;
+        bh=2mlgeLCCM9tgN/+2+P7WYlBHu2uO/quU2wwweklHWC0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EQCBBlYXft7dDfY4y0E22efFuLqrOqifVcdaPE7i3Y63Tg0m0UGLfz0mELFWClKXA
+         HyNVeAZp59Duzd38P74206XpoCXjsQmk+dtOu6R5oJUbYRTy8wPyWqp5ti+LRg6Ca7
+         CYK+gBjmhgFbtjDzvHs4FFTIsgDNS2L5mChnEF4LGAW2S7qkpqYN3jC5wKdzwp4OCf
+         vNYruYU0RriM/8DERH6sGuhZxfktXptxxcbNUdWpUvc8jY5U8AEiLHouUOIp79bbqa
+         1sXooEseEWJRBjNAJUGWvPR4T+CJLVZfHyhnY72QFy4vkdZlPNlVzLQve9BXL6aVFv
+         1bJoc26Z9hMPQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4CA205C0514; Thu, 15 Sep 2022 13:25:00 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 13:25:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/1] rcu: Simplify rcu_init_nohz() cpumask handling
+Message-ID: <20220915202500.GA346406@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220913030036.1569-1-thunder.leizhen@huawei.com>
+ <20220913030036.1569-2-thunder.leizhen@huawei.com>
+ <20220914104634.GC1936@lothringen>
+ <20220914113006.GX246308@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914174015.7158-1-gianfranco.dutka@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220914113006.GX246308@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gianfranco,
+On Wed, Sep 14, 2022 at 04:30:06AM -0700, Paul E. McKenney wrote:
+> On Wed, Sep 14, 2022 at 12:46:34PM +0200, Frederic Weisbecker wrote:
+> > On Tue, Sep 13, 2022 at 11:00:36AM +0800, Zhen Lei wrote:
+> > > In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
+> > > CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
+> > > Except that kernels booted without the rcu_nocbs= will not have
+> > > allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
+> > > its need_rcu_nocb_mask and offload_all local variables to track the
+> > > rcu_nocb and nohz_full state.
+> > > 
+> > > But there is a much simpler approach, namely creating a cpumask pointer
+> > > to track the default and then using cpumask_available() to check the
+> > > rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
+> > > and shortening the rcu_init_nohz() function.
+> > > 
+> > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> > 
+> > Looks good, thanks!
+> 
+> Queued and pushed, thank you all!
 
-Thank you for the patch! Yet something to improve:
+And this time, actually queued the most recent version.  Apologies for
+my confusion.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc5 next-20220915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gianfranco/fat-device-level-flush-after-sync/20220915-014337
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3245cb65fd91cd514801bf91f5a3066d562f0ac4
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220916/202209160411.466veQ09-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b1130c74311f7b8c0713f373a8dc20b572883fca
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gianfranco/fat-device-level-flush-after-sync/20220915-014337
-        git checkout b1130c74311f7b8c0713f373a8dc20b572883fca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/fat/inode.c:829:41: error: too many arguments to function call, expected single argument 'bdev', have 3 arguments
-                   return blkdev_issue_flush(sb->s_bdev, GFP_KERNEL, NULL);
-                          ~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/gfp_types.h:333:20: note: expanded from macro 'GFP_KERNEL'
-   #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
-                           ^
-   include/linux/blkdev.h:1031:5: note: 'blkdev_issue_flush' declared here
-   int blkdev_issue_flush(struct block_device *bdev);
-       ^
-   1 error generated.
-
-
-vim +/bdev +829 fs/fat/inode.c
-
-   825	
-   826	static int fat_sync_fs(struct super_block *sb, int wait)
-   827	{
-   828		if (wait)
- > 829			return blkdev_issue_flush(sb->s_bdev, GFP_KERNEL, NULL);
-   830		else
-   831			return 0;
-   832	}
-   833	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+							Thanx, Paul
