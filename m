@@ -2,151 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C123B5B9FC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3BB5B9FCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiIOQle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S229940AbiIOQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiIOQlc (ORCPT
+        with ESMTP id S229552AbiIOQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:41:32 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5234D4F3B4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:41:30 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127ba06d03fso48329821fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:41:30 -0700 (PDT)
+        Thu, 15 Sep 2022 12:43:40 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFAB4F3B4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id g8so12728950iob.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ihRDwkA3/+uCxAKrHSmLGee9NmkEXol5SUJ6O91CNsQ=;
+        b=ImI6oxn09GT5UW+MnR4ggV+ED5gD+svfD2kQMzQ4voej/W+eUfC3HFi6VBZwQXwecu
+         voIEManlVi43NC/9tYTL0uTdZ1wEgFcoBx4a8ub3zfgvGaS5xc83X/EvtA6XpvC4raQg
+         Z60mLYu8ZV4ww10k+iDFlynWBwENFebBhSxfM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=C1FrMtKA4pBBKcaZOKqszlDUi5Nv8jC2XZMYweIIehA=;
-        b=cMS8ncuT31cmql0FE9bPTF/8lAKQPdAnBIWw9Yt83IZPvBlhglQjL22sXA5SHuCuAj
-         dRAKHAWDZogffprn9p2yXQeTi+tLQfYA2fr/ldl0i/QjFkDyRo3P1Au0FXA3WXMKd+bo
-         Wz55TpKpHV3CTsLe6FHP69ysKnKg9THXWPwiqe3IrxN5HTOomvsBrddKqOanA5ZqPqA1
-         KZBM9OCjuzFE6/gaAtZm304PLWSn8Qy8Lq5tm398A5/c+s8OugxDP9p1OCUdDhDMnkVB
-         y4H+C2QffjQviWYRDC685UP43jmzaC5knb0oVZ5IQ4GWv2YcCGtB80WzIk1dL7gLg5it
-         vuVg==
-X-Gm-Message-State: ACrzQf0dPX4UEwGQ1KrSA646lGcb4KRyzMYnA5fd0GId6ANd7QwH86Zd
-        11AX83p1cNVdoT4bnARyLHGyAxhCN9MX4mqcQj8=
-X-Google-Smtp-Source: AMsMyM4KQSBYTM840gLemcZE2Ad0qtRJKan7THg93fappxP0K2D5vh9+vkkuLwdqEMP/ojt7JK/gwlKCLiBZEI71Kec=
-X-Received: by 2002:a05:6870:a70f:b0:127:666a:658 with SMTP id
- g15-20020a056870a70f00b00127666a0658mr311868oam.218.1663260089593; Thu, 15
- Sep 2022 09:41:29 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ihRDwkA3/+uCxAKrHSmLGee9NmkEXol5SUJ6O91CNsQ=;
+        b=kZ0k7MJKGrpVd8/DK9Vo9zFszBPGwtUZMno0YEKExiMuZ8MPNxTsmjQIba8v10RVAe
+         FCX0L7endva2kGpPreCu9rsyxC2iyvjMYvg37iAZujsS81DbxsMzhwR8rHjlqTcdB8sY
+         5jlQyboVJZpY5j3GuizGM+gHAkWFo1XaUxUENn7xJcxdDm6rWRibO7sjpfBcKPv6VXe6
+         DOCpTi+HKxz8KvYNpZvbXwkEIaeQBQ0kzATGcfz+H3Tk1wJ3Kf3XGtpMWwi+roxuRdTI
+         Jlft5GwQMfli4c9Gskw3vou8LiA5ZsqvfhXYAWT8zBVVxDUwePrBRd66b3EJg4v95cqu
+         Z2xQ==
+X-Gm-Message-State: ACrzQf2IxfPmz+G9Kcpujx0BOvddiavmWdRjDqzOLzx/QyiF7FxjfW+1
+        LhQIcnsye2YlQE3a4wUaA5TmgA==
+X-Google-Smtp-Source: AMsMyM4BvQTKE/r4PZSeJj2dgAk4gub8S4eTFG15BDPyb9u9/mTbJ8nnopamaoZaf8gPyzuWM8LMEQ==
+X-Received: by 2002:a05:6638:19cf:b0:358:3dd3:2162 with SMTP id bi15-20020a05663819cf00b003583dd32162mr441054jab.185.1663260218045;
+        Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id cb6-20020a0566381b0600b00349cee4ef4asm1327397jab.62.2022.09.15.09.43.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 09:43:37 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 16:43:36 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc:     Johan Hovold <johan@kernel.org>, andersson@kernel.org,
+        agross@kernel.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org, johan+linaro@kernel.org,
+        quic_kriskura@quicinc.com, dianders@chromium.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb
+ gdsc
+Message-ID: <YyNWOJerkZcqgx5h@google.com>
+References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
+ <20220901101756.28164-3-quic_rjendra@quicinc.com>
+ <YxDYJ+ONryLROBhL@google.com>
+ <YyF+5CQqcLQlXvzV@hovoldconsulting.com>
+ <YyJGNR33JbHxWWYD@google.com>
+ <4490d181-7bf2-791c-1778-1102e9adbc25@quicinc.com>
+ <f58077fd-3d12-4094-7d46-e49f25e16033@quicinc.com>
 MIME-Version: 1.0
-References: <20220902181934.1082647-1-namhyung@kernel.org>
-In-Reply-To: <20220902181934.1082647-1-namhyung@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 15 Sep 2022 09:41:18 -0700
-Message-ID: <CAM9d7ciLL0Hd1qB1jmfJzWms4d4soo9CXu89uXxm=jF7gUWPEw@mail.gmail.com>
-Subject: Re: [PATCH] perf/core: Increase lost_samples count only for samples
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f58077fd-3d12-4094-7d46-e49f25e16033@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Thu, Sep 15, 2022 at 06:59:36PM +0530, Rajendra Nayak wrote:
+> 
+> On 9/15/2022 12:55 PM, Rajendra Nayak wrote:
+> > 
+> > 
+> > On 9/15/2022 2:53 AM, Matthias Kaehlcke wrote:
+> > > On Wed, Sep 14, 2022 at 09:12:36AM +0200, Johan Hovold wrote:
+> > > > On Thu, Sep 01, 2022 at 09:04:55AM -0700, Matthias Kaehlcke wrote:
+> > > > > On Thu, Sep 01, 2022 at 03:47:56PM +0530, Rajendra Nayak wrote:
+> > > > > > USB on sc7280 cannot support wakeups from low power states
+> > > > > > if the GDSC is turned OFF. Update the .pwrsts for usb GDSC so it
+> > > > > > only transitions to RET in low power.
+> > > > > > 
+> > > > > > Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> > > > > 
+> > > > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > > Tested-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > 
+> > > > Did you confirm that you actually hit the retention state?
+> > > 
+> > > No, how would I do that?
+> > > 
+> > > > IIUC, this series is equivalent to using ALWAYS_ON unless CX is actually
+> > > > powered off during suspend.
+> > > 
+> > > The count in /sys/kernel/debug/qcom_stats/cxsd increses with each suspend,
+> > > however it also does that with the GDSC configured as ALWAYS_ON and with
+> > > Rajendra's "arm64: dts: qcom: sc7280: Add required-opps for USB" [1], so
+> > 
+> > hmm, that's really not expected. With my above patch and with the GDSC as
+> > ALWAYS_ON there is a cx vote in suspend preventing cxsd so the counter
+> > should not go up.
+> 
+> Perhaps you are missing '1b771839: clk: qcom: gdsc: enable optional power domain support'
+> in your tree?
 
-On Fri, Sep 2, 2022 at 11:19 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> The event->lost_samples count is intended to count (lost) sample records
-> but it's also counted for non-sample records like PERF_RECORD_MMAP etc.
-> This can be a problem when a sampling event tracks those side-band
-> events together.
->
-> As overflow handler for user events only calls perf_output_begin_
-> {for,back}ward() before writing to the ring buffer, we can pass an
-> additional flag to indicate that it's writing a sample record.
+Indeed, that patch was missing in our tree, thanks for the pointer!
 
-Could you please take a look?
-
-Thanks,
-Namhyung
-
-
->
-> Fixes: 119a784c8127 ("perf/core: Add a new read format to get a number of lost samples")
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  kernel/events/ring_buffer.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-> index 726132039c38..5f38ee4edbdb 100644
-> --- a/kernel/events/ring_buffer.c
-> +++ b/kernel/events/ring_buffer.c
-> @@ -149,7 +149,7 @@ static __always_inline int
->  __perf_output_begin(struct perf_output_handle *handle,
->                     struct perf_sample_data *data,
->                     struct perf_event *event, unsigned int size,
-> -                   bool backward)
-> +                   bool backward, bool sample)
->  {
->         struct perf_buffer *rb;
->         unsigned long tail, offset, head;
-> @@ -174,7 +174,8 @@ __perf_output_begin(struct perf_output_handle *handle,
->         if (unlikely(rb->paused)) {
->                 if (rb->nr_pages) {
->                         local_inc(&rb->lost);
-> -                       atomic64_inc(&event->lost_samples);
-> +                       if (sample)
-> +                               atomic64_inc(&event->lost_samples);
->                 }
->                 goto out;
->         }
-> @@ -256,7 +257,8 @@ __perf_output_begin(struct perf_output_handle *handle,
->
->  fail:
->         local_inc(&rb->lost);
-> -       atomic64_inc(&event->lost_samples);
-> +       if (sample)
-> +               atomic64_inc(&event->lost_samples);
->         perf_output_put_handle(handle);
->  out:
->         rcu_read_unlock();
-> @@ -268,14 +270,14 @@ int perf_output_begin_forward(struct perf_output_handle *handle,
->                               struct perf_sample_data *data,
->                               struct perf_event *event, unsigned int size)
->  {
-> -       return __perf_output_begin(handle, data, event, size, false);
-> +       return __perf_output_begin(handle, data, event, size, false, true);
->  }
->
->  int perf_output_begin_backward(struct perf_output_handle *handle,
->                                struct perf_sample_data *data,
->                                struct perf_event *event, unsigned int size)
->  {
-> -       return __perf_output_begin(handle, data, event, size, true);
-> +       return __perf_output_begin(handle, data, event, size, true, true);
->  }
->
->  int perf_output_begin(struct perf_output_handle *handle,
-> @@ -284,7 +286,7 @@ int perf_output_begin(struct perf_output_handle *handle,
->  {
->
->         return __perf_output_begin(handle, data, event, size,
-> -                                  unlikely(is_write_backward(event)));
-> +                                  unlikely(is_write_backward(event)), false);
->  }
->
->  unsigned int perf_output_copy(struct perf_output_handle *handle,
-> --
-> 2.37.2.789.g6183377224-goog
->
+With it the CXSD count does not increase when the GDSC is configured as
+ALWAYS_ON.
