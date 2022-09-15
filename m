@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FAC5B918A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F2C5B9190
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiIOAPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S230042AbiIOAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIOAPl (ORCPT
+        with ESMTP id S230108AbiIOAQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:15:41 -0400
+        Wed, 14 Sep 2022 20:16:21 -0400
 Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7827578AF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:15:39 -0700 (PDT)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id E6A0781271
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:15:38 -0500 (CDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA52952FF4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:16:19 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id D05819593B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:16:18 -0500 (CDT)
 Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id YcXaos831MdPuYcXaoHJG5; Wed, 14 Sep 2022 19:15:38 -0500
+        id YcYEoit87QLX5YcYEoasSL; Wed, 14 Sep 2022 19:16:18 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -28,19 +28,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3QyEiUIMg3pcJ2P2eEoVNcw/ZmTKvHhgyIM17Mtmmv4=; b=Z308g21mjmFjTOQ9EgvTubSOhD
-        C0yJQQ7JM/+69E7UWEtDiKeT5wZjjPZL0Qa2eSdjJfGuylisMi7OcW9vz67594eqx//t3mzsX7o85
-        xui/9U4ZZRqXUlJbMPykYg6hPE4WRzvRUdKEkzNxXJZwWkzexeQhVfJhDoaHzk8/qHsFLH8EP076g
-        k7Q8jaaK6mP985+XsOwUPI42XI/bvbDk2tWzRub10a5GHtL0r056t9Yz6fv6PxoZxPYntc/wn+zE4
-        GZAmiIHOr8B2rlOCLz8vdLuiP7mPhgoGn1BDDgd4nuU/J06oR+XmKJqbOdcWKzRE/VSYl2Wggeb6o
-        F3ewsyKg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:44414 helo=localhost)
+        bh=OWeZ3X+YfpufrP32pFwnzjr9SmrTxIgR0t/8xkGDE+g=; b=lbSCNqvYwIKnQwtr6jZnwojPe2
+        JckGwmoNcDxLyAcdED+Hw4TEZ0Rtz47ZJ8btAoA8ODOOPvx4dhYkfv0LOK4l6YvsjNFPcHfS/QGFb
+        uQNAi7O8d8cAZre0YlB3i18onUcQerBLOEClRj4qe+YFSYoSrDTpFe0cuImL//HfxTlDiJBsuJqcm
+        ZOrtzCVBWWXJt9vfY5GgxXwteuAhH4qb4VHrq9jPkEK+o458U/xzJchVCm2TyuwG6lGVSCjh1qSZi
+        oK8uBzLE+auzkyrtG/S0OIeIF0AIJZZlPBgTD23iLs4OqvBtOGz6/0pzNbcevwVijGJlQ+S7KcMOq
+        5KYtrkUQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37962 helo=localhost)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <linux@roeck-us.net>)
-        id 1oYcXZ-003Nmj-V5;
-        Thu, 15 Sep 2022 00:15:38 +0000
-Date:   Wed, 14 Sep 2022 17:15:33 -0700
+        id 1oYcYD-003OQQ-RQ;
+        Thu, 15 Sep 2022 00:16:17 +0000
+Date:   Wed, 14 Sep 2022 17:16:13 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
@@ -49,13 +49,13 @@ Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         slade@sladewatkins.com
-Subject: Re: [PATCH 4.14 00/61] 4.14.293-rc1 review
-Message-ID: <20220915001533.GF603793@roeck-us.net>
-References: <20220913140346.422813036@linuxfoundation.org>
+Subject: Re: [PATCH 4.9 00/42] 4.9.328-rc1 review
+Message-ID: <20220915001613.GG603793@roeck-us.net>
+References: <20220913140342.228397194@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913140346.422813036@linuxfoundation.org>
+In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -64,13 +64,13 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1oYcXZ-003Nmj-V5
+X-Exim-ID: 1oYcYD-003OQQ-RQ
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:44414
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:37962
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 77
+X-Email-Count: 90
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,9 +83,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:07:02PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.293 release.
-> There are 61 patches in this series, all will be posted as a response
+On Tue, Sep 13, 2022 at 04:07:31PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.328 release.
+> There are 42 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -94,9 +94,9 @@ On Tue, Sep 13, 2022 at 04:07:02PM +0200, Greg Kroah-Hartman wrote:
 > 
 
 Build results:
-	total: 170 pass: 170 fail: 0
+	total: 164 pass: 164 fail: 0
 Qemu test results:
-	total: 422 pass: 422 fail: 0
+	total: 395 pass: 395 fail: 0
 
 Tested-by: Guenter Roeck <linux@roeck-us.net>
 
