@@ -2,104 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF215B9C6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBEB5B9C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiION4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S229759AbiIOOJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiION4k (ORCPT
+        with ESMTP id S229685AbiIOOJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 09:56:40 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F3961700;
-        Thu, 15 Sep 2022 06:56:39 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l17so1521763wru.2;
-        Thu, 15 Sep 2022 06:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=ttVTobcerozJ0Qpoj1pMNzCZJWSC2cn6oDnQsoTO4Yk=;
-        b=pSjYWnqqo/26XBSg9dVZ2nm15xV7jvJSoZr12r8ahlYYpQqY+8iOuXiAD0tmoP3X22
-         G1Os0gc4T04ehMEV9GHG+11xHZjp5jUlm58zKxFU74XoO6H6iHYr1U//k6j2vLMpEyml
-         W6aQATI4WZjAqxXcFLcpIZLW7K3xrtgBr6ggqsyIjlpevA1qwI9s2lhDoojygmBw+WyP
-         CeAuR5RzdSk+T8VZjUYus2nKLFeOA0LGa65g5rJjxqdCAfwD+SQwfPwvAfjHWTyR5fl9
-         9/FUM3kKWjxp6pjqwVoKMhe92t7zEKMUZlt+dpAeJKdmVw8FjudfxXWRud3ujbg2H0D7
-         /Vew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ttVTobcerozJ0Qpoj1pMNzCZJWSC2cn6oDnQsoTO4Yk=;
-        b=UJK4F9sAnjTWdNalufo7/kfp2YibQju3Go9dSrj81m1MWfRubar/izSp2VncTCWa9+
-         2TQtpHd8n7GE9Bef2KbFjUyGnrmWkyibpLs5osJsTzn7iSD6sErN7QWWg+9jHJld02u1
-         hb9NVkYAVJcXHR0cwgID5lt3K2O1UIYstaGLsOliSk4opp6TGO1Vc3rZV9f46YyoAHTw
-         5jGjN1SUu5Ret1Yr/Av44idgfqJvwWVdGq6LfjZMpxYyw0dLwYADn3Wad5Qun1kwSKvG
-         laE67571Xs1LceXodC3YwFOnswom9LpdIo+uf/M/xc7eRCM6T+p1IFpNs4Fi3phNrnDP
-         A7fw==
-X-Gm-Message-State: ACgBeo0gQ2HVtYDR+p1Xbf1H5igJ9UtiZgAOO19I7zMZFOlYD+987lLI
-        fi77ywXWqgKejdMQAUt566rtN7XW3++lGXpGG5nC6RZCnws=
-X-Google-Smtp-Source: AA6agR5ZTPI4AZK4A+FrjJmuKe4UDMj77dCsdAcnrftEdV9Wb+vy01c8PVlahsQwkc/FtgZV41i6mnQLg1viHqD/MEo=
-X-Received: by 2002:a5d:4dcd:0:b0:228:d1e4:9cf1 with SMTP id
- f13-20020a5d4dcd000000b00228d1e49cf1mr23421819wru.182.1663250197399; Thu, 15
- Sep 2022 06:56:37 -0700 (PDT)
+        Thu, 15 Sep 2022 10:09:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502D29C2CB;
+        Thu, 15 Sep 2022 07:09:17 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FDw35o014388;
+        Thu, 15 Sep 2022 14:09:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=bdnp4PyOxcNHL0V8OK4m7uU6PG88LE7nMYWQq2m2E5g=;
+ b=PhwjtHuJm7QNu5fOPkNniL6Jwk2cISlW6kmoWWSKcPFUXha+6kMU1ijD7gi0x17T93p2
+ rK6fpjd4hzUCdyvNGV8eDqCypYqxgZm7FzMH7umFh1GvROgQXhXwfdKQ0qucTOlns0mL
+ W58k6ByMkM81v9IC8VIrbp9qUAWmuPEB8JkCqFcIFpEswIIxRYyIIEKHQcWHjj9s86bF
+ ZVml+T0tJvn/W6ynxm0EeHxHMltyGeBHZKes3TCmcrwBOx9XQ95uWF3S6eDJLHQd0O+m
+ +C1UQse96G5+VuS6cXKq7ReWiuqfV8sQiOlvKYsv7j+kWxxhRZf0Ipi5jYvmp2x23EUN oA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jkvr31k08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 14:09:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28FDlJHI003797
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 13:47:19 GMT
+Received: from hu-vhiren-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 15 Sep 2022 06:47:15 -0700
+From:   Hiren Gohel <quic_vhiren@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>
+CC:     Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Hiren Gohel <quic_vhiren@quicinc.com>
+Subject: [PATCH] usb: phy: qusb: Use scm call to update value in register
+Date:   Thu, 15 Sep 2022 19:17:07 +0530
+Message-ID: <1663249627-21151-1-git-send-email-quic_vhiren@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1663157936-5010-1-git-send-email-u0084500@gmail.com> <20220915134353.GA1168381-robh@kernel.org>
-In-Reply-To: <20220915134353.GA1168381-robh@kernel.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 15 Sep 2022 21:56:25 +0800
-Message-ID: <CADiBU3_6dXf1TUv9f7HbFfrqsfMUmT1Ejve6+O6OGnmTtxzpEQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: mfd: mt6370: fix the indentation in the example
-To:     Rob Herring <robh@kernel.org>
-Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        cy_huang@richtek.com, linux-mediatek@lists.infradead.org,
-        alice_chen@richtek.com, robh+dt@kernel.org, lee@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, chiaen_wu@richtek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: k3UMf0cqqUwzVOzOvcOgwA59SQcHlhQO
+X-Proofpoint-GUID: k3UMf0cqqUwzVOzOvcOgwA59SQcHlhQO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_08,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1011 impostorscore=0 suspectscore=0
+ priorityscore=1501 mlxlogscore=642 spamscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209150083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B49=E6=9C=8815=E6=97=A5 =
-=E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A9:43=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Wed, 14 Sep 2022 20:18:56 +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Fix the indentation in the binding example. There're two redudant space
-> > charactors need to be removed.
-> >
-> > Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> > Since v2:
-> > - Add Fixes tag in commit message
-> >
-> > ---
-> >  Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
->
->
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
->
-> If a tag was not added on purpose, please state why and what changed.
->
-I'm not sure about the rule.
-AngeloGioacchino said I need to add the 'Fixes' tag.
-I think it might be important.
-And I immediately submit the v2 patch and add the 'fixes' tag.
-So patch v3 and add 'Acked-by' tag?
+Registers used by vendors to control any functionality could be
+implemented by making the register secured. In such cases the
+register cannot be updated with a new value since the normal
+write ops will fail.
+
+Hence, use the scm_call to do a secure write to the register.
+
+Signed-off-by: Hiren Gohel <quic_vhiren@quicinc.com>
+---
+ drivers/firmware/qcom_scm.c | 19 +++++++++++++++++++
+ drivers/firmware/qcom_scm.h |  1 +
+ include/linux/qcom_scm.h    |  2 ++
+ 3 files changed, 22 insertions(+)
+
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index cdbfe54..7131df8 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -400,6 +400,25 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+ }
+ EXPORT_SYMBOL(qcom_scm_set_remote_state);
+ 
++void qcom_scm_phy_update_scm_level_shifter(u32 val)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_BOOT,
++		.cmd = QCOM_SCM_QUSB2PHY_LVL_SHIFTER_CMD_ID,
++		.owner = ARM_SMCCC_OWNER_SIP
++	};
++
++	desc.args[0] = val;
++	desc.args[1] = 0;
++	desc.arginfo = QCOM_SCM_ARGS(2);
++
++	ret = qcom_scm_call(__scm->dev, &desc, NULL);
++	if (ret)
++		pr_err("Failed to update scm level shifter=0x%x\n", ret);
++}
++EXPORT_SYMBOL(qcom_scm_phy_update_scm_level_shifter);
++
+ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+ {
+ 	struct qcom_scm_desc desc = {
+diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+index 0d51eef..0a8c25b 100644
+--- a/drivers/firmware/qcom_scm.h
++++ b/drivers/firmware/qcom_scm.h
+@@ -81,6 +81,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+ #define QCOM_SCM_BOOT_SET_ADDR_MC	0x11
+ #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
+ #define QCOM_SCM_FLUSH_FLAG_MASK	0x3
++#define QCOM_SCM_QUSB2PHY_LVL_SHIFTER_CMD_ID	0x1B
+ #define QCOM_SCM_BOOT_MAX_CPUS		4
+ #define QCOM_SCM_BOOT_MC_FLAG_AARCH64	BIT(0)
+ #define QCOM_SCM_BOOT_MC_FLAG_COLDBOOT	BIT(1)
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index f8335644..3e5cbe9 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -124,4 +124,6 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+ extern int qcom_scm_lmh_profile_change(u32 profile_id);
+ extern bool qcom_scm_lmh_dcvsh_available(void);
+ 
++extern void qcom_scm_phy_update_scm_level_shifter(u32 val);
++
+ #endif
+-- 
+2.7.4
+
