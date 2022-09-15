@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE1E5B952B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607F35B9531
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiIOHXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S229615AbiIOHYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIOHXR (ORCPT
+        with ESMTP id S229536AbiIOHYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:23:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E795C8A7D8;
-        Thu, 15 Sep 2022 00:23:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F2E6212E;
-        Thu, 15 Sep 2022 07:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DED6C433D7;
-        Thu, 15 Sep 2022 07:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663226595;
-        bh=0SnTifM38uuGpOzCk/4nJazCkvUROprkrsGQ8G+k6i0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B+EWzrT/8d47AlN/5m4fPay4wsX2D6k8r928y+sMAsJVpVQxpmnAwbE4xlQgWuIbJ
-         gg110KX9BunAmR0MEZxNTauwVo6QVWrzBW3xUz2+oELvdhum/pJzFp+ITKmL/UHKzO
-         vvIWOC8WY887llCPDuu+vkyKqnaCgsvPi6o8cY1Y=
-Date:   Thu, 15 Sep 2022 09:23:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/192] 5.19.9-rc1 review
-Message-ID: <YyLS/LYEqixRcV9V@kroah.com>
-References: <20220913140410.043243217@linuxfoundation.org>
- <20220915000912.GA603793@roeck-us.net>
- <81314196-ccd5-069b-a6ea-db07b1d2a857@gmail.com>
+        Thu, 15 Sep 2022 03:24:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA3AD4C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:24:42 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYjEh-0003lM-8q; Thu, 15 Sep 2022 09:24:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYjEh-000qeX-Ud; Thu, 15 Sep 2022 09:24:34 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oYjEf-00128o-Sw; Thu, 15 Sep 2022 09:24:33 +0200
+Date:   Thu, 15 Sep 2022 09:24:30 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [RFC v4 08/10] pwm: dwc: add of/platform support
+Message-ID: <20220915072430.bhpwk6iyqmyz6oie@pengutronix.de>
+References: <20220816211454.237751-1-ben.dooks@sifive.com>
+ <20220816211454.237751-9-ben.dooks@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7io5skmzn7fvbmsl"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81314196-ccd5-069b-a6ea-db07b1d2a857@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220816211454.237751-9-ben.dooks@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 07:24:42PM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 9/14/2022 5:09 PM, Guenter Roeck wrote:
-> > On Tue, Sep 13, 2022 at 04:01:46PM +0200, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.19.9 release.
-> > > There are 192 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > 
-> > Build results:
-> > 	total: 150 pass: 150 fail: 0
-> > Qemu test results:
-> > 	total: 490 pass: 490 fail: 0
-> > 
-> > New runtime warning
-> > 
-> > BUG: sleeping function called from invalid context at drivers/clk/imx/clk-pllv3.c:68
-> > 
-> > thanks to:
-> > 
-> > > Csókás Bence <csokas.bence@prolan.hu>
-> > >      net: fec: Use a spinlock to guard `fep->ptp_clk_on`
-> > 
-> > In the assumption that this patch will be dropped
-> > 
-> > Tested-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> It is being reverted upstream:
-> 
-> https://lore.kernel.org/netdev/20220912070143.98153-1-francesco.dolcini@toradex.com/
-> 
-> So probably best to just drop that patch.
 
-It is already dropped, thanks.
+--7io5skmzn7fvbmsl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+Hello,
+
+On Tue, Aug 16, 2022 at 10:14:52PM +0100, Ben Dooks wrote:
+> The dwc pwm controller can be used in non-PCI systems, so allow
+> either platform or OF based probing.
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+> v4:
+>  - split the of code out of the core
+>  - moved the compile test code earlier
+>  - fixed review comments
+>   - used NS_PER_SEC
+>   - use devm_clk_get_enabled
+> v3:
+>  - changed compatible name
+> ---
+>  drivers/pwm/Kconfig      |  9 +++++
+>  drivers/pwm/Makefile     |  1 +
+>  drivers/pwm/pwm-dwc-of.c | 78 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 88 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-dwc-of.c
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index a9f1c554db2b..f1735653365f 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -192,6 +192,15 @@ config PWM_DWC_PCI
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called pwm-dwc-pci.
+> =20
+> +config PWM_DWC_OF
+> +	tristate "DesignWare PWM Controller (OF bus)
+
+There is a missing " which results in:
+
+	drivers/pwm/Kconfig:196:warning: multi-line strings not supported
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7io5skmzn7fvbmsl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMi0ywACgkQwfwUeK3K
+7Amt2Qf/UgDMTUQkV2JPLj6sSbtjBfGpE4BRk4aFmN/Sstpx2l5KBA4ZR90CFXTF
+aK1cvyWxkX+lKS1J+SJGvClDbepo9UKlfQOJFKnE0fU8d1eBW7aDTXyP4RYChgSz
+b6AN2/GpxdexrNRRbc+AIX7dKKO8EQxqViRAoMet6fGz9kdNyn/S5DOfi6daiPxV
+UJv4Udb0mq5z5X9N9O1Ijvj+wUxiV05OLooj+hR4roAVW4mKfVgy50bdF+8V13aN
+LkcN3ohPzlEWHWT8ytbRZu+Mkyu38vAQHg+zZauA1qMXRXkohaPv6BDcMSR0LqSL
+faOPXyRq9AVP9QI92VWPteeApW4qBA==
+=eMUG
+-----END PGP SIGNATURE-----
+
+--7io5skmzn7fvbmsl--
