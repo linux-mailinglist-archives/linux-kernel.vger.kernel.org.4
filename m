@@ -2,154 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E613B5B9269
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838655B9271
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiIOB5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S229893AbiIOB5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIOB5i (ORCPT
+        with ESMTP id S230091AbiIOB5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:57:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988F28E472;
-        Wed, 14 Sep 2022 18:57:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BFFAB81D63;
-        Thu, 15 Sep 2022 01:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F36AC433D6;
-        Thu, 15 Sep 2022 01:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663207055;
-        bh=aoSRSTCag8l0MVvAawlhHyEVLuGR7v1VAyAi5bDVdV0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pN9YnBUGFwz4p4F0zvwLmYf/rW/NWhUuGFlUjRSaDtid21lXc6Upb5MqPOu5abrxy
-         A1/1lTkaYiI4L7BHqggJU6AQ3/k5EjG/LIQLUH7OqXC4TZxGCPrYsiuKR7yjnr6u8d
-         XFBC3F77ft5J1SB9Ip5tzQSaA4k2HVTPeQFYnETLpRWKWYZ9OEOf/PNscYfyhCcrsJ
-         epTcMieYUBQY5+6dHyqpvYszTUG8Q/EhK9C4WdHn942wZ9/yJCtsLiam+Ok7vIF/o7
-         QD0z7ZGQ2xD7tukqFGIJy7lGQI3nkIryNAOdV0etGyGpq8tmYWjhp3Lyn6zQ0IOQM1
-         JKtOYb6gbQF6w==
-Received: by mail-wm1-f44.google.com with SMTP id ay36so3306225wmb.0;
-        Wed, 14 Sep 2022 18:57:34 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2d8CMMIixMFwMt9NYVpalE6hHnaioTvX1bWgBS9eMO5aikKpj+
-        p9whArlwnwqUTUGdeEBpvuZlqnLPZxy6R8G/i1M=
-X-Google-Smtp-Source: AA6agR5buy/tXnCUXXG3a+BHycJDxuOdO5maD2LttOCF+4xw0zjN1zk3rj4LnQ1oaVye1Z0dlKBUprQ6WPEnuG7yhtw=
-X-Received: by 2002:a05:600c:4e15:b0:3b4:a621:b54e with SMTP id
- b21-20020a05600c4e1500b003b4a621b54emr3312685wmq.47.1663207053256; Wed, 14
- Sep 2022 18:57:33 -0700 (PDT)
+        Wed, 14 Sep 2022 21:57:45 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6568E4F5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:57:41 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPqW6wP_1663207057;
+Received: from 30.240.97.215(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPqW6wP_1663207057)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 09:57:38 +0800
+Message-ID: <fd50c65c-728d-d561-afc1-6c1e2c73f252@linux.alibaba.com>
+Date:   Thu, 15 Sep 2022 09:57:37 +0800
 MIME-Version: 1.0
-References: <43b68b1f48c20b1dfcd7e6663c3dcb38e4e0648c.1663020936.git.objelf@gmail.com>
- <a432abf4cf95e93783864b27bafa53d45bdd5212.1663020936.git.objelf@gmail.com> <CABBYNZ+Z+BApMOPEgVBxf6j0sTYFE0tH6Eab-hQW8FKVFqfvqA@mail.gmail.com>
-In-Reply-To: <CABBYNZ+Z+BApMOPEgVBxf6j0sTYFE0tH6Eab-hQW8FKVFqfvqA@mail.gmail.com>
-From:   Sean Wang <sean.wang@kernel.org>
-Date:   Wed, 14 Sep 2022 18:57:21 -0700
-X-Gmail-Original-Message-ID: <CAGp9LzrjmKDF_3+Km05eLVkr9ZHKhfMWjVxx=7GvsfRmWNp2dQ@mail.gmail.com>
-Message-ID: <CAGp9LzrjmKDF_3+Km05eLVkr9ZHKhfMWjVxx=7GvsfRmWNp2dQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] Bluetooth: btusb: mediatek: reset the device as WMT failed
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [PATCH V2] mm/damon: simplify scheme create in lru_sort.c
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220914142250.1269-1-sj@kernel.org>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20220914142250.1269-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
 
-On Wed, Sep 14, 2022 at 3:46 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
+在 2022/9/14 下午10:22, SeongJae Park 写道:
+> Hi Xin,
 >
-> Hi Sean,
+> On Wed, 14 Sep 2022 19:38:59 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
 >
-> On Mon, Sep 12, 2022 at 3:18 PM <sean.wang@mediatek.com> wrote:
-> >
-> > From: Sean Wang <sean.wang@mediatek.com>
-> >
-> > Reset the BT device whenever the driver detected any WMT failure happened
-> > to recover such kind of system-level error as soon as possible.
-> >
-> > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> > ---
-> >  drivers/bluetooth/btusb.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> > index 653f57a98233..dc86726c8271 100644
-> > --- a/drivers/bluetooth/btusb.c
-> > +++ b/drivers/bluetooth/btusb.c
-> > @@ -2576,6 +2576,10 @@ static int btusb_mtk_hci_wmt_sync(struct hci_dev *hdev,
-> >         data->evt_skb = NULL;
-> >  err_free_wc:
-> >         kfree(wc);
-> > +
-> > +       if (err < 0)
-> > +               btmtk_reset_sync(hdev);
+>> In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
+>> they have so much in common, so we can combine them into a single
+>> function, and we just need to distinguish their differences.
+> Thank you again for patiently waiting for my changes and reworking on this!
 >
-> Doesn't reset itself can fail?
-
-The reset is supposed not to fail so there is no return value is
-designated in the function
-
+>> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+>> ---
+>>   mm/damon/lru_sort.c | 57 ++++++++++++++++++++++-----------------------
+>>   1 file changed, 28 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+>> index 07a0908963fd..2eac907e866d 100644
+>> --- a/mm/damon/lru_sort.c
+>> +++ b/mm/damon/lru_sort.c
+>> @@ -135,17 +135,40 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
+>>   static struct damon_ctx *ctx;
+>>   static struct damon_target *target;
+>>   
+>> -static struct damos *damon_lru_sort_new_scheme(
+>> -		struct damos_access_pattern *pattern, enum damos_action action)
+>> +static struct damos *damon_lru_sort_new_scheme(unsigned int thres,
+>> +					       enum damos_action action)
+>>   {
+>> +	struct damos_access_pattern pattern = {
+>> +		/* Find regions having PAGE_SIZE or larger size */
+>> +		.min_sz_region = PAGE_SIZE,
+>> +		.max_sz_region = ULONG_MAX,
+>> +		/* and accessed for more than the threshold */
+> This comment would be better to be written again?
 >
-> >         return err;
+>> +		.min_nr_accesses = 0,
+>> +		.max_nr_accesses = 0,
+> If we're gonna set above two fields anyway later, we could simply remove above
+> three lines.
 >
-> It would probably be better to reset on error at the caller IMO, also
-> in case it fails during firmware upload does reset even work? Also it
-
-The reset is supposed to work even without the firmware uploaded but I
-need to have further confirmation with fw folks to ensure this point.
-Anyway, I will try to move the reset on the error at the caller or
-based on the context in the next version because I thought again that
-will also help
-working out a patch to recover any error present at firmware
-initialization that the driver currently cannot handle and the patch
-cannot cover.
-
-> would probably have been better to have its own file for vendor
-> specific commands like this and use btmtk_ prefix as well.
-
-I had tried to move btusb_mtk_hci_wmt_sync to btmtk.c to allow it to
-be reused by all mtk bluetooth drivers but some reason stopped me from
-doing that.
-that is btusb_mtk_hci_wmt_sync has the reference to the data bundled
-with btusb.c and it seemed a bit harder for me to split out from
-btusb.c for the moment,
-such as btusb data->flag the function will refer to and is shared by
-all vendors, so I still temporarily leave the vendor-specific commands
-there.
-I think that would be easy to do if btusb.c can support a pointer in
-struct btusb_data pointed to the vendor-specific data area where I can
-put the flag and other
-vendor-specific stuff the btmtk.c needed there.
-
-             Sean
+>> +		/* no matter its age */
+>> +		.min_age_region = 0,
+>> +		.max_age_region = UINT_MAX,
+>> +	};
+>>   	struct damos_quota quota = damon_lru_sort_quota;
+>>   
+>>   	/* Use half of total quota for hot/cold pages sorting */
+>>   	quota.ms = quota.ms / 2;
+>>   
+>> +	switch (action) {
+>> +	case DAMOS_LRU_PRIO:
+>> +		pattern.min_nr_accesses = thres;
+>> +		pattern.max_nr_accesses = UINT_MAX;
+>> +		break;
+>> +	case DAMOS_LRU_DEPRIO:
+>> +		pattern.min_age_region = thres;
+>> +		break;
+>> +	default:
+>> +		return NULL;
+>> +	}
+>> +
+> This switch-case makes me wondering if the 'default' case really possible case.
+> I think it would be clearer to set these from caller.
 >
-> >  }
-> >
-> > --
-> > 2.25.1
-> >
+> IMHO, it might be clearer and shorter to define a static global 'struct
+> damos_access_pattern' stub variable, and make the
+> damon_lru_sort_new_{hot,cold}_scheme() copies it to their local variable,
+> update the relevant fields, and pass that to 'damon_new_scheme()'.  What do you
+> think?
 >
+>>   	return damon_new_scheme(
+>>   			/* find the pattern, and */
+>> -			pattern,
+>> +			&pattern,
+>>   			/* (de)prioritize on LRU-lists */
+>>   			action,
+>>   			/* under the quota. */
+>> @@ -157,37 +180,13 @@ static struct damos *damon_lru_sort_new_scheme(
+>>   /* Create a DAMON-based operation scheme for hot memory regions */
+>>   static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+>>   {
+>> -	struct damos_access_pattern pattern = {
+>> -		/* Find regions having PAGE_SIZE or larger size */
+>> -		.min_sz_region = PAGE_SIZE,
+>> -		.max_sz_region = ULONG_MAX,
+>> -		/* and accessed for more than the threshold */
+>> -		.min_nr_accesses = hot_thres,
+>> -		.max_nr_accesses = UINT_MAX,
+>> -		/* no matter its age */
+>> -		.min_age_region = 0,
+>> -		.max_age_region = UINT_MAX,
+>> -	};
+>> -
+>> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
+>> +	return damon_lru_sort_new_scheme(hot_thres, DAMOS_LRU_PRIO);
+> If we follow what I suggested above, we could make this like below:
 >
-> --
-> Luiz Augusto von Dentz
+> 	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
+>
+> 	pattern.min_nr_accesses = hot_thres;
+> 	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
+Agree totally,  i will fix it in the next patch.
+>>   }
+>>   
+>>   /* Create a DAMON-based operation scheme for cold memory regions */
+>>   static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
+>>   {
+>> -	struct damos_access_pattern pattern = {
+>> -		/* Find regions having PAGE_SIZE or larger size */
+>> -		.min_sz_region = PAGE_SIZE,
+>> -		.max_sz_region = ULONG_MAX,
+>> -		/* and not accessed at all */
+>> -		.min_nr_accesses = 0,
+>> -		.max_nr_accesses = 0,
+>> -		/* for min_age or more micro-seconds */
+>> -		.min_age_region = cold_thres,
+>> -		.max_age_region = UINT_MAX,
+>> -	};
+>> -
+>> -	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
+>> +	return damon_lru_sort_new_scheme(cold_thres, DAMOS_LRU_DEPRIO);
+> And similarly here.
+>
+>>   }
+>>   
+>>   static int damon_lru_sort_apply_parameters(void)
+>> -- 
+>> 2.31.0
+>>
+>>
+>
+> Thanks,
+> SJ
