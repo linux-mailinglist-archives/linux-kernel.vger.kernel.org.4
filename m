@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09995B98BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D515B98C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiIOK1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 06:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S229933AbiIOK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiIOK1u (ORCPT
+        with ESMTP id S229632AbiIOK3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:27:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CCC97D44;
-        Thu, 15 Sep 2022 03:27:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D14926600371;
-        Thu, 15 Sep 2022 11:27:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663237668;
-        bh=fAUuUgx4PgoGY4gQr2IMZ6T5dmjhyUOc5bLVNivN6Hw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F1u56N8hpZ6Wj9eJLKmb5gV7fbGagzJGPWqNq5+8fgV1a6ywMivyOUUL8W2NY9pyK
-         e3j5+7TiGTtSZGTJCEfDrqaVBGUXfTESjB2sgilXKHEy5LQfw7jQIfIvBA/09nJilk
-         zFMIfsL18TJhR92Gpklq8oQjvKuhPJE43GI2gV8fhoKSqSIZ9LAZrbxN/Jv/TuZDIx
-         hJfIR0m6a+Ip2noRgymPu5toXMFG45nAgqmKJgeYwXXuFL0G2vEQ3OmWNplvZNYmHk
-         Vy4svP4ulR0n1ydL10x6/RhoxjsObt0dd5QWPcpGthMq6OvjpDcDsKV231cjh6yABu
-         PHkyc5+zKjBIA==
-Message-ID: <ad21638e-f233-2bf0-ca62-72228ff04ff7@collabora.com>
-Date:   Thu, 15 Sep 2022 12:27:44 +0200
+        Thu, 15 Sep 2022 06:29:32 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBF9BDC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 03:29:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so2983067wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 03:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date;
+        bh=y3YnLw+nXEeLifDonLqSm9OS37vY/PHeQsoRqCvRyZw=;
+        b=tb0VtQ7Dm1ElTc3P918h0Z4a+VCawiprdrJqFkrB4GOgPgdql0CHr2ol99ytX5NgyU
+         t6w6gjVNIgsTz/FhjvMRQgcmKiV+pMniz+rQ0PdbdxfhjtFotTgr404R3wJLWtHgj2v8
+         /IxVUOsYDo8Fvwm6Ly+vr8gWoUCIT6ileC3lrickMewYOpTt5AyxPpdFvQQcOI66DQw3
+         SRr89pxSzjoqa+syiBId6rfOgBAHASwgpMgVin3+XuAxOmqNtX4XpJs21HmrWqYQ1gWg
+         ABtzJu04XDzNrLoZMh6gBHN2wVk443HUM8nbDwUHmyTEGTQaABfjmKr3gdaN+cZNnm2M
+         WUFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=y3YnLw+nXEeLifDonLqSm9OS37vY/PHeQsoRqCvRyZw=;
+        b=AdJq48qQAQImCY+SYK1zbCf1Cg7lZBTGMZBQVk/PjRgtK6PaEFn+4g4/i6jUa+s8tR
+         umJj9U1PQwUmmiB8sL6YROA5cSnmP9h8oV7a9CKhUmyvL7Wsjbr9Plrj1DCGKbN3yPPO
+         /OIHRuveDmsuEHCExG9yWX4LyZZv7FIL1VVc5yQ/rm/bDO7TKRn/criKX3J9LYscz2xc
+         Fjme8EwY3s7lzhI15Tmg3dve2hoLTB13Tce6eTivG5RNuk2lMd2zSGVojIhuBv7pCD2B
+         5vSX8l6ci+k7aaNAGUoX4U3G9CtnQrHACzuVmITsd+3DjEO4INhapaWe8sN1ZkAriHvG
+         hAEw==
+X-Gm-Message-State: ACgBeo3wN6AbMaCbeDeguFdcTKaXld8eO/A8h6iiwc7TjOl1z6g8cPUj
+        nHrvLUKNdvsJNlCjQfthwntDJg==
+X-Google-Smtp-Source: AA6agR7ax1DEZBhTdEExCg1H+xG0foTJjRODIus60KxmYrRQOkYTyvp0sv60JG8wV9Tb0stIHQOEtw==
+X-Received: by 2002:a7b:c013:0:b0:3b4:a682:a640 with SMTP id c19-20020a7bc013000000b003b4a682a640mr3734590wmb.136.1663237767964;
+        Thu, 15 Sep 2022 03:29:27 -0700 (PDT)
+Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
+        by smtp.gmail.com with ESMTPSA id q17-20020adff951000000b00228dff8d975sm2098257wrr.109.2022.09.15.03.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 03:29:27 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, dianders@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v1 0/2] Fix chrontel-ch7033 reversion
+Date:   Thu, 15 Sep 2022 12:29:22 +0200
+Message-Id: <20220915102924.370090-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 4/4] arm64: dts: mediatek: cherry: Add edptx and dptx
- support
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220915094640.5571-1-rex-bc.chen@mediatek.com>
- <20220915094640.5571-5-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220915094640.5571-5-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/09/22 11:46, Bo-Chen Chen ha scritto:
-> In cherry projects, we use edptx as the internal display interface
-> and use dptx as the external display interface. To support this, we
-> need to add more properties.
-> 
-> - Add pinctrls for edptx and dptx.
-> - Add ports for edptx and dptx.
-> 
-> The port connections for the internal and external display:
-> dp-intf0 -> edptx -> panel
-> dp-intf1 -> dptx
-> 
-> Because it lacks port of panel, so we keep empty remote-endpoint for
-> port1@edptx.
+When the chrontel-ch7033 series from Chris Morgan was reverted[1], I made mistake.
 
-Better wording:
+Patch 2/2 in this[1] series reverts [2] when it should have reverted [3].
 
-The eDP TX endpoint is kept empty for now, as the panel addition will come
-in a later commit.
+This series fixes this mistake.
 
-> 
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-...after which:
+[1] https://lore.kernel.org/all/20220912113856.817188-1-robert.foss@linaro.org/
+[2] c312b0df3b13 - drm/bridge: ti-sn65dsi86: Implement bridge connector operations for DP
+[3] ce9564cfc9ae - drm/bridge: chrontel-ch7033: Add byteswap order setting
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Robert Foss (2):
+  Revert "Revert "drm/bridge: ti-sn65dsi86: Implement bridge connector
+    operations for DP""
+  Revert "drm/bridge: chrontel-ch7033: Add byteswap order setting"
 
+ drivers/gpu/drm/bridge/chrontel-ch7033.c | 15 ++-----------
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c    | 28 ++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 13 deletions(-)
+
+-- 
+2.34.1
 
