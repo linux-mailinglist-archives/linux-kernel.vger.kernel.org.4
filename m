@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8E5B9E17
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F7E5B9E18
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiIOPF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S230383AbiIOPFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiIOPFJ (ORCPT
+        with ESMTP id S230270AbiIOPFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:05:09 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D4726118
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:50 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id qa33-20020a17090786a100b0077a69976d24so6989649ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:50 -0700 (PDT)
+        Thu, 15 Sep 2022 11:05:15 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561F12DA9D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:53 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id y9-20020a056402270900b00451dfbbc9b2so8662521edd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
-        b=EznsgfSiy9WifxPdZjYT1Vwj2wYB4AW4etiNBG8scEb5xiAuby2h1T+k5Dja+N3dWf
-         S2duxflNmAPHuHcgocbmA96vZwFvrsgfdpnNtgj4uq+eTJxlt5j2bMabt1gCsRhCJDg0
-         AzJpKEbhLm7ml6bETgD4W/9UBTpmd8EsT/Am6VtGzrLBUEUuaNnF2fOKbJNN/Aff33pA
-         czLuVMpyryuAc03jszny9BsfuzYr+hnv5Q0Y0MfzpdFRm1q9kcGSv2bsQlwBLHtxb+Ub
-         wZPRS/RuAFlH1BM4U0m04fB6G24UfKuxoKx9lbER6yfzIS/q5yq4d5MQKvhKRZhxWaXW
-         sOjg==
+        bh=fFq4uMFAQOrpNZLU6ydmQ4L19fVmnSZ8zUbgI7i1GQ4=;
+        b=cYFC7xgwkG3gs04oiPHichqf/b1cFGgnshWpci997Y8A5dmNKzM9GLf1pSniU9D5ku
+         Hu0GNNgLGKOuCAjrWJaXT+n9N89m2OxLOF0aOwdMyJRfQdseBJiGghcUNTQyFs/ZUubo
+         G0Bq2nmYZaMX470D+dLwGf+5tXv+CdH3F2TMy+uDbAiFguTk8zqG98QgRczskOtYOVDt
+         jAjc9/Nvo2lVMh0sB6dJ8QlQ6FSwdkrIQtBbc5j54TAMFUpg1fazPK6geXTDbKZa+hK/
+         CtUyiXzLrd1aFajhJlu7Z3AG5P4f56KCWQ3N8ixK5cFk+NBX9dXK5inzenk1xXL3SCUs
+         gf6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
-        b=aYIc3HlKNHqMQ0+DiOcO9El6YSa3geTBg3vNG6M2wo20TMHJ2UkhBuzYqN4J2BQBen
-         QDDuLRFhPUuPbvZSnXiySC2zowkIvKok4rTbwJOouM+I3DMenxBC5u5A6YiISzWQjWno
-         Fkdc+HTH94TvdmQXg64J4WmG/3mWr1niSBwwjnM2dGF4aTz164PXtujQEEVsHLm7ZNri
-         XlYRqvqr2H5eHfThR6EJ9AZSvf2+mELQ+WpICUzPk+Td0pnnz3SQUvTIYguN9uHMPFNF
-         eI76h3nDP+U07TCWVLSCvqxwixOfNpySoJkNFO68NzLsOI6NqXwiuj5t4tnI5hcdlN/2
-         Uo4g==
-X-Gm-Message-State: ACrzQf0jGQB3tNVv+Vct0w1ynbVjXwms5epsFYyCwDVjUShWYwZFHCo8
-        hPXVQi9AFEmkraU+GHxJKUsw7LVzLo0=
-X-Google-Smtp-Source: AMsMyM5aonhljpQzaVwxXn/+2WXKN29fLiAxHjU40s/VJeTy2/yz2WCgfXCD6zZKzAdUnorRQiOSr1kogeM=
+        bh=fFq4uMFAQOrpNZLU6ydmQ4L19fVmnSZ8zUbgI7i1GQ4=;
+        b=oLkZpO986bC6wmA0dPzUjO/nSha8ucyzgclcXhubnDjpQHaZNQfAMP5/NKMo8spOBK
+         fqUM2DhgSvnPeQ/SlvpsefTioTaNwYds9vdn8FY1bKWZJf9L2Wvbmd9SbRBXARyFsrnD
+         SaN7D9AwKKA9MXXRzy89HgUD18dGPHHwzfgSNa6MpBNaKvO/zffyxMXJvgEA6k3ENcd6
+         ArlnM2zlfMGDWNdje4QcHX00DxQW9cnqG90fe0HEOvJBkOvSvLjEzHKPyPPtxqud+Goc
+         N1J9M7nlXDqyfcj+PyTVQowMnpYHLPdpMs3Ue3DDFtJcPjgT1Rs8NAIiyDz2ETpUU7uz
+         KzDA==
+X-Gm-Message-State: ACrzQf3I23uabEaytIPywAt6QCwhfGPgIcjwtIWOVEP5xmOkxdWxgbfk
+        Lggwb79gPrqXxtrDPZ3SuIzB7JtRrFg=
+X-Google-Smtp-Source: AMsMyM6nb4U8HQAI/T9hvY7h7118sHc1IkAnGq/cw4fx9f/IsFE0PzlQ/IJC4zd5NEMJksDjOy7tAJB6OCw=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a05:6402:c8a:b0:44e:81b3:4b7e with SMTP id
- cm10-20020a0564020c8a00b0044e81b34b7emr256022edb.181.1663254289168; Thu, 15
- Sep 2022 08:04:49 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:03:38 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:272a:b0:77c:d7df:c9da with SMTP id
+ d10-20020a170907272a00b0077cd7dfc9damr318116ejl.332.1663254291795; Thu, 15
+ Sep 2022 08:04:51 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:03:39 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-5-glider@google.com>
-Subject: [PATCH v7 04/43] x86: asm: instrument usercopy in get_user() and put_user()
+Message-ID: <20220915150417.722975-6-glider@google.com>
+Subject: [PATCH v7 05/43] asm-generic: instrument usercopy in cacheflush.h
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -91,7 +91,7 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,142 +99,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use hooks from instrumented.h to notify bug detection tools about
-usercopy events in variations of get_user() and put_user().
+Notify memory tools about usercopy events in copy_to_user_page() and
+copy_from_user_page().
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
+
 ---
 v5:
- -- handle put_user(), make sure to not evaluate pointer/value twice
+ -- cast user pointers to `void __user *`
 
-v6:
- -- add missing empty definitions of instrument_get_user() and
-    instrument_put_user()
-
-Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
+Link: https://linux-review.googlesource.com/id/Ic1ee8da1886325f46ad67f52176f48c2c836c48f
 ---
- arch/x86/include/asm/uaccess.h | 22 +++++++++++++++-------
- include/linux/instrumented.h   | 28 ++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+), 7 deletions(-)
+ include/asm-generic/cacheflush.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 913e593a3b45f..c1b8982899eca 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
+diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+index 4f07afacbc239..f46258d1a080f 100644
+--- a/include/asm-generic/cacheflush.h
++++ b/include/asm-generic/cacheflush.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_GENERIC_CACHEFLUSH_H
+ #define _ASM_GENERIC_CACHEFLUSH_H
+ 
 +#include <linux/instrumented.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -103,6 +104,7 @@ extern int __get_user_bad(void);
- 		     : "=a" (__ret_gu), "=r" (__val_gu),		\
- 			ASM_CALL_CONSTRAINT				\
- 		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
-+	instrument_get_user(__val_gu);					\
- 	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
- 	__builtin_expect(__ret_gu, 0);					\
- })
-@@ -192,9 +194,11 @@ extern void __put_user_nocheck_8(void);
- 	int __ret_pu;							\
- 	void __user *__ptr_pu;						\
- 	register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);		\
--	__chk_user_ptr(ptr);						\
--	__ptr_pu = (ptr);						\
--	__val_pu = (x);							\
-+	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
-+	__typeof__(ptr) __ptr = (ptr); /* eval ptr once */		\
-+	__chk_user_ptr(__ptr);						\
-+	__ptr_pu = __ptr;						\
-+	__val_pu = __x;							\
- 	asm volatile("call __" #fn "_%P[size]"				\
- 		     : "=c" (__ret_pu),					\
- 			ASM_CALL_CONSTRAINT				\
-@@ -202,6 +206,7 @@ extern void __put_user_nocheck_8(void);
- 		       "r" (__val_pu),					\
- 		       [size] "i" (sizeof(*(ptr)))			\
- 		     :"ebx");						\
-+	instrument_put_user(__x, __ptr, sizeof(*(ptr)));		\
- 	__builtin_expect(__ret_pu, 0);					\
- })
- 
-@@ -248,23 +253,25 @@ extern void __put_user_nocheck_8(void);
- 
- #define __put_user_size(x, ptr, size, label)				\
- do {									\
-+	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
- 	__chk_user_ptr(ptr);						\
- 	switch (size) {							\
- 	case 1:								\
--		__put_user_goto(x, ptr, "b", "iq", label);		\
-+		__put_user_goto(__x, ptr, "b", "iq", label);		\
- 		break;							\
- 	case 2:								\
--		__put_user_goto(x, ptr, "w", "ir", label);		\
-+		__put_user_goto(__x, ptr, "w", "ir", label);		\
- 		break;							\
- 	case 4:								\
--		__put_user_goto(x, ptr, "l", "ir", label);		\
-+		__put_user_goto(__x, ptr, "l", "ir", label);		\
- 		break;							\
- 	case 8:								\
--		__put_user_goto_u64(x, ptr, label);			\
-+		__put_user_goto_u64(__x, ptr, label);			\
- 		break;							\
- 	default:							\
- 		__put_user_bad();					\
- 	}								\
-+	instrument_put_user(__x, ptr, size);				\
- } while (0)
- 
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-@@ -305,6 +312,7 @@ do {									\
- 	default:							\
- 		(x) = __get_user_bad();					\
- 	}								\
-+	instrument_get_user(x);						\
- } while (0)
- 
- #define __get_user_asm(x, addr, itype, ltype, label)			\
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index ee8f7d17d34f5..9f1dba8f717b0 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -153,4 +153,32 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
- {
- }
- 
-+/**
-+ * instrument_get_user() - add instrumentation to get_user()-like macros
-+ *
-+ * get_user() and friends are fragile, so it may depend on the implementation
-+ * whether the instrumentation happens before or after the data is copied from
-+ * the userspace.
-+ *
-+ * @to destination variable, may not be address-taken
-+ */
-+#define instrument_get_user(to)                         \
-+({                                                      \
-+})
 +
-+/**
-+ * instrument_put_user() - add instrumentation to put_user()-like macros
-+ *
-+ * put_user() and friends are fragile, so it may depend on the implementation
-+ * whether the instrumentation happens before or after the data is copied from
-+ * the userspace.
-+ *
-+ * @from source address
-+ * @ptr userspace pointer to copy to
-+ * @size number of bytes to copy
-+ */
-+#define instrument_put_user(from, ptr, size)                    \
-+({                                                              \
-+})
+ struct mm_struct;
+ struct vm_area_struct;
+ struct page;
+@@ -105,14 +107,22 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
+ #ifndef copy_to_user_page
+ #define copy_to_user_page(vma, page, vaddr, dst, src, len)	\
+ 	do { \
++		instrument_copy_to_user((void __user *)dst, src, len); \
+ 		memcpy(dst, src, len); \
+ 		flush_icache_user_page(vma, page, vaddr, len); \
+ 	} while (0)
+ #endif
+ 
 +
- #endif /* _LINUX_INSTRUMENTED_H */
+ #ifndef copy_from_user_page
+-#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+-	memcpy(dst, src, len)
++#define copy_from_user_page(vma, page, vaddr, dst, src, len)		  \
++	do {								  \
++		instrument_copy_from_user_before(dst, (void __user *)src, \
++						 len);			  \
++		memcpy(dst, src, len);					  \
++		instrument_copy_from_user_after(dst, (void __user *)src, len, \
++						0);			  \
++	} while (0)
+ #endif
+ 
+ #endif /* _ASM_GENERIC_CACHEFLUSH_H */
 -- 
 2.37.2.789.g6183377224-goog
 
