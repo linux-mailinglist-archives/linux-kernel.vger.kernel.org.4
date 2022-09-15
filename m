@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D385B96D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5C95B96D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIOJAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 05:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S230000AbiIOJAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiIOJAW (ORCPT
+        with ESMTP id S230107AbiIOJAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 05:00:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A554DB65
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 02:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6NWzU2x4Ef7zL3j8qPAIFaFolS89FfnM0DkhA07fsjw=; b=G/o2KLDgiCzGrigke6xL/2ccww
-        Umm4E5S9jZVD9Hr+zFJn4ddnjcClkghv/yTSz3bZMMa4mM4EEFO/k5Q2KzNpNLw5uaMzR36OfkJ1X
-        Y+CiZZc3JVakpzG01/lBsdVykxBnhuBjKV9z3RKH5RWuYg5/G1imEwblNBsglf6LPod3+mK3sjsWv
-        AP5lVJ9sMgObdBn2SnTF89xI+u/hRt2uNFdrbc6TccJHDhd0FVmAzdgUWov2Bwhfy/a58NyvsmKyT
-        z9UZrlAju08JHpF2+t8kROsIIWeKuXSbucY9rvNgvvctnIVZtz3vHAf+unXjY1OpNmz0ZgcfUKe5L
-        YtCPB4Rg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYkj8-000wfT-En; Thu, 15 Sep 2022 09:00:06 +0000
-Date:   Thu, 15 Sep 2022 10:00:06 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
- kswapd
-Message-ID: <YyLpls9/t6LKQefS@casper.infradead.org>
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
- <YyLUGnqtZXn4MjJF@casper.infradead.org>
- <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
+        Thu, 15 Sep 2022 05:00:37 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43BF14010
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 02:00:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so14572204pja.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 02:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yVCLZymkDZaWtxR0MNc+zLjIKkCSRMaWEa+EeRCKnmM=;
+        b=dwS6es3AJ+BLIMYIUPbZDti8uwoPuGw1K86yTn14ak5NfLQbsR14T5dQdL954Ixv+D
+         VyOt93yLXL1L2HtoRLAkSsprycIcLrOnnp/lXu1itwU/Fk613/p1txSfzR7gD7238GpL
+         EcMbMiMvGt54SpLL5OKI7fVT/y23466rrTaz7lON+01USKt7cqqemxCGt/zwuvkNPvUH
+         HJH+IWAEHexuB9Dy4R/WBWxv1hAyRgM8QwhY4xMXSoenyLUcjNRP5W9Xjp8h/meBpl17
+         8f5smvhoDOwPsfR57y0EyzLX4EOwjxDnYLsegz6C5iEUDBcfIuwU7DWLJW9XG1qoQjzO
+         DD4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yVCLZymkDZaWtxR0MNc+zLjIKkCSRMaWEa+EeRCKnmM=;
+        b=MqCQxFoo4kYO3OkG1D/gKYIJMvN8P5qpGHdrQUHGC9HKGi9ZCpqz4hMBvDHvfMwNY0
+         En/vUHBjT5rxW6xRs7ywQs2BSfc54u5/3cJrlcpwoivimFxR0ER/alPSnUC8LwsK8Ep0
+         9+NGLj+gbjG4UZ4biGGb7rgZcGeHR9ZfoMSJdUwMHuNm6Q28SU5b8dg4zbjb+Lh3GcwI
+         DtDLEj1xY91FE7H6sr2B5vRqlfTpYJRWZWPCNOLVcUKIwO7XMMwBdVlh49+1gb2QSlg/
+         z3Q2NIV5A5ePXpkI3T4LlrP39QNDvX1E+G1kQBiLBb5gf+I0Wjo8aIGLdUv77BYhRix3
+         gK9g==
+X-Gm-Message-State: ACrzQf0mFrC7i0EHqKketmUWacwv5ER066tjJvpoAID/Y+POAX4474aE
+        qepaqB3wvVVTviWk6pfc6xA=
+X-Google-Smtp-Source: AMsMyM4EdA8YCfUrWvPsPb30MArQlPgwgQunnHDATBkKIRBr1nRVIsfw6BwBxK2vCwVVFc6UP9FBHQ==
+X-Received: by 2002:a17:902:70c6:b0:173:c64:c03b with SMTP id l6-20020a17090270c600b001730c64c03bmr3212726plt.34.1663232429179;
+        Thu, 15 Sep 2022 02:00:29 -0700 (PDT)
+Received: from ubuntu ([175.124.254.119])
+        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0016f8e8032c4sm12281063plb.129.2022.09.15.02.00.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 02:00:28 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 02:00:23 -0700
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, laforge@gnumonks.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Paul Fulghum <paulkf@microgate.com>,
+        akpm@osdl.org, Lubomir Rintel <lkundrak@v3.sk>, imv4bel@gmail.com
+Subject: Re: [PATCH] pcmcia: synclink_cs: Fix use-after-free in mgslpc_ioctl()
+Message-ID: <20220915090023.GA112572@ubuntu>
+References: <20220913052020.GA85241@ubuntu>
+ <a8a9fd74-4ee5-4619-8492-be7139e6d48e@www.fastmail.com>
+ <20220915020834.GA110086@ubuntu>
+ <f41c2765-80e0-48bc-b1e4-8cfd3230fd4a@www.fastmail.com>
+ <YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
-> Hi Matthew,
-> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
-> > On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
-> > > [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
-> > > seconds.
-> > > [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
-> > > [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> > > this message.
-> > > [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
-> > > 77327 flags:0x00004002
-> > > [ 3748.483358] Call Trace:
-> > > [ 3748.485964]  <TASK>
-> > > [ 3748.488150]  __schedule+0x23d/0x590
-> > > [ 3748.491804]  schedule+0x4e/0xc0
-> > > [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
-> > > [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
-> > > [ 3748.505181]  down_read+0x43/0xa0
-> > > [ 3748.508518]  do_user_addr_fault+0x41c/0x670
-> > > [ 3748.512799]  exc_page_fault+0x77/0x170
-> > > [ 3748.516673]  asm_exc_page_fault+0x26/0x30
-> > > [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
-> > > [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
-> > > 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
-> > > a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
-> > > [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
-> > > [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
-> > > 0000000000000010
-> > > [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
-> > > 00007f99faa1a000
-> > > [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
-> > > 0000000000000014
-> > > [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
-> > > 0000000000001000
-> > > [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
-> > > ffffaa9248fffd98
-> > > [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
-> > > [ 3748.592614]  filemap_read+0x174/0x3e0
-> > 
-> > Interesting; it wasn't the process itself which triggered the page
-> > fault; the process called read() and the kernel took the page fault to
-> > satisfy the read() call.
-> > 
-> > > [ 3748.596354]  ? ima_file_check+0x6a/0xa0
-> > > [ 3748.600301]  generic_file_read_iter+0xe5/0x150
-> > > [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
-> > > [ 3748.609164]  ? aa_file_perm+0x102/0x250
-> > > [ 3748.613125]  new_sync_read+0x10d/0x1a0
-> > > [ 3748.617009]  vfs_read+0x103/0x1a0
-> > > [ 3748.620423]  ksys_read+0x67/0xf0
-> > > [ 3748.623743]  __x64_sys_read+0x19/0x20
-> > > [ 3748.627511]  do_syscall_64+0x59/0xc0
-> > > [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
-> > > [ 3748.636144]  ? do_syscall_64+0x69/0xc0
-> > > [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
-> > > [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
-> > > [ 3748.649872]  ? irqentry_exit+0x1d/0x30
-> > > [ 3748.653737]  ? exc_page_fault+0x89/0x170
-> > > [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> > > [ 3748.663030] RIP: 0033:0x7f9a852989cc
-> > > [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
-> > > 0000000000000000
-> > > [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
-> > > 00007f9a852989cc
-> > > [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
-> > > 0000000000000061
-> > > [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
-> > > 00007f99faa18010
-> > > [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
-> > > 00007f99faa18010
-> > > [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
-> > > 0000000000027100
-> > 
-> > ORIG_RAX is 0, which matches sys_read.
-> > RDI is file descriptor 0x61
-> > RSI is plausibly a userspace pointer, 0x7f99faa18010
-> > RDX is the length, 0x27100 or 160kB.
-> > 
-> > That all seems reasonable.
-> > 
-> > What I really want to know is who is _holding_ the lock.  We stash
-> > a pointer to the task_struct in 'owner', so we could clearly find this
-> > out in the 'blocked for too long' report, and print their stack trace.
-> > 
-> As described in the comment for __rwsem_set_reader_owned,it is hard to track
-> read owners.So we could not clearly find out who blocked the process,it was
-> caused by multiple tasks.
+On Thu, Sep 15, 2022 at 10:02:35AM +0200, Dominik Brodowski wrote:
+> Actually, I'd prefer to apply a patch to fix this now-known problem first,
+> even if we deactive / remove these drivers immediately afterwards.
 
-Readers don't block readers.  You have a reader here, so it's being
-blocked by a writer.  And that writer's task_struct is stashed in
-rwsem->owner.  It would be nice if we dumped that information
-automatically ... but we don't do that today.  Perhaps you could
-grab that information from a crash dump if you have one.
+Ok. A patch for the synclink_cs.c driver was submitted first on this mailing list, 
+and the other two will be submitted soon.
 
-> > You must have done something like this already in order to deduce that
-> > it was the direct reclaim path that was the problem?
-> > 
-> The method we used is to track the direct reclaim using the
-> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
-> occurred,we could get a very large "nr_reclaimed" which is not a desirable
-> value for process except kswapd.
 
-I disagree.  If a process needs to allocate memory then it should be
-paying the cost of reclaiming that memory itself.  kswapd is a last
-resort to reclaim memory when we have a workload (eg a network router)
-that does its memory allocation primarily in interrupt context.
+Best Regards,
+Hyunwoo Kim.
