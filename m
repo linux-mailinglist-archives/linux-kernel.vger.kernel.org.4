@@ -2,80 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386D65B98E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415745B98F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiIOKeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 06:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S229749AbiIOKk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 06:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiIOKeO (ORCPT
+        with ESMTP id S229698AbiIOKk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:34:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43D298A4C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 03:34:10 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 15 Sep 2022 06:40:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214773120C;
+        Thu, 15 Sep 2022 03:40:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C68D96601AAA;
-        Thu, 15 Sep 2022 11:34:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663238049;
-        bh=J5mscqBjskoIJTmbE49fccjEFLGV2r8MvVioIABdkxI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dKPxgbQRShNmGL/b7jZx4PFKNG282zTyXxU+SfgKnAbV4J6/XFebgfvLrEn6pGQYt
-         xgThBVrgkdLdLKlmjs+zn33eG57xjFbB2AOdRagNudkFEaGNghFNB80NPjvM5AqBGk
-         I3FWJCRpuDyZUXbfoItND/0tPF/peiUJw3580L6T3aRZLuzP0Ust49x2AKczfZo2yP
-         OVSJ5Jxa7tS4KXIpll+cEgFvlwh0FxosQUuV7q1gGC1E0PmMFp05tyTvIGGTjPztmb
-         HdNUnD3thRUbkvjOwrWpG6TEJ5KEL4T2ZiDDunFB3MgKIZ709DdrmSXjJxibvI1jDr
-         6saRbAzdJcLOQ==
-Message-ID: <47c6f2a3-ad38-c9c6-544b-5b2d1a234593@collabora.com>
-Date:   Thu, 15 Sep 2022 12:34:06 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB52D6212B;
+        Thu, 15 Sep 2022 10:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4E7C433C1;
+        Thu, 15 Sep 2022 10:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663238426;
+        bh=gdWuKdyhRj7htG7ALpc4cMPlF+Faodno9EvbagGtQew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Owaj92/i0efAzzMlYlAkC58TnTvhasZjtzJ92WeDfkrtdNayLSKav7JgeBh9YkDxW
+         s+dwYrej4hQeEfy8AHBEidUUpU1/DcvjbBbcbynmqNh6E5u6LJWVUWOSVHuLD5tC6b
+         41H4AkGiN8vJDluYfrVYD4zHHpf7AOC6BENYlCXg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.258
+Date:   Thu, 15 Sep 2022 12:40:50 +0200
+Message-Id: <166323845116159@kroah.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/3] drm/mediatek: dp: Refactor drivers in
- mtk_dp_bdg_detect()
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie
-Cc:     matthias.bgg@gmail.com, granquet@baylibre.com, daniel@ffwll.ch,
-        jitao.shi@mediatek.com, ck.hu@mediatek.com,
-        liangxu.xu@mediatek.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220915075028.644-1-rex-bc.chen@mediatek.com>
- <20220915075028.644-2-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220915075028.644-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/09/22 09:50, Bo-Chen Chen ha scritto:
-> It is more clear to modify this in mtk_dp_bdg_detect().
+I'm announcing the release of the 4.19.258 kernel.
 
-I agree with this commit. Since you anyway have to send a v2 of this series,
-please clarify the commit description and title, something like:
+All users of the 4.19 kernel series must upgrade.
 
-drm/mediatek: dp: Reduce indentation in mtk_dp_bdg_detect()
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-In order to improve human readability, reduce the indentation by returning
-early if the dp/edp cable is not plugged in.
+thanks,
 
-Cheers,
-Angelo
+greg k-h
 
+------------
+
+ Makefile                                      |    2 -
+ arch/arm64/kernel/cacheinfo.c                 |    6 ++-
+ arch/mips/loongson32/ls1c/board.c             |    1 
+ arch/parisc/kernel/head.S                     |   43 +++++++++++++++++++++-
+ arch/s390/include/asm/hugetlb.h               |    6 ++-
+ arch/s390/kernel/vmlinux.lds.S                |    1 
+ arch/x86/include/asm/nospec-branch.h          |   14 +++++++
+ drivers/android/binder.c                      |   12 ++++++
+ drivers/base/dd.c                             |   10 +++++
+ drivers/clk/clk.c                             |    3 -
+ drivers/firmware/efi/capsule-loader.c         |   31 +++-------------
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         |    3 +
+ drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c       |    1 
+ drivers/gpu/drm/i915/gvt/handlers.c           |    2 -
+ drivers/gpu/drm/msm/dsi/dsi_cfg.c             |    2 -
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c         |    2 -
+ drivers/gpu/drm/radeon/radeon_device.c        |    3 +
+ drivers/hwmon/gpio-fan.c                      |    3 +
+ drivers/infiniband/hw/mlx5/mad.c              |    6 +++
+ drivers/input/misc/rk805-pwrkey.c             |    1 
+ drivers/net/ethernet/intel/i40e/i40e_client.c |    5 ++
+ drivers/net/ethernet/rocker/rocker_ofdpa.c    |    2 -
+ drivers/net/ieee802154/adf7242.c              |    3 +
+ drivers/net/phy/dp83822.c                     |    1 
+ drivers/net/wireless/intel/iwlegacy/4965-rs.c |    5 --
+ drivers/parisc/ccio-dma.c                     |   11 ++++-
+ drivers/platform/x86/pmc_atom.c               |    2 -
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c          |    2 -
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c           |   50 ++++++++++++++++++++------
+ drivers/staging/rtl8712/rtl8712_cmd.c         |   36 ------------------
+ drivers/thunderbolt/ctl.c                     |    2 -
+ drivers/tty/serial/fsl_lpuart.c               |    4 +-
+ drivers/tty/vt/vt.c                           |   12 ++++--
+ drivers/usb/class/cdc-acm.c                   |    3 +
+ drivers/usb/core/hub.c                        |   10 +++++
+ drivers/usb/dwc2/platform.c                   |    8 ++--
+ drivers/usb/dwc3/core.c                       |   19 +++++----
+ drivers/usb/dwc3/dwc3-qcom.c                  |   14 ++++++-
+ drivers/usb/dwc3/host.c                       |    1 
+ drivers/usb/gadget/function/storage_common.c  |    6 ++-
+ drivers/usb/host/xhci-hub.c                   |   13 ++++++
+ drivers/usb/host/xhci.c                       |   19 ++-------
+ drivers/usb/host/xhci.h                       |    4 --
+ drivers/usb/serial/ch341.c                    |   15 ++++++-
+ drivers/usb/serial/cp210x.c                   |    1 
+ drivers/usb/serial/ftdi_sio.c                 |    2 +
+ drivers/usb/serial/ftdi_sio_ids.h             |    6 +++
+ drivers/usb/serial/option.c                   |   15 +++++++
+ drivers/usb/storage/unusual_devs.h            |    7 +++
+ drivers/usb/typec/altmodes/displayport.c      |    4 +-
+ drivers/video/fbdev/chipsfb.c                 |    1 
+ fs/debugfs/inode.c                            |   22 +++++++++++
+ include/linux/buffer_head.h                   |   11 +++++
+ include/linux/debugfs.h                       |    6 +++
+ include/linux/platform_data/x86/pmc_atom.h    |    6 ++-
+ include/linux/usb.h                           |    2 +
+ include/linux/usb/typec_dp.h                  |    5 ++
+ kernel/kprobes.c                              |    1 
+ mm/kmemleak.c                                 |    8 ++--
+ net/bridge/br_netfilter_hooks.c               |    2 +
+ net/bridge/br_netfilter_ipv6.c                |    1 
+ net/ipv4/tcp_input.c                          |   29 ++++++++++-----
+ net/ipv6/seg6.c                               |    5 ++
+ net/kcm/kcmsock.c                             |   15 +++----
+ net/mac80211/ibss.c                           |    4 ++
+ net/mac802154/rx.c                            |    2 -
+ net/netfilter/nf_conntrack_irc.c              |    5 +-
+ net/sched/sch_sfb.c                           |   13 ++++--
+ net/smc/af_smc.c                              |    1 
+ net/sunrpc/xprt.c                             |    4 +-
+ net/tipc/monitor.c                            |    2 -
+ net/wireless/debugfs.c                        |    3 +
+ sound/core/seq/oss/seq_oss_midi.c             |    2 +
+ sound/core/seq/seq_clientmgr.c                |   12 ++----
+ sound/drivers/aloop.c                         |    7 ++-
+ sound/pci/emu10k1/emupcm.c                    |    2 -
+ sound/usb/stream.c                            |    2 -
+ 77 files changed, 418 insertions(+), 189 deletions(-)
+
+Alan Stern (1):
+      USB: core: Prevent nested device-reset calls
+
+Andy Shevchenko (1):
+      platform/x86: pmc_atom: Fix SLP_TYPx bitfield mask
+
+Armin Wolf (1):
+      hwmon: (gpio-fan) Fix array out of bounds access
+
+Candice Li (1):
+      drm/amdgpu: Check num_gfx_rings for gfx v9_0 rb setup.
+
+Carlos Llamas (1):
+      binder: fix UAF of ref->proc caused by race condition
+
+Chen-Yu Tsai (2):
+      clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops
+      clk: core: Fix runtime PM sequence in clk_core_unprepare()
+
+Chris Mi (1):
+      RDMA/mlx5: Set local port to one when accessing counters
+
+Christian A. Ehrhardt (1):
+      kprobes: Prohibit probes in gate area
+
+Colin Ian King (1):
+      drm/i915/reg: Fix spelling mistake "Unsupport" -> "Unsupported"
+
+Cong Wang (1):
+      kcm: fix strp_init() order and cleanup
+
+Dan Carpenter (3):
+      wifi: cfg80211: debugfs: fix return type in ht40allow_map_read()
+      staging: rtl8712: fix use after free bugs
+      tipc: fix shift wrapping bug in map_get()
+
+David Leadbeater (1):
+      netfilter: nf_conntrack_irc: Fix forged IP logic
+
+David Lebrun (1):
+      ipv6: sr: fix out-of-bounds read when setting HMAC data.
+
+Dongxiang Ke (1):
+      ALSA: usb-audio: Fix an out-of-bounds bug in __snd_usb_parse_audio_interface()
+
+Douglas Anderson (1):
+      drm/msm/dsi: Fix number of regulators for msm8996_dsi_cfg
+
+Duoming Zhou (1):
+      ethernet: rocker: fix sleep in atomic context bug in neigh_timer_handler
+
+Enguerrand de Ribaucourt (1):
+      net: dp83822: disable false carrier interrupt
+
+Eric Dumazet (1):
+      tcp: annotate data-race around challenge_timestamp
+
+Gerald Schaefer (1):
+      s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages
+
+Greg Kroah-Hartman (2):
+      debugfs: add debugfs_lookup_and_remove()
+      Linux 4.19.258
+
+Harsh Modi (1):
+      netfilter: br_netfilter: Drop dst references before setting.
+
+Heiner Kallweit (1):
+      usb: dwc2: fix wrong order of phy_power_on and phy_init
+
+Helge Deller (2):
+      vt: Clear selection before changing the font
+      parisc: Add runtime check to prevent PA2.0 kernels on PA1.x machines
+
+Hyunwoo Kim (1):
+      efi: capsule-loader: Fix use-after-free in efi_capsule_write
+
+Isaac J. Manjarres (1):
+      driver core: Don't probe devices after bus_type.match() probe deferral
+
+Ivan Vecera (1):
+      i40e: Fix kernel crash during module removal
+
+Jakub Kicinski (1):
+      Revert "sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb"
+
+Johan Hovold (5):
+      USB: serial: cp210x: add Decagon UCA device id
+      usb: dwc3: fix PHY disable sequence
+      USB: serial: ch341: fix lost character on LCR updates
+      USB: serial: ch341: fix disabled rx timer on older devices
+      usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
+
+Josh Poimboeuf (1):
+      s390: fix nospec table alignments
+
+Krishna Kurapati (1):
+      usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
+
+Li Qiong (1):
+      parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()
+
+Liang He (1):
+      soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
+
+Lin Ma (1):
+      ieee802154/adf7242: defer destroy_workqueue call
+
+Linus Torvalds (1):
+      fs: only do a memory barrier for the first set_buffer_uptodate()
+
+Mathias Nyman (2):
+      Revert "xhci: turn off port power in shutdown"
+      xhci: Add grace period after xHC start to prevent premature runtime suspend.
+
+Mika Westerberg (1):
+      thunderbolt: Use the actual buffer in tb_async_error()
+
+Miquel Raynal (1):
+      net: mac802154: Fix a condition in the receive path
+
+Neal Cardwell (1):
+      tcp: fix early ETIMEDOUT after spurious non-SACK RTO
+
+NeilBrown (1):
+      SUNRPC: use _bh spinlocking on ->transport_lock
+
+Niek Nooijens (1):
+      USB: serial: ftdi_sio: add Omron CS1W-CIF31 device id
+
+Pablo Sun (1):
+      usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
+
+Pattara Teerapong (1):
+      ALSA: aloop: Fix random zeros in capture data when using jiffies timer
+
+Peter Robinson (1):
+      Input: rk805-pwrkey - fix module autoloading
+
+Peter Zijlstra (1):
+      x86/nospec: Fix i386 RSB stuffing
+
+Qu Huang (1):
+      drm/amdgpu: mmVM_L2_CNTL3 register not initialized correctly
+
+Shenwei Wang (1):
+      serial: fsl_lpuart: RS485 RTS polariy is inverse
+
+Siddh Raman Pant (1):
+      wifi: mac80211: Don't finalize CSA in IBSS mode if state is disconnected
+
+Slark Xiao (1):
+      USB: serial: option: add support for Cinterion MV32-WA/WB RmNet mode
+
+Sreekanth Reddy (1):
+      scsi: mpt3sas: Fix use-after-free warning
+
+Stanislaw Gruszka (1):
+      wifi: iwlegacy: 4965: corrected fix for potential off-by-one overflow in il4965_rs_fill_link_cmd()
+
+Stephen Boyd (1):
+      Revert "clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops"
+
+Sudeep Holla (1):
+      arm64: cacheinfo: Fix incorrect assignment of signed error value to unsigned fw_level
+
+Takashi Iwai (2):
+      ALSA: seq: oss: Fix data-race for max_midi_devs access
+      ALSA: seq: Fix data-race at module auto-loading
+
+Tasos Sahanidis (1):
+      ALSA: emu10k1: Fix out of bounds access in snd_emu10k1_pcm_channel_alloc()
+
+Thierry GUIBERT (1):
+      USB: cdc-acm: Add Icom PMR F3400 support (0c26:0020)
+
+Toke Høiland-Jørgensen (3):
+      sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb
+      sch_sfb: Don't assume the skb is still around after enqueueing to child
+      sch_sfb: Also store skb len before calling child enqueue
+
+Witold Lipieta (1):
+      usb-storage: Add ignore-residue quirk for NXP PN7462AU
+
+Yacan Liu (1):
+      net/smc: Remove redundant refcount increase
+
+Yan Xinyu (1):
+      USB: serial: option: add support for OPPO R11 diag port
+
+Yang Ling (1):
+      MIPS: loongson32: ls1c: Fix hang during startup
+
+Yang Yingliang (1):
+      fbdev: chipsfb: Add missing pci_disable_device() in chipsfb_pci_init()
+
+Yee Lee (1):
+      Revert "mm: kmemleak: take a full lowmem check in kmemleak_*_phys()"
+
+Yonglin Tan (1):
+      USB: serial: option: add Quectel EM060K modem
+
+Zhenneng Li (1):
+      drm/radeon: add a force flush to delay work when radeon
+
+sunliming (1):
+      drm/msm/dsi: fix the inconsistent indenting
 
