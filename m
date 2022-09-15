@@ -2,143 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DCA5B9F23
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42425B9F2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiIOPqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S229703AbiIOPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIOPqS (ORCPT
+        with ESMTP id S229544AbiIOPtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:46:18 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6041398D0F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:46:17 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id u6-20020a056830118600b006595e8f9f3fso654362otq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:46:17 -0700 (PDT)
+        Thu, 15 Sep 2022 11:49:10 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A79B9926F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:49:09 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id n81so14810644iod.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=f4Fumy8gcL3d3cQFNIhX6OmK6+nx7NWNfwT8g9ms94Q=;
-        b=dgy3yC+GbPWzn6EryT1gBQVG3Urhiu762MCvKGNxmT1/82uUu4Aa56SWDG08ffSBE4
-         fodx6YTHss/KqGaPHbd/HPgbQxiTPo8H0YCQ0yQ4L7dY3PRxkg/dCKB0tYAi26/ZtlUJ
-         e+8Yq4w9g8Ls4l7PjHXLMnB1RulP8PcVDZLBy0+ZMuV5Fw8KDt0Mlf/s1sPC7hE6RYZu
-         9AN+DwIQNrBaT6Zdqa968LR+1RTnH0cjQTXSOJUsKTasYCAt75fInjI3Wskka7LMoFVI
-         G3DbLYW02B57gdiy0Ner8tqgO7x8yN6BsIgx1NeTSnAB6m5eC88ou/Yxl7YrZ13G7H1x
-         5Kuw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=RbcmCrt9MgNwVtS84rioFN6K+2EnzOOlimgTAZwP98I=;
+        b=ZWfyszh5ASkbDN5lS0dfsNxWt9+T9r+fI0UExDTPZRhVQuglIZnwGXd9pcrBMwT+DF
+         trkp5ZM/q57uF+azefdt/8dxoYLykqpa37Jz+ZulL03PsWodP3IVhsgjqanPo4bG8iPT
+         htWBYNR5phBWSyLHfrPJuwYCya2nS+S7SWHcg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=f4Fumy8gcL3d3cQFNIhX6OmK6+nx7NWNfwT8g9ms94Q=;
-        b=qbySFnMdxhKMGPofowei/izrm/OJrHO2cD5GvJWtT3LD0edBBsielyVaFhVt4ZCX3V
-         YlkFaPv3eGu856iGidtX/NxV8QCnQIY6AbgQ25AY3q+4ml2jVi1sMdRNQRzwDAPiQyXo
-         j6coVG23q5mHDbFXG8e8rqoMwl0Ze3yCMUjRbHogueUA1K/lCcYOO1Mr6HEVaovhfLH3
-         VZIaHzYaSM/PhmMAUmmWTU0OBd7otCdtDMec6LgUiho//4OSsMaiAsZlmnLMVP+yLnpU
-         8/utgYVKFUrIFfFoov5veWFkvLJgnbFzFrk514K7F009YwgmD32sQAb3hS9M3mYao+Qc
-         FF2Q==
-X-Gm-Message-State: ACrzQf0wYcgZU1suVkAUD3hRR9EBbOuhncNWTO1t2380DyHjtL6poEEn
-        gg24Uqf5OnmGxKGw2b9ff+Cx1XQ20vhLog==
-X-Google-Smtp-Source: AMsMyM6PIJngKnpR+IIYYsxZy3aFT965jWLYIrPPCRaXofO8IJrdB691WEpW3mAQvxDitrTXDYBDxA==
-X-Received: by 2002:a05:6830:2094:b0:656:56cc:662c with SMTP id y20-20020a056830209400b0065656cc662cmr134857otq.191.1663256776708;
-        Thu, 15 Sep 2022 08:46:16 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 107-20020a9d0ef4000000b00637190319eesm8795094otj.29.2022.09.15.08.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 08:46:15 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 11:46:13 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     brgl@bgdev.pl, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 1/3] gpio: idio-16: Introduce the ACCES IDIO-16 GPIO
- library module
-Message-ID: <YyNIxWS0sneUKas0@fedora>
-References: <cover.1662927941.git.william.gray@linaro.org>
- <6b28fb497c35def57c1920362c82402bed4bd23f.1662927941.git.william.gray@linaro.org>
- <YyCs1/HgOG31MX1N@smile.fi.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=RbcmCrt9MgNwVtS84rioFN6K+2EnzOOlimgTAZwP98I=;
+        b=ybD5ehRn7gCaTVj+HTvhPInFCmq+2Hd/QfWz6sJeEL9LjLOJ4KqtfsGM1OaM4nkd2q
+         a4Rr632HpS+Sx5A2pmaQDAnxvNTkO4csZaczydMJCZ/2LpM4ngUV0mpAsYDaUyVIlkJK
+         rUJwDZN3MjdcPTWokf8T2S0iTpQCGkMvP9a3TTUx+a1eTY5KXlQTe34kPmEJJOSenY/9
+         2rybW5LVKHLBUYgo3F0ogV8SlRD29/uLL5FKSjGmwpmPyOVqWSo0PgVjaYvk6I54tz3b
+         HaJEkOaNstwaDr+DiOq93Umy7XeGRMGMYlEvgJEdbyOiVsFfdY79XhCOFiHJ1qaQSOn7
+         gCYw==
+X-Gm-Message-State: ACrzQf1bY2HF8uIN6XO6Dyb7kqxcbLDnTLYDvuugnuUfCd9oenfNN28e
+        jxOe2+uEnhYS+jYw2rLmyfIvzfwKEKCt4w==
+X-Google-Smtp-Source: AMsMyM6Lrv9SZPNzrpFFqskPVvHHBHvItNobX2zfJyRaF+ss0azUrxFlmkcPkTUlukxlLCSIqW6rUA==
+X-Received: by 2002:a02:cb92:0:b0:358:3b30:7d44 with SMTP id u18-20020a02cb92000000b003583b307d44mr279060jap.319.1663256948193;
+        Thu, 15 Sep 2022 08:49:08 -0700 (PDT)
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com. [209.85.166.51])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056e02214e00b002eb52f831f6sm8074977ilv.57.2022.09.15.08.49.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:49:04 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id g8so12593056iob.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:49:03 -0700 (PDT)
+X-Received: by 2002:a05:6638:4110:b0:35a:6d6b:57f7 with SMTP id
+ ay16-20020a056638411000b0035a6d6b57f7mr326227jab.134.1663256942370; Thu, 15
+ Sep 2022 08:49:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nzu/QuXFHOIMvVdg"
-Content-Disposition: inline
-In-Reply-To: <YyCs1/HgOG31MX1N@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220914235801.1731478-1-rrangel@chromium.org>
+ <20220914155914.v3.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <YyMCcNl2zU4/xEHN@black.fi.intel.com>
+In-Reply-To: <YyMCcNl2zU4/xEHN@black.fi.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Thu, 15 Sep 2022 09:48:50 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30A2Tpst-WKj-u_rmrnV69Dby3j0+mFBKorzF4YMBySqBw@mail.gmail.com>
+Message-ID: <CAHQZ30A2Tpst-WKj-u_rmrnV69Dby3j0+mFBKorzF4YMBySqBw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tim Van Patten <timvp@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---Nzu/QuXFHOIMvVdg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Sep 13, 2022 at 07:16:23PM +0300, Andy Shevchenko wrote:
-> On Sun, Sep 11, 2022 at 04:34:38PM -0400, William Breathitt Gray wrote:
-> > +	if (*mask & GENMASK(7, 0))
-> > +		bitmap_set_value8(bits, ioread8(&reg->out0_7), 0);
-> > +	if (*mask & GENMASK(15, 8))
-> > +		bitmap_set_value8(bits, ioread8(&reg->out8_15), 8);
-> > +	if (*mask & GENMASK(23, 16))
-> > +		bitmap_set_value8(bits, ioread8(&reg->in0_7), 16);
-> > +	if (*mask & GENMASK(31, 24))
-> > +		bitmap_set_value8(bits, ioread8(&reg->in8_15), 24);
->=20
-> So, the addresses of the ports are not expected to be continuous?
-
-No, unfortunately the IDIO-16 devices allocate the FET outputs to byte
-offsets 0 and 4 while the isolated inputs are allocated to byte offsets
-1 and 5. I don't know the design reason for the split but that's the
-reason I'm reading these addresses by byte rather than by word.
-
-> > +		return;
+On Thu, Sep 15, 2022 at 4:46 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Wed, Sep 14, 2022 at 05:57:55PM -0600, Raul E Rangel wrote:
+> > Device tree already has a mechanism to pass the wake_irq. It does this
+> > by looking for the wakeup-source property and setting the
+> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> > ACPI interrupt wake flag to determine if the interrupt can be used to
+> > wake the system. Previously the i2c drivers had to make assumptions and
+> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> > If there is a device with an Active Low interrupt and the device gets
+> > powered off while suspending, the interrupt line will go low since it's
+> > no longer powered and wakes the system. For this reason we should
+> > respect the board designers wishes and honor the wake bit defined on the
+> > interrupt.
+> >
+> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> > ---
+> >
+> > Changes in v3:
+> > - Convert wake_capable to bool
+> > - Only update wake_capable pointer once
+> > - Move wake_capable local into local block
+> >
+> > Changes in v2:
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> >
+> >  drivers/i2c/i2c-core-acpi.c | 33 ++++++++++++++++++++++++---------
+> >  drivers/i2c/i2c-core-base.c |  8 +++++++-
+> >  drivers/i2c/i2c-core.h      |  4 ++--
+> >  3 files changed, 33 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > index c762a879c4cc6b..b3d68a9659ff4f 100644
+> > --- a/drivers/i2c/i2c-core-acpi.c
+> > +++ b/drivers/i2c/i2c-core-acpi.c
+> > @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
+> >       {}
+> >  };
+> >
+> > +struct i2c_acpi_irq_context {
+> > +     int irq;
+> > +     bool wake_capable;
+> > +};
 > > +
-> > +	spin_lock_irqsave(&state->lock, flags);
->=20
-> > +	if (value)
-> > +		set_bit(offset, state->out_state);
-> > +	else
-> > +		clear_bit(offset, state->out_state);
->=20
-> assign_bit()
->=20
-> But I'm wondering why do you need the atomic bitops under the lock?
+> >  static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >                             struct i2c_acpi_lookup *lookup)
+> >  {
+> > @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
+> >
+> >  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  {
+> > -     int *irq = data;
+> > +     struct i2c_acpi_irq_context *irq_ctx = data;
+> >       struct resource r;
+> >
 
-I don't think atomic bitops are necessary in this case because of the
-lock as you pointedly out, but I felt using these made the intention of
-the code clearer. Is there a non-atomic version of assign_bit(), or do
-you recommend I use bitwise operations directly here instead?
+> > -     if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
+> > -             *irq = i2c_dev_irq_from_resources(&r, 1);
+> > +     if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
+> > +             irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
+> > +             irq_ctx->wake_capable =
+> > +                     !!(r.flags & IORESOURCE_IRQ_WAKECAPABLE);
+>
+> You don't need the !!() here. Just
+>
+>                 irq_ctx->wake_capable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
+>
+You know, I learned something new today! I was concerned about this
+setting `wake_capable` to something that wasn't 0 or 1, but apparently
+this is handled by the compiler!
 
-> > +static inline int idio_16_get_direction(const unsigned long offset)
-> > +{
-> > +	return (offset < IDIO_16_NOUT) ? 0 : 1;
->=20
-> 	return (offset >=3D IDIO_16_NOUT) ? 1 : 0;
->=20
-> ?
+http://port70.net/~nsz/c/c11/n1570.html#6.3.1.2
 
-I have no particular preference in this case, so I can switch this to
-the >=3D version for consistency with the rest of the code.
+> 6.3.1.2 Boolean type
+> When any scalar value is converted to _Bool, the result is 0 if the value compares equal to 0; otherwise, the result is 1.
 
-Thanks,
+Whoah!
 
-William Breathitt Gray
+> > +     }
+> >
+> >       return 1; /* No need to add resource to the list */
+> >  }
+> > @@ -182,31 +190,38 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+> >  /**
+> >   * i2c_acpi_get_irq - get device IRQ number from ACPI
+> >   * @client: Pointer to the I2C client device
+> > + * @wake_capable: Set to true if the IRQ is wake capable
+> >   *
+> >   * Find the IRQ number used by a specific client device.
+> >   *
+> >   * Return: The IRQ number or an error code.
+> >   */
+> > -int i2c_acpi_get_irq(struct i2c_client *client)
+> > +int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
+> >  {
+> >       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+> >       struct list_head resource_list;
+> > -     int irq = -ENOENT;
+> > +     struct i2c_acpi_irq_context irq_ctx = {
+> > +             .irq = -ENOENT,
+> > +     };
+> >       int ret;
+> >
+> >       INIT_LIST_HEAD(&resource_list);
+> >
+> >       ret = acpi_dev_get_resources(adev, &resource_list,
+> > -                                  i2c_acpi_add_resource, &irq);
+> > +                                  i2c_acpi_add_resource, &irq_ctx);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> >       acpi_dev_free_resource_list(&resource_list);
+> >
+> > -     if (irq == -ENOENT)
+> > -             irq = acpi_dev_gpio_irq_get(adev, 0);
+> > +     if (irq_ctx.irq == -ENOENT)
+> > +             irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0,
+> > +                                                      &irq_ctx.wake_capable);
+> > +
+> > +     if (wake_capable)
+> > +             *wake_capable = irq_ctx.wake_capable;
+> >
+> > -     return irq;
+> > +     return irq_ctx.irq;
+> >  }
+> >
+> >  static int i2c_acpi_get_info(struct acpi_device *adev,
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 91007558bcb260..c4debd46c6340f 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -487,8 +487,14 @@ static int i2c_device_probe(struct device *dev)
+> >                       if (irq == -EINVAL || irq == -ENODATA)
+> >                               irq = of_irq_get(dev->of_node, 0);
+> >               } else if (ACPI_COMPANION(dev)) {
+> > -                     irq = i2c_acpi_get_irq(client);
+> > +                     bool wake_capable;
+> > +
+> > +                     irq = i2c_acpi_get_irq(client, &wake_capable);
+> > +
+>
+> Drop the empty line here.
+Done
 
---Nzu/QuXFHOIMvVdg
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> > +                     if (irq > 0 && wake_capable)
+> > +                             client->flags |= I2C_CLIENT_WAKE;
+> >               }
+> > +
+>
+> Unrelated whitespace change.
+Done
 
------BEGIN PGP SIGNATURE-----
+>
+> With those fixed feel free to add,
+>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYyNIxQAKCRC1SFbKvhIj
-K3YnAP95t6WB1f2/suNqh2Of/obYvWHLqiVLCQDkfzLB3jOgRwEA4eU+HB/vod5c
-mxTR52mBZou143ZlB9l/Uw0zfY6nHQk=
-=fJeF
------END PGP SIGNATURE-----
-
---Nzu/QuXFHOIMvVdg--
+Added, thanks!
