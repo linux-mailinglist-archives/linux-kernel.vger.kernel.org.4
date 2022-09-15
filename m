@@ -2,159 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0E55B9F78
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE50F5B9F77
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiIOQQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S229724AbiIOQQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiIOQQS (ORCPT
+        with ESMTP id S229577AbiIOQQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:16:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24DD9C2E8;
-        Thu, 15 Sep 2022 09:16:17 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FFFp0s015370;
-        Thu, 15 Sep 2022 16:16:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mP7xIiIoNVng2pUnSuk+JLsCADjNiiuTggfJ2AumvEk=;
- b=cXWBk3T1ADnBa0MwvUyjlI2PcYrJ+NF7TzlELEAeuZTy0pljv1JzRvAV7Nf1q1+VJawP
- KNiVCEPOdhoJg9YXWgFAlzi9g4sgK6KsA5MfudS5/NM9MxZ2RXcML7Dxte8/vefHIfu6
- lBrf3/mOzkhSI5+a+IdNit241YEApdLqglSb0V1xF1h30J7VXYcHWnnbeYZnMZi5Rqzn
- jocKIwKWzbB7Dq8vasTzoOGzLGjeWpPkvFGKyzLVmJnNy/cjHhCBzbhRFwR5HnHZ5+/H
- THK9SUJnaqY6aSwWeum7t8rsG7ZfQ9YwytZ9WzZbaQ4sGdnvJu9+GyiDxy6d0Qu0Lv03 Pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6hmj5fm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:16:07 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FFGi0M021001;
-        Thu, 15 Sep 2022 16:16:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6hmj5er-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:16:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FG7gF2025576;
-        Thu, 15 Sep 2022 16:16:05 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jjyfran1t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:16:04 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FGCD9930343544
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Sep 2022 16:12:13 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F0664C040;
-        Thu, 15 Sep 2022 16:16:01 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE98D4C046;
-        Thu, 15 Sep 2022 16:16:00 +0000 (GMT)
-Received: from [9.171.87.36] (unknown [9.171.87.36])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Sep 2022 16:16:00 +0000 (GMT)
-Message-ID: <9645ad8e-1fbe-894a-6a13-f5e91d019199@linux.ibm.com>
-Date:   Thu, 15 Sep 2022 18:16:00 +0200
+        Thu, 15 Sep 2022 12:16:10 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510988C47C;
+        Thu, 15 Sep 2022 09:16:09 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dv25so43226152ejb.12;
+        Thu, 15 Sep 2022 09:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=63vT8m8MylaPly4euPrd3RMV4XW9rM+F1IN3x8FpSV0=;
+        b=M0g5ls1WKDHcioqcss6bp/Y2EM9o688UgiKmwr2miwQidIKxfe8WsHaKBS0QnP19xj
+         84b57V36j6Am47XtK0fTE9lCFQrdodANeaCY1bni5gEC/dfCJ80TiBl5e341v5NTrC0D
+         650wtgc15NOFZrh8+dap7PRZsUWABj7Tx8uec+gUSCChXzFnBAz+G5wUQdtcfn3xBwee
+         DxgKd50+fnKiuSJEIw9dIglUuWFo7G3S3McJAAZMRxOEpQN7gwHyE2qDJeYaycGoz8o1
+         hf9SDsn/OaHyNo5ZyIc/Tfi99c9xyyymk+TwGm/k+2ol5tALgglTCwhOwnxQTc+6e34w
+         jNdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=63vT8m8MylaPly4euPrd3RMV4XW9rM+F1IN3x8FpSV0=;
+        b=xPpDxSaJwOKcSf8SERoOK2XV+PZmMqWE4L0mELYRmM3SgH1LkwkZ1yGlcVxAq60Vya
+         MHYM/1psbqpskVCVf8o/1IOA62yJsyaKU2p+zXI5uP37dy67Gqr8coPaSjkwxC1jb1UE
+         CF7QXD4B84vGnxclpwREYYIfo5UuIwPKSwaAy8vTerLUFRdxmxxuwh/2BNW1TrFAtn9E
+         TGaxV8EpPQwQRJpl6LgDwjojaM0rSodJPLm2Gek0hsYjfiEKahZ8TiIMLxO0K0KkRBD1
+         g5YCpNu/E/M7eaKDHTr2t/UiHrMM24R3TX0EBh3+lhv71iCJmV6Q0R32eOGgcURpokLg
+         7hxw==
+X-Gm-Message-State: ACrzQf3U2SbldjDtjU2iPZb6bjlSgoarSxvUWm6iDaaccpaeUVodYwh5
+        mElo2mDqfjISEnyp0hldfX8=
+X-Google-Smtp-Source: AMsMyM5zyVslz6eL5hQZ2vqtP2XxTO6A1/t93r3hM55bDcfdv6gf3smsa5UfAq06UyXLFCm1A9hnzQ==
+X-Received: by 2002:a17:907:3f85:b0:733:3f0e:2f28 with SMTP id hr5-20020a1709073f8500b007333f0e2f28mr504311ejc.376.1663258567816;
+        Thu, 15 Sep 2022 09:16:07 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id y17-20020a50ce11000000b0044f2afbb1easm12258192edi.27.2022.09.15.09.16.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 09:16:06 -0700 (PDT)
+Message-ID: <cf8ee34d-8be3-b82c-8e93-afbfa97048a0@gmail.com>
+Date:   Thu, 15 Sep 2022 18:16:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] KVM: s390: pci: fix plain integer as NULL pointer
- warnings
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 0/2] MediaTek Helio X10 MT6795 - Display Mutex
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, frankja@linux.ibm.com
-Cc:     farman@linux.ibm.com, schnelle@linux.ibm.com, pmorel@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220823191548.77526-1-mjrosato@linux.ibm.com>
- <c558a8c8-4d87-13ee-8d33-ba0285445d62@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <c558a8c8-4d87-13ee-8d33-ba0285445d62@linux.ibm.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
+        jason-jh.lin@mediatek.com, rex-bc.chen@mediatek.com,
+        moudy.ho@mediatek.com, allen-kh.cheng@mediatek.com,
+        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220913140121.403637-1-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7A6rQPG6FilYpdhdzQewzHaf5eCEz412
-X-Proofpoint-GUID: aGLs8GRLKUoSvCgnftfFS8Qtt_wsMyEf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 clxscore=1011 spamscore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209150095
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 23.08.22 um 21:18 schrieb Matthew Rosato:
-> On 8/23/22 3:15 PM, Matthew Rosato wrote:
->> Fix some sparse warnings that a plain integer 0 is being used instead of
->> NULL.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> 
-> @Janosch, since you are taking the other PCI fix can you also take this small cleanup through KVM?
 
-Queued now for the kvm tree. Will have to look if we have other things for 6.0. Otherwise it will go with 6.1.
 
+On 13/09/2022 16:01, AngeloGioacchino Del Regno wrote:
+> This series adds display mutex arrays and compatibles for the
+> MediaTek Helio X10 (MT6795).
 > 
->> ---
->>   arch/s390/kvm/pci.c | 4 ++--
->>   arch/s390/kvm/pci.h | 6 +++---
->>   2 files changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index bb8c335d17b9..3c12637ce08c 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -58,7 +58,7 @@ static int zpci_setup_aipb(u8 nisc)
->>   	if (!zpci_aipb)
->>   		return -ENOMEM;
->>   
->> -	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, 0);
->> +	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, NULL);
->>   	if (!aift->sbv) {
->>   		rc = -ENOMEM;
->>   		goto free_aipb;
->> @@ -373,7 +373,7 @@ static int kvm_s390_pci_aif_disable(struct zpci_dev *zdev, bool force)
->>   		gaite->gisc = 0;
->>   		gaite->aisbo = 0;
->>   		gaite->gisa = 0;
->> -		aift->kzdev[zdev->aisb] = 0;
->> +		aift->kzdev[zdev->aisb] = NULL;
->>   		/* Clear zdev info */
->>   		airq_iv_free_bit(aift->sbv, zdev->aisb);
->>   		airq_iv_release(zdev->aibv);
->> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
->> index 3a3606c3a0fe..7be5568d8bd2 100644
->> --- a/arch/s390/kvm/pci.h
->> +++ b/arch/s390/kvm/pci.h
->> @@ -46,9 +46,9 @@ extern struct zpci_aift *aift;
->>   static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
->>   						 unsigned long si)
->>   {
->> -	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == 0 ||
->> -	    aift->kzdev[si] == 0)
->> -		return 0;
->> +	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == NULL ||
->> +	    aift->kzdev[si] == NULL)
->> +		return NULL;
->>   	return aift->kzdev[si]->kvm;
->>   };
->>   
+> Tested on Sony Xperia M5 smartphone.
+> 
+> AngeloGioacchino Del Regno (2):
+>    dt-bindings: soc: mediatek: Add display mutex support for MT6795
+>    soc: mediatek: mutex: Add support for MT6795 Helio X10 display mutex
+> 
+>   .../bindings/soc/mediatek/mediatek,mutex.yaml    |  1 +
+>   drivers/soc/mediatek/mtk-mutex.c                 | 16 ++++++++++++++++
+>   2 files changed, 17 insertions(+)
 > 
 
+Whole series applied, thanks!
