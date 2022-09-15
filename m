@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2C5B9190
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC595B9196
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiIOAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S229993AbiIOAU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiIOAQV (ORCPT
+        with ESMTP id S229586AbiIOAUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:16:21 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA52952FF4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:16:19 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id D05819593B
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:16:18 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YcYEoit87QLX5YcYEoasSL; Wed, 14 Sep 2022 19:16:18 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OWeZ3X+YfpufrP32pFwnzjr9SmrTxIgR0t/8xkGDE+g=; b=lbSCNqvYwIKnQwtr6jZnwojPe2
-        JckGwmoNcDxLyAcdED+Hw4TEZ0Rtz47ZJ8btAoA8ODOOPvx4dhYkfv0LOK4l6YvsjNFPcHfS/QGFb
-        uQNAi7O8d8cAZre0YlB3i18onUcQerBLOEClRj4qe+YFSYoSrDTpFe0cuImL//HfxTlDiJBsuJqcm
-        ZOrtzCVBWWXJt9vfY5GgxXwteuAhH4qb4VHrq9jPkEK+o458U/xzJchVCm2TyuwG6lGVSCjh1qSZi
-        oK8uBzLE+auzkyrtG/S0OIeIF0AIJZZlPBgTD23iLs4OqvBtOGz6/0pzNbcevwVijGJlQ+S7KcMOq
-        5KYtrkUQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37962 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oYcYD-003OQQ-RQ;
-        Thu, 15 Sep 2022 00:16:17 +0000
-Date:   Wed, 14 Sep 2022 17:16:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.9 00/42] 4.9.328-rc1 review
-Message-ID: <20220915001613.GG603793@roeck-us.net>
-References: <20220913140342.228397194@linuxfoundation.org>
+        Wed, 14 Sep 2022 20:20:24 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A54D804;
+        Wed, 14 Sep 2022 17:20:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSdBr0XmXz4x1T;
+        Thu, 15 Sep 2022 10:20:20 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663201220;
+        bh=gnGui/z0Z0qQeqJQvLvMOfV3VcFbb7V/C7qu0wIP4MM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rwbZQ35L0uePD3q0IILydINIZ+iiRaKsoRQIP74lVf/criwGXZlMPyVrjiG82g0g8
+         15V/qlSowydMDMrT7d/DcUmKPBUtBAq747H1b4enIhdHDQ2dy/iXtlNFX2XQ5WCimz
+         yOnsEMbEUWUCoawvB19xKgZieHyVO8Sz4ytCO1J6R4YWzOPxbFlpYvOFoN09gUuikp
+         UvYuyc917doia43At0RMJIsSyPAlNz0taYTxJGk4SXto35+4rRNmuuGwg+YIcmIDiK
+         UHQh/OQs/V/lw7b1MhA9lVMZ53gpG1YuafekpmpT/lJTy8a14e5Rym9WdrxrxevoM+
+         h2svVmXG7LYHw==
+Date:   Thu, 15 Sep 2022 10:20:18 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Leon Romanovsky <leon@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Aurelien Aptel <aaptel@nvidia.com>,
+        Ben Ben-Ishay <benishay@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lior Nahmanson <liorna@nvidia.com>,
+        Or Gerlitz <ogerlitz@nvidia.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: linux-next: manual merge of the mlx5-next tree with the net-next
+ tree
+Message-ID: <20220915102018.795c4a55@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913140342.228397194@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oYcYD-003OQQ-RQ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:37962
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 90
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/D5qb6bUYOjLrNQ6THHsn8k2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:07:31PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.328 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
-> 
+--Sig_/D5qb6bUYOjLrNQ6THHsn8k2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Build results:
-	total: 164 pass: 164 fail: 0
-Qemu test results:
-	total: 395 pass: 395 fail: 0
+Hi all,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Today's linux-next merge of the mlx5-next tree got a conflict in:
 
-Guenter
+  drivers/net/ethernet/mellanox/mlx5/core/fw.c
+
+between commit:
+
+  8ff0ac5be144 ("net/mlx5: Add MACsec offload Tx command support")
+
+from the net-next tree and commits:
+
+  939838632b91 ("net/mlx5: Query ADV_VIRTUALIZATION capabilities")
+  6182534c2678 ("net/mlx5: Add NVMEoTCP caps, HW bits, 128B CQE and enumera=
+tions")
+
+from the mlx5-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/mellanox/mlx5/core/fw.c
+index c63ce03e79e0,2140bf161c90..000000000000
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fw.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fw.c
+@@@ -273,13 -273,18 +273,25 @@@ int mlx5_query_hca_caps(struct mlx5_cor
+  			return err;
+  	}
+ =20
+ +	if (MLX5_CAP_GEN_64(dev, general_obj_types) &
+ +	    MLX5_GENERAL_OBJ_TYPES_CAP_MACSEC_OFFLOAD) {
+ +		err =3D mlx5_core_get_caps(dev, MLX5_CAP_MACSEC);
+ +		if (err)
+ +			return err;
+ +	}
+ +
++ 	if (MLX5_CAP_GEN(dev, adv_virtualization)) {
++ 		err =3D mlx5_core_get_caps(dev, MLX5_CAP_ADV_VIRTUALIZATION);
++ 		if (err)
++ 			return err;
++ 	}
++=20
++ 	if (MLX5_CAP_GEN(dev, nvmeotcp)) {
++ 		err =3D mlx5_core_get_caps(dev, MLX5_CAP_DEV_NVMEOTCP);
++ 		if (err)
++ 			return err;
++ 	}
++=20
+  	return 0;
+  }
+ =20
+
+--Sig_/D5qb6bUYOjLrNQ6THHsn8k2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMib8IACgkQAVBC80lX
+0GyFywgAkZdlOT75c5isIubKOOQPttiFJdr3TYp2S5rktSZrAu8ZZX0A7Pey5coO
+N41MQxKV22jD0UybU5zlLsTIrdvKihXY8VkDUutB31q512+KDdFEYuXs+1rLGCAj
+B2L4ChcZlkMt31dISE6PL6tlmZuZA1L4fc0O3xRG9YZOFle6tdiMS+NcrRkNZd4C
+5ADQp7LL4AR36uHYaYktYEGKhueQDtCUN6XCF5LxGzPDH72s9VyNusC4b7Rjoi0W
+AVxi1iuTW1Shr6cCQaoHueZcYuCIzhoKWeQbgLA8FWauBOlnI4TPE8r/PnT2XSW3
+iBCZxn093OH/TRGRKqRZ59XTl+hNXw==
+=cxZN
+-----END PGP SIGNATURE-----
+
+--Sig_/D5qb6bUYOjLrNQ6THHsn8k2--
