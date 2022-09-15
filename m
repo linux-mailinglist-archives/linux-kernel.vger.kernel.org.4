@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4114D5B9582
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208F05B957B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIOHgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S229503AbiIOHfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiIOHgr (ORCPT
+        with ESMTP id S229603AbiIOHfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:36:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21988E9AF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:36:44 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MSpnl6kgBzlVvf;
-        Thu, 15 Sep 2022 15:32:43 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 15:36:42 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
-        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
-        <21cnbao@gmail.com>, <guodong.xu@linaro.org>,
-        <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
-        <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
-        <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
-Subject: [RESEND PATCH v7 2/2] sched/fair: Scan cluster before scanning LLC in wake-up path
-Date:   Thu, 15 Sep 2022 15:34:23 +0800
-Message-ID: <20220915073423.25535-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220915073423.25535-1-yangyicong@huawei.com>
-References: <20220915073423.25535-1-yangyicong@huawei.com>
+        Thu, 15 Sep 2022 03:35:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E06A792DE
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663227338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=soVYuMAxayh+2brnGzLjNkGMPYifBwRHy6hrOc9fKJ8=;
+        b=OyPlY/1tpSkuNIuHGkNy3q3T709HeKFVaGyFkAZ/MG+FxFjU1t5zdpibDN/MOu0ymX9v9B
+        T9wUieo+qIcOczD4RB3igJJLWm4DgJetZhGQdmvU0IOGYwm/Ut5Zt1GtlxzlU6BykYWFQu
+        J+jWu6BVH4o3O2u0QzDLjnLBIdD4ih8=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-202-3M8He257MuC5r_TBGjOmLA-1; Thu, 15 Sep 2022 03:35:37 -0400
+X-MC-Unique: 3M8He257MuC5r_TBGjOmLA-1
+Received: by mail-pl1-f197.google.com with SMTP id i1-20020a170902cf0100b001730caeec78so11997231plg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:35:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=soVYuMAxayh+2brnGzLjNkGMPYifBwRHy6hrOc9fKJ8=;
+        b=LLt+E1ggmmHLBhuFZrXD1vDWnhneAzkif6OGu1OEJH/WRU4Dh1l/PHc6xt6vCSmqE6
+         yneYvDbF80yoJWQmDPervTaWs80/eQhlC+gldabbR06eABQEgXdwkWFE9lv/Hc66Equu
+         GJwpOMVfslxGfSaMSIJTdxn2zhwCj/x0Rq2rhFG87IrEbsyvD5wo0l3UxZPA7TIIYoLW
+         ac62rXjGS5NH+6ivXzpdfEqUasgyit4fGw/cGjnNj7UPiGet0LWRTQ/q9aeyiKt5FjXp
+         lrBuK76rHGwzeQGEkKpOlynijt1FAxn6TbvM3c0iG+BsfEKTRB+CmWmLxQ8pZ/yJpEC7
+         Effw==
+X-Gm-Message-State: ACrzQf3JuimOUXkGap8B9KaKzkMs+wD9zpx4gWyj+SB0er8/WkTujJ3a
+        dKdvFl/WU3UvCYDN+5IbSnR7b40ptUl8TQ8E14nacsUcxn2eHr04tzBcgxdqjr+5jhTiAczRvx2
+        MgH/1m7I/M6uXfhQMw8FZs6EuMVIBKi9BoLFd0MHC
+X-Received: by 2002:a17:903:3014:b0:176:e498:2340 with SMTP id o20-20020a170903301400b00176e4982340mr3078636pla.119.1663227336198;
+        Thu, 15 Sep 2022 00:35:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM66EOQRG+uyyFv9IE6MmpghdMEhIjmEVFEbL27fE57qiUN+hTdC4XHDd0YfNOVJy61ajzo/dhfEWZYTZs15d48=
+X-Received: by 2002:a17:903:3014:b0:176:e498:2340 with SMTP id
+ o20-20020a170903301400b00176e4982340mr3078616pla.119.1663227335929; Thu, 15
+ Sep 2022 00:35:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220822060936.769855-1-marcus.folkesson@gmail.com>
+ <CAO-hwJ+3Yrr--cr=r5+jvs4A=A-cmDtrKQETo=YOYDC3nXTMBg@mail.gmail.com>
+ <YwTvrNuulKx0SB6H@gmail.com> <CAO-hwJKiq50fWwXNUGcXeWtWcUXb65ZmJMsADfrsUTac_Xj2dw@mail.gmail.com>
+ <YwcbVJswrL1Doi4s@gmail.com> <CAO-hwJJ86oAuaFD+uX7Rwv7cASO=4mchRJ1UBTxz9gYs6M1rUg@mail.gmail.com>
+ <YyLVblZkIPCvNd/2@gmail.com>
+In-Reply-To: <YyLVblZkIPCvNd/2@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 15 Sep 2022 08:35:25 +0100
+Message-ID: <CAO-hwJJ5dRrgxrae-RasYXuu7C9xjw6RmPaPfmO=YU3StMaQ3A@mail.gmail.com>
+Subject: Re: [RESEND PATCH 1/2] HID: Add driver for RC Simulator Controllers
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,182 +78,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <song.bao.hua@hisilicon.com>
+On Thu, Sep 15, 2022 at 8:28 AM Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
+>
+> Hi Benjamin,
+>
+> On Tue, Aug 30, 2022 at 02:45:11PM +0200, Benjamin Tissoires wrote:
+> > On Thu, Aug 25, 2022 at 8:44 AM Marcus Folkesson
+> > <marcus.folkesson@gmail.com> wrote:
+> > >
+>
+>
+> [...]
+> > >
+> > >
+> > > Is the fact that more than one button share the same
+> > > byte hard to describe in the report?
+> >
+> > No, this is actually easy to describe. You say that there is one usage
+> > of "something" which has a report size of 1 bit, and then you have
+> > another usage of "something else" with the same report size.
+> >
+> > But usually you have to add padding after to make up to 8 bits (so 6
+> > bits in that case).
+> >
+> > I was referring to the case  where you are parsing the same bit on the
+> > wire, and give a different usage based if you have received an odd or
+> > an even number of reports. In that case, we probably need to use move
+> > this bit to a const field in the original report descriptor and say
+> > that the data is now not const:
+> >
+> > - initial report (completely random example):
+> >   X (2 bytes) | Y (2 bytes) | button this_or_that (1 bit, depending of
+> > odd or even received reports) | 7 bits of padding
+> > - we can declare it as:
+> >   X (2 bytes) | Y (2 bytes) | button this (1 bit) | button that (1
+> > bit) | 6 bits of padding
+>
+> How about if there is no unused bytes?
+>
+> The XTRG2FMS has 8 10-bit channels and use every byte in the report.
+> Should I specify 8 8-bit channels instead and fix that in raw_event?
+> If so, should I only use 8bit values then?
 
-For platforms having clusters like Kunpeng920, CPUs within the same cluster
-have lower latency when synchronizing and accessing shared resources like
-cache. Thus, this patch tries to find an idle cpu within the cluster of the
-target CPU before scanning the whole LLC to gain lower latency.
+If I am not wrong, you should be able to add another byte in the
+report descriptor, as long as your raw_event function always adds it.
+Though now that I am typing it, I am actually wondering if this will
+work. You can always try, there is a chance it'll work, but I can't
+remember if it'll result in a timeout on the USB front because it'll
+expect one more byte that will never arrive.
 
-Testing has been done on Kunpeng920 by pinning tasks to one numa and two
-numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+>
+> (Are you at the ELCE conference btw?)
 
-With this patch, We noticed enhancement on tbench within one numa or cross
-two numa.
+I was at Plumbers this week, but got an extra day today. But yeah, I'm
+in Dublin today.
 
-On numa 0:
-                             6.0-rc1                patched
-Hmean     1        351.20 (   0.00%)      396.45 *  12.88%*
-Hmean     2        700.43 (   0.00%)      793.76 *  13.32%*
-Hmean     4       1404.42 (   0.00%)     1583.62 *  12.76%*
-Hmean     8       2833.31 (   0.00%)     3147.85 *  11.10%*
-Hmean     16      5501.90 (   0.00%)     6089.89 *  10.69%*
-Hmean     32     10428.59 (   0.00%)    10619.63 *   1.83%*
-Hmean     64      8223.39 (   0.00%)     8306.93 *   1.02%*
-Hmean     128     7042.88 (   0.00%)     7068.03 *   0.36%*
+Cheers,
+Benjamin
 
-On numa 0-1:
-                             6.0-rc1                patched
-Hmean     1        363.06 (   0.00%)      397.13 *   9.38%*
-Hmean     2        721.68 (   0.00%)      789.84 *   9.44%*
-Hmean     4       1435.15 (   0.00%)     1566.01 *   9.12%*
-Hmean     8       2776.17 (   0.00%)     3007.05 *   8.32%*
-Hmean     16      5471.71 (   0.00%)     6103.91 *  11.55%*
-Hmean     32     10164.98 (   0.00%)    11531.81 *  13.45%*
-Hmean     64     17143.28 (   0.00%)    20078.68 *  17.12%*
-Hmean     128    14552.70 (   0.00%)    15156.41 *   4.15%*
-Hmean     256    12827.37 (   0.00%)    13326.86 *   3.89%*
-
-Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so the SMT branch
-in the code has not been tested but it supposed to work.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-[https://lore.kernel.org/lkml/Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net]
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
-Reviewed-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/sched/fair.c     | 30 +++++++++++++++++++++++++++---
- kernel/sched/sched.h    |  1 +
- kernel/sched/topology.c | 10 ++++++++++
- 3 files changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4e5b171b1171..e6505b0764c0 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6444,6 +6444,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 		}
- 	}
- 
-+	if (static_branch_unlikely(&sched_cluster_active)) {
-+		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
-+
-+		if (sdc) {
-+			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
-+				if (!cpumask_test_cpu(cpu, cpus))
-+					continue;
-+
-+				if (has_idle_core) {
-+					i = select_idle_core(p, cpu, cpus, &idle_cpu);
-+					if ((unsigned int)i < nr_cpumask_bits)
-+						return i;
-+				} else {
-+					if (--nr <= 0)
-+						return -1;
-+					idle_cpu = __select_idle_cpu(cpu, p);
-+					if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+						return idle_cpu;
-+				}
-+			}
-+			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
-+		}
-+	}
-+
- 	for_each_cpu_wrap(cpu, cpus, target + 1) {
- 		if (has_idle_core) {
- 			i = select_idle_core(p, cpu, cpus, &idle_cpu);
-@@ -6451,7 +6475,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 				return i;
- 
- 		} else {
--			if (!--nr)
-+			if (--nr <= 0)
- 				return -1;
- 			idle_cpu = __select_idle_cpu(cpu, p);
- 			if ((unsigned int)idle_cpu < nr_cpumask_bits)
-@@ -6550,7 +6574,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	/*
- 	 * If the previous CPU is cache affine and idle, don't be stupid:
- 	 */
--	if (prev != target && cpus_share_cache(prev, target) &&
-+	if (prev != target && cpus_share_lowest_cache(prev, target) &&
- 	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
- 	    asym_fits_capacity(task_util, prev))
- 		return prev;
-@@ -6576,7 +6600,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	p->recent_used_cpu = prev;
- 	if (recent_used_cpu != prev &&
- 	    recent_used_cpu != target &&
--	    cpus_share_cache(recent_used_cpu, target) &&
-+	    cpus_share_lowest_cache(recent_used_cpu, target) &&
- 	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
- 	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
- 	    asym_fits_capacity(task_util, recent_used_cpu)) {
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index c148f6c4f0fc..f99208146d7a 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1801,6 +1801,7 @@ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
- extern struct static_key_false sched_asym_cpucapacity;
-+extern struct static_key_false sched_cluster_active;
- 
- static __always_inline bool sched_asym_cpucap_active(void)
- {
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8ab27c0d6d1f..04ead3227201 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -670,7 +670,9 @@ DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-+
- DEFINE_STATIC_KEY_FALSE(sched_asym_cpucapacity);
-+DEFINE_STATIC_KEY_FALSE(sched_cluster_active);
- 
- static void update_top_cache_domain(int cpu)
- {
-@@ -2268,6 +2270,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 	struct rq *rq = NULL;
- 	int i, ret = -ENOMEM;
- 	bool has_asym = false;
-+	bool has_cluster = false;
- 
- 	if (WARN_ON(cpumask_empty(cpu_map)))
- 		goto error;
-@@ -2289,6 +2292,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 			sd = build_sched_domain(tl, cpu_map, attr, sd, i);
- 
- 			has_asym |= sd->flags & SD_ASYM_CPUCAPACITY;
-+			has_cluster |= sd->flags & SD_CLUSTER;
- 
- 			if (tl == sched_domain_topology)
- 				*per_cpu_ptr(d.sd, i) = sd;
-@@ -2399,6 +2403,9 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 	if (has_asym)
- 		static_branch_inc_cpuslocked(&sched_asym_cpucapacity);
- 
-+	if (has_cluster)
-+		static_branch_inc_cpuslocked(&sched_cluster_active);
-+
- 	if (rq && sched_debug_verbose) {
- 		pr_info("root domain span: %*pbl (max cpu_capacity = %lu)\n",
- 			cpumask_pr_args(cpu_map), rq->rd->max_cpu_capacity);
-@@ -2498,6 +2505,9 @@ static void detach_destroy_domains(const struct cpumask *cpu_map)
- 	if (rcu_access_pointer(per_cpu(sd_asym_cpucapacity, cpu)))
- 		static_branch_dec_cpuslocked(&sched_asym_cpucapacity);
- 
-+	if (rcu_access_pointer(per_cpu(sd_cluster, cpu)))
-+		static_branch_dec_cpuslocked(&sched_cluster_active);
-+
- 	rcu_read_lock();
- 	for_each_cpu(i, cpu_map)
- 		cpu_attach_domain(NULL, &def_root_domain, i);
--- 
-2.24.0
+>
+> Best regards
+> Marcus Folkesson
 
