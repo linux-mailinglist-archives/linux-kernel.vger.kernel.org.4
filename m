@@ -2,167 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729125B9EA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAB65B9EA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiIOPVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S229916AbiIOPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbiIOPUo (ORCPT
+        with ESMTP id S231186AbiIOPUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:20:44 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDF7FF95;
-        Thu, 15 Sep 2022 08:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=rtmvdMNM1tIKTKTQ4X5UMPpH4NaSm76HjovqLB0QykE=; b=NfPcGucCbwdJT5fmosDrNL6bvP
-        Kus2Ef7Lkkd+ewc/l/HMeOxqAzSLH4mhEk8JllOwXwHEL0Gacq53by8GBEm/LOeq1CkgjBUE4citj
-        0Q4YX/opu6q2vVm8GZyeFK5aXmCMDDsi4EQfS13vZ0ta0+n/1m1i+4b24CyhKvN4VXdiFCXUMIw0q
-        57cEScy+ksf21bInUh9SySdhARep7B+fX7bvAzOYx+zSlppFso/oy/TDmNKiDlhbFQbaQ0xdKrNf1
-        TB575RnLLh1fXwiSQC6tR1US1mKzC2A/lG+Q4YWkQcPO8iZM3MwBEM/oGvANF3tVSqY+449FTB9Mp
-        nYA1sM7A==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1oYqa4-002TWX-CQ; Thu, 15 Sep 2022 09:15:09 -0600
-Message-ID: <67168c64-25f2-6efd-c743-9bc459ff87d2@deltatee.com>
-Date:   Thu, 15 Sep 2022 09:15:04 -0600
+        Thu, 15 Sep 2022 11:20:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AE89E6B3;
+        Thu, 15 Sep 2022 08:15:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E331B8214F;
+        Thu, 15 Sep 2022 15:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A07C433D6;
+        Thu, 15 Sep 2022 15:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663254943;
+        bh=yFompk6YAJp9uTcLpz/ti5xq8fMotoctti4Pfkdw/oA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pg8XSUHkcuKcmTv5SKKEYpDChFoLmgBQP8lmWzqcc77Hcr/QxJoSDbDcg3RhgeUTM
+         wo7dl9OTpcfzSDfji3THcfS2c2khYv9mXovxlkoIYl/2Nr/YzaLz2c3bHOMigizy4p
+         MMjAe3C00P8odSF8mg5XMax8F/KAd+OXd5e/VWuKwKWm5Pm5ROWvF6F0WgefPyUc4p
+         mqRYc+3RhEw3lSbBaCvbiCxyC57PbE9Nqi4VZFOeECnRm3eYcSOzz/ZBhqWB2NBh08
+         3pCziL6yen3V35DsT8+d6QF3O68BpVGwi3BiC12ycs/oarsh5YoxaYhNCdLLGjgKEB
+         /khDJ9krOfU5A==
+Date:   Thu, 15 Sep 2022 10:15:40 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Alex Elder <elder@ieee.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
+Subject: Re: [PATCH V10 2/7] soc: qcom: dcc:Add driver support for Data
+ Capture and Compare unit(DCC)
+Message-ID: <20220915151540.lpl37jfyqz5kxvhx@builder.lan>
+References: <cover.1663250639.git.quic_schowdhu@quicinc.com>
+ <897931910a9fe4547513b4dcdabd83db68b7cc68.1663250640.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-CA
-To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-References: <20220908161516.4361-1-logang@deltatee.com>
- <20220908161516.4361-4-logang@deltatee.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220908161516.4361-4-logang@deltatee.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <897931910a9fe4547513b4dcdabd83db68b7cc68.1663250640.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 3/3] md/raid5: Wait for MD_SB_CHANGE_PENDING in raid5d
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 15, 2022 at 07:48:42PM +0530, Souradeep Chowdhury wrote:
+> The DCC is a DMA Engine designed to capture and store data
+> during system crash or software triggers. The DCC operates
+> based on user inputs via the debugfs interface. The user gives
+> addresses as inputs and these addresses are stored in the
+> dcc sram. In case of a system crash or a manual software
+> trigger by the user through the debugfs interface,
+> the dcc captures and stores the values at these addresses.
+> This patch contains the driver which has all the methods
+> pertaining to the debugfs interface, auxiliary functions to
+> support all the four fundamental operations of dcc namely
+> read, write, read/modify/write and loop. The probe method
+> here instantiates all the resources necessary for dcc to
+> operate mainly the dedicated dcc sram where it stores the
+> values. The DCC driver can be used for debugging purposes
+> without going for a reboot since it can perform software
+> triggers as well based on user inputs.
+> 
+> Also added the documentation for debugfs entries and explained
+> the functionalities of each debugfs file that has been created
+> for dcc.
+> 
+> The following is the justification of using debugfs interface
+> over the other alternatives like sysfs/ioctls
+> 
+> i) As can be seen from the debugfs attribute descriptions,
+> some of the debugfs attribute files here contains multiple
+> arguments which needs to be accepted from the user. This goes
+> against the design style of sysfs.
+> 
+> ii) The user input patterns have been made simple and convenient
+> in this case with the use of debugfs interface as user doesn't
+> need to shuffle between different files to execute one instruction
+> as was the case on using other alternatives.
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 
-Hi Song,
+Thanks for the respin Souradeep. checkpatch --strict still gives me 5
+warnings and 49 checks, please fix 48 of those checks.
 
-On 2022-09-08 10:15, Logan Gunthorpe wrote:
-> A complicated deadlock exists when using the journal and an elevated
-> group_thrtead_cnt. It was found with loop devices, but its not clear
-> whether it can be seen with real disks. The deadlock can occur simply
-> by writing data with an fio script.
-> 
-> When the deadlock occurs, multiple threads will hang in different ways:
-> 
->  1) The group threads will hang in the blk-wbt code with bios waiting to
->     be submitted to the block layer:
-> 
->         io_schedule+0x70/0xb0
->         rq_qos_wait+0x153/0x210
->         wbt_wait+0x115/0x1b0
->         io_schedule+0x70/0xb0
->         rq_qos_wait+0x153/0x210
->         wbt_wait+0x115/0x1b0
->         __rq_qos_throttle+0x38/0x60
->         blk_mq_submit_bio+0x589/0xcd0
->         wbt_wait+0x115/0x1b0
->         __rq_qos_throttle+0x38/0x60
->         blk_mq_submit_bio+0x589/0xcd0
->         __submit_bio+0xe6/0x100
->         submit_bio_noacct_nocheck+0x42e/0x470
->         submit_bio_noacct+0x4c2/0xbb0
->         ops_run_io+0x46b/0x1a30
->         handle_stripe+0xcd3/0x36b0
->         handle_active_stripes.constprop.0+0x6f6/0xa60
->         raid5_do_work+0x177/0x330
-> 
->     Or:
->         io_schedule+0x70/0xb0
->         rq_qos_wait+0x153/0x210
->         wbt_wait+0x115/0x1b0
->         __rq_qos_throttle+0x38/0x60
->         blk_mq_submit_bio+0x589/0xcd0
->         __submit_bio+0xe6/0x100
->         submit_bio_noacct_nocheck+0x42e/0x470
->         submit_bio_noacct+0x4c2/0xbb0
->         flush_deferred_bios+0x136/0x170
->         raid5_do_work+0x262/0x330
-> 
->  2) The r5l_reclaim thread will hang in the same way, submitting a
->     bio to the block layer:
-> 
->         io_schedule+0x70/0xb0
->         rq_qos_wait+0x153/0x210
->         wbt_wait+0x115/0x1b0
->         __rq_qos_throttle+0x38/0x60
->         blk_mq_submit_bio+0x589/0xcd0
->         __submit_bio+0xe6/0x100
->         submit_bio_noacct_nocheck+0x42e/0x470
->         submit_bio_noacct+0x4c2/0xbb0
->         submit_bio+0x3f/0xf0
->         md_super_write+0x12f/0x1b0
->         md_update_sb.part.0+0x7c6/0xff0
->         md_update_sb+0x30/0x60
->         r5l_do_reclaim+0x4f9/0x5e0
->         r5l_reclaim_thread+0x69/0x30b
-> 
->     However, before hanging, the MD_SB_CHANGE_PENDING flag will be
->     set for sb_flags in r5l_write_super_and_discard_space(). This
->     flag will never be cleared because the submit_bio() call never
->     returns.
-> 
->  3) Due to the MD_SB_CHANGE_PENDING flag being set, handle_stripe()
->     will do no processing on any pending stripes and re-set
->     STRIPE_HANDLE. This will cause the raid5d thread to enter an
->     infinite loop, constantly trying to handle the same stripes
->     stuck in the queue.
-> 
->     The raid5d thread has a blk_plug that holds a number of bios
->     that are also stuck waiting seeing the thread is in a loop
->     that never schedules. These bios have been accounted for by
->     blk-wbt thus preventing the other threads above from
->     continuing when they try to submit bios. --Deadlock.
-> 
-> To fix this, add the same wait_event() that is used in raid5_do_work()
-> to raid5d() such that if MD_SB_CHANGE_PENDING is set, the thread will
-> schedule and wait until the flag is cleared. The schedule action will
-> flush the plug which will allow the r5l_reclaim thread to continue,
-> thus preventing the deadlock.
-> 
-> It's not clear when the deadlock was introduced, but the similar
-> wait_event() call in raid5_do_work() was added in 2017 by this
-> commit:
-> 
->     16d997b78b15 ("md/raid5: simplfy delaying of writes while metadata
->                    is updated.")
-> 
-> Link: https://lore.kernel.org/r/7f3b87b6-b52a-f737-51d7-a4eec5c44112@deltatee.com
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 
-Seems this patch of mine that is in md-next is causing an 1 in ~30
-failure on the mdadm test 13imsm-r0_r5_3d-grow-r0_r5_4d.
+Please also add a space after "dcc:" in $subject.
 
-I'm looking into it and will try to send an updated patch when I have a fix.
-
-Logan
+Regards,
+Bjorn
