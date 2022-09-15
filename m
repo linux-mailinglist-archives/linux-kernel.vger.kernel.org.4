@@ -2,235 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455835BA09D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDBC5BA0A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiIOSLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 14:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S229703AbiIOSR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiIOSLa (ORCPT
+        with ESMTP id S229487AbiIOSR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 14:11:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8238975CCA;
-        Thu, 15 Sep 2022 11:11:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C381B821B9;
-        Thu, 15 Sep 2022 18:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959E4C433C1;
-        Thu, 15 Sep 2022 18:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663265486;
-        bh=IPBXIRJWGIKmUcuSu4wzGqM8+BkczzvpUWYUbZH7C9o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=J1smcVQf1YwYMQUj1Xh4qVeez3c9zW9gkBbsHEX/u9piDkgq/DZWb0LFMMUiQ4In0
-         BAQBFnSF1VHQzG8LZ+xvhPTD8lphE9GJIf7E08C32cBKSHa4IyiX5oBrlLi/X9zgM9
-         dbagK/mH1d3rOIpK7CPtReYXf4LXX8/1Ke9c9e5mqNNktz1Kowrf3VwT8i0pNXhg6P
-         hWVQi5pFrjQZB/zTEM3Ndlm+baoeDfwBzbvNSQHx15lTPVCNc1Yj3dDSzMB3wz+xV4
-         OKFMqIAq2n6z3eg1KKaX3MPLw1no7ZKLS0HzydIIBl/z9TUiEtYV2KpD5QGusnnNWv
-         dyInLhRv+BwMA==
-Message-ID: <34e91540c92ad6980256f6b44115cf993695d5e1.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "neilb@suse.de" <neilb@suse.de>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Date:   Thu, 15 Sep 2022 14:11:23 -0400
-In-Reply-To: <0646410b6d2a5d19d3315f339b2928dfa9f2d922.camel@hammerspace.com>
-References: <20220908083326.3xsanzk7hy3ff4qs@quack3>
-         <YxoIjV50xXKiLdL9@mit.edu>
-         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
-         <20220908155605.GD8951@fieldses.org>
-         <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
-         <20220908182252.GA18939@fieldses.org>
-         <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-         <166284799157.30452.4308111193560234334@noble.neil.brown.name>
-         <20220912134208.GB9304@fieldses.org>
-         <166302447257.30452.6751169887085269140@noble.neil.brown.name>
-         <20220915140644.GA15754@fieldses.org>
-         <577b6d8a7243aeee37eaa4bbb00c90799586bc48.camel@hammerspace.com>
-         <1a968b8e87f054e360877c9ab8cdfc4cfdfc8740.camel@kernel.org>
-         <0646410b6d2a5d19d3315f339b2928dfa9f2d922.camel@hammerspace.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 15 Sep 2022 14:17:26 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A6B80029;
+        Thu, 15 Sep 2022 11:17:25 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id n10so1522784wrw.12;
+        Thu, 15 Sep 2022 11:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=leABp5dxBF86jRRL8C7lYXNCQh2iHxzm/rbyCLJ37f8=;
+        b=ZIszAlAmfuoIBxkrUf/JOjKU8aD9wJQPuOlp9udFrtnYluf3hAuavgakf0YbU/Oxo8
+         VI3G0kg1wYU6VgIweo2Sx18qssSpkMbm3nHhXsLBQtnXn2KcbvgMJucncJXKh0GI3PoS
+         cuhEgth/Y8GpoGlaSKOi+9qwKWqfs4JulpjgpLzEwbc+YJPEj/8LWfsonWI3CKy/mAAe
+         fth3DO1yhqjPHmw/ZLiQDBy3Q2e6n7ov8zayY9NMEb10PRlA+FN8/SbnrVeNliK4DpTm
+         vz591pf9ZrKPrwtRJrUxPc+ZEuyMHQWTr7gYoFIAGtLZ8LuchI1OTmuNGdCdl+vGuwTb
+         cSoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=leABp5dxBF86jRRL8C7lYXNCQh2iHxzm/rbyCLJ37f8=;
+        b=rptva/bhwq3JyJFb0xQ/5hZgAxBEfVcLELlkjpN4p/qua/uE5r9qhqT7F+XXT2D7l8
+         QTXAjzM5IBAJAdcNtxMIBioNCueJLvk1hhGb0+Wa9gmgt9Mw5IGgiK5GUJS1jYMGCXpV
+         bkFbD+WvROHIFnCUgChnHYNz/jnT74zYUeznCx9OOt8ww8ikEHWLFYBUkW1VQEc68rw5
+         tEF0gPLZrxXX/lhuHDpSi6Z/q8Yvcfh7g18HuMm3y0T/2qSgS/5yPZSWuyrF3BGNh0Rn
+         5ixl+U7E1MsAd/YkIKU1fyrLz88Ly5o3jUr23XPfyZHKEwd471oTgTVf/2JSKRTOk1W+
+         B1Aw==
+X-Gm-Message-State: ACrzQf1+Tgl2ISz/2HMlxb9vZj0RogQ7khKHdrpVs8fSmcquM0h0JKMX
+        +Q6qiDMFWNTYCvEq+xP1Fxs=
+X-Google-Smtp-Source: AMsMyM6R/1FlXSTZ6NAwAo0wfIgogWFuTsDNrmpkpfkvSyqrn6clLDTw+IuBNwWor8/JYj76jPKsDw==
+X-Received: by 2002:adf:edc9:0:b0:228:60de:1d4b with SMTP id v9-20020adfedc9000000b0022860de1d4bmr630578wro.306.1663265843758;
+        Thu, 15 Sep 2022 11:17:23 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:d411:a48b:4035:3d98])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm4243151wmq.23.2022.09.15.11.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 11:17:22 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 00/10] Add support for Renesas RZ/Five SoC
+Date:   Thu, 15 Sep 2022 19:15:48 +0100
+Message-Id: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-15 at 17:49 +0000, Trond Myklebust wrote:
-> On Thu, 2022-09-15 at 12:45 -0400, Jeff Layton wrote:
-> > On Thu, 2022-09-15 at 15:08 +0000, Trond Myklebust wrote:
-> > > On Thu, 2022-09-15 at 10:06 -0400, J. Bruce Fields wrote:
-> > > > On Tue, Sep 13, 2022 at 09:14:32AM +1000, NeilBrown wrote:
-> > > > > On Mon, 12 Sep 2022, J. Bruce Fields wrote:
-> > > > > > On Sun, Sep 11, 2022 at 08:13:11AM +1000, NeilBrown wrote:
-> > > > > > > On Fri, 09 Sep 2022, Jeff Layton wrote:
-> > > > > > > >=20
-> > > > > > > > The machine crashes and comes back up, and we get a query
-> > > > > > > > for
-> > > > > > > > i_version
-> > > > > > > > and it comes back as X. Fine, it's an old version. Now
-> > > > > > > > there
-> > > > > > > > is a write.
-> > > > > > > > What do we do to ensure that the new value doesn't
-> > > > > > > > collide
-> > > > > > > > with X+1?=20
-> > > > > > >=20
-> > > > > > > (I missed this bit in my earlier reply..)
-> > > > > > >=20
-> > > > > > > How is it "Fine" to see an old version?
-> > > > > > > The file could have changed without the version changing.
-> > > > > > > And I thought one of the goals of the crash-count was to be
-> > > > > > > able to
-> > > > > > > provide a monotonic change id.
-> > > > > >=20
-> > > > > > I was still mainly thinking about how to provide reliable
-> > > > > > close-
-> > > > > > to-open
-> > > > > > semantics between NFS clients.=A0 In the case the writer was an
-> > > > > > NFS
-> > > > > > client, it wasn't done writing (or it would have COMMITted),
-> > > > > > so
-> > > > > > those
-> > > > > > writes will come in and bump the change attribute soon, and
-> > > > > > as
-> > > > > > long as
-> > > > > > we avoid the small chance of reusing an old change attribute,
-> > > > > > we're OK,
-> > > > > > and I think it'd even still be OK to advertise
-> > > > > > CHANGE_TYPE_IS_MONOTONIC_INCR.
-> > > > >=20
-> > > > > You seem to be assuming that the client doesn't crash at the
-> > > > > same
-> > > > > time
-> > > > > as the server (maybe they are both VMs on a host that lost
-> > > > > power...)
-> > > > >=20
-> > > > > If client A reads and caches, client B writes, the server
-> > > > > crashes
-> > > > > after
-> > > > > writing some data (to already allocated space so no inode
-> > > > > update
-> > > > > needed)
-> > > > > but before writing the new i_version, then client B crashes.
-> > > > > When server comes back the i_version will be unchanged but the
-> > > > > data
-> > > > > has
-> > > > > changed.=A0 Client A will cache old data indefinitely...
-> > > >=20
-> > > > I guess I assume that if all we're promising is close-to-open,
-> > > > then a
-> > > > client isn't allowed to trust its cache in that situation.=A0 Maybe
-> > > > that's
-> > > > an overly draconian interpretation of close-to-open.
-> > > >=20
-> > > > Also, I'm trying to think about how to improve things
-> > > > incrementally.
-> > > > Incorporating something like a crash count into the on-disk
-> > > > i_version
-> > > > fixes some cases without introducing any new ones or regressing
-> > > > performance after a crash.
-> > > >=20
-> > > > If we subsequently wanted to close those remaining holes, I think
-> > > > we'd
-> > > > need the change attribute increment to be seen as atomic with
-> > > > respect
-> > > > to
-> > > > its associated change, both to clients and (separately) on disk.=A0
-> > > > (That
-> > > > would still allow the change attribute to go backwards after a
-> > > > crash,
-> > > > to
-> > > > the value it held as of the on-disk state of the file.=A0 I think
-> > > > clients
-> > > > should be able to deal with that case.)
-> > > >=20
-> > > > But, I don't know, maybe a bigger hammer would be OK:
-> > > >=20
-> > >=20
-> > > If you're not going to meet the minimum bar of data integrity, then
-> > > this whole exercise is just a massive waste of everyone's time. The
-> > > answer then going forward is just to recommend never using Linux as
-> > > an
-> > > NFS server. Makes my life much easier, because I no longer have to
-> > > debug any of the issues.
-> > >=20
-> > >=20
-> >=20
-> > To be clear, you believe any scheme that would allow the client to
-> > see
-> > an old change attr after a crash is insufficient?
-> >=20
->=20
-> Correct. If a NFSv4 client or userspace application cannot trust that
-> it will always see a change to the change attribute value when the file
-> data changes, then you will eventually see data corruption due to the
-> cached data no longer matching the stored data.
->=20
-> A false positive update of the change attribute (i.e. a case where the
-> change attribute changes despite the data/metadata staying the same) is
-> not desirable because it causes performance issues, but false negatives
-> are far worse because they mean your data backup, cache, etc... are not
-> consistent. Applications that have strong consistency requirements will
-> have no option but to revalidate by always reading the entire file data
-> + metadata.
->=20
-> > The only way I can see to fix that (at least with only a crash
-> > counter)
-> > would be to factor it in at presentation time like Neil suggested.
-> > Basically we'd just mask off the top 16 bits and plop the crash
-> > counter
-> > in there before presenting it.
-> >=20
-> > In principle, I suppose we could do that at the nfsd level as well
-> > (and
-> > that might be the simplest way to fix this). We probably wouldn't be
-> > able to advertise a change attr type of MONOTONIC with this scheme
-> > though.
->=20
-> Why would you want to limit the crash counter to 16 bits?
->=20
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-To leave more room for the "real" counter. Otherwise, an inode that gets
-frequent writes after a long period of no crashes could experience the
-counter wrap.
+Hi All,
 
-IOW, we have 63 bits to play with. Whatever part we dedicate to the
-crash counter will not be available for the actual version counter.
+The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
+1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
+as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
+entry-class social infrastructure gateway control and industrial gateway
+control.
 
-I'm proposing a 16+47+1 split, but I'm happy to hear arguments for a
-different one.
---=20
-Jeff Layton <jlayton@kernel.org>
+This patch series adds initial SoC DTSi support for Renesas RZ/Five
+(R9A07G043) SoC and updates the bindings for the same. Below is the list
+of IP blocks added in the initial SoC DTSI which can be used to boot via
+initramfs on RZ/Five SMARC EVK:
+- AX45MP CPU
+- CPG
+- PINCTRL
+- PLIC
+- SCIF0
+- SYSC
+
+Useful links:
+-------------
+[0] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
+[1] http://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax45mp/
+
+Patch series depends on:
+-----------------------
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220914134211.199631-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220915165256.352843-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+v2->v3:
+-------
+* Re-used RZ/G2UL SMARC EVK SoM and carrier DTSI
+* Included RB tags
+* Rebased patches on -next
+
+v2: https://lore.kernel.org/all/20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+v1: https://lore.kernel.org/lkml/20220726180623.1668-5-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Below are the logs from RZ/Five SMARC EVK:
+------------------------------------------
+/ # uname -ra                                                                
+Linux (none) 6.0.0-rc5-next-20220915-00016-g0f0153102a13 #121 SMP Thu Sep 15 16:54:44 BST 2022 riscv64 GNU/Linux
+/ # cat /proc/cpuinfo 
+processor       : 0
+hart            : 0
+isa             : rv64imafdc
+mmu             : sv39
+uarch           : andestech,ax45mp
+mvendorid       : 0x31e
+marchid         : 0x8000000000008a45
+mimpid          : 0x500
+
+/ # cat /proc/interrupts 
+           CPU0       
+  1:          0  SiFive PLIC 412 Level     1004b800.serial:rx err
+  2:          0  SiFive PLIC 414 Level     1004b800.serial:rx full
+  3:        178  SiFive PLIC 415 Level     1004b800.serial:tx empty
+  4:          0  SiFive PLIC 413 Level     1004b800.serial:break
+  5:    1879569  RISC-V INTC   5 Edge      riscv-timer
+  6:         37  SiFive PLIC 416 Level     1004b800.serial:rx ready
+IPI0:         0  Rescheduling interrupts
+IPI1:         0  Function call interrupts
+IPI2:         0  CPU stop interrupts
+IPI3:         0  IRQ work interrupts
+IPI4:         0  Timer broadcast interrupts
+/ # cat /proc/meminfo 
+MemTotal:         882356 kB
+MemFree:          861740 kB
+MemAvailable:     859488 kB
+Buffers:               0 kB
+Cached:             1796 kB
+SwapCached:            0 kB
+Active:                0 kB
+Inactive:             80 kB
+Active(anon):          0 kB
+Inactive(anon):       80 kB
+Active(file):          0 kB
+Inactive(file):        0 kB
+Unevictable:        1796 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:           116 kB
+Mapped:             1136 kB
+Shmem:                 0 kB
+KReclaimable:       6732 kB
+Slab:              11932 kB
+SReclaimable:       6732 kB
+SUnreclaim:         5200 kB
+KernelStack:         540 kB
+PageTables:           32 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:      441176 kB
+Committed_AS:        592 kB
+VmallocTotal:   67108864 kB
+VmallocUsed:         760 kB
+VmallocChunk:          0 kB
+Percpu:               84 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+/ # 
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (10):
+  dt-bindings: soc: renesas: Move renesas.yaml from arm to soc
+  dt-bindings: riscv: Sort the CPU core list alphabetically
+  dt-bindings: riscv: Add Andes AX45MP core to the list
+  dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC
+  RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC kconfig option
+  riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
+  riscv: boot: dts: r9a07g043: Add placeholder nodes
+  riscv: dts: renesas: Add minimal DTS for Renesas RZ/Five SMARC EVK
+  MAINTAINERS: Add entry for Renesas RISC-V architecture
+  RISC-V: configs: defconfig: Enable Renesas RZ/Five SoC
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  11 +-
+ .../{arm => soc/renesas}/renesas.yaml         |   3 +-
+ MAINTAINERS                                   |   4 +-
+ arch/riscv/Kconfig.socs                       |  14 +
+ arch/riscv/boot/dts/Makefile                  |   1 +
+ arch/riscv/boot/dts/renesas/Makefile          |   2 +
+ arch/riscv/boot/dts/renesas/r9a07g043.dtsi    | 297 ++++++++++++++++++
+ .../boot/dts/renesas/r9a07g043f01-smarc.dts   |  27 ++
+ .../boot/dts/renesas/rzfive-smarc-som.dtsi    |  42 +++
+ arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi |  56 ++++
+ arch/riscv/configs/defconfig                  |   2 +
+ 11 files changed, 451 insertions(+), 8 deletions(-)
+ rename Documentation/devicetree/bindings/{arm => soc/renesas}/renesas.yaml (99%)
+ create mode 100644 arch/riscv/boot/dts/renesas/Makefile
+ create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
+ create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
+ create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+ create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
+
+-- 
+2.25.1
+
