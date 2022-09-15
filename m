@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8123B5B91C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09DE5B91D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiIOAef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S230166AbiIOAlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiIOAeD (ORCPT
+        with ESMTP id S230111AbiIOAlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:34:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1648D3F4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663202000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrTT7QwQof63VN7IDSDKfIt2sJtV3+I3xYSNcLHiNaY=;
-        b=TpTcnpMKOpKcegZnA5EhsEt7r5kSIt5d5Denj+U8M4hWmjxsR4bAZEl5IGjrJXc4s+hvs+
-        F6XQgFGu/Njmdq2LEX1FyEttrLpoajzKdE88DXyb24O7Jn7xeGQXTjAP0mGNzN7qfcfoto
-        WG4z9eO70FBgXAsqS+HsrftbTLPPVKI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-436-T7oj1C5EM3aNlSIIqvSQaw-1; Wed, 14 Sep 2022 20:33:11 -0400
-X-MC-Unique: T7oj1C5EM3aNlSIIqvSQaw-1
-Received: by mail-ed1-f70.google.com with SMTP id w20-20020a05640234d400b00450f24c8ca6so11783462edc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=UrTT7QwQof63VN7IDSDKfIt2sJtV3+I3xYSNcLHiNaY=;
-        b=KYt8X7tIFJQCTwrv3sLPCEi258wRuVNvLCRk5LEos5D05CwCDyfL+GKffddFgoYDVw
-         2yaQkMMOgrqdGFwVGhpPXqX5BqqpsYBxnSsWcWElE6FwjDkeVW5DrEoFrXozhhXMMbRS
-         uyjkq/ma+tLUKO9l0urqNDA+UBE/AZ7DwXj4Co8c6Kfpp+mWS6iDzMTGJ0QbXMeS/IEF
-         DTtzv3uvw8RGo0v9/jWX+BX9VmTZe5qPampKPDjZ7HHCy1wA8ut5WKFsFXtIA/sJ7v+j
-         HG6fl+nY3pH3bpIMxTyDVY05mHwe4UYO+ll6fZOzpNsv/n4XHL1wfGx00a4QNv9zuucl
-         ZJag==
-X-Gm-Message-State: ACgBeo0Jq/xEWv1S0zfvgFz1cIq6qxtox0tZTKWEmqLu2R0Hn4w4/S/7
-        WDTTme7SG2F+6d9odF4J9d+HPqiGshL+6zFujiH9iyai/v+Jy/DdPECoT9r1TQckViw2/DHrInP
-        TXv5TbeBAwIyOZCtYba4P0b9Y
-X-Received: by 2002:a17:907:b09:b0:76f:99cc:81cd with SMTP id h9-20020a1709070b0900b0076f99cc81cdmr26426926ejl.530.1663201990444;
-        Wed, 14 Sep 2022 17:33:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5g8V/nPxzHQDJZl0DRT92LXzhiR3i8YcPsXKLctBnnQWAlIwXPYox1IBRFR7Ze6l8SXhLAKA==
-X-Received: by 2002:a17:907:b09:b0:76f:99cc:81cd with SMTP id h9-20020a1709070b0900b0076f99cc81cdmr26426916ejl.530.1663201990310;
-        Wed, 14 Sep 2022 17:33:10 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id p5-20020a50cd85000000b0043ba7df7a42sm10701852edi.26.2022.09.14.17.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 17:33:09 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        mripard@kernel.org, stefan@agner.ch, alison.wang@nxp.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next 8/8] drm/fsl-dcu: remove trailing return statements
-Date:   Thu, 15 Sep 2022 02:32:31 +0200
-Message-Id: <20220915003231.363447-9-dakr@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220915003231.363447-1-dakr@redhat.com>
-References: <20220915003231.363447-1-dakr@redhat.com>
+        Wed, 14 Sep 2022 20:41:00 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4225D7F130;
+        Wed, 14 Sep 2022 17:40:52 -0700 (PDT)
+X-UUID: 2505da2ba7af4b02a38ec67ca03e61bd-20220915
+X-CPASD-INFO: ac03eae5191241108bbf27eaa03f2769@qrNqU5KTk2VdWXN-g3R8aliTkpZiY4W
+        wo2pTlmBnYlmVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sKVqU5WPlQ==
+X-CLOUD-ID: ac03eae5191241108bbf27eaa03f2769
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:168.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:170.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5,
+        AUF:1,DUF:4775,ACD:80,DCD:80,SL:0,EISP:0,AG:0,CFC:0.855,CFSR:0.036,UAT:0,RAF:
+        2,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF
+        :0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 2505da2ba7af4b02a38ec67ca03e61bd-20220915
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 2505da2ba7af4b02a38ec67ca03e61bd-20220915
+X-User: sunke@kylinos.cn
+Received: from [10.8.0.3] [(118.250.49.117)] by mailgw
+        (envelope-from <sunke@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+        with ESMTP id 378164889; Thu, 15 Sep 2022 08:41:23 +0800
+Message-ID: <1b9c2f74-c16d-8e19-17fa-615ff51f27f1@kylinos.cn>
+Date:   Thu, 15 Sep 2022 08:40:46 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/filemap: Make folio_put_wait_locked static
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        k2ci <kernel-bot@kylinos.cn>, linux-fsdevel@vger.kernel.org
+References: <20220914015836.3193197-1-sunke@kylinos.cn>
+From:   Ke Sun <sunke@kylinos.cn>
+In-Reply-To: <20220914015836.3193197-1-sunke@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the trailing return statements at the end of void functions.
+Ping.
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c  | 1 -
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
-index c77df9b7893f..23687551c831 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
-@@ -147,7 +147,6 @@ static void fsl_dcu_drm_crtc_mode_set_nofb(struct drm_crtc *crtc)
- 		     DCU_THRESHOLD_OUT_BUF_LOW(BUF_MIN_VAL));
- 
- 	drm_dev_exit(idx);
--	return;
- }
- 
- static const struct drm_crtc_helper_funcs fsl_dcu_drm_crtc_helper_funcs = {
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-index 1be3062a95df..d0a14b5b506e 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-@@ -172,7 +172,6 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
- 	}
- 
- 	drm_dev_exit(idx);
--	return;
- }
- 
- static const struct drm_plane_helper_funcs fsl_dcu_drm_plane_helper_funcs = {
--- 
-2.37.3
-
+On 2022/9/14 09:58, Ke Sun wrote:
+> It's only used in mm/filemap.c, since commit <ffa65753c431>
+> ("mm/migrate.c: rework migration_entry_wait() to not take a pageref").
+>
+> Make it static.
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Ke Sun <sunke@kylinos.cn>
+> ---
+>   include/linux/pagemap.h | 1 -
+>   mm/filemap.c            | 2 +-
+>   2 files changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> index 0178b2040ea3..82880993dd1a 100644
+> --- a/include/linux/pagemap.h
+> +++ b/include/linux/pagemap.h
+> @@ -1042,7 +1042,6 @@ static inline int wait_on_page_locked_killable(struct page *page)
+>   	return folio_wait_locked_killable(page_folio(page));
+>   }
+>   
+> -int folio_put_wait_locked(struct folio *folio, int state);
+>   void wait_on_page_writeback(struct page *page);
+>   void folio_wait_writeback(struct folio *folio);
+>   int folio_wait_writeback_killable(struct folio *folio);
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 15800334147b..ade9b7bfe7fc 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -1467,7 +1467,7 @@ EXPORT_SYMBOL(folio_wait_bit_killable);
+>    *
+>    * Return: 0 if the folio was unlocked or -EINTR if interrupted by a signal.
+>    */
+> -int folio_put_wait_locked(struct folio *folio, int state)
+> +static int folio_put_wait_locked(struct folio *folio, int state)
+>   {
+>   	return folio_wait_bit_common(folio, PG_locked, state, DROP);
+>   }
