@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDE85BA2A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A555BA2A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiIOWSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
+        id S229724AbiIOWVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIOWSc (ORCPT
+        with ESMTP id S229483AbiIOWVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:18:32 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759DA8C47D;
-        Thu, 15 Sep 2022 15:18:31 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id c9so29827021ybf.5;
-        Thu, 15 Sep 2022 15:18:31 -0700 (PDT)
+        Thu, 15 Sep 2022 18:21:01 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195A576959
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 15:21:00 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y5-20020a25bb85000000b006af8f244604so9870379ybg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 15:21:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7rTBa+TZvkiKAMcEE1GZa2Hw9K4HVwTdbY/7JXJfnHE=;
-        b=UYAzpgH6jbwevP5kLebZHPqxMQ1b1nKnksij3MYheAodV0Ll6zXsWBtBgWiNvEYXsP
-         acVy2vgPBsUTOEkMi2hRfllKSU1jpy58kbDY+COAQUbKr5chRQW47i7cMa2Yg2UUDyCr
-         4aC1JVJNdYzjHsFb4xJ7eeKI8Z23zn1Uz1HhxJob6Ap3kElHjMDMJjkjsoABrq2P4pal
-         +pNxjeNyd9SU4zSwVvAG12C9bgM+HoOX+IaU/HOc8miy0mJASO52oTZVKtLnrItxhheO
-         +xrV86CXjwHwYCmCjSFojngsjRLdkc1hIsiyntmKftI5anSiFv4SoZLC9MQts+ae+Ii0
-         SIFg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=hwsBbOCukVOmmbNRJPkSdnPVZPJXqTOFjX96LXshtvw=;
+        b=Spo98VOSTby2Le1Hze2WZq1/fiMoDhbdNBbMz+1fH1UtWkYDr6OUlNJ1GxWorydkND
+         o2RdLuvrBihW27OTeQMnhtJxEtH5+0QLznsrfpGYjUVNbxpc84DEwIeAc3Bgd+QoSXni
+         fJ8jYm81lx/hNz5+fY5+VQTMb+LGIb4avDSvpwHLnIOFjDo8S/UfSyp0WZ7XRdAHi2Ud
+         /+ubiItzzfgjlj+YkMhVjeYXbaI3lvyJtcHjkTmXLw40e/RxKqj8WFWj/7k+546fMdCq
+         Oqtnn2j5VP+1p8Q9ojAiZ5gXwicnn4WqgEMT2O8lCS557poHMNE407YzT9Wjs8qM62sM
+         Y8fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7rTBa+TZvkiKAMcEE1GZa2Hw9K4HVwTdbY/7JXJfnHE=;
-        b=UpF/KaI7kv5FQjsCoxVKQ4G22IdF3QoH7WsBBTOVhE4nSUJR7N3Ce4FC7UkMe87E4U
-         awnJwNoet//EFxhd4QQT/GDkd+HD2uRGiZyvaHtET8cHM2f3wG2AKebI2vUKib+DgUfA
-         gX/3rPU3p65l3+rALyuuDVnbcQ6mTkQO2tiFwJo7iQs9jMtKY0cv0jNLU1l1xGPSybtu
-         9ULcabaQzFw9AIgrHDfLQBCxP/QKRETaCT5gorQASaBmznPJ5D3J49Y5sbcZjOEUkzFG
-         eX8sKDsj54m6EdBs+BPUiAtnaWsDaZ7jmUblLPQKYje6eaPu03LE2AsPCG/z88T33kUK
-         m2/A==
-X-Gm-Message-State: ACrzQf0uFx8hrfRyaeTIsOkytaL9u1OA4tnJlGUdLb8Pc99kZUbnBfWD
-        4yanOG7BK6vUnLXj08Q7VzXHDXtGVMM8WXwUCKQ7q5dJGkR8Eg==
-X-Google-Smtp-Source: AMsMyM5qkhFr6mYLitJhEUs5llsOwuL8t3fDB1o5pzCFI52+HRBEiKw3M1v3foGS1UjlkCiHW+bL2UrNZJPYVkiP/M8=
-X-Received: by 2002:a05:6902:1007:b0:6ae:6cd5:4b0b with SMTP id
- w7-20020a056902100700b006ae6cd54b0bmr1895083ybt.354.1663280310596; Thu, 15
- Sep 2022 15:18:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220915181558.354737-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <126c611d-b421-cff9-6384-bc468be7ec73@microchip.com>
-In-Reply-To: <126c611d-b421-cff9-6384-bc468be7ec73@microchip.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 15 Sep 2022 23:18:02 +0100
-Message-ID: <CA+V-a8sv9sFwGktxqkWohQF2FfxyQm=Z5GVNjPW9i2hKxtNWpg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/10] RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC
- kconfig option
-To:     Conor.Dooley@microchip.com
-Cc:     geert+renesas@glider.be, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, heiko@sntech.de,
-        atishp@rivosinc.com, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com,
-        prabhakar.mahadev-lad.rj@bp.renesas.com
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=hwsBbOCukVOmmbNRJPkSdnPVZPJXqTOFjX96LXshtvw=;
+        b=y+V1vTnoWeWVDu+Z5Xu0bZeAaGmDnpSC0UByIcU7avqGvbSxAiBbazjzegqaAWdfIb
+         fm8L1mlmH2qTACXglN92bZq7Y7JEr1Cee1iKdlPxbCaG9zj7hXl3D2NRZ+J69RiB/drV
+         xEuBuzOwTgi5EzYsdK/Sa07LqE8eTWOufHpImpa7gWuw6+0fD+wZnK7fI4KRXbQUe62s
+         IvVUwQ0af1wdGjSKHAbT2jAUErgTQ+FocH6VGyCQJrFoQGOXaXwzL4rV0sAlQkoPTYrv
+         uzZcz2f+b9Mh76gpUL3rGAdbCTAiMP48ku9Q5RyUyFfs2e6y+oCJBFyzk4/A96Tq3g2m
+         y1dg==
+X-Gm-Message-State: ACrzQf0/6Wx60zhNk7mDD0/wmM7hVZGC0L7m38aVcNwn/Y241lkpYg6O
+        p+Gtg4AtiZOXOY4jyeWSyxDYcSPAuFil
+X-Google-Smtp-Source: AMsMyM4JxUSjaIOLfacJwbXgulMZPMHHhgP6UGtSh7bLGCMZqats1zNy4nc4yHegB+IuKfsqYETV6ur/jzZi
+X-Received: from eugenis.svl.corp.google.com ([2620:15c:2ce:200:d243:2f2b:afe4:86b4])
+ (user=eugenis job=sendgmr) by 2002:a81:84c6:0:b0:345:1c4e:f6f3 with SMTP id
+ u189-20020a8184c6000000b003451c4ef6f3mr1887660ywf.163.1663280459377; Thu, 15
+ Sep 2022 15:20:59 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 15:20:53 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+Message-ID: <20220915222053.3484231-1-eugenis@google.com>
+Subject: [PATCH v5] arm64: mte: move register initialization to C
+From:   Evgenii Stepanov <eugenis@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>
+Cc:     Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,81 +74,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+From: Peter Collingbourne <pcc@google.com>
 
-Thank you for the review.
+If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
+CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
+in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
+in fact implement FEAT_MTE2, setting the system register like this may
+lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
+in the C function cpu_enable_mte which is called based on the sanitized
+version of the system register.
 
-On Thu, Sep 15, 2022 at 9:59 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 15/09/2022 19:15, Prabhakar wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Introduce SOC_RENESAS_RZFIVE config option to enable Renesas RZ/Five
-> > (R9A07G043) SoC, along side also add ARCH_RENESAS config option as most
-> > of the Renesas drivers depend on this config option.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > v2->v3
-> > * Included RB tag from Geert
-> >
-> > v1->v2
-> > * No Change
-> > ---
-> >  arch/riscv/Kconfig.socs | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> > index 69774bb362d6..91b7f38b77a8 100644
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -80,4 +80,18 @@ config SOC_CANAAN_K210_DTB_SOURCE
-> >
-> >  endif # SOC_CANAAN
-> >
-> > +config ARCH_RENESAS
-> > +       bool
-> > +       select GPIOLIB
-> > +       select PINCTRL
-> > +       select SOC_BUS
->
-> Do you really need to select SOC_BUS?
-> Noone else does on RISC-V, hence my curiosity.
->
-Yes we do need SOC_BUS due to soc_device_register() call in [0].
-Digging further I realized we can drop the above SOC_BUS as
-SOC_RENESAS is selecting SOC_BUS [1]
+There is no need for the rest of the MTE-related system register
+initialization to happen from assembly, with the exception of TCR_EL1,
+which must be set to include at least TBI1 because the secondary CPUs
+access KASan-allocated data structures early. Therefore, make the TCR_EL1
+initialization unconditional and move the rest of the initialization to
+cpu_enable_mte so that we no longer have a dependency on the unsanitized
+ID register value.
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/soc/renesas/renesas-soc.c?h=v6.0-rc5#n487
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/soc/renesas/Kconfig?h=v6.0-rc5#n5
+Co-developed-by: Evgenii Stepanov <eugenis@google.com>
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Signed-off-by: Evgenii Stepanov <eugenis@google.com>
+Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 3b714d24ef17 ("arm64: mte: CPU feature detection and initial sysreg configuration")
+Cc: <stable@vger.kernel.org> # 5.10.x
+---
+Changelong since v3:
+- Removed extra isb barrier.
+- Fixed build without CONFIG_ARM64_MTE.
 
-> > +
-> > +config SOC_RENESAS_RZFIVE
-> > +       bool "Renesas RZ/Five SoC"
-> > +       select ARCH_R9A07G043
-> > +       select ARCH_RENESAS
-> > +       select RESET_CONTROLLER
-> > +       help
-> > +         This enables support for Renesas RZ/Five SoC.
->
-> :thinking: isn't this pretty much what we decided not to do?
-> And instead you would redefine ARCH_RENESAS in this file and
-> not use SOC_RENESAS* at all? Will save me having to purge the
-> the SOC symbol when I do the conversion.
->
-I was under the impression we didn't come to a conclusion so kept the
-patch as is. I'll just make ARCH_RENESAS visible as Geert suggested
-something like below:
+Changelog since v2:
+- Fixed register initialization on cpu_resume code path.
 
-        config ARCH_RENESAS
-            bool "Renesas RISC-V SoCs"
-            select GPIOLIB
-            select PINCTRL
-            select RESET_CONTROLLER
+Changelog since v1:
+- Keep TBI1 off unless CONFIG_ARM64_MTE
+- Fixed mask application in the RGSR_EL1 computation (bug found by Kenny
+  Root).
+- Changed code formatting
 
+ arch/arm64/include/asm/mte.h   |  5 ++++
+ arch/arm64/kernel/cpufeature.c |  3 +-
+ arch/arm64/kernel/mte.c        | 51 ++++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/suspend.c    |  2 ++
+ arch/arm64/mm/proc.S           | 46 ++++--------------------------
+ 5 files changed, 65 insertions(+), 42 deletions(-)
 
-Cheers,
-Prabhakar
+diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+index aa523591a44e5..760c62f8e22f8 100644
+--- a/arch/arm64/include/asm/mte.h
++++ b/arch/arm64/include/asm/mte.h
+@@ -42,7 +42,9 @@ void mte_sync_tags(pte_t old_pte, pte_t pte);
+ void mte_copy_page_tags(void *kto, const void *kfrom);
+ void mte_thread_init_user(void);
+ void mte_thread_switch(struct task_struct *next);
++void mte_cpu_setup(void);
+ void mte_suspend_enter(void);
++void mte_suspend_exit(void);
+ long set_mte_ctrl(struct task_struct *task, unsigned long arg);
+ long get_mte_ctrl(struct task_struct *task);
+ int mte_ptrace_copy_tags(struct task_struct *child, long request,
+@@ -72,6 +74,9 @@ static inline void mte_thread_switch(struct task_struct *next)
+ static inline void mte_suspend_enter(void)
+ {
+ }
++static inline void mte_suspend_exit(void)
++{
++}
+ static inline long set_mte_ctrl(struct task_struct *task, unsigned long arg)
+ {
+ 	return 0;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index af4de817d7123..d7a077b5ccd1c 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2034,7 +2034,8 @@ static void bti_enable(const struct arm64_cpu_capabilities *__unused)
+ static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+ {
+ 	sysreg_clear_set(sctlr_el1, 0, SCTLR_ELx_ATA | SCTLR_EL1_ATA0);
+-	isb();
++
++	mte_cpu_setup();
+ 
+ 	/*
+ 	 * Clear the tags in the zero page. This needs to be done via the
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index b2b730233274b..aca88470fb69d 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -285,6 +285,49 @@ void mte_thread_switch(struct task_struct *next)
+ 	mte_check_tfsr_el1();
+ }
+ 
++void mte_cpu_setup(void)
++{
++	u64 rgsr;
++
++	/*
++	 * CnP must be enabled only after the MAIR_EL1 register has been set
++	 * up. Inconsistent MAIR_EL1 between CPUs sharing the same TLB may
++	 * lead to the wrong memory type being used for a brief window during
++	 * CPU power-up.
++	 *
++	 * CnP is not a boot feature so MTE gets enabled before CnP, but let's
++	 * make sure that is the case.
++	 */
++	BUG_ON(read_sysreg(ttbr0_el1) & TTBR_CNP_BIT);
++	BUG_ON(read_sysreg(ttbr1_el1) & TTBR_CNP_BIT);
++
++	/* Normal Tagged memory type at the corresponding MAIR index */
++	sysreg_clear_set(mair_el1,
++			 MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED),
++			 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED,
++				      MT_NORMAL_TAGGED));
++
++	write_sysreg_s(KERNEL_GCR_EL1, SYS_GCR_EL1);
++
++	/*
++	 * If GCR_EL1.RRND=1 is implemented the same way as RRND=0, then
++	 * RGSR_EL1.SEED must be non-zero for IRG to produce
++	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
++	 * must initialize it.
++	 */
++	rgsr = (read_sysreg(CNTVCT_EL0) & SYS_RGSR_EL1_SEED_MASK) <<
++	       SYS_RGSR_EL1_SEED_SHIFT;
++	if (rgsr == 0)
++		rgsr = 1 << SYS_RGSR_EL1_SEED_SHIFT;
++	write_sysreg_s(rgsr, SYS_RGSR_EL1);
++
++	/* clear any pending tag check faults in TFSR*_EL1 */
++	write_sysreg_s(0, SYS_TFSR_EL1);
++	write_sysreg_s(0, SYS_TFSRE0_EL1);
++
++	local_flush_tlb_all();
++}
++
+ void mte_suspend_enter(void)
+ {
+ 	if (!system_supports_mte())
+@@ -301,6 +344,14 @@ void mte_suspend_enter(void)
+ 	mte_check_tfsr_el1();
+ }
+ 
++void mte_suspend_exit(void)
++{
++	if (!system_supports_mte())
++		return;
++
++	mte_cpu_setup();
++}
++
+ long set_mte_ctrl(struct task_struct *task, unsigned long arg)
+ {
+ 	u64 mte_ctrl = (~((arg & PR_MTE_TAG_MASK) >> PR_MTE_TAG_SHIFT) &
+diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
+index 9135fe0f3df53..8b02d310838f9 100644
+--- a/arch/arm64/kernel/suspend.c
++++ b/arch/arm64/kernel/suspend.c
+@@ -43,6 +43,8 @@ void notrace __cpu_suspend_exit(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
+ 
++	mte_suspend_exit();
++
+ 	/*
+ 	 * We are resuming from reset with the idmap active in TTBR0_EL1.
+ 	 * We must uninstall the idmap and restore the expected MMU
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 7837a69524c53..f38bccdd374a5 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -48,17 +48,19 @@
+ 
+ #ifdef CONFIG_KASAN_HW_TAGS
+ #define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
+-#else
++#elif defined(CONFIG_ARM64_MTE)
+ /*
+  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relies on
+  * TBI being enabled at EL1.
+  */
+ #define TCR_MTE_FLAGS TCR_TBI1 | TCR_TBID1
++#else
++#define TCR_MTE_FLAGS 0
+ #endif
+ 
+ /*
+  * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory and
+- * changed during __cpu_setup to Normal Tagged if the system supports MTE.
++ * changed during mte_cpu_setup to Normal Tagged if the system supports MTE.
+  */
+ #define MAIR_EL1_SET							\
+ 	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
+@@ -426,46 +428,8 @@ SYM_FUNC_START(__cpu_setup)
+ 	mov_q	mair, MAIR_EL1_SET
+ 	mov_q	tcr, TCR_TxSZ(VA_BITS) | TCR_CACHE_FLAGS | TCR_SMP_FLAGS | \
+ 			TCR_TG_FLAGS | TCR_KASLR_FLAGS | TCR_ASID16 | \
+-			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS
+-
+-#ifdef CONFIG_ARM64_MTE
+-	/*
+-	 * Update MAIR_EL1, GCR_EL1 and TFSR*_EL1 if MTE is supported
+-	 * (ID_AA64PFR1_EL1[11:8] > 1).
+-	 */
+-	mrs	x10, ID_AA64PFR1_EL1
+-	ubfx	x10, x10, #ID_AA64PFR1_MTE_SHIFT, #4
+-	cmp	x10, #ID_AA64PFR1_MTE
+-	b.lt	1f
+-
+-	/* Normal Tagged memory type at the corresponding MAIR index */
+-	mov	x10, #MAIR_ATTR_NORMAL_TAGGED
+-	bfi	mair, x10, #(8 *  MT_NORMAL_TAGGED), #8
++			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS | TCR_MTE_FLAGS
+ 
+-	mov	x10, #KERNEL_GCR_EL1
+-	msr_s	SYS_GCR_EL1, x10
+-
+-	/*
+-	 * If GCR_EL1.RRND=1 is implemented the same way as RRND=0, then
+-	 * RGSR_EL1.SEED must be non-zero for IRG to produce
+-	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
+-	 * must initialize it.
+-	 */
+-	mrs	x10, CNTVCT_EL0
+-	ands	x10, x10, #SYS_RGSR_EL1_SEED_MASK
+-	csinc	x10, x10, xzr, ne
+-	lsl	x10, x10, #SYS_RGSR_EL1_SEED_SHIFT
+-	msr_s	SYS_RGSR_EL1, x10
+-
+-	/* clear any pending tag check faults in TFSR*_EL1 */
+-	msr_s	SYS_TFSR_EL1, xzr
+-	msr_s	SYS_TFSRE0_EL1, xzr
+-
+-	/* set the TCR_EL1 bits */
+-	mov_q	x10, TCR_MTE_FLAGS
+-	orr	tcr, tcr, x10
+-1:
+-#endif
+ 	tcr_clear_errata_bits tcr, x9, x5
+ 
+ #ifdef CONFIG_ARM64_VA_BITS_52
+-- 
+2.37.2.789.g6183377224-goog
+
