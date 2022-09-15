@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C1A5B92B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 04:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B452B5B92B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 04:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIOChG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 22:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S230229AbiIOCi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 22:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIOChD (ORCPT
+        with ESMTP id S229685AbiIOCix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 22:37:03 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D745433360
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:37:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPqc0wr_1663209417;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPqc0wr_1663209417)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 10:36:58 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     sj@kernel.org
-Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xhao@linux.alibaba.com
-Subject: [PATCH V3] mm/damon: simplify scheme create in lru_sort.c
-Date:   Thu, 15 Sep 2022 10:36:55 +0800
-Message-Id: <20220915023655.41923-1-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
+        Wed, 14 Sep 2022 22:38:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2471286B7C;
+        Wed, 14 Sep 2022 19:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=Ne9cM+YswsLwN2sAUxB058oBiWyLOnEeEdaac2OhME0=; b=Lc
+        oA3YdAA+Nf2G+MvvFRbZfD9HVBUvaIuUPRfzo1Nhy/7lv5nb7OcEC1StLRYaBAt3+phKAv+q4KB90
+        xwXirbuxfyfEOfL/8JBkT+ZlUxjCfcQBatVtR4EiY8jmcg09CfL7w8s3/Zt4yD4lwSn7C/d5Qp2ZK
+        4gJU7QZNKkqc2q4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oYelt-00Glyc-QH; Thu, 15 Sep 2022 04:38:33 +0200
+Date:   Thu, 15 Sep 2022 04:38:33 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thibaut <hacks@slashdirt.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Subject: Re: Move MT7530 phy muxing from DSA to PHY driver
+Message-ID: <YyKQKRIYDIVeczl1@lunn.ch>
+References: <0e3ca573-2190-57b0-0e98-7f5b890d328e@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0e3ca573-2190-57b0-0e98-7f5b890d328e@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
-they have so much in common, so we can combine them into a single
-function, and we just need to distinguish their differences.
+On Thu, Sep 15, 2022 at 01:07:13AM +0300, Arınç ÜNAL wrote:
+> Hello folks.
+> 
+> MediaTek MT7530 switch has got 5 phys and 7 gmacs. gmac5 and gmac6 are
+> treated as CPU ports.
+> 
+> This switch has got a feature which phy0 or phy4 can be muxed to gmac5 of
+> the switch. This allows an ethernet mac connected to gmac5 to directly
+> connect to the phy.
+> 
+> PHY muxing works by looking for the compatible string "mediatek,eth-mac"
+> then the mac address to find the gmac1 node. Then, it checks the mdio
+> address on the node which "phy-handle" on the gmac1 node points to. If the
+> mdio address is 0, phy0 is muxed to gmac5 of the switch. If it's 4, phy4 is
+> muxed.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/drivers/net/dsa/mt7530.c?id=1f9a6abecf538cc73635f6082677a2f4dc9c89a4#n2238
+> 
+> Because that DSA probes the switch before muxing the phy, this won't work on
+> devices which only use a single switch phy because probing will fail.
+> 
+> I'd like this operation to be done from the MediaTek Gigabit PHY driver
+> instead. The motives for this change are that we solve the behaviour above,
+> liberate the need to use DSA for this operation and get rid of the DSA
+> overhead.
+> 
+> Would a change like this make sense and be accepted into netdev?
 
-Suggested-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-Changes from v2
-(https://lore.kernel.org/linux-mm/20220914113859.37637-1-xhao@linux.alibaba.com/)
-- Add static global 'struct damos_access_pattern' stub variable
----
- mm/damon/lru_sort.c | 41 +++++++++++++++++++----------------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+Where in the address range is the mux register? Officially, PHY
+drivers only have access to PHY registers, via MDIO. If the mux
+register is in the switch address space, it would be better if the
+switch did the mux configuration. An alternative might be to represent
+the mux in DT somewhere, and have a mux driver.
 
-diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-index 07a0908963fd..6a26c5822286 100644
---- a/mm/damon/lru_sort.c
-+++ b/mm/damon/lru_sort.c
-@@ -132,6 +132,18 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
- 		lru_sort_tried_cold_regions, lru_sorted_cold_regions,
- 		cold_quota_exceeds);
-
-+struct damos_access_pattern damon_lru_sort_stub_access_pattern = {
-+	/* Find regions having PAGE_SIZE or larger size */
-+	.min_sz_region = PAGE_SIZE,
-+	.max_sz_region = ULONG_MAX,
-+	/* and accessed for more than the threshold */
-+	.min_nr_accesses = 0,
-+	.max_nr_accesses = UINT_MAX,
-+	/* no matter its age */
-+	.min_age_region = 0,
-+	.max_age_region = UINT_MAX,
-+};
-+
- static struct damon_ctx *ctx;
- static struct damon_target *target;
-
-@@ -157,17 +169,9 @@ static struct damos *damon_lru_sort_new_scheme(
- /* Create a DAMON-based operation scheme for hot memory regions */
- static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
- {
--	struct damos_access_pattern pattern = {
--		/* Find regions having PAGE_SIZE or larger size */
--		.min_sz_region = PAGE_SIZE,
--		.max_sz_region = ULONG_MAX,
--		/* and accessed for more than the threshold */
--		.min_nr_accesses = hot_thres,
--		.max_nr_accesses = UINT_MAX,
--		/* no matter its age */
--		.min_age_region = 0,
--		.max_age_region = UINT_MAX,
--	};
-+	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
-+
-+	pattern.min_nr_accesses = hot_thres;
-
- 	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
- }
-@@ -175,17 +179,10 @@ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
- /* Create a DAMON-based operation scheme for cold memory regions */
- static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
- {
--	struct damos_access_pattern pattern = {
--		/* Find regions having PAGE_SIZE or larger size */
--		.min_sz_region = PAGE_SIZE,
--		.max_sz_region = ULONG_MAX,
--		/* and not accessed at all */
--		.min_nr_accesses = 0,
--		.max_nr_accesses = 0,
--		/* for min_age or more micro-seconds */
--		.min_age_region = cold_thres,
--		.max_age_region = UINT_MAX,
--	};
-+	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
-+
-+	pattern.max_nr_accesses = 0;
-+	pattern.min_age_region = cold_thres;
-
- 	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
- }
---
-2.31.0
+    Andrew
