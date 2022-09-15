@@ -2,152 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB265B95E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B4E5B9670
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiIOICV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S230070AbiIOIem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiIOICT (ORCPT
+        with ESMTP id S230137AbiIOIeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:02:19 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0169F6B;
-        Thu, 15 Sep 2022 01:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663228938; x=1694764938;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ybAfiFs8eUgGnH4G//19S9jDye+SzwnhGZadHt7eQ0U=;
-  b=Ueqeo7fuhWFl5/D5JTlpk2ZBnn9DhhYbs4DCAoiuFEj0rdfdEbkXXS8F
-   x34DcY0Mlq7dSX+TX/m2SAu6AKvXF16se1yLQ6QxfVpYJ0PSWYpMDV6dD
-   ugz4lP/efDHEqqJUZDfjD9jIeIBd3/D1ZkCyVnm9b113xWSmiifXgMrnT
-   PTmoL1qozrkDHKRy4A0kfS+csceJhGsujAzN5YIGg02uGpWzU+cCGlnp6
-   sY3x4QdhYg8N8IipSjEE9GPXUUBSJu08T096CwAj5QxVESVjjCet5tfCb
-   hlq8Yxafm5ZWv6y1JIg2NIRghWUxr+PR0yoQT8DX4iZH/qAlitgBQDMMi
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
-   d="scan'208";a="26194008"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 15 Sep 2022 10:02:16 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 15 Sep 2022 10:02:16 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 15 Sep 2022 10:02:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663228936; x=1694764936;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ybAfiFs8eUgGnH4G//19S9jDye+SzwnhGZadHt7eQ0U=;
-  b=cSAaWru0nDubmmWhr0zTwPPyhJFQNXWGn1Ak09iS/SKA8F6uBKpMzntp
-   vIa7oGoW/lxSIMKvWrwSeNh6GXjfmubq5XTt7qw7kHHIdlIR7r4I0Cou+
-   Wry+N9NQw0mLjbB3OrBZ/kBIajMOulxaCY+XuQa93rVBioUkBM2ji2sYm
-   Fd91o+B7BgsRpzezFrhhhYxQGzv9KhEkk0FgVTqt+ZRIEh7cBJ/nKatlB
-   jE7MFGre/SfDFYHiVEQeRz8u2Ash9DaB+hXbbmrKVkiSWRb0oJXHRExyD
-   92FT5avEHCeL6qssvQxuILKRjtPIx6TAR+7L82jLPVZdI/yxXPtKDTJsq
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
-   d="scan'208";a="26194007"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 Sep 2022 10:02:16 +0200
-Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id C9CD5280056;
-        Thu, 15 Sep 2022 10:02:15 +0200 (CEST)
-Message-ID: <a959cfe90356b702727413e7c14b246875eb88b6.camel@ew.tq-group.com>
-Subject: Re: [PATCH 0/9] Input: synaptics-rmi4 - Bootloader v7/v8 firmware
- update improvements
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Lyude Paul <lyude@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 15 Sep 2022 10:02:13 +0200
-In-Reply-To: <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
-References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
-         <26790cfecb827245187233bc81f9fb89553bb4a7.camel@ew.tq-group.com>
-         <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 15 Sep 2022 04:34:23 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980C96744;
+        Thu, 15 Sep 2022 01:34:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 9A51C3200B0A;
+        Thu, 15 Sep 2022 04:34:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 15 Sep 2022 04:34:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1663230859; x=1663317259; bh=vUqGwLgGnv
+        jdJN3EeYf2AxkvIZhOPYtabrS2PcOns6o=; b=le+JZ+5CDlwi9EXQabwtuvDK+e
+        e87H/rMyJt3a6KbeNM3dXWouovQYQFDWIT04BCRL+c2BSIsxpwxRHrgpEiUMx3jW
+        ybljVlZUbuXr8R4dwM52sZlhRH/s27nPhnuW3hJHLsEwr9EAfhOB781H5iXDu9fW
+        QE7oIvkoHBdKCE87Uo+0iR9J3fzzyiAJJzCwVB5gu6PWQ0xmfAxJYnz5GE4nXt8w
+        FZjROLHhwIFViLlRxIS3N4Ydjeoa/65xtgbgUFMMGtsqcNEoZ017DJRv/fDIQ7iN
+        lhXv2PAW/8xy2Fq3JryOHoflLiRAWga8kEctgpVyhjS5z7TTOcwe50EoxVqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663230859; x=1663317259; bh=vUqGwLgGnvjdJN3EeYf2AxkvIZhO
+        PYtabrS2PcOns6o=; b=l/0D1SxBe0pTzrYfJ8BgnHFf91ySUsC/VIa7YceXkWX0
+        qw2TGaiAJDRLs2maPY/4809U78Gj1RTq6/ojfZPAbchEyp3kg2RPuHz1Vh20igm7
+        ks7uKjcn69KAM/pQ7UTHc1McDlDWrE5xEnYgGNhW6XBM7Uqy7DE6gmwBvCaenLCJ
+        MLGysr012dMpp+FLEQqGySzV+8ZkjVqo0HMTPrDImzHDwHslscTlXxuACcJb9cF9
+        3oBPXHgvwBvzEajpsqaMe+OpXrCwj6iH5lU5r/uV4LBBs1qdT3LI3Jkgh6HsJavz
+        uooAlBDDbTa91cLN4fwLQUIJlnL2xe9fD6rWNNL1qA==
+X-ME-Sender: <xms:iuMiYxLPxTEiUPDOaQStd7AVPFmjc7Q1NkTFVDUYM6pe3uZgi9_2Ig>
+    <xme:iuMiY9Jy0bGvEpOBcIXjgnIA8qPV3u2T1ydiqK1BtaxpT-Zk-SthEj54LUOlK_rXo
+    BdhzNm1JKOkgkWwJk4>
+X-ME-Received: <xmr:iuMiY5vnTtC8exCYKvmzHdXDpOcjLTesl8dmxkjiY-vz0Y_Fjl0pQHeTTfk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:iuMiYyZLdcfd0yePK5bEe3AS1AnvzYzcVFNYVsbsGFuNQ4k5tBfXFA>
+    <xmx:iuMiY4bnwMWnulBNX4mruedb7YjgK9YJsU9W25BDFYbCS_nxr9WpYg>
+    <xmx:iuMiY2CUk6fxSvEk2DOn59AIwV2Pc9E2r-JvunQTAK2vKlEVRTQyJQ>
+    <xmx:i-MiY-yraWZtP3k3T-lqqHDcOHTUMhtsFyWZSlT0qMEHzlTDSb62eA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Sep 2022 04:34:18 -0400 (EDT)
+Date:   Thu, 15 Sep 2022 08:54:59 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the
+ maximum
+Message-ID: <20220915075459.d2snlbwkingwnbh3@penduick>
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
+ <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
+ <20220914155035.88E45C433C1@smtp.kernel.org>
+ <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
+ <20220914180508.0EDD9C433D6@smtp.kernel.org>
+ <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
+ <20220914181458.C6FCCC433C1@smtp.kernel.org>
+ <ecfe17be-5d81-3456-9a86-77acc848f95f@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hrirgpyhbd54p5r5"
+Content-Disposition: inline
+In-Reply-To: <ecfe17be-5d81-3456-9a86-77acc848f95f@i2se.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-15 at 09:43 +0200, Matthias Schiffer wrote:
-> On Mon, 2022-06-27 at 10:31 +0200, Matthias Schiffer wrote:
-> > On Wed, 2022-06-08 at 14:47 +0200, Matthias Schiffer wrote:
-> > > This fixes the firmware update function with bootloader v8, allows to
-> > > recover from interrupted updates with v7/v8, and does some code cleanup.
-> > > 
-> > > I believe that the code that allows to recover from a broken partition
-> > > table is also necessary to make flashing a different partition table
-> > > work at all, but I wasn't able to verify that, as I don't have any firmware
-> > > images with different partition tables to test with. In any case, I'm
-> > > pretty sure that it is working correctly now, as recovery from a mostly
-> > > empty flash without partition table has been tested successfully.
-> > > 
-> > > I have only tested the new code with bootloader v8, and I don't have the
-> > > documentation / interfacing guide for v7, so it would be great if anyone
-> > > could check that I didn't break updates for v7.
-> > 
-> > Hi everyone,
-> > 
-> > any news regarding this patch series?
-> > 
-> > 
-> > Kind regards,
-> > Matthias
-> 
-> Ping - can we get this applied, or at least any kind of feedback?
-> 
-> 
-> Kind regards,
-> Matthias
 
+--hrirgpyhbd54p5r5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ping - another month has passed.
+On Wed, Sep 14, 2022 at 08:26:55PM +0200, Stefan Wahren wrote:
+> Am 14.09.22 um 20:14 schrieb Stephen Boyd:
+> > Quoting Stefan Wahren (2022-09-14 11:09:04)
+> > > Am 14.09.22 um 20:05 schrieb Stephen Boyd:
+> > > > Quoting Stefan Wahren (2022-09-14 10:45:48)
+> > > > > Am 14.09.22 um 17:50 schrieb Stephen Boyd:
+> > > > > > Furthermore, I wonder if even that part needs to be implemented.  Why
+> > > > > > not make a direct call to rpi_firmware_property() and get the max rate?
+> > > > > > All of that can live in the drm driver. Making it a generic API that
+> > > > > > takes a 'struct clk' means that it looks like any clk can be passed,
+> > > > > > when that isn't true. It would be better to restrict it to the one use
+> > > > > > case so that the scope of the problem doesn't grow. I understand that it
+> > > > > > duplicates a few lines of code, but that looks like a fair tradeoff vs.
+> > > > > > exposing an API that can be used for other clks in the future.
+> > > > > it would be nice to keep all the Rpi specific stuff out of the DRM
+> > > > > driver, since there more users of it.
+> > > > Instead of 'all' did you mean 'any'?
+> > > yes
+> > Why?
+> This firmware is written specific for the Raspberry Pi and not stable from
+> interface point of view. So i'm afraid that the DRM driver is only usable
+> for the Raspberry Pi at the end with all these board specific dependencies.
 
-Should I resend the series? Not much has happened in the RMI4 driver,
-so the patches still apply cleanly to latest linux-next.
+I'm open for suggestions there, but is there any other bcm2711 device
+that we support upstream?
 
-Kind regards,
-Matthias
+If not, I'm not sure what the big deal is at this point. Chances are the
+DRM driver won't work as is on a different board.
 
+Plus, such a board wouldn't be using config.txt at all, so this whole
+dance to find what was enabled or not wouldn't be used at all.
 
+> Emma invested a lot of time to make this open source and now it looks that
+> like that more and more functionality moves back to firmware.
 
-> 
-> 
-> 
-> > 
-> > 
-> > > Matthias Schiffer (9):
-> > >   Input: synaptics-rmi4 - fix firmware update operations with bootloader
-> > >     v8
-> > >   Input: synaptics-rmi4 - introduce rmi_f34v7_check_command_status()
-> > >     helper
-> > >   Input: synaptics-rmi4 - fix command completion check for bootloader
-> > >     v7/v8
-> > >   Input: synaptics-rmi4 - rewrite partition table unconditionally
-> > >   Input: synaptics-rmi4 - reset after writing partition table
-> > >   Input: synaptics-rmi4 - make rmi_f34v7_erase_all() use the "erase all"
-> > >     command
-> > >   Input: synaptics-rmi4 - remove unneeded struct register_offset
-> > >   Input: synaptics-rmi4 - simplify rmi_f34v7_start_reflash()
-> > >   Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
-> > > 
-> > >  drivers/input/rmi4/rmi_f34.c   |  16 +-
-> > >  drivers/input/rmi4/rmi_f34.h   |  17 --
-> > >  drivers/input/rmi4/rmi_f34v7.c | 349 +++++++--------------------------
-> > >  3 files changed, 81 insertions(+), 301 deletions(-)
-> > > 
+What functionality has been moved back to firmware?
 
+Maxime
+
+--hrirgpyhbd54p5r5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYyLaUwAKCRCIQ8rmN6G3
+y9OpAP4piBbM6aPirswtJbaB00rQd11MuWbOXRUllFGsa+tQTAEAp0zgBVW200Xw
+HsAzlYqWG/1RsqziBcl/XungkVnV4Ck=
+=Rad4
+-----END PGP SIGNATURE-----
+
+--hrirgpyhbd54p5r5--
