@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E2F5BA1CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AD35BA1CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiIOUaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 16:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S229579AbiIOUaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 16:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIOU37 (ORCPT
+        with ESMTP id S229501AbiIOUaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 16:29:59 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A5D30F5A
+        Thu, 15 Sep 2022 16:30:00 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6032B8B
         for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:29:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id 13so15731325ejn.3
+Received: by mail-ed1-x529.google.com with SMTP id z97so28655514ede.8
         for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=v1YzXJ4RvumAwk7bF6dhyR+VAPv7fcA5m5FBuJy0qIY=;
-        b=qPH+EslmJox4jB/AYeCJVyO2sQGqb2P7YW0rUcwI0rqV6lVGQ0zsfxckTccO+35RwJ
-         D54NAIXUhnx7L7+nGaVxxv/YcyCGx7zWRSQX/OQmQEcBb/zUyF/9gMZQnD1kvz9iOf/3
-         QU7WSvojdZ4m9nGT/BwQC6Ccxci9CIg29PqKNyiwXxKVXkJOrYCS2ulm0PvBVxsqN+1c
-         7cPXwm05Gr27KWuIEnv4VON0gniO/kzAXrAI3Q95bZyjILHTlvunb/22gFl3YPJ1mrfR
-         uMV2GjSbArOlKqR2BEweVwf76cVk3ig9sQ1CH3tXZv4JnX8gTJMf7xlfdIaG6w7HJa9p
-         lV5A==
+        bh=OipeXrKVU1BCY0WjlS+Kuojt9dLqNbUbahDVdYj30x8=;
+        b=mkQTbaiVCfxFHMGkSMiDq2B0j4wI7cUA65gFgr12puDxoaN1ZTeoAReUDGZxV3OA2B
+         wWG5GBIXcY6Ttqkbc1iAXFWCe+cXNzdIXshyYk8OoR5lQgPFf4dv0JgbXjd745cRWP14
+         gneqlmF4Msg58rqdMeOpMwiLdm1dHZJh62MPz5/4M89qZ4wJpb6PY8a0SpWIXBYjDkVY
+         VdQciox2/UEeeUNiHuB1rPf6/enpOKq562MUva6huD8LZHV1dBuAJihQUR8UqmTcaU/p
+         sAJ0/ri8wddyl/NJ/Ow7GSMHz2EZ6HYkIEoFny0++WFY0g6oMP6KTmF6q1TGuphJKAv8
+         U+Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=v1YzXJ4RvumAwk7bF6dhyR+VAPv7fcA5m5FBuJy0qIY=;
-        b=d5qPa+B9/3gKXXj+Rqs6WAiwHhCbmpHKmjvuOAkoo+ZdM+OOPcZDkehVanHtZ9EZgT
-         bATS09DCkMahetIGisbWtEtuYNUL8ZhGVQEqCNth3FscX8ODSKsrrOfWvx0w6KBfnkFu
-         AMyLbWlQ0AEkCD69FuXGgg7k46nTgq81q4snPXQI8H+y36XAK9OQEdLl/ONN5yiwZ+4Z
-         eS3zpag67hUAAqQNJMYIPLtpRz3D1Zu2nqIcYIiX7+5LRKnuHZ0IIpcrhAMqtEhjx6SV
-         qrACrte4Eq65LvYOjWZx7dBlxMF552JDOaVUl99neq6ZuWFbPNW1ldTxa1rROxMUfX6h
-         c70w==
-X-Gm-Message-State: ACrzQf3YC/fKXRqCoLuN/KtKRZiycX8Q+JnurVRQ0chEaKa000/FsVDr
-        fdDMyC/eGyUdpYQd71zDamQ=
-X-Google-Smtp-Source: AMsMyM7mkHT26n8JwF9D9Gn8feUc/Kvkri9ZB0b/ZgqMXdfMsg8jMzESijFS1oWsnlJuXB6RvCrfRA==
-X-Received: by 2002:a17:906:ee86:b0:741:89bc:27a1 with SMTP id wt6-20020a170906ee8600b0074189bc27a1mr1133421ejb.725.1663273796925;
-        Thu, 15 Sep 2022 13:29:56 -0700 (PDT)
+        bh=OipeXrKVU1BCY0WjlS+Kuojt9dLqNbUbahDVdYj30x8=;
+        b=C+KAFfcpNHrJlJ1neWjl6hMMQIdd4eOGpLEjS73QD04OouUG8kBUhU7FgPq4gDZUQi
+         Ls0G6fojvWVeDB47iO8GB5EYGqTErgoulcT+2rLoAmnGZMpFjKU25G7RMJmzTY8VMdQs
+         MMqr5W4Uqf6ZngDpiD8uJoKG82U1wo+rlmd3bhFftox9AzABqM9aJfFYz1ujahRaAMBK
+         PUF9dQHuGwkNdgj7g+YBrq7scTIdfNrvAdXw1lA2ip/BQyKfGaUS8NLw1MFgUx4YKDsy
+         tffw+Ihsk8QhkML073rYyghwY3rUVb2Vi0PKN2I3xjMkcOfdGi+ifDNkhAWMQlRCtcut
+         E+kA==
+X-Gm-Message-State: ACrzQf26t2vp9VrjHqQEKBJvUFT4waQVcdiwlNH+vU7j9T1dqw6AIOjW
+        f5fuvyaimZyXKdNhmNU3vNM=
+X-Google-Smtp-Source: AMsMyM4jFu/KytAdYQKVUma6k3L7U3Vgc2mj0hUp08Ns2veNAewKttBuNZLs9d1DH1nAwCBbGSxb9g==
+X-Received: by 2002:a05:6402:50d1:b0:452:899e:77c with SMTP id h17-20020a05640250d100b00452899e077cmr1348375edb.0.1663273797603;
+        Thu, 15 Sep 2022 13:29:57 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-43.ip.prioritytelecom.net. [217.105.46.43])
         by smtp.gmail.com with ESMTPSA id ci25-20020a170906c35900b0072b3406e9c2sm9607295ejb.95.2022.09.15.13.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 13:29:56 -0700 (PDT)
+        Thu, 15 Sep 2022 13:29:57 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     forest@alittletooquiet.net, gregkh@linuxfoundation.org
 Cc:     namcaov@gmail.com, philipp.g.hortmann@gmail.com,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [RFC PATCH 1/5] staging: vt6655: remove redundant if condition
-Date:   Thu, 15 Sep 2022 22:29:32 +0200
-Message-Id: <1e26ece88d2fbf6dafff8694d70a8e52dfb3c077.1663273218.git.namcaov@gmail.com>
+Subject: [RFC PATCH 2/5] staging: vt6655: change vnt_receive_frame return type to void
+Date:   Thu, 15 Sep 2022 22:29:33 +0200
+Message-Id: <f727ea04703858920f6da694676ec323469e7b97.1663273218.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1663273218.git.namcaov@gmail.com>
 References: <cover.1663273218.git.namcaov@gmail.com>
@@ -71,37 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function vnt_receive_frame always returns true, so checking its
-return value is redundant. Remove it.
+The function vnt_receive_frame's returned value is not used anywhere.
+Furthermore, it always return true. Change its return type to void.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/vt6655/device_main.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/staging/vt6655/dpc.c | 8 ++++----
+ drivers/staging/vt6655/dpc.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 04d737012cef..79325a693857 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -832,12 +832,12 @@ static int device_rx_srv(struct vnt_private *priv, unsigned int idx)
- 		if (!rd->rd_info->skb)
- 			break;
+diff --git a/drivers/staging/vt6655/dpc.c b/drivers/staging/vt6655/dpc.c
+index c6ed3537f439..9f2128f5d3c3 100644
+--- a/drivers/staging/vt6655/dpc.c
++++ b/drivers/staging/vt6655/dpc.c
+@@ -115,7 +115,7 @@ static bool vnt_rx_data(struct vnt_private *priv, struct sk_buff *skb,
+ 	return true;
+ }
  
--		if (vnt_receive_frame(priv, rd)) {
--			if (!device_alloc_rx_buf(priv, rd)) {
--				dev_err(&priv->pcid->dev,
--					"can not allocate rx buf\n");
--				break;
--			}
-+		vnt_receive_frame(priv, rd);
-+
-+		if (!device_alloc_rx_buf(priv, rd)) {
-+			dev_err(&priv->pcid->dev,
-+				"can not allocate rx buf\n");
-+			break;
- 		}
- 		rd->rd0.owner = OWNED_BY_NIC;
+-bool vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
++void vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
+ {
+ 	struct vnt_rd_info *rd_info = curr_rd->rd_info;
+ 	struct sk_buff *skb;
+@@ -133,13 +133,13 @@ bool vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
+ 		/* Frame Size error drop this packet.*/
+ 		dev_dbg(&priv->pcid->dev, "Wrong frame size %d\n", frame_size);
+ 		dev_kfree_skb_irq(skb);
+-		return true;
++		return;
  	}
+ 
+ 	if (vnt_rx_data(priv, skb, frame_size))
+-		return true;
++		return;
+ 
+ 	dev_kfree_skb_irq(skb);
+ 
+-	return true;
++	return;
+ }
+diff --git a/drivers/staging/vt6655/dpc.h b/drivers/staging/vt6655/dpc.h
+index 40364c0ab7f6..f67c1ef23171 100644
+--- a/drivers/staging/vt6655/dpc.h
++++ b/drivers/staging/vt6655/dpc.h
+@@ -16,6 +16,6 @@
+ 
+ #include "device.h"
+ 
+-bool vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd);
++void vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd);
+ 
+ #endif /* __RXTX_H__ */
 -- 
 2.25.1
 
