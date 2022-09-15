@@ -2,310 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8F65B9412
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2035B9415
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIOF7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 01:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S229557AbiIOGFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOF7S (ORCPT
+        with ESMTP id S229448AbiIOGFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 01:59:18 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C499019F;
-        Wed, 14 Sep 2022 22:59:17 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11e9a7135easo46040428fac.6;
-        Wed, 14 Sep 2022 22:59:16 -0700 (PDT)
+        Thu, 15 Sep 2022 02:05:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F66580E9B;
+        Wed, 14 Sep 2022 23:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663221918; x=1694757918;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=b07O5ZnEvM3CKJMAYNHcDmUr8GppajapqqtQqK5dqlI=;
+  b=N6VifAv1u15DDaGPReqdX0UynBK1otALPSNjEvXK0WUYBEVeATfTeaFg
+   CsrytX94d7A/u5eg1HqC2HHN0zXjEwipcH0aXCgG+hNbLpQFtokfhgH5V
+   5Lidm46c6j4YBPHf4cuSIs55d0fhPXrZM0YGabkSkMZZEFCqeoUB32lrL
+   FSplhq/ALxF37k2wlV8CxtfGE8uF1AEXrQlVriIWqRBSbcd62PL58Z2dP
+   KR0H5Be5wbM2Gv4oZvCZpD4LpiSnXoz3stwYPHIBa8gISoujuW/HMHsjs
+   8XpIQ67MdSQnwarASmb4cpueojLAUWO2qwjs7ToR4b6HJoEnR3Vs9PjoK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="177246402"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Sep 2022 23:05:15 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 14 Sep 2022 23:05:14 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Wed, 14 Sep 2022 23:05:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nVO9poAx5n0vXbpSZuNCZzc075uBeBFq6jBjTRj8L/OgbEg4+LYyiRom2J3bt1mMuudJYeBJC8ZYZMHsij04m6Er3CVOCL3rNC7cEbaFjMk+oopllnGI3F3Sv36MpjYk2wmFZmVXNyACkB8fJISWfdaBKYBZVC2WmxdCAPrYEB9oRuFXaCGrlVEX3fHLsyQ4P5W1szi/SphlPlV8o4h/CyNeyU6WFE0CTWAM0wVo6CsmW9VuAeVcJTBV8IZ9mEDzt7b7dqEVtnlnqeax014QXjEkJInXCNApYgrX/4zXwNIzQPo57bXO2JkhcZSdO3S8HhRW08DfKHLPWl4JN4NFqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b07O5ZnEvM3CKJMAYNHcDmUr8GppajapqqtQqK5dqlI=;
+ b=I8ytmo2EY7nxSzHtLoJdoemGEDhpaOWQgPZAI9uQ8anI5cqkXH2HIkFyfXg6zw6czJIKDfue98MrHz5rbr/rImloCUlCquKIiypaLxHwO7aEbhjCF/e9ho98sJLA3QZWAYXyoXHcOp3R8iL4rzeJcSpg83Np/zZsWcFLDreELr7k7Y220pkE4Mu0s01ULCGLxebmIzw3+UIpxIYOzhfFeApRDeEcnakgsjoPcDx4uLZvOQOAYQq/vDXuoiYDceRUAUBGvHzCmU0meZDFaUxOZdhoIggi+kwci+8hTQeQ6U5+HaJ4gO91L7KKJasn8cLnN1EB/b2wQaDUikf7qonRMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=QuYwY1WWD4oc1w5hcjaVeyURITDJWRc1kZVgbGtIbbk=;
-        b=DSP1awPcWe1qx8PIBW3q/pE0+uNiUeGrVwlFlzVld6dQTJO30r+sBX70NGFeDfhk3g
-         nb5lz++dIYu7Vjnrdsd3ZyGNeiUu5QyOMjERF8VZ9H2SMYJMYSpoCAB91fs57kVa94RN
-         u8wr2rxMrMPYv/RsOKfUQP5D5X89yMRnZAhf125eRSMAeACbzPFRJwS9/x8zSdUyyvML
-         KbDDHR/VeYj3bqMxszYOhNico+rHvehIgE4Grrfz4OQaTNhiIRvvtL6XeT5S7fd5dE87
-         uAQjmjDejEe3YxAWHxI1I/RiFu62t97x+6R7/1OYnzwctPkXpCB8Hy6HM7QHRcswgbsY
-         HscA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=QuYwY1WWD4oc1w5hcjaVeyURITDJWRc1kZVgbGtIbbk=;
-        b=pas9WzvvPphRueuzhoOiBv4fqNs/CVxBtHJOWF6kspispsjk8fREyDEJbpmmXWgOxx
-         hLgmWDMoHjL40XBJCJR5SO+2DIKqBYfNGH7WIOjYewPYv8Gf4XU0uVjpETtkwFYgZoVo
-         5rFBNcwhvZ49V8OLM3Rj2RDm1KJQ33mzTSqDE1LcOnYTDkB15rseKLwKc+hlzVCqfZOl
-         Q7gzad4qVw3m3gIWsh9lYrvecf4W1MVnLFFdwWY3F8LE8hwrH62QZVKN7dnOmKKC2YAC
-         pV45pXFXYsKVgaxurN9xdqWLzfBukv9K3qQq++SQ/qi9nhvMYieEs4wpFCaK0BGVqYRQ
-         B/rw==
-X-Gm-Message-State: ACgBeo1WXSWM0X+kT5iOLSZoNwBGqZnx9YrPIR35d2fxyjDptlxCxQPH
-        BgOGPA7AVlmsSfn/veOF4D3Kb67++okwcudoEbM=
-X-Google-Smtp-Source: AA6agR7q6lVtWmHCXQBdt68pJfxkqrpvlVB8rMWyDEedFfJdCaTm2edGPrVJcncfUWp2Y38mPeBJ2uDrSVgmICNIUu0=
-X-Received: by 2002:a05:6870:c0c8:b0:101:b3c3:abc3 with SMTP id
- e8-20020a056870c0c800b00101b3c3abc3mr4359750oad.144.1663221556310; Wed, 14
- Sep 2022 22:59:16 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b07O5ZnEvM3CKJMAYNHcDmUr8GppajapqqtQqK5dqlI=;
+ b=fryNHrnhipCngivb9sKMGqQwJhW5EuePCyrMoroJHrZyIlx46qn/Iac87+B1yULgsYlOeT5hXhmYQtoN67OAiRsgyCfox6raVSdQ8umTMCgOOz5uVKIJq7HsvWDCgS0UbcnX1m7QQiSAwRvfEI326LGOjcWau636iemmXy66tgE=
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
+ by DM4PR11MB5996.namprd11.prod.outlook.com (2603:10b6:8:5f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Thu, 15 Sep
+ 2022 06:05:10 +0000
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780]) by BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780%4]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
+ 06:05:09 +0000
+From:   <Kumaravel.Thiagarajan@microchip.com>
+To:     <renzhijie2@huawei.com>, <arnd@arndb.de>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sudipm.mukherjee@gmail.com>
+Subject: RE: [PATCH -next] misc: microchip: pci1xxxx: Fix build error
+ unused-function
+Thread-Topic: [PATCH -next] misc: microchip: pci1xxxx: Fix build error
+ unused-function
+Thread-Index: AQHYyLIVXgvSM3vHT0yNPOd8TEVc/63f/8Sg
+Date:   Thu, 15 Sep 2022 06:05:09 +0000
+Message-ID: <BN8PR11MB3668C521DFE3ED67E101F150E9499@BN8PR11MB3668.namprd11.prod.outlook.com>
+References: <20220915031605.86214-1-renzhijie2@huawei.com>
+In-Reply-To: <20220915031605.86214-1-renzhijie2@huawei.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN8PR11MB3668:EE_|DM4PR11MB5996:EE_
+x-ms-office365-filtering-correlation-id: ff70ff29-7ca6-44d4-4c2e-08da96e03ed6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NkVjY5X7isXHVF/kxJNkBimXLORlmgM521uCgt92dEW20v1ssGdAhLLck62IzB93tiqhkLUbCSCPruQ1q3NNsaiouE8SEQ2sJRI+fc0sU74BBJUOxq78RqEJygSsrEaM8fTCDLrZMRwuamF1vYPq1dFi+83OB7iiyDI2ALvhd7z30R7K1Nv2n8MOqxpjLB/SluDFtTgvjGbvcEMK2iM/K39ftq87ymmDr1HuWLbZh11hy3zAmJs8xB9Q3PbdkJVhrW6dhBEYk2rS4zUzU/QFEtP1RIWgRwJzFZMtWtPdtbLHZA191OTsXAqhhHq8vab5nMU8Z4cpRoDpeBW6fyEP7eR5Kb1ChyyuYiteWjfYnKu5OIww4kHDopMVvS6fPb7a/vM/8+K8euWQBtg1j/CPCocNCKqF5b3h23OmEtkT7v7U3lVupkjOD3URdn2KWxd4ZiLWvBxROThdToWtPFAvGK74f6VCAhS/OIReMXohvcCZXccHaugK/OP4n8RYk+lHHjZ09hyk51vxXFTXnOFwPXQPOcWmSs5HY84sKtfSSJx4BlDbYKBdVZN8YvYOqcKhYeMETq98Rijlx7CSRSNagM+RZJNVmLS6kBfTBuJZK4nHCN3XghA+cLesRzpZ6AfA3c1RrjqLsaqnAu7oNrkIpF53ARvDGaVUsVXw767zRvwF/ipSeYfE7QK1Pfq1MQB8peIMyhYofWwkn++0cl3cUcBOYlX3JbdL0/A76o7N272lcdRHWO79+t/swo0AQS3yXBY3niMy3Kr1v0WCnhwLLUxua+9CxJLsIyTYRi/d4Q/7F03okvnBNRXXceh4hpWIZfZRbGIWRVvUCj/8nLcnoEHJCUo67fdqDeT6mP5DrYAAG9oUUm10h0psnP936Cti
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199015)(38100700002)(122000001)(38070700005)(71200400001)(4326008)(76116006)(66556008)(33656002)(66446008)(66946007)(64756008)(8936002)(110136005)(316002)(54906003)(55016003)(2906002)(66476007)(52536014)(5660300002)(83380400001)(478600001)(186003)(7696005)(53546011)(6506007)(26005)(41300700001)(966005)(86362001)(9686003)(8676002)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UTNSM0RYRGptYlVtdmJ6eXRXSTh5NEREbzdQZzZTYXdZbnN2emVQTytYYjI1?=
+ =?utf-8?B?RkFGUnVhd1E0QTI5NmV3TFZPQm1EbEU2Z2lsY2t3aVJyTmJ3Z3JsMnVDdjlO?=
+ =?utf-8?B?UmRxTDFTZjZPTnd0aXFBWi9ySWNvaElzT2JOZ2FhT21UWllxdGxidXJLZ0lV?=
+ =?utf-8?B?amdnSTNSWG5kUEo3ZE5lNHUvNFQxZnNEMldZbjNRK2c5MWNxZWZsZ1ZLOGFT?=
+ =?utf-8?B?QlROc05ZYVd5K0FWSjcyaTlkUGhDOWI1T2EweUFuR1ZrSlhCUmtHUVBHc1Ri?=
+ =?utf-8?B?T3dBMTNWMzE4RmNYTnI1NllUb0FRL3piM1IyeE5IamtpOWphenVVN2lBZkVQ?=
+ =?utf-8?B?U1MweThORkxnczhEUkhKdDV6YjVZSDhVZU9BNGN5RTNGanVEbmRrU3U2TnNn?=
+ =?utf-8?B?M05heFhFaXEzM1d1TXZqRG9FWDVHWFJqcnp6cDRVTldabTc1MHpaeWxQVjFU?=
+ =?utf-8?B?Q21kbU9WUkRmQ0NycVUrelpOK3VrNmVsUm9rajhGdklrS3c1dytPRW9zUmlV?=
+ =?utf-8?B?TDJndjNQU2FBVmFlOVhVc1RMK2lrQXdoTlNPazBTL0I0RTIxWGsvaHNvcG04?=
+ =?utf-8?B?MU1TUU8yL3VmaENrMElmcDhOZFFZRzNWbW9lUlRETjNLV0pxNVRTSE5XamlJ?=
+ =?utf-8?B?Qmh6Y3VyZFphWVNxNmVaQmRmbUwxV29zY2NZektxenNaWXhkazJySVBxSTNF?=
+ =?utf-8?B?UXhwcjZNL0FoOElSRkg5U3FDY0VlL3MyYk55TUdLTkNXZldxTDNiMGgzM1c0?=
+ =?utf-8?B?b3RCR1hHaFJNTEczSnZ2TlF0Y1o4S2xoTWhxaFdsR282Q1VoU1JuZTdwbXAx?=
+ =?utf-8?B?OWJRL1dSRTJrMWlUSEJkdVJTaHcvRjlzNTJROFE5UiswMlk4Q20rb2c2ZEM5?=
+ =?utf-8?B?cEV1eFYwbWhCR2Y1V0NSSzcvSXlYZDg2SnhLeFlxS0pqclhTRlgyb2Z5c0xx?=
+ =?utf-8?B?elhLM1pwTFh1RE1sTXZKaGh1aUtmMkQ3c0Y2K2tlQms3VzNDK2prZUh4enZL?=
+ =?utf-8?B?WUpoZFNXQm9vSktVNmhFREhMNXd4QVZPazRnOUFmeW83VUZjY0gxNnh0VU1O?=
+ =?utf-8?B?cUtSdzc1b1o3OUdNdWswcjc5ejREcmVtSmEyTFl3OGJVMkoxYXNjRFVKQjI3?=
+ =?utf-8?B?bTJlaVUralRUdmdCaG9GWUtLWlFBWGpzRFp5Wm9EaDRPUVlUVFlXRmp5ZWdM?=
+ =?utf-8?B?S0F0M3pZaHF1NktFcStIRFJEVkNteStQaWMweVZEUFVQUGJ0U3lGSGV0Vkpr?=
+ =?utf-8?B?S1NmT3NxTmRFb2d2UUdiUnFJajUvc2d1NytQN3lCb0ZCYmwwQ1lKUzJSZWZF?=
+ =?utf-8?B?bnJCcVFWbjE4TGNMU2tHK3hvVXBhQm5aZFFFamNyTXcwYkpKMUpYNFlqZk1B?=
+ =?utf-8?B?Z1hTcDg0NHBDajlwbmlsc0UydUxPdVQ5alJiSEtvN3R5UWpaZFlvazQ4UVNv?=
+ =?utf-8?B?aEdQV05RZmJMRTBLM1BTZmFRa1I2cjk3WUZ5WWVPc3JtWTl1WjNXZkFlV3Nn?=
+ =?utf-8?B?eFpvaTl3K3lSVUdPM1VBRHJET001Umt6SEY3U3hRdkRZS0xScVdsT1FiTXF3?=
+ =?utf-8?B?eEhla0RvWlFab1U1NFlxaFdldmVBcnNiM2RnTzc0QVdjRk1GR0c4UjJLNERZ?=
+ =?utf-8?B?aFc0WG5YRHNnMEFMSVptdHNmcmR0cHNWU1I2d1NDVXVFY0Y1SU9oV3RNZ0FZ?=
+ =?utf-8?B?VXdncmwwZGljMXYyRFFwa0MveHpiZXh0Y0JuWEhCZDVwOFYwTHQrVnJZcnYw?=
+ =?utf-8?B?dUhxa2xud2QxOW5BeTFHcTc0NFMvdDd0MEFmaTBFOVpLU2dtdWl4Q2hvNVlY?=
+ =?utf-8?B?WXY4RFBMSFd4Zk1qdmV1YXJrVnVENVUvZUlrOFlnMzlzcXBkdEo5ZENIalM4?=
+ =?utf-8?B?Um9NVkZBenpQUjRzd2M5WTdoaElKQjRranpsSFBoOEUxUUt0elNRbGVrVzQr?=
+ =?utf-8?B?T1k2cFpCK1JXVW9ub2h3TzFQSHVoZ2JlSU01V1lQSXM3Szl2UWd1Y1UxRlRu?=
+ =?utf-8?B?eE5GLzBxL1hiUFExR3ltcFN6YUZLQ05uNWtERmRodnlsL2h6V0Y4b3YxRTMy?=
+ =?utf-8?B?REppTFVnb3FTTUd2VVVBdmNEWXdoQ1pNS1Awb1J4a2w1eW95WGZ2WTFPUnlx?=
+ =?utf-8?B?UHVPQmFNbS84TzdSajNleHo4aW9ScnkrbysvREI5WjBlT2luaEpwWHRTTDZO?=
+ =?utf-8?Q?U0xaLq1dYQc6tsyvMY3d1Ew=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220914085451.11723-1-arinc.unal@arinc9.com> <20220914085451.11723-6-arinc.unal@arinc9.com>
- <CAMhs-H9pj+qEdOCEhkyCJPvbFonLuhgSHgL4L6kkhO3YRh52vw@mail.gmail.com>
- <6593afa8-931b-81eb-d9a8-ec3adbd047c6@arinc9.com> <CAMhs-H_woEpWVEWbe+1p76g6M3ALjoVn-OgzpnJQHOjd02tHxw@mail.gmail.com>
-In-Reply-To: <CAMhs-H_woEpWVEWbe+1p76g6M3ALjoVn-OgzpnJQHOjd02tHxw@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 15 Sep 2022 07:59:04 +0200
-Message-ID: <CAMhs-H9m9LdQ3J5PjDNo_fh1b6rhSdu5Ddb3nfE=2nWxfTCP=A@mail.gmail.com>
-Subject: Re: [PATCH 05/10] mips: dts: ralink: mt7621: fix some dtc warnings
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, erkin.bozoglu@xeront.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff70ff29-7ca6-44d4-4c2e-08da96e03ed6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2022 06:05:09.6325
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X6Sp5U5eYNLZxPMQFBNcWX1M2jSkW6G08Tr5Uk/7Dmf+nGOJcTPz/UMEPedNfQ2/wR0vlL5GJ8e0RiGXEQPzL9hSov02nGIrBOfAoxAvdb6FcPIr+Tj8REVJmZu8gdP6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5996
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 5:30 AM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Wed, Sep 14, 2022 at 12:46 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@ar=
-inc9.com> wrote:
-> >
-> > Hi Sergio,
-> >
-> > On 14.09.2022 12:14, Sergio Paracuellos wrote:
-> > > Hi Arinc,
-> > >
-> > > On Wed, Sep 14, 2022 at 10:55 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
-l@arinc9.com> wrote:
-> > >>
-> > >> Fix the dtc warnings below.
-> > >>
-> > >> /cpus/cpu@0: failed to match any schema with compatible: ['mips,mips=
-1004Kc']
-> > >> /cpus/cpu@1: failed to match any schema with compatible: ['mips,mips=
-1004Kc']
-> > >> uartlite@c00: $nodename:0: 'uartlite@c00' does not match '^serial(@.=
-*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/serial/8250.yaml
-> > >> uartlite@c00: Unevaluated properties are not allowed ('clock-names' =
-was unexpected)
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/serial/8250.yaml
-> > >> sdhci@1e130000: $nodename:0: 'sdhci@1e130000' does not match '^mmc(@=
-.*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/mmc/mtk-sd.yaml
-> > >> sdhci@1e130000: Unevaluated properties are not allowed ('bus-width',=
- 'cap-mmc-highspeed', 'cap-sd-highspeed', 'disable-wp', 'max-frequency', 'v=
-mmc-supply', 'vqmmc-supply' were unexpected)
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/mmc/mtk-sd.yaml
-> > >> xhci@1e1c0000: $nodename:0: 'xhci@1e1c0000' does not match '^usb(@.*=
-)?'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > >> xhci@1e1c0000: compatible: ['mediatek,mt8173-xhci'] is too short
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > >> switch0@0: $nodename:0: 'switch0@0' does not match '^(ethernet-)?swi=
-tch(@.*)?$'
-> > >>          From schema: /home/arinc9/Documents/linux/Documentation/dev=
-icetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > >> port@1: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >> port@2: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >> port@3: status:0: 'off' is not one of ['okay', 'disabled', 'reserved=
-']
-> > >>          From schema: /home/arinc9/.local/lib/python3.10/site-packag=
-es/dtschema/schemas/dt-core.yaml
-> > >>
-> > >> - Remove "mips,mips1004Kc" compatible string from the cpu nodes. Thi=
-s
-> > >> doesn't exist anywhere.
-> > >> - Change "memc: syscon@5000" to "memc: memory-controller@5000".
-> > >> - Change "uartlite: uartlite@c00" to "serial0: serial@c00" and remov=
-e the
-> > >> aliases node.
-> > >> - Remove "clock-names" from the serial0 node. The property doesn't e=
-xist on
-> > >> the 8250.yaml schema.
-> > >> - Change "sdhci: sdhci@1e130000" to "mmc: mmc@1e130000".
-> > >> - Change "xhci: xhci@1e1c0000" to "usb: usb@1e1c0000".
-> > >> - Add "mediatek,mtk-xhci" as the second compatible string on the usb=
- node.
-> > >> - Change "switch0: switch0@0" to "switch0: switch@0"
-> > >> - Change "off" to "disabled" for disabled nodes.
-> > >>
-> > >> Remaining warnings are caused by the lack of json-schema documentati=
-on.
-> > >>
-> > >> /cpuintc: failed to match any schema with compatible: ['mti,cpu-inte=
-rrupt-controller']
-> > >> /palmbus@1e000000/wdt@100: failed to match any schema with compatibl=
-e: ['mediatek,mt7621-wdt']
-> > >> /palmbus@1e000000/i2c@900: failed to match any schema with compatibl=
-e: ['mediatek,mt7621-i2c']
-> > >> /palmbus@1e000000/spi@b00: failed to match any schema with compatibl=
-e: ['ralink,mt7621-spi']
-> > >> /ethernet@1e100000: failed to match any schema with compatible: ['me=
-diatek,mt7621-eth']
-> > >>
-> > >> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> > >> ---
-> > >>   .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  2 +-
-> > >>   .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  |  2 +-
-> > >>   arch/mips/boot/dts/ralink/mt7621.dtsi         | 32 +++++++--------=
-----
-> > >>   3 files changed, 14 insertions(+), 22 deletions(-)
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/ar=
-ch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> index 24eebc5a85b1..6ecb8165efe8 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-> > >> @@ -53,7 +53,7 @@ system {
-> > >>          };
-> > >>   };
-> > >>
-> > >> -&sdhci {
-> > >> +&mmc {
-> > >>          status =3D "okay";
-> > >>   };
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/ar=
-ch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> index 34006e667780..2e534ea5bab7 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-> > >> @@ -37,7 +37,7 @@ key-reset {
-> > >>          };
-> > >>   };
-> > >>
-> > >> -&sdhci {
-> > >> +&mmc {
-> > >>          status =3D "okay";
-> > >>   };
-> > >>
-> > >> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/=
-dts/ralink/mt7621.dtsi
-> > >> index ee46ace0bcc1..9302bdc04510 100644
-> > >> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > >> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> > >> @@ -15,13 +15,11 @@ cpus {
-> > >>
-> > >>                  cpu@0 {
-> > >>                          device_type =3D "cpu";
-> > >> -                       compatible =3D "mips,mips1004Kc";
-> > >>                          reg =3D <0>;
-> > >>                  };
-> > >>
-> > >>                  cpu@1 {
-> > >>                          device_type =3D "cpu";
-> > >> -                       compatible =3D "mips,mips1004Kc";
-> > >>                          reg =3D <1>;
-> > >>                  };
-> > >>          };
-> > >
-> > > Instead of removing this, since compatible is correct here, I think a
-> > > cpus yaml file needs to be added to properly define mips CPU's but
-> > > compatible strings using all around the sources are a bit messy. Take
-> > > a look of how is this done for arm [0]
-> >
-> > I did investigate the arm bindings beforehand. I've seen that some of
-> > the strings are also checked by code. I don't see the mips strings used
-> > anywhere but DTs so I had decided to remove it here. I guess we can mak=
-e
-> > a basic binding to list the mips processor cores.
->
-> At the very least I do think a compatible string should exist for cpu
-> nodes :). And because of the mess with MIPS cpu nodes in dts files all
-> around I think we should only add this 'compatible' as a requirement
-> and mark 'reg' and 'device_type' as optionals.
-
-I have just sent a patch to start from containing all compatible
-strings I have found in the 'arch/mips/boot/dts' folder:
-
-https://lore.kernel.org/linux-devicetree/20220915055514.463241-1-sergio.par=
-acuellos@gmail.com/T/#u
-
->
-> >
-> > What do you think Thomas?
-> >
-> > >
-> > >> @@ -33,11 +31,6 @@ cpuintc: cpuintc {
-> > >>                  compatible =3D "mti,cpu-interrupt-controller";
-> > >>          };
-> > >>
-> > >> -       aliases {
-> > >> -               serial0 =3D &uartlite;
-> > >> -       };
-> > >> -
-> > >> -
-> > >>          mmc_fixed_3v3: regulator-3v3 {
-> > >>                  compatible =3D "regulator-fixed";
-> > >>                  regulator-name =3D "mmc_power";
-> > >> @@ -110,17 +103,16 @@ i2c: i2c@900 {
-> > >>                          pinctrl-0 =3D <&i2c_pins>;
-> > >>                  };
-> > >>
-> > >> -               memc: syscon@5000 {
-> > >> +               memc: memory-controller@5000 {
-> > >>                          compatible =3D "mediatek,mt7621-memc", "sys=
-con";
-> > >>                          reg =3D <0x5000 0x1000>;
-> > >>                  };
-> > >>
-> > >
-> > > I think syscon nodes need to use 'syscon' in the node name, but I am
-> > > not 100% sure.
-> >
-> > I've tested this patch series on my GB-PC2, it currently works fine.
-> > Also, DT binding for MT7621 memory controller uses memory-controller on
-> > the example so I guess it's fine?
->
-> I know that works fine but when the node is a syscon it is good to
-> have that syscon in the node name (I don't know if having it is a rule
-> or something, I guess no). In any case I agree that binding and dts
-> should match.
->
-> Best regards,
->     Sergio Paracuellos
-> >
-> > Ar=C4=B1n=C3=A7
-
-Best regards,
-    Sergio Paracuellos
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBSZW4gWmhpamllIDxyZW56aGlq
+aWUyQGh1YXdlaS5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBTZXB0ZW1iZXIgMTUsIDIwMjIgODo0
+NiBBTQ0KPiBUbzogS3VtYXJhdmVsIFRoaWFnYXJhamFuIC0gSTIxNDE3DQo+IDxLdW1hcmF2ZWwu
+VGhpYWdhcmFqYW5AbWljcm9jaGlwLmNvbT47IGFybmRAYXJuZGIuZGU7DQo+IGdyZWdraEBsaW51
+eGZvdW5kYXRpb24ub3JnDQo+IENjOiBsaW51eC1ncGlvQHZnZXIua2VybmVsLm9yZzsgbGludXgt
+a2VybmVsQHZnZXIua2VybmVsLm9yZzsgUmVuIFpoaWppZQ0KPiA8cmVuemhpamllMkBodWF3ZWku
+Y29tPg0KPiBTdWJqZWN0OiBbUEFUQ0ggLW5leHRdIG1pc2M6IG1pY3JvY2hpcDogcGNpMXh4eHg6
+IEZpeCBidWlsZCBlcnJvciB1bnVzZWQtDQo+IGZ1bmN0aW9uDQo+IA0KPiBJZiBDT05GSUdfUE1f
+U0xFRVAgaXMgbm90IHNldCwNCj4gbWFrZSBBUkNIPXg4Nl82NCwgd2lsbCBiZSBmYWlsZWQsIGxp
+a2UgdGhpczoNCj4gDQo+IGRyaXZlcnMvbWlzYy9tY2hwX3BjaTF4eHh4L21jaHBfcGNpMXh4eHhf
+Z3Bpby5jOjMxMToxMjogZXJyb3I6DQo+IOKAmHBjaTF4eHh4X2dwaW9fcmVzdW1l4oCZIGRlZmlu
+ZWQgYnV0IG5vdCB1c2VkIFstV2Vycm9yPXVudXNlZC1mdW5jdGlvbl0NCj4gc3RhdGljIGludCBw
+Y2kxeHh4eF9ncGlvX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICAgICAgICAgICAgIF5+
+fn5+fn5+fn5+fn5+fn5+fn5+DQo+IGRyaXZlcnMvbWlzYy9tY2hwX3BjaTF4eHh4L21jaHBfcGNp
+MXh4eHhfZ3Bpby5jOjI5NToxMjogZXJyb3I6DQo+IOKAmHBjaTF4eHh4X2dwaW9fc3VzcGVuZOKA
+mSBkZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVdlcnJvcj11bnVzZWQtZnVuY3Rpb25dDQo+IHN0YXRp
+YyBpbnQgcGNpMXh4eHhfZ3Bpb19zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gICAgICAg
+ICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+IGNjMTogYWxsIHdhcm5pbmdzIGJlaW5nIHRy
+ZWF0ZWQgYXMgZXJyb3JzDQo+IA0KPiBjb21taXQgMWEzYzdiYjA4ODI2ICgiUE06IGNvcmU6IEFk
+ZCBuZXcgKl9QTV9PUFMgbWFjcm9zLCBkZXByZWNhdGUNCj4gb2xkIG9uZXMiKSwgYWRkIG5ldyBt
+YXJjbyBERUZJTkVfU0lNUExFX0RFVl9QTV9PUFMgdG8gZml4IHRoaXMNCj4gdW51c2VkLWZ1bmN0
+aW9uIHByb2JsZW0uDQo+IA0KPiBGaXhlczogNGVjN2FjOTBmZjM5ICgibWlzYzogbWljcm9jaGlw
+OiBwY2kxeHh4eDogQWRkIHBvd2VyIG1hbmFnZW1lbnQNCj4gZnVuY3Rpb25zIC0gc3VzcGVuZCAm
+IHJlc3VtZSBoYW5kbGVycy4iKQ0KPiBTaWduZWQtb2ZmLWJ5OiBSZW4gWmhpamllIDxyZW56aGlq
+aWUyQGh1YXdlaS5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9taXNjL21jaHBfcGNpMXh4eHgvbWNo
+cF9wY2kxeHh4eF9ncGlvLmMgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24o
+KyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL21pc2MvbWNocF9w
+Y2kxeHh4eC9tY2hwX3BjaTF4eHh4X2dwaW8uYw0KPiBiL2RyaXZlcnMvbWlzYy9tY2hwX3BjaTF4
+eHh4L21jaHBfcGNpMXh4eHhfZ3Bpby5jDQo+IGluZGV4IDljYzc3MWM2MDRlZC4uNGNkNTQxMTY2
+YjBjIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL21pc2MvbWNocF9wY2kxeHh4eC9tY2hwX3BjaTF4
+eHh4X2dwaW8uYw0KPiArKysgYi9kcml2ZXJzL21pc2MvbWNocF9wY2kxeHh4eC9tY2hwX3BjaTF4
+eHh4X2dwaW8uYw0KPiBAQCAtNDA1LDcgKzQwNSw3IEBAIHN0YXRpYyBpbnQgcGNpMXh4eHhfZ3Bp
+b19wcm9iZShzdHJ1Y3QgYXV4aWxpYXJ5X2RldmljZQ0KPiAqYXV4X2RldiwNCj4gICAgICAgICBy
+ZXR1cm4gZGV2bV9ncGlvY2hpcF9hZGRfZGF0YSgmYXV4X2Rldi0+ZGV2LCAmcHJpdi0+Z3Bpbywg
+cHJpdik7ICB9DQo+IA0KPiAtc3RhdGljIFNJTVBMRV9ERVZfUE1fT1BTKHBjaTF4eHh4X2dwaW9f
+cG1fb3BzLA0KPiBwY2kxeHh4eF9ncGlvX3N1c3BlbmQsIHBjaTF4eHh4X2dwaW9fcmVzdW1lKTsN
+Cj4gK3N0YXRpYyBERUZJTkVfU0lNUExFX0RFVl9QTV9PUFMocGNpMXh4eHhfZ3Bpb19wbV9vcHMs
+DQo+ICtwY2kxeHh4eF9ncGlvX3N1c3BlbmQsIHBjaTF4eHh4X2dwaW9fcmVzdW1lKTsNCj4gDQo+
+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGF1eGlsaWFyeV9kZXZpY2VfaWQgcGNpMXh4eHhfZ3Bpb19h
+dXhpbGlhcnlfaWRfdGFibGVbXSA9IHsNCj4gICAgICAgICB7Lm5hbWUgPSAibWNocF9wY2kxeHh4
+eF9ncC5ncF9ncGlvIn0sDQo+IC0tDQo+IDIuMTcuMQ0KVGhpcyBpc3N1ZSB3YXMgYWxyZWFkeSBy
+ZXBvcnRlZCBieSBTdWRpcCA8c3VkaXBtLm11a2hlcmplZUBnbWFpbC5jb20+IGFuZCBhbHJlYWR5
+IGEgcGF0Y2ggaXMgcXVldWVkIGFuZA0KaW4gcmV2aWV3IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFi
+cy5vcmcvcHJvamVjdC9saW51eC1ncGlvL3BhdGNoLzIwMjIwOTEyMTEzNjM0LjE2NzgyMC0xLWt1
+bWFyYXZlbC50aGlhZ2FyYWphbkBtaWNyb2NoaXAuY29tLw0KDQpUaGFuayBZb3UuDQoNClJlZ2Fy
+ZHMsDQpLdW1hcmF2ZWwNCg==
