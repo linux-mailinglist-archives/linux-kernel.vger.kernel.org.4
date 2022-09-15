@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8DE5B91C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139105B91BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiIOAeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S230142AbiIOAe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiIOAdV (ORCPT
+        with ESMTP id S230111AbiIOAd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:33:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF058D3D1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:06 -0700 (PDT)
+        Wed, 14 Sep 2022 20:33:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D468A1C7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663201985;
+        s=mimecast20190719; t=1663201999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FtNtNsp7OqPqPE1l1U/CkF2qeKiAYQ9N67dyPKGWxE4=;
-        b=jRtZwV7GIpVBggCrgeYjmMCHwItkbfmaZI4+nRgP6ZrM53fK5cJ089Q0NEpOSaEnv0n1qs
-        gyc/9TUEPZWRVkfJbBxBd2OfCS3R/Fns4TC3MYYD4vFizYkrevF8pEk2Oxh2MJ2E8XFDX7
-        xcH2yU/OJ4uVBtEdUyQSfmR6x0eE0Yo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=IqWM55e5x02znRK55veSvbQ977VUM5OMWrptzYqj4WI=;
+        b=W9/nw2jv3HxF+4UEJ5ZqV9OSTTeEV3ilZPqjiOc7r7MCeyhT4MdRIk0JKAofVmJkFyQK3y
+        zqEvT9v19SloV83rKDsyvEPUCdXmMziCNLr2QZ1l3j2xBy4kIXrkxHG9sG57tcWlaaCGQD
+        NLYYwd3wRHObZl5QY7WJ5JXMK78aJo0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-163-AU7zZzpsOXO8MiZWMmKuWw-1; Wed, 14 Sep 2022 20:33:03 -0400
-X-MC-Unique: AU7zZzpsOXO8MiZWMmKuWw-1
-Received: by mail-ed1-f72.google.com with SMTP id dz21-20020a0564021d5500b0045217702048so6509788edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:03 -0700 (PDT)
+ us-mta-636-Unpv0UoAMwOKq71vvshR7Q-1; Wed, 14 Sep 2022 20:33:07 -0400
+X-MC-Unique: Unpv0UoAMwOKq71vvshR7Q-1
+Received: by mail-ej1-f72.google.com with SMTP id nb35-20020a1709071ca300b007805be52049so139917ejc.17
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:33:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=FtNtNsp7OqPqPE1l1U/CkF2qeKiAYQ9N67dyPKGWxE4=;
-        b=uKOZKhXAZ0uMFmV4/VwqMISg5iF/VtQmEE/pT9hKoczfdZA43Sj6f8t/0y+AC+XLhO
-         QTB+kPZYIVVfvcU5cRnKsyPuwh/32X/0kxqHycUwq/tEwBV3kql0gBwpXJkDgBQodq9Q
-         vhUyWPJs6MJKnBnIuYjNRlHQNPd4c4pXLZdqJC01ITzIHUe54tT9pUoEVbpbjRc+P8so
-         fbQCWVeBSX9TYto7E0Zoh4IG4x3YoPzC8opPmcxcppraRWcW6H50K2E9MRQwt2Ujr5cE
-         wYBqCsViJcNAk2BqtSGQKXgjhGrdH9Z359FRicJ0eBLWEwyDc4xV953A4BGZ4xvQeAt7
-         il6Q==
-X-Gm-Message-State: ACgBeo3duo1NAeRkzzEXM6wazGYUB9xQm0qpVJFIfCzDhvPwBRxW8X1J
-        bD+L9FY4YSDHWNaWzq+phxMyvIXA63TdLtJLAMrw5hoR25fRrDyfSvOtbSCAxF5U3aT51nfKdtJ
-        C3N7uyV+kz63LC9BQ5451xIDM
-X-Received: by 2002:a17:907:e9e:b0:77f:9688:2714 with SMTP id ho30-20020a1709070e9e00b0077f96882714mr9587299ejc.208.1663201982187;
-        Wed, 14 Sep 2022 17:33:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5ZRBZU53BRdNeyOhVVcill9G3iLRkCUJ/jYRhr4Dk+1M2YpVqKN5hH2aUWRV4Wra1YNWfF2A==
-X-Received: by 2002:a17:907:e9e:b0:77f:9688:2714 with SMTP id ho30-20020a1709070e9e00b0077f96882714mr9587289ejc.208.1663201981992;
-        Wed, 14 Sep 2022 17:33:01 -0700 (PDT)
+        bh=IqWM55e5x02znRK55veSvbQ977VUM5OMWrptzYqj4WI=;
+        b=aDEEWnQlto/7OguHUJ0b7KXdZoW1zpiUD0nilqtoHabm0VuQACga01n3XdYgEl8GPz
+         eGZZm59UkAX5kFtZVXp8a0EUhXIAlQ8+FhLbcdNV8Ooe7sP2pkYmwEWL+mwlpnSW6+zo
+         SZk4xlSiczFkqUInT5FqlZElMy9FIGaOBEKHTE90UI+sQR73i8KwkRjT3EgDBBNniY7+
+         6stKjjplYWSZwvLFGVTU4PunDUuAABEcrlyi4uObXE/01mkhpaDS//iA+eDQY7E4lVw2
+         919/1oLmekJqcf8S9fEmf7WagsOz4fxrH0nHa6Ptb9Jgoa5z85dYXJyBB4lRH2iKmKU6
+         rpAw==
+X-Gm-Message-State: ACgBeo121QN35AQ/8CPNdzKzIOoxl01uKBc/dawbFAJyAWr03RiRgq7f
+        ChWbq+6Rb5z0g0cxSIV6jCohhkSPxZ/DioylH3mEqoIH6uV+3rqN/bsLBnb98MWejSfwTTSIqAx
+        Y5uj9A0+KeB0jP1vwQtSRSyJR
+X-Received: by 2002:a17:907:94d4:b0:77f:d0c9:573f with SMTP id dn20-20020a17090794d400b0077fd0c9573fmr8146058ejc.98.1663201986324;
+        Wed, 14 Sep 2022 17:33:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6iVRAQ1Z8stFf5ouzhJoapY1r+dUfoumzBdmir+QwjM/bFap5BDDwaSqryltzmVKD37aquAA==
+X-Received: by 2002:a17:907:94d4:b0:77f:d0c9:573f with SMTP id dn20-20020a17090794d400b0077fd0c9573fmr8146041ejc.98.1663201986181;
+        Wed, 14 Sep 2022 17:33:06 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id kx25-20020a170907775900b0073d70df6e56sm8240280ejc.138.2022.09.14.17.33.01
+        by smtp.gmail.com with ESMTPSA id p20-20020a056402155400b004479cec6496sm10715506edx.75.2022.09.14.17.33.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 17:33:01 -0700 (PDT)
+        Wed, 14 Sep 2022 17:33:05 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org, stefan@agner.ch, alison.wang@nxp.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next 6/8] drm/fsl-dcu: plane: protect device resources after removal
-Date:   Thu, 15 Sep 2022 02:32:29 +0200
-Message-Id: <20220915003231.363447-7-dakr@redhat.com>
+Subject: [PATCH drm-misc-next 7/8] drm/fsl-dcu: crtc: protect device resources after removal
+Date:   Thu, 15 Sep 2022 02:32:30 +0200
+Message-Id: <20220915003231.363447-8-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220915003231.363447-1-dakr@redhat.com>
 References: <20220915003231.363447-1-dakr@redhat.com>
@@ -90,62 +90,136 @@ resources with drm_dev_enter() and drm_dev_exit().
 
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-index 23ff285da477..1be3062a95df 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-@@ -10,6 +10,7 @@
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
+index 1dad90f701c8..c77df9b7893f 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_crtc.c
+@@ -13,6 +13,7 @@
  #include <drm/drm_atomic.h>
  #include <drm/drm_atomic_helper.h>
  #include <drm/drm_crtc.h>
 +#include <drm/drm_drv.h>
- #include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
-@@ -65,7 +66,10 @@ static void fsl_dcu_drm_plane_atomic_disable(struct drm_plane *plane,
- {
- 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(plane->dev);
- 	unsigned int value;
--	int index;
-+	int index, idx;
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_vblank.h>
+ 
+@@ -26,6 +27,10 @@ static void fsl_dcu_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 	struct drm_device *dev = crtc->dev;
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(dev);
+ 	struct drm_pending_vblank_event *event = crtc->state->event;
++	int idx;
 +
-+	if (!drm_dev_enter(plane->dev, &idx))
++	if (!drm_dev_enter(dev, &idx))
 +		return;
  
- 	index = fsl_dcu_drm_plane_index(plane);
- 	if (index < 0)
-@@ -74,6 +78,8 @@ static void fsl_dcu_drm_plane_atomic_disable(struct drm_plane *plane,
- 	regmap_read(fsl_dev->regmap, DCU_CTRLDESCLN(index, 4), &value);
- 	value &= ~DCU_LAYER_EN;
- 	regmap_write(fsl_dev->regmap, DCU_CTRLDESCLN(index, 4), value);
+ 	regmap_write(fsl_dev->regmap,
+ 		     DCU_UPDATE_MODE, DCU_UPDATE_MODE_READREG);
+@@ -40,6 +45,8 @@ static void fsl_dcu_drm_crtc_atomic_flush(struct drm_crtc *crtc,
+ 			drm_crtc_send_vblank_event(crtc, event);
+ 		spin_unlock_irq(&crtc->dev->event_lock);
+ 	}
 +
 +	drm_dev_exit(idx);
  }
  
- static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
-@@ -86,7 +92,10 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
- 	struct drm_framebuffer *fb = plane->state->fb;
- 	struct drm_gem_dma_object *gem;
- 	unsigned int alpha = DCU_LAYER_AB_NONE, bpp;
--	int index;
-+	int index, idx;
+ static void fsl_dcu_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+@@ -49,6 +56,10 @@ static void fsl_dcu_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+ 									      crtc);
+ 	struct drm_device *dev = crtc->dev;
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(dev);
++	int idx;
 +
-+	if (!drm_dev_enter(plane->dev, &idx))
++	if (!drm_dev_enter(dev, &idx))
 +		return;
  
- 	if (!fb)
- 		return;
-@@ -162,6 +171,7 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
- 			     DCU_LAYER_PRE_SKIP(0));
- 	}
+ 	/* always disable planes on the CRTC */
+ 	drm_atomic_helper_disable_planes_on_crtc(old_crtc_state, true);
+@@ -61,6 +72,8 @@ static void fsl_dcu_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+ 	regmap_write(fsl_dev->regmap, DCU_UPDATE_MODE,
+ 		     DCU_UPDATE_MODE_READREG);
+ 	clk_disable_unprepare(fsl_dev->pix_clk);
++
++	drm_dev_exit(idx);
+ }
  
+ static void fsl_dcu_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -68,6 +81,10 @@ static void fsl_dcu_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+ {
+ 	struct drm_device *dev = crtc->dev;
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(dev);
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return;
+ 
+ 	clk_prepare_enable(fsl_dev->pix_clk);
+ 	regmap_update_bits(fsl_dev->regmap, DCU_DCU_MODE,
+@@ -77,6 +94,8 @@ static void fsl_dcu_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+ 		     DCU_UPDATE_MODE_READREG);
+ 
+ 	drm_crtc_vblank_on(crtc);
++
++	drm_dev_exit(idx);
+ }
+ 
+ static void fsl_dcu_drm_crtc_mode_set_nofb(struct drm_crtc *crtc)
+@@ -87,6 +106,10 @@ static void fsl_dcu_drm_crtc_mode_set_nofb(struct drm_crtc *crtc)
+ 	struct drm_display_mode *mode = &crtc->state->mode;
+ 	unsigned int pol = 0;
+ 	struct videomode vm;
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return;
+ 
+ 	clk_set_rate(fsl_dev->pix_clk, mode->clock * 1000);
+ 
+@@ -122,6 +145,8 @@ static void fsl_dcu_drm_crtc_mode_set_nofb(struct drm_crtc *crtc)
+ 		     DCU_THRESHOLD_LS_BF_VS(BF_VS_VAL) |
+ 		     DCU_THRESHOLD_OUT_BUF_HIGH(BUF_MAX_VAL) |
+ 		     DCU_THRESHOLD_OUT_BUF_LOW(BUF_MIN_VAL));
++
 +	drm_dev_exit(idx);
  	return;
  }
  
+@@ -137,11 +162,17 @@ static int fsl_dcu_drm_crtc_enable_vblank(struct drm_crtc *crtc)
+ 	struct drm_device *dev = crtc->dev;
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(dev);
+ 	unsigned int value;
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return -ENODEV;
+ 
+ 	regmap_read(fsl_dev->regmap, DCU_INT_MASK, &value);
+ 	value &= ~DCU_INT_MASK_VBLANK;
+ 	regmap_write(fsl_dev->regmap, DCU_INT_MASK, value);
+ 
++	drm_dev_exit(idx);
++
+ 	return 0;
+ }
+ 
+@@ -150,10 +181,16 @@ static void fsl_dcu_drm_crtc_disable_vblank(struct drm_crtc *crtc)
+ 	struct drm_device *dev = crtc->dev;
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(dev);
+ 	unsigned int value;
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return;
+ 
+ 	regmap_read(fsl_dev->regmap, DCU_INT_MASK, &value);
+ 	value |= DCU_INT_MASK_VBLANK;
+ 	regmap_write(fsl_dev->regmap, DCU_INT_MASK, value);
++
++	drm_dev_exit(idx);
+ }
+ 
+ static const struct drm_crtc_funcs fsl_dcu_drm_crtc_funcs = {
 -- 
 2.37.3
 
