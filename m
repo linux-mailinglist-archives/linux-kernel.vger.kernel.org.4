@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719B35B91D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA45D5B9185
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiIOAjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229999AbiIOAOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiIOAjF (ORCPT
+        with ESMTP id S229732AbiIOAOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:39:05 -0400
-X-Greylist: delayed 1345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 17:39:05 PDT
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.46.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B17D11C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:39:05 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id A7D2A400C69C6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:14:17 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YcWHo8UVrCE4UYcWHozphI; Wed, 14 Sep 2022 19:14:17 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=57dERAxkKtjD2+FLvsmVwo3QpjwyvvJCfPA5jtqf1Xw=; b=cHfu8qA/McHK0IBzNOgEvK48Iz
-        SEAJnw8vYTJwSEF8W1FZgF4GyP2VgCvi50Ga5VJCkYMZPz9eV4JiIDdFklekku5F+mOj3iLLnxuGk
-        D/tC5H+2neht2p0Qc25ahMiOHh/uJj0T03+zCnXZTns/ubd8MOg4Xh4Iz/A6PVoavUxB55vFsiwBD
-        MDRHqylgv0BhqhLKw9HYNNwRBLVsY1aMpPvKf8vjy6B9JzIZjZEBfH2+Z0i1DFQh7G+axfLLvSsDh
-        Kscmr8IPBndqpf2uO8yU1dfSfp7lf0nfOb1gYFoSwYBNPdWxaxG0dTvSqW/r760abgDK3rnq4pyAB
-        3/hs6/Fg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:59358 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oYcWG-003LpK-EI;
-        Thu, 15 Sep 2022 00:14:16 +0000
-Date:   Wed, 14 Sep 2022 17:14:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 000/108] 5.4.212-rc1 review
-Message-ID: <20220915001409.GD603793@roeck-us.net>
-References: <20220913140353.549108748@linuxfoundation.org>
+        Wed, 14 Sep 2022 20:14:36 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2C92718
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:14:33 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id d17so11372190qko.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=n75DckJoTNxwHGQy+cAzlCqQ+/GK+bz2i3ZQXyrbV3o=;
+        b=qApXbnIKeQh3JuT+G6S4AN/JA7pDhe1ZN1/ProWVTLC/Rij/S4yNyrTcBcqxb15gT8
+         8YiocZCvL+QltvhXJ9euL+HrQz+fpU5dQxPkkl7hRmteqRE6fzC5vAYZumEiU0vwZIq2
+         Cld5jckzCNCBc3dfflc8oaJA2UN3rZ8wDZXDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=n75DckJoTNxwHGQy+cAzlCqQ+/GK+bz2i3ZQXyrbV3o=;
+        b=LqLpdVLowAA1adfPR5ZbwZTYgPYtobTc0LBpbRFztwReU9da4Gn38ORrltohyTpsjK
+         IoDdAYFSUoHkMuC3DyZV7z38wKP0+x9k0DcPWMjyShcdQAhSaAUUVWgnLRL3C5ZDjoIb
+         /EaevkbQHtkGHw5fN8KlEBQmw2Q3PzUlBkLtJAOAPlF3SwYf3Rin8FxmyYTeWlQXDWNc
+         HEC4vxTfbfkp7W9gqL60kyaeV6FeIHr+Y4+Ptz02YMETn7QT2pPSoVvgqgrbIXMX4iYN
+         REtOhYgrnCMImho62gi0kn7huULcpCKQERBcV5t6xRYLwwagee9jUsj6PEJnDRojeqsc
+         D8Dg==
+X-Gm-Message-State: ACgBeo3fqaOOoCt2eguZETZII/S+k1lo1byaI3i2niGvGTHb4IQy0N2C
+        5EaCmI4GZsLRRVWqBdvWVyL0xG3zDanazSOA
+X-Google-Smtp-Source: AA6agR5EImjOMvPGoTYlDOogzQ3RZqT0E/3ynshzHY9J48USbOtAX8h2DmPD3ZjuAlj49Xt+xtD6eg==
+X-Received: by 2002:a05:620a:2887:b0:6b6:52a5:d287 with SMTP id j7-20020a05620a288700b006b652a5d287mr28551826qkp.442.1663200872662;
+        Wed, 14 Sep 2022 17:14:32 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id do11-20020a05620a2b0b00b006bbb07ebd83sm2872422qkb.108.2022.09.14.17.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 17:14:32 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH rcu/next 0/3] Preparatory patches borrowed from lazy rcu v5
+Date:   Thu, 15 Sep 2022 00:14:16 +0000
+Message-Id: <20220915001419.55617-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913140353.549108748@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oYcWG-003LpK-EI
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:59358
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 51
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:05:31PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.212 release.
-> There are 108 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
-> 
+Hello,
 
-Build results:
-	total: 161 pass: 161 fail: 0
-Qemu test results:
-	total: 447 pass: 447 fail: 0
+Just sending a few patches before lazy rcu v6 can come out. That can come out
+after more testing to check feasibility of ideas discussed at LPC. I will try
+to get rcutop pushed as well before v6, but in the meanwhile I don't see much
+reason to block these few patches for 6.1. These apply to Paul's rcu/next
+branch. What do you think?
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Joel Fernandes (Google) (3):
+rcu/tree: Use READ_ONCE() for lockless read of rnp->qsmask
+rcu: Move trace_rcu_callback() before bypassing
+rcu: Fix late wakeup when flush of bypass cblist happens
 
-Guenter
+kernel/rcu/tree.c      | 12 +++++++-----
+kernel/rcu/tree_nocb.h | 10 ++++++++--
+2 files changed, 15 insertions(+), 7 deletions(-)
+
+--
+2.37.2.789.g6183377224-goog
+
