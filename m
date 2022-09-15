@@ -2,91 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26C85B9218
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737F55B921F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiIOBUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S229994AbiIOBYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiIOBUb (ORCPT
+        with ESMTP id S229863AbiIOBYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:20:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CF336DC1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663204829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0bjgK+lBiTyGtI8DZXw0xpj/MCgq70rfPwVLT8sgAVc=;
-        b=V3nI21NnaAzYEFySyHJss9FWQpsyvrunybdsx6dBCqu4CkWbgVYfD9I32G1/lY9Mt95PZ5
-        7inhU3OFQYIhZV9hJCwiO5SXuyH+A8N6pAlDpAv2y/v7SzlD1y0peoY6Uusn2aATW6wUCL
-        w/0aKkHpfGCkDg3CtMCDyAvWh06vCls=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-nDvdEKQIPbKHKqYFLvmIfg-1; Wed, 14 Sep 2022 21:20:27 -0400
-X-MC-Unique: nDvdEKQIPbKHKqYFLvmIfg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C6B83C0D85A;
-        Thu, 15 Sep 2022 01:20:27 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 786D31121314;
-        Thu, 15 Sep 2022 01:20:26 +0000 (UTC)
-Date:   Thu, 15 Sep 2022 09:20:22 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>, akpm@linux-foundation.org,
-        nasastry@in.ibm.com, Michael Ellerman <mpe@ellerman.id.au>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec
- (ppc64)
-Message-ID: <YyJ91vHulTdjri49@MiWiFi-R3L-srv>
-References: <20220901214610.768645-1-stefanb@linux.ibm.com>
- <ce08b0af-fb1b-0ade-61ac-f66e95d6eb6a@linux.ibm.com>
- <CAL_JsqJ+M6TP9kWXDAUqqh7wfPHkE8YfEU7j5HWqeGMhL=c6bg@mail.gmail.com>
+        Wed, 14 Sep 2022 21:24:47 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A211C00;
+        Wed, 14 Sep 2022 18:24:41 -0700 (PDT)
+X-UUID: 1153459182e441fea09a3acc01c11218-20220915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=yWiqkRoMA5szwFch3bndA/3HuivLlnD9Nl9WlTv4YVY=;
+        b=Uuk3FPlR4i6kGpKTRIvihshdQ380JsGYWGpMHTStL/y7BeP1jpQlR1RPqfUbmPE5SqkWT0AUr7A6ujOSWwe82gCr0+se02SGn6LSESZDkSp5mnJoz3Z91rLt9ydV24UecZSo2tL0rd8o4Tnk9fHIx5PWzhmQGRZYACqQtDUruGY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:e68d4a5b-f68b-4f1e-b6d5-cba8538f273f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:ac896ff6-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1153459182e441fea09a3acc01c11218-20220915
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1828666474; Thu, 15 Sep 2022 09:24:32 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 15 Sep 2022 09:24:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 15 Sep 2022 09:24:31 +0800
+Message-ID: <296155e2a12a474439ba092e73b4bcffbf3d3edc.camel@mediatek.com>
+Subject: Re: [PATCH 1/5] dt-bindings: arm: mediatek: mmsys: change
+ compatible for MT8195
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Singo Chang" <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 15 Sep 2022 09:24:31 +0800
+In-Reply-To: <1b739216-8bb1-162b-1af5-24acba7324bf@gmail.com>
+References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
+         <20220914182331.20515-2-jason-jh.lin@mediatek.com>
+         <1b739216-8bb1-162b-1af5-24acba7324bf@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJ+M6TP9kWXDAUqqh7wfPHkE8YfEU7j5HWqeGMhL=c6bg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
+        URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/14/22 at 01:01pm, Rob Herring wrote:
-> On Mon, Sep 12, 2022 at 8:01 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
-> >
-> >
-> > Hi Rob,
-> >
-> >    can you take this series in your tree?
+Hi Matthias,
+
+Thanks for the reviews.
+
+On Wed, 2022-09-14 at 23:24 +0200, Matthias Brugger wrote:
 > 
-> IMO, it should be someone that cares about TPM, kexec, or powerpc.
-> Yes, there's code in drivers/of/, but that is purely to avoid
-> duplication of code across powerpc and arm64.
+> On 14/09/2022 20:23, Jason-JH.Lin wrote:
+> > For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> > pipelines binding to 1 mmsys with the same power domain, the same
+> > clock driver and the same mediatek-drm driver.
+> > 
+> > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding
+> > to
+> > 2 different power domains, different clock drivers and different
+> > mediatek-drm drivers.
+> > 
+> > Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
+> > Quality)
+> > and they makes VDOSYS0 supports PQ function while they are not
+> > including in VDOSYS1.
+> > 
+> > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> > component). It makes VDOSYS1 supports the HDR function while it's
+> > not
+> > including in VDOSYS0.
+> > 
+> > To summarize0:
+> > Only VDOSYS0 can support PQ adjustment.
+> > Only VDOSYS1 can support HDR adjustment.
+> > 
+> > Therefore, we need to separate these two different mmsys hardwares
+> > to
+> > 2 different compatibles for MT8195.
+> > 
+> > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195
+> > SoC binding")
+> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> I'm not sure Krzysztof gave his Acked-by tag.
 
-Looks like a PPC specific improvement, is it possible to have TPM on
-other ARCHes? For generic code patch, Andrew kindly help pick them
-into his tree if cooked. If it's an arch or component specific code,
-we usually ask arch or component maintainer to take it.
+I'll remove this tag.
+> 
+> > ---
+> >   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        |
+> > 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > index 6ad023eec193..a53b32c0a608 100644
+> > ---
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > @@ -32,6 +32,8 @@ properties:
+> >                 - mediatek,mt8186-mmsys
+> >                 - mediatek,mt8192-mmsys
+> >                 - mediatek,mt8195-mmsys
+> > +              - mediatek,mt8195-vdosys0
+> 
+> As I said in the last submission, we should make mediatek,mt8195-
+> mmsys as a 
+> fallback of vdosys0. Actually mediatek,mt8195-mmsys is only used for
+> the 
+> fallback of vdosys0.
 
-For this patchset, it should be merged into ppc tree?
+I think adding both vdosys0 and vdosys1 can make the description of
+this patch clearer. 
 
-Thanks
-Baoquan
+It's find to me to only add "mediatek,mt8195-vdosys0" in this patch.
+So I'll remove the "mediatek,mt8195-vdosys1" at the next version.
+
+Regards,
+Jason-JH.Lin
+> 
+> Regards,
+> Matthias
+> 
+> > +              - mediatek,mt8195-vdosys1
+> >                 - mediatek,mt8365-mmsys
+> >             - const: syscon
+> >         - items:
+> 
+> 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 
