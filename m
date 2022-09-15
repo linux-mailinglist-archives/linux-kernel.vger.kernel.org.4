@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EA15B93E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3C65B93E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIOFOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 01:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229577AbiIOFTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 01:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiIOFOJ (ORCPT
+        with ESMTP id S229499AbiIOFTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 01:14:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CA88A1F6;
-        Wed, 14 Sep 2022 22:14:08 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28F53oDc016130;
-        Thu, 15 Sep 2022 05:14:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=O1T5Rv/IOA3EgvUgCYRv4xkjxw1fabI14/nllGEHE8g=;
- b=AgNBHA6AVpi5v9OPaMQs4jpt+Xu+0IR2l7Pzh/tf5BHaI4QpmZao0j342vJDFkomH/KU
- /SZ7S8Hfm0Ul1mVYCBwS66qQkshGyrWvdD3sPBIep6bpu2Q9NL3iZppJE60CN6xvu7dY
- G244qD+DksEe+JzAPhKiihxOympgwOiJj/z5jMwUks1OiaHhxCPu4ByTQpQ+7g/wavvQ
- c2fsP7I2bsqQvdhkir9kndc6w+ku41u1A6rptGZeR0dGAPuJI1p0jJzLFXzlJdlY5C4l
- F55bKpjkN24nzc8tjAMaNO6sDQXWOUiE0VWchUDiWUBuvGdpjj3VpD40LXSiwD079XAF Jw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jkwjer0r4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 05:14:01 +0000
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28F5BNxc015481;
-        Thu, 15 Sep 2022 05:14:00 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jh45krfmm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 05:14:00 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28F5E0s4020104;
-        Thu, 15 Sep 2022 05:14:00 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 28F5DxuG020100
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 05:14:00 +0000
-Received: from [10.110.52.115] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
- 2022 22:13:58 -0700
-Message-ID: <4fe4736d-ccc2-de00-8bb0-992382644fe6@quicinc.com>
-Date:   Wed, 14 Sep 2022 22:13:57 -0700
+        Thu, 15 Sep 2022 01:19:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE379323A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 22:19:14 -0700 (PDT)
+X-UUID: eaee028f665b40e8ad518f2ce0622054-20220915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:CC:To:Subject:From:MIME-Version:Date:Message-ID; bh=I/eK0cfbxCIDrkJpxpNUKq8DfD7I1QFLOHC7/nfS/3o=;
+        b=dmn+CBxXltA8CLcFtZ+rGyEmzcSV/fz6VPlKGKEU4uGf0I95H5KjWcHIsiK64cmMthWvfM6s6q9T5yKGzV84EVyZMOgTaQfxIBeMSMebcmHdeGXR7iakLsVY0YLnfS/aMGTXOmwnVTcg4v2iMDim1wcYC/8UFKyT/3bLt6Fo0+o=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:60b2e5e1-0c7d-47f8-9011-4f681b75e465,IP:0,U
+        RL:25,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Release_Ham,ACT
+        ION:release,TS:93
+X-CID-INFO: VERSION:1.1.11,REQID:60b2e5e1-0c7d-47f8-9011-4f681b75e465,IP:0,URL
+        :25,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:93
+X-CID-META: VersionHash:39a5ff1,CLOUDID:fc4fb37b-ea28-4199-b57e-003c7d60873a,B
+        ulkID:220914161747OE9HJACH,BulkQuantity:69,Recheck:0,SF:28|17|19|48,TC:nil
+        ,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL:0
+X-UUID: eaee028f665b40e8ad518f2ce0622054-20220915
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 76293047; Thu, 15 Sep 2022 13:19:05 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 15 Sep 2022 13:19:03 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 15 Sep 2022 13:19:03 +0800
+Message-ID: <03cb748c-4531-9669-faac-7e975855149d@mediatek.com>
+Date:   Thu, 15 Sep 2022 13:19:01 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] orinoco: fix repeated words in comments
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: Re: [PATCH] drm: mediatek: Fix display vblank timeout when disable
+ dsi
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?WGlubGVpIExlZSAo5p2O5piV56OKKQ==?= 
+        <Xinlei.Lee@mediatek.com>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>
+References: <1663136309-29491-1-git-send-email-xinlei.lee@mediatek.com>
+ <0723c329-475c-42a1-f6d5-f478d649aef1@collabora.com>
+ <64bf6d7b-5a28-9b7d-fc3e-4c3c8eaa7d25@mediatek.com>
+ <3dd03eea-84cf-73bc-0bd4-3450c44ac8ba@collabora.com>
 Content-Language: en-US
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220915030201.35984-1-yuanjilin@cdjrlc.com>
- <caf04e03-6cf3-5f56-da0b-ab68d58e7409@quicinc.com>
-In-Reply-To: <caf04e03-6cf3-5f56-da0b-ab68d58e7409@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: A7Z2T8GWv3D9DdZdbO0lBd0FSyCUOatQ
-X-Proofpoint-GUID: A7Z2T8GWv3D9DdZdbO0lBd0FSyCUOatQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_02,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=750 clxscore=1015 impostorscore=0
- adultscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209150026
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3dd03eea-84cf-73bc-0bd4-3450c44ac8ba@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
+        URIBL_CSS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/14/2022 8:54 PM, Jeff Johnson wrote:
-> On 9/14/2022 8:02 PM, Jilin Yuan wrote:
->> Delete the redundant word 'this'.
+Hi maintainer,
+
+Patch v2 has been sent to [1].
+
+[1]
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220914140031.18578-1-allen-kh.cheng@mediatek.com/
+
+I'm sorry I didn't reply to all the email lists in the initial reply.
+
+Below is the most recent information.
+
+Thanks,
+Allen
+
+On 9/14/22 21:34, AngeloGioacchino Del Regno wrote:
+> Il 14/09/22 15:30, Allen-KH Cheng ha scritto:
+>> Hi Angelo,
 >>
->> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
->> ---
->>   drivers/net/wireless/intersil/orinoco/main.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> It's mt8186 corsola board. When this problem arises in system
+>> susepend/resume, we have your fix[1] in our dsi driver.
 >>
->> diff --git a/drivers/net/wireless/intersil/orinoco/main.h 
->> b/drivers/net/wireless/intersil/orinoco/main.h
->> index 5a8fec26136e..852e1643dad2 100644
->> --- a/drivers/net/wireless/intersil/orinoco/main.h
->> +++ b/drivers/net/wireless/intersil/orinoco/main.h
->> @@ -12,7 +12,7 @@
->>   /* Compile time configuration and compatibility stuff               */
->>   /********************************************************************/
->> -/* We do this this way to avoid ifdefs in the actual code */
->> +/* We do this way to avoid ifdefs in the actual code */
-> 
-> In this case the two instances of "this" are not a repetition, they are 
-> different parts of speech.
-> 
-> The existing sentence is correct English; the modified sentence is not.
-> 
-> If the repeated word really bothers you then insert "in": We do this in 
-> this way...
-> 
-> 
->>   #ifdef WIRELESS_SPY
->>   #define SPY_NUMBER(priv)    (priv->spy_data.spy_number)
->>   #else
-> 
-In addition the patch subject of all files in drivers/net/wireless 
-should now begin with "wifi: "
+>> Because there is a conflict in mediatek-drm-fixes,
+>> kernel/git/chunkuang.hu/linux.git.
+>>
+>> I'll assist Xinlei with another resend.
+>>
+>
+> Ok, thanks for confirming!
+>
+> Cheers,
+> Angelo
+>
