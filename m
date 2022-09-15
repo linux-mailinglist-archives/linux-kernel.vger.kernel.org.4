@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58D45B9C5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969FC5B9C5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiIONvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S229942AbiIONwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 09:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIONva (ORCPT
+        with ESMTP id S229885AbiIONwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 09:51:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A041197515;
-        Thu, 15 Sep 2022 06:51:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54BBBB8208C;
-        Thu, 15 Sep 2022 13:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE9EC433D6;
-        Thu, 15 Sep 2022 13:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663249887;
-        bh=1G2tI40qsypf1pzSQWC49MrRmBGWTMcjQ7kM9tFd+lI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q0FAK9Bg/zxd8zF4v6KjnNWJzsPCsdcn0ETZuoAvSVffXz433DekuenTi4Gl7PTGL
-         jC+XyU7zk2fBd09ezXAnLdL0m5DarsYEskBnC7m/2uDs9/t7Yu8g/F1ct4cK0DrwCC
-         hvabd1Z30moBJaVch+/JDPxJGk303wUXDCF7StQwNJH2/cidSXk+Yl1ipQ05nhr/tH
-         ums6BtTTjhOYkb1yx6SaB4XfFsXUdywaq52L534PXGP5z5D49z4NCNUIpKqhJmLIpV
-         e017y18bjq2xEmIMVUMnPc87Ln832dmvOU7DBhNiTPh6ZdQ0wGW/6f/933P7O+fUu/
-         N5U6pTRzu8+Ww==
-Date:   Thu, 15 Sep 2022 14:51:21 +0100
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] i2c: mux: harden i2c_mux_alloc() against integer
- overflows
-Message-ID: <YyMt2cWtHC2SeG62@work>
-References: <YyMM8iVSHJ4ammsg@kili>
+        Thu, 15 Sep 2022 09:52:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B999E98D31
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 06:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663249948; x=1694785948;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qNTf/fEg8wubvKF39b6L46iyHFBcPA4/o2SKZONT/Lk=;
+  b=HJv5/sHmX5ChOM3rgqca+kdnc4VVoiGqfO2f6G4gWUL1gIUhdFcKHj6C
+   rAa/Yt+FYGxH7eCOYHT6lMBNycFBUWdACwDYFUpHu6/y+yl7EkJkVCu5/
+   N9Jb9TKw4X32QlRF5sZ5lIliRyChFywCWrmqRQ9E+f53RLKf2PuEJznhW
+   C1pd2dMnHaMysae83Or4zCLFHFFGPzyeF15tzEtTmFVw8wpeZAURjX2+/
+   suRFAi++6JW0e6/mxsIOqOjukrn1lkCnDRTFF/ogyN/LO4QusgNGEI4sy
+   Qgeox0aKGueZX60O276ev1sbn+QiGBmMAJEo6BojPKF5VXO02vql+2WoW
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="180531560"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 06:52:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 15 Sep 2022 06:52:26 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Thu, 15 Sep 2022 06:52:25 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <conor.dooley@microchip.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: update polarfire soc clock binding
+Date:   Thu, 15 Sep 2022 14:51:49 +0100
+Message-ID: <20220915135148.2968422-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyMM8iVSHJ4ammsg@kili>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 02:30:58PM +0300, Dan Carpenter wrote:
-> A couple years back we went through the kernel an automatically
-> converted size calculations to use struct_size() instead.  The
-> struct_size() calculation is protected against integer overflows.
-> 
-> However it does not make sense to use the result from struct_size()
-> for additional math operations as that would negate any safeness.
+The clock binding has been renamed and a new binding added for the
+clock controllers in the FPGA fabric. Generalise the pattern to
+cover both.
 
-Right; there most be a couple more similar cases out there. I'll
-look for them and fix them. Thanks!
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+The maintainers addition of binding coverage landed as a 6.0 fix via
+soc while the binding was renamed in patches pending for 6.1. I'll
+send this via soc for 6.1
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Fixes: 1f3b69b6b939 ("i2c: mux: Use struct_size() in devm_kzalloc()")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c26a5c573a5d..170acda52f03 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17618,7 +17618,7 @@ M:	Conor Dooley <conor.dooley@microchip.com>
+ M:	Daire McNamara <daire.mcnamara@microchip.com>
+ L:	linux-riscv@lists.infradead.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
++F:	Documentation/devicetree/bindings/clock/microchip,mpfs*.yaml
+ F:	Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ F:	Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml
+ F:	Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+-- 
+2.36.1
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
---
-Gustavo
-
-> ---
->  drivers/i2c/i2c-mux.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-> index 774507b54b57..313904be5f3b 100644
-> --- a/drivers/i2c/i2c-mux.c
-> +++ b/drivers/i2c/i2c-mux.c
-> @@ -243,9 +243,10 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
->  				   int (*deselect)(struct i2c_mux_core *, u32))
->  {
->  	struct i2c_mux_core *muxc;
-> +	size_t mux_size;
->  
-> -	muxc = devm_kzalloc(dev, struct_size(muxc, adapter, max_adapters)
-> -			    + sizeof_priv, GFP_KERNEL);
-> +	mux_size = struct_size(muxc, adapter, max_adapters);
-> +	muxc = devm_kzalloc(dev, size_add(mux_size, sizeof_priv), GFP_KERNEL);
->  	if (!muxc)
->  		return NULL;
->  	if (sizeof_priv)
-> -- 
-> 2.35.1
-> 
