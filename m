@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7DF5B9448
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB90C5B947C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiIOG12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S229667AbiIOGba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIOG1Z (ORCPT
+        with ESMTP id S229553AbiIOGb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:27:25 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D1C8C47C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:27:23 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id cc5so19346582wrb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=tR/yc0qVr/pPmHhfdI0gHrbei1Gzu9NGG1oci8h9xR0=;
-        b=Ck3Fh2gTt8ONtcrUimsop8mvMaN5nsAxP1hFUZdSpbh4qOm3OqvKnjBVKBV2NU48x9
-         Zxl+dv4zw7A4nXMSBGXCJALvAR183MDCTlwgCzCRqTbIieclT5lHUNRgHdXDEpm1HfvU
-         WaAslt/qhzSNqJPDJDYP3/3AEX3/isNWEn7FEAGSvWkkXYVcrACGIxGMtyGy9abAbBJB
-         GP/l0wvddTVev0sfDej8Rlmy6BTU8PNZFxXpjnnc5IZ1bXDT2Mu9KfB5DFQ9E6tJzp4F
-         YcHS+G/oulYrueYYfn/vHErc7tNsrr1ySsvLsumzj3s7qA/sorh/+A4JIdqGJHARtYIJ
-         wZ7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tR/yc0qVr/pPmHhfdI0gHrbei1Gzu9NGG1oci8h9xR0=;
-        b=GxDHGCag66JI6lRtuzqgiPV/3R/lux43MELg6tmYOKhGBlB9Y8otFHoGxfniwUZgh4
-         bKB6fFIJuOgX89cuRZTdsXXa6JgG1cRYHx7FgOQ/0U772+h0i05CEL+aCTW0Pqtrxceb
-         kVpzVl5jxRmEJdCdCk6sozfercvr7XGK7aSwAz3QkPe2zvxFbAEIFSV5GlYGWgyUQr/V
-         OkWOFnkncpsyKbgoI2Q07XInGT4zLv4ONbfNcgMrRR47G3FFsm+ZXpbPGqs3oW1+u02c
-         FMJq5/yFpwS56XCbIT9Pec5rUcLF2pd3g8aDBOl6HB9hZY+CT47/RJC8KZGOc8Hjap/2
-         +8Ag==
-X-Gm-Message-State: ACrzQf0645AeQ4ndrtpqKghjVa5ZCcUo7FNFi4PE9jvCMsZjVufb+L91
-        iIjMcgNDYybO7AoTOj9+WrIZsw==
-X-Google-Smtp-Source: AMsMyM5jujrUocFcY/MzMzUAoDymbq2wVgR/kpk+SietGmAJg9k+8nlK433loz0NraJZPUNKoIF+Eg==
-X-Received: by 2002:a05:6000:1a8b:b0:22a:cb74:eaea with SMTP id f11-20020a0560001a8b00b0022acb74eaeamr3012806wry.253.1663223241880;
-        Wed, 14 Sep 2022 23:27:21 -0700 (PDT)
-Received: from [172.16.38.121] ([185.122.133.20])
-        by smtp.gmail.com with ESMTPSA id t16-20020a05600c199000b003b47b80cec3sm1566994wmq.42.2022.09.14.23.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Sep 2022 23:27:21 -0700 (PDT)
-Message-ID: <f33df5e9-8162-16b3-c0e3-73aabea7471b@kernel.dk>
-Date:   Thu, 15 Sep 2022 00:27:20 -0600
+        Thu, 15 Sep 2022 02:31:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907C195ADD;
+        Wed, 14 Sep 2022 23:31:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CE7AB8170D;
+        Thu, 15 Sep 2022 06:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B18C433C1;
+        Thu, 15 Sep 2022 06:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663223482;
+        bh=/j3wYkQ53wBqOy1dy0RP/FqvWpaMmnV8jV9KSEsMfb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q+g2wvii0/E/Z8cVEDNw6sgIeuruMdFIm883E1cP1WCsrDyMYItGA8qNKop/AUPuu
+         wMyNNgu/YV0JUNQHMGqvgYhgPNkxHD3WvsIcgqfcUL2QA1UNBC7kdwpEe+PEk7e6w0
+         DiP0vYCA249b6Wrrbjymk/ybH1P3mub/01z5lnKVOdeRAmq7s/HNMpim2gi7n9J0F5
+         nW8gWK3MkdZ2waQEVRUM0j000m4/9R9xnSWK+W0GbxbjKCh5b3NU2QvMLEKVjIYm63
+         vE9uJn4I7RBa3jdBgMG893n8+sNNdOkNEdgQwr5fdR8c1j98r7qGuKs/7+w3AZYcUv
+         B+pOvd/TsILAg==
+Date:   Thu, 15 Sep 2022 07:31:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lin Yujun <linyujun809@huawei.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        akpm@linux-foundation.org, wim@iguana.be,
+        linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v2] rtc: stmp3xxx: Add failure handling for
+ stmp3xxx_wdt_register()
+Message-ID: <YyLGsybCM5a5N1Mt@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Lin Yujun <linyujun809@huawei.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, akpm@linux-foundation.org,
+        wim@iguana.be, linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220915013304.213917-1-linyujun809@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] io_uring: rw: Fix an unsigned comparison which can never
- be negative
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220915054909.81394-1-jiapeng.chong@linux.alibaba.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220915054909.81394-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="INGsqzS9vIYhwxhE"
+Content-Disposition: inline
+In-Reply-To: <20220915013304.213917-1-linyujun809@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/14/22 11:49 PM, Jiapeng Chong wrote:
-> The parameter 'res' is defined as unsigned type, so the following if
-> statement is invalid, we can modify the type of res to long.
-> if (res < 0)
->   	res = io->bytes_done;
-> else
->   	res += io->bytes_done;
-> 
-> io_uring/rw.c:265 io_fixup_rw_res() warn: unsigned 'res' is never less than zero.
 
-This one is already fixed here:
+--INGsqzS9vIYhwxhE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-6.0&id=62bb0647b14646fa6c9aa25ecdf67ad18f13523c
+On Thu, Sep 15, 2022 at 09:33:04AM +0800, Lin Yujun wrote:
+> Use platform_device_put() to free platform device before print
+> error message when platform_device_add() fails to run. Add dev_err()
+> to report error in case of alloc memory to wdt_pdev fail.
 
--- 
-Jens Axboe
+The second part of the commit message is now obsolete.
 
 
+--INGsqzS9vIYhwxhE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMixq4ACgkQFA3kzBSg
+Kba06hAAoctutLkOr2jK9CYiGkFPE9BZufQe7ynk9RqKHGrJl8koHbPFix/eJqaj
+7H7R8mleeK4NYpDq1G0YSRqyrYm9rsUrMhMI76cFCZzi8eoQhkEiDPdJY46Oqpc0
+9yKUv4GVQP0wQl1GDPdag8sniYm4zzzfWN+eNYeclBoJ0PvAPaxq3RAppbgxGEkm
+9C1w7xzs3z6cAZGxWS2d56uDYDiFsP+0Prs7O4uM9q1xPi3/83BA8HXKECLv9maJ
++7EI8jqEIVYrBZedcoj2+ZyG2x0DrBGMoHJ3VnjAAZqr3uUOsKWZvV8bl9S2xBv7
+OYvoR6rWjfteKC+8H1mFFP5xoxpOnYXE7wcE3CmDRZgody6G4rZ9yzTc+KtuN0Hi
+fskF8s4bvjT4H/k5ON8KLVVNoj3nWzwmDn25uZ84cl6dMlgTgaSX21ufIvYd5DvG
+ZHQpHrgJo+PtZTOXg7hVQaF+VurZrigxyo/pxI32C8rmLD0TX79nSZNWfJm8y47f
+LadpP/k77dFMoSFl4sSYpamfnJuBWAsiJBhpARsta6VRdlWubSj+DVUiy3BG1YvK
+/aYMDRjkgc1yGKayHsdZgwkMzAhh2F25nSSj8AN3cpJVXcjG4rNnZ0MtNYHOTAJp
+u227FUBpN67I/Oidhg3QwWZ3YqI3QXSG7b/bEqqsNKUU7gLqPfE=
+=Z8sd
+-----END PGP SIGNATURE-----
+
+--INGsqzS9vIYhwxhE--
