@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085F25B956B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B043C5B956A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiIOH3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S229889AbiIOH3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiIOH3O (ORCPT
+        with ESMTP id S229501AbiIOH3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:29:14 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA0797ECA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:28:28 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c2so17514769plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Fhw29JEHtb6qb4ud3dpLERCou+hLp4czclTyz4sM8OU=;
-        b=dRm6uJHzU2fwPNwmRJ2PajFLvwjehyezpOi9tI43hUOSUPv+eu9oXhLENNm2JOCDt2
-         HiutLSG3dz3RRM24ckioC1CRQCjr6VrXod9pzusziOsw/7Nmzez68rLVpeT1oPrzwNOh
-         rVaTasAhVFtF19pSiF624lqNgR9zi3+RCRnNE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Fhw29JEHtb6qb4ud3dpLERCou+hLp4czclTyz4sM8OU=;
-        b=iFEOpEj4Ctr9GLW5UvRoHaXsNFaD6nIczVt6Bsgdo5BpTnVcffVaJyXxXpDuWskInT
-         mwHEoCAtHa+cO5klaDo+jbDiqCnSWYeNkd3uU/aLqtusBmERUdR7FhSgp2MZeuuo79U8
-         YZY0IvxKCNo6mpyO/6HCR0q/zYEoz9vlWFObe7VlaAMDiqwjc5wGgURUKqrVHgioY0sc
-         19ubnSwlpLyjcOWmgua1YAb8iNWGLKBM6eRuUcVItND9mjlHN1aDgQrTqoeEO4jIsk3o
-         hE/wG1ezLdVzBty2nzOqvMA8EkGSEQK46EbyGnbHNF/SCrv10PocD7lrSVvbWdZL8bRb
-         NuJg==
-X-Gm-Message-State: ACrzQf1OKdhgFCkusysnCGUGHre7ezL8uzMUeJh487F5zvvpO6efduKQ
-        dE2sQlLGongZ5EgaQ1qXe38vlQ==
-X-Google-Smtp-Source: AMsMyM5gHlD7VMLtWRKGOjIcYY9J/4wc4PJMOFlnEsHi7y4nMt8wxhrPtCIr8VPoGzOGZGZ1PsmRww==
-X-Received: by 2002:a17:902:da88:b0:178:143a:7267 with SMTP id j8-20020a170902da8800b00178143a7267mr2992839plx.164.1663226906824;
-        Thu, 15 Sep 2022 00:28:26 -0700 (PDT)
-Received: from 179a892027e7 ([220.253.112.46])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170903120700b0017312bfca95sm12279095plh.253.2022.09.15.00.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 00:28:26 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 07:28:18 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/79] 5.10.143-rc1 review
-Message-ID: <20220915072818.GA1084726@179a892027e7>
-References: <20220913140350.291927556@linuxfoundation.org>
+        Thu, 15 Sep 2022 03:29:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E727397D48
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jZjXacIHtf71qVEc6F7nmis+mD+u/JEdyW+ir9p4QvI=; b=Tm1mpm+PSptPgt+Dy3cmUPgS4x
+        i+lGxOmra5kHPfQdRFZIZqfmRGLc5RvWdhltMtOpgbU04M+XF2jiFII3ziIRrDPufwmFeIk9RGCyx
+        V0WbPfCdylvwuQYj2TFMh87T329sKOh3U/sp2DsebspDEj3y89jjiCFBj7SyZMiuX4ntEE+cpp01h
+        4k9HSaYH3kjmFiUIQtE/1LcdyHOd98v97UB9shIhRXxZaP2U6YFUEwGGK+AJuR8Gdkc1X7L9r+UaE
+        cViwxmw4IX9usMVcvkDLbNqK3HlVjhfAjxOJTLmH5CKaDOs2jLBQN0KRq1lyX/qRTG4KPyZ3nfxwE
+        F4Fk60DA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYjIQ-000tE2-Ad; Thu, 15 Sep 2022 07:28:26 +0000
+Date:   Thu, 15 Sep 2022 08:28:26 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
+ kswapd
+Message-ID: <YyLUGnqtZXn4MjJF@casper.infradead.org>
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+ <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913140350.291927556@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 04:04:05PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.143 release.
-> There are 79 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
-> Anything received after that time might be too late.
+On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
+> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
+> seconds.
+> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
+> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> this message.
+> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
+> 77327 flags:0x00004002
+> [ 3748.483358] Call Trace:
+> [ 3748.485964]  <TASK>
+> [ 3748.488150]  __schedule+0x23d/0x590
+> [ 3748.491804]  schedule+0x4e/0xc0
+> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
+> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
+> [ 3748.505181]  down_read+0x43/0xa0
+> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
+> [ 3748.512799]  exc_page_fault+0x77/0x170
+> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
+> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
+> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
+> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
+> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
+> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
+> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
+> 0000000000000010
+> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
+> 00007f99faa1a000
+> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
+> 0000000000000014
+> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
+> 0000000000001000
+> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
+> ffffaa9248fffd98
+> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
+> [ 3748.592614]  filemap_read+0x174/0x3e0
 
-Hi Greg,
+Interesting; it wasn't the process itself which triggered the page
+fault; the process called read() and the kernel took the page fault to
+satisfy the read() call.
 
-5.10.143-rc1 tested.
+> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
+> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
+> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
+> [ 3748.609164]  ? aa_file_perm+0x102/0x250
+> [ 3748.613125]  new_sync_read+0x10d/0x1a0
+> [ 3748.617009]  vfs_read+0x103/0x1a0
+> [ 3748.620423]  ksys_read+0x67/0xf0
+> [ 3748.623743]  __x64_sys_read+0x19/0x20
+> [ 3748.627511]  do_syscall_64+0x59/0xc0
+> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
+> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
+> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
+> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
+> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
+> [ 3748.653737]  ? exc_page_fault+0x89/0x170
+> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> [ 3748.663030] RIP: 0033:0x7f9a852989cc
+> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000000
+> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
+> 00007f9a852989cc
+> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
+> 0000000000000061
+> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
+> 00007f99faa18010
+> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
+> 00007f99faa18010
+> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
+> 0000000000027100
 
-Run tested on:
-- Intel Skylake x86_64 (nuc6 i5-6260U)
+ORIG_RAX is 0, which matches sys_read.
+RDI is file descriptor 0x61
+RSI is plausibly a userspace pointer, 0x7f99faa18010
+RDX is the length, 0x27100 or 160kB.
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
+That all seems reasonable.
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+What I really want to know is who is _holding_ the lock.  We stash
+a pointer to the task_struct in 'owner', so we could clearly find this
+out in the 'blocked for too long' report, and print their stack trace.
+
+You must have done something like this already in order to deduce that
+it was the direct reclaim path that was the problem?
+
