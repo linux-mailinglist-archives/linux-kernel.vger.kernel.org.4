@@ -2,272 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB7A5B9F9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7945B9F9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiIOQ2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S229966AbiIOQ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiIOQ16 (ORCPT
+        with ESMTP id S229538AbiIOQ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:27:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195519E11F;
-        Thu, 15 Sep 2022 09:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663259277; x=1694795277;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=hTLgiq46065uoaGpLmCVB41MvllRV5rjFIMLJgL3xHU=;
-  b=gp6Fbu9f7eEvTJ+5RnrIg5o6HslxPAkykbFp8WmNmfIQmK5mnFrT0TjK
-   QLah07IbZE4L7Jh/e5T0htAYlDWpDhPBqdt1s3zApOvD3qnYisYLlz5x3
-   +eGhABU23bI3ZhFFFvc9B5U0HKNGnEPAzlNP8kDR6m+C8un/LSWU/RFYs
-   3284Okm7YOrEv5tl9dch9GaCIjpOapSSKa7zeaOQfZEkipMtXAb9o35Gr
-   LjqGAHY0dj7CJjlO2lUFgtgHZ/bh3vJrTlUjsnD9m46lAqsDndziV9b9u
-   lUjV9RoQ8LwxeuCsRS8Iaqon0/vYWYb9rSeoT8hdRYEPVz1i/wk/TRYNf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="297490732"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="297490732"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:27:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="721066213"
-Received: from khagn-mobl1.ger.corp.intel.com ([10.249.46.185])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:27:53 -0700
-Date:   Thu, 15 Sep 2022 19:27:45 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-In-Reply-To: <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
-Message-ID: <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org> <YyGoZLTFhYQvlf+P@smile.fi.intel.com> <YyG2tDdq9PWTlaBQ@wantstofly.org> <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
+        Thu, 15 Sep 2022 12:28:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87AF9E11F;
+        Thu, 15 Sep 2022 09:28:40 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FFECZI016989;
+        Thu, 15 Sep 2022 16:28:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=3EkFjAR8k5C804PaGRzIAGHsfuCHMxISa88a7ags8cg=;
+ b=MoY46RERgCFVolL5jeg8Us82VOvmavjHzuqwliU+u7brgOqJCk3wG0XZzcM1kRirlG5O
+ 0E8MIUo2sm7/quOm78ufMrGhNhmuo2om7uGKPC6KkU1u2F1YK/DTvdPpBrSch3ELbPc1
+ 3NwD4aIXMIYAzOSx5fFgXu3az2s1qdP7CzOxZhahXT7lr9bF3zHtg5wQcON6z3PS5Fpl
+ ze5YRyzruBqi/SXZPoPemPYfIf4LqghjyG7zdi/rwKFptR60AB39+Bh7Sp4N/LKwmHAU
+ dExmMdR28r2Co6DcTRqWjYL9Pr8YogARipsWzAZacT5+WRR9LfBd+TfivMS5g24pr39H xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6grjf81-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 16:28:39 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FFHr8d003508;
+        Thu, 15 Sep 2022 16:28:38 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6grjf76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 16:28:38 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FGKkC6003295;
+        Thu, 15 Sep 2022 16:28:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jjyfrancu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 16:28:36 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FGSXXc37421514
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Sep 2022 16:28:33 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B6424C044;
+        Thu, 15 Sep 2022 16:28:33 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A7EB4C040;
+        Thu, 15 Sep 2022 16:28:32 +0000 (GMT)
+Received: from [9.171.87.36] (unknown [9.171.87.36])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Sep 2022 16:28:32 +0000 (GMT)
+Message-ID: <68b0e84f-38fd-fdca-f2f0-ba664b44d1d3@linux.ibm.com>
+Date:   Thu, 15 Sep 2022 18:28:32 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1047278770-1663259274=:1610"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] KVM: s390: pci: fix plain integer as NULL pointer
+ warnings
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, frankja@linux.ibm.com
+Cc:     farman@linux.ibm.com, schnelle@linux.ibm.com, pmorel@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220823191548.77526-1-mjrosato@linux.ibm.com>
+ <c558a8c8-4d87-13ee-8d33-ba0285445d62@linux.ibm.com>
+ <9645ad8e-1fbe-894a-6a13-f5e91d019199@linux.ibm.com>
+In-Reply-To: <9645ad8e-1fbe-894a-6a13-f5e91d019199@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kaDj6_oBD16dfH7kHgdYJ77xaVtoS66E
+X-Proofpoint-GUID: -H71A-lvbD2OKA9xPVqDuiiBcwMXCCf9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=829 clxscore=1015 bulkscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209150095
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1047278770-1663259274=:1610
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
 
-On Wed, 14 Sep 2022, Andy Shevchenko wrote:
-
-> On Wed, Sep 14, 2022 at 02:10:44PM +0300, Lennert Buytenhek wrote:
-> > On Wed, Sep 14, 2022 at 01:09:40PM +0300, Andy Shevchenko wrote:
-> > > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
-> > > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
-> > > > the UARTs and then re-open that UART.
-> > > > 
-> > > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
-> > > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
-> > > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
-> > > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
-> > > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
-> > > > __pci_write_msi_msg():
-> > > > 
-> > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > 		Address: fee00278  Data: 0000
-> > > > [root@icelake ~]# cat hangup.c
-> > > > #include <stdio.h>
-> > > > #include <sys/ioctl.h>
-> > > > 
-> > > > int main(int argc, char *argv[])
-> > > > {
-> > > > 	ioctl(1, TIOCVHANGUP);
-> > > > 
-> > > > 	return 0;
-> > > > }
-> > > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
-> > > > [root@icelake ~]# ./hangup > /dev/ttyS4
-> > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > 		Address: 00000000  Data: 0000
-> > > > [root@icelake ~]#
-> > > > 
-> > > > Opening the serial port device again while the UART is in this state
-> > > > then appears to cause the UART to generate an interrupt
-> > > 
-> > > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
-> > > Any of them can be possible, but to be sure, can you add:
-> > > 
-> > > 	dev_info(p->dev, "FISR: %x\n", fisr);
-> > > 
-> > > into dnv_handle_irq() before any other code and see which bits we
-> > > actually got there before the crash?
-> > > 
-> > > (If it floods the logs, dev_info_ratelimited() may help)
-> > 
-> > I think that that wouldn't report anything because when the UART is
-> > triggering an interrupt here, the MSI address/data are zero, so the
-> > IRQ handler is not actually invoked.
+Am 15.09.22 um 18:16 schrieb Christian Borntraeger:
+> Am 23.08.22 um 21:18 schrieb Matthew Rosato:
+>> On 8/23/22 3:15 PM, Matthew Rosato wrote:
+>>> Fix some sparse warnings that a plain integer 0 is being used instead of
+>>> NULL.
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>>
+>> @Janosch, since you are taking the other PCI fix can you also take this small cleanup through KVM?
 > 
-> Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
-> 
-> > If Ilpo doesn't beat me to it, I'll try adding some debug code to see
-> > exactly which UART register write in the tty open path is causing the
-> > UART to signal an interrupt before the IRQ handler is set up.
-> > 
-> > (The IOMMU stops the write in this case, so the machine doesn't crash,
-> > we just get an I/O page fault warning in dmesg every time this happens.)
-> 
-> And I believe you are not using that UART as debug console, so it won't
-> dead lock itself. It's then better than I assumed.
-> 
-> > > > before the
-> > > > MSI vector has been set up again, causing a DMA write to I/O virtual
-> > > > address zero:
-> > > > 
-> > > > [root@icelake console]# echo > /dev/ttyS4
-> > > > [  979.463307] DMAR: DRHD: handling fault status reg 3
-> > > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> > > > 
-> > > > I'm guessing there's something under tty_open() -> uart_open() ->
-> > > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
-> > > > serial8250_do_startup() that triggers a UART interrupt before the
-> > > > MSI vector has been set up again.
-> > > > 
-> > > > I did a quick search but it didn't seem like this is a known issue.
-> > > 
-> > > Thanks for your report and reproducer! Yes, I also never heard about
-> > > such an issue before. Ilpo, who is doing more UART work nowadays, might
-> > > have an idea, I hope.
+> Queued now for the kvm tree. Will have to look if we have other things for 6.0. Otherwise it will go with 6.1.
 
-The patch below seems to avoid the faults. I'm far from sure if it's the 
-best fix though as I don't fully understand what causes the faults during 
-the THRE tests because the port->irq is disabled by the THRE test block.
+Hmmm, checkpatch --strict has this:
 
---
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-[PATCH] serial: 8250: Turn IER bits on only after irq has been set up
+CHECK: Comparison to NULL could be written "!aift->kzdev"
+#52: FILE: arch/s390/kvm/pci.h:49:
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == NULL ||
 
-Invoking TIOCVHANGUP on 8250_mid port and then reopening the
-port triggers these faults during serial8250_do_startup():
+CHECK: Comparison to NULL could be written "!aift->kzdev[si]"
+#53: FILE: arch/s390/kvm/pci.h:50:
++	    aift->kzdev[si] == NULL)
 
-  DMAR: DRHD: handling fault status reg 3
-  DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
+total: 0 errors, 0 warnings, 2 checks, 28 lines checked
 
-The faults are triggered by the THRE test that temporarily toggles THRI
-in IER before UART's irq is set up.
+NOTE: For some of the reported defects, checkpatch may be able to
+       mechanically convert to the typical style using --fix or --fix-inplace.
 
-Refactor serial8250_do_startup() such that irq is setup before the THRE
-test. The current irq setup code is intermixed with the timer setup
-code. As THRE test must be performed prior to the timer setup, extract
-it into own function and call it only after the THRE test.
 
-Reported-by: Lennert Buytenhek <buytenh@wantstofly.org>
-Fixes: 40b36daad0ac ("[PATCH] 8250 UART backup timer")
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
----
- drivers/tty/serial/8250/8250.h      |  2 ++
- drivers/tty/serial/8250/8250_core.c | 23 ++++++++++++-----------
- drivers/tty/serial/8250/8250_port.c |  8 +++++---
- 3 files changed, 19 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-index 287153d32536..dbf4c1204bf3 100644
---- a/drivers/tty/serial/8250/8250.h
-+++ b/drivers/tty/serial/8250/8250.h
-@@ -403,3 +403,5 @@ static inline int serial_index(struct uart_port *port)
- {
- 	return port->minor - 64;
- }
-+
-+void univ8250_setup_timer(struct uart_8250_port *up);
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 2e83e7367441..e81a9cab6960 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -298,21 +298,15 @@ static void serial8250_backup_timeout(struct timer_list *t)
- 		jiffies + uart_poll_timeout(&up->port) + HZ / 5);
- }
- 
--static int univ8250_setup_irq(struct uart_8250_port *up)
-+void univ8250_setup_timer(struct uart_8250_port *up)
- {
- 	struct uart_port *port = &up->port;
--	int retval = 0;
- 
--	/*
--	 * The above check will only give an accurate result the first time
--	 * the port is opened so this value needs to be preserved.
--	 */
- 	if (up->bugs & UART_BUG_THRE) {
- 		pr_debug("%s - using backup timer\n", port->name);
- 
- 		up->timer.function = serial8250_backup_timeout;
--		mod_timer(&up->timer, jiffies +
--			  uart_poll_timeout(port) + HZ / 5);
-+		mod_timer(&up->timer, jiffies + uart_poll_timeout(port) + HZ / 5);
- 	}
- 
- 	/*
-@@ -322,10 +316,17 @@ static int univ8250_setup_irq(struct uart_8250_port *up)
- 	 */
- 	if (!port->irq)
- 		mod_timer(&up->timer, jiffies + uart_poll_timeout(port));
--	else
--		retval = serial_link_irq_chain(up);
-+}
-+EXPORT_SYMBOL_GPL(univ8250_setup_timer);
- 
--	return retval;
-+static int univ8250_setup_irq(struct uart_8250_port *up)
-+{
-+	struct uart_port *port = &up->port;
-+
-+	if (port->irq)
-+		return serial_link_irq_chain(up);
-+
-+	return 0;
- }
- 
- static void univ8250_release_irq(struct uart_8250_port *up)
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 39b35a61958c..6e8e16227a3a 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2294,6 +2294,10 @@ int serial8250_do_startup(struct uart_port *port)
- 	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
- 		up->port.irqflags |= IRQF_SHARED;
- 
-+	retval = up->ops->setup_irq(up);
-+	if (retval)
-+		goto out;
-+
- 	if (port->irq && !(up->port.flags & UPF_NO_THRE_TEST)) {
- 		unsigned char iir1;
- 
-@@ -2336,9 +2340,7 @@ int serial8250_do_startup(struct uart_port *port)
- 		}
- 	}
- 
--	retval = up->ops->setup_irq(up);
--	if (retval)
--		goto out;
-+	univ8250_setup_timer(up);
- 
- 	/*
- 	 * Now, initialize the UART
-
--- 
-tg: (1d10cd4da593..) 8250/setup-irq-fix (depends on: tty-linus)
---8323329-1047278770-1663259274=:1610--
+Can you maybe redo this so that we avoid followup patches?
