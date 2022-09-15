@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B673E5B942A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5E75B942F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiIOGOM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 02:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
+        id S229462AbiIOGQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIOGOK (ORCPT
+        with ESMTP id S229564AbiIOGQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:14:10 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A1492F6E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:14:07 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28F6D02N091061
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 15 Sep 2022 14:13:00 +0800 (CST)
-        (envelope-from Zhiguo.Niu@unisoc.com)
-Received: from bj08434pcu.spreadtrum.com (10.0.74.109) by
- BJMBX02.spreadtrum.com (10.0.64.8) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 15 Sep 2022 14:13:00 +0800
-From:   "zhiguo.niu" <zhiguo.niu@unisoc.com>
-To:     <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>
-CC:     <lvqiang.huang@unisoc.com>
-Subject: [PATCH Vx 1/1] f2fs: fix some error handling case in gc
-Date:   Thu, 15 Sep 2022 14:12:54 +0800
-Message-ID: <1663222374-27633-1-git-send-email-zhiguo.niu@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 15 Sep 2022 02:16:17 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5C923D1;
+        Wed, 14 Sep 2022 23:16:16 -0700 (PDT)
+Received: from [192.168.1.138] ([37.4.248.23]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MKc0o-1otYR01EL6-00Kxco; Thu, 15 Sep 2022 08:15:50 +0200
+Message-ID: <5b64f4ef-a62e-80df-80a6-3ab52589588b@i2se.com>
+Date:   Thu, 15 Sep 2022 08:15:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Originating-IP: [10.0.74.109]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-Content-Transfer-Encoding: 8BIT
-X-MAIL: SHSQR01.spreadtrum.com 28F6D02N091061
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the
+ maximum
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
+ <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
+ <20220914155035.88E45C433C1@smtp.kernel.org>
+ <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
+ <20220914180508.0EDD9C433D6@smtp.kernel.org>
+ <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
+ <20220914182101.92286C433D6@smtp.kernel.org>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220914182101.92286C433D6@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:73zk18NJSgeRmQb2Le65uElTFxV3rTYUitHoBJvve+UbuXV4Lq/
+ 85iX824f09JsP5yFcmk4/RIlNWFowhB/BncseVNTc6qrcF8txSpdtPq8u5IZ7sCxMfBxpN6
+ z0dLdnnRVvhA/8kB41r59RcxfVXw6/fGOAbNnGJw/IZ/o+uELNlnhR6DZZgaOu/RLBvfDUW
+ 8AOLcw+RuwLR7iUjhmH9g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WMDYiwxPIpk=:xpy+5yMq1PfEjq9b17sO70
+ q7hFz/LlwEwfONudWfiLk/MW8KhokFIf+78te2ULq+n3phlE6U5SHyACBF2ABwWNd8ZAQ2Yx+
+ cK8QxpBeYM65D0bSJvAtibGdbWB1vQMEsbDcOo/YRRMOLibpdUaWJOv4FoZ3DuEag1C2TnJtQ
+ d8bVQRCor/lCyISpxl/+GKDdVUeGdSOig6YKkZ5QDq+5pbqP1c5uWXKM3vjhjU9Fbec0WKXib
+ gK4kJi/avNqHK/Mvd+vTZ+Lm/lLykciLtydrkKoUeF+/Ap37BSB1e7Be9+unCpbXtVNJTAVx+
+ JBdcpCJ8yB3d401FJpYKRBva4gKlTAr+KNSq59+rgvigiUHKWvpmdGyxPqfkSGQmJhIFhgsam
+ SNV9gYv2kySJkBk89jeN41NB6Zw8VYuUc3WrRLJHuXyTARFK5RyhA6ZjzlvoeALAEIas7AQiu
+ tKVJEjyVbdHjhu4RJ14tkyhuOLDJ/oKngCV0U2QnDSnOi4hnJmKnePBF2MBifGlXfJcR2HPXG
+ Q7tY41DwYj0OLlrLp5CvnokoM0yP1Tvyp9vL6rfGb8Iwul/K7efzKMEg0auMAXWrJxeXoIVeq
+ ngJBi5FG5ZZ3Lrp0CtQ5h5yUc9QH0StRMiPYA35jiBhqZap/wjfd/drzl+VuDoD5IUsx6d6Li
+ zOBzj5zbya2mJdjpxHg4RV+S9rdoadp7w3WZFuocPeVfWUXDg5Cyb1zSJblhH1V+nk3KVTAo2
+ 8/e1GxDdwZLxHT7BMuV4FrF6AuJKFU2JoH6DWP4GVWGRxVRYQR8RdY2zNeFA/a34Scn58gY8M
+ +vS0GCVJETNnb4HXnOK3fpeQF8ANg==
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During GC, if segment type stored in SSA and SIT is inconsistent,
-we set SBI_NEED_FSCK first and then stop checkpoint, this will
-cause the following issues:
-1. SBI_NEED_FSCK can not be set to flash truly because of checkpoint
-has been stopped.
-2. Will cause more EIO error because of CP_ERROR_FLAG is set in
-f2fs_stop_checkpoint, this is not reasonable.
+Hi Stephen,
 
-So we fix this error handling case by recording current victim segment
-as invalid for gc.
+Am 14.09.22 um 20:20 schrieb Stephen Boyd:
+> Quoting Stefan Wahren (2022-09-14 11:09:04)
+>> Am 14.09.22 um 20:05 schrieb Stephen Boyd:
+>>> Quoting Stefan Wahren (2022-09-14 10:45:48)
+>>>> Am 14.09.22 um 17:50 schrieb Stephen Boyd:
+>>>>> Furthermore, I wonder if even that part needs to be implemented.  Why
+>>>>> not make a direct call to rpi_firmware_property() and get the max rate?
+>>>>> All of that can live in the drm driver. Making it a generic API that
+>>>>> takes a 'struct clk' means that it looks like any clk can be passed,
+>>>>> when that isn't true. It would be better to restrict it to the one use
+>>>>> case so that the scope of the problem doesn't grow. I understand that it
+>>>>> duplicates a few lines of code, but that looks like a fair tradeoff vs.
+>>>>> exposing an API that can be used for other clks in the future.
+>>>> it would be nice to keep all the Rpi specific stuff out of the DRM
+>>>> driver, since there more users of it.
+>>> Instead of 'all' did you mean 'any'?
+>> yes
+> Another idea is to populate an OPP table in the rpi firmware driver for
+> this platform device with the adjusted max frequency. That would be an
+> SoC/firmware agnostic interface that expresses the constraints.
+Do you mean in the source code of this driver or in the DT?
+> I'm
+> almost certain we talked about this before.
+I'm not sure about the context. Do you mean the CPU frequency handling? 
+I remember it was a hard decision. In the end it was little benefit but 
+a lot of disadvantages (hard to maintain all theses OPP tables for all 
+Raspberry Pi boards, doesn't work with already deployed DT). So yes, i'm 
+part of the problem i mentioned before ;-)
 
-Signed-off-by: zhiguo.niu <zhiguo.niu@unisoc.com>
----
- fs/f2fs/gc.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index d5fb426e0747..66bdf2678b5e 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1700,10 +1700,13 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
-
-                sum = page_address(sum_page);
-                if (type != GET_SUM_TYPE((&sum->footer))) {
--                       f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
--                                segno, type, GET_SUM_TYPE((&sum->footer)));
--                       set_sbi_flag(sbi, SBI_NEED_FSCK);
--                       f2fs_stop_checkpoint(sbi, false);
-+#ifdef CONFIG_F2FS_CHECK_FS
-+                       if (!test_and_set_bit(segno, SIT_I(sbi)->invalid_segmap)) {
-+                               f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
-+                                       segno, type, GET_SUM_TYPE((&sum->footer)));
-+                               set_sbi_flag(sbi, SBI_NEED_FSCK);
-+                       }
-+#endif
-                        goto skip;
-                }
-
---
-2.17.1
-
-________________________________
- This email (including its attachments) is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential or otherwise protected from disclosure. Unauthorized use, dissemination, distribution or copying of this email or the information herein or taking any action in reliance on the contents of this email or the information herein, by anyone other than the intended recipient, or an employee or agent responsible for delivering the message to the intended recipient, is strictly prohibited. If you are not the intended recipient, please do not read, copy, use or disclose any part of this e-mail to others. Please notify the sender immediately and permanently delete this e-mail and any attachments if you received it in error. Internet communications cannot be guaranteed to be timely, secure, error-free or virus-free. The sender does not accept liability for any errors or omissions.
-本邮件及其附件具有保密性质，受法律保护不得泄露，仅发送给本邮件所指特定收件人。严禁非经授权使用、宣传、发布或复制本邮件或其内容。若非该特定收件人，请勿阅读、复制、 使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件的方式即刻告知发件人。无法保证互联网通信及时、安全、无误或防毒。发件人对任何错漏均不承担责任。
