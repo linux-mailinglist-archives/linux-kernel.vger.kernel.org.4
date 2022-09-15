@@ -2,59 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF565B993B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248EA5B993C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiIOLA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
+        id S229641AbiIOLBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIOLAV (ORCPT
+        with ESMTP id S229562AbiIOLBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:00:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B214A79A5D;
-        Thu, 15 Sep 2022 04:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECC0EB81D67;
-        Thu, 15 Sep 2022 11:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 981FAC433C1;
-        Thu, 15 Sep 2022 11:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663239617;
-        bh=acLkAUMk8BizKu7cs/NDP4722gLa3JtenovpxYO3Tr8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gmgro/xCWfp0Ze/EGnC+VKSQMF6UT+HP8vRhQUthN2sRBWRbOqsBoQpALOJGiJ/10
-         cUwOVAMciz0g0KcBweDX2hfDVvb+hIGPGdJgXG3P0rcXtkpRPyodGlXfN9iefDrCpY
-         aNs+hiXkrgySSxOm7bL8H+BQMw8vmcs9u1omb+criFevg9Sm4arCrtBNm9tcu6+slD
-         DvcdT3mzYo8UJpcBLcdFz7HDk2eCI46Ux2Ze/mBS9ZW85U/3Da2X5qxyxhAN3mEagX
-         U+kjBGC0sf47cgTi4PtAbDI4CmsRt1WxBbYue8Vc5Y115JdCxcZyLB2CqYsv0MoxPq
-         sJXDx1FtsgnKQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73AF2C73FFC;
-        Thu, 15 Sep 2022 11:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 15 Sep 2022 07:01:08 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9469875C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:01:04 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so22002711pjm.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=iICjEN+A8kBol5PgEatcRbO30m2IBFRwWu1Tkq5B7ZA=;
+        b=dvpB9Vth3a+jEVh0cliDbcsM2qbvuxq5l7XPK+w4Tub7nhdoeZRqykz0bDKLx3jlJY
+         tvPwVDEDWJYLUX4zAcNH2j6XUEhKx6JtOS9er43MU8oWRp83sRKdbwVuvTn8Ish1VQRr
+         n0/KGMPBd6YAwqRD/bTMQ28WeIsGS03N4MJGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=iICjEN+A8kBol5PgEatcRbO30m2IBFRwWu1Tkq5B7ZA=;
+        b=nf2S9X4IHkuycU1tD8Wx3EWiRS7Rt0T7tBvKo1TsP1glboByxi37Bt21q/XFnL2sSa
+         +jpIn7uDI3UqFJOiWNYjxSZX4ocnew0iZI7+9b56iq6TBwJPQ+SVQsSne+xuZpaM6HUz
+         6Mb/HJPMg+u7Qa2Y8ck0TOad9MFqWlXacbHzj+YKdXJZp6Uo34JaHgakjaQ+TPkupcDS
+         jzj3fle/MEmCK0hP5kFJWcG7IypN4DDGpug95YJGJE1Ho/KP9dezWZbpO6VqCHKLtjaZ
+         jkPiaKg6mIE+d6nxMSnp6LOhGcq2+gEnywzOZzW3QbVyXDHatOveb+DGM6F27gw6tGJ/
+         3IaQ==
+X-Gm-Message-State: ACrzQf0c0cLYoxt85gl8QT0InbIDVwuaN9PuaiGrByJU95PtgjKQ9kQV
+        TnjQV4TwsmV3NUCGKDAYRClsAg==
+X-Google-Smtp-Source: AMsMyM5PCU7HXmaUWLPe6NfiWW6aVcPUIPahnYioiElCsxIg1xVPvYqr9HhqbqlIKOMIoqZaL91tAw==
+X-Received: by 2002:a17:902:e84c:b0:178:2a08:501c with SMTP id t12-20020a170902e84c00b001782a08501cmr3760240plg.110.1663239664230;
+        Thu, 15 Sep 2022 04:01:04 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:91d2:9e21:2c2b:323f])
+        by smtp.gmail.com with ESMTPSA id w73-20020a62824c000000b0053e940d360csm12025356pfd.58.2022.09.15.04.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 04:01:03 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 20:00:57 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: printk meeting at LPC 2022
+Message-ID: <YyMF6YkGdv/EepJf@google.com>
+References: <20220910221947.171557773@linutronix.de>
+ <87h71cr1gb.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/2] net: ftgmac100: support fixed link
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166323961746.5581.16008979446604456337.git-patchwork-notify@kernel.org>
-Date:   Thu, 15 Sep 2022 11:00:17 +0000
-References: <20220907054453.20016-1-rentao.bupt@gmail.com>
-In-Reply-To: <20220907054453.20016-1-rentao.bupt@gmail.com>
-To:     Tao Ren <rentao.bupt@gmail.com>
-Cc:     andrew@lunn.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, guoheyi@linux.alibaba.com,
-        dylan_hung@aspeedtech.com, huangguangbin2@huawei.com,
-        windhl@126.com, chenhao288@hisilicon.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        taoren@fb.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h71cr1gb.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,33 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue,  6 Sep 2022 22:44:51 -0700 you wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
+On (22/09/12 18:46), John Ogness wrote:
+> Hi,
 > 
-> The patch series adds fixed link support to ftgmac100 driver.
+> We now have a room/timeslot [0] where Thomas and I will be presenting
+> and discussing this new approach [1] for bringing kthread and atomic
+> console printing to the kernel.
 > 
-> Patch #1 adds fixed link logic into ftgmac100 driver.
-> 
-> Patch #2 enables mac3 controller in Elbert dts: Elbert mac3 is connected
-> to the onboard switch BCM53134P's IMP_RGMII port directly (no PHY
-> between BMC MAC and BCM53134P).
-> 
-> [...]
+> Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"
 
-Here is the summary with links:
-  - [net-next,v3,1/2] net: ftgmac100: support fixed link
-    https://git.kernel.org/netdev/net-next/c/38561ded50d0
-  - [net-next,v3,2/2] ARM: dts: aspeed: elbert: Enable mac3 controller
-    https://git.kernel.org/netdev/net-next/c/ce6ce9176975
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Was this recorded? I glanced through LPC/kernel summit schedules and didn't
+find it anywhere.
