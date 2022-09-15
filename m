@@ -2,118 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3BB5B9FCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86935B9FCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiIOQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S229872AbiIOQpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIOQnk (ORCPT
+        with ESMTP id S229457AbiIOQpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:43:40 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFAB4F3B4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id g8so12728950iob.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ihRDwkA3/+uCxAKrHSmLGee9NmkEXol5SUJ6O91CNsQ=;
-        b=ImI6oxn09GT5UW+MnR4ggV+ED5gD+svfD2kQMzQ4voej/W+eUfC3HFi6VBZwQXwecu
-         voIEManlVi43NC/9tYTL0uTdZ1wEgFcoBx4a8ub3zfgvGaS5xc83X/EvtA6XpvC4raQg
-         Z60mLYu8ZV4ww10k+iDFlynWBwENFebBhSxfM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ihRDwkA3/+uCxAKrHSmLGee9NmkEXol5SUJ6O91CNsQ=;
-        b=kZ0k7MJKGrpVd8/DK9Vo9zFszBPGwtUZMno0YEKExiMuZ8MPNxTsmjQIba8v10RVAe
-         FCX0L7endva2kGpPreCu9rsyxC2iyvjMYvg37iAZujsS81DbxsMzhwR8rHjlqTcdB8sY
-         5jlQyboVJZpY5j3GuizGM+gHAkWFo1XaUxUENn7xJcxdDm6rWRibO7sjpfBcKPv6VXe6
-         DOCpTi+HKxz8KvYNpZvbXwkEIaeQBQ0kzATGcfz+H3Tk1wJ3Kf3XGtpMWwi+roxuRdTI
-         Jlft5GwQMfli4c9Gskw3vou8LiA5ZsqvfhXYAWT8zBVVxDUwePrBRd66b3EJg4v95cqu
-         Z2xQ==
-X-Gm-Message-State: ACrzQf2IxfPmz+G9Kcpujx0BOvddiavmWdRjDqzOLzx/QyiF7FxjfW+1
-        LhQIcnsye2YlQE3a4wUaA5TmgA==
-X-Google-Smtp-Source: AMsMyM4BvQTKE/r4PZSeJj2dgAk4gub8S4eTFG15BDPyb9u9/mTbJ8nnopamaoZaf8gPyzuWM8LMEQ==
-X-Received: by 2002:a05:6638:19cf:b0:358:3dd3:2162 with SMTP id bi15-20020a05663819cf00b003583dd32162mr441054jab.185.1663260218045;
-        Thu, 15 Sep 2022 09:43:38 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id cb6-20020a0566381b0600b00349cee4ef4asm1327397jab.62.2022.09.15.09.43.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 09:43:37 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 16:43:36 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     Johan Hovold <johan@kernel.org>, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, johan+linaro@kernel.org,
-        quic_kriskura@quicinc.com, dianders@chromium.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb
- gdsc
-Message-ID: <YyNWOJerkZcqgx5h@google.com>
-References: <20220901101756.28164-1-quic_rjendra@quicinc.com>
- <20220901101756.28164-3-quic_rjendra@quicinc.com>
- <YxDYJ+ONryLROBhL@google.com>
- <YyF+5CQqcLQlXvzV@hovoldconsulting.com>
- <YyJGNR33JbHxWWYD@google.com>
- <4490d181-7bf2-791c-1778-1102e9adbc25@quicinc.com>
- <f58077fd-3d12-4094-7d46-e49f25e16033@quicinc.com>
+        Thu, 15 Sep 2022 12:45:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69AD43DBFB;
+        Thu, 15 Sep 2022 09:45:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7ECFE1682;
+        Thu, 15 Sep 2022 09:45:10 -0700 (PDT)
+Received: from e126311.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE2063F73B;
+        Thu, 15 Sep 2022 09:45:02 -0700 (PDT)
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, kajetan.puchalski@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
+Date:   Thu, 15 Sep 2022 17:44:10 +0100
+Message-Id: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f58077fd-3d12-4094-7d46-e49f25e16033@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 06:59:36PM +0530, Rajendra Nayak wrote:
-> 
-> On 9/15/2022 12:55 PM, Rajendra Nayak wrote:
-> > 
-> > 
-> > On 9/15/2022 2:53 AM, Matthias Kaehlcke wrote:
-> > > On Wed, Sep 14, 2022 at 09:12:36AM +0200, Johan Hovold wrote:
-> > > > On Thu, Sep 01, 2022 at 09:04:55AM -0700, Matthias Kaehlcke wrote:
-> > > > > On Thu, Sep 01, 2022 at 03:47:56PM +0530, Rajendra Nayak wrote:
-> > > > > > USB on sc7280 cannot support wakeups from low power states
-> > > > > > if the GDSC is turned OFF. Update the .pwrsts for usb GDSC so it
-> > > > > > only transitions to RET in low power.
-> > > > > > 
-> > > > > > Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> > > > > 
-> > > > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> > > > > Tested-by: Matthias Kaehlcke <mka@chromium.org>
-> > > > 
-> > > > Did you confirm that you actually hit the retention state?
-> > > 
-> > > No, how would I do that?
-> > > 
-> > > > IIUC, this series is equivalent to using ALWAYS_ON unless CX is actually
-> > > > powered off during suspend.
-> > > 
-> > > The count in /sys/kernel/debug/qcom_stats/cxsd increses with each suspend,
-> > > however it also does that with the GDSC configured as ALWAYS_ON and with
-> > > Rajendra's "arm64: dts: qcom: sc7280: Add required-opps for USB" [1], so
-> > 
-> > hmm, that's really not expected. With my above patch and with the GDSC as
-> > ALWAYS_ON there is a cx vote in suspend preventing cxsd so the counter
-> > should not go up.
-> 
-> Perhaps you are missing '1b771839: clk: qcom: gdsc: enable optional power domain support'
-> in your tree?
+Hi,
 
-Indeed, that patch was missing in our tree, thanks for the pointer!
+At the moment, all the available idle governors operate mainly based on their own past performance
+without taking into account any scheduling information. Especially on interactive systems, this
+results in them frequently selecting a deeper idle state and then waking up before its target
+residency is hit, thus leading to increased wakeup latency and lower performance with no power
+saving. For 'menu' while web browsing on Android for instance, those types of wakeups ('too deep')
+account for over 24% of all wakeups.
 
-With it the CXSD count does not increase when the GDSC is configured as
-ALWAYS_ON.
+At the same time, on some platforms C0 can be power efficient enough to warrant wanting to prefer
+it over C1. Sleeps that happened in C0 while they could have used C1 ('too shallow') only save
+less power than they otherwise could have. Too deep sleeps, on the other hand, harm performance
+and nullify the potential power saving from using C1 in the first place. While taking this into
+account, it is clear that on balance it is preferable for an idle governor to have more too shallow
+sleeps instead of more too deep sleeps.
+
+Currently the best available governor under this metric is TEO which on average results in less than
+half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+increased performance in the process.
+
+This proposed optional extension to TEO would specifically tune it for minimising too deep
+sleeps and minimising latency to achieve better performance. To this end, before selecting the next
+idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
+CPU is being utilized. This util value is then compared to a threshold defined as a percentage of
+the cpu's capacity (capacity >> 6 ie. ~1.5% in the current implementation). If the util is above the
+threshold, the governor directly selects the shallowest available idle state. If the util is below
+the threshold, the governor defaults to the TEO metrics mechanism to try to select the deepest
+available idle state based on the closest timer event and its own past correctness.
+
+Effectively this functions like a governor that on the fly disables deeper idle states when there
+are things happening on the cpu and then immediately reenables them as soon as the cpu isn't
+being utilized anymore.
+
+Initially I am sending this as a patch for TEO to visualize the proposed mechanism and simplify
+the review process. An alternative way of implementing it while not interfering
+with existing TEO code would be to fork TEO into a separate but mostly identical for the time being
+governor (working name 'idleutil') and then implement util-awareness there, so that the two
+approaches can coexist and both be available at runtime instead of relying on a compile-time option.
+I am happy to send a patchset doing that if you think it's a cleaner approach than doing it this way.
+
+This approach can outperform all the other currently available governors, at least on mobile device
+workloads, which is why I think it is worth keeping as an option.
+
+Additionally, in my view, the reason why it makes more sense to implement this type of mechanism
+inside a governor rather than outside using something like QoS or some other way to disable certain
+idle states on the fly are the governor's metrics. If we were disabling idle states and reenabling
+them without the governor 'knowing' about it, the governor's metrics would end up being updated
+based on state selections not caused by the governor itself. This could interfere with the
+correctness of said metrics as that's not what they were designed for as far as I understand.
+This approach skips metrics updates whenever a state was selected based on the util and not based
+on the metrics.
+
+There is no particular attachment or reliance on TEO for this mechanism, I simply chose to base
+it on TEO because it performs the best out of all the available options and I didn't think there was
+any point in reinventing the wheel on the side of computing governor metrics. If a
+better approach comes along at some point, there's no reason why the same idle aware mechanism
+couldn't be used with any other metrics algorithm. That would, however, require implemeting it as
+a separate governor rather than a TEO add-on.
+
+As for how the extension performs in practice, below I'll add some benchmark results I got while
+testing this patchset.
+
+Pixel 6 (Android 12, mainline kernel 5.18):
+
+1. Geekbench 5 (latency-sensitive, heavy load test)
+
+The values below are gmean values across 3 back to back iteration of Geekbench 5.
+As GB5 is a heavy benchmark, after more than 3 iterations intense throttling kicks in on mobile devices
+resulting in skewed benchmark scores, which makes it difficult to collect reliable results. The actual
+values for all of the governors can change between runs as the benchmark might be affected by factors
+other than just latency. Nevertheless, on the runs I've seen, util-aware TEO frequently achieved better
+scores than all the other governors.
+
+'shallow' is a trivial governor that only ever selects the shallowest available state, included here
+for reference and to establish the lower bound of latency possible to achieve through cpuidle.
+
+'gmean too deep %' and 'gmean too shallow %' are percentages of too deep and too shallow sleeps
+computed using the new trace event - cpu_idle_miss. The percentage is obtained by counting the two
+types of misses over the course of a run and then dividing them by the total number of wakeups.
+
+| metric                                | menu           | teo               | shallow           | teo + util-aware  |
+| ------------------------------------- | -------------  | ---------------   | ---------------   | ---------------   |
+| gmean score                           | 2716.4 (0.0%)  | 2795 (+2.89%)     | 2780.5 (+2.36%)   | 2830.8 (+4.21%)   |
+| gmean too deep %                      | 16.64%         | 9.61%             | 0%                | 4.19%             |
+| gmean too shallow %                   | 2.66%          | 5.54%             | 31.47%            | 15.3%             |
+| gmean task wakeup latency (gb5)       | 82.05μs (0.0%) | 73.97μs (-9.85%)  | 42.05μs (-48.76%) | 66.91μs (-18.45%) |
+| gmean task wakeup latency (asynctask) | 75.66μs (0.0%) | 56.58μs (-25.22%) | 65.78μs (-13.06%) | 55.35μs (-26.84%) |
+
+In case of this benchmark, the difference in latency does seem to translate into better scores.
+
+Additionally, here's a set of runs of Geekbench done after holding the phone in
+the fridge for exactly an hour each time in order to minimise the impact of thermal issues.
+
+| metric                                | menu           | teo               | teo + util-aware  |
+| ------------------------------------- | -------------  | ---------------   | ---------------   |
+| gmean multicore score                 | 2792.1 (0.0%)  | 2845.2 (+1.9%)    | 2857.4 (+2.34%)   |
+| gmean single-core score               | 1048.3 (0.0%)  | 1052.6 (+0.41%)   | 1055.3 (+0.67%)   |
+
+2. PCMark Web Browsing (non latency-sensitive, normal usage test)
+
+The table below contains gmean values across 20 back to back iterations of PCMark 2 Web Browsing.
+
+| metric                    | menu           | teo               | shallow          | teo + util-aware  |
+| ------------------------- | -------------  | ---------------   | ---------------  | ---------------   |
+| gmean score               | 6283.0 (0.0%)  | 6262.9 (-0.32%)   | 6258.4 (-0.39%)  | 6323.7 (+0.65%)   |
+| gmean too deep %          | 24.15%         | 10.32%            | 0%               | 3.2%              |
+| gmean too shallow %       | 2.81%          | 7.68%             | 27.69%           | 17.189%           |
+| gmean power usage [mW]    | 209.1 (0.0%)   | 187.8 (-10.17%)   | 205.5 (-1.71%)   | 205 (-1.96%)      |
+| gmean task wakeup latency | 204.6μs (0.0%) | 184.39μs (-9.87%) | 95.55μs (-53.3%) | 95.98μs (-53.09%) |
+
+As this is a web browsing benchmark, the task for which the wakeup latency was recorded was Chrome's
+rendering task, ie CrRendererMain. The latency improvement for the actual benchmark task was very
+similar.
+
+In this case the large latency improvement does not translate into a notable increase in benchmark score as
+this particular benchmark mainly responds to changes in operating frequency. Nevertheless, the small power
+saving compared to menu with no decrease in benchmark score indicate that there are no regressions for this
+type of workload while using this governor.
+
+Note: The results above were as mentioned obtained on the 5.18 kernel. Results for Geekbench obtained after
+backporting CFS patches from the most recent mainline can be found in the pdf linked below [1].
+The results and improvements still hold up but the numbers change slightly. Additionally, the pdf contains
+plots for all the relevant results obtained with this and other idle governors.
+
+At the very least this approach seems promising so I wanted to discuss it in RFC form first.
+Thank you for taking your time to read this!
+
+--
+Kajetan
+
+[1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+
+
+Kajetan Puchalski (1):
+  cpuidle: teo: Introduce optional util-awareness
+
+ drivers/cpuidle/Kconfig         | 12 +++++
+ drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
+ 2 files changed, 98 insertions(+)
+
+-- 
+2.37.1
+
