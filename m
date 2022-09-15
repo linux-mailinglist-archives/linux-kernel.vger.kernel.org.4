@@ -2,185 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207625B9F37
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158A35B9F38
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiIOPxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229786AbiIOPx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiIOPxe (ORCPT
+        with ESMTP id S229771AbiIOPxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:53:34 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75C980029
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:53:32 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id f13so831709wrs.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:53:32 -0700 (PDT)
+        Thu, 15 Sep 2022 11:53:55 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0C72B50
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:53:50 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z13so13615887edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/3wMcFW+Q2QkQYcgxSwnwev38w4amXX73UlBpLdQGfw=;
-        b=SjegSkPXCFmpyiHfBdu98vP76DdfhYVOvbr/LBihuRn6MatxIy3ClbyqSIX2XpM0f2
-         WElfJqmd1PRrBXCxH62Cod/tKmSjr11eXB8/exFsbTr/WMKQva40g4PkDBpe+3/nSGoe
-         WbUglcsu+yUPIBlRrMRKE/ZbYsdi/d1qe4gYhWS/VBnSUxCX3N1/IXkhuVVH3p5+qCIZ
-         Jknz8kgCpHmBkh/9HomdCKdV4xJ+rBBG/BZ7EYEdzU2h2gisCG7Rp/uqx8mGUkh+7MI5
-         6Ftxjdh4O40UbO4OFEXK9+A/wnWLBj1iwT9GYAn4YyiMT0AsjOirgQvhmgiPfjG9vTs/
-         7Meg==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Fb+oLfTwa+wHvHPAHvUFEVTiYgN/YlPqgDTxNg+w938=;
+        b=EpDeUVZ9gqIBclAPoXkmZEUMuhsFX7weD1nf9Arfdfw5qN92sX7yUu655fTaOpODtN
+         A/BiRfv43GR7s+mQCXytmVHjtb9aCmg+TrIn/foRpFVk4VOkGBIMbmhntQqrRIpB0KkS
+         q1ajhgAcDCd/q/EKBFu9otbxl8rIG1oDNiUQbe6sXGQbvo2Qj+SrKF8QyQPm/RVKrjWY
+         uq4GV9zzMIee2nPbUQnzfAAs5zuylkfqQcT0am35YYzWkioPMcPQ2koHKd54Lug9y+O/
+         9BhwER65nEvpZgiyFYry6aRK7G/2TjI1NRUprMlS5AmODgtC1d+a6cK2bXCoW/ktCQFE
+         kt/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/3wMcFW+Q2QkQYcgxSwnwev38w4amXX73UlBpLdQGfw=;
-        b=NhhY371FNRM5Q08TlHVE3+HnRZvVlXgqy21sG9iYNoak8xQQeThEEzi9fr60eVAERX
-         QNiSl2t4L0npDTeQzLhAUV/95A+dIoztUBfnK8WyWcOD4VvCJDC5nr8sRMFrQc/1Nnkr
-         bTzfv1a9bVf14z2+ekCy/aH1rz+AAOls15Ey5eXoiRQfthh8tnhwpAzGdCXBMcD3sgAh
-         2fuy+2UqvRieirs7lENr4HWdD/qh5F1Yh7s1Br9LZNLj4Zzw1UFODk4Qp4MWRoXW40tK
-         Hq8zZl6RqpVUMbeIZ67rFNNbG0vC7ZjOyWG0i28fzETccS4vz4q6gjgTJWzy9j2bDx7D
-         PrEA==
-X-Gm-Message-State: ACrzQf0GFv9KVtQhmpeSQCKL3//DLXEYsz/AburDqpJBoxj/rU779so6
-        BUG20DK74RskagR3LBKPdZxn8Q==
-X-Google-Smtp-Source: AMsMyM7ZOkmT70Vmw/HZ6InphqFsxwBe0lN9yQVkNrorY1EAAFc5Tl2dD8twdKHggcwKeFq4EtvUQg==
-X-Received: by 2002:adf:e94e:0:b0:228:da92:3691 with SMTP id m14-20020adfe94e000000b00228da923691mr216490wrn.1.1663257211361;
-        Thu, 15 Sep 2022 08:53:31 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n3-20020a05600c3b8300b003a319b67f64sm3824359wms.0.2022.09.15.08.53.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 08:53:30 -0700 (PDT)
-Message-ID: <92e80c4b-f41f-8822-93f1-2476499d0b6e@linaro.org>
-Date:   Thu, 15 Sep 2022 17:53:19 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fb+oLfTwa+wHvHPAHvUFEVTiYgN/YlPqgDTxNg+w938=;
+        b=DQ0cA83ZHqrbdIBbIC0brJqnjKFFdZA1ZIHX4DLThSbC/T76wVZUslSdZUOIzeQgCX
+         3eBo3zTqR6lis4yWdN+Nywypf5zydH23nYVGfnsbNKc9sS0QjuF4EAxiVL/RsSmyt5B9
+         FFJZhchocEChPAece7KEJjS9viiIzDVXgcOtOlH1sFzFM4nI3+fPMa+lxnmWsPTMzQQY
+         pmoE1Jtc52Qr+g4nxE5zEo6HyxODO12JCx+hWnHGTLSkSbrzNJ5MwBm1e38zD3C1kAVO
+         Dgn3Wm4pA1nBZh/6L5fAv85+25H4Jk0ghlgCglHvk2FKtlX1T64MZO+8QrvhC21qbdUU
+         540Q==
+X-Gm-Message-State: ACrzQf2jc0q1LxGosy+KoKRK82xudzYaqYqTJ3r15s62ahaxsK84Oyhr
+        zazhrlHHodGS5359B+3XlgaYC2dYPUoCQeXud//tdQ==
+X-Google-Smtp-Source: AMsMyM6bXkUZp3UnLnFx5sb1+LTMM0ZAc2TGc17s21R+um+3Gb2J6v67CmQPaodxxqcaGPUSYmlBMbx8Hp5V1mo8N40=
+X-Received: by 2002:a05:6402:e01:b0:442:dd7e:f49d with SMTP id
+ h1-20020a0564020e0100b00442dd7ef49dmr405769edh.355.1663257229065; Thu, 15 Sep
+ 2022 08:53:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] thermal/drivers/imx_sc: Rely on the platform data
- to get the resource id
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
- <17d09638-01e6-038f-c3db-cbe02ccb9327@linaro.org>
-In-Reply-To: <17d09638-01e6-038f-c3db-cbe02ccb9327@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <YuqDMLF2AQyj4+N1@kroah.com> <CAOesGMivEZmYb7Z8C1ic=r0oeNeXBh61LYu28B1g9d_qZVOjyA@mail.gmail.com>
+ <CAOesGMgKM9gU9qNEiLb==pE_u-W7HTGd0s75CL38u6Eve2Uchg@mail.gmail.com>
+ <YyCequVJnV3p0Cpw@kroah.com> <CAOesGMjQHhTUMBGHQcME4JBkZCof2NEQ4gaM1GWFgH40+LN9AQ@mail.gmail.com>
+ <YyHehZ5hT8mXKoTX@kroah.com> <CAOesGMid4_pDeUQFwhfSwrBRGhGocA-73V83h5qOsmYg7gAWTA@mail.gmail.com>
+ <CAGETcx9Ha+akkuqzanGH9vrCnFQT_zTmezAHwtMhpxsQa=mwjg@mail.gmail.com>
+ <CAOesGMgpJQjMvo6m7on+27F8REiHaVSRL6HBjiRPVDM9Jscnrg@mail.gmail.com> <YyMC5Fip2qCtil6D@kroah.com>
+In-Reply-To: <YyMC5Fip2qCtil6D@kroah.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Thu, 15 Sep 2022 08:53:37 -0700
+Message-ID: <CAOesGMh=dn3gakYr6sE6oruYmJMzbYfRVNsM6ZP-6OM4SE18kA@mail.gmail.com>
+Subject: Re: [GIT PULL] Driver core changes for 6.0-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 15, 2022 at 3:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Sep 14, 2022 at 08:56:04PM -0700, Olof Johansson wrote:
+> > On Wed, Sep 14, 2022 at 10:36 AM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > On Wed, Sep 14, 2022 at 9:24 AM Olof Johansson <olof@lixom.net> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Wed, Sep 14, 2022 at 7:00 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Tue, Sep 13, 2022 at 09:28:27AM -0700, Olof Johansson wrote:
+> > > > > > On Tue, Sep 13, 2022 at 8:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > >
+> > > > > > > On Mon, Sep 12, 2022 at 10:24:43AM -0700, Olof Johansson wrote:
+> > > > > > > > On Mon, Sep 12, 2022 at 10:23 AM Olof Johansson <olof@lixom.net> wrote:
+> > > > > > > > >
+> > > > > > > > > Hi,
+> > > > > > > > >
+> > > > > > > > > On Wed, Aug 3, 2022 at 7:16 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > > > >
+> > > > > > > > > > Saravana Kannan (11):
+> > > > > > > > > >       PM: domains: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > > > >       pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > > > >       net: mdio: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > > > >       driver core: Add wait_for_init_devices_probe helper function
+> > > > > > > > > >       net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+> > > > > > > > > >       Revert "driver core: Set default deferred_probe_timeout back to 0."
+> > > > > > > > > >       driver core: Set fw_devlink.strict=1 by default
+> > > > > > > > > >       iommu/of: Delete usage of driver_deferred_probe_check_state()
+> > > > > > > > > >       driver core: Delete driver_deferred_probe_check_state()
+> > > > > > > > > >       driver core: fw_devlink: Allow firmware to mark devices as best effort
+> > > > > > > > > >       of: base: Avoid console probe delay when fw_devlink.strict=1
+> > > > > > > > >
+> > > > > > > > > The last patch in this list regresses my HoneyComb LX2K (ironically
+> > > > > > > > > the machine I do maintainer work on). It stops PCIe from probing, but
+> > > > > > > > > without a single message indicating why.
+> > > > > > > > >
+> > > > > > > > > The reason seems to be that the iommu-maps property doesn't get
+> > > > > > > > > patched up by my (older) u-boot, and thus isn't a valid reference.
+> > > > > > > > > System works fine without IOMMU, which is how I've ran it for a couple
+> > > > > > > > > of years.
+> > > > > > > > >
+> > > > > > > > > It's also extremely hard to diagnose out of the box because there are
+> > > > > > > > > *no error messages*. And there were no warnings leading up to this
+> > > > > > > > > strict enforcement.
+> > > > > > > > >
+> > > > > > > > > This "feature" seems to have been done backwards. The checks should
+> > > > > > > > > have been running (and not skipped due to the "optional" flag), but
+> > > > > > > > > also not causing errors, just warnings. That would have given users a
+> > > > > > > > > chance to know that this is something that needs to be fixed.
+> > > > > > > > >
+> > > > > > > > > And when you flip the switch, at least report what failed so that
+> > > > > > > > > people don't need to spend a whole night bisecting kernels, please.
+> > > > > > > > >
+> > > > > > > > > Greg, mind reverting just the last one? If I hit this, I presume
+> > > > > > > > > others would too.
+> > > > > > > >
+> > > > > > > > Apologies, wrong patch pointed out. The culprit is "driver core: Set
+> > > > > > > > fw_devlink.strict=1 by default", 71066545b48e42.
+> > > > > > >
+> > > > > > > Is this still an issue in -rc5?  A number of patches in the above series
+> > > > > > > was just reverted and hopefully should have resolved the issue you are
+> > > > > > > seeing.
+> > > > > >
+> > > > > > Unfortunately, I discovered this regression with -rc5 in the first
+> > > > > > place, so it's still there.
+> > > > >
+> > > > > Ick, ok, Saravana, any thoughts?  I know you're at the conference this
+> > > > > week with me, maybe you can give Olof a hint as to what to look for
+> > > > > here?
+> > > >
+> > > > I'm not sure what you want me to look for. The patch turns on
+> > > > enforcement of DT contents that never used to be enforced, so now my
+> > > > computer no longer boots. And it does it in a way that makes it
+> > > > impossible for someone not rebuilding kernels to debug to figure out
+> > > > what happened.
+> > >
+> > > Hi Olof,
+> > >
+> > > Sorry for the trouble. It doesn't print any error messages because
+> > > there are cases where it's block the probe where it wouldn't be an
+> > > error. If I printed it every time fw_devlink blocked a probe, it'd be
+> > > a ton of messages.
+> > >
+> > > Btw, when I enabled fw_devlink.strict=1, it was AFTER making changes
+> > > that'll stop indefinitely blocking probes. So what you are seeing
+> > > shouldn't be happening. After about 10 seconds (configurable), it
+> > > should stop blocking the probes.
+> >
+> > "Shouldn't be happening" is a pretty bold statement. It's not actually
+> > stuck on timeout in my case, and doesn't recover.
+> >
+> > Instead, what seems to be happening is that the PCIe driver, which
+> > registers as a platform_driver here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/mobiveil/pcie-layerscape-gen4.c#n255
+> >
+> > ends up registering, and the driver core now refuses to try to probe
+> > the device matches, since they no longer have their suppliers
+> > fulfilled (the smmu suppliers would not be tracked since they are
+> > optional here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/of/property.c#n1449
+> >
+> > So what happens is that the driver registration succeeds, but there
+> > have been no devices matched to it. So when it returns to the platform
+> > core, it thinks there are no devices bound to this driver, so it
+> > should be unregistered:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/platform.c#n951
+> >
+> > That explains why the pcie core doesn't retry and just disappears, and
+> > stops retrying.
+> >
+> > This is what it looks like with CONFIG_DEBUG_DRIVER and CONFIG_DEBUG_DEVRES:
+> > [    5.178538] bus: 'platform': add driver layerscape-pcie-gen4
+> > [    5.184301] bus: 'platform': __driver_probe_device: matched device
+> > 3600000.pcie with driver layerscape-pcie-gen4
+> > [    5.194498] platform 3600000.pcie: error -EPROBE_DEFER: supplier
+> > 5000000.iommu not ready
+> > [    5.202607] platform 3600000.pcie: Added to deferred list
+> > [    5.208024] bus: 'platform': __driver_probe_device: matched device
+> > 3800000.pcie with driver layerscape-pcie-gen4
+> > [    5.218227] platform 3800000.pcie: error -EPROBE_DEFER: supplier
+> > 5000000.iommu not ready
+> > [    5.226333] platform 3800000.pcie: Added to deferred list
+> > [    5.231814] bus: 'platform': remove driver layerscape-pcie-gen4
+> > [    5.237761] driver: 'layerscape-pcie-gen4': driver_release
+> >
+> > Note that the platform driver registration sets flags to disable async
+> > probing, supposedly so it can assume that any matching devices would
+> > be found by the time registration returns:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/platform.c#n917
+> > :
+> >
+> > /*
+> > * We have to run our probes synchronously because we check if
+> > * we find any devices to bind to and exit with error if there
+> > * are any.
+> > */
+> > drv->driver.probe_type = PROBE_FORCE_SYNCHRONOUS;
+> >
+> > /*
+> > * Prevent driver from requesting probe deferral to avoid further
+> > * futile probe attempts.
+> > */
+> > drv->prevent_deferred_probe = true;
+> >
+> >
+> >
+> >
+> > Bottom line: How was this code tested? This seems far from mature,
+> > this doesn't seem like that of an obscure condition to occur and it
+> > could create minefields for others down the road if it's fragile.
+>
+> I've reverted it for now, let's get this worked out for later releases.
 
-Shawn, Sascha,
+Thanks Greg!
 
-if there is no comment on these two patches. I'll pick them up
-
-Thanks
-
-   -- D.
-
-On 26/08/2022 00:28, Daniel Lezcano wrote:
-> On 18/08/2022 10:23, Daniel Lezcano wrote:
->> Currently the imx_sc driver is reimplementing part of the thermal zone
->> parsing from the thermal OF tree code to get the sensor id associated
->> with a thermal zone sensor.
->>
->> The driver platform specific code should know what sensor is present
->> and not rely on the thermal zone description to do a discovery. Well
->> that is arguable but all the other drivers have a per platform data
->> telling what sensor id to use.
->>
->> The imx_sc thermal driver is the only one using a different
->> approach. Not invalid but forcing to keep a specific function
->> 'thermal_zone_of_get_sensor_id()' to get the sensor id for a specific
->> thermal zone as the self-explanatory function tells and having device
->> tree code inside the driver.
->>
->> The thermal OF code had a rework and remains now self-encapsulated
->> with a register/unregister functions and their 'devm' variants, except
->> for the function mentioned above.
->>
->> After investigating, it appears the imx_sc sensor is defined in
->> arch/arm64/boot/dts/freescale/imx8qxp.dtsi:
->>
->> which defines the cpu-thermal zone with the id: IMX_SC_R_SYSTEM
->>
->> This dtsi is included by:
->>   - imx8qxp-ai_ml.dts
->>   - imx8qxp-colibri.dtsi
->>   - imx8qxp-mek.dts
->>
->> The two first ones do not define more thermal zones
->> The third one adds the pmic-thermal0 zone with id: IMX_SC_R_PMIC_0
->>
->> The thermal OF code returns -ENODEV if the thermal zone registration
->> with a specific id fails because the description is not available in
->> the DT for such a sensor id. In this case we continue with the other
->> ids without bailing out with an error.
->>
->> So we can build for the 'fsl,imx-sc-thermal' a compatible data, an
->> array of sensor ids containing IMX_SC_R_SYSTEM and IMX_SC_R_PMIC_0.
->>
->> The latter won't be found but that will not result in an error but a
->> normal case where we continue the initialization with other ids.
->>
->> Just to clarify, it is what the thermal framework does and what the
->> other drivers are expecting: when a registration fails with -ENODEV
->> this is not an error but a case where the description is not found in
->> the device tree, that be can the entire thermal zones description or a
->> specific thermal zone with an unknown id.
->>
->> There is one small functional change but without impact. When there is
->> no 'thermal-zones' description the probe function was returning
->> '-ENODEV', now it returns zero. When a thermal zone fails to register
->> with an error different from '-ENODEV', the error is detected and
->> returned.
->>
->> Change the code accordingly and remove the OF code from the driver.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->> The changes apply on the linux-next branch:
->>
->>   
->> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next 
->>
->>
->> I don't have the platform, so I was not able to test the changes.
->>
->> Changelog:
->>   v2:
->>      - Clarified a bit more the changes description
->>
->>      - Fix use-after-free and add a couple of comments to reflect the
->>       patch description
->>
->>      - Put back the error message in case there is an error with the
->>        registration
->>
-> 
-> Is there any comment on this change ?
-> 
-> 
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+-Olof
