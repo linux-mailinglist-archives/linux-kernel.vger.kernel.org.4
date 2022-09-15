@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2F05B9B9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459965B9BA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiIONK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S229869AbiIONP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 09:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiIONKZ (ORCPT
+        with ESMTP id S229682AbiIONP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 09:10:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E272E9CC;
-        Thu, 15 Sep 2022 06:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663247423; x=1694783423;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HoCpplRGmLa8NMZ/Auv5ElmwuTYU4eLsbnw+GC1f8LU=;
-  b=GDMbYg/7ty3Pnn48jYjN0+yMkqkSwD7PinOogk+POn/HTD8unqr/uy6d
-   GAj26ots8CjQuvk/PXCCy0czqaA5weVyeKQQzp3t5cdsbwLn7gEOL7lZ+
-   wuH9ZCnmRXodRdP10T2buzXhaFzu7YRnBTlENk708uUVqxAGHuewLlfSM
-   b1sF/sy0NZvwNSCkj0ttnmgk/Zfi4lARn83uWpIidpC2vGsr3vJhCym5/
-   50M7OtmkhdycOtaG1DVsxEHjK6Vod0PgaiCVzPjxngUMS9fre3Q724LnU
-   CJvHOVtYyEeIFKaGq1T50QkJIwQ/hOSOejAAN2IU/7KIzCqhIy1dgxtKx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="281737598"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="281737598"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 06:10:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="617269024"
-Received: from bhomann-mobl.ger.corp.intel.com (HELO [10.252.61.7]) ([10.252.61.7])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 06:10:21 -0700
-Message-ID: <3962348a-33b4-5941-4a0b-cb447a513a41@linux.intel.com>
-Date:   Thu, 15 Sep 2022 15:10:18 +0200
+        Thu, 15 Sep 2022 09:15:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C4854C82;
+        Thu, 15 Sep 2022 06:15:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97BC3B8200F;
+        Thu, 15 Sep 2022 13:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC51CC433D6;
+        Thu, 15 Sep 2022 13:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663247752;
+        bh=D99hEJwO1zg9kh/dzIgxfTC45cTYP3GG0gTzAtC2HGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DUBaRJeOmWDtl4Zx9/FCXZUMTevnyyFhK4aENnzetz0tBhjQizwVpnJLtbemjYix9
+         1OL70DsII4MdyZ2K/fPnSvYNqdfC3lUo7tJ/0Xd1aYLH1Bz9Es0BkoRESDQf9dmAR6
+         DrM31CjAuMHphyWumv12TgXKWX/LCGbMpeKmQcws=
+Date:   Thu, 15 Sep 2022 15:16:18 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: Re: [PATCH v3] Documentation: remove magic number doc
+Message-ID: <YyMlovoskUcHLEb7@kroah.com>
+References: <731a3b01-1ade-6003-eb21-6b0a2c919750@gmail.com>
+ <20220914233254.zcuaw23nl2wgs7f3@tarta.nabijaczleweli.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] soundwire: qcom: update status from device id 1
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220915124215.13703-1-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220915124215.13703-1-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220914233254.zcuaw23nl2wgs7f3@tarta.nabijaczleweli.xyz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/15/22 14:42, Srinivas Kandagatla wrote:
-> By default autoenumeration is enabled on QCom SoundWire controller
-> which means the core should not be dealing with device 0 w.r.t enumeration.
-> Currently device 0 status is also shared with SoundWire core which confuses
-> the core sometimes and we endup adding 0:0:0:0 slave device.
-
-The change looks fine, but the description of the issue is surprising.
-
-Whether autoenumeration is enabled or not is irrelevant, by spec the
-device0 cannot be in ALERT status and throw in-band interrupts to the
-host with this mechanism.
-
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/soundwire/qcom.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Sep 15, 2022 at 01:32:54AM +0200, наб wrote:
+> The entire file blames back to the start of git
+> (minus whitespace from the RST translation and a typo fix):
+>   * there are changelog comments for March 1994 through to Linux 2.5.74
+>   * struct tty_ldisc is two pointers nowadays, so naturally no magic
+>   * GDA_MAGIC is defined but unused, and it's been this way
+>     since start-of-git
+>   * M3_CARD_MAGIC isn't defined, because
+>     commit d56b9b9c464a ("[PATCH] The scheduled removal of some OSS
+>     drivers") removed the entire driver in 2006
+>   * CS_CARD_MAGIC likewise since
+>     commit b5d425c97f7d ("more scheduled OSS driver removal") in 2007
+>   * KMALLOC_MAGIC and VMALLOC_MAGIC were removed in
+>     commit e38e0cfa48ac ("[ALSA] Remove kmalloc wrappers"),
+>     six months after start of git
+>   * SLAB_C_MAGIC has never even appeared in git
+>     (removed in 2.4.0-test3pre6)
 > 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index e21a3306bf01..871e4d8b32c7 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -428,7 +428,7 @@ static int qcom_swrm_get_alert_slave_dev_num(struct qcom_swrm_ctrl *ctrl)
->  
->  	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
->  
-> -	for (dev_num = 0; dev_num <= SDW_MAX_DEVICES; dev_num++) {
-> +	for (dev_num = 1; dev_num <= SDW_MAX_DEVICES; dev_num++) {
->  		status = (val >> (dev_num * SWRM_MCP_SLV_STATUS_SZ));
->  
->  		if ((status & SWRM_MCP_SLV_STATUS_MASK) == SDW_SLAVE_ALERT) {
-> @@ -448,7 +448,7 @@ static void qcom_swrm_get_device_status(struct qcom_swrm_ctrl *ctrl)
->  	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
->  	ctrl->slave_status = val;
->  
-> -	for (i = 0; i <= SDW_MAX_DEVICES; i++) {
-> +	for (i = 1; i <= SDW_MAX_DEVICES; i++) {
->  		u32 s;
->  
->  		s = (val >> (i * 2));
+> At a glance, the only ones still in use are in drivers which are mostly
+> untouched since git (TTY, SLIP,
+> SCSI (drivers/scsi/{arm/queue.c,ncr53c8xx.c}), &c.).
+> 
+> A rough estimate of magic numbers in the kernel is obtained by:
+>   # git grep define | grep '_MAGIC\b' |
+>     grep -ve IOC  -e ^tools/ -e '_IO[(WR]' -e _SUPER | wc -l
+>   780
+> Note that the word 'magic' may have different meaning from magic
+> number context.
+> There are also magic numbers which aren't listed here, like
+> SR_EEPROM_MAGIC, L2TP_TUNNEL_MAGIC, and MD_SB_MAGIC.
+> 
+> Therefore, magic-number.rst is a low-value historial relic at best and
+> misleading cruft at worst, so remove the documentation.
+> 
+> Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
+
+Please only remove the ones that are not used anymore.
+
+Then work on actually removing the remaining ones (hint, the tty layer
+should not need this and I'll gladly take patches), and only after they
+are all gone, can you remove the whole file.
+
+thanks,
+
+greg k-h
