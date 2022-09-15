@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF165B965E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF1C5B9662
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiIOIaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S229906AbiIOIbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiIOIaC (ORCPT
+        with ESMTP id S229499AbiIOIbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:30:02 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69487205C6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:29:55 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z21so25838653edi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TS6YrFcrJR4PovUykcbqJ+VFqwNuwN/qogyATPK5bVE=;
-        b=t3K+kX/fmnVmzk5ULGSpEVPyDLpCB7iEFYH67N5BtCuR6b8hSe6wG6CQFqist1BeMb
-         SqY0mP4qjA00fknOsk6TvJ8otNdN2v8hY5lff5ComqHops8VUzLFJzjE9E2ywCXA0Jvt
-         TD9X6KFS2d1VRnGSdaUa/8L8HW/OtII1VlOfPcxAcr/jTQ69adDjzPmpXk7E2oOx8bVz
-         wHnR7MQxFkMWUaoIZCc8VYoP+msbFfpiWzsPZCeZE/B6jxc7UwzIJ1iYXHjwwgKl1Vz/
-         hjjN2Ad8FGPATUBnvVUQJcbVXMImtutOJT5Yltoe8Y95V1bwCQuQGuvr7xoF1P/EPDHZ
-         Affw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TS6YrFcrJR4PovUykcbqJ+VFqwNuwN/qogyATPK5bVE=;
-        b=xo5I8W9zDcadAn44GaW5zPP5cimv0/LUktnyWDiCPbq/uFX/Z/jMmH9jWfsnQsc0fC
-         5KZu1v4mZwYuk68O2SwNyhWXoeNw2zQHY0uRmDUgnQhGe3/JU7v8Y+/R6Jpc/tprlDg8
-         OxvpAtZoeSUDEnGER/In2OM5jcU0xS5dWBYQ+/HpQ+UP73wEfbd2uYdo+JQWoUPjIEKC
-         cf0BUACeQrYVZZLplk+XCnW+IN7n+PyemVVRiTt7GIPD6I/8P+VHEDgaGFehm+VHSgSi
-         foZRLTCSumyElfs5UEzCMsuSLTCc2WS4NwWMNhVP/fpwy+HjSgn+Ka4Bd3T+XvXe+GHd
-         mUGQ==
-X-Gm-Message-State: ACgBeo0OFnAslz8HplzPPuv0HQE+sxxArHw09G0tdbkjHsqoG759JTaX
-        DjeOkilfPsppwVgoePSuSTMYQdB10lAc2kiWxIcNOg==
-X-Google-Smtp-Source: AA6agR5aEj6ODyYEz854uhZc2308xE6m3RIigEol2oZviVnxt8HGYPaDBCLY1LImUu5bfnEbFURzp6qV2SnBI07M9fo=
-X-Received: by 2002:a05:6402:2073:b0:44e:3555:5fcd with SMTP id
- bd19-20020a056402207300b0044e35555fcdmr32780028edb.82.1663230594429; Thu, 15
- Sep 2022 01:29:54 -0700 (PDT)
+        Thu, 15 Sep 2022 04:31:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDA38A1E9;
+        Thu, 15 Sep 2022 01:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663230707; x=1694766707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4QDYhv01XhBj9H19T7cifgoQYgyC7r+UJfLax276tBI=;
+  b=QkrL6RiCYezdZjx0jAPCMyuWDICqWScNX+Sx9q/ic4zTfh0OkO79CmmW
+   2+OFLDiO2KQ5McMMyFrQB4xwPJM3sBy5UJP5vcoWPtXkxrMLbveZMbXT2
+   UKeg3mKnV3VL4s/W/I2bjcWu5yw9IvD7s5kRmOsg/Om982BjDvbfy/kIT
+   2HTRs564OUj7z6b6+qm7WF5rv9P0OmPXvu2lhiUkOSUma/1gUI4o4MusZ
+   PwgyK/S6vzhdnoZhwmoIJFMeBxTX0qWv7f8y+dXsVtNJoHb3wWySGiORt
+   SfC13kk6ZpTLw8ZovmEeAMC7ahHRHWpdq/EV6Ka0YJvHC3bnC4F5jGPzK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="296241737"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="296241737"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 01:31:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="650396990"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Sep 2022 01:31:44 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYkHf-0000Dj-1p;
+        Thu, 15 Sep 2022 08:31:43 +0000
+Date:   Thu, 15 Sep 2022 16:30:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH v3] ARM: dts: aspeed: yosemit V2: Enable OCP debug card
+Message-ID: <202209151642.BiM4LmOZ-lkp@intel.com>
+References: <20220914095207.GA24690@hcl-ThinkPad-T495>
 MIME-Version: 1.0
-References: <cover.1660839809.git.william.gray@linaro.org> <016c8d87cef87a1375e53f1c97c41d8b969f8d79.1660839809.git.william.gray@linaro.org>
- <Yw/meB0ACIPsU6Tw@ishi>
-In-Reply-To: <Yw/meB0ACIPsU6Tw@ishi>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 15 Sep 2022 10:29:43 +0200
-Message-ID: <CAMRc=McKZuV8p-ubiqLFnbhn=G0z000sKvO40wLp5HW=SjbAzg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] isa: Introduce the module_isa_driver_with_irq helper macro
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914095207.GA24690@hcl-ThinkPad-T495>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 12:53 AM William Breathitt Gray
-<william.gray@linaro.org> wrote:
->
-> On Thu, Aug 18, 2022 at 12:28:10PM -0400, William Breathitt Gray wrote:
-> > Several ISA drivers feature IRQ support that can configured via an "irq"
-> > array module parameter. This array typically matches directly with the
-> > respective "base" array module parameter. To reduce code repetition, a
-> > module_isa_driver_with_irq helper macro is introduced to provide a check
-> > ensuring that the number of "irq" passed to the module matches with the
-> > respective number of "base".
-> >
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->
-> Acked-by: William Breathitt Gray <william.gray@linaro.org>
+Hi Karthikeyan,
 
-Series queued.
+Thank you for the patch! Yet something to improve:
 
-Bart
+[auto build test ERROR on arm/for-next]
+[also build test ERROR on arm64/for-next/core clk/clk-next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master v6.0-rc5 next-20220914]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Karthikeyan-Pasupathi/ARM-dts-aspeed-yosemit-V2-Enable-OCP-debug-card/20220914-175427
+base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220915/202209151642.BiM4LmOZ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f4ff107abc0f057d0a55ced8a8db831db6f7d59e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Karthikeyan-Pasupathi/ARM-dts-aspeed-yosemit-V2-Enable-OCP-debug-card/20220914-175427
+        git checkout f4ff107abc0f057d0a55ced8a8db831db6f7d59e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:222.9-10 syntax error
+   FATAL ERROR: Unable to parse input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
