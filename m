@@ -2,58 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B935BA261
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A3F5BA26E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 23:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbiIOVga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 17:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S229635AbiIOVpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 17:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIOVg0 (ORCPT
+        with ESMTP id S229462AbiIOVpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 17:36:26 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E794888DE6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:36:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id sb3so15423596ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=wGAyWEAabIbAvSogDrOIIx1zF8AmPT7zLl8Lu7dPpE8=;
-        b=pX5VLD9pMWT1ix23xz+4or6aBpV3oaRY3wh7BRmCKsLt3isoxT1BZUpdznrzqFlKrq
-         trWK4zS/EWvY6LfYOqmlFMUhoNLrPVcZ39l0BqAvNJS932NwvLFRFCBU48YySJOMNOnN
-         8Qua3tORKMqA6NgBRJHux+VP3XsOibY1Y0mnA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=wGAyWEAabIbAvSogDrOIIx1zF8AmPT7zLl8Lu7dPpE8=;
-        b=fjV6A81mQ3ZM6WRw0sKJBeUuqlb3G+nt526iRqBiBzrc9eyGfzjR3u/TdY3FS/eUPC
-         UoC75QXY/DKlT/MZsNFnpY1Kz9q26MiPrEAc8tw6b8T3f9JELFsxqZI9kwk712V04ApS
-         w3KZuMrSuLWQ8sLtdLqjKcKFlkVqHzM7xOkq262RTwO8HSMPGiTfZI/6vTqSLdojw6RH
-         svSQj7NWxVl3vlS6x9Fw1NDSRcWvqRHBcy0arMeVI+3zMBt7vRyCQ5StS7PHcGhX0gh0
-         W6mLALGKv08wY1KBe2AGIQG+gLo9PS+e43lU0CApadr02oubQ4OWrqim8FqAKb2qqGHZ
-         V3zw==
-X-Gm-Message-State: ACrzQf3jEtOz+LfVfYo9fhdhRe+6sSNgTjP1awmwqqFs2QhZoavqbID4
-        oQt5bCdYfoDnOhPCR4P2aMZZkVHoEz1RwlZKwy/Wug==
-X-Google-Smtp-Source: AMsMyM5oMi1bUIySegT87LumTJnJw5zkfpcovyyEIUA3RlANhh7LLaQpa0Ghae6Zs5vw9F2bAc4ZRu1Jaf+f7VnBT4Y=
-X-Received: by 2002:a17:907:6087:b0:77a:51e9:8e86 with SMTP id
- ht7-20020a170907608700b0077a51e98e86mr1293921ejc.31.1663277783495; Thu, 15
- Sep 2022 14:36:23 -0700 (PDT)
-MIME-Version: 1.0
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 15 Sep 2022 23:36:12 +0200
-Message-ID: <CAOf5uwk=Tx+W-JuJBXUYjt2BLmSvr9Q153D1RTyJG_cmeO4AUw@mail.gmail.com>
-Subject: Correlation CMA size and FORCE_MAX_ZONEORDER
-To:     Mike Rapoport <rppt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thu, 15 Sep 2022 17:45:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE1C27DDC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 14:45:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 747A5625B8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACEB0C433D6;
+        Thu, 15 Sep 2022 21:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663278303;
+        bh=ondPqiIv00SaqFFzETnfFTIZrNHScOlUmailF0Bt7bw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a6TVrhndKjuiPGGpUhhVhL4UpbvbyuZ0ChBABYaCZXpP1Z78KUpwnaF9yr9WZIfgW
+         l8S9OpWLLjW7M9JSxjlZINmniw0IGjFXU5Evg6WGM57KgzlqRO+rIXH1jQpoPnx/zp
+         0iOdlYxg8Yvj7TL4FOHU93DA7OZybPTdRJDsDFj8=
+Date:   Thu, 15 Sep 2022 14:45:02 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
+Subject: Re: [PATCH] mm: change the type to bool for page_has_xxx's val
+Message-Id: <20220915144502.31e7241c6144f23ce197428b@linux-foundation.org>
+In-Reply-To: <1663210600-29258-1-git-send-email-zhaoyang.huang@unisoc.com>
+References: <1663210600-29258-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,16 +51,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all
+On Thu, 15 Sep 2022 10:56:40 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
 
-Working on a small device with 128MB of memory and using imx_v6_v7
-defconfig I found that CMA_SIZE_MBYTES, CMA_SIZE_PERCENTAGE
-are not respected. The calculation done does not allow the requested
-size. I think that this should be somehow documented and described but
-I did not
-find the documentation. Does it work this way?
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> 
+> It is proper to return bool value for such functions
+> 
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  include/linux/page-flags.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index e66f7aa..9a46c8b 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -946,9 +946,9 @@ static inline bool is_page_hwpoison(struct page *page)
+>  #define PageType(page, flag)						\
+>  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
+>  
+> -static inline int page_has_type(struct page *page)
+> +static inline bool page_has_type(struct page *page)
+>  {
+> -	return (int)page->page_type < PAGE_MAPCOUNT_RESERVE;
+> +	return !!((int)page->page_type < PAGE_MAPCOUNT_RESERVE);
 
-With CMA_SIZE of 8MB I need to have FORCE_MAX_ZONEORDER=12 if I have
-the default FORCE_MAX_ZONEORDER=14 the min size is 32Mb
+Much nicer to simply do this:
 
-Michael
+	return page->page_type < PAGE_MAPCOUNT_RESERVE;
+
+>  }
+>  
+>  #define PAGE_TYPE_OPS(uname, lname)					\
+> @@ -1081,7 +1081,7 @@ static __always_inline void __ClearPageAnonExclusive(struct page *page)
+>   * Determine if a page has private stuff, indicating that release routines
+>   * should be invoked upon it.
+>   */
+> -static inline int page_has_private(struct page *page)
+> +static inline bool page_has_private(struct page *page)
+>  {
+>  	return !!(page->flags & PAGE_FLAGS_PRIVATE);
+>  }
+
+Maybe.  This might cause the compiler to emit more code, to convert the
+integer to a bool having value 0 or 1.  It would do so if the code was
+uninlined.
+
+But given that it's inlined, the compiler hopefully has the brains to
+avoid doing that and to test the integer directly.  Please check this -
+the above change shouldn't increase the .o file's text section size.
+
