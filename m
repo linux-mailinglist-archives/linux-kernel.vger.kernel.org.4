@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB775B9B19
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0ADF5B9B21
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiIOMls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
+        id S230064AbiIOMmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiIOMlq (ORCPT
+        with ESMTP id S230023AbiIOMma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:41:46 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816BE8;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so41771271ejb.13;
-        Thu, 15 Sep 2022 05:41:45 -0700 (PDT)
+        Thu, 15 Sep 2022 08:42:30 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED3118E00
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:29 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w2so7656091pfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=atzRGS0IEVvnd6WXWC1rlccaFpBQ2yFXqBqZ0xtSuNwYZbyh6YLVXuYzo5VlCf3iMP
-         BXWfOqj/F/1zmWoyB2Ve1b4rG8wV4V0nXNPRF2ttYQZHs5S+vgVt5aY8tk9kzZEKkCGp
-         99SPE2OCnrsp7ChpLRX6eFj/7iiUngJWcWymqH8Vf3Qh5/8epbpknxNhTWsZD+pPH0kl
-         8q57dvY2+qmbkMehptiFXjeo8CWidirKYdwZ1kovxRZGLbsHsxjaOqqcaSrGOvJCGK+R
-         RYD31Gyww66Ch62fGeb1WerCHHiTxFWaTjfIwREbvvYEBrsMvYShWfKyvxogNPSQVbAY
-         U1LQ==
+        bh=7R+j7wZtr6PMHfqjiv3nkV/a0UcoizsRKOwYLocOZGY=;
+        b=ZcehTf+g6XANFF260jYKGNH1MHnPD/8e3qg1uMSIVbEZsbO2mQ1a91g5+kBrfmMc8D
+         df95AQ58en4aIwU8Cqhuws2yBIc7M/pgkzQsOMajpAkm1AcrX8fZYCzBPukSqShDiQEc
+         1HTxogrPOBliLkhrNXxnbyz2NGS3F1sXZBaPguGlVZoNAzv62yCkgrgCMWb653glMssm
+         LI4nQUt6aoXUVur2AGuLWJ3JiaIgS3/mejYmAWKit/XKdLLxB9kagZBBdo0JgrPZzLvf
+         PGmZj+14574uE00vgdJIuCMlXssnh0COFDE8xHpiSGmt3AE+Q77VdYews3P6Zr4tIp5n
+         r9Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tzmtfB02Kll9bwoDnqvoio0j7mPs1ux70CIafG7WcfU=;
-        b=EpH8uQyQN5mFFxV3qACj/16IvD18Q/SDl0XbLhwwDUm/qcxszHX985oAGWqtLCGava
-         VXOLU8lXvxqFg70DLabKcpG8YHZ2XgTvMsvwATJDZKsXK1AUm+uNO3D/PjKJwYNtCJgH
-         3To0GreZT5yI+xEQe7BJpiNerhMSapEiqrLJFD/1weuiloPs12k1B8m5dCuaYBrAkacL
-         Ci3SaWA2uZ2Tvsk0TSPu7LAqWdVGfr2T6eoirayqVGRIBZO2JJeZGneGE9oN91nMhX8w
-         s03iixLhiXqPhyBBwZj7KmJBYQZl1ZAKtFJ2HMpnQv9PFI7mqZEz1+V5DYmSgE0C61IM
-         Ijag==
-X-Gm-Message-State: ACgBeo3txzsJrCfP+aP6f1zM7QWvphCjRbFAVBz1exKMJKTTMnAJgWbt
-        3sBWTfhy3rCB2m/zGXg88GI=
-X-Google-Smtp-Source: AA6agR6OETBFpaXizZkBzwGuLb/nSX3ng6zwpvWStvpMjub1lzTuDLEeGZHPr04IhJAIRKoFkOF22g==
-X-Received: by 2002:a17:906:8c7:b0:730:c1a9:e187 with SMTP id o7-20020a17090608c700b00730c1a9e187mr29400332eje.55.1663245703722;
-        Thu, 15 Sep 2022 05:41:43 -0700 (PDT)
-Received: from localhost.localdomain (host-95-251-45-225.retail.telecomitalia.it. [95.251.45.225])
-        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b007778c9b7629sm9056305ejh.34.2022.09.15.05.41.40
+        bh=7R+j7wZtr6PMHfqjiv3nkV/a0UcoizsRKOwYLocOZGY=;
+        b=CMBnmaiVB9u04mHqbJ4D6kTmi7kPsDRAdTXb875T7e3BVQXWSCiPWsUW65d6/RROxs
+         bTmG+k9C1GlC+cUEQpb4SpTChdEaudhvnPQHuFuUJ/h4URvceqZgNeGG0ZF6nuEa82Kl
+         AOb0H04evqrCVdRzIoxTKREKHS1sGAsU/ssHQps//arYE92t/Q3Ep3t4xewm6W6hV0pb
+         mmd0Ki2cGU77jKEf51FugRoHLO4IZxZ8K3ugv5Ju9GEkmMqMLda4LmTmLlg9NBnMeQzX
+         cQM4U8e4mQIIqDVML6Mei+co+q/GfBh/edJ8amfAzBfhx+9G5IT+ks4SBYVyYaH23zvE
+         828w==
+X-Gm-Message-State: ACgBeo2wMWopgwSrgklWEYndssg28kogAcvCCZfjo6VYZyxFIUQ4WdRR
+        QFYXv2c6LS6eW/pRQElYDF8TQQ==
+X-Google-Smtp-Source: AA6agR48s/xjOTWg6C4e0X1Y+joB/hhyF2EiMG4yEQMB7vlw4rdRJ/Bd2KRlsLAK79QiVzKyVXdXEQ==
+X-Received: by 2002:a05:6a00:1149:b0:53e:62c8:10bc with SMTP id b9-20020a056a00114900b0053e62c810bcmr41667054pfm.49.1663245748645;
+        Thu, 15 Sep 2022 05:42:28 -0700 (PDT)
+Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b001637529493esm12721906pll.66.2022.09.15.05.42.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:41:42 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with GFP_ATOMIC
-Date:   Thu, 15 Sep 2022 14:40:12 +0200
-Message-Id: <20220915124012.28811-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 15 Sep 2022 05:42:27 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V4 0/6] Introduce erofs shared domain
+Date:   Thu, 15 Sep 2022 20:42:07 +0800
+Message-Id: <20220915124213.25767-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,50 +68,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
-there is no need to call kmap() on them.
+Changes since V3:
+1. Avoid race condition.
+   1.1. Relinquish the volume before removing the domain from list. 
+   1.2. Hold erofs_domain_list_lock before dec the refcnt of domain.
+2. Relinquish previously registered erofs_fscache in
+	erofs_fscache_domain_init_cookie()'s error handling path.
+3. Some code cleanups without logic change.
 
-Therefore, don't call kmap() on rx_buffer->page() and instead use a
-plain page_address() to get the kernel address.
+[Kernel Patchset]
+===============
+Git tree:
+	https://github.com/userzj/linux.git zhujia/shared-domain-v4
+Git web:
+	https://github.com/userzj/linux/tree/zhujia/shared-domain-v4
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+[User Daemon for Quick Test]
+============================
+Git web:
+	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
+More test cases will be added to:
+	https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests-fscache 
 
-I send again this patch because it was submitted more than two months ago,
-Monday 4th July 2022, but for one or more (good?) reasons it has not yet
-reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
-and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
-Obviously I have not made any changes to the code.
+[E2E Container Demo for Quick Test]
+===================================
+[Issue]
+	https://github.com/containerd/nydus-snapshotter/issues/161
+[PR]
+	https://github.com/containerd/nydus-snapshotter/pull/162
 
- drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+[Background]
+============
+In ondemand read mode, we use individual volume to present an erofs
+mountpoint, cookies to present bootstrap and data blobs.
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-index 04f453eabef6..cb5c707538a5 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-@@ -1964,15 +1964,13 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
- 
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
-+	data = page_address(rx_buffer->page) + rx_buffer->page_offset;
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
--
- 	return match;
- }
- 
+In which case, since cookies can't be shared between fscache volumes,
+even if the data blobs between different mountpoints are exactly same,
+they can't be shared.
+
+[Introduction]
+==============
+Here we introduce erofs shared domain to resolve above mentioned case.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
+
+[Usage]
+Users could specify 'domain_id' mount option to create or join into a
+domain which reuses the same cookies(blobs).
+
+[Design]
+========
+1. Use pseudo mnt to manage domain's lifecycle.
+2. Use a linked list to maintain & traverse domains.
+3. Use pseudo sb to create anonymous inode for recording cookie's info
+   and manage cookies lifecycle.
+
+[Flow Path]
+===========
+1. User specify a new 'domain_id' in mount option.
+   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
+   1.2 Create a new domain(volume), add it to domain list.
+   1.3 Traverse pseudo sb's inode list, compare cookie name with
+       existing cookies.[Miss]
+   1.4 Alloc new anonymous inodes and cookies.
+
+2. User specify an existing 'domain_id' in mount option and the data
+   blob is existed in domain.
+   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
+   2.2 Reuse the domain and increase its refcnt.
+   2.3 Traverse pseudo sb's inode list, compare cookie name with
+   	   existing cookies.[Hit]
+   2.4 Reuse the cookie and increase its refcnt.
+
+RFC: https://lore.kernel.org/all/YxAlO%2FDHDrIAafR2@B-P7TQMD6M-0146.local/
+V1: https://lore.kernel.org/all/20220902034748.60868-1-zhujia.zj@bytedance.com/
+V2: https://lore.kernel.org/all/20220902105305.79687-1-zhujia.zj@bytedance.com/
+V3: https://lore.kernel.org/all/20220914105041.42970-1-zhujia.zj@bytedance.com/
+
+Jia Zhu (6):
+  erofs: use kill_anon_super() to kill super in fscache mode
+  erofs: code clean up for fscache
+  erofs: introduce fscache-based domain
+  erofs: introduce a pseudo mnt to manage shared cookies
+  erofs: Support sharing cookies in the same domain
+  erofs: introduce 'domain_id' mount option
+
+ fs/erofs/fscache.c  | 253 ++++++++++++++++++++++++++++++++++++++------
+ fs/erofs/internal.h |  30 ++++--
+ fs/erofs/super.c    |  72 ++++++++++---
+ fs/erofs/sysfs.c    |  19 +++-
+ 4 files changed, 317 insertions(+), 57 deletions(-)
+
 -- 
-2.37.2
+2.20.1
 
