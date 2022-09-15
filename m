@@ -2,285 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABCB5B9BB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4485B9BBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiIONUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S229851AbiIONUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 09:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiIONT7 (ORCPT
+        with ESMTP id S229735AbiIONU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 09:19:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A1266121
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 06:19:58 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oYomF-0002mZ-Jn; Thu, 15 Sep 2022 15:19:35 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oYomD-0007z0-RR; Thu, 15 Sep 2022 15:19:33 +0200
-Date:   Thu, 15 Sep 2022 15:19:33 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org, kishon@ti.com,
-        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
-        jacopo@jmondi.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] media: dt-bindings: add bindings for Toshiba TC358746
-Message-ID: <20220915131933.wclmhtliji5wz35t@pengutronix.de>
-References: <20220818143307.967150-1-m.felsch@pengutronix.de>
- <20220818143307.967150-4-m.felsch@pengutronix.de>
- <YxUoSfbrPPPT5nz6@pendragon.ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxUoSfbrPPPT5nz6@pendragon.ideasonboard.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 09:20:26 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEA07F091;
+        Thu, 15 Sep 2022 06:20:19 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 90FBC580746;
+        Thu, 15 Sep 2022 09:20:18 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 15 Sep 2022 09:20:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663248018; x=1663251618; bh=xNZO8Qd7cg
+        pPkf8PCEJfzLRPTqkkIBdXmgwHoAWKT4A=; b=a2xJhjmzELPuUYfPbItYy4aOcO
+        Y07OJ1Oap76mVHpiWU5QXbe7Ma56vPyqdGBugwY4nNJLcma3aHq2HW0ZaLE6LkFJ
+        VhBq1ItbSUahnmt5X7CDF8W5cGBiUQa5YWlVvC5T7cTmOmwdIxeIdA7W2wt3MqW7
+        SdQuR7xrEcisxypsjFAKK6MgTx4uiuajVfVTMHjM3EJrxUF40PtaKmCyuIN1xHnO
+        1Hf7IsM1gmsBFF2+/C6ehKkvXlacwEprK1vD8jT8D84LqtiHKp/WiEhjl8Wn2Vx2
+        mm4Y/l01xWVL+SI3bqaP7akl7joDtP4nKTDLulgrTJiME/Iv6bd4HpFnl03Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663248018; x=1663251618; bh=xNZO8Qd7cgpPkf8PCEJfzLRPTqkk
+        IBdXmgwHoAWKT4A=; b=AC+eqk5j1hCMlAhv/CbSd2vX7v0n/1oWUl3zgydiilXh
+        pQJfLN+hxyBPbYTFVBw3iraZ5wR2HP2Bpn94gdnb2pY6fBFredejsfhS9501Ev5i
+        dvzP6JSRsRsMv7YnYsk2w686/HiqfDe09ONU3TCxA90eQIHyf4BWJa0qeA+u957F
+        J5gejJ92r5ztanSYoxx/Vci/mesp5wQiIX98C3gaRxOZ/KYCVLQeLNg8H4yT+5tY
+        sOVW5eZQ6HP6HWJrVIoeD/eo5qxrD+iBeyhfBkTVfZwdWLqiPGtuPZLXkCTgfeAC
+        Q2xMAkBdVqmOmT81DtWyB0Nl7A2OArGzIvkAoS4ioQ==
+X-ME-Sender: <xms:kSYjY_lFyaC_26S5k1rP0yuDPZRsfVyRP33z-_6-dK6bdJfwbaOT2Q>
+    <xme:kSYjYy2dEgJulF0ZUhlZQS6PutbACfM1NChAFgpMCMjn6wlCcH_1a2OSQagG3Vwtb
+    UV9z90KDl_IBp9w7_k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:kSYjY1qy_31JJmykt3aa1wW7ndq6gn61m-XvgXuxeI23MNaGDcEu1g>
+    <xmx:kSYjY3k49xvf17FkDoNncvHrrPlMdoZeRXHn5x4rhbQk3uSWIKfRWw>
+    <xmx:kSYjY92Fzz65jCZ2YrLlCnfaboWBMn_c878YlpR_nNon5NzL2tyWZg>
+    <xmx:kiYjY2wxgbXkMfDzyifaNnC2CFw-yGmwRBgOvQRaKN7ylinRfKh9tw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D1532B60089; Thu, 15 Sep 2022 09:20:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <ac63bc50-3375-4877-a4f3-aa998cb148f9@www.fastmail.com>
+In-Reply-To: <CA+G9fYsUEmhHT_YsZSvLBiUStuTPJ_DW4Gp0=p7umvfpngSABA@mail.gmail.com>
+References: <CA+G9fYsaxK30=z0vBcNW-NRVHHkWxaoSNDt1bE-mfXQquMONKQ@mail.gmail.com>
+ <97b5728e-e8ed-44a6-a777-a7f56370761a@www.fastmail.com>
+ <CA+G9fYsUEmhHT_YsZSvLBiUStuTPJ_DW4Gp0=p7umvfpngSABA@mail.gmail.com>
+Date:   Thu, 15 Sep 2022 15:19:56 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc:     "Tony Lindgren" <tony@atomide.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Subject: Re: x15: kernel crash: LR is at sysc_enable_opt_clocks
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Thu, Sep 15, 2022, at 1:55 PM, Naresh Kamboju wrote:
+> On Wed, 14 Sept 2022 at 19:19, Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> What is the easiest way to find out how long this job
+>> has been failing, and what the last successful build
+>> was?
+>
+> It is not reproducible easily and I have checked when it got
+> started but failed to find it. Because on v6.0-rc3 kernel the x15
+> did not boot pass.
 
-On 22-09-05, Laurent Pinchart wrote:
-> Hi Marco,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Aug 18, 2022 at 04:33:06PM +0200, Marco Felsch wrote:
-> > Add the bindings for the Toshiba TC358746 Parallel <-> MIPI-CSI bridge
-> > driver.
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >  .../bindings/media/i2c/toshiba,tc358746.yaml  | 157 ++++++++++++++++++
-> >  1 file changed, 157 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > new file mode 100644
-> > index 000000000000..9783cca363c6
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > @@ -0,0 +1,157 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/toshiba,tc358746.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Toshiba TC358746 Parallel to MIPI CSI2 Bridge
-> > +
-> > +maintainers:
-> > +  - Marco Felsch <kernel@pengutronix.de>
-> > +
-> > +description: |-
-> > +  The Toshiba TC358746 converts a parallel video stream into a MIPI CSI-2
-> > +  stream. The direction can be either parallel-in -> csi-out or csi-in ->
-> > +  parallel-out The chip is programmable trough I2C and SPI but the SPI
-> > +  interface is only supported in parallel-in -> csi-out mode.
-> > +
-> > +  Note that the current device tree bindings only support the
-> > +  parallel-in -> csi-out path.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: toshiba,tc358746
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      The phandle to the reference clock source. This corresponds to the
-> > +      hardware pin REFCLK.
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    const: refclk
-> 
-> As there's a single clock, should we omit the clock name ?
+To clarify my question: how to I look up on the website what the
+previous results for this boot were? Surely it must have passed
+at some point, and I would like to know e.g. whether this test
+setup booted 5.19, but I don't know how I see that.
 
-Don't know, I would rather keep it to make it explicite. Many other go
-that way too.
-
-> > +# The bridge can act as clock provider for the sensor. To enable this support
-> > +# #clock-cells must be specified. Attention if this feature is used than the
-> 
-> s/than/then/
-
-Sure, thanks.
-
-> 
-> > +# mclk rate must be at least: (2 * link-frequency) / 8
-> > +#                             `------------------´   ^
-> > +#                             internal PLL rate   smallest possible mclk-div
-> 
-> Could this be captured in the description of the property instead of a
-> comment ?
-
-Hm.. a few (1,2) bindings using comments like this but I'm not against
-it. If it belongs to the description, which property should I use? Since
-there is no: clock-controller property like gpio-controller or
-interrupt-controller. The clock provider will be activated based on the
-#clock-cells property. But this property has nothing to with the
-description since this property specifies the cell size.
-
-> > +  "#clock-cells":
-> > +    const: 0
-> > +
-> > +  clock-output-names:
-> > +    description:
-> > +      The clock name of the MCLK output, the default name is tc358746-mclk.
-> > +    maxItems: 1
-> > +
-> > +  vddc-supply:
-> > +    description: Digital core voltage supply, 1.2 volts
-> > +
-> > +  vddio-supply:
-> > +    description: Digital I/O voltage supply, 1.8 volts
-> > +
-> > +  vddmipi-supply:
-> > +    description: MIPI CSI phy voltage supply, 1.2 volts
-> > +
-> > +  reset-gpios:
-> > +    description:
-> > +      The phandle and specifier for the GPIO that controls the chip reset.
-> > +      This corresponds to the hardware pin RESX which is physically active low.
-> > +    maxItems: 1
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Input port
-> 
-> Are the H/V sync signal polarities fixed, or should they be specified
-> here ?
-
-At the moment they are fixed. I can describe it if you want.
-
-> Does the chip support external sync only, or also BT.656 ? In the
-> latter case this needs a bus-type.
-
-Yes, the chip also supports BT.656 but the driver doesn't support it
-yet. You're right, that we should make it explicite albeit it would a
-bit overhead yet since the only mode is: parallel-in with externa syncs.
-
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        description: Output port
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: /schemas/media/video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              data-lanes:
-> > +                minItems: 1
-> > +                maxItems: 4
-> > +
-> > +              clock-noncontinuous: true
-> > +              link-frequencies: true
-> > +
-> > +            required:
-> > +              - data-lanes
-> > +              - link-frequencies
-> > +
-> > +    required:
-> > +      - port@0
-> > +      - port@1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - vddc-supply
-> > +  - vddio-supply
-> > +  - vddmipi-supply
-> > +  - ports
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +
-> > +    i2c {
-> > +      #address-cells = <1>;
-> > +      #size-cells = <0>;
-> > +
-> > +      csi-bridge@e {
-> > +        compatible = "toshiba,tc358746";
-> > +        reg = <0xe>;
-> > +
-> > +        clocks = <&refclk>;
-> > +        clock-names = "refclk";
-> > +
-> > +        reset-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
-> > +
-> > +        vddc-supply = <&v1_2d>;
-> > +        vddio-supply = <&v1_8d>;
-> > +        vddmipi-supply = <&v1_2d>;
-> > +
-> > +        /* sensor mclk provider */
-> > +        #clock-cells = <0>;
-> > +
-> > +        ports {
-> > +          #address-cells = <1>;
-> > +          #size-cells = <0>;
-> > +
-> > +          /* Input */
-> > +          port@0 {
-> > +            reg = <0>;
-> > +            tc358746_in: endpoint {
-> > +              remote-endpoint = <&sensor_out>;
-> > +              };
-> 
-> Wrong indentation here.
-
-Yes, thanks.
-
-Regards,
-  Marco
-
-> > +          };
-> > +
-> > +          /* Output */
-> > +          port@1 {
-> > +            reg = <1>;
-> > +            tc358746_out: endpoint {
-> > +              remote-endpoint = <&mipi_csi2_in>;
-> > +              data-lanes = <1 2>;
-> > +              clock-noncontinuous;
-> > +              link-frequencies = /bits/ 64 <216000000>;
-> > +            };
-> > +          };
-> > +        };
-> > +      };
-> > +    };
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
-> 
+     Arnd
