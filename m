@@ -2,165 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FE15B94E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414F65B94D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiIOG5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S229703AbiIOG4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiIOG5D (ORCPT
+        with ESMTP id S229598AbiIOG4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:57:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9345B80368
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:56:54 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28F6UDZB024030;
-        Thu, 15 Sep 2022 06:56:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=VEbTNybxmKmxaaOiLXroQ2jlKviqDhSyY+6f1s4O6xw=;
- b=COZ5EBb4ZZZzQ0XkndCKGyHLeCavwbBoMBrIFyPhC+R0WWSZ3NC7aNllaGH5uUjfJ4Hu
- ItpeFlua7fqGv2gCNdzo0+L8T0D/CXXFUflR7bjNJ6Mgd+KSJDuIguyafQwZ0M+MGDZw
- GhzcqaUF2h2lrDFZ27nMIYmRFzU3RCxW4y0aPQzxuEVTucuiq0rUzAWN3bUNfoO4sul9
- IhofHbMVp7OvrnJ3HAr54GdPZc4s+MxMWPo3fTQKvrgYCD5yzD6J4kQeN4i4/wzG9Bti
- Zj1i4WiK9xDvMInYre+t44SBraNNUlx5ftuQd4wSR1IA40j2Mg9m+3DARmsM0OmeWe0t pA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jkvuuv8s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 06:56:14 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28F5woB1031355;
-        Thu, 15 Sep 2022 06:56:13 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jkvuuv8r5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 06:56:13 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28F6pwgf029024;
-        Thu, 15 Sep 2022 06:56:11 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3jjy25sgsn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 06:56:11 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28F6u9bf41943374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Sep 2022 06:56:09 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 206F142041;
-        Thu, 15 Sep 2022 06:56:09 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 94B354203F;
-        Thu, 15 Sep 2022 06:56:08 +0000 (GMT)
-Received: from localhost (unknown [9.43.117.180])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Sep 2022 06:56:08 +0000 (GMT)
-Date:   Thu, 15 Sep 2022 12:26:06 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 11/16] objtool: Add --mnop as an option to --mcount
-To:     linuxppc-dev@lists.ozlabs.org, kernel test robot <lkp@intel.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com,
-        christophe.leroy@csgroup.eu, jpoimboe@redhat.com,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        mbenes@suse.cz, mingo@redhat.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, peterz@infradead.org, rostedt@goodmis.org
-References: <20220912082020.226755-12-sv@linux.ibm.com>
-        <202209130240.GpGMxW7T-lkp@intel.com>
-In-Reply-To: <202209130240.GpGMxW7T-lkp@intel.com>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1663223588.wppdx3129x.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: x-5wh-fBxHda3hOfVgmV9Jba-vKB6N3Y
-X-Proofpoint-GUID: bFSofjGk_B3eU0eLu_FuXhJNh8zjDUcx
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 15 Sep 2022 02:56:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6699B6DAF6;
+        Wed, 14 Sep 2022 23:56:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D34A6601AAA;
+        Thu, 15 Sep 2022 07:56:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663224989;
+        bh=o2s8o3bUZ35Fc8myVBKxsKVtl6T6Tf2rP2KJHIQ3WnE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EZ7fUllGYbaK06F+/t1t7bN5ZjDYkfIh0XgUonCJqCJS9Qy917AVNdgfF4Mzq5kQY
+         lyL9yd0fwqfnMyRuKppUKJJwZT8hN08NlmwacpnkIeyvilIzHBBZP60AAY2or1gk5s
+         PzlvltTNiyuI7w2cvedSJL0vrnmUZIQPuLNfeNjTaohSNWIqmA6blt+Y8C69q9smAw
+         pJFQZ5zyU4n/dLohmPsDz3Y4J6/u37SDuVsoljJvaKkTkG4M75jUaziwgwozDbMIyn
+         yvigBObuCQ/zvUg3aKLJDagtACgllvRjWALNUQ9tYAQgsEx8Yd1CLYNOdGrbTemg3W
+         cDwsXoieJorjQ==
+Message-ID: <551a0a6d-107e-d521-57cd-90c428576d69@collabora.com>
+Date:   Thu, 15 Sep 2022 08:56:25 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_02,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 adultscore=0 impostorscore=0 lowpriorityscore=0
- phishscore=0 clxscore=1011 mlxscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2208220000 definitions=main-2209150034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>
+References: <20220914124552.16964-1-johnson.wang@mediatek.com>
+ <20220914124552.16964-3-johnson.wang@mediatek.com>
+ <06eb15ea-56b3-4f18-be18-3fc710cef779@collabora.com>
+ <47ad92dfc593681508fcf09df1303cdfe86c4202.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <47ad92dfc593681508fcf09df1303cdfe86c4202.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot wrote:
-> Hi Sathvika,
->=20
-> Thank you for the patch! Yet something to improve:
->=20
-> [auto build test ERROR on powerpc/topic/ppc-kvm]
-> [also build test ERROR on linus/master v6.0-rc5]
-> [cannot apply to powerpc/next masahiroy-kbuild/for-next next-20220912]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->=20
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sathvika-Vasireddy=
-/objtool-Enable-and-implement-mcount-option-on-powerpc/20220912-163023
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git=
- topic/ppc-kvm
-> config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220913=
-/202209130240.GpGMxW7T-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> reproduce (this is a W=3D1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/ca5e2b42c0d4438ba=
-93623579b6860b98f3598f3
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Sathvika-Vasireddy/objtool-Enabl=
-e-and-implement-mcount-option-on-powerpc/20220912-163023
->         git checkout ca5e2b42c0d4438ba93623579b6860b98f3598f3
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+Il 15/09/22 06:00, Johnson Wang ha scritto:
+> Hi Angelo,
+> 
+> Thanks for your review.
+> 
+> On Wed, 2022-09-14 at 15:46 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 14/09/22 14:45, Johnson Wang ha scritto:
+>>> Add the new binding documentation for MediaTek frequency hopping
+>>> and spread spectrum clocking control.
+>>>
+>>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>>> ---
+>>>    .../bindings/arm/mediatek/mediatek,fhctl.yaml | 47
+>>> +++++++++++++++++++
+>>>    1 file changed, 47 insertions(+)
+>>>    create mode 100644
+>>> Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+>>> l
+>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+>>> l
+>>> new file mode 100644
+>>> index 000000000000..7b0fd0889bb6
+>>> --- /dev/null
+>>> +++
+>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+>>> l
+>>> @@ -0,0 +1,47 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id:
+>>> https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml*__;Iw!!CTRNKA9wMg0ARbw!3sumdhtrK5Ah5_rfIilgm4UUmnwkkqMpc3r_ZfkLfsXsLn-_AKm9ZokhJGD1Fl-gJpckAKHZh-jNVW64KRU8Duv1kg$
+>>>   
+>>> +$schema:
+>>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!3sumdhtrK5Ah5_rfIilgm4UUmnwkkqMpc3r_ZfkLfsXsLn-_AKm9ZokhJGD1Fl-gJpckAKHZh-jNVW64KRWMb8jIsw$
+>>>   
+>>> +
+>>> +title: MediaTek frequency hopping and spread spectrum clocking
+>>> control
+>>> +
+>>> +maintainers:
+>>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>> +
+>>> +description: |
+>>> +  Frequency hopping control (FHCTL) is a piece of hardware that
+>>> control
+>>> +  some PLLs to adopt "hopping" mechanism to adjust their
+>>> frequency.
+>>> +  Spread spectrum clocking (SSC) is another function provided by
+>>> this hardware.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: mediatek,mt8186-fhctl
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>
+>> There are still a few issues in this binding that I can immediately
+>> see...
+>>
+>>> +
+>>> +  clocks:
+>>
+>> MT8195 has 23 PLLs, MT8186 has 14, but perhaps in the future we may
+>> see
+>> something more than that on some newer SoC, so...
+>>
+>>     clocks:
+>>       maxItems: 30
+> 
+> May I add "minItems: 1" to clocks property?
+> 
 
-Thanks.
+Of course you can! Sorry for the incomplete advice here :-)
 
->=20
-> All errors (new ones prefixed by >>):
->=20
->>> cc1: error: '-mnop-mcount' is not implemented for '-fPIC'
+> Without this, dt_binding_check will fail because we don't have enough
+> clocks in the example. (Both MT8195 and MT8186 don't have 30 PLLs)
+> 
+>>
+>>> +    description: Phandles of the PLL with FHCTL hardware
+>>> capability.
+>>> +
+>>> +  mediatek,hopping-ssc-percents:
+>>> +    description: The percentage of spread spectrum clocking for
+>>> one PLL.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>
+>> This is an array, so...
+>> $ref: /schemas/types.yaml#/definitions/uint32-array
+>>
+>> ...also, maxItems?
+> 
+> As you know, mediatek,hopping-ssc-percents property is used to specify
+> ssc rate for matching clocks.
+> 
+> If we have to add maxItems, I think we should specify the same value
+> as clocks property. Is my understanding wrong?
+> 
 
-CONFIG_NOP_MCOUNT is used for FTRACE_MCOUNT_USE_CC, so instead of:
+Your understanding is right. The number of min/max items on the ssc
+percents will be the same as clocks.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..a8dd138df637 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -189,6 +189,7 @@ config X86
-        select HAVE_CONTEXT_TRACKING_USER_OFFSTACK      if HAVE_CONTEXT_TRA=
-CKING_USER
-        select HAVE_C_RECORDMCOUNT
-        select HAVE_OBJTOOL_MCOUNT              if HAVE_OBJTOOL
-+       select HAVE_NOP_MCOUNT                  if HAVE_OBJTOOL_MCOUNT
-        select HAVE_BUILDTIME_MCOUNT_SORT
-        select HAVE_DEBUG_KMEMLEAK
-        select HAVE_DMA_CONTIGUOUS
+Regards,
+Angelo
 
-I think you should do:
+> 
+> Thanks!
+> 
+> BRs,
+> Johnson Wang
+>>
+>> and you should also specify:
+>>
+>> default: 0   <- because, by default, SSC is disabled
+>> minimum: 0   <- because this is the minimum accepted value
+>>
+>>
+>> Regards,
+>> Angelo
+>>
+>>> +    maximum: 8
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - clocks
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/mt8186-clk.h>
+>>> +    fhctl: fhctl@1000ce00 {
+>>> +        compatible = "mediatek,mt8186-fhctl";
+>>> +        reg = <0x1000c000 0xe00>;
+>>> +        clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
+>>> +        mediatek,hopping-ssc-percents = <3>;
+>>> +    };
+>>
+>>
+> 
 
-+       select HAVE_NOP_MCOUNT                  if FTRACE_MCOUNT_USE_OBJTOOL
+-- 
+AngeloGioacchino Del Regno
+Software Engineer
 
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
 
-I was hoping we could reuse CONFIG_NOP_MCOUNT seeing as it is only used=20
-by s390, but I now wonder if it is better to just keep that separate. We=20
-could introduce HAVE_OBJTOOL_NOP_MCOUNT for objtool instead.
-
-
-- Naveen
