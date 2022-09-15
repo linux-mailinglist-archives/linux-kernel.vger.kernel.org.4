@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5215B91E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9425B91E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiIOAqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S230232AbiIOAqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiIOAqM (ORCPT
+        with ESMTP id S229765AbiIOAqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:46:12 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E656D9D8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:06 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id b11-20020a170902d50b00b0017828988079so8456252plg.21
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:06 -0700 (PDT)
+        Wed, 14 Sep 2022 20:46:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9C83337B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id lc7so38628628ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=o0TKZg1V+iwVMAhcvK219IOXYb7az/U83DvEghII4Dw=;
-        b=ixIlbiWjYVB7lleKcOS25U/195trOCFFYYTNY2ArRn6K/NXN4jKkbx8xqVv40XOYwc
-         gzOAoHFIZ5nYNTfyaobW0eR/pRWG25686m9JNJWBrr+6XN1RIF81EpUMZ2WjcMFCwhSm
-         8Gb5q+USrZHuvbc4jRv89+/+mSkgNgiHosn5pQFsAnbd1C2Dv7ogkJvH1mC5lGrL+dPr
-         bnDcostykRNUl2cropFFiaYmIcz4a5CirfMwmfwgNqHM/EqMlJz/pmNv4Ugl2f1MNawE
-         jIGBZhIlX4HrU621pf9P/4CGXhHLBZxK7w0Dp2p+dDVn1hB+Jl5575zzcLF/aRyRy4zu
-         UhiQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=WgZixTRxTWoDkCtULJb0cXzPEDep5TgMZR2wDcQQdOw=;
+        b=Kg+1UZzlDU50pcnzV1o05HTamlrToevhWcGaP84OVJsseY3AhIhNhwicDxakzx5zQO
+         W7HZ1yWfcO696l161SYZhn+PCzNXzc1jy5DgAJFhVBcg1Q2wVas/GrD/F87VOavB801q
+         1SiQDMUdU6HpX4x5oSDoCEz5kxjQU8EyeCuyk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=o0TKZg1V+iwVMAhcvK219IOXYb7az/U83DvEghII4Dw=;
-        b=aInIiI0Rp/AMElN7KzvktQHcUVOm4l1pU2mhRBLt35R9/TDfMcqxXiD/DAN8ToHvKN
-         wDOWkgkUobYxRu94Aecn2JpEs7146aHjojJTC7Osq7HWzD0iZaGX4PHu5Aw3iMUPNvZS
-         3ujOx/RsWXQs1545i031MDXdFLu768WkCOhJF+D+MpM0MS/kOYw9Ro8NqZudlVwS9ZBU
-         lBzVrV+iB/z9jCnmoDOrQFKTIajzYGLxV+wH/udp1anW7gkB7rjKhYjBLhTn9FoV8new
-         Io/EBHVfGlkfEEXO0qk1qu8+o4hHR4LNLl5L0IVTY+MusNMa+vMNTmZBm+mP8CM0w4vK
-         EfgA==
-X-Gm-Message-State: ACrzQf3T8HDZyU+0WB4Ygf+EEEvmYAUsLDuBdiKNWrM5+cvUVBgjsDO0
-        jltcEFI+5IG8oYIaJxVjJwwKxW0FRBUU22c=
-X-Google-Smtp-Source: AMsMyM7cpjC0UvYeAkGaQWcCbIFCVaxS58PZrp3VQQ5nzbzNbiesGmVdHmcPLBDxn84TmNTXrfnoS9iOMdHYeok=
-X-Received: from pceballos.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:128c])
- (user=pceballos job=sendgmr) by 2002:a17:90a:5aa2:b0:200:30aa:c773 with SMTP
- id n31-20020a17090a5aa200b0020030aac773mr7466200pji.182.1663202766080; Wed,
- 14 Sep 2022 17:46:06 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 00:46:01 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915004601.320198-1-pceballos@google.com>
-Subject: [PATCH] drm/i915/display/lspcon: Increase LSPCON mode settle timeout
-From:   Pablo Ceballos <pceballos@google.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?=" 
-        <ville.syrjala@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Pablo Ceballos <pceballos@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=WgZixTRxTWoDkCtULJb0cXzPEDep5TgMZR2wDcQQdOw=;
+        b=W6hxTEBDbhivWyNiOMDGd8UuDoKy2aPxqK2xnMvuGEVr6dlj0nwKSxP8i466ZJcWR9
+         u1KlcC0pHea1F5T/GXor530ODaIg+plpEk8S4x7bfe5sVJVrUerjJ1sQST5rENoAxgeZ
+         dxm2v08Ye551nZWVWLyu16x4hv5De4PcuHQ6ZQJ5/jyiYu0tI9UIIP/7oX5cXmXbOaX/
+         7jck8SJMoxfDYc54Jrsc28DOfH6RAsvDjsnvrAy8ONQvajkpQG9EFyguRHv7+M5XZZ4v
+         kEWbrR9M6sZz/CYBZk8SsehyXcOSqkvMkpY91W5ciJhnuiIE74twMRpJGIBf1hy7IU42
+         DxZw==
+X-Gm-Message-State: ACgBeo10VkcFuBHu26au0Ra2nkSxOroF0lR9QvRLfWkRo3yXZs8mKYgQ
+        LOHixROCYeAeaY0EKf0icmyqazTvXMUY5H1JaPHroA==
+X-Google-Smtp-Source: AA6agR54zdmn7Yw5OAkEnKI6FIl0BrR5R5qoYvJoVPX6e0a0Ba7VGgMA3ek/Ii7ijMcFUlJ3KBZn+g4zCLbdbONkGRU=
+X-Received: by 2002:a17:906:401:b0:73d:af73:b78 with SMTP id
+ d1-20020a170906040100b0073daf730b78mr27986527eja.122.1663202800297; Wed, 14
+ Sep 2022 17:46:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220826065621.2255795-1-judyhsiao@chromium.org> <166308148206.625876.8801069802083923195.b4-ty@kernel.org>
+In-Reply-To: <166308148206.625876.8801069802083923195.b4-ty@kernel.org>
+From:   Judy Hsiao <judyhsiao@chromium.org>
+Date:   Thu, 15 Sep 2022 08:46:29 +0800
+Message-ID: <CAJXt+b90z32L3ZYh22Vnxo4=DbETJZjf+rx9X7ZuqqmaBDggfQ@mail.gmail.com>
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Fix Dmic no sound on villager-r1
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     quic_srivasam@quicinc.com, judyhsiao@google.com,
+        cychiang@google.com, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rob Herring <robh+dt@kernel.org>,
+        swboyd@chromium.org, dianders@chromium.org,
+        devicetree@vger.kernel.org,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some devices the Parade PS175 takes more than 400ms to settle in PCON
-mode.
+Please help to apply
+Add dtsi for sc7280 herobrine boards that using rt5682 codec (v4)
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=661760
+It's dependencies are landed.
 
-Signed-off-by: Pablo Ceballos <pceballos@google.com>
----
- drivers/gpu/drm/i915/display/intel_lspcon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks & Regards
 
-diff --git a/drivers/gpu/drm/i915/display/intel_lspcon.c b/drivers/gpu/drm/i915/display/intel_lspcon.c
-index 15d59de8810e..b4cbade13ee5 100644
---- a/drivers/gpu/drm/i915/display/intel_lspcon.c
-+++ b/drivers/gpu/drm/i915/display/intel_lspcon.c
-@@ -166,7 +166,7 @@ static enum drm_lspcon_mode lspcon_wait_mode(struct intel_lspcon *lspcon,
- 	drm_dbg_kms(&i915->drm, "Waiting for LSPCON mode %s to settle\n",
- 		    lspcon_mode_name(mode));
- 
--	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 400);
-+	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 800);
- 	if (current_mode != mode)
- 		drm_err(&i915->drm, "LSPCON mode hasn't settled\n");
- 
--- 
-2.37.2.789.g6183377224-goog
-
+On Tue, Sep 13, 2022 at 11:04 PM Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Fri, 26 Aug 2022 06:56:21 +0000, Judy Hsiao wrote:
+> > Fix the DMIC no sound issue of villager-r1 by using "PP1800_L2C" as the
+> > DMIC power source to match the hardware schematic.
+> >
+> > This patch:
+> >    1. set vdd-micb-supply to PP1800_L2C as the MIC Bias voltage regulator.
+> >    2. In audio-routing, set VA DMIC01~VA DMIC03 to use the vdd-micb-supply
+> >       setting.
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [1/1] arm64: dts: qcom: sc7280: Fix Dmic no sound on villager-r1
+>       commit: 61a301ca83736afeeeb307b931c59f107067da3c
+>
+> Best regards,
+> --
+> Bjorn Andersson <andersson@kernel.org>
