@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1125B9254
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5350C5B9257
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIOBsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
+        id S229657AbiIOBtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiIOBsq (ORCPT
+        with ESMTP id S230031AbiIOBsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:48:46 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6A58E4C4;
-        Wed, 14 Sep 2022 18:48:44 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id JAL00038;
-        Thu, 15 Sep 2022 09:48:38 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
- 15.1.2507.12; Thu, 15 Sep 2022 09:48:38 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <viro@zeniv.linux.org.uk>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] acl: fix the comments of posix_acl_xattr_set
-Date:   Wed, 14 Sep 2022 21:48:30 -0400
-Message-ID: <20220915014830.1671-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 14 Sep 2022 21:48:54 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA9D8E4DC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:48:52 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 10:48:43 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663206531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=YfBJ/GC8iJydQQDAOa7qVsrlMvw7oRL/3fIgXnJ2x8Q=;
+        b=tWXlOsDrBYO+izjXmjHpqkFMxiargiwT8rlf4lp4qGvTMbVb3NinF3u1DU9Kf2g85coPB8
+        ghn+CUmEy+1JN7p11ySJ82P3MKuxQNDrtGKS5PH9JO7NYVLVYON+TSdutM3ncB+xKm0do2
+        EbW4hkKK4iyoJsb1BaI0ypu0I4Jgfrc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     linmiaohe@huawei.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        cuibixuan@linux.alibaba.com, baolin.wang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
+Message-ID: <20220915012626.GA1791458@hori.linux.bs1.fc.nec.co.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   202291509483862b65ce9929ae927b401b4472fcad13c
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,26 +50,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove the double world of 'in'.
+On Wed, Sep 14, 2022 at 02:49:35PM +0800, Shuai Xue wrote:
+> The GHES code calls memory_failure_queue() from IRQ context to queue work
+> into workqueue and schedule it on the current CPU. Then the work is
+> processed in memory_failure_work_func() by kworker and calls
+> memory_failure().
+>
+> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
+> SIGBUS with error virutal address") make memory_failure() call
+> kill_accessing_process() that:
+>
+>     - holds mmap locking of current->mm
+>     - does pagetable walk to find the error virtual address
+>     - and sends SIGBUS to the current process with error info.
+>
+> However, the mm of kworker is not valid. Therefore, check mm when killing
+> accessing process.
+>
+> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- fs/posix_acl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the patch, the fix itself makes sense to me.
+I agree with this patch with applying comments from Andrew.
 
-diff --git a/fs/posix_acl.c b/fs/posix_acl.c
-index 4e69cce6bd2a..74dc0f571dc9 100644
---- a/fs/posix_acl.c
-+++ b/fs/posix_acl.c
-@@ -1177,7 +1177,7 @@ posix_acl_xattr_set(const struct xattr_handler *handler,
- 		 * ACL_{GROUP,USER} have already been mapped according to the
- 		 * caller's idmapping. The vfs_set_acl_prepare() helper will
- 		 * recover them and take idmapped mounts into account. The
--		 * filesystem will receive the POSIX ACLs in in the correct
-+		 * filesystem will receive the POSIX ACLs in the correct
- 		 * format ready to be cached or written to the backing store
- 		 * taking the filesystem idmapping into account.
- 		 */
--- 
-2.27.0
-
+Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
