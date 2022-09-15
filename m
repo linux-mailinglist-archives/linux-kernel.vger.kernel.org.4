@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70605B9DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EAC5B9DBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiIOOuV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 10:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S230307AbiIOOv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiIOOuR (ORCPT
+        with ESMTP id S229572AbiIOOvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:50:17 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEAA15827;
-        Thu, 15 Sep 2022 07:50:13 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0E26B1C0012;
-        Thu, 15 Sep 2022 14:50:09 +0000 (UTC)
-Message-ID: <5d890576d10cda7dbeef48f0eb13aa6860ab7d44.camel@hadess.net>
-Subject: Re: [PATCH v1] HID: logitech-hidpp: Detect hi-res scrolling support
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Peter F. Patel-Schneider" <pfpschneider@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Date:   Thu, 15 Sep 2022 16:50:09 +0200
-In-Reply-To: <e9526860-b77e-8cc0-7421-91fe5370918d@gmail.com>
-References: <20220914132146.6435-1-hadess@hadess.net>
-         <c56c4053388baa5ea3db8bc849c5a420859347f1.camel@hadess.net>
-         <e9526860-b77e-8cc0-7421-91fe5370918d@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 15 Sep 2022 10:51:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACEA6BD64;
+        Thu, 15 Sep 2022 07:51:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0B726336BC;
+        Thu, 15 Sep 2022 14:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663253479; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=32FnE/jPBxSheAV2o1jOqSIv4eKfN7cEfyroXJ6700U=;
+        b=1ltI2O8di+dMce5cZ+ybV+YPrcfDK4eYZHGLLr1DNBdBwc3pBx9U1wrrAnQrvEjuVoYPqa
+        TeUMuSxSEiYUR8tLNnkv89NYgiwbmBl4nfRtrYNtxn4pyXBRa8DEPNMQfORp78RdZ46TYk
+        d4Hx9JZN5BeXD0Z3zKjlXadKIaG64NI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663253479;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=32FnE/jPBxSheAV2o1jOqSIv4eKfN7cEfyroXJ6700U=;
+        b=uPrV3f45UBozqpw9Bt/nb07RFtUVIP1YDnUb7Sjjai2qEFmqbcn8PPGRpxiT7IvkGNW8cV
+        nx9IPYy3U3EaUmBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1CE3133B6;
+        Thu, 15 Sep 2022 14:51:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iMABO+Y7I2MqBAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 15 Sep 2022 14:51:18 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 854B6A0682; Thu, 15 Sep 2022 16:51:18 +0200 (CEST)
+Date:   Thu, 15 Sep 2022 16:51:18 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     yebin <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 2/2] ext4: adjust fast commit disable judgement
+ order in ext4_fc_track_inode
+Message-ID: <20220915145118.po7abyz4tnmigpyk@quack3>
+References: <20220915135611.3040776-1-yebin10@huawei.com>
+ <20220915135611.3040776-3-yebin10@huawei.com>
+ <20220915143008.27woacjur6sg32t2@quack3>
+ <632339F2.1000802@huawei.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <632339F2.1000802@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-15 at 10:23 -0400, Peter F. Patel-Schneider wrote:
+On Thu 15-09-22 22:42:58, yebin wrote:
 > 
-> On 9/14/22 11:41, Bastien Nocera wrote:
-> > On Wed, 2022-09-14 at 15:21 +0200, Bastien Nocera wrote:
-> > > Rather than relying on a never-ending stream of patches for
-> > > quirks.
+> 
+> On 2022/9/15 22:30, Jan Kara wrote:
+> > On Thu 15-09-22 21:56:11, Ye Bin wrote:
+> > > Judge filesystem if fast commit disabled before test inode's journal mode.
 > > > 
-> > > This change will detect whether HID++ 1.0 hi-res scroll, HID++
-> > > 2.0
-> > > hi-res scroll or HID++ 2.0 hi-res scroll wheel is supported, and
-> > > enable
-> > > the feature without the need for quirks.
-> > > 
-> > > Tested on a Logitech M705 mouse that was unsupported before this
-> > > change.
-> > > 
-> > > [    9.365324] logitech-hidpp-device 0003:046D:406D.0006:
-> > > input,hidraw3: USB HID v1.11 Mouse [Logitech M705] on usb-
-> > > 0000:00:14.0-4/input2:3
-> > > [   57.472434] logitech-hidpp-device 0003:046D:406D.0006: HID++
-> > > 4.5
-> > > device connected.
-> > > [   57.616429] logitech-hidpp-device 0003:046D:406D.0006:
-> > > Detected
-> > > HID++ 2.0 hi-res scroll wheel
-> > > [   57.712424] logitech-hidpp-device 0003:046D:406D.0006: wheel
-> > > multiplier = 8
-> > > 
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216480
-> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > For anyone on a recent version of Fedora that wants to test it,
-> > those
-> > packages should work:
-> > https://koji.fedoraproject.org/koji/taskinfo?taskID=92008550
+> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > Probably makes sense but is there any particular reason why you do this?
 > > 
-> > Cheers
+> > 								Honza
 > 
+> I think the impact of fast commit on normal processes should be minimized.
+
+Yeah, I guess you mean when fastcommit is actually disabled. Makes sense
+but please add it to the changelog. With that feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+
 > 
+> > 
+> > > ---
+> > >   fs/ext4/fast_commit.c | 6 +++---
+> > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > > index eadab945b856..9217a588afd1 100644
+> > > --- a/fs/ext4/fast_commit.c
+> > > +++ b/fs/ext4/fast_commit.c
+> > > @@ -577,15 +577,15 @@ void ext4_fc_track_inode(handle_t *handle, struct inode *inode)
+> > >   	if (S_ISDIR(inode->i_mode))
+> > >   		return;
+> > > +	if (ext4_fc_disabled(inode->i_sb))
+> > > +		return;
+> > > +
+> > >   	if (ext4_should_journal_data(inode)) {
+> > >   		ext4_fc_mark_ineligible(inode->i_sb,
+> > >   					EXT4_FC_REASON_INODE_JOURNAL_DATA, handle);
+> > >   		return;
+> > >   	}
+> > > -	if (ext4_fc_disabled(inode->i_sb))
+> > > -		return;
+> > > -
+> > >   	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> > >   		return;
+> > > -- 
+> > > 2.31.1
+> > > 
 > 
-> Using this kernel I tested several Logitech mice - an MX Master 3,
-> which 
-> already supported hi-res scrolling in Linux; an M310 and an M185,
-> which have 
-> features but no feature for hi-res scrolling; and an old-style M510,
-> which 
-> does not have features.  I used evtest to show the events that were 
-> generated.   For these mice the patch does not produce any change in
-> events 
-> generated, as expected, both REL_WHEEL and REL_WHEEL_HI_RES events.
-
-In the future, it would be awesome if you could mention the tested-by
-tag as mentioned here:
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
-
-As the tree maintainer can then use it directly when merging the patch
-in their tree.
-
-So, for Jiri or Benjamin:
-
-Tested-by: Peter F. Patel-Schneider <pfpschneider@gmail.com>
-
-:)
-
-Thanks for the testing, much appreciated!
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
