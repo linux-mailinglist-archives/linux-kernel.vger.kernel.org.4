@@ -2,179 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096ED5B9B48
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4587E5B9B4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIOMsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        id S229459AbiIOMuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiIOMs1 (ORCPT
+        with ESMTP id S229833AbiIOMuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:48:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8593211;
-        Thu, 15 Sep 2022 05:48:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77741623AF;
-        Thu, 15 Sep 2022 12:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF092C43141;
-        Thu, 15 Sep 2022 12:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663246105;
-        bh=vYPH7fx1ureHC33v6mpOR/ZwVsXqh5v8XdoMYLJYITA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bmtTYnl887if/Y0PWs0Xbs/vZfSB5mW18ArMYw7ewAyImXhFphVNnQFBg1XBV2gvL
-         PGHrgrm1goParP2chNY18YPBXEfZ/qkFhXfEZvdcN9xfBkF9qTCGNced5Te6DUgCpm
-         JjExm0wKOJNu3tSJsyyCKFp7kLW2nMo3mDAxxBTrIHmrPCicWpYsgg3sV+Yq2OnWuR
-         oAn+pGRXBZo9Z4kh6wEWM+D+3N0z18h9XzthMruxg3rzEk272624f7UfBKtSOEQ/Bd
-         eYSt8u96/MoWI3i6y+JdEhPEJT2LQwfz6Vup8KKWg+S7FDtKmTfEVgZNlYwO2pmIHT
-         6omV+kTcrri9g==
-Received: by mail-vs1-f41.google.com with SMTP id q26so13678535vsr.7;
-        Thu, 15 Sep 2022 05:48:25 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3nKSComtmY9k5wQNFMqmLhUxzB/Av4YVbhBLWjQmpCo2iMQRto
-        c28dYhZZ3ARxz9k0s20n4Vlh3cdzRS97VPu1Eg==
-X-Google-Smtp-Source: AA6agR6cWMD0DU2Xd5g/oUc1mkJQuwd2KsOUyJJshpK/eKp9yVKE22ZbQHQDM85SEx87Sd6nqnD3BhvwMhkBxmAkNQY=
-X-Received: by 2002:a67:c18a:0:b0:398:4c72:cafb with SMTP id
- h10-20020a67c18a000000b003984c72cafbmr10648043vsj.53.1663246104815; Thu, 15
- Sep 2022 05:48:24 -0700 (PDT)
+        Thu, 15 Sep 2022 08:50:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD1C3AE6A;
+        Thu, 15 Sep 2022 05:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663246218; x=1694782218;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IIdOmEcdS83aIuUyuRuxgaNZb9Jk3USNPSc9UWh3dM4=;
+  b=m4u9tLDXeBMzDyF9ME0fc5t4EWlWTb2Lpz7aA8tcrRmc/7fn26FwD/x1
+   c6kN+Ktmel/PixfcRH8WTqsLSWb+1MJJQkPO95MTYiMzeOnOJZcPZdeEJ
+   MT0Oa+4Vi7YXm+7TQQAWA/7kNlmk+eYwTjVr1U2qRKAeH+IRSuhgKmrEQ
+   Fw+loAZkU4He1zWrfUOlLD8FKbBToUJnDUmhisKY7ed1Xdlf3CEca3O5U
+   FJV1pgtI3xHllIK0yGRIX9AnUHIYk4fNBml8tiTTX5M2+FdKT3ejWSaCY
+   D8h0jvMq1Zuz7SiRTGgdyWJkthpsWesPAXf8pDcneywF/xINt7yT73go2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299513129"
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="299513129"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 05:50:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="647812068"
+Received: from cvbock-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.165.77])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 05:50:16 -0700
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-sgx@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, jarkko@kernel.org,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/sgx: Add xa_store_range() return value check in sgx_setup_epc_section()
+Date:   Fri, 16 Sep 2022 00:50:06 +1200
+Message-Id: <20220915125006.759592-1-kai.huang@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220909135103.98179-1-j@jannau.net> <20220909135103.98179-7-j@jannau.net>
- <20220913133207.GA3500192-robh@kernel.org> <20220914110448.GF4024@jannau.net>
-In-Reply-To: <20220914110448.GF4024@jannau.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 15 Sep 2022 07:48:13 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKxU4W1yTRWuxbVAtQJPx_4+jqF7p29R9TW5MNsrLoTCQ@mail.gmail.com>
-Message-ID: <CAL_JsqKxU4W1yTRWuxbVAtQJPx_4+jqF7p29R9TW5MNsrLoTCQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 06/10] arm64: dts: apple: Add initial
- t6000/t6001/t6002 DTs
-To:     Janne Grunau <j@jannau.net>
-Cc:     asahi@lists.linux.dev, Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>, devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 6:04 AM Janne Grunau <j@jannau.net> wrote:
->
-> On 2022-09-13 08:32:07 -0500, Rob Herring wrote:
-> > On Fri, Sep 09, 2022 at 03:50:59PM +0200, Janne Grunau wrote:
-> > > From: Hector Martin <marcan@marcan.st>
-> > >
-> > > These SoCs are found in Apple devices with M1 Pro (t6000), M1 Max
-> > > (t6001) and M1 Ultra (t6002).
-> > >
-> > > t6000 is a cut-down version of t6001, so the former just includes the
-> > > latter and disables the missing bits (This is currently just one PMGR
-> > > node and all of its domains.
-> > >
-> > > t6002 is two connected t6001 dies. The implementation seems to use
-> > > t6001 with blocks disabled (mostly on the second die). MMIO addresses on
-> > > the second die have a constant offset. The interrupt controller is
-> > > multi-die aware. This setup can be represented in the device tree with
-> > > two top level "soc" nodes. The MMIO offset is applied via "ranges" and
-> > > devices are included with preproceesor macros to make the node labels
-> > > unique and to specify the die number for the interrupt definition.
-> > >
-> > > Device nodes are distributed over dtsi files based on whether they are
-> > > present on both dies or just on the first die. The only execption is the
-> > > NVMe controller which resides on the second die. Its nodes are in a
-> > > separate file.
-> > >
-> > > Signed-off-by: Hector Martin <marcan@marcan.st>
-> > > Co-developed-by: Janne Grunau <j@jannau.net>
-> > > Signed-off-by: Janne Grunau <j@jannau.net>
-> > >
-> > > ---
-> > >
-> > >
-> > > ---
-> > >  arch/arm64/boot/dts/apple/multi-die-cpp.h     |   23 +
-> > >  arch/arm64/boot/dts/apple/t6000.dtsi          |   18 +
-> > >  arch/arm64/boot/dts/apple/t6001.dtsi          |   63 +
-> > >  arch/arm64/boot/dts/apple/t6002.dtsi          |  173 ++
-> > >  arch/arm64/boot/dts/apple/t600x-common.dtsi   |  128 ++
-> > >  arch/arm64/boot/dts/apple/t600x-die0.dtsi     |  298 +++
-> > >  arch/arm64/boot/dts/apple/t600x-dieX.dtsi     |  103 +
-> > >  .../arm64/boot/dts/apple/t600x-gpio-pins.dtsi |   45 +
-> > >  arch/arm64/boot/dts/apple/t600x-nvme.dtsi     |   42 +
-> > >  arch/arm64/boot/dts/apple/t600x-pmgr.dtsi     | 2012 +++++++++++++++++
-> > >  10 files changed, 2905 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/apple/multi-die-cpp.h
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t6000.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t6001.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t6002.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-common.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-die0.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-dieX.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-gpio-pins.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-nvme.dtsi
-> > >  create mode 100644 arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
-> > >
-> > > diff --git a/arch/arm64/boot/dts/apple/multi-die-cpp.h b/arch/arm64/boot/dts/apple/multi-die-cpp.h
-> > > new file mode 100644
-> > > index 000000000000..153d89dd0ae1
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/apple/multi-die-cpp.h
-> > > @@ -0,0 +1,23 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0+ OR MIT
-> > > + *
-> > > + * C preprocessor macros for t600x multi die support.
-> > > + */
-> > > +
-> > > +#ifndef __DTS_APPLE_MULTI_DIE_CPP_H
-> > > +#define __DTS_APPLE_MULTI_DIE_CPP_H
-> > > +
-> > > +#ifndef __stringify
-> > > +/* copied from include/linux/stringify.h */
-> >
-> > Which is dual licensed? Arguably, not big enough to matter.
->
-> include/linux/stringify.h has no license header at all. If that's
-> acceptable I will drop it from this file as well.
-> I started from scratch with the SPDX header from other apple dts files.
-> I should have paid more attention after replacing it with kernel
-> __stringify (I probably would have updated it if stringify.h had a SPDX
-> header).
+In sgx_setup_epc_section(), xa_store_range() is called to store EPC
+pages' owner section to an Xarray using physical addresses of those EPC
+pages as index.  Currently, the return value of xa_store_range() is not
+checked, but actually it can fail (i.e. due to -ENOMEM).
 
-I'd leave the license and just drop the comment. The construct is not
-copyrightable IMO.
+Not checking the return value of xa_store_range() would result in the
+EPC section being used by SGX driver (and KVM SGX guests), but part or
+all of its EPC pages not being handled by the memory failure handling of
+EPC page.  Such inconsistency should be avoided, even at the cost that
+this section won't be used by the kernel.
 
-> > > +#define __stringify_1(x...)     #x
-> > > +#define __stringify(x...)       __stringify_1(x)
-> > > +#endif
-> > > +
-> > > +#ifndef __concat
-> > > +#define __concat_1(x, y...)     x ## y
-> > > +#define __concat(x, y...)       __concat_1(x, y)
-> > > +#endif
-> > > +
-> > > +#define DIE_NODE(a) __concat(a, DIE)
-> > > +#define DIE_LABEL(a) __stringify(__concat(a, DIE))
-> >
-> > Not a pattern we encourage in DT, but seems necessary here.
->
-> That is probably an arguments for keeping __concat/__stringify local
-> instead of adding it to include/dt-bindings
+Add the missing check of the return value of xa_store_range(), and when
+it fails, clean up and fail to initialize the EPC section.
 
-Yes.
+Fixes: 40e0e7843e23 ("x86/sgx: Add infrastructure to identify SGX EPC pages")
+Signed-off-by: Kai Huang <kai.huang@intel.com>
+---
+ arch/x86/kernel/cpu/sgx/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> > > +
-> > > +#endif /* !__LINUX_STRINGIFY_H */
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 515e2a5f25bb..2ee23e60ef61 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -632,8 +632,12 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
+ 	}
+ 
+ 	section->phys_addr = phys_addr;
+-	xa_store_range(&sgx_epc_address_space, section->phys_addr,
+-		       phys_addr + size - 1, section, GFP_KERNEL);
++	if (xa_err(xa_store_range(&sgx_epc_address_space, section->phys_addr,
++		       phys_addr + size - 1, section, GFP_KERNEL))) {
++		vfree(section->pages);
++		memunmap(section->virt_addr);
++		return false;
++	}
+ 
+ 	for (i = 0; i < nr_pages; i++) {
+ 		section->pages[i].section = index;
 
-Stale comment.
+base-commit: ee56a283988d739c25d2d00ffb22707cb487ab47
+-- 
+2.37.1
 
-Rob
