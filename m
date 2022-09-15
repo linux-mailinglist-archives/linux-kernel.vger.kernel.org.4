@@ -2,108 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0BF5B997E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CFB5B9973
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiIOLXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S229861AbiIOLSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIOLXB (ORCPT
+        with ESMTP id S229480AbiIOLSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:23:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746917D783
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1EvKTI+8vdc4mrKuvrpi7vpxhe4JIVCAewhTA3ti8qc=; b=FuqDqvKs3kCvpr8IrOUsK3sFZz
-        ZbTh3ayxic3EmFpQf240Nloa1N5nMIHSQ+AoME07L7MlloOYqzCityEaf555ngb1Xa8tQJhXL+jVe
-        Za3802G+htij/YdzFxfkPD6mMhhr01ZUbUHUV05AWbCGsEU9ap6aDIXqaS2yNwV+RB9fVCvbWPAl3
-        XIfQU+YQ9NdNdrmV41w2nNibxOMnJEYp/ypYPwHg0o9csIRwfppHFTlCpUsRq3ud7gwn0DJNm5UqC
-        4LWXV49rteCtQdxkL5zkVdZVhP+L2D6y4kOnK/pu3XIwLx6MmH5vI8hPniVq7IBXkOHvPgYhofZqO
-        sRuqEqDw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYmwl-00CaNR-IB; Thu, 15 Sep 2022 11:22:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DF47A30029C;
-        Thu, 15 Sep 2022 13:22:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AACED2B1A4535; Thu, 15 Sep 2022 13:22:17 +0200 (CEST)
-Date:   Thu, 15 Sep 2022 13:22:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 22/59] x86: Put hot per CPU variables into a struct
-Message-ID: <YyMK6US2CmsugZbe@hirez.programming.kicks-ass.net>
-References: <20220902130625.217071627@infradead.org>
- <20220902130948.643735860@infradead.org>
- <CAG48ez07c2ThydovaHtBZ+u137eaXdEut4J-zycvPn7io4MySw@mail.gmail.com>
+        Thu, 15 Sep 2022 07:18:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2112760C6;
+        Thu, 15 Sep 2022 04:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663240711; x=1694776711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nXQXpz1fBQ6NMUr8fUF06om1l4CftgGyuzoaQmQCFYw=;
+  b=tnA1Z+7Ink/H2hPxN+qUVFWIZhUSMEOfGYuFkIAm6jXKg4JV+ue6yVSS
+   eAeu4OYu2N8gxJulLPJdI6Ffb0k3H2dWcWBGJ5J6VTkZCFpmr3/D8Yq5Z
+   HBlmVE5EZ8FiP14lMVoDIKwtpavhNm2IS4L0AJwoUXk/o7f73HKgkJJB0
+   Py0yMXeY8SyhpkLAxoG1p14qbWteYsF6yZOyinrgw9PxTH8kEqfboGKyH
+   TzFHoGM9eFHyrAUvPkYVGSQk0+PvdbYNjygNVCRPVoSH3WdvZQ4vSjRQ4
+   mH3PcGJ66EzjFJdCNrKS/dt9uoWd2fr1eFWlzL3XPxo3SwMdb6zNnr2kd
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="174003028"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 04:18:30 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 15 Sep 2022 04:18:24 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Thu, 15 Sep 2022 04:18:23 -0700
+Date:   Thu, 15 Sep 2022 13:22:47 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andy.shevchenko@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
+Message-ID: <20220915112247.fin7bb45plnr7cme@soft-dev3-1.localhost>
+References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
+ <CACRpkdYWP4ASoO4wWSEgdCPbNLsx8fuHn_-oqnD+ff1TU84ieQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CAG48ez07c2ThydovaHtBZ+u137eaXdEut4J-zycvPn7io4MySw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdYWP4ASoO4wWSEgdCPbNLsx8fuHn_-oqnD+ff1TU84ieQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 08:02:46PM +0200, Jann Horn wrote:
-> On Fri, Sep 2, 2022 at 3:54 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > From: Thomas Gleixner <tglx@linutronix.de>
-> >
-> > The layout of per-cpu variables is at the mercy of the compiler. This
-> > can lead to random performance fluctuations from build to build.
-> >
-> > Create a structure to hold some of the hottest per-cpu variables,
-> > starting with current_task.
-> [...]
-> > -DECLARE_PER_CPU(struct task_struct *, current_task);
-> > +struct pcpu_hot {
-> > +       union {
-> > +               struct {
-> > +                       struct task_struct      *current_task;
-> > +               };
-> > +               u8      pad[64];
-> > +       };
-> > +};
+The 09/14/2022 15:02, Linus Walleij wrote:
 > 
-> fixed_percpu_data::stack_canary is probably also a fairly hot per-cpu
-> variable on distro kernels with CONFIG_STACKPROTECTOR_STRONG (which
-> e.g. Debian enables), so perhaps it'd make sense to reuse
-> fixed_percpu_data as the struct for hot percpu variables? But I don't
-> have any numbers to actually back up that idea.
+> On Fri, Sep 9, 2022 at 4:55 PM Horatiu Vultur
+> <horatiu.vultur@microchip.com> wrote:
+> 
+> > Fixes: be36abb71d878f ("pinctrl: ocelot: add support for interrupt controller")
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> 
+> This v3 patch applied for fixes so we get some rotation in linux-next
+> and get the Ocelot kernel in working order.
+> Should it even be tagged for stable?
 
-Not a bad idea; but the immediate problem I see with this is that
-fixed_percpu_data is x86_64 only.
+Thanks for applying the patch!
 
-Also; I'm thinking the current stack-protector thing is somewhat of a
-hack due to GCC limitations (per the comment there) and once that gets
-cleaned up it can come live in the pcpu_hot thing.
+It would be great to go also in stable. I have tried to apply it on
+5.19, 5.15, 5.10, 5.4, 4.19 but it failed on all of them because of
+merge conflicts.
+Should I send separate patch for each stable tree?
+
+> 
+> Andy had some further things to think about, consider these
+> for possible further patching.
+> 
+> Yours,
+> Linus Walleij
+
+-- 
+/Horatiu
