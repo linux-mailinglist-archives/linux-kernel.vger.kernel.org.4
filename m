@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4F95B922C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4579A5B9234
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiIOBdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229969AbiIOBhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiIOBds (ORCPT
+        with ESMTP id S229564AbiIOBhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:33:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922C792DE;
-        Wed, 14 Sep 2022 18:33:44 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28F0ZueQ017536;
-        Thu, 15 Sep 2022 01:33:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LRBFs3XrfWaoGBTNqSmEzJ2c04tlJ8Rh82eU+9eVUuw=;
- b=CwLYmIockp2hO1HIFAmLCwql+ZIz8z79i7hCI1ceXHtX9LT8mlv9Y2vkMxBR2texMvL9
- m5u67dlx/JJjuUTe75kta+ZQEV9StCCW/J8KPBFhpRK/Foo7wlrgd//7giu4Pptb/Ffp
- uqwbvJvmxpdGDsU5WCaGncSj/tqC1dnFndiQK58hz+vjSpLfvCsVr9OE7abtGwf9hwt/
- ddhaB+HMixJXtTgTQ27Cr7uAL8c+ojHR1Dd8QWClv+8DftUR5Ziv2HfFnM4ucXspLLvm
- i1k2h/gOD97gjMn1iM0ebvqiZFdtjUcSuHCKUqkZueTZBzABIOdxucLdSJy3Vf4z2x4j JQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jkp8arh6q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 01:33:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28F1XAPk023301
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 01:33:11 GMT
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
- 2022 18:33:07 -0700
-Subject: Re: [PATCH 2/2] mailbox: Add support for QTI CPUCP mailbox controller
-To:     Trilok Soni <quic_tsoni@quicinc.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <manivannan.sadhasivam@linaro.org>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <konrad.dybcio@somainline.org>,
-        Gaurav Kohli <gkohli@codeaurora.org>
-References: <1663135386-26270-1-git-send-email-quic_sibis@quicinc.com>
- <1663135386-26270-3-git-send-email-quic_sibis@quicinc.com>
- <b8e0cbb4-8d4e-1208-0fa0-8f9178b6d85f@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <04d046aa-59c8-46c5-d957-5d2e48f25d72@quicinc.com>
-Date:   Thu, 15 Sep 2022 07:03:04 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 14 Sep 2022 21:37:08 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C3659264
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:37:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VPqLUsL_1663205822;
+Received: from 30.240.121.31(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VPqLUsL_1663205822)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 09:37:04 +0800
+Message-ID: <e9076da5-bd96-1a21-e4af-36eb46409178@linux.alibaba.com>
+Date:   Thu, 15 Sep 2022 09:36:59 +0800
 MIME-Version: 1.0
-In-Reply-To: <b8e0cbb4-8d4e-1208-0fa0-8f9178b6d85f@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aVU5gjC4oydM2V8ZopPTFBLGNHmETNjq
-X-Proofpoint-ORIG-GUID: aVU5gjC4oydM2V8ZopPTFBLGNHmETNjq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_11,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 mlxlogscore=794
- clxscore=1015 phishscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
- definitions=main-2209150002
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     naoya.horiguchi@nec.com, linmiaohe@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        Huang Ying <ying.huang@intel.com>
+References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
+ <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Trilok,
-Thanks for taking time to review the patch.
 
-On 9/14/22 11:08 PM, Trilok Soni wrote:
-> Hi Sibi,
+
+在 2022/9/15 AM6:35, Andrew Morton 写道:
+> On Wed, 14 Sep 2022 14:49:35 +0800 Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 > 
+>> The GHES code calls memory_failure_queue() from IRQ context to queue work
+>> into workqueue and schedule it on the current CPU. Then the work is
+>> processed in memory_failure_work_func() by kworker and calls
+>> memory_failure().
+>>
+>> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
+>> SIGBUS with error virutal address") make memory_failure() call
+>> kill_accessing_process() that:
+>>
+>>     - holds mmap locking of current->mm
+>>     - does pagetable walk to find the error virtual address
+>>     - and sends SIGBUS to the current process with error info.
+>>
+>> However, the mm of kworker is not valid. Therefore, check mm when killing
+>> accessing process.
+> 
+> Thanks.
+> 
+> When fixing a bug, please always describe the user-visible effects of
+> tha bug.  I'm thinking "null pointer deref crashes the kernel".
+
+Got it. Thank you :)
+
+> 
+>> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> 
+> I'll add cc:stable.
+
+Thanks.
+
+> 
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>>  	};
+>>  	priv.tk.tsk = p;
+>>  
+>> +	if (!p->mm)
+>> +		return -EFAULT;
 >> +
->> +MODULE_AUTHOR("Gaurav Kohli <gkohli@codeaurora.org>");
->> +MODULE_AUTHOR("Sibi Sankar <quic_sibis@qti.qualcomm.com>");
+>>  	mmap_read_lock(p->mm);
+>>  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
+>>  			      (void *)&priv);
+>> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>>  	else
+>>  		ret = 0;
+>>  	mmap_read_unlock(p->mm);
+>> +
+>>  	return ret > 0 ? -EHWPOISON : -EFAULT;
+>>  }
 > 
-> Email address should be quic_sibi@quicinc.com.
-> 
-> codeaurora.org is any way deprecated, so we should we keep it ? I know 
-> giving the credit is important, but above address will not be reachable 
-> anyways.
-Ack my bad.
+> This is an unrelated change which doesn't appear to match the style in
+> memory-failure.c, so I'll drop this hunk.
 
-> 
-> ---Trilok Soni
+I see, thanks.
+
+Cheers,
+Shuai
