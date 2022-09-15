@@ -2,120 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD1D5B9197
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D015B919A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiIOAWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S230070AbiIOAXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiIOAWK (ORCPT
+        with ESMTP id S229498AbiIOAXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:22:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C5B6C126
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663201330; x=1694737330;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DwH6r7kSYgXKu31Svcb7eDa7neWtWKabWhTS1u3DP5E=;
-  b=k85wRzoLQXs9BGUDTz68vDHXfuDnD+usFjlTVohSK0Gn1S6ngkrgj1vP
-   FgYdDBWKsV3idYdwx1SwllG/BYGPoU+XA8uO7aIooI53Xiq37uz5kSuiq
-   Tftm91nwA9g2Cg5gidZsxoJPVO4dz23YzCyXOBmjZ4F52EM8iOBjLIBkZ
-   e36uZXXUiJHEu+azZJxhnjRKxsn5nyFmYbvFIQQxa1Of25mbtOa1FTzTm
-   OPheoHoTnYMcnzgDIzJksQSEAezq5y/8bw3aQ+cLdEWFZ7hSebfAKCtdW
-   j1wovRClPFOjYRriXI0pQ0xc054f/gAA81cS7eGkaLtMs6Riti07ZCUv1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299387625"
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="299387625"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:22:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="594599391"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.26.213])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:22:09 -0700
-Message-ID: <95bbbc9b927abf3c756e6cce810be69e85985541.camel@linux.intel.com>
-Subject: Re: [PATCH v5 4/5] sched/fair: Skip SIS domain scan if fully busy
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Abel Wu <wuyun.abel@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 14 Sep 2022 17:22:09 -0700
-In-Reply-To: <20220909055304.25171-5-wuyun.abel@bytedance.com>
-References: <20220909055304.25171-1-wuyun.abel@bytedance.com>
-         <20220909055304.25171-5-wuyun.abel@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Wed, 14 Sep 2022 20:23:01 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212F80B68
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:23:00 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id cj27so311259qtb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=eRiMKscQqGLWHiLc+7+i9xWjQkO+eAs1NiZ4jOvGS0U=;
+        b=DDKycVVoBoWbCM3nQMDQEe8g1JNrOsjXVyfZHCebseS4+afsgAkQYMIPCaGK1izdDM
+         jObnH0Dtsq8TtMdYHeoe8jd1zKZZhyuyg1q9B5mKnPFlbJJRuorQ+GIhMZ0dQtXWu7TW
+         j9Ta3r8XkKQ5zPasxQulLbgCtgRgUSGETaydY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=eRiMKscQqGLWHiLc+7+i9xWjQkO+eAs1NiZ4jOvGS0U=;
+        b=rmkxKMRG8MEwVwXCThEuecPD12nNk4X+zkgoFvn8B4qvt9xkmCiDfi6msmeYLQkj/V
+         6Myya4vn3D0psucJwZa/UEli7boNVMimfg39Rf42lxxsQNU7bXay//3SdLQbJhB9UvGH
+         q6jhbTclgBVyHo+FFZvJkfkpQ+bnY/xg3vvjCBnBC1zmnC7fhZkQ4LnjzVplg8nSqhG6
+         J+q6FLQ5tzRRyzHdUut4xkcqhIdnb7rOt651A5OBtRKysHdnywi5WuCkYBuu2tPbsPwt
+         RenLF7y/oR26+zy4SXNePSIZutKp+sWIgz2V4/pD2AbNJFOGTk0Uamy8zqozVPskgv1i
+         WYdw==
+X-Gm-Message-State: ACgBeo1SbfynDguNn0LWg4TRaXCVLY35q1z19cqUcXDJtDvGWeAZVnpn
+        SUCpNZCwUO//8bmGwr0vuPBrCvK+97gV3g==
+X-Google-Smtp-Source: AA6agR5n0qg3MJMUDrj6cUWrw4bfwjRO+f7dxAy+UMb7nJNVnhtqjMVgK7ybK2zcEHxqmw36epXNPg==
+X-Received: by 2002:a05:622a:38f:b0:35b:b8e7:82ef with SMTP id j15-20020a05622a038f00b0035bb8e782efmr13021242qtx.647.1663201379203;
+        Wed, 14 Sep 2022 17:22:59 -0700 (PDT)
+Received: from trappist.c.googlers.com.com (128.174.85.34.bc.googleusercontent.com. [34.85.174.128])
+        by smtp.gmail.com with ESMTPSA id m5-20020ac86885000000b0034367ec57ecsm2377611qtq.9.2022.09.14.17.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 17:22:58 -0700 (PDT)
+From:   Sven van Ashbrook <svenva@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Olivia Mackall <olivia@selenic.com>
+Cc:     Alex Levin <levinale@google.com>,
+        Andrey Pronin <apronin@google.com>,
+        Stephen Boyd <swboyd@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Theodore Ts'o <tytso@mit.edu>, linux-crypto@vger.kernel.org
+Subject: [PATCH v2 1/2] random: move add_hwgenerator_randomness()'s wait outside function
+Date:   Thu, 15 Sep 2022 00:22:53 +0000
+Message-Id: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-09 at 13:53 +0800, Abel Wu wrote:
-> If a full domain scan failed, then no unoccupied cpus available
-> and the LLC is fully busy.  In this case we'd better use cpus
-> more wisely, rather than wasting it trying to find an idle cpu
-> that probably not exist. The fully busy status will be cleared
-> when any cpu of that LLC goes idle and everything goes back to
-> normal again.
-> 
-> Make the has_idle_cores boolean hint more rich by turning it
-> into a state machine.
-> 
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> ---
->  include/linux/sched/topology.h | 35 +++++++++++++++++-
->  kernel/sched/fair.c            | 67 ++++++++++++++++++++++++++++------
->  2 files changed, 89 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> index 816df6cc444e..cc6089765b64 100644
-> --- a/include/linux/sched/topology.h
-> +++ b/include/linux/sched/topology.h
-> @@ -77,10 +77,43 @@ extern int sched_domain_level_max;
->  
->  struct sched_group;
->  
-> +/*
-> + * States of the sched-domain
-> + *
-> + * - sd_has_icores
-> + *	This state is only used in LLC domains to indicate worthy
-> + *	of a full scan in SIS due to idle cores available.
-> + *
-> + * - sd_has_icpus
-> + *	This state indicates that unoccupied (sched-idle/idle) cpus
-> + *	might exist in this domain. For the LLC domains it is the
-> + *	default state since these cpus are the main targets of SIS
-> + *	search, and is also used as a fallback state of the other
-> + *	states.
-> + *
-> + * - sd_is_busy
-> + *	This state indicates there are no unoccupied cpus in this
+add_hwgenerator_randomness() currently blocks until more entropy
+is needed. Move the blocking wait out of the function to the caller,
+by letting the function return the number of jiffies needed to block.
 
-Suggest reword to
+This is done to prepare the function's sole kernel caller from a
+kthread to self-rearming delayed_work.
 
-.. indicates that all cpus are occupied in this ...
+Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
+---
 
-> + *	domain. So for LLC domains, it gives the hint on whether
-> + *	we should put efforts on the SIS search or not.
-> + *
-> 
+Changes in v2:
+- justify patch as a preparation for next patch
 
-Tim
+ drivers/char/hw_random/core.c |  7 +++++--
+ drivers/char/random.c         | 13 ++++++-------
+ include/linux/random.h        |  2 +-
+ 3 files changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+index 16f227b995e8..3675122c6cce 100644
+--- a/drivers/char/hw_random/core.c
++++ b/drivers/char/hw_random/core.c
+@@ -491,6 +491,7 @@ static int __init register_miscdev(void)
+ static int hwrng_fillfn(void *unused)
+ {
+ 	size_t entropy, entropy_credit = 0; /* in 1/1024 of a bit */
++	unsigned long delay;
+ 	long rc;
+ 
+ 	while (!kthread_should_stop()) {
+@@ -526,8 +527,10 @@ static int hwrng_fillfn(void *unused)
+ 			entropy_credit = entropy;
+ 
+ 		/* Outside lock, sure, but y'know: randomness. */
+-		add_hwgenerator_randomness((void *)rng_fillbuf, rc,
+-					   entropy >> 10);
++		delay = add_hwgenerator_randomness((void *)rng_fillbuf, rc,
++						   entropy >> 10);
++		if (delay > 0)
++			schedule_timeout_interruptible(delay);
+ 	}
+ 	hwrng_fill = NULL;
+ 	return 0;
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 79d7d4e4e582..5dc949298f92 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -686,7 +686,7 @@ static void __cold _credit_init_bits(size_t bits)
+  * the above entropy accumulation routines:
+  *
+  *	void add_device_randomness(const void *buf, size_t len);
+- *	void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy);
++ *	unsigned long add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy);
+  *	void add_bootloader_randomness(const void *buf, size_t len);
+  *	void add_vmfork_randomness(const void *unique_vm_id, size_t len);
+  *	void add_interrupt_randomness(int irq);
+@@ -702,8 +702,8 @@ static void __cold _credit_init_bits(size_t bits)
+  * available to them (particularly common in the embedded world).
+  *
+  * add_hwgenerator_randomness() is for true hardware RNGs, and will credit
+- * entropy as specified by the caller. If the entropy pool is full it will
+- * block until more entropy is needed.
++ * entropy as specified by the caller. Returns time delay in jiffies until
++ * more entropy is needed.
+  *
+  * add_bootloader_randomness() is called by bootloader drivers, such as EFI
+  * and device tree, and credits its input depending on whether or not the
+@@ -857,10 +857,10 @@ EXPORT_SYMBOL(add_device_randomness);
+ 
+ /*
+  * Interface for in-kernel drivers of true hardware RNGs.
+- * Those devices may produce endless random bits and will be throttled
++ * Those devices may produce endless random bits and should be throttled
+  * when our pool is full.
+  */
+-void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
++unsigned long add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
+ {
+ 	mix_pool_bytes(buf, len);
+ 	credit_init_bits(entropy);
+@@ -869,8 +869,7 @@ void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
+ 	 * Throttle writing to once every CRNG_RESEED_INTERVAL, unless
+ 	 * we're not yet initialized.
+ 	 */
+-	if (!kthread_should_stop() && crng_ready())
+-		schedule_timeout_interruptible(CRNG_RESEED_INTERVAL);
++	return crng_ready() ? CRNG_RESEED_INTERVAL : 0;
+ }
+ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+ 
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 3fec206487f6..6608b0fb4402 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -17,7 +17,7 @@ void __init add_bootloader_randomness(const void *buf, size_t len);
+ void add_input_randomness(unsigned int type, unsigned int code,
+ 			  unsigned int value) __latent_entropy;
+ void add_interrupt_randomness(int irq) __latent_entropy;
+-void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy);
++unsigned long add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy);
+ 
+ #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
+ static inline void add_latent_entropy(void)
+-- 
+2.37.2.789.g6183377224-goog
 
