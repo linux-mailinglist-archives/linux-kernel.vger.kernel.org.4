@@ -2,135 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957205B9C89
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB285B9C91
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiIOOGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S229772AbiIOOGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIOOGf (ORCPT
+        with ESMTP id S229577AbiIOOGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:06:35 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA89B9BB4D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 07:06:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPtLYHP_1663250787;
-Received: from 192.168.1.6(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPtLYHP_1663250787)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 22:06:28 +0800
-Message-ID: <f5bceffb-3168-8a5b-4987-d71eed0c6f93@linux.alibaba.com>
-Date:   Thu, 15 Sep 2022 22:06:27 +0800
+        Thu, 15 Sep 2022 10:06:48 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D839C1C1;
+        Thu, 15 Sep 2022 07:06:45 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 3E7CDA99; Thu, 15 Sep 2022 10:06:44 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 3E7CDA99
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1663250804;
+        bh=LLHFRFO6j0hm3HnFxTTsR3ywh1o3veH7ecKfWKoG5Bo=;
+        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
+        b=RnQubsCmjhVbXQbFVtfPj0KCK6Bhc5FRhEHFKQaBiiMurk1EI292SjWwOpq43nZ+L
+         xM44/v5REErLDFQM7dKmb6dCp/MuBDq+XiH+0+dbhCAYW9AogNPMQ5kr7kiy1DdAWF
+         j7po02iv95tP0IF/xX4z8h+ZSZEb1S66DWrfY01A=
+Date:   Thu, 15 Sep 2022 10:06:44 -0400
+To:     NeilBrown <neilb@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+        Jan Kara <jack@suse.cz>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <20220915140644.GA15754@fieldses.org>
+References: <20220908083326.3xsanzk7hy3ff4qs@quack3>
+ <YxoIjV50xXKiLdL9@mit.edu>
+ <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+ <20220908155605.GD8951@fieldses.org>
+ <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+ <20220908182252.GA18939@fieldses.org>
+ <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+ <166284799157.30452.4308111193560234334@noble.neil.brown.name>
+ <20220912134208.GB9304@fieldses.org>
+ <166302447257.30452.6751169887085269140@noble.neil.brown.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.1
-Subject: Re: [PATCH v4] mm/damon: simplify scheme create in lru_sort.c
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220915133041.71819-1-sj@kernel.org>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20220915133041.71819-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166302447257.30452.6751169887085269140@noble.neil.brown.name>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
+On Tue, Sep 13, 2022 at 09:14:32AM +1000, NeilBrown wrote:
+> On Mon, 12 Sep 2022, J. Bruce Fields wrote:
+> > On Sun, Sep 11, 2022 at 08:13:11AM +1000, NeilBrown wrote:
+> > > On Fri, 09 Sep 2022, Jeff Layton wrote:
+> > > > 
+> > > > The machine crashes and comes back up, and we get a query for i_version
+> > > > and it comes back as X. Fine, it's an old version. Now there is a write.
+> > > > What do we do to ensure that the new value doesn't collide with X+1? 
+> > > 
+> > > (I missed this bit in my earlier reply..)
+> > > 
+> > > How is it "Fine" to see an old version?
+> > > The file could have changed without the version changing.
+> > > And I thought one of the goals of the crash-count was to be able to
+> > > provide a monotonic change id.
+> > 
+> > I was still mainly thinking about how to provide reliable close-to-open
+> > semantics between NFS clients.  In the case the writer was an NFS
+> > client, it wasn't done writing (or it would have COMMITted), so those
+> > writes will come in and bump the change attribute soon, and as long as
+> > we avoid the small chance of reusing an old change attribute, we're OK,
+> > and I think it'd even still be OK to advertise
+> > CHANGE_TYPE_IS_MONOTONIC_INCR.
+> 
+> You seem to be assuming that the client doesn't crash at the same time
+> as the server (maybe they are both VMs on a host that lost power...)
+> 
+> If client A reads and caches, client B writes, the server crashes after
+> writing some data (to already allocated space so no inode update needed)
+> but before writing the new i_version, then client B crashes.
+> When server comes back the i_version will be unchanged but the data has
+> changed.  Client A will cache old data indefinitely...
 
-Thanks.
+I guess I assume that if all we're promising is close-to-open, then a
+client isn't allowed to trust its cache in that situation.  Maybe that's
+an overly draconian interpretation of close-to-open.
 
-在 2022/9/15 下午9:30, SeongJae Park 写道:
-> From: Xin Hao <xhao@linux.alibaba.com>
->
-> In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
-> they have so much in common, so we can combine them into a single
-> function, and we just need to distinguish their differences.
->
-> Suggested-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
-> changes from v3
-> (https://lore.kernel.org/damon/20220915023655.41923-1-xhao@linux.alibaba.com/)
-> - Cosmetic cleanups
->
-> Changes from v2
-> (https://lore.kernel.org/linux-mm/20220914113859.37637-1-xhao@linux.alibaba.com/)
-> - Add static global 'struct damos_access_pattern' stub variable
->
->   mm/damon/lru_sort.c | 39 +++++++++++++++++----------------------
->   1 file changed, 17 insertions(+), 22 deletions(-)
->
-> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> index 46e7c0738bc5..abfaf471e3e9 100644
-> --- a/mm/damon/lru_sort.c
-> +++ b/mm/damon/lru_sort.c
-> @@ -132,6 +132,18 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
->   		lru_sort_tried_cold_regions, lru_sorted_cold_regions,
->   		cold_quota_exceeds);
->   
-> +struct damos_access_pattern damon_lru_sort_stub_pattern = {
-> +	/* Find regions having PAGE_SIZE or larger size */
-> +	.min_sz_region = PAGE_SIZE,
-> +	.max_sz_region = ULONG_MAX,
-> +	/* no matter its access frequency */
-> +	.min_nr_accesses = 0,
-> +	.max_nr_accesses = UINT_MAX,
-> +	/* no matter its age */
-> +	.min_age_region = 0,
-> +	.max_age_region = UINT_MAX,
-> +};
-> +
->   static struct damon_ctx *ctx;
->   static struct damon_target *target;
->   
-> @@ -157,36 +169,19 @@ static struct damos *damon_lru_sort_new_scheme(
->   /* Create a DAMON-based operation scheme for hot memory regions */
->   static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
->   {
-> -	struct damos_access_pattern pattern = {
-> -		/* Find regions having PAGE_SIZE or larger size */
-> -		.min_sz_region = PAGE_SIZE,
-> -		.max_sz_region = ULONG_MAX,
-> -		/* and accessed for more than the threshold */
-> -		.min_nr_accesses = hot_thres,
-> -		.max_nr_accesses = UINT_MAX,
-> -		/* no matter its age */
-> -		.min_age_region = 0,
-> -		.max_age_region = UINT_MAX,
-> -	};
-> +	struct damos_access_pattern pattern = damon_lru_sort_stub_pattern;
->   
-> +	pattern.min_nr_accesses = hot_thres;
->   	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
->   }
->   
->   /* Create a DAMON-based operation scheme for cold memory regions */
->   static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
->   {
-> -	struct damos_access_pattern pattern = {
-> -		/* Find regions having PAGE_SIZE or larger size */
-> -		.min_sz_region = PAGE_SIZE,
-> -		.max_sz_region = ULONG_MAX,
-> -		/* and not accessed at all */
-> -		.min_nr_accesses = 0,
-> -		.max_nr_accesses = 0,
-> -		/* for min_age or more micro-seconds */
-> -		.min_age_region = cold_thres,
-> -		.max_age_region = UINT_MAX,
-> -	};
-> +	struct damos_access_pattern pattern = damon_lru_sort_stub_pattern;
->   
-> +	pattern.max_nr_accesses = 0;
-> +	pattern.min_age_region = cold_thres;
->   	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
->   }
->   
+Also, I'm trying to think about how to improve things incrementally.
+Incorporating something like a crash count into the on-disk i_version
+fixes some cases without introducing any new ones or regressing
+performance after a crash.
+
+If we subsequently wanted to close those remaining holes, I think we'd
+need the change attribute increment to be seen as atomic with respect to
+its associated change, both to clients and (separately) on disk.  (That
+would still allow the change attribute to go backwards after a crash, to
+the value it held as of the on-disk state of the file.  I think clients
+should be able to deal with that case.)
+
+But, I don't know, maybe a bigger hammer would be OK:
+
+> I think we need to require the filesystem to ensure that the i_version
+> is seen to increase shortly after any change becomes visible in the
+> file, and no later than the moment when the request that initiated the
+> change is acknowledged as being complete.  In the case of an unclean
+> restart, any file that is not known to have been unchanged immediately
+> before the crash must have i_version increased.
+> 
+> The simplest implementation is to have an unclean-restart counter and to
+> always included this multiplied by some constant X in the reported
+> i_version.  The filesystem guarantees to record (e.g.  to journal
+> at least) the i_version if it comes close to X more than the previous
+> record.  The filesystem gets to choose X.
+
+So the question is whether people can live with invalidating all client
+caches after a cache.  I don't know.
+
+> A more complex solution would be to record (similar to the way orphans
+> are recorded) any file which is open for write, and to add X to the
+> i_version for any "dirty" file still recorded during an unclean
+> restart.  This would avoid bumping the i_version for read-only files.
+
+Is that practical?  Working out the performance tradeoffs sounds like a
+project.
+
+> There may be other solutions, but we should leave that up to the
+> filesystem.  Each filesystem might choose something different.
+
+Sure.
+
+--b.
