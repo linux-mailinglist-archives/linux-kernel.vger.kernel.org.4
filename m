@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198735B9AF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6373C5B9AF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIOMi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S229869AbiIOMiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIOMiX (ORCPT
+        with ESMTP id S229612AbiIOMiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:38:23 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26327E81B;
-        Thu, 15 Sep 2022 05:38:20 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2E87B580A3A;
-        Thu, 15 Sep 2022 08:38:18 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 15 Sep 2022 08:38:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663245498; x=1663249098; bh=GOQu+p1fdW
-        E5Hvw9mjSrByv4wqlK2YtuqQuIjWmQzbM=; b=iK5aPwGsVp4LFDgOT6v1vOcJXd
-        v2t8uJQju2i8NkEtKrotkc5at3C7vkyEkNUUxz9B82lUwXv7Lr21VT80tZNk6Xg0
-        VRUNf0hJD0plBl1FZ5GNRUtEqIwjfFhYH6YW1ePT91pqrlvLL+KGgT89uA9hxfn6
-        y/08rc0ujo57MH7A18qUiPKHanmiiEVUS+YH4kezjtMvb680f/DDVV+g4ZUyIKQF
-        G+8ELEfkrpp9D9oh46zsXllUYrXMC5N+wCJXgEzOA0k0mxgByf2UcCBISBR/xyim
-        HR87b5q8kR/eRvt6H06SHTiTX6L0WAboqXD460/6N0lIuurIpQ/aXNFpRHng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663245498; x=1663249098; bh=GOQu+p1fdWE5Hvw9mjSrByv4wqlK
-        2YtuqQuIjWmQzbM=; b=XaP2SxmoImcj1BJ6jg8g6fEGc6KHKH0i4XzjSPePeibz
-        wZwJE85YQWmeqJeFt25ucs8DVPCn4dDPa1/zkBlnTXJLa+V6CNhcZRSOI0TEpwhA
-        GzICWSWNfPluom+CS1n8uoEzUs6YOUouK+x+auOp4GJxMAqFCx3F+gIxfFrAao7l
-        bI6qVKdN1+VIslJf/FV3mxocas2V9/2nfiWksIwRSfJWzitRtJrTLOKoB7FGL+EX
-        LTdB6SDyV8+n5Qiv70X6A8yHCmG+6Ks7xS44poXj+NO1UANnO7uID7gtTHKu9nMj
-        MYZ4+v+XA8xhFq/2uDZMtGVBPM5pgY7lPEQhofEKkQ==
-X-ME-Sender: <xms:uRwjYxy4457sp1J45hJz17mdgyC-fHkQu3jpgXB8k3GPtPBi2CSV8g>
-    <xme:uRwjYxSoJIjfQx0nTyxs4Dx5qqAUuU5SZqiJUKACxcFlBExpeOjL0uW3XHBMSFWC6
-    QlwuabPhy0cW1anTu4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffgeffuddtvdehffefleethfejjeegvdelffejieegueetledvtedtudelgfdu
-    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:uRwjY7XgbSh2gejrUG0URQLMnh5ZCUjw7_jlihEsNOxC_rdc_UmOjg>
-    <xmx:uRwjYzi3alBKqtNJCZvnBe4DCeR0e54CtjSK3-tNYoEucuiBBLJ1yw>
-    <xmx:uRwjYzAX8NFJFzjqDJ6_8NkuIZ2gBRjnK9nUrTeL3waIGlxcMFuKJw>
-    <xmx:uhwjY1QFxdp0oD-rFYiv-ob2eFLeh0JULhb9m9QbhYG0ddWSVtPZqQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9768BB60089; Thu, 15 Sep 2022 08:38:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
-In-Reply-To: <20220915050106.650813-1-parav@nvidia.com>
-References: <20220915050106.650813-1-parav@nvidia.com>
-Date:   Thu, 15 Sep 2022 14:37:57 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Parav Pandit" <parav@nvidia.com>, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>, boqun.feng@gmail.com,
-        "Nicholas Piggin" <npiggin@gmail.com>, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        "Paul E. McKenney" <paulmck@kernel.org>, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        "Jonathan Corbet" <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] locking/memory-barriers.txt: Improve documentation for writel()
- usage
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 08:38:51 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D580EA3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:38:49 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso13746289wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=kbiyzXIrqqVnS3Or15etF5uykJHCKO1KdtudfrmDI3U=;
+        b=iA0FYP2uzJZ+HGL/O25lhf8+gT/9xEuMkiR6ptAaSuYurAgUKJoi2GlBXiQSKUAF+p
+         hZzzJb2lM7JVSh4E4n9RncjJCGh/Sq3IZMRnSekPPzXm6v6A0C2V+7UoucrHUuT30oUs
+         G7kqul1+r7dFC6HjbQ1fQpa4uCOwJCFgrtNemj3ne4UWjzmyLLG/bakhiqMgjI4jV6oy
+         5z76jiwsRZNmrU3i0M+ollZj7mpsmtIcdC58n+Su9zer/wZouWmiuZZ+xEApDNwRh/Vq
+         t7RrrX8/07LJKtAv3J72NgS21tZIMhH9FS3Au/pLQYraYGX5RK77b7bh9vwvXf64J1Sc
+         x1tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kbiyzXIrqqVnS3Or15etF5uykJHCKO1KdtudfrmDI3U=;
+        b=7j9r4ZkgeSqk+7fHNyakYvBk0XjywlAT1flKJVDbtcWH9M+fpYa57fas9Hz1T4kxZk
+         xJ8tY6KXc4BvuAXNS5sbs+kZ8x1pKyUkGsrYoTIoQhkY4npQG5Sn1O0ncFvlMCJfPFaX
+         eCqps74eX2biauR7Pi7EmL0pJOmla1s7dhhWR4nb7QonFnw31ixDhOIKRKs1a7FD3hrR
+         PMeywIsD/3pFoJ6zWrDa6D+NsWffpdpAQz16jl617wfZwrmdpsyElQp5VV7BFvvk+6+X
+         +DamFv8d6hUucZtE6denXxuzvb1Q937sNrlnm3nefW0ut1VjsRC+WrXlvtWRwxoCebgI
+         PEpQ==
+X-Gm-Message-State: ACgBeo1C6kW+rDmNlxNmbfI1L0zBhhRUXLtPNGhBWihntbUFUlQavPo/
+        drIcrWGOhRhyhH5LCJsTDu9fdg==
+X-Google-Smtp-Source: AA6agR6t0LuD3GiIL8CcC5TW8J+oqLST9RZTztmt9uvAY+Da6RjXdnyIFXn4IYzPghMsYlExxPiL+w==
+X-Received: by 2002:a05:600c:19cc:b0:3b4:adca:a821 with SMTP id u12-20020a05600c19cc00b003b4adcaa821mr1715121wmq.37.1663245528107;
+        Thu, 15 Sep 2022 05:38:48 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id bg13-20020a05600c3c8d00b003a5f4fccd4asm3112559wmb.35.2022.09.15.05.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:38:46 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
+        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/9] ASoC: qdsp6: audioreach: add multi-port, SAL and MFC support
+Date:   Thu, 15 Sep 2022 13:38:28 +0100
+Message-Id: <20220915123837.11591-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022, at 7:01 AM, Parav Pandit wrote:
-> The cited commit [1] describes that when using writel(), explcit wmb()
-> is not needed. However, it should have said that dma_wmb() is not
-> needed.
+This patchset adds support to multi-port connections between AudioReach Modules
+which is required for sophisticated graphs like ECNS or Speaker Protection.
+Also as part of ECNS testing new module support for SAL and MFC are added.
 
-Are you sure? As I understand it, the dma_wmb() only serializes
-a set of memory accesses, but does not serialized against an MMIO
-access, which depending on the CPU architecture may require a
-different type of barrier.
 
-E.g. on arm, writel() uses __iowmb(), which like wmb() is defined
-as "dsb(x); arm_heavy_mb();", while dma_wmb() is a "dmb(oshst)".
+Tested on SM8450 with ECNS.
 
-     Arnd
+Thanks,
+Srini
+
+Srinivas Kandagatla (9):
+  ASoC: qdsp6: audioreach: topology use idr_alloc_u32
+  ASoC: qdsp6: audioreach: remove unused connection_list
+  ASoC: qdsp6: audioreach: update dapm kcontrol private data
+  ASoC: qdsp6: audioreach: Simplify handing FE and BE graph connections
+  ASoC: qdsp6: audioreach: simplify module_list sz calculation
+  ASoC: qdsp6: audioreach: add support for more port connections
+  ASoC: qdsp6: audioreach: add support to enable SAL Module
+  ASoC: qdsp6: audioreach: add support for MFC Module
+  ASoC: qdsp6: audioreach: add support to enable module command
+
+ include/uapi/sound/snd_ar_tokens.h |  27 +++
+ sound/soc/qcom/qdsp6/audioreach.c  | 298 ++++++++++++++++++++---------
+ sound/soc/qcom/qdsp6/audioreach.h  |  47 +++--
+ sound/soc/qcom/qdsp6/q6apm.c       |  84 +-------
+ sound/soc/qcom/qdsp6/q6apm.h       |   6 +-
+ sound/soc/qcom/qdsp6/topology.c    | 242 +++++++++++++++++++----
+ 6 files changed, 480 insertions(+), 224 deletions(-)
+
+-- 
+2.21.0
+
