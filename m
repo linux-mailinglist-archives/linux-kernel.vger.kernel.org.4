@@ -2,175 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77B05B9CCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416355B9CD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIOOSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S229964AbiIOOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiIOOST (ORCPT
+        with ESMTP id S229658AbiIOOT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:18:19 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C558B5756B;
-        Thu, 15 Sep 2022 07:18:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mhw8l4wzTj5hK0ten3hZ91AMdPqa3N8wuFz+l5+KMUDt9hFJZYFgREX05N8pvwGqx9DUIlP7DmZRtTm6aZSi6HumLTz0aHI74bHFfqoUfseyJmCJ1XO4HsdulmSxz8Yp018u8aqHOYQ/AJwdJCc51xIOYACFobBRt/nUzutBxjDOEDkY2JQrMnGI0NTj1UXZ5zETNmyBvpmqbsTJiO9LaYSYEVG5lvzPLhdOJtCz6l0QIQH+PsvNyncE3Eyli1+uWwWNbEMuqcaNifl4j3hmn4/3vofWiQbX27kpJ+BtvJeFGvV47PlvNGIuYCZbkNKG9jt9MJLxu1zjhuosYgL+9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/PTtfh2WqJrjUDO/yi+uESM0WQ/Sp0zHf+EoR0D07u8=;
- b=B4u1CpiseNYIHQy92A8nYSTYp9fltX8xHXNjSrpo/dMnpYMLOPhH0rmhPG0YcMw1G6VODToBL+zD+vBblnvZgS3213+1RzQHoEGNR6AZJiCftTqPe6R03UGqFTNM6r5M7ixFXpfW/5Eh/KRb7xDaR4KSF3rpfiLwJxD/FYmZKmmEm/GV+unWYq7yEA2x8wr5xitY04VqJySnXO+c4Mz7USGVJHx4gwDyXc89FjWIDWcj0tTaLrnrFKs/tHOuudb13OmrcnMx+83uq0ZWfv7GYY28VDFjKj3TncORR0wHVxF9sCvcmojjLIQgdI0Q0PHedNFoNGw2/rgM72fj8IWS3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/PTtfh2WqJrjUDO/yi+uESM0WQ/Sp0zHf+EoR0D07u8=;
- b=EQDVk1RR/7gUV4J/XcGnZHOtt8+q8iHmGeFpZtCQsG4EDrnyrBfUVe7CF3mEFKdt6DuUTz6YAGCb/WuC0rE2f/QCiIBxbFjzLaBME2EVxNJ3m0LQT7bsdIPckNNZx/sXk2InMQcLaKECTtp6KDz1ScNz1sMzu0G9Vue6YF2mvrsZlhqzyp2xlWJ5kfdwiuw0s75JEfpAv8rM5MufAa62hw/gN0jAI03mRizJKG/PI+F8YjsayExoiNfo6JtSwYQfnf0MNRIFeUU0EvY3BArmjVRTSBKtfOZ4c+o3953rBkGVsiEpmCL91abIA2ZiUgjinrI7JhEtoADpszqnWbZ3ow==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by SA1PR12MB6727.namprd12.prod.outlook.com (2603:10b6:806:256::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Thu, 15 Sep
- 2022 14:18:16 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1429:e3e9:dc54:ba98]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1429:e3e9:dc54:ba98%9]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 14:18:15 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        Dan Lustig <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH] locking/memory-barriers.txt: Improve documentation for
- writel() usage
-Thread-Topic: [PATCH] locking/memory-barriers.txt: Improve documentation for
- writel() usage
-Thread-Index: AQHYyMA9YvMyHkwA3EyvMDv7VnmV1K3gbnaAgAAIXgA=
-Date:   Thu, 15 Sep 2022 14:18:15 +0000
-Message-ID: <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <20220915050106.650813-1-parav@nvidia.com>
- <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
-In-Reply-To: <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|SA1PR12MB6727:EE_
-x-ms-office365-filtering-correlation-id: 9c33f1e7-4004-4c49-15c8-08da97252194
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0hZA2al4zLAzsbA9oZo+vEWTCrKqd8/UQVDgMPn5fprSzySP/6b019lFY71rKtYxEeZGcXKY1I8Cu7D9or6ST2NMD2eKDsSykxZaj/5q50AwQUxDx6GOxTtmIlDRevzb8NhMBoYTRU5BHzg+/9MieRt9MW8g1UH/3Absn3ktrUraf6rVX0yaQ5aHnNJw13gPj5loqbsjtOGOOu6SX2q5ydG1zW6DtR+2/hz7EVbPxj3j5O/y+r+Sv4GMuqC8bHQMvyMveQfUf/mPEewn5TXneVoFoNFQnslwrdyjafN7qd90VAE5Uw060RXtA7c5pl0O9wsCXrKEinPGbPjIQHO7idEfpK/34/+5BEJ6LwqB0aKpCp+UjwHU0hLYd5RgheJ+MWieOVznivbKHi9bTkdmXjiquEdJAb0JLsZOlQhin6LaLLsGQv4EbycUwWsxAXz1DExtk2STti97ogv/dqimP9tvaX4wmyvQAEmo/DPoDY3PpnKNxetTCZh6zgRFK5j25Zem/3e7dGPjOIuRPdmsAMXDiAv57I9ZT6e9g/2iK0DB+qFs30edpNL/J1yQyCFIVvtuyyMFCZg1dPVVSBzsYmKPurReP0GjWF3M/isHlgunjaZ7aju/7FG3RGvRF4lI8M+8zC+EVtEdgxFQs9uMH9GHe/qrZygt8RrWD+ijC6mdIAG4KQ3Xwk82reOzv+cP0NvK7r6s9+sB8R42ORB/Sz/F00VanrQcHwZbr1wDBL7Gl54n9ygfcIH1iojGs9hPeWnc6SfJvxCAl9EInQKriscRhNF7DSRsXzwixxmFMy4Trj49VyOZmZWyQWDRv4Ufmgp9oX4Jy1a83Ws6wIzojMDDQbIU0brBx4KdYDGwwudUinijv/XongetWYDhhTBBhVCPrH9RQqRnC/9ZW7OQeIn/46yBHgkPOdxafcekV78=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199015)(7416002)(5660300002)(38100700002)(122000001)(966005)(8676002)(921005)(7696005)(66556008)(64756008)(9686003)(71200400001)(8936002)(38070700005)(66946007)(76116006)(52536014)(478600001)(6506007)(316002)(83380400001)(186003)(66476007)(86362001)(55016003)(110136005)(41300700001)(33656002)(2906002)(26005)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ibt43f1gkSpaGW/djU/XnB4sQ+Wy4coJU4YIXMGrvtVikEXYB12nZxkgF35Y?=
- =?us-ascii?Q?qalHc2Z+JeUfZzV0PFlB+KHpIZZzbgZJBJJZ/evC7RKPVgVTN4bauLPrOtFj?=
- =?us-ascii?Q?GvCNzBEWhdNzvQh+eikN8XFWniEfRmngOV4M1hQ87wQ5uIHJbnFiM1YpIB0Q?=
- =?us-ascii?Q?GkLeDzRhFBbR7EThS6mI38VD5Asvn5S25salhvsLdxmYZ5fuE+MdjJQOUFur?=
- =?us-ascii?Q?oT+6XoTBevYLt1fiJx5MaSRB3O4jZbw80RBYcm9eSCK6jCmz4/xj33x29ft3?=
- =?us-ascii?Q?Kc0S4Qu98wjeMWgB3d2QlY+Qlz5ozIPLVgpNX1j9w+brH9JSRalcB17P5xoc?=
- =?us-ascii?Q?+eZlbgGdv55X7hP3FIi8WMUtiGg9QTW7d7djYN5yXxoHN2pkPZR8Nl48taCr?=
- =?us-ascii?Q?HJXdcyf6CRyNGxLnuxnDd67kJMI6S0k2L2OC/8iPh/9gLiYLJZUHSyHWlpjO?=
- =?us-ascii?Q?r+RbiIS4YEk0Kv0F3uuiYD7vjBBw5qTZyX/5JJRtoVMoRay8GAMlQSVI9l1o?=
- =?us-ascii?Q?CxH3qSzovbFjhBPhlg4VIDjPzhyu9GgK9HGwRRD46RFz74iy6Q1qavxS2sqY?=
- =?us-ascii?Q?RSkUNvJ2ahbXXjHw6OnHJyFQueCPi52QU61R0zCWuEdwuSiFJPcmn239nTm1?=
- =?us-ascii?Q?A72PR4EeUzU+fyfWeI7molOCXr2QybbQ5njRpiWu2T5+bxMZbjSIvK1LQnxu?=
- =?us-ascii?Q?4YijEz2C0Am7ra7otlhryBc/4EZia7MED9UhuppfnaD5Fga8WCaOzUNx5rgn?=
- =?us-ascii?Q?42d14nry4PYagz58J5om6sKy9gTDpGlZ1s5YjSHDp1LajxxRxeptfb8xup3t?=
- =?us-ascii?Q?7Xa4tD1q6moqlCRvVdBA5zWQjLam0CzgYJKI/QoMGUE9DV4fioih8wFB1gwM?=
- =?us-ascii?Q?PdkxpOMFM11ZHXicLxmO24BCWUkqSMLT1Wlrz6o7ckjuZ66CnIv68rFWgOp2?=
- =?us-ascii?Q?GJ7SINcvXc7B9HeHXCOWcg/cN1woerXiWfcrAyx3Slf5WUTMQmhymkvoFvKZ?=
- =?us-ascii?Q?G3UiNnE4P75wZo0bKLMgfNpZ0KkBzO54LBSkBpEN0RFsRHXPUCAIfaOC+/KD?=
- =?us-ascii?Q?cp5Rj/IhhJuBzyAKtlJMTa05V3DQDWiewV/W6Vak+jFUpEHkpfr7MDNaOksU?=
- =?us-ascii?Q?DrxlekGNXqpj89a1TsNCV+59Xg1VO9BtCzYceWB8x1T4cfjkPd43MX/0MiIZ?=
- =?us-ascii?Q?9UOzlvlYz8Llv8MXYLR58op/l06yrbWZC3NfF2mH/76a8TAaSX3gYHcneFPC?=
- =?us-ascii?Q?atbErGs938i54jwRNT+MmVcCd19wDDgPBLMnyPvVUsziRO4HyOBAn2djTO8R?=
- =?us-ascii?Q?FkKPYGnghhSHwOighLzthxZcSobt9THmphDH3xDIxInJr4KlUeBATNENoh+q?=
- =?us-ascii?Q?hQRj1ubsl9gAUlXRTmanDesJnCLGlxOIXY4ewnlBFUvf2Azy8ns80+4Kc89J?=
- =?us-ascii?Q?VMGbrGJ5i7kipSdU/yLSOyCYDqvDrInuLZ8EfTqs9zj0jr+atMi3sTtoNPnQ?=
- =?us-ascii?Q?XX4ScyM5VTSiWFyZIgvCnZISKDRO/wNdw3O4z+OMRgWyqMVD9uDsJDE9i1z7?=
- =?us-ascii?Q?HBzCFSs0aC5uTHRIGQ4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 15 Sep 2022 10:19:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9A113D54;
+        Thu, 15 Sep 2022 07:19:55 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FDwAqr004664;
+        Thu, 15 Sep 2022 14:19:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=e9LeeLBE4JM5JRdFbkKri5Ubkno9MyGtZ0ux8jhpeZU=;
+ b=As77NeEhD3W+ol0gSTjGHmAKX28LbETpHRadcXurG5u8Wrzoo1eb6d1t+l9GuJVvPDMu
+ CuQukxW9d2oQE7sgAxs2oOtigvtSSX0JSxmucDnOiqMjE8+pDYVuwjeXKzO3TuIKVxcY
+ 1BoDwCOri3P/TbeGAw5bHrWXJ0gfVdjJg0bJ3igz8qAOttwAdRgj4CtQ/BGnJ5DQDtpQ
+ CPoZrHuq0kWsWTrtVRTL3p//Tv4IEYH+lnb1ZdsJo+UO8fHuxs0284XwoOehD/eSHrIi
+ A87lswn936u4JyNF+WCm+JEkekKSgTb0hQ6jGofNgYX/zjXigOvaZ8srFNfZ8F8sXziM gQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxyvpp28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 14:19:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28FEJkDQ007145
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 14:19:46 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 15 Sep 2022 07:19:42 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
+        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
+Subject: [PATCH V10 0/7]  Add driver support for Data Capture and Compare Engine(DCC) for SM8150,SC7280,SC7180,SDM845
+Date:   Thu, 15 Sep 2022 19:48:40 +0530
+Message-ID: <cover.1663250639.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c33f1e7-4004-4c49-15c8-08da97252194
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2022 14:18:15.8814
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YwOJM9lbTeta4dUkQ4dTVTV15pXcbML9ziBgSCxWqnJJWmThGtSNyIP/KuKPFwmBtFe+R1XroKVqFlqpK+bM9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6727
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cgs73u5xa-pGpEsZEJNaRDvd_DfsfJMM
+X-Proofpoint-ORIG-GUID: cgs73u5xa-pGpEsZEJNaRDvd_DfsfJMM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_08,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209150083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> Sent: Thursday, September 15, 2022 8:38 AM
->=20
-> On Thu, Sep 15, 2022, at 7:01 AM, Parav Pandit wrote:
-> > The cited commit [1] describes that when using writel(), explcit wmb()
-> > is not needed. However, it should have said that dma_wmb() is not
-> > needed.
->=20
-> Are you sure? As I understand it, the dma_wmb() only serializes a set of
-> memory accesses, but does not serialized against an MMIO access, which
-> depending on the CPU architecture may require a different type of barrier=
-.
->=20
-> E.g. on arm, writel() uses __iowmb(), which like wmb() is defined as "dsb=
-(x);
-> arm_heavy_mb();", while dma_wmb() is a "dmb(oshst)".
+DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+In case of a system crash or manual software triggers by the user the DCC hardware
+stores the value at the register addresses which can be used for debugging purposes.
+The DCC driver provides the user with debugfs interface to configure the register
+addresses. The options that the DCC hardware provides include reading from registers,
+writing to registers, first reading and then writing to registers and looping
+through the values of the same register.
 
-You are right, on arm heavy barrier dsb() is needed, while on arm64, dmb(os=
-hst) is sufficient.
+In certain cases a register write needs to be executed for accessing the rest of the
+registers, also the user might want to record the changing values of a register with
+time for which he has the option to use the loop feature.
 
-So more accurate documentation is to say that=20
-'when using writel() a prior IO barrier is not needed ...'
+The options mentioned above are exposed to the user by debugfs files once the driver
+is probed. The details and usage of this debugfs files are documented in
+Documentation/ABI/testing/debugfs-driver-dcc.
 
-How about that?
+As an example let us consider a couple of debug scenarios where DCC has been proved to be
+effective for debugging purposes:-
 
-It started with my cleanup efforts to two drivers [1] and [2] that had diff=
-iculty in using writel() on 32-bit system, and it ended up open coding writ=
-el() as wmb() + mlx5_write64().
+i)TimeStamp Related Issue
 
-I am cleaning up the repetitive pattern of,=20
-wmb();
-mlx5_write64()
+On SC7180, there was a coresight timestamp issue where it would occasionally be all 0
+instead of proper timestamp values.
 
-Before I fix drivers, I thought to improve the documentation that I can fol=
-low. :)
+Proper timestamp:
+Idx:3373; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x13004d8f5b7aa; CC=0x9e
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/infiniband/hw/ml=
-x5/wr.c#L1042
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/mel=
-lanox/mlx5/core/en/txrx.h#L226
+Zero timestamp:
+Idx:3387; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x0; CC=0xa2
+
+Now this is a non-fatal issue and doesn't need a system reset, but still needs
+to be rootcaused and fixed for those who do care about coresight etm traces.
+Since this is a timestamp issue, we would be looking for any timestamp related
+clocks and such.
+
+We get all the clk register details from IP documentation and configure it
+via DCC config_read debugfs node. Before that we set the current linked list.
+
+/* Program the linked list with the addresses */
+echo R 0x10c004 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c008 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c00c > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c010 > /sys/kernel/debug/dcc/../3/config
+..... and so on for other timestamp related clk registers
+
+/* Other way of specifying is in "addr len" pair, in below case it
+specifies to capture 4 words starting 0x10C004 */
+
+echo R 0x10C004 4 > /sys/kernel/debug/dcc/../3/config_read
+
+/* Enable DCC */
+echo 1 > /sys/kernel/debug/dcc/../3/enable
+
+/* Run the timestamp test for working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram1.bin
+
+/* Run the timestamp test for non-working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram2.bin
+
+Get the parser from [1] and checkout the latest branch.
+
+/* Parse the SRAM bin */
+python dcc_parser.py -s dcc_sram1.bin --v2 -o output/
+python dcc_parser.py -s dcc_sram2.bin --v2 -o output/
+
+Sample parsed output of dcc_sram1.bin:
+
+<hwioDump version="1">
+        <timestamp>03/14/21</timestamp>
+            <generator>Linux DCC Parser</generator>
+                <chip name="None" version="None">
+                <register address="0x0010c004" value="0x80000000" />
+                <register address="0x0010c008" value="0x00000008" />
+                <register address="0x0010c00c" value="0x80004220" />
+                <register address="0x0010c010" value="0x80000000" />
+            </chip>
+    <next_ll_offset>next_ll_offset : 0x1c </next_ll_offset>
+</hwioDump>
+
+ii)NOC register errors
+
+A particular class of registers called NOC which are functional registers was reporting
+errors while logging the values.To trace these errors the DCC has been used effectively.
+The steps followed were similar to the ones mentioned above.
+In addition to NOC registers a few other dependent registers were configured in DCC to
+monitor it's values during a crash. A look at the dependent register values revealed that
+the crash was happening due to a secured access to one of these dependent registers.
+All these debugging activity and finding the root cause was achieved using DCC.
+
+DCC parser is available at the following open source location
+
+https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/dcc_parser
+
+Changes in V10
+
+*The comments on version 9 are implemented.
+
+Souradeep Chowdhury (7):
+  dt-bindings: Added the yaml bindings for DCC
+  soc: qcom: dcc:Add driver support for Data Capture and Compare
+    unit(DCC)
+  MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
+    support
+  arm64: dts: qcom: sm8150: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sc7280: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support
+    node
+
+ Documentation/ABI/testing/debugfs-driver-dcc       |   98 ++
+ .../devicetree/bindings/arm/msm/qcom,dcc.yaml      |   44 +
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |    6 +
+ drivers/soc/qcom/Kconfig                           |    8 +
+ drivers/soc/qcom/Makefile                          |    1 +
+ drivers/soc/qcom/dcc.c                             | 1343 ++++++++++++++++++++
+ 10 files changed, 1526 insertions(+)
+ create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
+ create mode 100644 drivers/soc/qcom/dcc.c
+
+-- 
+2.7.4
+
