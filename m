@@ -2,71 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042EC5B94AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545B65B94B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiIOGo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229693AbiIOGqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIOGoN (ORCPT
+        with ESMTP id S229959AbiIOGp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:44:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E85896750;
-        Wed, 14 Sep 2022 23:44:09 -0700 (PDT)
-X-UUID: dba8270642a84b609807bd9cee491025-20220915
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4RayBIx8fpgv/JRMfqcE3Iv+08TaIj0FKXAYZOJDnL4=;
-        b=lT7NhV22mzHm6OmUlYYcHm8fdXkEl+44UUsDFiEUHyyNfcADiAyWE7uwHY1vDMjLVbe5i3k8YcbyqLR4yCWEPKtbt6KBkA3o0FKOVZ2PJ1Ao8e3+BM0sVeLhf33aUaSr1BcljCprRYF/lnmb+JwZg6bB/j3I6DVtuOzzlOzmvLU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:2d1930ba-f2dd-44f1-9de9-54c85860bf16,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:e791bb5d-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: dba8270642a84b609807bd9cee491025-20220915
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2110909497; Thu, 15 Sep 2022 14:44:04 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 15 Sep 2022 14:44:03 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 15 Sep 2022 14:44:02 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
-        kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, irui wang <irui.wang@mediatek.com>
-Subject: [V14,09/15] media: mtk-jpegdec: export jpeg decoder functions
-Date:   Thu, 15 Sep 2022 14:43:37 +0800
-Message-ID: <20220915064337.2686-10-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220915064337.2686-1-irui.wang@mediatek.com>
-References: <20220915064337.2686-1-irui.wang@mediatek.com>
+        Thu, 15 Sep 2022 02:45:56 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E13E2613;
+        Wed, 14 Sep 2022 23:45:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPrYcVl_1663224302;
+Received: from 30.221.129.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPrYcVl_1663224302)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 14:45:03 +0800
+Message-ID: <cb498259-08a1-2d94-c725-0188633efdb7@linux.alibaba.com>
+Date:   Thu, 15 Sep 2022 14:45:02 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 2/6] erofs: code clean up for fscache
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
+        xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, huyue2@coolpad.com
+References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
+ <20220914105041.42970-3-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220914105041.42970-3-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,64 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
 
-mtk jpeg decoder is built as a module, export some functions to make them
-visible by other modules.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On 9/14/22 6:50 PM, Jia Zhu wrote:
+>  
+> @@ -485,13 +481,13 @@ void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
+>  	ctx->inode = NULL;
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index 1e3852295f2f..d2f25f43e852 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -189,6 +189,7 @@ int mtk_jpeg_dec_fill_param(struct mtk_jpeg_dec_param *param)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_fill_param);
- 
- u32 mtk_jpeg_dec_get_int_status(void __iomem *base)
- {
-@@ -200,6 +201,7 @@ u32 mtk_jpeg_dec_get_int_status(void __iomem *base)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_get_int_status);
- 
- u32 mtk_jpeg_dec_enum_result(u32 irq_result)
- {
-@@ -216,11 +218,13 @@ u32 mtk_jpeg_dec_enum_result(u32 irq_result)
- 
- 	return MTK_JPEG_DEC_RESULT_ERROR_UNKNOWN;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_enum_result);
- 
- void mtk_jpeg_dec_start(void __iomem *base)
- {
- 	writel(0, base + JPGDEC_REG_TRIG);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_start);
- 
- static void mtk_jpeg_dec_soft_reset(void __iomem *base)
- {
-@@ -240,6 +244,7 @@ void mtk_jpeg_dec_reset(void __iomem *base)
- 	mtk_jpeg_dec_soft_reset(base);
- 	mtk_jpeg_dec_hard_reset(base);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_reset);
- 
- static void mtk_jpeg_dec_set_brz_factor(void __iomem *base, u8 yscale_w,
- 					u8 yscale_h, u8 uvscale_w, u8 uvscale_h)
-@@ -408,3 +413,4 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
- 				   config->dma_last_mcu);
- 	mtk_jpeg_dec_set_pause_mcu_idx(base, config->total_mcu);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
+-	ctx->cookie = NULL;
+-	ctx->inode = NULL;
+
+I think the above two lines can also be deleted. After all @ctx will be
+freed soon.
+
+>  
+>  	kfree(ctx);
+> -	*fscache = NULL;
+>  }
+>  
+
+
 -- 
-2.18.0
-
+Thanks,
+Jingbo
