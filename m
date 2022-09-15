@@ -2,127 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC9D5B9F4B
+	by mail.lfdr.de (Postfix) with ESMTP id B99555B9F4C
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiIOQAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S230024AbiIOQAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiIOP73 (ORCPT
+        with ESMTP id S229712AbiIOP7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:59:29 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FA552821
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:25 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id g3so10671458wrq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:25 -0700 (PDT)
+        Thu, 15 Sep 2022 11:59:38 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2359A2ACA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:32 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id b23so15129271iof.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=t0i/TBZDs7elMmSaK59d+TIsx+y7LWOVQuu86421qJg=;
-        b=XyXui7x1eEUDQwQQYrglR5eB3aj/RM0yZ3vcjpOHBJXQ80mfYNO1sTXtlv++vne7JK
-         /Mb/Gftu6+B1z//gjd9lA9w+3EskiTjR6GrT7VbfPgr8ANZ0NQS/jebJwk/HfeNa1Zda
-         cZUrqR8WgC5m8Ji2tNo7qCIu2tqH3xb97rIUsEvPCDgLx71HziJjgH73WlUiIJahQ3jQ
-         Q8EieUvvkme3gKk3atiXyHnvglkX8hlJtqMig2juqtb2tvbp0M+Tsmq1VTpsrErPWgaY
-         irarFeT8Mcy0NfVUqciaE7pIi1+1tr4hg/t8/EBNNYe53xpssacCXSIjZsl9GO2pMdtn
-         kSfg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=A9MuMr8sNFs+YY+FKNgKXQBhOWjKSVReOcYSP90Jf1A=;
+        b=Ik+US2xysLuHqA26EeZQtVLuRyrG1XfW58naE8RwKWA47z9umdBePuYBCKpZKOXQx4
+         rgcv2+ht9lY6mpF2IWDS8J5lHSbWLocG+63ouJKqeofiMEI+qGCL1wuXO8JcVNIqkayM
+         ONhxT72VMXODD1Zp7KHVGccZVVihwEO+OyYus=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=t0i/TBZDs7elMmSaK59d+TIsx+y7LWOVQuu86421qJg=;
-        b=vUHJ5+0U4sRYCsP/3arJTn14WqgV95/X6g5mUsIW8N8UjhZQLZTgZVxhhPJGjVQPvp
-         0WV56Tz6qBjFW3WBcRRDTaXeBilblrbfknbNyUsbh6ECXUm7U1dF/hKGnt7HzCLPAUqa
-         tglIlvV8bR3+uK3ECmfeAnlGwGEzfKaihbwFXRo7YV94/2T+cPV6OuvFzutJ7W0nL+f4
-         jOx+seVBzNw5fY4mHtMeVb5zs5yL6m3RttedYbCS2uGxEhJEwgN43/rG8wpNpubKo0Ok
-         jPsAYVQwJ7LpgoulndsXVmshw7p2dcmS+R7YvQS49UE1T9K5TpCcRfN86QIe4FcB4Nii
-         K6Mg==
-X-Gm-Message-State: ACrzQf1I9BVyvw5QVPvL5JbrD8sqsSB2nBAiEKsIh10njW66DDG9i9C8
-        sM26AI1MYbcFQ609ZHhiKUg=
-X-Google-Smtp-Source: AMsMyM5/jiNeWYU9WoRMSlLzfCdBR8Xnr6/lfRMXtFiqq8S+1eZjAzfpnQw1yT+m4rqEm6haKmPb+A==
-X-Received: by 2002:adf:cc92:0:b0:22a:361c:20b1 with SMTP id p18-20020adfcc92000000b0022a361c20b1mr205701wrj.691.1663257563771;
-        Thu, 15 Sep 2022 08:59:23 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05600c425100b003a62400724bsm3475950wmm.0.2022.09.15.08.59.22
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=A9MuMr8sNFs+YY+FKNgKXQBhOWjKSVReOcYSP90Jf1A=;
+        b=VUfWsvvmbasP2sfwf0m692LzPDM/Ka0WRg9nkVt1CIXyQcaI22Bx9UWCB7wdtbMvrJ
+         HPmhV4GvIv6jUWg5i/ChF+Uv89CEVjHqSygPnPiNxZRP+yrXBBChPajd5YroRXqpKhke
+         AlL2dPGjxbUgOkbl2/b/RCXb/YsDPhvcJE3PR4Y/c+iLs7yPvhRsrIG1GpkFLawn+fD7
+         KVxA+u3jRntoUSmYCnluONNDwRVW4AhpqBnUIh8v2RQlvdxZ/gnKAud2vLTlvaRpdFKq
+         2/UJ4m1NdW4gcsM2FqIbhI+Ikuq07gMUhOd02oAXFaTYwtQdGVKDnYJHRpobTAhQ+IK1
+         9drA==
+X-Gm-Message-State: ACrzQf2zJl0Hjel8GZ29a0b/7fzMxmrfQSnJA7UYBYYpb38sLh2d2/U7
+        SZH5icKeA6cmdELJUs+nZEKMEQ==
+X-Google-Smtp-Source: AMsMyM7gHn31ptChXvos9nZsLVhPP/4vq9KZDZObUsqXgzrJBDSZbL+iBuAH+HL42QzLb2tXWtp2SA==
+X-Received: by 2002:a05:6602:14c5:b0:689:5640:5b0f with SMTP id b5-20020a05660214c500b0068956405b0fmr170588iow.70.1663257571541;
+        Thu, 15 Sep 2022 08:59:31 -0700 (PDT)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id cx14-20020a056638490e00b0034a036a9a1fsm1322866jab.48.2022.09.15.08.59.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 08:59:22 -0700 (PDT)
-Message-ID: <7c2242ff-f526-a305-9d4b-650427a58a9d@gmail.com>
-Date:   Thu, 15 Sep 2022 17:59:21 +0200
+        Thu, 15 Sep 2022 08:59:30 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 15:59:30 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Rajat Jain <rajatja@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [RESEND PATCH v6] PCI/ASPM: Update LTR threshold based upon
+ reported max latencies
+Message-ID: <YyNL4lwmh0mz5CcV@google.com>
+References: <1663216335-9311-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 2/3] drm/mediatek: dp: Remove unused register definitions
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie
-Cc:     granquet@baylibre.com, daniel@ffwll.ch, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com, ck.hu@mediatek.com,
-        liangxu.xu@mediatek.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220915075028.644-1-rex-bc.chen@mediatek.com>
- <20220915075028.644-3-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220915075028.644-3-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1663216335-9311-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krishna,
 
+Your patch doesn't apply on pci/next due to changes to aspm_calc_l1ss_info()
+from commit 1d46154eed48 ("PCI/ASPM: Refactor L1 PM Substates Control
+Register programming"). Please send a rebased version.
 
-On 15/09/2022 09:50, Bo-Chen Chen wrote:
-> Some definitions in mtk_dp_reg.h are not used, so remove these
-> redundant codes.
+Thanks
+
+Matthias
+
+On Thu, Sep 15, 2022 at 10:02:06AM +0530, Krishna chaitanya chundru wrote:
+> In ASPM driver, LTR threshold scale and value are updated based on
+> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
+> LTR threshold scale and value are greater values than max snoop/non-snoop
+> value.
 > 
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> reported snoop/no-snoop values is greather than or equal to
+> LTR_L1.2_THRESHOLD value.
+> 
+> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->   drivers/gpu/drm/mediatek/mtk_dp_reg.h | 6 ------
->   1 file changed, 6 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp_reg.h b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> index 096ad6572a5e..84e38cef03c2 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> @@ -153,8 +153,6 @@
->   #define CH_STATUS_1_DP_ENC0_P0_MASK			GENMASK(15, 0)
->   #define MTK_DP_ENC0_P0_3094			0x3094
->   #define CH_STATUS_2_DP_ENC0_P0_MASK			GENMASK(7, 0)
-> -#define MTK_DP_ENC0_P0_30A0			0x30a0
-> -#define DP_ENC0_30A0_MASK				(BIT(7) | BIT(8) | BIT(12))
->   #define MTK_DP_ENC0_P0_30A4			0x30a4
->   #define AU_TS_CFG_DP_ENC0_P0_MASK			GENMASK(7, 0)
->   #define MTK_DP_ENC0_P0_30A8			0x30a8
-> @@ -171,8 +169,6 @@
->   #define MTK_DP_ENC0_P0_312C			0x312c
->   #define ASP_HB2_DP_ENC0_P0_MASK				GENMASK(7, 0)
->   #define ASP_HB3_DP_ENC0_P0_MASK				GENMASK(15, 8)
-> -#define MTK_DP_ENC0_P0_3130			0x3130
-> -#define MTK_DP_ENC0_P0_3138			0x3138
->   #define MTK_DP_ENC0_P0_3154			0x3154
->   #define PGEN_HTOTAL_DP_ENC0_P0_MASK			GENMASK(13, 0)
->   #define MTK_DP_ENC0_P0_3158			0x3158
-> @@ -206,8 +202,6 @@
->   #define SDP_PACKET_TYPE_DP_ENC1_P0_MASK			GENMASK(4, 0)
->   #define SDP_PACKET_W_DP_ENC1_P0				BIT(5)
->   #define SDP_PACKET_W_DP_ENC1_P0_MASK			BIT(5)
-> -#define MTK_DP_ENC1_P0_328C			0x328c
-> -#define VSC_DATA_RDY_VESA_DP_ENC1_P0_MASK		BIT(7)
->   #define MTK_DP_ENC1_P0_3300			0x3300
->   #define VIDEO_AFIFO_RDY_SEL_DP_ENC1_P0_VAL		2
->   #define VIDEO_AFIFO_RDY_SEL_DP_ENC1_P0_MASK		GENMASK(9, 8)
+> I am taking this patch forward as prasad is no more working with our org.
+> changes since v5:
+> 	- no changes, just reposting as standalone patch instead of reply to
+> 	  previous patch.
+> Changes since v4:
+> 	- Replaced conditional statements with min and max.
+> changes since v3:
+> 	- Changed the logic to include this condition "snoop/nosnoop
+> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> Changes since v2:
+> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> Changes since v1:
+> 	- Added missing variable declaration in v1 patch
+> ---
+>  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index a96b742..676c03e 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  {
+>  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+>  	u32 val1, val2, scale1, scale2;
+> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+>  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+>  	u32 ctl1 = 0, ctl2 = 0;
+>  	u32 pctl1, pctl2, cctl1, cctl2;
+>  	u32 pl1_2_enables, cl1_2_enables;
+> +	u16 ltr;
+> +	u16 max_snoop_lat, max_nosnoop_lat;
+>  
+>  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+>  		return;
+>  
+> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> +	if (!ltr)
+> +		return;
+> +
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> +
+> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	/* choose the greater max scale value between snoop and no snoop value*/
+> +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> +
+> +	/* choose the greater max value between snoop and no snoop scales */
+> +	max_val = max(max_snp_val, max_nsnp_val);
+> +
+>  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+>  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  	 */
+>  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+>  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> +
+> +	/*
+> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
+> +	 */
+> +	scale = min(scale, max_scale);
+> +	value = min(value, max_val);
+> +
+>  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+>  
+>  	/* Some broken devices only support dword access to L1 SS */
+> -- 
+> 2.7.4
+> 
