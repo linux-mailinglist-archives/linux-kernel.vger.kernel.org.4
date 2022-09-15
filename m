@@ -2,231 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57195B989B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71175B989F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiIOKO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 06:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229644AbiIOKR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 06:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiIOKOw (ORCPT
+        with ESMTP id S229499AbiIOKR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:14:52 -0400
-Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743ED2AC4A;
-        Thu, 15 Sep 2022 03:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1663236887; i=@fujitsu.com;
-        bh=5rA+LtPldd34XfUCE03AbLaVBytQ4Y6/eJyolwCDIJY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=b484MohMz8TISWPQrZxHnaYLRSxUPK0M7fFX23RsU9Xu4OAy9Qpfl1YD64S7Efup9
-         HSkzMBtIFe2sSmRnFnZ5yFrbTHL+alA6H+MvoyYbfrJj9ukxAiDDflf40SXKG1ngN9
-         rIxVmZ6VoDOYi1wo9mgMf+uYVYAv9re9EO5bGs/+IMS5olI5gDat7v9qb6Fwadwm4/
-         AysndWxnMywmWoYYizdFyn0e2wxLcp4B2fjwyU9raKZwj7Bu5upDsIHCHMdqeut6wb
-         3wOAsWV3k/dToIr6NE0dF1oLQtRbzhWZFpio9mSEQRnS+95vtMXwI9rV3508Gp5Coc
-         aZ0SeoJWRITmw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRWlGSWpSXmKPExsViZ8ORqCv2Wyn
-  Z4N4OU4t3n6ssthy7x2hx+QmfxekJi5gs9uw9yWJxedccNotdf3awW6z88YfVgcPj1CIJj80r
-  tDw2repk83ixeSajx/t9V9k8Pm+SC2CLYs3MS8qvSGDNWLz5LGNBi0bFq3lLGBsYP8t3MXJyC
-  AlsYZRY1ejVxcgFZC9nkjj85BMjhLONUWLC76+sIFW8AnYS0/ffZQexWQRUJfquNUHFBSVOzn
-  zCAmKLCiRJXN1wFywuLOArsXZTHzOILSLgI9FwZDsryFBmgUnMEqvnLGeB2LCDWeJZ9xmwDjY
-  BR4l5szaygdicAhoSTa+uMYLYzAIWEovfHGSHsOUlmrfOBpsqIaAo0bbkHzuEXSHROP0QE4St
-  JnH13CbmCYxCs5AcOAvJqFlIRi1gZF7FaJtUlJmeUZKbmJmja2hgoGtoaAqkjXQNTY31Eqt0E
-  /VSS3Xz8otKMnQN9RLLi/VSi4v1iitzk3NS9PJSSzYxAqMtpTht5g7GLft+6R1ilORgUhLlvX
-  pUKVmILyk/pTIjsTgjvqg0J7X4EKMMB4eSBC/fV6CcYFFqempFWmYOMPJh0hIcPEoivJVvgNK
-  8xQWJucWZ6RCpU4zGHOd37t/LzDFv9r/9zEIsefl5qVLivIt+AJUKgJRmlObBDYIlpEuMslLC
-  vIwMDAxCPAWpRbmZJajyrxjFORiVhHl7vgNN4cnMK4Hb9wroFCagU4ys5UFOKUlESEk1MJ37I
-  jfh8WKW/Dkpk+6vOxBZus7IS2ZLTcOt/yvmzXS/NpupaF69+ZbvUau8PrwKczuw77BwlX+b5f
-  93VTG1/79F8Fy/bPbrQ71J7RPZtdZFH7mySx39vlW84xG9d2ZqLOvslRl+W+Vqnd793e5Uwv5
-  k6g+ZOOvzR1Y5CamKd3+OUTXwvjJnhknJzcvtK90LD7BeOVt58cWhjcv37mjoXbuwOJxh9ouy
-  l6/UM6dve2Rru/hc35ypRWerd7fJyh2J1+ETX9W3S/2OWduSxNZdmVVdJXM+3JvkuFFS3HP/M
-  97nR5V/2UY2fvXOqTj7PHN1d+mxHkd53Q8Zhzh+P9W87SN1lJ/h834WCY4XebnhprVKLMUZiY
-  ZazEXFiQBFIIukwwMAAA==
-X-Env-Sender: yangx.jy@fujitsu.com
-X-Msg-Ref: server-10.tower-732.messagelabs.com!1663236886!10008!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 31016 invoked from network); 15 Sep 2022 10:14:46 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-10.tower-732.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 15 Sep 2022 10:14:46 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 3BC87100194;
-        Thu, 15 Sep 2022 11:14:46 +0100 (BST)
-Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        Thu, 15 Sep 2022 06:17:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027AC8B2FD;
+        Thu, 15 Sep 2022 03:17:24 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 2F3B1100191;
-        Thu, 15 Sep 2022 11:14:46 +0100 (BST)
-Received: from [10.167.215.54] (10.167.215.54) by
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Thu, 15 Sep 2022 11:14:39 +0100
-Message-ID: <a6e7f4eb-0664-bbe8-98d2-f8386b226113@fujitsu.com>
-Date:   Thu, 15 Sep 2022 18:14:26 +0800
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 08B7B6601FC1;
+        Thu, 15 Sep 2022 11:17:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663237042;
+        bh=VBjmGTPbnCwAAvGk/ff1IN7gQbWyskRYE92etNw3s84=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kQbe9/EZuy0ox4Mxfil4UtJ9AL8r5l+zM4oGImFZpoYLeRalRYcH46tdiY/K9y9K/
+         FDMADdX8OSCtWfJ/NVu+qecAIYDcou5gywuvEEmeXj0Tvkv/Y4KypcVhhUfn84RaDK
+         KJMZE7uEtmxMqS419CNZMN44ZHlYWACiL6+9r6rT7lwhCrtN2EaPPhG4876HpnE1AF
+         fo9RsFntwHWRudOJzemTNJMW9Zh+HVO55dQD6pYTXZA4jAIUjXGvXUY48ULke+1yra
+         gc6sFmKFhQcPnSf/4htTCDI0HVgTNV43e5vb7U8C4TAMwFYn+S/WNjZ9RMB6Zq5J4Y
+         KcsbE40D6lOWw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robh+dt@kernel.org
+Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] dt-bindings: mailbox: Convert mtk-gce to DT schema
+Date:   Thu, 15 Sep 2022 12:17:16 +0200
+Message-Id: <20220915101716.70225-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>
-CC:     =?UTF-8?B?UnVhbiwgU2hpeWFuZy/pmK4g5LiW6Ziz?= 
-        <ruansy.fnst@fujitsu.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "hch@infradead.org" <hch@infradead.org>
-References: <Ytl7yJJL1fdC006S@magnolia>
- <7fde89dc-2e8f-967b-d342-eb334e80255c@fujitsu.com>
- <YuNn9NkUFofmrXRG@magnolia>
- <0ea1cbe1-79d7-c22b-58bf-5860a961b680@fujitsu.com>
- <YusYDMXLYxzqMENY@magnolia>
- <dd363bd8-2dbd-5d9c-0406-380b60c5f510@fujitsu.com> <Yxs5Jb7Yt2c6R6eW@bfoster>
- <7fdc9e88-f255-6edb-7964-a5a82e9b1292@fujitsu.com>
- <76ea04b4-bad7-8cb3-d2c6-4ad49def4e05@fujitsu.com> <YyHKUhOgHdTKPQXL@bfoster>
- <YyIBMJzmbZsUBHpy@magnolia>
-From:   =?UTF-8?B?WWFuZywgWGlhby/mnagg5pmT?= <yangx.jy@fujitsu.com>
-In-Reply-To: <YyIBMJzmbZsUBHpy@magnolia>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.167.215.54]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/15 0:28, Darrick J. Wong wrote:
-> On Wed, Sep 14, 2022 at 08:34:26AM -0400, Brian Foster wrote:
->> On Wed, Sep 14, 2022 at 05:38:02PM +0800, Yang, Xiao/杨 晓 wrote:
->>> On 2022/9/14 14:44, Yang, Xiao/杨 晓 wrote:
->>>> On 2022/9/9 21:01, Brian Foster wrote:
->>>>> Yes.. I don't recall all the internals of the tools and test, but IIRC
->>>>> it relied on discard to perform zeroing between checkpoints or some such
->>>>> and avoid spurious failures. The purpose of running on dm-thin was
->>>>> merely to provide reliable discard zeroing behavior on the target device
->>>>> and thus to allow the test to run reliably.
->>>> Hi Brian,
->>>>
->>>> As far as I know, generic/470 was original designed to verify
->>>> mmap(MAP_SYNC) on the dm-log-writes device enabling DAX. Due to the
->>>> reason, we need to ensure that all underlying devices under
->>>> dm-log-writes device support DAX. However dm-thin device never supports
->>>> DAX so
->>>> running generic/470 with dm-thin device always returns "not run".
->>>>
->>>> Please see the difference between old and new logic:
->>>>
->>>>             old logic                          new logic
->>>> ---------------------------------------------------------------
->>>> log-writes device(DAX)                 log-writes device(DAX)
->>>>               |                                       |
->>>> PMEM0(DAX) + PMEM1(DAX)       Thin device(non-DAX) + PMEM1(DAX)
->>>>                                             |
->>>>                                           PMEM0(DAX)
->>>> ---------------------------------------------------------------
->>>>
->>>> We think dm-thin device is not a good solution for generic/470, is there
->>>> any other solution to support both discard zero and DAX?
->>>
->>> Hi Brian,
->>>
->>> I have sent a patch[1] to revert your fix because I think it's not good for
->>> generic/470 to use thin volume as my revert patch[1] describes:
->>> [1] https://lore.kernel.org/fstests/20220914090625.32207-1-yangx.jy@fujitsu.com/T/#u
->>>
->>
->> I think the history here is that generic/482 was changed over first in
->> commit 65cc9a235919 ("generic/482: use thin volume as data device"), and
->> then sometime later we realized generic/455,457,470 had the same general
->> flaw and were switched over. The dm/dax compatibility thing was probably
->> just an oversight, but I am a little curious about that because it should
-> 
-> It's not an oversight -- it used to work (albeit with EXPERIMENTAL
-> tags), and now we've broken it on fsdax as the pmem/blockdev divorce
-> progresses.
-Hi
+Convert the mtk-gce mailbox binding to DT schema format.
 
-Do you mean that the following patch set changed the test result of 
-generic/470 with thin-volume? (pass => not run/failure)
-https://lore.kernel.org/linux-xfs/20211129102203.2243509-1-hch@lst.de/
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../mailbox/mediatek,gce-mailbox.yaml         | 104 ++++++++++++++++++
+ .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 --------------
+ 2 files changed, 104 insertions(+), 82 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 
-> 
->> have been obvious that the change caused the test to no longer run. Did
->> something change after that to trigger that change in behavior?
->>
->>> With the revert, generic/470 can always run successfully on my environment
->>> so I wonder how to reproduce the out-of-order replay issue on XFS v5
->>> filesystem?
->>>
->>
->> I don't quite recall the characteristics of the failures beyond that we
->> were seeing spurious test failures with generic/482 that were due to
->> essentially putting the fs/log back in time in a way that wasn't quite
->> accurate due to the clearing by the logwrites tool not taking place. If
->> you wanted to reproduce in order to revisit that, perhaps start with
->> generic/482 and let it run in a loop for a while and see if it
->> eventually triggers a failure/corruption..?
->>
->>> PS: I want to reproduce the issue and try to find a better solution to fix
->>> it.
->>>
->>
->> It's been a while since I looked at any of this tooling to semi-grok how
->> it works.
-> 
-> I /think/ this was the crux of the problem, back in 2019?
-> https://lore.kernel.org/fstests/20190227061529.GF16436@dastard/
+diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+new file mode 100644
+index 000000000000..ac6ca7fc5302
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mailbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Global Command Engine Mailbox
++
++maintainers:
++  - Houlong Wei <houlong.wei@mediatek.com>
++
++description: |
++  The Global Command Engine (GCE) is used to help read/write registers with
++  critical time limitation, such as updating display configuration during the
++  vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt6779-gce
++      - mediatek,mt8173-gce
++      - mediatek,mt8183-gce
++      - mediatek,mt8186-gce
++      - mediatek,mt8192-gce
++      - mediatek,mt8195-gce
++
++  "#mbox-cells":
++    const: 2
++    description:
++      The first cell describes the Thread ID of the GCE,
++      the second cell describes the priority of the GCE thread
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Global Command Engine clock
++
++  clock-names:
++    items:
++      - const: gce
++
++required:
++  - compatible
++  - "#mbox-cells"
++  - reg
++  - interrupts
++  - clocks
++
++if:
++  not:
++    properties:
++      compatible:
++        contains:
++          const: mediatek,mt8195-gce
++then:
++  required:
++    - clock-names
++
++additionalProperties: false
++
++examples:
++  # Example for a device client and for a MediaTek mutex client
++  - |
++    #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/gce/mt8173-gce.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/power/mt8173-power.h>
++
++    gce: mailbox@12120000 {
++        compatible = "mediatek,mt8173-gce";
++        reg = <0x10816000 0x1000>;
++        interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
++        #mbox-cells = <2>;
++        clocks = <&infracfg CLK_INFRA_GCE>;
++        clock-names = "gce";
++    };
++
++    syscon@14000000 {
++        compatible = "mediatek,mt8173-mmsys", "syscon";
++        reg = <0x14000000 0x1000>;
++        power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
++        #clock-cells = <1>;
++        #reset-cells = <1>;
++        mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
++                 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
++        mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
++    };
++
++    mutex@14020000 {
++        compatible = "mediatek,mt8173-disp-mutex";
++        reg = <0x14020000 0x1000>;
++        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
++        power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
++        clocks = <&mmsys CLK_MM_MUTEX_32K>;
++        mediatek,gce-client-reg = <&gce SUBSYS_1402XXXX 0 0x1000>;
++        mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
++                              <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
++    };
+diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+deleted file mode 100644
+index c2aeba63bd47..000000000000
+--- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
++++ /dev/null
+@@ -1,82 +0,0 @@
+-MediaTek GCE
+-===============
+-
+-The Global Command Engine (GCE) is used to help read/write registers with
+-critical time limitation, such as updating display configuration during the
+-vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
+-
+-CMDQ driver uses mailbox framework for communication. Please refer to
+-mailbox.txt for generic information about mailbox device-tree bindings.
+-
+-Required properties:
+-- compatible: can be "mediatek,mt8173-gce", "mediatek,mt8183-gce",
+-  "mediatek,mt8186-gce", "mediatek,mt8192-gce", "mediatek,mt8195-gce" or
+-  "mediatek,mt6779-gce".
+-- reg: Address range of the GCE unit
+-- interrupts: The interrupt signal from the GCE block
+-- clock: Clocks according to the common clock binding
+-- clock-names: Must be "gce" to stand for GCE clock
+-- #mbox-cells: Should be 2.
+-	<&phandle channel priority>
+-	phandle: Label name of a gce node.
+-	channel: Channel of mailbox. Be equal to the thread id of GCE.
+-	priority: Priority of GCE thread.
+-
+-Required properties for a client device:
+-- mboxes: Client use mailbox to communicate with GCE, it should have this
+-  property and list of phandle, mailbox specifiers.
+-Optional properties for a client device:
+-- mediatek,gce-client-reg: Specify the sub-system id which is corresponding
+-  to the register address, it should have this property and list of phandle,
+-  sub-system specifiers.
+-  <&phandle subsys_number start_offset size>
+-  phandle: Label name of a gce node.
+-  subsys_number: specify the sub-system id which is corresponding
+-                 to the register address.
+-  start_offset: the start offset of register address that GCE can access.
+-  size: the total size of register address that GCE can access.
+-
+-Optional properties for a client mutex node:
+-- mediatek,gce-events: GCE events used by clients. The event numbers are
+-  defined in 'dt-bindings/gce/<chip>-gce.h'.
+-
+-Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h',
+-'dt-bindings/gce/mt8183-gce.h', 'dt-bindings/gce/mt8186-gce.h'
+-'dt-bindings/gce/mt8192-gce.h', 'dt-bindings/gce/mt8195-gce.h' or
+-'dt-bindings/gce/mt6779-gce.h'.
+-Such as sub-system ids, thread priority, event ids.
+-
+-Example:
+-
+-	gce: gce@10212000 {
+-		compatible = "mediatek,mt8173-gce";
+-		reg = <0 0x10212000 0 0x1000>;
+-		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
+-		clocks = <&infracfg CLK_INFRA_GCE>;
+-		clock-names = "gce";
+-		#mbox-cells = <2>;
+-	};
+-
+-Example for a client device:
+-
+-	mmsys: clock-controller@14000000 {
+-		compatible = "mediatek,mt8173-mmsys";
+-		mboxes = <&gce 0 CMDQ_THR_PRIO_LOWEST>,
+-			 <&gce 1 CMDQ_THR_PRIO_LOWEST>;
+-		mutex-event-eof = <CMDQ_EVENT_MUTEX0_STREAM_EOF
+-				CMDQ_EVENT_MUTEX1_STREAM_EOF>;
+-		mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>,
+-					  <&gce SUBSYS_1401XXXX 0x2000 0x100>;
+-		...
+-	};
+-
+-Example for a client mutex node:
+-	mutex: mutex@14020000 {
+-		compatible = "mediatek,mt8173-disp-mutex";
+-		reg = <0 0x14020000 0 0x1000>;
+-		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
+-		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+-		clocks = <&mmsys CLK_MM_MUTEX_32K>;
+-		mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
+-				      <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
+-	};
+-- 
+2.37.2
 
-Agreed.
-
-> 
->> Perhaps it could learn to rely on something more explicit like
->> zero range (instead of discard?) or fall back to manual zeroing?
-> 
-> AFAICT src/log-writes/ actually /can/ do zeroing, but (a) it probably
-> ought to be adapted to call BLKZEROOUT and (b) in the worst case it
-> writes zeroes to the entire device, which is/can be slow.
-> 
-> For a (crass) example, one of my cloudy test VMs uses 34GB partitions,
-> and for cost optimization purposes we're only "paying" for the cheapest
-> tier.  Weirdly that maps to an upper limit of 6500 write iops and
-> 48MB/s(!) but that would take about 20 minutes to zero the entire
-> device if the dm-thin hack wasn't in place.  Frustratingly, it doesn't
-> support discard or write-zeroes.
-
-Do you mean that discard zero(BLKDISCARD) is faster than both fill 
-zero(BLKZEROOUT) and write zero on user space?
-
-Best Regards,
-Xiao Yang
-> 
->> If the
->> eventual solution is simple and low enough overhead, it might make some
->> sense to replace the dmthin hack across the set of tests mentioned
->> above.
-> 
-> That said, for a *pmem* test you'd expect it to be faster than that...
-> 
-> --D
-> 
->> Brian
->>
->>> Best Regards,
->>> Xiao Yang
->>>
->>>>
->>>> BTW, only log-writes, stripe and linear support DAX for now.
->>>
->>
