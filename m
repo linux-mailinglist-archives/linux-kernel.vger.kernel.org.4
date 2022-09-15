@@ -2,190 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A424B5B9B36
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECB35B9B1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiIOMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S229998AbiIOMm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiIOMnB (ORCPT
+        with ESMTP id S229940AbiIOMmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:43:01 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C529CCDC
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:53 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c2so18228334plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:53 -0700 (PDT)
+        Thu, 15 Sep 2022 08:42:25 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9656411A0B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id n10so97501wrw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=dBZRlmedpxhbheR4+YN0HocAk5E9pqe8yTyKp+a8Jvo=;
-        b=wGL+P0AnD/GNLjjT24uVsLIZwCjtnS68EAO2WcfTxZFkhvVT/imehV4PqGdD9u11lo
-         mHxyBtFq9duyXZIiKcqegXgI67PQGZyv1FARnxfLtJPl//LGhPBirrHxsHZMHRB9DLAz
-         Wb7SJ6apxY7SF8Pc2g4Gg9+1s6+QI4I1vJhNBvhqpUPnYW8DdTU5YdGxp5D1QKIZck9/
-         L6U90aBZFVaRvvbGZrdF+ClZ5VxK0ZlwgZF9Wnhn6CBxbM6PAoQhJS5v/pkDOz2mIlAa
-         Su3CDhC0H6wTECs2IS+AbHhCLSS2SpIfTFUYeIOdDAxrJ+UmNxGT+M5DuFAWmGzDqJWT
-         +yqg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=5CMlBI/PrKLuiXDRVCmkwWXBv4d9T3I5m7kPv3uZKXk=;
+        b=LlF+gnOCTKInIpXUMWd7obhKq5M2pJu5O+Wb3rhT2HxfBdERUsLE1wWgnOlJfg/q4K
+         5Q5NYgl0EI7oudjmN2BXcWJ+A68ZdIYq0HPrx7dvi02Z6xKSkrgyEtaRuwEmGfHU9tMh
+         nsM98mhMPbu5R4iLSaJMKjePD/uulH7Xs45cvI3yzh9mvo2cALXcc+hs1wlnMENiyAL0
+         3qGjhwXNtoVkDOzxGLFh4G2f3OodGTSla8G8Osdc7DhVa3ehbWXvP9QUnXqVUQwf3V6B
+         KLqFvvvFu+W3HaZPn+yMpwjTfJzGURbTj+bOerzKyfrWygYV0lEkt7cWCSwGJ8szxcmx
+         cDlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=dBZRlmedpxhbheR4+YN0HocAk5E9pqe8yTyKp+a8Jvo=;
-        b=FLLuob4YAw0OFz01ycHZNo30eGYZEGHJQf32UIN4vk8/2zrq3UK2NpjoFDxLSu/wrS
-         2HTzU+9wCim+LkdDx0bGXggUhCRUSApQW6kdoLqtMMS2qHyw6KZ2Db0slH6X9la3UwB1
-         hd1hpDtQh2mUT4dY2Z900GnqZ9qbfrNHgqG4QgKU+a6+baJYpaYlUDJYP2TjGdyDvNFP
-         JQelo1vwY9NYzjWP04V+vNBP6UzOZ7Wxj179HTncWN4vQaefzBDWccVu/+vwHU+ZAe1F
-         m91I4Mrp/zIIawojzs4bq2oKBLG1gFAd5yZGIDFUXWoc8oMumXKAKusM/K7nbPJ5JHzm
-         BO8g==
-X-Gm-Message-State: ACrzQf2Z2y1yVp1yF6/IlBorzvkA3Az5uJhb9zPVJMu2ULO8DIjManX9
-        aB3su3O9SGUtVFFJCOlEY6bdog==
-X-Google-Smtp-Source: AMsMyM7YeUekbjwUyKbeSAZ971uM0weIsXJ7+N2Y2Xx6JX3tiNRAUFd1xpMZLNwBX63dFYLT7STQeg==
-X-Received: by 2002:a17:903:22c9:b0:178:18a1:d170 with SMTP id y9-20020a17090322c900b0017818a1d170mr4343590plg.2.1663245772723;
-        Thu, 15 Sep 2022 05:42:52 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b001637529493esm12721906pll.66.2022.09.15.05.42.49
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5CMlBI/PrKLuiXDRVCmkwWXBv4d9T3I5m7kPv3uZKXk=;
+        b=4BGSweReCqp/WJ9rBVROQSjjMT2WVzYTY86H270+D3DGwqgeNOGMQFsB56rGlvh6Ca
+         9Crhi6cPVLKzTts2yiCaFkXgvxllZpij8XUdPL5nzwQRvxbEeUsFPgj5qqlnAhjr2v6H
+         h/uOa73TnTSL0FdNIQWPkyVwCHrnWDMZvdV/RCU3OdNfLRckkfFHnBcAZNjz1gifEzr2
+         gJhPsktARXVdNede0VXydCncvnrLs9tOjZi7iHe9Vamggy1MtTgv907fyQf0y6+rIjBh
+         Z50oGwA4q8NWq7jIwP3QADqNOQIvertKN2gjXwpw4eh7toVb8C8QmGeSRi4rvPTOcpct
+         eJYw==
+X-Gm-Message-State: ACrzQf24BIU5SSPhc4t8c5A2bw60o9/yc2q0N6CvEaaxe7ldukos2mNL
+        +HVwLrWHiIAG49/4LunxRJZEeqGcpqeISw==
+X-Google-Smtp-Source: AMsMyM6WelGrs0W65x7NDo18eVH5IHv5aoBArcifU+8Xdkt9zsXkV+YgHzC7srp6z45g4OGNPQCqQw==
+X-Received: by 2002:adf:eec3:0:b0:22a:d159:456c with SMTP id a3-20020adfeec3000000b0022ad159456cmr1895699wrp.463.1663245740879;
+        Thu, 15 Sep 2022 05:42:20 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id ay29-20020a05600c1e1d00b003b4ac05a8a4sm2783145wmb.27.2022.09.15.05.42.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:42:52 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
-        Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V4 6/6] erofs: introduce 'domain_id' mount option
-Date:   Thu, 15 Sep 2022 20:42:13 +0800
-Message-Id: <20220915124213.25767-7-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20220915124213.25767-1-zhujia.zj@bytedance.com>
-References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
+        Thu, 15 Sep 2022 05:42:20 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] soundwire: qcom: update status from device id 1
+Date:   Thu, 15 Sep 2022 13:42:15 +0100
+Message-Id: <20220915124215.13703-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'domain_id' mount option to enable shared domain sementics.
-In which case, the related cookie is shared if two mountpoints in the
-same domain have the same data blob. Users could specify the name of
-domain by this mount option.
+By default autoenumeration is enabled on QCom SoundWire controller
+which means the core should not be dealing with device 0 w.r.t enumeration.
+Currently device 0 status is also shared with SoundWire core which confuses
+the core sometimes and we endup adding 0:0:0:0 slave device.
 
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- fs/erofs/super.c | 17 +++++++++++++++++
- fs/erofs/sysfs.c | 19 +++++++++++++++++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
+ drivers/soundwire/qcom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 24bac58285e8..5e55c4fe6220 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -440,6 +440,7 @@ enum {
- 	Opt_dax_enum,
- 	Opt_device,
- 	Opt_fsid,
-+	Opt_domain_id,
- 	Opt_err
- };
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index e21a3306bf01..871e4d8b32c7 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -428,7 +428,7 @@ static int qcom_swrm_get_alert_slave_dev_num(struct qcom_swrm_ctrl *ctrl)
  
-@@ -465,6 +466,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
- 	fsparam_string("fsid",		Opt_fsid),
-+	fsparam_string("domain_id",	Opt_domain_id),
- 	{}
- };
+ 	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
  
-@@ -568,6 +570,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 			return -ENOMEM;
- #else
- 		errorfc(fc, "fsid option not supported");
-+#endif
-+		break;
-+	case Opt_domain_id:
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		kfree(ctx->opt.domain_id);
-+		ctx->opt.domain_id = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.domain_id)
-+			return -ENOMEM;
-+#else
-+		errorfc(fc, "domain_id option not supported");
- #endif
- 		break;
- 	default:
-@@ -702,6 +714,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
- 	ctx->opt.fsid = NULL;
-+	ctx->opt.domain_id = NULL;
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
+-	for (dev_num = 0; dev_num <= SDW_MAX_DEVICES; dev_num++) {
++	for (dev_num = 1; dev_num <= SDW_MAX_DEVICES; dev_num++) {
+ 		status = (val >> (dev_num * SWRM_MCP_SLV_STATUS_SZ));
  
-@@ -846,6 +859,7 @@ static void erofs_fc_free(struct fs_context *fc)
+ 		if ((status & SWRM_MCP_SLV_STATUS_MASK) == SDW_SLAVE_ALERT) {
+@@ -448,7 +448,7 @@ static void qcom_swrm_get_device_status(struct qcom_swrm_ctrl *ctrl)
+ 	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
+ 	ctrl->slave_status = val;
  
- 	erofs_free_dev_context(ctx->devs);
- 	kfree(ctx->opt.fsid);
-+	kfree(ctx->opt.domain_id);
- 	kfree(ctx);
- }
+-	for (i = 0; i <= SDW_MAX_DEVICES; i++) {
++	for (i = 1; i <= SDW_MAX_DEVICES; i++) {
+ 		u32 s;
  
-@@ -914,6 +928,7 @@ static void erofs_kill_sb(struct super_block *sb)
- 	fs_put_dax(sbi->dax_dev, NULL);
- 	erofs_fscache_unregister_fs(sb);
- 	kfree(sbi->opt.fsid);
-+	kfree(sbi->opt.domain_id);
- 	kfree(sbi);
- 	sb->s_fs_info = NULL;
- }
-@@ -1067,6 +1082,8 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
- #ifdef CONFIG_EROFS_FS_ONDEMAND
- 	if (opt->fsid)
- 		seq_printf(seq, ",fsid=%s", opt->fsid);
-+	if (opt->domain_id)
-+		seq_printf(seq, ",domain_id=%s", opt->domain_id);
- #endif
- 	return 0;
- }
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index c1383e508bbe..341fb43ad587 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -201,12 +201,27 @@ static struct kobject erofs_feat = {
- int erofs_register_sysfs(struct super_block *sb)
- {
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
-+	char *name;
-+	char *str = NULL;
- 	int err;
- 
-+	if (erofs_is_fscache_mode(sb)) {
-+		if (sbi->opt.domain_id) {
-+			str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id,
-+					sbi->opt.fsid);
-+			if (!str)
-+				return -ENOMEM;
-+			name = str;
-+		} else {
-+			name = sbi->opt.fsid;
-+		}
-+	} else {
-+		name = sb->s_id;
-+	}
- 	sbi->s_kobj.kset = &erofs_root;
- 	init_completion(&sbi->s_kobj_unregister);
--	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
--			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
-+	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s", name);
-+	kfree(str);
- 	if (err)
- 		goto put_sb_kobj;
- 	return 0;
+ 		s = (val >> (i * 2));
 -- 
-2.20.1
+2.21.0
 
