@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A235B95E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59635B95E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiIOICz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S230202AbiIOIDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiIOICu (ORCPT
+        with ESMTP id S230174AbiIOIDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:02:50 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAAB4DF34
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:02:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VPs0xZi_1663228961;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VPs0xZi_1663228961)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 16:02:46 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     shawnguo@kernel.org
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 2/2] soc: imx: Remove unnecessary .owner
-Date:   Thu, 15 Sep 2022 16:02:22 +0800
-Message-Id: <20220915080222.114612-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20220915080222.114612-1-jiapeng.chong@linux.alibaba.com>
-References: <20220915080222.114612-1-jiapeng.chong@linux.alibaba.com>
+        Thu, 15 Sep 2022 04:03:01 -0400
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB5F97504
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:02:55 -0700 (PDT)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 9257E201390;
+        Thu, 15 Sep 2022 08:02:52 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 7FDA78060E; Thu, 15 Sep 2022 10:02:35 +0200 (CEST)
+Date:   Thu, 15 Sep 2022 10:02:35 +0200
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Hyunwoo Kim <imv4bel@gmail.com>, laforge@gnumonks.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Paul Fulghum <paulkf@microgate.com>,
+        akpm@osdl.org, Lubomir Rintel <lkundrak@v3.sk>
+Subject: Re: [PATCH] pcmcia: synclink_cs: Fix use-after-free in mgslpc_ioctl()
+Message-ID: <YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net>
+References: <20220913052020.GA85241@ubuntu>
+ <a8a9fd74-4ee5-4619-8492-be7139e6d48e@www.fastmail.com>
+ <20220915020834.GA110086@ubuntu>
+ <f41c2765-80e0-48bc-b1e4-8cfd3230fd4a@www.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f41c2765-80e0-48bc-b1e4-8cfd3230fd4a@www.fastmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove .owner field if calls are used which set it automatically.
+Am Thu, Sep 15, 2022 at 09:35:51AM +0200 schrieb Arnd Bergmann:
+> On Thu, Sep 15, 2022, at 4:08 AM, Hyunwoo Kim wrote:
+> > There are 3 other pcmica drivers in the path 
+> > "drivers/char/pcmcia/synclink_cs.c", 
+> > the path of the "synclink_cs.c" driver I reported the UAF to.
+> > A similar UAF occurs in the "cm4000_cs.c" and "cm4040_cs.c" drivers. 
+> > (this does not happen in scr24x_cs.c)
+> ...
+> > In the cm4000_cs.c driver, the race condition flow is tricky because of 
+> > the start/stop_monitor() functions.
+> >
+> > The overall flow is similar to cm4040_cs.c.
+> > Added one race condition to bypass the "dev->monitor_running" check.
+> >
+> >
+> > So, should the above two drivers be removed from the kernel like the 
+> > synclink_cs.c driver?
+> >
+> > Or should I submit a patch that fixes the UAF?
+> 
+> There is a good chance that we can remove both now, along with the
+> synclink_cs. The scr24x driver is from 2016, but of course the
+> hardware is much older. The cm4040/cm4000 drivers are from 2005.
+> My guess is that the hardware still exists in actively used systems,
+> but none of them get upgraded to modern kernels any more.
+> 
+> Let's just ask the driver authors (Lubomir and Harald) if they
+> think the drivers may still be needed.
 
-./drivers/soc/imx/imx93-src.c:24:3-8: No need to set .owner here. The core will do it.
+Actually, I'd prefer to apply a patch to fix this now-known problem first,
+even if we deactive / remove these drivers immediately afterwards.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2188
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/soc/imx/imx93-src.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/soc/imx/imx93-src.c b/drivers/soc/imx/imx93-src.c
-index 4d74921cae0f..f1c2e22d5cbd 100644
---- a/drivers/soc/imx/imx93-src.c
-+++ b/drivers/soc/imx/imx93-src.c
-@@ -21,7 +21,6 @@ MODULE_DEVICE_TABLE(of, imx93_src_ids);
- static struct platform_driver imx93_src_driver = {
- 	.driver = {
- 		.name	= "imx93_src",
--		.owner	= THIS_MODULE,
- 		.of_match_table = imx93_src_ids,
- 	},
- 	.probe = imx93_src_probe,
--- 
-2.20.1.7.g153144c
-
+Thanks,
+	Dominik
