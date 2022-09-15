@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284F45B9DC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411465B9DBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIOOxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S230309AbiIOOwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIOOxA (ORCPT
+        with ESMTP id S229782AbiIOOwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:53:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2117974DF6;
-        Thu, 15 Sep 2022 07:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D849B81EC0;
-        Thu, 15 Sep 2022 14:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44004C433D6;
-        Thu, 15 Sep 2022 14:52:50 +0000 (UTC)
-Date:   Thu, 15 Sep 2022 20:22:41 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thierry Reding <treding@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20220915145241.GE4550@workstation>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
- <20220914062411.GD16459@workstation>
- <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
+        Thu, 15 Sep 2022 10:52:50 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB2143315
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 07:52:49 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id w8so30767013lft.12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 07:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=MGF6Hdj1kAaXiRS0wW3SjCRTt2IYAVcbko6YhwAB5Qo=;
+        b=yCYk4vNdr4C7RcK23GqAdk23sl1W1M6nzJ6UyseDQohU4rFxHRMWsaYzZUQ+rCGSMy
+         c1a5rz6hVTbAkvWNoKrbMZEPmPDBXH11JUs8Ctc/iGOTIyjr7zmD7BXw3IJyeUNCsjOn
+         OB+lMz9q0uXB1Y7ZzTzdG1qo+C3yyYSfFpbZTt4x28o3QDOrCn9mguaqnjqYfTVF6bK1
+         s0EYz6bGlVBroTtBxMUIvfojXIXdsJvYjdWwPj+xzK3EYTkrRrhAs/c2C9T4m2uwhXu1
+         /TZXbduLThrlxenxoeJP3jems/lOWXNvEAfwPQUYz/lgWmnkr2DrMigEoNaU3llrlIkC
+         La1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MGF6Hdj1kAaXiRS0wW3SjCRTt2IYAVcbko6YhwAB5Qo=;
+        b=HlUR069KgnmSlZ32Dcpx3WaJodcgQ51q3Mss4j6KWGWEqy/ZXf8Ny0v+FeZiKgdJcK
+         mp54OuoO2BOFEEetTJX9ZFsTaJpkdvbBDdzmnHR8aw5YjLBroaVtgyES0PhjrD7vZvIn
+         FIYWPkhqGIWrO/62h6fhPAtdJ/2HQSOntwDgROV2sQDN/U6ks3gbHoRSjCqh5QEXPgzc
+         NmzLH9m5RaFxqwmlilDhLIkY35dwLoOb7IG/Z1L9ogS1oW4A/Rii+bcIv/9Q7i5ZuJNv
+         FiDit/KPgLuSS90Wb25+SinifEMVq2UT9+Yalh30K27j6+9AXtMpTslldWthrV+8iJpP
+         NgHw==
+X-Gm-Message-State: ACrzQf1/f3qgsdSaC05zgdtYh6y8o7WmKeq0D1sYkI/NMzHadqoyerE+
+        Ho9dUGqVvm67NcK+1/dg5Uy3OA==
+X-Google-Smtp-Source: AMsMyM4cRt2dHuWVj44Cc+swIEBBJ8MIf5gkhzKpuNJRcpuXbfDMvrLjiInXFw4elSjYO91zE/DVIQ==
+X-Received: by 2002:a05:6512:b28:b0:49d:ca3d:5935 with SMTP id w40-20020a0565120b2800b0049dca3d5935mr98480lfu.608.1663253567721;
+        Thu, 15 Sep 2022 07:52:47 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s13-20020a056512214d00b0049311968ca4sm2999809lfr.261.2022.09.15.07.52.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 07:52:47 -0700 (PDT)
+Message-ID: <a59b7a9e-95ec-9e44-01af-6a35f2e300f8@linaro.org>
+Date:   Thu, 15 Sep 2022 17:52:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v3 2/2] mfd: qcom-spmi-pmic: Add more PMIC SUBTYPE IDs
+Content-Language: en-GB
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220915113523.44074-1-luca.weiss@fairphone.com>
+ <20220915113523.44074-2-luca.weiss@fairphone.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220915113523.44074-2-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
-> On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > > not having an endpoint connected to the slot is not an error.
-> > > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > >
-> > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > > > returned. So I don't think the log severity should be changed.
-> > > >
-> > > > Yes it is an error in the sense it is a timeout, but reporting an error
-> > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > > > that a similar change was made by the following commit and it also seems
-> > > > appropriate here ...
-> > > >
-> > > > commit 4b16a8227907118e011fb396022da671a52b2272
-> > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > > >
-> > > >     PCI: tegra: Change link retry log level to debug
-> > > >
-> > > >
-> > > > BTW, we check for error messages in the dmesg output and this is a new error
-> > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > > > error, but in this case it seem more appropriate to make this a info or
-> > > > debug level print.
-> > >
-> > > Can you tell whether there's a device present, e.g., via Slot Status
-> > > Presence Detect?  If there's nothing in the slot, I don't know why we
-> > > would print anything at all.  If a card is present but there's no
-> > > link, that's probably worthy of dev_info() or even dev_err().
-> > >
-> >
-> > I don't think all form factors allow for the PRSNT pin to be wired up,
-> > so we cannot know if the device is actually present in the slot or not all
-> > the time. Maybe we should do if the form factor supports it?
-> >
-> > > I guess if you can tell the slot is empty, there's no point in even
-> > > trying to start the link, so you could avoid both the message and the
-> > > timeout by not even calling dw_pcie_wait_for_link().
-> >
-> > Right. There is an overhead of waiting for ~1ms during boot.
+On 15/09/2022 14:35, Luca Weiss wrote:
+> Add more IDs that are found in the downstream msm-4.19 kernel under the
+> path include/linux/qpnp/qpnp-revid.h.
 > 
-> Async probe should mitigate that, right? Saravana is working toward
-> making that the default instead of opt in, but you could opt in now.
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> Changes since v2:
+> * Convert hex numbers lowercase
+> * Remove SMB* IDs added in v1, given it's not sure they're actually spmi
+>    pmics or just i2c pmics (keep SMB2351 because it supports spmi)
 > 
+>   include/soc/qcom/qcom-spmi-pmic.h | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 
-No. The delay is due to the DWC core waiting for link up that depends on
-the PCIe device to be present on the slot. The driver probe order
-doesn't apply here.
 
-Thanks,
-Mani
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> Rob
+-- 
+With best wishes
+Dmitry
+
