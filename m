@@ -2,91 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869105B9F7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB095B9F7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiIOQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S229648AbiIOQSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiIOQQ6 (ORCPT
+        with ESMTP id S229523AbiIOQSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:16:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EC09C208
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663258616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5QGL2aU0V44evqxOzGLTXba8gjIgDLZbDaCL5a4Fyq4=;
-        b=HAqzCsSMdx45hXh098NhyKhLgrVf6zXnAZlVfTTl8afdJxmuYBINAD2zybEpKqc0DaimW+
-        sDjbW6w3NzoBW7Mr8NuWyG9BxF+J59/aRMtOMN5WisYJ2rKh2evZSkyREBYCWNlAWBRVUw
-        YmWvtUO5PKNlHz0Ezmuq53W4A7V8pwQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-549-o8ySK9JIMrGEY7aho3EImA-1; Thu, 15 Sep 2022 12:16:55 -0400
-X-MC-Unique: o8ySK9JIMrGEY7aho3EImA-1
-Received: by mail-wr1-f71.google.com with SMTP id q17-20020adfab11000000b0022a44f0c5d9so4622035wrc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:16:54 -0700 (PDT)
+        Thu, 15 Sep 2022 12:18:01 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8FD98CB5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:18:00 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id dv25so43237974ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 09:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=04xgqSaRrD4Mt6bAKc6OPHCEttCSurLeTnJ0LfF3Y88=;
+        b=W54LxCJxwzgcE/KxC7g2c70doyePGWlRwMOoJ7shqyflKt1q2SNQ2oI4JUsVBCn/u3
+         WcKpZyFTEG+tc36gNQLIWOFL0lwecmoDWy+fcY/2FxpNXh4SWmX4dX92zLC0l0RCBugb
+         0XM5QXZNULWoCzS3ShxXykAwqE/DNVuZ0P11pVcfHjU+Xoad5WXAPZTa1iAHWgGlCMBI
+         SocOlS1dOkIK3c9giGxc7xYSjf8w2oBYb4eVHqkf8cb73T3MLwQJRr9lhMLdC7XHe8X+
+         QfTpiFXLVgMaZPFAwXCoMcQ/GJ26dZkjwDnaM3vv7KFo6iIzJEHoduCHklX3HhlS0UD0
+         F/HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=5QGL2aU0V44evqxOzGLTXba8gjIgDLZbDaCL5a4Fyq4=;
-        b=C6mO8lfhesFRTjWJKYhOqFWbzH5y8uPy+ftPKbnbSI3o9nd/cNpmytMcfaKDTC132B
-         LtwA5ZYRVYEbbPDJ8bGUuT1GDkZNJVxwBVzCGjdVVmm2G8DNb+Ou+ykAssA9DdaPxAB5
-         d/EbZlVrFcP2zLR6cUVtbgsgrzL0XEypMwFB8ALbOgyfMQ9vu2ZxDC8TcwFtDRvzlLxb
-         pXNGbhLwwaSyeGMNvwRRUij0H13mH3R16aKQl1I1x1Y0/qJoDkiUYMaatwI9CM/u60zA
-         RACa3xqYvB7N2SFupzTlWR1oH0JHRUF8d8SCr0TiV7yx5mqRhIam5avBoiEubttIAvmq
-         NaLQ==
-X-Gm-Message-State: ACrzQf0GPPYya4FgyAiq/B/+JHPQP+f31pagXMzYgewIMTFkVTQiS2GQ
-        pVRY5jmY75C0HWAgK1bLAE2y+/C3OhxVi5AB6DVyfyHpPHgXCWyoKBn7Kt0tq9x/DIoobhhy08j
-        Y7NwmpeEJdyFl0SWUFAlMgVaJ
-X-Received: by 2002:a05:600c:3b1a:b0:3b4:858b:aef1 with SMTP id m26-20020a05600c3b1a00b003b4858baef1mr398018wms.193.1663258613942;
-        Thu, 15 Sep 2022 09:16:53 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6CYMxX0xbHz8gi5YOfJkZsL2gJtb0R6qnAZColXSHX9SLm5vk9dkl8TUPMZ763A++JeCAPKg==
-X-Received: by 2002:a05:600c:3b1a:b0:3b4:858b:aef1 with SMTP id m26-20020a05600c3b1a00b003b4858baef1mr398003wms.193.1663258613767;
-        Thu, 15 Sep 2022 09:16:53 -0700 (PDT)
-Received: from sgarzare-redhat ([79.140.208.123])
-        by smtp.gmail.com with ESMTPSA id bh16-20020a05600c3d1000b003a531c7aa66sm3455234wmb.1.2022.09.15.09.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 09:16:53 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 18:16:50 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     vdasa@vmware.com
-Cc:     gregkh@linuxfoundation.org, Pv-drivers@vmware.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bryantan@vmware.com
-Subject: Re: [PATCH] MAINTAINERS: Add header files under VMWARE VMCI DRIVER
-Message-ID: <20220915161650.fchcxhnei5jxdi35@sgarzare-redhat>
-References: <20220915031321.1121-1-vdasa@vmware.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=04xgqSaRrD4Mt6bAKc6OPHCEttCSurLeTnJ0LfF3Y88=;
+        b=3z+ghzHR4XVTQwbNDfnxCWZbkTFfCXyV+o9zG+KEWrUfsRD3pIvTG4gnD18syp8WXP
+         VvMMbHgOXxBpTJ0sJ1d3dVIkH8nu5p/h7YUSpfdiZccuQntGQK3AT9sWi9KonyO2oZsM
+         GrIkYjhx4S9CU00aCMqJV1z0smZaYkdIoJ98j/IRFeggH9ruAPifcLQ52pmoF/AGqQt9
+         u0bqMvL3xBq25GZ02qTVgHWm00nMPfbRAcBZMvO9x/6t67PpOZOBy4b5gswwBy6hYIQK
+         tzwPNC+hLrVwLJoP8OpThuVPYdygCJUcAQFVsOoost0r76+EEA1HCrDY9C7RIQuhoZ6Z
+         +dbA==
+X-Gm-Message-State: ACrzQf3oRkcjfcWTU6h8JLl3P8KWvbUKnxnPP0ibRMmNIgdBsDtmJ9CW
+        goKZgfMng81HZ0KAGT8tRUw=
+X-Google-Smtp-Source: AMsMyM6XCP2noM5ZoDO/SViV5bWU2rlo6M0rExAmhVAYI7gIgJk31zTRWDw+hwu9Bq2Bu4B1NRJ2GQ==
+X-Received: by 2002:a17:907:a05:b0:77b:b538:6476 with SMTP id bb5-20020a1709070a0500b0077bb5386476mr521284ejc.324.1663258678460;
+        Thu, 15 Sep 2022 09:17:58 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l10-20020a1709066b8a00b00773dbdd8205sm9228718ejr.168.2022.09.15.09.17.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 09:17:57 -0700 (PDT)
+Message-ID: <671a971e-1d5d-f420-25e1-2a83130d070e@gmail.com>
+Date:   Thu, 15 Sep 2022 18:17:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220915031321.1121-1-vdasa@vmware.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v6,1/3] soc: mediatek: Add mmsys func to adapt to dpi
+ output for MT8186
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, jason-jh.lin@mediatek.com,
+        rex-bc.chen@mediatek.com, angelogioacchino.delregno@collabora.com,
+        ck.hu@mediatek.com, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jitao.shi@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1663161662-1598-1-git-send-email-xinlei.lee@mediatek.com>
+ <1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 08:13:21PM -0700, vdasa@vmware.com wrote:
->From: Vishnu Dasa <vdasa@vmware.com>
->
->Add include/linux/vmw_vmci* files under VMWARE VMCI DRIVER.
->
->Acked-by: Bryan Tan <bryantan@vmware.com>
->Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
->Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
->---
-> MAINTAINERS | 1 +
-> 1 file changed, 1 insertion(+)
 
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 
+On 14/09/2022 15:21, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Add mmsys func to manipulate dpi output format config for MT8186.
+> 
+> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: Nís F. R. A. Prado <nfraprado@collabora.com>
+
+Applied, thanks!
+
+
+> ---
+>   drivers/soc/mediatek/mt8186-mmsys.h    |  6 ++++++
+>   drivers/soc/mediatek/mtk-mmsys.c       | 20 ++++++++++++++++++++
+>   include/linux/soc/mediatek/mtk-mmsys.h |  2 ++
+>   3 files changed, 28 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8186-mmsys.h b/drivers/soc/mediatek/mt8186-mmsys.h
+> index eb1ad9c37a9c..09b1ccbc0093 100644
+> --- a/drivers/soc/mediatek/mt8186-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8186-mmsys.h
+> @@ -3,6 +3,12 @@
+>   #ifndef __SOC_MEDIATEK_MT8186_MMSYS_H
+>   #define __SOC_MEDIATEK_MT8186_MMSYS_H
+>   
+> +/* Values for DPI configuration in MMSYS address space */
+> +#define MT8186_MMSYS_DPI_OUTPUT_FORMAT		0x400
+> +#define DPI_FORMAT_MASK					0x1
+> +#define DPI_RGB888_DDR_CON				BIT(0)
+> +#define DPI_RGB565_SDR_CON				BIT(1)
+> +
+>   #define MT8186_MMSYS_OVL_CON			0xF04
+>   #define MT8186_MMSYS_OVL0_CON_MASK			0x3
+>   #define MT8186_MMSYS_OVL0_2L_CON_MASK			0xC
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index 06d8e83a2cb5..2e20b24da363 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -227,6 +227,26 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>   
+> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+> +{
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(mmsys->regs + offset);
+> +	tmp = (tmp & ~mask) | val;
+> +	writel_relaxed(tmp, mmsys->regs + offset);
+> +}
+> +
+> +void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+> +{
+> +	if (val)
+> +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_RGB888_DDR_CON, DPI_FORMAT_MASK);
+> +	else
+> +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_RGB565_SDR_CON, DPI_FORMAT_MASK);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_dpi_fmt_config);
+> +
+>   static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned long id,
+>   				  bool assert)
+>   {
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+> index 59117d970daf..d2b02bb43768 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -65,4 +65,6 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   			      enum mtk_ddp_comp_id cur,
+>   			      enum mtk_ddp_comp_id next);
+>   
+> +void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val);
+> +
+>   #endif /* __MTK_MMSYS_H */
