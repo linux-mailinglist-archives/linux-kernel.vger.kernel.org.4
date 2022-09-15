@@ -2,93 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E055B9439
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666E15B9438
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIOGUB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 02:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S229581AbiIOGT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIOGT4 (ORCPT
+        with ESMTP id S229449AbiIOGTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:19:56 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57CD28720
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:19:52 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28F6J6tq022974
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 15 Sep 2022 14:19:06 +0800 (CST)
-        (envelope-from Zhiguo.Niu@unisoc.com)
-Received: from bj08434pcu.spreadtrum.com (10.0.74.109) by
- BJMBX02.spreadtrum.com (10.0.64.8) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 15 Sep 2022 14:19:06 +0800
-From:   "zhiguo.niu" <zhiguo.niu@unisoc.com>
-To:     <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>
-CC:     <lvqiang.huang@unisoc.com>
-Subject: [PATCH Vx 1/1] f2fs: fix some error handling case in gc
-Date:   Thu, 15 Sep 2022 14:18:49 +0800
-Message-ID: <1663222729-27774-1-git-send-email-zhiguo.niu@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 15 Sep 2022 02:19:55 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF5029801;
+        Wed, 14 Sep 2022 23:19:52 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28F6JgKZ080619;
+        Thu, 15 Sep 2022 01:19:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663222782;
+        bh=j/00PjYVqUZW6pY/LRc0/xTw2zanbwYMcCDvuOddwzU=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=Ottj6VqNfd1sEgwJ4t9zIBtp+TgTaa/1HZmrfgzEUNbVFIu+Yy7zF6gk/m8Je4W4d
+         d9B9uFYTVkXmgU69OPm0vk3h/MKJQlhsHRoT7A/fu9Kx8B3qFQYgq7qjjLFAYQRSGb
+         IXIwrqGpLbjasUoMbuksKamzYREP95KsRILWtv64=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28F6JgRM085529
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Sep 2022 01:19:42 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 15
+ Sep 2022 01:19:42 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 15 Sep 2022 01:19:41 -0500
+Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28F6JbNQ011013;
+        Thu, 15 Sep 2022 01:19:37 -0500
+Message-ID: <cc3d140a-d26e-3227-e7d6-14430cdbff8c@ti.com>
+Date:   Thu, 15 Sep 2022 11:49:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Originating-IP: [10.0.74.109]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-Content-Transfer-Encoding: 8BIT
-X-MAIL: SHSQR01.spreadtrum.com 28F6J6tq022974
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <grygorii.strashko@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sjakhade@cadence.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 3/6] phy: ti: gmii-sel: Add support for CPSW9G GMII SEL in
+ J721e
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>
+References: <20220914093911.187764-1-s-vadapalli@ti.com>
+ <20220914093911.187764-4-s-vadapalli@ti.com>
+ <dfb88c31-b6ae-32d4-2b8a-db6027ed19c8@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <dfb88c31-b6ae-32d4-2b8a-db6027ed19c8@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During GC, if segment type stored in SSA and SIT is inconsistent,
-we set SBI_NEED_FSCK first and then stop checkpoint, this will
-cause the following issues:
-1. SBI_NEED_FSCK can not be set to flash truly because of checkpoint
-has been stopped.
-2. Will cause more EIO error because of CP_ERROR_FLAG is set in
-f2fs_stop_checkpoint, this is not reasonable.
+Hello Roger,
 
-So we fix this error handling case by recording current victim segment
-as invalid for gc.
+On 14/09/22 17:04, Roger Quadros wrote:
+> Hi Siddharth,
+> 
+> On 14/09/2022 12:39, Siddharth Vadapalli wrote:
+>> Each of the CPSW9G ports in J721e support additional modes like QSGMII.
+>> Add a new compatible for J721e to support the additional modes.
+>>
+>> In TI's J721e, each of the CPSW9G ethernet interfaces can act as a
+>> QSGMII main or QSGMII-SUB port. The QSGMII main interface is responsible
+>> for performing auto-negotiation between the MAC and the PHY while the rest
+>> of the interfaces are designated as QSGMII-SUB interfaces, indicating that
+>> they will not be taking part in the auto-negotiation process.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  drivers/phy/ti/phy-gmii-sel.c | 47 +++++++++++++++++++++++++++--------
+>>  1 file changed, 37 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+>> index f0b2ba7a9c96..fdb1a7db123d 100644
+>> --- a/drivers/phy/ti/phy-gmii-sel.c
+>> +++ b/drivers/phy/ti/phy-gmii-sel.c
+>> @@ -223,6 +223,13 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw5g_soc_j7200 = {
+>>  	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII) | BIT(PHY_INTERFACE_MODE_SGMII),
+>>  };
+>>  
+>> +static const
+>> +struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw9g_soc_j721e = {
+>> +	.use_of_data = true,
+>> +	.regfields = phy_gmii_sel_fields_am654,
+>> +	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
+>> +};
+>> +
+>>  static const struct of_device_id phy_gmii_sel_id_table[] = {
+>>  	{
+>>  		.compatible	= "ti,am3352-phy-gmii-sel",
+>> @@ -248,6 +255,10 @@ static const struct of_device_id phy_gmii_sel_id_table[] = {
+>>  		.compatible	= "ti,j7200-cpsw5g-phy-gmii-sel",
+>>  		.data		= &phy_gmii_sel_cpsw5g_soc_j7200,
+>>  	},
+>> +	{
+>> +		.compatible	= "ti,j721e-cpsw9g-phy-gmii-sel",
+>> +		.data		= &phy_gmii_sel_cpsw9g_soc_j721e,
+>> +	},
+>>  	{}
+>>  };
+>>  MODULE_DEVICE_TABLE(of, phy_gmii_sel_id_table);
+>> @@ -389,7 +400,7 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+>>  	struct device_node *node = dev->of_node;
+>>  	const struct of_device_id *of_id;
+>>  	struct phy_gmii_sel_priv *priv;
+>> -	u32 main_ports = 1;
+>> +	u32 main_ports[2] = {1, 1};
+>>  	int ret;
+>>  
+>>  	of_id = of_match_node(phy_gmii_sel_id_table, pdev->dev.of_node);
+>> @@ -403,15 +414,31 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+>>  	priv->dev = &pdev->dev;
+>>  	priv->soc_data = of_id->data;
+>>  	priv->num_ports = priv->soc_data->num_ports;
+>> -	of_property_read_u32(node, "ti,qsgmii-main-ports", &main_ports);
+>> -	/*
+>> -	 * Ensure that main_ports is within bounds. If the property
+>> -	 * ti,qsgmii-main-ports is not mentioned, or the value mentioned
+>> -	 * is out of bounds, default to 1.
+>> -	 */
+>> -	if (main_ports < 1 || main_ports > 4)
+>> -		main_ports = 1;
+>> -	priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports);
+>> +	/* Differentiate between J7200 CPSW5G and J721e CPSW9G */
+>> +	if (of_device_is_compatible(node, "ti,j7200-cpsw5g-phy-gmii-sel") > 0) {
+> 
+> Why not just "if (of_device_is_compatible())" ?
 
-Signed-off-by: zhiguo.niu <zhiguo.niu@unisoc.com>
----
- fs/f2fs/gc.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Thank you for reviewing the patch. I will fix this in the v2 series.
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index d5fb426e0747..66bdf2678b5e 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1700,10 +1700,13 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
+> 
+>> +		of_property_read_u32(node, "ti,qsgmii-main-ports", &main_ports[0]);
+>> +		/*
+>> +		 * Ensure that main_ports is within bounds. If the property
+>> +		 * ti,qsgmii-main-ports is not mentioned, or the value mentioned
+>> +		 * is out of bounds, default to 1.
+>> +		 */
+>> +		if (main_ports[0] < 1 || main_ports[0] > 4)
+>> +			main_ports[0] = 1;
+> 
+> how about printing this issue with dev_err()?
 
-                sum = page_address(sum_page);
-                if (type != GET_SUM_TYPE((&sum->footer))) {
--                       f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
--                                segno, type, GET_SUM_TYPE((&sum->footer)));
--                       set_sbi_flag(sbi, SBI_NEED_FSCK);
--                       f2fs_stop_checkpoint(sbi, false);
-+#ifdef CONFIG_F2FS_CHECK_FS
-+                       if (!test_and_set_bit(segno, SIT_I(sbi)->invalid_segmap)) {
-+                               f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
-+                                       segno, type, GET_SUM_TYPE((&sum->footer)));
-+                               set_sbi_flag(sbi, SBI_NEED_FSCK);
-+                       }
-+#endif
-                        goto skip;
-                }
+I agree that using dev_err() instead of defaulting to a value is a
+better choice here. I had initially planned on defaulting to a value
+since this check is a part of the probe function and I had thought that
+the phy-mode is not yet known at this point. However, looking at it
+again, for the special case where the property "ti,qsgmii-main-ports" is
+mentioned in the devicetree node, it is possible to know with certainty
+that QSGMII mode is intended and a wrong value has been provided in the
+devicetree node. I will add dev_err() in the v2 series, instead of
+defaulting to 1 if the check fails.
 
---
-2.17.1
+For the other scenario where "ti,qsgmii-main-ports" is not mentioned in
+the devicetree node, I think that defaulting to 1 would be the correct
+choice since the intended phy-mode is not yet known at this point.
 
-________________________________
- This email (including its attachments) is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential or otherwise protected from disclosure. Unauthorized use, dissemination, distribution or copying of this email or the information herein or taking any action in reliance on the contents of this email or the information herein, by anyone other than the intended recipient, or an employee or agent responsible for delivering the message to the intended recipient, is strictly prohibited. If you are not the intended recipient, please do not read, copy, use or disclose any part of this e-mail to others. Please notify the sender immediately and permanently delete this e-mail and any attachments if you received it in error. Internet communications cannot be guaranteed to be timely, secure, error-free or virus-free. The sender does not accept liability for any errors or omissions.
-本邮件及其附件具有保密性质，受法律保护不得泄露，仅发送给本邮件所指特定收件人。严禁非经授权使用、宣传、发布或复制本邮件或其内容。若非该特定收件人，请勿阅读、复制、 使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件的方式即刻告知发件人。无法保证互联网通信及时、安全、无误或防毒。发件人对任何错漏均不承担责任。
+> 
+>> +		priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports[0]);
+>> +	} else if (of_device_is_compatible(node, "ti,j721e-cpsw9g-phy-gmii-sel") > 0) {
+>> +		of_property_read_u32_array(node, "ti,qsgmii-main-ports", &main_ports[0], 2);
+>> +		/*
+>> +		 * Ensure that main_ports is within bounds. If the property
+>> +		 * ti,qsgmii-main-ports is not mentioned, or the value mentioned
+>> +		 * is out of bounds, default to 1.
+>> +		 */
+>> +		if (main_ports[0] < 1 || main_ports[0] > 8)
+>> +			main_ports[0] = 1;
+>> +		if (main_ports[1] < 1 || main_ports[1] > 8)
+>> +			main_ports[1] = 1;
+>> +		priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports[0]);
+>> +		priv->qsgmii_main_ports |= PHY_GMII_PORT(main_ports[1]);
+>> +	}
+> 
+> The whole if/else logic can be got rid of if you store num_qsgmii_main_ports in priv data structure
+> after obtaining it from of_data.
+> 
+> Then all the above reduces to
+> 	for (i = 0; i < priv->num_qsgmii_main_ports; i++) {
+> 		if (main_ports[i] ...)
+> 	}
+> 
+> It will also make it very easy to scale later on for future platforms.
+
+Thank you for the suggestion. I will add the variable "u32
+num_qsgmii_main_ports" in "struct phy_gmii_sel_soc_data" and set its
+value to 1 for the "phy_gmii_sel_cpsw5g_soc_j7200" compatible and to 2
+for the "phy_gmii_sel_cpsw9g_soc_j721e" compatible. I will implement
+this in the v2 series.
+
+Regards,
+Siddharth.
