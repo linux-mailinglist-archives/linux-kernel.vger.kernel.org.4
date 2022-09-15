@@ -2,176 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D6D5B9EAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8835B9EB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiIOPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S229786AbiIOPZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiIOPXW (ORCPT
+        with ESMTP id S229539AbiIOPZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:23:22 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6B81E3F2;
-        Thu, 15 Sep 2022 08:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663255360; x=1694791360;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2mRF8w8hL1HBMWIlqV+SFW8gKa3TqIUcCL/Ln8KWTlo=;
-  b=WLKsNPDzK7AXBjvTZpnJuif9g9Fg9x3PHxdrOWnoLElToOhTkXdWqk8y
-   KrLTqd2tBQ4ttorZyhNNvLuqfHiSV8eIvyqq9MDDvZlgLke4UunkHpXlk
-   XDn41iaJ3WyWI6Z8mCn9iGijUFOPrVRBApCasdtiYM0rX5RWmk3dEArmb
-   MwkfW7At6qq+lyqxFiy5OyfSTx80fZwNbUNH4zXt6TftWwF+gLy4pCsVc
-   FjXvEVj2JuRVpT1y4Dz9VZhM2I4yIH7C96JLDI3MDdSzzEkw7Ki3LhxJ3
-   4jTuGmq0EziPYJvEblIvUD8f6hzU8evUFWQwuXUpBrL8e2aay1403tOeK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="285785144"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="285785144"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 08:22:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="679560931"
-Received: from vasanth1-mobl.amr.corp.intel.com (HELO [10.255.231.111]) ([10.255.231.111])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 08:22:37 -0700
-Message-ID: <208a847e-92eb-0590-b498-e34d59b1cf34@linux.intel.com>
-Date:   Thu, 15 Sep 2022 08:22:37 -0700
+        Thu, 15 Sep 2022 11:25:27 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403F33431
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id c24so17616309pgg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=M+4dSp/NyWH6hV7kqgm6uE66wW1DICbY/2tIyHY19E8=;
+        b=Ovid8VfwMNGOYz6N1r1dZJJMkvJ0X6Bhyc+U142KKVH3voDv8+Qm2VHut3BgbXGZB1
+         52O1STlvMr+Ka20/0qGlvNPNAW9y8f73yINR9lTeMrXJpimLJMh6ZTr/uxEKezNuRXUr
+         ulgRgOazPU6dKVBmonQpH9BUUiDterKqWBncg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=M+4dSp/NyWH6hV7kqgm6uE66wW1DICbY/2tIyHY19E8=;
+        b=zo1N0Hr+cx//7J04GUjXQ/pRduzWM8eW2mcBX1dO6A5Kr9ggvSk5opLGt4rLUhkfDu
+         JlFJjW/62rG+0nL4aNZufSnUC5/TfY5KgNAOwyS0SZKhFc6MJC/f0BAnBCoj5pF13xz1
+         +KVkVgFM/PY6RI7SiqZXN7gkLWx8mGdyXBekz6xe3jcM7OMGrsK1TKCHKDyWd52qa+jZ
+         rsS8hxX+Sfo9frVzx+WXmr+32XilEAhqdrYxDgVBwbaYzzZi8XN6Pt45tV+w/uD8Ne/o
+         X1wULdC5ShoHWWXOWfClElkIZ8u41weE09zmJsfw3yui7b86dk3grpOMLpHiCbQOjvIV
+         5irA==
+X-Gm-Message-State: ACrzQf1cl7Sra2FBkzG8rN7nZAkRDtn/h6qohsvqCjpbJB91ELGt7EWE
+        46OcNbQz03N1ROrMWXMAh1PCcA==
+X-Google-Smtp-Source: AMsMyM4hLM83yeJJ1NXBXCQkUnbxF65ZDcgalP0+9AAhGBUxKwD1Er0oxGOSLkn+SBVmRSvCkUvtjw==
+X-Received: by 2002:a63:e516:0:b0:434:9462:69cd with SMTP id r22-20020a63e516000000b00434946269cdmr295685pgh.503.1663255525251;
+        Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:91d2:9e21:2c2b:323f])
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b0016ee3d7220esm13300920plg.24.2022.09.15.08.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 08:25:24 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 00:25:18 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: printk meeting at LPC 2022
+Message-ID: <YyND3oI4M/G4qndr@google.com>
+References: <20220910221947.171557773@linutronix.de>
+ <87h71cr1gb.fsf@jogness.linutronix.de>
+ <YyMF6YkGdv/EepJf@google.com>
+ <20220915070938.7930c1df@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YyMH37G2CTuVCbLM@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YyMH37G2CTuVCbLM@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915070938.7930c1df@rorschach.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/15/22 4:09 AM, Greg Kroah-Hartman wrote:
-> On Fri, Sep 09, 2022 at 12:27:06PM -0700, Kuppuswamy Sathyanarayanan wrote:
->> +static int __init tdx_guest_init(void)
->> +{
->> +	int ret;
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +		return -EIO;
->> +
->> +	ret = misc_register(&tdx_misc_dev);
->> +	if (ret) {
->> +		pr_err("misc device registration failed\n");
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +device_initcall(tdx_guest_init)
+On (22/09/15 07:09), Steven Rostedt wrote:
+> > > We now have a room/timeslot [0] where Thomas and I will be presenting
+> > > and discussing this new approach [1] for bringing kthread and atomic
+> > > console printing to the kernel.
+> > > 
+> > > Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"  
+> > 
+> > Was this recorded? I glanced through LPC/kernel summit schedules and didn't
+> > find it anywhere.
 > 
-> As mentioned elsewhere, make this a normal module_init() format and only
-> load the module if the hardware is present.  Don't just always be
+> Yes it was, but it will take a bit to extract it from BBB and upload it to YouTube.
 
-This feature needs to be enabled by default for all valid TDX guests.
-
-If TDX support is enabled and the guest is a valid TDX guest, the
-"X86 FEATURE TDX GUEST" feature flag will be set. So looking for
-"if(!cpu feature enabled(X86 FEATURE TDX GUEST))" will ensure that
-the interface is only created in a valid TDX guest.
-
-Even if we make it into a separate driver and use module init(), we'll
-have to use the same "if(!cpu feature enabled(X86 FEATURE TDX GUEST))"
-check to create and load the device. This approach was used in earlier
-versions of this driver. We later changed it to initcall because it
-appeared to be a roundabout approach.
-
-Let me know if you still suggest to use module_init() model.
-
-Following is the sample implementation with module_init() and this code
-will be compiled with CONFIG_INTEL_TDX_GUEST=y.
-
-+static struct platform_driver tdx_attest_driver = {
-+	.probe		= tdx_attest_probe,
-+	.remove		= tdx_attest_remove,
-+	.driver		= {
-+		.name	= DRIVER_NAME,
-+	},
-+};
-+
-+static int __init tdx_attest_init(void)
-+{
-+	int ret;
-+
-+	/* Make sure we are in a valid TDX platform */
-+	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-+		return -EIO;
-+
-+	ret = platform_driver_register(&tdx_attest_driver);
-+	if (ret) {
-+		pr_err("failed to register driver, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-+	if (IS_ERR(pdev)) {
-+		ret = PTR_ERR(pdev);
-+		pr_err("failed to allocate device, err=%d\n", ret);
-+		platform_driver_unregister(&tdx_attest_driver);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit tdx_attest_exit(void)
-+{
-+	platform_device_unregister(pdev);
-+	platform_driver_unregister(&tdx_attest_driver);
-+}
-+
-+module_init(tdx_attest_init);
-+module_exit(tdx_attest_exit);
-
-> built/loaded, that's not ok.
-
-
-
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Thanks Steven!
