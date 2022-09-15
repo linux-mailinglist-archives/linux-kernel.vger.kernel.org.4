@@ -2,126 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7626C5B9323
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36B75B935B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiIODgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S230001AbiIODky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIODg3 (ORCPT
+        with ESMTP id S230363AbiIODk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:36:29 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E4A92F71;
-        Wed, 14 Sep 2022 20:36:21 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id g23so8138675qtu.2;
-        Wed, 14 Sep 2022 20:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uJffsqDRUOivPZiC/tl2/T1Mr1z4G0FCt64C8blLYZ4=;
-        b=VeguLffCxfpspTiwdtq9UYKbMufW723noBqlOXGYv9kyyzX90xkv2vzm2I2PEPmJJO
-         boAIMekRhBXHBG5vAF/QLtA3W9Gp+22wTwqels+K66SvO1fO9YieGqy6CVxr4Fk7F4BS
-         KUTeULswMGfGvshWz45/zc8Jep/TmSo97GyH7V948bwu4qDtkN+ZeXR6U8urNPdbxjUm
-         NbnwEFcxITV8IL1wfCvKNK4GRkZIq5quF3ntXhlP4AwfwWuZ4/6wejY4RmLfL2G1YoKZ
-         rHKCYKu4YydlyPA348LQYnDMLm9Hjo4u//s0ftLmErPMSbCdVE8mY8bsou+HyL8nY4Rr
-         +xWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uJffsqDRUOivPZiC/tl2/T1Mr1z4G0FCt64C8blLYZ4=;
-        b=n0Yl+GBWlD4iJQMP4eKFSzq3WBqpsrRA5AHfPWVdNdn+h76Ip+AKDJMLcws9hKhjID
-         waWlFEAG6p9xZ4zx1PHtjZYxX+6vDrPZJPlhY2wyRkltOQb9vs0a4TXLSBjdCk50piJT
-         emDKWxr7+AqWoJjn2bsFyxlSSBreSiM+6qkABvqJ1euHUAoe9AY9xcNJVhZhPoWC/GWZ
-         SGGPA0xEdqA4I3BlnYctltuJkN2eedBFeziHQSZiTFcNwXjsS6Ulks/wAdMow4EcLM9I
-         bbW2UXkubVjoA7zMAFGNuyXn9HKjbiESsG5ajG/Ne6xy/y6ifJ4lqUCruBGQdUyG6A+P
-         3O6w==
-X-Gm-Message-State: ACgBeo3oarBA3iRDS1S4Ss42oBFvZ+ZPrCyfnXVPqYBAw78OV/fA4TaZ
-        TtCEOvJkvhG4uG4pm6isvD1AKBXo9KK/q7e8OV4=
-X-Google-Smtp-Source: AA6agR4c8u6CA4VfIRaIl+yIQVBvxQDaeXAQN44DFOYuEyXUnfD+E++zb5w5jiIL9rOauuVd+M9PPulwORz+2O5YzXE=
-X-Received: by 2002:a05:622a:164e:b0:35b:a852:52ca with SMTP id
- y14-20020a05622a164e00b0035ba85252camr21445333qtj.2.1663212980577; Wed, 14
- Sep 2022 20:36:20 -0700 (PDT)
+        Wed, 14 Sep 2022 23:40:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9719630D;
+        Wed, 14 Sep 2022 20:39:50 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSjWg58ntzNmGp;
+        Thu, 15 Sep 2022 11:35:11 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 11:39:48 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <dan.j.williams@intel.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <trix@redhat.com>, <jarkko@kernel.org>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] crypto: add __init/__exit annotations to init/exit funcs
+Date:   Thu, 15 Sep 2022 11:36:15 +0800
+Message-ID: <20220915033615.12478-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220311060936.10663-1-JJLIU0@nuvoton.com> <20220311060936.10663-2-JJLIU0@nuvoton.com>
- <3f77c8c8-4bba-007b-fae9-5fb47f44719c@canonical.com>
-In-Reply-To: <3f77c8c8-4bba-007b-fae9-5fb47f44719c@canonical.com>
-From:   Jim Liu <jim.t90615@gmail.com>
-Date:   Thu, 15 Sep 2022 11:36:09 +0800
-Message-ID: <CAKUZ0+HLAxLw8Tio1HZt8TkYag_UGuDktjNbORwPzfRRrEJ0jQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] dts: add Nuvoton sgpio feature
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, CTCCHIEN@nuvoton.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof Kozlowski
+Add missing __init/__exit annotations to init/exit funcs.
 
-Thanks for your review.
-I am modifying this driver now, and i have some questions.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ crypto/async_tx/raid6test.c | 4 ++--
+ crypto/curve25519-generic.c | 4 ++--
+ crypto/dh.c                 | 4 ++--
+ crypto/ecdh.c               | 4 ++--
+ crypto/ecdsa.c              | 4 ++--
+ crypto/rsa.c                | 4 ++--
+ crypto/sm2.c                | 4 ++--
+ 7 files changed, 14 insertions(+), 14 deletions(-)
 
-what's mean "Generic node name." ?
-Nuvoton NPCM750 SGPIO module is base on serial to parallel IC (HC595)
-and parallel to serial IC (HC165).
-and dts node name is followed aspeed dts node name.
+diff --git a/crypto/async_tx/raid6test.c b/crypto/async_tx/raid6test.c
+index c9d218e53bcb..9719c7520661 100644
+--- a/crypto/async_tx/raid6test.c
++++ b/crypto/async_tx/raid6test.c
+@@ -189,7 +189,7 @@ static int test(int disks, int *tests)
+ }
+ 
+ 
+-static int raid6_test(void)
++static int __init raid6_test(void)
+ {
+ 	int err = 0;
+ 	int tests = 0;
+@@ -236,7 +236,7 @@ static int raid6_test(void)
+ 	return 0;
+ }
+ 
+-static void raid6_test_exit(void)
++static void __exit raid6_test_exit(void)
+ {
+ }
+ 
+diff --git a/crypto/curve25519-generic.c b/crypto/curve25519-generic.c
+index bd88fd571393..d055b0784c77 100644
+--- a/crypto/curve25519-generic.c
++++ b/crypto/curve25519-generic.c
+@@ -72,12 +72,12 @@ static struct kpp_alg curve25519_alg = {
+ 	.max_size		= curve25519_max_size,
+ };
+ 
+-static int curve25519_init(void)
++static int __init curve25519_init(void)
+ {
+ 	return crypto_register_kpp(&curve25519_alg);
+ }
+ 
+-static void curve25519_exit(void)
++static void __exit curve25519_exit(void)
+ {
+ 	crypto_unregister_kpp(&curve25519_alg);
+ }
+diff --git a/crypto/dh.c b/crypto/dh.c
+index 4406aeb1ff61..99c3b2ef7adc 100644
+--- a/crypto/dh.c
++++ b/crypto/dh.c
+@@ -893,7 +893,7 @@ static struct crypto_template crypto_ffdhe_templates[] = {};
+ #endif /* CONFIG_CRYPTO_DH_RFC7919_GROUPS */
+ 
+ 
+-static int dh_init(void)
++static int __init dh_init(void)
+ {
+ 	int err;
+ 
+@@ -911,7 +911,7 @@ static int dh_init(void)
+ 	return 0;
+ }
+ 
+-static void dh_exit(void)
++static void __exit dh_exit(void)
+ {
+ 	crypto_unregister_templates(crypto_ffdhe_templates,
+ 				    ARRAY_SIZE(crypto_ffdhe_templates));
+diff --git a/crypto/ecdh.c b/crypto/ecdh.c
+index e4857d534344..80afee3234fb 100644
+--- a/crypto/ecdh.c
++++ b/crypto/ecdh.c
+@@ -200,7 +200,7 @@ static struct kpp_alg ecdh_nist_p384 = {
+ 
+ static bool ecdh_nist_p192_registered;
+ 
+-static int ecdh_init(void)
++static int __init ecdh_init(void)
+ {
+ 	int ret;
+ 
+@@ -227,7 +227,7 @@ static int ecdh_init(void)
+ 	return ret;
+ }
+ 
+-static void ecdh_exit(void)
++static void __exit ecdh_exit(void)
+ {
+ 	if (ecdh_nist_p192_registered)
+ 		crypto_unregister_kpp(&ecdh_nist_p192);
+diff --git a/crypto/ecdsa.c b/crypto/ecdsa.c
+index b3a8a6b572ba..fbd76498aba8 100644
+--- a/crypto/ecdsa.c
++++ b/crypto/ecdsa.c
+@@ -332,7 +332,7 @@ static struct akcipher_alg ecdsa_nist_p192 = {
+ };
+ static bool ecdsa_nist_p192_registered;
+ 
+-static int ecdsa_init(void)
++static int __init ecdsa_init(void)
+ {
+ 	int ret;
+ 
+@@ -359,7 +359,7 @@ static int ecdsa_init(void)
+ 	return ret;
+ }
+ 
+-static void ecdsa_exit(void)
++static void __exit ecdsa_exit(void)
+ {
+ 	if (ecdsa_nist_p192_registered)
+ 		crypto_unregister_akcipher(&ecdsa_nist_p192);
+diff --git a/crypto/rsa.c b/crypto/rsa.c
+index 0e555ee4addb..c50f2d2a4d06 100644
+--- a/crypto/rsa.c
++++ b/crypto/rsa.c
+@@ -327,7 +327,7 @@ static struct akcipher_alg rsa = {
+ 	},
+ };
+ 
+-static int rsa_init(void)
++static int __init rsa_init(void)
+ {
+ 	int err;
+ 
+@@ -344,7 +344,7 @@ static int rsa_init(void)
+ 	return 0;
+ }
+ 
+-static void rsa_exit(void)
++static void __exit rsa_exit(void)
+ {
+ 	crypto_unregister_template(&rsa_pkcs1pad_tmpl);
+ 	crypto_unregister_akcipher(&rsa);
+diff --git a/crypto/sm2.c b/crypto/sm2.c
+index f3e1592965c0..ed9307dac3d1 100644
+--- a/crypto/sm2.c
++++ b/crypto/sm2.c
+@@ -441,12 +441,12 @@ static struct akcipher_alg sm2 = {
+ 	},
+ };
+ 
+-static int sm2_init(void)
++static int __init sm2_init(void)
+ {
+ 	return crypto_register_akcipher(&sm2);
+ }
+ 
+-static void sm2_exit(void)
++static void __exit sm2_exit(void)
+ {
+ 	crypto_unregister_akcipher(&sm2);
+ }
+-- 
+2.17.1
 
-Could you give more information??
-
-Best regards,
-Jim
-
-On Fri, Mar 11, 2022 at 5:18 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 11/03/2022 07:09, jimliu2 wrote:
-> > add Nuvoton sgpio feature
-> >
-> > Signed-off-by: jimliu2 <JJLIU0@nuvoton.com>
-> > ---
-> >  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 30 +++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > index 3696980a3da1..58f4b463c745 100644
-> > --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > @@ -329,6 +329,36 @@
-> >                               status = "disabled";
-> >                       };
-> >
-> > +                     sgpio1: sgpio@101000 {
->
-> Generic node name.
->
-> > +                             clocks = <&clk NPCM7XX_CLK_APB3>;
-> > +                             compatible = "nuvoton,npcm750-sgpio";
-> > +                             interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             gpio-controller;
-> > +                             #gpio-cells = <2>;
-> > +                             pinctrl-names = "default";
-> > +                             pinctrl-0 = <&iox1_pins>;
-> > +                             bus-frequency = <16000000>;
-> > +                             nin_gpios = <64>;
-> > +                             nout_gpios = <64>;
-> > +                             reg = <0x101000 0x200>;
->
-> In each node first goes compatible, then reg.
->
-> Best regards,
-> Krzysztof
