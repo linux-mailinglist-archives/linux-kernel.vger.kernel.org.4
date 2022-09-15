@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7855B958E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F96F5B9591
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiIOHl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
+        id S229984AbiIOHmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiIOHlX (ORCPT
+        with ESMTP id S229648AbiIOHmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:41:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0398B2F1;
-        Thu, 15 Sep 2022 00:41:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE42B62173;
-        Thu, 15 Sep 2022 07:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E64CC433D6;
-        Thu, 15 Sep 2022 07:41:14 +0000 (UTC)
-Message-ID: <96d148dc-6525-9977-c1a9-2b1affa889e7@xs4all.nl>
-Date:   Thu, 15 Sep 2022 08:41:12 +0100
+        Thu, 15 Sep 2022 03:42:04 -0400
+Received: from out28-74.mail.aliyun.com (out28-74.mail.aliyun.com [115.124.28.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195649108B;
+        Thu, 15 Sep 2022 00:42:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436284|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00286984-0.00393058-0.9932;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.PG7-fu-_1663227690;
+Received: from 192.168.220.136(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PG7-fu-_1663227690)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 15:41:59 +0800
+Message-ID: <8599d9df-3f56-1762-959d-01ee8c753a5b@allwinnertech.com>
+Date:   Thu, 15 Sep 2022 15:41:30 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [V14,0/15] Enable jpeg enc & dec multi-hardwares for MT8195
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com
-References: <20220915064337.2686-1-irui.wang@mediatek.com>
- <63cbb922a0b5df6af660919727ad9246142f75bf.camel@mediatek.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RESEND] devfreq: governor: Save void *data in the governor
+ userspace
 Content-Language: en-US
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <63cbb922a0b5df6af660919727ad9246142f75bf.camel@mediatek.com>
+To:     myungjoo.ham@samsung.com,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "allwinner-opensource-support@allwinnertech.com" 
+        <allwinner-opensource-support@allwinnertech.com>
+References: <a040e16c-e8e9-f550-7251-99ec1d18f508@allwinnertech.com>
+ <20220329091449.105308-1-kant@allwinnertech.com>
+ <CGME20220914091525epcas1p31c8a9b11ba7a36da4678e3254b0ea962@epcms1p8>
+ <20220914094355epcms1p8d6eeb0834e2d7c782d49558fac0ce6c4@epcms1p8>
+From:   Kant Fan <kant@allwinnertech.com>
+In-Reply-To: <20220914094355epcms1p8d6eeb0834e2d7c782d49558fac0ce6c4@epcms1p8>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,187 +52,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Irui,
-
-On 9/15/22 08:21, kyrie.wu wrote:
-> On Thu, 2022-09-15 at 14:43 +0800, Irui Wang wrote:
->> From: kyrie wu <kyrie.wu@mediatek.com>
+On 9/14/2022 5:43 PM, MyungJoo Ham wrote:
+>> On 3/29/2022 5:14 PM, Kant Fan wrote:
+>>>   The member void *data in the structure devfreq can be overwrite
+>>>   by governor_userspace.
+>>>   Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>>   ---
+>>>     drivers/devfreq/governor_userspace.c | 6 +++++-
+>>>     1 file changed, 5 insertions(+), 1 deletion(-)
+>>>   
+>>>   diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+>>>   index ab9db7adb3ad..dbbb448dcbcf 100644
+>>>   --- a/drivers/devfreq/governor_userspace.c
+>>>   +++ b/drivers/devfreq/governor_userspace.c
+>>>   @@ -17,6 +17,7 @@
+>>>     struct userspace_data {
+>>>             unsigned long user_frequency;
+>>>             bool valid;
+>>>   +        void *saved_data;
+>>>     };
+>>>     
+>>>     static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+>>>   @@ -91,6 +92,7 @@ static int userspace_init(struct devfreq *devfreq)
+>>>                     goto out;
+>>>             }
+>>>             data->valid = false;
+>>>   +        data->saved_data = devfreq->data;
+>>>             devfreq->data = data;
+>>>     
+>>>             err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
+>>>   @@ -100,6 +102,8 @@ static int userspace_init(struct devfreq *devfreq)
+>>>     
+>>>     static void userspace_exit(struct devfreq *devfreq)
+>>>     {
+>>>   +        struct userspace_data *data = devfreq->data;
+>>>   +        void *saved_data = data->saved_data;
+>>>             /*
+>>>              * Remove the sysfs entry, unless this is being called after
+>>>              * device_del(), which should have done this already via kobject_del().
+>>>   @@ -108,7 +112,7 @@ static void userspace_exit(struct devfreq *devfreq)
+>>>                     sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+>>>     
+>>>             kfree(devfreq->data);
+>>>   -        devfreq->data = NULL;
+>>>   +        devfreq->data = saved_data;
+>>>     }
+>>>     
+>>>     static int devfreq_userspace_handler(struct devfreq *devfreq,
 >>
->> This series adds support for multi hardwares jpeg enc & dec,
->> by first adding use of_platform_populate to manage each hardware
->> information:interrupt, clock, register bases and power.
->> Secondly add jpeg enc & dec work queue to deal with the encoding
->> or decoding requests of multi-hardwares at the same time.
->> Lastly, add output picture reorder function interface to
->> eliminate the out of order images.
->>
->> This series has been tested with MT8195 Gstreamer.
->> Encoding and decoding worked for this chip.
+>> Dear MyungJoo, Kyungmin & Chanwoo,
+>> Gently ping this issue... Does this patch has a chance to be accepted?
+>> This seems to be a bug in devfreq userspace governor, which affects the
+>> switching between governors -- When switching from userspace to
+>> ondemand, the ondemand governor would be invalid.
+>> If there's any question, please let me know.
+>> Thank you.
 > 
-> Hi Hans,
+> Yes, indeed. This is a bug.
 > 
-> I'm terrible sorry for that I didn't notice you picked all
-> patches series includes jpeg enc + dec.
-> Please overlook the V14 and I will send a new series to fix
-> kernel-doc warns.
-
-No, I didn't pick it up. The branch Angelo pointed to is just the branch 
-I used to compile test your series, I haven't posted a PR for it.
-
-Next week I'll try again with v14 to check if it passes all my compile 
-tests, and if OK, then I'll post a PR.
-
-Patches are picked up if I post a PR and they are marked as 'Under 
-Review' in patchwork. When Mauro merges them in our tree, then the state 
-goes to 'Accepted'.
-
-Regards,
-
-	Hans
-
+> Actually, it appears that allocating a new memory buffer for
+> devfreq->data itself is a bug for a governor, this is supposed
+> to be allocated by a device driver. Thus, the comment of
+> "void *data" of "struct devfreq" should be updated:
+> "/* private data for governors given by device drivers */"
 > 
-> Thanks.
+> It'd be better to have something like, "void *internal_data"
+> for governors to freely handle within its context of init-exit,
+> which is not touched by its users (device drivers).
 > 
-> Regards,
-> Kyrie.
->>
->> Patches 1 Adds jpeg encoder dt-bindings for mt8195
->>
->> Patches 2 jpeg encoder builds two module for using Multi-HW,
->> export some functions to make them visible by other modules.
->>
->> Patches 3 use devm_of_platform_populate to manage multi-hardware.
->>
->> Patch 4 add jpeg encoding timeout function to judge hardware timeout.
->>
->> Patch 5 add encoding work queue to deal with multi-hardware encoding
->> at the same time.
->>
->> Patch 6 add output picture reorder function to order images.
->>
->> Patch 7 add stop cmd function to deal with EOS operation.
->>
->> Patch 8 Adds jpeg decoder dt-bindings for mt8195
->>
->> Patches 9 jpeg decoder builds three module for using Multi-HW,
->> export some functions to make them visible by other modules.
->>
->> Patch 10 use of_platform_populate to manage multi-hardware.
->>
->> Patch 11 add jpeg decoding timeout function to judge hardware
->> timeout.
->>
->> Patch 12 add decoding work queue to deal with multi-hardware decoding
->> at the same time.
->>
->> Patch 13 add output picture reorder function to order images.
->>
->> Patch 14 refactor jpegdec func interface for HW working.
->>
->> Patch 15 add stop cmd function to deal with EOS operation.
->>
->> ---
->> This series patches dependent on:
->> media_stage tree:
->> [1]
->>
-> https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
->>
->> patch1 new jpegdec dt-bindings included files
->> [2] MM IOMMU binding:
->>
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
->>
->> [3] MT8195 power domain:
->>
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
->>
->> Changes compared with v13:
->> - some modifications for patch v13's review comments.
->> - fix kernel robot check errors.
->> - fix kernel-doc check warns.
->> - fix sparse check warns.
->> - combine jpeg encoder series with decoder series into
->>    one single series.
->>
->> Changes compared with v12:
->> - some modifications for patch v12's review comments.
->>
->> Changes compared with v11:
->> - some modifications for patch v11's review comments.
->> - fix yaml file check errors.
->>
->> Changes compared with v10:
->> - some modifications for patch v10's review comments.
->> - fix Gstreamer test errors.
->>
->> Changes compared with v9:
->> - some modifications for patch v9's review comments.
->>
->> Changes compared with v8:
->> - some modifications for patch v8's review comments.
->> - add stop cmd function.
->>
->> Changes compared with v7:
->> - some modifications for patch v6's review comments.
->>
->> Changes compared with v6:
->> - new yaml file for mt8195 jpeg encoder.
->> - some modifications for patch v5's review comments.
->>
->> Changes compared with v5:
->> - use of_platform_populate to replace component framework to
->>    manage multi-hardware in patch 2.
->>
->> Changes compared with v4:
->> - No change compaered with v4
->>
->> Changes compared with v3:
->> - Structure patches for consistency, non-backward
->>    compatible and do not break any existing functionality
->>
->> Changes compared with v2:
->> - Split the last two patches into several patches
->>    to enhance readability
->> - Correct some syntax errors
->> - Explain why the component framework is used
->>
->> Changes compared with v1:
->> - Add jpeg encoder dt-bindings for MT8195
->> - Use component framework to manage jpegenc HW
->> - Add jpegenc output pic reorder function interface
->>
->> kyrie wu (15):
->>    dt-bindings: mediatek: Add mediatek, mt8195-jpgenc compatible
->>    mtk-jpegenc: export jpeg encoder functions
->>    mtk-jpegenc: support jpegenc multi-hardware
->>    mtk-jpegenc: add jpegenc timeout func interface
->>    mtk-jpegenc: add jpeg encode worker interface
->>    mtk-jpegenc: add output pic reorder interface
->>    mtk-jpegenc: add stop cmd interface for jpgenc
->>    dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
->>    media: mtk-jpegdec: export jpeg decoder functions
->>    media: mtk-jpegdec: support jpegdec multi-hardware
->>    media: mtk-jpegdec: add jpegdec timeout func interface
->>    media: mtk-jpegdec: add jpeg decode worker interface
->>    media: mtk-jpegdec: add output pic reorder interface
->>    media: mtk-jpegdec: refactor jpegdec func interface
->>    mtk-jpegdec: add stop cmd interface for jpgdec
->>
->>   .../media/mediatek,mt8195-jpegdec.yaml        | 169 ++++++
->>   .../media/mediatek,mt8195-jpegenc.yaml        | 147 ++++++
->>   drivers/media/platform/mediatek/jpeg/Makefile |  14 +-
->>   .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 490
->> ++++++++++++++++--
->>   .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 169 +++++-
->>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 315 ++++++++++-
->>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   6 +-
->>   .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
->>   .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 255 +++++++++
->>   9 files changed, 1483 insertions(+), 83 deletions(-)
->>   create mode 100644
->> Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
->>   create mode 100644
->> Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
->>
+> @Chanwoo: what's your opinion on this?
 > 
+> Cheers,
+> MyungJoo.
+> 
+
+Hi MyungJoo,
+Thanks for your suggestion. Here's the patch-v2, please have a look:
+
+--
+Subject: [PATCH] devfreq: governor: Add a private governor_data for 
+governors in devfreq
+
+The member void *data in the structure devfreq can be overwrite
+by governor_userspace. For example:
+1. The device driver assigned the devfreq governor to simple_ondemand
+by the function devfreq_add_device() and init the devfreq member
+void *data to a pointer of a static structure devfreq_simple_ondemand_data
+by the function devfreq_add_device().
+2. The user changed the devfreq governor to userspace by the command
+"echo userspace > /sys/class/devfreq/.../governor".
+3. The governor userspace alloced a dynamic memory for the struct
+userspace_data and assigend the member void *data of devfreq to
+this memory by the function userspace_init().
+4. The user changed the devfreq governor back to simple_ondemand
+by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
+5. The governor userspace exited and assigned the member void *data
+in the structure devfreq to NULL by the function userspace_exit().
+6. The governor simple_ondemand fetched the static information of
+devfreq_simple_ondemand_data in the function
+devfreq_simple_ondemand_func() but the member void *data of devfreq was
+assigned to NULL by the function userspace_exit().
+7. The information of upthreshold and downdifferential is lost
+and the governor simple_ondemand can't work correctly.
+
+The member void *data in the structure devfreq is designed for
+a static pointer used in a governor and inited by the function
+devfreq_add_device(). This patch add an element named governor_data
+in the devfreq structure which can be used by a governor(E.g userspace)
+who want to assign a private data to do some private things.
+
+Signed-off-by: Kant Fan <kant@allwinnertech.com>
+---
+
+diff --git a/drivers/devfreq/governor_userspace.c 
+b/drivers/devfreq/governor_userspace.c
+index ab9db7a..d69672c 100644
+--- a/drivers/devfreq/governor_userspace.c
++++ b/drivers/devfreq/governor_userspace.c
+@@ -21,7 +21,7 @@
+
+  static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+  {
+-	struct userspace_data *data = df->data;
++	struct userspace_data *data = df->governor_data;
+
+  	if (data->valid)
+  		*freq = data->user_frequency;
+@@ -40,7 +40,7 @@
+  	int err = 0;
+
+  	mutex_lock(&devfreq->lock);
+-	data = devfreq->data;
++	data = devfreq->governor_data;
+
+  	sscanf(buf, "%lu", &wanted);
+  	data->user_frequency = wanted;
+@@ -60,7 +60,7 @@
+  	int err = 0;
+
+  	mutex_lock(&devfreq->lock);
+-	data = devfreq->data;
++	data = devfreq->governor_data;
+
+  	if (data->valid)
+  		err = sprintf(buf, "%lu\n", data->user_frequency);
+@@ -91,7 +91,7 @@
+  		goto out;
+  	}
+  	data->valid = false;
+-	devfreq->data = data;
++	devfreq->governor_data = data;
+
+  	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
+  out:
+@@ -107,8 +107,8 @@
+  	if (devfreq->dev.kobj.sd)
+  		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+
+-	kfree(devfreq->data);
+-	devfreq->data = NULL;
++	kfree(devfreq->governor_data);
++	devfreq->governor_data = NULL;
+  }
+
+  static int devfreq_userspace_handler(struct devfreq *devfreq,
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 34aab4d..d265af3 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -152,8 +152,8 @@
+   * @max_state:		count of entry present in the frequency table.
+   * @previous_freq:	previously configured frequency value.
+   * @last_status:	devfreq user device info, performance statistics
+- * @data:	Private data of the governor. The devfreq framework does not
+- *		touch this.
++ * @data:	devfreq core pass to governors, governor should not change it.
++ * @governor_data:	private data for governors, devfreq core doesn't 
+touch it.
+   * @user_min_freq_req:	PM QoS minimum frequency request from user (via 
+sysfs)
+   * @user_max_freq_req:	PM QoS maximum frequency request from user (via 
+sysfs)
+   * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
+@@ -193,7 +193,8 @@
+  	unsigned long previous_freq;
+  	struct devfreq_dev_status last_status;
+
+-	void *data; /* private data for governors */
++	void *data;
++	void *governor_data;
+
+  	struct dev_pm_qos_request user_min_freq_req;
+  	struct dev_pm_qos_request user_max_freq_req;
+
+-- 
+Best Regards,
+Kant Fan
