@@ -2,284 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1B45B919B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B575B919C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiIOAXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S229536AbiIOAXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiIOAXD (ORCPT
+        with ESMTP id S229935AbiIOAXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:23:03 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0199E80B68
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:23:02 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id j10so9655980qtv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=BnCdr1U/em5NpPCWgG/aOnm65mlthSVN6z+DfX/ZHto=;
-        b=PvdF1V9kUYUb0PK/HjhbxSbYF5T2tMtxcCB9+M8nMpqPrPFwz6ALyE48DIfGieOqGp
-         v1kouRf80IOAxzJlugoAihdagG9tPWp1IZgC0XUCaL3A71eoAQT6gahqL6s4EUWJHlei
-         TMVft8Orr1iCRfI+kYSOfjdb/XA+mjsEwTEgA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=BnCdr1U/em5NpPCWgG/aOnm65mlthSVN6z+DfX/ZHto=;
-        b=NXinds9QoS+VHfz63hXyE/rwRVSbib3Cmu+KPe+TOXaP7byiqEJJKcW8k2uoWcmboa
-         ATJ/0/ygcDYqR38flkTMOB72yX6sdpwT7NnrkNwv+DJnzDvZVwm1NPT1KiDHBUnBA9gJ
-         LsVpLXrcS8j4uVlOaBiwTd8CcdfL4qQedb9jFgdolrNsmJ6VMXe5Rta7IVAKjFqYSypE
-         rc8wVBPMdvtJTOv15XlCtUgxLB4Z8BqG1uqOpxlR1z1+vs16SH25e4/FzUIYwiL/scDo
-         Wc053env+nGJ/sVlEG5PDz54k121wXfpumrMYXJasIxRojK1gUZyOXSEqye03BTULQNW
-         nlnQ==
-X-Gm-Message-State: ACgBeo2V7EfonYhqYAP5IyZ3C3mserxhuhjRK6gcyk7koeRZV05gIt4G
-        +XY9TRJx4oo3/3jqEsO4Wbf/yMtlIC7AKQ==
-X-Google-Smtp-Source: AA6agR6PqdDOTaxrQgkWjRZA7p0lkg0Nc3A7gVBubgRSifUTqelkJp2YUvAkVhTnMNjRviqGusTccw==
-X-Received: by 2002:a05:622a:290:b0:35b:bc26:d98c with SMTP id z16-20020a05622a029000b0035bbc26d98cmr10713300qtw.489.1663201381041;
-        Wed, 14 Sep 2022 17:23:01 -0700 (PDT)
-Received: from trappist.c.googlers.com.com (128.174.85.34.bc.googleusercontent.com. [34.85.174.128])
-        by smtp.gmail.com with ESMTPSA id m5-20020ac86885000000b0034367ec57ecsm2377611qtq.9.2022.09.14.17.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 17:23:00 -0700 (PDT)
-From:   Sven van Ashbrook <svenva@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Olivia Mackall <olivia@selenic.com>
-Cc:     Alex Levin <levinale@google.com>,
-        Andrey Pronin <apronin@google.com>,
-        Stephen Boyd <swboyd@google.com>,
-        Rajat Jain <rajatja@google.com>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH v2 2/2] hwrng: core: fix suspend/resume race condition
-Date:   Thu, 15 Sep 2022 00:22:54 +0000
-Message-Id: <20220915002235.v2.2.I8db2637ed3b9abc3961f3bc41ec25fa8b8ae6624@changeid>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
-References: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+        Wed, 14 Sep 2022 20:23:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110B989906;
+        Wed, 14 Sep 2022 17:23:20 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28ENq1LS007824;
+        Thu, 15 Sep 2022 00:23:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=VpRVLQpGCFW0cQEexkr1W3XtSZgIraY5Rwsrn8ytycU=;
+ b=B7+H/BHiolm0SYRSLFVw3cSP7zURkkq5Qx6jhkrpsiREqceM7Hq7Z874vJoTw0iIBLQV
+ csITYVmax+BorbXqhOZ7iyd7eDf0wsZk5h+Z+r8gmlfm3mq+CZCENMDqxZlN44Co60pS
+ WeP0paBhBfhandh7+9Nq1bxB2yvCRBAM+Ud0tKZ4/wBNI1FLi0lOfpONgiY2LXwZrCkS
+ pJUrv7WJRx0TA7FcJC9Nb+mh2ubpmSXsq2wYro2AUdHzFhVv1vJjWbROK6Qa8xeOW3Up
+ 7SQMTC1XzngmuH2zmmDw0FBk8UXZ3q75HJZmBMLfYFVWS8Tsnp+5cLpggamJnbo29Gcc gQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxys4d0r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 00:23:09 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28F0N815000343;
+        Thu, 15 Sep 2022 00:23:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jjqbt792d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 00:23:08 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28F0N8u3000335;
+        Thu, 15 Sep 2022 00:23:08 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 28F0N8mj000330
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 00:23:08 +0000
+Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 14 Sep
+ 2022 17:23:08 -0700
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] wifi: ath11k: Make QMI message rules const
+Date:   Wed, 14 Sep 2022 17:23:03 -0700
+Message-ID: <20220915002303.12206-1-quic_jjohnson@quicinc.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220912221335.27520-1-quic_jjohnson@quicinc.com>
+References: <20220912221335.27520-1-quic_jjohnson@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uAj7W2lfvKqduu-u0JRgavNWcT8hM16Z
+X-Proofpoint-GUID: uAj7W2lfvKqduu-u0JRgavNWcT8hM16Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_11,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 impostorscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2208220000 definitions=main-2209140117
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hwrng fill function runs as a normal kthread. This thread
-doesn't get frozen by the PM, i.e. it will keep running during,
-or in, system suspend. It may call the client driver's
-data_present()/data_read() functions during, or in, suspend;
-which may generate errors or warnings. For example, if the
-client driver uses an i2c bus, the following warning may be
-intermittently generated:
+Commit ff6d365898d4 ("soc: qcom: qmi: use const for struct
+qmi_elem_info") allows QMI message encoding/decoding rules to be
+const, so do that for ath11k.
 
-  i2c: Transfer while suspended
+Compile tested only.
 
-Fix by converting the delay polled kthread into an ordered work
-queue running a single, self-rearming delayed_work. Make the
-workqueue WQ_FREEZABLE, so the PM will drain any work items
-before going into suspend. This prevents client drivers from
-being accessed during, or in, suspend.
-
-Tested on a Chromebook containing an cr50 tpm over i2c. The test
-consists of 31000 suspend/resume cycles. Occasional
-"i2c: Transfer while suspended" warnings are seen. After applying
-this patch, these warnings disappear.
-
-This patch also does not appear to cause any regressions on the
-ChromeOS test queues.
-
-Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 ---
 
-Changes in v2:
-- refreshed patch set against latest tree
+v2:
+- Added 12th digit to the hash in the commit text
+- rebased, updated 2 more definitions added since v1:
+  	   qmi_wlanfw_host_cap_req_msg_v01_ei[]
+	   qmi_wlfw_fw_init_done_ind_msg_v01_ei[]
 
- drivers/char/hw_random/core.c | 95 +++++++++++++++++++----------------
- 1 file changed, 51 insertions(+), 44 deletions(-)
+Depends-on: https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=ff6d365898d4d31bd557954c7fc53f38977b491c
 
-diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index 3675122c6cce..ee85ca97d215 100644
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -17,7 +17,7 @@
- #include <linux/hw_random.h>
- #include <linux/random.h>
- #include <linux/kernel.h>
--#include <linux/kthread.h>
-+#include <linux/workqueue.h>
- #include <linux/sched/signal.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -28,14 +28,17 @@
+drivers/net/wireless/ath/ath11k/qmi.c | 72 +++++++++++++--------------
+ 1 file changed, 36 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 2be45683260c..42f18c3bcfa3 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -28,7 +28,7 @@ module_param_named(cold_boot_cal, ath11k_cold_boot_cal, bool, 0644);
+ MODULE_PARM_DESC(cold_boot_cal,
+ 		 "Decrease the channel switch time but increase the driver load time (Default: true)");
  
- #define RNG_MODULE_NAME		"hw_random"
+-static struct qmi_elem_info qmi_wlanfw_host_cap_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_host_cap_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+ 		.elem_len	= 1,
+@@ -279,7 +279,7 @@ static struct qmi_elem_info qmi_wlanfw_host_cap_req_msg_v01_ei[] = {
+ 	},
+ };
  
--static struct hwrng *current_rng;
- /* the current rng has been explicitly chosen by user via sysfs */
- static int cur_rng_set_by_user;
--static struct task_struct *hwrng_fill;
-+static struct workqueue_struct *hwrng_wq;
-+static struct delayed_work hwrng_fill_dwork;
-+static size_t entropy_credit;
-+/* Protects rng_list, current_rng, is_hwrng_wq_running */
-+static DEFINE_MUTEX(rng_mutex);
- /* list of registered rngs */
- static LIST_HEAD(rng_list);
--/* Protects rng_list and current_rng */
--static DEFINE_MUTEX(rng_mutex);
-+static struct hwrng *current_rng;
-+static bool is_hwrng_wq_running;
- /* Protects rng read functions, data_avail, rng_buffer and rng_fillbuf */
- static DEFINE_MUTEX(reading_mutex);
- static int data_avail;
-@@ -488,37 +491,29 @@ static int __init register_miscdev(void)
- 	return misc_register(&rng_miscdev);
- }
+-static struct qmi_elem_info qmi_wlanfw_host_cap_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_host_cap_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -296,7 +296,7 @@ static struct qmi_elem_info qmi_wlanfw_host_cap_resp_msg_v01_ei[] = {
+ 	},
+ };
  
--static int hwrng_fillfn(void *unused)
-+static void hwrng_fillfn(struct work_struct *unused)
- {
--	size_t entropy, entropy_credit = 0; /* in 1/1024 of a bit */
-+	unsigned short quality;
- 	unsigned long delay;
-+	struct hwrng *rng;
-+	size_t entropy; /* in 1/1024 of a bit */
- 	long rc;
+-static struct qmi_elem_info qmi_wlanfw_ind_register_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_ind_register_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+ 		.elem_len	= 1,
+@@ -521,7 +521,7 @@ static struct qmi_elem_info qmi_wlanfw_ind_register_req_msg_v01_ei[] = {
+ 	},
+ };
  
--	while (!kthread_should_stop()) {
--		unsigned short quality;
--		struct hwrng *rng;
--
--		rng = get_current_rng();
--		if (IS_ERR(rng) || !rng)
--			break;
--		mutex_lock(&reading_mutex);
--		rc = rng_get_data(rng, rng_fillbuf,
--				  rng_buffer_size(), 1);
--		if (current_quality != rng->quality)
--			rng->quality = current_quality; /* obsolete */
--		quality = rng->quality;
--		mutex_unlock(&reading_mutex);
--		put_rng(rng);
--
--		if (!quality)
--			break;
-+	rng = get_current_rng();
-+	if (IS_ERR(rng) || !rng)
-+		return;
-+	mutex_lock(&reading_mutex);
-+	rc = rng_get_data(rng, rng_fillbuf, rng_buffer_size(), 1);
-+	if (current_quality != rng->quality)
-+		rng->quality = current_quality; /* obsolete */
-+	quality = rng->quality;
-+	mutex_unlock(&reading_mutex);
-+	put_rng(rng);
+-static struct qmi_elem_info qmi_wlanfw_ind_register_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_ind_register_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -557,7 +557,7 @@ static struct qmi_elem_info qmi_wlanfw_ind_register_resp_msg_v01_ei[] = {
+ 	},
+ };
  
--		if (rc <= 0) {
--			pr_warn("hwrng: no data available\n");
--			msleep_interruptible(10000);
--			continue;
--		}
-+	if (!quality)
-+		return;
+-static struct qmi_elem_info qmi_wlanfw_mem_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_mem_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_8_BYTE,
+ 		.elem_len	= 1,
+@@ -589,7 +589,7 @@ static struct qmi_elem_info qmi_wlanfw_mem_cfg_s_v01_ei[] = {
+ 	},
+ };
  
-+	if (rc > 0) {
- 		/* If we cannot credit at least one bit of entropy,
- 		 * keep track of the remainder for the next iteration
- 		 */
-@@ -529,11 +524,11 @@ static int hwrng_fillfn(void *unused)
- 		/* Outside lock, sure, but y'know: randomness. */
- 		delay = add_hwgenerator_randomness((void *)rng_fillbuf, rc,
- 						   entropy >> 10);
--		if (delay > 0)
--			schedule_timeout_interruptible(delay);
-+	} else {
-+		pr_warn("hwrng: no data available\n");
-+		delay = 10 * HZ;
- 	}
--	hwrng_fill = NULL;
--	return 0;
-+	mod_delayed_work(hwrng_wq, &hwrng_fill_dwork, delay);
- }
+-static struct qmi_elem_info qmi_wlanfw_mem_seg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_mem_seg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -631,7 +631,7 @@ static struct qmi_elem_info qmi_wlanfw_mem_seg_s_v01_ei[] = {
+ 	},
+ };
  
- static void hwrng_manage_rngd(struct hwrng *rng)
-@@ -541,14 +536,12 @@ static void hwrng_manage_rngd(struct hwrng *rng)
- 	if (WARN_ON(!mutex_is_locked(&rng_mutex)))
- 		return;
+-static struct qmi_elem_info qmi_wlanfw_request_mem_ind_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_request_mem_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_DATA_LEN,
+ 		.elem_len	= 1,
+@@ -658,7 +658,7 @@ static struct qmi_elem_info qmi_wlanfw_request_mem_ind_msg_v01_ei[] = {
+ 	},
+ };
  
--	if (rng->quality == 0 && hwrng_fill)
--		kthread_stop(hwrng_fill);
--	if (rng->quality > 0 && !hwrng_fill) {
--		hwrng_fill = kthread_run(hwrng_fillfn, NULL, "hwrng");
--		if (IS_ERR(hwrng_fill)) {
--			pr_err("hwrng_fill thread creation failed\n");
--			hwrng_fill = NULL;
--		}
-+	if (rng->quality == 0 && is_hwrng_wq_running) {
-+		cancel_delayed_work(&hwrng_fill_dwork);
-+		is_hwrng_wq_running = false;
-+	} else if (rng->quality > 0 && !is_hwrng_wq_running) {
-+		mod_delayed_work(hwrng_wq, &hwrng_fill_dwork, 0);
-+		is_hwrng_wq_running = true;
- 	}
- }
+-static struct qmi_elem_info qmi_wlanfw_mem_seg_resp_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_mem_seg_resp_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_8_BYTE,
+ 		.elem_len	= 1,
+@@ -698,7 +698,7 @@ static struct qmi_elem_info qmi_wlanfw_mem_seg_resp_s_v01_ei[] = {
+ 	},
+ };
  
-@@ -631,8 +624,7 @@ void hwrng_unregister(struct hwrng *rng)
- 	new_rng = get_current_rng_nolock();
- 	if (list_empty(&rng_list)) {
- 		mutex_unlock(&rng_mutex);
--		if (hwrng_fill)
--			kthread_stop(hwrng_fill);
-+		cancel_delayed_work_sync(&hwrng_fill_dwork);
- 	} else
- 		mutex_unlock(&rng_mutex);
+-static struct qmi_elem_info qmi_wlanfw_respond_mem_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_respond_mem_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_DATA_LEN,
+ 		.elem_len	= 1,
+@@ -725,7 +725,7 @@ static struct qmi_elem_info qmi_wlanfw_respond_mem_req_msg_v01_ei[] = {
+ 	},
+ };
  
-@@ -703,17 +695,32 @@ static int __init hwrng_modinit(void)
- 		return -ENOMEM;
- 	}
+-static struct qmi_elem_info qmi_wlanfw_respond_mem_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_respond_mem_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -743,7 +743,7 @@ static struct qmi_elem_info qmi_wlanfw_respond_mem_resp_msg_v01_ei[] = {
+ 	},
+ };
  
-+	/* ordered wq to mimic delay-polled kthread behaviour */
-+	hwrng_wq = alloc_ordered_workqueue("hwrng",
-+		WQ_FREEZABLE |	/* prevent work from running during suspend/resume */
-+		WQ_MEM_RECLAIM	/* client drivers may need memory reclaim */
-+	);
-+	if (!hwrng_wq) {
-+		kfree(rng_fillbuf);
-+		kfree(rng_buffer);
-+		return -ENOMEM;
-+	}
-+
- 	ret = register_miscdev();
- 	if (ret) {
-+		destroy_workqueue(hwrng_wq);
- 		kfree(rng_fillbuf);
- 		kfree(rng_buffer);
- 	}
+-static struct qmi_elem_info qmi_wlanfw_cap_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_cap_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_EOTI,
+ 		.array_type	= NO_ARRAY,
+@@ -751,7 +751,7 @@ static struct qmi_elem_info qmi_wlanfw_cap_req_msg_v01_ei[] = {
+ 	},
+ };
  
-+	INIT_DELAYED_WORK(&hwrng_fill_dwork, hwrng_fillfn);
-+
- 	return ret;
- }
+-static struct qmi_elem_info qmi_wlanfw_device_info_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_device_info_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_EOTI,
+ 		.array_type     = NO_ARRAY,
+@@ -759,7 +759,7 @@ static struct qmi_elem_info qmi_wlanfw_device_info_req_msg_v01_ei[] = {
+ 	},
+ };
  
- static void __exit hwrng_modexit(void)
- {
-+	destroy_workqueue(hwrng_wq);
- 	mutex_lock(&rng_mutex);
- 	BUG_ON(current_rng);
- 	kfree(rng_buffer);
+-static struct qmi_elem_info qmi_wlfw_device_info_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlfw_device_info_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -813,7 +813,7 @@ static struct qmi_elem_info qmi_wlfw_device_info_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_rf_chip_info_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_rf_chip_info_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -839,7 +839,7 @@ static struct qmi_elem_info qmi_wlanfw_rf_chip_info_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_rf_board_info_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_rf_board_info_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -856,7 +856,7 @@ static struct qmi_elem_info qmi_wlanfw_rf_board_info_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_soc_info_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_soc_info_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -872,7 +872,7 @@ static struct qmi_elem_info qmi_wlanfw_soc_info_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_fw_version_info_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_fw_version_info_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -898,7 +898,7 @@ static struct qmi_elem_info qmi_wlanfw_fw_version_info_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_cap_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_cap_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1099,7 +1099,7 @@ static struct qmi_elem_info qmi_wlanfw_cap_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_bdf_download_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_bdf_download_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_1_BYTE,
+ 		.elem_len	= 1,
+@@ -1234,7 +1234,7 @@ static struct qmi_elem_info qmi_wlanfw_bdf_download_req_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_bdf_download_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_bdf_download_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1252,7 +1252,7 @@ static struct qmi_elem_info qmi_wlanfw_bdf_download_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_m3_info_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_m3_info_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_8_BYTE,
+ 		.elem_len	= 1,
+@@ -1276,7 +1276,7 @@ static struct qmi_elem_info qmi_wlanfw_m3_info_req_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_m3_info_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_m3_info_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1293,7 +1293,7 @@ static struct qmi_elem_info qmi_wlanfw_m3_info_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -1346,7 +1346,7 @@ static struct qmi_elem_info qmi_wlanfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_ce_svc_pipe_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_ce_svc_pipe_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -1381,7 +1381,7 @@ static struct qmi_elem_info qmi_wlanfw_ce_svc_pipe_cfg_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_shadow_reg_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_shadow_reg_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_2_BYTE,
+ 		.elem_len	= 1,
+@@ -1405,7 +1405,7 @@ static struct qmi_elem_info qmi_wlanfw_shadow_reg_cfg_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_shadow_reg_v2_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_shadow_reg_v2_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -1422,7 +1422,7 @@ static struct qmi_elem_info qmi_wlanfw_shadow_reg_v2_cfg_s_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_mode_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_mode_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_4_BYTE,
+ 		.elem_len	= 1,
+@@ -1457,7 +1457,7 @@ static struct qmi_elem_info qmi_wlanfw_wlan_mode_req_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_mode_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_mode_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1475,7 +1475,7 @@ static struct qmi_elem_info qmi_wlanfw_wlan_mode_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_cfg_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_cfg_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+ 		.elem_len	= 1,
+@@ -1614,7 +1614,7 @@ static struct qmi_elem_info qmi_wlanfw_wlan_cfg_req_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_cfg_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_cfg_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1631,28 +1631,28 @@ static struct qmi_elem_info qmi_wlanfw_wlan_cfg_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_mem_ready_ind_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_mem_ready_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type = QMI_EOTI,
+ 		.array_type = NO_ARRAY,
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_fw_ready_ind_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_fw_ready_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type = QMI_EOTI,
+ 		.array_type = NO_ARRAY,
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_cold_boot_cal_done_ind_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_cold_boot_cal_done_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type = QMI_EOTI,
+ 		.array_type = NO_ARRAY,
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_ini_req_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_ini_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+ 		.elem_len	= 1,
+@@ -1678,7 +1678,7 @@ static struct qmi_elem_info qmi_wlanfw_wlan_ini_req_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlanfw_wlan_ini_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlanfw_wlan_ini_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -1696,7 +1696,7 @@ static struct qmi_elem_info qmi_wlanfw_wlan_ini_resp_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static struct qmi_elem_info qmi_wlfw_fw_init_done_ind_msg_v01_ei[] = {
++static const struct qmi_elem_info qmi_wlfw_fw_init_done_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type = QMI_EOTI,
+ 		.array_type = NO_ARRAY,
 -- 
-2.37.2.789.g6183377224-goog
+2.37.0
 
