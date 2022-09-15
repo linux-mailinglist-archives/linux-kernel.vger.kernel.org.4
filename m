@@ -2,83 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55835B942D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38CA5B9435
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiIOGQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S229604AbiIOGRH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 02:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIOGP7 (ORCPT
+        with ESMTP id S229495AbiIOGRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:15:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C5466108;
-        Wed, 14 Sep 2022 23:15:58 -0700 (PDT)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663222556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=16EkOxJWOJ2VYr1fBeCMv5EVP+eK/aR5IZaZqnAsUIs=;
-        b=Jo8DAk+8XrNoO7qyclUY85EEstbXluGvNbeLjVv0bmnHJBXpHyemrxgzapTX9LAwxcq9F7
-        YaTbyvayjfjFZcRRxwqY9JjSqi6bWAa3ZIZ9U/zpeW2P3VoRsuTJwvaLrfA992648tagko
-        vrfx5TvArtJwnj+td0JluzwC1HdIGZ5pyA+DvAdVZrYsBXHsTvFI8mVeqC1y1V5B0Kil74
-        hIa2oCgO3zt7KISU9Tq5hh4CdimcCGzcB2HFM59DeUrsigtrTVaEiQLF1nILyGTMxc45Jz
-        Qzbd4sZmeTHv0RihaKBUM6nvHPs1JTq3yad76jSVmkW8uQHv5hsz8PFYo7XySA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663222556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=16EkOxJWOJ2VYr1fBeCMv5EVP+eK/aR5IZaZqnAsUIs=;
-        b=DdTVkZycJlCNKiaDfqsVG7UN73DsE5FEavr2HXLbrbqdTrrTADF8xbscteukrg32W2lW42
-        +hZBDt1u3ep4OrAg==
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 08/13] net: dsa: hellcreek: deny tc-taprio
- changes to per-tc max SDU
-In-Reply-To: <20220914184051.2awuutgr4vm4tfgf@skbuf>
-References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
- <20220914153303.1792444-9-vladimir.oltean@nxp.com> <87a671bz8e.fsf@kurt>
- <20220914184051.2awuutgr4vm4tfgf@skbuf>
-Date:   Thu, 15 Sep 2022 08:15:54 +0200
-Message-ID: <87r10dxiw5.fsf@kurt>
+        Thu, 15 Sep 2022 02:17:05 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDAC91D29
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:17:03 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
+        by SHSQR01.spreadtrum.com with ESMTPS id 28F6GL6q009931
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Thu, 15 Sep 2022 14:16:21 +0800 (CST)
+        (envelope-from Zhiguo.Niu@unisoc.com)
+Received: from bj08434pcu.spreadtrum.com (10.0.74.109) by
+ BJMBX02.spreadtrum.com (10.0.64.8) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 15 Sep 2022 14:16:21 +0800
+From:   "zhiguo.niu" <zhiguo.niu@unisoc.com>
+To:     <jaegeuk@kernel.org>, <chao@kernel.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+CC:     <lvqiang.huang@unisoc.com>
+Subject: [PATCH Vx 1/1] f2fs: fix some error handling case in gc
+Date:   Thu, 15 Sep 2022 14:16:13 +0800
+Message-ID: <1663222573-27702-1-git-send-email-zhiguo.niu@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset="utf-8"
+X-Originating-IP: [10.0.74.109]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX02.spreadtrum.com (10.0.64.8)
+Content-Transfer-Encoding: 8BIT
+X-MAIL: SHSQR01.spreadtrum.com 28F6GL6q009931
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,113 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+During GC, if segment type stored in SSA and SIT is inconsistent,
+we set SBI_NEED_FSCK first and then stop checkpoint, this will
+cause the following issues:
+1. SBI_NEED_FSCK can not be set to flash truly because of checkpoint
+has been stopped.
+2. Will cause more EIO error because of CP_ERROR_FLAG is set in
+f2fs_stop_checkpoint, this is not reasonable.
 
-On Wed Sep 14 2022, Vladimir Oltean wrote:
-> On Wed, Sep 14, 2022 at 08:13:53PM +0200, Kurt Kanzenbach wrote:
->> I'd rather like to see that feature implemented :-). Something like belo=
-w.
->>=20
->> From 3d44683979bf50960125fa3005b1142af61525c7 Mon Sep 17 00:00:00 2001
->> From: Kurt Kanzenbach <kurt@linutronix.de>
->> Date: Wed, 14 Sep 2022 19:51:40 +0200
->> Subject: [PATCH] net: dsa: hellcreek: Offload per-tc max SDU from tc-tap=
-rio
->>=20
->> Add support for configuring the max SDU per priority and per port. If not
->> specified, keep the default.
->>=20
->> Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
->> ---
->
-> Nice :) Do you also want the iproute2 patch, so you can test it?
+So we fix this error handling case by recording current victim segment
+as invalid for gc.
 
-Sure. I see you posted that patch already.
+Signed-off-by: zhiguo.niu <zhiguo.niu@unisoc.com>
+---
+ fs/f2fs/gc.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
->
->>  drivers/net/dsa/hirschmann/hellcreek.c | 61 +++++++++++++++++++++++---
->>  drivers/net/dsa/hirschmann/hellcreek.h |  7 +++
->>  2 files changed, 61 insertions(+), 7 deletions(-)
->>=20
->> diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hi=
-rschmann/hellcreek.c
->> index 5ceee71d9a25..1b22710e1641 100644
->> --- a/drivers/net/dsa/hirschmann/hellcreek.c
->> +++ b/drivers/net/dsa/hirschmann/hellcreek.c
->> @@ -128,6 +128,16 @@ static void hellcreek_select_prio(struct hellcreek =
-*hellcreek, int prio)
->>  	hellcreek_write(hellcreek, val, HR_PSEL);
->>  }
->>=20=20
->> +static void hellcreek_select_port_prio(struct hellcreek *hellcreek, int=
- port,
->> +				       int prio)
->> +{
->> +	u16 val =3D port << HR_PSEL_PTWSEL_SHIFT;
->> +
->> +	val |=3D prio << HR_PSEL_PRTCWSEL_SHIFT;
->> +
->> +	hellcreek_write(hellcreek, val, HR_PSEL);
->> +}
->> +
->>  static void hellcreek_select_counter(struct hellcreek *hellcreek, int c=
-ounter)
->>  {
->>  	u16 val =3D counter << HR_CSEL_SHIFT;
->> @@ -1537,6 +1547,42 @@ hellcreek_port_prechangeupper(struct dsa_switch *=
-ds, int port,
->>  	return ret;
->>  }
->>=20=20
->> +static void hellcreek_setup_maxsdu(struct hellcreek *hellcreek, int por=
-t,
->> +				   const struct tc_taprio_qopt_offload *schedule)
->> +{
->> +	int tc;
->> +
->> +	for (tc =3D 0; tc < 8; ++tc) {
->> +		u16 val;
->> +
->> +		if (!schedule->max_sdu[tc])
->> +			continue;
->> +
->> +		hellcreek_select_port_prio(hellcreek, port, tc);
->> +
->> +		val =3D (schedule->max_sdu[tc] & HR_PTPRTCCFG_MAXSDU_MASK)
->> +			<< HR_PTPRTCCFG_MAXSDU_SHIFT;
->> +
->> +		hellcreek_write(hellcreek, val, HR_PTPRTCCFG);
->
-> So the maxSDU hardware register tracks exactly the L2 payload size, like
-> the software variable does, or does it include the Ethernet header size
-> and/or FCS?
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index d5fb426e0747..66bdf2678b5e 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1700,10 +1700,13 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
 
-This is something I'm not sure about. I'll ask the HW engineer when he's
-back from vacation.
+                sum = page_address(sum_page);
+                if (type != GET_SUM_TYPE((&sum->footer))) {
+-                       f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
+-                                segno, type, GET_SUM_TYPE((&sum->footer)));
+-                       set_sbi_flag(sbi, SBI_NEED_FSCK);
+-                       f2fs_stop_checkpoint(sbi, false);
++#ifdef CONFIG_F2FS_CHECK_FS
++                       if (!test_and_set_bit(segno, SIT_I(sbi)->invalid_segmap)) {
++                               f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
++                                       segno, type, GET_SUM_TYPE((&sum->footer)));
++                               set_sbi_flag(sbi, SBI_NEED_FSCK);
++                       }
++#endif
+                        goto skip;
+                }
 
-Thanks,
-Kurt
+--
+2.17.1
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmMiwxoTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgjmEEACRHYyHMI670c5W4f+UhOMFFjlsRN71
-CHM/yAlx/EIdMHAdiEXhHNU3qs7zGYVP8Lg4/ZKzN1gwzb6Phujs9R/7Phr+Brle
-ukNjrm+bZHQojiVfh4ZtuvMdEiycia8DQUHBuLv8ZZ8wSBYACCqQVpNMTKclIBR/
-J59EhDB+CFWTEhLx9VnmS9ee9kk3VcPl49J97svnG5bjbebvAFNER5oeqryKwQDd
-CmkDOh1CA/vPp71QcOrtrOjAdldCd3cvoC+GeKdGFmeDRHOKaiXc8DFxQjISLNo6
-KrG/frMVm8YLSwifkNvHol4gRem81pBjGGhcnGxu5V4dFOwThEdt7hek44ySYFOc
-oXTYhUl3A1w54xeSinJ2m3Isyt54iLPL4PnqVvl3Sa/4/LYEFrVCYbuHIO8rmMUS
-TwPQPPICJvdIsCuNmVKH1F720t7hR4AZ76UoaR7mCBeMicqRanb1qoMZWoFr6LMC
-/0zhzT7oZkBJekAuBkb0nVCgrMARjlhDb9Ciqupp9gX4Wgogk5udHHocHEXFVko+
-gUtiNc2K+Dc5iK2iW3lULiPjjcvkdY4N2bIP4tA+O5MstJlQivAFOU+qQOdiEB3d
-kpP8RKJRC/viM0sCoIhKE7eHz/mcd+GYYjQ3miyxi299SwUYneRczQ3tjQcCBPMa
-rPKxH9J0HJksNg==
-=38X1
------END PGP SIGNATURE-----
---=-=-=--
+________________________________
+ This email (including its attachments) is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential or otherwise protected from disclosure. Unauthorized use, dissemination, distribution or copying of this email or the information herein or taking any action in reliance on the contents of this email or the information herein, by anyone other than the intended recipient, or an employee or agent responsible for delivering the message to the intended recipient, is strictly prohibited. If you are not the intended recipient, please do not read, copy, use or disclose any part of this e-mail to others. Please notify the sender immediately and permanently delete this e-mail and any attachments if you received it in error. Internet communications cannot be guaranteed to be timely, secure, error-free or virus-free. The sender does not accept liability for any errors or omissions.
+本邮件及其附件具有保密性质，受法律保护不得泄露，仅发送给本邮件所指特定收件人。严禁非经授权使用、宣传、发布或复制本邮件或其内容。若非该特定收件人，请勿阅读、复制、 使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件的方式即刻告知发件人。无法保证互联网通信及时、安全、无误或防毒。发件人对任何错漏均不承担责任。
