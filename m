@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CF55B947F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2705B9481
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiIOGdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 02:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S229725AbiIOGhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 02:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiIOGdN (ORCPT
+        with ESMTP id S229458AbiIOGg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:33:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1795AD9;
-        Wed, 14 Sep 2022 23:33:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSnSx2Bhxz4x1F;
-        Thu, 15 Sep 2022 16:33:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663223585;
-        bh=wK9zZIrn0GSvSUQK4l4LOTF9pgexwJPX7pO19gTWnlA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lo1DubyyM7oDnig14KQnzqiWN92Nmw7++NY97BPxlIoGXV1yegWaAr0yUx2YfFave
-         O1SHvoLb55rMFOYAmi/fEcTCaOzls147TiNyxmVhucdkkgyNMp4EJmIb8RJ10zo7cP
-         5R1bZiA3vdO2qEPe9JKRUj4eHTXZ/1Uu4/7tlgRzzEAE6NdoVlWLDQpbXLYw0Oku0F
-         hcY9E8K9yWNd6SIz3WK03O+8BtDdznU0YOCNctgVeVo7XDAD5auyAaRp5FgzBhtmZC
-         K6PJJ9oePbR4kqNcP83GHZhvnzkZQEZUGyj+Z7EE7vMbVhrkYHWhFznUeJhTYYRIpY
-         bLLJnXHOnumhQ==
-Date:   Thu, 15 Sep 2022 16:33:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: linux-next: manual merge of the mm tree with the kselftest tree
-Message-ID: <20220915163301.1c8803bc@canb.auug.org.au>
+        Thu, 15 Sep 2022 02:36:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633B594EDD;
+        Wed, 14 Sep 2022 23:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663223815; x=1694759815;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ywGGKiwHZmURZQhHIr5KRE/Hb1qVk7n6C8wW7t5bUds=;
+  b=rWz+rvSvlZC+z7tlVGKHZKsxpV2wRr65OFn0hS9wsX2tgwev8Lj7cpZs
+   GdxUJqMxaBZN/cTeVX6eAtAxq5Pl4KeKekGC23cDErtnxAeY1xSdCB1ys
+   wBDQwynO4YLn/NG0KeZKMwB5PoCRdh1ljPusMWXJaiTna5wmC0OjzkQiu
+   ImoS94DgwbXuyLLbK6hQYgRvlxQbd9PKeU0hsS4bKAzuI+mIGO7o35goL
+   zLYkFv7NwOmMxH+w1tfpuZWsyZvltZoENhWb/AvlbDhvQmhcqohOHRNKL
+   7hUEM5YL4herZsymo9BQA7rspPD92zgVv9O8JGw4hx53Pw1wdlDhNjah5
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="113772105"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Sep 2022 23:36:54 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 14 Sep 2022 23:36:53 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 14 Sep 2022 23:36:51 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: Add interrupt support for PHYs on pcb8290
+Date:   Thu, 15 Sep 2022 08:41:12 +0200
+Message-ID: <20220915064112.1935051-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yca8PNeg1hzOn6qyYHw=22U";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yca8PNeg1hzOn6qyYHw=22U
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add interrupt support for the PHYs found on pcb8290. They are all
+sharing the same interrupt line towards lan966x.
 
-Hi all,
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ arch/arm/boot/dts/lan966x-pcb8290.dts | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Today's linux-next merge of the mm tree got a conflict in:
+diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
+index af92bb12bc6cd..2ed53da914acb 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8290.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
+@@ -68,41 +68,57 @@ &mdio0 {
+ 
+ 	ext_phy0: ethernet-phy@7 {
+ 		reg = <7>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy1: ethernet-phy@8 {
+ 		reg = <8>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy2: ethernet-phy@9 {
+ 		reg = <9>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy3: ethernet-phy@10 {
+ 		reg = <10>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy4: ethernet-phy@15 {
+ 		reg = <15>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy5: ethernet-phy@16 {
+ 		reg = <16>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy6: ethernet-phy@17 {
+ 		reg = <17>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ 
+ 	ext_phy7: ethernet-phy@18 {
+ 		reg = <18>;
++		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-parent = <&gpio>;
+ 		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
+ 	};
+ };
+-- 
+2.33.0
 
-  tools/testing/selftests/vm/hmm-tests.c
-
-between commit:
-
-  ab7039dbcc61 ("selftests/vm: use top_srcdir instead of recomputing relati=
-ve paths")
-
-from the kselftest tree and commit:
-
-  223e3150a0d8 ("hmm-tests: fix migrate_dirty_page test")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/vm/hmm-tests.c
-index 7d722265dcd7,96eb73f37904..000000000000
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@@ -31,8 -31,9 +31,9 @@@
-   * This is a private UAPI to the kernel test module so it isn't exported
-   * in the usual include/uapi/... directory.
-   */
- -#include "../../../../lib/test_hmm_uapi.h"
- -#include "../../../../mm/gup_test.h"
- +#include <lib/test_hmm_uapi.h>
- +#include <mm/gup_test.h>
-+ #include "vm_util.h"
- =20
-  struct hmm_buffer {
-  	void		*ptr;
-
---Sig_/yca8PNeg1hzOn6qyYHw=22U
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMixx0ACgkQAVBC80lX
-0GzOmAf/Z/qdfb0WQt9V/j5/HHy5XrgAQ/hTAxmcOoWNEEVopAhgagX3SRfdmGo2
-bQBRFO6v2PwdiQBInotRIWswg5lkOzgnQW6nz65hPIP6+mrIAkHlHa10mJDbP6u3
-wIpvJ7IRgvpw+oYl7PoVWgjEoqpUrzwS/hln5tdNNFQo1oB0p8wm7gGBtcB6q3pB
-cv1FhNzhZQMQynShvoGaUMlIk7Q2aUhouoN99QncAE+sV12XQ5Yk0dTlI0LG20QH
-Dx3Uql72IGY5yhtd3FETbltWm4lVOsSVbMtkGf+b/VxLzfeADY5QctzJ3zRHn6ln
-agZoTaDqSiLSQiv1ED4CcnADgmeCCA==
-=713r
------END PGP SIGNATURE-----
-
---Sig_/yca8PNeg1hzOn6qyYHw=22U--
