@@ -2,133 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DBB5B988F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455415B9897
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiIOKL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 06:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S230085AbiIOKO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 06:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiIOKLz (ORCPT
+        with ESMTP id S229701AbiIOKOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 06:11:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9373402D1;
-        Thu, 15 Sep 2022 03:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663236714; x=1694772714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9pV9/hSeLiF6NvcT3SLriBKTjof61GiqelolE5VGU3c=;
-  b=HSkgdbqs39zUb4c9c85hVSh/9SW5hjuYygwOnHtlPa9F5FOSpXZcR8q0
-   73nF9ruz0RFe86//0E9TcqiMkdEkj03A5Y8PPCvlncczpwi6IgfkB511f
-   E46kLOdKgd15WujQRNGerkr03EQQec3hbGAyeBYsAknh+PInhujFjfkIw
-   SHUtxBSPf/xG3ezulyhNzpmeTHjciofX9ot31l9jIw2Rp66YbUXOSJMC4
-   nyVugZdcvKovGUCxyMDIC1kiI3hJfC+NJwFvP3xkgi3eaevZ3W/VCYfB2
-   rPnwzuBHLQT9d5mQMjqqd87AKv6QbvBKl6wOJHg2YOQz9qDhyjsZIG6ls
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362632719"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="362632719"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 03:11:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="945892694"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Sep 2022 03:11:51 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oYlqZ-0000Lx-0n;
-        Thu, 15 Sep 2022 10:11:51 +0000
-Date:   Thu, 15 Sep 2022 18:11:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     wen.ping.teh@intel.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     kbuild-all@lists.01.org, Dinh Nguyen <dinguyen@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Teh Wen Ping <wen.ping.teh@intel.com>
-Subject: Re: [PATCH 1/2] crypto: intel-fcs: crypto service driver for Intel
- SoCFPGA family
-Message-ID: <202209151738.j2RLe6VA-lkp@intel.com>
-References: <20220914144320.605421-1-wen.ping.teh@intel.com>
+        Thu, 15 Sep 2022 06:14:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D164183070;
+        Thu, 15 Sep 2022 03:14:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C99431692;
+        Thu, 15 Sep 2022 03:14:28 -0700 (PDT)
+Received: from [10.57.48.93] (unknown [10.57.48.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DECA23F73B;
+        Thu, 15 Sep 2022 03:14:19 -0700 (PDT)
+Message-ID: <c39b704a-ceae-9db8-7f4f-81d9cfee8495@arm.com>
+Date:   Thu, 15 Sep 2022 11:14:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914144320.605421-1-wen.ping.teh@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 2/9] coresight-tpda: Add DSB dataset support
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1662626705-13097-1-git-send-email-quic_taozha@quicinc.com>
+ <1662626705-13097-3-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1662626705-13097-3-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Tao
 
-Thank you for the patch! Yet something to improve:
+On 08/09/2022 09:44, Tao Zhang wrote:
+> Read the DSB element size from the device tree. Set the register
+> bit that controls the DSB element size of the corresponding port.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-tpda.c | 62 ++++++++++++++++++++++++++++
+>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
+>   2 files changed, 66 insertions(+)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
+> index c8bbc75..76636a1 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpda.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
+> @@ -37,6 +37,15 @@ static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
+>   	u32 val;
+>   
+>   	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
+> +	/*
+> +	 * Configure aggregator port n DSB data set element size
+> +	 * Set the bit to 0 if the size is 32
+> +	 * Set the bit to 1 if the size is 64
+> +	 */
+> +	if (drvdata->dsb_esize[port] == 32)
+> +		val &= ~TPDA_Pn_CR_DSBSIZE;
+> +	else if (drvdata->dsb_esize[port] == 64)
+> +		val |= TPDA_Pn_CR_DSBSIZE;
+>   	/* Enable the port */
+>   	val |= TPDA_Pn_CR_ENA;
+>   	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
+> @@ -105,6 +114,55 @@ static const struct coresight_ops tpda_cs_ops = {
+>   	.link_ops	= &tpda_link_ops,
+>   };
+>   
+> +static int tpda_parse_dsb(struct tpda_drvdata *drvdata)
+> +{
+> +	int len, port, i;
+> +	const __be32 *prop;
+> +	struct device_node *node = drvdata->dev->of_node;
+> +
+> +	/* Read the size of DSB element */
+> +	prop = of_get_property(node, "qcom,dsb-elem-size", &len);
+> +	if (prop) {
+> +		len /= sizeof(__be32);
+> +		/*
+> +		 * The read set of data is port and size, so the number of data
+> +		 * is a multiple of two. And the number of data will not exceed
+> +		 * two times that of the TPDA inpurts number.
+> +		 */
+> +		if (len < 2 || len >= (2 * TPDA_MAX_INPORTS) || len % 2 != 0) {
+> +			dev_err(drvdata->dev,
+> +				"Dataset DSB width entries are wrong\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		for (i = 0; i < len; i++) {
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master arm64/for-next/core linus/master v6.0-rc5 next-20220914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please could we be explicit here that we are dealing with 2 entries
+in an iteration. i.e,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/wen-ping-teh-intel-com/crypto-intel-fcs-Add-crypto-service-driver-for-Intel-SoCFPGA/20220914-224700
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220915/202209151738.j2RLe6VA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/4cdd20e357a4c52a9479852d5464147100813280
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review wen-ping-teh-intel-com/crypto-intel-fcs-Add-crypto-service-driver-for-Intel-SoCFPGA/20220914-224700
-        git checkout 4cdd20e357a4c52a9479852d5464147100813280
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+		for (i = 0; i < len; i += 2) {
+> +			port = be32_to_cpu(prop[i++]);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+			port = be32_to_cpu(prop[i]);
 
-All errors (new ones prefixed by >>):
+> +			if (port >= TPDA_MAX_INPORTS) {
+> +				dev_err(drvdata->dev,
+> +					"Wrong port specified for DSB\n");
+> +				return -EINVAL;
+> +			}
+> +			/* Set DSB element size for corresponding port to dsb_esize*/
+> +			drvdata->dsb_esize[port] = be32_to_cpu(prop[i]);
 
-   In file included from <command-line>:
->> ./usr/include/linux/intel_fcs-ioctl.h:40:9: error: unknown type name 'uint32_t'
-      40 |         uint32_t test_bit:1;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:41:9: error: unknown type name 'uint32_t'
-      41 |         uint32_t rsvd:31;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:56:9: error: unknown type name 'uint32_t'
-      56 |         uint32_t size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:66:9: error: unknown type name 'uint32_t'
-      66 |         uint32_t size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:79:9: error: unknown type name 'uint32_t'
-      79 |         uint32_t size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:80:9: error: unknown type name 'uint32_t'
-      80 |         uint32_t c_status;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:92:9: error: unknown type name 'uint32_t'
-      92 |         uint32_t src_size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:94:9: error: unknown type name 'uint32_t'
-      94 |         uint32_t dst_size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:106:9: error: unknown type name 'uint32_t'
-     106 |         uint32_t src_size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:108:9: error: unknown type name 'uint32_t'
-     108 |         uint32_t dst_size;
-         |         ^~~~~~~~
-   ./usr/include/linux/intel_fcs-ioctl.h:116:9: error: unknown type name 'uint32_t'
-     116 |         uint32_t rndm[8];
-         |         ^~~~~~~~
+		drvdata->dsb_esize[port] = be32_to_cpu(prop[i + 1]);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tpda_parse_of_data(struct tpda_drvdata *drvdata)
+> +{
+> +	int ret;
+> +
+> +	ret = tpda_parse_dsb(drvdata);
+> +	if (ret) {
+> +		dev_err(drvdata->dev, "Fail to get DSB data set element size\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int tpda_init_default_data(struct tpda_drvdata *drvdata)
+>   {
+>   	int atid;
+> @@ -148,6 +206,10 @@ static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
+>   
+>   	spin_lock_init(&drvdata->spinlock);
+>   
+> +	ret = tpda_parse_of_data(drvdata);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ret = tpda_init_default_data(drvdata);
+>   	if (ret)
+>   		return ret;
+> diff --git a/drivers/hwtracing/coresight/coresight-tpda.h b/drivers/hwtracing/coresight/coresight-tpda.h
+> index 4beb332..ecc7869 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpda.h
+> +++ b/drivers/hwtracing/coresight/coresight-tpda.h
+> @@ -10,6 +10,8 @@
+>   #define TPDA_Pn_CR(n)		(0x004 + (n * 4))
+>   /* Aggregator port enable bit */
+>   #define TPDA_Pn_CR_ENA		BIT(0)
+> +/* Aggregator port DSB data set element size bit */
+> +#define TPDA_Pn_CR_DSBSIZE		BIT(8)
+>   
+>   #define TPDA_MAX_INPORTS	32
+>   
+> @@ -23,6 +25,7 @@
+>    * @csdev:      component vitals needed by the framework.
+>    * @spinlock:   lock for the drvdata value.
+>    * @enable:     enable status of the component.
+> + * @dsb_esize   DSB element size
+
+super minor nit: Missing ":", consistent with the other fields.
+
+>    */
+>   struct tpda_drvdata {
+>   	void __iomem		*base;
+> @@ -30,6 +33,7 @@ struct tpda_drvdata {
+>   	struct coresight_device	*csdev;
+>   	spinlock_t		spinlock;
+>   	u8			atid;
+> +	u32			dsb_esize[TPDA_MAX_INPORTS];
+>   };
+>   
+>   #endif  /* _CORESIGHT_CORESIGHT_TPDA_H */
+
+Suzuki
