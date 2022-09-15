@@ -2,251 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48FB5B9FD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5C35B9FDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIOQpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S229621AbiIOQpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiIOQpH (ORCPT
+        with ESMTP id S230023AbiIOQpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:45:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2BE03BC41;
-        Thu, 15 Sep 2022 09:45:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E80351D34;
-        Thu, 15 Sep 2022 09:45:11 -0700 (PDT)
-Received: from e126311.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5533C3F73B;
-        Thu, 15 Sep 2022 09:45:04 -0700 (PDT)
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/1] cpuidle: teo: Add optional util-awareness
-Date:   Thu, 15 Sep 2022 17:44:11 +0100
-Message-Id: <20220915164411.2496380-2-kajetan.puchalski@arm.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
-References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+        Thu, 15 Sep 2022 12:45:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2414F3B4;
+        Thu, 15 Sep 2022 09:45:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27F8662564;
+        Thu, 15 Sep 2022 16:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5302EC433D6;
+        Thu, 15 Sep 2022 16:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663260336;
+        bh=7QoGPp9vcUcB7hhq18SRD+bpB1C1+NfYZZj7FAZ+E6M=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=W9rgNJ3SH7gXXgofN1CZth0elGN3abwdqgo2Y0QWRD8eUiSpo+Y206ovGRYQfqui0
+         q5xxRGnTsy6dzWM+neWHODXDMDnV8+DvNG5Mvkmpg9ygkX/57vfwUXyzNrcUzk5lvf
+         BSbX2qCxR6tAQ182JQVnx28qST05Z8cBNxn1PEcu9k1YTEHlicuihj88WrVaZ3/7nR
+         cTm/ZCZSAQ3vOH7tYLWPyWVX0lwQIhX9fQyD0YL03uge+2XKGqUJXUR7pvaR/++ezg
+         225t/vogg+gUbu/v+PCFQqXhd2O8Bv3YbvtAgiXaSe9+HT2bjV16fhDd2uzPS4H7M7
+         lOcBnwZO87Lvg==
+Message-ID: <1a968b8e87f054e360877c9ab8cdfc4cfdfc8740.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "neilb@suse.de" <neilb@suse.de>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Date:   Thu, 15 Sep 2022 12:45:32 -0400
+In-Reply-To: <577b6d8a7243aeee37eaa4bbb00c90799586bc48.camel@hammerspace.com>
+References: <20220908083326.3xsanzk7hy3ff4qs@quack3>
+         <YxoIjV50xXKiLdL9@mit.edu>
+         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+         <20220908155605.GD8951@fieldses.org>
+         <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+         <20220908182252.GA18939@fieldses.org>
+         <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+         <166284799157.30452.4308111193560234334@noble.neil.brown.name>
+         <20220912134208.GB9304@fieldses.org>
+         <166302447257.30452.6751169887085269140@noble.neil.brown.name>
+         <20220915140644.GA15754@fieldses.org>
+         <577b6d8a7243aeee37eaa4bbb00c90799586bc48.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modern interactive systems, such as recent Android phones, tend to have
-power efficient shallow idle states. Selecting deeper idle states on a
-device while a latency-sensitive workload is running can adversely impact
-performance due to increased latency. Additionally, if the CPU wakes up
-from a deeper sleep before its target residency as is often the case, it
-results in a waste of energy on top of that.
+On Thu, 2022-09-15 at 15:08 +0000, Trond Myklebust wrote:
+> On Thu, 2022-09-15 at 10:06 -0400, J. Bruce Fields wrote:
+> > On Tue, Sep 13, 2022 at 09:14:32AM +1000, NeilBrown wrote:
+> > > On Mon, 12 Sep 2022, J. Bruce Fields wrote:
+> > > > On Sun, Sep 11, 2022 at 08:13:11AM +1000, NeilBrown wrote:
+> > > > > On Fri, 09 Sep 2022, Jeff Layton wrote:
+> > > > > >=20
+> > > > > > The machine crashes and comes back up, and we get a query for
+> > > > > > i_version
+> > > > > > and it comes back as X. Fine, it's an old version. Now there
+> > > > > > is a write.
+> > > > > > What do we do to ensure that the new value doesn't collide
+> > > > > > with X+1?=20
+> > > > >=20
+> > > > > (I missed this bit in my earlier reply..)
+> > > > >=20
+> > > > > How is it "Fine" to see an old version?
+> > > > > The file could have changed without the version changing.
+> > > > > And I thought one of the goals of the crash-count was to be
+> > > > > able to
+> > > > > provide a monotonic change id.
+> > > >=20
+> > > > I was still mainly thinking about how to provide reliable close-
+> > > > to-open
+> > > > semantics between NFS clients.=A0 In the case the writer was an NFS
+> > > > client, it wasn't done writing (or it would have COMMITted), so
+> > > > those
+> > > > writes will come in and bump the change attribute soon, and as
+> > > > long as
+> > > > we avoid the small chance of reusing an old change attribute,
+> > > > we're OK,
+> > > > and I think it'd even still be OK to advertise
+> > > > CHANGE_TYPE_IS_MONOTONIC_INCR.
+> > >=20
+> > > You seem to be assuming that the client doesn't crash at the same
+> > > time
+> > > as the server (maybe they are both VMs on a host that lost
+> > > power...)
+> > >=20
+> > > If client A reads and caches, client B writes, the server crashes
+> > > after
+> > > writing some data (to already allocated space so no inode update
+> > > needed)
+> > > but before writing the new i_version, then client B crashes.
+> > > When server comes back the i_version will be unchanged but the data
+> > > has
+> > > changed.=A0 Client A will cache old data indefinitely...
+> >=20
+> > I guess I assume that if all we're promising is close-to-open, then a
+> > client isn't allowed to trust its cache in that situation.=A0 Maybe
+> > that's
+> > an overly draconian interpretation of close-to-open.
+> >=20
+> > Also, I'm trying to think about how to improve things incrementally.
+> > Incorporating something like a crash count into the on-disk i_version
+> > fixes some cases without introducing any new ones or regressing
+> > performance after a crash.
+> >=20
+> > If we subsequently wanted to close those remaining holes, I think
+> > we'd
+> > need the change attribute increment to be seen as atomic with respect
+> > to
+> > its associated change, both to clients and (separately) on disk.=A0
+> > (That
+> > would still allow the change attribute to go backwards after a crash,
+> > to
+> > the value it held as of the on-disk state of the file.=A0 I think
+> > clients
+> > should be able to deal with that case.)
+> >=20
+> > But, I don't know, maybe a bigger hammer would be OK:
+> >=20
+>=20
+> If you're not going to meet the minimum bar of data integrity, then
+> this whole exercise is just a massive waste of everyone's time. The
+> answer then going forward is just to recommend never using Linux as an
+> NFS server. Makes my life much easier, because I no longer have to
+> debug any of the issues.
+>=20
+>=20
 
-This patch extends the TEO governor with an optional mechanism adding
-util-awareness, effectively providing a way for the governor to switch
-between only selecting the shallowest idle state when the cpu is being
-utilized over a certain threshold and trying to select the deepest possible
-state using TEO's metrics when the cpu is not being utilized. This is now
-possible since the CPU utilization is exported from the scheduler with the
-sched_cpu_util function and already used e.g. in the thermal governor IPA.
+To be clear, you believe any scheme that would allow the client to see
+an old change attr after a crash is insufficient?
 
-This can provide drastically decreased latency and performance benefits in
-certain types of mobile workloads that are sensitive to latency,
-such as Geekbench 5.
+The only way I can see to fix that (at least with only a crash counter)
+would be to factor it in at presentation time like Neil suggested.
+Basically we'd just mask off the top 16 bits and plop the crash counter
+in there before presenting it.
 
-Signed-off-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
----
- drivers/cpuidle/Kconfig         | 12 +++++
- drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
-
-diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-index ff71dd662880..6b66ee88a2b2 100644
---- a/drivers/cpuidle/Kconfig
-+++ b/drivers/cpuidle/Kconfig
-@@ -33,6 +33,18 @@ config CPU_IDLE_GOV_TEO
- 	  Some workloads benefit from using it and it generally should be safe
- 	  to use.  Say Y here if you are not happy with the alternatives.
- 
-+config CPU_IDLE_GOV_TEO_UTIL_AWARE
-+	bool "Util-awareness mechanism for TEO"
-+	depends on CPU_IDLE_GOV_TEO
-+	help
-+	  Util-awareness mechanism for the TEO governor. With this enabled,
-+	  the governor will choose the shallowest available state when the
-+	  CPU's average util is above a certain threshold and default to
-+	  using the metrics-based approach when it's not.
-+
-+	  Some latency-sensitive workloads on interactive devices can benefit
-+	  from using it.
-+
- config CPU_IDLE_GOV_HALTPOLL
- 	bool "Haltpoll governor (for virtualized systems)"
- 	depends on KVM_GUEST
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index d9262db79cae..fd5b2eb750be 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -2,8 +2,13 @@
- /*
-  * Timer events oriented CPU idle governor
-  *
-+ * TEO governor:
-  * Copyright (C) 2018 - 2021 Intel Corporation
-  * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-+ *
-+ * Util-awareness mechanism:
-+ * Copyright (C) 2022 Arm Ltd.
-+ * Author: Kajetan Puchalski <kajetan.puchalski@arm.com>
-  */
- 
- /**
-@@ -99,14 +104,48 @@
-  *      select the given idle state instead of the candidate one.
-  *
-  * 3. By default, select the candidate state.
-+ *
-+ * Util-awareness mechanism:
-+ *
-+ * The idea behind the util-awareness extension is that there are two distinct
-+ * scenarios for the CPU which should result in two different approaches to idle
-+ * state selection - utilized and not utilized.
-+ *
-+ * In this case, 'utilized' means that the average runqueue util of the CPU is
-+ * above a certain threshold.
-+ *
-+ * When the CPU is utilized while going into idle, more likely than not it will
-+ * be woken up to do more work soon and so the shallowest idle state should be
-+ * selected to minimise latency and maximise performance. When the CPU is not
-+ * being utilized, the usual metrics-based approach to selecting the deepest
-+ * available idle state should be preferred to take advantage of the power
-+ * saving.
-+ *
-+ * In order to achieve this, the governor uses a utilization threshold.
-+ * The threshold is computed per-cpu as a percentage of the CPU's capacity
-+ * by bit shifting the capacity value. Based on testing, the shift of 6 (~1.56%)
-+ * seems to be getting the best results.
-+ *
-+ * Before selecting the next idle state, the governor compares the current CPU
-+ * util to the precomputed util threhsold. If it's below, it defaults to the
-+ * TEO metrics mechanism. If it's above, it simply selects the shallowest
-+ * enabled idle state.
-  */
- 
- #include <linux/cpuidle.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-+#include <linux/sched.h>
- #include <linux/sched/clock.h>
- #include <linux/tick.h>
- 
-+/*
-+ * The number of bits to shift the cpu's capacity by in order to determine
-+ * the utilized threshold
-+ */
-+#define UTIL_THRESHOLD_SHIFT 6
-+
-+
- /*
-  * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
-  * is used for decreasing metrics on a regular basis.
-@@ -140,6 +179,8 @@ struct teo_bin {
-  * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
-  * @next_recent_idx: Index of the next @recent_idx entry to update.
-  * @recent_idx: Indices of bins corresponding to recent "intercepts".
-+ * @util_threshold: Threshold above which the CPU is considered utilized
-+ * @utilized: Whether the last sleep on the CPU happened while utilized
-  */
- struct teo_cpu {
- 	s64 time_span_ns;
-@@ -148,10 +189,28 @@ struct teo_cpu {
- 	unsigned int total;
- 	int next_recent_idx;
- 	int recent_idx[NR_RECENT];
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+	unsigned long util_threshold;
-+	bool utilized;
-+#endif
- };
- 
- static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
- 
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+/**
-+ * teo_get_util - Update the CPU utilized status
-+ * @dev: Target CPU
-+ * @cpu_data: Governor CPU data for the target CPU
-+ */
-+static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-+{
-+	unsigned long util = sched_cpu_util(dev->cpu);
-+
-+	cpu_data->utilized = util > cpu_data->util_threshold;
-+}
-+#endif
-+
- /**
-  * teo_update - Update CPU metrics after wakeup.
-  * @drv: cpuidle driver containing state data.
-@@ -301,7 +360,13 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 	int i;
- 
- 	if (dev->last_state_idx >= 0) {
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+		/* don't update metrics if the cpu was utilized during the last sleep */
-+		if (!cpu_data->utilized)
-+			teo_update(drv, dev);
-+#else
- 		teo_update(drv, dev);
-+#endif
- 		dev->last_state_idx = -1;
- 	}
- 
-@@ -321,6 +386,21 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 			goto end;
- 	}
- 
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+	teo_get_util(dev, cpu_data);
-+	/* if the cpu is being utilized, choose the shallowest state and exit */
-+	if (cpu_data->utilized) {
-+		for (i = 0; i < drv->state_count; ++i) {
-+			if (dev->states_usage[i].disable)
-+				continue;
-+			break;
-+		}
-+
-+		idx = i;
-+		goto end;
-+	}
-+#endif
-+
- 	/*
- 	 * Find the deepest idle state whose target residency does not exceed
- 	 * the current sleep length and the deepest idle state not deeper than
-@@ -508,9 +588,15 @@ static int teo_enable_device(struct cpuidle_driver *drv,
- 			     struct cpuidle_device *dev)
- {
- 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-+#endif
- 	int i;
- 
- 	memset(cpu_data, 0, sizeof(*cpu_data));
-+#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-+	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-+#endif
- 
- 	for (i = 0; i < NR_RECENT; i++)
- 		cpu_data->recent_idx[i] = -1;
--- 
-2.37.1
-
+In principle, I suppose we could do that at the nfsd level as well (and
+that might be the simplest way to fix this). We probably wouldn't be
+able to advertise a change attr type of MONOTONIC with this scheme
+though.
+--=20
+Jeff Layton <jlayton@kernel.org>
