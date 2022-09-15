@@ -2,98 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6722D5B95EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB785B95ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiIOIG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S229853AbiIOII6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIOIGW (ORCPT
+        with ESMTP id S229572AbiIOII4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:06:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D77C94EFA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:06:20 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MSqTN2j8pznVJP;
-        Thu, 15 Sep 2022 16:03:36 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 16:06:18 +0800
-Subject: Re: [PATCH 09/16] mm/page_alloc: use local variable zone_idx directly
-To:     Oscar Salvador <osalvador@suse.de>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-10-linmiaohe@huawei.com>
- <YyLV50jxlqq5GKtJ@localhost.localdomain>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <73b9a03a-232e-b327-641f-49bcd2e1bf9b@huawei.com>
-Date:   Thu, 15 Sep 2022 16:06:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 15 Sep 2022 04:08:56 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2126.outbound.protection.outlook.com [40.107.212.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3609C4F3B5;
+        Thu, 15 Sep 2022 01:08:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G3MhUnRJW5HlyTbcPewpsTBvbpTtUr7UnQfWVVo22mYt8RXbZzkMshJwnnMbI/odRGmtSZfivg6sjcwTGSkNupxze3oZLNoPfJTqxj+pAmRsE5cKTudKKUbgE5Rwr8v6xUda5bwsN8SpHYyYdE/ykJ3UvQqQI/98ibjbgBl/831XjfBf364CnmQUhxKXaiHCcrj9v9rV1VaD66z+RnxELArA8hg3dgLa3UZbO04HVYtj4dS/75AYl3pAbE+IpVgxQEcKIxbRsMrdviOEvhhjpPkJCbG2HlO3k6WhJitKwnY07TFz70YRU6+/sPjR+WAU8SuXKhI57VU/bOsng2WioA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gwDtrbXnF/HBvWWEXc8oIMUoljMs18vjbVOMCvk9H1M=;
+ b=j1Rn5bRmDkckxOLLzJOxH9zKnQNtla9Sxh1j8qOQ9Kn+FWb+1aAVYVio5HS6R38gq5b+T58dPcxJGL01lrFqdC/bEtjUvzODhnIxZf49wbmSPwWCn1z0AKL1hQTOresgd/oNsi5R+JlAoPipcDQ3SYuEz2ZQzuLQn0orVRmHyl6tW3Rhv/5nSwwn/qRaD11TNWE/k+t+Wo+p20ukanadk810/kdBqu75ZoAVnfnuCeDZzwB/H3kbf5Zv7g+MTuNem53WifncZD9C8OnEkM1IgXAPU25o7tvv18f419Y1SWcfMRshZ8lt/CsJcDpKrnPBTJMtR2lekq0mCyxuaN5q/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gwDtrbXnF/HBvWWEXc8oIMUoljMs18vjbVOMCvk9H1M=;
+ b=HfDckRdpDYEk5i50zdxvBhu/VEjIAbYGWO4w/sQKhJhOqtCoxS450CFFdYnFDtiZNqlMCda2fRKgEof6rWknvJ1m6gdmAtPa47mJtVaNnWqltsQYL0rVxcU00fTS0+IOaFtP9LQDKTnajOu/ZH6sa9BUkKef79OJYjE+QDA+7ro=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ MN2PR01MB5919.prod.exchangelabs.com (2603:10b6:208:188::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.15; Thu, 15 Sep 2022 08:08:50 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::48f7:ac49:a2f8:614e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::48f7:ac49:a2f8:614e%5]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
+ 08:08:50 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     quan@os.amperecomputing.com,
+        Phong Vo <phong@os.amperecomputing.com>,
+        Thang Nguyen <thang@os.amperecomputing.com>
+Subject: [PATCH] ARM: dts: aspeed: mtjade: Remove gpio-keys entries
+Date:   Thu, 15 Sep 2022 15:08:28 +0700
+Message-Id: <20220915080828.2894070-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
+ (2603:1096:4:68::26) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-In-Reply-To: <YyLV50jxlqq5GKtJ@localhost.localdomain>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR01MB7282:EE_|MN2PR01MB5919:EE_
+X-MS-Office365-Filtering-Correlation-Id: feb58148-2643-448e-1ae4-08da96f1856f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fnRBP3b7JWRjcuZ4QSpSOjxR9l7uGeqhRA358ZXjXE3xYoAyLpSwq3ccGCTHHeWsyanNNuCxReyTAOjj83DatBP9mwcxFRPr6VQnFqJ/Rs0orEZhalq565bpfAPidvGcSVXLjqESyBWv/4J+a0UJcAxqkLtE90KL2KSonwIuQD11MLrF02zY1kHnYGISjjM/Q16aM7Y/baIXMxewr4DqpY5ch9SoullSpgKGVtcBnNOzXQgtqpN5EKDH5BMAFEhW2k4pjQPPmJXS5tfSNSFI0J7Vq/ShIi6S9ytLndal+RnBdlLWjPUqoxWOBGJTVgaw/9asZ9Rbp+wVE8i8sTk+jqLb9HvEt7UOjZd1Klc43Go3Fqowpg5UBBcqV+Oof7FZ3rSI21jkg0ZfUtAOJhEHAGFdKcGP/xVpYY7Bjfc3uXFTcit3nUpNYz+GBez4djgacKf4ZonXyAIrr5L0PrdSeXt4+SfMzElAgz9w4AovnSLdpGl1FQe+TKwNDXxd6+AsRNN919+GOfg3cJUubhBtMhP8SrZEQg4ho6xh0KeIcnvSLxDWNZeqdgpVe5p78PvbM+oexoVGjUdLSuYlZIAyyTws538lkSBPBPM1ghouEO/KazHBikSr2FhcRy8Z+K5kSTE7jKGDXmvSwCgl/A9B/+WRkc8Rwnp8l/qqChKVeeynUiQ7i4T8avaMCqzrQHauDTk34J69DRLFcZoqr4eNBXs+IR0Rx3qMvcSc6CXksdUtZF+4sedrZgT6o/cIoEKrYf/EuW21XG5Hfkhv2tYATKqbMoBUx/2yote0pgrYzT4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(366004)(376002)(136003)(346002)(451199015)(8676002)(4326008)(5660300002)(66476007)(8936002)(66556008)(66946007)(54906003)(110136005)(1076003)(2616005)(316002)(86362001)(6486002)(38350700002)(2906002)(478600001)(38100700002)(83380400001)(921005)(186003)(41300700001)(6506007)(6512007)(6666004)(26005)(107886003)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lzM7tKjja2OefCPrOwqYDsgpsmIISAezf7ba3O1j+loWlrynN8clx1c+xh3d?=
+ =?us-ascii?Q?58Ux+UzspxFv0eTf/6Itm8Kcba5w12qGb13VnZS29kqiN/IsJDm6CHEvIrSw?=
+ =?us-ascii?Q?/m3KwKIcOygWGExKK2WWpCvmhR1XWwTFPxol3KAqOhZ3WqDSNWD4I4m3D0GL?=
+ =?us-ascii?Q?FkvjFIisxbCZu6fesMnWKFxldeTRJBg3KAYP8JSiF4tm4ZjY8JYfqMJ6txbI?=
+ =?us-ascii?Q?p0teyVpJ41jsZFHEnz4xBTHtENXrZOV2dagQ8KAirV5eSPPG462NleRiH2vs?=
+ =?us-ascii?Q?tvni6PqqQ1VV/QhOQtIoAow3leXviqnt9QYn5Vb2rICODdk3nS4Zo+VQP0wU?=
+ =?us-ascii?Q?nOkqymSsfz2kI0pQjh6/o78Piz+Geh+p8cjOvpLX2KkQymFQJUdHR1U/Y8sd?=
+ =?us-ascii?Q?S1qTG+RDw2zcflXk/JSIwNx1xQNiWarXXNqT+6I8u0BaLEOra3mpG4bbqBlt?=
+ =?us-ascii?Q?fnmNXlTd4FdyLLVuRbA/TOPoIzlPKRpn9Z+Ia5Z0V5CLdIcMrn7laddI49wz?=
+ =?us-ascii?Q?C7BMqSc67MR5NssUGSPAPzuuCIigwq5NtYlC/Gov1QqXFWL0Ot5tF8y4vlHu?=
+ =?us-ascii?Q?fei2VMrbGqhM1EFpp0Y8Akgp2GomSFg+/wVhjqdI8VVCVlEVV8UkZCb+oz5c?=
+ =?us-ascii?Q?leT1w5jHKLNEqf93j2UuGqhMI4nCddwvoVlGrU7JKoymj+TMBPAM0Im/ifG6?=
+ =?us-ascii?Q?+Mh5wtrDd1nXjZAGjCvBpuAzNe/U4oIPwZNdFyqYdK1/zbDPUhJyFjLWnMKG?=
+ =?us-ascii?Q?IpwDzWZoAqNqWaM59VSZ4chjo8xW/f/6q2KsZoqLq5nxSGqofKOFT539M4la?=
+ =?us-ascii?Q?qbpJKeO/0ZWXemenabCWZ/U8WncF6Gk1kDeIuMX0EBdSZ2ZQ6ynqeiQhvn59?=
+ =?us-ascii?Q?rOxE+9dmOK2HK0yxVRZbLL0tPYbQGabKjPS/Y7I7kXzJKoA3dPdRISQ0K+Eh?=
+ =?us-ascii?Q?aKbTYSm410pFLilueAoJD0+rAc+YuIGNzNcN23GKduZ47+4vS2p4OZ5KiL6e?=
+ =?us-ascii?Q?YJz4MGXT1mdvQ8qe17Gk3718h3as8RtsWKUzPZZGjWI+9Lx1zJlc3fkpY2Bn?=
+ =?us-ascii?Q?+YKiE5VipqQ/0wXgsevNbRgKa/X2/5x+xI5FmzA8b+oDS4B62Ox+sh9mCSDh?=
+ =?us-ascii?Q?lHbrLpysEGPal8R0FToIY4kVotYci4GkBa0cNTB4o72e0wgjlGGcmHtP4K2b?=
+ =?us-ascii?Q?g6yG8xaBtq0NRlRT3XDdyhk/vPSmPsfOQMZ0qTPFLOs16m4+s0a/Zet4ar9R?=
+ =?us-ascii?Q?WzULoap4jKmQg1Ea1QetZX1RWyjbsnnKdAHKHTh7f7C0I/aIxXMspgvALS6F?=
+ =?us-ascii?Q?lg9jXXRiXM9D53BN/sjbHVVRfnaEj+Md82Eub9W7nw/C96zBCYwxthwBjzrC?=
+ =?us-ascii?Q?65fkRxHLLN2DuWlx+lOWQW0sUojwzm82rD352PqbF6TVrv+y8xqg4ThXcsgW?=
+ =?us-ascii?Q?otHgN3/tx23ATSzBnAfarJG4/+aZAvgTYkXk90IpCi463mBO5b1tqQfgT0OD?=
+ =?us-ascii?Q?qRNGzNGfX0B3u291NGA7Z+dwkrYY6hRq1X/c8922xqZzZrs1V5OAIwiiSuEb?=
+ =?us-ascii?Q?NFqjYn8ApIyXoxmJHfoM59Ttw2OjVah8pYM+RCbRx3VxJrFhzZkGc9XU2/uw?=
+ =?us-ascii?Q?1VyyPwLEF/3f0vjHE1OGcco=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: feb58148-2643-448e-1ae4-08da96f1856f
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 08:08:50.3156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oKij1w1APx26v4sMgPOmYcpcX4wXdL6BdbS7bzVFuLitzqSkfwiGRIgVdSLyAtdi617heKoF5AphOKoUAwGzCsl0FbNSX3zlj7B7r3107PY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR01MB5919
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/15 15:36, Oscar Salvador wrote:
-> On Fri, Sep 09, 2022 at 05:24:44PM +0800, Miaohe Lin wrote:
->> Use local variable zone_idx directly since it holds the exact value of
->> zone_idx(). No functional change intended.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> 
-> By the way, zone_idx being "int" should be enough?
+Remove the gpio-keys entries from the Ampere's Mt. Jade BMC device
+tree. The user space applications are going to change from using
+libevdev to libgpiod.
 
-Yes, it should be. But zone_idx is used as "unsigned long" around this function,
-e.g. __init_zone_device_page expects zone_idx as "unsigned long", so it should be
-better to keep it as is ?
+Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+---
+ .../arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 95 -------------------
+ 1 file changed, 95 deletions(-)
 
-> 
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
-
-Many thanks for your review and comment in this series.
-
-Thanks,
-Miaohe Lin
-
-
-> 
->> ---
->>  mm/page_alloc.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index 94baf33da865..3417232afa45 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -6878,7 +6878,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
->>  	unsigned long start = jiffies;
->>  	int nid = pgdat->node_id;
->>  
->> -	if (WARN_ON_ONCE(!pgmap || zone_idx(zone) != ZONE_DEVICE))
->> +	if (WARN_ON_ONCE(!pgmap || zone_idx != ZONE_DEVICE))
->>  		return;
->>  
->>  	/*
->> -- 
->> 2.23.0
->>
-> 
+diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
+index 82a6f14a45f0..d127cbcc7998 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
+@@ -97,101 +97,6 @@ identify {
+ 		};
+ 	};
+ 
+-	gpio-keys {
+-		compatible = "gpio-keys";
+-
+-		event-shutdown-ack {
+-			label = "SHUTDOWN_ACK";
+-			gpios = <&gpio ASPEED_GPIO(G, 2) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(G, 2)>;
+-		};
+-
+-		event-reboot-ack {
+-			label = "REBOOT_ACK";
+-			gpios = <&gpio ASPEED_GPIO(J, 3) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(J, 3)>;
+-		};
+-
+-		event-s0-overtemp {
+-			label = "S0_OVERTEMP";
+-			gpios = <&gpio ASPEED_GPIO(G, 3) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(G, 3)>;
+-		};
+-
+-		event-s0-hightemp {
+-			label = "S0_HIGHTEMP";
+-			gpios = <&gpio ASPEED_GPIO(J, 0) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(J, 0)>;
+-		};
+-
+-		event-s0-cpu-fault {
+-			label = "S0_CPU_FAULT";
+-			gpios = <&gpio ASPEED_GPIO(J, 1) GPIO_ACTIVE_HIGH>;
+-			linux,code = <ASPEED_GPIO(J, 1)>;
+-		};
+-
+-		event-s0-scp-auth-fail {
+-			label = "S0_SCP_AUTH_FAIL";
+-			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(J, 2)>;
+-		};
+-
+-		event-s1-scp-auth-fail {
+-			label = "S1_SCP_AUTH_FAIL";
+-			gpios = <&gpio ASPEED_GPIO(Z, 5) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(Z, 5)>;
+-		};
+-
+-		event-s1-overtemp {
+-			label = "S1_OVERTEMP";
+-			gpios = <&gpio ASPEED_GPIO(Z, 6) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(Z, 6)>;
+-		};
+-
+-		event-s1-hightemp {
+-			label = "S1_HIGHTEMP";
+-			gpios = <&gpio ASPEED_GPIO(AB, 0) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(AB, 0)>;
+-		};
+-
+-		event-s1-cpu-fault {
+-			label = "S1_CPU_FAULT";
+-			gpios = <&gpio ASPEED_GPIO(Z, 1) GPIO_ACTIVE_HIGH>;
+-			linux,code = <ASPEED_GPIO(Z, 1)>;
+-		};
+-
+-		event-id {
+-			label = "ID_BUTTON";
+-			gpios = <&gpio ASPEED_GPIO(Q, 5) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(Q, 5)>;
+-		};
+-
+-		event-psu1-vin-good {
+-			label = "PSU1_VIN_GOOD";
+-			gpios = <&gpio ASPEED_GPIO(H, 4) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(H, 4)>;
+-		};
+-
+-		event-psu2-vin-good {
+-			label = "PSU2_VIN_GOOD";
+-			gpios = <&gpio ASPEED_GPIO(H, 5) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(H, 5)>;
+-		};
+-
+-		event-psu1-present {
+-			label = "PSU1_PRESENT";
+-			gpios = <&gpio ASPEED_GPIO(I, 0) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(I, 0)>;
+-		};
+-
+-		event-psu2-present {
+-			label = "PSU2_PRESENT";
+-			gpios = <&gpio ASPEED_GPIO(I, 1) GPIO_ACTIVE_LOW>;
+-			linux,code = <ASPEED_GPIO(I, 1)>;
+-		};
+-
+-	};
+-
+ 	gpioA0mux: mux-controller {
+ 		compatible = "gpio-mux";
+ 		#mux-control-cells = <0>;
+-- 
+2.35.1
 
