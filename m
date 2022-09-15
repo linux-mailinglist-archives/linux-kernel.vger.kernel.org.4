@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53225B9F2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982B15B9F30
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiIOPtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        id S229935AbiIOPuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiIOPts (ORCPT
+        with ESMTP id S229892AbiIOPum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:49:48 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4D13F00;
-        Thu, 15 Sep 2022 08:49:46 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id y11so1250814pjv.4;
-        Thu, 15 Sep 2022 08:49:46 -0700 (PDT)
+        Thu, 15 Sep 2022 11:50:42 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70F5C97C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:50:41 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t7so31496721wrm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=o8GIMFSFfJaC+NseNm4sPm6vviClb1WTiOKE9g6u8d0=;
-        b=Kpb4UPsyc0fBVJ1kG8S0WqzJBoKaa0B0H4jZg2t5WRgA5DK0eem2whcmCniUqCAhze
-         M4BMsNzAKvR12z9CTEwk046L8BqoPCrCt+S7i3rNECUmvWiRzaQJESAvYfSoQ4CtKSLR
-         XZuUIXijfiAfM4syb6THz0NNKlyV0zjM7H/hAWwAOZp6UqvpgZn+QJEEs2xwc5H7LVSz
-         87KBcABZUDOufMToZFbqYjj50T7bh8YAkVoPYCT5NnuUE/CGlydVy3n5G0nQrrw3xTqv
-         YYeAyjpwTHedndwxgNcrZxCJ4OUbl57ohiu2V4vD4lYgOHP8mw27/Jk3aHUNDX40kIsa
-         D6Ug==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=8FafyiLKp7Or/rqYTONtDbmDLktFN+TQm06lEnE/xp0=;
+        b=UGvqViR+bEKfooxOKyl61f7zfYyQvT3UR91MaRK85zA5upl5qvDxqCoYKwJ9DbWTbK
+         BXQL3kZQNfu+ZhhTwX2xaT1PBD7Pu3vnSgv12g+kYrQ2LV8GjDH8vmwFKRwZPgX+gFDW
+         TBPL6AoRQG31b3E6zsUUF4ThJvDyFtPPpPzwdVXByH1tUimkdPTSP2WZPTrEOMpALbFB
+         gQMlu9ZPYymNR8I1+X5iHBmP91hAAVgubxZvSgnLsYX+cRx0Lclj9mYlxbT0PYlvNFFN
+         FUInwGCU7YdzwE8wrt6TGzeYpZmzNrsdnFcmv2tLFaUHqB/528M+HtMe8eYJfLm+oKOn
+         RBtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=o8GIMFSFfJaC+NseNm4sPm6vviClb1WTiOKE9g6u8d0=;
-        b=n3FsSqaao5Rj2i1sFIsYMGXT5Q137uRCPt1ACesLtXyZm9F0r7REBueuzsSZlvYcP4
-         GkAUQVR6twhsVeN7JusjGIW4pkosnI5cb2zqetglDRAFJXbUW+g6PhjY3hdddGDevWl6
-         J2lBcVFW91dhgPMYVA8A3UtUR66NlIWcwMYKeIOnGqfP/UJ4N5Izh47/FK1kPpfiq5yw
-         fbvpMOvZpgy87+zAVI6L5+UJaM9YPjVV1Ywwr9BlNgL4f6RLLVF0RcMA7DLwvUiIDN5V
-         CXw7xk0h2eyAQFGlsEgrt45HW6awRGBXrdlbMq+toR1k8mlyBnrlXS5ZywBLqNng1k1r
-         Gx0A==
-X-Gm-Message-State: ACrzQf3tVt/O+WiLkGxsfB1DiPSl0DAcyZsXh+OcSOBaeW/cxAcSAJoZ
-        CUiDBpFa9DZSA28qZxYVZBr8CxVtEsZ3Rvc78Ek=
-X-Google-Smtp-Source: AMsMyM4wChBybAsL7iXfbCcR1cc7DTRSZVNv+umTCL/5uSKEZkSGTle1Cc9DUNgAD8N2inzbz5TuUu+5890Jpf7iGXI=
-X-Received: by 2002:a17:902:f782:b0:173:1206:cee0 with SMTP id
- q2-20020a170902f78200b001731206cee0mr96463pln.130.1663256986323; Thu, 15 Sep
- 2022 08:49:46 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=8FafyiLKp7Or/rqYTONtDbmDLktFN+TQm06lEnE/xp0=;
+        b=brAlpRzyLtJCX4lPKOK20iz67KeM2tpcCmPSpWhLROmITJge6OO+KNQ/nounF8YjKX
+         8k9ZPz5QxKVvtQ7tF/W831BqjGL303VWn9o4D2uxjKOYZTGN3KqDTwAu8tzYluxmvD0D
+         uI2YUcWnoh7qg2UwLvKAo5tvzi8etXgFDLtb+sK5Y8lGAsGmQQVBhwOG88f4fMRzEDct
+         rf9v9lujTfN28WkkZiyDqzLDqGvzYHQYBwnlMuEkXyFSnme/IurDR588/NTvwJ7D329k
+         guUPJ7ouWWwwEU52kbtBg4Qpm4+vcel+XH0F/9aAnscTzGfLq9ICQXTYqVL78zTD7hg0
+         CZpw==
+X-Gm-Message-State: ACrzQf2EtE9/yfiDkfAHCNC15DYE2mPEyXr0Lvxh05JLvP3oJmwAx3lg
+        Z+z/wIr/gwiU7JB6jmaAJsq7Xg==
+X-Google-Smtp-Source: AMsMyM73EKanDBPB3oY8SpNYbImMYZv2oSNslZxghiuD4hWcbfKeoMv+Z3dheYOFVSWUYKvpr0r0rg==
+X-Received: by 2002:a05:6000:10ca:b0:22a:3318:861f with SMTP id b10-20020a05600010ca00b0022a3318861fmr207641wrx.284.1663257040069;
+        Thu, 15 Sep 2022 08:50:40 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e7-20020adfa747000000b0022878c0cc5esm2880247wrd.69.2022.09.15.08.50.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:50:39 -0700 (PDT)
+Message-ID: <ca326ce8-3eee-8a7a-a522-9ffbdf7d8a82@linaro.org>
+Date:   Thu, 15 Sep 2022 17:50:28 +0200
 MIME-Version: 1.0
-References: <20220915150959.3646702-1-han.xu@nxp.com>
-In-Reply-To: <20220915150959.3646702-1-han.xu@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 15 Sep 2022 12:49:34 -0300
-Message-ID: <CAOMZO5CPLUCdxrZa7T8E=ic8WN_sAKZbNZZdTaGQ-1ZZ9pJBVA@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: imx: imx6sx: remove the SET_RATE_PARENT flag for
- QSPI clocks
-To:     Han Xu <han.xu@nxp.com>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:NXP i.MX CLOCK DRIVERS" <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones
+ without trips.
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220914131339.18348-1-aouledameur@baylibre.com>
+ <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 12:10 PM Han Xu <han.xu@nxp.com> wrote:
->
-> There is no dedicate parent clock for QSPI so SET_RATE_PARENT flag
-> should not be used. For instance, the default parent clock for QSPI is
-> pll2_bus, which is also the parent clock for quite a few modules, such
-> as MMDC, once GPMI NAND set clock rate for EDO5 mode can cause system
-> hang due to pll2_bus rate changed.
->
-> Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
-> Signed-off-by: Han Xu <han.xu@nxp.com>
+On 14/09/2022 16:15, Matthias Brugger wrote:
+> 
+> 
+> On 14/09/2022 15:13, Amjad Ouled-Ameur wrote:
+>> Thermal zones without trip point are not registered by thermal core.
+>>
+>> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+>> only but are not supposed to remain on DT.
+>>
+>> Remove the zones above and keep only cpu_thermal.
+>>
+> 
+> My understanding is that this thermal zones exist but are not used. DTS 
+> should describe the HW as it is, so I propose to add
+> status = "disabled";
+> to the zones.
+> 
 
-Tested-by: Fabio Estevam <festevam@denx.de>
+At least the trip points must be declared as stated in the bindings
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n213
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
