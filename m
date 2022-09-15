@@ -2,134 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFF75B92F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EE05B92F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 05:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiIODOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 23:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S230044AbiIODN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 23:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiIODN4 (ORCPT
+        with ESMTP id S229804AbiIODNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 23:13:56 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11013012.outbound.protection.outlook.com [52.101.64.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677A7915C2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 20:13:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CqJUmr5EveBuqxj4W8FolgkpbOuhFekfSAq7PuHvemCwAQCnMF1aKk8OqNnobE/ALtatZSf+pirQNmWtsknVeJVugJrwaNqX0EwD8yuqj0NwgmYbQuiL4kPDKSUBeCB0jjFV2XXZFiDs6ovIdzDm/TxgrmBAHJ9gCg7b47YaWjvBlZnbHgxTjvrreIhw/Xw7hm0YyA55jSYxZz0hX1EicSpW54ZpPSZe5DpTkJAzQ65LN7iZxmLnYa3RsN8O6okYz6skM2OvSjnEUEhKo1OGXh5hd7FtxlBWsBcgyABrQ2aZRUSLF08K79nJysttJFvvtc5CA1BCZt3vGhCdOZ4ceA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bj62dkRHlvu8fsBaPBgI8dPDVvbwgRLdW/cC86DSn2s=;
- b=XLq4tdV1Kp4hEpMWxOhNzmVTl2KF29hZc1Vmy/B1Cv1X0bz12ZN2OCOX+Bdz2VGk6zX26ZkQMsZX+GyCrWv7my9g7ftU8bqJA5BJ+oilqfpe+hHXOoXutqt5qz3JsEvRkai1PtY8U0PgD6OdccLjRhH56zIMP6m3JBH1UVZeTmfstwtgQ5hN9O88SC7dK/p23DRm+JvaH7IVXhCr0Q7e0n32Ec71eBvkxGqOHQZcDihRvuSpRSDvVnQRrxIwNa761HXNhEiVZlvOYY0Cs+3ZS3rij5KRWvaKF4WwSfwBE8ToZHRSztoKStrM78DGeYaHgfDSUuz1ObbtOPKTE91zrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bj62dkRHlvu8fsBaPBgI8dPDVvbwgRLdW/cC86DSn2s=;
- b=eDym8w/W52nJBQNMwz6WBUZSkKmiVaPxc/o1xMaf1NAmIMAqb154i1estIyX1y258H7MQeLJf9dABLnavKIEkr4vM47RdOv0TpKRQCgWzQDTyhvShKTsk3Y6KpYYD9JdqSxGGbRJ0vdo9JhMF1/9J9q/B3NTDYQJFUOoB9skH/0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
- by BYAPR05MB5848.namprd05.prod.outlook.com (2603:10b6:a03:d1::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.4; Thu, 15 Sep
- 2022 03:13:50 +0000
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::a8ee:57cf:b2f1:b818]) by BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::a8ee:57cf:b2f1:b818%5]) with mapi id 15.20.5612.011; Thu, 15 Sep 2022
- 03:13:50 +0000
-From:   vdasa@vmware.com
-To:     gregkh@linuxfoundation.org, Pv-drivers@vmware.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bryantan@vmware.com
-Cc:     Vishnu Dasa <vdasa@vmware.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH] MAINTAINERS: Add header files under VMWARE VMCI DRIVER
-Date:   Wed, 14 Sep 2022 20:13:21 -0700
-Message-Id: <20220915031321.1121-1-vdasa@vmware.com>
-X-Mailer: git-send-email 2.35.1
-Reply-To: vdasa@vmware.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0343.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::18) To BYAPR05MB3960.namprd05.prod.outlook.com
- (2603:10b6:a02:88::12)
+        Wed, 14 Sep 2022 23:13:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BFD910B6;
+        Wed, 14 Sep 2022 20:13:50 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MShyP5GrLzlVml;
+        Thu, 15 Sep 2022 11:09:49 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 11:13:47 +0800
+Message-ID: <02634506-8aa2-af44-38d6-3bd656b866cf@huawei.com>
+Date:   Thu, 15 Sep 2022 11:13:47 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR05MB3960:EE_|BYAPR05MB5848:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea4f78c1-5831-4f80-e101-08da96c84f80
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zjmx9duK5lP6tcEcFIUBLFLamDTNWZ83jM4WgnkMx3nLUxLXImCDjLVrBX5e9zn3HaIIw1RSTEPY2rWD+RKUoqW+Eee5LlqeDyqRQl7o2x2M6WgVNA+2pr89M/FltjwYgPmV1XvlYktceiGMYEliqyBRwUhKAF0BiiPO+cmOsE6wtclX08Nr/Lg3k4GSrcXX49wXZdK0u/mXi5thaVlu/QVHPeWGU1JZOxqh/q5mUoOQgvX9Z1YgvxfTGFDkB4pceDM8ZFDdYbSL1uR17Dm+ZC9XnkT4O1J/BTV18K0H54Aa1gQ6hWw4SnxlnPfRCAeL2Iw07acBS2smNzvgTwLgDaSrZkMgt1A4VaBLt+X4YWl7SjG3KVrOZdS74wDP3k2wlCIXX9J+cpFD/wTrAG677ddXBxL+AscMy153Xb22JUub9R0HiPWkS6lXbC+Ois3o5chL3c1pZgly6iKmfzEQCavYEt43dH6vZnz5RXkUsEdfW6F+SQCUtQDUwQveKWrbUSEXYb+N4oflI2lFG4ziSzkvNbhBGbUXTr887lK8djwRclpuogNAZtk68SAcsceu8HRhnQAltHcXdC9z3wIBYtekiv0XJjntZ10YXwJYS1I/Bwne4R5yrw2oK0yr9Cq6m/GeEDmSKbPZZ7OnvijdZv2u7/qSrX6/MKZVD6dVqb4GOavFU4rk82CRaM/OizatAlkfN+CaNcUEBR7HvByCQBlVLXBvI2jWjiLGTm5bHTDf/QkZBZKY0H1hETYXcFLtlbc1Po71uW+JoaA3YmuFjg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(39860400002)(136003)(346002)(451199015)(36756003)(1076003)(86362001)(2616005)(4744005)(38350700002)(38100700002)(2906002)(5660300002)(9686003)(26005)(6486002)(6666004)(8676002)(54906003)(316002)(186003)(52116002)(66946007)(478600001)(8936002)(66476007)(66556008)(4326008)(6512007)(41300700001)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f4aSuA0hVXueaU6BRgf807wVE0pOdSBxfAoo71HkqJeg2rMRAe6WQ83Aj53u?=
- =?us-ascii?Q?KVsbBV1I3eHZnpvW49aKCRiwxD5pMuzmIIYPyBAEbWeSleoTv0/S/a9Yh7b1?=
- =?us-ascii?Q?oKCfqFHwhz+biS4aQ/rGmfs/3FXqDXFjW6mjGF5Ve0vGMskiFukSNtDlNrHw?=
- =?us-ascii?Q?p6aPvBu+nCXooAFxUBj3nWEibAGXibmNm64EjbNaJvSdoj7PKMjYUiI3jgpG?=
- =?us-ascii?Q?6sU9jLnLMQ6VTEbMgJujVmwKgi2YtDDyudQw6phVaiCOqSeB8m4LDWExeRNi?=
- =?us-ascii?Q?RZfCqb1q6w0F87bAYWY14NkFLpjQ4XVeEtZO54j8YZTiHIERTyBDQ2pINNYC?=
- =?us-ascii?Q?G5OPq+zxvcnoWHR4eGBIs6Zo3f1fzvvVzUU4Uae/8VzjaHdHy3wxdauFgywi?=
- =?us-ascii?Q?AAKtcZ6O1pBxW6shu62HlgQbndnyYNEmmX5n+FTHYz9HajyO1cHypf4sLSsk?=
- =?us-ascii?Q?3iNcD4JMY8OKfSYtDMJeDtnobjlYz1IUXKldoKXfq7rvfRHcJeoEn7gxy3eN?=
- =?us-ascii?Q?b7m3ZGZT8ur6Joaojfs4B1qyQXwmnmmnSYcWG07jfrO7cTZszZSf4GRglTJX?=
- =?us-ascii?Q?4fpEwqr5MMaeCf9dqTCm8vdsrNdsLHAQZRSIpLlkyBqbBo73JPumvgYe3eHn?=
- =?us-ascii?Q?BmTKKRKEs4x91SGp+6ZZ5eLA8m3Tu1hX4WbMSTV03y/8lMFUyyFxMfl8oyxh?=
- =?us-ascii?Q?BUx7JMeYsQ/50G8QBCfzqqeRKxPhLskwkXRDr+UG2r9egwdGQ/nSkBZVSiR6?=
- =?us-ascii?Q?AHrTDXr350yCeoQtLt7iCaVedGZ4IU86W14CNMT2x0CBXCxf/iCg3rYEWYQX?=
- =?us-ascii?Q?I9RauMtaqSE7CyjmR5gpVlZcL930YVu6pZhjky1ZelN5pBP7SkUjsb3bmS+x?=
- =?us-ascii?Q?UMkh0c+LeCyU/b3o47ZHiSwEh/4WjS6Tz3lc7OOwstJoBlQWqLEpk0VsdIhh?=
- =?us-ascii?Q?LkxVeuHQcnUTnt5ZP7kac3/KG7TrKuUUMjxuvB7EEKzlgqUH94nOyS12Dvtn?=
- =?us-ascii?Q?ml/LH6q8rG064PArcC/iTfAUQ5ePMPC/KVM3c8w2qoYTUDyD/locLzN1NPaN?=
- =?us-ascii?Q?kY54rKVUkF0JwMWlzU01Dyi0ygiaCz3Tw69SCAU9ewxTCdQmwRPuy+rGFwLk?=
- =?us-ascii?Q?DWyla/99Cc2QkCKrVWqRZ0CTq8uqJ1qKlG8YSeE99TJAdSfViqcvTq3bfbIf?=
- =?us-ascii?Q?giLAaCK+nXKlffOCo5lDYnatDUfBta+l9dKCazNpaAfdAnmSM4CI6RY3PY5j?=
- =?us-ascii?Q?oGSoT5ZwyXl+UKm2lzS+ElLiwADJ/XjwVRwFGqVtFP8mrhMs6XbX+5hsi2Xl?=
- =?us-ascii?Q?K9CW5dkVLCdoH1kv56y5hxamPsJf1YITfnGnUmWlHirKvzEAV8zx9LWDgt4T?=
- =?us-ascii?Q?HFDGwNd/B0QxyafYW9Zi/azA8PFxg2o36UrEaEslsPWpyTBk8FwrANCb6kdF?=
- =?us-ascii?Q?FO/htx3EkWA+1A4pxHdIBlYPANzDW4fP6VdRqbpmC7ZcJS3XpcVVhQpQytWm?=
- =?us-ascii?Q?bZiNNUmU5CozcgDV2/z5HaofYfTGtGtm614R40vFLQhS8OfMXwx/oru2wwWt?=
- =?us-ascii?Q?xKKmRStEmDEfA+5LAJH6rkqXZs3YJK6Vqat8rELZ?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB5848
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net-next 0/9] refactor duplicate codes in the tc cls walk
+ function
+To:     Victor Nogueira <victor@mojatatu.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <jhs@mojatatu.com>, <jiri@resnulli.us>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>
+References: <20220913042135.58342-1-shaozhengchao@huawei.com>
+ <24f4feb8-7ca1-eae3-570e-5ece870dee47@mojatatu.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <24f4feb8-7ca1-eae3-570e-5ece870dee47@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vishnu Dasa <vdasa@vmware.com>
 
-Add include/linux/vmw_vmci* files under VMWARE VMCI DRIVER.
 
-Acked-by: Bryan Tan <bryantan@vmware.com>
-Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
-Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+On 2022/9/14 21:59, Victor Nogueira wrote:
+> On 13/09/2022 01:21, Zhengchao Shao wrote:
+>> The walk implementation of most tc cls modules is basically the same.
+>> That is, the values of count and skip are checked first. If count is
+>> greater than or equal to skip, the registered fn function is executed.
+>> Otherwise, increase the value of count. So the code can be refactored.
+>> Then use helper function to replace the code of each cls module in
+>> alphabetical order.
+>>
+>> The walk function is invoked during dump. Therefore, test cases related
+>>   to the tdc filter need to be added.
+>>
+>> Add test cases locally and perform the test. The test results are listed
+>> below:
+>>
+>> ./tdc.py -e 0811
+>> ok 1 0811 - Add multiple basic filter with cmp ematch u8/link layer and
+>> default action and dump them
+>>
+>> ./tdc.py -e 5129
+>> ok 1 5129 - List basic filters
+>>
+>> ./tdc.py -c filters bpf
+>> ok 13 23c3 - Add cBPF filter with valid bytecode
+>> ok 14 1563 - Add cBPF filter with invalid bytecode
+>> ok 15 2334 - Add eBPF filter with valid object-file
+>> ok 16 2373 - Add eBPF filter with invalid object-file
+>> ok 17 4423 - Replace cBPF bytecode
+>> ok 18 5122 - Delete cBPF filter
+>> ok 19 e0a9 - List cBPF filters
+>>
+>> ./tdc.py -c filters cgroup
+>> ok 1 6273 - Add cgroup filter with cmp ematch u8/link layer and drop
+>> action
+>> ok 2 4721 - Add cgroup filter with cmp ematch u8/link layer with trans
+>> flag and pass action
+>> ok 3 d392 - Add cgroup filter with cmp ematch u16/link layer and pipe
+>> action
+>> ok 4 0234 - Add cgroup filter with cmp ematch u32/link layer and miltiple
+>> actions
+>> ok 5 8499 - Add cgroup filter with cmp ematch u8/network layer and pass
+>> action
+>> ok 6 b273 - Add cgroup filter with cmp ematch u8/network layer with trans
+>> flag and drop action
+>> ok 7 1934 - Add cgroup filter with cmp ematch u16/network layer and pipe
+>> action
+>> ok 8 2733 - Add cgroup filter with cmp ematch u32/network layer and
+>> miltiple actions
+>> ok 9 3271 - Add cgroup filter with NOT cmp ematch rule and pass action
+>> ok 10 2362 - Add cgroup filter with two ANDed cmp ematch rules and single
+>> action
+>> ok 11 9993 - Add cgroup filter with two ORed cmp ematch rules and single
+>> action
+>> ok 12 2331 - Add cgroup filter with two ANDed cmp ematch rules and one
+>> ORed ematch rule and single action
+>> ok 13 3645 - Add cgroup filter with two ANDed cmp ematch rules and one
+>> NOT ORed ematch rule and single action
+>> ok 14 b124 - Add cgroup filter with u32 ematch u8/zero offset and drop
+>> action
+>> ok 15 7381 - Add cgroup filter with u32 ematch u8/zero offset and invalid
+>> value >0xFF
+>> ok 16 2231 - Add cgroup filter with u32 ematch u8/positive offset and
+>> drop action
+>> ok 17 1882 - Add cgroup filter with u32 ematch u8/invalid mask >0xFF
+>> ok 18 1237 - Add cgroup filter with u32 ematch u8/missing offset
+>> ok 19 3812 - Add cgroup filter with u32 ematch u8/missing AT keyword
+>> ok 20 1112 - Add cgroup filter with u32 ematch u8/missing value
+>> ok 21 3241 - Add cgroup filter with u32 ematch u8/non-numeric value
+>> ok 22 e231 - Add cgroup filter with u32 ematch u8/non-numeric mask
+>> ok 23 4652 - Add cgroup filter with u32 ematch u8/negative offset and
+>> pass action
+>> ok 24 1331 - Add cgroup filter with u32 ematch u16/zero offset and pipe
+>> action
+>> ok 25 e354 - Add cgroup filter with u32 ematch u16/zero offset and
+>> invalid value >0xFFFF
+>> ok 26 3538 - Add cgroup filter with u32 ematch u16/positive offset and
+>> drop action
+>> ok 27 4576 - Add cgroup filter with u32 ematch u16/invalid mask >0xFFFF
+>> ok 28 b842 - Add cgroup filter with u32 ematch u16/missing offset
+>> ok 29 c924 - Add cgroup filter with u32 ematch u16/missing AT keyword
+>> ok 30 cc93 - Add cgroup filter with u32 ematch u16/missing value
+>> ok 31 123c - Add cgroup filter with u32 ematch u16/non-numeric value
+>> ok 32 3675 - Add cgroup filter with u32 ematch u16/non-numeric mask
+>> ok 33 1123 - Add cgroup filter with u32 ematch u16/negative offset and
+>> drop action
+>> ok 34 4234 - Add cgroup filter with u32 ematch u16/nexthdr+ offset and
+>> pass action
+>> ok 35 e912 - Add cgroup filter with u32 ematch u32/zero offset and pipe
+>> action
+>> ok 36 1435 - Add cgroup filter with u32 ematch u32/positive offset and
+>> drop action
+>> ok 37 1282 - Add cgroup filter with u32 ematch u32/missing offset
+>> ok 38 6456 - Add cgroup filter with u32 ematch u32/missing AT keyword
+>> ok 39 4231 - Add cgroup filter with u32 ematch u32/missing value
+>> ok 40 2131 - Add cgroup filter with u32 ematch u32/non-numeric value
+>> ok 41 f125 - Add cgroup filter with u32 ematch u32/non-numeric mask
+>> ok 42 4316 - Add cgroup filter with u32 ematch u32/negative offset and
+>> drop action
+>> ok 43 23ae - Add cgroup filter with u32 ematch u32/nexthdr+ offset and
+>> pipe action
+>> ok 44 23a1 - Add cgroup filter with canid ematch and single SFF
+>> ok 45 324f - Add cgroup filter with canid ematch and single SFF with mask
+>> ok 46 2576 - Add cgroup filter with canid ematch and multiple SFF
+>> ok 47 4839 - Add cgroup filter with canid ematch and multiple SFF with
+>> masks
+>> ok 48 6713 - Add cgroup filter with canid ematch and single EFF
+>> ok 49 4572 - Add cgroup filter with canid ematch and single EFF with mask
+>> ok 50 8031 - Add cgroup filter with canid ematch and multiple EFF
+>> ok 51 ab9d - Add cgroup filter with canid ematch and multiple EFF with
+>> masks
+>> ok 52 5349 - Add cgroup filter with canid ematch and a combination of
+>> SFF/EFF
+>> ok 53 c934 - Add cgroup filter with canid ematch and a combination of
+>> SFF/EFF with masks
+>> ok 54 4319 - Replace cgroup filter with diffferent match
+>> ok 55 4636 - Detele cgroup filter
+>>
+>> ./tdc.py -c filters flow
+>> ok 1 5294 - Add flow filter with map key and ops
+>> ok 2 3514 - Add flow filter with map key or ops
+>> ok 3 7534 - Add flow filter with map key xor ops
+>> ok 4 4524 - Add flow filter with map key rshift ops
+>> ok 5 0230 - Add flow filter with map key addend ops
+>> ok 6 2344 - Add flow filter with src map key
+>> ok 7 9304 - Add flow filter with proto map key
+>> ok 8 9038 - Add flow filter with proto-src map key
+>> ok 9 2a03 - Add flow filter with proto-dst map key
+>> ok 10 a073 - Add flow filter with iif map key
+>> ok 11 3b20 - Add flow filter with priority map key
+>> ok 12 8945 - Add flow filter with mark map key
+>> ok 13 c034 - Add flow filter with nfct map key
+>> ok 14 0205 - Add flow filter with nfct-src map key
+>> ok 15 5315 - Add flow filter with nfct-src map key
+>> ok 16 7849 - Add flow filter with nfct-proto-src map key
+>> ok 17 9902 - Add flow filter with nfct-proto-dst map key
+>> ok 18 6742 - Add flow filter with rt-classid map key
+>> ok 19 5432 - Add flow filter with sk-uid map key
+>> ok 20 4234 - Add flow filter with sk-gid map key
+>> ok 21 4522 - Add flow filter with vlan-tag map key
+>> ok 22 4253 - Add flow filter with rxhash map key
+>> ok 23 4452 - Add flow filter with hash key list
+>> ok 24 4341 - Add flow filter with muliple ops
+>> ok 25 4322 - List flow filters
+>> ok 26 2320 - Replace flow filter with map key num
+>> ok 27 3213 - Delete flow filter with map key num
+>>
+>> ./tdc.py -c filters route
+>> ok 1 e122 - Add route filter with from and to tag
+>> ok 2 6573 - Add route filter with fromif and to tag
+>> ok 3 1362 - Add route filter with to flag and reclassify action
+>> ok 4 4720 - Add route filter with from flag and continue actions
+>> ok 5 2812 - Add route filter with form tag and pipe action
+>> ok 6 7994 - Add route filter with miltiple actions
+>> ok 7 4312 - List route filters
+>> ok 8 2634 - Delete route filters with pipe action
+>>
+>> ./tdc.py -c filters rsvp
+>> ok 1 2141 - Add rsvp filter with tcp proto and specific IP address
+>> ok 2 5267 - Add rsvp filter with udp proto and specific IP address
+>> ok 3 2819 - Add rsvp filter with src ip and src port
+>> ok 4 c967 - Add rsvp filter with tunnelid and continue action
+>> ok 5 5463 - Add rsvp filter with tunnel and pipe action
+>> ok 6 2332 - Add rsvp filter with miltiple actions
+>> ok 7 8879 - Add rsvp filter with tunnel and skp flag
+>> ok 8 8261 - List rsvp filters
+>> ok 9 8989 - Delete rsvp filters
+>>
+>> ./tdc.py -c filters tcindex
+>> ok 1 8293 - Add tcindex filter with default action
+>> ok 2 7281 - Add tcindex filter with hash size and pass action
+>> ok 3 b294 - Add tcindex filter with mask shift and reclassify action
+>> ok 4 0532 - Add tcindex filter with pass_on and continue actions
+>> ok 5 d473 - Add tcindex filter with pipe action
+>> ok 6 2940 - Add tcindex filter with miltiple actions
+>> ok 7 1893 - List tcindex filters
+>> ok 8 2041 - Change tcindex filters with pass action
+>> ok 9 9203 - Replace tcindex filters with pass action
+>> ok 10 7957 - Delete tcindex filters with drop action
+>>
+>> Zhengchao Shao (9):
+>>    net/sched: cls_api: add helper for tc cls walker stats updating
+>>    net/sched: use tc_cls_stats_update() in filter
+>>    selftests/tc-testings: add selftests for bpf filter
+>>    selftests/tc-testings: add selftests for cgroup filter
+>>    selftests/tc-testings: add selftests for flow filter
+>>    selftests/tc-testings: add selftests for route filter
+>>    selftests/tc-testings: add selftests for rsvp filter
+>>    selftests/tc-testings: add selftests for tcindex filter
+>>    selftests/tc-testings: add list case for basic filter
+>>
+>>   include/net/pkt_cls.h                         |   13 +
+>>   net/sched/cls_basic.c                         |    9 +-
+>>   net/sched/cls_bpf.c                           |    8 +-
+>>   net/sched/cls_flow.c                          |    8 +-
+>>   net/sched/cls_fw.c                            |    9 +-
+>>   net/sched/cls_route.c                         |    9 +-
+>>   net/sched/cls_rsvp.h                          |    9 +-
+>>   net/sched/cls_tcindex.c                       |   18 +-
+>>   net/sched/cls_u32.c                           |   20 +-
+>>   .../tc-testing/tc-tests/filters/basic.json    |   47 +
+>>   .../tc-testing/tc-tests/filters/bpf.json      |  171 +++
+>>   .../tc-testing/tc-tests/filters/cgroup.json   | 1236 +++++++++++++++++
+>>   .../tc-testing/tc-tests/filters/flow.json     |  623 +++++++++
+>>   .../tc-testing/tc-tests/filters/route.json    |  181 +++
+>>   .../tc-testing/tc-tests/filters/rsvp.json     |  203 +++
+>>   .../tc-testing/tc-tests/filters/tcindex.json  |  227 +++
+>>   16 files changed, 2716 insertions(+), 75 deletions(-)
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/route.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/rsvp.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+>>
+> 
+> Aside from tabs vs spaces nit-picking, the test patches in this set look 
+> good.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9475aa701a3f..7c6f7fbba31a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21860,6 +21860,7 @@ R:	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	drivers/misc/vmw_vmci/
-+F:	include/linux/vmw_vmci*
- 
- VMWARE VMMOUSE SUBDRIVER
- M:	Zack Rusin <zackr@vmware.com>
--- 
-2.35.1
+Hi Victor and Jamal:
+	Thank you for your review. I will change them in V3.
 
+Zhengchao Shao
