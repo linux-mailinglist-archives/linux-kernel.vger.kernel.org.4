@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444045BA2DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537065BA2E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIOWky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S229996AbiIOWlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiIOWkR (ORCPT
+        with ESMTP id S229905AbiIOWka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:40:17 -0400
+        Thu, 15 Sep 2022 18:40:30 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 100B53A14A;
-        Thu, 15 Sep 2022 15:40:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D46AFDF33;
+        Thu, 15 Sep 2022 15:40:20 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id F3CA6161C;
-        Fri, 16 Sep 2022 00:40:13 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id DB65F1510;
+        Fri, 16 Sep 2022 00:40:18 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1663281614;
-        bh=LJxbxN0p+J8K4MB6fZQ/FX68iUgDSxVET1nGFcHAxDw=;
+        s=202205; t=1663281618;
+        bh=NcDp57NM41CxaRHeUFE46J8qQ8GsD0ZPROjOQuAUwfw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HC9LxH81GBDUWS66rXqUxR+BRXg1iwoTKrioNmZDS2v0lCvd1wM+lSHHiiFytSw3B
-         6Vb2KIeDz1mejudKQsmwPwTxqEBxngcMVCKPhKRQwHPcy2cMP8ohX6RQU7DwQoF6aA
-         rk+qus0XbBml2Ts9sUwIBKihg6fFEe0AdImxESxD720xW4OId8+NcIlJlkiITDsVuZ
-         xEAPGZ+z2UpRvdCIrh7f7KC3Iw6Wj2fNL+dDkOlirxDIfFsksIWTNqEzTFVMH8TO+o
-         GlQrRd1u94EFPZvogOMRBzG+YGLI4E7CS3S0NZo10ImB6BDt/kEWzkAN9Uy789jlyN
-         niyGI+wu92fvGzg0NLb0q2z0Rb5S972+NLeCDBeWODYSW7ZKP9WMhlgrBK2MOwvQtf
-         cpF3txzKg5ZP0GPciHBGbgaGNWFvrwlIyz0q0t0CYvmklb5Nyt7mKW5okmN741PDX7
-         64bifIfc2vpjF1KI0F06QSmNt1XV1LMwfWGlpXNx93SgfzicaY4AsS12CwJwFrnqIu
-         nM0uRlzqvqFnPeDQ7vyvDWopT3+qVSDDlPhDxsOHizeaDlBP9TXO93pqgeGKQZXmZf
-         o0VRN5qfUvwFy0iTvxNwh9WXvoihaKIzz5/EZyN/w1RbgGB+FL9PJqGyGJFuK5CEFR
-         lAv5k4ye3tPfxl6krEp0q9wo=
-Date:   Fri, 16 Sep 2022 00:40:12 +0200
+        b=qPN644olUvRkqqgIv9NM/H6P6TJEOSOeYMyu2t9Llwu7dTDrE+k2TfMa3kcfYiDIk
+         c3Np5ozHJ5W7x85b++GzzykX3Hw+qH374rd6/hBE5I6s+kDNaLRpEX5weG4U4jhfox
+         VJNinnD/thtWLvnsEQ9jtQevT8tJJoqLfr2VEl4ns3+ICi58dZYniYmbEXOuhgI+zv
+         23fp5YfXQbdhMqLJg2bocjnMbcfC4BKgqeVsD7yhvBJKh6n2hld8fxIXGsXgujuNlg
+         ODc+LFLxWhi38rCfrlR1rpyLV+fU08BAAWPC6gfUCbvAijq3FpHukUVf+mnyCFFpgD
+         zVuIdKKxNZ4U/pibMUtLNKpQWAcZxeWiXAMCZFyfMnXMgtQVgs3JMvD+vevrnMCx1h
+         4YDQP2vQdKhev7UHmlgkbnC3UugD2UJxMPHnSnX3xCSUfUgahd8ACdEB6zfaLovxPm
+         8Qwg6RZPubeHwdbTAtDLmeGpyS+Q1bVx6WT1ue1bmQFbDVT3UrH3kHsQlLGua8DBjD
+         ASsyw/zd3YjndFiX2p5w1faOaP4H2BEHR8bWGY3fxHqmdN+rUoTxsNeiJXT0V/O9LH
+         Q+pWbmybGStPRwHm8V8aETs5ykRyXq1gvEYnV4zLvGLx9jsBIV0K+q9Ge1WmGqXJRu
+         tkE6LQO3W+wAEWsqlDU3KPWU=
+Date:   Fri, 16 Sep 2022 00:40:17 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
@@ -41,19 +41,15 @@ Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
+        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: [PATCH v4 16/18] nbd: remove define-only NBD_MAGIC, previously magic
- number
-Message-ID: <10a80681c5966fed1a1afc696e3db114f481514c.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: [PATCH v4 17/18] Documentation: NBD_REPLY_MAGIC isn't a magic number
+Message-ID: <a8afed8fb4d7df2c8fb95c3fa758240b2e46cdc8.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <YyMlovoskUcHLEb7@kroah.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xpjr53kvf7ol5gv5"
+        protocol="application/pgp-signature"; boundary="ssbrusngf3o7lupp"
 Content-Disposition: inline
 In-Reply-To: <YyMlovoskUcHLEb7@kroah.com>
 User-Agent: NeoMutt/20220429
@@ -68,14 +64,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---xpjr53kvf7ol5gv5
+--ssbrusngf3o7lupp
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-commit f4507164e779 ("nbd: rename the nbd_device variable from lo to
-nbd") renamed LO_MAGIC to NBD_MAGIC; commit 5ea8d10802ec ("nbd:
-separate out the config information") removed the last users of that
+It's part of the line protocol
 
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
@@ -83,12 +77,11 @@ Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
  Documentation/translations/it_IT/process/magic-number.rst | 1 -
  Documentation/translations/zh_CN/process/magic-number.rst | 1 -
  Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- drivers/block/nbd.c                                       | 2 --
- 5 files changed, 6 deletions(-)
+ 4 files changed, 4 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index e242ef9e5dd3..3f72252d9fd3 100644
+index 3f72252d9fd3..520cbab3ee17 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
 @@ -81,7 +81,6 @@ NBD_REQUEST_MAGIC     0x12560953       nbd_request       =
@@ -99,17 +92,17 @@ net/baycom_epp.c``
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
--LO_MAGIC              0x68797548       nbd_device               ``include/=
-linux/nbd.h``
- NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
+-NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
 linux/nbd.h``
  ENI155_MAGIC          0xa54b872d       midway_eprom	        ``drivers/atm/=
 eni.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
+ YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
+net/hamradio/yam.c``
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index 0730b561ff47..db57ea55d3be 100644
+index db57ea55d3be..33ad6186fbd4 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
 @@ -87,7 +87,6 @@ NBD_REQUEST_MAGIC     0x12560953       nbd_request       =
@@ -120,17 +113,17 @@ net/baycom_epp.c``
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
--LO_MAGIC              0x68797548       nbd_device               ``include/=
-linux/nbd.h``
- NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
+-NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
 linux/nbd.h``
  ENI155_MAGIC          0xa54b872d       midway_eprom	        ``drivers/atm/=
 eni.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
+ YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
+net/hamradio/yam.c``
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index 70e46ecf8089..c555e857a210 100644
+index c555e857a210..1a8c7d3c98b6 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
 @@ -70,7 +70,6 @@ NBD_REQUEST_MAGIC     0x12560953       nbd_request       =
@@ -141,17 +134,17 @@ net/baycom_epp.c``
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
--LO_MAGIC              0x68797548       nbd_device               ``include/=
-linux/nbd.h``
- NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
+-NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
 linux/nbd.h``
  ENI155_MAGIC          0xa54b872d       midway_eprom	        ``drivers/atm/=
 eni.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
+ YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
+net/hamradio/yam.c``
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index e2c650213d51..ebe99277b7b3 100644
+index ebe99277b7b3..40063df8ba84 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
 @@ -73,7 +73,6 @@ NBD_REQUEST_MAGIC     0x12560953       nbd_request       =
@@ -162,48 +155,35 @@ net/baycom_epp.c``
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
--LO_MAGIC              0x68797548       nbd_device               ``include/=
-linux/nbd.h``
- NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
+-NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/=
 linux/nbd.h``
  ENI155_MAGIC          0xa54b872d       midway_eprom	        ``drivers/atm/=
 eni.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 2a709daefbc4..e185d7b5f1e8 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -157,8 +157,6 @@ static struct dentry *nbd_dbg_dir;
-=20
- #define nbd_name(nbd) ((nbd)->disk->disk_name)
-=20
--#define NBD_MAGIC 0x68797548
--
- #define NBD_DEF_BLKSIZE_BITS 10
-=20
- static unsigned int nbds_max =3D 16;
+ YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
+net/hamradio/yam.c``
 --=20
 2.30.2
 
---xpjr53kvf7ol5gv5
+--ssbrusngf3o7lupp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqcwACgkQvP0LAY0m
-WPFaRw/+KLY9JQVt3S6Uq8YY1O5AK2Xvnk8+Faf/e5+ajK0ZY+tODhLaUj532JPw
-KryqUqOduysnHgM/9eQ3E3+UwMqu/Q4YibiPrHPTkJkbSZIZAyZqahtSXM7+Jgi1
-W7iYjWtxk8ayGEAazuX0+f+7K9htN7grQNEhnKnFvRw0KVN74sAi01SqT5vxHTja
-zrsI0nPVVWgjiDYTt7PTNu3QSkoY1/mBtORzrMnCLOqRSiVS3IFFDhQMqt/L1Wcw
-SG3bqKEU4noZPrIj8uP8C9MRMkJKzJGNZsqhzKZltuhcUXYVAgkjkaSpsGWgbz7w
-UIJAGUVm2VXqdbGynmSfyxXJUX/q8PVWEiJ3zDHdkc534JLjlIKBbSinFkF3cMyC
-iSzkp5VA2RLWBYru/+E13vpH16gPstxKxPv7lZxCx6ZUms8ZBuT3R/oIchEHKJxm
-ZziSa/Iq9bVKl2lqsh4egkugcAtp8LkVoyOj6HT6Zx0QDlrAL/wDAJBg9XRYl/Q/
-M4rfoKffAJgsFFviwKhoripKIB2rSXbeiiX8lIEUAugSDxzM/0FB06dMQB8lYSMT
-RSW4VCpN6aRYHTB917vyRAdvQKUV3H8zH+abYBe3zVJb8+QZxFgzop7NJfHFJW9v
-UXGtgUDMDEPPIr+EJRxQ2a9rONdS67XMs4IOPuuylNwKy/j1L20=
-=bjLr
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqdEACgkQvP0LAY0m
+WPEL4w//YiAK5vgdzx33ml7mHTaZRfq0mnsN/pnHISadAYrawRsudLufQ5Q1UIoZ
+QFqAkqBsfQhF/L5CWKDSsOrZnicDO3E01OY0Usl5wo0wcqer5mU5GvFX7UNPdl4V
+7YVkB0BmvW1/A6mktGDVYFzZs2AJZaXLr1Up4KOgw8sV8Zk6BD2SfkC1rukqQINC
+tCQci+J4OZ9Ohq865IWszTtX9Hvpg97V0u+aQC4W/dDgzoKvMZU1V1LQmfsAIVVU
+IFKqcEvnUUDfRwUdj5ma+tlSs/XBHCPZIlCcg1TPtLdZOUmE4o6Jh3tvrjTwlBIy
+n8wbK2QJOc+hqwQkTMvyZTh3K9YAuoGbVjNmRcSKyAP2EY30NMfbsLzuVF/ZhFFD
+0rV/MpPuZ9f+u8TaXyA8dvlHCMmG17DqxQNuafVc4tvbBxCwviT2YyHMa95GXhXU
+cta/0mCGa76AOC2pCGVVCXp8MU6zvMwdacgmTEGSUndVlByZRzU1HL1qT9YeR+Bd
+hUrkrod+KWJfuAuJNHzvaE2PBegEa7ckOlyLYWJg1blaMFvmj67ZVtH0EY0UWgbH
+xlu2YTBVwQRgXZBg1jxjEKbC0DR0i1ysNtL3M2gdf4Px6fKpFw1OVZbmynK/U78X
+dWTWo+qIkoA6sVBdG3X5AU+M3izOcgOm6NTqYDv7fSbIDvS7us0=
+=oS25
 -----END PGP SIGNATURE-----
 
---xpjr53kvf7ol5gv5--
+--ssbrusngf3o7lupp--
