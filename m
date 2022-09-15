@@ -2,92 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA6B5B9957
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC5F5B9959
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiIOLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
+        id S229602AbiIOLJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIOLI5 (ORCPT
+        with ESMTP id S229483AbiIOLJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:08:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB83D9A953;
-        Thu, 15 Sep 2022 04:08:56 -0700 (PDT)
+        Thu, 15 Sep 2022 07:09:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8836318356
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:09:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 374A0B81FB1;
-        Thu, 15 Sep 2022 11:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7413BC433C1;
-        Thu, 15 Sep 2022 11:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663240134;
-        bh=X2hjnjeX49SebaaaihSZE19uspJmmj2lwVirIDzCF7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boJ7wi+9tDgG0wTR1Qga6ltlyFe0JxieAebGeG3fD/VJAJEQC22qH+AyaZwlVQ+Ls
-         jKaAYOJO2r8e7nmsnFrKkkFeEbHWT0j/bPIWLhhgnPZZ9jr+OOc5+XqgQfmcE7kj8i
-         yn3QOmPtbgta0EkCGoup4tnfwSGTyyxZ1rKgrEuU=
-Date:   Thu, 15 Sep 2022 13:09:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Message-ID: <YyMH37G2CTuVCbLM@kroah.com>
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E051361F92
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 11:09:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD928C433D6;
+        Thu, 15 Sep 2022 11:09:42 +0000 (UTC)
+Date:   Thu, 15 Sep 2022 07:09:38 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: printk meeting at LPC 2022
+Message-ID: <20220915070938.7930c1df@rorschach.local.home>
+In-Reply-To: <YyMF6YkGdv/EepJf@google.com>
+References: <20220910221947.171557773@linutronix.de>
+        <87h71cr1gb.fsf@jogness.linutronix.de>
+        <YyMF6YkGdv/EepJf@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:27:06PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> +static int __init tdx_guest_init(void)
-> +{
-> +	int ret;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +		return -EIO;
-> +
-> +	ret = misc_register(&tdx_misc_dev);
-> +	if (ret) {
-> +		pr_err("misc device registration failed\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +device_initcall(tdx_guest_init)
+On Thu, 15 Sep 2022 20:00:57 +0900
+Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
 
-As mentioned elsewhere, make this a normal module_init() format and only
-load the module if the hardware is present.  Don't just always be
-built/loaded, that's not ok.
+> Hi,
+> 
+> On (22/09/12 18:46), John Ogness wrote:
+> > Hi,
+> > 
+> > We now have a room/timeslot [0] where Thomas and I will be presenting
+> > and discussing this new approach [1] for bringing kthread and atomic
+> > console printing to the kernel.
+> > 
+> > Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"  
+> 
+> Was this recorded? I glanced through LPC/kernel summit schedules and didn't
+> find it anywhere.
 
-thanks,
+Yes it was, but it will take a bit to extract it from BBB and upload it to YouTube.
 
-greg k-h
+-- Steve
