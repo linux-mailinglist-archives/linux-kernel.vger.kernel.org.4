@@ -2,90 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01A25B9665
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0CB5B9668
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIOIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S230001AbiIOIco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiIOIcC (ORCPT
+        with ESMTP id S229835AbiIOIcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:32:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9B68E9A0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:31:58 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b35so25873030edf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=BIGBGBntdDKXqz/EQ3wuUT7hkmXxVvDzgAVe4vykiSY=;
-        b=yB81I5DoaRjvmvKPiQmh0m/cBng4BWgK5Qla/cakP8oIj9kCayNAXgW0wTwyfKwZxd
-         ewdJAB1k9Zcx9DAbbO2t3tP420rxDp6GbvckBuv27CUc4OjH0jOqJvFEWB3mayhSt9T0
-         bEAoGe3+/d/m3U1b1l5zNimmLef/g9rMRbSbXf4gzitGncExS7H0nCbTTyXIGuuo3Osi
-         9ns0Mpq6yzQjciWf/wCUroLk88RJhED0OczgJMos2+oy837zxBkWXIbAn2GVz3HWT3kH
-         z5XpwDh/2yRk7Sinp/NzhoHSs2zx7dMn2c+veJuo41nzBL6aPdhT6VGA5qVppCM2cgZg
-         W1UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BIGBGBntdDKXqz/EQ3wuUT7hkmXxVvDzgAVe4vykiSY=;
-        b=CN2oQ2kq0nT5Uc/x1uZHfij40z3ImMRuRYCMHp27pbTBLsktkBEZ60hy0d/5dPlM9a
-         S3pyK+3aapyTBTK0MbQPMV/NNKx1KhzzqZHVx/MBeXfjkXT3lk/TBf0Zxo6/Eyk8k7Ex
-         j2XmUO6ai7NdYcfNGCKTySADD9kz1Hd98K65880StRd19Wr93MxHe2kHtvZ77hsiOVZw
-         hfivrYqYQwkKvUkA2gsvhWOXsOwTt3kIATnSU2VzgR/7nNU0+l3rQF2xzD01Ru4GwTzX
-         NVaiYFBHnk3lEDmGVHis1xpcl1lZju9Q8ucBDSNFM+bLZDsnrG6f+N9oGEJ5VERhoo/v
-         Al8A==
-X-Gm-Message-State: ACrzQf3mX1yS/tzV3T7LY3k3Nof14Nca+MdbATpVPQ7iGmnLhNadN7YL
-        i+GVIO9RclOYEiEMzTyQa/7hEVhaPxkt0kcIb4Ct6w==
-X-Google-Smtp-Source: AMsMyM6IUmfXjYAHjh+YBY278q1u5kbWH0c6BrprUo1crA8ni+iao3OLyM8Rkyz4KRI7AQpfdN4PLTbrCl0YiHvnpJI=
-X-Received: by 2002:a05:6402:190f:b0:452:d6ba:a150 with SMTP id
- e15-20020a056402190f00b00452d6baa150mr4945425edz.126.1663230717413; Thu, 15
- Sep 2022 01:31:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220914151558.536226-1-martyn.welch@collabora.co.uk> <20220914151558.536226-5-martyn.welch@collabora.co.uk>
-In-Reply-To: <20220914151558.536226-5-martyn.welch@collabora.co.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Sep 2022 10:31:46 +0200
-Message-ID: <CACRpkdZBTfnRaFRLDb_OW5oGbtdC2=3VnrM1EL=_SmPVHBX-eQ@mail.gmail.com>
-Subject: Re: [PATCH v5 5/5] gpio: pca953x: Add support for PCAL6534
-To:     Martyn Welch <martyn.welch@collabora.co.uk>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 15 Sep 2022 04:32:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118FB9569E;
+        Thu, 15 Sep 2022 01:32:37 -0700 (PDT)
+X-UUID: 8bed5012100d42258b60ba20f626b509-20220915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=2V4ISJ1pSA6PqL2bSlrt/KFVdLf7Qresglb+Otewhw8=;
+        b=gYXijqSQhE3/J/2NToiB2wQqFbam+DeNvKZLztSmC+CHfRSniaQBDPctaznvMYslFNdZt5Ftlpl+g+esEnIedIoLcbwWvAOh8ZLY00WMrXuLrmXwOWl7AQ9v4OJUIw+MPtTg70XkG4zqayzhi9/1mgPO/hxqYYRZZKWxJHX30mU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:177355e2-3559-440d-8837-51d1c5acb34a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:177355e2-3559-440d-8837-51d1c5acb34a,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:81f37ff6-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:220915161402LYR09JH6,BulkQuantity:134,Recheck:0,SF:28|17|19|48,TC:ni
+        l,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 8bed5012100d42258b60ba20f626b509-20220915
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 272185181; Thu, 15 Sep 2022 16:32:32 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 15 Sep 2022 16:32:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 15 Sep 2022 16:32:31 +0800
+Message-ID: <7cec789d6d54f4bb85e9129d39a3da52e26293dd.camel@mediatek.com>
+Subject: Re: [PATCH 1/4] arm64: dts: mt8195: Add dp-intf nodes
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 15 Sep 2022 16:32:31 +0800
+In-Reply-To: <f882ab40-b9bf-3f38-d62e-c175135383c3@collabora.com>
+References: <20220915075849.1920-1-rex-bc.chen@mediatek.com>
+         <20220915075849.1920-2-rex-bc.chen@mediatek.com>
+         <f882ab40-b9bf-3f38-d62e-c175135383c3@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 5:16 PM Martyn Welch
-<martyn.welch@collabora.co.uk> wrote:
+On Thu, 2022-09-15 at 16:13 +0800, AngeloGioacchino Del Regno wrote:
+> Il 15/09/22 09:58, Bo-Chen Chen ha scritto:
+> > Add dp-intf0 and dp-intf1 nodes for MT8195.
+> > 
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 23
+> > +++++++++++++++++++++++
+> >   1 file changed, 23 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index 905d1a90b406..93e6a106a9b8 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -2155,5 +2155,28 @@
+> >   			clock-names = "apb", "smi", "gals";
+> >   			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_VDOSYS1>;
+> >   		};
+> > +
+> > +		dp_intf0: dp-intf@1c015000 {
+> 
+> Please keep the devicetree nodes ordered by mmio.
+> dp_intf0 goes between mutex@1c016000 and larb@1c018000.
+> 
 
-> From: Martyn Welch <martyn.welch@collabora.com>
->
-> Add support for the NXP PCAL6534. This device is broadly a 34-bit version
-> of the PCAL6524. However, whilst the registers are broadly what you'd
-> expect for a 34-bit version of the PCAL6524, the spacing of the registers
-> has been compacted. This has the unfortunate effect of breaking the bit
-> shift based mechanism that is employed to work out register locations used
-> by the other chips supported by this driver. To accommodate ths, callback
-> functions have been added to allow alterate implementations of
-> pca953x_recalc_addr() and pca953x_check_register() for the PCAL6534.
->
-> Datasheet: https://www.nxp.com/docs/en/data-sheet/PCAL6534.pdf
-> Datasheet: https://www.diodes.com/assets/Datasheets/PI4IOE5V6534Q.pdf
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+Hello Angelo,
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks for your review.
 
-Yours,
-Linus Walleij
+I think it should be merge@1c014000 and mutex@1c016000?
+I will move dp-intf@1c015000 between them.
+
+> > +			status = "disabled";
+> 
+> status = "disabled" across the entire mt8195.dtsi nodes is always at
+> the end.
+> Please keep consistency.
+> 
+
+OK, I will modify this in next version.
+
+BRs,
+Bo-Chen
+
+> > +			compatible = "mediatek,mt8195-dp-intf";
+> > +			reg = <0 0x1c015000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 657 IRQ_TYPE_LEVEL_HIGH
+> > 0>;
+> > +			clocks = <&vdosys0  CLK_VDO0_DP_INTF0>,
+> > +				 <&vdosys0 CLK_VDO0_DP_INTF0_DP_INTF>,
+> > +				 <&apmixedsys CLK_APMIXED_TVDPLL1>;
+> > +			clock-names = "engine", "pixel", "pll";
+> > +		};
+> > +
+> > +		dp_intf1: dp-intf@1c113000 {
+> > +			compatible = "mediatek,mt8195-dp-intf";
+> > +			reg = <0 0x1c113000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 513 IRQ_TYPE_LEVEL_HIGH
+> > 0>;
+> > +			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_VDOSYS1>;
+> > +			clocks = <&vdosys1 CLK_VDO1_DP_INTF0_MM>,
+> > +				 <&vdosys1 CLK_VDO1_DPINTF>,
+> > +				 <&apmixedsys CLK_APMIXED_TVDPLL2>;
+> > +			clock-names = "engine", "pixel", "pll";
+> > +			status = "disabled";
+> > +		};
+> >   	};
+> >   };
+> 
+> 
+
