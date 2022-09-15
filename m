@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2345BA2B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F88E5BA2BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiIOW1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S229766AbiIOWas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIOW1H (ORCPT
+        with ESMTP id S229709AbiIOWaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:27:07 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4620FF78;
-        Thu, 15 Sep 2022 15:27:06 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-349c4310cf7so72437617b3.3;
-        Thu, 15 Sep 2022 15:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=NlxdPlGDclSVG1dP8Ered5Aj96QYeQaYTMEQCcdsZZE=;
-        b=ZHooVNorr46gDUSPq+/8edA6CX+1L8cGMDsChOOIi+v5mWr+mXwPOJysExYYJyNIAj
-         WDD6IGqhajlPhJzUNhUPqKUIh0e1HQrdguD0ExiX+mSjAfqXvjGawh/ReIqeMpi5uDu0
-         LfbRrMJNU/yU1CnAtTZKV0TQDb6rI1jGSxrUTDBEtx9hXvmeaDuiOM/lDI/5Rr9G+i8L
-         85rTrdHDFti1kMCT8+q3KblPSnapUTLL+RQ9OiBdJD04JAWp+xcGB3YaMsHwtUYybb/1
-         7JnYZUDFho4xwf0xHe6kV4C3Cp+sb3uHf8a+SX1xK43K+yDmW4lIJarFW0Tq6bqoAs0a
-         HRzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=NlxdPlGDclSVG1dP8Ered5Aj96QYeQaYTMEQCcdsZZE=;
-        b=p+O9K+fAYkIrOQ3EAH0RWz+O5XLfH1Oej6FVAW+AA8ty5hHc3T+k2D25OkWvj0RY6M
-         HMKrld3qsyad/LK9eQCMuwbm/j6ucWfroR2A1sU+PVFaWaO0Ru7QN1jhWYp/dfSVIax5
-         cxfQqXsRXSVAKgGLs3xGdvwpitQbSIWM11UFXk8tPnL+YF0g4iEidtdaj7mo138MxSkM
-         IR6KS8ktNTnJMITu1uXC7xeog1aeBe9eB08AVZyGFFbHGMlOHxmHSwZbiWnDzZt4fLFJ
-         iBcpJ2pNoh3CSq4YPy6QDfDWmcdHA9Nhv/p+YT7tyGEE5lhBaLIbiH8/YQjjbErXXegl
-         klDQ==
-X-Gm-Message-State: ACrzQf1N0IxwzMoiPaotI4nBs3NBL6mxTNvrlxFwAHZ4VTbeaflBIpa1
-        YBBdZHkvtwDzmIlNPN4u8ktfWCFqbCsTOqzowFQ=
-X-Google-Smtp-Source: AMsMyM4Yp7PBzBgpfRaS3bO7iKYy5Jlc/0xzHj4cPfpCIpsQ9PGNNJjX8oCqARs+4zAsE6SlnC/8A+XAHEdYFUNOoiE=
-X-Received: by 2002:a81:4ac6:0:b0:344:ef13:7c8b with SMTP id
- x189-20020a814ac6000000b00344ef137c8bmr1905559ywa.24.1663280825519; Thu, 15
- Sep 2022 15:27:05 -0700 (PDT)
+        Thu, 15 Sep 2022 18:30:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF7839BB7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 15:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a8m4L+YoF2OMpSt1Cxxi4inAGnYjV3Y/Ay7DZvVJZLw=; b=gJyEHFrXLoGMVdpzbDml+1dE3D
+        qzY+dIY4XYIGx9c6wU2C4hJIIiAWMfHM/u5tfVCVyeA4Nbz/kOpDnAYdxtuNSl5ZZJ5mzJQEdUihe
+        1BYHw5JJKF+hfgBA/FJT2ivZ8bNK2Iqz0qNXh1jgP70qeb8atjLuqxetvbuNIxW68J90LpiNsNJ6N
+        rMS1Vh+ZEr8XWUUaasnMmHD4fIEJvrjuRAL3cFXPZ6RweqmyvrOlJGIVAANPzyc9POJKIzorhoA/r
+        k5dvMFej89Uw5e0YyKvb+LYxCEmr7BiNu7G72HjnkZSVPaVGYq9kZuVh/1bHfjPkvTWbXNCx3w1Ee
+        XfI7srJg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYxNV-001YnJ-Lj; Thu, 15 Sep 2022 22:30:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5EA07300074;
+        Fri, 16 Sep 2022 00:30:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 43DB02BAA5EBC; Fri, 16 Sep 2022 00:30:34 +0200 (CEST)
+Date:   Fri, 16 Sep 2022 00:30:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: RCU vs NOHZ
+Message-ID: <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+ <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220915181558.354737-8-prabhakar.mahadev-lad.rj@bp.renesas.com> <3693a3a1-5a2a-4cc5-fb55-f6ad9a4b3f72@microchip.com>
-In-Reply-To: <3693a3a1-5a2a-4cc5-fb55-f6ad9a4b3f72@microchip.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 15 Sep 2022 23:26:37 +0100
-Message-ID: <CA+V-a8u87tqhC69qGD2zq_gT9jc_cSWd+NRn_u0bPTdmmk+j4A@mail.gmail.com>
-Subject: Re: [PATCH v3 07/10] riscv: boot: dts: r9a07g043: Add placeholder nodes
-To:     Conor.Dooley@microchip.com
-Cc:     geert+renesas@glider.be, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, heiko@sntech.de,
-        atishp@rivosinc.com, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com,
-        prabhakar.mahadev-lad.rj@bp.renesas.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On Thu, Sep 15, 2022 at 12:14:27PM -0700, Paul E. McKenney wrote:
+> On Thu, Sep 15, 2022 at 08:50:44PM +0200, Peter Zijlstra wrote:
+> > On Thu, Sep 15, 2022 at 09:06:00AM -0700, Paul E. McKenney wrote:
+> > > On Thu, Sep 15, 2022 at 10:39:12AM +0200, Peter Zijlstra wrote:
+> > > > Hi,
+> > > > 
+> > > > After watching Joel's talk about RCU and idle ticks I was wondering
+> > > > about why RCU doesn't have NOHZ hooks -- that is regular NOHZ, not the
+> > > > NOHZ_FULL stuff.
+> > > 
+> > > It actually does, but they have recently moved into the context-tracking
+> > > code, courtesy of Frederic's recent patch series.
+> > 
+> > afair that's idle and that is not nohz.
+> 
+> For nohz_full CPUs, it does both.
 
-Thank you for the review.
+Normal people don't have nohz_full cpus (and shouldn't want any).
 
-On Thu, Sep 15, 2022 at 10:36 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 15/09/2022 19:15, Prabhakar wrote:
-> > riscv: boot: dts: r9a07g043: Add placeholder nodes
->
-> nit: s/boot//
->
-Will fix that.
+> > > > These deep idle states are only feasible during NOHZ idle, and the NOHZ
+> > > > path is already relatively expensive (which is offset by then mostly
+> > > > staying idle for a long while).
+> > > > 
+> > > > Specifically my thinking was that when a CPU goes NOHZ it can splice
+> > > > it's callback list onto a global list (cmpxchg), and then the
+> > > > jiffy-updater CPU can look at and consume this global list (xchg).
+> > > > 
+> > > > Before you say... but globals suck (they do), NOHZ already has a fair
+> > > > amount of global state, and as said before, it's offset by the CPU then
+> > > > staying idle for a fair while. If there is heavy contention on the NOHZ
+> > > > data, the idle governor is doing a bad job by selecting deep idle states
+> > > > whilst we're not actually idle for long.
+> > > > 
+> > > > The above would remove the reason for RCU to inhibit NOHZ.
+> > > > 
+> > > > 
+> > > > Additionally; when the very last CPU goes idle (I think we know this
+> > > > somewhere, but I can't reaily remember where) we can insta-advance the
+> > > > QS machinery and run the callbacks before going (NOHZ) idle.
+> > > > 
+> > > > 
+> > > > Is there a reason this couldn't work? To me this seems like a much
+> > > > simpler solution than the whole rcu-cb thing.
+> > > 
+> > > To restate Joel's reply a bit...
+> > > 
+> > > Maybe.
+> > > 
+> > > Except that we need rcu_nocbs anyway for low latency and HPC applications.
+> > > Given that we have it, and given that it totally eliminates RCU-induced
+> > > idle ticks, how would it help to add cmpxchg-based global offloading?
+> > 
+> > Because that nocb stuff isn't default enabled?
+> 
+> Last I checked, both RHEL and Fedora were built with CONFIG_RCU_NOCB_CPU=y.
+> And I checked Fedora just now.
+> 
+> Or am I missing your point?
 
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Add empty placeholder nodes to RZ/Five (R9A07G043) SoC DTSI.
->
-> Can you explain why do you need placeholder nodes for this and
-> cannot just directly include the other dtsis?
->
-Since the RZ/G2UL SoC is ARM64 where it has a GIC and on RZ/Five SoC
-we have PLIC for interrupts. Also the interrupt numbering for RZ/Five
-SoC differs from RZ/G2UL SoC hence we are not directly using the
-RZ/G2UL SoC DTSI [0].
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/r9a07g043.dtsi?h=v6.0-rc5
-
-For the RZ/Five SMARC EVK I am re-using the below files [1] (SoM) and
-[2] (Carrier board) as the RZ/Five SMARC EVK is pin compatible.  Since
-I am re-using these when trying to compile the RZ/Five DTB I get
-compilation errors since the nodes dont exist (and there is no way
-currently we can delete the node reference when the actual node itself
-isn't present) hence these place holders.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi?h=v6.0-rc5
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/rzg2ul-smarc.dtsi?h=v6.0-rc5
-
-Cheers,
-Prabhakar
+I might be missing the point; but why did Joel have a talk if it's all
+default on?
