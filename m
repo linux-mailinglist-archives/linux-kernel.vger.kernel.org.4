@@ -2,71 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424535B9A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E6E5B9A55
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIOMEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S230124AbiIOMGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiIOMEq (ORCPT
+        with ESMTP id S229952AbiIOMGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:04:46 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3E0B1CB;
-        Thu, 15 Sep 2022 05:04:41 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso221142wmq.2;
-        Thu, 15 Sep 2022 05:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GTDWAPzRsyFSCgEo/xQ7NozivtexTQr6waF1dmd0WW4=;
-        b=XdgJU1eTrvqiPlVuWBJIoSVOz6UeMHYPWk2LIJKO9jGRyrapANn6Qa+MGqW3XjK05L
-         eRaX31dmXi7rHUPS4HjgCdKFWuVG6dtLhRCdykqbCGjYVePGFee9sMKgf0tjI+4sTx8T
-         daDF3+uwqyh3NybjbxOnC/krpSXZYQi3yy8M4TccmsNSvEDAsvYwCGa0IxC9cFVhl6jA
-         1RwM4zgJJsMt0AGb2arJF1P78ZjuWOPMnolYxKE/bw8h2G86/z0SOxp/QhVubenSQPH7
-         8EEWHYo28k0jQG6tcCHrgKzbxCRunvMRcw8mKvpk39A50eSaCKHdtjvWT3PIUk1AXpIS
-         yDDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=GTDWAPzRsyFSCgEo/xQ7NozivtexTQr6waF1dmd0WW4=;
-        b=UEWG/8ySJppY32NQFW7WRge7a7BNTsqsK3VlOQFATYEqFxZfwuvDBlib27YUFSK5k1
-         zRimHWHtRZjOP4QrTgbzjmbFrgMmUkR7zZjHuHbFBZkDiZTwc5m91QCTsMTyceOIeLN6
-         u+AFo6UPGranjkf8wLqPqB0vxtGoBYzX/uOkblmSIePdFGZMg7LRxiHlkBEVrjQYnaW+
-         v2oc8pvf8kydsuETnji0i2b+aFbjHdRzk4C+jYHpi00o9BwBhph5JAmL0lmMs2M2Oknm
-         tLl37wuDFFdrk7YhiUjoAN5K1zucjwjNgRBw3ejSEawPBQJRPBJUwta4AlIryCVg25Vq
-         nxPw==
-X-Gm-Message-State: ACgBeo1cRZK+hBEZ3IKgnq9wc3tI+0ADfZKlYqdBLpDY/MCZz4Z7qk+8
-        n4c85xURxB6haOccgaZwgGc=
-X-Google-Smtp-Source: AA6agR5gP0BegU9kHb3Zmn5OiE+xmFZii0czHnWhtHnh/ZgekfhGNexHMIldIjutQE4x++ElsIvYiA==
-X-Received: by 2002:a05:600c:354a:b0:3a5:b01b:2ab0 with SMTP id i10-20020a05600c354a00b003a5b01b2ab0mr6245611wmq.61.1663243479840;
-        Thu, 15 Sep 2022 05:04:39 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id k6-20020a5d5246000000b00228fa832b7asm2376315wrc.52.2022.09.15.05.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:04:38 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 14:04:37 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] arm64: defconfig: build TEGRA SPI & QSPI
-Message-ID: <YyMU1WqAV6A7yqg7@orome>
-References: <20220913041012.17027-1-kyarlagadda@nvidia.com>
+        Thu, 15 Sep 2022 08:06:30 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7C6753A2;
+        Thu, 15 Sep 2022 05:06:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fHMhP8D3GD2GnfexFvM6RsWHcKLf96Vs81q34uBr0rVyod52xOybePlUf299/mvQiSHMsUaXgRa6EPtCTO75rdA1SjbavuorTnAaNG110gvnE8ncIoazGYuhi76aw687469BIMAps9TnMPAaGjbLJKTfoNWYYy1RJHidR7ANsWEUYDHjOlEHPj+pxIZE6zO3OSHfpvX+qIvQYiAdWPH3U+lNXFQQr6xEIlrWLnAmfQ3XIbkfdyklAUHWuMrGpZS4KY5arjE5/i+rS8lwyflfWtWfz2xmhr9EjIukf51YvYah8dxrEBkx5lG0pfJssAY2vyZgaUyOf0VaXVw2WE3jXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4vE8/XcSrydPbucf+xA9JBtKf378VKo7CItST9/3eQo=;
+ b=IgjfktuNmeP/YTL40LyVZSQHv4ZCF5Ndqhj3jcZTduFn+oIex1VN3J/WeRtBu19jxkcbVdv/4c2GRsJJihwQ659jEPF2XlFiWu9QOWq+wPz7xWvV5VIO1NuRCf3EajBCx+wSug8nA9GKNYDiT1jFEjrrjDKzUwdI5EWZ6EC4awCnsKv/3zt+L2ywmfLb6kE8BOJV3XZisX5lQseu88R7OUzow2wODd4xlSPDlIMzuzwdki/wMP6U23PuacKVrZDjlRQHCRKmMrYxOPytCedaMAnH735SXRjnr0ZYK4xz0hB0thUGhOxhrrK8jA4TpEihOPTOYkMnT7UupoeOwLZmkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4vE8/XcSrydPbucf+xA9JBtKf378VKo7CItST9/3eQo=;
+ b=5Phj+Uy0B83aip4nF4Tkz7dxtGcDEd1OHerstvDEfxIXptF48rKte4jNldKZzO3CrQP5BZXS32rHGVq/gQhrTC2sdOMjT3wLTiopg39vweqbhoj/E9xqOBrJFbuiU79FESPtNO8mN0/aJapYrlvUXj2up3pAwK8n8nxCnfG0+LE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN2PR12MB4287.namprd12.prod.outlook.com (2603:10b6:208:1dd::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Thu, 15 Sep
+ 2022 12:06:26 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5632.015; Thu, 15 Sep 2022
+ 12:06:26 +0000
+Message-ID: <cbfbe832-db39-8681-239a-75d612111394@amd.com>
+Date:   Thu, 15 Sep 2022 14:06:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/6] dma-buf: dma_fence_wait must enable signaling
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220914164321.2156-1-Arvind.Yadav@amd.com>
+ <20220914164321.2156-5-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220914164321.2156-5-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0123.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::9) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Vqw6/qZF1/rYoiav"
-Content-Disposition: inline
-In-Reply-To: <20220913041012.17027-1-kyarlagadda@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MN2PR12MB4287:EE_
+X-MS-Office365-Filtering-Correlation-Id: 44e5e829-5ff3-4627-f759-08da9712b6e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UZWn2bQ4g153ano4ZsKRcwYrO5clqtX4FMmdb6dLKXGXbZHQU5OVovQh2L1avGC48suYn7W+FjG7fdz+1ReEQdNaYVjzlsD+tj6IdOf6oymanE8QsDesKOYbyx1ig1WSBkxXquiyWhuWzsPOLfnjqpTchh477sfeexQJIZ00uuQ2BG45B6YE7pc+wRGrsZYc4rWEfvk+1K5NcY6q0z98K8RLcJtrYJsT7G3B/TPws2faeOL8PX0jIzTEG0TwoVPf4iCIi6Tn245gjUdL++8/Dapwaegtr4wfynYczycEl/g7ddzN/DB0xueJy6U12X83KpQ9Z/qjlZiv8LUQgdPyJLfCEI94xpwzLfczy/lw2PtQBOhniIToK624U/0prS/bkPDhmetdqKV0Rj86cwgGozDmQZzeHg6RuwAkjt4Lt7H4bRK5skZhi9e+BJeT10eOH8hhEIqylpRyrvFJg2j5jCTL++XL+GL5HFOOIy/oo953hwXoA9DKvAgs7hBuHaAogTmWOO/rFQydyYxlBSyhao8NOUM++G37VBM8A75owPaOCJaB+Geb/pFbtbxj8SndlXe3m7x+YPKZapI3gdlu6/6vpWQxTjkQPU+XrnGlmouCcnPAFwoRpk6pwDGwSHsgQJGiI19GYQmcSrUMzKrW+RK2mbzJYsKob6nG1JwSqApSsOIQF5lRSmGRCyJIeiQqiLHPDlUpJnP/fdWrruD946S9Lbg52cxl9ZsLPN3lZ78ahe2aVyiME4LntEJ8OE10xwACNkwIGRGUS1pRPQVX8fQ+BmpgZLQVzl8ZXo55wH2CHs3xDxt5N64DkF/N/J8k
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199015)(186003)(86362001)(31696002)(6512007)(478600001)(41300700001)(26005)(36756003)(5660300002)(2616005)(6486002)(8936002)(83380400001)(316002)(6506007)(6666004)(921005)(66476007)(66556008)(8676002)(38100700002)(31686004)(66946007)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NU9IRGsrNGtZZ2NVMXhic0N6STVlTTU2N0xMM2k2OEp5em1iREtoVk1KcnBz?=
+ =?utf-8?B?YnZNZFJsWHZNSVBvZmJSd2daZTRmZFp2dTBtZ1Q1QzFNMWtxbmczRnNWZ0RE?=
+ =?utf-8?B?ajUwQnYxUzhEaDAwWVNHSmRDekdzRWxBYnVScHVLRFV3L0lSczU3S1RpdUUz?=
+ =?utf-8?B?Z3hBY1VKc1JWbGtBR3hlYlJVNlFMWEh4MVQxNjlWZzRxN3BxR1U2YmhLQ3Fm?=
+ =?utf-8?B?R0k5ODFDMEh1R2kydEZBOFdIM3dMREkzQUlPVFRtb3JiODFKd2RxKzl2YVFr?=
+ =?utf-8?B?UEJGNm5JakNhSXhEMW81cGJpc0ZrbHcwZWg3eUl0MDd3UzM3dUJBcE1GMndj?=
+ =?utf-8?B?bFZtTVdFbTlFRWV0ZnFEUnRLcGVubys0TVE0NTROTkt2dGZKbnZ4YlRWK3R3?=
+ =?utf-8?B?OUlWQmNpQ0pVMG9mRjRpM3I3c1YySGs4MUNHZGp4RCs1emNaRERVUTMzNElo?=
+ =?utf-8?B?M0d0Uit0bitrdjdjcWJEMy9CNnQwaG11RXROZ2FMMkg3cWJwc1NtSFlnWE9x?=
+ =?utf-8?B?bnJwS1d4UUFIdVpuU3BSK29mVUlIdmo4UmlkRFM1eVJzT0IwclpjTmVLdG9i?=
+ =?utf-8?B?N0QwY21kQ1NQdzhvSmlHVkpRMDJEcHZuZnM2RTRrU2I3SFY2cDFycmV6YVpM?=
+ =?utf-8?B?TjdhVzQ4WHVra2dUMXFWSWx6NEhwQ2ZhbFhZODFySmM2Z2szb1c4OG9QVEd2?=
+ =?utf-8?B?bFk3Z3dYMXdNclVranI0My80enNmQ2JYbzZyUXZUWXZsUkJNMGtYdldZRmxq?=
+ =?utf-8?B?cmZEbmVOUDMyY0I5WlhyMk1VSTljNDVTL0NNVW5WU2t4QWEyeXBkWDRDWUJJ?=
+ =?utf-8?B?Q3BXNjBiMEVDd1JzSm5TNjNtMEw5M3o2RjBydk5TbUpzQ3NkM2V3YmM4TlQ4?=
+ =?utf-8?B?eXAzN0phTkZ3ZkcvZ3d1T0p5L3NTTEdCbHhOeWpZbmlvbnBzTW9BMFZyS2E0?=
+ =?utf-8?B?Q1VTZFZDZkN4bjNITDRQOUl3ajVHN0tud2lGUE4wb0NZNnJVTDhBMzJTYWxF?=
+ =?utf-8?B?WFZWYkE3VTZuNVByRmJNc0RxaTBnM25KMFBSVUZDMTdER0JMeUhEQlB0ZVRW?=
+ =?utf-8?B?YzZKRmdSM25HWm5iOEpXd1QvcVBtWnMrRXpDSUhtSTczVGR1LzRrZWVkRmFP?=
+ =?utf-8?B?OGRtNmlyNStWSTV1dG1ZTmtBRU1DMjF6dWJhMjIyRmZYL08rbFRoeU84Z0dz?=
+ =?utf-8?B?ODlQbmJOVmRDYUxaRlFQNU52eWo2SEF3OXc4NUNMaEI0MklzZStjVXhVbTdW?=
+ =?utf-8?B?RWY2SVhSbmc4MmVRTVE5dkt0TktoUUZmY2dxZUwwTzFya3RZWklHYzRMVHZJ?=
+ =?utf-8?B?M1ZDdEFHcSt3M3ZOTE9zdUtyV2ZhSnFsWUwrMWFrU0VwS2lLaXZTb0Rad1gx?=
+ =?utf-8?B?bktoUWVGZ2FZQzlTc1lvZDBFZU1GMmtTMTlBR2Y4czY1cDFMOXpsVHZYZ2s3?=
+ =?utf-8?B?ZHQ3Tkk3cklZSkpTbEg2UDNtczdtT0VuWUdwZUJLZEVYa3NSNHorUWs4TzdD?=
+ =?utf-8?B?eVZkUmdTMkhUSVhkYTgwOFkvOVltTlc2K2lmM3kzWW5Uc0t4NE5DdXgxNDFE?=
+ =?utf-8?B?MWdRdUpGalFaOCtSNGNRQkg1OFZJS1A1Mktkem1mVVBmY2xETmt0MCtBbHU2?=
+ =?utf-8?B?Ni9YUmhCM2VNZXVYS1VWZDdYREh0QzZMNmZick5lcTJJdldLeXh5b3d1bTZB?=
+ =?utf-8?B?RnhZbFNOc204ZWx0NE1PRmdMdTRuME44TjZ1WjRIV2JYdGNxKzFseW1hOUxq?=
+ =?utf-8?B?TzdVak5TajI3WFRqaTNjanJhU093b1hyYkwvb3RmaFZoYnZSSGRyS3RDdnpF?=
+ =?utf-8?B?Q2JSSEJFRm8yTm92Z2NOVDd5OUVsSGc3eUFvZ3llQWlCNXZ2eTBGUnVwSzJX?=
+ =?utf-8?B?ZEFGZUdMN29zUms2TThQTWJnZVkwTjQ1b21WelRCdmVFeHgzblBzcEVudnhM?=
+ =?utf-8?B?Szg3cDVzZlhaZ1l2QWNXbDVMWjlzMXdiWis5RU1TSEgzdmVsbWdtMzJXM3BZ?=
+ =?utf-8?B?b2sxRW92ZmtDN2ZiQ2RDYlJKT1Y5RGZlOEZvZ0ZoeXNoWldScEw1YWxLa2dt?=
+ =?utf-8?B?N2FWMkV1UTRTM01Oa01wUTlRKy9abGlOS0ZzSVdLMUtCMXlodDk1cTJWRTJI?=
+ =?utf-8?Q?GQrLVJQ8QLcl6K+PsNurYZWwb?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44e5e829-5ff3-4627-f759-08da9712b6e7
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 12:06:26.3644
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cgaUx13/v/UAqcxfAbJV/Tg4wrPzP4nfYxyOj5K32K5brl9s0VsoImz+gSnIIPwi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4287
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,45 +128,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 14.09.22 um 18:43 schrieb Arvind Yadav:
+> dma_fence_wait() should always enable signaling even
+> when the fence is already signaled.
+>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 
---Vqw6/qZF1/rYoiav
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-On Tue, Sep 13, 2022 at 09:40:12AM +0530, Krishna Yarlagadda wrote:
-> Jetson AGX board has flash device on QSPI controller and SPI instance
-> on 40-pin expander.
->=20
-> Enable TEGRA SPI & QSPI drivers in defconfig as modules.
->=20
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+>
+> Changes in v1..v3: This new patch was not part of previous series.
+>
+> ---
+>
+>   drivers/dma-buf/dma-fence.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 645c158b7e01..a5fbf1c1e0ea 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -508,6 +508,8 @@ dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
+>   
+>   	__dma_fence_might_wait();
+>   
+> +	dma_fence_enable_sw_signaling(fence);
+> +
+>   	trace_dma_fence_wait_start(fence);
+>   	if (fence->ops->wait)
+>   		ret = fence->ops->wait(fence, intr, timeout);
+> @@ -771,9 +773,6 @@ dma_fence_default_wait(struct dma_fence *fence, bool intr, signed long timeout)
+>   		goto out;
+>   	}
+>   
+> -	if (!__dma_fence_enable_signaling(fence))
+> -		goto out;
+> -
+>   	if (!timeout) {
+>   		ret = 0;
+>   		goto out;
 
-Applied, thanks.
-
-Thierry
-
---Vqw6/qZF1/rYoiav
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjFNIACgkQ3SOs138+
-s6EwHQ//WfP05aTNaotuPDBxg73V4ZTIJyA/6rlCKLpC0HU/pinxD3yiah3hkKiY
-PQR3YEKVv6rfZBUX92N5c4V96JmOxpk1mo39P/Kfo5Ml33/YNOzfRRA59TkvaxfI
-Hp2BxQubQ/9ue9yFKlEzDwgAcfpRTGXcRq3EBJkS0kCHnf26isoVRf+S3FF9ypUK
-nZq7GtsiM2Ur/lWHoib6j8iAHXVtvp0BNfkOWN9t+lEyUEFD3WSV0LWUqu1YlLVE
-ZpsoO4CSrbKQztLnRX/GysbsKthuw7H/XO32u9QbMvMRTwMBDdjdHgYMmpKa6Irc
-0DbOkm8IMiEvk2NZdSjvVThpEMwsKahGwKd/oO/a82N5P1+sZxBpX5gWZ9HxrVdL
-WqJ9rEVW7TmxW3bv0gtX0TF8mvjSPoNn0oq+XgLSdpnIM40P5Mxo4bT6UNeP5ZwY
-ko3M5CieGHrEacpjqTVAyj4c+0TV8irr7rvPUvlDpW8nRaKaoqJzY0LVK6WFlz7G
-gvLflHTXdGVsk7M/gQBVArEFFwJsPcp4/DJ9mv5EQcS+DAsuYI8W1xLzccqO2Aaa
-pmVe5tUfcvwIxliJGINiso7ki85NZ1LpRUgR2PTdhgKzo3o7UmtNLr25NLg5V5qL
-gk4g6fgGIf1ctuY/iIXH4S+Cyy16xaMfQx7gA0nSAnI+zjm/Za4=
-=498g
------END PGP SIGNATURE-----
-
---Vqw6/qZF1/rYoiav--
