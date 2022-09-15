@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4587E5B9B4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C285B9B64
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIOMuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S229935AbiIOM4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiIOMuT (ORCPT
+        with ESMTP id S229591AbiIOM4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:50:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD1C3AE6A;
-        Thu, 15 Sep 2022 05:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663246218; x=1694782218;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IIdOmEcdS83aIuUyuRuxgaNZb9Jk3USNPSc9UWh3dM4=;
-  b=m4u9tLDXeBMzDyF9ME0fc5t4EWlWTb2Lpz7aA8tcrRmc/7fn26FwD/x1
-   c6kN+Ktmel/PixfcRH8WTqsLSWb+1MJJQkPO95MTYiMzeOnOJZcPZdeEJ
-   MT0Oa+4Vi7YXm+7TQQAWA/7kNlmk+eYwTjVr1U2qRKAeH+IRSuhgKmrEQ
-   Fw+loAZkU4He1zWrfUOlLD8FKbBToUJnDUmhisKY7ed1Xdlf3CEca3O5U
-   FJV1pgtI3xHllIK0yGRIX9AnUHIYk4fNBml8tiTTX5M2+FdKT3ejWSaCY
-   D8h0jvMq1Zuz7SiRTGgdyWJkthpsWesPAXf8pDcneywF/xINt7yT73go2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299513129"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="299513129"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 05:50:18 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="647812068"
-Received: from cvbock-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.165.77])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 05:50:16 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     linux-sgx@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, jarkko@kernel.org,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/sgx: Add xa_store_range() return value check in sgx_setup_epc_section()
-Date:   Fri, 16 Sep 2022 00:50:06 +1200
-Message-Id: <20220915125006.759592-1-kai.huang@intel.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 15 Sep 2022 08:56:21 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705D99C1DC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:56:19 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id l17so1255112wru.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 05:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=G2rHbxpP60TFR+zumNeCiSf5mCfJRZI93xLQZOWnmYY=;
+        b=aVuw7Ao9bWSdWPOAkXlAvUrgWFm15T6IzL4j33izpIsPodrX+PYSvVVf/rqlm5EoE1
+         mq5MEwJQK1Z6sbxzTRTLnSwp6EAI6ZM+5RnT7wjeGdoNJQpGo8RMsuRIntHhbL7NeD95
+         JTGroguJ/fNT85NG9v2QXJb6FSJG/pZLnc/xmQAtqkmHHpIFaDMR50b2JQdp0z/atNzY
+         QGLz3jEsnW9hc9Sl/JrPYus1AaPo1IU/GNDCB3Nb6gyU5jsrtkxwalvLaaqpy5S1UIj7
+         BGt2TTRXaSws+aRn2IdFvkUkFQdRCWRtrnZ1roMj5XlABrefNzvccOPo87IJmjgVjoVx
+         xE7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=G2rHbxpP60TFR+zumNeCiSf5mCfJRZI93xLQZOWnmYY=;
+        b=aQcNVKMk8tY7MVCOAHUQsS/7wZkP5ArzwnX4V5zDVMPxGBBt/Oip2aUwwu3cyKkGY1
+         EFdoVYGw5pDg2FIf/FFSnSK8zrAkN6LbT0dA2Qlqju8xht3ZFjBYiaeCssiEb2DoFXZc
+         +9I6LOiSHn8cyvSCp+UrMEj42CdXB47SdDytM1NP8LUHHOVXYXqjnJUKmBK7Z9AoSIeH
+         8cpndU3deRfjAvJe0XF6UU3XPBxsQljAZ3S1f/nAXah6vW96VN9tz2tRE6xQ1Zq308o3
+         ETOqZM0D1iveHG1gQ3+9rzWQ1ZoegZcYY2hqs3A3Fs7P4hI1LD9ZcvgcnieTMm15RHDL
+         7Y9A==
+X-Gm-Message-State: ACrzQf33ND6ci8Z986ZTqz1H8kbGQHkLBFFVXj79wsbskn4YM0sL/+m4
+        dcacwIuy/JFHs044u7nbJzS99g==
+X-Google-Smtp-Source: AMsMyM76KrIHzxT8CDfHmA6sOIBVAkTVLDe0LL3YIWLSTze54PfuHSmOXH1+RYNH95t9DQIYTSbC3w==
+X-Received: by 2002:adf:f509:0:b0:22a:cbe3:3da8 with SMTP id q9-20020adff509000000b0022acbe33da8mr4053421wro.532.1663246577950;
+        Thu, 15 Sep 2022 05:56:17 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id o11-20020a05600c510b00b003a845621c5bsm2764776wms.34.2022.09.15.05.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:56:17 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v4 0/4] ASoC: qcom: add support for sc8280xp machine
+Date:   Thu, 15 Sep 2022 13:56:07 +0100
+Message-Id: <20220915125611.22473-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In sgx_setup_epc_section(), xa_store_range() is called to store EPC
-pages' owner section to an Xarray using physical addresses of those EPC
-pages as index.  Currently, the return value of xa_store_range() is not
-checked, but actually it can fail (i.e. due to -ENOMEM).
+This patchset adds support for SC8280XP SoC machine driver.
 
-Not checking the return value of xa_store_range() would result in the
-EPC section being used by SGX driver (and KVM SGX guests), but part or
-all of its EPC pages not being handled by the memory failure handling of
-EPC page.  Such inconsistency should be avoided, even at the cost that
-this section won't be used by the kernel.
+First patch moves some of the commonly used code to common from sm8250 machine driver
+and the follow on code adds minimal support for sc8280xp.
 
-Add the missing check of the return value of xa_store_range(), and when
-it fails, clean up and fail to initialize the EPC section.
+Currently this driver is only tested with SmartSpeakers and Headset
+on Lenovo Thinkpad X13s.
 
-Fixes: 40e0e7843e23 ("x86/sgx: Add infrastructure to identify SGX EPC pages")
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
- arch/x86/kernel/cpu/sgx/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Support for sm8450 is tested and I will post the patches soon.
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 515e2a5f25bb..2ee23e60ef61 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -632,8 +632,12 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
- 	}
- 
- 	section->phys_addr = phys_addr;
--	xa_store_range(&sgx_epc_address_space, section->phys_addr,
--		       phys_addr + size - 1, section, GFP_KERNEL);
-+	if (xa_err(xa_store_range(&sgx_epc_address_space, section->phys_addr,
-+		       phys_addr + size - 1, section, GFP_KERNEL))) {
-+		vfree(section->pages);
-+		memunmap(section->virt_addr);
-+		return false;
-+	}
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		section->pages[i].section = index;
+Thanks,
+Srini
 
-base-commit: ee56a283988d739c25d2d00ffb22707cb487ab47
+Changes since v3:
+	- fixed few spellings in commit log
+	- removed build dependency with APR
+
+Srinivas Kandagatla (4):
+  ASoC: qcom: common: use EXPORT_SYMBOL_GPL instead of EXPORT_SYMBOL
+  ASoC: dt-bindings: qcom,sm8250: add compatibles for sm8450 and sm8250
+  ASoC: qcom: sm8250: move some code to common
+  ASoC: qcom: add machine driver for sc8280xp
+
+ .../bindings/sound/qcom,sm8250.yaml           |   2 +
+ sound/soc/qcom/Kconfig                        |  12 ++
+ sound/soc/qcom/Makefile                       |   2 +
+ sound/soc/qcom/common.c                       | 173 +++++++++++++++++-
+ sound/soc/qcom/common.h                       |  35 ++++
+ sound/soc/qcom/sc8280xp.c                     | 157 ++++++++++++++++
+ sound/soc/qcom/sm8250.c                       | 152 +--------------
+ 7 files changed, 387 insertions(+), 146 deletions(-)
+ create mode 100644 sound/soc/qcom/sc8280xp.c
+
 -- 
-2.37.1
+2.21.0
 
