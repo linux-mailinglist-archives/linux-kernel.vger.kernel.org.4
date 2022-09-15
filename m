@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AD35B9D1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49205B9D25
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiIOOaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S229972AbiIOObp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiIOOaM (ORCPT
+        with ESMTP id S229695AbiIOObn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:30:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC23846C;
-        Thu, 15 Sep 2022 07:30:10 -0700 (PDT)
+        Thu, 15 Sep 2022 10:31:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300B989934;
+        Thu, 15 Sep 2022 07:31:42 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F05AB33786;
-        Thu, 15 Sep 2022 14:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663252208; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbhmGjCvkeNneLmFaHzzNfVQsclXD7BkZKZeexJiJmU=;
-        b=xBgP5PVYdcnLnEoanc50FexGxJrd3qbDY5gHzD88WBqaPjmXPiOHlxe5/1RpVqlxVboHhT
-        qgL3ucsDo/MIAnsT1QMRbc1+ch0LX//we+NFv5MN4YdtA9WEbxHqxtwcSqcrSzdBRvSvJx
-        9b6fr+m7h5QMpTqmrad5wPzshU+EWUo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663252208;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbhmGjCvkeNneLmFaHzzNfVQsclXD7BkZKZeexJiJmU=;
-        b=//wYkh1FkCgxufxrFp8RaivcCzo0DUarv4uJXO/SndD6ftqv6i9uMR3fwAoGTnkbrxeOq+
-        sMEcj+ExoCSk2CCg==
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D1CD31F8AF;
+        Thu, 15 Sep 2022 14:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663252300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dzoAgu6mheUOzlynwIyePFbncbuBp9hucJwC4AGAEMg=;
+        b=cBu5DlTCREcpIg2AL2xFilshrjAlZTvrjdO687YcesK9GrOmCA581P3FxwwuYLrZ+YkHpE
+        Sf7gTfCFQhBDBDudEhF0MI7TmSLcA60AMgyUI28s9e2hH5T3IFxj25WBCY7sZwFQXroC3E
+        yL1W20RErwozixvr7renhuJpHHkbSjI=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3912133B6;
-        Thu, 15 Sep 2022 14:30:08 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DA73133B6;
+        Thu, 15 Sep 2022 14:31:40 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id so6LN/A2I2MAegAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 15 Sep 2022 14:30:08 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 886ACA0682; Thu, 15 Sep 2022 16:30:08 +0200 (CEST)
-Date:   Thu, 15 Sep 2022 16:30:08 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next 2/2] ext4: adjust fast commit disable judgement
- order in ext4_fc_track_inode
-Message-ID: <20220915143008.27woacjur6sg32t2@quack3>
-References: <20220915135611.3040776-1-yebin10@huawei.com>
- <20220915135611.3040776-3-yebin10@huawei.com>
+        id DRsmJUw3I2OVegAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 15 Sep 2022 14:31:40 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        stable@vger.kernel.org, Sander Eikelenboom <linux@eikelenboom.it>
+Subject: [PATCH] xen/xenbus: fix xenbus_setup_ring()
+Date:   Thu, 15 Sep 2022 16:31:37 +0200
+Message-Id: <20220915143137.1763-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915135611.3040776-3-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 15-09-22 21:56:11, Ye Bin wrote:
-> Judge filesystem if fast commit disabled before test inode's journal mode.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+Commit 4573240f0764 ("xen/xenbus: eliminate xenbus_grant_ring()")
+introduced an error for initialization of multi-page rings.
 
-Probably makes sense but is there any particular reason why you do this?
+Cc: stable@vger.kernel.org
+Fixes: 4573240f0764 ("xen/xenbus: eliminate xenbus_grant_ring()")
+Reported-by: Sander Eikelenboom <linux@eikelenboom.it>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ drivers/xen/xenbus/xenbus_client.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-								Honza
-
-> ---
->  fs/ext4/fast_commit.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index eadab945b856..9217a588afd1 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -577,15 +577,15 @@ void ext4_fc_track_inode(handle_t *handle, struct inode *inode)
->  	if (S_ISDIR(inode->i_mode))
->  		return;
->  
-> +	if (ext4_fc_disabled(inode->i_sb))
-> +		return;
-> +
->  	if (ext4_should_journal_data(inode)) {
->  		ext4_fc_mark_ineligible(inode->i_sb,
->  					EXT4_FC_REASON_INODE_JOURNAL_DATA, handle);
->  		return;
->  	}
->  
-> -	if (ext4_fc_disabled(inode->i_sb))
-> -		return;
-> -
->  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
->  		return;
->  
-> -- 
-> 2.31.1
-> 
+diff --git a/drivers/xen/xenbus/xenbus_client.c b/drivers/xen/xenbus/xenbus_client.c
+index d5f3f763717e..caa5c5c32f8e 100644
+--- a/drivers/xen/xenbus/xenbus_client.c
++++ b/drivers/xen/xenbus/xenbus_client.c
+@@ -382,9 +382,10 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
+ 	unsigned long ring_size = nr_pages * XEN_PAGE_SIZE;
+ 	grant_ref_t gref_head;
+ 	unsigned int i;
++	void *addr;
+ 	int ret;
+ 
+-	*vaddr = alloc_pages_exact(ring_size, gfp | __GFP_ZERO);
++	addr = *vaddr = alloc_pages_exact(ring_size, gfp | __GFP_ZERO);
+ 	if (!*vaddr) {
+ 		ret = -ENOMEM;
+ 		goto err;
+@@ -401,13 +402,15 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
+ 		unsigned long gfn;
+ 
+ 		if (is_vmalloc_addr(*vaddr))
+-			gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr[i]));
++			gfn = pfn_to_gfn(vmalloc_to_pfn(addr));
+ 		else
+-			gfn = virt_to_gfn(vaddr[i]);
++			gfn = virt_to_gfn(addr);
+ 
+ 		grefs[i] = gnttab_claim_grant_reference(&gref_head);
+ 		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
+ 						gfn, 0);
++
++		addr += PAGE_SIZE;
+ 	}
+ 
+ 	return 0;
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.35.3
+
