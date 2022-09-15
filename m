@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BAA5BA2C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5550B5BA2C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiIOWiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
+        id S229810AbiIOWjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiIOWiu (ORCPT
+        with ESMTP id S229708AbiIOWjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:38:50 -0400
+        Thu, 15 Sep 2022 18:39:04 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78F944F64E;
-        Thu, 15 Sep 2022 15:38:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FF93501AB;
+        Thu, 15 Sep 2022 15:39:03 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id B02AC11FE;
-        Fri, 16 Sep 2022 00:38:47 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 602FE1780;
+        Fri, 16 Sep 2022 00:39:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1663281527;
-        bh=2Ct6MVeyoYb6dtKXKW6sQX2qdA4lO3IpMlc6S8ZVHZI=;
+        s=202205; t=1663281542;
+        bh=9LsAriyg/v8KRDWcGoxpt5EInCN4szvRf6df46hf4n0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kr5iOHkd3Pn/FmDuk0PDNec11o9mPloAwhGhRxCTrNQcRovjYscjaSwSMZJZvCeFl
-         kL3ObEev0j2vZobb9GGQRHkWEE1BmhUvSrtXlrzfyBUscxn2MNYRuUFbKPN7jJWZIW
-         DD0VXhMoeEYOpdYRafXFtM4w2Im13he/MteiFN+ccnnD7PlmPo2bZWGMeE+SaGufUC
-         0WHM7WF6g1dvV8GO5WY4BucJ8Pmb+9p5ptXB5AdjeL+4eRFLx1nfy5dVv9zIYJF7AF
-         rOQhZ/e6z8m287b9waUrqXJbjomLTVHrqi63cy0BFyKntqwGV3tIqEraz7HCafXqxQ
-         A0ekGf8b7QN6E5xqtrXf4wlNwo5cd2OGj9blqMKhjQVvVnqz1UTSlrZDzRcjr4f0HJ
-         Jucjz2drdx47KNFSKtKCBbLsCodnE4jImIHdDe3KBpSyJs80AgutayI/Xsu4N4DDff
-         Q+KsU59ETf1MmDPqKlvcSjzgvKgL2Y8LpftqcofSBArEsECKXFekKcZ/FexL3iWM9D
-         TPSIhyKCIyLBiu78ZWAI/KpSF8vhdQFvwOWAkv3AMh5aapcoRUNKynpleGWvI687qw
-         mm08oHNRc6p8b1WFBa4pDajCDwzAfzCgtTljYaMUCwroXC1DyhWxt3pNA/gnzuw7lH
-         qrJFgU7OUL3yPHHMxCnDJb+U=
-Date:   Fri, 16 Sep 2022 00:38:46 +0200
+        b=VRbpVyliiCo9uK6YDde4vcF7fniX5J4CChUbVT7l1q3DxRFHL+bzHD7ufclN+98rt
+         wcINjU6L/x0eXf4BNn26+NwXfSWPhtBB50u7Or7RAgEJfnvOhJX/QDMqYGN7fgAeMV
+         o/MCgNU5u28+UCF2ZJbNOqfsiXkqOIeTJyznDqK1kEUbFGgSbSj2tYqi2lCwbaRSIu
+         ZB7KMEt511LEvYiG1/jJd+gdFQCwroMOiIJBnGkbkXH6eOS0ZA5OjLPbAVox51Ibyr
+         rxAISLcOESvoKyzrHWJvWWTG7BHRUB0AktbPgVNbqp3M9t8Pu1HjTm2mRp3Bbs7PGp
+         GXUbnodOujtPrkS03G23KuIa3ybFHOGvG2KNOPE0j9G9P8pblHC7poifFTN2WgsLSQ
+         X7XJXzfgXkcFF7xA5DXy1KfrjCPG31MzCvWsqAdvn/fa2pNv0dheWhDi1M8iaBFkrc
+         D33CRFi5snFQE+l9LON1U0tg4GnBAt35VQlmAq23KYeVyRJRYcxgdsfYNc/7yXZta3
+         OymRa7etgA+k54DwCrEwgVMKfAl+Y4nZ8oonuEQEYCJkedgX4MZmv5lkiUMPSZ36vr
+         sSbSnsS9Wo2cPrsU7n+xJbPXkvmgE0qT1kpw8AxDfC0fcwNaqpxbEgBBgN0Fe7V9DA
+         tOl93fuKEpjzydGi8NtsvmaM=
+Date:   Fri, 16 Sep 2022 00:39:01 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
@@ -41,16 +41,24 @@ Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
+        Hu Haowen <src.res@email.cn>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Subject: [PATCH v4 02/18] a.out: remove define-only CMAGIC, previously magic
- number
-Message-ID: <9cbea062df7125ef43e2e0b2a67ede6ad1c5f27e.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v4 03/18] Bluetooth: RFCOMM: remove define-only
+ RFCOMM_TTY_MAGIC ex-magic-number
+Message-ID: <f6d375201dfd99416ea03b49b3dd40af56c1537e.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <YyMlovoskUcHLEb7@kroah.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lgubbxsphv7oxy7x"
+        protocol="application/pgp-signature"; boundary="a6k63ixd4da7layj"
 Content-Disposition: inline
 In-Reply-To: <YyMlovoskUcHLEb7@kroah.com>
 User-Agent: NeoMutt/20220429
@@ -65,19 +73,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---lgubbxsphv7oxy7x
+--a6k63ixd4da7layj
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The last user was removed in 5.1 in
-commit 08300f4402ab ("a.out: remove core dumping support")
-but this is part of the UAPI headers, so this may want to either wait
-until a.out is removed entirely, or be removed from the magic number doc
-and silently remain in the header
-
-A cursory glance on DCS didn't show any user code actually using this
-value
+Appeared in its present state in pre-git (2.5.41), never used
 
 Found with
 grep MAGIC Documentation/process/magic-number.rst | while read -r mag _;
@@ -91,134 +92,127 @@ Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
  Documentation/translations/it_IT/process/magic-number.rst | 1 -
  Documentation/translations/zh_CN/process/magic-number.rst | 1 -
  Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- include/uapi/linux/a.out.h                                | 3 ---
- 5 files changed, 7 deletions(-)
+ net/bluetooth/rfcomm/tty.c                                | 1 -
+ 5 files changed, 5 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index eb2db3608a15..f48c6c6efaf7 100644
+index f48c6c6efaf7..f16f4e2cc48f 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
-@@ -69,7 +69,6 @@ Changelog::
- Magic Name            Number           Structure                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/=
-linux/pg.h``
--CMAGIC                0x0111           user                     ``include/=
-linux/a.out.h``
- HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/=
-char/n_hdlc.c``
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
+@@ -78,7 +78,6 @@ MGSL_MAGIC            0x5401           mgsl_info         =
+       ``drivers/char/s
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+ FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/=
+net/ethernet/dec/tulip/de2104x.c``
+-RFCOMM_TTY_MAGIC      0x6d02                                    ``net/blue=
+tooth/rfcomm/tty.c``
+ CG_MAGIC              0x00090255       ufs_cylinder_group       ``include/=
+linux/ufs_fs.h``
+ RIEBL_MAGIC           0x09051990                                ``drivers/=
+net/atarilance.c``
+ NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
+linux/nbd.h``
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index 86ef47906f37..27f60133fbe5 100644
+index 27f60133fbe5..5366cad4a4ea 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -75,7 +75,6 @@ Registro dei cambiamenti::
- Nome magico           Numero           Struttura                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/=
-linux/pg.h``
--CMAGIC                0x0111           user                     ``include/=
-linux/a.out.h``
- HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/=
-char/n_hdlc.c``
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
+@@ -84,7 +84,6 @@ MGSL_MAGIC            0x5401           mgsl_info         =
+       ``drivers/char/s
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+ FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/=
+net/ethernet/dec/tulip/de2104x.c``
+-RFCOMM_TTY_MAGIC      0x6d02                                    ``net/blue=
+tooth/rfcomm/tty.c``
+ CG_MAGIC              0x00090255       ufs_cylinder_group       ``include/=
+linux/ufs_fs.h``
+ RIEBL_MAGIC           0x09051990                                ``drivers/=
+net/atarilance.c``
+ NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
+linux/nbd.h``
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index cbefdcbfbf53..520cc5cf4d63 100644
+index 520cc5cf4d63..08f5a83eed92 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -58,7 +58,6 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
- =E9=AD=94=E6=9C=AF=E6=95=B0=E5=90=8D              =E6=95=B0=E5=AD=97      =
-       =E7=BB=93=E6=9E=84                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/=
-linux/pg.h``
--CMAGIC                0x0111           user                     ``include/=
-linux/a.out.h``
- HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/=
-char/n_hdlc.c``
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
+@@ -67,7 +67,6 @@ MGSL_MAGIC            0x5401           mgsl_info         =
+       ``drivers/char/s
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+ FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/=
+net/ethernet/dec/tulip/de2104x.c``
+-RFCOMM_TTY_MAGIC      0x6d02                                    ``net/blue=
+tooth/rfcomm/tty.c``
+ CG_MAGIC              0x00090255       ufs_cylinder_group       ``include/=
+linux/ufs_fs.h``
+ GDTIOCTL_MAGIC        0x06030f07       gdth_iowr_str            ``drivers/=
+scsi/gdth_ioctl.h``
+ RIEBL_MAGIC           0x09051990                                ``drivers/=
+net/atarilance.c``
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index 7fd6e494467b..7d6debd0117e 100644
+index 7d6debd0117e..8a30da3d36b2 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -61,7 +61,6 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
- =E9=AD=94=E8=A1=93=E6=95=B8=E5=90=8D              =E6=95=B8=E5=AD=97      =
-       =E7=B5=90=E6=A7=8B                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/=
-linux/pg.h``
--CMAGIC                0x0111           user                     ``include/=
-linux/a.out.h``
- HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/=
-char/n_hdlc.c``
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
-diff --git a/include/uapi/linux/a.out.h b/include/uapi/linux/a.out.h
-index 5fafde3798e5..bb15da96df2a 100644
---- a/include/uapi/linux/a.out.h
-+++ b/include/uapi/linux/a.out.h
-@@ -70,9 +70,6 @@ enum machine_type {
-    The first page is unmapped to help trap NULL pointer references */
- #define QMAGIC 0314
+@@ -70,7 +70,6 @@ MGSL_MAGIC            0x5401           mgsl_info         =
+       ``drivers/char/s
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+ FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/=
+net/ethernet/dec/tulip/de2104x.c``
+-RFCOMM_TTY_MAGIC      0x6d02                                    ``net/blue=
+tooth/rfcomm/tty.c``
+ CG_MAGIC              0x00090255       ufs_cylinder_group       ``include/=
+linux/ufs_fs.h``
+ GDTIOCTL_MAGIC        0x06030f07       gdth_iowr_str            ``drivers/=
+scsi/gdth_ioctl.h``
+ RIEBL_MAGIC           0x09051990                                ``drivers/=
+net/atarilance.c``
+diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
+index ebd78fdbd6e8..27898d49e68e 100644
+--- a/net/bluetooth/rfcomm/tty.c
++++ b/net/bluetooth/rfcomm/tty.c
+@@ -35,7 +35,6 @@
+ #include <net/bluetooth/hci_core.h>
+ #include <net/bluetooth/rfcomm.h>
 =20
--/* Code indicating core file.  */
--#define CMAGIC 0421
--
- #if !defined (N_BADMAG)
- #define N_BADMAG(x)	  (N_MAGIC(x) !=3D OMAGIC		\
- 			&& N_MAGIC(x) !=3D NMAGIC		\
+-#define RFCOMM_TTY_MAGIC 0x6d02		/* magic number for rfcomm struct */
+ #define RFCOMM_TTY_PORTS RFCOMM_MAX_DEV	/* whole lotta rfcomm devices */
+ #define RFCOMM_TTY_MAJOR 216		/* device node major id of the usb/bluetooth=
+=2Ec driver */
+ #define RFCOMM_TTY_MINOR 0
 --=20
 2.30.2
 
---lgubbxsphv7oxy7x
+--a6k63ixd4da7layj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqXYACgkQvP0LAY0m
-WPHrEw//fk86vfZFRNVWVaS97xuG/31rh215afAT7Beuvk5ftASgN500LlPCUDqz
-heAGSFguaH73eGfJ3IuP5ZnVlEoIxSdC0N2XSD+faszwQBimN37EQaVXIBBcQ7tE
-nZH9QOxorrKj/gvc7WdIyEznsj3Vtg9Zn5pQ8W0wgIb6OZ1IUcxgOK0acUZXXo+Z
-oZDviMwwfQFkjeiUfueOchifZPk/lnUd+07OpfV1puiHphEnqUur3DJJu0L2D+Fq
-L59vV2m+wxTpPlz3KsrU5xBrOc5S7hn2UT0IYrxYgSXL0L9Skv9Lrm0hajgfE2Ir
-wUJdL/BE72Qir4XvfxjJUKIR84ciFGNJf+Nsqz7MPZbRf62j/p1Dbvq9EH+y7JCF
-bQHO/SLIFbJB9jqf8YyMbPB1hJG80TvXdJON8E1b6KyhJFCCPh6763AXERdR26Dr
-jOhHtvxxtEihML4l0+QZTmV3/QlqfuWYv0Jc+p4Ruo+zB27ECnHpMNUKa2mHbfzX
-5JuVcftObuCEXmuWzjxSiskdhFgvt4r/7O3GQcFOGhDrJtStJCPQd6uO3pf18TUz
-z4wqhAjUaq+rL0Ks+WZ5TG6B1qBSJ5deV5XePRI8snwnKU23bZlS54vBecndsT0P
-jocSg4Nhdyth0hJl8dJCGNdIjHlIqbOY3Yx9ZNrjQ2S9TiGDt/0=
-=0YxH
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqYQACgkQvP0LAY0m
+WPHBJBAAqbXxKBkEwpY3k4nI16D2D0lN5w4pBdOmVZ+EFnU9eQjhoX3ojCd02Cy+
+BlM4fK1egJIjwwExHI1np/7V0RL5eEnV0F+1kIHivibxr/UFk2eXN5YgmKob/tht
+xWq1Y6VDspfzuhRD32lBfeV/PAKwDuUNyEwPIi003ByriG0NNbk6BFfn/k/KX/f7
+oYnpuSL0g7wcVkAt9kfyksAQed6lAa3ymutm/+Wa5ldWeAmu8i2ja+ZkM625lYUo
+bwJ9dzeJSmglMurespONIzO41VhvnKbZ+LaCs74W3/am+jBVRMt2GgdVtvaVMiOc
+5GOSGAF8jxxaNRDG8nwtHy8y6fTKGgNtblnRt0Ki8slDD9L774pr9ilmcuSwEXMz
+y8CrHPWb3hB5ua0Jpu9DctbrtktLl9JdaW+D4cj1ezEPBk9on8AGhg5szg9aR4dR
+xrZxl52vvQ1ewl/9iFUJtBU17zDMdUeJKJN7vPD0sgzH18RAM7Pbmc8IUfMBKpwF
+BiM65+DqOB6DPnp7He8hry/zJy/+tyO79grqAo2v8s2fXwGFOCKtmPHXS1+afd27
+qiCFr9Lpjlkc78Cn556+vqllXVImNhbey6SH9Vz7H+VRhcHHCBwOG1xJTfmMe6iv
+gpLt2SZesJL9AWcTTWw09B8reZiD6jpQeYEyDS8qQnKQv8MjldU=
+=Vrti
 -----END PGP SIGNATURE-----
 
---lgubbxsphv7oxy7x--
+--a6k63ixd4da7layj--
