@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8F65B9F20
+	by mail.lfdr.de (Postfix) with ESMTP id 71CE45B9F1F
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiIOPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S229948AbiIOPoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIOPoF (ORCPT
+        with ESMTP id S229682AbiIOPoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:44:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B379D8048F;
-        Thu, 15 Sep 2022 08:44:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A4CE624B1;
-        Thu, 15 Sep 2022 15:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF35C433D7;
-        Thu, 15 Sep 2022 15:44:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QBIF+TRm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663256640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/yyWzHROU9kEnjmKKhzTY5LfkMeTLQIiTrmiEeAJ7no=;
-        b=QBIF+TRmrJ9BBoXcNSZPogvyVgAi6lpDHuhq6UZw7vtreOC75hxckoaDqZzRKME02yaXdr
-        APJItTxeyNIC1U5qJo+XwicF9EkTbTxkwVcThRaWmkMEtC7mVjwQ+dNRaSDRM67XIi3b26
-        f/JxHtHtWv4lRMfWilWmhYYCtkPtAbo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9114dced (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 15 Sep 2022 15:44:00 +0000 (UTC)
-Date:   Thu, 15 Sep 2022 16:43:54 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sven van Ashbrook <svenva@chromium.org>, linux@dominikbrodowski.net
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Olivia Mackall <olivia@selenic.com>,
-        Alex Levin <levinale@google.com>,
-        Andrey Pronin <apronin@google.com>,
-        Stephen Boyd <swboyd@google.com>,
-        Rajat Jain <rajatja@google.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Theodore Ts'o <tytso@mit.edu>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] random: move add_hwgenerator_randomness()'s wait
- outside function
-Message-ID: <YyNIOg1mtnzQz1H7@zx2c4.com>
-References: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+        Thu, 15 Sep 2022 11:44:06 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB1483BFD;
+        Thu, 15 Sep 2022 08:44:05 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s10so22056958ljp.5;
+        Thu, 15 Sep 2022 08:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MTL0p90qhzvaa9Qy56q//m1syQEZ7USkfPoHOhnC+Jk=;
+        b=i4LRwgaaHJksuuObJshFcKX+A8JNBcL+Ao+YGHOdxMOCYShEucRokxxF6gOHrXTJHa
+         YR++plI15/TCx9YyE0mL8MbPscbkG/3bNcqcD/mxXVj529K9j/K9KTWdux7g41+xi+9z
+         iUyusKCJEGpkr+pq8hcndXL9cm2FKfIlZ56kRietnjgf6/RHtWfr2yX4SKFtejcaDBYE
+         7GWawXejycAX8ArJ6fTbFNJVMFJfgc1tNZZcK6haqy2n3KE/aeC6bZWaGoVZ+snXWL0d
+         Ei8vmUclBUcceGA+2uKXNCDSP1QlaN3mX9FfXne5aS2EGTkpfntCGVADIHE5MSVMf2En
+         xCmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MTL0p90qhzvaa9Qy56q//m1syQEZ7USkfPoHOhnC+Jk=;
+        b=nUtEUWcbRtQ4+7cD/oE5nndkYOG+JJ8SYOXQP4QLtAZ9id3/jYqx4qHKDJ22Kcn3b5
+         uTxS9gZK1b2rZ28WnDAmDAEwEf5eCfbrvwjTyXZEjSuCeeSx7yg+eaTP2IJDCZZjdeRY
+         vbIcv8NPjtF0XDodp3sWJ3Cdd7tYUB1P6GvZSfcIFmRoJ5dyl/R/eDHmwQw9cujkvl0M
+         1uTBScVVdBAi3XKWBRgqUTulsBj2lRU7wXwZinLK9W9WsbC/Wz/HqPaq946K7RxWskiu
+         inUC1kXx/9+2RrcLCk3Yb1WBZxmLjgGCq/2pPRIEUJlioJEWKbh+Z/4sWiee/9p85tfD
+         0kBQ==
+X-Gm-Message-State: ACrzQf22t8MH8D2c+gZ8uGYYX9meRE61OJizk4Qh2inqaJr/PHba00oa
+        EIlXlnmPMyPuaOX8XhgQZx8=
+X-Google-Smtp-Source: AMsMyM4mMip9R4TrOPWPmHEJYLs0UBjYnWs4kk4CsebSxVXPFnhwWHIwh1bmvU/AflVI3wAdUerAFg==
+X-Received: by 2002:a05:651c:1611:b0:261:e11c:c2ef with SMTP id f17-20020a05651c161100b00261e11cc2efmr108775ljq.340.1663256643779;
+        Thu, 15 Sep 2022 08:44:03 -0700 (PDT)
+Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
+        by smtp.gmail.com with ESMTPSA id o20-20020ac24bd4000000b0049c29292250sm1748961lfq.149.2022.09.15.08.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 08:44:03 -0700 (PDT)
+Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
+        by home.paul.comp (8.15.2/8.15.2/Debian-22) with ESMTP id 28FFi0gJ021928;
+        Thu, 15 Sep 2022 18:44:01 +0300
+Received: (from paul@localhost)
+        by home.paul.comp (8.15.2/8.15.2/Submit) id 28FFhwaf021927;
+        Thu, 15 Sep 2022 18:43:58 +0300
+Date:   Thu, 15 Sep 2022 18:43:58 +0300
+From:   Paul Fertser <fercerpav@gmail.com>
+To:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/ncsi: Add Intel OS2BMC OEM command
+Message-ID: <YyNIPjNX9MCI3zkK@home.paul.comp>
+References: <20220909025716.2610386-1-jiaqing.zhao@linux.intel.com>
+ <YxrWPfErV7tKRjyQ@home.paul.comp>
+ <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com>
+ <Yxrun9LRcFv2QntR@home.paul.comp>
+ <36c12486-57d4-c11d-474f-f26a7de8e59a@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <36c12486-57d4-c11d-474f-f26a7de8e59a@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,19 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sven,
+Hello,
 
-On Thu, Sep 15, 2022 at 12:22:53AM +0000, Sven van Ashbrook wrote:
-> add_hwgenerator_randomness() currently blocks until more entropy
-> is needed. Move the blocking wait out of the function to the caller,
-> by letting the function return the number of jiffies needed to block.
+On Tue, Sep 13, 2022 at 10:12:06AM +0800, Jiaqing Zhao wrote:
+> On 2022-09-09 15:43, Paul Fertser wrote:
+> > On Fri, Sep 09, 2022 at 03:34:53PM +0800, Jiaqing Zhao wrote:
+> >>> Can you please outline some particular use cases for this feature?
+> >>>
+> >> It enables access between host and BMC when BMC shares the network connection
+> >> with host using NCSI, like accessing BMC via HTTP or SSH from host. 
+> > 
+> > Why having a compile time kernel option here more appropriate than
+> > just running something like "/usr/bin/ncsi-netlink --package 0
+> > --channel 0 --index 3 --oem-payload 00000157200001" (this example uses
+> > another OEM command) on BMC userspace startup?
+> > 
 > 
-> This is done to prepare the function's sole kernel caller from a
-> kthread to self-rearming delayed_work.
+> Using ncsi-netlink is one way, but the package and channel id is undetermined
+> as it is selected at runtime. Calling the netlink command on a nonexistent
+> package/channel may lead to kernel panic.
 
-Isn't Dominik working on the same thing, but slightly different? I
-recall he sent a patch recently, which looked pretty good, except it
-just needed to be split up. I'm waiting for his v2. Does this build on
-that?
+That sounds like a bug all right. If you can reproduce, it's likely
+the fix is reasonably easy, please consider doing it.
 
-Jason
+> Why I prefer the kernel option is that it applies the config to all ncsi
+> devices by default when setting up them. This reduces the effort and keeps
+> compatibility. Lots of things in current ncsi kernel driver can be done via
+> commands from userspace, but I think it is not a good idea to have a driver
+> resides on both kernel and userspace.
+
+How should the developer decide whether to enable this compile-time
+option for a platform or not? If it's always nice to have why not
+add the code unconditionally? And if not, are you sure kernel compile
+time is the right decision point? So far I get an impression a sysfs
+runtime knob would be more useful.
+
+-- 
+Be free, use free (http://www.gnu.org/philosophy/free-sw.html) software!
+mailto:fercerpav@gmail.com
