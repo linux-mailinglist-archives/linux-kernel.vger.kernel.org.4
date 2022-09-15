@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EDC5B93AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 06:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D845B93B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 06:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiIOEeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 00:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S229470AbiIOEiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 00:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiIOEeH (ORCPT
+        with ESMTP id S229458AbiIOEiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 00:34:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F918E4EB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 21:34:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A88D5CCAE;
-        Thu, 15 Sep 2022 04:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663216444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5/z54frbvxXoAbMjgu4uOYR70plD0Fi7+VY1zuIczo=;
-        b=QW+nu7Uh54+PMwibzMW5XVBt0/dy9tJZ1fX+d2mUcurnS02kX0S+I+xG/uWUiCU/2z70xm
-        q7iJXuLRxMatZTCNcMP6E2mZO0/cDlX+hDxleCuUrHIuJ6LeLZ1hdFkZS+HOD0fB4lq7dJ
-        JVcC4ie5s74ONdsYaocqqa7rmO7XqzM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663216444;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5/z54frbvxXoAbMjgu4uOYR70plD0Fi7+VY1zuIczo=;
-        b=Jnu//URwA9D6Ch+X/Blx3j1U2Ed07UXsGkchW//dAlhN4R8Ic1VQ97sTQuN4l5sbTUElyd
-        GBwttHts7KuaxHBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DCA1B139C8;
-        Thu, 15 Sep 2022 04:34:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o/4yMzurImOrKAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 15 Sep 2022 04:34:03 +0000
-Date:   Thu, 15 Sep 2022 06:34:02 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/16] mm/page_alloc: ensure kswapd doesn't accidentally
- go to sleep
-Message-ID: <YyKrOnf0VhBQMUhd@localhost.localdomain>
-References: <20220909092451.24883-1-linmiaohe@huawei.com>
- <20220909092451.24883-2-linmiaohe@huawei.com>
+        Thu, 15 Sep 2022 00:38:13 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400129082A;
+        Wed, 14 Sep 2022 21:38:12 -0700 (PDT)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 28F4bdIQ010245;
+        Thu, 15 Sep 2022 13:37:40 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 28F4bdIQ010245
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1663216660;
+        bh=DTM4YhijXyqcWbuvEdtEKpJz/qh9PvPxWAryO5oWxio=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ON3vNImgG/4YQMlg4PnTOgCrUDwC19e8KSxLihceviJOQd7o4BE4dML/KgP3ThV5o
+         CkvL6z97u0Dmyt+uBXA8hAJwSif4vh/SY8Yaqe6L0PsQRtFEKtgex9cnp/GIbdYxU6
+         dBpLVB4jnfvh3Xu7N4KMQ1d3HvJnPIqEwxLw+Sl9F1UpJon1OsrkNwPhwW/U87nb3C
+         54vjRH8N33825QGNH0fVlunDMyFic2b/HgPMPBTJH64EyEyTe4bhWXFWmw/K7PeDCs
+         gvHOU/oJe/1tnp843XFUltfU+0iWr6W2xNcEwM2LuS4l25xpDtGpaJXJWXKNwOzM7s
+         KH5nmcrw/AZAw==
+X-Nifty-SrcIP: [209.85.160.49]
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127d10b4f19so45771848fac.9;
+        Wed, 14 Sep 2022 21:37:39 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3979GuUQQEwjnV3pUUbAPDAWQmsPGUc41OPgClGs/Rjq7YCPba
+        a5BX7AC0dTTUIC9zyiU5Pd99pTDd2vFantrC+Tc=
+X-Google-Smtp-Source: AA6agR7b9TaS7ATuSBZ6wotnPypejf9sn5hN1J5SWKFwwD+u8ZLZcO5EGyIde2NLPjFovv7glVrxVbUZ7xcWaPi8Uh8=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr4235164oab.287.1663216658927; Wed, 14
+ Sep 2022 21:37:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909092451.24883-2-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220908113449.259942-1-fe@dev.tdt.de> <CAK7LNAT3cyv07p7AZ54D=HOZRZ7-zLgMM+YPNLzcPidpDvXZgA@mail.gmail.com>
+ <c8577c14a1663cbdea70534c086c247c@dev.tdt.de>
+In-Reply-To: <c8577c14a1663cbdea70534c086c247c@dev.tdt.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 15 Sep 2022 13:37:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARfQodG3tSYBs7ZAzsbkdwDS0=g=e8qJStfBi3BGut7Fw@mail.gmail.com>
+Message-ID: <CAK7LNARfQodG3tSYBs7ZAzsbkdwDS0=g=e8qJStfBi3BGut7Fw@mail.gmail.com>
+Subject: Re: [PATCH] fs/proc: add compile time info
+To:     Florian Eckert <fe@dev.tdt.de>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Eckert.Florian@googlemail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 05:24:36PM +0800, Miaohe Lin wrote:
-> If ALLOC_KSWAPD is set, wake_all_kswapds() will be called to ensure
-> kswapd doesn't accidentally go to sleep. But when reserve_flags is
-> set, alloc_flags will be overwritten and ALLOC_KSWAPD is thus lost.
-> Preserve the ALLOC_KSWAPD flag in alloc_flags to ensure kswapd won't
-> go to sleep accidentally.
-> 
-> Fixes: 0a79cdad5eb2 ("mm: use alloc_flags to record if kswapd can wake")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Mon, Sep 12, 2022 at 6:42 PM Florian Eckert <fe@dev.tdt.de> wrote:
+>
+> Hello Masahiro,
+>
+> thanks for your feedback.
+>
+> > https://patchwork.kernel.org/project/linux-kbuild/patch/20220828024003.28873-6-masahiroy@kernel.org/
+> > lands, nobody cannot reference KBUILD_BUILD_TIMESTAMP,
+> > then this whack-a-mole game will end.
+>
+> I was not aware of that problem. Thanks for the link.
+>
+> I understood that this is a bad idea to create the timestamp for proc
+> like this!
+> But how does it look in principle to offer the build timestamp in proc
+> for reading?
+> You have only made your point about creating the timestamp but not about
+> reading it out via the proc directory.
+>
+> So far the timestamp is only readable as a string via dmesg.
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-> ---
->  mm/page_alloc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index ba5c9402a5cb..4b97a03fa2dd 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5147,7 +5147,8 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
->  
->  	reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
->  	if (reserve_flags)
-> -		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags);
-> +		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags) |
-> +					  (alloc_flags & ALLOC_KSWAPD);
->  
->  	/*
->  	 * Reset the nodemask and zonelist iterators if memory policies can be
-> -- 
-> 2.23.0
-> 
+init/version.c is the only file that can depend on the output of
+the 'date' command.
+
+
+You can follow what 'linux_proc_banner' does.
+
+Define it in init/version.c, and declare it somewhere in a header file.
+
+
+
+
+
+> Best regards
+>
+> Florian
+
+
 
 -- 
-Oscar Salvador
-SUSE Labs
+Best Regards
+Masahiro Yamada
