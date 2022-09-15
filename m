@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D435BA1F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694B55BA201
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 22:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIOUtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 16:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S229704AbiIOUwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 16:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIOUtD (ORCPT
+        with ESMTP id S229542AbiIOUwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 16:49:03 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF26A9AFC3;
-        Thu, 15 Sep 2022 13:49:02 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z21so28745065edi.1;
-        Thu, 15 Sep 2022 13:49:02 -0700 (PDT)
+        Thu, 15 Sep 2022 16:52:19 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914FC48C80
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:52:18 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id o13so15165139qvw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 13:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=k8iJ7L9yaA7qD0s2nB5tW0Kqk0H2NxzybAr7hwW0qQ8=;
-        b=Gt7WXplca5WSGjFg8coRd5SWUVMnfGgQ1FpG6lk28KeHhcPKsC6SCG3MwF1hCqd6v5
-         siQSRouNdzko/OR9BWe3hk13CE8On8O13XWxocmI7fCoJX1+mUI0e5pxPfF+gfLX4QJN
-         PfDrkyauVy+UAvKlV9zsBA1AFR5SGUVnFUoXTDc1dMiZcPOFqD2SL/k2uNVgHo7skDvJ
-         +WwsRGGKIm4ZsqK9UoyW9NoKoeUD5C1sXhJi9IF585eYpkoOwDyA2kihHQ1977Uvh2AC
-         w9ZW3aTvtHpigb1W10Oup3TViHNy/fwiZMJOofhTZzfvvh4U+XJ6XNBXwfB0SkWSQj7k
-         w4Hw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=h6GP7OMr98DgtTyeApOsh0thg3e2Q1uN92gwxmTHO34=;
+        b=E8Ap1REycdzFe39/XRMw1m1jAGKPXO/Uq4k6BR2syVJGth1OWVrqSyDtMVnyFx6j1P
+         RrlIKjS/XINphFZXfY7elpDMuu55ePnAnFjoo7gmStlr/a/7ugzN2xA4/kdxBPcIePYU
+         4RdkcoDZZ42InaqgiRbungzUAuoKNt+MBEaKxUag6+VZ7zHRdmTfROd+nIaup5CVeHVW
+         FzrEHpQZWhj9gF/leIwJm57jv/Jka26UbRJUjc70GE7PJsFVgr34cXtvZ2i3Np35ZMnH
+         s4RdZfH4kUSdVD5wV/rqixuKJeL7VmG3rmhpi85EhcaP58MPFvJHQivgoD9LV+K29xSJ
+         nC3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=k8iJ7L9yaA7qD0s2nB5tW0Kqk0H2NxzybAr7hwW0qQ8=;
-        b=yJ2xtpIslewsoVzhdLkx2s9W/h1r7ltAUpIMYrl98WqQqm0irazg/zZ91+c3S01aZL
-         +M6c3GLj/YsDQJVHtZZPFuPPX3o7OP7z5Tb2XuuGDcisf5LLKiQri8i3nAmxptYNmAtC
-         11aeQTv9hXx6MnYlWxEmhDMNyTzO41SnC0h4Y+tZqIH0CGFR1f7rD0WPNbImUkCjd0ZF
-         3pgvBOyDhGD6Z2dXwBc15l3Ph9El2PbeofvFuNOLy1m7lB1tFhNTRDoph+9ilK/UjsvN
-         7zpkubfbxmGa8sgzuNCBbDgvIhbUBkLnujWjznovhBOk9MQQLXDBvlqSkiNx3UgVm4Pl
-         3VJw==
-X-Gm-Message-State: ACrzQf2I+GoSxHt6z1FoQHndjyDz21E2Z2zTNQf5Qkc7ahYIfvodnS3g
-        GY4UBNWGykPlYByTHg8Vgfg=
-X-Google-Smtp-Source: AMsMyM5nuZewDVYKx1wSQhUz89PC5Qkx7BMd/9JOZT+MXGvT+rvDEJGDlHCun7Xqgz4b4XQAh7DfLA==
-X-Received: by 2002:a05:6402:50ca:b0:451:a711:1389 with SMTP id h10-20020a05640250ca00b00451a7111389mr1330023edb.239.1663274941019;
-        Thu, 15 Sep 2022 13:49:01 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.googlemail.com with ESMTPSA id u2-20020a1709061da200b00764a76d5888sm9504846ejh.27.2022.09.15.13.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 13:49:00 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] dmaengine: qcom-adm: fix wrong sizeof config in slave_config
-Date:   Thu, 15 Sep 2022 22:48:44 +0200
-Message-Id: <20220915204844.3838-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=h6GP7OMr98DgtTyeApOsh0thg3e2Q1uN92gwxmTHO34=;
+        b=SOdKEqXNs1sPz4FVCq60tefua4RNUiiSOBir7XtuuSeFoDUmIimv68b9r7BO/gpCZO
+         k/rFJiNwICfBnX0bip9NHI96sya8xogzOsU527/NUqYHryBGq3UrKyFdpulBACtYL7HC
+         UdxPmW9ANarN1pNaxM1ZtC12kVF5J2qPOQjuI3hcAm2kxkfycMfXn9A2gtYkMPkb4AhG
+         WsdJeuKbbDVxhiCffZGtBeP+m77Lt4d/F+gsGeaOK3D7ayy+ow5exPfwk6o/JG8jiX1H
+         IgTlcpgdp5j/j1X2TYZLMUR1LvqbYT2nMa9+rgH6uyw5vyeG0qL+08aLwKgMu+e9uy5L
+         jaHg==
+X-Gm-Message-State: ACrzQf1DprgsI5Uf8asbv8+VFXnFR528CRS6lG1z1lVSvTbvC907xLq5
+        u3OybqIQChtktYEvv7vx5LU=
+X-Google-Smtp-Source: AMsMyM4Z5cKWgJDetP3HbLHXQcRthknzjqVa+UA9gJLy0QHWAFQ+GqDV40URFEaPLuktx3ogjxJ7Hg==
+X-Received: by 2002:ad4:5ae8:0:b0:4aa:af21:b43c with SMTP id c8-20020ad45ae8000000b004aaaf21b43cmr1266892qvh.36.1663275137671;
+        Thu, 15 Sep 2022 13:52:17 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id w8-20020a05620a424800b006ce5fe31c2dsm5069897qko.65.2022.09.15.13.52.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 13:52:17 -0700 (PDT)
+Message-ID: <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
+Date:   Thu, 15 Sep 2022 13:52:12 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/2] arm64: Kconfig.platforms: Group NXP platforms
+ together
+Content-Language: en-US
+To:     Olof Johansson <olof@lixom.net>
+Cc:     linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        krzysztof.kozlowski@linaro.org, arnd@arndb.de,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        william.zhang@broadcom.com, anand.gore@broadcom.com
+References: <20220829173830.3567047-1-f.fainelli@gmail.com>
+ <20220829173830.3567047-3-f.fainelli@gmail.com> <YyNN/IZgOAlbSHnF@lx2k>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YyNN/IZgOAlbSHnF@lx2k>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,34 +82,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix broken slave_config function that uncorrectly compare the
-peripheral_size with the size of the config pointer instead of the size
-of the config struct. This cause the crci value to be ignored and cause
-a kernel panic on any slave that use adm driver.
+On 9/15/22 09:08, Olof Johansson wrote:
+> On Mon, Aug 29, 2022 at 10:38:29AM -0700, Florian Fainelli wrote:
+>> Group the three NXP platforms under an ARCH_NXP menuconfig symbol to
+>> make make selection of similar vendor SoCs visually nicer.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Hi,
+> 
+> While these are convenient if they're done right from the beginning, the result
+> of adding a new dependency like this is that old defconfigs stop working if you
+> just go with the default.
+> 
+> Was there a reason to group these now and cause this config churn for
+> downstream users?
 
-To fix this, compare to the size of the struct and NOT the size of the
-pointer.
-
-Fixes: 03de6b273805 ("dmaengine: qcom-adm: stop abusing slave_id config")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Cc: stable@vger.kernel.org # v5.17+
----
- drivers/dma/qcom/qcom_adm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma/qcom/qcom_adm.c b/drivers/dma/qcom/qcom_adm.c
-index facdacf8aede..c77d9de853de 100644
---- a/drivers/dma/qcom/qcom_adm.c
-+++ b/drivers/dma/qcom/qcom_adm.c
-@@ -494,7 +494,7 @@ static int adm_slave_config(struct dma_chan *chan, struct dma_slave_config *cfg)
- 
- 	spin_lock_irqsave(&achan->vc.lock, flag);
- 	memcpy(&achan->slave, cfg, sizeof(struct dma_slave_config));
--	if (cfg->peripheral_size == sizeof(config))
-+	if (cfg->peripheral_size == sizeof(*config))
- 		achan->crci = config->crci;
- 	spin_unlock_irqrestore(&achan->vc.lock, flag);
- 
+No reason to cause churn, and no specific reason other than visually and 
+logically group options from the same vendors. I had clearly not 
+anticipated the defconfig breakage, too bad that Kconfig does not allow 
+menuconfig items to be enabled by default, or does it?
 -- 
-2.37.2
-
+Florian
