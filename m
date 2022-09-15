@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82875BA2D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76835BA2D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 00:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiIOWk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 18:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S229966AbiIOWk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 18:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiIOWjz (ORCPT
+        with ESMTP id S229853AbiIOWj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:39:55 -0400
+        Thu, 15 Sep 2022 18:39:58 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8DBC4E620;
-        Thu, 15 Sep 2022 15:39:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF04ED5C;
+        Thu, 15 Sep 2022 15:39:56 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 614431616;
-        Fri, 16 Sep 2022 00:39:51 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id C343313E4;
+        Fri, 16 Sep 2022 00:39:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1663281591;
-        bh=z+bHJUZhZw6AgtmFbhkEVNMXd7B4tmecX1P8Y9aMnFU=;
+        s=202205; t=1663281595;
+        bh=3Yz/e6VvCsxkJMZkV+FLO9p1JbLACTNPankUYZ/dIxc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hVYp4JOZlf5O+234CjpJRivKGJMwDrpkd2JgUqiVHpT5RUuRn+yodFuTa5igTdQZI
-         NdN586GYU4RzsoY1r+6hQRx+8qwXX95Psl+NAd8Qteam9SjLSmAqu0EV4FwvjvZ1C5
-         jDoa4O3RT24If8FiKurrdZujSlBL8ikkC+fpcY97gHirs1fehZsXBGELlfAnyTa1lp
-         U7VijHkH+EQ6B/COmX8JzIi7vHEycX+elvKE8i38A13v3glSl4YArdDyzVkwW8R84h
-         ib/c3hZDvWf6Phufb38EInJe5bCaL5f2tvfh/Ju/E+rWE4hXLAwTJ3WXEERX0pfcJC
-         jNIcBXkDOyFm1neE0Hz+HAVpSgrGZlQF1HOtCoXy20mLQeguFcs+YEAhEkOKyjsQ0s
-         5SErsVNL/o85ehfVabSRbelzMgKigAUyDXSaHRAbnLB+FUBX8k4iV3a4XobEC65k3C
-         KUZRNqnjtmwp2yvEhJJIEjPVYpzDgMiGcW81JhMFF3IaoAMreRYe+k7XJlOscKUeHn
-         FoNaLZJiSabB0yrSjoOJ1XPShbGYhrq25klqfKH/Gffjbeilr2qt4YH+ImJwVj+46l
-         AyFe9/hRy29kmJForrwKEZMtWHLguHsxMrdZ0vavZCnHT5PxM4ssbLaR24g4lyenQl
-         lrnvz06COJhMeAIolQx2OGKI=
-Date:   Fri, 16 Sep 2022 00:39:50 +0200
+        b=X85fN93zd32Bm0XRs3r94uPlySZVOaSwA0oBhEuc5ArkOxHpIAhlHr26g8BnHUbZ0
+         AvLzUbveA28HlXu6qBcX30ZJPkje2CSacH2ajorml6wOUgs7KMMw05odaMUmXtU5vp
+         zXn0jXG4t4UvVAbvFev5wJKDrZx+imyFUE4Z/KC6VEd2ljyVJv1MYnkuC+hZmJn01W
+         ivDHbFH/yf8yAgZQ1OrSDC0iqCnYWZjM5MZKfn3y3RyNkM3CprBgvFCmSWHo+Py6ua
+         Rw3+62I67fmyxDhnXpgu4nhW0FKxLnuQNvN5EWcxetSTF/2xIcfzG4+WiXr0TmvdEN
+         e4zc+j33+ysaArABj+1mGALAAIhxHvtA0FV/es5Sr1rV9f8UgIktfsnUfOAsuj2LzD
+         xrso/kYKzrIQb6TvLnh5TKbUh2ofYuGdQKdEnnGPoH/FhoaXsKdW/PPb2CnP/G19K3
+         +lVEV/dzOUy5/8NvkE1Qxc8+i+0XgFiCmGgDNsU3V8Yrz5neVVCG/GJ58DnaVXtW/0
+         QRIh4APLQb23GS6omuWY0vfjLNHRCRWsDtOJ48WWN2D+fIUzbXOVc6V25N2fPEGqE8
+         vJUj/5KzDWaSYgvUIJbjhvQlp/KH/qKCNwQ7S2Dh4PgXY7paMty5/X4amgO8/fXzG8
+         6pohM7d4R1Ca5WYwtOBMez1Q=
+Date:   Fri, 16 Sep 2022 00:39:54 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
@@ -44,12 +44,13 @@ Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-doc-tw-discuss@lists.sourceforge.net
-Subject: [PATCH v4 11/18] Documentation: RIEBL_MAGIC isn't a magic number
-Message-ID: <773e5a8fe80201bed0dff5cdb1ce6f4272b0cc92.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
+Subject: [PATCH v4 12/18] Documentation: SAVEKMSG_MAGIC[12] aren't magic
+ numbers
+Message-ID: <c0fe3aadb700621eeee736f0ce6d73aa9d2cf856.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <YyMlovoskUcHLEb7@kroah.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nrqphrmf26ymszxs"
+        protocol="application/pgp-signature"; boundary="f5ofq5afb2shlyau"
 Content-Disposition: inline
 In-Reply-To: <YyMlovoskUcHLEb7@kroah.com>
 User-Agent: NeoMutt/20220429
@@ -64,128 +65,144 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---nrqphrmf26ymszxs
+--f5ofq5afb2shlyau
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-At least not in the sense described in magic-number.rst:
-it determines whether the Atari VME Lance Ethernet card has a hardware
-MAC address or not, and is set thereby to indicate this
+At least not in the magic-number.rst sense: they're used as part of
+delineating messages dumping dmesg into Chip RAM on the Amiga with
+debug=3Dram
 
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- 4 files changed, 4 deletions(-)
+ Documentation/process/magic-number.rst                    | 2 --
+ Documentation/translations/it_IT/process/magic-number.rst | 2 --
+ Documentation/translations/zh_CN/process/magic-number.rst | 2 --
+ Documentation/translations/zh_TW/process/magic-number.rst | 2 --
+ 4 files changed, 8 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index 687eb3cf4f0a..a85623d5f4b3 100644
+index a85623d5f4b3..5258fb55249c 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
-@@ -77,7 +77,6 @@ TTY_MAGIC             0x5401           tty_struct        =
+@@ -79,9 +79,7 @@ TTY_DRIVER_MAGIC      0x5402           tty_driver        =
        ``include/linux/
- MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
-char/synclink.c``
- TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
-linux/tty_driver.h``
  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
 char/pcmcia/synclink_cs.c``
--RIEBL_MAGIC           0x09051990                                ``drivers/=
-net/atarilance.c``
  NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
 linux/nbd.h``
  BAYCOM_MAGIC          0x19730510       baycom_state             ``drivers/=
 net/baycom_epp.c``
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
+-SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
 miga/config.c``
+ COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
+drivers/ubd_user.c``
+-SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
+miga/config.c``
+ EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
+atm/lanai.c``
+ HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
+linux/hdlcdrv.h``
+ KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
+s/include/asm/sn/klkernvars.h``
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index ec74c6c1d05b..03d9fc9e6bfd 100644
+index 03d9fc9e6bfd..4d7982185ba4 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -83,7 +83,6 @@ TTY_MAGIC             0x5401           tty_struct        =
+@@ -85,9 +85,7 @@ TTY_DRIVER_MAGIC      0x5402           tty_driver        =
        ``include/linux/
- MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
-char/synclink.c``
- TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
-linux/tty_driver.h``
  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
 char/pcmcia/synclink_cs.c``
--RIEBL_MAGIC           0x09051990                                ``drivers/=
-net/atarilance.c``
  NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
 linux/nbd.h``
  BAYCOM_MAGIC          0x19730510       baycom_state             ``drivers/=
 net/baycom_epp.c``
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
+-SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
 miga/config.c``
+ COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
+drivers/ubd_user.c``
+-SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
+miga/config.c``
+ EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
+atm/lanai.c``
+ HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
+linux/hdlcdrv.h``
+ KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
+s/include/asm/sn/klkernvars.h``
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index 9bfe4fa8ca10..d6b1cfed51cd 100644
+index d6b1cfed51cd..b2aee7e7ce00 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -66,7 +66,6 @@ TTY_MAGIC             0x5401           tty_struct        =
+@@ -68,9 +68,7 @@ TTY_DRIVER_MAGIC      0x5402           tty_driver        =
        ``include/linux/
- MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
-char/synclink.c``
- TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
-linux/tty_driver.h``
  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
 char/pcmcia/synclink_cs.c``
--RIEBL_MAGIC           0x09051990                                ``drivers/=
-net/atarilance.c``
  NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
 linux/nbd.h``
  BAYCOM_MAGIC          0x19730510       baycom_state             ``drivers/=
 net/baycom_epp.c``
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
+-SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
 miga/config.c``
+ COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
+drivers/ubd_user.c``
+-SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
+miga/config.c``
+ EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
+atm/lanai.c``
+ HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
+linux/hdlcdrv.h``
+ KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
+s/include/asm/sn/klkernvars.h``
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index b1f8f2a6d725..12c3a62403ff 100644
+index 12c3a62403ff..84419f4bb348 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -69,7 +69,6 @@ TTY_MAGIC             0x5401           tty_struct        =
+@@ -71,9 +71,7 @@ TTY_DRIVER_MAGIC      0x5402           tty_driver        =
        ``include/linux/
- MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
-char/synclink.c``
- TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
-linux/tty_driver.h``
  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
 char/pcmcia/synclink_cs.c``
--RIEBL_MAGIC           0x09051990                                ``drivers/=
-net/atarilance.c``
  NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/=
 linux/nbd.h``
  BAYCOM_MAGIC          0x19730510       baycom_state             ``drivers/=
 net/baycom_epp.c``
- SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
+-SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/a=
 miga/config.c``
+ COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/=
+drivers/ubd_user.c``
+-SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/a=
+miga/config.c``
+ EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/=
+atm/lanai.c``
+ HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
+linux/hdlcdrv.h``
+ KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
+s/include/asm/sn/klkernvars.h``
 --=20
 2.30.2
 
---nrqphrmf26ymszxs
+--f5ofq5afb2shlyau
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqbUACgkQvP0LAY0m
-WPGjSw/9Gd3NNW74sqcfIqMBd7ALTqZh/4F/CvkbQ7IfHkfmno7JseK2v+QIxzrh
-x8urBOEnZZLuiMqN1oC12pugYoGW4Gb2l9lqwERMCHh8kbgwAPzPUMdBJdfw4Cdu
-PTcaQ5S72Efuc9q3WdTG94hMrTqvw4jTXRm6czm9zKwdi8E5eTIuw8qqZf/VrgDe
-2UmoU5xTi0epVrLoX0Gxneugo5EaSJm3iinDvu9+Db3Dj+Odlh9N2+0rqVseqNlY
-Augpt2o/sG9qm2a5lnM8V0STacmrz2QWmNWDNTPvY64VHShbvJCbGO8gE/kWbalb
-ESwe+5D1rBZyqZagzzu0LyG8ENV0p3xkI97DkhOtBROSiGpvW+tzJoQgcCkJUMlD
-uiFrJG4TzrXApVkldWtIvxdNN5FTFTO3N5LHasoL0L+n7p6ElQJ6+kQCw4GDCHpd
-uvurmrbyQW1fohRwpLDYcRW+8ogxB0v5SumWG65RUhHldwJkr1pmdlyTgFZZxTBN
-fDHCOetXkKpXNuysjSJ0AEQizrTPT3UD4vPTaBa56W/PdWllVrYKSSaz367okbAY
-tT3+VCJ+/zbQnuFO0RhJsBt9bIDy522EszjSBlcJg1VhjZiWtWPKPIAeJEuB2ehD
-bxWmErJXG++PA8NQcOfNROTaJWinv61DnIHxgy89nomyvGKud4o=
-=dLxI
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMjqboACgkQvP0LAY0m
+WPHaTxAAqdgarm7+r7PC+MvA4kyTC+6Fv0dNJrhg1WA8PRAqkEDjTznLEu1D4+hf
+h3sqneL24bcuNmbIY9O52zbjsTNccKRpxeUp6TP3noE/hu1rAENsnHHybqXccUlT
+9NW13dBeJCa/782ySiHbN+JUfDvO+72uA4Ec/QFJF/tdIQzvQUTHn3tqwknS+0DZ
+wH32dKj12c8aG0dtLUfYgwQBEez8fAacz9gwTxetxRQK4sqmV92KVAcCa69qXV1/
+u/3mQMDB1X7g2gpjk32lqBkiUnWcm1LlRSS/G1Se0VJaNhIqJ6AkBBpO4wAMxAU4
+pcpnq9izWTHhKNBsXTSRtPEw0I84Q7rjWcUUwl0uc0lu1jYk9QygfVFPu8RvCYza
+tuo3D88Nxj8dPMotpQMUxu0ObEL9xXvrJ3c6Rv2S34owMIzrKQNl0UTFfBkvpukw
+WtlzLVVB3cPCzYi/VmkM/1LbmPFWPLr8jmnkbYgTsCOMAPkPgOD16xckNnKexoag
+HCw47TOL1wASlZBxKjCq9aYYfApC93JxDx6AugLzVHPF5mQqKF8iaWXjjGWivyPe
+aA9Nu3ltzCg+i+AeMNISYZBcGHLi4LBv+o3VDKBmEWPkPyDc8m6XVajxDhdfMAM6
+yUYSwsqqGat2JA3H1VieMAC1R9BQdn6im/IIjd1jeQN6PKSJU4I=
+=U1gs
 -----END PGP SIGNATURE-----
 
---nrqphrmf26ymszxs--
+--f5ofq5afb2shlyau--
