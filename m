@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0611B5B9610
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D635B9652
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiIOIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S230281AbiIOIZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiIOIRC (ORCPT
+        with ESMTP id S230247AbiIOIXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:17:02 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A78C81B05
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:16:57 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e18so25811702edj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=bHrSqc0KeBCd30dQAVZKmDgp9XGbk9siJPUAdtVg+8M=;
-        b=zVyw/QCbT359iWxfTbEQYFzCcvQrEO0ZALgI42uVp+RrUzdcGwnHxN4rAphOWBe4GD
-         dbsjfT1jBvHRRaIKDTWUUMR0hxQUiUAOn0ycjBNIyT1CW23VWW+2tsG9eZIza/pW8uus
-         MW5MtLq+KijRUik+GpeMvzJSCcjmzxR6DpURzeVXfrjiauGoFEt6x07wDJwmxN35grTF
-         FOaR4jUMKAGZ2SwKErrDhIgDHe5hCao3/QskebqdfmVAXEQBxzA8/h8sPVju3Vdbbv/g
-         L0OPkgM5YsoPACyoFgDEEMxNt+eCehO0cHs17aO4OHfTXv+fHdZ7e1yLMnqgz5oABpJ6
-         rikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bHrSqc0KeBCd30dQAVZKmDgp9XGbk9siJPUAdtVg+8M=;
-        b=jw4R4FKy1iiH4g/dBc47TWnagpcL/R67qjIt3Rep42Cwt6mgwsvU2Hhybvz7jdMW31
-         Ljq1Zqf8vnIkFExMQuaQS6hoGciTqeeW0ySucO72510/wbIy3nf6nCYdCa+lBa5sNKu7
-         L99/JLPZW3Un4QxdF+b0i6YjfkR5M87AL4kwFf1Y4Fi7/ZZ3iHnIcAbNy33XgmotTg7V
-         bD4TOinVRCGg3JWC5tATAGMPihNvJ+pzefxmal4L38Xl+P9pDb9Sdw9TB8xZWfccoI5K
-         BgjSUAL2mTrGkqBEaVOb5z3nd4bcN92q36o+cO3aKSMsq5nNtHWNuaqYP/lLSVeRaHt2
-         Kztg==
-X-Gm-Message-State: ACgBeo2jqSyzkyfW6l8AxlaQVWhEPWsSeRuyQBvVhL/m2O/u8Hspm8yX
-        JQeRH15QvdG53JPlyVzifoiWzZgIUFo+mDoTr8RBCQ==
-X-Google-Smtp-Source: AA6agR43EgBtEhzrjzZ9AxWcgYR5SO/qp9NWw/NSLKFqvS0BDXxGaA0wvN12y2hmlJlPfL/k8aUkVSK6FnuUa66rxq0=
-X-Received: by 2002:aa7:dd02:0:b0:44e:f7af:b996 with SMTP id
- i2-20020aa7dd02000000b0044ef7afb996mr34096318edv.422.1663229815801; Thu, 15
- Sep 2022 01:16:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220914151558.536226-1-martyn.welch@collabora.co.uk>
-In-Reply-To: <20220914151558.536226-1-martyn.welch@collabora.co.uk>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 15 Sep 2022 10:16:45 +0200
-Message-ID: <CAMRc=Mf-8FLSyCD887emEmGOZsxiMxf73O425MQv1_tjvDbU9w@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] dt-bindings: vendor-prefixes: add Diodes
-To:     Martyn Welch <martyn.welch@collabora.co.uk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Thu, 15 Sep 2022 04:23:33 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0906A9836D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:22:54 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 465702B05F8B;
+        Thu, 15 Sep 2022 04:22:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 15 Sep 2022 04:22:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663230172; x=1663233772; bh=9mKn6blmYA
+        NFuaZ0dtOqisfOd8Rd6vzhg19KJ8Gas0w=; b=dkrfo0E65c8JJoicwHhtCyqEqn
+        YT0dufOKnphOC2mruIY0Kz6gecCS6aPSgDCZgJ2lsTrk26ZDmaNEmuWWn5kq0ng7
+        gB7/cv52eEujaA4q5hFiFrS1MQ9XA3vZzgZVfXVNLebKz+s77esbMuU5R2nQry3S
+        gTniSwul5hXnk0az9QzN10tzkrB/D5LN3xHcNj+AbAkxF9XcvWO+EILkMkH7wh0o
+        Gv33ba7NZRONh6Lp2kaVfDWq8NXpp3YciblIkbJSalMubRjLVhNiWLbcu2Vke1sN
+        lKLOVJMH/vsOfV7y4aCdyTsHrz1QNc/gQECipkXGyCf4yGDpQLEuc1ixTbbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663230172; x=1663233772; bh=9mKn6blmYANFuaZ0dtOqisfOd8Rd
+        6vzhg19KJ8Gas0w=; b=b5KYyzw/+DD85iAltMyHonE25aj06cE00CMmDAPxOurs
+        a/95BYFawT3nExW/s8f1MtE+KAGK1PQ5jjnL+ghzpb2AtcnJKDJMZJ8cR7XfA350
+        ixLfi7T2+GOYxTWjKklX5sQNkwrdKf09tGWs2iAKxwhE423vXMdFVALEBL0P8yYO
+        AzAkNIRr9ilbcRPM0enDKQjzxDEEA/AeKxW31Gj7sAPjCWwvnPdp0cAmtSAtZtzt
+        QUfXP/kkYWdAan1j29e3tUDKg/1k8ph65DynFNbTo+l/Hc5nfaBYbsf9tzUH1dxF
+        LYVmqwYLjfl7uAhCg68obx1joWFOXjKtJKtb/NOnXg==
+X-ME-Sender: <xms:3OAiYySPNMKSYXvCYn0TCnaSKrHPnT4ktLl9nvUVInfBGVpaX_yRuA>
+    <xme:3OAiY3xmIV6quYyP88EM_eZ-wltM6yJSLRtzvn3RifHB9k8vfjU8qM-xlgx9DlnGU
+    jCiK9drjD098L39M0Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
+    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:3OAiY_1i_A8Rd3fptBIsk42F3KxhhdZbYB9eY7OMq3dreoyZrStVDw>
+    <xmx:3OAiY-DfhHt1oyooXdM_vkHByJ-LrFP6u4jvjR_YC3OT1ckhMsE5QA>
+    <xmx:3OAiY7hWetdX_yG-F1ikv5nVUuuitiBOYnX1sJwIXh879KvAC9ippw>
+    <xmx:3OAiY2UFNMDExF4xlJNDTWFKPMVGPds_vT6O_1SGqGpootahV39reYvp-78>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6F2D9B60089; Thu, 15 Sep 2022 04:22:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <b66ea89d-c62e-4772-b3d7-6e236da837af@www.fastmail.com>
+In-Reply-To: <20220914211057.423617-1-nhuck@google.com>
+References: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
+ <20220914211057.423617-1-nhuck@google.com>
+Date:   Thu, 15 Sep 2022 10:21:47 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nathan Huckleberry" <nhuck@google.com>, nathan@kernel.org
+Cc:     error27@gmail.com,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        llvm@lists.linux.dev, "Nick Desaulniers" <ndesaulniers@google.com>,
+        trix@redhat.com
+Subject: Re: [PATCH v3] staging: octeon: Fix return type of cvm_oct_xmit and
+ cvm_oct_xmit_pow
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 5:16 PM Martyn Welch
-<martyn.welch@collabora.co.uk> wrote:
+On Wed, Sep 14, 2022, at 11:10 PM, Nathan Huckleberry wrote:
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 >
-> From: Martyn Welch <martyn.welch@collabora.com>
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
 >
-> Diodes Incorporated is a manufacturer of application specific standard
-> products within the discrete, logic, analog, and mixed-signal semiconductor
-> markets.
+> The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
+> from int to netdev_tx_t.
 >
-> https://www.diodes.com/
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 >
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 >
-> Changes in v2:
->  - None
+> Changes v1 -> v2:
+> - Update function signatures in ethernet-tx.h.
 >
-> Changes in v3:
->  - None
->
-> Changes in v4:
->  - None
->
-> Changes in v5:
->  - None
->
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 2f0151e9f6be..7ee9b7692ed1 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -328,6 +328,8 @@ patternProperties:
->      description: Digi International Inc.
->    "^digilent,.*":
->      description: Diglent, Inc.
-> +  "^diodes,.*":
-> +    description: Diodes, Inc.
->    "^dioo,.*":
->      description: Dioo Microcircuit Co., Ltd
->    "^dlc,.*":
-> --
-> 2.35.1
->
+> Changes v2 -> v3:
+> - Move changes below the scissors --- so they don't show in commit msg
+> - Add reviewed-by tag
 
-Queued the series.
+The patch looks correct to me so
 
-Bart
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+but I have two more general comments:
+
+- For your changelogs, it would help to include the diagnostic message
+  from smatch that you link to.
+
+- This has probably been discussed before, but why is this only
+  reported by smatch but by clang itself when building with CFI
+  enabled? It appears that CFI enforces stricter C++ style type
+  compatibility on enums while the warnings only catch incompatible
+  types according to the normal C11 rules.
+
+     Arnd
