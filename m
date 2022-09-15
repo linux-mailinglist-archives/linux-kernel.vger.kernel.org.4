@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CFB5B9973
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605925B998E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiIOLSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S229636AbiIOL2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIOLSc (ORCPT
+        with ESMTP id S229606AbiIOL2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:18:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2112760C6;
-        Thu, 15 Sep 2022 04:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663240711; x=1694776711;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nXQXpz1fBQ6NMUr8fUF06om1l4CftgGyuzoaQmQCFYw=;
-  b=tnA1Z+7Ink/H2hPxN+qUVFWIZhUSMEOfGYuFkIAm6jXKg4JV+ue6yVSS
-   eAeu4OYu2N8gxJulLPJdI6Ffb0k3H2dWcWBGJ5J6VTkZCFpmr3/D8Yq5Z
-   HBlmVE5EZ8FiP14lMVoDIKwtpavhNm2IS4L0AJwoUXk/o7f73HKgkJJB0
-   Py0yMXeY8SyhpkLAxoG1p14qbWteYsF6yZOyinrgw9PxTH8kEqfboGKyH
-   TzFHoGM9eFHyrAUvPkYVGSQk0+PvdbYNjygNVCRPVoSH3WdvZQ4vSjRQ4
-   mH3PcGJ66EzjFJdCNrKS/dt9uoWd2fr1eFWlzL3XPxo3SwMdb6zNnr2kd
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="174003028"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 04:18:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 15 Sep 2022 04:18:24 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 15 Sep 2022 04:18:23 -0700
-Date:   Thu, 15 Sep 2022 13:22:47 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andy.shevchenko@gmail.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
-Message-ID: <20220915112247.fin7bb45plnr7cme@soft-dev3-1.localhost>
-References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
- <CACRpkdYWP4ASoO4wWSEgdCPbNLsx8fuHn_-oqnD+ff1TU84ieQ@mail.gmail.com>
+        Thu, 15 Sep 2022 07:28:17 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D09D88DF6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:28:16 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id e5so17754694pfl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=8BbJuqttJ/4fV8VqdOXoHInPzBrkD/Iy1FYpvE30g1c=;
+        b=Bi8jW5stvM7E/VS68FDwwRlwNAFRPBXV03tcB7arf/SAHExnJ59XJtmwUg1wqr8cLk
+         ZxfITpFvHJjzKL1jH6pyhGJ3dNSb8QL6ifnIVCJkkKEs0J3jgAs11uovByFus/9sN8VT
+         RQOzvYx6dKEDrjNeUyvPRA6CQqTl7+TVJIIIiul6tiopmX0X9aJHOu70hjdYjFoNtQzR
+         qv/HRulxb3D0RRFrWD3LPye8mCexxByJw6+z6S53VtGMpD3tpIy0Y06VsHdQ5yX+EesX
+         +7sz03IGYRhYXarssSJBeQAVjtF5rF3CI0JiZdcH4e/sbPsqovWhVbywvbCoKGeT7AlO
+         80GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=8BbJuqttJ/4fV8VqdOXoHInPzBrkD/Iy1FYpvE30g1c=;
+        b=a1z5k0/RZPR1NlPte2qfNxCz7jJFbpDqlKULOOe31rBszxv9j3N78npPwAUtlUfObq
+         7lzEBPScjVkz2ZDVdL/Od7Fu41H4emnDZBiXlFA/Ov5xEpetTtKu3sUL9qWrITQHhov2
+         MXiOQYzKWjUHbh9vpffhglBXowg6+hiwvP5nV6QQRQTExrt16A3Kf0jJsnaG2rAPUwnc
+         txJy7Pm/liz5IjGqGXlUkUpTkixUb1u3CH0zYImmrjEe0lY+STsS6eDm5hiU58pZQCF7
+         i/FuMSziUTkb7iUN9m4GL/zS10/VDi5X6nn8/Fg7eMxn5MDd+m4xxLf9vpfkJK9ajJw3
+         YGiA==
+X-Gm-Message-State: ACgBeo3dz11odf3buvTe07GJNcO2fCzcOFErQKMZ9mNWMEgTMBjMTrPw
+        R3c89SZdo4P6XsGa5yOe9AvkmA==
+X-Google-Smtp-Source: AA6agR4B/IutwaBDZel5D+SGqN4y4Z0TKVPo8Zo/Vm2Hwunv3YSwj0n9BBt71rBKTNLWw0ZyHbex6A==
+X-Received: by 2002:a63:778d:0:b0:438:5c5b:f2ac with SMTP id s135-20020a63778d000000b004385c5bf2acmr29736269pgc.401.1663241295529;
+        Thu, 15 Sep 2022 04:28:15 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b001782751833bsm9214157plx.223.2022.09.15.04.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 04:28:15 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     netdev@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+Subject: [PATCH] MAINTAINERS: Add myself as a reviewer for Qualcomm ETHQOS Ethernet driver
+Date:   Thu, 15 Sep 2022 16:58:04 +0530
+Message-Id: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYWP4ASoO4wWSEgdCPbNLsx8fuHn_-oqnD+ff1TU84ieQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 09/14/2022 15:02, Linus Walleij wrote:
-> 
-> On Fri, Sep 9, 2022 at 4:55 PM Horatiu Vultur
-> <horatiu.vultur@microchip.com> wrote:
-> 
-> > Fixes: be36abb71d878f ("pinctrl: ocelot: add support for interrupt controller")
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> 
-> This v3 patch applied for fixes so we get some rotation in linux-next
-> and get the Ocelot kernel in working order.
-> Should it even be tagged for stable?
+As suggested by Vinod, adding myself as the reviewer
+for the Qualcomm ETHQOS Ethernet driver.
 
-Thanks for applying the patch!
+Recently I have enabled this driver on a few Qualcomm
+SoCs / boards and hence trying to keep a close eye on
+it.
 
-It would be great to go also in stable. I have tried to apply it on
-5.19, 5.15, 5.10, 5.4, 4.19 but it failed on all of them because of
-merge conflicts.
-Should I send separate patch for each stable tree?
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: David Miller <davem@davemloft.net>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Andy had some further things to think about, consider these
-> for possible further patching.
-> 
-> Yours,
-> Linus Walleij
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c26a5c573a5d..e8b58d4afce5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16943,6 +16943,7 @@ F:	drivers/net/ethernet/qualcomm/emac/
+ 
+ QUALCOMM ETHQOS ETHERNET DRIVER
+ M:	Vinod Koul <vkoul@kernel.org>
++R:	Bhupesh Sharma <bhupesh.sharma@linaro.org>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/qcom,ethqos.txt
 -- 
-/Horatiu
+2.37.1
+
