@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A9B5BA10A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC76C5BA0FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiIOSz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 14:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S229567AbiIOSvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIOSzv (ORCPT
+        with ESMTP id S229531AbiIOSu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 14:55:51 -0400
-X-Greylist: delayed 339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Sep 2022 11:55:50 PDT
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4D63CBE4;
-        Thu, 15 Sep 2022 11:55:50 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 53F6C582BAC;
-        Thu, 15 Sep 2022 14:50:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 15 Sep 2022 14:50:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663267810; x=1663271410; bh=BBYoQBiYc3
-        blvf9HLzeei4DjTG96i2voaCfxbBryfek=; b=MD/SPjkYriKkZPO0IKBMTzNyHD
-        2NkJwDPiDt6d08iDVWgkkKyagHowZE82kgFUjeayHGChz0V4ll79h9IKxWaapbVq
-        T53pIacMaGFJrFp/LYMq+DY2t0pva0D9E9E1LfjJRMq0vfCID87Viw1+s9l0TcM0
-        HWsR5US9mN3FI7A8Fi8ICIfDDuFdGnr/ig4XFSxQUSDtS9qLlTNi7KLRd+c5YHdL
-        1g3Q9oqE2MU31wFFu4YfVjZr4RuNwBhbTh1L+JuIl/7W/XahSVqECH7cDZRjcoN9
-        QnWK4iarBG0VMhsUADqf2ZX/xWOsmCtsj3dhq52mgohPOLqMO9Kb6ts2tFUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663267810; x=1663271410; bh=BBYoQBiYc3blvf9HLzeei4DjTG96
-        i2voaCfxbBryfek=; b=0nV/D6/Qe5dubZEHkhDqr6L+R0jme1Skhm+b8pH0RACL
-        vKoVavUPZrmy0Sfkn0XWLe0MGh5oJn/1M6kyINIIW1jG9Lese3SeGsVE1WW7ZzqK
-        d0htkhh5tz6a2qU3Qh/6WnrHCpYENa2rv2cPYprP+LKweWkfEkS4+A1II2o3ppdT
-        dFI4zaZQahgKfxwXvgbbkjYJIdH1D8EmtY/MCqBucVkF0poGYXzTj41ve96J+hb5
-        b5O5TiRRe3Q1/FJddDbjj8lSxsC5DVIxj79YBkUnR+OlKAOvs+bcQUZHwv2C6idT
-        tksqyVP97RLSNCOJHRplKpRJOE+hf35gpr9vDhoeqQ==
-X-ME-Sender: <xms:4HMjY3rzgUaF40C3d0WcWQ2u_DVFF2jyhQVAbSQB3dRTWgTihB1KTw>
-    <xme:4HMjYxpjgk5fCBjkdi1nKv7Pbwia8ByC7KkJ8zUp5tLQraoh2EVxWyE6uhgtK3gwb
-    ax0S8VGtpvNuEqfiWU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgudefvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:4HMjY0Pm5XHk-g7wSGdxxqd6qiecnTUc-p5rQV5L-Er4Ex1xnR93sA>
-    <xmx:4HMjY66oarAjzbfOhtFV36Gwai_hazX6LeLGsaN9sEzTO8u1TGPRpQ>
-    <xmx:4HMjY27qoZG8dAaFWwdosyRGFW59SFfGMxMCp088_BgmdJGtCsv96A>
-    <xmx:4nMjYx3ywXZCQbn60d0ACPvXtZmQDy2NDHE3yAYv4hWksHtt6JxTLw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9F9F5B60089; Thu, 15 Sep 2022 14:50:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <9b4152e9-34cb-4ed6-b5e3-ef045b40dff2@www.fastmail.com>
-In-Reply-To: <202209160259.7f3Z5krO-lkp@intel.com>
-References: <202209160259.7f3Z5krO-lkp@intel.com>
-Date:   Thu, 15 Sep 2022 20:49:48 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        linux-omap@vger.kernel.org,
-        "Tomi Valkeinen" <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: drivers/gpu/drm/omapdrm/dss/dsi.c:1126:1: warning: the frame size of 1060
- bytes is larger than 1024 bytes
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 14:50:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE3B895F9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 11:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y3/OsDB+tCXSurOGbQPCyu5Vi3DPFNawOvXCBwr6bCs=; b=MNx3Ny3fbabrb2MySFIgszB18E
+        tWM+b/8WSpP9OgKLedDdjMVRra+O7Ts2ucg20TRzpd+Gob0aJXBVJXUFCEOMmfLbr3cbiNDPmAQ7h
+        m0+B24Zh6X2368PzX6LIfXjWlwpVkKMJrir9Fhg69eAxJNoB6dni1sYbv1YRcCGJ/EyzlfxvJJF2t
+        EMGOhCNJbA6c071P/pWeKl3IU7m4zsU4jJZxOWAIlplwdpCKoMStes1ShfzGIZ+ZDI8y37b/kblqr
+        hYMuIEovYVY2m/oKMsY/D3/VVLLnwmcK975E70GSKyTqnGBEEU49b8UQX95kUfZzbNj2+0/uGy/Tw
+        U3CgrtJA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYtwn-001Mlx-1O; Thu, 15 Sep 2022 18:50:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2DB6830013F;
+        Thu, 15 Sep 2022 20:50:45 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 03D0B2BA9C050; Thu, 15 Sep 2022 20:50:44 +0200 (CEST)
+Date:   Thu, 15 Sep 2022 20:50:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: RCU vs NOHZ
+Message-ID: <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022, at 8:17 PM, kernel test robot wrote:
-> Hi Arnd,
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
-> master
-> head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-> commit: 3d427228f7370894680580fcd0381c0349624fa1 ARM: ixp4xx: enable 
-> multiplatform support
+On Thu, Sep 15, 2022 at 09:06:00AM -0700, Paul E. McKenney wrote:
+> On Thu, Sep 15, 2022 at 10:39:12AM +0200, Peter Zijlstra wrote:
+> > Hi,
+> > 
+> > After watching Joel's talk about RCU and idle ticks I was wondering
+> > about why RCU doesn't have NOHZ hooks -- that is regular NOHZ, not the
+> > NOHZ_FULL stuff.
+> 
+> It actually does, but they have recently moved into the context-tracking
+> code, courtesy of Frederic's recent patch series.
 
-This did not cause the problem, the bisection just landed on a
-commit that enabled additional configuraitons.
+afair that's idle and that is not nohz.
 
->    drivers/gpu/drm/omapdrm/dss/dsi.c: In function 'dsi_dump_dsi_irqs':
->>> drivers/gpu/drm/omapdrm/dss/dsi.c:1126:1: warning: the frame size of 1060 bytes is larger than 1024 bytes [-Wframe-larger-than=]
->     1126 | }
+> > These deep idle states are only feasible during NOHZ idle, and the NOHZ
+> > path is already relatively expensive (which is offset by then mostly
+> > staying idle for a long while).
+> > 
+> > Specifically my thinking was that when a CPU goes NOHZ it can splice
+> > it's callback list onto a global list (cmpxchg), and then the
+> > jiffy-updater CPU can look at and consume this global list (xchg).
+> > 
+> > Before you say... but globals suck (they do), NOHZ already has a fair
+> > amount of global state, and as said before, it's offset by the CPU then
+> > staying idle for a fair while. If there is heavy contention on the NOHZ
+> > data, the idle governor is doing a bad job by selecting deep idle states
+> > whilst we're not actually idle for long.
+> > 
+> > The above would remove the reason for RCU to inhibit NOHZ.
+> > 
+> > 
+> > Additionally; when the very last CPU goes idle (I think we know this
+> > somewhere, but I can't reaily remember where) we can insta-advance the
+> > QS machinery and run the callbacks before going (NOHZ) idle.
+> > 
+> > 
+> > Is there a reason this couldn't work? To me this seems like a much
+> > simpler solution than the whole rcu-cb thing.
+> 
+> To restate Joel's reply a bit...
+> 
+> Maybe.
+> 
+> Except that we need rcu_nocbs anyway for low latency and HPC applications.
+> Given that we have it, and given that it totally eliminates RCU-induced
+> idle ticks, how would it help to add cmpxchg-based global offloading?
 
-I think hte problem is that struct dsi_irq_stats is just too
-large, at 776 bytes. The interrupts are disabled during a copy
-from 'dsi->irq_stats' into 'stats'. A trivial workaround would
-avoid the local copy and keep interrupts disabled through
-the entire function so it can operate directly on the source
-data, but that would introduce a longer time with irqs disabled,
-which might be bad as well.
-
-Since this is only called from a debugfs file, and reading that
-file is probably not performance critical itself, maybe
-using kmalloc on the large structure would be best.
-
-       Arnd
+Because that nocb stuff isn't default enabled?
