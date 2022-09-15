@@ -2,76 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1612F5BA1A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 21:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9ED5BA1AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 21:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiIOT45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 15:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S229515AbiIOT5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 15:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIOT4z (ORCPT
+        with ESMTP id S229679AbiIOT5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 15:56:55 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5459895AF5;
-        Thu, 15 Sep 2022 12:56:53 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so14008917pjk.4;
-        Thu, 15 Sep 2022 12:56:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gyQyTPpOZ8LGCjvpI2ddL5xmk77BHkTjwD50wytUqtQ=;
-        b=6yHX4yM+QXfnxcWc58gXRzr4muqzLMtQepRBP2l4MeU2r3rPoJGtDbZT+E225w1Avq
-         tGgCHC0NG6UcFHpDrS3FXlgwbI8ldBKKkXkk2cMoa23avO6rtf4mGoaZNKWJyIO6btr7
-         gy9SyID2VeQzVrV5kAPyXs95z00CVK0Rkfvn9e7JXtplW9D7CGWtP/sPe6zfCoQJstdQ
-         OpTiHOT/JzZsv2cEd8VsvGzYfarU6GVWcnscuSY/xkfiVv2O4CKEeAlv3Y3k+3KvM3Dv
-         tK79UXl/383k50t9eGIxN9sx+8OliTfJ7Ww0uyUe6v6lWDF/yNePmnvmBueiI1aWdWWq
-         7LgA==
-X-Gm-Message-State: ACrzQf1VFENR78Zym9ULarKIKvk+2LneS04OnEZvXxG8ldQi/RdRODNl
-        LwBDLUMcDb1h5TCAMDC5aq8=
-X-Google-Smtp-Source: AMsMyM55hVXIV0ScNgLxoKaWpwj9fO2GuHp8i0aZm9VTfQfTRzkCbTSBYnXjvmPe+MZlBs1DbfaF4w==
-X-Received: by 2002:a17:902:8301:b0:178:7a61:c01e with SMTP id bd1-20020a170902830100b001787a61c01emr1239258plb.90.1663271812660;
-        Thu, 15 Sep 2022 12:56:52 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:c3e3:32a8:d0fd:8248? ([2620:15c:211:201:c3e3:32a8:d0fd:8248])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902e75200b0017849a2b56asm6881371plf.46.2022.09.15.12.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 12:56:51 -0700 (PDT)
-Message-ID: <df1b5b6e-5a98-00b3-0e23-6048463480a9@acm.org>
-Date:   Thu, 15 Sep 2022 12:56:49 -0700
+        Thu, 15 Sep 2022 15:57:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C1295AF2;
+        Thu, 15 Sep 2022 12:57:36 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FIuWvw026876;
+        Thu, 15 Sep 2022 19:57:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=lvOej1TBFIRacZ5ySZE663i6gClm+IF+DVjQHVjivh4=;
+ b=DfPO3WnOKGhwy3K3iGL7VvWgyK8mHp9fgCE1xVLMgvH9ZsNdL/DnoPUwOFzGdVOl1Oeo
+ dcq87AeM07FaaBK5kSKXqx/tsL+Tl7KwFZc1v408sG5/rNEKoaFijXdweoEEne28shKC
+ iPFAXWM0Mkn81Tc3Y3pANgmqbhm61p1eWNfPbpdfQX6lNaDimCbKdPnS35eOlisMsPEL
+ +H/rtDZ9cQOfqblnICHCkq1I1O7vjNPH5j7TFPJc5ZIONECLE25RY1NWztPUYCNwT4hA
+ kPBFR7zlSTGzCzvFZ1zy6Azl+/THjCcE9aJ6j+fgK5WHLHsOC2b9bu3tmcfT+njQuhux Og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm9s5sskh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 19:57:23 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FJfJB2020103;
+        Thu, 15 Sep 2022 19:57:22 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm9s5ssk6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 19:57:22 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FJoKAF008696;
+        Thu, 15 Sep 2022 19:57:21 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03wdc.us.ibm.com with ESMTP id 3jm91w0ga6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Sep 2022 19:57:21 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FJvKDq9437798
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Sep 2022 19:57:20 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D242AC605B;
+        Thu, 15 Sep 2022 19:57:19 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E3494C6057;
+        Thu, 15 Sep 2022 19:57:18 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.65.211.128])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Sep 2022 19:57:18 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org, joel@jms.id.au,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        stable@vger.kernel.org, eajames@linux.ibm.com
+Subject: [PATCH v8 0/2] iio: pressure: dps310: Reset chip if MEAS_CFG is corrupt
+Date:   Thu, 15 Sep 2022 14:57:17 -0500
+Message-Id: <20220915195719.136812-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] scsi: ufs: add a variant operation in struct
- ufs_hba_variant_ops
-Content-Language: en-US
-To:     SEO HOYOUNG <hy50.seo@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-References: <sc.suh@samsung.com; hy50.seo@samsung.com;>
- <CGME20220913075407epcas2p1075426e0ef45b6969e50823d59c374d3@epcas2p1.samsung.com>
- <20220912193703.102267-1-hy50.seo@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220912193703.102267-1-hy50.seo@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tgMdImoW7eIeHHYOKkQQk21VrU-rgEGl
+X-Proofpoint-ORIG-GUID: XCWKlWb9110-Ss2aVFqaHtzLt25y7bDu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209150119
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 12:37, SEO HOYOUNG wrote:
-> Add ufs_hba_variant_ops about vendor error in check_error.
-> It need to reset when occurred ah8 related error.
-> At that time could not recovery with pwr cmd.
-> So add vendor error check function at ufs_hba_variant_ops.
+The DPS310 chip has been observed to get "stuck" such that pressure
+and temperature measurements are never indicated as "ready" in the
+MEAS_CFG register. The only solution is to reset the device and try
+again. In order to avoid continual failures, use a boolean flag to
+only try the reset after timeout once if errors persist. Include a
+patch to move the startup procedure into a function.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Changes since v7:
+ - Condense the code a bit by dropping rc2
+
+Changes since v6:
+ - Use helper instead of the lengthy regmap_read_poll_timeout twice
+ - Just return dps310_startup in dps310_reset_reinit
+
+Changes since v5:
+ - Completely rework the second patch to reset and reinit in any
+   timeout condition, if there haven't been previous timeouts that
+   failed to recover the chip.
+
+Changes since v4:
+ - Just check for rc rather than rc < 0 in some cases
+ - Split declaration and init of rc
+
+Changes since v3:
+ - Don't check regmap* return codes for < 0
+ - Fix comment spelling
+
+Changes since v2:
+ - Add some comments
+ - Fix the clunky control flow
+
+Changes since v1:
+ - Separate into two patches
+ - Rename 'dps310_verify_meas_cfg' to 'dps310_check_reset_meas_cfg'
+
+Eddie James (2):
+  iio: pressure: dps310: Refactor startup procedure
+  iio: pressure: dps310: Reset chip after timeout
+
+ drivers/iio/pressure/dps310.c | 262 +++++++++++++++++++++-------------
+ 1 file changed, 163 insertions(+), 99 deletions(-)
+
+-- 
+2.31.1
+
