@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7945B9F9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0755B9FA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiIOQ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S229980AbiIOQbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIOQ2l (ORCPT
+        with ESMTP id S229931AbiIOQbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:28:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87AF9E11F;
-        Thu, 15 Sep 2022 09:28:40 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FFECZI016989;
-        Thu, 15 Sep 2022 16:28:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3EkFjAR8k5C804PaGRzIAGHsfuCHMxISa88a7ags8cg=;
- b=MoY46RERgCFVolL5jeg8Us82VOvmavjHzuqwliU+u7brgOqJCk3wG0XZzcM1kRirlG5O
- 0E8MIUo2sm7/quOm78ufMrGhNhmuo2om7uGKPC6KkU1u2F1YK/DTvdPpBrSch3ELbPc1
- 3NwD4aIXMIYAzOSx5fFgXu3az2s1qdP7CzOxZhahXT7lr9bF3zHtg5wQcON6z3PS5Fpl
- ze5YRyzruBqi/SXZPoPemPYfIf4LqghjyG7zdi/rwKFptR60AB39+Bh7Sp4N/LKwmHAU
- dExmMdR28r2Co6DcTRqWjYL9Pr8YogARipsWzAZacT5+WRR9LfBd+TfivMS5g24pr39H xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6grjf81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:28:39 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28FFHr8d003508;
-        Thu, 15 Sep 2022 16:28:38 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jm6grjf76-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:28:38 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28FGKkC6003295;
-        Thu, 15 Sep 2022 16:28:36 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jjyfrancu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Sep 2022 16:28:36 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28FGSXXc37421514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Sep 2022 16:28:33 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B6424C044;
-        Thu, 15 Sep 2022 16:28:33 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A7EB4C040;
-        Thu, 15 Sep 2022 16:28:32 +0000 (GMT)
-Received: from [9.171.87.36] (unknown [9.171.87.36])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Sep 2022 16:28:32 +0000 (GMT)
-Message-ID: <68b0e84f-38fd-fdca-f2f0-ba664b44d1d3@linux.ibm.com>
-Date:   Thu, 15 Sep 2022 18:28:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] KVM: s390: pci: fix plain integer as NULL pointer
- warnings
+        Thu, 15 Sep 2022 12:31:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4784A79638;
+        Thu, 15 Sep 2022 09:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663259464; x=1694795464;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Cu4VrjAAKPW3hoJ8IJrfzgvaDkK3CkVuld2n8P3lYcs=;
+  b=Ru/mOjfrFlYNchi+WvnuItTtdCGH4Y4RiqXBe9GEQhs2+1VQb8C2hQDH
+   Dh8fA4z8L9Sc2/sg34KbxpCG9EwbuJJblbN5EDbIT9fgbi0YFnWj+nTdB
+   4tPgFCa2FmF9zwY1Yy618pbfgfijgTuvCmwDHic+8IIzbEmxlW7V3prcE
+   yRkwl+NmqyPDsEKnTaVPQXze3FG4Iv31jzTKuTGZtIGWU25K56Vba+JRq
+   BEDO88RLu4rQVz5+cYWCh2k91j6KNH9V9hSVNhiKtwsrB91ysS6xsIxix
+   5ZPE582xU0+PH28A4b+Kmsf+7MS2+Itw6wjJHosaspICAahWjKuEUUvpv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="385056104"
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="385056104"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:30:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="619759682"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Sep 2022 09:30:58 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 09:30:57 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 09:30:57 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 15 Sep 2022 09:30:57 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 15 Sep 2022 09:30:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bR44otzbq9mIWvFQo3JHS/PBfEHPb+Qy8C+VywHRE997Wlk8UzZ+L8OK0pDGlinLIXJu6h831b+5Oux+YrfoUc1h6PvroMNkPEgq/0dtDjmxdD6Mk56kLbGinqawAHfUEy6OTvm7TH+KAOmXxHa+LeFR7k7TaOlb7vLW49NvqwNLMXryIRAVDeF2+JD3K9y4eGa82VUIU59OS8rtsobAFccgfvEKcR8dpitMWg8BXztEL9JUx32smY1efH9vN73/CC5FQEnw1rCzgTwJvvXT0RQ6Ko0Zpe+XXj9OkOc7PMh0lBtyGASaz9RtXnqs6aIrpc/JtpUzxHR7QEjBStZ0hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oUE0IXFNBqmEiuPOyjYNxTH4Jhhn5uqOWXVM8T3ZD+M=;
+ b=RyZ52CwNI0tRFSKkggUJpi8vJBejPaa6m47lpTvRAko+rwk+H4ENqBQ1pEtswjaH/wxszwedNwrVHAu/capFruq0ueIVIjnGjnybrLDyCMh/UI0PcVfIIEexQ7XGX1TpEDDv72EG4EhNcQpAysC6Dit2xdnyUtcNj1guzOzbx2vc9R2nsRtjRhKi2A0xY/+FR4BBDx0/dI8+ubjacUYAsdQIeYYtOZUKP0Dkwxun+stdblP72+d5H47UdPySKSjvrCsGlRPD6SExvz3oNi5AnWJbedY/25ORUURgF+OgGNl9AwzSIhJwlMIv5gF9mpCV8vCnojOLeMDshnB920b2kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
+ by MW3PR11MB4746.namprd11.prod.outlook.com (2603:10b6:303:5f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Thu, 15 Sep
+ 2022 16:30:54 +0000
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::a422:5962:2b89:d7f5]) by SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::a422:5962:2b89:d7f5%7]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
+ 16:30:54 +0000
+Message-ID: <96855b74-5b77-4426-891b-d638ead17cd6@intel.com>
+Date:   Thu, 15 Sep 2022 09:30:50 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RESEND PATCH] ixgbe: Don't call kmap() on page allocated with
+ GFP_ATOMIC
 Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, frankja@linux.ibm.com
-Cc:     farman@linux.ibm.com, schnelle@linux.ibm.com, pmorel@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220823191548.77526-1-mjrosato@linux.ibm.com>
- <c558a8c8-4d87-13ee-8d33-ba0285445d62@linux.ibm.com>
- <9645ad8e-1fbe-894a-6a13-f5e91d019199@linux.ibm.com>
-In-Reply-To: <9645ad8e-1fbe-894a-6a13-f5e91d019199@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+CC:     Ira Weiny <ira.weiny@intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Gurucharan <gurucharanx.g@intel.com>
+References: <20220915124012.28811-1-fmdefrancesco@gmail.com>
+From:   Tony Nguyen <anthony.l.nguyen@intel.com>
+In-Reply-To: <20220915124012.28811-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kaDj6_oBD16dfH7kHgdYJ77xaVtoS66E
-X-Proofpoint-GUID: -H71A-lvbD2OKA9xPVqDuiiBcwMXCCf9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=829 clxscore=1015 bulkscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209150095
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR05CA0153.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::8) To SN6PR11MB3229.namprd11.prod.outlook.com
+ (2603:10b6:805:ba::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|MW3PR11MB4746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 013b9cea-f03e-4f48-d1a2-08da9737a8f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZrAjsF/xQK1bD/lAqZEzb+X5qfbhFf1FenSN0jqtxrO6M0IGRLTtwTs9ZNgEVsE1Pn0rbOSJIs6pwotrswxJ5xHv7egPYllO75uUNcurrI5luQKztCgarrCF4YRcFRZaiDnZmEYXn2WqEChpb/fAHANmhVT3C7TlUHKfaGcuLYF3i8y3Tkdoprp9b4I5hxjJ6N1ktrIr3tFiuDsxBgtg3+Z9VIDb59i8V26CB6g/afdMxNKYI1nMGfgSUU9sP7bagVtNsiEAiJDaroU9HzEKCVQI5Sz2T27NCTE5bJqJ1/1fy1/NPTEVrhzBYGvWeh63W/KSojGrtzeDkdr6JtZTUK+yfVn3m0bV0mbY8yO21k4jYSWrJLO/emCJE7CP7YExfLJxSHuGKAoUVxXvhBi7SBRQt7CokZy7TpciJMsBw+1kEhW/lMtUC9ulLT7ryak871YSbNIXb0RGOcvH+ouKcwJKfq+HzeWjAOfNS1zHTIDjRi8uuncqwR+OnO0Tcm+yUxQgbmq6mGqW8ZqMZl+rz8Z5jbI3yAO1C3ip8tuFN2v7j1HwLEiyavf5gMxD8MmA+e4xmk9L4nzOQLrUf42E3XGlftKRAi256VdJrh8lbIqS1T5wMefpSdBcUimP85bV+hRnxdEg0O4scTIIqkQd1yIIz+bXWPIaN9qbGDtR6krSbX2zkX8XTXqzMQrg7M8HL/FYCLBEl1hD9MjlcmpGsyZXCkoxlmWwRW0shJdzV3141vYUQRyIVk+bUU1Hvn0U6oj24aRrmejVJSEUttAnaAweJEqI0wldliczwk5mSVh22KSRnX5qGshcVTGirGCQuDeO4uBPtiM/7V8aNxiG4Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199015)(7416002)(186003)(31696002)(8936002)(6486002)(110136005)(966005)(921005)(86362001)(53546011)(41300700001)(107886003)(316002)(478600001)(54906003)(6506007)(4326008)(2616005)(38100700002)(31686004)(6666004)(66556008)(6512007)(66946007)(5660300002)(82960400001)(36756003)(26005)(8676002)(66476007)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUpZakR2dUlOc2cxblBvZk9ldjlFaysyeklURWsrZ1FGbTY4cUdUbWVxY1la?=
+ =?utf-8?B?bFhuWldOajY4VDg0ZFd5bmY2QVR3ekVEV3FaTllWS1IrWlBBK0JCSlVkYWdS?=
+ =?utf-8?B?NjhwcG1hSXNYY0hoWGVpYktuVHBXNkEyMmZxNmE3NHA4U1pvSEsrL25uV2Rt?=
+ =?utf-8?B?RFhNQ2JJV1ZQb3MzQzBaMnRwZnZBN0lRN2R2Z1Q1SVU1RCtjeW56Rmx5dVIw?=
+ =?utf-8?B?K0FsbGFSVTc5SVk0RUR2V1V5ZWk0dHRBaXI2aENseHAwT1lBdytCdnp0RU5S?=
+ =?utf-8?B?RTJ3aTFNNmkrVFZFRS9Rd1hwYzNSMzhCK0pORWFmZmFjVy9oMUV3NnIrM0V0?=
+ =?utf-8?B?RlN3Q3ViM1dEeE5tU28vNlVkTG5lNTF2YTJJb21hV0hGQnl5TG1odmtEcFgx?=
+ =?utf-8?B?LzN5NUJZM0NIay9CWG1HMys0YXVtWFlnNExIejdCQzhZNzJrcjByNWU2a1hu?=
+ =?utf-8?B?Z29JRE1wV2xBRWtpUGdNamtvZ0diUmJoVVFWUGJZOTkwL2s3a1V0bTNzK1c3?=
+ =?utf-8?B?VU0rR2JSa1VmRjdxdG1OTENwTWdFdjFYSjRLdWwrWUdaeUp1ZWNMdmFjQkow?=
+ =?utf-8?B?WWJtbUFxUWhSQzNCVExWZmo5dGNobGJqalBnQ1AwMHVHdldEdVZlYkhXL3dO?=
+ =?utf-8?B?R2orcXVBcEtaQVdtOFI0ZjF2UmYrc2hleXA0TGlucDRTRVBuWVRnZG96ZVBZ?=
+ =?utf-8?B?UmpndUxjVkMyWURBWVBPVzMyUklpUlRKUVQxb2JpVXlFZkNiRDJDSDVhSHpt?=
+ =?utf-8?B?ZHc5anFVUEw1WTFNZUtueTV5VlM2czdXNW9QUzBZVFE4MWtNL1hqcUVjQk1a?=
+ =?utf-8?B?SCtaRDZ6cGxiREM0UnV5NnJDSkxpWW5KaTl3UU4vb1lQcmFxYm5TRnlFTlI5?=
+ =?utf-8?B?SjVTWGRZNHBoT3ZqY3lEWVBxbHpVbWhoWEVoQkorVjNoSVQ4SWZVdHF1WFJ3?=
+ =?utf-8?B?K0dSQUNpTldZQVNvODdrK0xPNEJZMGJCR2xSd3ZpRDlGMVpmSWExQnpFYUpy?=
+ =?utf-8?B?eCtHMHBKbUhLSmJxMUpvYlYvQTJsVnQ3bm5CMDNFaXJpdSsrdXBLQTZ4ak1J?=
+ =?utf-8?B?RUQxRFovakJUN000TmtXaXErQlA2cXVyWm5WTEpzMlVjL05UMkNmZnBiVnAv?=
+ =?utf-8?B?U0lSZUgzSzlHb0l4Q2ZIU0d0T3owOUE2a2NsMjNUU0lVSzZ5UnV5YThuaW1x?=
+ =?utf-8?B?MENxM252RXlRV2dxN2U0SEtSdVJYdGdPQUtUM3lTelQxZmp3NWFhRUNmbGJn?=
+ =?utf-8?B?V09lN3ZxN21NUm1JeDJNUkwwN21yZWJEVUVQQjFWckRVWnQrNTFMbk9rbU9j?=
+ =?utf-8?B?YnNyQnRYejd5Q2QrU29LNStFQjlGMnZYVUsxKzBUamVJZUpBZUF4K1JSbDhR?=
+ =?utf-8?B?dXJ6N3MxSitCYVhWUFc5YUtVTStpUTdSaDNYTmVZOXI0VWxWY3pIdGF1U0ty?=
+ =?utf-8?B?ck9vaERCd0EvNDdENWlWbEFmRmI3T3NxaS9hTG5RTHFIbUZtQmp3a3ZWeVFa?=
+ =?utf-8?B?eHpER1ZwTzZEaU94VTV2MEU4VUVCQm1vNkk0SzhVL1ZmakFXRGYrZ3V3M3hr?=
+ =?utf-8?B?cFk5Q0tKUmRHaDdZbWthSHpUOFVHcllIdmMzcHRsS3F0aEd0b2JtcG8zUVBu?=
+ =?utf-8?B?KzlUeE44YVdNaFZxcFNWTmNwU1JlSWhvQ25aWTA2YUxmbk04cDlPdlRkNlhw?=
+ =?utf-8?B?Q0s0NWYwdXMwY1V0TTNwV2VDUkdRSXA5bEdWTHgyUk5MSTQyK0YwT3dLN2Zh?=
+ =?utf-8?B?UXQwUFFRbS9xSmlrbm9ENVhpcm1rM2dHTDZaK3NXR2crQnIzUWVaSG5jZlZI?=
+ =?utf-8?B?Ymo0MUpaZmhjNFAwTHBnSS95cE5QZ3E0Q0NEaVNNZnM5RnNlSWlGb2dhWTR6?=
+ =?utf-8?B?QTJnN3NWbU0xMDVVbHYrQ1U4SWJWVU9wcGkyM3RMVmlMb08wWmlyTW1xVHlM?=
+ =?utf-8?B?V1FsVVVVS2tiUS9lSUtjaTZPYzczbW0xQXFkLzdpYmJGaGNPRC9jeDFXd1do?=
+ =?utf-8?B?Nkdnc0RYWWpNT1JiK0tJQjQwV1Q2T2FFSjh1TEJmOVNWbzFGWVloTyt6TWEw?=
+ =?utf-8?B?aUFnbVl2eFREMGVQeFdqOUFGWVNvN0twV0tqOGkzQVlWbGwyTEZiamJMYlpq?=
+ =?utf-8?B?MUg3NlVIOEhmdk9QelJQTGltcmxHQ21vZDd4UzZ4c2MxeW10bXJEMlhvb0ly?=
+ =?utf-8?B?SXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 013b9cea-f03e-4f48-d1a2-08da9737a8f9
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2022 16:30:54.2317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DWS0gDAWUXbXDXn6QbWQyraSvld3oRqfYJFadffXpoH4pYXpHcOuA/453nJRb0nBsFjsuyA+WhQ2+3GtQHy7aWWwFIsdQUR+lGsRH7dpuSk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4746
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,33 +178,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-Am 15.09.22 um 18:16 schrieb Christian Borntraeger:
-> Am 23.08.22 um 21:18 schrieb Matthew Rosato:
->> On 8/23/22 3:15 PM, Matthew Rosato wrote:
->>> Fix some sparse warnings that a plain integer 0 is being used instead of
->>> NULL.
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->>
->> @Janosch, since you are taking the other PCI fix can you also take this small cleanup through KVM?
+On 9/15/2022 5:40 AM, Fabio M. De Francesco wrote:
+> Pages allocated with GFP_ATOMIC cannot come from Highmem. This is why
+> there is no need to call kmap() on them.
 > 
-> Queued now for the kvm tree. Will have to look if we have other things for 6.0. Otherwise it will go with 6.1.
+> Therefore, don't call kmap() on rx_buffer->page() and instead use a
+> plain page_address() to get the kernel address.
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Alexander Duyck <alexander.duyck@gmail.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Alexander Duyck <alexander.duyck@gmail.com>
+> Tested-by: Gurucharan <gurucharanx.g@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> I send again this patch because it was submitted more than two months ago,
+> Monday 4th July 2022, but for one or more (good?) reasons it has not yet
+> reached Linus' tree. In the meantime I am also forwarding two "Reviewed-by"
+> and one "Tested-by" tags (thanks a lot to Ira, Alexander, Gurucharan).
+> Obviously I have not made any changes to the code.
 
-Hmmm, checkpatch --strict has this:
+Hi Fabio,
 
-CHECK: Comparison to NULL could be written "!aift->kzdev"
-#52: FILE: arch/s390/kvm/pci.h:49:
-+	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == NULL ||
+This is accepted into net-next already[1] and will land in the next kernel.
 
-CHECK: Comparison to NULL could be written "!aift->kzdev[si]"
-#53: FILE: arch/s390/kvm/pci.h:50:
-+	    aift->kzdev[si] == NULL)
+Thanks,
+Tony
 
-total: 0 errors, 0 warnings, 2 checks, 28 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or --fix-inplace.
-
-
-Can you maybe redo this so that we avoid followup patches?
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=03f51719df032637250af828f9a1ffcc5695982d
