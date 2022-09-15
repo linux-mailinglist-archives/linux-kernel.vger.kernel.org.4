@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38CA5B9435
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E055B9439
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 08:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIOGRH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 02:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        id S229562AbiIOGUB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Sep 2022 02:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIOGRF (ORCPT
+        with ESMTP id S229459AbiIOGT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:17:05 -0400
+        Thu, 15 Sep 2022 02:19:56 -0400
 Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDAC91D29
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:17:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57CD28720
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 23:19:52 -0700 (PDT)
 Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28F6GL6q009931
+        by SHSQR01.spreadtrum.com with ESMTPS id 28F6J6tq022974
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 15 Sep 2022 14:16:21 +0800 (CST)
+        Thu, 15 Sep 2022 14:19:06 +0800 (CST)
         (envelope-from Zhiguo.Niu@unisoc.com)
 Received: from bj08434pcu.spreadtrum.com (10.0.74.109) by
  BJMBX02.spreadtrum.com (10.0.64.8) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 15 Sep 2022 14:16:21 +0800
+ 15.0.1497.23; Thu, 15 Sep 2022 14:19:06 +0800
 From:   "zhiguo.niu" <zhiguo.niu@unisoc.com>
 To:     <jaegeuk@kernel.org>, <chao@kernel.org>,
         <linux-f2fs-devel@lists.sourceforge.net>,
         <linux-kernel@vger.kernel.org>
 CC:     <lvqiang.huang@unisoc.com>
 Subject: [PATCH Vx 1/1] f2fs: fix some error handling case in gc
-Date:   Thu, 15 Sep 2022 14:16:13 +0800
-Message-ID: <1663222573-27702-1-git-send-email-zhiguo.niu@unisoc.com>
+Date:   Thu, 15 Sep 2022 14:18:49 +0800
+Message-ID: <1663222729-27774-1-git-send-email-zhiguo.niu@unisoc.com>
 X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -38,8 +38,8 @@ X-Originating-IP: [10.0.74.109]
 X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
  BJMBX02.spreadtrum.com (10.0.64.8)
 Content-Transfer-Encoding: 8BIT
-X-MAIL: SHSQR01.spreadtrum.com 28F6GL6q009931
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
+X-MAIL: SHSQR01.spreadtrum.com 28F6J6tq022974
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
