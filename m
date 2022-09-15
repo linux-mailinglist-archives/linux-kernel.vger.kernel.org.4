@@ -2,44 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038E35B92AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 04:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C1A5B92B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 04:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiIOC2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 22:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S230217AbiIOChG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 22:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiIOC2g (ORCPT
+        with ESMTP id S229685AbiIOChD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 22:28:36 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D4D40554;
-        Wed, 14 Sep 2022 19:28:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VPqk5.y_1663208911;
-Received: from 30.221.129.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPqk5.y_1663208911)
+        Wed, 14 Sep 2022 22:37:03 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D745433360
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:37:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPqc0wr_1663209417;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VPqc0wr_1663209417)
           by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 10:28:32 +0800
-Message-ID: <b8d9aaac-6e91-f760-c9bc-ac270eecefa6@linux.alibaba.com>
-Date:   Thu, 15 Sep 2022 10:28:31 +0800
+          Thu, 15 Sep 2022 10:36:58 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+To:     sj@kernel.org
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: [PATCH V3] mm/damon: simplify scheme create in lru_sort.c
+Date:   Thu, 15 Sep 2022 10:36:55 +0800
+Message-Id: <20220915023655.41923-1-xhao@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V3 1/6] erofs: use kill_anon_super() to kill super in
- fscache mode
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
- <20220914105041.42970-2-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220914105041.42970-2-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,39 +40,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In damon_lru_sort_new_hot_scheme() and damon_lru_sort_new_cold_scheme(),
+they have so much in common, so we can combine them into a single
+function, and we just need to distinguish their differences.
 
+Suggested-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+Changes from v2
+(https://lore.kernel.org/linux-mm/20220914113859.37637-1-xhao@linux.alibaba.com/)
+- Add static global 'struct damos_access_pattern' stub variable
+---
+ mm/damon/lru_sort.c | 41 +++++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 22 deletions(-)
 
-On 9/14/22 6:50 PM, Jia Zhu wrote:
-> Use kill_anon_super() instead of generic_shutdown_super() since the
-> mount() in erofs fscache mode uses get_tree_nodev() and associated
-> anon bdev needs to be freed.
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+index 07a0908963fd..6a26c5822286 100644
+--- a/mm/damon/lru_sort.c
++++ b/mm/damon/lru_sort.c
+@@ -132,6 +132,18 @@ DEFINE_DAMON_MODULES_DAMOS_STATS_PARAMS(damon_lru_sort_cold_stat,
+ 		lru_sort_tried_cold_regions, lru_sorted_cold_regions,
+ 		cold_quota_exceeds);
 
-Thanks. You're welcome to use "Suggested-by" in this case. The same with
-patch 2.
++struct damos_access_pattern damon_lru_sort_stub_access_pattern = {
++	/* Find regions having PAGE_SIZE or larger size */
++	.min_sz_region = PAGE_SIZE,
++	.max_sz_region = ULONG_MAX,
++	/* and accessed for more than the threshold */
++	.min_nr_accesses = 0,
++	.max_nr_accesses = UINT_MAX,
++	/* no matter its age */
++	.min_age_region = 0,
++	.max_age_region = UINT_MAX,
++};
++
+ static struct damon_ctx *ctx;
+ static struct damon_target *target;
 
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> ---
->  fs/erofs/super.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 3173debeaa5a..9716d355a63e 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -879,7 +879,7 @@ static void erofs_kill_sb(struct super_block *sb)
->  	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
->  
->  	if (erofs_is_fscache_mode(sb))
-> -		generic_shutdown_super(sb);
-> +		kill_anon_super(sb);
->  	else
->  		kill_block_super(sb);
->  
+@@ -157,17 +169,9 @@ static struct damos *damon_lru_sort_new_scheme(
+ /* Create a DAMON-based operation scheme for hot memory regions */
+ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+ {
+-	struct damos_access_pattern pattern = {
+-		/* Find regions having PAGE_SIZE or larger size */
+-		.min_sz_region = PAGE_SIZE,
+-		.max_sz_region = ULONG_MAX,
+-		/* and accessed for more than the threshold */
+-		.min_nr_accesses = hot_thres,
+-		.max_nr_accesses = UINT_MAX,
+-		/* no matter its age */
+-		.min_age_region = 0,
+-		.max_age_region = UINT_MAX,
+-	};
++	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
++
++	pattern.min_nr_accesses = hot_thres;
 
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+ 	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_PRIO);
+ }
+@@ -175,17 +179,10 @@ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+ /* Create a DAMON-based operation scheme for cold memory regions */
+ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
+ {
+-	struct damos_access_pattern pattern = {
+-		/* Find regions having PAGE_SIZE or larger size */
+-		.min_sz_region = PAGE_SIZE,
+-		.max_sz_region = ULONG_MAX,
+-		/* and not accessed at all */
+-		.min_nr_accesses = 0,
+-		.max_nr_accesses = 0,
+-		/* for min_age or more micro-seconds */
+-		.min_age_region = cold_thres,
+-		.max_age_region = UINT_MAX,
+-	};
++	struct damos_access_pattern pattern = damon_lru_sort_stub_access_pattern;
++
++	pattern.max_nr_accesses = 0;
++	pattern.min_age_region = cold_thres;
 
--- 
-Thanks,
-Jingbo
+ 	return damon_lru_sort_new_scheme(&pattern, DAMOS_LRU_DEPRIO);
+ }
+--
+2.31.0
