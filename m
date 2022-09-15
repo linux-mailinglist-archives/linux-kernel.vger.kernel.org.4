@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F395B9520
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D665B9522
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiIOHV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S229705AbiIOHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIOHVZ (ORCPT
+        with ESMTP id S229657AbiIOHVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:21:25 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1EA1F2E6;
-        Thu, 15 Sep 2022 00:21:23 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MSpVQ565TzKG5w;
-        Thu, 15 Sep 2022 15:19:26 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgC3VW9u0iJj+9h_Aw--.25937S3;
-        Thu, 15 Sep 2022 15:21:20 +0800 (CST)
-Subject: Re: [PATCH v2 1/4] md/raid10: cleanup wait_barrier()
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
-        guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220914014914.398712-1-yukuai1@huaweicloud.com>
- <20220914014914.398712-2-yukuai1@huaweicloud.com>
- <f0dd9208-05ec-b2fa-4b29-5fa140486fa3@deltatee.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1932cd56-87fc-51ac-4cb0-ec35d912525c@huaweicloud.com>
+        Thu, 15 Sep 2022 03:21:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884E08A1DD
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663226502; x=1694762502;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Cs0ARHqTg/sLxBqGoBiCU8P4JJO3ea/6zqkCpGynC1g=;
+  b=WPMEk0qQ4vx9Mzh7y+pY6kqHM94TvaJdDsI38M8K94Lzs3eQzXN+Pk84
+   P9+646jClRXnCNxc9CUPz7GOUYw9DFKE1MYAeX69o9w3qjJXHvjlDQSi+
+   mHMSwk0x5sQiuaJ7/UFJKbsHmpSK10HIYnDq3t45U9ILKRIOEta9DUuBg
+   hRVrQGM3M7RCk+momnXQKSLC2ErQFO2mRcUzr5kNZJu182t1UoP/XFOIp
+   S8ZPFGxT945z2OYl6PsjqBj65yVRzRYkCUorpScV1h6QFY9DAV8IoMyVE
+   XEa7N0g5w7yURsPkrzGEqvtOnU9f8tIMvGIUJWl4mi36rGOYSreWFJphf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384929649"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="384929649"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 00:21:22 -0700
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="568322212"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.238]) ([10.254.208.238])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 00:21:20 -0700
+Message-ID: <78da3b7e-c930-f433-8c80-b1ac53f9ab58@linux.intel.com>
 Date:   Thu, 15 Sep 2022 15:21:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <f0dd9208-05ec-b2fa-4b29-5fa140486fa3@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC3VW9u0iJj+9h_Aw--.25937S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4xKrW3WF4rKw13Aw4DCFg_yoW5GF1Upw
-        sxGFW3AF4kJ342ywsxXa18ZFyS9397JrWUJF9Fk34kZFn0vr98Kr43t34FkryDurs3ua4F
-        qFs5Kr9xG3WjkrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] iommu/vt-d: Enable PASID during iommu device probe
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <20220912024826.1684913-1-baolu.lu@linux.intel.com>
+ <BN9PR11MB52766A868879689D55AE9DC68C479@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <826a10fa-7dc3-887d-8a08-e03dcf1fa59c@linux.intel.com>
+ <BN9PR11MB527688C87CEA57CACD5324608C499@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB527688C87CEA57CACD5324608C499@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +68,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2022/09/15 0:16, Logan Gunthorpe 写道:
-> 
-> 
-> On 2022-09-13 19:49, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
+On 2022/9/15 11:22, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, September 13, 2022 5:25 PM
 >>
->> Currently the nasty condition is wait_barrier() is hard to read. This
->> patch factor out the condition into a function.
+>> On 2022/9/13 16:01, Tian, Kevin wrote:
+>>>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>>> Sent: Monday, September 12, 2022 10:48 AM
+>>>>
+>>>> @@ -1401,7 +1403,6 @@ static void iommu_enable_dev_iotlb(struct
+>>>> device_domain_info *info)
+>>>
+>>> This is not the right name now as dev_iotlb is only related to ATS.
 >>
->> There are no functional changes.
+>> Yes. This name is confusing. Perhaps we can split it into some specific
+>> helpers,
 >>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/raid10.c | 56 ++++++++++++++++++++++++++-------------------
->>   1 file changed, 32 insertions(+), 24 deletions(-)
+>> - intel_iommu_enable_pci_ats()
+>> - intel_iommu_enabel_pci_pri()
+>> - intel_iommu_enable_pci_pasid()
+>> ?
+> 
+> Probably intel_iommu_enable_pci_caps()
+
+It's better.
+
+> 
 >>
->> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->> index 64d6e4cd8a3a..56458a53043d 100644
->> --- a/drivers/md/raid10.c
->> +++ b/drivers/md/raid10.c
->> @@ -957,44 +957,52 @@ static void lower_barrier(struct r10conf *conf)
->>   	wake_up(&conf->wait_barrier);
->>   }
->>   
->> +static bool stop_waiting_barrier(struct r10conf *conf)
->> +{
->> +	/* barrier is dropped */
->> +	if (!conf->barrier)
->> +		return true;
->> +
->> +	/*
->> +	 * If there are already pending requests (preventing the barrier from
->> +	 * rising completely), and the pre-process bio queue isn't empty, then
->> +	 * don't wait, as we need to empty that queue to get the nr_pending
->> +	 * count down.
->> +	 */
->> +	if (atomic_read(&conf->nr_pending)) {
->> +		struct bio_list *bio_list = current->bio_list;
+>>>
+>>>>    		info->pfsid = pci_dev_id(pf_pdev);
+>>>>    	}
+>>>>
+>>>> -#ifdef CONFIG_INTEL_IOMMU_SVM
+>>>>    	/* The PCIe spec, in its wisdom, declares that the behaviour of
+>>>>    	   the device if you enable PASID support after ATS support is
+>>>>    	   undefined. So always enable PASID support on devices which
+>>>> @@ -1414,7 +1415,7 @@ static void iommu_enable_dev_iotlb(struct
+>>>> device_domain_info *info)
+>>>>    	    (info->pasid_enabled ? pci_prg_resp_pasid_required(pdev) : 1)
+>>>> &&
+>>>>    	    !pci_reset_pri(pdev) && !pci_enable_pri(pdev, PRQ_DEPTH))
+>>>>    		info->pri_enabled = 1;
+>>>> -#endif
+>>>> +
+>>>>    	if (info->ats_supported && pci_ats_page_aligned(pdev) &&
+>>>>    	    !pci_enable_ats(pdev, VTD_PAGE_SHIFT)) {
+>>>>    		info->ats_enabled = 1;
+>>>
+>>> iommu_enable_dev_iotlb() is currently called both when the device is
+>> probed
+>>> and when sva is enabled (which is actually useless). From this angle the
+>> commit
+>>> msg is inaccurate.
+>>
+>> The logic is a bit tricky. iommu_support_dev_iotlb() only returns a
+>> devinfo pointer when ATS is supported on the device. So, you are right
+>> if device supports both ATS and PASID; otherwise PASID will not be
+>> enabled.
 > 
-> I'd probably just put the bio_list declaration at the top of this
-> function, then the nested if statements are not necessary. The compiler
-> should be able to optimize the access just fine.
+> Yes, that is what the first part of this patch fixes.
 > 
->>   	if (conf->barrier) {
->> -		struct bio_list *bio_list = current->bio_list;
->> -		conf->nr_waiting++;
->> -		/* Wait for the barrier to drop.
->> -		 * However if there are already pending
->> -		 * requests (preventing the barrier from
->> -		 * rising completely), and the
->> -		 * pre-process bio queue isn't empty,
->> -		 * then don't wait, as we need to empty
->> -		 * that queue to get the nr_pending
->> -		 * count down.
->> -		 */
->>   		/* Return false when nowait flag is set */
->>   		if (nowait) {
->>   			ret = false;
->>   		} else {
->> +			conf->nr_waiting++;
+> But my point is about the message that previously PASID was enabled
+> only when FEAT_SVA is enabled and now the patch moves it to the
+> probe time.
 > 
-> Technically speaking, I think moving nr_waiting counts as a functional
-> change. As best as I can see it is correct, but it should probably be at
-> least mentioned in the commit message, or maybe done as a separate
-> commit with it's own justification. That way if it causes problems down
-> the road, a bisect will make the issue clearer.
+> My point is that even in old way iommu_enable_dev_iotlb() was called
+> twice: one at probe time and the other at FEAT_SVA. If ATS exists
+> then PASID is enabled at probe time already. If ATS doesn't exist then
+> PASID is always disabled.
+> 
+> So this patch is really to decouple PASID enabling from ATS and remove
+> the unnecessary/duplicated call of iommu_enable_dev_iotlb() in
+> intel_iommu_enable_sva().
 
-Thanks for your advice, I just think increase and decrease nr_waiting in
-the case 'nowait' is pointless, and I move it incidentally.
+Yes. Exactly. I will rephrase the commit message and send a v2.
 
-I'll post a separate clean up patch to do that.
-
-Paul, can I still add your Acked-by for this patch?
-
-Thanks,
-Kuai
-> 
-> Thanks,
-> 
-> Logan
-> .
-> 
-
+Best regards,
+baolu
