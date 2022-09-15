@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434E65B99DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901BF5B99CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiIOLlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
+        id S229949AbiIOLkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiIOLkU (ORCPT
+        with ESMTP id S229896AbiIOLkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:40:20 -0400
+        Thu, 15 Sep 2022 07:40:13 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D501752469
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FE7476D3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=3pHERFsmuK61/aX42Un1sPpA4i778m0NUaKcblu/jsE=; b=UUu8iCIG9J+UczqP61Lv6dWV/i
-        QnvjN+G7+2imSzU66BQWWjDYPBPbfNnoZ/d7MYInm08a4xo4Ih04foBJDhDVnR1apEe5WNyPD/B3H
-        n3iHl4K9mEnGdpOfJAxFvvc/G60O/KIF+HdggpLc7MyZGsrwsYqyReMKGT/tjd/+oSGv0FvbdcLIn
-        PAs7PPZTqDrv/h4qG9OPXdRKRyHOkpd6EA9zU1/mGqazSzhBWjFaVyzvfzaxVY8NOSoo00EUBfZmC
-        e9FZFXp48cDEHDjkDiaG5qyAO0kYX/HlbQX1rhSy2/KlK4LeKR/HVSYhmXJE01eP0RlMuKxJ2Pa1O
-        ZGpjc7Lg==;
+        bh=VtHSfWHBCM/dkewK26y+PcMV0oq6+DiYrWTtkB689iQ=; b=qT4Oro5EOrXrMzLS+pxGmYqBzT
+        wKr4CiPeRYXh4EWABg4a8UZ5WMgFMZroQS/bmdKW7Yc0FpoD/RFLBKbQ42K0AcOT0hKew/BGXbrfn
+        3+bvymrca5LT0Z+uIXutQ4UV5a+iDqsOo6eHngfmbXqlgMZtREuBsqawB0a92Hqv25L9DiWYr39hb
+        1ppdcPB2DX8nOxOLhzF/p3Bcs9WbdC+5X4twleGeUFSpn+wIm2iINAWSZVBfK9T+Hjcf0FhDCmi16
+        vAxSkSuRoR1zyaXLrZ1RLrviuAHDc+nCwqLX1o3gOUs8vmtkP9T56CSoL7AzN2vs9Burj0Ljk5L2d
+        QiPOiTeQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYnDd-0012NH-0V; Thu, 15 Sep 2022 11:39:45 +0000
+        id 1oYnDd-0012Nr-GT; Thu, 15 Sep 2022 11:39:45 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E132A302D39;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E41B4302D5A;
         Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 7FD6329BA2EA8; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
-Message-ID: <20220915111145.702133710@infradead.org>
+        id 8542A29BA2EAA; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
+Message-ID: <20220915111145.806607235@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Sep 2022 13:11:06 +0200
+Date:   Thu, 15 Sep 2022 13:11:07 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v3 27/59] x86/softirq: Move softirq pending next to current task
+Subject: [PATCH v3 28/59] objtool: Allow !PC relative relocations
 References: <20220915111039.092790446@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,48 +72,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Peter Zijlstra <peterz@infradead.org>
 
-Another hot variable which is strict per CPU and benefits from
-being in the same cache line.
+Objtool doesn't currently much like per-cpu usage in alternatives:
 
+arch/x86/entry/entry_64.o: warning: objtool: .altinstr_replacement+0xf: unsupported relocation in alternatives section
+  f:   65 c7 04 25 00 00 00 00 00 00 00 80     movl   $0x80000000,%gs:0x0      13: R_X86_64_32S        __x86_call_depth
+
+Since the R_X86_64_32S relocation is location invariant (it's
+computation doesn't include P - the address of the location itself),
+it can be trivially allowed.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/current.h |    1 +
- arch/x86/include/asm/hardirq.h |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ tools/objtool/arch/x86/decode.c       |   42 +++++++++++++++++++++++++++++-----
+ tools/objtool/check.c                 |    6 +---
+ tools/objtool/include/objtool/arch.h  |    6 ++--
+ tools/objtool/include/objtool/check.h |   17 +++++++------
+ 4 files changed, 51 insertions(+), 20 deletions(-)
 
---- a/arch/x86/include/asm/current.h
-+++ b/arch/x86/include/asm/current.h
-@@ -19,6 +19,7 @@ struct pcpu_hot {
- 			int			cpu_number;
- 			unsigned long		top_of_stack;
- 			void			*hardirq_stack_ptr;
-+			u16			softirq_pending;
- #ifdef CONFIG_X86_64
- 			bool			hardirq_stack_inuse;
- #else
---- a/arch/x86/include/asm/hardirq.h
-+++ b/arch/x86/include/asm/hardirq.h
-@@ -3,9 +3,9 @@
- #define _ASM_X86_HARDIRQ_H
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -73,6 +73,30 @@ unsigned long arch_jump_destination(stru
+ 	return insn->offset + insn->len + insn->immediate;
+ }
  
- #include <linux/threads.h>
-+#include <asm/current.h>
++bool arch_pc_relative_reloc(struct reloc *reloc)
++{
++	/*
++	 * All relocation types where P (the address of the target)
++	 * is included in the computation.
++	 */
++	switch (reloc->type) {
++	case R_X86_64_PC8:
++	case R_X86_64_PC16:
++	case R_X86_64_PC32:
++	case R_X86_64_PC64:
++
++	case R_X86_64_PLT32:
++	case R_X86_64_GOTPC32:
++	case R_X86_64_GOTPCREL:
++		return true;
++
++	default:
++		break;
++	}
++
++	return false;
++}
++
+ #define ADD_OP(op) \
+ 	if (!(op = calloc(1, sizeof(*op)))) \
+ 		return -1; \
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1622,7 +1620,7 @@ static int handle_group_alt(struct objto
+ 		 * accordingly.
+ 		 */
+ 		alt_reloc = insn_reloc(file, insn);
+-		if (alt_reloc &&
++		if (alt_reloc && arch_pc_relative_reloc(alt_reloc) &&
+ 		    !arch_support_alt_relocation(special_alt, insn, alt_reloc)) {
  
- typedef struct {
--	u16	     __softirq_pending;
- #if IS_ENABLED(CONFIG_KVM_INTEL)
- 	u8	     kvm_cpu_l1tf_flush_l1d;
- #endif
-@@ -60,6 +60,7 @@ extern u64 arch_irq_stat_cpu(unsigned in
- extern u64 arch_irq_stat(void);
- #define arch_irq_stat		arch_irq_stat
+ 			WARN_FUNC("unsupported relocation in alternatives section",
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -93,4 +91,6 @@ bool arch_is_rethunk(struct symbol *sym)
  
-+#define local_softirq_pending_ref       pcpu_hot.softirq_pending
+ int arch_rewrite_retpolines(struct objtool_file *file);
  
- #if IS_ENABLED(CONFIG_KVM_INTEL)
- static inline void kvm_set_cpu_l1tf_flush_l1d(void)
++bool arch_pc_relative_reloc(struct reloc *reloc);
++
+ #endif /* _ARCH_H */
 
 
