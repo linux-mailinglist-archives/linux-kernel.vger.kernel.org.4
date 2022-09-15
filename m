@@ -2,123 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012805B9CF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1785A5B9CFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiIOOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S230104AbiIOOXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiIOOXS (ORCPT
+        with ESMTP id S229999AbiIOOXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:23:18 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AB53F33F;
-        Thu, 15 Sep 2022 07:23:16 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h194so13201870iof.4;
-        Thu, 15 Sep 2022 07:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Wf3LFv5rC06ssqbN8SDKw5G1+/QGs5HuYv3crVTHQuU=;
-        b=DcQteIs6/yV0oIj+5sazQrZx1nbzlNuRyJU9xI5bizLmrlb91PUxA3hiScAqel/UU+
-         pB07aAH/pXr+BfWorG0sloGqx0hySrSn6SvRziAZAyAp/eVyX8GJ888KfND6irNpqd0R
-         gOL2duv1axTqdZqsO3zl1ak4cSays3fkGCiItgtq12q0n5cYZA2xsDaTdRPOwYTP7K46
-         7ujmOPqiO/+kHql9XhFVAKN26tQ3sZU5VN6xMAZRrhW0YF+i4CqBW+JNJ1fvgpznnBFx
-         xb8tc/93qhd0LyGawQabkeAWDLdHzERz8WvvM7/2jdicxcJ11DDazZ1ya6DuE2wm4IjE
-         Y0pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Wf3LFv5rC06ssqbN8SDKw5G1+/QGs5HuYv3crVTHQuU=;
-        b=OvfMoIR53oqecBpJs8DZZLoSg/KCWpjcpCRXubX8KE1jPOpKnJ4iWVZubE2RD9m2NB
-         6+Ch0UdxapIZttD5qkJkuShQBqugODohSBQu/N8X6tPdxIn4nHgH0Km4APEJlpa16c6n
-         ZTKxvCzWd9+7j+8PvxzYFA+xJEfOExzUayC8pmy/3eyVaPtZ/kQgNZ7RYbdOQvN5y15n
-         D1r6kL4bsL+KjjFiI12DZnb5HXPZATTZKZ6CzfEZM7w0ZfSGW3GjepDliGYw03F1MbFn
-         wONPOxtW5GQh0ie4EN08Fm7SCJLtPHhvAhoSSrKtWwFhVShJCUO2cbHoXTM98mqbdJGj
-         MfHQ==
-X-Gm-Message-State: ACrzQf2/Jz06LzdCA082jH5+GkPAkSkvgJJ2sb9oRARDscq2NM4wzbny
-        hEm9u9HIlexsO7vyIkWliaw=
-X-Google-Smtp-Source: AMsMyM6teYR6UVDxdZ4HWR6cCMD+/cLkxwgUd3P6zoqzL+Kux8giDtbNMM7STKgvNaFfcn7eH/d/wA==
-X-Received: by 2002:a05:6638:2501:b0:35a:3675:fe2c with SMTP id v1-20020a056638250100b0035a3675fe2cmr125586jat.35.1663251795914;
-        Thu, 15 Sep 2022 07:23:15 -0700 (PDT)
-Received: from [192.168.0.27] ([204.237.50.126])
-        by smtp.gmail.com with ESMTPSA id y9-20020a920909000000b002eb3b43cd63sm8013568ilg.18.2022.09.15.07.23.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 07:23:15 -0700 (PDT)
-Message-ID: <e9526860-b77e-8cc0-7421-91fe5370918d@gmail.com>
-Date:   Thu, 15 Sep 2022 10:23:13 -0400
+        Thu, 15 Sep 2022 10:23:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CA02F001;
+        Thu, 15 Sep 2022 07:23:44 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:23:41 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663251822;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BwlUJp0ha5hGvi4OuVHKyiA3BjHfx9/RXMl32q15g0Y=;
+        b=jkG0cgBqHPyDV3nA9i+Zwll6End0qxGYo286+O7qtretIinsge5B8/oWVvRNHA5tc4Ie2O
+        ADNOvqJuTVYOvY+DL7u5ovNIpn8KY9RGyRqOXp011EFJC47xo0JA70NA60IruV8OJMsi6t
+        ZF6AFR8DeVRhZkg4MdZ5RS8cAWFf340O0M45xMBm4BvInbXFJEMUN8K9IQX9lXy/KTTcf9
+        mKk40nKYiZfjmZ/f/V8IetmuDJBzfVe+IkgAH1pra990j44JmkgNaFdaRBArY4Iidq8PRF
+        dWLQpgvM/qhbcAyipIuxRhNGFqODyrbOQflSs/GP9QJkKMGNJPsWFwXVLncJeQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663251822;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BwlUJp0ha5hGvi4OuVHKyiA3BjHfx9/RXMl32q15g0Y=;
+        b=pOVCeMnIH1ZSzj/TJ6oaTWD7FlfTyXLUTWaFqf2Aja2a19eiK5US2sD3JySGYSQ8eCziH5
+        k4joppKih5jd78Dg==
+From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] locking: Add __sched to semaphore functions
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220909000803.4181857-1-namhyung@kernel.org>
+References: <20220909000803.4181857-1-namhyung@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v1] HID: logitech-hidpp: Detect hi-res scrolling support
-To:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-References: <20220914132146.6435-1-hadess@hadess.net>
- <c56c4053388baa5ea3db8bc849c5a420859347f1.camel@hadess.net>
-Content-Language: en-US
-From:   "Peter F. Patel-Schneider" <pfpschneider@gmail.com>
-In-Reply-To: <c56c4053388baa5ea3db8bc849c5a420859347f1.camel@hadess.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166325182156.401.3796755990517584127.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the locking/core branch of tip:
 
-On 9/14/22 11:41, Bastien Nocera wrote:
-> On Wed, 2022-09-14 at 15:21 +0200, Bastien Nocera wrote:
->> Rather than relying on a never-ending stream of patches for quirks.
->>
->> This change will detect whether HID++ 1.0 hi-res scroll, HID++ 2.0
->> hi-res scroll or HID++ 2.0 hi-res scroll wheel is supported, and
->> enable
->> the feature without the need for quirks.
->>
->> Tested on a Logitech M705 mouse that was unsupported before this
->> change.
->>
->> [    9.365324] logitech-hidpp-device 0003:046D:406D.0006:
->> input,hidraw3: USB HID v1.11 Mouse [Logitech M705] on usb-
->> 0000:00:14.0-4/input2:3
->> [   57.472434] logitech-hidpp-device 0003:046D:406D.0006: HID++ 4.5
->> device connected.
->> [   57.616429] logitech-hidpp-device 0003:046D:406D.0006: Detected
->> HID++ 2.0 hi-res scroll wheel
->> [   57.712424] logitech-hidpp-device 0003:046D:406D.0006: wheel
->> multiplier = 8
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216480
->> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> For anyone on a recent version of Fedora that wants to test it, those
-> packages should work:
-> https://koji.fedoraproject.org/koji/taskinfo?taskID=92008550
->
-> Cheers
+Commit-ID:     0d97db026509c1a13f732b22670ab1f0ac9d8d87
+Gitweb:        https://git.kernel.org/tip/0d97db026509c1a13f732b22670ab1f0ac9d8d87
+Author:        Namhyung Kim <namhyung@kernel.org>
+AuthorDate:    Thu, 08 Sep 2022 17:08:03 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 15 Sep 2022 16:14:03 +02:00
 
+locking: Add __sched to semaphore functions
 
+The internal functions are marked with __sched already, let's do the same
+for external functions too so that we can skip them in the stack trace.
 
-Using this kernel I tested several Logitech mice - an MX Master 3, which 
-already supported hi-res scrolling in Linux; an M310 and an M185, which have 
-features but no feature for hi-res scrolling; and an old-style M510, which 
-does not have features.  I used evtest to show the events that were 
-generated.   For these mice the patch does not produce any change in events 
-generated, as expected, both REL_WHEEL and REL_WHEEL_HI_RES events.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220909000803.4181857-1-namhyung@kernel.org
+---
+ kernel/locking/semaphore.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-
-Peter F. Patel-Schneider
-
-
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index f2654d2..34bfae7 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -51,7 +51,7 @@ static noinline void __up(struct semaphore *sem);
+  * Use of this function is deprecated, please use down_interruptible() or
+  * down_killable() instead.
+  */
+-void down(struct semaphore *sem)
++void __sched down(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 
+@@ -74,7 +74,7 @@ EXPORT_SYMBOL(down);
+  * If the sleep is interrupted by a signal, this function will return -EINTR.
+  * If the semaphore is successfully acquired, this function returns 0.
+  */
+-int down_interruptible(struct semaphore *sem)
++int __sched down_interruptible(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -101,7 +101,7 @@ EXPORT_SYMBOL(down_interruptible);
+  * -EINTR.  If the semaphore is successfully acquired, this function returns
+  * 0.
+  */
+-int down_killable(struct semaphore *sem)
++int __sched down_killable(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -131,7 +131,7 @@ EXPORT_SYMBOL(down_killable);
+  * Unlike mutex_trylock, this function can be used from interrupt context,
+  * and the semaphore can be released by any task or interrupt.
+  */
+-int down_trylock(struct semaphore *sem)
++int __sched down_trylock(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int count;
+@@ -156,7 +156,7 @@ EXPORT_SYMBOL(down_trylock);
+  * If the semaphore is not released within the specified number of jiffies,
+  * this function returns -ETIME.  It returns 0 if the semaphore was acquired.
+  */
+-int down_timeout(struct semaphore *sem, long timeout)
++int __sched down_timeout(struct semaphore *sem, long timeout)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -180,7 +180,7 @@ EXPORT_SYMBOL(down_timeout);
+  * Release the semaphore.  Unlike mutexes, up() may be called from any
+  * context and even by tasks which have never called down().
+  */
+-void up(struct semaphore *sem)
++void __sched up(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 
