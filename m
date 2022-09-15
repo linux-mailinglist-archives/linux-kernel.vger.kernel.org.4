@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D1F5B9646
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0611B5B9610
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiIOIYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S229956AbiIOIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiIOIXl (ORCPT
+        with ESMTP id S229881AbiIOIRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:23:41 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F171998757
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663230184; x=1694766184;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dbGDw/fR57kfC3zNVT516fZ+CC10yT0IHxbEPv0a3KE=;
-  b=T189inbqMQ/qup3xRV/qFqy679kn/fTGzCfaxcx1/W/RWHewJdvAZh9k
-   lwY1btCQufLB9xsk7R7Rx8lugiWoATG7saLzpmAh77lDgQr3HSAhGCfuk
-   lEzIwZxZirIUp9NiJT0WVikelbp4ffEd4X+DSiYjdVwc02b8SkBJd0y5i
-   JOMDtlR3r5qHohlVhUU8jjW/pSWCei2OFMlKw62AD+80Qf6whtbiw3tjb
-   +jx1Oa9CfJ3zsl03w0Yjj3j05yXSAHRJnsuS/zSc3yMUa42/RCSw+sAvx
-   QFBlM5krmgejsSnSbpDcJ19bSp9UCIcijyuHt+B2sDpv1sRKcwiDm3hI/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="285691775"
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="285691775"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 01:22:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
-   d="scan'208";a="647737363"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2022 01:22:43 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/1] iommu/vt-d: Remove pasid_set_eafe()
-Date:   Thu, 15 Sep 2022 16:16:45 +0800
-Message-Id: <20220915081645.1834555-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Sep 2022 04:17:02 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A78C81B05
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:16:57 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so25811702edj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=bHrSqc0KeBCd30dQAVZKmDgp9XGbk9siJPUAdtVg+8M=;
+        b=zVyw/QCbT359iWxfTbEQYFzCcvQrEO0ZALgI42uVp+RrUzdcGwnHxN4rAphOWBe4GD
+         dbsjfT1jBvHRRaIKDTWUUMR0hxQUiUAOn0ycjBNIyT1CW23VWW+2tsG9eZIza/pW8uus
+         MW5MtLq+KijRUik+GpeMvzJSCcjmzxR6DpURzeVXfrjiauGoFEt6x07wDJwmxN35grTF
+         FOaR4jUMKAGZ2SwKErrDhIgDHe5hCao3/QskebqdfmVAXEQBxzA8/h8sPVju3Vdbbv/g
+         L0OPkgM5YsoPACyoFgDEEMxNt+eCehO0cHs17aO4OHfTXv+fHdZ7e1yLMnqgz5oABpJ6
+         rikQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bHrSqc0KeBCd30dQAVZKmDgp9XGbk9siJPUAdtVg+8M=;
+        b=jw4R4FKy1iiH4g/dBc47TWnagpcL/R67qjIt3Rep42Cwt6mgwsvU2Hhybvz7jdMW31
+         Ljq1Zqf8vnIkFExMQuaQS6hoGciTqeeW0ySucO72510/wbIy3nf6nCYdCa+lBa5sNKu7
+         L99/JLPZW3Un4QxdF+b0i6YjfkR5M87AL4kwFf1Y4Fi7/ZZ3iHnIcAbNy33XgmotTg7V
+         bD4TOinVRCGg3JWC5tATAGMPihNvJ+pzefxmal4L38Xl+P9pDb9Sdw9TB8xZWfccoI5K
+         BgjSUAL2mTrGkqBEaVOb5z3nd4bcN92q36o+cO3aKSMsq5nNtHWNuaqYP/lLSVeRaHt2
+         Kztg==
+X-Gm-Message-State: ACgBeo2jqSyzkyfW6l8AxlaQVWhEPWsSeRuyQBvVhL/m2O/u8Hspm8yX
+        JQeRH15QvdG53JPlyVzifoiWzZgIUFo+mDoTr8RBCQ==
+X-Google-Smtp-Source: AA6agR43EgBtEhzrjzZ9AxWcgYR5SO/qp9NWw/NSLKFqvS0BDXxGaA0wvN12y2hmlJlPfL/k8aUkVSK6FnuUa66rxq0=
+X-Received: by 2002:aa7:dd02:0:b0:44e:f7af:b996 with SMTP id
+ i2-20020aa7dd02000000b0044ef7afb996mr34096318edv.422.1663229815801; Thu, 15
+ Sep 2022 01:16:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220914151558.536226-1-martyn.welch@collabora.co.uk>
+In-Reply-To: <20220914151558.536226-1-martyn.welch@collabora.co.uk>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 15 Sep 2022 10:16:45 +0200
+Message-ID: <CAMRc=Mf-8FLSyCD887emEmGOZsxiMxf73O425MQv1_tjvDbU9w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/5] dt-bindings: vendor-prefixes: add Diodes
+To:     Martyn Welch <martyn.welch@collabora.co.uk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not used anywhere in the tree. Remove it to avoid dead code.
-No functional change intended.
+On Wed, Sep 14, 2022 at 5:16 PM Martyn Welch
+<martyn.welch@collabora.co.uk> wrote:
+>
+> From: Martyn Welch <martyn.welch@collabora.com>
+>
+> Diodes Incorporated is a manufacturer of application specific standard
+> products within the discrete, logic, analog, and mixed-signal semiconductor
+> markets.
+>
+> https://www.diodes.com/
+>
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>
+> Changes in v2:
+>  - None
+>
+> Changes in v3:
+>  - None
+>
+> Changes in v4:
+>  - None
+>
+> Changes in v5:
+>  - None
+>
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 2f0151e9f6be..7ee9b7692ed1 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -328,6 +328,8 @@ patternProperties:
+>      description: Digi International Inc.
+>    "^digilent,.*":
+>      description: Diglent, Inc.
+> +  "^diodes,.*":
+> +    description: Diodes, Inc.
+>    "^dioo,.*":
+>      description: Dioo Microcircuit Co., Ltd
+>    "^dlc,.*":
+> --
+> 2.35.1
+>
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/pasid.c | 10 ----------
- 1 file changed, 10 deletions(-)
+Queued the series.
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index c5e7e8b020a5..ccaf32949254 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -392,16 +392,6 @@ pasid_set_flpm(struct pasid_entry *pe, u64 value)
- 	pasid_set_bits(&pe->val[2], GENMASK_ULL(3, 2), value << 2);
- }
- 
--/*
-- * Setup the Extended Access Flag Enable (EAFE) field (Bit 135)
-- * of a scalable mode PASID entry.
-- */
--static inline void
--pasid_set_eafe(struct pasid_entry *pe)
--{
--	pasid_set_bits(&pe->val[2], 1 << 7, 1 << 7);
--}
--
- static void
- pasid_cache_invalidation_with_pasid(struct intel_iommu *iommu,
- 				    u16 did, u32 pasid)
--- 
-2.34.1
-
+Bart
