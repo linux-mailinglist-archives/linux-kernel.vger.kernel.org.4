@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823015B920D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098FE5B9211
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIOBRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S229838AbiIOBSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiIOBRf (ORCPT
+        with ESMTP id S229653AbiIOBSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:17:35 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46FD8B9B9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:17:33 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id e4-20020a5d85c4000000b0068bb3c11e72so9883979ios.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:17:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=Scr9jBcKRqCpRy9j3Cd8BIVPcViR5mnf4BfHjCpxE3E=;
-        b=H1XWQkU0Ck4EuHAx1W1TrpABDTNClvg4cMFUeTINxDbx+LTQZWu0mABwrEYwsTPtFq
-         Xqy+dD8iXK+tV7yZ+Xjamsa7YTrMljgSs2iQVOC8UFDAmOZ75l6RTT5AlkRzGZz/gW7h
-         mRCibL2kfeaMe+DKAIQdFRpYoDreGFXORCwZ1srjW209kipcn7t6j3z2ajiB8gAr+7qj
-         Hp22YUDXB12UvgA8iZHPiuaOEpvjov3OEqNnxUjn1oKb1sUYiIRYNQiSUM5A8/ZKzYE1
-         NiA3+S3xsg1kjeyRBGZeIgw4a3Z1utd+Remcr96zVoA0C6lu0dOqDwt/flWnoRTEAVaM
-         l/KA==
-X-Gm-Message-State: ACgBeo1TmcfQw2kaLBf9qxUKCIYPvtQh7n8AviE6n3oe7IinRQZnuAR6
-        JF5ENUjZ5uvS69/AkLPq80BGgtbAKJZPOx3UFqqj2uwL1MAp
-X-Google-Smtp-Source: AA6agR4D9NBZfuCORuhqy4BIYUdmpRjrCbp2Yc6iGuSHf6p4zvcW9axe9YyyKyLEsEuREPQ7DNfbMhL4fkIPLrMRCDEEkwGYL3gV
+        Wed, 14 Sep 2022 21:18:50 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAD68B9BA;
+        Wed, 14 Sep 2022 18:18:46 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MSfS32rQdzKH0Z;
+        Thu, 15 Sep 2022 09:16:51 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgAnenNzfSJjJlpzAw--.7349S3;
+        Thu, 15 Sep 2022 09:18:44 +0800 (CST)
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Paolo VALENTE <paolo.valente@unimore.it>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
+ <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
+ <5cb0e5bc-feec-86d6-6f60-3c28ee625efd@huaweicloud.com>
+ <D89DCF20-27D8-4F8F-B8B0-FD193FC4F18D@unimore.it>
+ <e6b53794-f93f-92b2-1f45-35ae81a28a5c@huaweicloud.com>
+ <F758A356-EE6B-4B7B-95E2-6414616C77E4@unimore.it>
+ <5e0b44b4-46cc-b3c6-1d93-00a0a683eda8@huaweicloud.com>
+ <f89eb61b-7912-5916-1a12-039e32bebe70@huaweicloud.com>
+ <BF3909EA-4659-48CB-917A-639DC3318916@unimore.it>
+ <97534773-484f-5c2c-a371-446cc0680b73@huaweicloud.com>
+ <20220914090036.46zsrj2l23ubvvk6@quack3>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <c0b6cd13-c494-4fa3-d509-e69e91acbeeb@huaweicloud.com>
+Date:   Thu, 15 Sep 2022 09:18:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:40a3:b0:35a:3f2d:a21c with SMTP id
- m35-20020a05663840a300b0035a3f2da21cmr8095440jam.221.1663204653166; Wed, 14
- Sep 2022 18:17:33 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 18:17:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a7a3f05e8ad02f6@google.com>
-Subject: [syzbot] BUG: corrupted list in kobject_add_internal (4)
-From:   syzbot <syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220914090036.46zsrj2l23ubvvk6@quack3>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAnenNzfSJjJlpzAw--.7349S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxtry3tr1kWw48GF1UGr1rZwb_yoW7ZF48pw
+        4UGa15Cr4UJr1Utw1ktr1UXry5t3y3Jr15WryDJryUCr1Dtrn7tF12qr4Y9ry8XrykJw47
+        Xr4UJ3s7Xw1UZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,85 +77,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+在 2022/09/14 17:00, Jan Kara 写道:
+> Hi guys!
+> 
+> On Wed 14-09-22 16:15:26, Yu Kuai wrote:
+>> 在 2022/09/14 15:50, Paolo VALENTE 写道:
+>>>
+>>>
+>>>> Il giorno 14 set 2022, alle ore 03:55, Yu Kuai <yukuai1@huaweicloud.com> ha scritto:
+>>>>
+>>>>
+>>>>
+>>>> 在 2022/09/07 9:16, Yu Kuai 写道:
+>>>>> Hi, Paolo!
+>>>>> 在 2022/09/06 17:37, Paolo Valente 写道:
+>>>>>>
+>>>>>>
+>>>>>>> Il giorno 26 ago 2022, alle ore 04:34, Yu Kuai <yukuai1@huaweicloud.com> ha scritto:
+>>>>>>>
+>>>>>>> Hi, Paolo!
+>>>>>>>
+>>>>>>> 在 2022/08/25 22:59, Paolo Valente 写道:
+>>>>>>>>> Il giorno 11 ago 2022, alle ore 03:19, Yu Kuai <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>>>>>>
+>>>>>>>>> Hi, Paolo
+>>>>>>>>>
+>>>>>>>>> 在 2022/08/10 18:49, Paolo Valente 写道:
+>>>>>>>>>>> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>>>>>>>>
+>>>>>>>>>>> Hi, Paolo
+>>>>>>>>>>>
+>>>>>>>>>> hi
+>>>>>>>>>>> Are you still interested in this patchset?
+>>>>>>>>>>>
+>>>>>>>>>> Yes. Sorry for replying very late again.
+>>>>>>>>>> Probably the last fix that you suggest is enough, but I'm a little bit
+>>>>>>>>>> concerned that it may be a little hasty.  In fact, before this fix, we
+>>>>>>>>>> exchanged several messages, and I didn't seem to be very good at
+>>>>>>>>>> convincing you about the need to keep into account also in-service
+>>>>>>>>>> I/O.  So, my question is: are you sure that now you have a
+>>>>>>>>>
+>>>>>>>>> I'm confused here, I'm pretty aware that in-service I/O(as said pending
+>>>>>>>>> requests is the patchset) should be counted, as you suggested in v7, are
+>>>>>>>>> you still thinking that the way in this patchset is problematic?
+>>>>>>>>>
+>>>>>>>>> I'll try to explain again that how to track is bfqq has pending pending
+>>>>>>>>> requests, please let me know if you still think there are some problems:
+>>>>>>>>>
+>>>>>>>>> patch 1 support to track if bfqq has pending requests, it's
+>>>>>>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
+>>>>>>>>> first request is inserted to bfqq, and it's cleared when the last
+>>>>>>>>> request is completed. specifically the flag is set in
+>>>>>>>>> bfq_add_bfqq_busy() when 'bfqq->dispatched' if false, and it's cleared
+>>>>>>>>> both in bfq_completed_request() and bfq_del_bfqq_busy() when
+>>>>>>>>> 'bfqq->diapatched' is false.
+>>>>>>>>>
+>>>>>>>> This general description seems correct to me. Have you already sent a new version of your patchset?
+>>>>>>>
+>>>>>>> It's glad that we finially on the same page here.
+>>>>>>>
+>>>>>>
+>>>>>> Yep. Sorry for my chronicle delay.
+>>>>> Better late than never 😁
+>>>>>>
+>>>>>>> Please take a look at patch 1, which already impelement the above
+>>>>>>> descriptions, it seems to me there is no need to send a new version
+>>>>>>> for now. If you think there are still some other problems, please let
+>>>>>>> me know.
+>>>>>>>
+>>>>>>
+>>>>>> Patch 1 seems ok to me. I seem to have only one pending comment on this patch (3/4) instead. Let me paste previous stuff here for your convenience:
+>>>>> That sounds good.
+>>>>>>
+>>>>>>>>
+>>>>>>>> -    /*
+>>>>>>>> -     * Next function is invoked last, because it causes bfqq to be
+>>>>>>>> -     * freed if the following holds: bfqq is not in service and
+>>>>>>>> -     * has no dispatched request. DO NOT use bfqq after the next
+>>>>>>>> -     * function invocation.
+>>>>>>>> -     */
+>>>>>>> I would really love it if you leave this comment.  I added it after
+>>>>>>> suffering a lot for a nasty UAF.  Of course the first sentence may
+>>>>>>> need to be adjusted if the code that precedes it is to be removed.
+>>>>>>> Same as above, if this patch is applied, this function will be gone.
+>>>>
+>>>> Hi, I'm curious while I'm trying to add the comment, before this
+>>>> patchset, can bfqq be freed when bfq_weights_tree_remove is called?
+>>>>
+>>>> bfq_completed_request
+>>>> bfqq->dispatched--
+>>>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq))
+>>>>    bfq_weights_tree_remove(bfqd, bfqq);
+>>>>
+>>>> // continue to use bfqq
+>>>>
+>>>> It seems to me this is problematic if so, because bfqq is used after
+>>>> bfq_weights_tree_remove() is called.
+>>>>
+>>>
+>>> It is.  Yet, IIRC, I verified that bfqq was not used after that free,
+>>> and I added that comment as a heads-up.  What is a scenario (before
+>>> your pending modifications) where this use-after-free happens?
+>>>
+>>
+>> No, it never happens, I just notice it because it'll be weird if I
+>> place the comment where bfq_weights_tree_remove() is called, since bfqq
+>> will still be accessed.
+>>
+>> If the suituation that the comment says is possible, perhaps we should
+>> move bfq_weights_tree_remove() to the last of bfq_completed_request().
+>> However, it seems that we haven't meet the problem for quite a long
+>> time...
+> 
+> I'm bit confused which comment you are speaking about but
+> bfq_completed_request() gets called only from bfq_finish_requeue_request()
+> and the request itself still holds a reference to bfqq. Only later in
+> bfq_finish_requeue_request() when we do:
+> 
+> 	bfqq_request_freed(bfqq);
+> 	bfq_put_queue(bfqq);
+> 
+> bfqq can get freed.
 
-HEAD commit:    b96fbd602d35 Merge tag 's390-6.0-4' of git://git.kernel.or..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1226a500880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c79df237bd9a0448
-dashboard link: https://syzkaller.appspot.com/bug?extid=e653e3f67251b6139aaa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f618e8880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1090704f080000
+Yes, you're right. Then I think the only place that
+bfq_weights_tree_remove() can free bfqq is from bfq_del_bfqq_busy().
+I'll move the following comment with a little adjustment here, which is
+from bfq_weights_tree_remove() before this patchset:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com
+         /*
+         ┊* Next function is invoked last, because it causes bfqq to be
+         ┊* freed. DO NOT use bfqq after the next function invocation.
+         ┊*/
 
-list_add double add: new=ffff88807cd08540, prev=ffff88807cd08540, next=ffff888144a30000.
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:33!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3610 Comm: kworker/u5:2 Not tainted 6.0.0-rc4-syzkaller-00302-gb96fbd602d35 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: hci0 hci_rx_work
-RIP: 0010:__list_add_valid.cold+0x42/0x58 lib/list_debug.c:33
-Code: e8 73 f6 f0 ff 0f 0b 48 c7 c7 40 f9 48 8a e8 65 f6 f0 ff 0f 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 40 fb 48 8a e8 4e f6 f0 ff <0f> 0b 48 89 f1 48 c7 c7 c0 fa 48 8a 4c 89 e6 e8 3a f6 f0 ff 0f 0b
-RSP: 0018:ffffc9000398f800 EFLAGS: 00010282
-RAX: 0000000000000058 RBX: ffff8880216bd298 RCX: 0000000000000000
-RDX: ffff888076949d80 RSI: ffffffff8161f408 RDI: fffff52000731ef2
-RBP: ffff88807cd08540 R08: 0000000000000058 R09: 0000000000000000
-R10: 0000000080000001 R11: 0000000000000000 R12: ffff888144a30000
-R13: ffff88807cd08550 R14: ffff88807cd08558 R15: ffff88807cd08540
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 0000000078c49000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- kobj_kset_join lib/kobject.c:164 [inline]
- kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
- kobject_add_varg lib/kobject.c:358 [inline]
- kobject_add+0x150/0x1c0 lib/kobject.c:410
- device_add+0x368/0x1e90 drivers/base/core.c:3452
- hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
- hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
- hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
- hci_event_func net/bluetooth/hci_event.c:7440 [inline]
- hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
- hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_add_valid.cold+0x42/0x58 lib/list_debug.c:33
-Code: e8 73 f6 f0 ff 0f 0b 48 c7 c7 40 f9 48 8a e8 65 f6 f0 ff 0f 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 40 fb 48 8a e8 4e f6 f0 ff <0f> 0b 48 89 f1 48 c7 c7 c0 fa 48 8a 4c 89 e6 e8 3a f6 f0 ff 0f 0b
-RSP: 0018:ffffc9000398f800 EFLAGS: 00010282
-RAX: 0000000000000058 RBX: ffff8880216bd298 RCX: 0000000000000000
-RDX: ffff888076949d80 RSI: ffffffff8161f408 RDI: fffff52000731ef2
-RBP: ffff88807cd08540 R08: 0000000000000058 R09: 0000000000000000
-R10: 0000000080000001 R11: 0000000000000000 R12: ffff888144a30000
-R13: ffff88807cd08550 R14: ffff88807cd08558 R15: ffff88807cd08540
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Thanks,
+Kuai
 
+> 
+> 								Honza
+> 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
