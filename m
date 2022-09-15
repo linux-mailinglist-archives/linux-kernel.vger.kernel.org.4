@@ -2,229 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACB35B95A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D619E5B95A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 09:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiIOHoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 03:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S230086AbiIOHpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 03:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiIOHoI (ORCPT
+        with ESMTP id S229809AbiIOHpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 03:44:08 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938A49412C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:43:55 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ge9so5412333pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:43:55 -0700 (PDT)
+        Thu, 15 Sep 2022 03:45:19 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7582CC9A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:45:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id u9so40204217ejy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 00:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=0aDjag9mgnZUwZDL3/dmCWrXaKWe2fIwx4al3A3NRMo=;
-        b=oyz638cJKv6J2roLzQ7KUUqYcsktC7gk6sSK61//s+wfmM89JEHwWAFFzoyA9msFCh
-         44J2ixTroDwnDnlQpQJFyyVd7oQ1sWmMiAjPIoVqCn2RNA9YCAOpnywWqYFXfHluDIE6
-         7AvXNfldrSe9Si+E+wK6AwTI8CwdoR1ErcLG7iueucws0kOlmCc8HbjIFumwevGGDRLO
-         v8fFYS70WGHt93NMrzi8r7zgJxcGHGeb/Hfk3rdn5fyWB4hehZKAYx2TeZDEghunP9Ys
-         hgdZhXirIgAPO6X3Bue/aRm5tncCxy4BwS+Vqvkj7WTboJS5Y/LM4kPdRCdJucOX6j4a
-         UzwQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Bosun96f8TMfDCqWwTtVlpT+bonCDQv+KvF6kBQMBX8=;
+        b=4jCzO3HLLCBi5NPL2L+C0+b8SQwdy+Glb5BIwMT2t9SaBQoyD/l0zghvZkXYqUlYfb
+         SqPa2DSMk3ZlnF7bqGbWzD73XZCLtD/7mKomRnKLLRu5Hm4ojNzsPm6hu1si0FRdQW5T
+         TVTfWQTgoJ1sKRw22jU8Xuja+rRG/AMRMEKEkERH6Hm+KF03UDHLlnfu0yUMc7N8Yooo
+         B5bzYbKjitm0kXpFFqehqnvBtjlo6q7SCgg8X4uRArPwRaglzAXfY3By9qqc7FhQtQUa
+         HQlpt8nBmiaWHd0huNoqEtxgI+zi6IxOJ+ZX59Ki16I7dCsTqT9MJyK+9Ps4dVXRHF5V
+         jLbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=0aDjag9mgnZUwZDL3/dmCWrXaKWe2fIwx4al3A3NRMo=;
-        b=6E+JnhCXH3Ef+LREQVgjjh1LYvy4Y12srE1la8tprSgP23E83iP2xf7WtjsVuheEhP
-         lpRFxF0vCh+OtJ4hYf4mNqo7/bxZqN3dca4oZGAYfcLF+z445GmeUDn5FfTub/9KWa/u
-         Wd3tqhnxgcROxniqip7fQ0a5lhOFZK2xtQKwVgrw5m35QGFgs0aXkbjf5bzo6azH11Y7
-         Of/O5pQ7r1Aoul1GBTrXhVe0x1BB9KHmEGUeCD1gc7WdB4K2THYa/uYTTB2rUTxmcyoO
-         7LLzXtKUGih6tQidW7mFkiW4KokZsm42//k0jbP4TDeZrWZLhFbnP7TMlElIL4NQn/l3
-         KdUA==
-X-Gm-Message-State: ACrzQf0WaEPhsFRRTk8PaiiFcj5KQ3Gu5OKkT0JRohWLKudjbqj1aKXj
-        ECxKmilS9ISwZwuD8PbQa+zVXQ==
-X-Google-Smtp-Source: AMsMyM6vuIQZnI1C1ZB+e9OYLPdSrSfPmwYiZ5VrqRkRue21ifj6ZjJQJo6NNXBl1QRT1db/LF3ohQ==
-X-Received: by 2002:a17:902:d482:b0:178:1585:40b6 with SMTP id c2-20020a170902d48200b00178158540b6mr3092415plg.134.1663227834350;
-        Thu, 15 Sep 2022 00:43:54 -0700 (PDT)
-Received: from [10.76.37.214] ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902f35100b00172b87d9770sm12008735ple.81.2022.09.15.00.43.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 00:43:53 -0700 (PDT)
-Message-ID: <dfebd3d3-29e6-b01e-a163-2ea0766062ae@bytedance.com>
-Date:   Thu, 15 Sep 2022 15:43:48 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bosun96f8TMfDCqWwTtVlpT+bonCDQv+KvF6kBQMBX8=;
+        b=ljq8UQaXkr9vfCv9n4ezlxERdZPTcWTI2rOCMDCD1diyuexKeE5nqCRPYVqJp/QWtN
+         s7kVd7zYbMkyM/yoIneftC4v3rU5iIT2Qzd4xgV70AlBYCdOBXcWnRnibNck/Vp0vTlG
+         EPKgohCQ1k6+13ovumelRiellO9cNrJrbvC7KvTd4zCs1NhWReFdIHDa95dji7s1Vw+K
+         IWXIT0euSMAlpjW9DkfRqWuMvDPo5zhrbPfp/RsuYwZAILa4Cbqnf70RD8z4ecqUqgTA
+         ava+30yRPxniV+IjvqxVGzbN0OASncNXEQE7hT/HheQjFv3tpm3tX4aCUcC0DDA1JbJK
+         di0Q==
+X-Gm-Message-State: ACgBeo1AGrfRLBOpO0dau9CR6tKhYrIJWrqIUaBH2LPPCwWSYiRZJ3K5
+        AxiVyUIT+7/ZzQJ7ewKCNVD85VHKAzT4Cp2hRGRLmw==
+X-Google-Smtp-Source: AA6agR4kuJ81GTOL2NIPCZqGS/eAy9AELyIu2A+RpvsYIDRvcgvm6Cn3ME4fmf5Ih7iL0AY0pIhOtD+MmBnUWyuJVok=
+X-Received: by 2002:a17:907:9816:b0:741:89cc:af19 with SMTP id
+ ji22-20020a170907981600b0074189ccaf19mr27456998ejc.492.1663227897696; Thu, 15
+ Sep 2022 00:44:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [External] Re: [PATCH V3 3/6] erofs: introduce 'domain_id' mount
- option
-To:     JeffleXu <jefflexu@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, huyue2@coolpad.com
-References: <20220914105041.42970-1-zhujia.zj@bytedance.com>
- <20220914105041.42970-4-zhujia.zj@bytedance.com>
- <6644b9eb-d477-bbca-bbbe-b41776e38a46@linux.alibaba.com>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <6644b9eb-d477-bbca-bbbe-b41776e38a46@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220914151145.73253-1-brgl@bgdev.pl> <YyH/hJMyPZSqyvQj@sol>
+ <CAMRc=McERgSkmpWv4k1eB1mtRU=jGhWiXYMdq72h9H9SYuF6Ng@mail.gmail.com> <YyIEbW2gx/FX7ele@sol>
+In-Reply-To: <YyIEbW2gx/FX7ele@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 15 Sep 2022 09:44:46 +0200
+Message-ID: <CAMRc=MeyPsCzY-mySx7YizpaJ5Dtq4tnjs5ccpT_tm4ckWkuSw@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: TODO: add an item about GPIO safe-state
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> You call the driver to set the value after calling the free()?
+>On Wed, Sep 14, 2022 at 6:42 PM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Wed, Sep 14, 2022 at 06:25:21PM +0200, Bartosz Golaszewski wrote:
+> > On Wed, Sep 14, 2022 at 6:21 PM Kent Gibson <warthog618@gmail.com> wrote:
+> > >
+> > > On Wed, Sep 14, 2022 at 05:11:45PM +0200, Bartosz Golaszewski wrote:
+> > > > This adds a new TODO item for gpiolib and can also be used to start
+> > > > a discussion about the need for it and implementation details.
+> > > >
+> > > > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> > > > ---
+> > > >  drivers/gpio/TODO | 22 ++++++++++++++++++++++
+> > > >  1 file changed, 22 insertions(+)
+> > > >
+> > > > diff --git a/drivers/gpio/TODO b/drivers/gpio/TODO
+> > > > index f87ff3fa8a53..6ab39c5cec9d 100644
+> > > > --- a/drivers/gpio/TODO
+> > > > +++ b/drivers/gpio/TODO
+> > > > @@ -197,3 +197,25 @@ A small number of drivers have been converted (pl061, tegra186, msm,
+> > > >  amd, apple), and can be used as examples of how to proceed with this
+> > > >  conversion. Note that drivers using the generic irqchip framework
+> > > >  cannot be converted yet, but watch this space!
+> > > > +
+> > > > +Safe-state of GPIOs
+> > > > +
+> > > > +During 2022 Linux Plumbers Conference's GPIO & pinctrl BOF it's been discussed
+> > > > +that we don't have any middle ground between hogging GPIO lines and letting the
+> > > > +user (either in-kernel or user-space) control them. Either the lines are forever
+> > > > +reserved as hogs or their state is undefined unless requested.
+> > > > +
+> > > > +Currently the behavior of GPIOs that were not requested or were released is
+> > > > +largely driver dependent (the provider driver decides whether the line's state
+> > > > +is reverted to some predefined value or left as-is). This can be problematic
+> > > > +as the output state of a line can damage physical hardware.
+> > > > +
+> > > > +This item is about proposing a solution, most likely in the form of a new device
+> > > > +property called "safe-state" that would define the safe states of specific lines
+> > > > +(e.g. output-high) but not block the line from being requested by users who
+> > > > +could then modify that default state. Once released the GPIO core would then
+> > > > +put the line back into the "safe-state".
+> > > > +
+> > >
+> > > Geert suggests idle-state, rather than safe-state, but you call it
+> > > the "default state" here as well - pick one.
+> > >
+> >
+> > idle-state it is then.
+> >
+> > > So this idle-state would be another attribute on a line that the user
+> > > could configure via the GPIO uAPI, and so replicate the "set and forget"
+> > > sysfs behavior that we are currently missing, and which seems to be the
+> > > biggest sticking point for a transition away from sysfs?
+> > >
+> >
+> > No, this should only be defined on the device tree or in ACPI. As the
+> > HW policy of a device. I don't think we should allow user-space to
+> > override this behavior.
+> >
+>
+> Oh, ok - from the item I got the impression you did want to be able to
+> control it from user-space.
+>
 
+Oh god no, then it would be sysfs all over again.
 
-在 2022/9/15 15:30, JeffleXu 写道:
-> 
-> 
-> On 9/14/22 6:50 PM, Jia Zhu wrote:
->> Introduce 'domain_id' mount option to enable shared domain sementics.
->> In which case, the related cookie is shared if two mountpoints in the
->> same domain have the same data blob. Users could specify the name of
->> domain by this mount option.
->>
->> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> 
-> Could you please move this patch to the end of this patch set, so that
-> once the "domain_id" mount option is visible to users, this feature
-> really works?
-> 
-Thanks for your example. I'll revise it.
-> 
->> ---
->>   fs/erofs/internal.h |  1 +
->>   fs/erofs/super.c    | 17 +++++++++++++++++
->>   fs/erofs/sysfs.c    | 19 +++++++++++++++++--
->>   3 files changed, 35 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
->> index aa71eb65e965..2d129c6b3027 100644
->> --- a/fs/erofs/internal.h
->> +++ b/fs/erofs/internal.h
->> @@ -76,6 +76,7 @@ struct erofs_mount_opts {
->>   #endif
->>   	unsigned int mount_opt;
->>   	char *fsid;
->> +	char *domain_id;
->>   };
-> 
-> Indeed we can add @domain_id field into struct erofs_mount_opts in prep
-> for the following implementation of the domain_id feature. IOW, the
-> above change can be folded into patch 4, just like what [1] does.
-> 
-> [1]
-> https://github.com/torvalds/linux/commit/c6be2bd0a5dd91f98d6b5d2df2c79bc32993352c#diff-eee5fb30f4e83505af808386e84c953266d2fd2e76b6e66cb94cf6e849881240R77
-> 
-> 
->>   
->>   struct erofs_dev_context {
->> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
->> index 7aa57dcebf31..856758ee4869 100644
->> --- a/fs/erofs/super.c
->> +++ b/fs/erofs/super.c
->> @@ -440,6 +440,7 @@ enum {
->>   	Opt_dax_enum,
->>   	Opt_device,
->>   	Opt_fsid,
->> +	Opt_domain_id,
->>   	Opt_err
->>   };
->>   
->> @@ -465,6 +466,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
->>   	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
->>   	fsparam_string("device",	Opt_device),
->>   	fsparam_string("fsid",		Opt_fsid),
->> +	fsparam_string("domain_id",	Opt_domain_id),
->>   	{}
->>   };
->>   
->> @@ -568,6 +570,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
->>   			return -ENOMEM;
->>   #else
->>   		errorfc(fc, "fsid option not supported");
->> +#endif
->> +		break;
->> +	case Opt_domain_id:
->> +#ifdef CONFIG_EROFS_FS_ONDEMAND
->> +		kfree(ctx->opt.domain_id);
->> +		ctx->opt.domain_id = kstrdup(param->string, GFP_KERNEL);
->> +		if (!ctx->opt.domain_id)
->> +			return -ENOMEM;
->> +#else
->> +		errorfc(fc, "domain_id option not supported");
->>   #endif
->>   		break;
->>   	default:
->> @@ -695,6 +707,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->>   	sb->s_fs_info = sbi;
->>   	sbi->opt = ctx->opt;
->>   	ctx->opt.fsid = NULL;
->> +	ctx->opt.domain_id = NULL;
->>   	sbi->devs = ctx->devs;
->>   	ctx->devs = NULL;
->>   
->> @@ -834,6 +847,7 @@ static void erofs_fc_free(struct fs_context *fc)
->>   
->>   	erofs_free_dev_context(ctx->devs);
->>   	kfree(ctx->opt.fsid);
->> +	kfree(ctx->opt.domain_id);
->>   	kfree(ctx);
->>   }
->>   
->> @@ -887,6 +901,7 @@ static void erofs_kill_sb(struct super_block *sb)
->>   	fs_put_dax(sbi->dax_dev, NULL);
->>   	erofs_fscache_unregister_fs(sb);
->>   	kfree(sbi->opt.fsid);
->> +	kfree(sbi->opt.domain_id);
->>   	kfree(sbi);
->>   	sb->s_fs_info = NULL;
->>   }
->> @@ -1040,6 +1055,8 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
->>   #ifdef CONFIG_EROFS_FS_ONDEMAND
->>   	if (opt->fsid)
->>   		seq_printf(seq, ",fsid=%s", opt->fsid);
->> +	if (opt->domain_id)
->> +		seq_printf(seq, ",domain_id=%s", opt->domain_id);
->>   #endif
->>   	return 0;
->>   }
->> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
->> index c1383e508bbe..341fb43ad587 100644
->> --- a/fs/erofs/sysfs.c
->> +++ b/fs/erofs/sysfs.c
->> @@ -201,12 +201,27 @@ static struct kobject erofs_feat = {
->>   int erofs_register_sysfs(struct super_block *sb)
->>   {
->>   	struct erofs_sb_info *sbi = EROFS_SB(sb);
->> +	char *name;
->> +	char *str = NULL;
->>   	int err;
->>   
->> +	if (erofs_is_fscache_mode(sb)) {
->> +		if (sbi->opt.domain_id) {
->> +			str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id,
->> +					sbi->opt.fsid);
->> +			if (!str)
->> +				return -ENOMEM;
->> +			name = str;
->> +		} else {
->> +			name = sbi->opt.fsid;
->> +		}
->> +	} else {
->> +		name = sb->s_id;
->> +	}
->>   	sbi->s_kobj.kset = &erofs_root;
->>   	init_completion(&sbi->s_kobj_unregister);
->> -	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
->> -			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
->> +	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s", name);
->> +	kfree(str);
->>   	if (err)
->>   		goto put_sb_kobj;
->>   	return 0;
-> 
+> > > For backward compatibility the default idle-state, i.e. the value the
+> > > idle-state would take if not explicitly set, would map to existing
+> > > behaviour, so let the driver decide?
+> > >
+> > > What happens when gpiolib frees the line?  Isn't the driver still able
+> > > to do what it likes to the line at that point, no matter what GPIO core
+> > > has set it to previously? e.g. gpio_sim_free() restores the line to its
+> > > own internal pull value.
+> > >
+> >
+> > This "idle-state" property wouldn't be mandatory and normally would
+> > only be defined for a limited set of lines. I'd say we just override
+> > whatever the driver does in free() (most drivers don't implement it
+> > BTW) and do what the property says we should.
+> >
+>
+> Not sure what "override" involves.
+> You call the driver to set the value after calling the free()?
+>
+
+Yes. We call the driver's free() callback and it does something in it
+(potentially set some predefined state). We see that this line has the
+idle-state property defined so we call into the driver and set the
+value as defined by idle-state.
+
+Bartosz
