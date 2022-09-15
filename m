@@ -2,457 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E67A5B97EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7A85B97C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 11:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiIOJrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 05:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S229939AbiIOJpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 05:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiIOJpp (ORCPT
+        with ESMTP id S229886AbiIOJo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 05:45:45 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7DC99B72;
-        Thu, 15 Sep 2022 02:45:41 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1663235137; bh=bRQJtjHiqmiUbO7aODNsVMY+QgEBMDgjvdHacDpVq3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FEyzbO6PLQtLJWO8bywhcNmJekXO2xIjim1gKBSE2jRXse1FHO4DCyxb05ZG2l0+g
-         jqX/i0JY7dgzaiqCnrfpdW6kD7WFH7KS629yZ6jeDudrpnsJcRNcJZ8I1+M+Du++WX
-         aQVjSXXyIbuC7hXAKc83RM/ryAbfNgjBQwG/XGJE=
-To:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Matt Flax <flatmax@flatmax.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: [PATCH v2 09/11] ASoC: cs42l83: Extend CS42L42 support to new part
+        Thu, 15 Sep 2022 05:44:57 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3942713EA7;
+        Thu, 15 Sep 2022 02:44:47 -0700 (PDT)
 Date:   Thu, 15 Sep 2022 11:44:42 +0200
-Message-Id: <20220915094444.11434-10-povik+lin@cutebit.org>
-In-Reply-To: <20220915094444.11434-1-povik+lin@cutebit.org>
-References: <20220915094444.11434-1-povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663235085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9HGr/Xz3Nz5Oe6gQpIzDaO+SoCtgP8KCXpxOyiLDjzM=;
+        b=vyZ1eCcD/MXc4cKd0CBFHSIaK3VdW708iT8jcXLnW7GbWRTKQhLFORj0pyCiZdva94aDwB
+        3Me4DVSj1iVzzVcqiY+SC+tk4PdmeIZxyd7Nv/ROmTCJqAdu/9iYBlly0VGgDzEHQIK0xp
+        HIdSCDtx2tbtZnOp65bRmR7bBhJaZv4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Subject: Re: [V2 PATCH 2/8] KVM: selftests: Add arch specific initialization
+Message-ID: <20220915094442.45eldu4bes5alacm@kamzik>
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-3-vannapurve@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915000448.1674802-3-vannapurve@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CS42L83 part is a headphone jack codec found in recent Apple
-machines. It is a publicly undocumented part but as far as can be told
-it is identical to CS42L42 except for two points:
+On Thu, Sep 15, 2022 at 12:04:42AM +0000, Vishal Annapurve wrote:
+> Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
+> handle initialization before running any selftest logic.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
+>  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
+>  tools/testing/selftests/kvm/lib/kvm_util.c     |  2 ++
+>  .../selftests/kvm/lib/riscv/processor.c        |  4 ++++
+>  .../selftests/kvm/lib/s390x/processor.c        |  4 ++++
+>  .../selftests/kvm/lib/x86_64/processor.c       |  4 ++++
+>  6 files changed, 28 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 24fde97f6121..98edbbda9f97 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -834,4 +834,9 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+>  	return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
+>  }
+>  
+> +/*
+> + * API to execute architecture specific setup before executing selftest logic.
+> + */
+> +void kvm_selftest_arch_init(void);
+> +
+>  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 6f5551368944..2281d6c5d02f 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -495,15 +495,6 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
+>  	close(kvm_fd);
+>  }
+>  
+> -/*
+> - * arm64 doesn't have a true default mode, so start by computing the
+> - * available IPA space and page sizes early.
+> - */
+> -void __attribute__((constructor)) init_guest_modes(void)
+> -{
+> -       guest_modes_append_default();
+> -}
+> -
+>  void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+>  	       uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
+>  	       uint64_t arg6, struct arm_smccc_res *res)
+> @@ -528,3 +519,12 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+>  		       [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
+>  		     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
+>  }
+> +
+> +/*
+> + * arm64 doesn't have a true default mode, so start by computing the
+> + * available IPA space and page sizes early.
+> + */
 
- * The chip ID is different.
+It'd be better to move this comment inside the function above the
+guest_modes_append_default call.
 
- * Of those registers for which we have a default value in the existing
-   CS42L42 kernel driver, one register (MCLK_CTL) differs in its reset
-   value on CS42L83.
+> +void kvm_selftest_arch_init(void)
+> +{
+> +	guest_modes_append_default();
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 3c83838999f5..dafe4471a6c7 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1984,4 +1984,6 @@ void __attribute((constructor)) kvm_selftest_init(void)
+>  {
+>  	/* Tell stdout not to buffer its content. */
+>  	setbuf(stdout, NULL);
+> +
+> +	kvm_selftest_arch_init();
+>  }
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index 604478151212..26660dd2ba78 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -362,3 +362,7 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 89d7340d9cbd..8654ec74009a 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -218,3 +218,7 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 2e6e61bbe81b..20bf125f9363 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1311,3 +1311,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  
+>  	return val == 'Y';
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> -- 
+> 2.37.2.789.g6183377224-goog
+>
 
-To address those two points (and only those), add to the CS42L42 driver
-a separate CS42L83 front.
+Otherwise,
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
-There's a simpler alternative to the full cs42l83-i2c.c duplication:
-We could drop the default
-
-  { CS42L42_MCLK_CTL,     0x02 },
-
-from the CS42L42 regmap, and not distinguish between the parts -- that
-would work too.
-
- MAINTAINERS                    |   1 +
- include/sound/cs42l42.h        |   1 +
- sound/soc/codecs/Kconfig       |   7 +
- sound/soc/codecs/Makefile      |   2 +
- sound/soc/codecs/cs42l42-i2c.c |   1 +
- sound/soc/codecs/cs42l42.c     |   9 +-
- sound/soc/codecs/cs42l42.h     |   1 +
- sound/soc/codecs/cs42l83-i2c.c | 242 +++++++++++++++++++++++++++++++++
- 8 files changed, 260 insertions(+), 4 deletions(-)
- create mode 100644 sound/soc/codecs/cs42l83-i2c.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9393198af38f..3d3bc5f37432 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1906,6 +1906,7 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Maintained
- F:	Documentation/devicetree/bindings/sound/apple,*
- F:	sound/soc/apple/*
-+F:	sound/soc/codecs/cs42l83-i2c.c
- 
- ARM/ARTPEC MACHINE SUPPORT
- M:	Jesper Nilsson <jesper.nilsson@axis.com>
-diff --git a/include/sound/cs42l42.h b/include/sound/cs42l42.h
-index a55d522f1772..1d1c24fdd0ca 100644
---- a/include/sound/cs42l42.h
-+++ b/include/sound/cs42l42.h
-@@ -40,6 +40,7 @@
- #define CS42L42_PAGE_30		0x3000
- 
- #define CS42L42_CHIP_ID		0x42A42
-+#define CS42L83_CHIP_ID		0x42A83
- 
- /* Page 0x10 Global Registers */
- #define CS42L42_DEVID_AB		(CS42L42_PAGE_10 + 0x01)
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 01725d0a9500..444cee829a26 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -722,6 +722,13 @@ config SND_SOC_CS42L73
- 	tristate "Cirrus Logic CS42L73 CODEC"
- 	depends on I2C
- 
-+config SND_SOC_CS42L83
-+	tristate "Cirrus Logic CS42L83 CODEC"
-+	depends on I2C
-+	select REGMAP
-+	select REGMAP_I2C
-+	select SND_SOC_CS42L42_CORE
-+
- config SND_SOC_CS4234
- 	tristate "Cirrus Logic CS4234 CODEC"
- 	depends on I2C
-diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index 5b7020a0b234..9170ee1447dd 100644
---- a/sound/soc/codecs/Makefile
-+++ b/sound/soc/codecs/Makefile
-@@ -71,6 +71,7 @@ snd-soc-cs42l51-i2c-objs := cs42l51-i2c.o
- snd-soc-cs42l52-objs := cs42l52.o
- snd-soc-cs42l56-objs := cs42l56.o
- snd-soc-cs42l73-objs := cs42l73.o
-+snd-soc-cs42l83-i2c-objs := cs42l83-i2c.o
- snd-soc-cs4234-objs := cs4234.o
- snd-soc-cs4265-objs := cs4265.o
- snd-soc-cs4270-objs := cs4270.o
-@@ -430,6 +431,7 @@ obj-$(CONFIG_SND_SOC_CS42L51_I2C)	+= snd-soc-cs42l51-i2c.o
- obj-$(CONFIG_SND_SOC_CS42L52)	+= snd-soc-cs42l52.o
- obj-$(CONFIG_SND_SOC_CS42L56)	+= snd-soc-cs42l56.o
- obj-$(CONFIG_SND_SOC_CS42L73)	+= snd-soc-cs42l73.o
-+obj-$(CONFIG_SND_SOC_CS42L83)	+= snd-soc-cs42l83-i2c.o
- obj-$(CONFIG_SND_SOC_CS4234)	+= snd-soc-cs4234.o
- obj-$(CONFIG_SND_SOC_CS4265)	+= snd-soc-cs4265.o
- obj-$(CONFIG_SND_SOC_CS4270)	+= snd-soc-cs4270.o
-diff --git a/sound/soc/codecs/cs42l42-i2c.c b/sound/soc/codecs/cs42l42-i2c.c
-index 5f01b6adc17e..35fecff0f74f 100644
---- a/sound/soc/codecs/cs42l42-i2c.c
-+++ b/sound/soc/codecs/cs42l42-i2c.c
-@@ -31,6 +31,7 @@ static int cs42l42_i2c_probe(struct i2c_client *i2c_client)
- 		return ret;
- 	}
- 
-+	cs42l42->devid = CS42L42_CHIP_ID;
- 	cs42l42->dev = dev;
- 	cs42l42->regmap = regmap;
- 	cs42l42->irq = i2c_client->irq;
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index 7b9237f0ce78..c1d7eb12b0ba 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -2317,11 +2317,11 @@ int cs42l42_init(struct cs42l42_private *cs42l42)
- 		goto err_disable;
- 	}
- 
--	if (devid != CS42L42_CHIP_ID) {
-+	if (devid != cs42l42->devid) {
- 		ret = -ENODEV;
- 		dev_err(cs42l42->dev,
--			"CS42L42 Device ID (%X). Expected %X\n",
--			devid, CS42L42_CHIP_ID);
-+			"CS42L%x Device ID (%X). Expected %X\n",
-+			cs42l42->devid & 0xff, devid, cs42l42->devid);
- 		goto err_disable;
- 	}
- 
-@@ -2332,7 +2332,8 @@ int cs42l42_init(struct cs42l42_private *cs42l42)
- 	}
- 
- 	dev_info(cs42l42->dev,
--		 "Cirrus Logic CS42L42, Revision: %02X\n", reg & 0xFF);
-+		 "Cirrus Logic CS42L%x, Revision: %02X\n",
-+		 cs42l42->devid & 0xff, reg & 0xFF);
- 
- 	/* Power up the codec */
- 	regmap_update_bits(cs42l42->regmap, CS42L42_PWR_CTL1,
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index be6f979c82ec..bc51bb09da5c 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -31,6 +31,7 @@ struct  cs42l42_private {
- 	struct completion pdn_done;
- 	struct snd_soc_jack *jack;
- 	struct mutex irq_lock;
-+	int devid;
- 	int irq;
- 	int pll_config;
- 	u32 sclk;
-diff --git a/sound/soc/codecs/cs42l83-i2c.c b/sound/soc/codecs/cs42l83-i2c.c
-new file mode 100644
-index 000000000000..ba8772aa51e1
---- /dev/null
-+++ b/sound/soc/codecs/cs42l83-i2c.c
-@@ -0,0 +1,242 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * cs42l83-i2c.c -- CS42L83 ALSA SoC audio driver for I2C
-+ *
-+ * Based on cs42l42-i2c.c:
-+ *   Copyright 2016, 2022 Cirrus Logic, Inc.
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+#include "cs42l42.h"
-+
-+static const struct reg_default cs42l83_reg_defaults[] = {
-+	{ CS42L42_FRZ_CTL,			0x00 },
-+	{ CS42L42_SRC_CTL,			0x10 },
-+	{ CS42L42_MCLK_CTL,			0x00 }, /* <- only deviation from CS42L42 */
-+	{ CS42L42_SFTRAMP_RATE,			0xA4 },
-+	{ CS42L42_SLOW_START_ENABLE,		0x70 },
-+	{ CS42L42_I2C_DEBOUNCE,			0x88 },
-+	{ CS42L42_I2C_STRETCH,			0x03 },
-+	{ CS42L42_I2C_TIMEOUT,			0xB7 },
-+	{ CS42L42_PWR_CTL1,			0xFF },
-+	{ CS42L42_PWR_CTL2,			0x84 },
-+	{ CS42L42_PWR_CTL3,			0x20 },
-+	{ CS42L42_RSENSE_CTL1,			0x40 },
-+	{ CS42L42_RSENSE_CTL2,			0x00 },
-+	{ CS42L42_OSC_SWITCH,			0x00 },
-+	{ CS42L42_RSENSE_CTL3,			0x1B },
-+	{ CS42L42_TSENSE_CTL,			0x1B },
-+	{ CS42L42_TSRS_INT_DISABLE,		0x00 },
-+	{ CS42L42_HSDET_CTL1,			0x77 },
-+	{ CS42L42_HSDET_CTL2,			0x00 },
-+	{ CS42L42_HS_SWITCH_CTL,		0xF3 },
-+	{ CS42L42_HS_CLAMP_DISABLE,		0x00 },
-+	{ CS42L42_MCLK_SRC_SEL,			0x00 },
-+	{ CS42L42_SPDIF_CLK_CFG,		0x00 },
-+	{ CS42L42_FSYNC_PW_LOWER,		0x00 },
-+	{ CS42L42_FSYNC_PW_UPPER,		0x00 },
-+	{ CS42L42_FSYNC_P_LOWER,		0xF9 },
-+	{ CS42L42_FSYNC_P_UPPER,		0x00 },
-+	{ CS42L42_ASP_CLK_CFG,			0x00 },
-+	{ CS42L42_ASP_FRM_CFG,			0x10 },
-+	{ CS42L42_FS_RATE_EN,			0x00 },
-+	{ CS42L42_IN_ASRC_CLK,			0x00 },
-+	{ CS42L42_OUT_ASRC_CLK,			0x00 },
-+	{ CS42L42_PLL_DIV_CFG1,			0x00 },
-+	{ CS42L42_ADC_OVFL_INT_MASK,		0x01 },
-+	{ CS42L42_MIXER_INT_MASK,		0x0F },
-+	{ CS42L42_SRC_INT_MASK,			0x0F },
-+	{ CS42L42_ASP_RX_INT_MASK,		0x1F },
-+	{ CS42L42_ASP_TX_INT_MASK,		0x0F },
-+	{ CS42L42_CODEC_INT_MASK,		0x03 },
-+	{ CS42L42_SRCPL_INT_MASK,		0x7F },
-+	{ CS42L42_VPMON_INT_MASK,		0x01 },
-+	{ CS42L42_PLL_LOCK_INT_MASK,		0x01 },
-+	{ CS42L42_TSRS_PLUG_INT_MASK,		0x0F },
-+	{ CS42L42_PLL_CTL1,			0x00 },
-+	{ CS42L42_PLL_DIV_FRAC0,		0x00 },
-+	{ CS42L42_PLL_DIV_FRAC1,		0x00 },
-+	{ CS42L42_PLL_DIV_FRAC2,		0x00 },
-+	{ CS42L42_PLL_DIV_INT,			0x40 },
-+	{ CS42L42_PLL_CTL3,			0x10 },
-+	{ CS42L42_PLL_CAL_RATIO,		0x80 },
-+	{ CS42L42_PLL_CTL4,			0x03 },
-+	{ CS42L42_LOAD_DET_EN,			0x00 },
-+	{ CS42L42_HSBIAS_SC_AUTOCTL,		0x03 },
-+	{ CS42L42_WAKE_CTL,			0xC0 },
-+	{ CS42L42_ADC_DISABLE_MUTE,		0x00 },
-+	{ CS42L42_TIPSENSE_CTL,			0x02 },
-+	{ CS42L42_MISC_DET_CTL,			0x03 },
-+	{ CS42L42_MIC_DET_CTL1,			0x1F },
-+	{ CS42L42_MIC_DET_CTL2,			0x2F },
-+	{ CS42L42_DET_INT1_MASK,		0xE0 },
-+	{ CS42L42_DET_INT2_MASK,		0xFF },
-+	{ CS42L42_HS_BIAS_CTL,			0xC2 },
-+	{ CS42L42_ADC_CTL,			0x00 },
-+	{ CS42L42_ADC_VOLUME,			0x00 },
-+	{ CS42L42_ADC_WNF_HPF_CTL,		0x71 },
-+	{ CS42L42_DAC_CTL1,			0x00 },
-+	{ CS42L42_DAC_CTL2,			0x02 },
-+	{ CS42L42_HP_CTL,			0x0D },
-+	{ CS42L42_CLASSH_CTL,			0x07 },
-+	{ CS42L42_MIXER_CHA_VOL,		0x3F },
-+	{ CS42L42_MIXER_ADC_VOL,		0x3F },
-+	{ CS42L42_MIXER_CHB_VOL,		0x3F },
-+	{ CS42L42_EQ_COEF_IN0,			0x00 },
-+	{ CS42L42_EQ_COEF_IN1,			0x00 },
-+	{ CS42L42_EQ_COEF_IN2,			0x00 },
-+	{ CS42L42_EQ_COEF_IN3,			0x00 },
-+	{ CS42L42_EQ_COEF_RW,			0x00 },
-+	{ CS42L42_EQ_COEF_OUT0,			0x00 },
-+	{ CS42L42_EQ_COEF_OUT1,			0x00 },
-+	{ CS42L42_EQ_COEF_OUT2,			0x00 },
-+	{ CS42L42_EQ_COEF_OUT3,			0x00 },
-+	{ CS42L42_EQ_INIT_STAT,			0x00 },
-+	{ CS42L42_EQ_START_FILT,		0x00 },
-+	{ CS42L42_EQ_MUTE_CTL,			0x00 },
-+	{ CS42L42_SP_RX_CH_SEL,			0x04 },
-+	{ CS42L42_SP_RX_ISOC_CTL,		0x04 },
-+	{ CS42L42_SP_RX_FS,			0x8C },
-+	{ CS42l42_SPDIF_CH_SEL,			0x0E },
-+	{ CS42L42_SP_TX_ISOC_CTL,		0x04 },
-+	{ CS42L42_SP_TX_FS,			0xCC },
-+	{ CS42L42_SPDIF_SW_CTL1,		0x3F },
-+	{ CS42L42_SRC_SDIN_FS,			0x40 },
-+	{ CS42L42_SRC_SDOUT_FS,			0x40 },
-+	{ CS42L42_SPDIF_CTL1,			0x01 },
-+	{ CS42L42_SPDIF_CTL2,			0x00 },
-+	{ CS42L42_SPDIF_CTL3,			0x00 },
-+	{ CS42L42_SPDIF_CTL4,			0x42 },
-+	{ CS42L42_ASP_TX_SZ_EN,			0x00 },
-+	{ CS42L42_ASP_TX_CH_EN,			0x00 },
-+	{ CS42L42_ASP_TX_CH_AP_RES,		0x0F },
-+	{ CS42L42_ASP_TX_CH1_BIT_MSB,		0x00 },
-+	{ CS42L42_ASP_TX_CH1_BIT_LSB,		0x00 },
-+	{ CS42L42_ASP_TX_HIZ_DLY_CFG,		0x00 },
-+	{ CS42L42_ASP_TX_CH2_BIT_MSB,		0x00 },
-+	{ CS42L42_ASP_TX_CH2_BIT_LSB,		0x00 },
-+	{ CS42L42_ASP_RX_DAI0_EN,		0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH1_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI0_CH1_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH1_BIT_LSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH2_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI0_CH2_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH2_BIT_LSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH3_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI0_CH3_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH3_BIT_LSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH4_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI0_CH4_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI0_CH4_BIT_LSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI1_CH1_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI1_CH1_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI1_CH1_BIT_LSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI1_CH2_AP_RES,	0x03 },
-+	{ CS42L42_ASP_RX_DAI1_CH2_BIT_MSB,	0x00 },
-+	{ CS42L42_ASP_RX_DAI1_CH2_BIT_LSB,	0x00 },
-+};
-+
-+/*
-+ * This is all the same as for CS42L42 but we
-+ * replace the on-reset register defaults.
-+ */
-+const struct regmap_config cs42l83_regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.readable_reg = cs42l42_readable_register,
-+	.volatile_reg = cs42l42_volatile_register,
-+
-+	.ranges = &cs42l42_page_range,
-+	.num_ranges = 1,
-+
-+	.max_register = CS42L42_MAX_REGISTER,
-+	.reg_defaults = cs42l83_reg_defaults,
-+	.num_reg_defaults = ARRAY_SIZE(cs42l83_reg_defaults),
-+	.cache_type = REGCACHE_RBTREE,
-+
-+	.use_single_read = true,
-+	.use_single_write = true,
-+};
-+
-+static int cs42l83_i2c_probe(struct i2c_client *i2c_client)
-+{
-+	struct device *dev = &i2c_client->dev;
-+	struct cs42l42_private *cs42l83;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	cs42l83 = devm_kzalloc(dev, sizeof(*cs42l83), GFP_KERNEL);
-+	if (!cs42l83)
-+		return -ENOMEM;
-+
-+	regmap = devm_regmap_init_i2c(i2c_client, &cs42l83_regmap);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(&i2c_client->dev, PTR_ERR(regmap),
-+				     "regmap_init() failed\n");
-+
-+	cs42l83->devid = CS42L83_CHIP_ID;
-+	cs42l83->dev = dev;
-+	cs42l83->regmap = regmap;
-+	cs42l83->irq = i2c_client->irq;
-+
-+	ret = cs42l42_common_probe(cs42l83, &cs42l42_soc_component, &cs42l42_dai);
-+	if (ret)
-+		return ret;
-+
-+	return cs42l42_init(cs42l83);
-+}
-+
-+static int cs42l83_i2c_remove(struct i2c_client *i2c_client)
-+{
-+	struct cs42l42_private *cs42l83 = dev_get_drvdata(&i2c_client->dev);
-+
-+	cs42l42_common_remove(cs42l83);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs42l83_i2c_resume(struct device *dev)
-+{
-+	int ret;
-+
-+	ret = cs42l42_resume(dev);
-+	if (ret)
-+		return ret;
-+
-+	cs42l42_resume_restore(dev);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops cs42l83_i2c_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l83_i2c_resume)
-+};
-+
-+static const struct of_device_id __maybe_unused cs42l83_of_match[] = {
-+	{ .compatible = "cirrus,cs42l83", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, cs42l83_of_match);
-+
-+static struct i2c_driver cs42l83_i2c_driver = {
-+	.driver = {
-+		.name = "cs42l83",
-+		.pm = &cs42l83_i2c_pm_ops,
-+		.of_match_table = of_match_ptr(cs42l83_of_match),
-+		},
-+	.probe_new = cs42l83_i2c_probe,
-+	.remove = cs42l83_i2c_remove,
-+};
-+
-+module_i2c_driver(cs42l83_i2c_driver);
-+
-+MODULE_DESCRIPTION("ASoC CS42L83 I2C driver");
-+MODULE_AUTHOR("Martin Povišer <povik+lin@cutebit.org>");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(SND_SOC_CS42L42_CORE);
--- 
-2.33.0
-
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
