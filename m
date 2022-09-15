@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A669E5B9A4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424535B9A4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiIOMEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S230088AbiIOMEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiIOMEc (ORCPT
+        with ESMTP id S230082AbiIOMEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:04:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE624F6AF;
-        Thu, 15 Sep 2022 05:04:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3C05B81FC2;
-        Thu, 15 Sep 2022 12:04:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C37C433C1;
-        Thu, 15 Sep 2022 12:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663243462;
-        bh=RIQem7khPhER0zIIsxM9+l0wsS7loevZzvbu+Al+lKI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BrmLhK57lFGnX+95oZ/W9QSJRrgeKHEC/x9Fbfn3HqyXDZ5Fa1EhFeYZybBH2Tb8P
-         /QO+23oASbYMOJ70/BcHUFE14fr+HfBJpDsU/nNLEYv4h94/RmL9e8k1dZGELXOr+1
-         paxCSJZYRI5VQovh8dMphoEhm/7AZTqRif1Tovl7R+3So3fi7CqFkBnU+lZE7UVh+G
-         ycicJTwEjVRrl5oBkZixATgd7D0oSQSmf5DCzzpOIeVpuFIHRTIPcVFsQzAvdGZ5v0
-         GgzlCsrQdKPq0iWcDHJ8JvbDzETkEVd1kjAAtZfUCYu8CpLc53KQFGOfo3q9X4oQDz
-         jCRjuYk8EzPKA==
-Date:   Thu, 15 Sep 2022 20:04:13 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Marek Vasut <marex@denx.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: Re: [PATCH v8 0/5] add imx8dxl evk support
-Message-ID: <20220915120413.GL1728671@dragon>
-References: <20220914135848.118616-1-shenwei.wang@nxp.com>
+        Thu, 15 Sep 2022 08:04:46 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3E0B1CB;
+        Thu, 15 Sep 2022 05:04:41 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso221142wmq.2;
+        Thu, 15 Sep 2022 05:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=GTDWAPzRsyFSCgEo/xQ7NozivtexTQr6waF1dmd0WW4=;
+        b=XdgJU1eTrvqiPlVuWBJIoSVOz6UeMHYPWk2LIJKO9jGRyrapANn6Qa+MGqW3XjK05L
+         eRaX31dmXi7rHUPS4HjgCdKFWuVG6dtLhRCdykqbCGjYVePGFee9sMKgf0tjI+4sTx8T
+         daDF3+uwqyh3NybjbxOnC/krpSXZYQi3yy8M4TccmsNSvEDAsvYwCGa0IxC9cFVhl6jA
+         1RwM4zgJJsMt0AGb2arJF1P78ZjuWOPMnolYxKE/bw8h2G86/z0SOxp/QhVubenSQPH7
+         8EEWHYo28k0jQG6tcCHrgKzbxCRunvMRcw8mKvpk39A50eSaCKHdtjvWT3PIUk1AXpIS
+         yDDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=GTDWAPzRsyFSCgEo/xQ7NozivtexTQr6waF1dmd0WW4=;
+        b=UEWG/8ySJppY32NQFW7WRge7a7BNTsqsK3VlOQFATYEqFxZfwuvDBlib27YUFSK5k1
+         zRimHWHtRZjOP4QrTgbzjmbFrgMmUkR7zZjHuHbFBZkDiZTwc5m91QCTsMTyceOIeLN6
+         u+AFo6UPGranjkf8wLqPqB0vxtGoBYzX/uOkblmSIePdFGZMg7LRxiHlkBEVrjQYnaW+
+         v2oc8pvf8kydsuETnji0i2b+aFbjHdRzk4C+jYHpi00o9BwBhph5JAmL0lmMs2M2Oknm
+         tLl37wuDFFdrk7YhiUjoAN5K1zucjwjNgRBw3ejSEawPBQJRPBJUwta4AlIryCVg25Vq
+         nxPw==
+X-Gm-Message-State: ACgBeo1cRZK+hBEZ3IKgnq9wc3tI+0ADfZKlYqdBLpDY/MCZz4Z7qk+8
+        n4c85xURxB6haOccgaZwgGc=
+X-Google-Smtp-Source: AA6agR5gP0BegU9kHb3Zmn5OiE+xmFZii0czHnWhtHnh/ZgekfhGNexHMIldIjutQE4x++ElsIvYiA==
+X-Received: by 2002:a05:600c:354a:b0:3a5:b01b:2ab0 with SMTP id i10-20020a05600c354a00b003a5b01b2ab0mr6245611wmq.61.1663243479840;
+        Thu, 15 Sep 2022 05:04:39 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d5246000000b00228fa832b7asm2376315wrc.52.2022.09.15.05.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:04:38 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:04:37 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] arm64: defconfig: build TEGRA SPI & QSPI
+Message-ID: <YyMU1WqAV6A7yqg7@orome>
+References: <20220913041012.17027-1-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Vqw6/qZF1/rYoiav"
 Content-Disposition: inline
-In-Reply-To: <20220914135848.118616-1-shenwei.wang@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220913041012.17027-1-kyarlagadda@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 08:58:43AM -0500, Shenwei Wang wrote:
-> i.MX8DXL is a device targeting the automotive and industrial market
-> segments. The chip is designed to achieve both high performance and
-> low power consumption. It has a dual (2x) Cortex-A35 processor.
-> 
-> The series of patches is to add the imx8dxl soc and its evk board
-> support.
-> 
-> changes in V8:
->   - change the flag of gpio phandle in reg_fec1_sel node to
->     GPIO_ACTIVE_LOW to match the hardware behavior.
-> 
-> changes in V7:
->   - move the fec1 reset gpio into its phy node
-> 
-> changes in V6:
->   - The V6 changes mainly respond to the comments from Shawn
->   - Separate the V5 patch into SoC and Board commits
->   - Remove the unnecessary properties of "max-frequency"
->     in usdhc2 node
->   - Remove the unnecessary properties of "clk_csr" in eqos node
->   - Fix several coding style problems
-> 
-> changes in V5:
->   - change the "scu" node name to "system-controller"
->   - fix the typo in the comments for imx8dxl evk board
-> 
-> changes in V4:
->   - move i2c/mmc/serial aliases from soc to board
->   - correct the node names to follow the generic names recommendation
->   - remove some unused nodes in the evk board dts
-> 
-> changes in V3:
->   - re-order the commit sequence according to Krzysztof's feedback
->   - correct the syntax and styple problems pointed by Krzysztof
->     (Thank you for the detailed review, Krzysztof!)
->   - remove the unused nodes in imx8dxl-evk.dts
->   - dt_binding_check passed
-> 
-> Changes in V2:
->   - removed the edma2 device node because the edma v3 driver hasn't been
->     upstreamed yet.
->   - removed the imx8dxl_cm4 alias to fix the compile error.
->   - removed the extra blank lines at EOF.
->   - dt_binding_check passed.
-> 
-> Shenwei Wang (5):
->   dt-bindings: firmware: add missing resource IDs for imx8dxl
->   dt-bindings: arm: imx: update fsl.yaml for imx8dxl
->   arm64: dts: imx8: add a node label to ddr-pmu
->   arm64: dts: freescale: add i.MX8DXL SoC support
->   arm64: dts: freescale: add support for i.MX8DXL EVK board
 
-Applied all, thanks!
+--Vqw6/qZF1/rYoiav
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Sep 13, 2022 at 09:40:12AM +0530, Krishna Yarlagadda wrote:
+> Jetson AGX board has flash device on QSPI controller and SPI instance
+> on 40-pin expander.
+>=20
+> Enable TEGRA SPI & QSPI drivers in defconfig as modules.
+>=20
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  arch/arm64/configs/defconfig | 2 ++
+>  1 file changed, 2 insertions(+)
+
+Applied, thanks.
+
+Thierry
+
+--Vqw6/qZF1/rYoiav
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjFNIACgkQ3SOs138+
+s6EwHQ//WfP05aTNaotuPDBxg73V4ZTIJyA/6rlCKLpC0HU/pinxD3yiah3hkKiY
+PQR3YEKVv6rfZBUX92N5c4V96JmOxpk1mo39P/Kfo5Ml33/YNOzfRRA59TkvaxfI
+Hp2BxQubQ/9ue9yFKlEzDwgAcfpRTGXcRq3EBJkS0kCHnf26isoVRf+S3FF9ypUK
+nZq7GtsiM2Ur/lWHoib6j8iAHXVtvp0BNfkOWN9t+lEyUEFD3WSV0LWUqu1YlLVE
+ZpsoO4CSrbKQztLnRX/GysbsKthuw7H/XO32u9QbMvMRTwMBDdjdHgYMmpKa6Irc
+0DbOkm8IMiEvk2NZdSjvVThpEMwsKahGwKd/oO/a82N5P1+sZxBpX5gWZ9HxrVdL
+WqJ9rEVW7TmxW3bv0gtX0TF8mvjSPoNn0oq+XgLSdpnIM40P5Mxo4bT6UNeP5ZwY
+ko3M5CieGHrEacpjqTVAyj4c+0TV8irr7rvPUvlDpW8nRaKaoqJzY0LVK6WFlz7G
+gvLflHTXdGVsk7M/gQBVArEFFwJsPcp4/DJ9mv5EQcS+DAsuYI8W1xLzccqO2Aaa
+pmVe5tUfcvwIxliJGINiso7ki85NZ1LpRUgR2PTdhgKzo3o7UmtNLr25NLg5V5qL
+gk4g6fgGIf1ctuY/iIXH4S+Cyy16xaMfQx7gA0nSAnI+zjm/Za4=
+=498g
+-----END PGP SIGNATURE-----
+
+--Vqw6/qZF1/rYoiav--
