@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4579A5B9234
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486665B9237
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiIOBhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S229528AbiIOBiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiIOBhI (ORCPT
+        with ESMTP id S229473AbiIOBh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:37:08 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C3659264
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:37:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VPqLUsL_1663205822;
-Received: from 30.240.121.31(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VPqLUsL_1663205822)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Sep 2022 09:37:04 +0800
-Message-ID: <e9076da5-bd96-1a21-e4af-36eb46409178@linux.alibaba.com>
-Date:   Thu, 15 Sep 2022 09:36:59 +0800
+        Wed, 14 Sep 2022 21:37:58 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56069356F4;
+        Wed, 14 Sep 2022 18:37:55 -0700 (PDT)
+X-UUID: 50a4d611035e4c9dbc8292300dcfb242-20220915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Hll8D14Qt08YGxyPP/LHoUI1r1mvl/3LO8G0w9Pypy4=;
+        b=SW7AwRMt03iywCX638DbFqJFe72Bsdqs4YRABETl8FUwO62IHzhfcMP/pJjjfsawpgYEtK9djRulMWClhVvx57fCEbe1R24DDPrD7oRGdtEhNNpRUSXAviMPQ/Jr1HJ2DFpaXiumE0A0GagtPuioD5OxXDRE7EYQ6HFWzr2DUD8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:64aa8fcd-4baf-4823-86ec-3b2949ac0a9c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:601578ec-2856-4fce-b125-09d4c7ebe045,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 50a4d611035e4c9dbc8292300dcfb242-20220915
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1255417790; Thu, 15 Sep 2022 09:37:46 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 15 Sep 2022 09:37:45 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 15 Sep 2022 09:37:45 +0800
+Message-ID: <f206b9f6c4c61b90306e19c713e2758d471ec037.camel@mediatek.com>
+Subject: Re: [PATCH 5/5] dt-bindings: arm: mediatek: mmsys: remove the
+ unused compatible for mt8195
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 15 Sep 2022 09:37:45 +0800
+In-Reply-To: <1b3a880f-06a2-1865-3791-03021aa34175@gmail.com>
+References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
+         <20220914182331.20515-6-jason-jh.lin@mediatek.com>
+         <1b3a880f-06a2-1865-3791-03021aa34175@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     naoya.horiguchi@nec.com, linmiaohe@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
-        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        Huang Ying <ying.huang@intel.com>
-References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
- <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220914153542.285f870f728c6129a479a69d@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/9/15 AM6:35, Andrew Morton 写道:
-> On Wed, 14 Sep 2022 14:49:35 +0800 Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+On Wed, 2022-09-14 at 22:45 +0200, Matthias Brugger wrote:
 > 
->> The GHES code calls memory_failure_queue() from IRQ context to queue work
->> into workqueue and schedule it on the current CPU. Then the work is
->> processed in memory_failure_work_func() by kworker and calls
->> memory_failure().
->>
->> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
->> SIGBUS with error virutal address") make memory_failure() call
->> kill_accessing_process() that:
->>
->>     - holds mmap locking of current->mm
->>     - does pagetable walk to find the error virtual address
->>     - and sends SIGBUS to the current process with error info.
->>
->> However, the mm of kworker is not valid. Therefore, check mm when killing
->> accessing process.
+> On 14/09/2022 20:23, Jason-JH.Lin wrote:
+> > The compatible properties of mt8195 have changed to
+> > mediatek,mt8195-vdosys0
+> > and mediatek,mt8195-vdosys1 from mediatek,mt895-mmsys, so remove
+> > the unused
+> > compatible.
+> > 
+> > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195
+> > SoC binding")
+> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  
+> > .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml         |
+> > 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > index a53b32c0a608..bfbdd30d2092 100644
+> > ---
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > @@ -31,7 +31,6 @@ properties:
+> >                 - mediatek,mt8183-mmsys
+> >                 - mediatek,mt8186-mmsys
+> >                 - mediatek,mt8192-mmsys
+> > -              - mediatek,mt8195-mmsys
 > 
-> Thanks.
-> 
-> When fixing a bug, please always describe the user-visible effects of
-> tha bug.  I'm thinking "null pointer deref crashes the kernel".
+> Should be part of the first patch. As described in the review.
 
-Got it. Thank you :)
+Ok, I'll merge this patch into the first patch.
 
-> 
->> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> 
-> I'll add cc:stable.
-
-Thanks.
+Regards,
+Jason-JH.Lin
 
 > 
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->>  	};
->>  	priv.tk.tsk = p;
->>  
->> +	if (!p->mm)
->> +		return -EFAULT;
->> +
->>  	mmap_read_lock(p->mm);
->>  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
->>  			      (void *)&priv);
->> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->>  	else
->>  		ret = 0;
->>  	mmap_read_unlock(p->mm);
->> +
->>  	return ret > 0 ? -EHWPOISON : -EFAULT;
->>  }
+> Regards,
+> Matthias
 > 
-> This is an unrelated change which doesn't appear to match the style in
-> memory-failure.c, so I'll drop this hunk.
+> >                 - mediatek,mt8195-vdosys0
+> >                 - mediatek,mt8195-vdosys1
+> >                 - mediatek,mt8365-mmsys
+> 
+> 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 
-I see, thanks.
-
-Cheers,
-Shuai
