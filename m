@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510635B924C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F535B924F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 03:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIOBpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 21:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S229634AbiIOBqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 21:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiIOBpV (ORCPT
+        with ESMTP id S229849AbiIOBqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 21:45:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D6A75CDA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 18:45:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSfzX6mKjzNm7G;
-        Thu, 15 Sep 2022 09:40:40 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 09:45:16 +0800
-Subject: Re: [PATCH] mm,hwpoison: check mm when killing accessing process
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <cuibixuan@linux.alibaba.com>, <baolin.wang@linux.alibaba.com>,
-        <zhuo.song@linux.alibaba.com>, <naoya.horiguchi@nec.com>,
-        <akpm@linux-foundation.org>
-References: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <51eb9735-349e-db8b-fa1c-096a924ef520@huawei.com>
-Date:   Thu, 15 Sep 2022 09:45:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 14 Sep 2022 21:46:21 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDE879EEA;
+        Wed, 14 Sep 2022 18:46:18 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id JAJ00012;
+        Thu, 15 Sep 2022 09:46:12 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.12; Thu, 15 Sep 2022 09:46:13 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] media: vivid.rst: fix TV and S-Video Inputs section
+Date:   Wed, 14 Sep 2022 21:46:09 -0400
+Message-ID: <20220915014609.1559-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20220914064935.7851-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+tUid:   2022915094612d4a18b7b809ee003b7622ffe0444f35e
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/14 14:49, Shuai Xue wrote:
-> The GHES code calls memory_failure_queue() from IRQ context to queue work
-> into workqueue and schedule it on the current CPU. Then the work is
-> processed in memory_failure_work_func() by kworker and calls
-> memory_failure().
-> 
-> When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
-> SIGBUS with error virutal address") make memory_failure() call
-> kill_accessing_process() that:
-> 
->     - holds mmap locking of current->mm
->     - does pagetable walk to find the error virtual address
->     - and sends SIGBUS to the current process with error info.
-> 
-> However, the mm of kworker is not valid. Therefore, check mm when killing
-> accessing process.
-> 
-> Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+remove the double word 'in'.
 
-Thanks for fixing.
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ Documentation/admin-guide/media/vivid.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks,
-Miaohe Lin
-
-
-> ---
->  mm/memory-failure.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 14439806b5ef..7553917ce820 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -743,6 +743,9 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->  	};
->  	priv.tk.tsk = p;
->  
-> +	if (!p->mm)
-> +		return -EFAULT;
-> +
->  	mmap_read_lock(p->mm);
->  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
->  			      (void *)&priv);
-> @@ -751,6 +754,7 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->  	else
->  		ret = 0;
->  	mmap_read_unlock(p->mm);
-> +
->  	return ret > 0 ? -EHWPOISON : -EFAULT;
->  }
->  
-> 
+diff --git a/Documentation/admin-guide/media/vivid.rst b/Documentation/admin-guide/media/vivid.rst
+index 4f680dc9661c..a5a9c062b23f 100644
+--- a/Documentation/admin-guide/media/vivid.rst
++++ b/Documentation/admin-guide/media/vivid.rst
+@@ -392,7 +392,7 @@ Which one is returned depends on the chosen channel, each next valid channel
+ will cycle through the possible audio subchannel combinations. This allows
+ you to test the various combinations by just switching channels..
+ 
+-Finally, for these inputs the v4l2_timecode struct is filled in in the
++Finally, for these inputs the v4l2_timecode struct is filled in the
+ dequeued v4l2_buffer struct.
+ 
+ 
+-- 
+2.27.0
 
