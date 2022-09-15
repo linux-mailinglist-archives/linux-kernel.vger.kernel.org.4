@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FB95B96C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F395B96C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiIOI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S229832AbiIOI7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIOI7E (ORCPT
+        with ESMTP id S229531AbiIOI7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:59:04 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86390C4A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:59:03 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id lc7so40631179ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1yevQqreqFif1tWjDWGjJnPqQZbw5Gj8I8oZ/6Fr7mk=;
-        b=WCwmrkP+09XaX2sS2DJ9Z6v2ic6IGQx0B7niR11WVSgzQ1MyS8R6QmqnsQo35Hn0fJ
-         JJX56OSe09XpAAw4Jj+ahgToitci/rZNgthSG7iECnIHQ0T0WIpXz6mlceXLZk2WtcQj
-         KvTwpPgESZXOg2CBIGdiLqHm5A+3ZcnYe1B8S/O0h9zlqFH4ZNr14eNimbalI0UhnoyE
-         jXWJV0VN+ptM0XuZxuCEifqgKsC5cnjtZeIB/06hIyR8aduteXjAXzUqoPAtjnLr8YwH
-         BVNfHudy4pZinSW63UG6nHKy7Sg0hSlHhU6HVXd/sJbVmg6bdHGNwgyE4uQubBWichjO
-         QrYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1yevQqreqFif1tWjDWGjJnPqQZbw5Gj8I8oZ/6Fr7mk=;
-        b=kyEum0r/Iti3iI8e97/1GxASBt2lOB2fCxoCmfJCVOXMnITI8OUmHCoEw6Y/Ackwod
-         GO5w0J2onF7LqgGe4i2J+cQor5MFvnwFR3qZjbkJ72/ChMulZBZZjWLn+07yUGOxa+N1
-         Ao1z8pRd344DFBFc8Pu1uSeYzyQodLI/4d6EYhS5W+D5R0ytMPG0/tWoaA2+1T48VzaC
-         VAlWiiKexlsRjZF5rIjwZ7AZgQqeeWuGH/NdnH5H8bqJ+GxAyORkkExGx3pKkr78erE+
-         oJCllhaYMyLkJxnLS0hSLHJSW81XStFsHJmBWjrTzp6U5QBVJmkypWMLxieJ+i5IZGko
-         4O/w==
-X-Gm-Message-State: ACgBeo2nAQKJx+HRZkR4/m2noqT7pORFGSKVcj3zbDRwXdCyqafR38om
-        3sXshpX4ishxA7EU3S0z68mhs+ymF7VtJkIk98y/Qw==
-X-Google-Smtp-Source: AA6agR6FQxW+G+2JxcTI18HbQeQFA4W7utMa4guK35w3CcDNsSaFT+0yiGM/D2WGcfKBtTS/WbU81zjM4+Rau0+S5KY=
-X-Received: by 2002:a17:906:8a5c:b0:77c:9d8:6fbc with SMTP id
- gx28-20020a1709068a5c00b0077c09d86fbcmr15461520ejc.500.1663232341934; Thu, 15
- Sep 2022 01:59:01 -0700 (PDT)
+        Thu, 15 Sep 2022 04:59:39 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CE56357;
+        Thu, 15 Sep 2022 01:59:34 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28F8x8TW046686;
+        Thu, 15 Sep 2022 03:59:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663232348;
+        bh=40RIuyJ2v1HtbWXuDnlrnW8RPk37ZglF34ofD503bS4=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=e6bzabUStOo5T8yO8QyySkKPtyAhaLQOdu0IzNLPYPl6WThhdxkxO3CvyMuESRKUr
+         HBgzIoe13+R+HH+bj5pDYLr3ycGz1gLDzQjQmEo0LBIcg4TrFB5pmJaGbCEG4Mpmjd
+         is+d28/hY8zW1pv6W+daAhYeMAyZTQvDqSVEIE4E=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28F8x7GY066923
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Sep 2022 03:59:07 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 15
+ Sep 2022 03:59:07 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 15 Sep 2022 03:59:06 -0500
+Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28F8x1kZ032248;
+        Thu, 15 Sep 2022 03:59:01 -0500
+Message-ID: <1c3facf9-1ecf-f090-e800-803d83a89e4b@ti.com>
+Date:   Thu, 15 Sep 2022 14:29:00 +0530
 MIME-Version: 1.0
-References: <20220914151145.73253-1-brgl@bgdev.pl>
-In-Reply-To: <20220914151145.73253-1-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Sep 2022 10:58:50 +0200
-Message-ID: <CACRpkdZaSL_pkmrVGOT-y7+3i4y6f6Cjgehycq2FKLwPxrbFvw@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: TODO: add an item about GPIO safe-state
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Drew Fustini <dfustini@baylibre.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vladimir.oltean@nxp.com>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
+ fixed-link configuration
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20220914095053.189851-1-s-vadapalli@ti.com>
+ <20220914095053.189851-6-s-vadapalli@ti.com>
+ <YyH2GcLCAN+9GAn8@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <YyH2GcLCAN+9GAn8@shell.armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 5:11 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+Hello Russell,
 
-> This adds a new TODO item for gpiolib and can also be used to start
-> a discussion about the need for it and implementation details.
->
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+On 14/09/22 21:11, Russell King (Oracle) wrote:
+> On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
+>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> index 72b1df12f320..1739c389af20 100644
+>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>> @@ -1494,10 +1494,50 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>>  							  phylink_config);
+>>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>>  	struct am65_cpsw_common *common = port->common;
+>> +	struct fwnode_handle *fwnode;
+>> +	bool fixed_link = false;
+>>  
+>>  	if (common->pdata.extra_modes & BIT(state->interface))
+>>  		writel(AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+>>  		       port->sgmii_base + AM65_CPSW_SGMII_CONTROL_REG);
+>> +
+>> +	/* Detecting fixed-link */
+>> +	fwnode = of_node_to_fwnode(port->slave.phy_node);
+>> +	if (fwnode)
+>> +		fixed_link = !!fwnode_get_named_child_node(fwnode, "fixed-link");
+>> +
+>> +	if (fixed_link) {
+>> +		/* In fixed-link mode, mac_link_up is not invoked.
+>> +		 * Therefore, the relevant mac_link_up operations
+>> +		 * have to be moved to mac_config.
+>> +		 */
+> 
+> This seems very wrong. Why is mac_link_up() not invoked? Have you
+> debugged this? It works for other people.
+> 
+> Please debug rather than adding hacks to drivers when you find
+> things that don't seem to work.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+I will debug and find out. I had assumed that mac_link_up() is not
+invoked in fixed-link mode. Thank you for clarifying.
 
-Several approaches have been tried in the past. Consider adding
-these lore links:
-
-"[PATCH 3/4] gpio: dt-bindings: Declare gpio-hog optional for GPIO
-subnodes" (2016)
-https://lore.kernel.org/linux-devicetree/1456214089-13954-3-git-send-email-mpa@pengutronix.de/
-"[PATCH] gpio: 74x164: add lines-initial-states property" (2018)
-https://lore.kernel.org/lkml/20180815201855.29738-1-mail@david-bauer.net/"
-"[RFC] Initial state for GPIOs" (2019)
-https://lore.kernel.org/linux-gpio/bee53b48c96603ae8970d42bc4bff386b876bc51.camel@collabora.com/
-
-Just so we don't have to constantly look them up for referral.
-
-Yours,
-Linus Walleij
+Regards,
+Siddharth.
