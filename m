@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B575BA0B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFD25BA0C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiIOSSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 14:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S229636AbiIOSST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiIOSRu (ORCPT
+        with ESMTP id S229907AbiIOSRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 14:17:50 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687238A7E1;
-        Thu, 15 Sep 2022 11:17:36 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h8so25148577wrf.3;
-        Thu, 15 Sep 2022 11:17:36 -0700 (PDT)
+        Thu, 15 Sep 2022 14:17:52 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774A495E61;
+        Thu, 15 Sep 2022 11:17:38 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso855846wmq.2;
+        Thu, 15 Sep 2022 11:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=O2VLizPOFB8Cw4tUD1XPYg1pr+6HOsBm1gy7frAi+N8=;
-        b=WjEv3HYvp+P8hT/A+r1RHj7K0WdkUmFxq4Bph7B8aE9nk4YmAVR9Vtjz/ZxaZ/PgLb
-         L1oReoZcG1UW51RdkDI6kB74J1mO0ellGTLUMWnfInG8EE8wayZCH/xablk2X+MAk6he
-         UZKTly33tWVbNozQhmhTiyQ0c+U1xruHTxKVB/H3q5vMRRAxI8GSp6vmjDw/o/fDYV5C
-         BcK73vgZCXhaswM6xzcG/7PyQfAg3Wz3HX8Juf319Vs1RmZL3MkjXaD4bgSt2E6tnqW/
-         1vuOjUF6Cgoapvz2zrDrd9AR7nJwL+YPuf/iSQCwB1gvFvDJKpSgm1cYS5uA1vW/PXgV
-         Ouog==
+        bh=h7rmDnDbEL5nfCcVBsfSnk+K+mwOgzf5y2MGdbkhmos=;
+        b=pJ+WzY3CCFUWtX4TsruXqFq2+vI90gSDypxzOkr2djU2Rj0ml3PS1t96Zx0i2lZ2wM
+         vCYotryDXl75WPhpCDPwhBNQSOMJv6hSEluVzcMeieuoobhBBV9ur0buMnwLJgsmjxnp
+         XVpSNQyJzSlYeEsUWjP0JWZm/FaxpvEUVcBpXkXoelZ1exDOtgW4kx4lgolnLmj46Rs+
+         y+DGl0webU/vwpfufgNaT6k0j6pDRy3L9TYfMzC8CTLex6fQGFSowm6nahPGyx8iamcK
+         2bJuIT74TkPfmAT7cZo4Bie83H9TbZ3vixCHv6bcak24ma3jf1grEXg4FrZtb11g+YUU
+         swRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=O2VLizPOFB8Cw4tUD1XPYg1pr+6HOsBm1gy7frAi+N8=;
-        b=Gnc5Xw3Ey3uSINFEBwW3BmKqaMWLHzsfHaKUWHygRk361m9KY3t6BuNjIKnO/U7VGC
-         37o+TMpvltXD08uLLABNRZ48J3U0DlPks7FHXFvO2cGuuO/d3uvM/OPbSGLRadTGRWfB
-         8+v6HLTUaEavvfD18M8rPK0Aru9AE36JYPTJpJv69hQOvBM6IRwTFjMyw7h8yZMj0bzE
-         fKL3jX25egJR/hvW2vU+in8AWIcIkvmG6bp81XsA+MNCoVfNjrJGM66DAf7kfjoI5m0z
-         g//Xfe9gWul12RQmCTaBY7mJ438KUVd6lbT1sHTVX5rgd65OlTh99EBxWqm4cXNPNYCb
-         mE0w==
-X-Gm-Message-State: ACrzQf2Rd9HnsImqboJo37HpGz6sUZ+sRF5fdPEL5xF5BJVBEBV5A+1t
-        VcLvMJUDJs8FPJSPuq22i3U=
-X-Google-Smtp-Source: AMsMyM4GZLek6Dbkaa0Gg6W0uuQfJsrc32TNRUf+JpBGN81tL3eR5A97hx5L6vwOK3q4FrzRhi6RpA==
-X-Received: by 2002:a05:6000:178c:b0:222:f8ec:9977 with SMTP id e12-20020a056000178c00b00222f8ec9977mr569349wrg.509.1663265854886;
-        Thu, 15 Sep 2022 11:17:34 -0700 (PDT)
+        bh=h7rmDnDbEL5nfCcVBsfSnk+K+mwOgzf5y2MGdbkhmos=;
+        b=WTkGZ3GvhrlSakN7H9QQUMunhLIBxbKH2B5wM2YPKQ7JM0Q7+NpbwPbvOYq3k1rpI+
+         J7k8m572HJGpUC7PI0HLt0EjAGo3x6TucMWsUQ1llHAPe+rjY8JIYAR58+t/bDS8Y1oy
+         3noAPzy1ZsU7I3Y/vVmGOnxYNiwKFut3DGlgirzPUvXkxEc8JAoWWubxOa060mEJ5oCp
+         Bf+4sBmcY3c1fdRk5z/jbkmTwPYPBIeTz7JJOWiec3DBQk3LxbS0GB+aM/zvMKJI2dGr
+         QPJUbplFylfCMamU1Evdtc+a8w1/panwFGzYsyeJWFEGHUDfjrrj/jarr9/gszQ+28KE
+         J0ng==
+X-Gm-Message-State: ACgBeo2r/elDXwXsr7VfC0uhYEY//cW8tRspGkB6sGmoi8RhDqGpD0WI
+        6OTqlo4zShXeGnTgMisOZFM=
+X-Google-Smtp-Source: AA6agR6pdr/WhjUQs5dbPdMFvVEN7qcpsDILeWhlX+kudsNMORv11FDp6hzHNX+T5WBRNGOTYfw7zQ==
+X-Received: by 2002:a05:600c:229a:b0:3b4:810a:8b4f with SMTP id 26-20020a05600c229a00b003b4810a8b4fmr7749657wmf.117.1663265856553;
+        Thu, 15 Sep 2022 11:17:36 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:d411:a48b:4035:3d98])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm4243151wmq.23.2022.09.15.11.17.33
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm4243151wmq.23.2022.09.15.11.17.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 11:17:33 -0700 (PDT)
+        Thu, 15 Sep 2022 11:17:35 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -65,9 +65,9 @@ Cc:     Heiko Stuebner <heiko@sntech.de>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 06/10] riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
-Date:   Thu, 15 Sep 2022 19:15:54 +0100
-Message-Id: <20220915181558.354737-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 07/10] riscv: boot: dts: r9a07g043: Add placeholder nodes
+Date:   Thu, 15 Sep 2022 19:15:55 +0100
+Message-Id: <20220915181558.354737-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -85,162 +85,234 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
-Single).
+Add empty placeholder nodes to RZ/Five (R9A07G043) SoC DTSI.
 
-Below is the list of IP blocks added in the initial SoC DTSI which can be
-used to boot via initramfs on RZ/Five SMARC EVK:
-- AX45MP CPU
-- CPG
-- PINCTRL
-- PLIC
-- SCIF0
-- SYSC
+This is in preparation to reuse the RZ/G2UL SMARC SoM and carrier
+board DTS/I.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
-v2->v3
-* Fixed clock entry for CPU core
-* Fixed timebase frequency to 12MHz
-* Fixed sorting of the nodes
-* Included RB tags
-
-v1->v2
-* Dropped including makefile change
-* Updated ndev count
+v1->v3
+* New patch
 ---
- arch/riscv/boot/dts/renesas/r9a07g043.dtsi | 120 +++++++++++++++++++++
- 1 file changed, 120 insertions(+)
- create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
+ arch/riscv/boot/dts/renesas/r9a07g043.dtsi | 177 +++++++++++++++++++++
+ 1 file changed, 177 insertions(+)
 
 diff --git a/arch/riscv/boot/dts/renesas/r9a07g043.dtsi b/arch/riscv/boot/dts/renesas/r9a07g043.dtsi
-new file mode 100644
-index 000000000000..fb6733f3cc2b
---- /dev/null
+index fb6733f3cc2b..6d9db759a847 100644
+--- a/arch/riscv/boot/dts/renesas/r9a07g043.dtsi
 +++ b/arch/riscv/boot/dts/renesas/r9a07g043.dtsi
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Device Tree Source for the RZ/Five SoC
-+ *
-+ * Copyright (C) 2022 Renesas Electronics Corp.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/r9a07g043-cpg.h>
-+
-+/ {
-+	compatible = "renesas,r9a07g043";
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		timebase-frequency = <12000000>;
-+
-+		ax45mp: cpu@0 {
-+			compatible = "andestech,ax45mp", "riscv";
-+			device_type = "cpu";
-+			reg = <0x0>;
-+			status = "okay";
-+			riscv,isa = "rv64imafdc";
-+			mmu-type = "riscv,sv39";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <0x40>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <0x40>;
-+			clocks = <&cpg CPG_CORE R9A07G043_CLK_I>;
-+
-+			cpu0_intc: interrupt-controller {
-+				#interrupt-cells = <1>;
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+			};
-+		};
+@@ -13,6 +13,14 @@ / {
+ 	#address-cells = <2>;
+ 	#size-cells = <2>;
+ 
++	audio_clk1: audio1-clk {
++		/* placeholder */
 +	};
 +
-+	/* clock can be either from exclk or crystal oscillator (XIN/XOUT) */
-+	extal_clk: extal-clk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		/* This value must be overridden by the board */
-+		clock-frequency = <0>;
++	audio_clk2: audio2-clk {
++		/* placeholder */
 +	};
 +
-+	soc: soc {
-+		compatible = "simple-bus";
-+		interrupt-parent = <&plic>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		scif0: serial@1004b800 {
-+			compatible = "renesas,scif-r9a07g043",
-+				     "renesas,scif-r9a07g044";
-+			reg = <0 0x1004b800 0 0x400>;
-+			interrupts = <412 IRQ_TYPE_LEVEL_HIGH>,
-+				     <414 IRQ_TYPE_LEVEL_HIGH>,
-+				     <415 IRQ_TYPE_LEVEL_HIGH>,
-+				     <413 IRQ_TYPE_LEVEL_HIGH>,
-+				     <416 IRQ_TYPE_LEVEL_HIGH>,
-+				     <416 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "eri", "rxi", "txi",
-+					  "bri", "dri", "tei";
-+			clocks = <&cpg CPG_MOD R9A07G043_SCIF0_CLK_PCK>;
-+			clock-names = "fck";
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_SCIF0_RST_SYSTEM_N>;
+ 	cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+@@ -54,6 +62,23 @@ soc: soc {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
++		ssi1: ssi@1004a000 {
++			reg = <0 0x1004a000 0 0x400>;
++			#sound-dai-cells = <0>;
 +			status = "disabled";
++
++			/* placeholder */
 +		};
 +
-+		cpg: clock-controller@11010000 {
-+			compatible = "renesas,r9a07g043-cpg";
-+			reg = <0 0x11010000 0 0x10000>;
-+			clocks = <&extal_clk>;
-+			clock-names = "extal";
-+			#clock-cells = <2>;
++		spi1: spi@1004b000 {
++			reg = <0 0x1004b000 0 0x400>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
+ 		scif0: serial@1004b800 {
+ 			compatible = "renesas,scif-r9a07g043",
+ 				     "renesas,scif-r9a07g044";
+@@ -73,6 +98,48 @@ scif0: serial@1004b800 {
+ 			status = "disabled";
+ 		};
+ 
++		canfd: can@10050000 {
++			reg = <0 0x10050000 0 0x8000>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		i2c0: i2c@10058000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x10058000 0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		i2c1: i2c@10058400 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x10058400 0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		adc: adc@10059000 {
++			reg = <0 0x10059000 0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		sbc: spi@10060000 {
++			reg = <0 0x10060000 0 0x10000>,
++			      <0 0x20000000 0 0x10000000>,
++			      <0 0x10070000 0 0x10000>;
++			reg-names = "regs", "dirmap", "wbuf";
++			status = "disabled";
++
++			/* placeholder */
++		};
++
+ 		cpg: clock-controller@11010000 {
+ 			compatible = "renesas,r9a07g043-cpg";
+ 			reg = <0 0x11010000 0 0x10000>;
+@@ -104,6 +171,95 @@ pinctrl: pinctrl@11030000 {
+ 				 <&cpg R9A07G043_GPIO_SPARE_RESETN>;
+ 		};
+ 
++		sdhi0: mmc@11c00000 {
++			reg = <0x0 0x11c00000 0 0x10000>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		sdhi1: mmc@11c10000 {
++			reg = <0x0 0x11c10000 0 0x10000>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		eth0: ethernet@11c20000 {
++			reg = <0 0x11c20000 0 0x10000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		eth1: ethernet@11c30000 {
++			reg = <0 0x11c30000 0 0x10000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		phyrst: usbphy-ctrl@11c40000 {
++			reg = <0 0x11c40000 0 0x10000>;
 +			#reset-cells = <1>;
-+			#power-domain-cells = <0>;
-+		};
-+
-+		sysc: system-controller@11020000 {
-+			compatible = "renesas,r9a07g043-sysc";
-+			reg = <0 0x11020000 0 0x10000>;
 +			status = "disabled";
++
++			/* placeholder */
 +		};
 +
-+		pinctrl: pinctrl@11030000 {
-+			compatible = "renesas,r9a07g043-pinctrl";
-+			reg = <0 0x11030000 0 0x10000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			gpio-ranges = <&pinctrl 0 0 152>;
-+			clocks = <&cpg CPG_MOD R9A07G043_GPIO_HCLK>;
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_GPIO_RSTN>,
-+				 <&cpg R9A07G043_GPIO_PORT_RESETN>,
-+				 <&cpg R9A07G043_GPIO_SPARE_RESETN>;
++		ohci0: usb@11c50000 {
++			reg = <0 0x11c50000 0 0x100>;
++			status = "disabled";
++
++			/* placeholder */
 +		};
 +
-+		plic: interrupt-controller@12c00000 {
-+			compatible = "renesas,r9a07g043-plic", "andestech,nceplic100";
-+			#interrupt-cells = <2>;
-+			#address-cells = <0>;
-+			riscv,ndev = <512>;
-+			interrupt-controller;
-+			reg = <0x0 0x12c00000 0 0x400000>;
-+			clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
-+			interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
++		ohci1: usb@11c70000 {
++			reg = <0 0x11c70000 0 0x100>;
++			status = "disabled";
++
++			/* placeholder */
 +		};
-+	};
-+};
++
++		ehci0: usb@11c50100 {
++			reg = <0 0x11c50100 0 0x100>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		ehci1: usb@11c70100 {
++			reg = <0 0x11c70100 0 0x100>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		usb2_phy0: usb-phy@11c50200 {
++			reg = <0 0x11c50200 0 0x700>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		usb2_phy1: usb-phy@11c70200 {
++			reg = <0 0x11c70200 0 0x700>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		hsusb: usb@11c60000 {
++			reg = <0 0x11c60000 0 0x10000>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
+ 		plic: interrupt-controller@12c00000 {
+ 			compatible = "renesas,r9a07g043-plic", "andestech,nceplic100";
+ 			#interrupt-cells = <2>;
+@@ -116,5 +272,26 @@ plic: interrupt-controller@12c00000 {
+ 			resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+ 			interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+ 		};
++
++		wdt0: watchdog@12800800 {
++			reg = <0 0x12800800 0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		ostm1: timer@12801400 {
++			reg = <0x0 0x12801400 0x0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
++
++		ostm2: timer@12801800 {
++			reg = <0x0 0x12801800 0x0 0x400>;
++			status = "disabled";
++
++			/* placeholder */
++		};
+ 	};
+ };
 -- 
 2.25.1
 
