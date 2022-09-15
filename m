@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8835B9EB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B729D5B9EB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIOPZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S229930AbiIOPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIOPZ1 (ORCPT
+        with ESMTP id S229889AbiIOPZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:25:27 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403F33431
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id c24so17616309pgg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
+        Thu, 15 Sep 2022 11:25:50 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A841A45F53
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:48 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id cc5so21585273wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=M+4dSp/NyWH6hV7kqgm6uE66wW1DICbY/2tIyHY19E8=;
-        b=Ovid8VfwMNGOYz6N1r1dZJJMkvJ0X6Bhyc+U142KKVH3voDv8+Qm2VHut3BgbXGZB1
-         52O1STlvMr+Ka20/0qGlvNPNAW9y8f73yINR9lTeMrXJpimLJMh6ZTr/uxEKezNuRXUr
-         ulgRgOazPU6dKVBmonQpH9BUUiDterKqWBncg=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=BHcfoRSqhikD1hOYg44uSOWlY3aFvjAHe7q8Qax5QmY=;
+        b=QtgpMJ5u5NKyPnVF5sV8RMe62k5Pq1GkPk+H7kZxWT2atc1Zns1MUPWnp8WWEEAUXN
+         2f+2bevcxW+hU2Zs1ZJ2Pn6G6DkC6HfXsJmkFIYeEQsiMfPaPMTfM1WBCzkT5Ebcrv6O
+         G7pSJhoK0ymrDBryJIIvmR0SS9k8XgHB6vYFxlNmRzZoyKUvclDPnlfs4V0OWcaf8Zgz
+         L1PMFH2hnOVB1E/DrkSu8jlhVDAYSXtZXk1fYbFe1yx0+BQfv7epwdHQO53c/gku3R96
+         4dJgBHea6ALP8/wLjGgQPEvmbXEpcMM81Bh4nVWjyIk9tMm+Vp6pOl8U74N2skEreA85
+         nkAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=M+4dSp/NyWH6hV7kqgm6uE66wW1DICbY/2tIyHY19E8=;
-        b=zo1N0Hr+cx//7J04GUjXQ/pRduzWM8eW2mcBX1dO6A5Kr9ggvSk5opLGt4rLUhkfDu
-         JlFJjW/62rG+0nL4aNZufSnUC5/TfY5KgNAOwyS0SZKhFc6MJC/f0BAnBCoj5pF13xz1
-         +KVkVgFM/PY6RI7SiqZXN7gkLWx8mGdyXBekz6xe3jcM7OMGrsK1TKCHKDyWd52qa+jZ
-         rsS8hxX+Sfo9frVzx+WXmr+32XilEAhqdrYxDgVBwbaYzzZi8XN6Pt45tV+w/uD8Ne/o
-         X1wULdC5ShoHWWXOWfClElkIZ8u41weE09zmJsfw3yui7b86dk3grpOMLpHiCbQOjvIV
-         5irA==
-X-Gm-Message-State: ACrzQf1cl7Sra2FBkzG8rN7nZAkRDtn/h6qohsvqCjpbJB91ELGt7EWE
-        46OcNbQz03N1ROrMWXMAh1PCcA==
-X-Google-Smtp-Source: AMsMyM4hLM83yeJJ1NXBXCQkUnbxF65ZDcgalP0+9AAhGBUxKwD1Er0oxGOSLkn+SBVmRSvCkUvtjw==
-X-Received: by 2002:a63:e516:0:b0:434:9462:69cd with SMTP id r22-20020a63e516000000b00434946269cdmr295685pgh.503.1663255525251;
-        Thu, 15 Sep 2022 08:25:25 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:91d2:9e21:2c2b:323f])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b0016ee3d7220esm13300920plg.24.2022.09.15.08.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 08:25:24 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 00:25:18 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        John Kacur <jkacur@redhat.com>,
-        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: printk meeting at LPC 2022
-Message-ID: <YyND3oI4M/G4qndr@google.com>
-References: <20220910221947.171557773@linutronix.de>
- <87h71cr1gb.fsf@jogness.linutronix.de>
- <YyMF6YkGdv/EepJf@google.com>
- <20220915070938.7930c1df@rorschach.local.home>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=BHcfoRSqhikD1hOYg44uSOWlY3aFvjAHe7q8Qax5QmY=;
+        b=esEPBAXpWoFKxrWZ58Bx2QLLEGz/rk6D+ga7zeS0qBj0660bUX5zZ1OlDz3rxvOIlN
+         /J8EUQDSqNNirt/1oPfMPWfOAMGGh4m6QD85rsRyJZhhFh3Ol0hj4pEBO8suRKoL2NOU
+         TyJAzsnvTNNCpcQRK5EAby6bHTdFi+UYoLIKjkIjbqo2dSwwWNB1OY6PwbQ7xxiDUh3F
+         sB31+QDMrGjkpXCG4FGfY9ip+CMU7nl+ukxl0SRigntwBXll/MmbKZmFzt35oxPJmXie
+         EwBpsC7bOKmbcz9RAuSljoC1ZqPjBXtPbI58JLsybu/hb3pJoag4zgfdlr1kvhqvAg7c
+         U0mQ==
+X-Gm-Message-State: ACrzQf06eyMIdYfy1gwQ1089QnfOmxlIa1k80MxnoCf9IEkFrFhkXX8I
+        qjf13GU9Z5opY1xU6Qn9szr2+THCe637dqTG
+X-Google-Smtp-Source: AMsMyM6jbHiu69sUiE2afsrEB9VDk+2EF3IxK7ozsl+xHorAt3Mj1j34+HcOi0Wy/USm0LikBipx9g==
+X-Received: by 2002:a05:6000:178c:b0:222:f8ec:9977 with SMTP id e12-20020a056000178c00b00222f8ec9977mr111630wrg.509.1663255547251;
+        Thu, 15 Sep 2022 08:25:47 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.72])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm3834952wmq.23.2022.09.15.08.25.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:25:46 -0700 (PDT)
+Message-ID: <bb932677-d7b5-a39f-ebb9-4a64812591a1@linaro.org>
+Date:   Thu, 15 Sep 2022 16:25:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915070938.7930c1df@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] dt-bindings: mfd: mt6370: fix the indentation in the
+ example
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>, Rob Herring <robh@kernel.org>
+Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        cy_huang@richtek.com, linux-mediatek@lists.infradead.org,
+        alice_chen@richtek.com, robh+dt@kernel.org, lee@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, chiaen_wu@richtek.com
+References: <1663157936-5010-1-git-send-email-u0084500@gmail.com>
+ <20220915134353.GA1168381-robh@kernel.org>
+ <CADiBU3_6dXf1TUv9f7HbFfrqsfMUmT1Ejve6+O6OGnmTtxzpEQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CADiBU3_6dXf1TUv9f7HbFfrqsfMUmT1Ejve6+O6OGnmTtxzpEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/15 07:09), Steven Rostedt wrote:
-> > > We now have a room/timeslot [0] where Thomas and I will be presenting
-> > > and discussing this new approach [1] for bringing kthread and atomic
-> > > console printing to the kernel.
-> > > 
-> > > Wednesday, 14 Sep. @ 3:00pm-4:30pm in room "Meeting 9"  
-> > 
-> > Was this recorded? I glanced through LPC/kernel summit schedules and didn't
-> > find it anywhere.
-> 
-> Yes it was, but it will take a bit to extract it from BBB and upload it to YouTube.
+On 15/09/2022 14:56, ChiYuan Huang wrote:
+>>
+>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>> there's no need to repost patches *only* to add the tags. The upstream
+>> maintainer will do that for acks received on the version they apply.
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+>>
+> I'm not sure about the rule.
+> AngeloGioacchino said I need to add the 'Fixes' tag.
+> I think it might be important.
+> And I immediately submit the v2 patch and add the 'fixes' tag.
+> So patch v3 and add 'Acked-by' tag?
 
-Thanks Steven!
+https://lore.kernel.org/all/20220914150620.GA2221443-robh@kernel.org/
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+
+Best regards,
+Krzysztof
