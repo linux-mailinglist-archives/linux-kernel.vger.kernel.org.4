@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126745B9A82
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F91B5B9A88
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 14:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiIOMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 08:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229561AbiIOMMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 08:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiIOMKB (ORCPT
+        with ESMTP id S229457AbiIOMMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 08:10:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27AB645A;
-        Thu, 15 Sep 2022 05:09:49 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C22C56601FC5;
-        Thu, 15 Sep 2022 13:09:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663243769;
-        bh=RK8hmnYA9/Ua/srvkkHpq1mJKE2UO3eoI+MSMmIYKB4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eCZJp/IOyMypPw8N/qUi9fJT0Krp1rDKzMSHjICELzdlUL4h/nzpMg7gXLJYarmwN
-         SUepuoiK6cRqq6MVxnNgPTjOj7djmsaI3lHs9m4WZobEuZFrvv6lRcR162qpalOqCc
-         kD0XYHoB2BBmlnrjtGxVEvE1JxPjDK5sr2dJQYhvWoNxq+hkhJPM0IA351M+9MU4rx
-         yuDR3XkYYmcMq3nekkPRBIwyqn0Wd8ugdSh+26IdkPQ5gzhh+roNX/DUP4cUbj+fJN
-         nQM3wQnU379YAHeDQ6nmf31qlmPdT7AlUXMaoqxM0tHv80n4RSKF9zs8Cc5xhpEFiz
-         28ILISpWrCt9A==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chaotian.jing@mediatek.com
-Cc:     ulf.hansson@linaro.org, matthias.bgg@gmail.com,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/2] mmc: mtk-sd: Add support for MT6795 Helio X10
-Date:   Thu, 15 Sep 2022 14:09:23 +0200
-Message-Id: <20220915120923.86038-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220915120923.86038-1-angelogioacchino.delregno@collabora.com>
-References: <20220915120923.86038-1-angelogioacchino.delregno@collabora.com>
+        Thu, 15 Sep 2022 08:12:00 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D6BCD;
+        Thu, 15 Sep 2022 05:11:57 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e16so30558468wrx.7;
+        Thu, 15 Sep 2022 05:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=LPM/AULX8xXLs7+uogOUxKAzfuJtpuv0oPBeLnfAptU=;
+        b=CH1OMOjtiwqz7YAYLeKpx1HR4ss1tuzs+xFQlPExYGm64fpkpAGoCji4ONBzn9W5hr
+         KyBnhHu306/sHAlQmD7XnaAKWVGclgRsOsaBW0JPOdabqkvKSIu1YFbcA1Y+UqMI3Jc3
+         9dcQX6+KwkhuxSXT6I2YUphI2z2gPiCj95dnuz/pUgTklzWoUzObva+FFsWdMjH+8p1z
+         zMq1E67lr8Aj4IBC9OXa1UYldvPPUly/7nsmsu5dbMtvo+Ljl1Wg21TPlcz5A6gjIumf
+         T6h13cOlMsFRdz8eIEYp4MOQUxiocYQaleVUGnhmyRJyGAyTzJgR6Bd41O1mphQK9vE+
+         npYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=LPM/AULX8xXLs7+uogOUxKAzfuJtpuv0oPBeLnfAptU=;
+        b=wGuQpxYUNdtxzvgorqIZOvuECUZ35TrPcEfoj90BaKvP9Re/JpXWAAy+7R+0Z0sKH7
+         mMWyXtEOqYUU+d+2ypt1TXBdH/hmHD0iTi31JoODcRGzrIHOfosxeN6HsW513IPBL9Z6
+         eu4GMvKa/2pZwS4JAmPfnhDNXeI9DVhrwUXkR+DTaqIOxHD4g1PLTb7vYrZci7eZkdSK
+         FHI6xA1gGoZoWvFXksRfQXZYRlu7W2C67IrCiRkiNN6x7704G3/S0t/wk3fWx0D1+BB1
+         8UUabwIusgyagfqBqDYbFBaj/MdKvo4KLxPmH7aJX5qfuyn0vGFugag6BN/IkgOvHuPo
+         2cUw==
+X-Gm-Message-State: ACrzQf0ehuzi5AVhpYkMksoVl6rfU+/pwNRJWNyP57SpBnYq+jH9opif
+        6OmonGs2InpmcatjnJhk4DM=
+X-Google-Smtp-Source: AMsMyM6KNXCAIkfB6NDZg1tBoEnF1MIjuOAqFOx9kifr7Kt7Rz6NMEL+V94j0UlHUB2hPxur03DvEQ==
+X-Received: by 2002:a05:6000:1e14:b0:22a:c818:9737 with SMTP id bj20-20020a0560001e1400b0022ac8189737mr4854301wrb.515.1663243916298;
+        Thu, 15 Sep 2022 05:11:56 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00228634628f1sm2418444wrq.110.2022.09.15.05.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 05:11:55 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:11:53 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc:     jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        dmitry.osipenko@collabora.com, ulf.hansson@linaro.org,
+        kkartik@nvidia.com, cai.huoqing@linux.dev, spatra@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: Re: [PATCH] soc/tegra: pmc: Check device node status property
+Message-ID: <YyMWiVZm1jAyEHJs@orome>
+References: <20220906135117.341529-1-petlozup@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Npy2d1m7ESZZaX7I"
+Content-Disposition: inline
+In-Reply-To: <20220906135117.341529-1-petlozup@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for MT6795 with a new compatible string and platform data.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/mmc/host/mtk-sd.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+--Npy2d1m7ESZZaX7I
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 572eb5d48813..df941438aef5 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -513,6 +513,19 @@ static const struct mtk_mmc_compatible mt6779_compat = {
- 	.support_64g = true,
- };
- 
-+static const struct mtk_mmc_compatible mt6795_compat = {
-+	.clk_div_bits = 8,
-+	.recheck_sdio_irq = false,
-+	.hs400_tune = true,
-+	.pad_tune_reg = MSDC_PAD_TUNE,
-+	.async_fifo = false,
-+	.data_tune = false,
-+	.busy_check = false,
-+	.stop_clk_fix = false,
-+	.enhance_rx = false,
-+	.support_64g = false,
-+};
-+
- static const struct mtk_mmc_compatible mt7620_compat = {
- 	.clk_div_bits = 8,
- 	.recheck_sdio_irq = true,
-@@ -593,6 +606,7 @@ static const struct of_device_id msdc_of_ids[] = {
- 	{ .compatible = "mediatek,mt2701-mmc", .data = &mt2701_compat},
- 	{ .compatible = "mediatek,mt2712-mmc", .data = &mt2712_compat},
- 	{ .compatible = "mediatek,mt6779-mmc", .data = &mt6779_compat},
-+	{ .compatible = "mediatek,mt6795-mmc", .data = &mt6795_compat},
- 	{ .compatible = "mediatek,mt7620-mmc", .data = &mt7620_compat},
- 	{ .compatible = "mediatek,mt7622-mmc", .data = &mt7622_compat},
- 	{ .compatible = "mediatek,mt8135-mmc", .data = &mt8135_compat},
--- 
-2.37.2
+On Tue, Sep 06, 2022 at 01:51:17PM +0000, Petlozu Pravareshwar wrote:
+> In early_initcall, check if PMC device is available for use
+> and avoid accessing PMC resources if the device node status
+> property is set to disabled.
+>=20
+> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+> ---
+>  drivers/soc/tegra/pmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Applied, thanks.
+
+Thierry
+
+--Npy2d1m7ESZZaX7I
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjFokACgkQ3SOs138+
+s6GU1A/9EdIsca8gNvIVWIriSk6N3JY5no5FQlnUXf05gsayIEdev0crlv8OTuav
+XCY4Xw5RwOIulDuqZvzxzGtFv8XPoDmy3ZuerXXB4tv/iAWg68EbXqevpJbH1apz
+6Uswc5ZbPrXUIx61q/xEpr/J/oL70LygvPxCx35sSNa0m4aVsHJxylk9pgZ9zWOU
+rEmJPxiJ1ngXluH9pWo3Y/o8BN8ukdON5NbvMlcHGnfjX/nmb086AE/h6qSxn1Dv
+d36WI1t1SW7Ys+MrXV4uu0wlNyYH2VcY5refrx3LdGQjEHKgpNvtpBIV/1R/iSPv
+o4quxtmy8NOyMPxIr0hHbxrXMb1cuN9pY0HhCN73KLJEclR0PRPAxEuzaPwWSkvt
+p95kvs8UOr5dzZ7SpBTTp5qXQOgPg6YnjEI48v9fRP/Ql/1sDyj0x+QByEICER/z
+GioXcrCSnITC9mNbmmpmn+wIhlBZZ25OKJihiipypI6LA4LEqLW8zrLebXhVWUAQ
+bne4ymN9uYOy9wjWWb0df/CyZY/tAt41HH7xrEksVyTdN4WyJi53u+Z0QMwfpqdc
+Ho6y6bZ7XEyMwybGXXrj2KL4OLUDe0PcwWu0NTUMWxCW1HgJwJPFpV7yen570bc8
+5NT43Xr4CS+KmU5ZaOz9v/OfoMEt0FCw/9wBDhNV9/EYmgQw3CI=
+=TB7G
+-----END PGP SIGNATURE-----
+
+--Npy2d1m7ESZZaX7I--
