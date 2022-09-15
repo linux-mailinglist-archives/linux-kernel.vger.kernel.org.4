@@ -2,74 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99555B9F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146B45B9F4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 18:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiIOQAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 12:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S230041AbiIOQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 12:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIOP7i (ORCPT
+        with ESMTP id S229824AbiIOP7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:59:38 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2359A2ACA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:32 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id b23so15129271iof.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=A9MuMr8sNFs+YY+FKNgKXQBhOWjKSVReOcYSP90Jf1A=;
-        b=Ik+US2xysLuHqA26EeZQtVLuRyrG1XfW58naE8RwKWA47z9umdBePuYBCKpZKOXQx4
-         rgcv2+ht9lY6mpF2IWDS8J5lHSbWLocG+63ouJKqeofiMEI+qGCL1wuXO8JcVNIqkayM
-         ONhxT72VMXODD1Zp7KHVGccZVVihwEO+OyYus=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=A9MuMr8sNFs+YY+FKNgKXQBhOWjKSVReOcYSP90Jf1A=;
-        b=VUfWsvvmbasP2sfwf0m692LzPDM/Ka0WRg9nkVt1CIXyQcaI22Bx9UWCB7wdtbMvrJ
-         HPmhV4GvIv6jUWg5i/ChF+Uv89CEVjHqSygPnPiNxZRP+yrXBBChPajd5YroRXqpKhke
-         AlL2dPGjxbUgOkbl2/b/RCXb/YsDPhvcJE3PR4Y/c+iLs7yPvhRsrIG1GpkFLawn+fD7
-         KVxA+u3jRntoUSmYCnluONNDwRVW4AhpqBnUIh8v2RQlvdxZ/gnKAud2vLTlvaRpdFKq
-         2/UJ4m1NdW4gcsM2FqIbhI+Ikuq07gMUhOd02oAXFaTYwtQdGVKDnYJHRpobTAhQ+IK1
-         9drA==
-X-Gm-Message-State: ACrzQf2zJl0Hjel8GZ29a0b/7fzMxmrfQSnJA7UYBYYpb38sLh2d2/U7
-        SZH5icKeA6cmdELJUs+nZEKMEQ==
-X-Google-Smtp-Source: AMsMyM7gHn31ptChXvos9nZsLVhPP/4vq9KZDZObUsqXgzrJBDSZbL+iBuAH+HL42QzLb2tXWtp2SA==
-X-Received: by 2002:a05:6602:14c5:b0:689:5640:5b0f with SMTP id b5-20020a05660214c500b0068956405b0fmr170588iow.70.1663257571541;
-        Thu, 15 Sep 2022 08:59:31 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id cx14-20020a056638490e00b0034a036a9a1fsm1322866jab.48.2022.09.15.08.59.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 08:59:30 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 15:59:30 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Rajat Jain <rajatja@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [RESEND PATCH v6] PCI/ASPM: Update LTR threshold based upon
- reported max latencies
-Message-ID: <YyNL4lwmh0mz5CcV@google.com>
-References: <1663216335-9311-1-git-send-email-quic_krichai@quicinc.com>
+        Thu, 15 Sep 2022 11:59:43 -0400
+Received: from out20-15.mail.aliyun.com (out20-15.mail.aliyun.com [115.124.20.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F6BCD;
+        Thu, 15 Sep 2022 08:59:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08941565|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.00588278-0.000715529-0.993402;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.PGRt5Pa_1663257570;
+Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.PGRt5Pa_1663257570)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 23:59:31 +0800
+Date:   Thu, 15 Sep 2022 23:59:38 +0800
+From:   Wang Yugui <wangyugui@e16-tech.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH 5.15 000/121] 5.15.68-rc1 review
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org
+In-Reply-To: <CA+G9fYv5CJeEaxu6XoaJrpizk+z1uXZ0aaQm2DVTA_w79oa2SA@mail.gmail.com>
+References: <20220913140357.323297659@linuxfoundation.org> <CA+G9fYv5CJeEaxu6XoaJrpizk+z1uXZ0aaQm2DVTA_w79oa2SA@mail.gmail.com>
+Message-Id: <20220915235936.4AD5.409509F4@e16-tech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1663216335-9311-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Becky! ver. 2.75.04 [en]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,104 +48,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+Hi,
 
-Your patch doesn't apply on pci/next due to changes to aspm_calc_l1ss_info()
-from commit 1d46154eed48 ("PCI/ASPM: Refactor L1 PM Substates Control
-Register programming"). Please send a rebased version.
+> I have not bisected the reported problem.
+> 
+> hugemmap05.c:99: TINFO: check /proc/meminfo before allocation.
+> hugemmap05.c:278: TINFO: HugePages_Total is 3.
+> hugemmap05.c:278: TINFO: HugePages_Free is 3.
+> hugemmap05.c:278: TINFO: HugePages_Surp is 1.
+> hugemmap05.c:27[   51.077819] ------------[ cut here ]------------
+> [   51.082692] WARNING: CPU: 0 PID: 590 at fs/nfs/inode.c:123
+> nfs_evict_inode+0x58/0x70
+> [   51.090451] Modules linked in: x86_pkg_temp_thermal
+> [   51.095329] CPU: 0 PID: 590 Comm: hugemmap05 Not tainted 5.15.68-rc1 #1
+> [   51.101948] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.5 11/26/2020
+> [   51.109340] RIP: 0010:nfs_evict_inode+0x58/0x70
+> [   51.113872] Code: 29 49 8b 54 24 90 49 8d 44 24 90 48 39 c2 75 2b
+> 4c 89 e7 e8 7a d8 ff ff 4c 89 e7 e8 82 74 ff ff 4c 8b 65 f8 c9 c3 cc
+> cc cc cc <0f> 0b 49 8b 54 24 90 49 8d 44 24 90 48 39 c2 74 d5 0f 0b eb
+> d1 0f
+> [   51.132626] RSP: 0018:ffffb6b140a8fb90 EFLAGS: 00010286
+> [   51.137861] RAX: adacafaea9a8abaa RBX: ffff937fa606a2c0 RCX: ffffb6b140a8fbd0
+> [   51.144986] RDX: ffff937fa606a2d0 RSI: ffffffffbc720682 RDI: ffffffffbc5ec05f
+> [   51.152120] RBP: ffffb6b140a8fb98 R08: 0000000000000000 R09: ffffb6b140a8fcf0
+> [   51.159253] R10: 0000000000000000 R11: 0000000000000002 R12: ffff937fa606a1a8
+> [   51.166395] R13: ffffffffbd851b40 R14: ffff937c40803870 R15: 0000000000000003
+> [   51.173525] FS:  00007f5afcdf4740(0000) GS:ffff937fa7a00000(0000)
+> knlGS:0000000000000000
+> [   51.181602] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   51.187359] CR2: 00007f5afcf10680 CR3: 000000010360a006 CR4: 00000000003706f0
+> 8: TINFO: HugePa[   51.194499] DR0: 0000000000000000 DR1:
+> 0000000000000000 DR2: 0000000000000000
+> [   51.203009] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   51.210135] Call Trace:
+> [   51.212585]  <TASK>
+> [   51.214684]  evict+0xc8/0x180
+> [   51.217682]  prune_icache_sb+0x81/0xc0
+> [   51.221435]  super_cache_scan+0x169/0x200
+> [   51.225447]  do_shrink_slab+0x13f/0x2b0
+> [   51.229288]  shrink_slab+0x186/0x2a0
+> [   51.232868]  drop_slab_node+0x4a/0xa0
+> [   51.236533]  drop_slab+0x41/0x90
+> [   51.239765]  drop_caches_sysctl_handler+0x79/0x90
+> [   51.244471]  proc_sys_call_handler+0x159/0x290
+> [   51.248918]  proc_sys_write+0x13/0x20
+> [   51.252582]  new_sync_write+0x111/0x1a0
+> [   51.256423]  vfs_write+0x1d5/0x270
+> [   51.259828]  ksys_write+0x67/0xf0
+> [   51.263150]  __x64_sys_write+0x19/0x20
+> [   51.266901]  do_syscall_64+0x38/0x90
+> [   51.270479]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> [   51.275534] RIP: 0033:0x7f5afcef31d7
+> [   51.279112] Code: 0f 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7
+> 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89
+> 74 24
+> [   51.297859] RSP: 002b:00007ffd40638738 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000001
+> [   51.305425] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f5afcef31d7
+> [   51.312557] RDX: 0000000000000001 RSI: 00000000016f1480 RDI: 0000000000000003
+> [   51.319689] RBP: 00000000016f1480 R08: 0000000000000001 R09: 0000000000000001
+> [   51.326812] R10: 0000000000001000 R11: 0000000000000246 R12: 0000000000000001
+> [   51.333938] R13: 00000000016f12a0 R14: 0000000000000001 R15: 00007f5afcfe87a0
+> [   51.341073]  </TASK>
+> [   51.343264] ---[ end trace 3420625c1fbde9e9 ]---
+> ges_Rsvd is 3.
+> [   51.348004] hugemmap05 (590): drop_caches: 3
+> hugemmap05.c:253: TINFO: First hex is 7070707
 
-Thanks
+I hit this warning too.
 
-Matthias
+It seems that we need this patch for 5.15.y
 
-On Thu, Sep 15, 2022 at 10:02:06AM +0530, Krishna chaitanya chundru wrote:
-> In ASPM driver, LTR threshold scale and value are updated based on
-> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
-> LTR threshold scale and value are greater values than max snoop/non-snoop
-> value.
-> 
-> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> reported snoop/no-snoop values is greather than or equal to
-> LTR_L1.2_THRESHOLD value.
-> 
-> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
-> 
-> I am taking this patch forward as prasad is no more working with our org.
-> changes since v5:
-> 	- no changes, just reposting as standalone patch instead of reply to
-> 	  previous patch.
-> Changes since v4:
-> 	- Replaced conditional statements with min and max.
-> changes since v3:
-> 	- Changed the logic to include this condition "snoop/nosnoop
-> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> Changes since v2:
-> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> Changes since v1:
-> 	- Added missing variable declaration in v1 patch
-> ---
->  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index a96b742..676c03e 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  {
->  	struct pci_dev *child = link->downstream, *parent = link->pdev;
->  	u32 val1, val2, scale1, scale2;
-> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
->  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->  	u32 ctl1 = 0, ctl2 = 0;
->  	u32 pctl1, pctl2, cctl1, cctl2;
->  	u32 pl1_2_enables, cl1_2_enables;
-> +	u16 ltr;
-> +	u16 max_snoop_lat, max_nosnoop_lat;
->  
->  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->  		return;
->  
-> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> +	if (!ltr)
-> +		return;
-> +
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> +
-> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	/* choose the greater max scale value between snoop and no snoop value*/
-> +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> +
-> +	/* choose the greater max value between snoop and no snoop scales */
-> +	max_val = max(max_snp_val, max_nsnp_val);
-> +
->  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  	 */
->  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> +
-> +	/*
-> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
-> +	 */
-> +	scale = min(scale, max_scale);
-> +	value = min(value, max_val);
-> +
->  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->  
->  	/* Some broken devices only support dword access to L1 SS */
-> -- 
-> 2.7.4
-> 
+commit 0ebeebcf59601bcfa0284f4bb7abdec051eb856d
+Author: Dave Wysochanski <dwysocha@redhat.com>
+Date:   Sun Oct 10 18:23:13 2021 -0400
+
+    NFS: Fix WARN_ON due to unionization of nfs_inode.nrequests
+
+    Fixes the following WARN_ON
+    WARNING: CPU: 2 PID: 18678 at fs/nfs/inode.c:123 nfs_clear_inode+0x3b/0x50 [nfs]
+    ...
+    Call Trace:
+      nfs4_evict_inode+0x57/0x70 [nfsv4]
+      evict+0xd1/0x180
+
+Best Regards
+Wang Yugui (wangyugui@e16-tech.com)
+2022/09/15
+
+
