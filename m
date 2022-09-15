@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969FC5B9C5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F411F5B9C5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 15:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiIONwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 09:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiIONwb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229895AbiIONwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 15 Sep 2022 09:52:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B999E98D31
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 06:52:27 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229686AbiIONw1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 15 Sep 2022 09:52:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E97D98D2F;
+        Thu, 15 Sep 2022 06:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663249948; x=1694785948;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qNTf/fEg8wubvKF39b6L46iyHFBcPA4/o2SKZONT/Lk=;
-  b=HJv5/sHmX5ChOM3rgqca+kdnc4VVoiGqfO2f6G4gWUL1gIUhdFcKHj6C
-   rAa/Yt+FYGxH7eCOYHT6lMBNycFBUWdACwDYFUpHu6/y+yl7EkJkVCu5/
-   N9Jb9TKw4X32QlRF5sZ5lIliRyChFywCWrmqRQ9E+f53RLKf2PuEJznhW
-   C1pd2dMnHaMysae83Or4zCLFHFFGPzyeF15tzEtTmFVw8wpeZAURjX2+/
-   suRFAi++6JW0e6/mxsIOqOjukrn1lkCnDRTFF/ogyN/LO4QusgNGEI4sy
-   Qgeox0aKGueZX60O276ev1sbn+QiGBmMAJEo6BojPKF5VXO02vql+2WoW
-   A==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663249947; x=1694785947;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DPl8JULjiE6znvBSZ8XCagbyNoT+W5D+8RTaxBC14CU=;
+  b=EEjcmOPeHpvXCoMf38dRsop01r5uQRL0ggCQ3qW6TDfjJSqd7McEFReW
+   1j/pcOgAOB2Nw7KSEwXDTzvMXnHQNAHH3YRxk+ZcGWy6wuuTvKlLfHTiW
+   JRWkahZCNbUiHKxEqn7+uwoHMqcd9dsrPsbnW8rk+qv64Y9X6RdF+azqu
+   9xJy3rCCX2Cvn6w+KmvWK9NEL7Pgx7xKdkQtzXUdXCXkuvi3NIK4ABtoz
+   pWritBpTlpZvT2PPlBmUYFf204qQYfJdzNbzMejz8FfGxhFLRfko68kpI
+   Cb1TDXlTb0iOKsYnXg/SmNvCNIhEx7DeRCOgHdGzX7n2GV2J/8RgLMwnN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324978888"
 X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="180531560"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 06:52:28 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 15 Sep 2022 06:52:26 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 15 Sep 2022 06:52:25 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <conor.dooley@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: update polarfire soc clock binding
-Date:   Thu, 15 Sep 2022 14:51:49 +0100
-Message-ID: <20220915135148.2968422-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
+   d="scan'208";a="324978888"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 06:52:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
+   d="scan'208";a="619700757"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Sep 2022 06:52:23 -0700
+From:   wen.ping.teh@intel.com
+To:     dmitry.baryshkov@linaro.org
+Cc:     bjorn.andersson@linaro.org, catalin.marinas@arm.com,
+        davem@davemloft.net, dinguyen@kernel.org,
+        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        wen.ping.teh@intel.com, will@kernel.org
+Subject: Re: [PATCH 0/2] crypto: intel-fcs: Add crypto service driver for Intel SoCFPGA
+Date:   Thu, 15 Sep 2022 21:52:19 +0800
+Message-Id: <20220915135219.670329-1-wen.ping.teh@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2d24ed07-5501-5ee9-e2a9-34ef15216e28@linaro.org>
+References: <2d24ed07-5501-5ee9-e2a9-34ef15216e28@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock binding has been renamed and a new binding added for the
-clock controllers in the FPGA fabric. Generalise the pattern to
-cover both.
+From: wen.ping.teh@intel.com=0D
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-The maintainers addition of binding coverage landed as a 6.0 fix via
-soc while the binding was renamed in patches pending for 6.1. I'll
-send this via soc for 6.1
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c26a5c573a5d..170acda52f03 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17618,7 +17618,7 @@ M:	Conor Dooley <conor.dooley@microchip.com>
- M:	Daire McNamara <daire.mcnamara@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
--F:	Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
-+F:	Documentation/devicetree/bindings/clock/microchip,mpfs*.yaml
- F:	Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
- F:	Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml
- F:	Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
--- 
-2.36.1
-
+>From: Dmitry Baryshkov @ 2022-09-15 11:46 UTC (permalink / raw)=0D
+>> From: wen.ping.teh@intel.com=0D
+>> =0D
+>>> This patch introduces a crypto service driver for Intel SoCFPGA=0D
+>>> family. The FPGA Crypto Service (FCS) includes a large set of security=
+=0D
+>>> features that are provided by the Secure Device Manager(SDM) in FPGA.=0D
+>>> The driver provide IOCTL interface for user to call the crypto services=
+=0D
+>>> and send them to SDM's mailbox.=0D
+>>>=0D
+>>> Teh Wen Ping (2):=0D
+>>>   crypto: intel-fcs: crypto service driver for Intel SoCFPGA family=0D
+>>>   arm64: defconfig: add CRYPTO_DEV_INTEL_FCS=0D
+>> Hi,=0D
+>> =0D
+>> I just found out that there was a previous attempt to upstream this driv=
+er=0D
+>> 2 years ago. It was NACK because it did not implement crypto API. Please=
+=0D
+>> drop this review.=0D
+>> https://www.mail-archive.com/linux-crypto@vger.kernel.org/msg44701.html=
+=0D
+>> =0D
+>> I will move this driver to drivers/misc.=0D
+>=0D
+>I think the proper solution would be to implement the existing API first =
+=0D
+>rather than adding a set of custom proprietary IOCTLs that nobody else =0D
+>is going to use.=0D
+=0D
+Could you explain what are the existing API that you are referring? =0D
+The FCS driver doesn't have API. Instead it uses IOCTLs to interact with us=
+er-space application to perform Intel SoCFPGA crypto features. =0D
+=0D
+Thanks=0D
+Wen Ping=
