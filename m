@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1A65B9CC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A39E5B9CBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 16:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiIOOQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 10:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S229986AbiIOOQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 10:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiIOOQm (ORCPT
+        with ESMTP id S229940AbiIOOQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Sep 2022 10:16:42 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83A25A2C8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AB95A3FB;
         Thu, 15 Sep 2022 07:16:40 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 14:16:37 -0000
+Date:   Thu, 15 Sep 2022 14:16:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663251398;
+        s=2020; t=1663251399;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eMvD6jjlbRsFd+s2e4cOs1s7I1Uh1C5NgEpu4VtLWUQ=;
-        b=J0qJzOC3GVrSpso2nQsSdXQwVfp3gRUQfagb6zRecH452hcxwj5haYePvy6ANxfRRi94A5
-        v4IpOybLZ2fB2SOLdlASg5TV+o9YIjEfOLOANRwhdpFHVS5Rv6kZnCW8L0sBKy48W3wosN
-        zTRaTz6iGrR4DPbHugIcgP29Zwpy9Ahbg8to1knG7eYjJM2uQnylTTILZZkAqjjYWQMQe/
-        XeFrMPAV1ojUkO8xUehLujjwDUlFMNkriH3Set5o9PdgCNtlTxYgSlioK7wn2WNrhzlLYR
-        xIeL9gravNt657gOj3bVoqesWIaPSw3pJyCuTEEwH/aMWjNfk6S6zgz6rGZ2/A==
+        bh=ccBMjjEeCKeUdwVrOFsmFb8BeKecH/ZVqdBTIwVLElM=;
+        b=RJpovITKExtVTmuAHptPBNR9PtznBpCM6Suuk5yWYGc5WB/PnCQEfARwivICTanaLsJ9B8
+        spiyLa0X9TeqClHZz+oV+YqmBO6PHDywQ3jlJpmO566D4VtzLGmvdPTmcWPgl86jB449KL
+        4EOOmuTc59qfy4JeivVfI4B9CctZj0/GJBEH22hURxsXl/uWgxMVRnzxiTwUXU5FjNjMOl
+        Fk8MzsmAiU32oNeEoDT4QwSLZSlfZGTaAIuZI2oVx/ssjvYhSExOQlS/oRD+DPI3bp948U
+        iwDk2XT56HWv97n7FEwVNzJfaaSovB8S4cvEI3gHIsKTHXPss1TatApchuMQaw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663251398;
+        s=2020e; t=1663251399;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eMvD6jjlbRsFd+s2e4cOs1s7I1Uh1C5NgEpu4VtLWUQ=;
-        b=hptVoQpJ3Wv8KGAK/DvUjh5lzAol3Zyb3CyS30NR01wbtRd7P9Dsm047zLGRU+Mv/YO1u2
-        ntTVxZelPppbjJDg==
+        bh=ccBMjjEeCKeUdwVrOFsmFb8BeKecH/ZVqdBTIwVLElM=;
+        b=CkbA7pmMzY+xzbHVpcP05CCYUfVjtWjytJDbKfrAw0q04VqagaEUxQ06dT0oNcyIa30btE
+        Rqo1OHcWfD0tT4Aw==
 From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf: Kill __PERF_SAMPLE_CALLCHAIN_EARLY
+Subject: [tip: perf/core] perf/bpf: Always use perf callchains if exist
 Cc:     Namhyung Kim <namhyung@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220908214104.3851807-3-namhyung@kernel.org>
-References: <20220908214104.3851807-3-namhyung@kernel.org>
+In-Reply-To: <20220908214104.3851807-2-namhyung@kernel.org>
+References: <20220908214104.3851807-2-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166325139712.401.13892634089162382455.tip-bot2@tip-bot2>
+Message-ID: <166325139832.401.13098591458028743653.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,71 +66,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     b4e12b2d70fd9eccdb3cef8015dc1788ca38e3fd
-Gitweb:        https://git.kernel.org/tip/b4e12b2d70fd9eccdb3cef8015dc1788ca38e3fd
+Commit-ID:     16817ad7e8b31728b44ff9f17d8d894ed8a450d0
+Gitweb:        https://git.kernel.org/tip/16817ad7e8b31728b44ff9f17d8d894ed8a450d0
 Author:        Namhyung Kim <namhyung@kernel.org>
-AuthorDate:    Thu, 08 Sep 2022 14:41:04 -07:00
+AuthorDate:    Thu, 08 Sep 2022 14:41:03 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 13 Sep 2022 15:03:23 +02:00
+CommitterDate: Tue, 13 Sep 2022 15:03:22 +02:00
 
-perf: Kill __PERF_SAMPLE_CALLCHAIN_EARLY
+perf/bpf: Always use perf callchains if exist
 
-There's no in-tree user anymore.  Let's get rid of it.
+If the perf_event has PERF_SAMPLE_CALLCHAIN, BPF can use it for stack trace.
+The problematic cases like PEBS and IBS already handled in the PMU driver and
+they filled the callchain info in the sample data.  For others, we can call
+perf_callchain() before the BPF handler.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220908214104.3851807-3-namhyung@kernel.org
+Link: https://lore.kernel.org/r/20220908214104.3851807-2-namhyung@kernel.org
 ---
- arch/x86/events/amd/ibs.c       | 10 ----------
- arch/x86/events/intel/core.c    |  3 ---
- include/uapi/linux/perf_event.h |  2 --
- 3 files changed, 15 deletions(-)
+ kernel/bpf/stackmap.c |  4 ++--
+ kernel/events/core.c  | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index dab0941..ce5720b 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -300,16 +300,6 @@ static int perf_ibs_init(struct perf_event *event)
- 	hwc->config_base = perf_ibs->msr;
- 	hwc->config = config;
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 1adbe67..aecea74 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -338,7 +338,7 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+ 	int ret;
  
--	/*
--	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
--	 * recorded as part of interrupt regs. Thus we need to use rip from
--	 * interrupt regs while unwinding call stack. Setting _EARLY flag
--	 * makes sure we unwind call-stack before perf sample rip is set to
--	 * IbsOpRip.
--	 */
--	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
--		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
--
- 	return 0;
- }
+ 	/* perf_sample_data doesn't have callchain, use bpf_get_stackid */
+-	if (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
++	if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
+ 		return bpf_get_stackid((unsigned long)(ctx->regs),
+ 				       (unsigned long) map, flags, 0, 0);
  
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 7f4e7e6..b16c91a 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -3868,9 +3868,6 @@ static int intel_pmu_hw_config(struct perf_event *event)
- 		}
- 		if (x86_pmu.pebs_aliases)
- 			x86_pmu.pebs_aliases(event);
--
--		if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
--			event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
- 	}
+@@ -506,7 +506,7 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+ 	int err = -EINVAL;
+ 	__u64 nr_kernel;
  
- 	if (needs_branch_stack(event)) {
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index dca1658..e639c74 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -164,8 +164,6 @@ enum perf_event_sample_format {
- 	PERF_SAMPLE_WEIGHT_STRUCT		= 1U << 24,
+-	if (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
++	if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
+ 		return __bpf_get_stack(regs, NULL, NULL, buf, size, flags);
  
- 	PERF_SAMPLE_MAX = 1U << 25,		/* non-ABI */
--
--	__PERF_SAMPLE_CALLCHAIN_EARLY		= 1ULL << 63, /* non-ABI; internal use */
- };
+ 	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index c98ecf3..7da5515 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -10000,8 +10000,16 @@ static void bpf_overflow_handler(struct perf_event *event,
+ 		goto out;
+ 	rcu_read_lock();
+ 	prog = READ_ONCE(event->prog);
+-	if (prog)
++	if (prog) {
++		if (prog->call_get_stack &&
++		    (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
++		    !(data->sample_flags & PERF_SAMPLE_CALLCHAIN)) {
++			data->callchain = perf_callchain(event, regs);
++			data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
++		}
++
+ 		ret = bpf_prog_run(prog, &ctx);
++	}
+ 	rcu_read_unlock();
+ out:
+ 	__this_cpu_dec(bpf_prog_active);
+@@ -10027,7 +10035,7 @@ static int perf_event_set_bpf_handler(struct perf_event *event,
  
- #define PERF_SAMPLE_WEIGHT_TYPE	(PERF_SAMPLE_WEIGHT | PERF_SAMPLE_WEIGHT_STRUCT)
+ 	if (event->attr.precise_ip &&
+ 	    prog->call_get_stack &&
+-	    (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY) ||
++	    (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) ||
+ 	     event->attr.exclude_callchain_kernel ||
+ 	     event->attr.exclude_callchain_user)) {
+ 		/*
