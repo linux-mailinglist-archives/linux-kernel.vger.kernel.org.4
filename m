@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB205B9E6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11355B9E70
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiIOPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S231211AbiIOPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiIOPJt (ORCPT
+        with ESMTP id S230527AbiIOPJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:09:49 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F1A9DB63
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:18 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id g19-20020adfa493000000b0022a2ee64216so4918865wrb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:18 -0700 (PDT)
+        Thu, 15 Sep 2022 11:09:52 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB2C9C2F9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:20 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id qa33-20020a17090786a100b0077a69976d24so6992002ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=y4+04AEFcGK6lJisKBf+d7wj7/tgJIfosEPW0CJiM4s=;
-        b=TY9zj9hsonLfxsKiJ/Nk2jseei3hK6yzpjZdnJr1tEyHclD4r1lmduXOFaXWThcHMB
-         DJaob/V+m/PRO6csCY9Qz7+UxT/duZ0JLxrjFhCX78YuVaTTZumMHyb2TWgLeR3UbElB
-         7X4tMiqGIMatHsfHnsy6juWEIz1QNOu/tb14hyG2cs2B6k04dPWvwNIFfjy6W/oOeaN0
-         QrnIqe66ITykN//4B+h/MckE3RzTc0/Lsnyh0ahzj+igL5hjBzIYjNA8Ky1MP7CzfGn4
-         gexfdk9N6b5itmc9hr0TODSZeATm0DUea9IoCzI93/y47kt1AL6SpSZT+FyLO6lv3DEl
-         7UAg==
+        bh=UAXLi6hWes4K0I7wTwgH8ix0vMuStYu2bu/++oTzO6o=;
+        b=ERCi1CpV4jZif78HFY8gJQN4P8IDxcWvvUgCJpc8tDdg16sYqfI+n7+eI/UuSCUmAL
+         SRsI5Hb91SXSeFx5sJE1WSEv/4pORbIjsWZTzgEFYcgB/oZjvlbdnJymDpzxMI9WqsSA
+         fzkKSe+qfBYibckT/e2O3pBw/nejcxC4oW7V9C7vbDKbUxY/1oiLcrrUCzDCYPL0adsT
+         b2RNlS/5f0ZdOsGOr5ezTbcfH4d1nDZoSyn+/iVHMh1x3nzhYUV/wDYZq+9D8wPhUAkh
+         ifAj5YfBWK0ZWXgVZXSMG/CcCXlZscKX8+i4U7n68cPdraXGc+ejH1kH30GZoeyXCaAN
+         BRHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=y4+04AEFcGK6lJisKBf+d7wj7/tgJIfosEPW0CJiM4s=;
-        b=V2p1nPwBYX6bQSwmjVS6Iw8VMOppJ3zcmSH6HrQg/hHCgQVAEUIiUqc+A9u+r6nlU9
-         rIKNuSu3jFF9QrvNNeaq/9HcsIJQSHjCna0j2G1UvrrY9OdSVjD5J0Usx9v1L7+QF64X
-         7daIn+o8WwwCfxExu8BMCjJQVAq8Zyvefpa92JVl99AZOxEjmnaCDa/TIw5SEFJ6NF/1
-         8HMHNlZozOMfFFlpRgJdXv3ltWVjoayJCwfuIZMx280rZx0Ai5+YuuMPohWh9pL03Zs2
-         Ot+7QUuSssYp+MPUTh6kGfpzxyxlp7ndXeQ2dZI5FreUOFrnZQVM0uVace7cLMjMA7No
-         kTvQ==
-X-Gm-Message-State: ACrzQf0nWYe1V7wHAjTMBMjCnLGC7g6772YU0usR0USC1nOQzGemnSx5
-        aotTGI4Vc/U88b6lfBTBmP3qweuBifM=
-X-Google-Smtp-Source: AMsMyM7TO7pwHZKC5FCuc6aosYGc8fP10GsQWeB+vHWTvsz1rJA3jVBR26bmI08PTxhgRL6r8YIYohpf0Dw=
+        bh=UAXLi6hWes4K0I7wTwgH8ix0vMuStYu2bu/++oTzO6o=;
+        b=m0ueQQoYa/82IhIJ5UjRrTpgAoa7MQdmUDa1qGG+5Z2EO5sPNGYcH3YR3zELqiSUwH
+         Pm8AdYdiqygPlKEXYQ69/4fmAclOR8mX8uoezpeJsaJiNi39FPH7sxuLR9LgGWaWGW+T
+         d8ZptSL/rTa6cFGFubeNIU85apkwoCI0wwVvlJvZq/LSirRh8FbqCNUZ2dioPwN7rqWd
+         /7kOPM90zlBlxXCOlsx24gch1tgCRbQbbbsOfbuGKKuCpTBDW/tlis2QDOZ1cdIlJ66C
+         PZ5J96sT3CA7ay8oGSul4nvqkrELtA8wPb6q9ZVtO/2m1lbE0G0opRDdDm79rbrRTLY8
+         TFQA==
+X-Gm-Message-State: ACrzQf2P3ZnfqYc+BhptcRUCjpEE+v+DmO/w3cT1NB8cLV0GBdOJEn7/
+        thfEm8efgT+dw2PTiDI8Q6i8cyzWmhg=
+X-Google-Smtp-Source: AMsMyM75ouYEbc3+dMPfZoPiB6oSYiohoWcuheQnJIsz7c3U6au3f9s6axieNdPO5ybuRDS+Vorz5dq1hn0=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a05:6000:68c:b0:22a:bde3:f8cc with SMTP id
- bo12-20020a056000068c00b0022abde3f8ccmr71217wrb.556.1663254376855; Thu, 15
- Sep 2022 08:06:16 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:10 +0200
+ (user=glider job=sendgmr) by 2002:aa7:ca50:0:b0:44e:973b:461e with SMTP id
+ j16-20020aa7ca50000000b0044e973b461emr269636edt.414.1663254379373; Thu, 15
+ Sep 2022 08:06:19 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:04:11 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-37-glider@google.com>
-Subject: [PATCH v7 36/43] x86: kmsan: sync metadata pages on page fault
+Message-ID: <20220915150417.722975-38-glider@google.com>
+Subject: [PATCH v7 37/43] x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on
+ x86, enable it for KASAN/KMSAN
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -91,7 +92,7 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,65 +100,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN assumes shadow and origin pages for every allocated page are
-accessible. For pages between [VMALLOC_START, VMALLOC_END] those metadata
-pages start at KMSAN_VMALLOC_SHADOW_START and
-KMSAN_VMALLOC_ORIGIN_START, therefore we must sync a bigger memory
-region.
+This is needed to allow memory tools like KASAN and KMSAN see the
+memory accesses from the checksum code. Without CONFIG_GENERIC_CSUM the
+tools can't see memory accesses originating from handwritten assembly
+code.
+For KASAN it's a question of detecting more bugs, for KMSAN using the C
+implementation also helps avoid false positives originating from
+seemingly uninitialized checksum values.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 
 ---
 
-v2:
- -- addressed reports from kernel test robot <lkp@intel.com>
-
-Link: https://linux-review.googlesource.com/id/Ia5bd541e54f1ecc11b86666c3ec87c62ac0bdfb8
+Link: https://linux-review.googlesource.com/id/I3e95247be55b1112af59dbba07e8cbf34e50a581
 ---
- arch/x86/mm/fault.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ arch/x86/Kconfig                |  4 ++++
+ arch/x86/include/asm/checksum.h | 16 ++++++++++------
+ arch/x86/lib/Makefile           |  2 ++
+ 3 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index fa71a5d12e872..d728791be8ace 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -260,7 +260,7 @@ static noinline int vmalloc_fault(unsigned long address)
- }
- NOKPROBE_SYMBOL(vmalloc_fault);
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8d..33f4d4baba079 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -324,6 +324,10 @@ config GENERIC_ISA_DMA
+ 	def_bool y
+ 	depends on ISA_DMA_API
  
--void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-+static void __arch_sync_kernel_mappings(unsigned long start, unsigned long end)
- {
- 	unsigned long addr;
- 
-@@ -284,6 +284,27 @@ void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
- 	}
- }
- 
-+void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-+{
-+	__arch_sync_kernel_mappings(start, end);
-+#ifdef CONFIG_KMSAN
-+	/*
-+	 * KMSAN maintains two additional metadata page mappings for the
-+	 * [VMALLOC_START, VMALLOC_END) range. These mappings start at
-+	 * KMSAN_VMALLOC_SHADOW_START and KMSAN_VMALLOC_ORIGIN_START and
-+	 * have to be synced together with the vmalloc memory mapping.
-+	 */
-+	if (start >= VMALLOC_START && end < VMALLOC_END) {
-+		__arch_sync_kernel_mappings(
-+			start - VMALLOC_START + KMSAN_VMALLOC_SHADOW_START,
-+			end - VMALLOC_START + KMSAN_VMALLOC_SHADOW_START);
-+		__arch_sync_kernel_mappings(
-+			start - VMALLOC_START + KMSAN_VMALLOC_ORIGIN_START,
-+			end - VMALLOC_START + KMSAN_VMALLOC_ORIGIN_START);
-+	}
-+#endif
-+}
++config GENERIC_CSUM
++	bool
++	default y if KMSAN || KASAN
 +
- static bool low_pfn(unsigned long pfn)
- {
- 	return pfn < max_low_pfn;
+ config GENERIC_BUG
+ 	def_bool y
+ 	depends on BUG
+diff --git a/arch/x86/include/asm/checksum.h b/arch/x86/include/asm/checksum.h
+index bca625a60186c..6df6ece8a28ec 100644
+--- a/arch/x86/include/asm/checksum.h
++++ b/arch/x86/include/asm/checksum.h
+@@ -1,9 +1,13 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#define  _HAVE_ARCH_COPY_AND_CSUM_FROM_USER 1
+-#define HAVE_CSUM_COPY_USER
+-#define _HAVE_ARCH_CSUM_AND_COPY
+-#ifdef CONFIG_X86_32
+-# include <asm/checksum_32.h>
++#ifdef CONFIG_GENERIC_CSUM
++# include <asm-generic/checksum.h>
+ #else
+-# include <asm/checksum_64.h>
++# define  _HAVE_ARCH_COPY_AND_CSUM_FROM_USER 1
++# define HAVE_CSUM_COPY_USER
++# define _HAVE_ARCH_CSUM_AND_COPY
++# ifdef CONFIG_X86_32
++#  include <asm/checksum_32.h>
++# else
++#  include <asm/checksum_64.h>
++# endif
+ #endif
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index f76747862bd2e..7ba5f61d72735 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -65,7 +65,9 @@ ifneq ($(CONFIG_X86_CMPXCHG64),y)
+ endif
+ else
+         obj-y += iomap_copy_64.o
++ifneq ($(CONFIG_GENERIC_CSUM),y)
+         lib-y += csum-partial_64.o csum-copy_64.o csum-wrappers_64.o
++endif
+         lib-y += clear_page_64.o copy_page_64.o
+         lib-y += memmove_64.o memset_64.o
+         lib-y += copy_user_64.o
 -- 
 2.37.2.789.g6183377224-goog
 
