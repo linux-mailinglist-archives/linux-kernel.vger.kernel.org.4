@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5F85B99EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125FE5B99C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 13:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiIOLmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 07:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229915AbiIOLkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 07:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiIOLkr (ORCPT
+        with ESMTP id S229458AbiIOLkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 07:40:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA6167C85
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:18 -0700 (PDT)
+        Thu, 15 Sep 2022 07:40:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2FC31DEF
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 04:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=dU2Gcv7fJ6+XDB4dHrX1+Ks1xNnLuKHyEB6BsKn/hys=; b=P8cII2EyHmh4Nty6p1CUwU9uBs
-        veO7pfxCKeIcYZGWfNz9zEOUf23l/pQ9gIEgA2/EemCq8xi33zerjtXSRbf8hwWRbhEvcLr165bkP
-        /77nPic1G13j9RNUCslE9FjEZ7f+wrX0qeZlWAbtXwwNCcqawuz8VGyGLrLoi+th+vTiBPQgHsfMs
-        ATHckjREUJT2FOj9bV1Pn4hOTq14tL4PHrk1/FV0pYVyURjHbYJPEB1v+HxUmAu2/S5G7YiR9TWA+
-        UOjOk1IMnaIIU/2Ldz+9QrpILhjmzIdhG4Bsn0VY+tUL1VbARCbbxfXxy6XAE1mEw/lN08G9QE7B3
-        mXCUziVg==;
+        bh=BJHqXamgAJqTcT2FFMKxQyrqmVcujF7M2+0CHXkEhUI=; b=W1b/8dE8UWoAn/AYQdcR3yl05T
+        h/647vG5bqynMSGInS1aU7GoGZeEaiU+Xtwm8NYT/nVRcrZrJIcItKX8x6SP45W0mygOAF1H0iorj
+        B0L5T6qo84/CxIrySSeEk27l08Rwt94+z5EiOLR3wGjlukBoEoTPxpm+vP72t+CVYdTCr3A94VfQ8
+        iWFyQ0sZCRFRqAWWrcDVqbHujvzNc3g8Kammuszh7pOgOoHjbW+Pvq2mHoPyao1ZX7qMuvX3fMKx0
+        QUxS6zf6l+Vzoo9d+Y/Z1g+h9mKoKwahBwiegqRirOEMPShkSKP4/sc9Oismv8N9PUicok0GSdRhh
+        oLx1uFvw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYnDZ-00Caam-JQ; Thu, 15 Sep 2022 11:39:53 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oYnDb-0012N0-PY; Thu, 15 Sep 2022 11:39:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C135B3018A7;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CBBEF301D53;
         Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 204AA29AADBF3; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
-Message-ID: <20220915111144.144068841@infradead.org>
+        id 26AA329AADBF2; Thu, 15 Sep 2022 13:39:39 +0200 (CEST)
+Message-ID: <20220915111144.248229966@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Sep 2022 13:10:51 +0200
+Date:   Thu, 15 Sep 2022 13:10:52 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v3 12/59] x86/entry: Align SYM_CODE_START() variants
+Subject: [PATCH v3 13/59] crypto: x86/camellia: Remove redundant alignments
 References: <20220915111039.092790446@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -74,76 +74,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Explicitly align a bunch of commonly called SYM_CODE_START() symbols.
+SYM_FUNC_START*() and friends already imply alignment, remove custom
+alignment hacks to make code consistent. This prepares for future
+function call ABI changes.
+
+Also, with having pushed the function alignment to 16 bytes, this
+custom alignment is completely superfluous.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/entry/entry_64.S |   12 ++++++++----
- arch/x86/entry/thunk_64.S |    4 ++--
- 2 files changed, 10 insertions(+), 6 deletions(-)
+ arch/x86/crypto/camellia-aesni-avx-asm_64.S  |    2 --
+ arch/x86/crypto/camellia-aesni-avx2-asm_64.S |    4 ----
+ 2 files changed, 6 deletions(-)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -284,7 +284,8 @@ SYM_FUNC_END(__switch_to_asm)
-  * r12: kernel thread arg
+--- a/arch/x86/crypto/camellia-aesni-avx-asm_64.S
++++ b/arch/x86/crypto/camellia-aesni-avx-asm_64.S
+@@ -712,7 +712,6 @@ SYM_FUNC_END(roundsm16_x4_x5_x6_x7_x0_x1
+ 
+ .text
+ 
+-.align 8
+ SYM_FUNC_START_LOCAL(__camellia_enc_blk16)
+ 	/* input:
+ 	 *	%rdi: ctx, CTX
+@@ -799,7 +798,6 @@ SYM_FUNC_START_LOCAL(__camellia_enc_blk1
+ 	jmp .Lenc_done;
+ SYM_FUNC_END(__camellia_enc_blk16)
+ 
+-.align 8
+ SYM_FUNC_START_LOCAL(__camellia_dec_blk16)
+ 	/* input:
+ 	 *	%rdi: ctx, CTX
+--- a/arch/x86/crypto/camellia-aesni-avx2-asm_64.S
++++ b/arch/x86/crypto/camellia-aesni-avx2-asm_64.S
+@@ -221,7 +221,6 @@
+  * Size optimization... with inlined roundsm32 binary would be over 5 times
+  * larger and would only marginally faster.
   */
- .pushsection .text, "ax"
--SYM_CODE_START(ret_from_fork)
-+	__FUNC_ALIGN
-+SYM_CODE_START_NOALIGN(ret_from_fork)
- 	UNWIND_HINT_EMPTY
- 	ANNOTATE_NOENDBR // copy_thread
- 	movq	%rax, %rdi
-@@ -828,7 +829,8 @@ EXPORT_SYMBOL(asm_load_gs_index)
-  *
-  * C calling convention: exc_xen_hypervisor_callback(struct *pt_regs)
-  */
--SYM_CODE_START_LOCAL(exc_xen_hypervisor_callback)
-+	__FUNC_ALIGN
-+SYM_CODE_START_LOCAL_NOALIGN(exc_xen_hypervisor_callback)
+-.align 8
+ SYM_FUNC_START_LOCAL(roundsm32_x0_x1_x2_x3_x4_x5_x6_x7_y0_y1_y2_y3_y4_y5_y6_y7_cd)
+ 	roundsm32(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %ymm5, %ymm6, %ymm7,
+ 		  %ymm8, %ymm9, %ymm10, %ymm11, %ymm12, %ymm13, %ymm14, %ymm15,
+@@ -229,7 +228,6 @@ SYM_FUNC_START_LOCAL(roundsm32_x0_x1_x2_
+ 	RET;
+ SYM_FUNC_END(roundsm32_x0_x1_x2_x3_x4_x5_x6_x7_y0_y1_y2_y3_y4_y5_y6_y7_cd)
  
- /*
-  * Since we don't modify %rdi, evtchn_do_upall(struct *pt_regs) will
-@@ -856,7 +858,8 @@ SYM_CODE_END(exc_xen_hypervisor_callback
-  * We distinguish between categories by comparing each saved segment register
-  * with its current contents: any discrepancy means we in category 1.
-  */
--SYM_CODE_START(xen_failsafe_callback)
-+	__FUNC_ALIGN
-+SYM_CODE_START_NOALIGN(xen_failsafe_callback)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	movl	%ds, %ecx
-@@ -1516,7 +1519,8 @@ SYM_CODE_END(ignore_sysret)
- #endif
+-.align 8
+ SYM_FUNC_START_LOCAL(roundsm32_x4_x5_x6_x7_x0_x1_x2_x3_y4_y5_y6_y7_y0_y1_y2_y3_ab)
+ 	roundsm32(%ymm4, %ymm5, %ymm6, %ymm7, %ymm0, %ymm1, %ymm2, %ymm3,
+ 		  %ymm12, %ymm13, %ymm14, %ymm15, %ymm8, %ymm9, %ymm10, %ymm11,
+@@ -748,7 +746,6 @@ SYM_FUNC_END(roundsm32_x4_x5_x6_x7_x0_x1
  
- .pushsection .text, "ax"
--SYM_CODE_START(rewind_stack_and_make_dead)
-+	__FUNC_ALIGN
-+SYM_CODE_START_NOALIGN(rewind_stack_and_make_dead)
- 	UNWIND_HINT_FUNC
- 	/* Prevent any naive code from trying to unwind to our caller. */
- 	xorl	%ebp, %ebp
---- a/arch/x86/entry/thunk_64.S
-+++ b/arch/x86/entry/thunk_64.S
-@@ -11,7 +11,7 @@
+ .text
  
- 	/* rdi:	arg1 ... normal C conventions. rax is saved/restored. */
- 	.macro THUNK name, func
--SYM_FUNC_START_NOALIGN(\name)
-+SYM_FUNC_START(\name)
- 	pushq %rbp
- 	movq %rsp, %rbp
+-.align 8
+ SYM_FUNC_START_LOCAL(__camellia_enc_blk32)
+ 	/* input:
+ 	 *	%rdi: ctx, CTX
+@@ -835,7 +832,6 @@ SYM_FUNC_START_LOCAL(__camellia_enc_blk3
+ 	jmp .Lenc_done;
+ SYM_FUNC_END(__camellia_enc_blk32)
  
-@@ -36,7 +36,7 @@ SYM_FUNC_END(\name)
- 	EXPORT_SYMBOL(preempt_schedule_thunk)
- 	EXPORT_SYMBOL(preempt_schedule_notrace_thunk)
- 
--SYM_CODE_START_LOCAL_NOALIGN(__thunk_restore)
-+SYM_CODE_START_LOCAL(__thunk_restore)
- 	popq %r11
- 	popq %r10
- 	popq %r9
+-.align 8
+ SYM_FUNC_START_LOCAL(__camellia_dec_blk32)
+ 	/* input:
+ 	 *	%rdi: ctx, CTX
 
 
