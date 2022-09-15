@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D335BA0ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928375BA0EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 20:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiIOSqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 14:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S229652AbiIOSqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 14:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIOSq3 (ORCPT
+        with ESMTP id S229561AbiIOSqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 14:46:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6ED59A68A;
-        Thu, 15 Sep 2022 11:46:28 -0700 (PDT)
+        Thu, 15 Sep 2022 14:46:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D809A955;
+        Thu, 15 Sep 2022 11:46:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DED8625F4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 891BB625F5;
+        Thu, 15 Sep 2022 18:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C07C4347C;
         Thu, 15 Sep 2022 18:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BFB4C433C1;
-        Thu, 15 Sep 2022 18:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663267587;
-        bh=xChaNWZaTfA8GaSh2F5Mi+IsCxwrgzYZucCR5BSDzYQ=;
+        s=k20201202; t=1663267589;
+        bh=4aQoWqQIlT7CgalHAG9G4oWuQNvk1txMTZ7ASFZJVZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VwyJ3h4MhfTBn0r/I7ErupFSe3+J9PRhh6DALGR2rH/4oD75lZ4BNSfl+PM5f1VpJ
-         5oJtc2vHv1sqoCXJR4tiiPB2AE6zEZYCwMpIUqUazrJ356teiYttZggB2Hwk+GCFKd
-         vBtonr/pcUrQzwq3PesGCxiaNmoK87rgQ4VUlDUwBV0j/X9mDZS9ml98E/m7dgNer+
-         IWnZ/K1t+eoGNOT/GiKFALrsRniTmBBNoHF1qWlCs2vBpKmKAOvzvs37NRKbBtgR90
-         oUJ2sKtQ+JlPcc7LyEryeAmOAbiEKY2d5R7qGlgV838MFxqAiplD7TPS9hoNnDFSZS
-         7Hd9sbvfTCJiA==
+        b=Kwfqm0b58S9XHaA6SXwpIQshMRQzgrbBbnZqdSOBNDw7dSBwkis/h4bHKrUmtIpMN
+         Nje8LYcT1BeruQbVbUB4Rq0oGY37Rt7hMFzDzMaWngEvs7QW+uAU0sqiCqLXvo0dpS
+         4cWXBxbK7GHF+Orgm60KwUmuXT/vtu79UcRmk4XywsZ2sm6UnpTik609XHVRk0zqRG
+         zLk47HItonSTwNEYJez7yx2p4YRKwwCfO2rQdiiWgc9tL5NsOqARGD5NWV5A80Zt63
+         IVYOYJfBuhyYHr+o9XCCcpWHr2WJfdFrHZysmvc50kFrCZuA2TouQhoellVlXARNqa
+         TZBRRYpacb+Gg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     johan+linaro@kernel.org
-Cc:     robh+dt@kernel.org, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/2] arm64: dts: qcom: ipq8074: fix PCIe PHY serdes size
-Date:   Thu, 15 Sep 2022 13:46:25 -0500
-Message-Id: <166326758062.847092.16539111299394629381.b4-ty@kernel.org>
+To:     luca@z3ntu.xyz, linux-arm-msm@vger.kernel.org
+Cc:     robh+dt@kernel.org, agross@kernel.org, phone-devel@vger.kernel.org,
+        mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        mani@kernel.org, devicetree@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 1/5] dt-bindings: remoteproc: qcom: pas: Add MSM8226 adsp
+Date:   Thu, 15 Sep 2022 13:46:26 -0500
+Message-Id: <166326758064.847092.18364479017237684349.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220915143431.19842-1-johan+linaro@kernel.org>
-References: <20220915143431.19842-1-johan+linaro@kernel.org>
+In-Reply-To: <20220423155059.660387-1-luca@z3ntu.xyz>
+References: <20220423155059.660387-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,19 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 16:34:30 +0200, Johan Hovold wrote:
-> The size of the PCIe PHY serdes register region is 0x1c4 and the
-> corresponding 'reg' property should specifically not include the
-> adjacent regions that are defined in the child node (e.g. tx and rx).
+On Sat, 23 Apr 2022 17:50:55 +0200, Luca Weiss wrote:
+> Add the compatible for the adsp found in MSM8226.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: ipq8074: fix PCIe PHY serdes size
-      commit: ed22cc93abae68f9d3fc4957c20a1d902cf28882
-[2/2] arm64: dts: qcom: sm8540: fix UFS PHY serdes size
-      commit: 677920072e9d757ae158d66b8fdb695992bb3f1a
+[3/5] ARM: dts: qcom: msm8226: Add ADSP node
+      commit: 25ba74dd60022f2fa1630405d6eba7c37f45b13a
+[4/5] ARM: dts: qcom: apq8026-asus-sparrow: Enable ADSP
+      commit: 268c661c172d783540f34a132290e78342bae3c5
+[5/5] ARM: dts: qcom: apq8026-lg-lenok: Enable ADSP
+      commit: 5cbd20166f0ac7ae0272d25401b6ec5472482a19
 
 Best regards,
 -- 
