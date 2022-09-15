@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C035B95F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE865B95F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 10:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiIOIJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 04:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S230200AbiIOIKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 04:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiIOIJp (ORCPT
+        with ESMTP id S230018AbiIOIJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 04:09:45 -0400
+        Thu, 15 Sep 2022 04:09:49 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBF5167C1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:09:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 797353200B50;
-        Thu, 15 Sep 2022 04:09:43 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B70186FF
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 01:09:47 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 167A93200B73;
+        Thu, 15 Sep 2022 04:09:47 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 15 Sep 2022 04:09:43 -0400
+  by compute2.internal (MEProxy); Thu, 15 Sep 2022 04:09:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1663229382; x=1663315782; bh=vF
-        9yk8jSGcOUiyf4eGbShAgD4UX6iWj8uUKlajrxg1Q=; b=BHZ2E2ufgGuQ/CnZV5
-        jqNOHRY2EvO0VVnzxP0hSUnk2YaLG61j6Zvc3M2Xd7+CUX191HdJZt3aybSxBgB1
-        JyjE557sJ4VT0cunOEzxJ1IwgOCPXlvc+UshyEMZKMw1V6Lx52Wot9Vnc0Z+NpC7
-        uZqjeW1/oMBWvAyXJ8F/8MWnwzxEqeQNkU/yCTtdwRiX9LQiJPPX+EBakG2/DwRS
-        3POKy3XZCdEFXbPilS0IKOuf5t1S774YOoSBxAvBh0FS+kawUjsJxlifAZPPKEMB
-        q+2XwmyjFNa3v5l0eCR4M0jF28FZqXrMrhUUGCJ/ESS/bEwRBvv/oywn24jq0yGu
-        y3LQ==
+        :subject:subject:to:to; s=fm3; t=1663229386; x=1663315786; bh=0Q
+        04mFgRD7edEsHcym+fN9UcJx2DHyn2Ew32bsA9ExQ=; b=Luzsp/ba1qz1kBcZ3m
+        t87N6zIxxrDhm2MvOVnj+ZgtpcPD7ve40DbxQHrGdAzPCJ/1b4/cHbnpKtNXBqmk
+        +miEadMKEmYUPj3iOCbaAvzVonBbZjIS0ePprqsmb72lWNVbZX2SshXcVZzOZx9b
+        iIO0ny3uVedfix/LAMzMzYQHxmZqtWw1Tlg+5tamgxy3fyOof06/H/dPA1Rm7qHx
+        52OVZTIj8EhutFiYuA9zQUUoW/1/cVRjmqo24Nq5Zx41Xo5w6v9mM54AaWmJ4i50
+        U3e6LjJsjt6hSyKOEpp5x5DdSmUxcIFO74Ji+h9yDIV0epsltf7nqgTVkaWqaoZg
+        sdgQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1663229382; x=1663315782; bh=vF9yk8jSGcOUi
-        yf4eGbShAgD4UX6iWj8uUKlajrxg1Q=; b=lvCIz+A9RuT29UYvG5FUjGQ+5fr9W
-        /qjyhZ5gS5871Ds3KJlU5IHeA6kVzSBL22qtVHmSPIer++DmAai3el4u4u30r6mj
-        o1zGritPYjxfB4BkZrmpJlEFlQh0FOZjRUTaKUkQ9zk2VGFTihP64YxasIwo+yVW
-        20UKqL4zuGy7Se1VeQIPfL/lXYFgbRNKuoAU6OLuXbkK7ypyJ3zUFWXcCgiBFntp
-        oywNuAii2kbVYecfG6Gmxvn6kGDHRtbAwwOgQJgTr33UIqfjf1cc6iDqBSynM52W
-        GFKt++VgNGm4wNAbXj0k6kaRv73yDvplcFCGZh+bCGnSgIAOTeOPYyNtg==
-X-ME-Sender: <xms:xt0iY4x6pRhaBiWTgxB1YNtXIJGV5d7UbuE7FV8INpChS5-g9KWHfA>
-    <xme:xt0iY8QRldOyQ6AJaasOkg9AAQiqVbYyTqg9iobjVa8aQvo0zWrc9XhLJDM4Mg9hg
-    sSw8cs3oyJyT_JNPSE>
-X-ME-Received: <xmr:xt0iY6UAf1S4QNzOZc6JlEuW9h-K58N-7iUGQ-KCq2LP6yoJCrcqc1GXMrRX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekredtre
-    dttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhjohhn
-    vghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugffgle
-    eltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:xt0iY2jwpgdTuqon4CY-z5KviESsg4WJi2w8XVSqivxsCBguTPgB1A>
-    <xmx:xt0iY6CQNUqsHWhh9NcKGvbR-6SWHX63PQYl9GnQmYkzZ0EP-mPlBw>
-    <xmx:xt0iY3LwJE0ol-0uryhvP32R40rmiNuq662PApbJ0ey-_v81cnYGug>
-    <xmx:xt0iY9MRptkWzDS4tXM5dXSFXINHYTqy7iF_5MI8R1K9q_H-1D6lLw>
+        :x-sasl-enc; s=fm2; t=1663229386; x=1663315786; bh=0Q04mFgRD7edE
+        sHcym+fN9UcJx2DHyn2Ew32bsA9ExQ=; b=EP2EFni2DQQWxuZh6jWnRfT2WB+z8
+        t3DDaxhzIgAG1LXYCkj2j1nQbUhnFmqnKEj5RKg6X5jpLxaFfwJWSH6iEPEUq8ta
+        dL4xyS2vylwZb/sXl/HPXHCX3qxZgpGENSHmAhYrp3zIbzTKVf2GaaJtK36CIdn0
+        9cQP1xQI1c6fALolle+2xFc4OjnvHlD+067huWJYeGFXmMKckyJw8rw/uVa41n2T
+        CvQv9DDDVklLuyxjlxSjIXNnDIwcyME1dZaylB5EICzOUm3w1qV9Ku7NS7bfRthP
+        D2etX6ln/G1L7eilnKITMRzmOQhCFnwlvvwMhrG5hirLrlSY3gUunjN1w==
+X-ME-Sender: <xms:yt0iY9cZPhTkSGIxk7e0YiTiDhWUM9aMMu9rFRtIg7FJKHYKPziNJA>
+    <xme:yt0iY7NG0vUvCKezU3mr2lWuDuWbMpha5ayrAgx2MrdAZJEMdS5KCn2ILWMbUkYUu
+    RNg01216AoP5JR-h9s>
+X-ME-Received: <xmr:yt0iY2hEcfT6NTwj27wPQwozdVH_iaaLx6w02ANy-e2-wnE1Wu4PJvfTWTal>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
+    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
+    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:yt0iY2_8clyP5Z7kVrMf4zkLVFkVhp3FaHOqOh8Z4vOI8XfpGO34pA>
+    <xmx:yt0iY5v5WOCi6sV0Vu9Ezai_EMaQR-39umNDnRNEett7WkeQA4MO1w>
+    <xmx:yt0iY1El7nuug-pFavGj2OLffYG8fgHr7QWE0sW25dqchKae84Ytiw>
+    <xmx:yt0iYy5_sUM4WJogGFc3e7hQmjlpyB6S0qk_LyyXohmiRct2OtEYKw>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Sep 2022 04:09:39 -0400 (EDT)
+ 15 Sep 2022 04:09:44 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     tiwai@suse.com
 Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
         perex@perex.cz, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v2 2/3] sound: realtek: Add pincfg for ASUS G533Z HP jack
-Date:   Thu, 15 Sep 2022 20:09:20 +1200
-Message-Id: <20220915080921.35563-3-luke@ljones.dev>
+Subject: [PATCH v2 3/3] sound: realtek: Add quirk for ASUS GA503R laptop
+Date:   Thu, 15 Sep 2022 20:09:21 +1200
+Message-Id: <20220915080921.35563-4-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220915080921.35563-1-luke@ljones.dev>
 References: <20220915080921.35563-1-luke@ljones.dev>
@@ -83,49 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes up the pincfg for ASUS ROG Strix G15 (G533Z) headphone combo jack
+The ASUS G15 2022 (GA503R) series laptop has the same node-to-DAC pairs
+as early models and the G14, this includes bass speakers which are by
+default mapped incorrectly to the 0x06 node.
+
+Add a quirk to use the same DAC pairs as the G14.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- sound/pci/hda/patch_realtek.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 1485dea712d8..a44a55619144 100644
+index a44a55619144..52eb31f4166c 100644
 --- a/sound/pci/hda/patch_realtek.c
 +++ b/sound/pci/hda/patch_realtek.c
-@@ -7026,6 +7026,7 @@ enum {
- 	ALC294_FIXUP_ASUS_GU502_PINS,
- 	ALC294_FIXUP_ASUS_GU502_VERBS,
- 	ALC294_FIXUP_ASUS_G513_PINS,
-+	ALC285_FIXUP_ASUS_G533Z_PINS,
- 	ALC285_FIXUP_HP_GPIO_LED,
- 	ALC285_FIXUP_HP_MUTE_LED,
- 	ALC236_FIXUP_HP_GPIO_LED,
-@@ -8373,6 +8374,15 @@ static const struct hda_fixup alc269_fixups[] = {
- 				{ }
- 		},
- 	},
-+	[ALC285_FIXUP_ASUS_G533Z_PINS] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x14, 0x90170120 },
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_G513_PINS,
-+	},
- 	[ALC294_FIXUP_ASUS_COEF_1B] = {
- 		.type = HDA_FIXUP_VERBS,
- 		.v.verbs = (const struct hda_verb[]) {
-@@ -9325,6 +9335,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+@@ -9332,6 +9332,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1e11, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA502),
+ 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1c52, "ASUS Zephyrus G15 2022", ALC289_FIXUP_ASUS_GA401),
  	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
  	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
  	SND_PCI_QUIRK(0x1043, 0x1e5e, "ASUS ROG Strix G513", ALC294_FIXUP_ASUS_G513_PINS),
-+	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
- 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
 -- 
 2.37.3
 
