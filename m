@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EC55B9189
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A875B918D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 02:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiIOAO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Sep 2022 20:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S230054AbiIOAPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Sep 2022 20:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiIOAOi (ORCPT
+        with ESMTP id S230134AbiIOAPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:14:38 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FD92718
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:14:36 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id c19so10235673qkm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=SqiD/rmTmUnZN+sxp6myZ+MDQ3Vwh3eOQpZ6rdR1rxE=;
-        b=ZLcx7NHB52/qzkYWSR8ckkf1gareZ4GmzTiq/hCOgGnRBEHkz0NxGweHu1K3EVjRIg
-         G3fMULXiX7AFK9DZkvhNqmCZECLF0CkEWQAp6MDA9wyeA6dFgX5uV1lxs9PA0qPeJ9Kz
-         BW7OgVuE0HCV8Sui9C6J77DMSvj8TO6/fRzB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=SqiD/rmTmUnZN+sxp6myZ+MDQ3Vwh3eOQpZ6rdR1rxE=;
-        b=Jhjh66UXA28tCB9UVV2v0SdOXufiQ4ntHNeTzrXA/QbvgYoGcwU48XFfN/BAdK35lb
-         nroROPHeqhxU52zADno63F29Ai2zxKBDXHNdx+BMN+LdogvPRZgfMHDfxbFQtAI3r+Eo
-         qnBdoBuZxpwQOdcyVMyO+NQJcadrlCiexISLlejj3OvbmFSdwzBEg+erxkhipP1GL6tT
-         thnYw3VzeLsH4uJXtfNp7Q2IE/AUlX+a1FfBpVxN7ekKLiIc5HEvU7r/9fD3ioMHMZGV
-         7x37/OZCr+tATUBbUYsNgpaAsN1/MQH6SsZa4FmCRLEdmD8Sx632YM2BBuv8NoqtNR9w
-         fI9g==
-X-Gm-Message-State: ACgBeo270nlJYk0p9pc9w118dO9k+U5Ejj9tKHyIAinoj5AOuu/7a5K2
-        BVV1xeXbKh744GftIR65QXDiTMQGmkoNfUMUQs0=
-X-Google-Smtp-Source: AA6agR6Jaelol8J/6+LJ4V0dMBTzfQIqYm7WXyULloG4qJkDuOxHTYKXfQ9I2xuKCi40lhnAtDyzpw==
-X-Received: by 2002:a05:620a:318a:b0:6ce:732a:f92 with SMTP id bi10-20020a05620a318a00b006ce732a0f92mr6969342qkb.347.1663200875110;
-        Wed, 14 Sep 2022 17:14:35 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id do11-20020a05620a2b0b00b006bbb07ebd83sm2872422qkb.108.2022.09.14.17.14.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 17:14:34 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH rcu/next 3/3] rcu: Fix late wakeup when flush of bypass cblist happens
-Date:   Thu, 15 Sep 2022 00:14:19 +0000
-Message-Id: <20220915001419.55617-4-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220915001419.55617-1-joel@joelfernandes.org>
-References: <20220915001419.55617-1-joel@joelfernandes.org>
+        Wed, 14 Sep 2022 20:15:15 -0400
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.144.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166A6564F7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 17:15:05 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 9D9354132
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Sep 2022 19:15:04 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YcX2o5yiKgeGqYcX2o5cow; Wed, 14 Sep 2022 19:15:04 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RdFJ9iCSUUjTqUmiSvFxf1BsORkwWwDknSu7u+3cmdw=; b=SZ21UEQdjnUEpbmw9qqOKnqOT+
+        mOdcag0a5njs0zMOFy9FgdvvmjBEiIAoWy2BGc4lCxKAMH7ObFd1Mjkoag6coSC3OSBfdoeVXDcFy
+        9FRS3EY/qFtVZ1a9kugGY9FRiA2gGjEEL+3nK8qHkOLa+t7TULK9q0H+MzM08UA1anAObk3PHK/vC
+        YLd4ssQpL4PSmiAiFPqv485sXYcFeZygeqKtharOZAKpEmiNWKQUTY+6bxlfZxiZPpRWpObzAihBV
+        tK9LLnDQALzccQa6QZMnpoVmGMB23v1iHNeqGLH4pFNdpE6KnfoIuIFNsGDDstljhu17j8mf+KULc
+        R5ZVYWqw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55530 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oYcX1-003MWG-Ih;
+        Thu, 15 Sep 2022 00:15:03 +0000
+Date:   Wed, 14 Sep 2022 17:14:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/79] 4.19.257-rc1 review
+Message-ID: <20220915001458.GE603793@roeck-us.net>
+References: <20220913140348.835121645@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913140348.835121645@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oYcX1-003MWG-Ih
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:55530
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 64
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the bypass cblist gets too big or its timeout has occurred, it is
-flushed into the main cblist. However, the bypass timer is still running
-and the behavior is that it would eventually expire and wake the GP
-thread.
+On Tue, Sep 13, 2022 at 04:06:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.257 release.
+> There are 79 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 15 Sep 2022 14:03:27 +0000.
+> Anything received after that time might be too late.
+> 
 
-Since we are going to use the bypass cblist for lazy CBs, do the wakeup
-soon as the flush happens. Otherwise, the lazy-timer will go off much
-later and the now-non-lazy cblist CBs can get stranded for the duration
-of the timer.
+Build results:
+	total: 157 pass: 157 fail: 0
+Qemu test results:
+	total: 423 pass: 423 fail: 0
 
-This is a good thing to do anyway, since it makes the behavior consistent with
-behavior of other code paths where queueing something into the ->cblist makes
-the GP kthread in a non-sleeping state quickly.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- kernel/rcu/tree_nocb.h | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 0a5f0ef41484..04c87f250e01 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -433,8 +433,9 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 	if ((ncbs && j != READ_ONCE(rdp->nocb_bypass_first)) ||
- 	    ncbs >= qhimark) {
- 		rcu_nocb_lock(rdp);
-+		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-+
- 		if (!rcu_nocb_flush_bypass(rdp, rhp, j)) {
--			*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
- 			if (*was_alldone)
- 				trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
- 						    TPS("FirstQ"));
-@@ -447,7 +448,12 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 			rcu_advance_cbs_nowake(rdp->mynode, rdp);
- 			rdp->nocb_gp_adv_time = j;
- 		}
--		rcu_nocb_unlock_irqrestore(rdp, flags);
-+
-+		// The flush succeeded and we moved CBs into the regular list.
-+		// Don't wait for the wake up timer as it may be too far ahead.
-+		// Wake up the GP thread now instead, if the cblist was empty.
-+		__call_rcu_nocb_wake(rdp, *was_alldone, flags);
-+
- 		return true; // Callback already enqueued.
- 	}
- 
--- 
-2.37.2.789.g6183377224-goog
-
+Guenter
