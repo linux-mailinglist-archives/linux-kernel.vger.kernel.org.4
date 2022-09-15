@@ -2,391 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CCB5B9E83
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650BD5B9E8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 17:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiIOPOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 11:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S230215AbiIOPPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 11:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiIOPON (ORCPT
+        with ESMTP id S229916AbiIOPO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 11:14:13 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCBD9F8FE
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:08:19 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so3956439wmr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 08:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9mQUaPNceis8qparWDkrLv2BKnQ9SmM81stuAhhbzew=;
-        b=LsQo2JpTUkhTzfuDrJ9y/4GnGKTFwHW/PSWLYrWtomRbBWYjPZM14GvphXRuD7cPBp
-         k3JZ+7US/WNPMpgGXXwWecEDpG/BAvoYLpVJKNKVvQr+ezEuGx4gzqSMsVaF/Uotbwpj
-         dF3HxM8tD1HpTdAuiw4AdS00lvRWOBZP/FAQ1ekdtvTTikxyAoXPGZT/ocVSemAbMnV+
-         XFbG2AKYu/mvIPw9EgzPG2cLjvqbHSDNeXELIuoYPpjCeehPx5EN7xVHiyZDO/J8ArY7
-         iPln6G8fXhIaBuBbEARnBetbMcZrFpMkLXHmfmpqC3fCdbp0gi6CVp9TCgKi0/CLPxg9
-         vk8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9mQUaPNceis8qparWDkrLv2BKnQ9SmM81stuAhhbzew=;
-        b=kQXSEJAzFAkpdmNfSRISsOWmAqZujcvvXpA6BYK5SnxAXfXaX3ti8LQhxlWlyxlitz
-         pyrOt9rQBehRAenWm2dulCg6c45Y57iWpo7+HMxWr6NvPwErafpcBONoLp0JKB06v9Zk
-         WZQbr1uWKB5ZvWgA/Qx2ma2RU3U5a83Vp5qlP6CGu1GhXOayMnpVvyyMPt9/tFjvCWTE
-         k7G+NXz+Uqv0SeWpdnuc0poO8D0w6SmRBVyB5qSAK1CxTK4r09tGbD3svZckJwtu7Mcb
-         2T7nsvbfacXc3BMuQUF1FdrctAQ6E4dhns5Zu+MbXkFYYAPKA9dyCErTej8UAU3b17qS
-         6qdA==
-X-Gm-Message-State: ACgBeo2SU3MF8AemqqxD8qqKpMOsTxefs3OgtLsXSjqkKFJ3baNQJc9a
-        hhstPzU/xWUKzhcIhwWTZDB4eg==
-X-Google-Smtp-Source: AA6agR7MonZjlHNMXwe0IaiZO8G7Nw83j+6yzFvN9UU8Qb8D8xG5Ma8HaDtaJ4b0KHXmzJd/VpiUAw==
-X-Received: by 2002:a05:600c:4c22:b0:3b4:766a:4f76 with SMTP id d34-20020a05600c4c2200b003b4766a4f76mr6708741wmp.101.1663254475376;
-        Thu, 15 Sep 2022 08:07:55 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.72])
-        by smtp.gmail.com with ESMTPSA id h4-20020a5d5044000000b00228d67db06esm2904974wrt.21.2022.09.15.08.07.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 08:07:54 -0700 (PDT)
-Message-ID: <c46fd424-3517-9f66-dc8c-ed10ca3ef622@linaro.org>
-Date:   Thu, 15 Sep 2022 16:07:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] Changes phy configuration to expose sata in place of usb3
- on quartz64-a board
+        Thu, 15 Sep 2022 11:14:59 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2127.outbound.protection.outlook.com [40.107.94.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8EC96FC2;
+        Thu, 15 Sep 2022 08:08:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A3MS3G62308tWXsTANYiJaQ+acNzcsmTuhDZNnCBkbOF9PXNODd8Y7WPn2oT/0I2v2tGjBY0nDI0iB1GlnguMiemQvMooJCYYSV2KdzpN6FPm/ZE9DUysREyn73wqT+kOl+4N6kR3PMTR52SMJOhznZ1cKyMsXj+M+8j3yPDQPbFiks2fAefX+ZHFvCJLqcAj6M7aGXG3Gc1AikLddpgh6jCNWZpjbo80Id2bEKHk1BCV1LDvblf8QNVn4jYwwxm99UGdROEKR/+zzrJ62NyF2I8qq8zjlA36mcWhB9VtGSNg7cNdC8NCwmojuLXLzWnXdOk/hPhDoSzFY0npCJl9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=niUI6ik+e3sJVSVSh/1xA9k3AWTERhlxJk1f9SpkbTY=;
+ b=kXYYw6LLSq1TZyF6K0FLBPJNZxwxACcVj6wyd/tuv2h5B28b5x3EQO5lEBXnsLWzjvZC7hvyi3dfZQwX6U8+ueAOSLosFuB8ZIZgenYCWptsCJUCq9bwPiE6rZGSOPVCX3L5Yl4EI4jLSm6CVfYuh2r5lF4th8dO4PXsCUPwuLKomRTqxGPkR54uqb6g2a5VYAKGIWNn183TSHzrNX3RKdEqbkrb+lRPt2+ocmHtIMiRLKLeR4uVjGrMXd1QK5BBlpafX+jj8Nhd1gEj5exE0zkowoabeVcqVdKPX84+B4aA0vht28UqcJgxvMh4Sa7mEdTlWcdhWv2kE5FD42f+bQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=niUI6ik+e3sJVSVSh/1xA9k3AWTERhlxJk1f9SpkbTY=;
+ b=JSI/jMlL8QD4NK4zMmH76wd/r98ToDI+sAnD6lhNGY00v/qR8fcyGurXz55RV7UvPJ52F1AzpG8qisqRFItCsW6wzsDbn1YaH9bUZOPEu6FjOUgIMgq4FfsTB8DftWr8H17uYQfMWwpuJDB3j1RxS0saveV9yhelqnwew9x/6tY=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by PH0PR13MB5445.namprd13.prod.outlook.com (2603:10b6:510:142::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.12; Thu, 15 Sep
+ 2022 15:08:35 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::f1c7:62d0:a63d:f5ca]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::f1c7:62d0:a63d:f5ca%3]) with mapi id 15.20.5632.012; Thu, 15 Sep 2022
+ 15:08:35 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     "bfields@fieldses.org" <bfields@fieldses.org>,
+        "neilb@suse.de" <neilb@suse.de>
+CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Thread-Topic: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Thread-Index: AQHYwqs/evAHvn9kzUKFB4lWpvCB0q3T1xmAgAATgACAAAFbgIAABbEAgAAK/YCAALZNAIAAgw4AgAByGoCAAAZagIAAAzmAgAAdFoCAAAvtAIAADJkAgANYaoCAApXgAIAAn+4AgAQd8ACAABFGgA==
+Date:   Thu, 15 Sep 2022 15:08:34 +0000
+Message-ID: <577b6d8a7243aeee37eaa4bbb00c90799586bc48.camel@hammerspace.com>
+References: <20220908083326.3xsanzk7hy3ff4qs@quack3>
+         <YxoIjV50xXKiLdL9@mit.edu>
+         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+         <20220908155605.GD8951@fieldses.org>
+         <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+         <20220908182252.GA18939@fieldses.org>
+         <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
+         <166284799157.30452.4308111193560234334@noble.neil.brown.name>
+         <20220912134208.GB9304@fieldses.org>
+         <166302447257.30452.6751169887085269140@noble.neil.brown.name>
+         <20220915140644.GA15754@fieldses.org>
+In-Reply-To: <20220915140644.GA15754@fieldses.org>
+Accept-Language: en-US, en-GB
 Content-Language: en-US
-To:     Alessandro Carminati <alessandro.carminati@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <YyIyo42QWvgJTBjL@lab.hqhome163.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YyIyo42QWvgJTBjL@lab.hqhome163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH0PR13MB5084:EE_|PH0PR13MB5445:EE_
+x-ms-office365-filtering-correlation-id: 10dc1ef3-98b5-4320-a6a9-08da972c290f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AlHVe6olJkCvmrtbJHiY/vBEGg5QRoq6px8x+Vxoi3IrXYh1OUgO3l63XyWW1YY5FGvfSRUfbRUxi6LK5IjChSofEgYXCHvpqhd4dRiHcL2kVfVlixYgnKohl/cRNJ6lZ8P2rO3HmWRtTqUf6zQpCajXYv3Z9wOQbIgCro4MHHIVOtE3tPO9dtG5l7MAS8JygXJgArFq08wT5eyP5yU5ulPIjdxEK/CBr2CbV99fkF+6vgciCQyXaDFmptMrxCbne8rQ5utVk+HpHxiNF4dGL+BB2UrYrBIIjTEdVECXrPKqB5z/c8Q0VnHGAtoQ/4jwINQlmcPY1Ueaje3LV9jgNavMCtxJuU/fQJqE8/B65iJj6O7Wf051UERENZts12ZTYMY2r3N3pL/LJ0NnHxOHGGB2I08AyLdMUPL8fRp+Tmi/GrSIq4gNkOweTFpox2SPoQI6tvYCErC4Q4dPxHKFQuZ4AS/1AdAL1rEKip/Z4b8la4JFUjpAFEWh1BaMU+bHXvaOFngqqRbeAyART/ZhEyJMlFuPFyhZAffhRi4V5ooRoFRJlVxslAaiotX9JRZaq+YQm4G/mJq56iII2mkb99zFa2ywKVngIT0rf9kr3gD8opJsRRUR98toctQv802hutdGjhAG5r2uTMVF9L8ftiN4OP/nykVn2sVL4K/G3VrxQKKfRG9yQHc9LCn4rniWY36rrU9fC1jd9tQZqfOwSK6emKTSfyooEcACh9+8M2K3Ex1aLNIKIlVcNrQSKCyYUeBstSbeFfG4/ozFbyxsV9Dz2WfCe53Ut+9ozydKOQWMgDp+YVqgYpHmZR7PUS8b
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39840400004)(346002)(376002)(136003)(396003)(366004)(451199015)(38070700005)(478600001)(66476007)(66946007)(86362001)(5660300002)(41300700001)(36756003)(6512007)(122000001)(110136005)(4326008)(8936002)(6506007)(316002)(2906002)(26005)(83380400001)(64756008)(38100700002)(66899012)(91956017)(66446008)(8676002)(76116006)(66556008)(71200400001)(54906003)(2616005)(7416002)(186003)(6486002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?djVRa3B2eUk0MFhOcU9tTWtxcUhzbUs0ckhzMWNNdXF6MldSdFFFdU1YaE9S?=
+ =?utf-8?B?WWdhdU9uZ20xUjUxTmJVQnYvcmdKczFILytza3E4dWh5V05yMEs2bVg1ZnhC?=
+ =?utf-8?B?bVRZQzllSjVWN1plWENha2RZalVKNmxpWkJkemdVK1hwSW9kUnZrOWxDSUcy?=
+ =?utf-8?B?TEhiNGVGbUEyczBqR1dvUWVtWEt2Q05LRGR0ZVhlQlZKWWtjVlliQWJnSS9N?=
+ =?utf-8?B?azByMUFqK3ZxUTJtRmhvWDcwYjBZb3paV0EyUUlnSC9UK01wWmZSdUxvRGln?=
+ =?utf-8?B?Zlp4ekhJaDZIYkxRbFFtUE1CMFExUFBhQVozU0hYVVlxcWN3OGxDN2kxYy84?=
+ =?utf-8?B?eHFEemJKcndSMlI0VHd1SWtEWVR6czNiMlpSbndzUEpVZ1gwejNhY21hU2dJ?=
+ =?utf-8?B?dnNRL2xXZHduRGlua2RQNVVyRStDTStZT2xUamMxTTJ5QmNjSFo5Zjl4OHNo?=
+ =?utf-8?B?U1I1RnRuTkhWMFdYVTVHVVE5cFdGTjg3WUpvU0tpYU43cjh6dU5yYWk0STI0?=
+ =?utf-8?B?cmJ0STN6dzM4eHpIRnlTQmVZRmd6TEpVdytVVDg5SUdLb2NxNHJmRDdwSzRE?=
+ =?utf-8?B?NTVjMXNBNnFIaGk5ZnRIOS8wQlFRajh5am5OYUtnMGdYVit4SDNFS25VYnZ5?=
+ =?utf-8?B?SW80VHFlZi9wVXVkZU9ieThJSGtMMTVGRjNTV1dXTmRYd29icEhHeGd5b3Mx?=
+ =?utf-8?B?TmFDRy9nWDZTNFkrV0RSbC9PNkROUlhsRlYxWGoyVS9WczJ5aWZxODdheU1r?=
+ =?utf-8?B?b003VWVWRjhTZk1pMTRHNUZuTGF2WTdpUmhNemhVNmkrSnVQcitCYmJxTW1a?=
+ =?utf-8?B?c2twQTVncldzdHRoS2FlVjUzMC9uYXlCVTl3OXpBZnJLVjVCOFplNmVLckxN?=
+ =?utf-8?B?aTJ2cDc4QTNzTXN5MEtod01QY3QxTHY0L1ZRQW5QUFh3Y3pBaUVUbzRta1FC?=
+ =?utf-8?B?N3NoSmRvL05OZXVqc0Fia1RlVEpVRTNIN0NabDRIMUtYamc1dURkTjhPQzl0?=
+ =?utf-8?B?NTFhQ0tGd1ZRTEhDYzFzNEVzRXFpVVloRzFRSGI1S05FRU1CbkZnaW5UbGhF?=
+ =?utf-8?B?YjJkek5WZHV4Y1hiNVBmNUdqcFpxOW9ic1dPOTFsbFJCRStMTkVzQlZyY1hJ?=
+ =?utf-8?B?NW80Z3RjWEI3RGZxM2JpOWwxSEtmMXlVYWh2Q1pLRVVkUEdXR3dhdzM2aiti?=
+ =?utf-8?B?clVFdkZnQ0FISVJ2TG1YWUlXSHVaZkZGYUgwZVgrcDRvcXBjS1VKbCtRc2py?=
+ =?utf-8?B?bHZPZmNSRGxUVnRDOVcxNCtiY25GK0t0dGRvWWR1UTBHbVVyL283eGowZERJ?=
+ =?utf-8?B?R291WjRQSllMMjNaaURyUGJ4WDFqV293WUVoeE8xckZGWGRLV0FBUWVWY2lZ?=
+ =?utf-8?B?NUsvM0dnWUNvNHhUMDZRMGFRaHNoNVpnK2dDbkkzWHZ4STZObC9nYm1HZjJV?=
+ =?utf-8?B?cm81L0xkQUgyVSt2bzhIenpnd3piNURHU0l1OS80ckFrTk1KeFRUWlptL3Ex?=
+ =?utf-8?B?aE1yM2Q3cVZnUVRyeFZTWUN4cGswRG5iZ2NZckpoNWI5c0ZHQ3RhNFR3Z1RZ?=
+ =?utf-8?B?SC9Zenl5a0xsNGp6cnJEd2x2SE9QTFh4amZ3RGhZZ2k1RlJBZUtlTTFyMndW?=
+ =?utf-8?B?Q2QwUGd2OXdwYkhpeDVHZHN1amczWXA5cVBqMGFlN092SG01ZUlXUnJPQ1pz?=
+ =?utf-8?B?TUJISjRUcEJHQ1pPUUZwRUt1VUc2ZXV5VldkRzgxVTJiWTNlMXdLM09xOFcx?=
+ =?utf-8?B?K2lTUU1ZQlBTSU9xTjUxa25SRkpFK2pCZWtqWlBWSkdKeVRRMGZ1c1FwdHdB?=
+ =?utf-8?B?QTUyNHI1T2NUVkN1N2lub0tNU0Zzdy9LNER2LzlVUHdqUGxocXlVbmc4NEJN?=
+ =?utf-8?B?OUltNG1QQlo4MHdzU0FSeVpRQW1kZlFhZXcxNTVvU0lEQ2x5Wi94U29GaEVm?=
+ =?utf-8?B?dVBHdFJES1J4aTRjdkRNQ1dKQ3luejhyY3R2NlJ2eU1nYmFsamJBYkdiZ05E?=
+ =?utf-8?B?b2pTanRpbU5BZEFINXJ3dXo0M3UzT0pxcDFybW1iK0hWTzVhK1ZkUmlmNHkr?=
+ =?utf-8?B?Uk1EWTNyVWRqeC9UZDFlTDFhbXpwWWpHclhqaDhGSytucmNPU2ZUb3NnWnlG?=
+ =?utf-8?B?RmR5TFJycUhhQVNJUEZ1dXpQWit0RW1RbThzTjRPR2F2ZGNkWkVpMFQ1R0F6?=
+ =?utf-8?B?bnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A47BAB8A3F98F7449B9319C9B86FF73F@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5445
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 20:59, Alessandro Carminati wrote:
-> The Quartz64 board is built upon Rockchip RK3566.
-> Rockchip RK3566 has two combo phys.
-> The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-> ctrl2.
-> The second combo phy is hardwired to the PCIe slot, where for the first,
-> the hardware on the board provides both the USB3 connector and the SATA
-> connector.
-> This DT allows the users to switch the combo phy to the SATA connector.
-> 
-> Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
-> ---
->  .../dts/rockchip/rk3566-quartz64-a.sata.dts   | 839 ++++++++++++++++++
->  1 file changed, 839 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> new file mode 100644
-> index 000000000000..6ac21b729be7
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> @@ -0,0 +1,839 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/pinctrl/rockchip.h>
-> +#include <dt-bindings/soc/rockchip,vop2.h>
-> +#include "rk3566.dtsi"
-> +
-> +/ {
-> +	model = "Pine64 RK3566 Quartz64-A Board";
-> +	compatible = "pine64,quartz64-a", "rockchip,rk3566";
-> +
-> +	aliases {
-> +		ethernet0 = &gmac1;
-> +		mmc0 = &sdmmc0;
-> +		mmc1 = &sdhci;
-> +	};
-> +
-> +	chosen: chosen {
-> +		stdout-path = "serial2:1500000n8";
-> +	};
-> +
-> +	gmac1_clkin: external-gmac1-clock {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <125000000>;
-> +		clock-output-names = "gmac1_clkin";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	fan: gpio_fan {
-
-No underscores in node names. Node name just "fan"
-
-> +		compatible = "gpio-fan";
-> +		gpios = <&gpio0 RK_PD5 GPIO_ACTIVE_HIGH>;
-> +		gpio-fan,speed-map = <0    0
-> +				      4500 1>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&fan_en_h>;
-> +		#cooling-cells = <2>;
-> +	};
-> +
-> +	hdmi-con {
-
-Node name: connector
-
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con_in: endpoint {
-> +				remote-endpoint = <&hdmi_out_con>;
-> +			};
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-work {
-> +			label = "work-led";
-> +			default-state = "off";
-> +			gpios = <&gpio0 RK_PD3 GPIO_ACTIVE_HIGH>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&work_led_enable_h>;
-> +			retain-state-suspended;
-> +		};
-> +
-> +		led-diy {
-> +			label = "diy-led";
-> +			default-state = "on";
-> +			gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "heartbeat";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&diy_led_enable_h>;
-> +			retain-state-suspended;
-> +		};
-> +	};
-> +
-> +	rk817-sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,format = "i2s";
-> +		simple-audio-card,name = "Analog RK817";
-> +		simple-audio-card,mclk-fs = <256>;
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&i2s1_8ch>;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&rk817>;
-> +		};
-> +	};
-> +
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		clocks = <&rk817 1>;
-> +		clock-names = "ext_clock";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wifi_enable_h>;
-> +		post-power-on-delay-ms = <100>;
-> +		power-off-delay-us = <5000000>;
-> +		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	spdif_dit: spdif-dit {
-> +		compatible = "linux,spdif-dit";
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
-> +	spdif_sound: spdif-sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "SPDIF";
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&spdif>;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&spdif_dit>;
-> +		};
-> +	};
-> +
-> +	vcc12v_dcin: vcc12v_dcin {
-
-No underscores in node names, generic node name, so at least with
-regulator prefix or suffix.
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc12v_dcin";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +	};
-> +
-> +	/* vbus feeds the rk817 usb input.
-> +	 * With no battery attached, also feeds vcc_bat+
-> +	 * via ON/OFF_BAT jumper
-> +	 */
-> +	vbus: vbus {
-
-Ditto
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vbus";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc12v_dcin>;
-> +	};
-> +
-> +	vcc3v3_pcie_p: vcc3v3-pcie-p-regulator {
-
-And here you have suffix...
-
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pcie_enable_h>;
-> +		regulator-name = "vcc3v3_pcie_p";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc_3v3>;
-> +	};
-> +
-> +	vcc5v0_usb: vcc5v0_usb {
-
-Ditto
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc5v0_usb";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc12v_dcin>;
-> +	};
-> +
-> +	/* all four ports are controlled by one gpio
-> +	 * the host ports are sourced from vcc5v0_usb
-> +	 * the otg port is sourced from vcc5v0_midu
-> +	 */
-> +	vcc5v0_usb20_host: vcc5v0_usb20_host {
-
-and in other places as well
-
-
-
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vcc5v0_usb20_host_en>;
-> +		regulator-name = "vcc5v0_usb20_host";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&vcc5v0_usb>;
-> +	};
-> +
-> +	vcc5v0_usb20_otg: vcc5v0_usb20_otg {
-> +		compatible = "regulator-fixed";
-> +		enable-active-high;
-> +		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
-> +		regulator-name = "vcc5v0_usb20_otg";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&dcdc_boost>;
-> +	};
-> +
-> +	vcc3v3_sd: vcc3v3_sd {
-> +		compatible = "regulator-fixed";
-> +		enable-active-low;
-> +		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vcc_sd_h>;
-> +		regulator-boot-on;
-> +		regulator-name = "vcc3v3_sd";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc_3v3>;
-> +	};
-> +
-> +	/* sourced from vbus and vcc_bat+ via rk817 sw5 */
-> +	vcc_sys: vcc_sys {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <4400000>;
-> +		regulator-max-microvolt = <4400000>;
-> +		vin-supply = <&vbus>;
-> +	};
-> +
-> +	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
-> +	vcc_wl: vcc_wl {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_wl";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc_sys>;
-> +	};
-> +};
-> +
-> +&combphy1 {
-> +	status = "okay";
-> +};
-> +
-> +&combphy2 {
-> +	status = "okay";
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu1 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu2 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu3 {
-> +	cpu-supply = <&vdd_cpu>;
-> +};
-> +
-> +&cpu_thermal {
-> +	trips {
-> +		cpu_hot: cpu_hot {
-
-No underscores in node names. Are you sure bindings/schema do not expect
-some specific name?
-
-> +			temperature = <55000>;
-> +			hysteresis = <2000>;
-> +			type = "active";
-> +		};
-> +	};
-
-
-Best regards,
-Krzysztof
+T24gVGh1LCAyMDIyLTA5LTE1IGF0IDEwOjA2IC0wNDAwLCBKLiBCcnVjZSBGaWVsZHMgd3JvdGU6
+DQo+IE9uIFR1ZSwgU2VwIDEzLCAyMDIyIGF0IDA5OjE0OjMyQU0gKzEwMDAsIE5laWxCcm93biB3
+cm90ZToNCj4gPiBPbiBNb24sIDEyIFNlcCAyMDIyLCBKLiBCcnVjZSBGaWVsZHMgd3JvdGU6DQo+
+ID4gPiBPbiBTdW4sIFNlcCAxMSwgMjAyMiBhdCAwODoxMzoxMUFNICsxMDAwLCBOZWlsQnJvd24g
+d3JvdGU6DQo+ID4gPiA+IE9uIEZyaSwgMDkgU2VwIDIwMjIsIEplZmYgTGF5dG9uIHdyb3RlOg0K
+PiA+ID4gPiA+IA0KPiA+ID4gPiA+IFRoZSBtYWNoaW5lIGNyYXNoZXMgYW5kIGNvbWVzIGJhY2sg
+dXAsIGFuZCB3ZSBnZXQgYSBxdWVyeSBmb3INCj4gPiA+ID4gPiBpX3ZlcnNpb24NCj4gPiA+ID4g
+PiBhbmQgaXQgY29tZXMgYmFjayBhcyBYLiBGaW5lLCBpdCdzIGFuIG9sZCB2ZXJzaW9uLiBOb3cg
+dGhlcmUNCj4gPiA+ID4gPiBpcyBhIHdyaXRlLg0KPiA+ID4gPiA+IFdoYXQgZG8gd2UgZG8gdG8g
+ZW5zdXJlIHRoYXQgdGhlIG5ldyB2YWx1ZSBkb2Vzbid0IGNvbGxpZGUNCj4gPiA+ID4gPiB3aXRo
+IFgrMT8gDQo+ID4gPiA+IA0KPiA+ID4gPiAoSSBtaXNzZWQgdGhpcyBiaXQgaW4gbXkgZWFybGll
+ciByZXBseS4uKQ0KPiA+ID4gPiANCj4gPiA+ID4gSG93IGlzIGl0ICJGaW5lIiB0byBzZWUgYW4g
+b2xkIHZlcnNpb24/DQo+ID4gPiA+IFRoZSBmaWxlIGNvdWxkIGhhdmUgY2hhbmdlZCB3aXRob3V0
+IHRoZSB2ZXJzaW9uIGNoYW5naW5nLg0KPiA+ID4gPiBBbmQgSSB0aG91Z2h0IG9uZSBvZiB0aGUg
+Z29hbHMgb2YgdGhlIGNyYXNoLWNvdW50IHdhcyB0byBiZQ0KPiA+ID4gPiBhYmxlIHRvDQo+ID4g
+PiA+IHByb3ZpZGUgYSBtb25vdG9uaWMgY2hhbmdlIGlkLg0KPiA+ID4gDQo+ID4gPiBJIHdhcyBz
+dGlsbCBtYWlubHkgdGhpbmtpbmcgYWJvdXQgaG93IHRvIHByb3ZpZGUgcmVsaWFibGUgY2xvc2Ut
+DQo+ID4gPiB0by1vcGVuDQo+ID4gPiBzZW1hbnRpY3MgYmV0d2VlbiBORlMgY2xpZW50cy7CoCBJ
+biB0aGUgY2FzZSB0aGUgd3JpdGVyIHdhcyBhbiBORlMNCj4gPiA+IGNsaWVudCwgaXQgd2Fzbid0
+IGRvbmUgd3JpdGluZyAob3IgaXQgd291bGQgaGF2ZSBDT01NSVR0ZWQpLCBzbw0KPiA+ID4gdGhv
+c2UNCj4gPiA+IHdyaXRlcyB3aWxsIGNvbWUgaW4gYW5kIGJ1bXAgdGhlIGNoYW5nZSBhdHRyaWJ1
+dGUgc29vbiwgYW5kIGFzDQo+ID4gPiBsb25nIGFzDQo+ID4gPiB3ZSBhdm9pZCB0aGUgc21hbGwg
+Y2hhbmNlIG9mIHJldXNpbmcgYW4gb2xkIGNoYW5nZSBhdHRyaWJ1dGUsDQo+ID4gPiB3ZSdyZSBP
+SywNCj4gPiA+IGFuZCBJIHRoaW5rIGl0J2QgZXZlbiBzdGlsbCBiZSBPSyB0byBhZHZlcnRpc2UN
+Cj4gPiA+IENIQU5HRV9UWVBFX0lTX01PTk9UT05JQ19JTkNSLg0KPiA+IA0KPiA+IFlvdSBzZWVt
+IHRvIGJlIGFzc3VtaW5nIHRoYXQgdGhlIGNsaWVudCBkb2Vzbid0IGNyYXNoIGF0IHRoZSBzYW1l
+DQo+ID4gdGltZQ0KPiA+IGFzIHRoZSBzZXJ2ZXIgKG1heWJlIHRoZXkgYXJlIGJvdGggVk1zIG9u
+IGEgaG9zdCB0aGF0IGxvc3QNCj4gPiBwb3dlci4uLikNCj4gPiANCj4gPiBJZiBjbGllbnQgQSBy
+ZWFkcyBhbmQgY2FjaGVzLCBjbGllbnQgQiB3cml0ZXMsIHRoZSBzZXJ2ZXIgY3Jhc2hlcw0KPiA+
+IGFmdGVyDQo+ID4gd3JpdGluZyBzb21lIGRhdGEgKHRvIGFscmVhZHkgYWxsb2NhdGVkIHNwYWNl
+IHNvIG5vIGlub2RlIHVwZGF0ZQ0KPiA+IG5lZWRlZCkNCj4gPiBidXQgYmVmb3JlIHdyaXRpbmcg
+dGhlIG5ldyBpX3ZlcnNpb24sIHRoZW4gY2xpZW50IEIgY3Jhc2hlcy4NCj4gPiBXaGVuIHNlcnZl
+ciBjb21lcyBiYWNrIHRoZSBpX3ZlcnNpb24gd2lsbCBiZSB1bmNoYW5nZWQgYnV0IHRoZSBkYXRh
+DQo+ID4gaGFzDQo+ID4gY2hhbmdlZC7CoCBDbGllbnQgQSB3aWxsIGNhY2hlIG9sZCBkYXRhIGlu
+ZGVmaW5pdGVseS4uLg0KPiANCj4gSSBndWVzcyBJIGFzc3VtZSB0aGF0IGlmIGFsbCB3ZSdyZSBw
+cm9taXNpbmcgaXMgY2xvc2UtdG8tb3BlbiwgdGhlbiBhDQo+IGNsaWVudCBpc24ndCBhbGxvd2Vk
+IHRvIHRydXN0IGl0cyBjYWNoZSBpbiB0aGF0IHNpdHVhdGlvbi7CoCBNYXliZQ0KPiB0aGF0J3MN
+Cj4gYW4gb3Zlcmx5IGRyYWNvbmlhbiBpbnRlcnByZXRhdGlvbiBvZiBjbG9zZS10by1vcGVuLg0K
+PiANCj4gQWxzbywgSSdtIHRyeWluZyB0byB0aGluayBhYm91dCBob3cgdG8gaW1wcm92ZSB0aGlu
+Z3MgaW5jcmVtZW50YWxseS4NCj4gSW5jb3Jwb3JhdGluZyBzb21ldGhpbmcgbGlrZSBhIGNyYXNo
+IGNvdW50IGludG8gdGhlIG9uLWRpc2sgaV92ZXJzaW9uDQo+IGZpeGVzIHNvbWUgY2FzZXMgd2l0
+aG91dCBpbnRyb2R1Y2luZyBhbnkgbmV3IG9uZXMgb3IgcmVncmVzc2luZw0KPiBwZXJmb3JtYW5j
+ZSBhZnRlciBhIGNyYXNoLg0KPiANCj4gSWYgd2Ugc3Vic2VxdWVudGx5IHdhbnRlZCB0byBjbG9z
+ZSB0aG9zZSByZW1haW5pbmcgaG9sZXMsIEkgdGhpbmsNCj4gd2UnZA0KPiBuZWVkIHRoZSBjaGFu
+Z2UgYXR0cmlidXRlIGluY3JlbWVudCB0byBiZSBzZWVuIGFzIGF0b21pYyB3aXRoIHJlc3BlY3QN
+Cj4gdG8NCj4gaXRzIGFzc29jaWF0ZWQgY2hhbmdlLCBib3RoIHRvIGNsaWVudHMgYW5kIChzZXBh
+cmF0ZWx5KSBvbiBkaXNrLsKgDQo+IChUaGF0DQo+IHdvdWxkIHN0aWxsIGFsbG93IHRoZSBjaGFu
+Z2UgYXR0cmlidXRlIHRvIGdvIGJhY2t3YXJkcyBhZnRlciBhIGNyYXNoLA0KPiB0bw0KPiB0aGUg
+dmFsdWUgaXQgaGVsZCBhcyBvZiB0aGUgb24tZGlzayBzdGF0ZSBvZiB0aGUgZmlsZS7CoCBJIHRo
+aW5rDQo+IGNsaWVudHMNCj4gc2hvdWxkIGJlIGFibGUgdG8gZGVhbCB3aXRoIHRoYXQgY2FzZS4p
+DQo+IA0KPiBCdXQsIEkgZG9uJ3Qga25vdywgbWF5YmUgYSBiaWdnZXIgaGFtbWVyIHdvdWxkIGJl
+IE9LOg0KPiANCg0KSWYgeW91J3JlIG5vdCBnb2luZyB0byBtZWV0IHRoZSBtaW5pbXVtIGJhciBv
+ZiBkYXRhIGludGVncml0eSwgdGhlbg0KdGhpcyB3aG9sZSBleGVyY2lzZSBpcyBqdXN0IGEgbWFz
+c2l2ZSB3YXN0ZSBvZiBldmVyeW9uZSdzIHRpbWUuIFRoZQ0KYW5zd2VyIHRoZW4gZ29pbmcgZm9y
+d2FyZCBpcyBqdXN0IHRvIHJlY29tbWVuZCBuZXZlciB1c2luZyBMaW51eCBhcyBhbg0KTkZTIHNl
+cnZlci4gTWFrZXMgbXkgbGlmZSBtdWNoIGVhc2llciwgYmVjYXVzZSBJIG5vIGxvbmdlciBoYXZl
+IHRvDQpkZWJ1ZyBhbnkgb2YgdGhlIGlzc3Vlcy4NCg0KPiANCg0KLS0gDQpUcm9uZCBNeWtsZWJ1
+c3QNCkxpbnV4IE5GUyBjbGllbnQgbWFpbnRhaW5lciwgSGFtbWVyc3BhY2UNCnRyb25kLm15a2xl
+YnVzdEBoYW1tZXJzcGFjZS5jb20NCg0KDQo=
