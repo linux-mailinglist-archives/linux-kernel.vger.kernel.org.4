@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361C05B93F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5947B5B93FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Sep 2022 07:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiIOFcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 01:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S229639AbiIOFfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 01:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIOFcp (ORCPT
+        with ESMTP id S229587AbiIOFfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 01:32:45 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859B77577;
-        Wed, 14 Sep 2022 22:32:43 -0700 (PDT)
-X-UUID: 9e0e5349c19f4b78a83b8417397e9ed2-20220915
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=YkxDDvQTqV0T2kgqiwptXOrxnydc9XfbPvm55Lt05Q0=;
-        b=ASFl1ntJ19L2r1GeyWqCH/VEpjcJpSPBKqPPaMRwYPiRL3eKRJlxPLF2e41v1FNjxQ6lxOVQIckNw7XGgFPqgDAO90OSjRfOPZvkbymD3e8vOeeJvA+EU/bC/wQGK8VmTHWZzeQdYKm04Po82lzf4nLjpELDp1iFNsew7dXH1ZI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:2b039e25-fdbd-4096-936c-9f185c2a0048,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.11,REQID:2b039e25-fdbd-4096-936c-9f185c2a0048,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:39a5ff1,CLOUDID:9fb4b85d-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:2209151332395LCBLUT0,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9e0e5349c19f4b78a83b8417397e9ed2-20220915
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 751581607; Thu, 15 Sep 2022 13:32:37 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 15 Sep 2022 13:32:37 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 15 Sep 2022 13:32:36 +0800
-From:   <sean.wang@mediatek.com>
-To:     <stable@vger.kernel.org>
-CC:     <linux-wireless@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Deren Wu <deren.wu@mediatek.com>,
-        "Johannes Berg" <johannes.berg@intel.com>
-Subject: [PATCH 5.19] wifi: mt76: mt7921e: fix crash in chip reset fail
-Date:   Thu, 15 Sep 2022 13:32:35 +0800
-Message-ID: <404d2f5ec663128342541fa392a47226a46e5634.1663219530.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Thu, 15 Sep 2022 01:35:21 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E9A6FA14;
+        Wed, 14 Sep 2022 22:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1663220089;
+        bh=4nieZw5geSNA7yue4365PqN3YDOxsAGZvwH9Xy/fnQw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=lpmZBMXkb8xZxg++ZcaTNw+CSRUMScGrdWE8sOAunf+aFnybcaUcGjbBcleHYmci7
+         mSk03/pNWxNHzkjH3w/gm2bZT+XWW7b3VwSwvNm6lWdsR9PAlvEGY0y8MlD38jMxjr
+         qjppofH7CVf83vqAGewFj7kVyBhCvGLsdEQ42Gz8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.174.140]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0G1d-1pUdrS1RYt-00xNJf; Thu, 15
+ Sep 2022 07:34:49 +0200
+Message-ID: <76919d92-0a85-8c83-c434-ba8998d19a07@gmx.de>
+Date:   Thu, 15 Sep 2022 07:34:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] parisc: remove obsolete manual allocation aligning
+Content-Language: en-US
+To:     Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-parisc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <2442384.MTfJ8ztCV8@eto.sf-tec.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <2442384.MTfJ8ztCV8@eto.sf-tec.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tUEK0Er3yd2fxKJW47f5w/Osc1fKAlq9XXT7w8+50NDZXFdb/0O
+ lCzSmXKoffQQktklPO77RrCRSMxgIPbkD5Eiddg+9elMH1ftuDRAWaiDT9HlqdLjwvSs3Oh
+ nZZj6BgF2ACJaSC215OOKw7q0D4HLAb/2wHYm3pj1zgeuTFMVe5r2wZGQyjuEAFE2I6D3dW
+ 6as0w2AW8SlMCM4w8VvCw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:39nUoAt6lQ8=:CamLCCfW77OJskz4kntuiD
+ mOqGFS82i16XOZ36Yu8g7qptLFoxCPUGiD2FWVcraotz2mETN0CCT6A7n2XoM9ftf8Zhbn3xP
+ DAZo3nvNI8DH/eM105NIDp0yDn1nBbrbkjlv0TgNo0PAg1lmzrwnWxqL5pYOT//7IS8Ywudw+
+ yrkN9XJ1vLIzCnjMA6eKoFHUXKnSJn+t9ZMnttdyWD4a4+60UlWgNhtarLFEUehqGdu3FWx6O
+ o+7/j4+o1nIvOAUuvFFf35zncXUj0F2SAN907LIdyZLqzgsWfuTX2ohCCrytjnjG4ndB1CfHV
+ lE4WnDXEIEcxfCB/FvHUx2rRGG1dRfot627tvww2izqw0z/Ywwxkp8IVBRR+4TRwSVQD0eIWE
+ lRc6NFMTUMXYGWx5aFGJ/vge4V5j2MJw0rQrHq5MCa9jf/srQP6C0OqLRFPK/xtFEp9a2xZd5
+ UYFPmFbCqPDU3ETimkeATI93d8I3vNAcwqUa3LGDZJBWwiILtBjxjFG7iJSDhoRvi1c0oPRA+
+ UpPPGxZBq67k/0mi3s8otZTE8Xs2Jld5ErEHfHa2rkCLa5UjXbBLK5rszXwEBFUUJxl55iTeN
+ GCjGWgS7RtljWTAcZrs8mwjCJi2Ve6dXzzXZ5C0+IW4dvAQEGxGQU12deEoLPc8JL1RAvvB77
+ 52gViI7mxJURLpQk58+nbg4027xC85rYOY1XejdcRnsFpMer1ME2e5KgQeosQnQUutJgQ349p
+ X/WgzaSFF/WBdj12TxB0WiXD/f4mhdNG7cFc3itESqniRLZ8nhAXRjy5KaZyg/ZeUeFX6kSdt
+ zqPhkLEb0fSnIBLAg/Teh3fz7Da2DkVIUTjaDmZ/P3QXCDRcGxABsbjKEW01BlNoK1Dl/uOmC
+ gRQNjtopLZUj1EZTzq/aAc1l/yUGZ9HEMfAxpG73fhOonrxFcNaQUlQOwgHmTsg6P55GKhexk
+ HduwYVVP3uYDILjLy7uGnlMkxLPxoNmS8cgZWbkoqoF06QvuLloxD+yqlEZ8cSctRLB9u55ad
+ MZxH575ZPb4m96DzGbIqnGZWwS5pn2TfdqZaxIuEMg++ixe/a5Ihlqmi0KKTWj7+YgF45h+Gs
+ vv50Xnolmau6bvoOJtvpAroA6Llk0/75ypuoSjZrafdqT7K3245YXmTYywkbgul5Ze2/y65+S
+ fEvac=
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,63 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deren Wu <deren.wu@mediatek.com>
+On 9/14/22 16:23, Rolf Eike Beer wrote:
+> kmalloc() returns memory with __assume_kmalloc_alignment, which is
+> __alignof__(unsigned long long) for parisc.
+>
+> Signed-off-by: Rolf Eike Beer <eike-kernel@sf-tec.de>
 
-commit fa3fbe64037839f448dc569212bafc5a495d8219 upstream.
+applied.
 
-In case of drv own fail in reset, we may need to run mac_reset several
-times. The sequence would trigger system crash as the log below.
+Thanks!
+Helge
 
-Because we do not re-enable/schedule "tx_napi" before disable it again,
-the process would keep waiting for state change in napi_diable(). To
-avoid the problem and keep status synchronize for each run, goto final
-resource handling if drv own failed.
 
-[ 5857.353423] mt7921e 0000:3b:00.0: driver own failed
-[ 5858.433427] mt7921e 0000:3b:00.0: Timeout for driver own
-[ 5859.633430] mt7921e 0000:3b:00.0: driver own failed
-[ 5859.633444] ------------[ cut here ]------------
-[ 5859.633446] WARNING: CPU: 6 at kernel/kthread.c:659 kthread_park+0x11d
-[ 5859.633717] Workqueue: mt76 mt7921_mac_reset_work [mt7921_common]
-[ 5859.633728] RIP: 0010:kthread_park+0x11d/0x150
-[ 5859.633736] RSP: 0018:ffff8881b676fc68 EFLAGS: 00010202
-......
-[ 5859.633766] Call Trace:
-[ 5859.633768]  <TASK>
-[ 5859.633771]  mt7921e_mac_reset+0x176/0x6f0 [mt7921e]
-[ 5859.633778]  mt7921_mac_reset_work+0x184/0x3a0 [mt7921_common]
-[ 5859.633785]  ? mt7921_mac_set_timing+0x520/0x520 [mt7921_common]
-[ 5859.633794]  ? __kasan_check_read+0x11/0x20
-[ 5859.633802]  process_one_work+0x7ee/0x1320
-[ 5859.633810]  worker_thread+0x53c/0x1240
-[ 5859.633818]  kthread+0x2b8/0x370
-[ 5859.633824]  ? process_one_work+0x1320/0x1320
-[ 5859.633828]  ? kthread_complete_and_exit+0x30/0x30
-[ 5859.633834]  ret_from_fork+0x1f/0x30
-[ 5859.633842]  </TASK>
-
-Cc: stable@vger.kernel.org
-Fixes: 0efaf31dec57 ("mt76: mt7921: fix MT7921E reset failure")
-Signed-off-by: Deren Wu <deren.wu@mediatek.com>
-Link: https://lore.kernel.org/r/727eb5ffd3c7c805245e512da150ecf0a7154020.1659452909.git.deren.wu@mediatek.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
----
- drivers/net/wireless/mediatek/mt76/mt7921/pci_mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci_mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci_mac.c
-index b0f58bcf70cb..106c88b723b9 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci_mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci_mac.c
-@@ -345,7 +345,7 @@ int mt7921e_mac_reset(struct mt7921_dev *dev)
- 
- 	err = mt7921e_driver_own(dev);
- 	if (err)
--		return err;
-+		goto out;
- 
- 	err = mt7921_run_firmware(dev);
- 	if (err)
--- 
-2.25.1
+> ---
+>   drivers/parisc/iosapic.c | 11 +----------
+>   1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> I must confirm it's entirely untested.
+>
+> diff --git a/drivers/parisc/iosapic.c b/drivers/parisc/iosapic.c
+> index 3a8c98615634..bdef7a8d6ab8 100644
+> --- a/drivers/parisc/iosapic.c
+> +++ b/drivers/parisc/iosapic.c
+> @@ -221,16 +221,7 @@ static size_t irt_num_entry;
+>
+>   static struct irt_entry *iosapic_alloc_irt(int num_entries)
+>   {
+> -	unsigned long a;
+> -
+> -	/* The IRT needs to be 8-byte aligned for the PDC call.
+> -	 * Normally kmalloc would guarantee larger alignment, but
+> -	 * if CONFIG_DEBUG_SLAB is enabled, then we can get only
+> -	 * 4-byte alignment on 32-bit kernels
+> -	 */
+> -	a =3D (unsigned long)kmalloc(sizeof(struct irt_entry) * num_entries + =
+8, GFP_KERNEL);
+> -	a =3D (a + 7UL) & ~7UL;
+> -	return (struct irt_entry *)a;
+> +	return kcalloc(num_entries, sizeof(struct irt_entry), GFP_KERNEL);
+>   }
+>
+>   /**
 
