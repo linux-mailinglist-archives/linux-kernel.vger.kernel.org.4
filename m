@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4B85BAEEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ECD5BAEEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiIPOGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S231913AbiIPOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiIPOFp (ORCPT
+        with ESMTP id S231889AbiIPOGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:05:45 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232C027FFD
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:44 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s6so24546156lfo.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nPsSPucMBuKtAd8AfZmYJlLAtpXVu8go4ahtDG4VctY=;
-        b=UmQ9IXGR6XcCNXRD2DdV5uYcKzvLhdmr2An44e3UEarwwC0ssykFVCSD9XSpivnMJS
-         BTCNHB5aEiYWmpQ0B0Ha17T53z8CXBxGc6u0cf6KqNzgqalgKi69MrSZHYHD85ib0qVA
-         D43sGYn6lNB3T7DBJ56h64qScbc/4GBc6bHr8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nPsSPucMBuKtAd8AfZmYJlLAtpXVu8go4ahtDG4VctY=;
-        b=1BQI8vYIkoeQKClGi5YzItpCAVpU7mLFUU7vW70cO938steN/PaY0pzF1OWLYL2Ynz
-         Ic6MmrCR4lbuOSJfoy0D0RLH8YakQffz/yFIGDD/fSmslWQ4IHZSym5bRB6Sib558aQk
-         55Y0+LprnajxCMiRFDrn4W0gW56JbSwcwHCxPN5rjmiFIjdh7OOGoVUQgPIlReI7ODjv
-         dmWc8Z3WwdE+JiSfyNVe/Xk/FmiQPqHmqwSo0B3UXl/FlXGeNWJEUTNKrkf2f7KY3z/P
-         dRkGG6Fx5nsn3Qy9Ds7rhi1JxRGUymUhSkdu2E2ZFuh0TUYE+Vrjtbz5DQarS99pcP91
-         HHCw==
-X-Gm-Message-State: ACrzQf2h/PU5hbq7qHaRRTvxABWBzMn0bzn/IfkANLqehCS9e88imz73
-        002FM1ZncecWiOwaA0jMjuY5/u59P9tV0uZu1l0=
-X-Google-Smtp-Source: AMsMyM5dADF7wFp6uiIM32Son1X8Rn1+QFpvB/QVE8snSkAqaWJgsUzvnCXZpvwiQQKgO8ZxqtMfSw==
-X-Received: by 2002:a05:6512:1287:b0:49e:f94f:eb72 with SMTP id u7-20020a056512128700b0049ef94feb72mr1898308lfs.376.1663337142151;
-        Fri, 16 Sep 2022 07:05:42 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id r23-20020a2e8e37000000b00261e3856abcsm3557232ljk.102.2022.09.16.07.05.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 07:05:41 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id x27so2540598lfu.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:41 -0700 (PDT)
-X-Received: by 2002:a05:6512:31c1:b0:498:fe7:b46 with SMTP id
- j1-20020a05651231c100b004980fe70b46mr1699244lfe.549.1663337140735; Fri, 16
- Sep 2022 07:05:40 -0700 (PDT)
+        Fri, 16 Sep 2022 10:06:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43334AED8E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663337161; x=1694873161;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6Y35qyUGEJdFxo9fITySx0oXT97wWrIULMbRg5QQQFM=;
+  b=Op9O8QDf+TOWuCNMa8ZuKo26zWkTvlHQlFXrtnAf01+d9XFMChIY2DTE
+   x5A8JCTZV9tAdzrJJ9FMIbfqfMUleJl6q3H5Rx5ighPSviT0OEYJ5GrfN
+   i1NVeBGBHjF7/WXW6EjnPsplFq5f9ABprJweblZL0+F8BInKPVo0+S8K+
+   CXECkGLP7PTgefz/SiVuy4mhtBWfgFSIWjWTX1lw+df5FkMLcdAIEQAMA
+   iwHjj3n3h/owcPwFB4w/YGKaL0Wg38P7EUk+rzwrrbEwHms7FwICUZK8J
+   pQJcvd8vxtbXlSbQUTF22jQfBeLnPn9GtdWsmfju5qYxfggtWG+6ccNIN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="385287937"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="385287937"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 07:05:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="613260360"
+Received: from lroque-mobl1.amr.corp.intel.com ([10.251.209.126])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 07:05:57 -0700
+Date:   Fri, 16 Sep 2022 17:05:56 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Hyunwoo Kim <imv4bel@gmail.com>
+cc:     arnd@arndb.de, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] char: pcmcia: synclink_cs: Fix use-after-free in
+ mgslpc_ops
+In-Reply-To: <20220916140353.GA235538@ubuntu>
+Message-ID: <51585a1-d236-5e26-a41-125ae4d0a0eb@linux.intel.com>
+References: <20220916134751.GA234676@ubuntu> <21d84319-4d1a-8d8e-a098-947772406faf@linux.intel.com> <20220916140353.GA235538@ubuntu>
 MIME-Version: 1.0
-References: <20220916074253.781428-1-brgl@bgdev.pl>
-In-Reply-To: <20220916074253.781428-1-brgl@bgdev.pl>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 16 Sep 2022 07:05:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh7XqYTJgDHGF5xYBNJEKtf1wQ7Gg3vjr+onevNN8uHvw@mail.gmail.com>
-Message-ID: <CAHk-=wh7XqYTJgDHGF5xYBNJEKtf1wQ7Gg3vjr+onevNN8uHvw@mail.gmail.com>
-Subject: Re: [GIT PULL] gpio: fixes for v6.0-rc6
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1097490929-1663337160=:1788"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:42 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-fixes-for-v6.0-rc6
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I think you forgot to push the tag, there's no such thing.
+--8323329-1097490929-1663337160=:1788
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-I see the branch ("gpio/for-current") that contains that top commit,
-but no fixes tag by that name.
+On Fri, 16 Sep 2022, Hyunwoo Kim wrote:
 
-              Linus
+> On Fri, Sep 16, 2022 at 04:54:11PM +0300, Ilpo Järvinen wrote:
+> > On Fri, 16 Sep 2022, Hyunwoo Kim wrote:
+> > 
+> > > A race condition may occur if the user physically removes
+> > > the pcmcia device while calling ioctl() for this tty device node.
+> > > 
+> > > This is a race condition between the mgslpc_ioctl() function and
+> > > the mgslpc_detach() function, which may eventually result in UAF.
+> > > 
+> > > So, add a refcount check to mgslpc_detach() to free the structure
+> > > after the tty device node is close()d.
+> > > 
+> > > Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+> > 
+> > > @@ -2517,9 +2548,14 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
+> > >  	if (debug_level >= DEBUG_LEVEL_INFO)
+> > >  		printk("%s(%d):mgslpc_open(%s) success\n",
+> > >  			 __FILE__, __LINE__, info->device_name);
+> > > +
+> > > +	kref_get(&info->refcnt);
+> > >  	retval = 0;
+> > > +	mutex_unlock(&remove_mutex);
+> > >  
+> > > +	return retval;
+> > >  cleanup:
+> > > +	mutex_unlock(&remove_mutex);
+> > >  	return retval;
+> > 
+> > Just move the cleanup label instead.
+> 
+> I'm sorry, but could you please explain a bit more?
+
+The last two statements of the cleanup path and the path above it are
+the same.
+
+-- 
+ i.
+
+--8323329-1097490929-1663337160=:1788--
