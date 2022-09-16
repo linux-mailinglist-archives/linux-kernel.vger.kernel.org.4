@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C15B5BB2D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E935BB2D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiIPTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S230161AbiIPTcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiIPTb7 (ORCPT
+        with ESMTP id S230185AbiIPTcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:31:59 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FAA5F10A;
-        Fri, 16 Sep 2022 12:31:57 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-12c8312131fso3341622fac.4;
-        Fri, 16 Sep 2022 12:31:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z3Sthnj1FcNAMBSXALUfkD26U2zHJqvId9wxHnJlzmY=;
-        b=3b0i18ONW3pGFCtwvTqwk6BEKKPjHiLt0wMiG8UgZCJau7EWkv5jws442mxSDSoKYm
-         GVTBYmZq6HkgQqG7CIDe0n05aMSgxHCeGk+5neWMeJPDxH7f9LidkG0BrvlvgYl9Vpq8
-         9Gd56JjB1wiuNOriITtBtK4UStHWeM07vkgR7Y1rn/VrNeintHbQguA/pbqqvR6kkHNQ
-         hv+NPQ+huCGmGNYRPAyTJKn9FevIiF2MDVE3c/zekYOyEaUkWhHRKHhqypBpj0OJln3e
-         QgetrI8j8fgOdVRbHFAQSXBviiA06KXSsYtfsBjwD2xk40XsRme15NiLSvq1W+pskOVZ
-         ug2Q==
-X-Gm-Message-State: ACrzQf0apnDtdtrA6248pDACT0saOKxSqtxuykNFL3UCTlwLZN9+R0z/
-        L4kJIbPRCHabjWcfQFI42g==
-X-Google-Smtp-Source: AMsMyM5Rud+4rF6YtBDwMIg8bCMYOKWqbQQPT5V67M6vLmxAkZc0l4fY485Hix4y6qmiYT/d/aVVKg==
-X-Received: by 2002:a05:6870:e997:b0:10c:6f42:b05e with SMTP id r23-20020a056870e99700b0010c6f42b05emr3602742oao.89.1663356716571;
-        Fri, 16 Sep 2022 12:31:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f92-20020a9d2c65000000b00655bc32a413sm10481673otb.42.2022.09.16.12.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 12:31:55 -0700 (PDT)
-Received: (nullmailer pid 1133996 invoked by uid 1000);
-        Fri, 16 Sep 2022 19:31:55 -0000
-Date:   Fri, 16 Sep 2022 14:31:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        Jian-Jia Su <jjsu@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 3/4 v4] dt-bindings: memory: Add jedec,lpddr4 and
- jedec,lpddr5 bindings
-Message-ID: <20220916193155.GA1133958-robh@kernel.org>
-References: <20220915003222.1296421-1-jwerner@chromium.org>
- <20220915003222.1296421-3-jwerner@chromium.org>
+        Fri, 16 Sep 2022 15:32:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B42B0B18;
+        Fri, 16 Sep 2022 12:32:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8025DB82921;
+        Fri, 16 Sep 2022 19:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D74C433C1;
+        Fri, 16 Sep 2022 19:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663356728;
+        bh=//xoDX9kOXmkp982WJui+uOT9DeSmbvciR+NGZPx6EU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bK4Vpr7ZMnK1HS7eGhhmG9DvDRAwdhutjJR60Pa+S5R85TA3EA/BA7vIqp84S1vVZ
+         t0BcT/iSnmUpJrvRNvxR1axHAsuZJQVkYvPVE2sEMKOaiATvv9ua5bXkP9TdNvJ8VW
+         NE3R3ast7xLOagKx1tDNTrGLeYmxAtIs3DPZvjZn9elABCqhv3nqbna/HJjlUcSepc
+         7qANe6kK/vWBlH4G4NYM+6yOCAFpD+1wlhBdgAujge58I3HvRQO9Kuz2GGBPx9wx0T
+         Qagk8veUoGrQRPvTleHMgzr4IJWWeUzWfbHvdTsx38yZ91oioZ7hEDMTvwN8uD0xJP
+         /P86z9AmTEIqw==
+Date:   Fri, 16 Sep 2022 20:31:58 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>, Peter Rosin <peda@axentia.se>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: mux: harden i2c_mux_alloc() against integer
+ overflows
+Message-ID: <YyTPLkOfPlgkLaxq@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Kees Cook <keescook@chromium.org>, Peter Rosin <peda@axentia.se>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <YyMM8iVSHJ4ammsg@kili>
+ <202209160046.016AC8B4@keescook>
+ <YyQxuHi2iQIvj0Lj@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LH3CZH+3vzn5Op2u"
 Content-Disposition: inline
-In-Reply-To: <20220915003222.1296421-3-jwerner@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YyQxuHi2iQIvj0Lj@kadam>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 17:32:21 -0700, Julius Werner wrote:
-> This patch adds bindings for LPDDR4 and LPDDR5 memory analogous to the
-> existing bindings for LPDDR2 and LPDDR3. For now, the new types are only
-> needed for topology description, so other properties like timing
-> parameters are omitted. They can be added later if needed.
-> 
-> Signed-off-by: Julius Werner <jwerner@chromium.org>
-> ---
->  .../ddr/jedec,lpddr-props.yaml                |  4 ++
->  .../memory-controllers/ddr/jedec,lpddr4.yaml  | 35 ++++++++++++++
->  .../memory-controllers/ddr/jedec,lpddr5.yaml  | 46 +++++++++++++++++++
->  3 files changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
-> 
-> Changelog:
-> 
-> - v2
->   - removed minItems
->   - moved `$ref` below `maintainers`
->   - renamed example node from `lpddr4` to `lpddr`
-> - v3
->   - removed manufacturer-id property from examples
-> - v4
->   - removed quotes from schema $ref strings
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--LH3CZH+3vzn5Op2u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> > The new variable makes it more readable, but beyond that, do you see any
+> > reason not to just directly compose the calls?
+> >=20
+>=20
+> You could do that too.
+>=20
+> You pointed this out in your other email but the one thing that people
+> have to be careful of when assigning struct_size() is that the
+> "mux_size" variable has to be size_t.
+>=20
+> The math in submit_create() from drivers/gpu/drm/msm/msm_gem_submit.c
+> is so terribly unreadable.  It works but it's so ugly.  Unfortunately,
+> I'm the person who wrote it.
+
+I can't parse from that if the patch in question is okay or needs a
+respin? Could you kindly enlighten me?
+
+
+--LH3CZH+3vzn5Op2u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMkzy0ACgkQFA3kzBSg
+Kbaztw/+N9X2QXwxeCMfK355UzAvNqP0fyKw/53SNJxPqJzaWafNStUjc6C3ADP2
+sKfB/I2gjBm+sAso9p1XcIDlV8Cxbdxyt5h+xCWQt1Ybm6XpUIVlapux0gNOX2ER
+Y2pc5De4V89fuIY6ZjQMvjwAm4mEsRH25zcXhpS0lVhX2JGeaGDGXc9Iv34L0CW3
+qDJOUlF78YJcIoTew5EGmz4WmExudT7Z3RwNKFQOmTuHK4Swmux6rwI18ekAbHHf
+s7Cvlc3EpxMYYFPR4ReFQg8wnsHrVbyQ6TJP8flGZ1XL59/N9xwhvPTPcQIjWVI3
+O2s7xef3USuyT0m2o+S5VsN4whdLVn3TkvxI9tLz9hEFoBOs7zPP3C5iTy8g9ds5
+dUpk+J4tC+cagZahifx4+SM8fBvGxlo6BxU+qjhZUihxE8d8kQcrp0/xQCL+lT2x
+2eEjPSuYuBLvUqJata/ccnw70VTPSgqyPiV0DeboK3trFVM+ZBOiQXcvAT4UGoyE
+egT1IozpmnunXR8bgLS1al8Bqbz0AzbGg1xB9G0fqg/F/jpixMZh6BVP8qkHTEgK
+gs8ysFdupJjLS3fIVDuY/2Jyta1QuBrULQpznjeUFld8QjA8Gy9k2XYBu5UgrcOT
+eVm8alL5rMthCrqpP138W6Mes+shwVZG6Nj7LCHx7n8ALrzdHyQ=
+=fKpo
+-----END PGP SIGNATURE-----
+
+--LH3CZH+3vzn5Op2u--
