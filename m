@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07045BB018
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06985BB01D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiIPPVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S231703AbiIPPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiIPPVE (ORCPT
+        with ESMTP id S231708AbiIPPVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:21:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDB082FA2;
-        Fri, 16 Sep 2022 08:21:01 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28GD6xEl018195;
-        Fri, 16 Sep 2022 15:20:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wBvc5kjqSvGVlMipQAv6v4gLaFz+BavyO2mTc58+5tg=;
- b=L3MZra1DCquB7AMvqvzOCBtHywAcHq/FnPAFQWo7MkoDYxThaVR1i8b/FPPq5a+H25st
- 58RkEocgYziqLrlqkRJY/WA42EeYK//9yKBzv2G1RzrvDtjSCjvGh5tuX5MQK4fUl51v
- tShMHyoufHbII7p0oXU/Qk2RWi+nfYhXuYqeauWdwN9I2rhUnzDZckJqe6TAA1Hjxsud
- /Ps2PI/KsWv03+16CVUWbudbO/Uykj5iUNakBsNFaoUprPRYdS0Ab34cR7kkaU0S/yWn
- sPB/NTQdycbawnIpp2Y3NuAsjK0HKDmOCqZkHeZnhwym7vA8Da/cBYSLKL/66+uTHmmt XA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jm8xmunbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Sep 2022 15:20:47 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28GFFnGk008145;
-        Fri, 16 Sep 2022 15:20:46 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jkyc2dy25-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Sep 2022 15:20:46 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28GF4o0l026041;
-        Fri, 16 Sep 2022 15:20:45 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 28GFKjZP013121
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Sep 2022 15:20:45 +0000
-Received: from [10.110.7.80] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 16 Sep
- 2022 08:20:43 -0700
-Message-ID: <f5b2eaa8-70eb-21b2-e2e7-485aaa927a5d@quicinc.com>
-Date:   Fri, 16 Sep 2022 08:20:42 -0700
+        Fri, 16 Sep 2022 11:21:54 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5AAA4DF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:21:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id sb3so20541026ejb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=FAZ1nZoda0LvxFO03fEct6+OY7sOs5EIJLDowUOvXx4=;
+        b=i3EM54wqEUd4S0hEjrVzr83R6YfecGIo0DsXnpvu9Xi5oB1vfFa8ZVBK2Is2icTZWm
+         X5hso/7NBeg9mGUsZNtQzLp7jv/OTgknKbmhMgB4znO6wmSipfbNDVNKwdd/spAXbwL4
+         yVQWrtWpdhgdoaYh5zmlRXLyokBMUZXmQlOnKfqultK8EcRuQ5lTU9qONFYronuMziCP
+         La1Rml9QYllS1G3sqFsNVEpqcaF3HSK2nY1c5Wpgt8fVVo6YBLBTBCUkP+xZHDWYy2Ds
+         SzQjOdH8HgLucw29Hg2ugKqSYNh6Ewx+S0j0u+0N/4IHqbsTwuk8ffu8qg4/Z0N2pqzS
+         gv8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=FAZ1nZoda0LvxFO03fEct6+OY7sOs5EIJLDowUOvXx4=;
+        b=49p9s5/y45TKSv912kDg1ZBST+r9RVPJh+T9wRKLV/4rIAePzkVoXZMK/av6P7NV0D
+         XbpvR+BRmrXyzOQpaHistrWgK6RGF83KsrD5BZ29oxlQDFZOV1QMjS7rPoBI883gB++k
+         i2XIppt549nhqjriXAMvlqArWixNFqNwraI9fe22IXp5IGfcItxzzwfYeMjrpoCFYoTP
+         2kRrTLzeU+7BjYc2MKAWjCMbzdtn7/j3oG68xbWJmI3wOtwmKvyJsSpPb0WWP1E+nGag
+         WCyv2CfF5pfS0Ugn2xethHMB1k5/cm2aE0Yn+HZWTEXhadtp5DKVelbMQ4NyAilSHwgx
+         FOCw==
+X-Gm-Message-State: ACrzQf2Y6917Ywhn0FdrfKDv9Pzl0sL4EhaWr4GfFrlKaCBasOOZXKdS
+        UNCkfhPogxWBvV1n0I4O9asiBziroxP/4/4n09g=
+X-Google-Smtp-Source: AMsMyM7VdObrUWQ3oMSH0uIBXnSpYn73/MNnHRJRFIMKRcnMR0VWDex5xXR94UsnsJLt5amN0/PYib0/nXhnk1LrGNk=
+X-Received: by 2002:a17:906:8a77:b0:780:a02d:ca4a with SMTP id
+ hy23-20020a1709068a7700b00780a02dca4amr2762440ejc.488.1663341707544; Fri, 16
+ Sep 2022 08:21:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 3/4] slimbus: qcom-ngd-ctrl: Make QMI message rules const
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
- <20220912232526.27427-2-quic_jjohnson@quicinc.com>
- <20220912232526.27427-3-quic_jjohnson@quicinc.com>
- <20220912232526.27427-4-quic_jjohnson@quicinc.com>
- <65f11ed1-f09f-e0a2-91f5-891394160c96@linaro.org>
-Content-Language: en-US
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <65f11ed1-f09f-e0a2-91f5-891394160c96@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N1YML4LhMNVhIb3BzHEaZ0fgMRS9KksY
-X-Proofpoint-ORIG-GUID: N1YML4LhMNVhIb3BzHEaZ0fgMRS9KksY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-16_09,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=723 priorityscore=1501 clxscore=1015 impostorscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209160112
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
+ <CAJedcCw1eJqjSK+yR7eQMDheNtH3Mjm+viwt00xAhnmrfpq2pw@mail.gmail.com>
+ <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com>
+ <YxWtfjfpNsoPUrgh@kroah.com> <CAJedcCzMo51aiy=Dv7zn7VmL3gwkw7JgzwAPAB2Z27C9CnhoYA@mail.gmail.com>
+ <20220907030754.GU1089@zhen-hp.sh.intel.com> <CAJedcCxO_Rq0qMeLiHtY5+FuN1A1pDGsZd3gMtvUpm1xbAK3aA@mail.gmail.com>
+ <Yxmzj2nCoTKurCY8@kroah.com> <CAJedcCwVC6Rg+wF7h6GhFvL6BGkKV=DS9Mo9fOf-gfDAk9VqPg@mail.gmail.com>
+ <CAJedcCxRQ4h-ChNsD4OWpDMUJd3JNaQrvD=uVKxMpYONGFUgzA@mail.gmail.com> <YyQzDlM5n7mOLh5Q@kroah.com>
+In-Reply-To: <YyQzDlM5n7mOLh5Q@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 16 Sep 2022 23:21:35 +0800
+Message-ID: <CAJedcCy-beMX=ytszAWMu28FH0qGKCsLC=0bJPL_Tmh35wigKw@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>,
+        "security@kernel.org" <security@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        xmzyshypnc <1002992920@qq.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/16/2022 6:06 AM, Srinivas Kandagatla wrote:
-> 
-> 
-> On 13/09/2022 00:25, Jeff Johnson wrote:
->> Commit ff6d365898d ("soc: qcom: qmi: use con
-> 
-> SHA ID should be at least 12 chars long.
-> 
-> Same comment for all the patches in the series.
-> 
-> 
-> st for struct
->> qmi_elem_info") allows QMI message encoding/decoding rules to be
->> const, so do that for qcom-ngd-ctrl.
->>
->> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> 
-> Other than that it LGTM,
-> Once fixed:
-> 
-> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> 
-> 
-> --srini
+Hi greg,
 
-that was corrected in v2. thx for the ack
+Thanks for pointing that out. Working on it now :)
+
+Best wishes,
+Zheng Wang
+
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=8816=E6=
+=97=A5=E5=91=A8=E4=BA=94 16:25=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Sep 16, 2022 at 02:39:21PM +0800, Zheng Hacker wrote:
+> > >From 8d95c1399e3ff345500a575e21254a73b0c89144 Mon Sep 17 00:00:00 2001
+> > From: xmzyshypnc <1002992920@qq.com>
+> > Date: Fri, 16 Sep 2022 14:37:48 +0800
+> > Subject: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_ent=
+ry
+> >
+> > There is a double-free security bug in split_2MB_gtt_entry.
+> >
+> > Here is a calling chain :
+> > ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
+> > If intel_gvt_dma_map_guest_page failed, it will call
+> > ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
+> > kfree(spt). But the caller does not notice that, and it will call
+> > ppgtt_free_spt again in error path.
+> >
+> > Fix this by only freeing spt in ppgtt_invalidate_spt in good case.
+> >
+> > Signed-off-by: xmzyshypnc <1002992920@qq.com>
+> > ---
+> >  drivers/gpu/drm/i915/gvt/gtt.c | 16 +++++++++-------
+> >  1 file changed, 9 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/=
+gtt.c
+> > index 9f14fded8c0c..31d2a8d56384 100644
+> > --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> > +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> > @@ -959,7 +959,7 @@ static inline int ppgtt_put_spt(struct
+> > intel_vgpu_ppgtt_spt *spt)
+> >   return atomic_dec_return(&spt->refcount);
+> >  }
+> >
+> > -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
+> > +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *sptm,
+> > int is_error);
+>
+> Your patch is whitespace damaged and linewrapped and can not be applied,
+> and can only barely read :(
+>
+> Please fix up your email client to not do this so that the change can be
+> properly reviewed and accepted if correct.
+>
+> thanks,
+>
+> greg k-h
