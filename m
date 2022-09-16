@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C15BA850
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFA85BA852
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiIPIiu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Sep 2022 04:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S230063AbiIPIlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiIPIir (ORCPT
+        with ESMTP id S229690AbiIPIlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:38:47 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D29A74DD
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:38:46 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MTS6G33Mtz67nLn;
-        Fri, 16 Sep 2022 16:34:14 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 10:38:43 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 09:38:43 +0100
-Date:   Fri, 16 Sep 2022 09:38:42 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-CC:     Dan Carpenter <dan.carpenter@oracle.com>,
-        "kbuild@lists.01.org" <kbuild@lists.01.org>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "lkp@intel.com" <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [jic23-iio:testing 149/150] drivers/iio/dac/ad5593r.c:87
- ad5593r_gpio_read() error: uninitialized symbol 'val'.
-Message-ID: <20220916093842.0000535c@huawei.com>
-In-Reply-To: <SJ0PR03MB6778F73D1F3C08012C6B277299489@SJ0PR03MB6778.namprd03.prod.outlook.com>
-References: <202209160614.IE7ciPMN-lkp@intel.com>
-        <SJ0PR03MB6778F73D1F3C08012C6B277299489@SJ0PR03MB6778.namprd03.prod.outlook.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 16 Sep 2022 04:41:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEBCA74F1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qfHTiySpHhHOQIjP3+B153jEM36eOAvO8iYY29vr6qc=; b=FfvFaEfaJ0hVGKpxK47hCv9Clk
+        kuVTtteUkRdxfZfV3cqc562/VZ4wpHEAcKlsqdFaIj+FuKaT4+D2cKQF4B5CY3OkzL99rP1dpE1a2
+        ccyJMM+PtnmP/s/hUzaf1eWguiMdn+mAsfSfTK1j5PHe8Fp6SzRVeS2k6l1RK2ZlFNvy7G7DzUZJK
+        6kD/1vbuWbpFBKqkm9ofUYDA1lot2agiHxgbWV90b3eeSrD179WpiyOPSNFcNFfxv4/3d4dGOQKCJ
+        1qj3ffTiPBqGh3NVgh5383fCrldocXGUIOynTP4cWDpwGRgGHYsOAAadZRB5gU7r2oC5FJYEamUIy
+        8SWz4ukQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oZ6uB-00223z-O1; Fri, 16 Sep 2022 08:40:59 +0000
+Date:   Fri, 16 Sep 2022 09:40:59 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
+ kswapd
+Message-ID: <YyQ2m9vU/plyBNas@casper.infradead.org>
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+ <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+ <YyLUGnqtZXn4MjJF@casper.infradead.org>
+ <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
+ <YyLpls9/t6LKQefS@casper.infradead.org>
+ <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 07:11:54 +0000
-"Sa, Nuno" <Nuno.Sa@analog.com> wrote:
-
-> Hi Dan,
+On Fri, Sep 16, 2022 at 08:57:50AM +0800, Hongchen Zhang wrote:
+> Hi Andrew ,
 > 
-> > From: Dan Carpenter <dan.carpenter@oracle.com>
-> > Sent: Friday, September 16, 2022 8:56 AM
-> > To: kbuild@lists.01.org; Hennerich, Michael
-> > <Michael.Hennerich@analog.com>
-> > Cc: lkp@intel.com; kbuild-all@lists.01.org; linux-kernel@vger.kernel.org;
-> > Jonathan Cameron <Jonathan.Cameron@huawei.com>; Sa, Nuno
-> > <Nuno.Sa@analog.com>
-> > Subject: [jic23-iio:testing 149/150] drivers/iio/dac/ad5593r.c:87
-> > ad5593r_gpio_read() error: uninitialized symbol 'val'.
+> On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
+> > On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
+> > > Hi Matthew,
+> > > On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
+> > > > On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
+> > > > > [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
+> > > > > seconds.
+> > > > > [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
+> > > > > [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> > > > > this message.
+> > > > > [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
+> > > > > 77327 flags:0x00004002
+> > > > > [ 3748.483358] Call Trace:
+> > > > > [ 3748.485964]  <TASK>
+> > > > > [ 3748.488150]  __schedule+0x23d/0x590
+> > > > > [ 3748.491804]  schedule+0x4e/0xc0
+> > > > > [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
+> > > > > [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
+> > > > > [ 3748.505181]  down_read+0x43/0xa0
+> > > > > [ 3748.508518]  do_user_addr_fault+0x41c/0x670
+> > > > > [ 3748.512799]  exc_page_fault+0x77/0x170
+> > > > > [ 3748.516673]  asm_exc_page_fault+0x26/0x30
+> > > > > [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
+> > > > > [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
+> > > > > 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
+> > > > > a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
+> > > > > [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
+> > > > > [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
+> > > > > 0000000000000010
+> > > > > [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
+> > > > > 00007f99faa1a000
+> > > > > [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
+> > > > > 0000000000000014
+> > > > > [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
+> > > > > 0000000000001000
+> > > > > [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
+> > > > > ffffaa9248fffd98
+> > > > > [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
+> > > > > [ 3748.592614]  filemap_read+0x174/0x3e0
+> > > > 
+> > > > Interesting; it wasn't the process itself which triggered the page
+> > > > fault; the process called read() and the kernel took the page fault to
+> > > > satisfy the read() call.
+> > > > 
+> > > > > [ 3748.596354]  ? ima_file_check+0x6a/0xa0
+> > > > > [ 3748.600301]  generic_file_read_iter+0xe5/0x150
+> > > > > [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
+> > > > > [ 3748.609164]  ? aa_file_perm+0x102/0x250
+> > > > > [ 3748.613125]  new_sync_read+0x10d/0x1a0
+> > > > > [ 3748.617009]  vfs_read+0x103/0x1a0
+> > > > > [ 3748.620423]  ksys_read+0x67/0xf0
+> > > > > [ 3748.623743]  __x64_sys_read+0x19/0x20
+> > > > > [ 3748.627511]  do_syscall_64+0x59/0xc0
+> > > > > [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
+> > > > > [ 3748.636144]  ? do_syscall_64+0x69/0xc0
+> > > > > [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
+> > > > > [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
+> > > > > [ 3748.649872]  ? irqentry_exit+0x1d/0x30
+> > > > > [ 3748.653737]  ? exc_page_fault+0x89/0x170
+> > > > > [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> > > > > [ 3748.663030] RIP: 0033:0x7f9a852989cc
+> > > > > [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
+> > > > > 0000000000000000
+> > > > > [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
+> > > > > 00007f9a852989cc
+> > > > > [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
+> > > > > 0000000000000061
+> > > > > [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
+> > > > > 00007f99faa18010
+> > > > > [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
+> > > > > 00007f99faa18010
+> > > > > [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
+> > > > > 0000000000027100
+> > > > 
+> > > > ORIG_RAX is 0, which matches sys_read.
+> > > > RDI is file descriptor 0x61
+> > > > RSI is plausibly a userspace pointer, 0x7f99faa18010
+> > > > RDX is the length, 0x27100 or 160kB.
+> > > > 
+> > > > That all seems reasonable.
+> > > > 
+> > > > What I really want to know is who is _holding_ the lock.  We stash
+> > > > a pointer to the task_struct in 'owner', so we could clearly find this
+> > > > out in the 'blocked for too long' report, and print their stack trace.
+> > > > 
+> > > As described in the comment for __rwsem_set_reader_owned,it is hard to track
+> > > read owners.So we could not clearly find out who blocked the process,it was
+> > > caused by multiple tasks.
 > > 
-> > [External]
+> > Readers don't block readers.  You have a reader here, so it's being
+> > blocked by a writer.  And that writer's task_struct is stashed in
+> > rwsem->owner.  It would be nice if we dumped that information
+> > automatically ... but we don't do that today.  Perhaps you could
+> > grab that information from a crash dump if you have one.
 > > 
-> > tree:
-> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/g
-> > it/jic23/iio.git__;!!A3Ni8CS0y2Y!94Jf_eIoy5zwbmsSRdWgugxbqkbgHFd0A88T
-> > z4SKRufGLX24YYSEzKlB13AXeYzsBWzd5HW-SqPpIzc8hvh-6w$   testing
-> > head:   62a6e699f4669b2c51f408273756f93b21c9f1a1
-> > commit: 53b6e3b2164c5807669fbf6b3df0e1494b4d03b8 [149/150] iio: dac:
-> > ad5593r: Fix i2c read protocol requirements
-> > config: x86_64-randconfig-m001
-> > compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> > > > You must have done something like this already in order to deduce that
+> > > > it was the direct reclaim path that was the problem?
+> > > > 
+> > > The method we used is to track the direct reclaim using the
+> > > trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
+> > > occurred,we could get a very large "nr_reclaimed" which is not a desirable
+> > > value for process except kswapd.
 > > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > I disagree.  If a process needs to allocate memory then it should be
+> > paying the cost of reclaiming that memory itself.  kswapd is a last
+> > resort to reclaim memory when we have a workload (eg a network router)
+> > that does its memory allocation primarily in interrupt context.
 > > 
-> > smatch warnings:
-> > drivers/iio/dac/ad5593r.c:87 ad5593r_gpio_read() error: uninitialized symbol
-> > 'val'.
-> > 
-> > vim +/val +87 drivers/iio/dac/ad5593r.c
-> > 
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05  79  static int
-> > ad5593r_gpio_read(struct ad5592r_state *st, u8 *value)
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05  80  {
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05  81  	struct i2c_client *i2c =
-> > to_i2c_client(st->dev);
-> > 53b6e3b2164c580 Michael Hennerich 2022-09-13  82  	u16 val;
-> > 53b6e3b2164c580 Michael Hennerich 2022-09-13  83  	int ret;
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05  84
-> > 53b6e3b2164c580 Michael Hennerich 2022-09-13  85  	ret =
-> > ad5593r_read_word(i2c, AD5593R_MODE_GPIO_READBACK, &val);
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05  86
-> > 56ca9db862bf3d7 Paul Cercueil     2016-04-05 @87  	*value = (u8) val;
-> > 
-> > 
-> > In the original code the error checking prevented reading uninitialized
-> > variables.  It's not really a problem, because ad5593r_read_word() can't
-> > actually fail but, you know?  Technically the checker is correct.  
-> 
-> Hmm, in theory, it can if one of the i2c functions (for some reason) return error.
-> Not sure how to handle this... Given this is still in the testing branch should I
-> just re-spin another version of the series? Jonathan?
+> What's your opinion about this scan adjust issue? Is there a better way to
+> fix this issue?
 
-Either a fix patch or a respin is fine as long as I haven't pushed it out as togreg
-(once that happens I would almost always want a fix on top).
-
-Separate fix is slightly easier for me.
-
-Jonathan
-
-> 
-> - Nuno Sá
-
+Yes, but we need you to gather more information about what's causing
+the issue before we can suggest what that is.
