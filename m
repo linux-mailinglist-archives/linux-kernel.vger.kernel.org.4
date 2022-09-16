@@ -2,165 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2845BADF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25C25BADF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiIPNS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S230488AbiIPNTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiIPNSu (ORCPT
+        with ESMTP id S231396AbiIPNTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:18:50 -0400
-Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C519EA3D44;
-        Fri, 16 Sep 2022 06:18:47 -0700 (PDT)
-Received: by mail.wantstofly.org (Postfix, from userid 1000)
-        id 2D4807F505; Fri, 16 Sep 2022 16:18:46 +0300 (EEST)
-Date:   Fri, 16 Sep 2022 16:18:46 +0300
-From:   Lennert Buytenhek <buytenh@wantstofly.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-Message-ID: <YyR3tnUXsgIJ1w/W@wantstofly.org>
-References: <YyF/dogp/0C87zLb@wantstofly.org>
- <YyGoZLTFhYQvlf+P@smile.fi.intel.com>
- <YyG2tDdq9PWTlaBQ@wantstofly.org>
- <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
- <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
- <YyRiPMa26qDptj3L@wantstofly.org>
- <421c541b-25d7-a1de-8c21-5a164dcf24ef@linux.intel.com>
+        Fri, 16 Sep 2022 09:19:33 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6D7DF9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w8so35533245lft.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=OaypWP/IxlHhG1Kx4aDr1Q5K0a9Anqf01PLYalSrVCo=;
+        b=mq3JbMh11ee0Td9M2zQC6K//p9ytv7XheGu/zc/RTSsxwG05ni+X18R4SVKDSxecV9
+         qjfi8hTwyS1KV0MutpqHstd6CbHSgNcgK2pSiHhgOWIsMc5mEVmtI6rlSOKrqz7HC9YU
+         KxtBUj5mhgOT73/hF4H8RxwzWdj2yZx0IoumQ5d7lVIgcZGVzQdmaDh0Cd9xHj39tF6E
+         e4HX3U5bk28EwhKfRA5shj3qaZRb30J5mBvfiuu3Y02Y7SbBEFmoTwkeuheRvbApJpU2
+         TQ3cOvdj01JuerO1qKMk0t5GGwiuCXV5ai2PuG0Vzo2biI2IOp5f5GDpGoaWl8H/jDaH
+         M3Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=OaypWP/IxlHhG1Kx4aDr1Q5K0a9Anqf01PLYalSrVCo=;
+        b=AhfLlpcC6EmvrQeTwF+pTsYhIPFnWOCFAe2N2OiolpiwUBNO5iKdDMV2NhCl6XbcNO
+         DkbmhkY4Mi2+GSFWv1Z8LY0ihw4gDfkMo5NwBzAWO7dAPFsvTlvqD2Eny0jr5KwZcpfI
+         7nerkrZMxNqIgvl/uHKmauZQ4P8Qulp+WqkofcovmjGOjKaaEuChGgI7kUjUIDgiqhor
+         92vNxcxWBrbEP4SA7XQgzrfEB5LGC+0LxMUEqomx6tlZe85lmQXPigJ/s/mIeuLbeHnM
+         LiW6a5oFhEcnEQXCIA+PXNxiSX+GBF28jwszyE7hOiB97FOs3YOlRbR7F5jf+yBP/eta
+         oMGg==
+X-Gm-Message-State: ACrzQf0RyiwSYHQn3U4dgyglLOSmZDmFW6f/NBdqJquH9b6aiaWfY3CA
+        R0sCIFtILEK0rg0rtj4FgEaNOh6xL9UYUw==
+X-Google-Smtp-Source: AMsMyM6uah9ha3qExCMZeorZmSh0Jd6ZlB8Vni6OkPnTZNHGOGWV8wlQpL0aCQj6UWpc52FxE9ISaw==
+X-Received: by 2002:ac2:5d25:0:b0:497:a280:9825 with SMTP id i5-20020ac25d25000000b00497a2809825mr1630139lfb.409.1663334367682;
+        Fri, 16 Sep 2022 06:19:27 -0700 (PDT)
+Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b0025fdf1af42asm3650847ljo.78.2022.09.16.06.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 06:19:27 -0700 (PDT)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
+        mario.limonciello@amd.com, jsd@semihalf.com
+Subject: [PATCH -next 0/2] Add i2c arbitration support for new SoCs
+Date:   Fri, 16 Sep 2022 15:18:52 +0200
+Message-Id: <20220916131854.687371-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <421c541b-25d7-a1de-8c21-5a164dcf24ef@linux.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 03:02:04PM +0300, Ilpo Järvinen wrote:
+This patchset comprises changes into i2c-designware-amdpsp.c module
+which aims to add support for new SoCs, while keep backward
+compatibility with Cezanne platforms.
 
-> > > > > > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
-> > > > > > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
-> > > > > > > the UARTs and then re-open that UART.
-> > > > > > > 
-> > > > > > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
-> > > > > > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
-> > > > > > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
-> > > > > > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
-> > > > > > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
-> > > > > > > __pci_write_msi_msg():
-> > > > > > > 
-> > > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > > > > 		Address: fee00278  Data: 0000
-> > > > > > > [root@icelake ~]# cat hangup.c
-> > > > > > > #include <stdio.h>
-> > > > > > > #include <sys/ioctl.h>
-> > > > > > > 
-> > > > > > > int main(int argc, char *argv[])
-> > > > > > > {
-> > > > > > > 	ioctl(1, TIOCVHANGUP);
-> > > > > > > 
-> > > > > > > 	return 0;
-> > > > > > > }
-> > > > > > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
-> > > > > > > [root@icelake ~]# ./hangup > /dev/ttyS4
-> > > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > > > > 		Address: 00000000  Data: 0000
-> > > > > > > [root@icelake ~]#
-> > > > > > > 
-> > > > > > > Opening the serial port device again while the UART is in this state
-> > > > > > > then appears to cause the UART to generate an interrupt
-> > > > > > 
-> > > > > > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
-> > > > > > Any of them can be possible, but to be sure, can you add:
-> > > > > > 
-> > > > > > 	dev_info(p->dev, "FISR: %x\n", fisr);
-> > > > > > 
-> > > > > > into dnv_handle_irq() before any other code and see which bits we
-> > > > > > actually got there before the crash?
-> > > > > > 
-> > > > > > (If it floods the logs, dev_info_ratelimited() may help)
-> > > > > 
-> > > > > I think that that wouldn't report anything because when the UART is
-> > > > > triggering an interrupt here, the MSI address/data are zero, so the
-> > > > > IRQ handler is not actually invoked.
-> > > > 
-> > > > Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
-> > > > 
-> > > > > If Ilpo doesn't beat me to it, I'll try adding some debug code to see
-> > > > > exactly which UART register write in the tty open path is causing the
-> > > > > UART to signal an interrupt before the IRQ handler is set up.
-> > > > > 
-> > > > > (The IOMMU stops the write in this case, so the machine doesn't crash,
-> > > > > we just get an I/O page fault warning in dmesg every time this happens.)
-> > > > 
-> > > > And I believe you are not using that UART as debug console, so it won't
-> > > > dead lock itself. It's then better than I assumed.
-> > > > 
-> > > > > > > before the
-> > > > > > > MSI vector has been set up again, causing a DMA write to I/O virtual
-> > > > > > > address zero:
-> > > > > > > 
-> > > > > > > [root@icelake console]# echo > /dev/ttyS4
-> > > > > > > [  979.463307] DMAR: DRHD: handling fault status reg 3
-> > > > > > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> > > > > > > 
-> > > > > > > I'm guessing there's something under tty_open() -> uart_open() ->
-> > > > > > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
-> > > > > > > serial8250_do_startup() that triggers a UART interrupt before the
-> > > > > > > MSI vector has been set up again.
-> > > > > > > 
-> > > > > > > I did a quick search but it didn't seem like this is a known issue.
-> > > > > > 
-> > > > > > Thanks for your report and reproducer! Yes, I also never heard about
-> > > > > > such an issue before. Ilpo, who is doing more UART work nowadays, might
-> > > > > > have an idea, I hope.
-> > > 
-> > > The patch below seems to avoid the faults. [...]
-> > 
-> > Thanks for the fix!
-> > 
-> > 
-> > > [...] I'm far from sure if it's the 
-> > > best fix though as I don't fully understand what causes the faults during 
-> > > the THRE tests because the port->irq is disabled by the THRE test block.
-> > 
-> > If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-> > address/data registers.  Disabling the IRQ at the interrupt controller
-> > won't stop the UART from performing a DMA write to the address programmed
-> > in its MSI address register (zero) when it wants to signal an interrupt.
-> > 
-> > (These UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-> > capability, so there is no way to mask the interrupt at the source PCI
-> > function level, except disabling the MSI capability entirely, but that
-> > would cause it to fall back to INTx# assertion, and the PCI specification
-> > prohibits disabling the MSI capability as a way to mask a function's
-> > interrupt service request.)
+Beside new algorithm introduced for the PSP-x86 communication, it also
+switches from MSR/MMIO access to SMN (System Management Network) since
+only the latter is working on both old new revisions of SoCs.
 
-(In other words, disabling the IRQ at the interrupt controller doesn't
-prevent the device from signaling an interrupt, and signaling an
-interrupt without a proper MSI target address configured in the device's
-MSI address register is what is causing the I/O page fault.)
+Jan Dabros (2):
+  i2c: designware: Switch from using MMIO access to SMN access
+  i2c: designware: Add support for new SoCs in AMDPSP driver
 
+ arch/x86/include/asm/amd_nb.h               |   1 +
+ arch/x86/kernel/amd_nb.c                    |   3 +-
+ drivers/i2c/busses/i2c-designware-amdpsp.c  | 199 +++++++++++++-------
+ drivers/i2c/busses/i2c-designware-core.h    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+ 5 files changed, 134 insertions(+), 71 deletions(-)
 
-> > > Reported-by: Lennert Buytenhek <buytenh@wantstofly.org>
-> > 
-> > Could you make this buytenh@arista.com ?
-> 
-> Sure. Should I add Tested-by as well?
+-- 
+2.37.3.968.ga6b4b080e4-goog
 
-OK!
-
-Tested-by: Lennert Buytenhek <buytenh@arista.com>
