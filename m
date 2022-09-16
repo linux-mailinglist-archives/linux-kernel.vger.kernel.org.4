@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72695BB2E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727745BB2E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiIPTkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S230229AbiIPTld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiIPTkj (ORCPT
+        with ESMTP id S229593AbiIPTla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:40:39 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7548551A26
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:40:38 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id go6so17820162pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=vH9TYUFkIGeMDXb5QksQYPq2h16Z8OyKOOQMeyEvl7I=;
-        b=yQYnZNYXV2FOBIibg997hqy6cC66Xcky9Sj1dsdt9zQ2ExgJBmCw7m7HEVew01OMsq
-         F5Syd9PMYleHHa8qZTq3Fm9U8YYRdzBT6XwXkLH6AkBSRD4kYLWXSbmA+XE0Ijd7Y02R
-         fywzlhmHsq9NLj5EqW7MBVPTfeuC0m1PXQXy01iqcDPQ5fpf2SfP9VjvqQG43JPfEMzd
-         THexk1qxiNY3EdQ9PhS20kfWyFX+ybdJ8u7ZRMlpfyWhiuQGOrEOcL0pCG6Ph5f1NyCE
-         rYM8RxnObeweJJ5wHVpXvCjsOKxxl4A9iZ4d9eqpD/xkB/ezV5oRZDFpQnnhCdNgRhRC
-         Uehw==
+        Fri, 16 Sep 2022 15:41:30 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11941835C;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so15535397oth.8;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vH9TYUFkIGeMDXb5QksQYPq2h16Z8OyKOOQMeyEvl7I=;
-        b=1PatgN8cCD1GpmxZCwnMwWIzA+khFNxj53aocnACLWTYIHcX/Bpn/dgEQBhF2KZTCk
-         YBBy4Osuo1VDKJTLDsXlh3CFuPuy9F6NPt8JXBLiFYU99OUG0kdZc2B5dCviBcXztS4o
-         kgJHVJ2Kpz+UgpdbgElei+UEnn5PWOwK0KWdBzr0G9rIaydLHLX3sDcTXzUMwFeFP0NZ
-         iRHtGZM3WjrNFgm6pVTDvciqNwf2beqBOlquf1+lSoPZ1kjGWGU4fOd/a+zE8WFXILuu
-         sF//5wjboa7SRgNo8nxwVQVvwyd2LUMu5yas04XeR9K5P1XGPlgK8g/Q1edxZgKCaU+0
-         He+w==
-X-Gm-Message-State: ACrzQf3d+SM9NhHFiJEpdfg3OLm4HlpXrVnG9ixuD3PXU1Mc2dvxsV4h
-        1ggfrBGM1txEAe8ClD8DGIFSLQ==
-X-Google-Smtp-Source: AMsMyM7bBzN5wKpJ4/hmwedRCv3ia/zW3TzU2MrSu2w0889ImAiNQlhDbVHcvxIyYWbaKNLMT5PpHA==
-X-Received: by 2002:a17:90b:4c0c:b0:203:1407:809c with SMTP id na12-20020a17090b4c0c00b002031407809cmr7126292pjb.193.1663357237910;
-        Fri, 16 Sep 2022 12:40:37 -0700 (PDT)
-Received: from relinquished.localdomain ([2620:10d:c090:500::3:3c76])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b001780a528540sm15448988plh.93.2022.09.16.12.40.36
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rnBpLy/J1dgd76aFhw5FRIiMycfqNVIws11h81p/NbU=;
+        b=w8EJQ9HuinnqzdUivoC9wyIv4hqI+k81G9PXuOsBNfCwev8PnonvKbpq/XsLbKRzcv
+         7ta5mjGADY7rGIacGTYhqWdJ9pi6ToPoCLcOSI3PXpn+lHGQutfEk3Oo11BfRNhmeW6X
+         d6aV3Ipnn6zqDN2mvxlikPeZN0dQjCPEpjgtl4T7sOStGs8KZjf/O5ZztVMQ3zA9xdfV
+         q2rJ8kGbWKAH0W53n/iSz7El+iUxmj4lhc6PibLuHYcGW9l3XFN4koWUL2Z2Nh7KMp5q
+         2xNc7IrP2SmlVjCwORFOuwjGlSB+w7wc3HmMPO5jPW07GJyiNyZpi8Pf1EcfDjl2tXoS
+         aOzw==
+X-Gm-Message-State: ACrzQf2NZcTh2/KCPkGUzuxzk40VeHQVDaETS2d+s4qJs30ZznfsBZIr
+        ZpXN0ISEpElaxQfHgWJL3w==
+X-Google-Smtp-Source: AMsMyM5pqr2hJIPZ5Ycq9i2ddvBU0Tqj0jiQjbffC/+TCU+VgGx6xTzvHWQ4WsRCZjTtPRkCSNER1Q==
+X-Received: by 2002:a05:6830:2706:b0:659:de15:2cae with SMTP id j6-20020a056830270600b00659de152caemr1661203otu.4.1663357289198;
+        Fri, 16 Sep 2022 12:41:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p13-20020a056830130d00b006391adb6034sm10333282otq.72.2022.09.16.12.41.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 12:40:37 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 12:40:35 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
-Message-ID: <YyTRM3/9Mm+b+M8N@relinquished.localdomain>
-References: <20200428132105.170886-1-hjl.tools@gmail.com>
- <20200428132105.170886-2-hjl.tools@gmail.com>
+        Fri, 16 Sep 2022 12:41:28 -0700 (PDT)
+Received: (nullmailer pid 1149627 invoked by uid 1000);
+        Fri, 16 Sep 2022 19:41:27 -0000
+Date:   Fri, 16 Sep 2022 14:41:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 04/10] dt-bindings: memory: mt7621: add
+ syscon as compatible string
+Message-ID: <20220916194127.GA1139257-robh@kernel.org>
+References: <20220915065542.13150-1-arinc.unal@arinc9.com>
+ <20220915065542.13150-5-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200428132105.170886-2-hjl.tools@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220915065542.13150-5-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 06:21:05AM -0700, H.J. Lu wrote:
-> With the command-line option, -mx86-used-note=yes, the x86 assembler
-> in binutils 2.32 and above generates a program property note in a note
-> section, .note.gnu.property, to encode used x86 ISAs and features.  But
-> kernel linker script only contains a single NOTE segment:
+On Thu, Sep 15, 2022 at 09:55:36AM +0300, Arınç ÜNAL wrote:
+> Add syscon as a constant string on the compatible property as it's required
+> for the SoC to work. Update the example accordingly.
+
+I read this and start to give you the same reply as v1. Then I remember 
+saying this already...
+
+Update the commit message such that it answers my question and I don't 
+think you just ignored me and have to go find v1. The fact that this 
+change makes the binding match what is already in use in dts files is an 
+important detail.
+
 > 
-> PHDRS {
->  text PT_LOAD FLAGS(5);
->  data PT_LOAD FLAGS(6);
->  percpu PT_LOAD FLAGS(6);
->  init PT_LOAD FLAGS(7);
->  note PT_NOTE FLAGS(0);
-> }
-> SECTIONS
-> {
-> ...
->  .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
-> e.*)) __stop_notes = .; } :text :note
-> ...
-> }
-> 
-> The NOTE segment generated by kernel linker script is aligned to 4 bytes.
-> But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
-> we get
-> 
-> [hjl@gnu-skx-1 linux]$ readelf -n vmlinux
-> 
-> Displaying notes found in: .notes
->   Owner                Data size Description
->   Xen                  0x00000006 Unknown note type: (0x00000006)
->    description data: 6c 69 6e 75 78 00
->   Xen                  0x00000004 Unknown note type: (0x00000007)
->    description data: 32 2e 36 00
->   xen-3.0              0x00000005 Unknown note type: (0x006e6558)
->    description data: 08 00 00 00 03
-> readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
-> readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
-> 0x80000000, alignment: 8
-> [hjl@gnu-skx-1 linux]$
-> 
-> Since note.gnu.property section in kernel image is never used, this patch
-> discards .note.gnu.property sections in kernel linker script by adding
-> 
-> /DISCARD/ : {
->   *(.note.gnu.property)
-> }
-> 
-> before kernel NOTE segment in generic NOTES.
-> 
-> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Fixes: 5278e4a181ff ("dt-bindings: memory: add binding for Mediatek's MT7621 SDRAM memory controller")
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  include/asm-generic/vmlinux.lds.h | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  .../bindings/memory-controllers/mediatek,mt7621-memc.yaml | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 71e387a5fe90..95cd678428f4 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -833,7 +833,14 @@
->  #define TRACEDATA
->  #endif
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> index 85e02854f083..ba8cd6d81d08 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,mt7621-memc.yaml
+> @@ -11,7 +11,9 @@ maintainers:
 >  
-> +/*
-> + * Discard .note.gnu.property sections which are unused and have
-> + * different alignment requirement from kernel note sections.
-> + */
->  #define NOTES								\
-> +	/DISCARD/ : {							\
-> +		*(.note.gnu.property)					\
-> +	}								\
->  	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
->  		__start_notes = .;					\
->  		KEEP(*(.note.*))					\
+>  properties:
+>    compatible:
+> -    const: mediatek,mt7621-memc
+> +    items:
+> +      - const: mediatek,mt7621-memc
+> +      - const: syscon
+>  
+>    reg:
+>      maxItems: 1
+> @@ -24,7 +26,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    memory-controller@5000 {
+> -        compatible = "mediatek,mt7621-memc";
+> +    syscon@5000 {
+> +        compatible = "mediatek,mt7621-memc", "syscon";
+>          reg = <0x5000 0x1000>;
+>      };
 > -- 
-> 2.25.4
+> 2.34.1
 > 
-
-Hi, H.J.,
-
-I recently ran into this same .notes corruption when building kernels on
-Arch Linux.
-
-What ended up happening to this patch? It doesn't appear to have been
-merged, and I couldn't find any further discussion about it. I'm happy
-to resend it for you if you need a hand.
-
-Thanks,
-Omar
+> 
