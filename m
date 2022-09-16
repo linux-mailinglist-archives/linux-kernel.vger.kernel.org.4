@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EA15BA589
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDAC5BA58F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiIPDpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 23:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S229906AbiIPDvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 23:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIPDpS (ORCPT
+        with ESMTP id S229503AbiIPDvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:45:18 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F052444;
-        Thu, 15 Sep 2022 20:45:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPvH1tx_1663299912;
-Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPvH1tx_1663299912)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Sep 2022 11:45:14 +0800
-Message-ID: <1ccf326e-dd47-d5cf-02ab-5f033892a7d4@linux.alibaba.com>
-Date:   Fri, 16 Sep 2022 11:45:12 +0800
+        Thu, 15 Sep 2022 23:51:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C259353A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 20:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663300296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C/CNirb5aNM2+/jDbEf4rfvjRpTSCtEdOZAcwKqI7yU=;
+        b=Y37N6X7Xh/f5l99QkEjFJkwk9T1hLSiaUkciHhuVdV44Bc4ZSN/vbfO90NdRpZIOtBQVrj
+        AQHCIzB6EjSXfgX0zIH/o/z3wag/BYhJ3SfcxdUpa+WvpPMx4kgWab3NC5/mSpHCFlfRKu
+        7KHyQygC9fgNjznG7VOS1Rkb+Bjhf7M=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-10-oVPSFBDBMHOwgqlMa_pIuw-1; Thu, 15 Sep 2022 23:51:34 -0400
+X-MC-Unique: oVPSFBDBMHOwgqlMa_pIuw-1
+Received: by mail-lf1-f72.google.com with SMTP id w18-20020ac25d52000000b0048af13b6ef6so6213012lfd.7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 20:51:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=C/CNirb5aNM2+/jDbEf4rfvjRpTSCtEdOZAcwKqI7yU=;
+        b=up75sorL8rll70iE5hxOvb4IstA82W4Mvc5qU/Zk49hn36NfDsTAZqgNNEsohNrSvM
+         x21HpoS5M7Yhgc98ssvSYr5/bBpKzFeK0C5lL8bLCIAGQ0VftPyu1sltwVAriv6n58CL
+         KNxxiTxlt5yTpKoA/ZFbFJMbftnCYZrlGZCDZgBSQtkiY486KxzOTeMYVMSJKzOPzsTX
+         2MeJk1vL0K3rX0W92+ALIdzpcXIDBFFER0FQKFcpd/K8KAlXheJbcAvzv7cDZLQU8Tq9
+         hRpXtga+PGCeLLPv/vhm8bdkbXxMmlUMo7gS6k2syaygo7lodJxniMSRzrUrwOYduIPp
+         h+cQ==
+X-Gm-Message-State: ACrzQf2SXcZ/pBqY28CiHxuYiBix5Zjfuc0tVp5U7R1p8++cgSsxGOsn
+        iWaaUZbPc2BaGL1jJ2ue13UbUNsEXXw0A1r0gBcmWnKsf9hDh9gfwcy7e4Bvjx95dIxzIfPVVKr
+        BAmimT0EQl8vTOJzAGBPtPZBT7rwkSVYdFmHDkk8E
+X-Received: by 2002:a05:6512:3d17:b0:497:9e34:94f2 with SMTP id d23-20020a0565123d1700b004979e3494f2mr941122lfv.285.1663300293443;
+        Thu, 15 Sep 2022 20:51:33 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4KIjQQOQEAz2rfnCXfJXK795QetoyHr8NUQ0oWj6eNCqrdNbxhUg53OGOwyxCvA4D1rGGNQcSqWMcwTJW2PsE=
+X-Received: by 2002:a05:6512:3d17:b0:497:9e34:94f2 with SMTP id
+ d23-20020a0565123d1700b004979e3494f2mr941108lfv.285.1663300293246; Thu, 15
+ Sep 2022 20:51:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH V4 5/6] erofs: Support sharing cookies in the same domain
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
- <20220915124213.25767-6-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220915124213.25767-6-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <YxdKiUzlfpHs3h3q@fedora> <Yv5PFz1YrSk8jxzY@bullseye> <20220908143652.tfyjjx2z6in6v66c@sgarzare-redhat>
+ <YxuCVfFcRdWHeeh8@bullseye> <CAGxU2F5HG_UouKzJNuvfeCASJ4j84qPY9-7-yFUpEtAJQSoxJg@mail.gmail.com>
+ <YxvNNd4dNTIUu6Rb@bullseye>
+In-Reply-To: <YxvNNd4dNTIUu6Rb@bullseye>
+From:   Stefano Garzarella <sgarzare@redhat.com>
+Date:   Fri, 16 Sep 2022 05:51:22 +0200
+Message-ID: <CAGxU2F5+M2SYKwr56NJ9s2yO5h40MWQFO82t_RkSvx10VRfbVQ@mail.gmail.com>
+Subject: Re: Call to discuss vsock netdev/sk_buff [was Re: [PATCH 0/6]
+ virtio/vsock: introduce dgrams, sk_buff, and qdisc]
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 12, 2022 at 8:28 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
+>
+> On Mon, Sep 12, 2022 at 08:12:58PM +0200, Stefano Garzarella wrote:
+> > On Fri, Sep 9, 2022 at 8:13 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
+> > >
+> > > Hey Stefano, thanks for sending this out.
+> > >
+> > > On Thu, Sep 08, 2022 at 04:36:52PM +0200, Stefano Garzarella wrote:
+> > > >
+> > > > Looking better at the KVM forum sched, I found 1h slot for Sep 15 at 16:30
+> > > > UTC.
+> > > >
+> > > > Could this work for you?
+> > >
+> > > Unfortunately, I can't make this time slot.
+> >
+> > No problem at all!
+> >
+> > >
+> > > My schedule also opens up a lot the week of the 26th, especially between
+> > > 16:00 and 19:00 UTC, as well as after 22:00 UTC.
+> >
+> > Great, that week works for me too.
+> > What about Sep 27 @ 16:00 UTC?
+> >
+>
+> That time works for me!
 
+Great! I sent you an invitation.
 
-On 9/15/22 8:42 PM, Jia Zhu wrote:
+For others that want to join the discussion, we will meet Sep 27 @
+16:00 UTC at this room: https://meet.google.com/fxi-vuzr-jjb
 
-> +static
-> +struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
-> +							char *name, bool need_inode)
-> +{
-> +	int err;
-> +	struct inode *inode;
-> +	struct erofs_fscache *ctx;
-> +	struct erofs_domain *domain = EROFS_SB(sb)->domain;
-> +
-> +	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
-> +	if (IS_ERR(ctx))
-> +		return ctx;
-> +
-> +	ctx->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ctx->name) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
-> +	if (!inode) {
-> +		kfree(ctx->name);
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	ctx->domain = domain;
-> +	ctx->anon_inode = inode;
-> +	inode->i_private = ctx;
-> +	refcount_inc(&domain->ref);
-> +	return ctx;
-> +out:
-> +	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
-> +	fscache_relinquish_cookie(ctx->cookie, false);
-> +	if (need_inode)
-> +		iput(ctx->inode);
-> +	kfree(ctx);
-> +	return ERR_PTR(err);
-
-Could you please abstract the cleanup logic into one helper? like:
-
-erofs_fscache_relinquish_cookie()
-{
-	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
-	fscache_relinquish_cookie(ctx->cookie, false);
-	iput(ctx->inode);
-	kfree(ctx->name);
-	kfree(ctx);
-}
-
-which could also be called in erofs_fscache_unregister_cookie().
-
-
->  void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
->  {
-> +	bool drop;
-> +	struct erofs_domain *domain;
-> +
->  	if (!ctx)
->  		return;
-> +	domain = ctx->domain;
-> +	if (domain) {
-> +		mutex_lock(&erofs_domain_cookies_lock);
-> +		drop = atomic_read(&ctx->anon_inode->i_count) == 1;
-> +		iput(ctx->anon_inode);
-> +		mutex_unlock(&erofs_domain_cookies_lock);
-> +		if (!drop)
-> +			return;
-> +	}
->  
->  	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
->  	fscache_relinquish_cookie(ctx->cookie, false);
-> +	erofs_fscache_domain_put(domain);
->  	iput(ctx->inode);
-> +	kfree(ctx->name);
->  	kfree(ctx);
->  }
-
-
--- 
 Thanks,
-Jingbo
+Stefano
+
