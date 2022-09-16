@@ -2,61 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1C5BB086
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82FF5BB087
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiIPPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S229813AbiIPPv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiIPPuC (ORCPT
+        with ESMTP id S229797AbiIPPvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:50:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC0413DE9;
-        Fri, 16 Sep 2022 08:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663343401; x=1694879401;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ptEF5ZhxsMrhv6+alJwEvLA23XOcH9/AWp09Jw7I6fU=;
-  b=hAkvHAAd91RkYcPai5U2Iv060A8bf5DgMrAYNocOCNQRrMFbfOGcasj9
-   08c6vLJK5Zw2QDv5AsKIUtwKURbdMAce6bUSEI/KRhPH/VeXxVvpcPOwW
-   O5wb7i0NSLn+8scXfGZXgXM33XSFXRWQeX3Ll6pEXcfqCI8cE8nEDqKtM
-   gdoMZLk2OHro1gRKtXvkUhyGT7qPdZzIWxrhdUUoxW/kWtYATAVakurge
-   yrFivYYJLn6xVnFH7y9eAZyGOM85pLlyPC+wdER6r73ZheRXQT+9gENxB
-   NOTTMPWO4DAYB0WwbUHFUhlTiSe2oNEO8GY0hiZHLKOWfVLWDz2ONz+oh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="299010931"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="299010931"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 08:50:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="686181003"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.64.121]) ([10.212.64.121])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 08:50:00 -0700
-Message-ID: <92f29edd-9027-5950-10ac-37bbda1d583a@intel.com>
-Date:   Fri, 16 Sep 2022 08:50:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH] dmaengine: idxd: Fix memory leak in idxd_alloc()
-Content-Language: en-US
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220914230815.700702-1-rafaelmendsr@gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220914230815.700702-1-rafaelmendsr@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 11:51:25 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4BAF54
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:51:20 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1663343477; bh=o7/sJH9KC43rAMSSCMF6yPESCQKJUXZTt09gwNOkTQY=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=PTr3TThy0zNQpy4g0N5g88DBy+9CYDUyhzW1nw2JYD6oDUCHB6Ri/UgBATuzhq/N6
+         otpDt6RmUQIymf3jnnmqcTExDeuVS/bsGRPCdASWhn8kdo7OM+wJXTGwo2GKfowrks
+         jKWUvDuvqJOfBg9dZum27M1PuHazfwJeM8M87Mb0=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] get_maintainer: Extend matched name characters in
+ maintainers_in_file()
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <20220916084712.84411-1-j@jannau.net>
+Date:   Fri, 16 Sep 2022 17:51:16 +0200
+Cc:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D0ADED23-788E-4A17-AA50-12C837839CAD@cutebit.org>
+References: <20220916084712.84411-1-j@jannau.net>
+To:     Janne Grunau <j@jannau.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,35 +44,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 9/14/2022 4:08 PM, Rafael Mendonca wrote:
-> If the IDA id allocation fails, then the allocated memory for the
-> idxd_device struct doesn't get freed before returning NULL, which leads to
-> a memleak.
->
-> Fixes: 47c16ac27d4c ("dmaengine: idxd: fix idxd conf_dev 'struct device' lifetime")
-> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+> On 16. 9. 2022, at 10:47, Janne Grunau <j@jannau.net> wrote:
+>=20
+> Extend the regexp matching name characters to cover Unicode blocks =
+Latin
+> Extended-A and Extended-B.
+> Fixes 'scripts/get_maintainer.pl -f' for
+> 'Documentation/devicetree/bindings/clock/apple,nco.yaml'.
+>=20
+> Signed-off-by: Janne Grunau <j@jannau.net>
 
-Thanks!
+Applauded-and-tested-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+On behalf of those not wanting to mangle our names to appease software,
+let me thank you.
 
-> ---
->   drivers/dma/idxd/init.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index aa3478257ddb..fdc97519b8fb 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -445,8 +445,10 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
->   	idxd->data = data;
->   	idxd_dev_set_type(&idxd->idxd_dev, idxd->data->type);
->   	idxd->id = ida_alloc(&idxd_ida, GFP_KERNEL);
-> -	if (idxd->id < 0)
-> +	if (idxd->id < 0) {
-> +		kfree(idxd);
->   		return NULL;
-> +	}
->   
->   	device_initialize(conf_dev);
->   	conf_dev->parent = dev;
+> This still excludes Greek and Cyrilic characters which should be
+> expected in names as well. I tried to use '\p{L}' to match all Unicode
+> letters but couldn't get it to work. Feel free understand this as bug
+> report with an incomplete fix.
+>=20
+> best regards,
+> Janne
+
