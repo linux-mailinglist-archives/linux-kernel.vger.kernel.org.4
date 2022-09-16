@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196B05BB1D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C371C5BB1DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiIPSEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S229714AbiIPSKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiIPSEO (ORCPT
+        with ESMTP id S229735AbiIPSKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:04:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C81B6D23
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:04:13 -0700 (PDT)
+        Fri, 16 Sep 2022 14:10:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC07527B24
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:09:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663351452;
+        s=mimecast20190719; t=1663351796;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+1Y0WCFyP/xwaopES4fLdWeNPtgD6wFT9927YdVHjxA=;
-        b=R6UmTAooTjPGG1eD6g0Bl3UNXD0szNzqM3i7w6+WrWfrQ3JATrrWUcXZcdx7pQOAMwdEuh
-        1lqdXt2ZnTOTQK0JGyVIC2qFSSdzG33wRTQ91OMNJaOkCvhJ1UYmVaLztATZYYDzYX+rBI
-        pmLPNxGDqm9P9byOBnvdKXs8hz9kyCw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
+        b=L+nDd7drQ18V/4o+P3iWlEwbGCTApKViDUYJSuQiyuYGZvXm8ZoeFu9zf7M0agV5Afg8Es
+        ASqGEL7SAI5ROEiWOJhW1QYhZyQY5gkw60kg9knoPc+BhNLgD8iDkP27vtIUr3URpIZe0z
+        NkwzgdT52RXTrK92Fv1TJ7sQ/SqCrhc=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-n7om1aerOzOlD59pr9M1AQ-1; Fri, 16 Sep 2022 14:04:11 -0400
-X-MC-Unique: n7om1aerOzOlD59pr9M1AQ-1
-Received: by mail-qt1-f199.google.com with SMTP id u9-20020a05622a14c900b0035cc7e8cbaeso3473783qtx.19
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:04:11 -0700 (PDT)
+ us-mta-480-GoN8AAOuPES_BcodPtpqfA-1; Fri, 16 Sep 2022 14:09:55 -0400
+X-MC-Unique: GoN8AAOuPES_BcodPtpqfA-1
+Received: by mail-qk1-f199.google.com with SMTP id s17-20020a05620a255100b006c9cefbc68eso18931861qko.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+1Y0WCFyP/xwaopES4fLdWeNPtgD6wFT9927YdVHjxA=;
-        b=vC7XoABptlzCXaW6an/MhLH2K49YfmWMNBZoLZnEg4RSR5yzsU1PKAB6D+dJ74XxGQ
-         trd4DditLZiFz81X2aGzHS2vBJ4h2rHBfDYnZL8TgU4lCSN29W32g4rjAErLj88bLdh6
-         rFIN/1g8gIC8Et0kg7ZO5EBosI+iCe4CYPfyIwDpfbyZi/8P1ueFCrtivqsdtHIXETgs
-         pHFIslqP3UFdYtk7v3TmVydOR6qwYJOIWo66k4tvPuSf3Lz5pn3c4D0FG8xwwwiRs9aF
-         xt4kHGZA/nWzCx0uY1NU87o/EIXXsyGl5QZ1V07zZqmw9piFq7EVQqpLpku7qJhx/IhM
-         YJZw==
-X-Gm-Message-State: ACrzQf3fl3MxlDKncc4krhBQcpNh+4B2OXav92huZpdqe1Sg7gOm4kz/
-        Ac6Po2gWw8UvjB1f6WVznsGE4kSr8o0POb6RT+3J10j2QA9aXFmznIVSSL126Jb66eJA2fAdfwO
-        zN3cBdtHO43WEcBFSS1Frg1g=
-X-Received: by 2002:a05:622a:310:b0:344:89e4:cf8a with SMTP id q16-20020a05622a031000b0034489e4cf8amr5512045qtw.206.1663351450853;
-        Fri, 16 Sep 2022 11:04:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4avfW/4YAwR1npdBqO0O8h7AEDzFTbb8jsyKyqwPyhkUAoMtuvNzFwbiGDh+VRZqHyNgc5tQ==
-X-Received: by 2002:a05:622a:310:b0:344:89e4:cf8a with SMTP id q16-20020a05622a031000b0034489e4cf8amr5512014qtw.206.1663351450637;
-        Fri, 16 Sep 2022 11:04:10 -0700 (PDT)
-Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
-        by smtp.gmail.com with ESMTPSA id j15-20020a05620a410f00b006b5df4d2c81sm7417854qko.94.2022.09.16.11.04.10
+        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
+        b=jxtQpV9JAfniAM9QU7Dt58nDjljKvVU/pDIvZFPZZdxKe9njoVFiz/CmSrPggmOTYf
+         uhMWKo07jVqAGXTBAt/HuF+w9nbeHSXFL6A3dPJBeGHgMhdjJX+ii9N8+pJPu1CemlYp
+         p8jms2Kk6Jz2QNJf0a55lURpjO7pUR3l+FMXuM0MUE8DQTmmUUvBt7aR6M1t2Ck8qq7I
+         Xf1osOHZYN0Mw4nH8F58DGDSX4f+xUpF2K5JAApURcPk0fjBlbQMRfhTcAOOr/BQevb6
+         JKM3RTkdks33AtVklnw8eLOW6Nalq/bLa1u1b6dqyE6oCA4UDUdqmAYRbUMn9oiCoJxl
+         gtyw==
+X-Gm-Message-State: ACrzQf3uuO55V9zb1XY3mg95G4BzElhmw+X7E9phBzc0vimOyhYj5nKM
+        CevHr5IjLX1lzFdoHmmKzqtDFgFHuSQzNM0pqIOnaDWSA2LJ6yjZL/m17VG1kBn6BwUwL2bob7i
+        ZsNSp9bVdFHc/rhG/bGkAqDuD
+X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516870qta.26.1663351795091;
+        Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Eq8nutd1y8SgkrtcXFUsUl9UMHM0MnxQbGXx8ngkMtdvW9XgFJl7Id6By2Z5c1AZ7GoPT7w==
+X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516842qta.26.1663351794880;
+        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006b60d5a7205sm7398453qkp.51.2022.09.16.11.09.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:04:10 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 14:04:09 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     hch@lst.de, agk@redhat.com, damien.lemoal@opensource.wdc.com,
-        axboe@kernel.dk, snitzer@kernel.org, linux-kernel@vger.kernel.org,
-        Johannes.Thumshirn@wdc.com, linux-nvme@lists.infradead.org,
-        pankydev8@gmail.com, matias.bjorling@wdc.com,
-        linux-block@vger.kernel.org, bvanassche@acm.org,
-        gost.dev@samsung.com, dm-devel@redhat.com, hare@suse.de,
-        jaegeuk@kernel.org, Damien Le Moal <damien.lemoal@wdc.com>
-Subject: Re: [PATCH v13 13/13] dm: add power-of-2 target for zoned devices
- with non power-of-2 zone sizes
-Message-ID: <YyS6mUzqjq9P0+OG@redhat.com>
-References: <20220912082204.51189-1-p.raghav@samsung.com>
- <CGME20220912082220eucas1p24605fdcf22aedc4c40d5303da8f17ad5@eucas1p2.samsung.com>
- <20220912082204.51189-14-p.raghav@samsung.com>
- <YyIG3i++QriS9Gyy@redhat.com>
- <e42a0579-61b2-7b77-08cb-6723278490cc@samsung.com>
- <622ae86d-39ad-c45e-ec48-42abf4b257d2@samsung.com>
+        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 14:09:52 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
+        linux-kselftest@vger.kernel.org, bgardon@google.com,
+        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
+        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
+        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
+Message-ID: <YyS78BqsQxKkLOiW@xz-m1.local>
+References: <20220916045135.154505-1-gshan@redhat.com>
+ <20220916045135.154505-2-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <622ae86d-39ad-c45e-ec48-42abf4b257d2@samsung.com>
+In-Reply-To: <20220916045135.154505-2-gshan@redhat.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
@@ -87,29 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16 2022 at  1:57P -0400,
-Pankaj Raghav <p.raghav@samsung.com> wrote:
-
-> >>
-> >> Are you certain you shouldn't at least be exposing a different
-> >> logical_block_size to upper layers?
-> >>
-> > To be honest, I tested my patches in QEMU with 4k Logical block size and on
-> > a device with 4k LBA size.
-> > 
-> > I did a quick test with 512B LBA size in QEMU, and I didn't see any
-> > failures when I ran my normal test suite.
-> > 
-> > Do you see any problem with exposing the same LBA as the underlying device?
-> > 
+On Fri, Sep 16, 2022 at 12:51:31PM +0800, Gavin Shan wrote:
+> This adds KVM_REQ_RING_SOFT_FULL, which is raised when the dirty
+> ring of the specific VCPU becomes softly full in kvm_dirty_ring_push().
+> The VCPU is enforced to exit when the request is raised and its
+> dirty ring is softly full on its entrance.
 > 
-> Do you see any issues here? If not, I can send the next version with the
-> other two changes you suggested.
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c       | 5 +++--
+>  include/linux/kvm_host.h | 1 +
+>  virt/kvm/dirty_ring.c    | 4 ++++
+>  3 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 43a6a7efc6ec..7f368f59f033 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10265,8 +10265,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	bool req_immediate_exit = false;
+>  
+>  	/* Forbid vmenter if vcpu dirty ring is soft-full */
+> -	if (unlikely(vcpu->kvm->dirty_ring_size &&
+> -		     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
+> +	if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
+> +	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
+> +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+>  		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+>  		trace_kvm_dirty_ring_exit(vcpu);
+>  		r = 0;
 
-That's fine, I just thought there might be special considerations
-needed.  But if yo've tested it and upper layers work as expected then
-obviously my concern wasn't applicable.
+As commented previously - can we use kvm_test_request() instead? because we
+don't want to unconditionally clear the bit.  Instead of making the request
+again, we can clear request only if !full.
+
+We can also safely move this into the block of below kvm_request_pending()
+as Marc used to suggest.
+
+To explicitly use kvm_clear_request(), we may need to be careful on the
+memory barriers.  I'm wondering whether we should have moved
+smp_mb__after_atomic() into kvm_clear_request() because kvm_clear_request()
+is used outside kvm_check_request() and IIUC all the call sites should
+better have that barrier too to be safe.
+
+Side note: when I read the code around I also see some mis-use of clear
+request where it can be omitted, e.g.:
+
+		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
+			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
+		}
+
+Maybe it's a sign of bad naming, so we should renamed kvm_check_request()
+to kvm_test_clear_request() too to show that clearing after that is not
+needed?
 
 Thanks,
-Mike
+
+-- 
+Peter Xu
 
