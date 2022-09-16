@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736FB5BAB04
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22DA5BAB35
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiIPKTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S232055AbiIPK0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiIPKSM (ORCPT
+        with ESMTP id S231955AbiIPKXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:18:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF79AC26F;
-        Fri, 16 Sep 2022 03:12:23 -0700 (PDT)
+        Fri, 16 Sep 2022 06:23:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA159B1B91;
+        Fri, 16 Sep 2022 03:14:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 897FD62A20;
-        Fri, 16 Sep 2022 10:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E085C433C1;
-        Fri, 16 Sep 2022 10:11:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 377A9B82547;
+        Fri, 16 Sep 2022 10:13:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68039C433D6;
+        Fri, 16 Sep 2022 10:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323093;
-        bh=LRRMg89awfRIwvKA8yTo6KSIu04EZVF1BJm2jCaOKsE=;
+        s=korg; t=1663323199;
+        bh=xKc+VJzNq7ghgu3tWGElFyry0K9Yx2ti+Gz7sg7FU6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKVCa6uvmBlJuo+zPdFPdE9poVGhpj3xDHDMsuX9WQHLwKJGWfWYGnw69ykxn+kOS
-         g4mGAEeBVFLTZ7b7LvqufG/bBRePyfjIdunB3JL8kAaTUAgU7rEubfGAtRgT4VzPai
-         MnLzgUaVRzEbyEcnHRSJnZbg1VhQrByChh9mwCko=
+        b=rqBHRL5p/AWZGwYqo9sMoI7qe3hwthR8z2ae8e8R/r7NF8EHl2m/D75Ruzk+YGs24
+         CLe2z3vqDCXieljWTyN1PRkBo5D9BXRz7LlqdqGsqjhPQzwJyXoIqk/nmVWAzflVDB
+         glNEoIZQC+fjLXQ+aJ+jYMCQN2M7AOADw2VMjYRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,22 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wen Jin <wen.jin@intel.com>,
         Lu Baolu <baolu.lu@linux.intel.com>,
         Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 12/35] iommu/vt-d: Fix kdump kernels boot failure with scalable mode
+Subject: [PATCH 5.19 01/38] iommu/vt-d: Fix kdump kernels boot failure with scalable mode
 Date:   Fri, 16 Sep 2022 12:08:35 +0200
-Message-Id: <20220916100447.454737005@linuxfoundation.org>
+Message-Id: <20220916100448.496305937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-References: <20220916100446.916515275@linuxfoundation.org>
+In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
+References: <20220916100448.431016349@linuxfoundation.org>
 User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 50 insertions(+), 59 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index bc5444daca9b4..2affdccb58e47 100644
+index 40ac3a78d90ef..c0464959cbcdb 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -191,38 +191,6 @@ static phys_addr_t root_entry_uctp(struct root_entry *re)
+@@ -168,38 +168,6 @@ static phys_addr_t root_entry_uctp(struct root_entry *re)
  	return re->hi & VTD_PAGE_MASK;
  }
  
@@ -132,7 +135,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  static inline void context_set_present(struct context_entry *context)
  {
  	context->lo |= 1;
-@@ -270,6 +238,26 @@ static inline void context_clear_entry(struct context_entry *context)
+@@ -247,6 +215,26 @@ static inline void context_clear_entry(struct context_entry *context)
  	context->hi = 0;
  }
  
@@ -159,7 +162,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  /*
   * This domain is a statically identity mapping domain.
   *	1. This domain creats a static 1:1 mapping to all usable memory.
-@@ -792,6 +780,13 @@ struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
+@@ -644,6 +632,13 @@ struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
  	struct context_entry *context;
  	u64 *entry;
  
@@ -173,7 +176,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  	entry = &root->lo;
  	if (sm_supported(iommu)) {
  		if (devfn >= 0x80) {
-@@ -1899,6 +1894,11 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
+@@ -1770,6 +1765,11 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
  		iommu->domain_ids = NULL;
  	}
  
@@ -185,7 +188,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  	g_iommus[iommu->seq_id] = NULL;
  
  	/* free context mapping */
-@@ -2107,7 +2107,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+@@ -1978,7 +1978,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
  		goto out_unlock;
  
  	ret = 0;
@@ -194,7 +197,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  		goto out_unlock;
  
  	/*
-@@ -2119,7 +2119,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+@@ -1990,7 +1990,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
  	 * in-flight DMA will exist, and we don't need to worry anymore
  	 * hereafter.
  	 */
@@ -203,7 +206,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  		u16 did_old = context_domain_id(context);
  
  		if (did_old < cap_ndoms(iommu->cap)) {
-@@ -2130,6 +2130,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+@@ -2001,6 +2001,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
  			iommu->flush.flush_iotlb(iommu, did_old, 0, 0,
  						 DMA_TLB_DSI_FLUSH);
  		}
@@ -212,7 +215,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  	}
  
  	context_clear_entry(context);
-@@ -3024,32 +3026,14 @@ static int copy_context_table(struct intel_iommu *iommu,
+@@ -2783,32 +2785,14 @@ static int copy_context_table(struct intel_iommu *iommu,
  		/* Now copy the context entry */
  		memcpy(&ce, old_ce + idx, sizeof(ce));
  
@@ -247,7 +250,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  		new_ce[idx] = ce;
  	}
  
-@@ -3076,8 +3060,8 @@ static int copy_translation_tables(struct intel_iommu *iommu)
+@@ -2835,8 +2819,8 @@ static int copy_translation_tables(struct intel_iommu *iommu)
  	bool new_ext, ext;
  
  	rtaddr_reg = dmar_readq(iommu->reg + DMAR_RTADDR_REG);
@@ -258,7 +261,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  
  	/*
  	 * The RTT bit can only be changed when translation is disabled,
-@@ -3088,6 +3072,10 @@ static int copy_translation_tables(struct intel_iommu *iommu)
+@@ -2847,6 +2831,10 @@ static int copy_translation_tables(struct intel_iommu *iommu)
  	if (new_ext != ext)
  		return -EINVAL;
  
@@ -270,7 +273,7 @@ index bc5444daca9b4..2affdccb58e47 100644
  	if (!old_rt_phys)
  		return -EINVAL;
 diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 05a65eb155f76..81da7107e3bd0 100644
+index 5fcf89faa31ab..d72626d71258f 100644
 --- a/include/linux/intel-iommu.h
 +++ b/include/linux/intel-iommu.h
 @@ -196,7 +196,6 @@
@@ -289,16 +292,16 @@ index 05a65eb155f76..81da7107e3bd0 100644
  #define DMA_RTADDR_SMT (((u64)1) << 10)
  
  /* CCMD_REG */
-@@ -594,6 +592,7 @@ struct intel_iommu {
+@@ -579,6 +577,7 @@ struct intel_iommu {
+ 
  #ifdef CONFIG_INTEL_IOMMU
  	unsigned long 	*domain_ids; /* bitmap of domains */
- 	struct dmar_domain ***domains; /* ptr to domains */
 +	unsigned long	*copied_tables; /* bitmap of copied tables */
  	spinlock_t	lock; /* protect context, domain ids */
  	struct root_entry *root_entry; /* virtual address */
  
-@@ -713,6 +712,11 @@ static inline int first_pte_in_page(struct dma_pte *pte)
- 	return !((unsigned long)pte & ~VTD_PAGE_MASK);
+@@ -692,6 +691,11 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
+ 		(struct dma_pte *)ALIGN((unsigned long)pte, VTD_PAGE_SIZE) - pte;
  }
  
 +static inline bool context_present(struct context_entry *context)
@@ -307,9 +310,9 @@ index 05a65eb155f76..81da7107e3bd0 100644
 +}
 +
  extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
- extern int dmar_find_matched_atsr_unit(struct pci_dev *dev);
  
-@@ -806,7 +810,6 @@ static inline void intel_iommu_debugfs_init(void) {}
+ extern int dmar_enable_qi(struct intel_iommu *iommu);
+@@ -776,7 +780,6 @@ static inline void intel_iommu_debugfs_init(void) {}
  #endif /* CONFIG_INTEL_IOMMU_DEBUGFS */
  
  extern const struct attribute_group *intel_iommu_groups[];
