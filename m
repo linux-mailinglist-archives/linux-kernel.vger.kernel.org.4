@@ -2,102 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6A85BAD91
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86875BAD95
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiIPMma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S230026AbiIPMo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiIPMm2 (ORCPT
+        with ESMTP id S229911AbiIPMo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:42:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503BFA6C00;
-        Fri, 16 Sep 2022 05:42:28 -0700 (PDT)
+        Fri, 16 Sep 2022 08:44:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D94140C3;
+        Fri, 16 Sep 2022 05:44:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09271B815C6;
-        Fri, 16 Sep 2022 12:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F17C433D6;
-        Fri, 16 Sep 2022 12:42:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54050B826A9;
+        Fri, 16 Sep 2022 12:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA51DC433C1;
+        Fri, 16 Sep 2022 12:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663332145;
-        bh=kV7HFk4TO924Bo/xQRpbgAArFEG65LVWJgBRYxJCc5E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Uy9N41Wt68k+Kk0T6wi3qmF6CRknyIj54dXpQeCJD4iU2jc2zT7ioOEWJRQFimuDl
-         shghRuyLTULxCkWO3thB1DXmOeEFCRBlQiNeE8K2wAU3DnwDGx/m0Ymcl7A7a0Vuw3
-         96ozCIYeUpdLnXdNq5MlFhDCokWndt5ztG2SPzZcYdQJEzl3p1/yxcJ7YEOQ2NTIhN
-         /qKix8E4lQG5u1LFz7ikc6k0AsnMzdjo31ekjlnUAmcldLLMq2o2GsaRhI9y9/zpsh
-         +MZg8EyA46iWwysLGOCISqZ04bueCqmuK372w503M/Lyi8tN2QjwhRFTYFY6qKIwUr
-         V52ckB019QF8Q==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: defconfig: Enabled SC8180x configs
-Date:   Fri, 16 Sep 2022 18:12:14 +0530
-Message-Id: <20220916124214.3881948-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        s=k20201202; t=1663332293;
+        bh=igk9GlLv3KkYKEXLeUJi08ISGzrkEi6vJxF172jR/ao=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=h5NXSFuTGx9FmzPY2FFpIHAJoPTR9kisePSGu8bVlDVKsRlj2aOeS6V+cC+RWoYRX
+         N7l12/IsQr0IM1RyeUlD6xxp/vCT70XK6/jVVAYFT0DolIPdvs27FG7BE1vxnjFL/3
+         UDbGwSDKzvETtlXh+vO7ATh3uTEBSOw+Dya15wqTT4NHVhnI4wnnq58Tjm+90b2N07
+         NXEOYgSzNGLgGXy0YLzs1JHgrhQouQ7pHk58CnBOh+MthM+kBDXdcdRMfUIjrj1u1J
+         NyjDBaFcIJSTi5Pl9Vk+GNYaZNzZddpXUNU70xBKN7zBfCKTOyuqiQIWz132Tzd55D
+         44RkiYMgJHS8Q==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] PCI: aardvark: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
+Date:   Fri, 16 Sep 2022 14:44:47 +0200
+Message-Id: <166333227279.2903520.16266580196289898718.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220711225915.13896-1-pali@kernel.org>
+References: <20220711221823.12154-1-pali@kernel.org> <20220711225915.13896-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable sc8180x global clock controller, tlmm, interconnect and edp phy
-drivers which are required for sc8180x like Lenovo Flex 5G laptop to
-boot.
+On Tue, 12 Jul 2022 00:59:15 +0200, Pali Rohár wrote:
+> Register with Subsystem Device/Vendor ID is at offset 0x2c. Export is via
+> emulated bridge.
+> 
+> After this change Subsystem ID is visible in lspci output at line:
+> 
+>   Capabilities: [40] Subsystem
+> 
+> [...]
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to pci/aardvark, thanks!
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0816b7f6926e..e772d01536cf 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -534,6 +534,7 @@ CONFIG_PINCTRL_QDF2XXX=y
- CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
- CONFIG_PINCTRL_SC7180=y
- CONFIG_PINCTRL_SC7280=y
-+CONFIG_PINCTRL_SC8180X=y
- CONFIG_PINCTRL_SC8280XP=y
- CONFIG_PINCTRL_SDM845=y
- CONFIG_PINCTRL_SM8150=y
-@@ -1060,6 +1061,7 @@ CONFIG_MSM_GCC_8998=y
- CONFIG_QCS_GCC_404=y
- CONFIG_SC_GCC_7180=y
- CONFIG_SC_GCC_7280=y
-+CONFIG_SC_GCC_8180X=y
- CONFIG_SC_GCC_8280XP=y
- CONFIG_SDM_CAMCC_845=m
- CONFIG_SDM_GPUCC_845=y
-@@ -1213,6 +1215,7 @@ CONFIG_PHY_HISTB_COMBPHY=y
- CONFIG_PHY_HISI_INNO_USB2=y
- CONFIG_PHY_MVEBU_CP110_COMPHY=y
- CONFIG_PHY_MTK_TPHY=y
-+CONFIG_PHY_QCOM_EDP=m
- CONFIG_PHY_QCOM_PCIE2=m
- CONFIG_PHY_QCOM_QMP=m
- CONFIG_PHY_QCOM_QUSB2=m
-@@ -1275,6 +1278,7 @@ CONFIG_INTERCONNECT_QCOM_OSM_L3=m
- CONFIG_INTERCONNECT_QCOM_QCS404=m
- CONFIG_INTERCONNECT_QCOM_SC7180=m
- CONFIG_INTERCONNECT_QCOM_SC7280=y
-+CONFIG_INTERCONNECT_QCOM_SC8180X=y
- CONFIG_INTERCONNECT_QCOM_SC8280XP=y
- CONFIG_INTERCONNECT_QCOM_SDM845=y
- CONFIG_INTERCONNECT_QCOM_SM8150=m
--- 
-2.37.3
+[1/1] PCI: aardvark: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
+      https://git.kernel.org/lpieralisi/pci/c/a080f9ad6045
 
+Thanks,
+Lorenzo
