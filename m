@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE68B5BA5F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289065BA5FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiIPEdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S229727AbiIPEjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIPEdh (ORCPT
+        with ESMTP id S229497AbiIPEjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:33:37 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480A2A024A;
-        Thu, 15 Sep 2022 21:33:36 -0700 (PDT)
-Received: from HP-EliteBook-840-G7.. (111-71-63-204.emome-ip.hinet.net [111.71.63.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 16 Sep 2022 00:39:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BBD2EF28;
+        Thu, 15 Sep 2022 21:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 48ACD3FDDB;
-        Fri, 16 Sep 2022 04:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663302814;
-        bh=prBpj7C9jqQogczh9/Q5N69YHwbujqAamyJ+7rRBut4=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=nswuJ0QBhoy0LCET6ewmH0qbn4R5RhFjouolpcGhIfCF5lNchd3ZCpoTaaKdThBzp
-         ZI+8hlf73m0ysWxpxDxxEw4rCv2bBXzv9vtREePs0jBhZBayUhUChbN/8pkKiyxrmF
-         re5w86PB03QfG8QAeDppycoDb7SDtSFYuYgmfA9LkspjGXGAnDgQUDjTVZAKtgB2l/
-         ypqgz8kd9nc9IeUxA6iuskQuGFbU568BKl3HTPt9EhisoEenu5mE0Eqp7NiNsyEZPj
-         dsZZ4rTSn4OSFdiDlkc9h5eDcHzjRvY0LwXVCWYlj3n3K9oJkQmZg13Bp8SbY54C6H
-         kyNxwnBVaoLFA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     rafael.j.wysocki@intel.com, lenb@kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
-Date:   Fri, 16 Sep 2022 12:33:17 +0800
-Message-Id: <20220916043319.119716-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220916043319.119716-1-kai.heng.feng@canonical.com>
-References: <20220916043319.119716-1-kai.heng.feng@canonical.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBCACB8238E;
+        Fri, 16 Sep 2022 04:39:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A5CC433C1;
+        Fri, 16 Sep 2022 04:39:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663303187;
+        bh=qaWzNt16Fu0APLvunyNPiTVzoCIa9T/+oRGyO0EdnU8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ATXjEz1AuxWXLtKk29PT67fyWtC6khPZD59WAd/D0oyCrQ/p99CqRE1aySG46fVJd
+         hAiye+gYYnkoB+KCtvKbU/gEsL/RB42hnHcgsWydaXiU2RWr/vjdnheyO3tEwJNORo
+         04TZ53De6AXfD4D9q+puq5MUd5WCpZsGUeN8c/BTFa65oJmQ5042MPH+USYgEVtT4M
+         R9s1O8ljmW/5sJcex1h8YSIEf/swd8W/xFV7kZaYd+7cc/u4iGiv1uDbLb5+tYQrNv
+         7MlHuQ0B/sq9EngMXNBrR49MpOan65UdS1UxrwfuHkCVpa/AUnGohk3kmwtKC0/Ie8
+         PDoqjZepVS1fQ==
+Date:   Fri, 16 Sep 2022 10:09:43 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        David Miller <davem@davemloft.net>
+Subject: Re: [PATCH] MAINTAINERS: Add myself as a reviewer for Qualcomm
+ ETHQOS Ethernet driver
+Message-ID: <YyP+D/JUrXd8fDwn@matsya>
+References: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
-PowerEdge r440 hangs at reboot.
+On 15-09-22, 16:58, Bhupesh Sharma wrote:
+> As suggested by Vinod, adding myself as the reviewer
+> for the Qualcomm ETHQOS Ethernet driver.
+> 
+> Recently I have enabled this driver on a few Qualcomm
+> SoCs / boards and hence trying to keep a close eye on
+> it.
 
-The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
-system reboot to avoid triggering AER"), so use the new sysoff API to
-reinstate S5 for reboot on ACPI-based systems.
+Thanks Bhupesh for helping out.
 
-Using S5 for reboot is default behavior under Windows, "A full shutdown
-(S5) occurs when a system restart is requested" [1].
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-[1] https://docs.microsoft.com/en-us/windows/win32/power/system-power-state
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: David Miller <davem@davemloft.net>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c26a5c573a5d..e8b58d4afce5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16943,6 +16943,7 @@ F:	drivers/net/ethernet/qualcomm/emac/
+>  
+>  QUALCOMM ETHQOS ETHERNET DRIVER
+>  M:	Vinod Koul <vkoul@kernel.org>
+> +R:	Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>  L:	netdev@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/net/qcom,ethqos.txt
+> -- 
+> 2.37.1
 
-Cc: Josef Bacik <josef@toxicpanda.com>
-Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v4:
- - Add comment and add more info to commit message.
-v3:
- - Use new API to invoke ACPI S5.
-v2:
- - Use do_kernel_power_off_prepare() instead.
-
- drivers/acpi/sleep.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index ad4b2987b3d6e..0b557c0d405ef 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -1088,6 +1088,14 @@ int __init acpi_sleep_init(void)
- 		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
- 					 SYS_OFF_PRIO_FIRMWARE,
- 					 acpi_power_off, NULL);
-+
-+		/*
-+		 * Windows uses S5 for reboot, so some BIOSes depend on it to
-+		 * perform proper reboot.
-+		 */
-+		register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
-+					 SYS_OFF_PRIO_FIRMWARE,
-+					 acpi_power_off_prepare, NULL);
- 	} else {
- 		acpi_no_s5 = true;
- 	}
 -- 
-2.37.2
-
+~Vinod
