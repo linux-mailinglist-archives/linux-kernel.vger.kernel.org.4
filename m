@@ -2,88 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E465BA4AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C3E5BA4A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiIPCia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S229960AbiIPCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIPCi1 (ORCPT
+        with ESMTP id S229539AbiIPCf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:38:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2169197503;
-        Thu, 15 Sep 2022 19:38:26 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTJ7436Z6z14QZ8;
-        Fri, 16 Sep 2022 10:34:24 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 10:38:23 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 10:38:22 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huangguangbin2@huawei.com>, <lipeng321@huawei.com>,
-        <lanhao@huawei.com>, <shenjian15@huawei.com>
-Subject: [PATCH] net: ethernet: ti: am65-cpsw: remove unused parameter of am65_cpsw_nuss_common_open()
-Date:   Fri, 16 Sep 2022 10:35:41 +0800
-Message-ID: <20220916023541.23415-1-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 15 Sep 2022 22:35:59 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2806D9D1;
+        Thu, 15 Sep 2022 19:35:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPv3AqH_1663295754;
+Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPv3AqH_1663295754)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Sep 2022 10:35:55 +0800
+Message-ID: <96a96aff-5d16-a2e3-2529-58e154e0f728@linux.alibaba.com>
+Date:   Fri, 16 Sep 2022 10:35:54 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH V4 3/6] erofs: introduce fscache-based domain
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
+ <20220915124213.25767-4-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220915124213.25767-4-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jian Shen <shenjian15@huawei.com>
 
-The inptu parameter 'features' is unused now. so remove it.
 
-Signed-off-by: Jian Shen <shenjian15@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 9/15/22 8:42 PM, Jia Zhu wrote:
+>  
+> +static void erofs_fscache_domain_put(struct erofs_domain *domain)
+> +{
+> +	if (!domain)
+> +		return;
+> +	mutex_lock(&erofs_domain_list_lock);
+> +	if (refcount_dec_and_test(&domain->ref)) {
+> +		list_del(&domain->list);
+> +		fscache_relinquish_volume(domain->volume, NULL, false);
+> +		mutex_unlock(&erofs_domain_list_lock);
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 7ef5d8208a4e..4f8f3dda7764 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -363,8 +363,7 @@ static void am65_cpsw_init_host_port_emac(struct am65_cpsw_common *common);
- static void am65_cpsw_init_port_switch_ale(struct am65_cpsw_port *port);
- static void am65_cpsw_init_port_emac_ale(struct am65_cpsw_port *port);
- 
--static int am65_cpsw_nuss_common_open(struct am65_cpsw_common *common,
--				      netdev_features_t features)
-+static int am65_cpsw_nuss_common_open(struct am65_cpsw_common *common)
- {
- 	struct am65_cpsw_host *host_p = am65_common_get_host(common);
- 	int port_idx, i, ret;
-@@ -577,7 +576,7 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
- 	for (i = 0; i < common->tx_ch_num; i++)
- 		netdev_tx_reset_queue(netdev_get_tx_queue(ndev, i));
- 
--	ret = am65_cpsw_nuss_common_open(common, ndev->features);
-+	ret = am65_cpsw_nuss_common_open(common);
- 	if (ret)
- 		return ret;
- 
+I think we can mutex_unlock as long as the domain is removed from the list.
+
+
+Otherwise LGTM.
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 -- 
-2.33.0
-
+Thanks,
+Jingbo
