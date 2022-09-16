@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3145BAF75
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BAF5BAF87
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiIPOhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S231326AbiIPOnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIPOg7 (ORCPT
+        with ESMTP id S230411AbiIPOm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:36:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D095B5E576
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663339018; x=1694875018;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZlAjlfeBNZZSlxWShJFmoeJQqe7c1A1u25E9Xs0GJTY=;
-  b=L1soIoNZzN+L+3hBuJoQHWHPywwnNJ0JemwoBook8B1Tb750TqtUIzqh
-   wMlj7WGNQaYSAmD395yZLVgg+wuqCk1FLF4zPR4rDKLPBvGOIOjnCpxob
-   EachzwfOWMn0vowTwHGvGvQRRV3yiDd55NfH557DXiqFgTx+TE7Tw6Rn/
-   NQMvmOGuY3bxAwtm2t1MgnDJq7iIHOcDAO2GGfWVU7q5E8SdHZErUNQ/s
-   XUxLH+tJ5gHEuhbYzzNrUgGRvEbWRcCrT2Fa6mTIbceraR2BEcMUC4D8U
-   Fmpq9GQy3LdZq004m4R9qsCrJDb/t5Zwd3lCg7i7tYw9ZcXeHibsC0Awp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="385294607"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="385294607"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 07:36:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="743359336"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga004.jf.intel.com with ESMTP; 16 Sep 2022 07:36:57 -0700
-Date:   Fri, 16 Sep 2022 07:42:52 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 06/23] sched/core: Update the classification of the
- current task
-Message-ID: <20220916144251.GB29395@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-7-ricardo.neri-calderon@linux.intel.com>
- <YyHavf3rHNLOWF8Z@hirez.programming.kicks-ass.net>
+        Fri, 16 Sep 2022 10:42:58 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6698358500
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:42:57 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so1833564pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=CczDj0L6fyErXarjYUw/nJButDiDyt2jg/VsMlHD9x0=;
+        b=OulnIc0PtMHK6HBr/Ps6pXumK5u3z46zD9qTpwgCt3YZ9WlxymyQYofzW2uXiYqD68
+         l+1dCUz9ozdNUjkvCBpAKBX7kXamXafBqAitnxJWe/mgSPrKxR+LqZz1ASr2cVF+MT0i
+         FqQW0UwdPP0m9XW+ODPsEEuMnSXwGDAiQYCCg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=CczDj0L6fyErXarjYUw/nJButDiDyt2jg/VsMlHD9x0=;
+        b=6hQq7wbBr5tn7c4Vvuo8Pu3TlLFAlRXBdrmGy2FHDotMfsy+ZBFfiFYs9l+IWy9KKz
+         aaeDTrMvdlqrfv0pL1GPGciCZtdsdY8KbmqLPAi/BiLadFHn7xwHbQqQZp1koNyRiJYy
+         +cn5ZmIaJiOs8yAoBLrQp08KLdyntygLkdapvMUEAs+Kvo4c2A4MXyKN79/IKmCTACnH
+         EjZM1rZE/BniwG4RBrETxSVXSDZ8NmV+EVFthbpkruXcZuc8GPDlgU+iRRqi8FNsfSwJ
+         lvBMAc8X9Fbe4Qiz6shH7LfEiaha5aWVlzPgQSZLY/kp2sF0wjwdg2MgUAYIYxhYZF1O
+         kbNg==
+X-Gm-Message-State: ACrzQf1/R4bNixFFOplqKVVys+ioBrI/l+0dWVYyPpSwe/dfZNraNxf6
+        BhWskbixlsBQK37PKfPFnhD8KKP7yXbiSD3/
+X-Google-Smtp-Source: AMsMyM6fN+pgEnc/ncnyOHdVfzsAk03A4QioD6WtmLqIzn6JzDwi9BxnF+gf8QmMz6pDubaM926hUw==
+X-Received: by 2002:a17:902:b693:b0:178:5fa6:4b3 with SMTP id c19-20020a170902b69300b001785fa604b3mr170800pls.63.1663339376925;
+        Fri, 16 Sep 2022 07:42:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m17-20020a637d51000000b0042ff6b0cf4dsm13491251pgn.58.2022.09.16.07.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 07:42:56 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 07:42:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] powerpc/xmon: Fix -Wswitch-unreachable warning in
+ bpt_cmds
+Message-ID: <202209160742.81BE54E@keescook>
+References: <YySE6FHiOcbWWR+9@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YyHavf3rHNLOWF8Z@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YySE6FHiOcbWWR+9@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 03:44:29PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:11:48PM -0700, Ricardo Neri wrote:
+On Fri, Sep 16, 2022 at 03:15:04PM +0100, Gustavo A. R. Silva wrote:
+> When building with automatic stack variable initialization, GCC 12
+> complains about variables defined outside of switch case statements.
+> Move the variable into the case that uses it, which silences the warning:
 > 
-> > +	if (sched_task_classes_enabled() && user_tick)
-> > +		arch_update_task_class(curr, is_core_idle(cpu));
+> arch/powerpc/xmon/xmon.c: In function ‘bpt_cmds’:
+> arch/powerpc/xmon/xmon.c:1529:13: warning: statement will never be executed [-Wswitch-unreachable]
+>  1529 |         int mode;
+>       |             ^~~~
 > 
-> This evaluates is_core_idle() even if the hardware improves.
+> Fixes: 09b6c1129f89 ("powerpc/xmon: Fix compile error with PPC_8xx=y")
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Yes, this is true. Do you think it would make sense to expose is_core_idle()
-outside the scheduler? In this manner, only hardware that needs it would
-call it.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks and BR,
-Ricardo
-> 
+-- 
+Kees Cook
