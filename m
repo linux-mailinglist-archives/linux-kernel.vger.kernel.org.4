@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7172C5BB451
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256B25BB454
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIPWNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 18:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S229540AbiIPWPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 18:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIPWNf (ORCPT
+        with ESMTP id S229568AbiIPWPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 18:13:35 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EAABBA45
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:13:34 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id y10-20020a5d914a000000b00688fa7b2252so13074118ioq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:13:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=EqMgv96S6WOApHkV1NNQhBVATR9B3h0BGCpG14NXv7E=;
-        b=52+AEDUQuegbUgqx+oxZ293FY3IP9cge5rUKsTAx1EQefEtmMtMCYDs/YYpzuN9p7Z
-         OXzvrNbHNpxbpKzMm420Jdx7XyOXBEC+y4fB/o3RTqnVF2eZLnBQrELqI0pVAgD+8kVe
-         CoTT3yusTTnTXTDFVs9yMJUpf6XxZQPgHS7MJuLXWJhec6DFlnSf0kgSAz3nQoOTErkq
-         B6iJLbYVEbLskK30DHSPx3ART0OAna7XlABqE/2A47BpiXQnBlPq0vLplVeZhjE9fyyu
-         HB+jpDd1fyzgOvbFFHfm068MzD4z9P7kDLuBDGiBNFGobxIWRbuxfaZfg8qGeCKtOGXx
-         oMYw==
-X-Gm-Message-State: ACrzQf30ExL0TjmCzQVAzptwNRYr4xEQ63RSnW1U8CHqpfpNzPe7M/f/
-        jMyl9vtizXCt1tlJbahz+EGCtEseKokoH/cKVO4NccMuMG0G
-X-Google-Smtp-Source: AMsMyM6+Auj0NFS3XWN08knoqKP1R6D6Hg0acSp2RtRUzfCLPUJTUYyFzAUmxaEGrYertHxCWX8cPSe1znjm9opSFyEQdBAK9uzP
+        Fri, 16 Sep 2022 18:15:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1EE4D804
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663366543; x=1694902543;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UHJsERHXZmCJuMqj/1wFtspAiClrkU1tTPWBFWPsWRc=;
+  b=eQVf7SpFkEE4TSb/EQbP/uLoP87Bkvn0OOSNC3E6D12A0ohtDx55Fgjo
+   rxFiFMrUsSCWKNh39Uo/gdS85byJLN9XB+iko9kAI7Mds3JmSH2niEXVC
+   jJsYlnC/Mguc8vorldOiO4v8qehZ5hym5/5vQuxQEGWv80+4yRqrimI97
+   T2/6sIUB/R3yXp5TjVcD4rBA+YW4hIcOwcaIwJh2NO5a35hKlCXBvzMX0
+   UUjgi+q5LNNH/9g/Znlm/QMBbsQfHaSU2TbFAKeXtZp/GiIT8AENZPhzH
+   RkqPWij4h/elFvh98Lshnf4ybx/Co8UryPGeEUvvzHFtM5P8YHdVYo5RH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="385382278"
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="385382278"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 15:15:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="568979604"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Sep 2022 15:15:40 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZJca-0002Bm-0l;
+        Fri, 16 Sep 2022 22:15:40 +0000
+Date:   Sat, 17 Sep 2022 06:14:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko]
+ undefined!
+Message-ID: <202209170657.86nWuKIN-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1748:b0:2eb:e656:8123 with SMTP id
- y8-20020a056e02174800b002ebe6568123mr3055166ill.15.1663366414212; Fri, 16 Sep
- 2022 15:13:34 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 15:13:34 -0700
-In-Reply-To: <0000000000006b15c805c7fbd885@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004027ca05e8d2ac0a@google.com>
-Subject: Re: [syzbot] memory leak in mld_newpack
-From:   syzbot <syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, phind.uet@gmail.com,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Randy,
 
-HEAD commit:    6879c2d3b960 Merge tag 'pinctrl-v6.0-2' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1053435d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a4afe4efcad47dde
-dashboard link: https://syzkaller.appspot.com/bug?extid=dcd3e13cf4472f2e0ba1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11842b37080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15078ed5080000
+First bad commit (maybe != root cause):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0e68bb9c6cf9/disk-6879c2d3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bf179217db31/vmlinux-6879c2d3.xz
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
+commit: fc1aabb088860d6cf9dd03612b7a6f0de91ccac2 mips: lantiq: add support for clk_get_parent()
+date:   10 months ago
+config: mips-buildonly-randconfig-r003-20220917 (https://download.01.org/0day-ci/archive/20220917/202209170657.86nWuKIN-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc1aabb088860d6cf9dd03612b7a6f0de91ccac2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fc1aabb088860d6cf9dd03612b7a6f0de91ccac2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-BUG: memory leak
-unreferenced object 0xffff88810bb0bb00 (size 240):
-  comm "kworker/0:2", pid 143, jiffies 4294946271 (age 15.640s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 bb b0 0b 81 88 ff ff  ................
-    00 70 aa 11 81 88 ff ff 80 10 e9 44 81 88 ff ff  .p.........D....
-  backtrace:
-    [<ffffffff8387bb59>] __alloc_skb+0x1f9/0x270 net/core/skbuff.c:422
-    [<ffffffff8388255a>] alloc_skb include/linux/skbuff.h:1257 [inline]
-    [<ffffffff8388255a>] alloc_skb_with_frags+0x6a/0x340 net/core/skbuff.c:6021
-    [<ffffffff8387508f>] sock_alloc_send_pskb+0x39f/0x3d0 net/core/sock.c:2665
-    [<ffffffff83d4eb01>] sock_alloc_send_skb include/net/sock.h:1866 [inline]
-    [<ffffffff83d4eb01>] mld_newpack.isra.0+0x81/0x200 net/ipv6/mcast.c:1748
-    [<ffffffff83d4ed26>] add_grhead+0xa6/0xc0 net/ipv6/mcast.c:1851
-    [<ffffffff83d4f4fc>] add_grec+0x7bc/0x820 net/ipv6/mcast.c:1989
-    [<ffffffff83d514e3>] mld_send_cr net/ipv6/mcast.c:2115 [inline]
-    [<ffffffff83d514e3>] mld_ifc_work+0x273/0x750 net/ipv6/mcast.c:2653
-    [<ffffffff8127afca>] process_one_work+0x2ba/0x5f0 kernel/workqueue.c:2289
-    [<ffffffff8127b8e9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2436
-    [<ffffffff81284c95>] kthread+0x125/0x160 kernel/kthread.c:376
-    [<ffffffff8100224f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+>> ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
