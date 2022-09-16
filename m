@@ -2,138 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293865BA496
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770965BA499
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiIPCZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S229815AbiIPC2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIPCZN (ORCPT
+        with ESMTP id S229695AbiIPC21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:25:13 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC29031ED6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:25:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a3so21332144lfk.9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3g1pfChMrPCGzoHDLIuvi7goXUtH2xCwrvM79pUzgzI=;
-        b=UexWPpGvsEPgSXmhTRD96BEdU4Hf13I3c8OciXhz/Sa3MFOgO521TrTUbeY0UuMgZp
-         XnSOlcg/cSLXpo/XQ+Ie5yi/r7bZC+mM9oOlfL2/60EOcI0DnDtxq58FsDKkeQa5AkBB
-         4khgpj3XcbQTW6IApIy2gCVgMFsxhL2VgyX4jpNd2eqHd22VbEX3BQHLRCA9D39R+2ux
-         aUHDYeI0mRxvBCw2Hae2frsvx6o5NeDkyTfZkNoU2nXmNmd95CPVgzVFOVWruCMazfCw
-         0VPrObFG/Ws9LzrH7odPWBTAl0VF7sGqo9FYkqX7Tuiv0CzAAMW4bFi9BdSCm9+bVCbB
-         hGMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3g1pfChMrPCGzoHDLIuvi7goXUtH2xCwrvM79pUzgzI=;
-        b=HiBfu3Xqn4lxFpKIH3ybCOJF5qh+aXHOktObmB2Yh6ZFSAN/dGykcJKuAOmKmvtYRA
-         fRErTM8Xcog70ZaVBBvrdCJTIz7AKIJJ23aHG8H8MHNOiOMQ6FHv1bhDZO4r2hSZXoBz
-         XrlkiO8EGJ8FQh70kXmiKvhZZDwgjmgE6flN4+812gHysr4MSYOLzTGhdKsfBrdgM7cB
-         k+8YwfSo8LsZrJOeserROXVH1bZeVfvkIgwidOzOiNZcyTNYqfmX4+GLYKQBK4g63OlG
-         CZ7CqRMR+L0TO+YOad8cs9NIfzwpTiwWwAcXgHEiCQeQDDF+YY9qZSrE1csW954jOFDz
-         e7yQ==
-X-Gm-Message-State: ACrzQf2Iqoleskx7m3/snjHH8/LH2+3b5H9St/Z39/XoPxFXOjLv0z1/
-        SaJjRGymb6iI+PoXARJB+rvQnHeEiYq579eTy/Mcgjc1c/w=
-X-Google-Smtp-Source: AMsMyM42n1q8iE4ZmVyKUgfz7ioTW4GZ7ESC6v+9tbZSKZ7yah0eBdk7Dhde71sBFjrXQ4ud6gbmk83C3a1tNDyopw0=
-X-Received: by 2002:a05:6512:401f:b0:49e:ea65:cd49 with SMTP id
- br31-20020a056512401f00b0049eea65cd49mr877570lfb.419.1663295109005; Thu, 15
- Sep 2022 19:25:09 -0700 (PDT)
+        Thu, 15 Sep 2022 22:28:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B80179638
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663295306; x=1694831306;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5j8Qjk3fSVoifNQfh4s/9O3xld2aYe+pO5nvXFLyBZE=;
+  b=H4v/wxypFLv04YPAb4Zgwt4g6v0FvPaBqwapUyZK7+QX7s0ev69XZ9yA
+   6Kbinl5HSDXgeVF7ryJ0pfpWJsID3b7z47m8HwldWkHJOVadoE+gfZqId
+   9KAOio0GrUibaUKy/xMmjB8NLV1jQKIaKpRZN4d0Bk8acmxUIVHtaxbAT
+   kw1t86UFPc2JJj1XgsaX+Gi3IjQIzpfZZ7R3h7TQe/9HuR3uyFvQp0W0c
+   /UsB4DtlF89xqZnEZhZQfwpjtBw8dbSZOTr55L/WIyDNrBpymWiW1yZYh
+   ytIRpYQn0sE6d6jOgG1uLLsQkwD+5drXt71pzHB9g+qw8SAdveVskNa16
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="299716830"
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="299716830"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 19:28:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="743178576"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Sep 2022 19:28:24 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZ15c-0001LC-0Q;
+        Fri, 16 Sep 2022 02:28:24 +0000
+Date:   Fri, 16 Sep 2022 10:28:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/core] BUILD SUCCESS
+ 8c03af3e090e9d57d90f482d344563dd4bae1e66
+Message-ID: <6323df44.D657xNH8Ih8kFovM%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220830044642.566769-1-apatel@ventanamicro.com> <20220830044642.566769-2-apatel@ventanamicro.com>
-In-Reply-To: <20220830044642.566769-2-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Fri, 16 Sep 2022 07:54:55 +0530
-Message-ID: <CAK9=C2WkqVgg58sKyDEMWue_vL8Pz7bCfERuaW_4DGnYTpcSMw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for
- systems with Svpbmt
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+branch HEAD: 8c03af3e090e9d57d90f482d344563dd4bae1e66  x86,retpoline: Be sure to emit INT3 after JMP *%\reg
 
-On Tue, Aug 30, 2022 at 10:17 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> Currently, all flavors of ioremap_xyz() function maps to the generic
-> ioremap() which means any ioremap_xyz() call will always map the
-> target memory as IO using _PAGE_IOREMAP page attributes. This breaks
-> ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
-> remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
-> page attributes.
->
-> To address above (just like other architectures), we implement RISC-V
-> specific ioremap_cache() and ioremap_wc() which maps memory using page
-> attributes as defined by the Svpbmt specification.
->
-> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
-> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+elapsed time: 726m
 
-This is a crucial RC fix. Can you please take this ?
+configs tested: 118
+configs skipped: 3
 
-Regards,
-Anup
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
->  arch/riscv/include/asm/io.h      | 10 ++++++++++
->  arch/riscv/include/asm/pgtable.h |  2 ++
->  2 files changed, 12 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-> index 69605a474270..07ac63999575 100644
-> --- a/arch/riscv/include/asm/io.h
-> +++ b/arch/riscv/include/asm/io.h
-> @@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
->  #define outsq(addr, buffer, count) __outsq((void __iomem *)addr, buffer, count)
->  #endif
->
-> +#ifdef CONFIG_MMU
-> +#define ioremap_wc(addr, size)         \
-> +       ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
-> +#endif
-> +
->  #include <asm-generic/io.h>
->
-> +#ifdef CONFIG_MMU
-> +#define ioremap_cache(addr, size)      \
-> +       ioremap_prot((addr), (size), _PAGE_KERNEL)
-> +#endif
-> +
->  #endif /* _ASM_RISCV_IO_H */
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 7ec936910a96..346b7c1a3eeb 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
->  #define PAGE_TABLE             __pgprot(_PAGE_TABLE)
->
->  #define _PAGE_IOREMAP  ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-> +#define _PAGE_IOREMAP_WC       ((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
-> +                                _PAGE_NOCACHE)
->  #define PAGE_KERNEL_IO         __pgprot(_PAGE_IOREMAP)
->
->  extern pgd_t swapper_pg_dir[];
-> --
-> 2.34.1
->
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+s390                 randconfig-r044-20220915
+arc                  randconfig-r043-20220915
+riscv                randconfig-r042-20220915
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+mips                     decstation_defconfig
+sh                             sh03_defconfig
+powerpc                         wii_defconfig
+openrisc                       virt_defconfig
+powerpc                      ep88xc_defconfig
+sparc                       sparc32_defconfig
+powerpc                      arches_defconfig
+sh                          rsk7203_defconfig
+arm                         vf610m4_defconfig
+powerpc                        cell_defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+powerpc                        warp_defconfig
+xtensa                           alldefconfig
+powerpc                      mgcoge_defconfig
+m68k                        m5307c3_defconfig
+arm                           viper_defconfig
+i386                          randconfig-c001
+arm64                               defconfig
+ia64                             allyesconfig
+arm                              allmodconfig
+m68k                                defconfig
+ia64                                defconfig
+mips                             allmodconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220916
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                         lubbock_defconfig
+sh                            titan_defconfig
+ia64                         bigsur_defconfig
+powerpc                      pcm030_defconfig
+powerpc                       eiger_defconfig
+arm                            xcep_defconfig
+sh                           se7750_defconfig
+arm                           tegra_defconfig
+arm                            zeus_defconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+hexagon              randconfig-r045-20220915
+hexagon              randconfig-r041-20220915
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
+powerpc                 xes_mpc85xx_defconfig
+mips                           ip28_defconfig
+powerpc                    socrates_defconfig
+arm                        mvebu_v5_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                    gamecube_defconfig
+powerpc                     kmeter1_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
