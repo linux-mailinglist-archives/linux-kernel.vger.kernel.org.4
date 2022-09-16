@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BEF5BA5AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3935BA5AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiIPERa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229667AbiIPEXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiIPER0 (ORCPT
+        with ESMTP id S229599AbiIPEXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:17:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4C9F74A;
-        Thu, 15 Sep 2022 21:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=MEez9kK9Q97P1sNxTGr3lx3ZTRfEr4B4CaTzZ35o3+U=; b=YIWUCsCzoDIpAz4Rd/l7Q5gAp1
-        h05ASEEwsY6s/Y348jsKaoQMlveis882eVIUvW8Nfk4v/Y1fMCQoZ0WaxoLwRvYPz5Q6z6uVQuO6F
-        EPApgKdv1xYkkm2Z48VDd7Sia5UTpDeni2zylLp4+K679Pfi0vep6z3AP3yFryI5tZHREqT9qNdyI
-        71xwY6UiAgxUUsEDGWO8LUuIwdrQ6cusT+sQ2HJGPPWflXg7pLPOC0YTDdcq0S3+Jx3CDJEAO0ajv
-        yNQUS5oXVQyNo8PPzTSuCOSymv7RaEdqFuqSOZm4tJjFFtcSCshAQGRpehpKeVeJ5TjHA4wx1TWyR
-        sxFt+A3g==;
-Received: from [2601:1c2:d80:3110::c55a]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZ2mq-001qML-Dj; Fri, 16 Sep 2022 04:17:08 +0000
-Message-ID: <293d8d5b-8423-a8bc-a42f-34b08ee65717@infradead.org>
-Date:   Thu, 15 Sep 2022 21:17:00 -0700
+        Fri, 16 Sep 2022 00:23:44 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BFB6E883
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:23:35 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bh13so19241299pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=gvdjpHS/YRkH0vho3frtzgK80BilJG2+eEXjf2bW/zQ=;
+        b=JcV1gWeBnsQpr8IFqM1+cNtK3uJZja8fNUZDQ9YI32sLk50HAJeJHl8CtuLS0PXkF1
+         bt8oDuJ+JN1bl77ccVAq5lwZQNC7l++U2iAztTCBPnoSxu1cTU+6Dr9hs2glfYM4yf09
+         8kmNhFJRFeOsax8NwX9CBfSKXbeMXz2OHU3cGE3e9PbAsbQTZ0v8JoOO+0yHnQXU5OtV
+         GDf+DQDJjUGr4ucmj+WbBhKV8+M03WKpLvZR68yhxLFN6GhWtkPbT5jhahFYTtdPE2SX
+         BYRR6rco9AMkf69xO+CGlY/878xxKJA3DNg3hv8A+uZwjXcyp64zU/wnKB7rLAqunwgu
+         cBBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=gvdjpHS/YRkH0vho3frtzgK80BilJG2+eEXjf2bW/zQ=;
+        b=2/WgK6QdNelYfLBQQqTmfd4aYGe7WxZcEBIaoCFWt2TH1Vilz3ciYg0QR+355yOUGr
+         ymU9r5ilDslhv0U8LsuLRP4YLzd1Dh+yUsgtWxK7KLiDoXZKHiCK/580J9qZuxFCjVNU
+         mM1PLjmFX7sGNsLrBzCthgImSCeVw5IG72UIqSgfh5ZPCHW11Q9rKOzK/HtMYy/HXnU5
+         20D773vfTIs2NqInGLQEmXNQihK2bg5kTQZUDLlbIpc3OR1D5apyTH1fzWg8QEK9bp39
+         eFnksgSUNKJbEZhwiQtADHO/wqzjUIHdW72y2QZ8UMuNSIv5pL4SK9s0x/Etjc6MA9ii
+         S7zg==
+X-Gm-Message-State: ACrzQf1FirVSYT9Vvn669NmTU2kam//W3Yi1QOR8ILwq79riRg+WQMEO
+        icpFKQ4RrwbxXh5PhkvL09/4ng==
+X-Google-Smtp-Source: AMsMyM4cNNU9y7eTJK5lmnGYbYr9GG/UfHslV3Qdx3TRxlr05zTuKGANPDIp17c/0MkdgUZJJIB8Jw==
+X-Received: by 2002:a65:56ca:0:b0:439:169f:f027 with SMTP id w10-20020a6556ca000000b00439169ff027mr2792866pgs.580.1663302214959;
+        Thu, 15 Sep 2022 21:23:34 -0700 (PDT)
+Received: from vineet-framework.ba.rivosinc.com (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id x4-20020a623104000000b0053e6eae9668sm13257286pfx.2.2022.09.15.21.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 21:23:34 -0700 (PDT)
+From:   Vineet Gupta <vineetg@rivosinc.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Christoph Muellner <cmuellner@ventanamicro.com>,
+        linux@rivosinc.com, Vineet Gupta <vineetg@rivosinc.com>
+Subject: [PATCH v2] riscv: ztso: disallow elf binaries needing TSO
+Date:   Thu, 15 Sep 2022 21:23:31 -0700
+Message-Id: <20220916042331.1398823-1-vineetg@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220916030552.1396820-1-vineetg@rivosinc.com>
+References: <20220916030552.1396820-1-vineetg@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] liquidio: CN23XX: delete repeated words
-To:     Ruffalo Lavoisier <ruffalolavoisier@gmail.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Satanand Burla <sburla@marvell.com>,
-        Felix Manlunas <fmanlunas@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220915084637.5165-1-RuffaloLavoisier@gmail.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220915084637.5165-1-RuffaloLavoisier@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+As of now the software stack needs work to support ztso. Until that work
+is finished, disallow binaries needing TSO.
 
-There are several other problems here also.
-Preferably fix all of them.
+This patch is needed to help ztso ratification and prolifiration of tso
+bits in tooling.
 
-On 9/15/22 01:46, Ruffalo Lavoisier wrote:
-> - Delete the repeated word 'to' in the comment
-> 
-> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-> ---
->   drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
->   drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> index 3f1c189646f4..9a994b5bfff5 100644
-> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> @@ -88,7 +88,7 @@
->   #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
->   /* The input jabber is used to determine the TSO max size.
->    * Due to H/W limitation, this need to be reduced to 60000
+Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
+---
+Changes since v1
+  - Build error (and boot tested on qemu)
+  - Improved the comments a bit
+---
+ arch/riscv/include/asm/elf.h      | 11 ++++++++++-
+ arch/riscv/include/uapi/asm/elf.h |  2 ++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-                               this needs
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index f53c40026c7a..b6b4542b3039 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -26,10 +26,19 @@
+ 
+ #define ELF_DATA	ELFDATA2LSB
+ 
++/*
++ * Make sure the elf being loaded is compatible with extensions.
++ *
++ * In the final incarnation this will get the extension list from DT and
++ * make sure elf can run on given hardware+kernel.
++ * For now disallow TSO built binaries.
++ */
++#define rv_ext_ok(x)	(!((x)->e_flags & EF_RISCV_TSO))
++
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+-#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++#define elf_check_arch(x) ((x)->e_machine == EM_RISCV && rv_ext_ok(x))
+ 
+ #define CORE_DUMP_USE_REGSET
+ #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
+diff --git a/arch/riscv/include/uapi/asm/elf.h b/arch/riscv/include/uapi/asm/elf.h
+index d696d6610231..fa9e4c52c7ac 100644
+--- a/arch/riscv/include/uapi/asm/elf.h
++++ b/arch/riscv/include/uapi/asm/elf.h
+@@ -32,6 +32,8 @@ typedef union __riscv_fp_state elf_fpregset_t;
+ #define ELF_RISCV_R_TYPE(r_info)	ELF32_R_TYPE(r_info)
+ #endif
+ 
++#define EF_RISCV_TSO		(1 << 3)
++
+ /*
+  * RISC-V relocation types
+  */
+-- 
+2.34.1
 
-> - * in order to to H/W TSO and avoid the WQE malfarmation > + * in order to H/W TSO and avoid the WQE malfarmation
-
-Now it is missing some word. Something like
-       in order to use H/W TSO
-makes some sense.
-
-Also, s/malfarmation/malformation/
-
->    * PKO_BUG_24989_WQE_LEN
->    */
->   #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
-> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> index d33dd8f4226f..19894b7c1ce8 100644
-> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> @@ -37,7 +37,7 @@
->   
->   /* The input jabber is used to determine the TSO max size.
->    * Due to H/W limitation, this need to be reduced to 60000
-> - * in order to to H/W TSO and avoid the WQE malfarmation
-> + * in order to H/W TSO and avoid the WQE malfarmation
-
-Same as comments above.
-
->    * PKO_BUG_24989_WQE_LEN
->    */
->   #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
