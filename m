@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7195BA95F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7973C5BA96D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiIPJ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S229633AbiIPJaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiIPJ3X (ORCPT
+        with ESMTP id S229768AbiIPJaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:29:23 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4F3A59AA;
-        Fri, 16 Sep 2022 02:29:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPwiYrC_1663320557;
-Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPwiYrC_1663320557)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Sep 2022 17:29:18 +0800
-Message-ID: <1b1222b8-4511-dfd4-bbd2-f354dc2cc5a9@linux.alibaba.com>
-Date:   Fri, 16 Sep 2022 17:29:17 +0800
+        Fri, 16 Sep 2022 05:30:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849EF2FFEC;
+        Fri, 16 Sep 2022 02:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42D25B82498;
+        Fri, 16 Sep 2022 09:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F0306C433D7;
+        Fri, 16 Sep 2022 09:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663320616;
+        bh=8URMKA0WFeAHhN4JW3gUlE5t8ISa0B70lbytY1nLHGw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oui20Cq1+G6Gp/E/kV9VtNsR8odonv6do2fJ8AxfHHGtPVVnNztnE0obfMCFPDDne
+         8K4sEO5GZ08aQaItqx4CDCJsD2hHNME+LBXOpZlpwd3Oll5jEghWeqhuVNuGf6BYcv
+         s/U0Z7UnkTVCmAD5BG//B4nf6eWFVp3KXv9K5D++/Lnn0w0vHm/6GW5cj9N7F+45/y
+         LDFpsMy1TZVjT1dYxVSIXm7P43ByggIUnAwXNWADIoGnXCXAi7JkygMlxooU6YZ7C+
+         G23SsDOvNcNer7fCCuYbvzB1mLOa7EvDndw9TdggEZvIpok1l2ygQ0GuoaHzSx9HS+
+         MhUzlXHpZGt5A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1C49C59A58;
+        Fri, 16 Sep 2022 09:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH V5 5/6] erofs: Support sharing cookies in the same domain
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20220916085940.89392-1-zhujia.zj@bytedance.com>
- <20220916085940.89392-6-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220916085940.89392-6-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] vsock/vmci: fix repeated words in comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166332061585.20358.18279693577661649289.git-patchwork-notify@kernel.org>
+Date:   Fri, 16 Sep 2022 09:30:15 +0000
+References: <20220907040131.52975-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220907040131.52975-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-On 9/16/22 4:59 PM, Jia Zhu wrote:
+On Wed,  7 Sep 2022 12:01:31 +0800 you wrote:
+> Delete the redundant word 'that'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  net/vmw_vsock/vmci_transport.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +static
-> +struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
-> +							char *name, bool need_inode)
-> +{
-> +	int err;
-> +	struct inode *inode;
-> +	struct erofs_fscache *ctx;
-> +	struct erofs_domain *domain = EROFS_SB(sb)->domain;
-> +
-> +	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
-> +	if (IS_ERR(ctx))
-> +		return ctx;
-> +
-> +	ctx->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ctx->name) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
-> +	if (!inode) {
-> +		kfree(ctx->name);
-		^
-This line can be omitted since erofs_fscache_relinquish_cookie() will be
-called.
+Here is the summary with links:
+  - vsock/vmci: fix repeated words in comments
+    https://git.kernel.org/netdev/net-next/c/454e7b138436
 
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	ctx->domain = domain;
-> +	ctx->anon_inode = inode;
-> +	inode->i_private = ctx;
-> +	refcount_inc(&domain->ref);
-> +	return ctx;
-> +out:
-> +	erofs_fscache_relinquish_cookie(ctx);
-> +	return ERR_PTR(err);
-> +}
-
-
-Otherwise LGTM.
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-
+You are awesome, thank you!
 -- 
-Thanks,
-Jingbo
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
