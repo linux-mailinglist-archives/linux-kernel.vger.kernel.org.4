@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED86D5BABA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340585BABA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbiIPKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
+        id S229635AbiIPKvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiIPKuf (ORCPT
+        with ESMTP id S230197AbiIPKvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:50:35 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC70B6169
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:29:29 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso15606696wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:29:29 -0700 (PDT)
+        Fri, 16 Sep 2022 06:51:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A6B5154
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:30:19 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so670767wmr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=lEm28T4aiukFj/jkOyJ/N1z4ZyJd8w2mvne3ZnFiHNg=;
-        b=IEN8i+yAPd/f+hsdfXcFUDKh+gFqVy3qWI5xvBGkd73lTfZdOGaOjQzcLHtFGQQHVY
-         jpbgZgOW/d7e4SUl2JBvJtkrKYgrdfdFbhIT32ecCqkpM1B5v14m5UKK3LOXMmqDYHGB
-         TtKvW0kBBcIKKTQz/9ruHl4Jb5ooMEOY5agR/5jHPPEwU17PfCaJjN8qZyBzlLMQf3aQ
-         7sx39Jss0gVpzP/pYJ5MnJ5W/YczeGkBPu+V0iljyYa9u91zQOYR2iCwI7IjRyORxnQz
-         Z9oBOEJW1DDlyEnju0EZxtxCb0oxbZSXyRzM2Hw+K42JBQ1oNA72wpCERFFhPH3u3YuY
-         yilw==
+        bh=3pSSbYLsUZVphsAWzkeXxvJouGOGgPDa3BFZ6REzto4=;
+        b=u8x/gpFB48PZ2CVbPWXd89tZdFwnU41LwIPsiCY6fWlNE61ORB4aaNwFhBQA33VcqJ
+         1rgIMOQhIL7BpbiSm6SxOAE/Jhl4KPdFLkK7FhPlgpqCSTHYTooCLmsZV7fiUTeLtHuJ
+         2seIzGcFeLlUWwQSb+NW+1vXI+SUydvOSe2zuKQToyp49RczDOykjMVp3jwsGLAosbIP
+         7w4T+by5xnZok/pnf1td5ZEYjDmbBPDuPYoifV5mJMLDXZTbSDV+74i7zKIEHRQqTDEq
+         2xcEEXblCkNKih7XRRRnX2mDclvu8bjKfACWz/Y5wXoyxbbW2BK1Vq2n8RLh20rPUIir
+         toLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=lEm28T4aiukFj/jkOyJ/N1z4ZyJd8w2mvne3ZnFiHNg=;
-        b=azIcxZ1CPYGSRTWSWKXu6jZQirP37fa2tr8f/LgBeW0DIOUlfMsKQUAKQBCE6ZNLeh
-         DYimHiWPe01kF9D3PP2imx48NXAbIoR+9R3DQanWRkHUdoPQCmEHX5Zh/sLrlWqTNIHn
-         X8qxXO8pbf64qU5iajjB6XuBfMoqbYZOiUpWkitX5lmogtA2vc+7JOC8LqZHUCN86THZ
-         LIqczBmxQtS5KXtvsgn0RT34eojH1dJT2fH3nl43vr06TH6jjyVcrADQDUPyn8LoGJ8K
-         vDw3V19JAw44H6evqY9CYrFcyJciVJlonXro/RgPSkk3zq9Ea57oMqxZiMbCbspD3Jdb
-         kD2g==
-X-Gm-Message-State: ACgBeo2bepafbuOCHgJKFfIpY+IpD5UbZPYirXtUNmmmhwTYKA0NIhPi
-        wl0sBVq0SNtS9t5nzV9Kde2dbw==
-X-Google-Smtp-Source: AA6agR4GhmwLDzJhDGKWyU6qvAUsmcDKMpVKTynu1xNvIu9OwasG3Ddi3IpZk2qTkIBvVxJT59oYqw==
-X-Received: by 2002:a05:600c:3493:b0:3b4:9a0e:b691 with SMTP id a19-20020a05600c349300b003b49a0eb691mr9691352wmq.123.1663324111900;
-        Fri, 16 Sep 2022 03:28:31 -0700 (PDT)
+        bh=3pSSbYLsUZVphsAWzkeXxvJouGOGgPDa3BFZ6REzto4=;
+        b=aU7a9b9Q0Vg+9RFi1HfOsXymTrE8/dnW7f1L2vRb4wpeAmeFWSwIrIqjDS9WNNUZKY
+         5SowKZKKiwyQQpXstFApQXCoxVKDEiOIt+lQXtdUk9Aq9x9pydam3G2HaQX33vAw7bTI
+         5duo6cALML5ULPvH/lucWSDUNs6IrdCJK/nQnowWRdxbagDUVNiKUt5ayA1YrYuup56P
+         UtQ4B2Peg1o2OcDR9T097D2U/0oL2IEvTRoxk5xGhxym5Oqe4qtPYbKtompOR7dhBC0X
+         7hooB5fCLba5eED2qKbZ+drdrlKZoIpndq8zbqGxM4E4P7v34zqDso0+4TDLaf3ykMvG
+         +WbA==
+X-Gm-Message-State: ACrzQf1w5kvaC5FCn/loFmhFDGe5UVvjN+TcTGXktyTpCuqxWyto+ukt
+        OoFk8AzzkgdzWmnn0e6tHx4/vg==
+X-Google-Smtp-Source: AMsMyM4OyQkKoo2fuhcDIb/EjBh2hnOfoU1+YHmTYRKnnONgZLG46VxZ2lyHsBWIqlwMI1WUY1go/w==
+X-Received: by 2002:a7b:c417:0:b0:3b4:5c94:24c1 with SMTP id k23-20020a7bc417000000b003b45c9424c1mr2843337wmi.86.1663324215296;
+        Fri, 16 Sep 2022 03:30:15 -0700 (PDT)
 Received: from [10.119.22.201] ([89.101.193.73])
-        by smtp.gmail.com with ESMTPSA id z13-20020a5d4c8d000000b0021f131de6aesm4553655wrs.34.2022.09.16.03.28.30
+        by smtp.gmail.com with ESMTPSA id g17-20020a5d5551000000b00228e1e90822sm4679007wrw.112.2022.09.16.03.30.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 03:28:31 -0700 (PDT)
-Message-ID: <7a01b1cc-6d00-715c-1e21-b8836a64a9a0@linaro.org>
-Date:   Fri, 16 Sep 2022 11:28:30 +0100
+        Fri, 16 Sep 2022 03:30:14 -0700 (PDT)
+Message-ID: <66a057d4-8c52-6a64-c23f-ba4a4428efb5@linaro.org>
+Date:   Fri, 16 Sep 2022 11:30:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH] media: dt-bindings: ov5645: Convert OV5645 binding to a
- schema
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: imx: sync with SCFW kit
+ v1.13.0
 Content-Language: en-US
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+To:     Viorel Suman <viorel.suman@oss.nxp.com>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220914214132.GA2173@tom-ThinkPad-T14s-Gen-2i>
- <CA+V-a8ufbsiz3p2n3LmYxES2aJYN9y8byF9bSyckNFz=fB-5LQ@mail.gmail.com>
+        Viorel Suman <viorel.suman@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220915181805.424670-1-viorel.suman@oss.nxp.com>
+ <20220915181805.424670-2-viorel.suman@oss.nxp.com>
+ <42e78db0-74f9-3098-0cf2-908092a0b594@linaro.org>
+ <20220916101738.xn7xx7ipf7p5dbok@fsr-ub1664-116>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CA+V-a8ufbsiz3p2n3LmYxES2aJYN9y8byF9bSyckNFz=fB-5LQ@mail.gmail.com>
+In-Reply-To: <20220916101738.xn7xx7ipf7p5dbok@fsr-ub1664-116>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,33 +90,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/2022 11:24, Lad, Prabhakar wrote:
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - clock-names
->>> +  - clock-frequency
->>> +  - vdda-supply
->>> +  - vddd-supply
->>> +  - vdddo-supply
->>> +  - enable-gpios
->>> +  - reset-gpios
->>> +  - port
+On 16/09/2022 11:17, Viorel Suman wrote:
+> On 22-09-16 10:38:30, Krzysztof Kozlowski wrote:
+>> On 15/09/2022 19:18, Viorel Suman (OSS) wrote:
+>>> From: Viorel Suman <viorel.suman@nxp.com>
+>>>
+>>> Sync defines with the latest available SCFW kit version 1.13.0,
+>>> may be found at the address below:
+>>>
+>>> https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
+>>>
+>>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+>>> ---
+>>>  include/dt-bindings/firmware/imx/rsrc.h | 299 ++++++++++++++++--------
+>>>  1 file changed, 203 insertions(+), 96 deletions(-)
+>>>
+>>> diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+>>> index 43885056557c..a4c68f394986 100644
+>>> --- a/include/dt-bindings/firmware/imx/rsrc.h
+>>> +++ b/include/dt-bindings/firmware/imx/rsrc.h
+>>> @@ -13,34 +13,38 @@
+>>>   * never be changed or removed (only added to at the end of the list).
+>>>   */
+>>>  
+>>> -#define IMX_SC_R_A53			0
+>>> -#define IMX_SC_R_A53_0			1
 >>
->> I think we don't need all of these properties as required.
->> The only "really" required are:
->>
->>   - compatible
->>   - reg
->>   - clocks
->>   - port
->>
-> Agreed, it's just the driver requirement hence the previous bindings
-> had marked them as required.
+>> You cannot change binding constants... Aren't you breaking all possible
+>> boards and users?
+> 
+> Hi Krzysztof,
+> 
+> There is a backward compatibility section added in the end of the patch,
+> it follows the same approach as in SCFW kit v1.13.0:
+> 
+> +/*
+> + * Compatibility defines for sc_rsrc_t
+> + */
+> +#define IMX_SC_R_A35                   IMX_SC_R_AP_2
 
-Please mention the change from pure conversion (with reason) in the
-commit msg.
+Then it looks fine, except someone would need to compare/test the numbers...
 
 
 Best regards,
