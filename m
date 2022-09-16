@@ -2,375 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4846F5BADFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62A05BADFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiIPNTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        id S231167AbiIPNUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiIPNTh (ORCPT
+        with ESMTP id S231621AbiIPNUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:19:37 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033D92635
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:19:33 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a8so35469203lff.13
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=EQ9/p3lJwci77ftCdqtq0O5QcfX0Mc1jziB3F9PSJEI=;
-        b=Hb69zvadMagHI6Rmr8J94YmyJGlj3RJiSLbUJDAgtRs5nlghIMcztyCqjgg2Ig0/XK
-         /d4PPdExghd4DUvS4vtwcoNZQCIaI1co85ms9tX2JRN1W1/tc2sH0OB7uOId4vAACkLr
-         /jPogKEvu7YIp6ewOC7oUmmbe6cRrVWWC7aqh+fqm0Lk57ywqoeQHApIo+mLAQ2j67q8
-         oWzvCROmfS4kw8KCniRWS7BKuJ7uZItKKda+twqiQv+jqG3x+a/85odDLSFoNOv4o/6d
-         5MMjI75rVRcRBweY5bZIdAAljRKHDpj1tUTa5h9GW9ozj+MhW3eIPV0cpVAFSsD+mm5+
-         435A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=EQ9/p3lJwci77ftCdqtq0O5QcfX0Mc1jziB3F9PSJEI=;
-        b=WFO6dFpjZuFRiYDE7scnEzWPvY4GePuaUci8eYC4hoFG/8zrCOwngWB+5q54qRxuDg
-         mDOEdxfp6CwemZKN97MmF2D+HQBBt+JGK5rZ2i+oHMWbnS2+kfuKUo2FF6Ip/uFSvIzc
-         wUkUuA6eR+TQtUE+q/Q3IkuknxawZ+0MsMlyKSaKZL3CPtSrb778WVD57dAHlzLgzLMm
-         dgIhaSnO5yJ9tXe5Zrj99nD806++rU9D8nQJBnY51vDPfiESMGVnbwB+Xt0egsF+X0Op
-         IAIQe2BioeIzGZvAgPT6XB9apHrdP145CT2w+5iq/hEnT+qie9rZqBrr3zNQcmds3lEC
-         nYjQ==
-X-Gm-Message-State: ACrzQf06Ym2nxw2SkEF27pEb9s0lgShm45jnSUcIePJO96GSHgk366rv
-        dRWIXSZId40uC6Ey9LoVn3AeIrTXhcESvA==
-X-Google-Smtp-Source: AMsMyM5N5LQf4ychHaDbBThx4GDmr3IOssq3QwqQ2E8d30ZgLuG8liE/GeH1rjLEuC86l/yFS5t6MA==
-X-Received: by 2002:a05:6512:b81:b0:494:78cc:ca9c with SMTP id b1-20020a0565120b8100b0049478ccca9cmr1605663lfv.564.1663334370150;
-        Fri, 16 Sep 2022 06:19:30 -0700 (PDT)
-Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b0025fdf1af42asm3650847ljo.78.2022.09.16.06.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:19:29 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
-        mario.limonciello@amd.com, jsd@semihalf.com
-Subject: [PATCH -next 2/2] i2c: designware: Add support for new SoCs in AMDPSP driver
-Date:   Fri, 16 Sep 2022 15:18:54 +0200
-Message-Id: <20220916131854.687371-3-jsd@semihalf.com>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220916131854.687371-1-jsd@semihalf.com>
-References: <20220916131854.687371-1-jsd@semihalf.com>
+        Fri, 16 Sep 2022 09:20:24 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAA4DEDF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:20:13 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220916132011euoutp020e3b34dbd440285d65d2d9684ffdbc6e~VWdW0hIay2954829548euoutp029
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:20:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220916132011euoutp020e3b34dbd440285d65d2d9684ffdbc6e~VWdW0hIay2954829548euoutp029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663334411;
+        bh=WkFSIox/+u3CVQwr0PZml4B9CMIqKSekifLZMllTt4U=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=fa+X8MPQnLpr5qKUibjzg97MRmIErp0bkzJfwlixGFdtg3/P4N39RPMU0kXAI1+1O
+         gFH64VnF6Po11r5bW/cFgHhBYsW75q4fWDflHaH1LUBT3Aht+44tNwG6SYjMZYGwwl
+         v/jinToxWknfmqF20qe0T6eQhc0xmzhMymKzGJ+c=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220916132011eucas1p2ce14ff026bcfb2c77aa2fbce3528c3ca~VWdWqHp9A2966929669eucas1p2Q;
+        Fri, 16 Sep 2022 13:20:11 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id EA.93.19378.B0874236; Fri, 16
+        Sep 2022 14:20:11 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220916132011eucas1p1360b9cc02cc108556fe80fab8d89567d~VWdWXOADn1418514185eucas1p1X;
+        Fri, 16 Sep 2022 13:20:11 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220916132011eusmtrp113fa532ae744f1b7211f720d022899b8~VWdWWg7aq2272422724eusmtrp1R;
+        Fri, 16 Sep 2022 13:20:11 +0000 (GMT)
+X-AuditID: cbfec7f5-a4dff70000014bb2-e2-6324780b65d1
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 9A.FD.07473.B0874236; Fri, 16
+        Sep 2022 14:20:11 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220916132010eusmtip1c7ce24bc9eb9b6b5c8986566f78b50d1~VWdWAVZe71394813948eusmtip1h;
+        Fri, 16 Sep 2022 13:20:10 +0000 (GMT)
+Message-ID: <1041bfe5-6515-feea-36d6-47f8f28938b6@samsung.com>
+Date:   Fri, 16 Sep 2022 15:20:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH] gpiolib: fix OOB access in quirk callbacks
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220916110118.446132-1-michael@walle.cc>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf0yMcRjf933fe+/tOHu7cE+YuMpo9ItxG6Msds2UX9shLW/nXaI7dm9x
+        bJGW2E12QnhFCUUsoR2KplMXUlq/VFisI2XHSKWrme7eov8+z+f5fL6f53n2pXDZRdE0Kl6X
+        yOp1TIKClBBm6+DrBRMMPppAa+psZekHM6l8lvcFKc8MF2DK+znDSNlYmk0q7TXF4hBSdbXl
+        rUj1iH8vVr1reUyqeu/NVD19kkauE22VLNvBJsTvY/UBy7dLdtZ/u4XtfTLDYH1bhqWgi3Ij
+        cqOAXgQVjR24EUkoGX0DwfOMfEwofiG4+nGQFIpeBC9fNxJjlt6uytFGAYL0krujlh8ILK02
+        sVMlpZdD5mery0HQvnC7tp8QeHd4ccHmwlNoDfBWK3JiD3oFdN60uLw4LYd2W47r0cn0NQR2
+        Y9FoYxlUHnsvcmKSDgKj3Ug6sRu9BO6/aSIFjRc8sGe7NgK6iYIy/iguzB0GjtpykYA9oKe6
+        RCzgGVBz+gQhGI4hyB3qwITChCClqx0JqqXwrs4xEkGNRMyDO6UBAh0Kjkv5hJMGehK02t2F
+        ISZBpvkcLtBSOJ4uE9RzgK8u+hdbUd+Am5CCH3cXftz+/Lh1+P+5uYgoRHI2idPGsdxCHbvf
+        n2O0XJIuzl+zR3sPjfyfmj/VfQ/RjZ4f/haEUciCgMIVk6W+4T4amXQHc+Agq98To09KYDkL
+        mk4RCrlUE1/MyOg4JpHdzbJ7Wf1YF6PcpqVg67elXifa2mZ9stY9ZIoG0vuaN/tzqbt/xXye
+        uMKT1EUVRhgsi2P7XyS3qMIenzR5n83otpdgVbZTxWe/8/SmVxVewX43M4ZjO6tMu3KmHl9/
+        ZKV2teR29FqW+01WhPhVTex+lZGVl970zedWdKH75cH9qd1L50TjZgjzmhdrb+he82zhxqac
+        iOAhz6wNDW1B7abz0ulRB8uvXys45Nt8JdQzKtCX9zns6Z14JCVP7ZiQn/xhbjm0DDAhqnUf
+        N3QRenS3y1waOv9keI+60WwJ6NxWr51Vll+lNmCm8I5VkqGnWyI3OyLVEZKvoZkDhuYYcTus
+        rfxZk5Vmkw+pjYFrFAS3kwnyw/Uc8xfPDYsnrgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsVy+t/xu7rcFSrJBntn8VrserCNzeLwoheM
+        FlP+LGey2Dz/D6PF5V1z2Czent7A7sDmsfjabVaPnbPusnvcubaHzePzJjmPA3tb2AJYo/Rs
+        ivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQyLrxbzVSw
+        V6bi2O3dTA2Ms8W7GDk5JARMJD4/P8LWxcjFISSwlFFiwvrJLBAJGYmT0xpYIWxhiT/XuqCK
+        3jNK3D19jREkwStgJzHp2TGwBhYBVYk1Z7+xQMQFJU7OfAJmiwokSyxpuA82SFjAXuLxykPs
+        IDazgLjErSfzmUBsEYEljBJ92wIh4jYSR9rvgtULCZhJrOz7CFbDJmAo0fUW5AhODk4Bc4nN
+        16+wQdSbSXRt7WKEsOUltr+dwzyBUWgWkjNmIVk3C0nLLCQtCxhZVjGKpJYW56bnFhvqFSfm
+        Fpfmpesl5+duYgTG2rZjPzfvYJz36qPeIUYmDsZDjBIczEoivKqeKslCvCmJlVWpRfnxRaU5
+        qcWHGE2BYTGRWUo0OR8Y7Xkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1M
+        HJxSDUwbpi7Ty1V0DMwUNOJ5mxvisf2elO/TSJOf4U5Vh15U/ri9W3571yIxRt0LP2avdFa5
+        XDrneeTU2zMW9Yi8t9GzPPRu89UGzuPzNSXMV32duuyp+V7Ft1d+WdoJOJvdN3vSPnXazOmT
+        mdZ1P+ZUmLXCS8eTmWnDpFtV29Wq681PVZ2Rfp3ZFd97++vhifd1f05a1O1UuPTOmSOy0fq3
+        Vr1c6sQ35b+HaG8vo7SJ+sOlTjwqq9IL9ib/cXksrXkg6d+Kj0JNx8Pa/oQ11Zo/uNBcycP6
+        Y9Vb7U91C+/wXOGfH+R2z6NTfOP1KN3Str5PcxlmRd0PumAerH78wNQwAcuUO+LCu/jn3JoS
+        0KAs9jdciaU4I9FQi7moOBEAxIz6kz4DAAA=
+X-CMS-MailID: 20220916132011eucas1p1360b9cc02cc108556fe80fab8d89567d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220916132011eucas1p1360b9cc02cc108556fe80fab8d89567d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220916132011eucas1p1360b9cc02cc108556fe80fab8d89567d
+References: <20220916110118.446132-1-michael@walle.cc>
+        <CGME20220916132011eucas1p1360b9cc02cc108556fe80fab8d89567d@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New AMD SoCs are using different algorithm for x86-PSP communication,
-thus need to modify I2C arbitration driver. Since possible future
-revisions should have follow new approach, mark functions used only for
-Cezanne with "czn_" prefix.
+On 16.09.2022 13:01, Michael Walle wrote:
+> Commit a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+> introduced an array of quirk functions which get iterated over. But a
+> sentinal value is missing. Add it.
+>
+> Fixes: a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-While at it, remove redundant check by modifying psp_wait_cmd() to only
-check for MBOX_READY bit, since MBOX_CMD field being zero is verified by
-czn_psp_check_mbox_sts() later on in the sequence.
+This fixes the boot issue on all my test machines I've observed with 
+linux next-20220916. Thanks!
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
----
- drivers/i2c/busses/i2c-designware-amdpsp.c | 145 ++++++++++++++-------
- 1 file changed, 97 insertions(+), 48 deletions(-)
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 1d467fc83f59..4395a2ae960a 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -4,6 +4,7 @@
- #include <linux/bits.h>
- #include <linux/i2c.h>
- #include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/pci.h>
- #include <linux/psp-sev.h>
- #include <linux/types.h>
- #include <linux/workqueue.h>
-@@ -30,9 +31,13 @@
- #define PSP_MBOX_FIELDS_RECOVERY	BIT(30)
- #define PSP_MBOX_FIELDS_READY		BIT(31)
- 
--#define PSP_MBOX_CMD_OFFSET		0x3810570
--#define PSP_MBOX_BUFFER_L_OFFSET	0x3810574
--#define PSP_MBOX_BUFFER_H_OFFSET	0x3810578
-+#define CZN_PSP_MBOX_CMD_OFFSET		0x3810570
-+#define CZN_PSP_MBOX_BUFFER_L_OFFSET	0x3810574
-+#define CZN_PSP_MBOX_BUFFER_H_OFFSET	0x3810578
-+#define PSP_MBOX_CMD_OFFSET		0x3810A40
-+#define PSP_MBOX_DOORBELL_OFFSET	0x3810A24
-+
-+#define AMD_CPU_ID_CZN			0x1630
- 
- struct psp_req_buffer_hdr {
- 	u32 total_size;
-@@ -55,6 +60,7 @@ static unsigned long psp_i2c_sem_acquired;
- static u32 psp_i2c_access_count;
- static bool psp_i2c_mbox_fail;
- static struct device *psp_i2c_dev;
-+static unsigned short cpu_id;
- 
- /*
-  * Implementation of PSP-x86 i2c-arbitration mailbox introduced for AMD Cezanne
-@@ -63,6 +69,17 @@ static struct device *psp_i2c_dev;
- 
- static int psp_mbox_probe(void)
- {
-+	struct pci_dev *rdev;
-+
-+	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
-+	if (!rdev) {
-+		dev_err(psp_i2c_dev, "Failed to get host bridge device\n");
-+		return -ENODEV;
-+	}
-+
-+	cpu_id = rdev->device;
-+	pci_dev_put(rdev);
-+
- 	/*
- 	 * Explicitly initialize system management network interface here, since
- 	 * usual init happens only after PCI subsystem is ready. This is too late
-@@ -81,80 +98,76 @@ static int psp_smn_read(u32 smn_addr, u32 *value)
- 	return amd_smn_read(0, smn_addr, value);
- }
- 
--/* Recovery field should be equal 0 to start sending commands */
--static int psp_check_mbox_recovery(void)
-+static int psp_mbox_ready(u32 smn_addr)
- {
- 	u32 tmp;
--	int status;
--
--	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &tmp);
--	if (status)
--		return status;
--
--	return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
--}
--
--static int psp_wait_cmd(void)
--{
--	u32 tmp, expected;
- 	int ret, status;
- 
--	/* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
--	expected = FIELD_PREP(PSP_MBOX_FIELDS_READY, 1);
--
- 	/*
- 	 * Check for readiness of PSP mailbox in a tight loop in order to
- 	 * process further as soon as command was consumed.
- 	 */
- 	ret = read_poll_timeout(psp_smn_read, status,
--				(status < 0) || (tmp == expected), 0,
--				PSP_CMD_TIMEOUT_US, 0, PSP_MBOX_CMD_OFFSET,
--				&tmp);
-+				(status < 0) || (tmp & PSP_MBOX_FIELDS_READY),
-+				0, PSP_CMD_TIMEOUT_US, 0, smn_addr, &tmp);
- 	if (status)
- 		ret = status;
- 
- 	return ret;
- }
- 
-+/* Recovery field should be equal 0 to start sending commands */
-+static int czn_psp_check_mbox_recovery(void)
-+{
-+	u32 tmp;
-+	int status;
-+
-+	status = psp_smn_read(CZN_PSP_MBOX_CMD_OFFSET, &tmp);
-+	if (status)
-+		return status;
-+
-+	return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
-+}
-+
- /* Status equal to 0 means that PSP succeed processing command */
--static int psp_check_mbox_sts(void)
-+static u32 czn_psp_check_mbox_sts(void)
- {
- 	u32 cmd_reg;
- 	int status;
- 
--	status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &cmd_reg);
-+	status = psp_smn_read(CZN_PSP_MBOX_CMD_OFFSET, &cmd_reg);
- 	if (status)
- 		return status;
- 
- 	return FIELD_GET(PSP_MBOX_FIELDS_STS, cmd_reg);
- }
- 
--static int psp_wr_mbox_buffer(phys_addr_t buf)
-+static int czn_psp_wr_mbox_buffer(phys_addr_t buf)
- {
- 	u32 buf_addr_h = upper_32_bits(buf);
- 	u32 buf_addr_l = lower_32_bits(buf);
- 	int status;
- 
--	status = psp_smn_write(PSP_MBOX_BUFFER_H_OFFSET, buf_addr_h);
-+	status = psp_smn_write(CZN_PSP_MBOX_BUFFER_H_OFFSET, buf_addr_h);
- 	if (status)
- 		return status;
- 
--	status = psp_smn_write(PSP_MBOX_BUFFER_L_OFFSET, buf_addr_l);
-+	status = psp_smn_write(CZN_PSP_MBOX_BUFFER_L_OFFSET, buf_addr_l);
- 	if (status)
- 		return status;
- 
- 	return 0;
- }
- 
--static int psp_send_cmd(struct psp_i2c_req *req)
-+static int czn_psp_send_cmd(struct psp_i2c_req *req)
- {
- 	phys_addr_t req_addr;
- 	u32 cmd_reg;
- 
--	if (psp_check_mbox_recovery())
-+	if (czn_psp_check_mbox_recovery())
- 		return -EIO;
- 
--	if (psp_wait_cmd())
-+	if (psp_mbox_ready(CZN_PSP_MBOX_CMD_OFFSET))
- 		return -EBUSY;
- 
- 	/*
-@@ -163,18 +176,18 @@ static int psp_send_cmd(struct psp_i2c_req *req)
- 	 * PSP. Use physical address of buffer, since PSP will map this region.
- 	 */
- 	req_addr = __psp_pa((void *)req);
--	if (psp_wr_mbox_buffer(req_addr))
-+	if (czn_psp_wr_mbox_buffer(req_addr))
- 		return -EIO;
- 
- 	/* Write command register to trigger processing */
- 	cmd_reg = FIELD_PREP(PSP_MBOX_FIELDS_CMD, PSP_I2C_REQ_BUS_CMD);
--	if (psp_smn_write(PSP_MBOX_CMD_OFFSET, cmd_reg))
-+	if (psp_smn_write(CZN_PSP_MBOX_CMD_OFFSET, cmd_reg))
- 		return -EIO;
- 
--	if (psp_wait_cmd())
-+	if (psp_mbox_ready(CZN_PSP_MBOX_CMD_OFFSET))
- 		return -ETIMEDOUT;
- 
--	if (psp_check_mbox_sts())
-+	if (czn_psp_check_mbox_sts())
- 		return -EIO;
- 
- 	return 0;
-@@ -185,8 +198,13 @@ static int check_i2c_req_sts(struct psp_i2c_req *req)
- {
- 	u32 status;
- 
--	/* Status field in command-response buffer is updated by PSP */
--	status = READ_ONCE(req->hdr.status);
-+	if (req) {
-+		/* Status field in command-response buffer is updated by PSP */
-+		status = READ_ONCE(req->hdr.status);
-+	} else {
-+		status = psp_smn_read(PSP_MBOX_CMD_OFFSET, &status);
-+		status &= ~PSP_MBOX_FIELDS_READY;
-+	}
- 
- 	switch (status) {
- 	case PSP_I2C_REQ_STS_OK:
-@@ -199,8 +217,31 @@ static int check_i2c_req_sts(struct psp_i2c_req *req)
- 	}
- }
- 
--static int psp_send_check_i2c_req(struct psp_i2c_req *req)
-+static int psp_send_cmd(enum psp_i2c_req_type i2c_req_type)
-+{
-+	int ret;
-+
-+	ret = psp_mbox_ready(PSP_MBOX_CMD_OFFSET);
-+	if (ret)
-+		return ret;
-+
-+	psp_smn_write(PSP_MBOX_CMD_OFFSET, i2c_req_type);
-+
-+	/* Ring the Doorbell for PSP by writing a non-zero value */
-+	psp_smn_write(PSP_MBOX_DOORBELL_OFFSET, 0x1);
-+
-+	ret = psp_mbox_ready(PSP_MBOX_CMD_OFFSET);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int psp_send_check_i2c_req(struct psp_i2c_req *req,
-+				  enum psp_i2c_req_type i2c_req_type)
- {
-+	int ret;
-+
- 	/*
- 	 * Errors in x86-PSP i2c-arbitration protocol may occur at two levels:
- 	 * 1. mailbox communication - PSP is not operational or some IO errors
-@@ -208,10 +249,15 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
- 	 * 2. i2c-requests - PSP refuses to grant i2c arbitration to x86 for too
- 	 * long.
- 	 * In order to distinguish between these two in error handling code, all
--	 * errors on the first level (returned by psp_send_cmd) are shadowed by
-+	 * errors on the first level (returned by *psp_send_cmd) are shadowed by
- 	 * -EIO.
- 	 */
--	if (psp_send_cmd(req))
-+	if (req)
-+		ret = czn_psp_send_cmd(req);
-+	else
-+		ret = psp_send_cmd(i2c_req_type);
-+
-+	if (ret)
- 		return -EIO;
- 
- 	return check_i2c_req_sts(req);
-@@ -219,24 +265,27 @@ static int psp_send_check_i2c_req(struct psp_i2c_req *req)
- 
- static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
- {
--	struct psp_i2c_req *req;
-+	struct psp_i2c_req *req = NULL;
- 	unsigned long start;
- 	int status, ret;
- 
--	/* Allocate command-response buffer */
--	req = kzalloc(sizeof(*req), GFP_KERNEL);
--	if (!req)
--		return -ENOMEM;
-+	/* Allocate command-response buffer for Cezanne platforms */
-+	if (cpu_id == AMD_CPU_ID_CZN) {
-+		req = kzalloc(sizeof(*req), GFP_KERNEL);
-+		if (!req)
-+			return -ENOMEM;
- 
--	req->hdr.total_size = sizeof(*req);
--	req->type = i2c_req_type;
-+		req->hdr.total_size = sizeof(*req);
-+		req->type = i2c_req_type;
-+	}
- 
- 	start = jiffies;
- 	ret = read_poll_timeout(psp_send_check_i2c_req, status,
- 				(status != -EBUSY),
- 				PSP_I2C_REQ_RETRY_DELAY_US,
- 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
--				0, req);
-+				0, req, i2c_req_type);
-+
- 	if (ret) {
- 		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
- 			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
+> ---
+> FWIW here is the kernel oops backtrace:
+> [    4.108706] Internal error: SP/PC alignment exception: 8a000000 [#1] SMP
+> [    4.115470] Modules linked in:
+> [    4.118549] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc5-next-20220916-00091-g6cae0fcbd5e7 #1821
+> [    4.128033] Hardware name: Kontron KBox A-230-LS (DT)
+> [    4.133127] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    4.140154] pc : 0x61722d6f697067
+> [    4.143495] lr : of_find_gpio+0x138/0x174
+> [    4.147546] sp : ffff80000a24b680
+> [    4.150884] x29: ffff80000a24b680 x28: 0000000000000000 x27: ffff80000996044c
+> [    4.158090] x26: 0000000000000001 x25: ffff80000970f588 x24: ffff800009297968
+> [    4.165295] x23: ffff80000a24b770 x22: 0000000000000000 x21: ffff0020009a7010
+> [    4.172500] x20: ffff8000097752f8 x19: fffffffffffffffe x18: 0000000000000000
+> [    4.179703] x17: ffff8000085fb9d0 x16: ffff8000085fb264 x15: ffff8000085f96ac
+> [    4.186907] x14: 0000000000000000 x13: ffff80000884b3e8 x12: ffff80000884ab04
+> [    4.194111] x11: ffff80000884aa54 x10: 0000000000025080 x9 : ffff8000085fce78
+> [    4.201316] x8 : 0101010101010101 x7 : ffff800009750268 x6 : 051f521459491b57
+> [    4.208520] x5 : 571b495914521f05 x4 : 6e61722d6f697067 x3 : ffff80000a24b6d4
+> [    4.215724] x2 : 0000000000000000 x1 : ffff8000097752f8 x0 : ffff00207f7e4b20
+> [    4.222928] Call trace:
+> [    4.225389]  0x61722d6f697067
+> [    4.228377]  gpiod_get_index+0x12c/0x440
+> [    4.232334]  devm_gpiod_get_index+0x34/0xf0
+> [    4.236553]  devm_gpiod_get_optional+0x20/0x40
+> [    4.241036]  uart_get_rs485_mode+0x104/0x180
+> [    4.245345]  serial8250_register_8250_port+0x198/0x484
+> [    4.250532]  of_platform_serial_probe+0x358/0x640
+> [    4.255279]  platform_probe+0x70/0xe0
+> [    4.258973]  really_probe+0xc4/0x2e4
+> [    4.262577]  __driver_probe_device+0x80/0xec
+> [    4.266882]  driver_probe_device+0x44/0x150
+> [    4.271100]  __driver_attach+0x88/0x1a0
+> [    4.274967]  bus_for_each_dev+0x78/0xdc
+> [    4.278833]  driver_attach+0x2c/0x40
+> [    4.282437]  bus_add_driver+0x15c/0x210
+> [    4.286303]  driver_register+0x80/0x13c
+> [    4.290170]  __platform_driver_register+0x30/0x3c
+> [    4.294915]  of_platform_serial_driver_init+0x24/0x30
+> [    4.300013]  do_one_initcall+0x4c/0x240
+> [    4.303882]  kernel_init_freeable+0x29c/0x30c
+> [    4.308276]  kernel_init+0x2c/0x140
+> [    4.311793]  ret_from_fork+0x10/0x20
+> [    4.315401] Code: bad PC value
+>
+>   drivers/gpio/gpiolib-of.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 95be5f0d2623..0e4e1291604d 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -498,6 +498,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
+>   	of_find_regulator_gpio,
+>   	of_find_arizona_gpio,
+>   	of_find_usb_gpio,
+> +	NULL
+>   };
+>   
+>   struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+
+Best regards
 -- 
-2.37.3.968.ga6b4b080e4-goog
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
