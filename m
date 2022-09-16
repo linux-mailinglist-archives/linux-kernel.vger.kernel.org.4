@@ -2,437 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72685BA9B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E215BA9D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiIPJyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S230201AbiIPJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIPJyA (ORCPT
+        with ESMTP id S230128AbiIPJ6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:54:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808613B957;
-        Fri, 16 Sep 2022 02:53:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D8D0B824EC;
-        Fri, 16 Sep 2022 09:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E51C433D7;
-        Fri, 16 Sep 2022 09:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663322035;
-        bh=qFPNvyHhB2r/skNQfxfx2JMHndYiHi2MRfUe73aWbiM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RsDD13ai0f1QCnA23L2VDi0Ie696D09vogDcR9mSab0sry4gymw6zHE8J8PQTYSss
-         v2yjh1Mwx/1M4Xrx5rT+tLzYWpU/8443c0/JB0qRoWRY5Yp8HqXPIzERt3hBaVEGMd
-         u1J9+PScBuBNCVgDP1WRJYUou2DabT8uZpSoYCGQs9SvV9KSmvZhqbPFOMEfd/EMUy
-         zRMaPduT9DEx0aDTapi4gMxDJVzFGinj6QRTs6XtgDSDtq3XqQepOl/9yz7KhpzQbZ
-         jGQ5txBwPozVbeH8gM8aQ4S52kxDzTZjRSaUZBGUsgkDVKh7mbAdJzXgIWKoh1S5sK
-         6egsc52A3o8Mw==
-Received: by mail-ua1-f49.google.com with SMTP id a14so7671876uat.13;
-        Fri, 16 Sep 2022 02:53:55 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3UCTMtXNNVr/UzcRAf+1QDSHVy/dr5nl5MLzdhSYSQluc12Y6i
-        ZWg1MyspHxoqGxjvhxt4OsDd1n4k5wvZwAb/SAI=
-X-Google-Smtp-Source: AMsMyM5nRkPsAtjryOFzobmnOnzjWzAZpksURPSIuN4BEDidMOSDOxDtOT4oL2oqXqlPu0bnMQFb0VsMeEs33iHi/5c=
-X-Received: by 2002:a05:6130:c13:b0:39f:58bb:d51c with SMTP id
- cg19-20020a0561300c1300b0039f58bbd51cmr1613949uab.104.1663322034565; Fri, 16
- Sep 2022 02:53:54 -0700 (PDT)
+        Fri, 16 Sep 2022 05:58:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1E8AA4DF;
+        Fri, 16 Sep 2022 02:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663322311; x=1694858311;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=12OZBcnGODAmYZ+AQhyX6U0d1a9s5HIpAjq3AWPtWJs=;
+  b=hK7Z2muPoe51t+mAtm3DCPxAFrwHkUH4KdVddLvWyC5NdgoSi7SJwMAm
+   7QXpD1QkARfIZ8SBmQ27HRCShf8Iflxv6Q/7/5dad5GaXbZR6W+ojV8F1
+   aWGG3mBJ9KH8/8Eb2e3cecxO76Px9lQUkvwrPchRKOGpzcu5rjpZ/oG4X
+   jPRBQ+0d+ZNec65VmYnU6KvNtpUI0tMjcyUnEPT0wjaFxM9YYQM0vF1xB
+   c8rZ9NXL+FxLcDFfLvxQNbD8yk1KYTQNeUNrXNCgS8FzfynSdyfh2ymfj
+   brlycSVwwLc7dJ7biIByg8EJoBkCSN/AL/yTWn6hnbvP6EUePyPFmaeNU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="298950578"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="298950578"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 02:58:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="620036603"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Sep 2022 02:58:21 -0700
+Date:   Fri, 16 Sep 2022 17:53:42 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20220916095342.GA2261402@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <YyQ+dQT9/V5e62/u@debian.me>
 MIME-Version: 1.0
-References: <20220818040413.2865849-1-chenhuacai@loongson.cn>
-In-Reply-To: <20220818040413.2865849-1-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 16 Sep 2022 17:53:30 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7fiyq7tKJw3CsYDBWjJu89oBJqgNZLxgd+UQE=+X6Czw@mail.gmail.com>
-Message-ID: <CAAhV-H7fiyq7tKJw3CsYDBWjJu89oBJqgNZLxgd+UQE=+X6Czw@mail.gmail.com>
-Subject: Re: [PATCH] Input: i8042 - Add PNP checking hook for Loongson
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyQ+dQT9/V5e62/u@debian.me>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping?
+On Fri, Sep 16, 2022 at 04:14:29PM +0700, Bagas Sanjaya wrote:
+> On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index abd7c32126ce..c1fac1e9f820 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -1319,7 +1319,7 @@ yet and must be cleared on entry.
+> >  :Capability: KVM_CAP_USER_MEMORY
+> >  :Architectures: all
+> >  :Type: vm ioctl
+> > -:Parameters: struct kvm_userspace_memory_region (in)
+> > +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
+> >  :Returns: 0 on success, -1 on error
+> >  
+> >  ::
+> > @@ -1332,9 +1332,18 @@ yet and must be cleared on entry.
+> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
+> >    };
+> >  
+> > +  struct kvm_userspace_memory_region_ext {
+> > +	struct kvm_userspace_memory_region region;
+> > +	__u64 private_offset;
+> > +	__u32 private_fd;
+> > +	__u32 pad1;
+> > +	__u64 pad2[14];
+> > +  };
+> > +
+> >    /* for kvm_memory_region::flags */
+> >    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
+> >    #define KVM_MEM_READONLY	(1UL << 1)
+> > +  #define KVM_MEM_PRIVATE		(1UL << 2)
+> >  
+> >  This ioctl allows the user to create, modify or delete a guest physical
+> >  memory slot.  Bits 0-15 of "slot" specify the slot id and this value
+> > @@ -1365,12 +1374,27 @@ It is recommended that the lower 21 bits of guest_phys_addr and userspace_addr
+> >  be identical.  This allows large pages in the guest to be backed by large
+> >  pages in the host.
+> >  
+> > -The flags field supports two flags: KVM_MEM_LOG_DIRTY_PAGES and
+> > -KVM_MEM_READONLY.  The former can be set to instruct KVM to keep track of
+> > -writes to memory within the slot.  See KVM_GET_DIRTY_LOG ioctl to know how to
+> > -use it.  The latter can be set, if KVM_CAP_READONLY_MEM capability allows it,
+> > -to make a new slot read-only.  In this case, writes to this memory will be
+> > -posted to userspace as KVM_EXIT_MMIO exits.
+> > +kvm_userspace_memory_region_ext includes all the kvm_userspace_memory_region
+> > +fields. It also includes additional fields for some specific features. See
+> > +below description of flags field for more information. It's recommended to use
+> > +kvm_userspace_memory_region_ext in new userspace code.
+> 
+> Better say "kvm_userspace_memory_region_ext includes all fields of
+> kvm_userspace_memory_region struct, while also adds additional fields ..."
+> 
+> > +
+> > +The flags field supports below flags:
+> 
+> s/below/following/
+> 
+> > +
+> > +- KVM_MEM_LOG_DIRTY_PAGES can be set to instruct KVM to keep track of writes to
+> > +  memory within the slot.  See KVM_GET_DIRTY_LOG ioctl to know how to use it.
+> > +
+> 
+> Better say "... For more details, see KVM_GET_DIRTY_LOG."
+> 
+> > +- KVM_MEM_READONLY can be set, if KVM_CAP_READONLY_MEM capability allows it, to
+> > +  make a new slot read-only.  In this case, writes to this memory will be posted
+> > +  to userspace as KVM_EXIT_MMIO exits.
+> > +
+> 
+> Better say "if KVM_CAP_READONLY_MEM allows, KVM_MEM_READONLY makes a new
+> slot read-only ..."
+> 
+> > +- KVM_MEM_PRIVATE can be set to indicate a new slot has private memory backed by
+> > +  a file descirptor(fd) and the content of the private memory is invisible to
+> > +  userspace. In this case, userspace should use private_fd/private_offset in
+> > +  kvm_userspace_memory_region_ext to instruct KVM to provide private memory to
+> > +  guest. Userspace should guarantee not to map the same pfn indicated by
+> > +  private_fd/private_offset to different gfns with multiple memslots. Failed to
+> > +  do this may result undefined behavior.
+> >  
+> 
+> For the lists above,
+> s/can be set/
 
-On Thu, Aug 18, 2022 at 12:04 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> Add PNP checking related functions for Loongson, so that i8042 driver
-> can work well under the ACPI firmware with PNP typed keyboard and mouse
-> configured in DSDT.
->
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/input/serio/i8042-loongsonio.h | 330 +++++++++++++++++++++++++
->  drivers/input/serio/i8042.h            |   2 +
->  2 files changed, 332 insertions(+)
->  create mode 100644 drivers/input/serio/i8042-loongsonio.h
->
-> diff --git a/drivers/input/serio/i8042-loongsonio.h b/drivers/input/serio/i8042-loongsonio.h
-> new file mode 100644
-> index 000000000000..2ea83b14f13d
-> --- /dev/null
-> +++ b/drivers/input/serio/i8042-loongsonio.h
-> @@ -0,0 +1,330 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * i8042-loongsonio.h
-> + *
-> + * Copyright (C) 2020 Loongson Technology Corporation Limited
-> + * Author: Jianmin Lv <lvjianmin@loongson.cn>
-> + *         Huacai Chen <chenhuacai@loongson.cn>
-> + */
-> +
-> +#ifndef _I8042_LOONGSONIO_H
-> +#define _I8042_LOONGSONIO_H
-> +
-> +/*
-> + * Names.
-> + */
-> +
-> +#define I8042_KBD_PHYS_DESC "isa0060/serio0"
-> +#define I8042_AUX_PHYS_DESC "isa0060/serio1"
-> +#define I8042_MUX_PHYS_DESC "isa0060/serio%d"
-> +
-> +/*
-> + * IRQs.
-> + */
-> +#define I8042_MAP_IRQ(x)       (x)
-> +
-> +#define I8042_KBD_IRQ  i8042_kbd_irq
-> +#define I8042_AUX_IRQ  i8042_aux_irq
-> +
-> +static int i8042_kbd_irq;
-> +static int i8042_aux_irq;
-> +
-> +/*
-> + * Register numbers.
-> + */
-> +
-> +#define I8042_COMMAND_REG      i8042_command_reg
-> +#define I8042_STATUS_REG       i8042_command_reg
-> +#define I8042_DATA_REG         i8042_data_reg
-> +
-> +static int i8042_command_reg = 0x64;
-> +static int i8042_data_reg = 0x60;
-> +
-> +
-> +static inline int i8042_read_data(void)
-> +{
-> +       return inb(I8042_DATA_REG);
-> +}
-> +
-> +static inline int i8042_read_status(void)
-> +{
-> +       return inb(I8042_STATUS_REG);
-> +}
-> +
-> +static inline void i8042_write_data(int val)
-> +{
-> +       outb(val, I8042_DATA_REG);
-> +}
-> +
-> +static inline void i8042_write_command(int val)
-> +{
-> +       outb(val, I8042_COMMAND_REG);
-> +}
-> +
-> +#ifdef CONFIG_PNP
-> +#include <linux/pnp.h>
-> +
-> +static bool i8042_pnp_kbd_registered;
-> +static unsigned int i8042_pnp_kbd_devices;
-> +static bool i8042_pnp_aux_registered;
-> +static unsigned int i8042_pnp_aux_devices;
-> +
-> +static int i8042_pnp_command_reg;
-> +static int i8042_pnp_data_reg;
-> +static int i8042_pnp_kbd_irq;
-> +static int i8042_pnp_aux_irq;
-> +
-> +static char i8042_pnp_kbd_name[32];
-> +static char i8042_pnp_aux_name[32];
-> +
-> +static void i8042_pnp_id_to_string(struct pnp_id *id, char *dst, int dst_size)
-> +{
-> +       strlcpy(dst, "PNP:", dst_size);
-> +
-> +       while (id) {
-> +               strlcat(dst, " ", dst_size);
-> +               strlcat(dst, id->id, dst_size);
-> +               id = id->next;
-> +       }
-> +}
-> +
-> +static int i8042_pnp_kbd_probe(struct pnp_dev *dev,
-> +               const struct pnp_device_id *did)
-> +{
-> +       if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
-> +               i8042_pnp_data_reg = pnp_port_start(dev, 0);
-> +
-> +       if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
-> +               i8042_pnp_command_reg = pnp_port_start(dev, 1);
-> +
-> +       if (pnp_irq_valid(dev, 0))
-> +               i8042_pnp_kbd_irq = pnp_irq(dev, 0);
-> +
-> +       strlcpy(i8042_pnp_kbd_name, did->id, sizeof(i8042_pnp_kbd_name));
-> +       if (strlen(pnp_dev_name(dev))) {
-> +               strlcat(i8042_pnp_kbd_name, ":", sizeof(i8042_pnp_kbd_name));
-> +               strlcat(i8042_pnp_kbd_name, pnp_dev_name(dev),
-> +                               sizeof(i8042_pnp_kbd_name));
-> +       }
-> +       i8042_pnp_id_to_string(dev->id, i8042_kbd_firmware_id,
-> +                              sizeof(i8042_kbd_firmware_id));
-> +
-> +       /* Keyboard ports are always supposed to be wakeup-enabled */
-> +       device_set_wakeup_enable(&dev->dev, true);
-> +
-> +       i8042_pnp_kbd_devices++;
-> +       return 0;
-> +}
-> +
-> +static int i8042_pnp_aux_probe(struct pnp_dev *dev,
-> +               const struct pnp_device_id *did)
-> +{
-> +       if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
-> +               i8042_pnp_data_reg = pnp_port_start(dev, 0);
-> +
-> +       if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
-> +               i8042_pnp_command_reg = pnp_port_start(dev, 1);
-> +
-> +       if (pnp_irq_valid(dev, 0))
-> +               i8042_pnp_aux_irq = pnp_irq(dev, 0);
-> +
-> +       strlcpy(i8042_pnp_aux_name, did->id, sizeof(i8042_pnp_aux_name));
-> +       if (strlen(pnp_dev_name(dev))) {
-> +               strlcat(i8042_pnp_aux_name, ":", sizeof(i8042_pnp_aux_name));
-> +               strlcat(i8042_pnp_aux_name, pnp_dev_name(dev),
-> +                               sizeof(i8042_pnp_aux_name));
-> +       }
-> +       i8042_pnp_id_to_string(dev->id, i8042_aux_firmware_id,
-> +                              sizeof(i8042_aux_firmware_id));
-> +
-> +       i8042_pnp_aux_devices++;
-> +       return 0;
-> +}
-> +
-> +static const struct pnp_device_id pnp_kbd_devids[] = {
-> +       { .id = "PNP0300", .driver_data = 0 },
-> +       { .id = "PNP0301", .driver_data = 0 },
-> +       { .id = "PNP0302", .driver_data = 0 },
-> +       { .id = "PNP0303", .driver_data = 0 },
-> +       { .id = "PNP0304", .driver_data = 0 },
-> +       { .id = "PNP0305", .driver_data = 0 },
-> +       { .id = "PNP0306", .driver_data = 0 },
-> +       { .id = "PNP0309", .driver_data = 0 },
-> +       { .id = "PNP030a", .driver_data = 0 },
-> +       { .id = "PNP030b", .driver_data = 0 },
-> +       { .id = "PNP0320", .driver_data = 0 },
-> +       { .id = "PNP0343", .driver_data = 0 },
-> +       { .id = "PNP0344", .driver_data = 0 },
-> +       { .id = "PNP0345", .driver_data = 0 },
-> +       { .id = "CPQA0D7", .driver_data = 0 },
-> +       { .id = "", },
-> +};
-> +MODULE_DEVICE_TABLE(pnp, pnp_kbd_devids);
-> +
-> +static struct pnp_driver i8042_pnp_kbd_driver = {
-> +       .name           = "i8042 kbd",
-> +       .id_table       = pnp_kbd_devids,
-> +       .probe          = i8042_pnp_kbd_probe,
-> +       .driver         = {
-> +               .probe_type = PROBE_FORCE_SYNCHRONOUS,
-> +               .suppress_bind_attrs = true,
-> +       },
-> +};
-> +
-> +static const struct pnp_device_id pnp_aux_devids[] = {
-> +       { .id = "AUI0200", .driver_data = 0 },
-> +       { .id = "FJC6000", .driver_data = 0 },
-> +       { .id = "FJC6001", .driver_data = 0 },
-> +       { .id = "PNP0f03", .driver_data = 0 },
-> +       { .id = "PNP0f0b", .driver_data = 0 },
-> +       { .id = "PNP0f0e", .driver_data = 0 },
-> +       { .id = "PNP0f12", .driver_data = 0 },
-> +       { .id = "PNP0f13", .driver_data = 0 },
-> +       { .id = "PNP0f19", .driver_data = 0 },
-> +       { .id = "PNP0f1c", .driver_data = 0 },
-> +       { .id = "SYN0801", .driver_data = 0 },
-> +       { .id = "", },
-> +};
-> +MODULE_DEVICE_TABLE(pnp, pnp_aux_devids);
-> +
-> +static struct pnp_driver i8042_pnp_aux_driver = {
-> +       .name           = "i8042 aux",
-> +       .id_table       = pnp_aux_devids,
-> +       .probe          = i8042_pnp_aux_probe,
-> +       .driver         = {
-> +               .probe_type = PROBE_FORCE_SYNCHRONOUS,
-> +               .suppress_bind_attrs = true,
-> +       },
-> +};
-> +
-> +static void i8042_pnp_exit(void)
-> +{
-> +       if (i8042_pnp_kbd_registered) {
-> +               i8042_pnp_kbd_registered = false;
-> +               pnp_unregister_driver(&i8042_pnp_kbd_driver);
-> +       }
-> +
-> +       if (i8042_pnp_aux_registered) {
-> +               i8042_pnp_aux_registered = false;
-> +               pnp_unregister_driver(&i8042_pnp_aux_driver);
-> +       }
-> +}
-> +#ifdef CONFIG_ACPI
-> +#include <linux/acpi.h>
-> +#endif
-> +static int __init i8042_pnp_init(void)
-> +{
-> +       char kbd_irq_str[4] = { 0 }, aux_irq_str[4] = { 0 };
-> +       bool pnp_data_busted = false;
-> +       int err;
-> +
-> +       if (i8042_nopnp) {
-> +               pr_info("PNP detection disabled\n");
-> +               return 0;
-> +       }
-> +
-> +       err = pnp_register_driver(&i8042_pnp_kbd_driver);
-> +       if (!err)
-> +               i8042_pnp_kbd_registered = true;
-> +
-> +       err = pnp_register_driver(&i8042_pnp_aux_driver);
-> +       if (!err)
-> +               i8042_pnp_aux_registered = true;
-> +
-> +       if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
-> +               i8042_pnp_exit();
-> +               pr_info("PNP: No PS/2 controller found.\n");
-> +#ifdef CONFIG_ACPI
-> +               if (acpi_disabled == 0)
-> +                       return -ENODEV;
-> +#endif
-> +               pr_info("Probing ports directly.\n");
-> +               return 0;
-> +       }
-> +
-> +       if (i8042_pnp_kbd_devices)
-> +               snprintf(kbd_irq_str, sizeof(kbd_irq_str),
-> +                       "%d", i8042_pnp_kbd_irq);
-> +       if (i8042_pnp_aux_devices)
-> +               snprintf(aux_irq_str, sizeof(aux_irq_str),
-> +                       "%d", i8042_pnp_aux_irq);
-> +
-> +       pr_info("PNP: PS/2 Controller [%s%s%s] at %#x,%#x irq %s%s%s\n",
-> +               i8042_pnp_kbd_name,
-> +               (i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
-> +               i8042_pnp_aux_name,
-> +               i8042_pnp_data_reg, i8042_pnp_command_reg,
-> +               kbd_irq_str,
-> +               (i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
-> +               aux_irq_str);
-> +
-> +       if (((i8042_pnp_data_reg & ~0xf) == (i8042_data_reg & ~0xf) &&
-> +             i8042_pnp_data_reg != i8042_data_reg) ||
-> +           !i8042_pnp_data_reg) {
-> +               pr_warn("PNP: PS/2 controller has invalid data port %#x; using default %#x\n",
-> +                       i8042_pnp_data_reg, i8042_data_reg);
-> +               i8042_pnp_data_reg = i8042_data_reg;
-> +               pnp_data_busted = true;
-> +       }
-> +
-> +       if (((i8042_pnp_command_reg & ~0xf) == (i8042_command_reg & ~0xf) &&
-> +             i8042_pnp_command_reg != i8042_command_reg) ||
-> +           !i8042_pnp_command_reg) {
-> +               pr_warn("PNP: PS/2 controller has invalid command port %#x; using default %#x\n",
-> +                       i8042_pnp_command_reg, i8042_command_reg);
-> +               i8042_pnp_command_reg = i8042_command_reg;
-> +               pnp_data_busted = true;
-> +       }
-> +
-> +       if (!i8042_nokbd && !i8042_pnp_kbd_irq) {
-> +               pr_warn("PNP: PS/2 controller doesn't have KBD irq; using default %d\n",
-> +                       i8042_kbd_irq);
-> +               i8042_pnp_kbd_irq = i8042_kbd_irq;
-> +               pnp_data_busted = true;
-> +       }
-> +
-> +       if (!i8042_noaux && !i8042_pnp_aux_irq) {
-> +               if (!pnp_data_busted && i8042_pnp_kbd_irq) {
-> +                       pr_warn("PNP: PS/2 appears to have AUX port disabled, "
-> +                               "if this is incorrect please boot with i8042.nopnp\n");
-> +                       i8042_noaux = true;
-> +               } else {
-> +                       pr_warn("PNP: PS/2 controller doesn't have AUX irq; using default %d\n",
-> +                               i8042_aux_irq);
-> +                       i8042_pnp_aux_irq = i8042_aux_irq;
-> +               }
-> +       }
-> +
-> +       i8042_data_reg = i8042_pnp_data_reg;
-> +       i8042_command_reg = i8042_pnp_command_reg;
-> +       i8042_kbd_irq = i8042_pnp_kbd_irq;
-> +       i8042_aux_irq = i8042_pnp_aux_irq;
-> +
-> +       return 0;
-> +}
-> +
-> +#else  /* !CONFIG_PNP */
-> +static inline int i8042_pnp_init(void) { return 0; }
-> +static inline void i8042_pnp_exit(void) { }
-> +#endif /* CONFIG_PNP */
-> +
-> +static int __init i8042_platform_init(void)
-> +{
-> +       int retval;
-> +
-> +       i8042_kbd_irq = I8042_MAP_IRQ(1);
-> +       i8042_aux_irq = I8042_MAP_IRQ(12);
-> +
-> +       retval = i8042_pnp_init();
-> +       if (retval)
-> +               return retval;
-> +
-> +       return retval;
-> +}
-> +
-> +static inline void i8042_platform_exit(void)
-> +{
-> +       i8042_pnp_exit();
-> +}
-> +
-> +#endif /* _I8042_LOONGSONIO_H */
-> diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
-> index 55381783dc82..166bd69841cf 100644
-> --- a/drivers/input/serio/i8042.h
-> +++ b/drivers/input/serio/i8042.h
-> @@ -19,6 +19,8 @@
->  #include "i8042-snirm.h"
->  #elif defined(CONFIG_SPARC)
->  #include "i8042-sparcio.h"
-> +#elif defined(CONFIG_MACH_LOONGSON64)
-> +#include "i8042-loongsonio.h"
->  #elif defined(CONFIG_X86) || defined(CONFIG_IA64)
->  #include "i8042-x86ia64io.h"
->  #else
-> --
-> 2.31.1
->
->
+It all looks good, thanks!
+
+> 
+> Thanks. 
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara
+
+
