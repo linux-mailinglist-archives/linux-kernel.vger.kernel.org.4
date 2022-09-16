@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2A95BAE82
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B474A5BAE85
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiIPNsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S230432AbiIPNtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiIPNsA (ORCPT
+        with ESMTP id S229591AbiIPNtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:48:00 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30925AE229
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:47:57 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so10931613pjo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:47:57 -0700 (PDT)
+        Fri, 16 Sep 2022 09:49:12 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCC0AE224
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:49:10 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id e68so21322840pfe.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:49:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=9rPQR8P/1VtjE9ENgMce5rmv248XA42Ive8e266iH3M=;
-        b=LfqafN7nozXhI9fIMip1UQHI87pGyqlTaZureB4Oal0otmj1VRG+d6UpCYiy+OMbHm
-         TkDiWM7BCgEhK2BQK2VeWijvslBDAwhQGV+uqGetdO0ixgY5qvNslxcCYuG39TeaSb1S
-         u05VmIv0/I8A07i9645mGvk0Yn1DvZjWH+n/qAA2tFRkvxmIqq24zhGYyKykZsCJDy/J
-         cjkCf8Lsnd+uEgNi3UrtWEhng4kVMyOc+e30YLmhquuwMs3Xf7WEfbtOO8DuqgMDuRRT
-         sbcRn3p/CQmU/ds+X/sy7S86jPde+1g4b+zsaJOihpspbsxJCngwRp9VoapotCvSCnOh
-         AyUg==
+        bh=2n8m9Yg3eXJzST89nwSJkSXaUJbY6Is/T+eVGx/bEtE=;
+        b=InbrCZw7ADBRyLcE0w/hYkSGWrPQCgBuKuS6Ui1TVueMsiBUOcInyrNZ+OkGJDFP0q
+         890sZa0ZP5QxB3rf+okJYjtedKY0jlvTBElLvfJhReTdieMe5XOMIcFf7jUFUDZNWHeV
+         9rD8CH/Fz2q1bkbshTcYZKJUB/YYQ98i/Q3oXExZnZsGRwIr+7gQbRjWGvNWg+p4E1UW
+         adCvKs3UDHSV8q379cstNllRXQbO6oOyWWrM3dmyDJJ1JUO31TW1Z+GZCW2hkEsigfxH
+         9KHVDIIbhLIk3qz4dIBBWKFAwU3GZdgmv1g03oBqU14oj5cmiiZPWkarAMNecwJrrZmn
+         Jn2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=9rPQR8P/1VtjE9ENgMce5rmv248XA42Ive8e266iH3M=;
-        b=4CiR8qihcIb09bymS5jontcVZxshYUH2iXMk6dwOfHDilgLq+AgH+rYedpaFDkmqw9
-         ypg9TYWk75nseVBIJ9z9ax0XejJf8PhTv+2lxWsx+LUhG9bmwT//AxH0s0iq6Z5lUlRT
-         P15iDkwqFxXjYB45CyoYf4/dGX/LYleotLM7PXj3vzkj6EXaUPPojeafgqT3qJlHqiwS
-         2N8/bxx6kuY3XMvbeCYh7wO5EqROYf76q4zdW6nyk1HjNDRWmLX/5O0Zb0vxrwYhJAqu
-         WFya7hq9BGtrESCmBminahiCeA2s50EhohvvgW2xlILzRumNf6iLjzuPTxyrN+AopSGt
-         /EgQ==
-X-Gm-Message-State: ACrzQf2CdL3yqnwo4YoaktxZy5SmMUF+uCYhGWr8BS/QOTSF3yaUblTD
-        ETpZISZMGDDjgV0whaZUoaY=
-X-Google-Smtp-Source: AMsMyM7cFFkZj80RfXPlM3hdsWDRwH9lmBGI4X5wgVqp/jJpbwQZAGXr81UM3Sj9Yjp2qoXXiSe3dA==
-X-Received: by 2002:a17:902:d50e:b0:178:2fe:9f60 with SMTP id b14-20020a170902d50e00b0017802fe9f60mr4820928plg.154.1663336076622;
-        Fri, 16 Sep 2022 06:47:56 -0700 (PDT)
+        bh=2n8m9Yg3eXJzST89nwSJkSXaUJbY6Is/T+eVGx/bEtE=;
+        b=OmOjTgCgAw/zfHJ/1ObVTr+n1EfmDWQL4jiZgSQTqq4xTJyZE/DTxAQr5/WFWjd1U2
+         r+QiXuYpRKDyaf6fQOiLn+OekbKYMUgvyhBjLexgCb8gfwO1hoOpDKtgdMhRqUGQhaJr
+         pXGH1Ppw7Eb+k0KiqTCrKBombd6YNL+xgdbQTvXTn7oCmelVrUDCPF6GUY8rkXwAnQuQ
+         z6wnfvJh41aoqZIjkBOTdeBE5jdNM31fs0oVlbQ1Z4m0QwjtB+ElbsMRbWVCdqx8dZuh
+         KPbgiAWhr3TwIOtVar8DYeeTds4K9LVyYC5/QhhOI77zSBv7DtTuhORfADF4pPxkPK4Y
+         25Lg==
+X-Gm-Message-State: ACrzQf3kqki78SCH7LqvlGBaOyYnL+LAsQha8PfF3I4MKounrxe0b8fw
+        l8S1K7rDVXz7Xm9SQPLGeE0=
+X-Google-Smtp-Source: AMsMyM4kQOow4P5R/R3e9OK5fwgiCEOH5qP1igo/T+sQUKNkyPxtdxAEfAegYwpnXc5loIxAX9KbEQ==
+X-Received: by 2002:a05:6a00:f04:b0:547:50b1:4f4e with SMTP id cr4-20020a056a000f0400b0054750b14f4emr5540041pfb.69.1663336149593;
+        Fri, 16 Sep 2022 06:49:09 -0700 (PDT)
 Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id b18-20020a170903229200b00176a6ba5969sm14967953plh.98.2022.09.16.06.47.54
+        by smtp.gmail.com with ESMTPSA id x20-20020aa78f14000000b0052d2b55be32sm14926810pfr.171.2022.09.16.06.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:47:56 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 06:47:51 -0700
+        Fri, 16 Sep 2022 06:49:09 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 06:49:05 -0700
 From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
+To:     laforge@gnumonks.org
 Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com,
-        ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v3] char: pcmcia: synclink_cs: Fix use-after-free in
- mgslpc_ops
-Message-ID: <20220916134751.GA234676@ubuntu>
+        gregkh@linuxfoundation.org, arnd@arndb.de
+Subject: [PATCH v2] char: pcmcia: cm4040_cs: Fix use-after-free in reader_fops
+Message-ID: <20220916134905.GA234760@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -69,146 +68,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes
-the pcmcia device while calling ioctl() for this tty device node.
+A race condition may occur if the user physically removes the pcmcia
+device while calling open() for this char device node.
 
-This is a race condition between the mgslpc_ioctl() function and
-the mgslpc_detach() function, which may eventually result in UAF.
+This is a race condition between the cm4040_open() function and the
+reader_detach() function, which may eventually result in UAF.
 
-So, add a refcount check to mgslpc_detach() to free the structure
-after the tty device node is close()d.
+So, add a refcount check to reader_detach() to free the "dev" structure
+after the char device node is close()d.
 
 Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 ---
- drivers/char/pcmcia/synclink_cs.c | 44 ++++++++++++++++++++++++++++---
- 1 file changed, 40 insertions(+), 4 deletions(-)
+ drivers/char/pcmcia/cm4040_cs.c | 87 ++++++++++++++++++---------------
+ 1 file changed, 48 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 8fc49b038372..c991acfbc34d 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -216,7 +216,9 @@ typedef struct _mgslpc_info {
+diff --git a/drivers/char/pcmcia/cm4040_cs.c b/drivers/char/pcmcia/cm4040_cs.c
+index 827711911da4..50df1e63580a 100644
+--- a/drivers/char/pcmcia/cm4040_cs.c
++++ b/drivers/char/pcmcia/cm4040_cs.c
+@@ -59,6 +59,7 @@ static DEFINE_MUTEX(cm4040_mutex);
+ /* how often to poll for fifo status change */
+ #define POLL_PERIOD 				msecs_to_jiffies(10)
  
- 	/* PCMCIA support */
++static void cm4040_delete(struct kref *kref);
+ static void reader_release(struct pcmcia_device *link);
+ 
+ static int major;
+@@ -69,15 +70,16 @@ static struct class *cmx_class;
+ 
+ struct reader_dev {
  	struct pcmcia_device	*p_dev;
--	int		      stop;
-+	int			stop;
-+	int			removed;
+-	wait_queue_head_t	devq;
+ 	wait_queue_head_t	poll_wait;
+ 	wait_queue_head_t	read_wait;
+ 	wait_queue_head_t	write_wait;
 +	struct kref		refcnt;
+ 	unsigned long 	  	buffer_status;
+ 	unsigned long     	timeout;
+ 	unsigned char     	s_buf[READ_WRITE_BUFFER_SIZE];
+ 	unsigned char     	r_buf[READ_WRITE_BUFFER_SIZE];
+ 	struct timer_list 	poll_timer;
++	int			removed;
+ };
  
- 	/* SPPP/Cisco HDLC device parts */
- 	int netcount;
-@@ -228,6 +230,8 @@ typedef struct _mgslpc_info {
+ static struct pcmcia_device *dev_table[CM_MAX_DEV];
+@@ -102,6 +104,28 @@ static inline unsigned char xinb(unsigned short port)
+ }
+ #endif
  
- } MGSLPC_INFO;
- 
-+static DEFINE_MUTEX(remove_mutex);
-+
- #define MGSLPC_MAGIC 0x5402
- 
- /*
-@@ -468,10 +472,21 @@ static void mgslpc_wait_until_sent(struct tty_struct *tty, int timeout);
- 
- /* PCMCIA prototypes */
- 
-+static void mgslpc_delete(struct kref *kref);
- static int mgslpc_config(struct pcmcia_device *link);
- static void mgslpc_release(u_long arg);
- static void mgslpc_detach(struct pcmcia_device *p_dev);
- 
-+static void mgslpc_delete(struct kref *kref)
++static void cm4040_delete(struct kref *kref)
 +{
-+	MGSLPC_INFO *info = container_of(kref, MGSLPC_INFO, refcnt);
-+	struct pcmcia_device *link = info->p_dev;
++	struct reader_dev *dev = container_of(kref, struct reader_dev, refcnt);
++	struct pcmcia_device *link = dev->p_dev;
++	int devno;
 +
-+	mgslpc_release((u_long)link);
++	/* find device */
++	for (devno = 0; devno < CM_MAX_DEV; devno++) {
++		if (dev_table[devno] == link)
++			break;
++	}
++	if (devno == CM_MAX_DEV)
++		return;
 +
-+	mgslpc_remove_device(info);
++	reader_release(link);
++
++	dev_table[devno] = NULL;
++	kfree(dev);
++
++	device_destroy(cmx_class, MKDEV(major, devno));
 +}
 +
- /*
-  * 1st function defined in .text section. Calling this function in
-  * init_module() followed by a breakpoint allows a remote debugger
-@@ -534,6 +549,7 @@ static int mgslpc_probe(struct pcmcia_device *link)
- 	init_waitqueue_head(&info->event_wait_q);
- 	spin_lock_init(&info->lock);
- 	spin_lock_init(&info->netlock);
-+	kref_init(&info->refcnt);
- 	memcpy(&info->params,&default_params,sizeof(MGSL_PARAMS));
- 	info->idle_mode = HDLC_TXIDLE_FLAGS;
- 	info->imra_value = 0xffff;
-@@ -620,13 +636,17 @@ static void mgslpc_release(u_long arg)
- 
- static void mgslpc_detach(struct pcmcia_device *link)
- {
-+	MGSLPC_INFO *info = link->priv;
-+
-+	mutex_lock(&remove_mutex);
- 	if (debug_level >= DEBUG_LEVEL_INFO)
- 		printk("mgslpc_detach(0x%p)\n", link);
- 
--	((MGSLPC_INFO *)link->priv)->stop = 1;
--	mgslpc_release((u_long)link);
-+	info->stop = 1;
- 
--	mgslpc_remove_device((MGSLPC_INFO *)link->priv);
-+	kref_put(&info->refcnt, mgslpc_delete);
-+	info->removed = 1;
-+	mutex_unlock(&remove_mutex);
- }
- 
- static int mgslpc_suspend(struct pcmcia_device *link)
-@@ -2341,10 +2361,13 @@ static void mgslpc_close(struct tty_struct *tty, struct file * filp)
- 	
- 	tty_port_close_end(port, tty);
- 	tty_port_tty_set(port, NULL);
-+
- cleanup:
- 	if (debug_level >= DEBUG_LEVEL_INFO)
- 		printk("%s(%d):mgslpc_close(%s) exit, count=%d\n", __FILE__, __LINE__,
- 			tty->driver->name, port->count);
-+
-+	kref_put(&info->refcnt, mgslpc_delete);
- }
- 
- /* Wait until the transmitter is empty.
-@@ -2465,6 +2488,7 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
- 	int		retval, line;
- 	unsigned long	flags;
- 
-+
- 	/* verify range of specified line number */
- 	line = tty->index;
- 	if (line >= mgslpc_device_count) {
-@@ -2480,6 +2504,13 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
- 	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_open"))
+ /* poll the device fifo status register.  not to be confused with
+  * the poll syscall. */
+ static void cm4040_do_poll(struct timer_list *t)
+@@ -442,24 +466,30 @@ static int cm4040_open(struct inode *inode, struct file *filp)
  		return -ENODEV;
  
-+	mutex_lock(&remove_mutex);
+ 	mutex_lock(&cm4040_mutex);
 +
-+	if (info->removed == 1) {
-+		retval = -ENODEV;
-+		goto cleanup;
+ 	link = dev_table[minor];
+ 	if (link == NULL || !pcmcia_dev_present(link)) {
+-		ret = -ENODEV;
+-		goto out;
++		mutex_unlock(&cm4040_mutex);
++		return -ENODEV;
+ 	}
+ 
+ 	if (link->open) {
+-		ret = -EBUSY;
+-		goto out;
++		mutex_unlock(&cm4040_mutex);
++		return -EBUSY;
+ 	}
+ 
+ 	dev = link->priv;
+ 	filp->private_data = dev;
+ 
++	if (dev->removed == 1) {
++		mutex_unlock(&cm4040_mutex);
++		return -ENODEV;
 +	}
 +
- 	port = &info->port;
- 	tty->driver_data = info;
- 	tty_port_tty_set(port, tty);
-@@ -2517,9 +2548,14 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
- 	if (debug_level >= DEBUG_LEVEL_INFO)
- 		printk("%s(%d):mgslpc_open(%s) success\n",
- 			 __FILE__, __LINE__, info->device_name);
-+
-+	kref_get(&info->refcnt);
- 	retval = 0;
-+	mutex_unlock(&remove_mutex);
+ 	if (filp->f_flags & O_NONBLOCK) {
+ 		DEBUGP(4, dev, "filep->f_flags O_NONBLOCK set\n");
+-		ret = -EAGAIN;
+-		goto out;
++		mutex_unlock(&cm4040_mutex);
++		return -EAGAIN;
+ 	}
  
-+	return retval;
- cleanup:
-+	mutex_unlock(&remove_mutex);
- 	return retval;
+ 	link->open = 1;
+@@ -468,8 +498,11 @@ static int cm4040_open(struct inode *inode, struct file *filp)
+ 
+ 	DEBUGP(2, dev, "<- cm4040_open (successfully)\n");
+ 	ret = nonseekable_open(inode, filp);
+-out:
++
++	kref_get(&dev->refcnt);
++
+ 	mutex_unlock(&cm4040_mutex);
++
+ 	return ret;
  }
  
+@@ -492,24 +525,12 @@ static int cm4040_close(struct inode *inode, struct file *filp)
+ 	cm4040_stop_poll(dev);
+ 
+ 	link->open = 0;
+-	wake_up(&dev->devq);
+ 
+ 	DEBUGP(2, dev, "<- cm4040_close\n");
+-	return 0;
+-}
+ 
+-static void cm4040_reader_release(struct pcmcia_device *link)
+-{
+-	struct reader_dev *dev = link->priv;
++	kref_put(&dev->refcnt, cm4040_delete);
+ 
+-	DEBUGP(3, dev, "-> cm4040_reader_release\n");
+-	while (link->open) {
+-		DEBUGP(3, dev, MODULE_NAME ": delaying release "
+-		       "until process has terminated\n");
+- 		wait_event(dev->devq, (link->open == 0));
+-	}
+-	DEBUGP(3, dev, "<- cm4040_reader_release\n");
+-	return;
++	return 0;
+ }
+ 
+ static int cm4040_config_check(struct pcmcia_device *p_dev, void *priv_data)
+@@ -550,7 +571,6 @@ static int reader_config(struct pcmcia_device *link, int devno)
+ 
+ static void reader_release(struct pcmcia_device *link)
+ {
+-	cm4040_reader_release(link);
+ 	pcmcia_disable_device(link);
+ }
+ 
+@@ -579,11 +599,11 @@ static int reader_probe(struct pcmcia_device *link)
+ 
+ 	dev_table[i] = link;
+ 
+-	init_waitqueue_head(&dev->devq);
+ 	init_waitqueue_head(&dev->poll_wait);
+ 	init_waitqueue_head(&dev->read_wait);
+ 	init_waitqueue_head(&dev->write_wait);
+ 	timer_setup(&dev->poll_timer, cm4040_do_poll, 0);
++	kref_init(&dev->refcnt);
+ 
+ 	ret = reader_config(link, i);
+ 	if (ret) {
+@@ -600,22 +620,11 @@ static int reader_probe(struct pcmcia_device *link)
+ static void reader_detach(struct pcmcia_device *link)
+ {
+ 	struct reader_dev *dev = link->priv;
+-	int devno;
+-
+-	/* find device */
+-	for (devno = 0; devno < CM_MAX_DEV; devno++) {
+-		if (dev_table[devno] == link)
+-			break;
+-	}
+-	if (devno == CM_MAX_DEV)
+-		return;
+-
+-	reader_release(link);
+ 
+-	dev_table[devno] = NULL;
+-	kfree(dev);
+-
+-	device_destroy(cmx_class, MKDEV(major, devno));
++	mutex_lock(&cm4040_mutex);
++	kref_put(&dev->refcnt, cm4040_delete);
++	dev->removed = 1;
++	mutex_unlock(&cm4040_mutex);
+ 
+ 	return;
+ }
 -- 
 2.25.1
 
