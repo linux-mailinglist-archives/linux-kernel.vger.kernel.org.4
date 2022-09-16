@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963595BADAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96AE5BADA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiIPM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S229621AbiIPM4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiIPM6U (ORCPT
+        with ESMTP id S229557AbiIPM4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:58:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5585A84;
-        Fri, 16 Sep 2022 05:58:15 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z21so31375554edi.1;
-        Fri, 16 Sep 2022 05:58:15 -0700 (PDT)
+        Fri, 16 Sep 2022 08:56:05 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0F979ED9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:56:04 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so857238wmr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=IG4b/9qkVqXv7kLI2B6K6D4fsAXw0d141JxQKyJNYJk=;
-        b=NTTHo2e/DLNQhPAGpNTyU4dy3HZlapFC+TotD6eGY2iPZWGaQKNtP+zZNY6b8s3nNM
-         6VflsjiW6wsi/Ez5G42TUhdjM9bxVNHHgBsUs0SgIv9rDGlcqSJ9XdZszt3SbJKCiXTb
-         IjWkYFXfsrnjsKJ4iKBK/cp17oyHgREi0y7O40gMwt9H3GJPxGYN60SCS2hX/Afcyegm
-         iOZZpXbm0Ak1JndAxZlTMGFRAzRq+GqdZh6sMSsdf8wBm03VuXXUl6XIdH+JhJxAqX5M
-         cznDeN8eLwa5yc4gjy6hcyBP5/Nti0JD6LEgZoRt7cEE+qxiMjfYCE/UMglfooyZMIgy
-         aNPA==
+        bh=FlgUh5+pDn0PTCFu6MENysdcsTjYuALACeiMk1+3GzM=;
+        b=UMBnXSenihH6P6oCZLrpTzS5LnafMHOZaBY1de7HlfwJ1BMfyP3aCIlF3tncrofGwL
+         aENJI01ZvTyvYNjmCy4OJ+fj1ne14FYUIXFEpI+YAU3ekZwGLnc/s5xMZkPbBCCR1uCt
+         T6zeXiyqKjCK87ByFt/X5ApIvQtwoJtFda2BmKiYjoXb3Gjg7+uXHdkL2GuCPQNtDpLE
+         /NMzxLFpkm/Obsa9gU+re7MQZmxVMbi1ozSni/7MBrb7dPoJ7kV9MuTf/7XItcl5RKPP
+         d3fF/Lba2lhhjAq0F0m+41eqWSXbZHyUn/AXSLlTgqUEjwF76R6+0UyQPyglNvuGQ5I+
+         yW8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=IG4b/9qkVqXv7kLI2B6K6D4fsAXw0d141JxQKyJNYJk=;
-        b=oMfaxuhIp5/PhAPZpER/ipGISFVUhjxbz+x770nyQHig/hm9rcm0ca8gcY1ewzbIro
-         Zkg7Ow7FJqKReDPnKRIHHXuI1t4SRDf/+1JoK/k8jmowstebfckQ15RdQA4YRgmBqnhl
-         ey1QhID7CgCh3d3edZmbvO3moVLOl93JMqVXCDA7Ak/Q+jG9NilV6+bS/jye7TgCOWX1
-         cumUFHuGVb9Oj1mSnVzwNYInEm6m8ggPTejWcw7q9zq12ZvoiZiB53yJG5pZ7xDAa0my
-         Hgfjjh7pi2Etppc9qEqpVR4TAF2gy3fyeLsiK2TfKwscFdVxp2SBYCUjNsldVHXSZ7zV
-         9oCw==
-X-Gm-Message-State: ACrzQf0XhWbb82jTRc8+W2Wa7QjnVewUQVNlNCF+dSvloVyHyvTgObI4
-        Jmg0xEakrv7uIFFVhPB2n4yvm1qwEi32Ur+z
-X-Google-Smtp-Source: AMsMyM5CExtLOFCePMl0RMPVGwK3oViHoN7dQl3B8bnKvLCi6yrSzLlQag+b8ZIbNeRC9aLaK3v99A==
-X-Received: by 2002:aa7:cada:0:b0:452:5b04:efd9 with SMTP id l26-20020aa7cada000000b004525b04efd9mr3877637edt.84.1663333094399;
-        Fri, 16 Sep 2022 05:58:14 -0700 (PDT)
-Received: from lab.hqhome163.com ([194.183.10.152])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056402514800b00451319a43dasm13358711edd.2.2022.09.16.05.58.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 05:58:14 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 12:53:27 +0000
-From:   Alessandro Carminati <alessandro.carminati@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Add sata version of the quartz64-a board
-Message-ID: <YyRxx4zovhMMeQYV@lab.hqhome163.com>
+        bh=FlgUh5+pDn0PTCFu6MENysdcsTjYuALACeiMk1+3GzM=;
+        b=3DLHxBnk4Uo7CNKLF1cxsHK4MRJkLaS1SBioLyr96uDFBvEB1BPrmsHA2Mto1WnxrL
+         MFsX6AKXA37K+No2QHXEqq14HRfJnd5/4fowQXhDHJkGOn+FJ4ExH3eNhlca8z7EkV8T
+         5memw6zGGlWFRYjhjmMVHl8fSii2nsLTS1mbWcXDVUZHgUwyJSgomUgw6tXlouck840S
+         GqqnUhqJ/sMlBjXQIybos+Xsi3mBW4KlGli/DDCTK8prvMOUNVsPpkG06VE9dbMhuR5a
+         q42v1cLgPuLtZHRcnI7FVR6vSr0Xr3Rd8ftWMF8d0hDgDhl9gmuTw+6nor3eRO9P0P3J
+         RK3Q==
+X-Gm-Message-State: ACrzQf3ap3vvYZxwbi0NzOJNlOr+nl82IOSQYWzUR7DmkCaKQTxJpU7W
+        tXwTXhcquXlcjO3nPjRCBAgmxg==
+X-Google-Smtp-Source: AMsMyM6S94CyeAVhtUcro6X5ND/HkjA9cvn45gsoLeKfqmfPRi08nogI6dDjR5RpNWhkCQOxxVnB7A==
+X-Received: by 2002:a05:600c:34c2:b0:3b4:7a98:5f5a with SMTP id d2-20020a05600c34c200b003b47a985f5amr3238815wmq.156.1663332962696;
+        Fri, 16 Sep 2022 05:56:02 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id n2-20020a5d67c2000000b0021badf3cb26sm5715968wrw.63.2022.09.16.05.56.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 05:56:01 -0700 (PDT)
+Message-ID: <e085312e-79d7-cd43-169c-0e606f67752f@linaro.org>
+Date:   Fri, 16 Sep 2022 13:56:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 00/10] misc: fastrpc: Add audiopd support
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
+        Bharath Kumar <bkumar@qti.qualcomm.com>,
+        Himateja Reddy <hmreddy@quicinc.com>,
+        Anirudh Raghavendra <araghave@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+References: <20220909133938.3518520-1-abel.vesa@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220909133938.3518520-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Quartz64 board is built upon Rockchip RK3566.
-Rockchip RK3566 has two combo phys.
-The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-ctrl2.
-The second combo phy is hardwired to the PCIe slot, where for the first,
-the hardware on the board provides both the USB3 connector and the SATA
-connector.
-This DT allows the users to switch the combo phy to the SATA connector.
 
-Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
----
- arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts | 9 +++++++++
- 2 files changed, 10 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
 
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 97ec6c156346..5c82881a92d3 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.usb3.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.sata.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-new file mode 100644
-index 000000000000..8620df7ec01e
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+
-+/dts-v1/;
-+
-+#include "rk3566-quartz64-a.dtsi"
-+
-+&sata1 {
-+	status = "okay";
-+};
--- 
-2.34.1
+On 09/09/2022 14:39, Abel Vesa wrote:
+> This patchset adds audiopd support to fastrpc.
+> 
+> The v2 of this patchset is here:
+> https://lore.kernel.org/all/20220902154900.3404524-1-abel.vesa@linaro.org/
+> 
+> Abel Vesa (10):
+>    misc: fastrpc: Rename audio protection domain to root
+>    misc: fastrpc: Add reserved mem support
+>    dt-bindings: misc: fastrpc: Document memory-region property
+>    misc: fastrpc: Add fastrpc_remote_heap_alloc
+>    misc: fastrpc: Use fastrpc_map_put in fastrpc_map_create on fail
+>    misc: fastrpc: Rework fastrpc_req_munmap
+>    misc: fastrpc: Add support for audiopd
+>    misc: fastrpc: Safekeep mmaps on interrupted invoke
+>    misc: fastrpc: Add mmap request assigning for static PD pool
+>    misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
+> 
 
+thanks Abel for picking this up...
+
+Tested this series on SM8450 with ECNS.
+
+Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+>   .../bindings/misc/qcom,fastrpc.yaml           |   5 +
+>   drivers/misc/fastrpc.c                        | 260 +++++++++++++++---
+>   include/uapi/misc/fastrpc.h                   |   7 +
+>   3 files changed, 240 insertions(+), 32 deletions(-)
+> 
