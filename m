@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FB45BA6BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB93C5BA6C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiIPGYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 02:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S229852AbiIPGZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 02:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiIPGY3 (ORCPT
+        with ESMTP id S229621AbiIPGZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 02:24:29 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7010A2223
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:24:21 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id e68so20308680pfe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:24:21 -0700 (PDT)
+        Fri, 16 Sep 2022 02:25:17 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FA5005C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:25:16 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so24639666pja.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=n4S92ltdclB9gEaEbidGcfEJc4hoERFLtmLJlSQbuQo=;
-        b=KDBVkZqEu+wmjHfMe6cFICUhPZbfK2OfZqL4HN2oITBvNKQWfAc6A4p4OYCo7LCInU
-         Pqy2UX2U/O3NSzrRQJr4X3JVpE0+SuvngoL9dZAxf6SkBeYpLhubw/jx7tHMfuzDmAxr
-         4dlZD340iwkCMUlxCemdzGM7VCnrIs7/eVF83Q90o+DjfG4w5vq02EdjhaXOWWZogyhc
-         sPWIezVefsnrvonXdkBZJ7hmylxuwvzZVu2kPtyfkNerVV7Eu7dZ5Kxr96OmL+pOdRJM
-         HL/AdBwhwUVApWf3gt1yOg+HQgcJ0YSlt0VkPQfyHXzS3lgES4329a7zDteliIeDR4it
-         0Rjg==
+        bh=u8dZyZyEmYUHpM71+E3HiKXQlujdNpXoeQ0z9HInFJk=;
+        b=SrgEuNZj1nSfxDq9JNMMV0CaoibvzZ28f0cinyXqmTqWeR6VHPzjxperY1OEPBAhN6
+         fU6jUc59dz7YPrx46bEInYvS0Ih/nNKz++1oVyNFZ2VeNpwzBD6UIHfBK3zMCZcf5jeb
+         uQtdIy8HBTggun7p6zf6ABgXxOHxK6oGpuW2kLN3yuAsuLxWpFg9PrmE8s0xtUorqvzY
+         +HIa9n9W0nXt3qpuVrQq292xWxCqghCe83PBC5GvJ91tw/oSZrik57MbRXwFAheKCI+J
+         kNYSDNekqaggTU8pqZZcGAomtonI88DZ1b1VyxwtHRHh4aW8yV3Sq6AGxnp324NltkkZ
+         vANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=n4S92ltdclB9gEaEbidGcfEJc4hoERFLtmLJlSQbuQo=;
-        b=qMXVDqrFiEAGw8VFvGE62ic9OTOq27G/qkgJZqmCvVq0joU7l8A8zmcZ1fryRtR4G4
-         wwnUjk+deKmTkTrWABIeRtGzMvyp8uGFhbgxUROYV2DBO/JwwIiwHmN524xqHPV9taoP
-         JJhyXDWrUd80rl3eWelZX34cY2CVeJmgXJUZ5X1YUgVzKFADQj2opYJu17qrejKDfg3b
-         drfSS8MPSnSexpXxc9juKfkiveicW4QadpPryhh8OOt/b87IZuP8saFNRoYjLeDsoCn7
-         Xg7eRm7dR0NNFWzj/kgUACO9GT9cNlxMziv0BjVldF/TNsyWWMG7tE+SIPczqylDuDoS
-         YxpA==
-X-Gm-Message-State: ACrzQf3NvpbryZaf4ckLTCf8EOlKCq2WMiYBKy2qXS3RM4udbJur8tuq
-        K2Ex7dvMlQUE/onmxP7CKS8=
-X-Google-Smtp-Source: AMsMyM6Xeip4PMKJuOyP0VyLECoI9jr5AlNeekFVQUtmid6WX66FRGnMKmOjJNGNlbaEp4NNGRahvA==
-X-Received: by 2002:a05:6a00:23cd:b0:544:cbec:6d60 with SMTP id g13-20020a056a0023cd00b00544cbec6d60mr3894104pfc.16.1663309460689;
-        Thu, 15 Sep 2022 23:24:20 -0700 (PDT)
+        bh=u8dZyZyEmYUHpM71+E3HiKXQlujdNpXoeQ0z9HInFJk=;
+        b=IxDOQUHwWJkokpUEEZ3cqKv22cmBenRIB54opbZRTlmBVbIGG63T7HKFc/1u0qI2TI
+         r6nc4ciTQ4+4JYPArHA79ftmgejaeW7puUXwkn482CXoELyfluKerJYczN+BdOwxXgOi
+         PhZXotd+UREjfuHyesTHQLRf9Jl0CdlmeE+y/fJeGQiF6HqyQtF0+JL0GGrQl5gLJCWL
+         eEAWpW+pbiwEzt4aamPw+Ut/rylPfuZpEvKtLb0SOWtzbGh38oTf7xLmNgwVEfhw4/+b
+         t5fbg24deRPVqRNSctDCL04xtOQcj0n4BzOSAI4iRYoc6IDTXIdID2+sRwahEeg62Vvs
+         0DJA==
+X-Gm-Message-State: ACrzQf2pj28ltBMiDpWfCjtAHD9otFWe7hl6sScxHsUFJ/CZ+vuHo3Nf
+        gbiHSh2ChOIYN5Aa5MVgQC0=
+X-Google-Smtp-Source: AMsMyM5A4+NSIkir6I5l0vbKkK7GUlWOx3OaaTI2tlDfie1myNdNjNeJJd+g7m353IdR2pZD5AZSJg==
+X-Received: by 2002:a17:902:8d8a:b0:16f:21fb:b97a with SMTP id v10-20020a1709028d8a00b0016f21fbb97amr3208205plo.160.1663309516326;
+        Thu, 15 Sep 2022 23:25:16 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b00176cdd80148sm13982414plg.305.2022.09.15.23.24.17
+        by smtp.gmail.com with ESMTPSA id g3-20020aa79f03000000b005465ffaa89dsm7341967pfr.184.2022.09.15.23.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 23:24:20 -0700 (PDT)
+        Thu, 15 Sep 2022 23:25:16 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
 To:     broonie@kernel.org
-Cc:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
-        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, perex@perex.cz, tiwai@suse.com,
-        mchehab@kernel.org, andrey.turkin@gmail.com,
-        muralidhar.reddy@intel.com, alsa-devel@alsa-project.org,
+Cc:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, perex@perex.cz, tiwai@suse.com,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] ASoC: Intel: sof_es8336: use function devm_kcalloc() instead of devm_kzalloc()
-Date:   Fri, 16 Sep 2022 06:24:15 +0000
-Message-Id: <20220916062415.153659-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] ASOC: SOF: use devm_kcalloc() instead of devm_kzalloc()
+Date:   Fri, 16 Sep 2022 06:25:11 +0000
+Message-Id: <20220916062511.153962-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -83,26 +82,30 @@ of devm_kzalloc().
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- sound/soc/intel/boards/sof_es8336.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ sound/soc/sof/nocodec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index 606cc3242a60..fbb42e54947a 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -481,9 +481,10 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+diff --git a/sound/soc/sof/nocodec.c b/sound/soc/sof/nocodec.c
+index 356497fe4f4c..3537805070ad 100644
+--- a/sound/soc/sof/nocodec.c
++++ b/sound/soc/sof/nocodec.c
+@@ -32,7 +32,7 @@ static int sof_nocodec_bes_setup(struct device *dev,
  
- 	/* HDMI */
- 	if (hdmi_num > 0) {
--		idisp_components = devm_kzalloc(dev,
--						sizeof(struct snd_soc_dai_link_component) *
--						hdmi_num, GFP_KERNEL);
-+		idisp_components = devm_kcalloc(dev,
-+						hdmi_num,
-+						sizeof(struct snd_soc_dai_link_component),
-+						GFP_KERNEL);
- 		if (!idisp_components)
- 			goto devm_err;
- 	}
+ 	/* set up BE dai_links */
+ 	for (i = 0; i < link_num; i++) {
+-		dlc = devm_kzalloc(dev, 3 * sizeof(*dlc), GFP_KERNEL);
++		dlc = devm_kcalloc(dev, 3, sizeof(*dlc), GFP_KERNEL);
+ 		if (!dlc)
+ 			return -ENOMEM;
+ 
+@@ -78,7 +78,7 @@ static int sof_nocodec_setup(struct device *dev,
+ 	struct snd_soc_dai_link *links;
+ 
+ 	/* create dummy BE dai_links */
+-	links = devm_kzalloc(dev, sizeof(struct snd_soc_dai_link) * num_dai_drivers, GFP_KERNEL);
++	links = devm_kcalloc(dev, num_dai_drivers, sizeof(struct snd_soc_dai_link), GFP_KERNEL);
+ 	if (!links)
+ 		return -ENOMEM;
+ 
 -- 
 2.25.1
