@@ -2,81 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEB65BA76B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0846D5BA75F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiIPHZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S229973AbiIPHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiIPHXs (ORCPT
+        with ESMTP id S229458AbiIPHXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:23:48 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E10A50E2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:47 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTQSY1KpqzmVRN;
-        Fri, 16 Sep 2022 15:19:57 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 15:23:43 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <osalvador@suse.de>, <anshuman.khandual@arm.com>
-CC:     <willy@infradead.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2 16/16] mm/page_alloc: fix obsolete comment in deferred_pfn_valid()
-Date:   Fri, 16 Sep 2022 15:22:57 +0800
-Message-ID: <20220916072257.9639-17-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20220916072257.9639-1-linmiaohe@huawei.com>
-References: <20220916072257.9639-1-linmiaohe@huawei.com>
+        Fri, 16 Sep 2022 03:23:12 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E71A50D7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:11 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id e17so30225199edc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ROqLBReQE/7GkbmtaIhshZARplN5wkq7A//qiLQq9kA=;
+        b=nxgYfvnLNrk+I96j5O2yz93N3SfOABT5E9o6l1hADwyr3tOCILnrCPzEDFHTnDSP3W
+         YXTL8Ru8oR2hFRwtaKCfX3q71e6P5jfk12F4q6GgaNiOe5JHECDeqB8n35iEYxqjD2Tq
+         gBZjbEBBszCurcyPlLpx5skqBkBxFUMXZP75U4yy+zBHxOlEKQwrdDdYbPWqXowcHCLk
+         tyUHuUNDi4iLIGQkRfcKfVnm8oUmJZ83Eg3e8vKY7HNxhB25VFIJPr83CGLRs44c34VT
+         +um9qJeGlhsTtoGOcaZp9X7nDi1UuC8xvZVtrWkH0W+Uz+WZQ9/xUiRla8rZN91SEEFd
+         zjFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ROqLBReQE/7GkbmtaIhshZARplN5wkq7A//qiLQq9kA=;
+        b=bx+0z5SJtDTIshZxxoMwcAm2LPXgzKY0pEo/+PWuLazVD8iv5gDK/PcjSWphLCtpan
+         ZhqyOTgGbCM4dVqxsUy0GRcxTo4Yh1iG9djQqOBmYAcfR6M+cVU+MEV3cUEFGIpTQlYS
+         eeGBWcWShjZxtDX2SCSrfl7V1zf/enX8U4nBALKBeJSo9wpZHNEUnkzpPPRjtHgJKYoQ
+         AKA45Ng1gPhYlU/Z74mbQ5aDGAV+L1M1M2WhNKfwO2XC/LLI7SUij8SrFqRtdTCIVIlf
+         nWAMkHXpjqatB1uZJ4pTDO9ux+TVqDfg2vHAuYGekmZ8oteiKn4WHpkw/Tz+TrK93YVh
+         jNVQ==
+X-Gm-Message-State: ACrzQf1rEJNi84lykWo9ZobSqJ7wnEO3OvjmyYQgc1Jmo9xbXK4cHhkc
+        qXlJ6zuKFmCEJ9Yf9jZM/mj7QUgYROWn8MVCLQO/RA==
+X-Google-Smtp-Source: AMsMyM74RLbjFMtpNGct0Ozwlha2WJplFjDI0j00KfUxbeOXQV5fKwafkxSRCZBcwfMfUHTVYRXkledc1oWhwynzbD0=
+X-Received: by 2002:a05:6402:5243:b0:451:6d52:5928 with SMTP id
+ t3-20020a056402524300b004516d525928mr2846752edd.328.1663312989854; Fri, 16
+ Sep 2022 00:23:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906211628.6u4hbpn4shjcvqel@pali> <Yxe7CJnIT5AiUilL@google.com>
+ <20220906214114.vj3v32dzwxz6uqik@pali> <YxfBKkqce/IQQLk9@google.com>
+ <20220906220901.p2c44we7i4c35uvx@pali> <YxfMkzW+5W3Hm1dU@google.com>
+ <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
+ <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
+ <YyKMsyI961Mo1EQE@sol> <CACRpkdYB6dZf4TBhfXB2Z5E2PJ46ctAM_QKLiW-fykbCopcVGQ@mail.gmail.com>
+ <YyLwsOBXv9jRw/+n@sol>
+In-Reply-To: <YyLwsOBXv9jRw/+n@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 16 Sep 2022 09:22:59 +0200
+Message-ID: <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no architectures that can have holes in the memory map within
-a pageblock since commit 859a85ddf90e ("mm: remove pfn_valid_within()
-and CONFIG_HOLES_IN_ZONE"). Update the corresponding comment.
+On Thu, Sep 15, 2022 at 11:30 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Thu, Sep 15, 2022 at 10:51:02AM +0200, Linus Walleij wrote:
+> > On Thu, Sep 15, 2022 at 4:23 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> > > After sleeping on this, I'm even more in disagreement with renaming
+> > > value to state.
+> >
+> > OK let's not do that then.
+> >
+> > > OTOH, I totally agree with the addition of GPIOD_ACTIVE/INACTIVE to be
+> > > used for the logical cases, and even a script to apply it globally.
+> > > Ideally that script would change both the calls to the logical functions
+> > > to use ACTIVE/INACTIVE, and the physical to HIGH/LOW.
+> >
+> > OK we have consensus on this.
+> >
+> > > Introducing enums for those, and changing the function signatures to
+> > > use those rather than int makes sense to me too.
+> >
+> > Either they can be enum or defined to bool true/false. Not really
+> > sure what is best. But intuitively enum "feels better" for me.
+> >
+>
+> Enums work for me - especially if the goal is to differentiate
+> logical from physical - there should be a distinct enum for each.
+>
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
----
- mm/page_alloc.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+We won't even have to change the function signatures if we go with
+enums - they already take an int and I'm in general against putting
+enum types into function signatures in C as they give you a false
+sense of a strong type.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3d2ad5c197d5..d7b20bf09c1c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1929,11 +1929,7 @@ static inline void __init pgdat_init_report_one_done(void)
- /*
-  * Returns true if page needs to be initialized or freed to buddy allocator.
-  *
-- * First we check if pfn is valid on architectures where it is possible to have
-- * holes within pageblock_nr_pages. On systems where it is not possible, this
-- * function is optimized out.
-- *
-- * Then, we check if a current large page is valid by only checking the validity
-+ * We check if a current large page is valid by only checking the validity
-  * of the head pfn.
-  */
- static inline bool __init deferred_pfn_valid(unsigned long pfn)
--- 
-2.23.0
+Bart
 
+> > > Though I'm not sure
+> > > why that has to wait until after all users are changed to the new macros.
+> > > Would that generate lint warnings?
+> >
+> > I rather want it all to happen at once. One preparatory commit
+> > adding the new types and one sed script to refactor the whole
+> > lot. Not gradual switchover.
+> >
+> > The reason is purely administrative: we have too many refactorings
+> > lagging behind, mainly the GPIO descriptors that have been
+> > lagging behind for what is it? 5 years? 10? GPIO irqchips also dragged
+> > out for way too long. We can't keep doing things gradually like
+> > this, it takes too much time and effort.
+> >
+> > I don't want any more "in-transition-indefinitely" stuff in the GPIO
+> > subsystem if I can avoid it.
+> >
+> > Therefore I would advice to switch it all over at the end of a merge
+> > window and be done with it.
+> >
+>
+> Agreed - do it all at once.  My question was specific to the change of the
+> function signatures to using enums - what is to prevent us doing that
+> before running the sed script, and have the script switch usage over to
+> the enums?
+>
+> Cheers,
+> Kent.
