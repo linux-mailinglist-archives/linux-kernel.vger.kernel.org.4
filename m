@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C3E5BA4A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5712A5BA4B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiIPCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S230021AbiIPCky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIPCf7 (ORCPT
+        with ESMTP id S230000AbiIPCku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:35:59 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2806D9D1;
-        Thu, 15 Sep 2022 19:35:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPv3AqH_1663295754;
-Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPv3AqH_1663295754)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Sep 2022 10:35:55 +0800
-Message-ID: <96a96aff-5d16-a2e3-2529-58e154e0f728@linux.alibaba.com>
-Date:   Fri, 16 Sep 2022 10:35:54 +0800
+        Thu, 15 Sep 2022 22:40:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CB6491EF;
+        Thu, 15 Sep 2022 19:40:47 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTJ9338VbzNm7L;
+        Fri, 16 Sep 2022 10:36:07 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 16 Sep 2022 10:40:44 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 16 Sep 2022 10:40:43 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <huangguangbin2@huawei.com>, <lipeng321@huawei.com>,
+        <lanhao@huawei.com>, <shenjian15@huawei.com>
+Subject: [PATCH net-next 0/4] net: hns3: updates for -next
+Date:   Fri, 16 Sep 2022 10:37:59 +0800
+Message-ID: <20220916023803.23756-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH V4 3/6] erofs: introduce fscache-based domain
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
- <20220915124213.25767-4-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220915124213.25767-4-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series includes some updates for the HNS3 ethernet driver.
 
+Guangbin Huang (2):
+  net: hns3: optimize converting dscp to priority process of
+    hns3_nic_select_queue()
+  net: hns3: add judge fd ability for sync and clear process of flow
+    director
 
-On 9/15/22 8:42 PM, Jia Zhu wrote:
->  
-> +static void erofs_fscache_domain_put(struct erofs_domain *domain)
-> +{
-> +	if (!domain)
-> +		return;
-> +	mutex_lock(&erofs_domain_list_lock);
-> +	if (refcount_dec_and_test(&domain->ref)) {
-> +		list_del(&domain->list);
-> +		fscache_relinquish_volume(domain->volume, NULL, false);
-> +		mutex_unlock(&erofs_domain_list_lock);
+Hao Lan (1):
+  net: hns3: refactor function hclge_mbx_handler()
 
-I think we can mutex_unlock as long as the domain is removed from the list.
+Yonglong Liu (1):
+  net: hns3: add support for external loopback test
 
-
-Otherwise LGTM.
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+ .../net/ethernet/hisilicon/hns3/hclge_mbx.h   |  11 +
+ drivers/net/ethernet/hisilicon/hns3/hnae3.h   |   6 +
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |  64 ++-
+ .../net/ethernet/hisilicon/hns3/hns3_enet.h   |   3 +
+ .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  61 ++-
+ .../hisilicon/hns3/hns3pf/hclge_dcb.c         |  28 +-
+ .../hisilicon/hns3/hns3pf/hclge_debugfs.c     |  17 +-
+ .../hisilicon/hns3/hns3pf/hclge_main.c        |  46 +-
+ .../hisilicon/hns3/hns3pf/hclge_main.h        |   4 -
+ .../hisilicon/hns3/hns3pf/hclge_mbx.c         | 415 ++++++++++++------
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_tm.c |  18 +-
+ 11 files changed, 454 insertions(+), 219 deletions(-)
 
 -- 
-Thanks,
-Jingbo
+2.33.0
+
