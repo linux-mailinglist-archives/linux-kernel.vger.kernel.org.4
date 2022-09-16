@@ -2,116 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D495BA638
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984EF5BA639
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiIPFDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S229796AbiIPFFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIPFDl (ORCPT
+        with ESMTP id S229479AbiIPFFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:03:41 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1541DB8A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:03:39 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k21so9836297pls.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GGt+P3tyB6IbayXHNd03wUTY/fcs3eacafLGKOqD3vo=;
-        b=pmS5LL2SU51x6XwLGrV2YezKCWPO2kYTmhvIaldZwaWh6RwJvfxeCxHhAVW/jecCfO
-         vlFMEESi5hJ+SDD/wcQlHRMtoR8VkRk+fxIPyyxVLxYmyE60LY0xSZ6zTXRUjnZ2p/DD
-         cBESEFTEPtUAhbvNi23HoxMsxOQdbAd4t1TxzTDy3+6jbBhoQUdJ5VSpC/fCcU+057n1
-         EYH1OjQIJmPnZRhvaHttQw/MP//HhkjFTgbo34th3T+7x+RCBS/zPtCBHOJTylMP5reV
-         W/Z5M4lB5Z/AsH4yJ44T4N9hnsCAeIQAvN2MuUn08wHVLQmmTjKGhc8odbwad6rEopxz
-         LUng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GGt+P3tyB6IbayXHNd03wUTY/fcs3eacafLGKOqD3vo=;
-        b=Vk9kWNQD93QfFC0p5JcuxwAl8MuzMqCg6V6C4MsteqcpxEDoZCldARqHh4lPlSl4uG
-         kgG5etHG/88vqRV4bfAr+IYN0Sfcf+LpkdSj3ClXk9cgZ8mwzKkIOtmTQqT6u4CH242U
-         vdwg1iOqg4KEMHvHa8UL9KGC9RDeSZ9ySqvo/D75sz0oS9/UeUmOza5LEtGGFm/XA0/T
-         mmQHw8s3Z0GpSxdDojqaQ2MG2D6rszwzMb9CGgKpvWAZEYiahQPeCDVcMQjuY4cTKMrl
-         WF/Ejd5bzEPGbS/1XqqloRPsM7iA44qzu6KcYziyuDWzaOY+PyYHM9yAdjA3cHzZ8gU9
-         7UiQ==
-X-Gm-Message-State: ACrzQf3tuwyUgowWdpqNBZNrvaZOGWHZCUMGFI3lvOdN7H8se7Fi1Atl
-        knn3tPeegzMRIQ0YzMnmA8s=
-X-Google-Smtp-Source: AMsMyM7WjxLGdyDHCUi+Qd3hzRkzcigiyOkUetVpXfQ8fbC8jxzOE4spaHqusvT6aOYKmpXZgBwXGQ==
-X-Received: by 2002:a17:902:778c:b0:178:49a1:dae8 with SMTP id o12-20020a170902778c00b0017849a1dae8mr2883578pll.147.1663304618631;
-        Thu, 15 Sep 2022 22:03:38 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id 2-20020a621902000000b0054aa69bc192sm577691pfz.72.2022.09.15.22.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 22:03:38 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 22:03:33 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, laforge@gnumonks.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Paul Fulghum <paulkf@microgate.com>,
-        akpm@osdl.org, Lubomir Rintel <lkundrak@v3.sk>, imv4bel@gmail.com
-Subject: Re: [PATCH] pcmcia: synclink_cs: Fix use-after-free in mgslpc_ioctl()
-Message-ID: <20220916050333.GA188358@ubuntu>
-References: <20220913052020.GA85241@ubuntu>
- <a8a9fd74-4ee5-4619-8492-be7139e6d48e@www.fastmail.com>
- <20220915020834.GA110086@ubuntu>
- <f41c2765-80e0-48bc-b1e4-8cfd3230fd4a@www.fastmail.com>
- <YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net>
+        Fri, 16 Sep 2022 01:05:21 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DB8481C0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:05:19 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id CEAFE5C0243;
+        Fri, 16 Sep 2022 01:05:16 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 16 Sep 2022 01:05:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1663304716; x=1663391116; bh=S9j0j1Lz1/cpeYXutB+jjIO0x
+        PRBQqXx5zC+Ilqp1fk=; b=kCwpt0NliST/EYKU2XDzmofiTnhzrTzigxsvelLru
+        gAtW5U2J7RHP6JAM/f9EWZwJLusyeZ6B4DtsepeqUZVKdOQkTFH95A4gn+MFCgDP
+        DdQixKYy3IR1GweMwjYNJtF7TcTtebf5SHGDDhTwQgDWItx6e8RfPNiRnKAfizaf
+        15oBhLmonoANbSc9RfJnTa722TYzbUMsjANCBABpd2JthPochJG7risrTATdBGkf
+        vC5Mx+BOeuq5kqLDgSwaeWsk6kI08l0iUaJ6AFZbkSVl0hSfV3CEusZipEhTEQwH
+        BKoMACROQARWoWss7hYaxwBVoZAm0ODAoAvgkIUJEvcXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663304716; x=1663391116; bh=S9j0j1Lz1/cpeYXutB+jjIO0xPRBQqXx5zC
+        +Ilqp1fk=; b=ZYULg6WLKnL9puoWilOYnCxEVn7ACUx1ytPVFc8Xrdnns6FBFBZ
+        rVL8J1rmcPMVduvpYMSCJLUOwC2f56DCbLZUct+MV0ui8N4pig4sf07NSVFnm06W
+        FrRyxY9/OwE3cZPdTA81HrKBeqd3Yws26r+b49VCXvnLmAHDhu+MzIR+dnyELG06
+        DjyYjG2Q4tQNeRFPTPZY5igYPzpG9dp55OZ9AyKJP8OWFZwG0grVRswj7R6yT5z0
+        jAgWO0ZSQFM1a/wUMZP1R32bfIxrPvqTmxxScocGQIVn58c4QNjiA5H58IBcJLW+
+        k5I/43377jxRGrdOgGz3yEYuUeKL6toi53w==
+X-ME-Sender: <xms:DAQkY3jQhGmHLrV4XRhVhIglivPful62s6DLytz2pBHCjvFB9xux2g>
+    <xme:DAQkY0CvbsfdW5VHFfs-jWxAugCAqL3PHXtY2anM4DSF8kOf-PBLR2MKjnLPiIMiC
+    BjgtAiyQHNf0D1xPg>
+X-ME-Received: <xmr:DAQkY3F29GGF0VRp9WMCAJHKHSr62OA2V1sBI9If6FcrlMrUGk1KG9Ks_QCv4_KIWtSBqImLyIklfTR_CFH5wEXcIXAkY1vkKpwFbH9bwte_Hi5hYiMfpqTSNmbp_jt0-d72Yw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:DAQkY0Rgj8r5WBw4Z2Mtom14kknQyEzJnDIfiOMqoH3brmNShKmS-A>
+    <xmx:DAQkY0zZfAIljp-FZUqzDHUdISYvHrQcg5ufXjcoagztz6kOCZUAcA>
+    <xmx:DAQkY65pWfUzfn7je6agm02j5vIes-rUCu6kayXDt1AHN7aNvu-KfQ>
+    <xmx:DAQkY3yJ4ttefYgjCCYj6WXQWbxoMs-DSziz39JYy-iA7L3Uqw8t7w>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 16 Sep 2022 01:05:15 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Russell Currey <ruscur@russell.cc>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc: Save AMR/IAMR when switching tasks
+Date:   Fri, 16 Sep 2022 00:05:14 -0500
+Message-Id: <20220916050515.48842-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyLcG1hG5d6D4zNN@owl.dominikbrodowski.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous mailing list is here:
-https://lore.kernel.org/lkml/20220913052020.GA85241@ubuntu/#r
+With CONFIG_PREEMPT=y (involuntary preemption enabled), it is possible
+to switch away from a task inside copy_{from,to}_user. This left the CPU
+with userspace access enabled until after the next IRQ or privilege
+level switch, when AMR/IAMR got reset to AMR_KU[AE]P_BLOCKED. Then, when
+switching back to the original task, the userspace access would fault:
 
+  Kernel attempted to write user page (3fff7ab68190) - exploit attempt? (uid: 65536)
+  ------------[ cut here ]------------
+  Bug: Write fault blocked by KUAP!
+  WARNING: CPU: 56 PID: 4939 at arch/powerpc/mm/fault.c:228 ___do_page_fault+0x7b4/0xaa0
+  CPU: 56 PID: 4939 Comm: git Tainted: G        W         5.19.8-00005-gba424747260d #1
+  NIP:  c0000000000555e4 LR: c0000000000555e0 CTR: c00000000079d9d0
+  REGS: c00000008f507370 TRAP: 0700   Tainted: G        W          (5.19.8-00005-gba424747260d)
+  MSR:  9000000000021033 <SF,HV,ME,IR,DR,RI,LE>  CR: 28042222  XER: 20040000
+  CFAR: c000000000123780 IRQMASK: 3
+  NIP [c0000000000555e4] ___do_page_fault+0x7b4/0xaa0
+  LR [c0000000000555e0] ___do_page_fault+0x7b0/0xaa0
+  Call Trace:
+  [c00000008f507610] [c0000000000555e0] ___do_page_fault+0x7b0/0xaa0 (unreliable)
+  [c00000008f5076c0] [c000000000055938] do_page_fault+0x68/0x130
+  [c00000008f5076f0] [c000000000008914] data_access_common_virt+0x194/0x1f0
+  --- interrupt: 300 at __copy_tofrom_user_base+0x9c/0x5a4
+  NIP:  c00000000007b1a8 LR: c00000000073f4d4 CTR: 0000000000000080
+  REGS: c00000008f507760 TRAP: 0300   Tainted: G        W          (5.19.8-00005-gba424747260d)
+  MSR:  900000000280b033 <SF,HV,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 24002220  XER: 20040000
+  CFAR: c00000000007b174 DAR: 00003fff7ab68190 DSISR: 0a000000 IRQMASK: 0
+  NIP [c00000000007b1a8] __copy_tofrom_user_base+0x9c/0x5a4
+  LR [c00000000073f4d4] copyout+0x74/0x150
+  --- interrupt: 300
+  [c00000008f507a30] [c0000000007430cc] copy_page_to_iter+0x12c/0x4b0
+  [c00000008f507ab0] [c0000000002c7c20] filemap_read+0x200/0x460
+  [c00000008f507bf0] [c0000000005f96f4] xfs_file_buffered_read+0x104/0x170
+  [c00000008f507c30] [c0000000005f9800] xfs_file_read_iter+0xa0/0x150
+  [c00000008f507c70] [c0000000003bddc8] new_sync_read+0x108/0x180
+  [c00000008f507d10] [c0000000003c06b0] vfs_read+0x1d0/0x240
+  [c00000008f507d60] [c0000000003c0ba4] ksys_read+0x84/0x140
+  [c00000008f507db0] [c00000000002a3fc] system_call_exception+0x15c/0x300
+  [c00000008f507e10] [c00000000000c63c] system_call_common+0xec/0x250
+  --- interrupt: c00 at 0x3fff83aa7238
+  NIP:  00003fff83aa7238 LR: 00003fff83a923b8 CTR: 0000000000000000
+  REGS: c00000008f507e80 TRAP: 0c00   Tainted: G        W          (5.19.8-00005-gba424747260d)
+  MSR:  900000000280f033 <SF,HV,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 80002482  XER: 00000000
+  IRQMASK: 0
+  NIP [00003fff83aa7238] 0x3fff83aa7238
+  LR [00003fff83a923b8] 0x3fff83a923b8
+  --- interrupt: c00
+  Instruction dump:
+  e87f0100 48101021 60000000 2c230000 4182fee8 408e0128 3c82ff80 3884e978
+  3c62ff80 3863ea78 480ce13d 60000000 <0fe00000> fb010070 fb810090 e80100c0
+  ---[ end trace 0000000000000000 ]---
 
-Dear all,
+Fix this by saving and restoring the kernel-side AMR/IAMR values when
+switching tasks.
 
+Fixes: 890274c2dc4c ("powerpc/64s: Implement KUAP for Radix MMU")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+I have no idea if this is the right change to make, and it could be
+optimized, but my system has been stable with this patch for 5 days now.
 
-I reported that the scr24x_cs driver does not cause UAF, which is incorrect.
+Without the patch, I hit the bug every few minutes when my load average
+is <1, and I hit it immediately if I try to do a parallel kernel build.
 
-UAFs can also occur in the scr24x_cs driver in the following order:
-```
-                cpu0                                                cpu1
-       1. open()
-                                                             2. scr24x_remove()
-                                                                device_destroy()
-                                                                cdev_del()
-                                                                kref_put()
-       3. scr24x_open()
-          kref_get()   <- refcount_t: addition on 0;
-                                                             4. scr24x_delete()
-                                                                kfree(dev);
-       5. scr24x_read()    <- UAF
-```
-Because this driver uses kref_init, it looks as if no UAF is happening, but it does.
+Because of the instability (file I/O randomly raises SIGBUS), I don't
+think anyone would run a system in this configuration, so I don't think
+this bug is exploitable.
 
-Since there is no lock between .open and .remove, kref_get() is called after kref_put() 
-is called, so "refcount_t: addition on 0;" This is what happens.
+ arch/powerpc/kernel/process.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
+diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
+index 0fbda89cd1bb..69b189d63124 100644
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -1150,6 +1150,12 @@ static inline void save_sprs(struct thread_struct *t)
+ 		 */
+ 		t->tar = mfspr(SPRN_TAR);
+ 	}
++	if (t->regs) {
++		if (mmu_has_feature(MMU_FTR_BOOK3S_KUAP))
++			t->regs->amr = mfspr(SPRN_AMR);
++		if (mmu_has_feature(MMU_FTR_BOOK3S_KUEP))
++			t->regs->iamr = mfspr(SPRN_IAMR);
++	}
+ #endif
+ }
+ 
+@@ -1228,6 +1234,13 @@ static inline void restore_sprs(struct thread_struct *old_thread,
+ 	if (cpu_has_feature(CPU_FTR_P9_TIDR) &&
+ 	    old_thread->tidr != new_thread->tidr)
+ 		mtspr(SPRN_TIDR, new_thread->tidr);
++	if (new_thread->regs) {
++		if (mmu_has_feature(MMU_FTR_BOOK3S_KUAP))
++			mtspr(SPRN_AMR, new_thread->regs->amr);
++		if (mmu_has_feature(MMU_FTR_BOOK3S_KUEP))
++			mtspr(SPRN_IAMR, new_thread->regs->iamr);
++		isync();
++	}
+ #endif
+ 
+ }
+-- 
+2.35.1
 
-So I submitted a patch for all drivers in this path:
-- synclink_cs.c "v2" patch : https://lore.kernel.org/lkml/20220916045734.GA187909@ubuntu/T/#u
-- cm4040_cs.c : https://lore.kernel.org/lkml/20220916045834.GA188033@ubuntu/T/#u
-- cm4000_cs.c : https://lore.kernel.org/lkml/20220916045929.GA188153@ubuntu/T/#u
-- scr24x_cs.c : https://lore.kernel.org/lkml/20220916050006.GA188273@ubuntu/T/#u
-
-
-Best Regards,
-Hyunwoo Kim.
