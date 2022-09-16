@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0846D5BA75F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43585BA771
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiIPHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S229458AbiIPH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIPHXM (ORCPT
+        with ESMTP id S230061AbiIPH1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:23:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E71A50D7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:11 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id e17so30225199edc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ROqLBReQE/7GkbmtaIhshZARplN5wkq7A//qiLQq9kA=;
-        b=nxgYfvnLNrk+I96j5O2yz93N3SfOABT5E9o6l1hADwyr3tOCILnrCPzEDFHTnDSP3W
-         YXTL8Ru8oR2hFRwtaKCfX3q71e6P5jfk12F4q6GgaNiOe5JHECDeqB8n35iEYxqjD2Tq
-         gBZjbEBBszCurcyPlLpx5skqBkBxFUMXZP75U4yy+zBHxOlEKQwrdDdYbPWqXowcHCLk
-         tyUHuUNDi4iLIGQkRfcKfVnm8oUmJZ83Eg3e8vKY7HNxhB25VFIJPr83CGLRs44c34VT
-         +um9qJeGlhsTtoGOcaZp9X7nDi1UuC8xvZVtrWkH0W+Uz+WZQ9/xUiRla8rZN91SEEFd
-         zjFA==
+        Fri, 16 Sep 2022 03:27:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A691E1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663313237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Of9F6D0XG0kz29dHaaaRnZmMTmIQ7SApcigqeqNHsck=;
+        b=eq1q5yzfohmGurTA8i11/bhzVfvX4eem7BpygXiVfP+GNuunw9+sErLjjstijcpNUfOoL8
+        rXsr5pxAkbWeVDN8qtpzfMf1NxM+U2zTvBxR1ki/yxlQf3/A+1eFx96BWkxx0WbZFrkkRZ
+        yVgAA4Pqjlm7F1AgPd7urnGbnCNL9DU=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-578-hr4xlMfeN9ikimccRsnUCQ-1; Fri, 16 Sep 2022 03:27:15 -0400
+X-MC-Unique: hr4xlMfeN9ikimccRsnUCQ-1
+Received: by mail-vk1-f197.google.com with SMTP id h194-20020a1f9ecb000000b003a29cd56380so2883884vke.15
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ROqLBReQE/7GkbmtaIhshZARplN5wkq7A//qiLQq9kA=;
-        b=bx+0z5SJtDTIshZxxoMwcAm2LPXgzKY0pEo/+PWuLazVD8iv5gDK/PcjSWphLCtpan
-         ZhqyOTgGbCM4dVqxsUy0GRcxTo4Yh1iG9djQqOBmYAcfR6M+cVU+MEV3cUEFGIpTQlYS
-         eeGBWcWShjZxtDX2SCSrfl7V1zf/enX8U4nBALKBeJSo9wpZHNEUnkzpPPRjtHgJKYoQ
-         AKA45Ng1gPhYlU/Z74mbQ5aDGAV+L1M1M2WhNKfwO2XC/LLI7SUij8SrFqRtdTCIVIlf
-         nWAMkHXpjqatB1uZJ4pTDO9ux+TVqDfg2vHAuYGekmZ8oteiKn4WHpkw/Tz+TrK93YVh
-         jNVQ==
-X-Gm-Message-State: ACrzQf1rEJNi84lykWo9ZobSqJ7wnEO3OvjmyYQgc1Jmo9xbXK4cHhkc
-        qXlJ6zuKFmCEJ9Yf9jZM/mj7QUgYROWn8MVCLQO/RA==
-X-Google-Smtp-Source: AMsMyM74RLbjFMtpNGct0Ozwlha2WJplFjDI0j00KfUxbeOXQV5fKwafkxSRCZBcwfMfUHTVYRXkledc1oWhwynzbD0=
-X-Received: by 2002:a05:6402:5243:b0:451:6d52:5928 with SMTP id
- t3-20020a056402524300b004516d525928mr2846752edd.328.1663312989854; Fri, 16
- Sep 2022 00:23:09 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Of9F6D0XG0kz29dHaaaRnZmMTmIQ7SApcigqeqNHsck=;
+        b=kF90crtweqISPjdzSWMGwC6+8+2S8QlbknmDPyCsmEH/w2hVQayIFqYDyAvkcLQwGC
+         K8fILp4/yx/XNT+U3Odm8KGEx+2QYejyjV7eBU/6OsAQpEUgEEuOjhSp2JXzG3I8587o
+         ow2yu3F+NOrhpnnpM65f9kf67hvUpjZzfKnb98FsjlZabHy3rC2VxFunGY5Z/TViiOIa
+         fXaYY1atPO/4i5a0kA3EOizpWlnsUfs26O12F5iB/2zlKAsKWOb2k079aOeFKevH41dJ
+         uOHgKpzzatYT29QD0Rtmc10jVApMXPXAzeVpynz//6S/UugWkDoexIAp0ao44QJ/xV6W
+         nGzA==
+X-Gm-Message-State: ACrzQf2TRKdrTdhfYbusVrbAuVx+z6zCx/EQKcgovo6WZ6pxC6Q70Hyp
+        Au0o/nzi8VxLE5GmYaZRHbCxsp5odji4XAKR8f3p6R5S0VqgemApamIVzs5Zkg2H9HMTCCAVvPv
+        1tEqzR6xIFF+6g53oxsAP3Mw3KnXanR62Ugx/1AxB
+X-Received: by 2002:a67:ec82:0:b0:388:fefa:2467 with SMTP id h2-20020a67ec82000000b00388fefa2467mr1503175vsp.67.1663313235240;
+        Fri, 16 Sep 2022 00:27:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5xMrLs26c52lN9gK3YyGVQL3n3xVFjzBpm2yGpQ+A9J0bntdHsO2kin0KVBZ7r4qv5ElrakEPqWpP0T6Y1Md0=
+X-Received: by 2002:a67:ec82:0:b0:388:fefa:2467 with SMTP id
+ h2-20020a67ec82000000b00388fefa2467mr1503172vsp.67.1663313235031; Fri, 16 Sep
+ 2022 00:27:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220906211628.6u4hbpn4shjcvqel@pali> <Yxe7CJnIT5AiUilL@google.com>
- <20220906214114.vj3v32dzwxz6uqik@pali> <YxfBKkqce/IQQLk9@google.com>
- <20220906220901.p2c44we7i4c35uvx@pali> <YxfMkzW+5W3Hm1dU@google.com>
- <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
- <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
- <YyKMsyI961Mo1EQE@sol> <CACRpkdYB6dZf4TBhfXB2Z5E2PJ46ctAM_QKLiW-fykbCopcVGQ@mail.gmail.com>
- <YyLwsOBXv9jRw/+n@sol>
-In-Reply-To: <YyLwsOBXv9jRw/+n@sol>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 16 Sep 2022 09:22:59 +0200
-Message-ID: <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220912161140.34281-1-mlombard@redhat.com> <YyMe8LvKxc5juCfr@hyeyoo>
+In-Reply-To: <YyMe8LvKxc5juCfr@hyeyoo>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Date:   Fri, 16 Sep 2022 09:27:04 +0200
+Message-ID: <CAFL455kQaTb=6NFUbDdpP051nc2=LwpJxAOFicdAeoFjDXvgMQ@mail.gmail.com>
+Subject: Re: [PATCH V2] mm: slub: fix flush_cpu_slab()/__free_slab()
+ invocations in task context.
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 11:30 AM Kent Gibson <warthog618@gmail.com> wrote:
+=C4=8Dt 15. 9. 2022 v 14:48 odes=C3=ADlatel Hyeonggon Yoo <42.hyeyoo@gmail.=
+com> napsal:
+> No objection about this patch,
+> but it seems create_workqueue is deprecated?
+
+You're right, the documentation says that create_workqueue() is deprecated,
+too bad there is not a comment in the source code.
+Thanks for reporting this.
+
+I will wait for the maintainers to review this one and eventually I
+will submit a V3.
+
+Maurizio
+
+
+
 >
-> On Thu, Sep 15, 2022 at 10:51:02AM +0200, Linus Walleij wrote:
-> > On Thu, Sep 15, 2022 at 4:23 AM Kent Gibson <warthog618@gmail.com> wrote:
-> >
-> > > After sleeping on this, I'm even more in disagreement with renaming
-> > > value to state.
-> >
-> > OK let's not do that then.
-> >
-> > > OTOH, I totally agree with the addition of GPIOD_ACTIVE/INACTIVE to be
-> > > used for the logical cases, and even a script to apply it globally.
-> > > Ideally that script would change both the calls to the logical functions
-> > > to use ACTIVE/INACTIVE, and the physical to HIGH/LOW.
-> >
-> > OK we have consensus on this.
-> >
-> > > Introducing enums for those, and changing the function signatures to
-> > > use those rather than int makes sense to me too.
-> >
-> > Either they can be enum or defined to bool true/false. Not really
-> > sure what is best. But intuitively enum "feels better" for me.
-> >
 >
-> Enums work for me - especially if the goal is to differentiate
-> logical from physical - there should be a distinct enum for each.
+> --
+> Thanks,
+> Hyeonggon
 >
 
-We won't even have to change the function signatures if we go with
-enums - they already take an int and I'm in general against putting
-enum types into function signatures in C as they give you a false
-sense of a strong type.
-
-Bart
-
-> > > Though I'm not sure
-> > > why that has to wait until after all users are changed to the new macros.
-> > > Would that generate lint warnings?
-> >
-> > I rather want it all to happen at once. One preparatory commit
-> > adding the new types and one sed script to refactor the whole
-> > lot. Not gradual switchover.
-> >
-> > The reason is purely administrative: we have too many refactorings
-> > lagging behind, mainly the GPIO descriptors that have been
-> > lagging behind for what is it? 5 years? 10? GPIO irqchips also dragged
-> > out for way too long. We can't keep doing things gradually like
-> > this, it takes too much time and effort.
-> >
-> > I don't want any more "in-transition-indefinitely" stuff in the GPIO
-> > subsystem if I can avoid it.
-> >
-> > Therefore I would advice to switch it all over at the end of a merge
-> > window and be done with it.
-> >
->
-> Agreed - do it all at once.  My question was specific to the change of the
-> function signatures to using enums - what is to prevent us doing that
-> before running the sed script, and have the script switch usage over to
-> the enums?
->
-> Cheers,
-> Kent.
