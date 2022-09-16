@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CFF5BAB13
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834665BAA53
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiIPKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S231979AbiIPK1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiIPKSu (ORCPT
+        with ESMTP id S231880AbiIPKZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:18:50 -0400
+        Fri, 16 Sep 2022 06:25:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A77AFAF3;
-        Fri, 16 Sep 2022 03:12:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583A5B286C;
+        Fri, 16 Sep 2022 03:16:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF29662A20;
-        Fri, 16 Sep 2022 10:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B88C433C1;
-        Fri, 16 Sep 2022 10:12:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC10C62A30;
+        Fri, 16 Sep 2022 10:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97EAC433C1;
+        Fri, 16 Sep 2022 10:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323162;
-        bh=8ThC85J/wSX3GFsBiI4U7mtGNrOsFRRcVFqnrA//jpc=;
+        s=korg; t=1663323302;
+        bh=vz5fOPB/0yc8mAdng/GhOFDcONd3/2mlwH7O9Qh8JFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2Kowy92iu+Ao3ZyxwIQTDo3qrcSd6P0n+wIqUCnWH6o6d2viEAfFFUr0tQRKqdF0
-         Hgu0Si4h96j7BwH1C4p7lcYZH9xoQ9i13XlB90KhnNyIkBtKH8WuF9XNeXDpkBO3xI
-         VjlcMet6Ch+w0gjX/ShdYY5wlKjn6d4BMEpvpWK8=
+        b=KHha+YmrfRfgHspoPTYFzYTsqpYgU4A/psZxJdXuyxJCiFuwORaDbJOO+LoNVje1K
+         OH3HCOIhhvxNLkR9kNTcHBMVjXXgSSm9DRdhoHAqcfJLTsOnSkrQkhtN8mR6n5C6qR
+         H/1WKLu1i6aB3PBrWwLhSJl9cv483ms7BxCI62Pg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Jing Leng <jleng@ambarella.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: [PATCH 5.15 33/35] usb: gadget: f_uac2: fix superspeed transfer
-Date:   Fri, 16 Sep 2022 12:08:56 +0200
-Message-Id: <20220916100448.339070740@linuxfoundation.org>
+        stable@vger.kernel.org, Guchun Chen <guchun.chen@amd.com>,
+        Kent Russell <kent.russell@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 23/38] drm/amdgpu: disable FRU access on special SIENNA CICHLID card
+Date:   Fri, 16 Sep 2022 12:08:57 +0200
+Message-Id: <20220916100449.440667456@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-References: <20220916100446.916515275@linuxfoundation.org>
+In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
+References: <20220916100448.431016349@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,90 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+From: Guchun Chen <guchun.chen@amd.com>
 
-commit f511aef2ebe5377d4c263842f2e0c0b8e274e8e5 upstream.
+[ Upstream commit c8fea9273fd1be308668496badfcbd55183e0dd3 ]
 
-On page 362 of the USB3.2 specification (
-https://usb.org/sites/default/files/usb_32_20210125.zip),
-The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
-by Enhanced SuperSpeed devices that are operating at Gen X speed.
-Each endpoint described in an interface is followed by a 'SuperSpeed
-Endpoint Companion Descriptor'.
+Below driver load error will be printed, not friendly to end user.
 
-If users use SuperSpeed UDC, host can't recognize the device if endpoint
-doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
+amdgpu: ATOM BIOS: 113-D603GLXE-077
+[drm] FRU: Failed to get size field
+[drm:amdgpu_fru_get_product_info [amdgpu]] *ERROR* Failed to read FRU Manufacturer, ret:-5
 
-Currently in the uac2 driver code:
-1. ss_epout_desc_comp follows ss_epout_desc;
-2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
-3. ss_epin_desc_comp follows ss_epin_desc;
-4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
-Companion Descriptor' followed, so we should add it.
-
-Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-Link: https://lore.kernel.org/r/20220721014815.14453-1-quic_jackp@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guchun Chen <guchun.chen@amd.com>
+Reviewed-by: Kent Russell <kent.russell@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_uac2.c |   16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_fru_eeprom.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -281,6 +281,12 @@ static struct usb_endpoint_descriptor ss
- 	.bInterval = 4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
-+	.bLength = sizeof(ss_ep_int_desc_comp),
-+	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-+	.wBytesPerInterval = cpu_to_le16(6),
-+};
-+
- /* Audio Streaming OUT Interface - Alt0 */
- static struct usb_interface_descriptor std_as_out_if0_desc = {
- 	.bLength = sizeof std_as_out_if0_desc,
-@@ -594,7 +600,8 @@ static struct usb_descriptor_header *ss_
- 	(struct usb_descriptor_header *)&in_feature_unit_desc,
- 	(struct usb_descriptor_header *)&io_out_ot_desc,
- 
--  (struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
- 
- 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
-@@ -721,6 +728,7 @@ static void setup_headers(struct f_uac2_
- 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
- 	struct usb_endpoint_descriptor *epout_desc;
- 	struct usb_endpoint_descriptor *epin_desc;
- 	struct usb_endpoint_descriptor *epin_fback_desc;
-@@ -748,6 +756,7 @@ static void setup_headers(struct f_uac2_
- 		epin_fback_desc = &ss_epin_fback_desc;
- 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
- 		ep_int_desc = &ss_ep_int_desc;
-+		ep_int_desc_comp = &ss_ep_int_desc_comp;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fru_eeprom.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fru_eeprom.c
+index ecada5eadfe35..e325150879df7 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fru_eeprom.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fru_eeprom.c
+@@ -66,10 +66,15 @@ static bool is_fru_eeprom_supported(struct amdgpu_device *adev)
+ 		return true;
+ 	case CHIP_SIENNA_CICHLID:
+ 		if (strnstr(atom_ctx->vbios_version, "D603",
++		    sizeof(atom_ctx->vbios_version))) {
++			if (strnstr(atom_ctx->vbios_version, "D603GLXE",
+ 			    sizeof(atom_ctx->vbios_version)))
+-			return true;
+-		else
++				return false;
++			else
++				return true;
++		} else {
+ 			return false;
++		}
+ 	default:
+ 		return false;
  	}
- 
- 	i = 0;
-@@ -776,8 +785,11 @@ static void setup_headers(struct f_uac2_
- 	if (EPOUT_EN(opts))
- 		headers[i++] = USBDHDR(&io_out_ot_desc);
- 
--	if (FUOUT_EN(opts) || FUIN_EN(opts))
-+	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
- 		headers[i++] = USBDHDR(ep_int_desc);
-+		if (ep_int_desc_comp)
-+			headers[i++] = USBDHDR(ep_int_desc_comp);
-+	}
- 
- 	if (EPOUT_EN(opts)) {
- 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
+-- 
+2.35.1
+
 
 
