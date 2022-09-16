@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6775BAE4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082CE5BAE51
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiIPNhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S230474AbiIPNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiIPNhI (ORCPT
+        with ESMTP id S229581AbiIPNhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:37:08 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21E4AC255
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:37:06 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id p5so26026143ljc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:37:06 -0700 (PDT)
+        Fri, 16 Sep 2022 09:37:43 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2F7AC26F;
+        Fri, 16 Sep 2022 06:37:42 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso2455173wmq.2;
+        Fri, 16 Sep 2022 06:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=BNr579MPUpBlNB016dcpQJAUDBZMbLiiEVY+aFYhFJ0=;
-        b=uz4sGI+1uL8AisIcwfRejIBgxha5ufOJQG2c8ni9YHCRRKwl8D1MClt+J7wzDAM9Cx
-         ZdbSyhIfJnrK/ih20efRtNeWD7Lq+Pr9yOY9ZeYarWfRphPSFvwiNLxXDvaEEuYUNl1J
-         5XkCVAWKPjtCGrRaG4EFuGX3iBkS85FI06eHkACDYxScys5bxA8MA8YHUKTtWnbayLhl
-         gw86kxjUm57ES2Wx3byANyKxqorfi/E5xTDQc3qPVGXPJIeChCcdlBiupYUlL2bkBJWh
-         /7mc638dbkRaodna5svrDs+lOgEVrFPBVCpHZOIQWHL5lXxSMBMRqg5aY/DxA6uDdSVm
-         KoJA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=rORpGGbJKPVv+PVvk49M2jSMdJUZULrbtHHlInsLrkQ=;
+        b=b1iczw5CXHlGhJY+7Y6+yvHb5Q0YgKVqQaqcGhIhTHGzeYY90RZ+xvUOWyTGho+I6h
+         soKUQqhApU+V66BwIL0Ul78t1BGJAs7CM/zuPjEzQU+RMr692MsMBBDwjvaEvv0C42/j
+         iEN8w6HmnZ937SNzaKWUphPAzhroCvMmiHel6FN06gRBuEMDe++ya4HmB9EdifpXRrN1
+         S4y0mZL9HAr1WFuK+wfXsyWIyXwWbq9Lo8RWifYlevhNucPQ/Sm7MEubygHM6pqRfSy+
+         qM6IWOp2WHFXIGqiBP2LE91cBxa90EG/5voo7XP/lDNEFnEWrh1OyoJDzN+SYTmOqA5G
+         RVkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BNr579MPUpBlNB016dcpQJAUDBZMbLiiEVY+aFYhFJ0=;
-        b=oG01ukbR8rchgyH26DYwnK2hvMdsQrSn9qKagR47Vl+N7nG/qc2Vk++Oh5tMGEYIw4
-         l7OnXGwy9TXd00fqNzZgXpL5bmYB3xUyril1DpEJoQF39YSGBaw2oyENFWSTOtVXslKF
-         o5Bbq6INKO1qA4jgL0q7U/Zvr30vk5s29lFkyeJMFvQGPefnupgNdIzdKb+kRlzY4iFm
-         IFiIAe2J1x3l44TT2abDSWFjLhu0PrXq4kxUORfntTwfGWJSsl9kPi0jJ4yUFJMhxLTb
-         LXPU65GMT7Np9uu0M01u4HlDIQ6Q2UCayfxGF5obKgiN6GLeTEo6I7Wt9kRKOx7H9XBi
-         eZ5Q==
-X-Gm-Message-State: ACrzQf2xdTvC08xfN5Z03UI2jX0l9Bmu+GSZtnne62cE69U7y/LKlDS4
-        JxksOtpcUG7A4PFzR+H5eU5eUkciKUeky9oBPMsw3Q==
-X-Google-Smtp-Source: AMsMyM4o1CDq0lVx3zR3LBnFmOkRyaj7CUypLRlvapURWQhtGmNoNbRScG9H1KH1qSovAoMhJPhsAj0dE9VZ3RhRpKc=
-X-Received: by 2002:a2e:bf01:0:b0:25f:df1a:f39d with SMTP id
- c1-20020a2ebf01000000b0025fdf1af39dmr1565245ljr.365.1663335424982; Fri, 16
- Sep 2022 06:37:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rORpGGbJKPVv+PVvk49M2jSMdJUZULrbtHHlInsLrkQ=;
+        b=hGRBSkxB3q2sVoyOv8dvycWCl+on3FE548ry5vt84m3wKJxGRefp3OJEPIOCOYbquu
+         3XwXkPTshaHrt/A1OS069ln9xYMZP0StOKKi6oh7Pr16PZcHq1c85/5+NXB8vTaXLLHb
+         qhVN4wEgQNOE1j/h+w8DbhWPgakLPGfLTio7Z93i/5WABrAG5jHPTDnz3YVHtSWDc3WE
+         0LDg9OInEI+HPH17mpNhcRqMgcCXolPyVKFSzCmvT+kV9jEJR+RnrlOOn6k6rfTMaEpV
+         UxE+lcNhOTbGLTOzuSQmgnX7CaaR6RGXl80Wm1JOCFDHRt3zeJEMVLZMo9vTsa5vlTVO
+         y/nQ==
+X-Gm-Message-State: ACrzQf0uIz8WbMNo3cNzQhZdVx+xfvI7S9WsJwK83YsFwuH/w7mHbb91
+        ElekuHwTlZ6Mb8FbudkvJFc=
+X-Google-Smtp-Source: AMsMyM4zgMhHDwxcK38r/llMwjONmZ930iJB3qaVTn/4mUnfujfJsY8z79ZTjhacrl3bux22I3cEpA==
+X-Received: by 2002:a05:600c:268f:b0:3b4:acef:34ab with SMTP id 15-20020a05600c268f00b003b4acef34abmr3370602wmt.176.1663335461413;
+        Fri, 16 Sep 2022 06:37:41 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:453:ec29:bd55:6b15])
+        by smtp.gmail.com with ESMTPSA id p10-20020a5d48ca000000b00229d55994e0sm79024wrs.59.2022.09.16.06.37.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 06:37:40 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] media: dt-bindings: i2c: ovti,ov02a10: Drop ref to video-interface-devices.yaml
+Date:   Fri, 16 Sep 2022 14:37:28 +0100
+Message-Id: <20220916133728.73433-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220916080305.29574-6-vincent.guittot@linaro.org> <20220916120245.2951-1-hdanton@sina.com>
-In-Reply-To: <20220916120245.2951-1-hdanton@sina.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 16 Sep 2022 15:36:53 +0200
-Message-ID: <CAKfTPtDV+ACXtQGH38sXwFVJfq+EzyKO1mCMZ68Q+GC5kw7-ww@mail.gmail.com>
-Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at wakeup
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     peterz@infradead.org, mgorman@suse.de, valentin.schneider@arm.com,
-        parth@linux.ibm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Fri, 16 Sept 2022 at 14:03, Hillf Danton <hdanton@sina.com> wrote:
->
-> Hello Vincent
->
-> On 16 Sep 2022 10:03:02 +0200 Vincent Guittot <vincent.guittot@linaro.org> wrote:
-> >
-> > @@ -4606,6 +4608,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >
-> >       se = __pick_first_entity(cfs_rq);
-> >       delta = curr->vruntime - se->vruntime;
-> > +     delta -= wakeup_latency_gran(curr, se);
-> >
-> >       if (delta < 0)
-> >               return;
->
-> What is derived from the latency nice you added is the runtime granulaity
-> which has a role in preempting the current task.
->
-> Given the same defination of latency nice as the nice, the runtime granularity
-> can be computed without introducing the latency nice.
->
-> Only for thoughts now.
->
-> Hillf
->
-> +++ b/kernel/sched/fair.c
-> @@ -4569,7 +4569,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
->  static void
->  check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->  {
-> -       unsigned long ideal_runtime, delta_exec;
-> +       unsigned long ideal_runtime, delta_exec, granu;
->         struct sched_entity *se;
->         s64 delta;
->
-> @@ -4594,6 +4594,14 @@ check_preempt_tick(struct cfs_rq *cfs_rq
->                 return;
->
->         se = __pick_first_entity(cfs_rq);
-> +
-> +       granu = sysctl_sched_min_granularity +
-> +               (ideal_runtime - sysctl_sched_min_granularity) *
-> +               (se->latency_nice + 20) / LATENCY_NICE_WIDTH;
+video-interface-devices.yaml isn't used so just drop it from the
+DT binding doc.
 
-There is no latency_nice field in se but a latency_offset instead
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Also at this step, we are sure that curr has run at least
-sysctl_sched_min_granularity and we want now to compare curr vruntime
-with first se's one. We take the latency offset into account to make
-sure we will not preempt curr too early
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+index 63a040944f3d..bd1914cf6c33 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+@@ -17,9 +17,6 @@ description: |-
+   @ 1600x1200 (UXGA) resolution transferred over a 1-lane MIPI interface. The
+   sensor output is available via CSI-2 serial data output.
+ 
+-allOf:
+-  - $ref: /schemas/media/video-interface-devices.yaml#
+-
+ properties:
+   compatible:
+     const: ovti,ov02a10
+-- 
+2.25.1
 
-> +
-> +       if (delta_exec < granu)
-> +               return;
-> +
->         delta = curr->vruntime - se->vruntime;
->
->         if (delta < 0)
