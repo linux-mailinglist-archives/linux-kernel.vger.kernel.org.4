@@ -2,252 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1555BB042
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2962D5BB045
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiIPPcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S231386AbiIPPdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIPPcd (ORCPT
+        with ESMTP id S229600AbiIPPda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:32:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2317915C3;
-        Fri, 16 Sep 2022 08:32:32 -0700 (PDT)
-Received: from localhost.localdomain (unknown [186.189.224.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: adalessandro)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AB8B6601FAA;
-        Fri, 16 Sep 2022 16:32:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663342350;
-        bh=SDfL43uN7TS0CIFsjEl56ILa0pLZzGPF0gpzroZOqo4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dnioMijY8E0B3dPuLCOzUrpMDx9NKdoQemIUis94V24SH6whLLgLCmGJEiOe3b9gg
-         p7jgGdjUHDiYORI7STU8m9Y++hQTCp1rAzzpftGE0k4xmCu85pCANlKyIF/e1890Bs
-         P4FHFzwvqgaERnsfTZH2bQ0+BktwVqd620FQsEVsSeQYgddbSA7kPR2CslUPYf79ot
-         9cca6llq0kZd/GdsfVymoyq4wxASSBxZ2uAU678Bg6Zr6q7oFHYBi0kymCA0lDmM+S
-         M78yDTZRj64skUcYI6YD5lRaLptzsVtR7LfEDo6R7tDgqR8Npg5+pHvNmVGDvOa4Ry
-         jbskuXoZ04ClQ==
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-To:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org
-Cc:     ariel.dalessandro@collabora.com, arnd@arndb.de,
-        f.fainelli@gmail.com, krzyszccf.kozlowski+dt@linaro.org,
-        nsaenz@kernel.org, olof@lixom.net, robh+dt@kernel.org,
-        soc@kernel.org, stefan.wahren@i2se.com, william.zhang@broadcom.com
-Subject: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
-Date:   Fri, 16 Sep 2022 12:31:56 -0300
-Message-Id: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 16 Sep 2022 11:33:30 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC8ABF2E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:33:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id dv25so50182328ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:33:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2Y3KUPS6KhbaKXeSt32NbllpEAsejP8RFv38cwdpBtc=;
+        b=BfiVfhXuwEPNc19RdhalPSQxId92CUh9keRFBJ4iiOWxFeC2ML5hSa5iZgyhLpr/4N
+         nKgTwzn4/Zsag1FNkD0DAEI6CH26zzPPBGDXNL6HQ7izBv13atnn/DMh+vxIIlST/es9
+         hfq5giZ8X98VHYn9op4uBASZ+6aL+/5JeeXeLPCP+jH1XvQRbX4ibKrdPFMhayY3jVwu
+         yt89E6NxIQgjBWSfVGj711sIXwj9UkdV9kg/U9ONZ2imo42Qzm0mYVstBObZRCHdl+h9
+         r8AEHog/pyBmn8L5Xcy1COjm2w7yIjb4JUB06fxdJj1o2EHN7uDF2XJ6xnyLv0C9hZs5
+         aNrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2Y3KUPS6KhbaKXeSt32NbllpEAsejP8RFv38cwdpBtc=;
+        b=rXR43cSAaGeCe/eduJbBfbxbzSB67pRXpvefeZzWGoyoEgbca5QfH0de3dVnRYa9eL
+         o5Dodiq9ZCym00HpvlUFU0J9Klm4rdARkakZvH6PcTq5d+qJRN7Eqb9enK318LT2JeeW
+         Wt6YkUQRyXk+geT+m+WMKIU47BQebBcONYeWimHpPRutIVcwaDplqH9p/kdbgr2ds0Au
+         t9hGSqvOp4PUeEyl+Zbgs6HwfRVFmD9DTPlcpKU3E8RR28/mT3WdzhFzxJqsO+MW6C1x
+         lNgMEPqZ30coAJ472KLxUB+ShnGXsEhqmzK4hXLXmMXJx0YOynIiZC/6MLQcsxHp0xOB
+         WA/A==
+X-Gm-Message-State: ACrzQf31PETg/2zgzRShwTgHWwxhSBMME5IeZ5q3TEjELaeDKXf5aotb
+        jNsPDb/OAnOpBGQhUosz9f7pbKADtWtuXNjd5Eg=
+X-Google-Smtp-Source: AMsMyM59ZsfSmjomo2J0ZZttYb2oEBCKJdVTuNLKF0++dGGJKyowJGDHTRnx9soewDnXqGz7AX4cPl/iGWbbsLBjC44=
+X-Received: by 2002:a17:907:1b12:b0:72f:9b44:f9e with SMTP id
+ mp18-20020a1709071b1200b0072f9b440f9emr3958118ejc.653.1663342406891; Fri, 16
+ Sep 2022 08:33:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <tencent_48738CD5589B4162E0D0B9D85B84DCD33C0A@qq.com> <YyQwsxDoaWT6Y5a0@kroah.com>
+In-Reply-To: <YyQwsxDoaWT6Y5a0@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 16 Sep 2022 23:33:15 +0800
+Message-ID: <CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com>
+Subject: Re: [PATCH] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     xmzyshypnc <1002992920@qq.com>, dimitri.sivanich@hpe.com,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, security@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
-Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
-MCP251xFD based CAN-FD interfaces.
+From 7cdd08c87a3252ffa081997146dd9c3adcb37f1c Mon Sep 17 00:00:00 2001
+From: xmzyshypnc <1002992920@qq.com>
+Date: Fri, 16 Sep 2022 17:54:07 +0800
+Subject: [PATCH] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
 
-[0] https://github.com/boschresearch/kuksa.hardware
+In grufile.c, gru_file_unlocked_ioctl function can be called by user.
 
-Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+If the req is GRU_SET_CONTEXT_OPTION, it will call gru_set_context_option.
+
+In gru_set_context_option, as req can be controlled by user,
+
+We can reach gru_check_context_placement function call.
+
+In gru_check_context_placement function, if the error path was steped,
+
+say gru_check_chiplet_assignment return 0,
+
+Then it will fall into gru_unload_context function.
+
+And it will finnaly call kfree gts in gts_drop function.
+
+Then gru_unlock_gts will be called in gru_set_context_option function.
+
+This is a typical Use after free.
+
+The same problem exists in gru_handle_user_call_os and gru_fault.
+
+Fix it by introduce the return value to see if gts is in good case or not.
+
+Free the gts in caller when gru_check_chiplet_assignment check failed.
+
+Signed-off-by: xmzyshypnc <1002992920@qq.com>
 ---
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
- arch/arm64/boot/dts/broadcom/Makefile         |   1 +
- .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
- 4 files changed, 143 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 05d8aef6e5d2..8930ab2c132c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
- 	bcm2837-rpi-zero-2-w.dtb \
- 	bcm2711-rpi-400.dtb \
- 	bcm2711-rpi-4-b.dtb \
-+	bcm2711-rpi-cm4-canopi.dtb \
- 	bcm2711-rpi-cm4-io.dtb \
- 	bcm2835-rpi-zero.dtb \
- 	bcm2835-rpi-zero-w.dtb
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-new file mode 100644
-index 000000000000..52ec5908883c
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+#include "bcm2711-rpi-cm4.dtsi"
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..2b5b049fbd38 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+    if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+        goto exit;
+
+-   gru_check_context_placement(gts);
++   ret = gru_check_context_placement(gts);
++   if (ret)
++       goto err;
+
+    /*
+     * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+    gru_unlock_gts(gts);
+    return ret;
++err:
++   gru_unlock_gts(gts);
++   gru_unload_context(gts, 1);
++   return -EINVAL;
+ }
+
+ /*
+@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
+        } else {
+            gts->ts_user_blade_id = req.val1;
+            gts->ts_user_chiplet_id = req.val0;
+-           gru_check_context_placement(gts);
++           ret = gru_check_context_placement(gts);
+        }
+        break;
+    case sco_gseg_owner:
+@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
+        ret = -EINVAL;
+    }
+    gru_unlock_gts(gts);
++   if (ret) {
++       gru_unload_context(gts, 1);
++       ret = -EINVAL;
++   }
+
+    return ret;
+ }
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..79903cf7e706 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct
+gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+    struct gru_state *gru;
++   int ret = 0;
+
+    /*
+     * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct
+gru_thread_state *gts)
+     */
+    gru = gts->ts_gru;
+    if (!gru || gts->ts_tgid_owner != current->tgid)
+-       return;
++       return ret;
+
+    if (!gru_check_chiplet_assignment(gru, gts)) {
+        STAT(check_context_unload);
+-       gru_unload_context(gts, 1);
++       ret = -EINVAL;
+    } else if (gru_retarget_intr(gts)) {
+        STAT(check_context_retarget_intr);
+    }
 +
-+/ {
-+	model = "Raspberry Pi Compute Module 4 CANOPi Board";
-+
-+	clocks {
-+		clk_mcp251xfd_osc: mcp251xfd-osc {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <20000000>;
-+		};
-+	};
-+
-+	leds {
-+		led-act {
-+			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-pwr {
-+			label = "PWR";
-+			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
-+			default-state = "keep";
-+			linux,default-trigger = "default-on";
-+		};
-+	};
-+};
-+
-+&ddc0 {
-+	status = "okay";
-+};
-+
-+&ddc1 {
-+	status = "okay";
-+};
-+
-+&hdmi0 {
-+	status = "okay";
-+};
-+
-+&hdmi1 {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_gpio44>;
-+	status = "okay";
-+	clock-frequency = <100000>;
-+
-+	pcf85063a@51 {
-+		compatible = "nxp,pcf85063a";
-+		reg = <0x51>;
-+	};
-+};
-+
-+&pcie0 {
-+	pci@0,0 {
-+		device_type = "pci";
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		reg = <0 0 0 0 0>;
-+
-+		usb@0,0 {
-+			reg = <0 0 0 0 0>;
-+			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-+		};
-+	};
-+};
-+
-+&pixelvalve0 {
-+	status = "okay";
-+};
-+
-+&pixelvalve1 {
-+	status = "okay";
-+};
-+
-+&pixelvalve2 {
-+	status = "okay";
-+};
-+
-+&pixelvalve4 {
-+	status = "okay";
-+};
-+
-+&spi {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi0_gpio7>;
-+	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
-+	dmas = <&dma 6>, <&dma 7>;
-+	dma-names = "tx", "rx";
-+
-+	mcp251xfd0: mcp251xfd@0 {
-+		compatible = "microchip,mcp251xfd";
-+		reg = <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mcp251xfd0_pins>;
-+		spi-max-frequency = <20000000>;
-+		interrupt-parent = <&gpio>;
-+		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&clk_mcp251xfd_osc>;
-+	};
-+
-+	mcp251xfd1: mcp251xfd@1 {
-+		compatible = "microchip,mcp251xfd";
-+		reg = <1>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mcp251xfd1_pins>;
-+		spi-max-frequency = <20000000>;
-+		interrupt-parent = <&gpio>;
-+		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&clk_mcp251xfd_osc>;
-+	};
-+};
-+
-+&gpio {
-+	mcp251xfd0_pins: mcp251xfd0_pins {
-+		brcm,pins = <27>;
-+		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-+	};
-+
-+	mcp251xfd1_pins: mcp251xfd1_pins {
-+		brcm,pins = <22>;
-+		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-+	};
-+};
-+
-+&vc4 {
-+	status = "okay";
-+};
-+
-+&vec {
-+	status = "disabled";
-+};
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index e8584d3b698f..7cd88b8c0345 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
- 			      bcm2711-rpi-4-b.dtb \
-+			      bcm2711-rpi-cm4-canopi.dtb \
- 			      bcm2711-rpi-cm4-io.dtb \
- 			      bcm2837-rpi-3-a-plus.dtb \
- 			      bcm2837-rpi-3-b.dtb \
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-new file mode 100644
-index 000000000000..e9369aa0eb39
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "arm/bcm2711-rpi-cm4-canopi.dts"
++   return ret;
+ }
+
+
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+    struct gru_thread_state *gts;
+    unsigned long paddr, vaddr;
+    unsigned long expires;
++   int ret;
+
+    vaddr = vmf->address;
+    gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+    mutex_lock(&gts->ts_ctxlock);
+    preempt_disable();
+
+-   gru_check_context_placement(gts);
++   ret = gru_check_context_placement(gts);
++   if (ret) {
++       mutex_unlock(&gts->ts_ctxlock);
++       gru_unload_context(gts, 1);
++       return ret;
++   }
+
+    if (!gts->ts_gru) {
+        STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-2.37.2
-
+2.25.1
