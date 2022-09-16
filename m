@@ -2,164 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC365BB470
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F895BB472
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiIPWj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 18:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S229663AbiIPWkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 18:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiIPWjY (ORCPT
+        with ESMTP id S229602AbiIPWkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 18:39:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2988BB9F84
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663367962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HhYwrTEM5JyN6rurGhxXS/hiRRIr6cuLaeWImR7nsEk=;
-        b=OMwLOeicIIPv6eP/wy53cXca+e0CKuv4xveWpcUOsowb820xTetNkyN4SlKNR8wTeGU68X
-        nqWmyUNmT5/cE9/HouIULkEpnmYOlvUr0bZyUTDC/OIC4yWvazzUBxl6C8w92qVt5GTVBi
-        cHRGDU3odTcsmQZGz/OAswJEUYtl26g=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-107-MKuOPdr8PE6Ts0uVhdkXrQ-1; Fri, 16 Sep 2022 18:39:21 -0400
-X-MC-Unique: MKuOPdr8PE6Ts0uVhdkXrQ-1
-Received: by mail-qk1-f197.google.com with SMTP id n15-20020a05620a294f00b006b5768a0ed0so19390555qkp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:39:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HhYwrTEM5JyN6rurGhxXS/hiRRIr6cuLaeWImR7nsEk=;
-        b=0DZySYarIUyiA5dsDdJ2ZNZHaWjJd9Y5beKcjUCVkTyczZyiMWpu7Gay1lJhvp3IR8
-         hQkeU+rTvSgi0W94D5atqI1pCeGhvAr5jPQLQA4Yxc0aopXEnUCXldvLh98vxlGlsEYL
-         919A4fkGtL9RHU8CHbJCfi2GEoeJUwQTj8j4Hk7UjrkjjsYBqhyyE3bpanzTnvDXL+ie
-         6KBHwR95/RY9zUc4bNNq6rnhjoOThFHkLz2bQLdbrNMV+h18SH8aSWwt4tKprvtm8cLw
-         2YYxFzUm2SIay2MqcwJNBl1LipAsg5Sbye9wdtq8WrLy2sKvqmlwjBDLXII9bjDE21BM
-         p96A==
-X-Gm-Message-State: ACrzQf1I3NMSuBoO2gJWdw9+rZh3UvnSCZDiCSGUsz0iciCnk2tx126y
-        AVioCjcQTqEig6HQBQIiQXxW6rFzoJ7tOTZTvUSjIw984joPS7/X24agjLt9oGdhFMQw/gAtAFY
-        MIQaGplSqaJRijKC1lHK63R8z
-X-Received: by 2002:ac8:5e08:0:b0:35c:b97b:8b23 with SMTP id h8-20020ac85e08000000b0035cb97b8b23mr6459285qtx.585.1663367960572;
-        Fri, 16 Sep 2022 15:39:20 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4IVYbEJeATX3JAJs4XV52Zi5ZgFDy8Zk10Y3Fl8S96hqyY7mNdc2kNc23f7trtnw+ZkPicgQ==
-X-Received: by 2002:ac8:5e08:0:b0:35c:b97b:8b23 with SMTP id h8-20020ac85e08000000b0035cb97b8b23mr6459269qtx.585.1663367960355;
-        Fri, 16 Sep 2022 15:39:20 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c48:e00::feb? ([2600:4040:5c48:e00::feb])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05622a011200b0035ba4e53500sm6315183qtw.56.2022.09.16.15.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 15:39:19 -0700 (PDT)
-Message-ID: <4b0d603814c8740b125cc6130b67c79e37405d69.camel@redhat.com>
-Subject: Re: [PATCH 0/9] Input: synaptics-rmi4 - Bootloader v7/v8 firmware
- update improvements
-From:   Lyude Paul <lyude@redhat.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 16 Sep 2022 18:39:18 -0400
-In-Reply-To: <a959cfe90356b702727413e7c14b246875eb88b6.camel@ew.tq-group.com>
-References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
-         <26790cfecb827245187233bc81f9fb89553bb4a7.camel@ew.tq-group.com>
-         <c434ba87606d3d7696ae076684ceea67bfe662e3.camel@ew.tq-group.com>
-         <a959cfe90356b702727413e7c14b246875eb88b6.camel@ew.tq-group.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 16 Sep 2022 18:40:13 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60055.outbound.protection.outlook.com [40.107.6.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534FC5A8BB;
+        Fri, 16 Sep 2022 15:40:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bZSsH04xGUV3+Y0adAdwNA21yUs7/YnU6suwZUyiWB5XMXwCCCSizs1jaKWFyJDI+roPvOXcC8dMTLA8YRMwXzomoKVj8WE3y7LMhKoBMze9GBTqiCO82nqtOCjrHCoJ9Ub8YMfyi0q4p1CiSai3EGTg9knf5lLF18/n0jvInDvPyHo76+xhEdOW21fqTR7BP2WqnCKVBZRk+k8rtdwsaM39ck54DDlantLTpkIITzVUeiPZF2ZAeePe4b/NIg+tsuz/iUjtjn5rdGi3ZMwkw5memEO/o70LP2pJ9CPIRaKg7hTpyQoaw7v4Cq/jQwqEQfhwOJZDyPSfT2/PXQgN2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x2weH8/LaKlldU9EV455PhlIjYz7YLoIXmt1r9779Zs=;
+ b=Fa7Elo2KLG30EHK0jpX7SKgf1lLr1OR9kUm2FoI5TWRxsljVrDZuDbgl8UapRp7cNuGscOBaoxrBgHmDic55WXgaVmM0zZr/xlH5UbQKx7Aij4Dapi0F/Dyp4R8WLmRtaViS9uQ3ZgvQ3rzGa0S/a4eBQR4uJCEo/pk6De+HT/gSKJSVfqIiAaSq20MjF3RXYmMbEI/9qXllhYrOYnmhNGyabd94htZr9dHpN0BxJSyOjeBXva/dBU6b1VB9dtssQct2EIX79W4MKjJVhXbl0XEb/yXhzYZeeQk7QSNxpX9emgybqPn1ubLnqnbhitDVy7Azt3wPUvU8c597ip1DGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x2weH8/LaKlldU9EV455PhlIjYz7YLoIXmt1r9779Zs=;
+ b=Cabcn3kHhKeTWU2tYLoPzKnpX6d1mN7e2y33SbizqF6XNvxfdypQtyxLudnGlml67oVJQ/uC7x95dmUdtutGTW7xb0hNhdkTx6r2rd5SqM4vMp0PNPX4VtdV5uXRf4nKLin81alveKABQg0TBOxsBK6ubKco8KMpjsrPfX0xL88=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AS4PR04MB9340.eurprd04.prod.outlook.com (2603:10a6:20b:4e8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Fri, 16 Sep
+ 2022 22:40:10 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.016; Fri, 16 Sep 2022
+ 22:40:10 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v1 net-next 2/2] net: mscc: ocelot: check return values of
+ writes during reset
+Thread-Topic: [PATCH v1 net-next 2/2] net: mscc: ocelot: check return values
+ of writes during reset
+Thread-Index: AQHYygB+3lNUS9Vav0i1SxPnUbd9eg==
+Date:   Fri, 16 Sep 2022 22:40:10 +0000
+Message-ID: <20220916224009.g4prlpphnji5i4zi@skbuf>
+References: <20220916191349.1659269-1-colin.foster@in-advantage.com>
+ <20220916191349.1659269-1-colin.foster@in-advantage.com>
+ <20220916191349.1659269-3-colin.foster@in-advantage.com>
+ <20220916191349.1659269-3-colin.foster@in-advantage.com>
+In-Reply-To: <20220916191349.1659269-3-colin.foster@in-advantage.com>
+ <20220916191349.1659269-3-colin.foster@in-advantage.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AS4PR04MB9340:EE_
+x-ms-office365-filtering-correlation-id: e775d20d-3c45-4db3-6a09-08da9834698f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rgjN3srpBYCqs448V1Xyobrc2R/GgVXxNZJv3Mu4ncCF6OU/tlAw5T+JyO2TJo7LrbRE8Pyvite2dwhaS3GjkAoUrAnHpp4ota75fzYfpshZpXhYgeUolR2oIEA4nzhERUpxCypZHLanKZfFD2ll2U9/uHv5JLdx3nEhSfcea9zwNqoJ45aHkji2wu6tef5eTFBtMDLk4Ar5j4Jh9ygcI6dpwM19gasAvKYfhqCc2n3Bj58xQQtR316bVNQWq5lKGFtduy5U/CqP9keOw63gT+DTPaEmaygUW+5QRsbuIyVMWvE81ueZ5OyuSxwQJXcxPodFpLHXsenMeQl3hEqxyvqnehF5W6eqloEIcnlHLDKnn04YqsintwQrl7hUdhIYWxRnRTeDkPT3+Ou2fRUSdnbf9WyQI0trMVf7lcUJ/zRH8/rQiyFP5dXK+DTZPW2OV6hlLF2LiwiSo97+V+tMyRR77B95zW3LQHijPW1iw6/YxP5mWBzcOztIlHU6MYMar7U+UgeTgI1lUKY5hbo8cgp6S7vMx3Pl3IlxKP2yHUPbIk4JRVeTsdek9rEYrwajpZ8AXUvxbLeFrU09XlpxDUnwZmmIOgQAYhj94KBqMETo9rZEKTxDK9KZkf7ohNxob4XsVh/8hzwS3LO2BKk3xjfLtyNhEFV44abqUhU9JK5tSIt0MS1QC5+Sm/K4Lxql/jFAIO8zOK1HMWGHow+YQkwmlKqoSAm8roW/LGqst+WrY2McOq1G9IJt6qfhn0afVB6hyY6qkI1YXAYCqGMLeA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199015)(4326008)(44832011)(66446008)(8676002)(64756008)(2906002)(76116006)(66946007)(66556008)(4744005)(6506007)(5660300002)(6512007)(33716001)(66476007)(86362001)(8936002)(9686003)(26005)(38100700002)(122000001)(186003)(1076003)(41300700001)(91956017)(38070700005)(6916009)(478600001)(54906003)(71200400001)(6486002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?z1P2MQ/pzUArJF0hx8l69LffYmoql0OXC4EUO7jD6bpk1FPTdj5BSlcIp+Rn?=
+ =?us-ascii?Q?foWt2AKgcaL/KumDiMdnwJcQAcdQY2Bh7KREz1Ej6YbYf3xjtzgFYHze7j3x?=
+ =?us-ascii?Q?aAoN7JlvJBeLb4KlOSb4i9KSFih3dVaa9X0c7/BDp4ibt2xQUyMpE1yhQ781?=
+ =?us-ascii?Q?wziow//BA6f/HTPfRE78UgdaCwt1Kaj4l4EmThc4Rp58IWMoQMoHBGkU7Y4e?=
+ =?us-ascii?Q?NZMmcy6J7WaVUbqw+Yu10lycwdG/RZHZcltlirymVWGkW5Kp51pn/sRa4b+s?=
+ =?us-ascii?Q?i2zsRFweVz+Iniz8VF61zy4yt7GJMoNdSDvEoqVkVw+spNZSUgSDl3m9lyFC?=
+ =?us-ascii?Q?iiELyV2gwn/lTB+VLjScMqPrGC1ohVX+ALlSXzCQUfEg5OIE+ZA/afM9yHM7?=
+ =?us-ascii?Q?2jiEHWNfvBfp+I+1DWfLjV04e+iqn9sL7+IOe1UU78zi3c/INpIkdzHKuJhJ?=
+ =?us-ascii?Q?Xji7yT7U65Zp3ZZzm2b5MovNzvgsYd4A6ez/2VNabgp0G6fTDaq/mFODcpXV?=
+ =?us-ascii?Q?WPbxY+GCs+4hKKPBupGYUceRWTguBG8WISKOzqN4K/3aDZsEWJhnoNRyLO55?=
+ =?us-ascii?Q?azaTROU1tuz0TaiAHgXmN9w3mELtIkDoGOxCxx1kobSkseFQBfbuL9zv0XaM?=
+ =?us-ascii?Q?z3R+4XKClXakthLx3myWVZuqzYE/u86EPmLq8TnbuYMH5NnKr0kuSOwlMEN2?=
+ =?us-ascii?Q?JtHPF2Oph7lHacNqy/HuslN0wWSsu2unef4c1FDpqRNPEQWx6zZTy800JVQ8?=
+ =?us-ascii?Q?NPZWP7OqdvNdhZXdHvG+88lsT8doUxlOiZFkIS+QxIohN7/Yk2UsPQP++3gt?=
+ =?us-ascii?Q?QLhaRUHvpdDC1HChDqd0mln8q0s3FVcZ983SewSc88A1k4HrH1DUnPSD9bsA?=
+ =?us-ascii?Q?F1Yu7M6vMrN2SesRN0PKz0N+fp9pb5dtJS93B4jKSh/wj5tVtxbI71+y4aNx?=
+ =?us-ascii?Q?HyGX7MchpgD21ml4itakqKKcK5HOmSXE71er/iVZ3tg1o2B+vOSga4pH0MTs?=
+ =?us-ascii?Q?MoflrauvdYBaUnLWYexq1pq2zU6ZzYRrVtJNlC+UKKNGhDQT8pNmXQFFS0Xe?=
+ =?us-ascii?Q?p7UfboGpPhL5lOOvIvkSQopDM+61XesooKa/kKYnHlFxsghXx1S/eUt2Tyok?=
+ =?us-ascii?Q?vdB5S0GkUmV793kQYrHdJ6+z0u4DTYsJtBVLAiuabpn0AS8RkytIIQ7vusVo?=
+ =?us-ascii?Q?wZcupgjX8HbA2S+J/nQp6QI65VySIUJV8DwYhlzX9UOp9Es9OI7hvdqVCHNE?=
+ =?us-ascii?Q?9JjN577cjka/w+oCMXbPanOiy5h9NbOl+pyUGcUYmhtuBVYYXB1Evl7xMYWR?=
+ =?us-ascii?Q?tIkG5soLEzAA5bMFQCBTjNTbwHlR+Imt4rdgRHzD6JNXbjnCA0ZkP1FL0SXH?=
+ =?us-ascii?Q?B8laN7RJ6j7QpEkzOsTufXtOjMJPHAAuGPH6hw7offaVPTyDNEf0lk6iGHpL?=
+ =?us-ascii?Q?ZJB/d4O1hRq2oKnFE082HjieHbvfJ5kjhkW/xpwn4KHPlQDv36yN02nuvKY/?=
+ =?us-ascii?Q?AHCBDhbMryc3BRANl3wRsz2i77zwXAzDJP1MI4ORormmwATcEcO08WqODxFl?=
+ =?us-ascii?Q?XoZ2Cs1v4r5u4fA9bumzV6ZPMm+AOOUVUC8Isrox08nzvZpNgqsXqcCD1JyN?=
+ =?us-ascii?Q?Pw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D52FBC02A2DF5745AE4822F04E3CC754@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e775d20d-3c45-4db3-6a09-08da9834698f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2022 22:40:10.2918
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oEJFTM2KrNYLAKdRokYUInMxSV3nezVtLgS1ltd0aEI0/F/OtYgPfcK4Q/5P5mPIsWUlR/LqjjAaJQojXkebVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9340
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Would my review count at all here? I hadn't reviewed until now because I
-wasn't sure it would, but I'm happy to take a look if you think that'd help.
+On Fri, Sep 16, 2022 at 12:13:49PM -0700, Colin Foster wrote:
+> -	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
+> -	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
+> +	err =3D regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1)=
+;
+> +	if (err)
+> +		return err;
+> =20
+> -	return 0;
+> +	err =3D regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1=
+);
+> +
+> +	return err;
+>  }
 
-On Thu, 2022-09-15 at 10:02 +0200, Matthias Schiffer wrote:
-> On Mon, 2022-08-15 at 09:43 +0200, Matthias Schiffer wrote:
-> > On Mon, 2022-06-27 at 10:31 +0200, Matthias Schiffer wrote:
-> > > On Wed, 2022-06-08 at 14:47 +0200, Matthias Schiffer wrote:
-> > > > This fixes the firmware update function with bootloader v8, allows to
-> > > > recover from interrupted updates with v7/v8, and does some code cleanup.
-> > > > 
-> > > > I believe that the code that allows to recover from a broken partition
-> > > > table is also necessary to make flashing a different partition table
-> > > > work at all, but I wasn't able to verify that, as I don't have any firmware
-> > > > images with different partition tables to test with. In any case, I'm
-> > > > pretty sure that it is working correctly now, as recovery from a mostly
-> > > > empty flash without partition table has been tested successfully.
-> > > > 
-> > > > I have only tested the new code with bootloader v8, and I don't have the
-> > > > documentation / interfacing guide for v7, so it would be great if anyone
-> > > > could check that I didn't break updates for v7.
-> > > 
-> > > Hi everyone,
-> > > 
-> > > any news regarding this patch series?
-> > > 
-> > > 
-> > > Kind regards,
-> > > Matthias
-> > 
-> > Ping - can we get this applied, or at least any kind of feedback?
-> > 
-> > 
-> > Kind regards,
-> > Matthias
-> 
-> 
-> Ping - another month has passed.
-> 
-> Should I resend the series? Not much has happened in the RMI4 driver,
-> so the patches still apply cleanly to latest linux-next.
-> 
-> Kind regards,
-> Matthias
-> 
-> 
-> 
-> > 
-> > 
-> > 
-> > > 
-> > > 
-> > > > Matthias Schiffer (9):
-> > > >   Input: synaptics-rmi4 - fix firmware update operations with bootloader
-> > > >     v8
-> > > >   Input: synaptics-rmi4 - introduce rmi_f34v7_check_command_status()
-> > > >     helper
-> > > >   Input: synaptics-rmi4 - fix command completion check for bootloader
-> > > >     v7/v8
-> > > >   Input: synaptics-rmi4 - rewrite partition table unconditionally
-> > > >   Input: synaptics-rmi4 - reset after writing partition table
-> > > >   Input: synaptics-rmi4 - make rmi_f34v7_erase_all() use the "erase all"
-> > > >     command
-> > > >   Input: synaptics-rmi4 - remove unneeded struct register_offset
-> > > >   Input: synaptics-rmi4 - simplify rmi_f34v7_start_reflash()
-> > > >   Input: synaptics-rmi4 - drop useless gotos in rmi_f34v7_do_reflash()
-> > > > 
-> > > >  drivers/input/rmi4/rmi_f34.c   |  16 +-
-> > > >  drivers/input/rmi4/rmi_f34.h   |  17 --
-> > > >  drivers/input/rmi4/rmi_f34v7.c | 349 +++++++--------------------------
-> > > >  3 files changed, 81 insertions(+), 301 deletions(-)
-> > > > 
-> 
+A kernel janitor will come and patch this up to:
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+	return regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
 
+so it's better to do it yourself.=
