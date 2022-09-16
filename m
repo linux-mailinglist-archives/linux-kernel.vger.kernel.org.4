@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD255BAD4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE755BAD53
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiIPMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S231460AbiIPMVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiIPMVP (ORCPT
+        with ESMTP id S231551AbiIPMVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:21:15 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC51EB14FB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso15742642wmr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:12 -0700 (PDT)
+        Fri, 16 Sep 2022 08:21:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4C3B1B83
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:13 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id k9so35807692wri.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=zo8kVKLKtNbL7LV3ucP5GI+hqu0rYi1ISG3c79jI6bk=;
-        b=H4iAzZYZ+xk0hTaVbutPPEiHQr70DA4fV99XQry0LkYqrdXQC2nm2atc0SE/c/H8mW
-         MSeEeTUZAvOZ39KCibaha5kVLEIE+ysdd58pG9znjZTQ3iV/eDN9nL51AF0uqsK5LYLj
-         apCf8G8+9dsCn6xhMoYKUjsR/6t9V1l7MuueXj8wAn84gfHgO2aaJuAYOA/O6mnGNCnS
-         joIvajR77qkCaVohOQgpPNXoQyR2j7eGqOmXLMQxsPVRTMZbakByEM20gVA0SoK1iWwP
-         5lDQ9GHA+d126VYwVlTht+vvAhtiBakEB0zaqOshJf7LwNHxr337uJcxHaM47hjLSsYK
-         ulCQ==
+        bh=roKqTDfIrTl9uRri+S8php+Fd9yWmb1Y8cdQ+WhhXiY=;
+        b=XXv4s6fz2yp/sVM9BNSs6pAQS67/Ovdc6+oBUAk/GIOfV3f6ZSnldpSkMVh77Kb5r+
+         rQ0VeXTVcju9ovRoHRSj9QSPDZdi/fRxfFMyxg4uazjPU5dZACPF5KH0g+x+hL3uA6uG
+         qNvseJxrRhzaC2YH3Z0+SgzAncDEV32klVtuTQ7bjxTSZBvQWvnduUd1NkChqINFXDA0
+         jKpAatYzt/O6JdC9W+SxNv+atFYDoWlmk576tHBjuBVSz5ZAcMllg20+1wC3ShYgU/b4
+         u51PfPuj8i1DP3saRTXWYPEqFPjk4+fvWJNzShsl8XVkYgbx4IuEk/ibb6XDAmfEKmvw
+         FFHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=zo8kVKLKtNbL7LV3ucP5GI+hqu0rYi1ISG3c79jI6bk=;
-        b=GIQF+9Pr4banzHr1UEuGM+I0i5mucHziYGuLULFVFQR8szLERzD3jI1hIkeIRNK70T
-         mPpwMmdzSxYZUhVsFNapgkx/cGcCF7096B7sGn+Uyn6rsJTdopQh0ddeYNhoBvkKexI4
-         kQOZ6jy+i0bn0KkWQtltRh5mCuMnh7N93vGYrIt79SQFGaTBzWLoRgmUHcSZbXVmYrCJ
-         LpY7ExVqQklVwjG4aA1Pc3pcCC/MmaUbh2tOLnNAm9oSdub56Mn4/hK+K1FANX2nl8Lw
-         lD+grX/HJ23GKJ5GfmPT9bt5BAi4Wd6I4DsWaVfmSKzxx/pMzysOB9NvDANDdoVszXpC
-         XMoA==
-X-Gm-Message-State: ACgBeo2vuUbmT2OQA9gvAlsv1FeOkQl43F8emQX9DKJe0Rh26SKNs9Ve
-        b4GSgaiCBdXBv+A2+Nxq/+eJ9/Fp3FSi9A==
-X-Google-Smtp-Source: AA6agR4ZvYxD4ZAQKOL7+MxGdvwiOOZ8f2ZfEziEvmtGZkPLTxBDZ0IBIBXOImfaZivaePnAhca23g==
-X-Received: by 2002:a1c:6a0b:0:b0:3b3:3ed4:9bef with SMTP id f11-20020a1c6a0b000000b003b33ed49befmr10549468wmc.84.1663330870991;
-        Fri, 16 Sep 2022 05:21:10 -0700 (PDT)
+        bh=roKqTDfIrTl9uRri+S8php+Fd9yWmb1Y8cdQ+WhhXiY=;
+        b=AM2aoeCGaVQZGtZbdSf541yBTHfcoqV9k57VJ9vsGP0VF6KOxW56zzFya8Ltg/EIT5
+         htKvk347d8UI8vminZof3Lp3uL22+CUgTsgz/BLjhku/P2QQCl+ujqHCWR0pD8CEdra9
+         9VPo//fUuQ6MNANgB6R6f8r7xSFatCQopjlpre9sJ6D4tV+dJWzpA60nzUABFmJfZL/7
+         Pf6Sh2xqLNDOrdcY5qcG1kZaCqcS6tGOpFo8p0Oc930oJynxpJfjpwtT04YlsGuOOsE1
+         XuYveeRv4lw8aLW+nquI01gEWk2xRGWvIHf0zZl6wuMh0d8AbBJNHJrP6afrzLU4Dsz5
+         SQ7w==
+X-Gm-Message-State: ACrzQf0lZ+a3m8Dx/QX/ETIPYV43iCvCOTwOTjJfyzh0ezJ3HE905QCt
+        3O8xWbcWGHz0IO0VnVCwuty9Rw==
+X-Google-Smtp-Source: AMsMyM4EQs92CwSmr+cSOC4oeYAgXnOVnoC9TqrK+2emcejHvVllu/KDocuYhA7gQ2UUVXjg1uGJWQ==
+X-Received: by 2002:a5d:69cf:0:b0:22a:c2d3:1d4a with SMTP id s15-20020a5d69cf000000b0022ac2d31d4amr2735175wrw.473.1663330872063;
+        Fri, 16 Sep 2022 05:21:12 -0700 (PDT)
 Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id u11-20020adfdb8b000000b0022add371ed2sm1540015wri.55.2022.09.16.05.21.09
+        by smtp.gmail.com with ESMTPSA id u11-20020adfdb8b000000b0022add371ed2sm1540015wri.55.2022.09.16.05.21.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 05:21:10 -0700 (PDT)
+        Fri, 16 Sep 2022 05:21:11 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org, Kenneth Lee <klee33@uw.edu>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 04/13] dt-bindings: nvmem: mediatek: efuse: Add support for MT8188
-Date:   Fri, 16 Sep 2022 13:20:51 +0100
-Message-Id: <20220916122100.170016-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 05/13] nvmem: brcm_nvram: Use kzalloc for allocating only one element
+Date:   Fri, 16 Sep 2022 13:20:52 +0100
+Message-Id: <20220916122100.170016-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220916122100.170016-1-srinivas.kandagatla@linaro.org>
 References: <20220916122100.170016-1-srinivas.kandagatla@linaro.org>
@@ -72,29 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johnson Wang <johnson.wang@mediatek.com>
+From: Kenneth Lee <klee33@uw.edu>
 
-Add compatible for MT8188 SoC.
+Use kzalloc(...) rather than kcalloc(1, ...) because the number of
+elements we are specifying in this case is 1, so kzalloc would
+accomplish the same thing and we can simplify.
 
-Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Kenneth Lee <klee33@uw.edu>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nvmem/brcm_nvram.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-index b5a1109f2ee1..75e0a516e59a 100644
---- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -30,6 +30,7 @@ properties:
-               - mediatek,mt8173-efuse
-               - mediatek,mt8183-efuse
-               - mediatek,mt8186-efuse
-+              - mediatek,mt8188-efuse
-               - mediatek,mt8192-efuse
-               - mediatek,mt8195-efuse
-               - mediatek,mt8516-efuse
+diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+index 450b927691c3..4441daa20965 100644
+--- a/drivers/nvmem/brcm_nvram.c
++++ b/drivers/nvmem/brcm_nvram.c
+@@ -96,7 +96,7 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
+ 
+ 	len = le32_to_cpu(header.len);
+ 
+-	data = kcalloc(1, len, GFP_KERNEL);
++	data = kzalloc(len, GFP_KERNEL);
+ 	memcpy_fromio(data, priv->base, len);
+ 	data[len - 1] = '\0';
+ 
 -- 
 2.25.1
 
