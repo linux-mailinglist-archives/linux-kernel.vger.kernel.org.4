@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2885BAA22
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A705BAB30
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiIPKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S231282AbiIPKK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiIPKJK (ORCPT
+        with ESMTP id S231244AbiIPKJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:09:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308A3ABF15;
-        Fri, 16 Sep 2022 03:08:25 -0700 (PDT)
+        Fri, 16 Sep 2022 06:09:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7482FABF3D;
+        Fri, 16 Sep 2022 03:08:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B0D6B82508;
-        Fri, 16 Sep 2022 10:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BC0C433D7;
-        Fri, 16 Sep 2022 10:08:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52C09B82507;
+        Fri, 16 Sep 2022 10:08:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDCDC433D7;
+        Fri, 16 Sep 2022 10:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663322902;
-        bh=ctclM3JBJrkIeibqeVrapq86rbugeEMyPRRRmJnwhBU=;
+        s=korg; t=1663322912;
+        bh=jaexKV/ISln6aKv9PrpU0ZKA7HGBT+BGvGa+IiQ2i6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mlQhKJy6JYLJYPVTCuwwYz81euPOcbQQsvULS5kzNKHukpJhhDtvDSMEststCivTH
-         8GyBdcfkamGFadIXZnqlbLL/r8TdbybVGz46bn7nROsXHo7L6YxzTZHbkQOaBGFnpl
-         0IZDIRLd5dLVDnlyChO0z3c96pZWEDbjsSjr6ZFQ=
+        b=uFh08g12IS4mby1izyf1CrpJmWRndBEFdTpBbkrhzufJ3mki71i8J0zS6xiCFX9ey
+         9BD0QL/N1wYb4E5iZljXP+f7q8PRseyQ1hrBOXsF27MUSfcl1u1auc9xoPICcpUM0y
+         oIf2hF7PVOnQBsxsivY032sjrlU36yjaUKkqCkos=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 01/11] drm/msm/rd: Fix FIFO-full deadlock
-Date:   Fri, 16 Sep 2022 12:07:57 +0200
-Message-Id: <20220916100442.738338213@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 02/11] HID: ishtp-hid-clientHID: ishtp-hid-client: Fix comment typo
+Date:   Fri, 16 Sep 2022 12:07:58 +0200
+Message-Id: <20220916100442.786603835@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220916100442.662955946@linuxfoundation.org>
 References: <20220916100442.662955946@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,37 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Jason Wang <wangborong@cdjrlc.com>
 
-[ Upstream commit 174974d8463b77c2b4065e98513adb204e64de7d ]
+[ Upstream commit 94553f8a218540d676efbf3f7827ed493d1057cf ]
 
-If the previous thing cat'ing $debugfs/rd left the FIFO full, then
-subsequent open could deadlock in rd_write() (because open is blocked,
-not giving a chance for read() to consume any data in the FIFO).  Also
-it is generally a good idea to clear out old data from the FIFO.
+The double `like' is duplicated in the comment, remove one.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/496706/
-Link: https://lore.kernel.org/r/20220807160901.2353471-2-robdclark@gmail.com
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_rd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hid/intel-ish-hid/ishtp-hid.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index d4cc5ceb22d01..bb65aab49c214 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -199,6 +199,9 @@ static int rd_open(struct inode *inode, struct file *file)
- 	file->private_data = rd;
- 	rd->open = true;
- 
-+	/* Reset fifo to clear any previously unread data: */
-+	rd->fifo.head = rd->fifo.tail = 0;
-+
- 	/* the parsing tools need to know gpu-id to know which
- 	 * register database to load.
- 	 */
+diff --git a/drivers/hid/intel-ish-hid/ishtp-hid.h b/drivers/hid/intel-ish-hid/ishtp-hid.h
+index f5c7eb79b7b53..fa16983007f60 100644
+--- a/drivers/hid/intel-ish-hid/ishtp-hid.h
++++ b/drivers/hid/intel-ish-hid/ishtp-hid.h
+@@ -118,7 +118,7 @@ struct report_list {
+  * @multi_packet_cnt:	Count of fragmented packet count
+  *
+  * This structure is used to store completion flags and per client data like
+- * like report description, number of HID devices etc.
++ * report description, number of HID devices etc.
+  */
+ struct ishtp_cl_data {
+ 	/* completion flags */
 -- 
 2.35.1
 
