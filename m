@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D01F5BB308
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3D35BB318
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiIPTyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S229905AbiIPT52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiIPTyX (ORCPT
+        with ESMTP id S229455AbiIPT5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:54:23 -0400
-Received: from mx06lb.world4you.com (mx06lb.world4you.com [81.19.149.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E299B99FC;
-        Fri, 16 Sep 2022 12:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vFiZ6J6rKleWghPafAo9+rN4nJo/ie0UFtGpkuXvE18=; b=IpiW7HKn1yvZMBBTCQ0QCCGW9q
-        0WHcGrM1WPfNg4Kcwta9mynVdqSovYgsH/48fWxxaQX/2Wx8cF+86xKJ1+Ctwi4J5nY+TEVvdZaHI
-        ba5YHAdFvWQ7HLY8o3OB8zB0LuAxtXcq5YUOUHa60RJQdrh0vt4A28LVtLflsoM0aALE=;
-Received: from [88.117.54.199] (helo=[10.0.0.160])
-        by mx06lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1oZHPR-0005s5-F9; Fri, 16 Sep 2022 21:53:57 +0200
-Message-ID: <7f09367e-2236-692c-4adf-cb262ff1c109@engleder-embedded.com>
-Date:   Fri, 16 Sep 2022 21:53:56 +0200
+        Fri, 16 Sep 2022 15:57:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D19B6D68;
+        Fri, 16 Sep 2022 12:57:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 182FEB82919;
+        Fri, 16 Sep 2022 19:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2545C433D7;
+        Fri, 16 Sep 2022 19:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663358240;
+        bh=vCLtuY1TpVMliumE5DbT2WWZvJ7/teLjaPmFO/zeNJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IOX0u1Ga5jI3fyqBR9wRY7ly+OLINlk+lX+/BsGejMs60jVRDL8sIKqdSt3XILF3S
+         3K8SPRau6FUTQjVtbE6TEJNBmBOBPcPVQXi8OX57u4C0HVoKJPkMEEJ00ksU2lEwGs
+         eneNMJ1+ZnjxnQkCh/cvuyCe2+sDYCEoDJMO2dCn8QTVKtHj5HclYZhNhoQ3rUjl8F
+         tLS/O8FsgwubYS4qOpznp7bdKsC95dfNfY+vQCoCjDHNxc5H6XhL91QFFlfKlKIRzu
+         6tQdmHN/uGcOz3u/YXt0EebKPWSOF1vo6zXrc1qJQEZh8QfmRKs6RTMPWgVqS4lGYT
+         5hmw0V5iFK+MA==
+Date:   Fri, 16 Sep 2022 20:57:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v1 02/11] dt-bindings: i2c: rockchip: add
+ rockchip,rk3128-i2c
+Message-ID: <YyTVHph1bCF/gfjL@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
+        sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next 10/13] tsnep: deny tc-taprio changes to per-tc
- max SDU
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
- <20220914153303.1792444-11-vladimir.oltean@nxp.com>
- <ecf497e3-8934-1046-818e-4ee5dc5889eb@engleder-embedded.com>
- <20220916135752.abmpagmyjt4gnolk@skbuf>
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <20220916135752.abmpagmyjt4gnolk@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AV-Do-Run: Yes
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Vbp8ZsxZHEPG+tBR"
+Content-Disposition: inline
+In-Reply-To: <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.09.22 15:57, Vladimir Oltean wrote:
-> On Thu, Sep 15, 2022 at 09:01:19PM +0200, Gerhard Engleder wrote:
->> Does it make any difference if the MAC already guarantees that too
->> long frames, which would violate the next taprio interval, will not
->> be transmitted?
-> 
-> This is not, in essence, about gate overruns, but about transmitting
-> packets larger than X bytes for a traffic class. It also becomes about
-> overruns and guard bands to avoid them, only in relation to certain
-> hardware implementations.
-> 
-> But it could also be useful for reducing latency in a given time slot
-> with mixed traffic classes where you don't have frame preemption.
-> 
->> MACs are able to do that, switches not.
-> 
-> Switches could in principle be able to do that too, but just in store
-> and forward mode (not cut-through).
-> 
->> The user could be informed, that the MAC is considering the length of the
->> frames by accepting any max_sdu value lower than the MTU of the netdev.
-> 
-> By accepting any max_sdu lower than the MTU of the netdev, I would
-> expect that the observable behavior is that the netdev will not send any
-> frame for this traffic class that is larger than max_sdu. But if you
-> accept the config as valid and not act on it, this will not be enforced
-> by anyone. This is because of the way in which the taprio qdisc works in
-> full offload mode.
 
-Ok, denying max_sdu makes sense. It can be used to prevent too large
-frames for a traffic class by discarding them.
+--Vbp8ZsxZHEPG+tBR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In my opinion for MACs a software implementation would make sense even
-in full offload mode, because it would prevent copying frames from RAM
-to MAC which are discarded anyway. But that should be decided driver
-specific.
+On Sat, Sep 10, 2022 at 12:02:30AM +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-i2c compatible string.
+>=20
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-Thanks for your explanations!
+Applied to for-next, thanks!
+
+
+--Vbp8ZsxZHEPG+tBR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk1R4ACgkQFA3kzBSg
+KbY8YxAAqkmITIjJchmw2BH4eehoxFiSAW8VYh6gojn2S2RgQjSwZsHnR8E8FMIu
+eUeROZH0Wd/Mihi8hLz9Fm3/aTSxUss5Zj2hzFr2RGOHqsicHtx622HwdTakfM08
+6NFWuuBya9tGX4iujN+oQsnI1NA8mDPNEIE8tMEh1wBzOY5m/ijAJLIALJ/cB/qj
+4MGIK9aKg9PfU3nSd0b+9Dn7iZDClo6CnBeKCAHhUeF+DoKzdLsl3FQzNtcIxS1+
++NL48AB8Kst01hfZHKpuUriTDT2lXfBeQi5NEKNRyc+1fEWBshPat1tYRlEfs9BA
+WAHNZkh3q8qsSDPh2lufGmmOhuX3pUumWAwHfHgbZksNtPj5ldSTXhUciPPHeufb
+Rf+Ne4WaMMX4JOJJ70wMKn+ycaJYRulfiOacroqTqTH7rSX+NuioTEtITA2KMa3q
+4WfMmHrJe3qLPhEkLXabhrYwMcAWkHaPDJ6dJJbHfxRtR0F8y0DMpyJrCRsF9TcS
++8Hqcq+y5bxc9n/eDxSrSQXXoEQLBFjGeJfCz4D+n6oOWv/6dxMe8dZyU7vq/Ea8
+0DApwW0esWTGZuuV5r2xmncP/4+spn2C2FCOI1ZqCPs2T3Kd7DPBEMPnp7UQRZFO
+cVkNoe0c0N9yQjMEVi9+aqqDWefE6imYt3d3PXqcHEYoHYqHON4=
+=t7C7
+-----END PGP SIGNATURE-----
+
+--Vbp8ZsxZHEPG+tBR--
