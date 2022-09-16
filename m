@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD165BB279
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B715BB285
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIPSwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S230303AbiIPSxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiIPSwf (ORCPT
+        with ESMTP id S230272AbiIPSxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:52:35 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD23B775F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:52:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1966552pjq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=di38Vx0xcwobovXFuqa+aqs6mrMaWt2alUPAsQ25AHE=;
-        b=HMcch5JkSHJGz9ZQUqTzI4QHZMH3bJxFOKm3B2upHhnBl8/9dF5xCiieB6xk0c+KIl
-         q/UQNLIza5wPp9U3ZRDC11bREH40xKg9rwbBLS/9/Ngdpi9jalz5O98gp9u2AmKOwT84
-         PvyXmUaQlLAt3Ta2OHtGUN9Vj0lbmm/pMUAwf7Z3KykezFtqcQz6mZZeR6IVSwkyBA3d
-         EluQsbFtgxctVh2rodhtkv1Aw5XtjXzP3lzDieu3mil82A92fnXrZMquY428RedIw3Dz
-         ZXEjrLpT0t0t35F5zT6pv9mEso44N9Xs3fE4HlTNQTj9jFY7LTvDHbHlzv8x7dAtaPNP
-         4NLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=di38Vx0xcwobovXFuqa+aqs6mrMaWt2alUPAsQ25AHE=;
-        b=ygZd3oB5F0dJHaR6RaloRcnZ3JyCju7KMtOrZBykYCuyVOxFftcsvcq1xhHzpNyiH2
-         SVgtK3wrEy4yalBUYfwP8wwIZ8YnDKhl4hKYtKtQ+44eWObRC50OK0U0kdOYWwqKspYr
-         yJo1Y2Fb4EPSW2MTlwqIzQFoT6c7vqJ6f+bEILA9Zp4JQZrSNwGbHvplpnLajtSlEwRp
-         JrK1SWbGko0i1rBzP0DLFVyy2bMVbbrTBRGsrcmzR5cSltMkNsuWOSIMCjq0JQKrJSG0
-         yaEWovXcusjOxubOPP2MbRVOKPEoRXeRVbofUMYtkCHmQKRcv8ta0aMJouMT8wP6+q07
-         fMRA==
-X-Gm-Message-State: ACrzQf1FDzSqg7bUjjBl1S4fXLwV3MHz42BImJiPz9UdB/SJHLV92yw/
-        rcXmYbhfByLfYEl2jrcvVFpFQA==
-X-Google-Smtp-Source: AMsMyM79oWhOrC1Z2hhvwMa6jwFt0c4Pf+jX7H0OuYkUP5Y9m5sL72liu9kfyo9lakjZU8wMGvW9tA==
-X-Received: by 2002:a17:90b:1b4d:b0:202:c05f:6ea0 with SMTP id nv13-20020a17090b1b4d00b00202c05f6ea0mr7040678pjb.7.1663354353552;
-        Fri, 16 Sep 2022 11:52:33 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902ecca00b0016c574aa0fdsm15487240plh.76.2022.09.16.11.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:52:32 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 18:52:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v2 13/23] KVM: x86: Disable APIC logical map if vCPUs are
- aliased in logical mode
-Message-ID: <YyTF7SsMjm+pClqh@google.com>
-References: <20220903002254.2411750-1-seanjc@google.com>
- <20220903002254.2411750-14-seanjc@google.com>
- <aedb7677-528a-75b7-6517-ab1865515ad4@amd.com>
- <YyGF6T/N1l3i7Ded@google.com>
- <59c2085e-1f0a-fe7d-8146-6c1bc570c97b@amd.com>
+        Fri, 16 Sep 2022 14:53:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07D1DB942E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:53:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B40ED1595;
+        Fri, 16 Sep 2022 11:53:40 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7AF2B3F73D;
+        Fri, 16 Sep 2022 11:53:33 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org, will@kernel.org
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] iommu: Optimise PCI SAC address trick
+Date:   Fri, 16 Sep 2022 19:53:25 +0100
+Message-Id: <cd0a0f8ae2c8e05a9322cd180920f9d422f52034.1663354405.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59c2085e-1f0a-fe7d-8146-6c1bc570c97b@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022, Suthikulpanit, Suravee wrote:
-> > > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > > > index 6b2f538b8fd0..75748c380ceb 100644
-> > > > --- a/arch/x86/kvm/lapic.c
-> > > > +++ b/arch/x86/kvm/lapic.c
-> > > > @@ -303,12 +303,13 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
-> > > >    		if (!mask)
-> > > >    			continue;
-> > > > -		if (!is_power_of_2(mask)) {
-> > > > +		ldr = ffs(mask) - 1;
-> > > > +		if (!is_power_of_2(mask) || cluster[ldr]) {
-> > > 
-> > > Should this be checking if the cluster[ldr] is pointing to the same struct
-> > > apic instead? For example:
-> > > 
-> > > 		if (!is_power_of_2(mask) || cluster[ldr] != apic)
-> > > 
-> > >  From my observation, the kvm_recalculate_apic_map() can be called many
-> > > times, and the cluster[ldr] could have already been assigned from the
-> > > previous invocation. So, as long as it is the same, it should be okay.
-> > 
-> > No, because cluster[ldr] can never match "apic".  kvm_recalculate_apic_map()
-> > creates and populates a _new_ kvm_apic_map every time, it doesn't do an in-place
-> > update of the current map.
-> 
-> Yes, the _new_ is getting created and initialized every time we call
-> kvm_recalculate_apic_map(), and then passed into
-> kvm_apic_map_get_logical_dest() along with the reference of cluster and mask
-> to get populated based on the provided ldr. Please note that the
-> new->phys_map[x2apic_id] is already assigned before the calling of
+Per the resasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
+PCI SAC address trick") and its subsequent revert, this mechanism no
+longer serves it original purpose, but now only works around broken
+hardware/drivers in a way that is unfortunately too impactful to remove.
 
-Ooh, this is what I was missing.  LDR is read-only for x2APIC, and so KVM simply
-uses the phys_map and computes the phys_map indices by reversing the x2APIC=>LDR
-calculation.
+This does not, however prevent us from solving the performance impact
+which that workaround has on large-scale systems that don't need it.
+That kicks in once the 32-bit IOVA space fills up and we keep
+unsuccessfully trying to allocate from it. However, if we get to that
+point then in fact it's already the endgame. The nature of the allocator
+is such that the first IOVA we give to a device after the 32-bit space
+runs out will be the highest possible address for that device, ever.
+If that works, then great, we know we can optimise for speed by always
+allocating from the full range. And if it doesn't, then the worst has
+already happened and any brokenness is now showing, so there's no point
+continuing to try to hide it.
 
-So it's so much not that _can_ "apic" can match "cluster[ldr]", it's actually that
-"apic" _must_ match "cluster[ldr]" for this flow.  Overwriting the cluster entry
-is all kinds of pointless.  It's either unnecessary (no bugs) or it breaks things
-(bugs in either LDR calculation or logical dest math).
+To that end, implement a flag to refine this into a per-device policy
+that can automatically get itself out of the way if and when it stops
+being useful.
 
-Rather than add an exception to the cluster[] check, which is very confusing for
-xAPIC, the whole flow can be skipped for x2APIC, with a sanity check that the LDR
-does indeed align with the x2APIC ID.
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/iommu/dma-iommu.c | 5 ++++-
+ drivers/iommu/iommu.c     | 3 +++
+ include/linux/iommu.h     | 2 ++
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 76a19bf1eb55..e9d7c647e8a7 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -347,6 +347,12 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
-                }
-                new->logical_mode = logical_mode;
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 9297b741f5e8..1cebb16faa33 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -643,9 +643,12 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+ 		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
  
-+               /* I'll add a comment here. */
-+               if (apic_x2apic_mode(apic)) {
-+                       WARN_ON_ONCE(ldr != kvm_apic_calc_x2apic_ldr(x2apic_id));
-+                       continue;
-+               }
+ 	/* Try to get PCI devices a SAC address */
+-	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
++	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_workaround) {
+ 		iova = alloc_iova_fast(iovad, iova_len,
+ 				       DMA_BIT_MASK(32) >> shift, false);
++		if (!iova)
++			dev->iommu->pci_workaround = false;
++	}
+ 
+ 	if (!iova)
+ 		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index edc768bf8976..19d0a6daae73 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -323,6 +323,9 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+ 
+ 	iommu_device_link(iommu_dev, dev);
+ 
++	if (!iommu_dma_forcedac && dev_is_pci(dev))
++		dev->iommu->pci_workaround = true;
 +
-                if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
-                                                                &cluster, &mask))) {
-                        new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+ 	return 0;
+ 
+ out_release:
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 79cb6eb560a8..0eb0f808109c 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -368,6 +368,7 @@ struct iommu_fault_param {
+  * @fwspec:	 IOMMU fwspec data
+  * @iommu_dev:	 IOMMU device this device is linked to
+  * @priv:	 IOMMU Driver private data
++ * @pci_workaround: Limit DMA allocations to 32-bit IOVAs
+  *
+  * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+  *	struct iommu_group	*iommu_group;
+@@ -379,6 +380,7 @@ struct dev_iommu {
+ 	struct iommu_fwspec		*fwspec;
+ 	struct iommu_device		*iommu_dev;
+ 	void				*priv;
++	bool				pci_workaround;
+ };
+ 
+ int iommu_device_register(struct iommu_device *iommu,
+-- 
+2.36.1.dirty
 
-Alternatively, the x2APIC handling could be done after kvm_apic_map_get_logical_dest(),
-e.g. so that KVM can sanity check mask+cluster[ldr], but that's annoying to implement
-and IMO it's overkill since the we can just as easily verify the math via tests on top
-of the LDR sanity check.
-
-I'll do a better job of verifying that APICv + x2APIC yields the correct inhibits.
-I verified x2APIC functional correctness, and that APICv + xAPIC yielded the correct
-inhibits, but I obviously didn't verify APICv + x2APIC yielded the correct inhibits.
-
-Thanks much!
