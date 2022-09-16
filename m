@@ -2,159 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44905BA833
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE875BA83E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiIPI1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 04:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S230401AbiIPI3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiIPI1C (ORCPT
+        with ESMTP id S230384AbiIPI3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:27:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28094A4B2E;
-        Fri, 16 Sep 2022 01:27:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA94F62921;
-        Fri, 16 Sep 2022 08:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246A2C433D6;
-        Fri, 16 Sep 2022 08:27:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663316820;
-        bh=TeA+Z+iJVc+IE04wIs427hBn63eWQx+Ir9CgYNaLl2Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qWRuz1bO0wVLag0NYjO8h+yoKfcIBz0qXkFO1VlJLQteUk6pqYRlEKuaPpEF9UJka
-         zF7wy2J+7+scpPxu0Vq0h8hkbRc3BAoRg2KsvqIbun78Gz9iOJuMqIJk0Q3VDzlFIa
-         fWWy+kJdDL4h4aJAcJFoKB08f1gwR6ZIsL97dbzrbtd3o57cpvNY+vZbI2LbuIFRnr
-         om+eCYGTxMoVunoGlcXnzkeXBPZpr3igSOHbGbFbTc47iJ0j6i6q49lw5reyiHE5D4
-         zOUpTxUOg+E8m6mmtbYesQTymKxgOV+AykKzKb99MFT74SrOqaKbnhYSa1fcwzLGRh
-         iyUQYdx6IgPIQ==
-Received: by mail-lf1-f50.google.com with SMTP id f9so33666153lfr.3;
-        Fri, 16 Sep 2022 01:27:00 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3/vqnDp2txi0dJUfUN4gE/b7n4KdVHOX/UP5bFtfvo3qhmfjyo
-        13MwzEcq6yJJ33+Cb10Hegc1p10T91zYcv9sUjY=
-X-Google-Smtp-Source: AMsMyM7FTBH03cBOW3t9CqWGe+sQB6qBmJw59BdKYW5uPq6K5NL8F8gUBjv6V+lEuK2iaN3xhEL54hkrU5CMSveGSYQ=
-X-Received: by 2002:a05:6512:c0f:b0:49b:1e8c:59fd with SMTP id
- z15-20020a0565120c0f00b0049b1e8c59fdmr1216142lfu.426.1663316818086; Fri, 16
- Sep 2022 01:26:58 -0700 (PDT)
+        Fri, 16 Sep 2022 04:29:12 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8765A74E2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:29:10 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1225219ee46so51130740fac.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date;
+        bh=1RNulGWubi8dMQ7lPg3rkRZj8P2hPUB2/Vc/FMnavGg=;
+        b=pCd4vz+hSVG4Enb3uOKwnCq739U7iV+qKlcw1dGx+YM9rP2WEgKmosGadoknCgE+dz
+         KUwGhBC9fsygi8Npk3+VqGk74raA1MgoPHT2jJ09NVHZWNcFl5ON8X7kWttT1rmeNCi7
+         Pb+UG3wtLSWUATBKgYgny/lzFkIqo5blyv6BU2RDC8gjiFycuYhfFdJtKXysyBs4ptLr
+         hsa9IcTTIhU6KQDTWyYmp3Y+9SJTsD1hIr5SHylQxFW1gNiln6nMuQyMe62x16q6LVVT
+         ZJ8nCsOk7HM5EvbVKrZJEazwoBZq1WsbCgGqUlgjo/IJPQxs9Vizl2A2gMzQMQGKQIjC
+         bZgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1RNulGWubi8dMQ7lPg3rkRZj8P2hPUB2/Vc/FMnavGg=;
+        b=LvhLOn+7vVmIReNtqi2RkTJ0IGaGRDDcQRpiRyJkL+oIBpwiV1Pffh1X5xATnA4APk
+         o2AxYPMC6rtPF7U2Zpp7j5cOcgiHRg+0az1cOTt9i2mnxADWjAhot3pxOIY97+nYyAxt
+         eilW5PH/148Dg2o5kQXpkqlBLdfyLpyZNKKqlH5UXtX4FrJFTLFW46QMXk7ykL6Sj3BJ
+         P+ePAaifGFjuut4kJKqycMCr3PIqaQr9uBC9cSHj4ZUas8/XQ7hrOx12FhZyMWWApoBd
+         OpOzi3ukqlIxe69nmB9ZG9lhKfqi0sPnXThvnZZBsYMhxtdCSxwqlPhawAsdGtKQ69gs
+         HD9Q==
+X-Gm-Message-State: ACgBeo2vi7gOGrXUdpKqTRwwMeBVhzRrEG8qGV5LXWLq28aYETbZySTp
+        xqMIS3nMOew4apbvAWa8L7pAJFjSn+GTtOYVr5SoUEzAhsKpDOdh
+X-Google-Smtp-Source: AA6agR7dm0dtGPurkDerSJQC9K4DBTffEZKU3zy2BCs3hI+zQLe6W4iYEcWskuMwbV3UNoyw3vFaWyGVnCkcOKw8308=
+X-Received: by 2002:a05:6870:2d1:b0:125:5519:1e4e with SMTP id
+ r17-20020a05687002d100b0012555191e4emr7421653oaf.264.1663316950176; Fri, 16
+ Sep 2022 01:29:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220916081441.1993492-1-ilias.apalodimas@linaro.org> <20220916081441.1993492-2-ilias.apalodimas@linaro.org>
-In-Reply-To: <20220916081441.1993492-2-ilias.apalodimas@linaro.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 16 Sep 2022 10:26:46 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEtzCF-19MHNmBB45t3X343bd1G+PRNn=h8=PMfLVq+pA@mail.gmail.com>
-Message-ID: <CAMj1kXEtzCF-19MHNmBB45t3X343bd1G+PRNn=h8=PMfLVq+pA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] efi/libstub: measure EFI LoadOptions
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     pjones@redhat.com, daniel.kiper@oracle.com,
-        James.Bottomley@hansenpartnership.com, leif@nuviainc.com,
-        jroedel@suse.de, Sunil V L <sunilvl@ventanamicro.com>,
-        Baskov Evgeniy <baskov@ispras.ru>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 16 Sep 2022 18:28:58 +1000
+Message-ID: <CAPM=9tzoEUdzdhUsjh8jsuSta3Nv7zkH1-H7g4Oyi4_07zkO2w@mail.gmail.com>
+Subject: [git pull] drm fixes for v6.0-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sept 2022 at 10:15, Ilias Apalodimas
-<ilias.apalodimas@linaro.org> wrote:
->
-> The EFI TCG spec, in =C2=A710.2.6 Measuring UEFI Variables and UEFI GPT D=
-ata,
-> is  measuring the entire UEFI_LOAD_OPTION (in PCR5).  As a result boot
-> variables that point to the same UEFI application but with different
-> optional data,  will have distinct measurements.
->
+Hi Linus,
 
-That is not the main problem. The main problem is that
-LoadImage()/StartImage() may be used to invoke things beyond Boot####
-options, and at StartImage() time, the load options could be anything.
-So not measuring the load options when the image is actually being
-invoked is a huge oversight.
+This is the regular drm fixes pull, the i915 and misc fixes are fairly
+regular, but the amdgpu contains fixes for new hw blocks, the dcn314
+specific path hookups and also has a bunch of fixes for clang stack
+size warnings which are a bit churny but fairly straightforward. This
+means it looks a little larger than usual.
 
+Dave.
 
-> However, PCR5 is used for more than that and there might be a need to use
-> a PCR with a more limited scope which measures our initramfs and
-> LoadOptions.
->
-> So add a measurement in PCR9 (which we already use for our initrd) and
-> extend it with the LoadOption measurements
->
-> Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> ---
->  .../firmware/efi/libstub/efi-stub-helper.c    | 21 +++++++++++++++++++
->  drivers/firmware/efi/libstub/efistub.h        |  1 +
->  2 files changed, 22 insertions(+)
->
-> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/fir=
-mware/efi/libstub/efi-stub-helper.c
-> index 3ef4867344b9..5b03248527c6 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> @@ -370,6 +370,27 @@ char *efi_convert_cmdline(efi_loaded_image_t *image,=
- int *cmd_line_len)
->         int options_bytes =3D 0, safe_options_bytes =3D 0;  /* UTF-8 byte=
-s */
->         bool in_quote =3D false;
->         efi_status_t status;
-> +       static const struct efi_measured_event load_options_tcg2_event =
-=3D {
-> +               {
-> +                       sizeof(load_options_tcg2_event) + sizeof("Load Op=
-tions"),
-> +                       {
-> +                               sizeof(load_options_tcg2_event.event_data=
-.event_header),
-> +                               EFI_TCG2_EVENT_HEADER_VERSION,
-> +                               9,
-> +                               EV_EVENT_TAG,
-> +                       },
-> +               },
-> +               {
-> +                       LOAD_OPTIONS_EVENT_TAG_ID,
-> +                       sizeof("Load Options"),
-> +               },
-> +               { "Load Options" },
-> +       };
-> +
-> +       if (options_chars > 0)
-> +               efi_measure_tagged_event((unsigned long) options,
-> +                                        (unsigned long) options_chars,
-> +                                        &load_options_tcg2_event);
->
+drm-fixes-2022-09-16:
+drm fixes for v6.0-rc6
 
-The name 'options_chars' is a bit misleading here, as it is actually
-the size in bytes at this point.
+amdgpu:
+- BACO fixes for some RDNA2 boards
+- PCI AER fixes uncovered by a core PCI change
+- Properly hook up dirtyfb helper
+- RAS fixes for GC 11.x
+- TMR fix
+- DCN 3.2.x fixes
+- DCN 3.1.4 fixes
+- LLVM DML stack size fixes
 
->         efi_apply_loadoptions_quirk((const void **)&options, &options_cha=
-rs);
->         options_chars /=3D sizeof(*options);
-> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/ef=
-i/libstub/efistub.h
-> index cb7eb5ed9f14..e3605b383964 100644
-> --- a/drivers/firmware/efi/libstub/efistub.h
-> +++ b/drivers/firmware/efi/libstub/efistub.h
-> @@ -741,6 +741,7 @@ union apple_properties_protocol {
->  typedef u32 efi_tcg2_event_log_format;
->
->  #define INITRD_EVENT_TAG_ID 0x8F3B22ECU
-> +#define LOAD_OPTIONS_EVENT_TAG_ID 0x8F3B22EDU
+i915:
+- Revert a display patch around max DP source rate now
+  that the proper WaEdpLinkRateDataReload is in place
+- Fix perf limit reasons bit position
+- Fix unclaimmed mmio registers on suspend flow with GuC
+- A vma_move_to_active fix for a regression with video decoding
+- DP DSP fix
 
-Is this an arbitrarily chosen value?
+gma500:
+- Locking and IRQ fixes
 
->  #define EV_EVENT_TAG 0x00000006U
->  #define EFI_TCG2_EVENT_HEADER_VERSION  0x1
->
-> --
-> 2.34.1
->
+meson:
+- OSD1 display fixes
+
+panel-edp:
+- Fix Innolux timings
+
+rockchip:
+- DP/HDMI fixes
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf=
+:
+
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-09-16
+
+for you to fetch changes up to 25100377a21ad40dae8be5a3ed361b87acec1479:
+
+  Merge tag 'drm-intel-fixes-2022-09-15' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-09-16
+17:49:54 +1000)
+
+----------------------------------------------------------------
+drm fixes for v6.0-rc6
+
+amdgpu:
+- BACO fixes for some RDNA2 boards
+- PCI AER fixes uncovered by a core PCI change
+- Properly hook up dirtyfb helper
+- RAS fixes for GC 11.x
+- TMR fix
+- DCN 3.2.x fixes
+- DCN 3.1.4 fixes
+- LLVM DML stack size fixes
+
+i915:
+- Revert a display patch around max DP source rate now
+  that the proper WaEdpLinkRateDataReload is in place
+- Fix perf limit reasons bit position
+- Fix unclaimmed mmio registers on suspend flow with GuC
+- A vma_move_to_active fix for a regression with video decoding
+- DP DSP fix
+
+gma500:
+- Locking and IRQ fixes
+
+meson:
+- OSD1 display fixes
+
+panel-edp:
+- Fix Innolux timings
+
+rockchip:
+- DP/HDMI fixes
+
+----------------------------------------------------------------
+Alex Deucher (4):
+      drm/amdgpu: add HDP remap functionality to nbio 7.7
+      drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
+      drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
+      drm/amdgpu: make sure to init common IP before gmc
+
+Alvin Lee (3):
+      drm/amd/display: Update MBLK calculation for SubVP
+      drm/amd/display: SW cursor fallback for SubVP
+      drm/amd/display: Refactor SubVP calculation to remove FPU
+
+Ankit Nautiyal (1):
+      drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
+
+Aric Cyr (1):
+      drm/amd/display: Fix divide by zero in DML
+
+Ashutosh Dixit (1):
+      drm/i915/gt: Fix perf limit reasons bit positions
+
+Aurabindo Pillai (2):
+      drm/amd/display: Revert "Fallback to SW cursor if SubVP + cursor too =
+big"
+      drm/amd/display: add workaround for subvp cursor corruption for DCN32=
+/321
+
+Candice Li (2):
+      drm/amdgpu: Enable full reset when RAS is supported on gc v11_0_0
+      drm/amdgpu: Skip reset error status for psp v13_0_0
+
+Chen-Yu Tsai (1):
+      drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+
+Dave Airlie (3):
+      Merge tag 'amd-drm-fixes-6.0-2022-09-14' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-09-15' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-intel-fixes-2022-09-15' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+
+Duncan Ma (1):
+      drm/amd/display: Correct dram channel width for dcn314
+
+Guchun Chen (1):
+      drm/amd/pm: disable BACO entry/exit completely on several sienna
+cichlid cards
+
+Hamza Mahfooz (1):
+      drm/amdgpu: use dirty framebuffer helper
+
+Hans de Goede (3):
+      drm/gma500: Fix BUG: sleeping function called from invalid context er=
+rors
+      drm/gma500: Fix WARN_ON(lock->magic !=3D lock) error
+      drm/gma500: Fix (vblank) IRQs not working after suspend/resume
+
+Leo Chen (1):
+      drm/amd/display: Fixing DIG FIFO Error
+
+Lijo Lazar (1):
+      drm/amdgpu: Don't enable LTR if not supported
+
+Nathan Chancellor (5):
+      drm/amd/display: Reduce number of arguments of
+dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
+      drm/amd/display: Reduce number of arguments of
+dml32_CalculatePrefetchSchedule()
+      drm/amd/display: Reduce number of arguments of dml31's
+CalculateWatermarksAndDRAMSpeedChangeSupport()
+      drm/amd/display: Reduce number of arguments of dml31's
+CalculateFlipSchedule()
+      drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for
+stack usage
+
+Nathan Huckleberry (1):
+      drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
+
+Nicholas Kazlauskas (2):
+      drm/amd/display: Hook up DCN314 specific dml implementation
+      drm/amd/display: Relax swizzle checks for video non-RGB formats on DC=
+N314
+
+Nirmoy Das (1):
+      drm/i915: Set correct domains values at _i915_vma_move_to_active
+
+Rodrigo Siqueira (2):
+      drm/amd/display: Fix compilation errors on DCN314
+      drm/amd/display: Enable dlg and vba compilation for dcn314
+
+Sascha Hauer (1):
+      drm/rockchip: vop2: Fix eDP/HDMI sync polarities
+
+Stuart Menefy (2):
+      drm/meson: Correct OSD1 global alpha value
+      drm/meson: Fix OSD1 RGB to YCbCr coefficient
+
+Taimur Hassan (1):
+      drm/amd/display: Round cursor width up for MALL allocation
+
+Umesh Nerlige Ramappa (1):
+      drm/i915/guc: Cancel GuC engine busyness worker synchronously
+
+Ville Syrj=C3=A4l=C3=A4 (1):
+      Revert "drm/i915/display: Re-add check for low voltage sku for
+max dp source rate"
+
+Yang Wang (1):
+      drm/amdgpu: change the alignment size of TMR BO to 1M
+
+Yao Wang1 (1):
+      drm/amd/display: Limit user regamma to a valid value
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  14 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c        |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.h            |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |   3 +-
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             |   9 +-
+ drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c             |   9 +-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c             |   9 +-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c             |   9 +
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |   5 +
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 |  25 --
+ drivers/gpu/drm/amd/amdgpu/soc21.c                 |   1 +
+ drivers/gpu/drm/amd/amdgpu/vega10_ih.c             |   4 +
+ drivers/gpu/drm/amd/amdgpu/vega20_ih.c             |   4 +
+ .../amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c |   2 +
+ drivers/gpu/drm/amd/display/dc/core/dc_stream.c    |   2 +-
+ drivers/gpu/drm/amd/display/dc/dc.h                |   1 +
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c       |  89 +++--
+ .../display/dc/dcn314/dcn314_dio_stream_encoder.c  |   3 +-
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hubp.c  |  24 +-
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c |  24 +-
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_resource.c  |   4 +-
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_resource.h  |   3 +
+ .../amd/display/dc/dcn32/dcn32_resource_helpers.c  |  59 ++-
+ .../drm/amd/display/dc/dcn321/dcn321_resource.c    |   4 +-
+ drivers/gpu/drm/amd/display/dc/dml/Makefile        |   3 +
+ .../amd/display/dc/dml/dcn30/display_mode_vba_30.c |   3 +-
+ .../amd/display/dc/dml/dcn31/display_mode_vba_31.c | 420 +++++------------=
+----
+ .../gpu/drm/amd/display/dc/dml/dcn314/dcn314_fpu.c |   5 +-
+ .../display/dc/dml/dcn314/display_mode_vba_314.c   |  13 +-
+ .../amd/display/dc/dml/dcn32/display_mode_vba_32.c | 260 +++++--------
+ .../dc/dml/dcn32/display_mode_vba_util_32.c        | 323 +++++++---------
+ .../dc/dml/dcn32/display_mode_vba_util_32.h        |  51 +--
+ .../gpu/drm/amd/display/dc/dml/display_mode_lib.c  |  12 +
+ .../gpu/drm/amd/display/dc/dml/display_mode_lib.h  |   1 +
+ .../gpu/drm/amd/display/dc/dml/display_mode_vba.h  |  10 +-
+ drivers/gpu/drm/amd/display/dc/inc/hw/clk_mgr.h    |   1 +
+ .../drm/amd/display/modules/color/color_gamma.c    |   4 +
+ .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c    |  11 +
+ drivers/gpu/drm/gma500/cdv_device.c                |   4 +-
+ drivers/gpu/drm/gma500/gem.c                       |   4 +-
+ drivers/gpu/drm/gma500/gma_display.c               |  11 +-
+ drivers/gpu/drm/gma500/oaktrail_device.c           |   5 +-
+ drivers/gpu/drm/gma500/power.c                     |   8 +-
+ drivers/gpu/drm/gma500/psb_drv.c                   |   2 +-
+ drivers/gpu/drm/gma500/psb_drv.h                   |   5 +-
+ drivers/gpu/drm/gma500/psb_irq.c                   |  15 +-
+ drivers/gpu/drm/gma500/psb_irq.h                   |   2 +-
+ drivers/gpu/drm/i915/display/icl_dsi.c             |   2 +
+ drivers/gpu/drm/i915/display/intel_dp.c            |  33 +-
+ drivers/gpu/drm/i915/display/intel_vdsc.c          |   1 -
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  |   7 +-
+ drivers/gpu/drm/i915/i915_reg.h                    |  16 +-
+ drivers/gpu/drm/i915/i915_vma.c                    |   3 +-
+ drivers/gpu/drm/meson/meson_plane.c                |   2 +-
+ drivers/gpu/drm/meson/meson_viu.c                  |   2 +-
+ drivers/gpu/drm/panel/panel-edp.c                  |   3 +-
+ drivers/gpu/drm/rockchip/cdn-dp-core.c             |   5 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c       |   4 +
+ 59 files changed, 655 insertions(+), 908 deletions(-)
