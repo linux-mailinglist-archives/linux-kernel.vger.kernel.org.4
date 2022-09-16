@@ -2,112 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98E75BA8E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE0F5BA8F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiIPJC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S231137AbiIPJEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiIPJCD (ORCPT
+        with ESMTP id S230449AbiIPJEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:02:03 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C6E491CE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:01:33 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 916DE580E9B;
-        Fri, 16 Sep 2022 05:01:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 16 Sep 2022 05:01:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663318892; x=1663322492; bh=eSy6TVmDPq
-        cwPJ8Iryb7Xwdk6oM2vvcqIdcjswH4P9E=; b=rHo2dTf9SE9S0gj2sOVe8pVO0W
-        Td7NhKdEevcRMSDxrlt5f6VZe80+19QkGriim8Fmm6LnbygI6ZZlbqmXF562LBK/
-        0RlGKgsVwYBRMFQfSYn6mu/yXAv7+PGopEYhS0kdjBDCR6koWscqVFJbqhfJaFD9
-        eTr1x7iI2tcXcAvVVYKlHK3BOfCeurroaxfrSFGsKecX6j6L+kNKbzF4E/9kYNcc
-        EtBzTcyPTiieH3falT3odzwFJflCJRGX+1WkFUE0eMWiaIWYOYssobHpWxbhHzMi
-        IuIDW39V4eJmcivJzq8bZ+ij/N+mVSTk8IWTYIkq1Z+Kz8hPWpy/Pq+VTCXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663318892; x=1663322492; bh=eSy6TVmDPqcwPJ8Iryb7Xwdk6oM2
-        vvcqIdcjswH4P9E=; b=rYMcLawC1WVkZQ5ZsW2j7sIZ7s2vguyxJM6ld7kKlR1o
-        O3igcFxjFQ9aQ+XQH5sV3A7mw1uTWU6slKTdbBmXIGBs725N/yVP5DMR/vXS4Psp
-        kG8iNsh0q2wqBe6FX83eGCCLZdZxn0jddAgIGuOuxTljuz5XMLbJR65jlGtnf7yD
-        y22IS59O3cvlQVxXJ0s8TDNMhE+TDJBVtZ/aJHVzt/7BI5FkEcqbsfBzn9reOtFz
-        r8/w4irSp0HGH5jban+7wZauToQ3uRRt/WeXKg8Gxz/X32L33nsSrHxT3FVfJdof
-        Tc+VK5S51J43zho/10TtaTLW/fYTnf+51hICEdiEFA==
-X-ME-Sender: <xms:bDskYzJ8ujs6qb8cpws1p2sQdxdIUNBVebt7AGW8awR-x1TPHGMwaA>
-    <xme:bDskY3LpCRzh8rHB-CiHP6350nPWwIqjnZqjbL5rVMLqf_z_LRVU4L_dmpc77rMpL
-    N1bB1bu0us_ErcE71I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvtddguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:bDskY7spbeCsSuJuDUkb7m3M8dfKgweKqqDMsV4lMlElBnxGZxTY9g>
-    <xmx:bDskY8YyQImQsG7U0ohA7BcYMs6KtM05Ap7DIzCnvrcc30Htx7JtJA>
-    <xmx:bDskY6ZGv9z8vadTzXkJtkoIExr5VRBYMZ6rhHNCBUaMlUbLGOIAxg>
-    <xmx:bDskYwP3dRa-ntBz4APv2sLSWGgP6GwdMsyCVym_q3hR00_zoQxASw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 274D0B60086; Fri, 16 Sep 2022 05:01:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <4dcb0e76-b965-42da-b637-751d2f8e1c51@www.fastmail.com>
-In-Reply-To: <20220916001038.11147-1-ansuelsmth@gmail.com>
-References: <20220916001038.11147-1-ansuelsmth@gmail.com>
-Date:   Fri, 16 Sep 2022 11:01:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christian Marangi" <ansuelsmth@gmail.com>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        "Vinod Koul" <vkoul@kernel.org>, "Mark Brown" <broonie@kernel.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: handle error pointer from adm
- prep_slave_sg
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 05:04:30 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873062EC;
+        Fri, 16 Sep 2022 02:04:26 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28G93TM3094011;
+        Fri, 16 Sep 2022 04:03:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663319009;
+        bh=l0yzlJ3VRMyHn0c+evjmOZziDl/jyYHZXoy+RPAZVdM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=eJRu0kkW24ozs/jtJW/PYVEugEbz2ay/34uU2ygzirMc5nQdG05EhffOWwfr8ZuXC
+         Olszw/35kOgWvKBhyrZu8qJYaeJNcZufdioCFwT9uehW91esMzumEmXTxw3yiqSUG8
+         oj38/d00b9A0F9uUYHFQroho+0UgBwATb66gJt4A=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28G93Thh016060
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 16 Sep 2022 04:03:29 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 16
+ Sep 2022 04:03:28 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 16 Sep 2022 04:03:28 -0500
+Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28G93NF6100788;
+        Fri, 16 Sep 2022 04:03:24 -0500
+Message-ID: <85398274-c0fb-6ef6-29b3-ad8d2465f8e4@ti.com>
+Date:   Fri, 16 Sep 2022 14:33:23 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vladimir.oltean@nxp.com>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
+ fixed-link configuration
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20220914095053.189851-1-s-vadapalli@ti.com>
+ <20220914095053.189851-6-s-vadapalli@ti.com>
+ <YyH8us424n3dyLYT@shell.armlinux.org.uk>
+ <ab683d52-d469-35cf-b3b5-50c9edfc173b@ti.com>
+ <YyL5WyA74/QRe/Y4@shell.armlinux.org.uk>
+ <c76fdb7a-a95f-53c6-6e0e-d9283dd2de2d@ti.com>
+ <YyQjqU7O5WRfrush@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <YyQjqU7O5WRfrush@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022, at 2:10 AM, Christian Marangi wrote:
-> ADM dma engine has changed to also provide error pointer instaed of
-> plain NULL pointer on invalid configuration of prep_slave_sg function.
-> Currently this is not handled and an error pointer is detected as a
-> valid dma_desc. This cause kernel panic as the driver doesn't fail
-> with an invalid dma engine configuration.
->
-> Correctly handle this case by checking if dma_desc is NULL or IS_ERR.
+Hello Russell,
 
-Using IS_ERR_OR_NULL() is almost never a correct solution. I think
-in this case the problem is the adm_prep_slave_sg() function
-that returns an invalid error code.
+On 16/09/22 12:50, Russell King (Oracle) wrote:
+> On Fri, Sep 16, 2022 at 10:24:48AM +0530, Siddharth Vadapalli wrote:
+>> On 15/09/22 15:37, Russell King (Oracle) wrote:
+>>> Hi,
+>>>
+>>> On Thu, Sep 15, 2022 at 02:58:52PM +0530, Siddharth Vadapalli wrote:
+>>>> Hello Russell,
+>>>>
+>>>> On 14/09/22 21:39, Russell King (Oracle) wrote:
+>>>>> On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
+>>>>>> Check for fixed-link in am65_cpsw_nuss_mac_config() using struct
+>>>>>> am65_cpsw_slave_data's phy_node property to obtain fwnode. Since
+>>>>>> am65_cpsw_nuss_mac_link_up() is not invoked in fixed-link mode, perform
+>>>>>> the relevant operations in am65_cpsw_nuss_mac_config() itself.
+>>>>>
+>>>>> Further to my other comments, you also fail to explain that, when in
+>>>>> fixed-link SGMII mode, you _emulate_ being a PHY - which I deduce
+>>>>> since you are sending the duplex setting and speed settings via the
+>>>>> SGMII control word. Also, as SGMII was invented for a PHY to be able
+>>>>> to communicate the media negotiation resolution to the MAC, SGMII
+>>>>> defines that the PHY fills in the speed and duplex information in
+>>>>> the control word to pass it to the MAC, and the MAC acknowledges this
+>>>>> information. There is no need (and SGMII doesn't permit) the MAC to
+>>>>> advertise what it's doing.
+>>>>>
+>>>>> Maybe this needs to be explained in the commit message?
+>>>>
+>>>> I had tested SGMII fixed-link mode using a bootstrapped ethernet layer-1
+>>>> PHY. Based on your clarification in the previous mails that there is an
+>>>> issue with the fixed-link mode which I need to debug, I assume that what
+>>>> you are referring to here also happens to be a consequence of that.
+>>>> Please let me know if I have misunderstood what you meant to convey.
+>>>
+>>> I think what you're saying is that you have this setup:
+>>>
+>>>   ethernet MAC <--SGMII link--> ethernet PHY <---> media
+>>>
+>>> which you are operating in fixed link mode?
+>>
+>> Yes, and the other end is connected to my PC's ethernet port.
+>>
+>>>
+>>> From the SGMII specification: "This is achieved by using the Auto-
+>>> Negotiation functionality defined in Clause 37 of the IEEE
+>>> Specification 802.3z. Instead of the ability advertisement, the PHY
+>>> sends the control information via its tx_config_Reg[15:0] as specified
+>>> in Table 1 whenever the control information changes. Upon receiving
+>>> control information, the MAC acknowledges the update of the control
+>>> information by asserting bit 14 of its tx_config_reg{15:0] as specified
+>>> in Table 1."
+>>>
+>>> For the control word sent from the MAC to the PHY, table 1 specifies a
+>>> value of 0x4001. All the zero bits in that word which are zero are
+>>> marked as "Reserved for future use." There are no fields for speed and
+>>> duplex in this acknowledgement word to the PHY.
+>>>
+>>> I hope this clears up my point.
+>>
+>> Thank you for the detailed explanation. After reading the above, my
+>> understanding is that even in the fixed-link mode, the ethernet MAC is
+>> not supposed to advertise the speed and duplex settings. The ethernet
+>> MACs present on both ends of the connection are supposed to be set to
+>> the same speed and duplex settings via the devicetree node. Thus, only
+>> for my setup which happens to be a special case of fixed-link mode where
+>> the ethernet PHY is present, I am having to send the control word due to
+>> the presence of a PHY in between.
+> 
+> In SGMII, the control word is only passed between the ethernet MAC and
+> the ethernet PHY. It is not conveyed across the media.
+> 
+>> And, I am supposed to mention this in
+>> the commit message, which I haven't done. Please let me know if this is
+>> what I was supposed to understand.
+> 
+> If you implement this conventionally, then you don't need to mention it
+> in the commit message, because you're following the standard.
+> 
+>> I am planning to change to a proper fixed-link setup without any
+>> ethernet PHY between the MACs, for debugging the driver's fixed-link
+>> mode where the "mac_link_up()" is not invoked.
+> 
+> SGMII is designed for the setup in the diagram I provided in my previous
+> email. It is not designed for two MACs to talk direct to each other
+> without any ethernet PHY because of the asymmetric nature of the control
+> word.
+> 
+> The PHY sends e.g. a control word of 0x9801 for 1G full duplex. On
+> reception of that, the MAC responds with 0x4001. Finally, the PHY
+> responds with 0xd801 to acknowledge the receipt of the MAC response.
+> 
+> If both ends of the link are SGMII, both ends will be waiting for
+> the control word from a PHY which is not present, and the link will
+> not come up.
+> 
+> 1000base-X is a symmetric protocol where both ends of the link
+> advertise their capabilities, acknowledge each others abilities and
+> resolve the duplex and pause settings.
+> 
+> SGMII is a Cisco proprietary modification of 1000base-X designed for
+> communicating the results of media autonegotiation between an
+> ethernet PHY and ethernet MAC.
 
-While error pointers are often better than NULL pointers for
-passing information to the caller, a driver can't just change
-the calling conventions on its own. If we want to change
-the dmaengine_prep_slave_sg() API, I would suggest coming
-up with a new name for a replacement interface that uses
-error pointers instead of NULL first, and then changing
-all callers to the new interface.
 
-       Arnd
+I will try to implement and test SGMII mode in the conventional way with
+both the MAC and the PHY present. If I am unable to do so, I will revert
+to the current set of patches for the special case where the MAC
+emulates a PHY, and mention this setup in the commit message of the v2
+series. I hope this approach would be fine to proceed with. Please let
+me know in case of any suggestions.
+
+Regards,
+Siddharth.
