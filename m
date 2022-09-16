@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389DF5BB4C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88C35BB4CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiIPXdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 19:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S229881AbiIPXuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 19:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiIPXdX (ORCPT
+        with ESMTP id S229723AbiIPXuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 19:33:23 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D0CB9595;
-        Fri, 16 Sep 2022 16:33:22 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r23so13113105pgr.6;
-        Fri, 16 Sep 2022 16:33:22 -0700 (PDT)
+        Fri, 16 Sep 2022 19:50:02 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927EF3AE40;
+        Fri, 16 Sep 2022 16:50:01 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id g2so14083705qkk.1;
+        Fri, 16 Sep 2022 16:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=FkwcMuPKAyIP/oOmQ4uH+hyF+kMKI0zxNAQqGfbM4Z8=;
-        b=S9cmbn4CyhtMlh6aNtSmNTJvFCO+Yuk/HR7QzXFPqpi2dDaDucz2dfmEcw/fswaD0u
-         vCn+FvnuVGFtJ0lX49P4LuJHW50golAAP+ehiTfuV4WcWJcjLDv+8c8oqajhE52hSU9S
-         3b/X0EqXFkHkCzD9K+qbnJq4fwYM/lUMh1aAfRX+9fWc5hzuGr/CGQtalLuPjwvajL3t
-         4Z7klohE2d00G2bCBnrkINzOrND/AcgRZmwNfYCTGNxYmWwmbY+SRF4cuBD46V3D34zt
-         Wy+EBjmoII++9HSuIZkc1xgLXJvGyUsrtDZX8oAeVl3+eT9at7TURsRiNDbgNc0Ej/4d
-         4jjA==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=oFxY0jVjO378ooGpIyQ8GCyfBIthqxc2ChN2Zjbp0uE=;
+        b=cyjy7CTHDm1nhfPt0CzGwroHiCK9A8DIAhJ83St8mNgvYWcnaIx+L+PtICZgBb4kF0
+         F9wJwUVA8FRM4s+FuJag3ey3LW+qDn6/rdjgStvpSgh6GhgSRqx+Qygu2otMIV3QKGsp
+         pcLh7F2yl3t8U8OPj8w4UvdXiSjxypd90f7lhUS44RYr9AQWcXGZMfHqJYGeUawsYkrq
+         8q71+9n4pPINONB3orFLiIJuPNQah00norDTRTDT54NnJvFNmQ5UUlSmpHjvFcuBGgOv
+         3b3MlRga1MzQ06MX1Gp0N8qdqbgD3cGvMPrGPYNCaSfF6IxwxmhQwdv09OFXZkdjLtG9
+         5Ugw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=FkwcMuPKAyIP/oOmQ4uH+hyF+kMKI0zxNAQqGfbM4Z8=;
-        b=s0eAbKnMr20Qq6avWrDB3sQzSwVzTacLUyrq8GiHN1V5KrD12t+OqsZ65o/HZ2CCoT
-         UC4Bj2nY9NHHeWcVu0l3b1esvmxyr0e2i8v8yExE+tQu2fAE31wMpeEYp6kqSDP5Bdbr
-         Ce5ehsUXzJqKKLAKjVvGVjv7QwV56de43YnE8mVm784mJSVbN+zpsg8eiPAJ6JoNr+3h
-         RMlBdH1n/BOGLjJtZqB+95u/Z+TP/1rop8bNdGwUfx7sPYHd4kZCd3DfgWVE71FLCWSx
-         y6MA3YPK7U6YVmmNMujEZDt8ilhFU8EJ9yAtOxYqUK1+8g4xNlLQsbFijth+soTXO+zz
-         QwtQ==
-X-Gm-Message-State: ACrzQf3yZ0MdnXdhkdiVkPM0dAKAumBXxn9QYoAPmNotMzNr/ADwWnU/
-        XM4mptZwOVeewF1VaWhO10q6WXbMAmk=
-X-Google-Smtp-Source: AMsMyM54vHxTNdmLHLU1J//l6ttbSdd442EteUL6rW2u3LeoAdFWAJeGCW+zEpHLpwdaEd/qTAnSmw==
-X-Received: by 2002:a63:4714:0:b0:42b:82d9:b617 with SMTP id u20-20020a634714000000b0042b82d9b617mr6308979pga.223.1663371201616;
-        Fri, 16 Sep 2022 16:33:21 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id g2-20020a170902d1c200b001781a7c28b9sm14578525plb.240.2022.09.16.16.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 16:33:20 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org
-Cc:     song@kernel.org, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v2] drivers/md/md-bitmap: check the return value of md_bitmap_get_counter()
-Date:   Fri, 16 Sep 2022 16:33:05 -0700
-Message-Id: <20220916233305.3784826-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oFxY0jVjO378ooGpIyQ8GCyfBIthqxc2ChN2Zjbp0uE=;
+        b=o+yvKy1eqWVQMxbBQ9llVwO4Xf9oISxqWd0hxhXpRDpVn0v4WOPoUAfs8l4Mvd2xvD
+         jjSachP80rYsPlCs3V7Z1xMHWEFrchZkLHNqlYInCbaocu04JuWQOv3GBu5dn3IlEOGu
+         BwEDBwEPwcpMf/U3w5334/bF/WVZnYKy1Xsoc1XJahzAGin6w75cvWNxRl9elLN6VMlu
+         WVzPPjI+1CiZyk7wE/xS9LnXTqWF1R9P4Z1uMtziEqnRmOOXZuRm9JK4TDG6tWVwnKS3
+         lkMLv+wtcX4DUZEvfxnbB869Jcgt8K9wemzZKAWMjolXHJ8ycgGFQiTs0uxD1i4eRmna
+         er7g==
+X-Gm-Message-State: ACrzQf0bzDjVgT6v7ANuEmYBcRoCqAfQXHyF/dMm8/nMwbRMwAmxGWjB
+        hB82GjhYt+CoYbtZtGWO5Zw=
+X-Google-Smtp-Source: AMsMyM6zhuZXNWXDcdHh0KtedTjvoEI1dVxOk8SxINxuCQJ+lw3q6csBaEntgh9Ud4X+CwDYhiXWOg==
+X-Received: by 2002:ae9:c118:0:b0:6ce:33f9:c5ca with SMTP id z24-20020ae9c118000000b006ce33f9c5camr5901673qki.61.1663372200642;
+        Fri, 16 Sep 2022 16:50:00 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id k13-20020a05620a414d00b006c479acd82fsm8061719qko.7.2022.09.16.16.49.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 16:50:00 -0700 (PDT)
+Message-ID: <6fab7362-50a1-07e6-f881-9c4e5592b0e2@gmail.com>
+Date:   Fri, 16 Sep 2022 16:49:56 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 4.9 0/7] 4.9.329-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220916100440.995894282@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220916100440.995894282@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,56 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of md_bitmap_get_counter() in case it returns
-NULL pointer, which will result in a null pointer dereference.
+On 9/16/2022 3:07 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.329 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.329-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-v2: update the check to include other dereference
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/md/md-bitmap.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index bf6dffadbe6f..63ece30114e5 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -2195,20 +2195,23 @@ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
- 
- 		if (set) {
- 			bmc_new = md_bitmap_get_counter(&bitmap->counts, block, &new_blocks, 1);
--			if (*bmc_new == 0) {
--				/* need to set on-disk bits too. */
--				sector_t end = block + new_blocks;
--				sector_t start = block >> chunkshift;
--				start <<= chunkshift;
--				while (start < end) {
--					md_bitmap_file_set_bit(bitmap, block);
--					start += 1 << chunkshift;
-+			if (bmc_new) {
-+				if (*bmc_new == 0) {
-+					/* need to set on-disk bits too. */
-+					sector_t end = block + new_blocks;
-+					sector_t start = block >> chunkshift;
-+
-+					start <<= chunkshift;
-+					while (start < end) {
-+						md_bitmap_file_set_bit(bitmap, block);
-+						start += 1 << chunkshift;
-+					}
-+					*bmc_new = 2;
-+					md_bitmap_count_page(&bitmap->counts, block, 1);
-+					md_bitmap_set_pending(&bitmap->counts, block);
- 				}
--				*bmc_new = 2;
--				md_bitmap_count_page(&bitmap->counts, block, 1);
--				md_bitmap_set_pending(&bitmap->counts, block);
-+				*bmc_new |= NEEDED_MASK;
- 			}
--			*bmc_new |= NEEDED_MASK;
- 			if (new_blocks < old_blocks)
- 				old_blocks = new_blocks;
- 		}
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
+Florian
 
