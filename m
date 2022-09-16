@@ -2,167 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DFF5BA39B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 02:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8B65BA3A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 02:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIPAyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 20:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S229665AbiIPA4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 20:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIPAyl (ORCPT
+        with ESMTP id S229647AbiIPA4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 20:54:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA37B4BF;
-        Thu, 15 Sep 2022 17:54:38 -0700 (PDT)
-X-UUID: fef0eb492a384a77b5197c090c416907-20220916
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=SyP+UC+nz0mfWD//PcLXFkLh7sU/Z2M1jPcJubN4g1g=;
-        b=qsTQyn8fjrX0MNCVO8dcJ0oQQA6TvRY/0oPIkkZ51IzNFBNs37y/+TceN0DgoRoevkrHFSRS5QRlyF77Tcc+CzwQe3tgYAVwNE0KctqBLH6wCHAZGBcT1srD7uKiHRcpac5gYslkoXj364LuVVniHP2sYfQaOO/JK09WpQnWwtM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:b7285645-0e43-47fb-ae1c-53b19381c961,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:b7285645-0e43-47fb-ae1c-53b19381c961,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:4edc91f6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:220916085434J14R123L,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fef0eb492a384a77b5197c090c416907-20220916
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 876420423; Fri, 16 Sep 2022 08:54:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 16 Sep 2022 08:54:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 16 Sep 2022 08:54:31 +0800
-Message-ID: <90201cd6f3385350a980f5fb98cb5f26c8aa5757.camel@mediatek.com>
-Subject: Re: [PATCH 4/5] arm64: dts: change compatible of vdosys0 and
- vdosys1 for mt8195
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "Singo Chang" <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 16 Sep 2022 08:54:31 +0800
-In-Reply-To: <1fd48fa0-66eb-5af9-6168-d1df602216a5@gmail.com>
-References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
-         <20220914182331.20515-5-jason-jh.lin@mediatek.com>
-         <1fd48fa0-66eb-5af9-6168-d1df602216a5@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 15 Sep 2022 20:56:40 -0400
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A2186C03
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663289798; bh=xKRiN+tRII6o9SvC/3zJQA9qwLpa7PTjKW/Ff3H5skQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=NFozRvUvVllyDxNm8mGpQuWHNfVe+0Vmd/ZxLGtyvDHNAFhVPihyJf93g1EQQONlgqSEraxWM2sTEVOfKS7eq+cOV7dMKI7WTJSC//J0RUU+HvsQYI02jErc/+PBQ4CbbQgo046/+oqjqlD03pCNJPxB1RUW8A7roxsDiv2FMG+gtYLlrRJnVn3Jcb7waBr5tfKfwMZqdLg5DHAM9bHfYZWCwZHHxk9n+OLchbJdzhMlQ0G3/B5paKde1VaWcMGmJZ8GiSGUgYdwMmTqZtMCyv2vjweL4O9vH1YHIvjH+9D2TY4O9KTX4ETM/qlRVt6EOMAW+lsCocOESbJO/psVDg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663289798; bh=WmbW9yzUc/no9nIGRczo+NjTt/C2LrnnvT/LDS/tlmf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jubetYHTnYnbe+plg91aXvQq7Gzu4RAHvHoK+1Yxi3sLZ60qd+fW5ZbR6y4+nbM2qJD/CQMebGxYdJs7eyhti4ADt8aAu+f0z7sG4UH0dXiOp2dsI1Jpvr3ht7XfCB1900W/2b+0LwBAmcl2MhjueK10ywLOtTVMh2KoA+f5ztjFgp5VCnYh0FXYERL93xszZJsBNwoJpYMsc/emFZhyFcA6uFNgO5yULhLVprj64RAGWfgRaEpmIxGyDFwsocqeM1dv+nWHr7RfXcxQCZQaB6P2pwqBXiGIJJZMilKNapACLr0bX/vSF2xicHHVOJqng8H0w930Ct2yw6T8xwvF4w==
+X-YMail-OSG: fcI8zmcVM1nySX6lXTbLEFjZgYiOVpZpFxRJjJrjqht1j8DWMgd8dKkoU7fLH95
+ BNDqUW3VENgZamOE4TKh4Ve0neoNuxMGhdJYJ26xm71ueJ5yztC9YAf_KmVk.P.WYHL.OnSmz6VV
+ F8RpEnJu8NvZ_cXXNA4HBl8.sHuYEfUHq81bVBqYlH23Nk9.lU6IbFBT0EFfAjwEhbq_yKG1GEX2
+ HsIFcDolc0njG9Yscj5Q6LBnOwJyjAIdpHM2.fJfq_PFNy5MfvAIDG36gDDLy_XJUjprczwHa6Kh
+ gGVOHWTVMjW9HVVOhbJ3jOnXd7x0eDYTRPulHswYIDvWzurhhZBvpoO49E4aDPYSh3oPHrx1qSC_
+ ISkkYvz37HTdskMw8BBMBQfYKEt8myY8yP1u3gnl_52ot42IgXh6hRSucG7QGTD1_B5YmwxfXEss
+ VJyYnkGwtVdBlfXCKzuMUCn57TLd59BPhCh2TB3FroMYu70GaoyCjOV1MIMtxCwq1UoHawe7Ejm4
+ lpPyhmJ.1YlSGZ5PKsP51MtnxeL1A1sjnIgSJlIEvIdHN27gNVhXbiLoPNQxYWlGXO8iObAhnPSD
+ QN2N_KnNNDOM6Pgk1vQiqKStegE2eisFkirZXywn.mc56hAk7wjX.6n.mebAXieUtDjmlpS.ZdYH
+ uPIa5z2CCVrzhh.7tHvt5ox7M2qxZg8onOsnPe8exln4yPv5NTVe.lYav592bq5To2BUQxmy8XMU
+ ZCKsECZzzn47dMi4Wl.Nq2gFofhmBjWzFsklHgBN5pgpOevVMy23aUUYX9Ilb9StI4dDRJI2jfXD
+ PE5XQCGkRaywik686Fj72._YPsOTQtOsv8l2arh1X5jOWPYRuH99VwPdtXodQMq_kk80fHn1i8.Z
+ fcF.eXuoOdeD49wNT.OhI5i6wZ52q9DaoAtaK2qgluleNBcHsz.BPTnPhZjuHXtyWrU7YoOS2kK7
+ 1ClQ4iQNNP2gEOdovsOym4vH96aLsXXHfpWfgZWSc.KjMb00vT.xvnDCeB6ncaQbk2eJHgQwJqVY
+ lDjiVHgd_iA1B4OhOTJu8YZFAkkicMKSkLvJUfSPCj.KFjsS4YIs2gODpXSMJrxduqnek86nnw3h
+ v0WKcWPl5dGHeazK6NofxQkjMSu9gXpWiY8FRt7bmoTlqY6zHCSyGGzs7cdR2GRvkqMQggGiBwcG
+ rEhUpAzbDo287MXBwG9vVLfFeVRAM6XKjkwDUbL0f9NLyks8B71BiF366OKyhguhVfeWFzPCfV1D
+ 1I6ISkDtf7tSc4IpRVQHC1pmQNuS9dFJMk9v0moddp35AecVKgcjHiT6rCrUGw8NqBv55SYsXhOR
+ vs_4xxIQNCN9vmR_w9Hgkhq6yDlpV9O_6rFmZg7GBQ0jTrPKFCI2HyA5yJeaaleuAkAJec4_XPTu
+ fBu1D.rMNewQQ8kn7CBZyc.wnaCNBjE7OjbY2u255uqsJqwg0u.vOVxWWfjO0UH6yM6r4PKjDAA7
+ AfNTR8ZeBofsYuoY5nf8aS3YkbEKRT52I08adwzYNvgYnwqBUvfvzsUaEyL9WeCgD9EJgWSCAuCc
+ g5vGgkePv3yCCAAV0bUuEyG4Ec6zH5sV9f_TY9hJoJlNH0OdZ5C9Trvvkf4RFM9EknJtr_ZhuGww
+ lm2clJFDMioDM8CIWbfv.EFoZs5C3tIKhvB749LWIWqCl1r3IGZqAbMAL1QXyRHPou8iRT2bJIUn
+ 17EqDQJHEAaKFXmeGO5vRUjvprLREavnzfw8VET0Nxqc6U_TDgaZ_5ZrVUxTk4_k7eu1ALh7UwSH
+ P47WTLn6dSqaT8mJv67xewLMkstsvD1tLfTSaKKuJJG7veeXgpVwFIgfK_DX.o_eYA5jtU35OdR6
+ qMpXGVEL.dHlmb5pCidBuL2yAtA2dpZl1Z27TmUfPbqeSkaJoYghyLrhPY8lmlkJOI3WxjKTQJZL
+ PTr4Kpkb22gI3ZMG5kDIylbrjkcsXmgSrBPiDiRhzjEbMeeUPjAna.mLReO9GUTvo.NJbxh5rMMD
+ 8wGT9wXdJRxKKGy5o89LqHttmDnPNk0M_4zHzmSbYRxKRGxVNlDjjFceSm8TtqOoKzRxieVKW8X7
+ jHvmU3CbXO0CR5uQ9tuPqJNLIoNJQLkyYa8COe7EPK79jxcOScsEoaVYhgGv1cio1HN8RBOGp2aY
+ 6AuZrT3Jc8piHv1UhMokg8ly8MdzVeOuOSKwG2SfhtK.6.4GoxFwoVyrBwl_dxup2XzW4mh6VejP
+ ZI8ndST0gVUDtRrXIOSdl4XaE4_KLz6dhFRyHBw8bKnJ3TrBk_68kE0dD82jZ9SBA7F1kJPyACpU
+ -
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Sep 2022 00:56:38 +0000
+Received: by hermes--production-ne1-544744cc75-mbjj6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 906197aefc0e524116a4d5e4b45ad582;
+          Fri, 16 Sep 2022 00:56:33 +0000 (UTC)
+Message-ID: <7234a3e5-8b3c-3ac4-2e06-c6cffa46c10e@schaufler-ca.com>
+Date:   Thu, 15 Sep 2022 17:56:32 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v14 00/26] ima: Namespace IMA with audit support in IMA-ns
+Content-Language: en-US
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com, brauner@kernel.org,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, casey@schaufler-ca.com
+References: <20220915193221.1728029-1-stefanb@linux.ibm.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220915193221.1728029-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailer: WebService/1.1.20612 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+On 9/15/2022 12:31 PM, Stefan Berger wrote:
+> The goal of this series of patches is to start with the namespacing of
+> IMA and support auditing within an IMA namespace (IMA-ns) as the first
+> step.
+>
+> In this series the IMA namespace is piggybacking on the user namespace
+> and therefore an IMA namespace is created when a user namespace is
+> created, although this is done late when SecurityFS is mounted inside
+> a user namespace. The advantage of piggybacking on the user namespace
+> is that the user namespace can provide the keys infrastructure that IMA
+> appraisal support will need later on.
+>
+> We chose the goal of supporting auditing within an IMA namespace since it
+> requires the least changes to IMA. Following this series, auditing within
+> an IMA namespace can be activated by a root running the following lines
+> that rely on a statically linked busybox to be installed on the host for
+> execution within the minimal container environment:
+>
+> As root (since audit rules may now only be set by root):
 
-Thanks for the review.
-
-On Thu, 2022-09-15 at 18:15 +0200, Matthias Brugger wrote:
-> 
-> On 14/09/2022 20:23, Jason-JH.Lin wrote:
-> > For previous MediaTek SoCs, such as MT8173, there are 2 display HW
-> > pipelines binding to 1 mmsys with the same power domain, the same
-> > clock driver and the same mediatek-drm driver.
-> > 
-> > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding
-> > to
-> > 2 different power domains, different clock drivers and different
-> > mediatek-drm drivers.
-> > 
-> > Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
-> > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
-> > Quality)
-> > and they makes VDOSYS0 supports PQ function while they are not
-> > including in VDOSYS1.
-> > 
-> > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
-> > component). It makes VDOSYS1 supports the HDR function while it's
-> > not
-> > including in VDOSYS0.
-> > 
-> > To summarize0:
-> > Only VDOSYS0 can support PQ adjustment.
-> > Only VDOSYS1 can support HDR adjustment.
-> > 
-> > Therefore, we need to separate these two different mmsys hardwares
-> > to
-> > 2 different compatibles for MT8195.
-> > 
-> > Fixes: b852ee68fd72 ("arm64: dts: mt8195: Add display node for
-> > vdosys0")
-> 
-> No fixes tag needed, there is no runtime bug.
-> 
-> Regards,
-> Matthias
-> 
-OK, I'll remove this.
-
-But I think this dts change should be sent after the vdosys1 series are
-accepted.
-So I'll drop this dts patch at the next version.
-
-Regards,
-Jason-JH.Lin
-
-> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > index 905d1a90b406..6ec6d59a16ec 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -1966,7 +1966,7 @@
-> >   		};
-> >   
-> >   		vdosys0: syscon@1c01a000 {
-> > -			compatible = "mediatek,mt8195-mmsys", "syscon";
-> > +			compatible = "mediatek,mt8195-vdosys0",
-> > "syscon";
-> >   			reg = <0 0x1c01a000 0 0x1000>;
-> >   			mboxes = <&gce0 0 CMDQ_THR_PRIO_4>;
-> >   			#clock-cells = <1>;
-> > @@ -2101,7 +2101,7 @@
-> >   		};
-> >   
-> >   		vdosys1: syscon@1c100000 {
-> > -			compatible = "mediatek,mt8195-mmsys", "syscon";
-> > +			compatible = "mediatek,mt8195-vdosys1",
-> > "syscon";
-> >   			reg = <0 0x1c100000 0 0x1000>;
-> >   			#clock-cells = <1>;
-> >   		};
-> 
-> 
--- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
+How about calling out the required capabilities? You don't need
+to be root, you need a specific set of capabilities. It would be
+very useful for the purposes of understanding the security value
+of the patch set to know this.
 
