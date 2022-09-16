@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B474A5BAE85
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F825BAE87
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiIPNtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S231247AbiIPNuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiIPNtM (ORCPT
+        with ESMTP id S231210AbiIPNuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:49:12 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCC0AE224
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:49:10 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id e68so21322840pfe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:49:10 -0700 (PDT)
+        Fri, 16 Sep 2022 09:50:14 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159A558C5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:50:08 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id l65so21293321pfl.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=2n8m9Yg3eXJzST89nwSJkSXaUJbY6Is/T+eVGx/bEtE=;
-        b=InbrCZw7ADBRyLcE0w/hYkSGWrPQCgBuKuS6Ui1TVueMsiBUOcInyrNZ+OkGJDFP0q
-         890sZa0ZP5QxB3rf+okJYjtedKY0jlvTBElLvfJhReTdieMe5XOMIcFf7jUFUDZNWHeV
-         9rD8CH/Fz2q1bkbshTcYZKJUB/YYQ98i/Q3oXExZnZsGRwIr+7gQbRjWGvNWg+p4E1UW
-         adCvKs3UDHSV8q379cstNllRXQbO6oOyWWrM3dmyDJJ1JUO31TW1Z+GZCW2hkEsigfxH
-         9KHVDIIbhLIk3qz4dIBBWKFAwU3GZdgmv1g03oBqU14oj5cmiiZPWkarAMNecwJrrZmn
-         Jn2Q==
+        bh=mg2W9f9guObOQ3nCr3SRnmWfaXFbUbY8UMTcwJAN+3o=;
+        b=e9oEDoBeKMaq5Xg9ri6m/f8YEXTD8oGbUcX3BbARWV9fdfK8nSDspeUsHvmMTyzSBx
+         3miEyDBqdk8z1Ub4HvK484Bc3H3FSqoRXQhOSJ+fdcePlBi8UDWuO68AVTEkkp/hHitO
+         ygiG+acNQ9mnqtwFnITS7ajc3LF6AWlWHf/e1lFh3jLVaUTs75XCiQrA7xo58J444M9I
+         FwJTN6ny6onDgLtdlEcaNKMoJv2hR2JbOdTzRpmoIQEfzYfIwNTMzuM2KlKZSNcv7yQ/
+         EMEFhlGfK0XPFMZI/fOdRTkuk6bZhCfGG2HV1iGgyq8vRy6Eirdj2x4SGYE7Sryxv/Nc
+         8RRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=2n8m9Yg3eXJzST89nwSJkSXaUJbY6Is/T+eVGx/bEtE=;
-        b=OmOjTgCgAw/zfHJ/1ObVTr+n1EfmDWQL4jiZgSQTqq4xTJyZE/DTxAQr5/WFWjd1U2
-         r+QiXuYpRKDyaf6fQOiLn+OekbKYMUgvyhBjLexgCb8gfwO1hoOpDKtgdMhRqUGQhaJr
-         pXGH1Ppw7Eb+k0KiqTCrKBombd6YNL+xgdbQTvXTn7oCmelVrUDCPF6GUY8rkXwAnQuQ
-         z6wnfvJh41aoqZIjkBOTdeBE5jdNM31fs0oVlbQ1Z4m0QwjtB+ElbsMRbWVCdqx8dZuh
-         KPbgiAWhr3TwIOtVar8DYeeTds4K9LVyYC5/QhhOI77zSBv7DtTuhORfADF4pPxkPK4Y
-         25Lg==
-X-Gm-Message-State: ACrzQf3kqki78SCH7LqvlGBaOyYnL+LAsQha8PfF3I4MKounrxe0b8fw
-        l8S1K7rDVXz7Xm9SQPLGeE0=
-X-Google-Smtp-Source: AMsMyM4kQOow4P5R/R3e9OK5fwgiCEOH5qP1igo/T+sQUKNkyPxtdxAEfAegYwpnXc5loIxAX9KbEQ==
-X-Received: by 2002:a05:6a00:f04:b0:547:50b1:4f4e with SMTP id cr4-20020a056a000f0400b0054750b14f4emr5540041pfb.69.1663336149593;
-        Fri, 16 Sep 2022 06:49:09 -0700 (PDT)
+        bh=mg2W9f9guObOQ3nCr3SRnmWfaXFbUbY8UMTcwJAN+3o=;
+        b=IehfVIvqDEWV2fMWsJnsJoLOsM6GgF8dkr7FJadoH0TFtgxC4B82aYA7NxqgWU1vZg
+         EmThgUsFcI+pz5bdV5A4YeY2omDEf6/q4Xppq5q0HaTuIB409BidhggBeCZkCH85jBO8
+         WsI1PwAjMLL3IY59in7D7lPPJMCmw7ICtepc4W1gtCp+NakFSkoOwagwWZPJcxjORf/6
+         0xeDdX6dd9QcHuy5pOdqYPJ17Tk5gwlVjNU+r3UTmBlmCqesUmsdPa1U+vVWzb3iW8HB
+         yly6GsaZoh6+0oORlnbFRp3ZHfIZurMsrtr/YqdqhumEAcb4EFzqeic/8NExMrrjGpLu
+         EpyQ==
+X-Gm-Message-State: ACrzQf2IorYgjUSsDETYxpC0LaEck6cVPyCaoFtKI0SYZRQq2xCaZ4+7
+        hbYiNBvDYA8pCO3UhhEXmjE=
+X-Google-Smtp-Source: AMsMyM4Nv77D56j8XB41KqJxvapYrQJM3bAvOrOMDEeHwMOle9M/kxZkgCwGhU+XBThOosGz1eElkA==
+X-Received: by 2002:a62:a50e:0:b0:54b:7915:8ff2 with SMTP id v14-20020a62a50e000000b0054b79158ff2mr1617677pfm.30.1663336207845;
+        Fri, 16 Sep 2022 06:50:07 -0700 (PDT)
 Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa78f14000000b0052d2b55be32sm14926810pfr.171.2022.09.16.06.49.07
+        by smtp.gmail.com with ESMTPSA id i24-20020a17090acf9800b0020071acaecasm1524226pju.42.2022.09.16.06.50.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:49:09 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 06:49:05 -0700
+        Fri, 16 Sep 2022 06:50:07 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 06:50:03 -0700
 From:   Hyunwoo Kim <imv4bel@gmail.com>
 To:     laforge@gnumonks.org
-Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com,
-        gregkh@linuxfoundation.org, arnd@arndb.de
-Subject: [PATCH v2] char: pcmcia: cm4040_cs: Fix use-after-free in reader_fops
-Message-ID: <20220916134905.GA234760@ubuntu>
+Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com, arnd@arndb.de,
+        gregkh@linuxfoundation.or
+Subject: [PATCH v2] char: pcmcia: cm4000_cs: Fix use-after-free in cm4000_fops
+Message-ID: <20220916135003.GA234913@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -71,93 +71,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 A race condition may occur if the user physically removes the pcmcia
 device while calling open() for this char device node.
 
-This is a race condition between the cm4040_open() function and the
-reader_detach() function, which may eventually result in UAF.
+This is a race condition between the cmm_open() function and the
+cm4000_detach() function, which may eventually result in UAF.
 
-So, add a refcount check to reader_detach() to free the "dev" structure
+So, add a refcount check to cm4000_detach() to free the "dev" structure
 after the char device node is close()d.
 
 Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 ---
- drivers/char/pcmcia/cm4040_cs.c | 87 ++++++++++++++++++---------------
- 1 file changed, 48 insertions(+), 39 deletions(-)
+ drivers/char/pcmcia/cm4000_cs.c | 81 +++++++++++++++++++++++----------
+ 1 file changed, 58 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/char/pcmcia/cm4040_cs.c b/drivers/char/pcmcia/cm4040_cs.c
-index 827711911da4..50df1e63580a 100644
---- a/drivers/char/pcmcia/cm4040_cs.c
-+++ b/drivers/char/pcmcia/cm4040_cs.c
-@@ -59,6 +59,7 @@ static DEFINE_MUTEX(cm4040_mutex);
- /* how often to poll for fifo status change */
- #define POLL_PERIOD 				msecs_to_jiffies(10)
+diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
+index adaec8fd4b16..9e54ad892056 100644
+--- a/drivers/char/pcmcia/cm4000_cs.c
++++ b/drivers/char/pcmcia/cm4000_cs.c
+@@ -55,6 +55,7 @@
+ 	} while (0)
  
-+static void cm4040_delete(struct kref *kref);
- static void reader_release(struct pcmcia_device *link);
+ static DEFINE_MUTEX(cmm_mutex);
++static DEFINE_MUTEX(remove_mutex);
  
- static int major;
-@@ -69,15 +70,16 @@ static struct class *cmx_class;
+ #define	T_1SEC		(HZ)
+ #define	T_10MSEC	msecs_to_jiffies(10)
+@@ -104,6 +105,8 @@ static int major;		/* major number we get from the kernel */
  
- struct reader_dev {
- 	struct pcmcia_device	*p_dev;
--	wait_queue_head_t	devq;
- 	wait_queue_head_t	poll_wait;
- 	wait_queue_head_t	read_wait;
- 	wait_queue_head_t	write_wait;
+ struct cm4000_dev {
+ 	struct pcmcia_device *p_dev;
 +	struct kref		refcnt;
- 	unsigned long 	  	buffer_status;
- 	unsigned long     	timeout;
- 	unsigned char     	s_buf[READ_WRITE_BUFFER_SIZE];
- 	unsigned char     	r_buf[READ_WRITE_BUFFER_SIZE];
- 	struct timer_list 	poll_timer;
 +	int			removed;
+ 
+ 	unsigned char atr[MAX_ATR];
+ 	unsigned char rbuf[512];
+@@ -146,6 +149,9 @@ struct cm4000_dev {
+ 
+ #define	ZERO_DEV(dev)	memset(&((dev)->init), 0, sizeof((dev)->init))
+ 
++static void stop_monitor(struct cm4000_dev *dev);
++static void cm4000_delete(struct kref *kref);
++
+ static struct pcmcia_device *dev_table[CM4000_MAX_DEV];
+ static struct class *cmm_class;
+ 
+@@ -416,6 +422,30 @@ static struct card_fixup card_fixups[] = {
+ 	},
  };
  
- static struct pcmcia_device *dev_table[CM_MAX_DEV];
-@@ -102,6 +104,28 @@ static inline unsigned char xinb(unsigned short port)
- }
- #endif
- 
-+static void cm4040_delete(struct kref *kref)
++
++static void cm4000_delete(struct kref *kref)
 +{
-+	struct reader_dev *dev = container_of(kref, struct reader_dev, refcnt);
++	struct cm4000_dev *dev = container_of(kref, struct cm4000_dev, refcnt);
 +	struct pcmcia_device *link = dev->p_dev;
 +	int devno;
 +
 +	/* find device */
-+	for (devno = 0; devno < CM_MAX_DEV; devno++) {
++	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
 +		if (dev_table[devno] == link)
 +			break;
-+	}
-+	if (devno == CM_MAX_DEV)
++	if (devno == CM4000_MAX_DEV)
 +		return;
 +
-+	reader_release(link);
++	stop_monitor(dev);
++
++	cm4000_release(link);
 +
 +	dev_table[devno] = NULL;
 +	kfree(dev);
 +
-+	device_destroy(cmx_class, MKDEV(major, devno));
++	device_destroy(cmm_class, MKDEV(major, devno));
 +}
 +
- /* poll the device fifo status register.  not to be confused with
-  * the poll syscall. */
- static void cm4040_do_poll(struct timer_list *t)
-@@ -442,24 +466,30 @@ static int cm4040_open(struct inode *inode, struct file *filp)
+ static void set_cardparameter(struct cm4000_dev *dev)
+ {
+ 	int i;
+@@ -1629,21 +1659,30 @@ static int cmm_open(struct inode *inode, struct file *filp)
+ 	if (minor >= CM4000_MAX_DEV)
  		return -ENODEV;
  
- 	mutex_lock(&cm4040_mutex);
-+
++	mutex_lock(&remove_mutex);
+ 	mutex_lock(&cmm_mutex);
  	link = dev_table[minor];
  	if (link == NULL || !pcmcia_dev_present(link)) {
 -		ret = -ENODEV;
 -		goto out;
-+		mutex_unlock(&cm4040_mutex);
++		mutex_unlock(&cmm_mutex);
++		mutex_unlock(&remove_mutex);
 +		return -ENODEV;
  	}
  
  	if (link->open) {
 -		ret = -EBUSY;
 -		goto out;
-+		mutex_unlock(&cm4040_mutex);
++		mutex_unlock(&cmm_mutex);
++		mutex_unlock(&remove_mutex);
 +		return -EBUSY;
  	}
  
@@ -165,104 +171,82 @@ index 827711911da4..50df1e63580a 100644
  	filp->private_data = dev;
  
 +	if (dev->removed == 1) {
-+		mutex_unlock(&cm4040_mutex);
++		mutex_unlock(&cmm_mutex);
++		mutex_unlock(&remove_mutex);
 +		return -ENODEV;
 +	}
 +
+ 	DEBUGP(2, dev, "-> cmm_open(device=%d.%d process=%s,%d)\n",
+ 	      imajor(inode), minor, current->comm, current->pid);
+ 
+@@ -1660,8 +1699,9 @@ static int cmm_open(struct inode *inode, struct file *filp)
+ 	 * inserted)
+ 	 */
  	if (filp->f_flags & O_NONBLOCK) {
- 		DEBUGP(4, dev, "filep->f_flags O_NONBLOCK set\n");
 -		ret = -EAGAIN;
 -		goto out;
-+		mutex_unlock(&cm4040_mutex);
++		mutex_unlock(&cmm_mutex);
++		mutex_unlock(&remove_mutex);
 +		return -EAGAIN;
  	}
  
- 	link->open = 1;
-@@ -468,8 +498,11 @@ static int cm4040_open(struct inode *inode, struct file *filp)
+ 	dev->mdelay = T_50MSEC;
+@@ -1673,8 +1713,12 @@ static int cmm_open(struct inode *inode, struct file *filp)
  
- 	DEBUGP(2, dev, "<- cm4040_open (successfully)\n");
- 	ret = nonseekable_open(inode, filp);
+ 	DEBUGP(2, dev, "<- cmm_open\n");
+ 	ret = stream_open(inode, filp);
 -out:
 +
 +	kref_get(&dev->refcnt);
 +
- 	mutex_unlock(&cm4040_mutex);
+ 	mutex_unlock(&cmm_mutex);
++	mutex_unlock(&remove_mutex);
 +
  	return ret;
  }
  
-@@ -492,24 +525,12 @@ static int cm4040_close(struct inode *inode, struct file *filp)
- 	cm4040_stop_poll(dev);
+@@ -1703,6 +1747,8 @@ static int cmm_close(struct inode *inode, struct file *filp)
+ 	link->open = 0;		/* only one open per device */
+ 	wake_up(&dev->devq);	/* socket removed? */
  
- 	link->open = 0;
--	wake_up(&dev->devq);
- 
- 	DEBUGP(2, dev, "<- cm4040_close\n");
--	return 0;
--}
- 
--static void cm4040_reader_release(struct pcmcia_device *link)
--{
--	struct reader_dev *dev = link->priv;
-+	kref_put(&dev->refcnt, cm4040_delete);
- 
--	DEBUGP(3, dev, "-> cm4040_reader_release\n");
--	while (link->open) {
--		DEBUGP(3, dev, MODULE_NAME ": delaying release "
--		       "until process has terminated\n");
-- 		wait_event(dev->devq, (link->open == 0));
--	}
--	DEBUGP(3, dev, "<- cm4040_reader_release\n");
--	return;
-+	return 0;
++	kref_put(&dev->refcnt, cm4000_delete);
++
+ 	DEBUGP(2, dev, "cmm_close\n");
+ 	return 0;
  }
- 
- static int cm4040_config_check(struct pcmcia_device *p_dev, void *priv_data)
-@@ -550,7 +571,6 @@ static int reader_config(struct pcmcia_device *link, int devno)
- 
- static void reader_release(struct pcmcia_device *link)
- {
--	cm4040_reader_release(link);
- 	pcmcia_disable_device(link);
- }
- 
-@@ -579,11 +599,11 @@ static int reader_probe(struct pcmcia_device *link)
- 
- 	dev_table[i] = link;
- 
--	init_waitqueue_head(&dev->devq);
- 	init_waitqueue_head(&dev->poll_wait);
- 	init_waitqueue_head(&dev->read_wait);
- 	init_waitqueue_head(&dev->write_wait);
- 	timer_setup(&dev->poll_timer, cm4040_do_poll, 0);
+@@ -1808,6 +1854,7 @@ static int cm4000_probe(struct pcmcia_device *link)
+ 	init_waitqueue_head(&dev->ioq);
+ 	init_waitqueue_head(&dev->atrq);
+ 	init_waitqueue_head(&dev->readq);
 +	kref_init(&dev->refcnt);
  
- 	ret = reader_config(link, i);
+ 	ret = cm4000_config(link, i);
  	if (ret) {
-@@ -600,22 +620,11 @@ static int reader_probe(struct pcmcia_device *link)
- static void reader_detach(struct pcmcia_device *link)
+@@ -1824,23 +1871,11 @@ static int cm4000_probe(struct pcmcia_device *link)
+ static void cm4000_detach(struct pcmcia_device *link)
  {
- 	struct reader_dev *dev = link->priv;
+ 	struct cm4000_dev *dev = link->priv;
 -	int devno;
--
+ 
 -	/* find device */
--	for (devno = 0; devno < CM_MAX_DEV; devno++) {
+-	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
 -		if (dev_table[devno] == link)
 -			break;
--	}
--	if (devno == CM_MAX_DEV)
+-	if (devno == CM4000_MAX_DEV)
 -		return;
 -
--	reader_release(link);
- 
+-	stop_monitor(dev);
+-
+-	cm4000_release(link);
+-
 -	dev_table[devno] = NULL;
 -	kfree(dev);
 -
--	device_destroy(cmx_class, MKDEV(major, devno));
-+	mutex_lock(&cm4040_mutex);
-+	kref_put(&dev->refcnt, cm4040_delete);
+-	device_destroy(cmm_class, MKDEV(major, devno));
++	mutex_lock(&remove_mutex);
++	kref_put(&dev->refcnt, cm4000_delete);
 +	dev->removed = 1;
-+	mutex_unlock(&cm4040_mutex);
++	mutex_unlock(&remove_mutex);
  
  	return;
  }
