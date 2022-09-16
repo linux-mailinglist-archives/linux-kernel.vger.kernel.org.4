@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9E45BA622
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9215BA623
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIPEzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S229586AbiIPE5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIPEzV (ORCPT
+        with ESMTP id S229503AbiIPE5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:55:21 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF58B6A4B1;
-        Thu, 15 Sep 2022 21:55:19 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28G4ssqA060056;
-        Thu, 15 Sep 2022 23:54:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663304094;
-        bh=DhgXN/2x1D5jdbzbm9/WulTVv5Ky25v+z/2Qoh7HaAQ=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=kc56b1znp3iRWDdvyMyUFqCPpR9Bq2ZrDX9vEnPx0d/XbDU+TUp1q7hurCLF8S5P/
-         jxtvMBXb/xq4FIBAIO/Nq071EHDNUxPdQWv2pbWrU4K0gExmyIzSQAquOmiFEaKElg
-         GfkXm2c3Q1iDwsKU4yNfT4YUp7a9Lk1rYOm84rIE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28G4ssCe065132
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Sep 2022 23:54:54 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 15
- Sep 2022 23:54:54 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 15 Sep 2022 23:54:54 -0500
-Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28G4smf0018522;
-        Thu, 15 Sep 2022 23:54:49 -0500
-Message-ID: <c76fdb7a-a95f-53c6-6e0e-d9283dd2de2d@ti.com>
-Date:   Fri, 16 Sep 2022 10:24:48 +0530
+        Fri, 16 Sep 2022 00:57:42 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6278777550
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:57:40 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id u132so20122044pfc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=5Aol/gk9VBVMsyT7ww7GCLNu8j3tphSoFBR2VKxvXKg=;
+        b=E9LWdr9SF5/4k4guq0EbKQ/2BEcNBP/0RhIDR9j8AQvCV65zKaH1tBqrjfVkaNx/3M
+         edQ5xwFCCuQcNzEBcefOZ1vo8HZjG79reCvb/XzUET5mv2PEhayMUIvTvyExhEFbRkJj
+         gzzWIxAetZIwZF3BU5v+A5uqLvGOOpJydhbl0fGwFMEXR5KqAqYYYkWFBWgV3+gBvYjF
+         PyyxFr/WmtrFcPxYBBJ02rAo4/HoC6TEh/CVfhmGaIN9NVDxI6oO+rbdQ6QgqaGdTGFp
+         ZPfsLflzNbl8HFkDV8XHe5HE7BS19e8npfyy1OGsfMkGARLThYi+QoT2dwW0LOR3a4+p
+         86kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5Aol/gk9VBVMsyT7ww7GCLNu8j3tphSoFBR2VKxvXKg=;
+        b=m9OoCIP1+KJ9AojIbCKQHbYRnLDtqWBTxKt77gmJXlWXteb5gz3l8IqN0wFl07LqMI
+         iNgHnP2uu0DPtRssXgy/W4JCRY7aWaGf0AAwCDiWLTZ7JFcGOsiz+r46RBXVR/+Cldmu
+         C6ci+ThN8oPYLP6wDu1Gu71mUWKpJQP3qSnGP749+di3b6pPT7KAstO8K1YwGi/CSZLy
+         aeIqHN1JVXJEWNeZGkxCaVn/NZViGtYZ1hsV5LC+1IaT/W/BIcSh54OYZ9Olt11K/9Ts
+         +zqW5TfgoOThw5NZQSU+3/6KdVSmu59xM009mD4++/VKttqHc/e8hChHHk2tSGRopH0p
+         KZcA==
+X-Gm-Message-State: ACrzQf1LvZdURfZT28/FrrI2ZvFq3AoDWvQiPT72G6ahH5bqer/E8Q1C
+        qV/zzaw7LPfBB9k1nhRM7YfnUJv/O9Q=
+X-Google-Smtp-Source: AMsMyM4L54APL8jDg8TB799MQkyu7JaBghJDVDQZzub1O3BaEHckI/RMja5gyXFBgpkFZ+C6mLDMFw==
+X-Received: by 2002:a63:2cce:0:b0:434:e004:a218 with SMTP id s197-20020a632cce000000b00434e004a218mr2876826pgs.241.1663304258959;
+        Thu, 15 Sep 2022 21:57:38 -0700 (PDT)
+Received: from ubuntu ([175.124.254.119])
+        by smtp.gmail.com with ESMTPSA id ij24-20020a170902ab5800b001783f964fe3sm8372150plb.113.2022.09.15.21.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 21:57:38 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 21:57:34 -0700
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com,
+        ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v2] char: pcmcia: synclink_cs: Fix use-after-free in
+ mgslpc_ops
+Message-ID: <20220916045734.GA187909@ubuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vladimir.oltean@nxp.com>,
-        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
- fixed-link configuration
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-6-s-vadapalli@ti.com>
- <YyH8us424n3dyLYT@shell.armlinux.org.uk>
- <ab683d52-d469-35cf-b3b5-50c9edfc173b@ti.com>
- <YyL5WyA74/QRe/Y4@shell.armlinux.org.uk>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <YyL5WyA74/QRe/Y4@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +69,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
+A race condition may occur if the user physically removes
+the pcmcia device while calling ioctl() for this tty device node.
 
-On 15/09/22 15:37, Russell King (Oracle) wrote:
-> Hi,
-> 
-> On Thu, Sep 15, 2022 at 02:58:52PM +0530, Siddharth Vadapalli wrote:
->> Hello Russell,
->>
->> On 14/09/22 21:39, Russell King (Oracle) wrote:
->>> On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
->>>> Check for fixed-link in am65_cpsw_nuss_mac_config() using struct
->>>> am65_cpsw_slave_data's phy_node property to obtain fwnode. Since
->>>> am65_cpsw_nuss_mac_link_up() is not invoked in fixed-link mode, perform
->>>> the relevant operations in am65_cpsw_nuss_mac_config() itself.
->>>
->>> Further to my other comments, you also fail to explain that, when in
->>> fixed-link SGMII mode, you _emulate_ being a PHY - which I deduce
->>> since you are sending the duplex setting and speed settings via the
->>> SGMII control word. Also, as SGMII was invented for a PHY to be able
->>> to communicate the media negotiation resolution to the MAC, SGMII
->>> defines that the PHY fills in the speed and duplex information in
->>> the control word to pass it to the MAC, and the MAC acknowledges this
->>> information. There is no need (and SGMII doesn't permit) the MAC to
->>> advertise what it's doing.
->>>
->>> Maybe this needs to be explained in the commit message?
->>
->> I had tested SGMII fixed-link mode using a bootstrapped ethernet layer-1
->> PHY. Based on your clarification in the previous mails that there is an
->> issue with the fixed-link mode which I need to debug, I assume that what
->> you are referring to here also happens to be a consequence of that.
->> Please let me know if I have misunderstood what you meant to convey.
-> 
-> I think what you're saying is that you have this setup:
-> 
->   ethernet MAC <--SGMII link--> ethernet PHY <---> media
-> 
-> which you are operating in fixed link mode?
+This is a race condition between the mgslpc_ioctl() function and
+the mgslpc_detach() function, which may eventually result in UAF.
 
-Yes, and the other end is connected to my PC's ethernet port.
+So, add a refcount check to mgslpc_detach() to free the structure
+after the tty device node is close()d.
 
-> 
-> From the SGMII specification: "This is achieved by using the Auto-
-> Negotiation functionality defined in Clause 37 of the IEEE
-> Specification 802.3z. Instead of the ability advertisement, the PHY
-> sends the control information via its tx_config_Reg[15:0] as specified
-> in Table 1 whenever the control information changes. Upon receiving
-> control information, the MAC acknowledges the update of the control
-> information by asserting bit 14 of its tx_config_reg{15:0] as specified
-> in Table 1."
-> 
-> For the control word sent from the MAC to the PHY, table 1 specifies a
-> value of 0x4001. All the zero bits in that word which are zero are
-> marked as "Reserved for future use." There are no fields for speed and
-> duplex in this acknowledgement word to the PHY.
-> 
-> I hope this clears up my point.
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+---
+ drivers/char/pcmcia/synclink_cs.c | 40 +++++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-Thank you for the detailed explanation. After reading the above, my
-understanding is that even in the fixed-link mode, the ethernet MAC is
-not supposed to advertise the speed and duplex settings. The ethernet
-MACs present on both ends of the connection are supposed to be set to
-the same speed and duplex settings via the devicetree node. Thus, only
-for my setup which happens to be a special case of fixed-link mode where
-the ethernet PHY is present, I am having to send the control word due to
-the presence of a PHY in between. And, I am supposed to mention this in
-the commit message, which I haven't done. Please let me know if this is
-what I was supposed to understand.
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index 8fc49b038372..0b2ea77ccb7e 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -216,7 +216,9 @@ typedef struct _mgslpc_info {
+ 
+ 	/* PCMCIA support */
+ 	struct pcmcia_device	*p_dev;
+-	int		      stop;
++	int			stop;
++	struct kref		refcnt;
++	struct mutex		remove_lock;
+ 
+ 	/* SPPP/Cisco HDLC device parts */
+ 	int netcount;
+@@ -468,10 +470,21 @@ static void mgslpc_wait_until_sent(struct tty_struct *tty, int timeout);
+ 
+ /* PCMCIA prototypes */
+ 
++static void mgslpc_delete(struct kref *kref);
+ static int mgslpc_config(struct pcmcia_device *link);
+ static void mgslpc_release(u_long arg);
+ static void mgslpc_detach(struct pcmcia_device *p_dev);
+ 
++static void mgslpc_delete(struct kref *kref)
++{
++	MGSLPC_INFO *info = container_of(kref, MGSLPC_INFO, refcnt);
++	struct pcmcia_device *link = info->p_dev;
++
++	mgslpc_release((u_long)link);
++
++	mgslpc_remove_device(info);
++}
++
+ /*
+  * 1st function defined in .text section. Calling this function in
+  * init_module() followed by a breakpoint allows a remote debugger
+@@ -534,6 +547,8 @@ static int mgslpc_probe(struct pcmcia_device *link)
+ 	init_waitqueue_head(&info->event_wait_q);
+ 	spin_lock_init(&info->lock);
+ 	spin_lock_init(&info->netlock);
++	kref_init(&info->refcnt);
++	mutex_init(&info->remove_lock);
+ 	memcpy(&info->params,&default_params,sizeof(MGSL_PARAMS));
+ 	info->idle_mode = HDLC_TXIDLE_FLAGS;
+ 	info->imra_value = 0xffff;
+@@ -620,13 +635,16 @@ static void mgslpc_release(u_long arg)
+ 
+ static void mgslpc_detach(struct pcmcia_device *link)
+ {
++	MGSLPC_INFO *info = link->priv;
++
++	mutex_lock(&info->remove_lock);
+ 	if (debug_level >= DEBUG_LEVEL_INFO)
+ 		printk("mgslpc_detach(0x%p)\n", link);
+ 
+-	((MGSLPC_INFO *)link->priv)->stop = 1;
+-	mgslpc_release((u_long)link);
++	info->stop = 1;
+ 
+-	mgslpc_remove_device((MGSLPC_INFO *)link->priv);
++	kref_put(&info->refcnt, mgslpc_delete);
++	mutex_unlock(&info->remove_lock);
+ }
+ 
+ static int mgslpc_suspend(struct pcmcia_device *link)
+@@ -2341,10 +2359,13 @@ static void mgslpc_close(struct tty_struct *tty, struct file * filp)
+ 	
+ 	tty_port_close_end(port, tty);
+ 	tty_port_tty_set(port, NULL);
++
+ cleanup:
+ 	if (debug_level >= DEBUG_LEVEL_INFO)
+ 		printk("%s(%d):mgslpc_close(%s) exit, count=%d\n", __FILE__, __LINE__,
+ 			tty->driver->name, port->count);
++
++	kref_put(&info->refcnt, mgslpc_delete);
+ }
+ 
+ /* Wait until the transmitter is empty.
+@@ -2465,6 +2486,7 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
+ 	int		retval, line;
+ 	unsigned long	flags;
+ 
++
+ 	/* verify range of specified line number */
+ 	line = tty->index;
+ 	if (line >= mgslpc_device_count) {
+@@ -2480,6 +2502,9 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
+ 	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_open"))
+ 		return -ENODEV;
+ 
++	mutex_lock(&info->remove_lock);
++	kref_get(&info->refcnt);
++
+ 	port = &info->port;
+ 	tty->driver_data = info;
+ 	tty_port_tty_set(port, tty);
+@@ -2517,9 +2542,14 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
+ 	if (debug_level >= DEBUG_LEVEL_INFO)
+ 		printk("%s(%d):mgslpc_open(%s) success\n",
+ 			 __FILE__, __LINE__, info->device_name);
+-	retval = 0;
+ 
++	retval = 0;
++	mutex_unlock(&info->remove_lock);
++	return retval;
+ cleanup:
++	kref_put(&info->refcnt, mgslpc_delete);
++
++	mutex_unlock(&info->remove_lock);
+ 	return retval;
+ }
+ 
+-- 
+2.25.1
 
-I am planning to change to a proper fixed-link setup without any
-ethernet PHY between the MACs, for debugging the driver's fixed-link
-mode where the "mac_link_up()" is not invoked. Additionally, with this
-new setup, my MAC will not have to emulate being an ethernet PHY,
-thereby making my patch cleaner in the process. The v2 series will be
-based on the new setup. I hope that this is fine.
-
-Regards,
-Siddharth.
