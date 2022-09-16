@@ -2,112 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BF55BAD36
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD595BAD48
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiIPMSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
+        id S231434AbiIPMVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiIPMSX (ORCPT
+        with ESMTP id S229874AbiIPMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:18:23 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F90DB089B;
-        Fri, 16 Sep 2022 05:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=OCC0Xr+0xRy79xAXIy34CWBnfIPVnQuynqQ7f4NA21M=; b=zlkcPmIMJNXMDcPqStE+RO2Vx5
-        a1vO+z6I+yyJ9BlTZe5KAtg6WMJvXIeRejlEnyBpelpYKNKDy5wUwqGHxSPPxvfKr6OgtAotjbrED
-        H0VJrHpzVI1/iCZr1v8eRbg9aABDzWKrXeBzeJTRv1WBRu9l42rumHrPYvgTdXjR2Ykw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oZAIU-00GukY-C1; Fri, 16 Sep 2022 14:18:18 +0200
-Date:   Fri, 16 Sep 2022 14:18:18 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
-        lxu@maxlinear.com, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com, Ian.Saturley@microchip.com
-Subject: Re: [PATCH net-next 2/2] net: lan743x: Add support to SGMII register
- dump for PCI11010/PCI11414 chips
-Message-ID: <YyRpij7ahB0cqWyy@lunn.ch>
-References: <20220916082327.370579-1-Raju.Lakkaraju@microchip.com>
- <20220916082327.370579-3-Raju.Lakkaraju@microchip.com>
+        Fri, 16 Sep 2022 08:21:08 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF07B08A8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:06 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id z6so3259883wrq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=dF72m7KrdimfS7GHUBTDYOHCGMGUiN/89ZHcjz/LfhQ=;
+        b=FkLYyLdYF5oafat2zG9jS43r89Rkz8Ll3QzJDimI6YKT+S5aqCqgyQEBk4A2EQPrH/
+         5o/oLT+cfTGWtMSmKdV/Y7OPX9S6pZ+PQEIYjH7ULuf7AKjcO9Yt7eF/w4OZKPlwSSKk
+         vWURi8F+nbodqjvsIydn4qufMTJMRfJ1gb1fYzUyrnLSAdBGsjlJ0bcwjy5u1AY50WWD
+         EFYcdFIJQaJSy3eSt0CXnPpn/BkfomK4s9itYVO/ZiN4tMqE6e4Pk/bvE9W2Vq+1mRxI
+         2x3agaFjiDGuEThC/n10QxVM5yjrwwVKaiVxI37dBxo1OKsTtp1R3+U2bqXfCgrlxE6r
+         h5Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=dF72m7KrdimfS7GHUBTDYOHCGMGUiN/89ZHcjz/LfhQ=;
+        b=zJC3SJU4UZRdAJSGHC2VPlNumwNP7ZV/GXYrJfON8Jko2RQ01D2VzuhqDjFy8d+Ywk
+         d4AGvfHSeM9PpdtrICPLIVZfaLAnSIbOPQnpAsfKpV7C1cirgNnalTus8FMtbnjOoejg
+         AR7h3GUG+dx7pzG/7V5q1JWDe80A3QqlwRTIdT0gfdQoCUmMaswa87nC0Jt0n1BBxClg
+         dwlBG6AFXMAlupvNSGIcjwbFR3OdgEFiZhGX1QW9vzToq191wkr2miwnuwrDgkT12L6a
+         9ldC85kwE/t+fEDaZthd4acGx2t+SaJhHmoKC0iMLdjN1eu181uHeqs2HuMHp0pYTTwH
+         aqUQ==
+X-Gm-Message-State: ACrzQf24tHdeRseUGEooMimAk2rk2zP/zeigceXsnkXWFxwiUPKjESTB
+        5QHfga2PDOaKlKJ9WUk1UIz/Mg==
+X-Google-Smtp-Source: AMsMyM4TcI3gOkZxDJZdsIN3awAwLcdcFm/yXTDOyL5UAJz8kt607DReTVHpClZIqcbbnDGBCug+aQ==
+X-Received: by 2002:a5d:47c3:0:b0:22a:2e9f:b839 with SMTP id o3-20020a5d47c3000000b0022a2e9fb839mr2791693wrc.72.1663330865338;
+        Fri, 16 Sep 2022 05:21:05 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id u11-20020adfdb8b000000b0022add371ed2sm1540015wri.55.2022.09.16.05.21.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 05:21:04 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 00/13] nvmem: patches(set 1) for 6.1
+Date:   Fri, 16 Sep 2022 13:20:47 +0100
+Message-Id: <20220916122100.170016-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916082327.370579-3-Raju.Lakkaraju@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 01:53:27PM +0530, Raju Lakkaraju wrote:
-> Add support to SGMII register dump
+Hi Greg,
 
-> +static void lan743x_get_pauseparam(struct net_device *dev,
-> +				   struct ethtool_pauseparam *pause)
-> +{
-> +	struct lan743x_adapter *adapter = netdev_priv(dev);
-> +
-> +//	pause->autoneg = adapter->pause_autoneg;
-> +	pause->tx_pause = adapter->pause_tx;
-> +	pause->rx_pause = adapter->pause_rx;
-> +}
-> +
-> +static int lan743x_set_pauseparam(struct net_device *dev,
-> +				  struct ethtool_pauseparam *pause)
-> +{
-> +	struct lan743x_adapter *adapter = netdev_priv(dev);
-> +	struct phy_device *phydev = dev->phydev;
-> +
-> +	if (pause->autoneg)
-> +		return -EINVAL;
-> +
-> +	if (!phydev)
-> +		return -EINVAL;
-> +
-> +	if (!phy_validate_pause(phydev, pause))
-> +		return -EINVAL;
-> +
-> +	//adapter->pause_auto = pause->autoneg;
-> +	adapter->pause_rx   = pause->rx_pause;
-> +	adapter->pause_tx   = pause->tx_pause;
-> +
-> +	phy_set_asym_pause(phydev, pause->rx_pause, pause->tx_pause);
-> +
-> +	return 0;
->  }
+Here are some nvmem patches for 6.1, which includes
 
-This is not part of register dumping...
+- Cleanups to Kconfig and Makefile for consistency reasons, which also
+  updates some defconfig
+- new lan9662 nvmem provider
+- new u-boot-env nvmem provider to handle u-boot environment variables.
+- support for sm6115, ipq8064, sdm630 in qfprom nvmem provider.
+- mt8188 support in mediatek nvmem provider
+- few cleanups in core to handing error cases for dev_set_name.
+- few minor updates to u-boot-env provider. 
 
-> --- a/drivers/net/ethernet/microchip/lan743x_main.c
-> +++ b/drivers/net/ethernet/microchip/lan743x_main.c
-> @@ -25,6 +25,22 @@
->  #define PCS_POWER_STATE_DOWN	0x6
->  #define PCS_POWER_STATE_UP	0x4
->  
-> +static int lan743x_sgmii_read(struct lan743x_adapter *adapter,
-> +			      u8 mmd, u16 addr);
-> +int lan743x_sgmii_dump_read(struct lan743x_adapter *adapter,
-> +			    u8 dev, u16 adr)
-> +{
-> +	int ret;
-> +
-> +	ret = lan743x_sgmii_read(adapter, dev, adr);
-> +	if (ret < 0) {
-> +		pr_warn("SGMII read fail\n");
+Can you please queue them up for 6.1.
 
-Better to use netdev_warn(), so we know which devices has read
-problems.
+Thanks,
+Srini
 
-	Andrew
+Gaosheng Cui (1):
+  nvmem: core: add error handling for dev_set_name
+
+Horatiu Vultur (2):
+  dt-bindings: lan9662-otpc: document Lan9662 OTPC
+  nvmem: lan9662-otp: add support
+
+Iskren Chernev (1):
+  dt-bindings: nvmem: Add SoC compatible for sm6115
+
+Johnson Wang (1):
+  dt-bindings: nvmem: mediatek: efuse: Add support for MT8188
+
+Kenneth Lee (1):
+  nvmem: brcm_nvram: Use kzalloc for allocating only one element
+
+Krzysztof Kozlowski (1):
+  dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
+
+Rafał Miłecki (6):
+  nvmem: add driver handling U-Boot environment variables
+  mtd: allow getting MTD device associated with a specific DT node
+  nvmem: prefix all symbols with NVMEM_
+  nvmem: sort config symbols alphabetically
+  nvmem: u-boot-env: find Device Tree nodes for NVMEM cells
+  nvmem: u-boot-env: fix crc32 casting type
+
+ .../bindings/nvmem/mediatek,efuse.yaml        |   1 +
+ .../nvmem/microchip,lan9662-otpc.yaml         |  45 +++
+ .../bindings/nvmem/qcom,qfprom.yaml           |   3 +
+ MAINTAINERS                                   |   1 +
+ arch/arm/configs/multi_v7_defconfig           |   6 +-
+ arch/arm/configs/qcom_defconfig               |   2 +-
+ arch/arm64/configs/defconfig                  |  10 +-
+ arch/mips/configs/ci20_defconfig              |   2 +-
+ drivers/cpufreq/Kconfig.arm                   |   2 +-
+ drivers/mtd/mtdcore.c                         |  28 ++
+ drivers/nvmem/Kconfig                         | 313 ++++++++++--------
+ drivers/nvmem/Makefile                        | 120 +++----
+ drivers/nvmem/brcm_nvram.c                    |   2 +-
+ drivers/nvmem/core.c                          |  12 +-
+ drivers/nvmem/lan9662-otpc.c                  | 222 +++++++++++++
+ drivers/nvmem/u-boot-env.c                    | 219 ++++++++++++
+ drivers/soc/mediatek/Kconfig                  |   2 +-
+ drivers/thermal/qcom/Kconfig                  |   2 +-
+ include/linux/mtd/mtd.h                       |   1 +
+ 19 files changed, 773 insertions(+), 220 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/microchip,lan9662-otpc.yaml
+ create mode 100644 drivers/nvmem/lan9662-otpc.c
+ create mode 100644 drivers/nvmem/u-boot-env.c
+
+-- 
+2.25.1
+
