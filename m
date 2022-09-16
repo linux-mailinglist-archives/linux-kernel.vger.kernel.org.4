@@ -2,266 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087095BAC52
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFFE5BAC8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiIPLYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
+        id S229998AbiIPLg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 07:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiIPLXi (ORCPT
+        with ESMTP id S229532AbiIPLgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:23:38 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D2F79623;
-        Fri, 16 Sep 2022 04:23:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MTWqS3HndzKNp7;
-        Fri, 16 Sep 2022 19:21:40 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgDXKXOzXCRjdyK5Aw--.60594S9;
-        Fri, 16 Sep 2022 19:23:35 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     song@kernel.org, logang@deltatee.com, guoqing.jiang@linux.dev,
-        pmenzel@molgen.mpg.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v3 5/5] md/raid10: convert resync_lock to use seqlock
-Date:   Fri, 16 Sep 2022 19:34:28 +0800
-Message-Id: <20220916113428.774061-6-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220916113428.774061-1-yukuai1@huaweicloud.com>
-References: <20220916113428.774061-1-yukuai1@huaweicloud.com>
+        Fri, 16 Sep 2022 07:36:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F203ECF2;
+        Fri, 16 Sep 2022 04:36:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0173362B08;
+        Fri, 16 Sep 2022 11:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C602C433D6;
+        Fri, 16 Sep 2022 11:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663328183;
+        bh=ja/9EJVsKPTgFZeYyJH2ug/aulAQTiLYqdvlooelnH8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oihM0Kd14upZF19siU0+t7a01Rxpt2MJyV0MERiYdu4qdQzVqisOIUAdF4bX0ugfp
+         F5VFxtpSqMnIlSOvG4jr+6UeIfn98qcwj+pttgxeTwgAHaNG3tcQoqxrRsm4ehXz43
+         sWqkT3Qh+jhg+aNB+eW5ONz3qA8zT6AdHKKJnrZaZm9mX/e56rC/Bi3Xvu76rmK+p6
+         grIpwi75+faH6ARSabDtLgPg+j175jvDdSPdmY3Bj++pZaaKDDxx2yr6zYmEarA6CU
+         1sSUtmQ8X0PaVwDeQum5iKC+E5KtimDtRWva9eHGQvtkAuF2FOFFCyP44AILVG4Wk2
+         n//jhCUxUe6wQ==
+Message-ID: <7027d1c2923053fe763e9218d10ce8634b56e81d.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>, NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
+Date:   Fri, 16 Sep 2022 07:36:19 -0400
+In-Reply-To: <YyQdmLpiAMvl5EkU@mit.edu>
+References: <20220912134208.GB9304@fieldses.org>
+         <166302447257.30452.6751169887085269140@noble.neil.brown.name>
+         <20220915140644.GA15754@fieldses.org>
+         <577b6d8a7243aeee37eaa4bbb00c90799586bc48.camel@hammerspace.com>
+         <1a968b8e87f054e360877c9ab8cdfc4cfdfc8740.camel@kernel.org>
+         <0646410b6d2a5d19d3315f339b2928dfa9f2d922.camel@hammerspace.com>
+         <34e91540c92ad6980256f6b44115cf993695d5e1.camel@kernel.org>
+         <871f9c5153ddfe760854ca31ee36b84655959b83.camel@hammerspace.com>
+         <e8922bc821a40f5a3f0a1301583288ed19b6891b.camel@kernel.org>
+         <166328063547.15759.12797959071252871549@noble.neil.brown.name>
+         <YyQdmLpiAMvl5EkU@mit.edu>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDXKXOzXCRjdyK5Aw--.60594S9
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw45Gr47JF4ftryruFWfXwb_yoWxWFWUpw
-        4aqr15tFWUXrs0qr4DJa1q9r1Fgw4kKa47Ka9ru3WkZFs5tryfWF1UGr9Ygryqvr9xJFyv
-        qFWrCFWfGw17tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9E14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbmZX7UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Fri, 2022-09-16 at 02:54 -0400, Theodore Ts'o wrote:
+> On Fri, Sep 16, 2022 at 08:23:55AM +1000, NeilBrown wrote:
+> > > > If the answer is that 'all values change', then why store the crash
+> > > > counter in the inode at all? Why not just add it as an offset when
+> > > > you're generating the user-visible change attribute?
+> > > >=20
+> > > > i.e. statx.change_attr =3D inode->i_version + (crash counter * offs=
+et)
+>=20
+> I had suggested just hashing the crash counter with the file system's
+> on-disk i_version number, which is essentially what you are suggested.
+>=20
+> > > Yes, if we plan to ensure that all the change attrs change after a
+> > > crash, we can do that.
+> > >=20
+> > > So what would make sense for an offset? Maybe 2**12? One would hope t=
+hat
+> > > there wouldn't be more than 4k increments before one of them made it =
+to
+> > > disk. OTOH, maybe that can happen with teeny-tiny writes.
+> >=20
+> > Leave it up the to filesystem to decide.  The VFS and/or NFSD should
+> > have not have part in calculating the i_version.  It should be entirely
+> > in the filesystem - though support code could be provided if common
+> > patterns exist across filesystems.
+>=20
+> Oh, *heck* no.  This parameter is for the NFS implementation to
+> decide, because it's NFS's caching algorithms which are at stake here.
+>=20
+> As a the file system maintainer, I had offered to make an on-disk
+> "crash counter" which would get updated when the journal had gotten
+> replayed, in addition to the on-disk i_version number.  This will be
+> available for the Linux implementation of NFSD to use, but that's up
+> to *you* to decide how you want to use them.
+>=20
+> I was perfectly happy with hashing the crash counter and the i_version
+> because I had assumed that not *that* much stuff was going to be
+> cached, and so invalidating all of the caches in the unusual case
+> where there was a crash was acceptable.  After all it's a !@#?!@
+> cache.  Caches sometimmes get invalidated.  "That is the order of
+> things." (as Ramata'Klan once said in "Rocks and Shoals")
+>=20
+> But if people expect that multiple TB's of data is going to be stored;
+> that cache invalidation is unacceptable; and that a itsy-weeny chance
+> of false negative failures which might cause data corruption might be
+> acceptable tradeoff, hey, that's for the system which is providing
+> caching semantics to determine.
+>=20
+> PLEASE don't put this tradeoff on the file system authors; I would
+> much prefer to leave this tradeoff in the hands of the system which is
+> trying to do the caching.
+>=20
 
-Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
-and io can't be dispatched until 'barrier' is dropped.
+Yeah, if we were designing this from scratch, I might agree with leaving
+more up to the filesystem, but the existing users all have pretty much
+the same needs. I'm going to plan to try to keep most of this in the
+common infrastructure defined in iversion.h.
 
-Since holding the 'barrier' is not common, convert 'resync_lock' to use
-seqlock so that holding lock can be avoided in fast path.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/md/raid10.c | 87 ++++++++++++++++++++++++++++++---------------
- drivers/md/raid10.h |  2 +-
- 2 files changed, 59 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 9a28abd19709..2daa7d57034c 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -79,6 +79,21 @@ static void end_reshape(struct r10conf *conf);
- 
- #include "raid1-10.c"
- 
-+#define NULL_CMD
-+#define cmd_before(conf, cmd) \
-+	do { \
-+		write_sequnlock_irq(&(conf)->resync_lock); \
-+		cmd; \
-+	} while (0)
-+#define cmd_after(conf) write_seqlock_irq(&(conf)->resync_lock)
-+
-+#define wait_event_barrier_cmd(conf, cond, cmd) \
-+	wait_event_cmd((conf)->wait_barrier, cond, cmd_before(conf, cmd), \
-+		       cmd_after(conf))
-+
-+#define wait_event_barrier(conf, cond) \
-+	wait_event_barrier_cmd(conf, cond, NULL_CMD)
-+
- /*
-  * for resync bio, r10bio pointer can be retrieved from the per-bio
-  * 'struct resync_pages'.
-@@ -936,30 +951,29 @@ static void flush_pending_writes(struct r10conf *conf)
- 
- static void raise_barrier(struct r10conf *conf, int force)
- {
--	spin_lock_irq(&conf->resync_lock);
-+	write_seqlock_irq(&conf->resync_lock);
- 	BUG_ON(force && !conf->barrier);
- 
- 	/* Wait until no block IO is waiting (unless 'force') */
--	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
--			    conf->resync_lock);
-+	wait_event_barrier(conf, force || !conf->nr_waiting);
- 
- 	/* block any new IO from starting */
--	conf->barrier++;
-+	WRITE_ONCE(conf->barrier, conf->barrier + 1);
- 
- 	/* Now wait for all pending IO to complete */
--	wait_event_lock_irq(conf->wait_barrier,
--			    !atomic_read(&conf->nr_pending) && conf->barrier < RESYNC_DEPTH,
--			    conf->resync_lock);
-+	wait_event_barrier(conf, !atomic_read(&conf->nr_pending) &&
-+				 conf->barrier < RESYNC_DEPTH);
- 
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static void lower_barrier(struct r10conf *conf)
- {
- 	unsigned long flags;
--	spin_lock_irqsave(&conf->resync_lock, flags);
--	conf->barrier--;
--	spin_unlock_irqrestore(&conf->resync_lock, flags);
-+
-+	write_seqlock_irqsave(&conf->resync_lock, flags);
-+	WRITE_ONCE(conf->barrier, conf->barrier - 1);
-+	write_sequnlock_irqrestore(&conf->resync_lock, flags);
- 	wake_up(&conf->wait_barrier);
- }
- 
-@@ -990,11 +1004,31 @@ static bool stop_waiting_barrier(struct r10conf *conf)
- 	return false;
- }
- 
-+static bool wait_barrier_nolock(struct r10conf *conf)
-+{
-+	unsigned int seq = read_seqbegin(&conf->resync_lock);
-+
-+	if (READ_ONCE(conf->barrier))
-+		return false;
-+
-+	atomic_inc(&conf->nr_pending);
-+	if (!read_seqretry(&conf->resync_lock, seq))
-+		return true;
-+
-+	if (atomic_dec_and_test(&conf->nr_pending))
-+		wake_up_barrier(conf);
-+
-+	return false;
-+}
-+
- static bool wait_barrier(struct r10conf *conf, bool nowait)
- {
- 	bool ret = true;
- 
--	spin_lock_irq(&conf->resync_lock);
-+	if (wait_barrier_nolock(conf))
-+		return true;
-+
-+	write_seqlock_irq(&conf->resync_lock);
- 	if (conf->barrier) {
- 		/* Return false when nowait flag is set */
- 		if (nowait) {
-@@ -1002,9 +1036,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
- 		} else {
- 			conf->nr_waiting++;
- 			raid10_log(conf->mddev, "wait barrier");
--			wait_event_lock_irq(conf->wait_barrier,
--					    stop_waiting_barrier(conf),
--					    conf->resync_lock);
-+			wait_event_barrier(conf, stop_waiting_barrier(conf));
- 			conf->nr_waiting--;
- 		}
- 		if (!conf->nr_waiting)
-@@ -1013,7 +1045,7 @@ static bool wait_barrier(struct r10conf *conf, bool nowait)
- 	/* Only increment nr_pending when we wait */
- 	if (ret)
- 		atomic_inc(&conf->nr_pending);
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- 	return ret;
- }
- 
-@@ -1038,27 +1070,24 @@ static void freeze_array(struct r10conf *conf, int extra)
- 	 * must match the number of pending IOs (nr_pending) before
- 	 * we continue.
- 	 */
--	spin_lock_irq(&conf->resync_lock);
-+	write_seqlock_irq(&conf->resync_lock);
- 	conf->array_freeze_pending++;
--	conf->barrier++;
-+	WRITE_ONCE(conf->barrier, conf->barrier + 1);
- 	conf->nr_waiting++;
--	wait_event_lock_irq_cmd(conf->wait_barrier,
--				atomic_read(&conf->nr_pending) == conf->nr_queued+extra,
--				conf->resync_lock,
--				flush_pending_writes(conf));
--
-+	wait_event_barrier_cmd(conf, atomic_read(&conf->nr_pending) ==
-+			conf->nr_queued + extra, flush_pending_writes(conf));
- 	conf->array_freeze_pending--;
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static void unfreeze_array(struct r10conf *conf)
- {
- 	/* reverse the effect of the freeze */
--	spin_lock_irq(&conf->resync_lock);
--	conf->barrier--;
-+	write_seqlock_irq(&conf->resync_lock);
-+	WRITE_ONCE(conf->barrier, conf->barrier - 1);
- 	conf->nr_waiting--;
- 	wake_up(&conf->wait_barrier);
--	spin_unlock_irq(&conf->resync_lock);
-+	write_sequnlock_irq(&conf->resync_lock);
- }
- 
- static sector_t choose_data_offset(struct r10bio *r10_bio,
-@@ -4044,7 +4073,7 @@ static struct r10conf *setup_conf(struct mddev *mddev)
- 	INIT_LIST_HEAD(&conf->retry_list);
- 	INIT_LIST_HEAD(&conf->bio_end_io_list);
- 
--	spin_lock_init(&conf->resync_lock);
-+	seqlock_init(&conf->resync_lock);
- 	init_waitqueue_head(&conf->wait_barrier);
- 	atomic_set(&conf->nr_pending, 0);
- 
-@@ -4363,7 +4392,7 @@ static void *raid10_takeover_raid0(struct mddev *mddev, sector_t size, int devs)
- 				rdev->new_raid_disk = rdev->raid_disk * 2;
- 				rdev->sectors = size;
- 			}
--		conf->barrier = 1;
-+		WRITE_ONCE(conf->barrier, 1);
- 	}
- 
- 	return conf;
-diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
-index 5c0804d8bb1f..8c072ce0bc54 100644
---- a/drivers/md/raid10.h
-+++ b/drivers/md/raid10.h
-@@ -76,7 +76,7 @@ struct r10conf {
- 	/* queue pending writes and submit them on unplug */
- 	struct bio_list		pending_bio_list;
- 
--	spinlock_t		resync_lock;
-+	seqlock_t		resync_lock;
- 	atomic_t		nr_pending;
- 	int			nr_waiting;
- 	int			nr_queued;
--- 
-2.31.1
-
+Ted, for the ext4 crash counter, what wordsize were you thinking? I
+doubt we'll be able to use much more than 32 bits so a larger integer is
+probably not worthwhile. There are several holes in struct super_block
+(at least on x86_64), so adding this field to the generic structure
+needn't grow it.
+--=20
+Jeff Layton <jlayton@kernel.org>
