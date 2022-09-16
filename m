@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E605BB112
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802F65BB114
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiIPQZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 12:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S229568AbiIPQ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 12:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIPQZB (ORCPT
+        with ESMTP id S229454AbiIPQ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 12:25:01 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9501E3F5;
-        Fri, 16 Sep 2022 09:25:00 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id m130so6748482oif.6;
-        Fri, 16 Sep 2022 09:25:00 -0700 (PDT)
+        Fri, 16 Sep 2022 12:28:45 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4E4A59B8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 09:28:44 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id w20so9855105ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 09:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=U5AYJvax+i2EMubMe6fD3KCYINyj/ItK7CWW73D66sI=;
-        b=gIv6oYKsjrSP/2YfL/tjL4UCSavJrEUmLSf9v4eDo1jRkumKKDPkbcHs+GuNf3Dukl
-         Ii7Eh6NSJv5vXNzU6n7gsuQrnc0LYxjftkHpsYcXPvkkpHkSlmKb4Z/F0LI3xjVXS9SB
-         aqtnWopiIT2ZiRXQySJUZHTRKIeMyzIZgmFAgu3K1EnyqPrXXhFlnL9zQmhcK6ovfX10
-         TKd949RA5XeKySmgrSVSlAQXkVu9CMuPHBDnD2OQY8T03isToIsf3/nqe+Y8CTd2I8Tl
-         VMG2CNeZMrPATjStDNNBY5JIBgxYQlzIU6LSiAyYdnQ0Do2baMDM+W5zY5/5+hOLh8qg
-         g8HA==
+        bh=Yuo6+cdkzpbtvDqxmCi4dS+f4ldcDL0jhsTFqbGT6Zg=;
+        b=AZnn0bm7v9VrAGIqi0cZog9gB1fZPBmiBz5bgTsc4qpivvqHwktAJJZLu8kunxu+Tt
+         TtlXzw9bNgd92FQEoutvuMOqvC2fi84q5x0DmzM32sKMm/6Qb14t8z6gQ+071EyA6aBX
+         p4eeYERfTUjhUJ/MIBSqwiQpCoUdHqYWMxzfNMtXW/k2rIxES+TtiFR2W5i2q4P9EM4h
+         lmcP18faVMsoB8f3dTXfzd6+BlcvJrPikwz/3zo4VQsEq/9lsT9uUTtsqKUl0ZA++Hop
+         ixrVwkJ3WBEvPyf4OARJS+7XxUXsl1nuD+M+LMRRkVeszrV4nQu2fRCjmzEN6L9AWKeb
+         7PrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=U5AYJvax+i2EMubMe6fD3KCYINyj/ItK7CWW73D66sI=;
-        b=Cvctue1wn+msSHLABHkE3r0wLf7Bw42QuBmcKqZL0SjmUaX3N7mWmQW+jLVljxAXkg
-         4il3g0yn46wHA765vx9TNaYO7zpObjZuvrabTRSt2+TQt5Zis1T5UM9jh1Hto43VrbRB
-         cn9A5KTbAw8lTpSnCytatDcKYjxOPgzPIKMQDGqbUZMdiXx2QMrj1ZCmneKY9xRPQ9O1
-         onioRN3ATddLkfovQA2TqidXvpagGkwdQsdi6uHBurZUvxOQXMxfGLleqbDh2AHvaTx5
-         BKXN85PgEHuOlqhXRf/YkWDWRnCQgb0gMKiYiaQCPr8HjwbVqsmCo3MxkxaJKlSXAXiY
-         ocaw==
-X-Gm-Message-State: ACgBeo1oBxuxevDExoY9CWn22EJzsxrgM/wPJIGimcEWJqV8Q8a79B9w
-        f5upfKXI6XK+9Jdn221+X/x2E/Md6LU=
-X-Google-Smtp-Source: AA6agR5+WBFT+s1ltH0THiFbRQOT/8M1i6Vr2Qrxos/nJAccwseA1/bCBTnZLLtP9z0sEZ/NbmbYPA==
-X-Received: by 2002:a05:6808:1524:b0:350:1965:8a1 with SMTP id u36-20020a056808152400b00350196508a1mr5816711oiw.211.1663345499597;
-        Fri, 16 Sep 2022 09:24:59 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id j12-20020a4aab4c000000b00475652b97d8sm1166174oon.42.2022.09.16.09.24.56
+        bh=Yuo6+cdkzpbtvDqxmCi4dS+f4ldcDL0jhsTFqbGT6Zg=;
+        b=31M/9Wx/xKZcG9MSmRFC0iz9Jl+NUh7L56yOG30szKW8g09MFpM/FfmcfUNzTmBNFr
+         EvgwtR48YCdN/ApjI4nulY7HlnHmRf+65nArtCA7CNod102uModynh7bjT5zH+7uQq4y
+         3jC2yeeY007Ksxy5gh3Cj6GwxLPhKkbJcl2zIl7fOyiFJtfLWuTY94M92bUjqnyTJTME
+         mVwBZfxo4/ceyb6gAJjs33XIc32RHB5mLryFle5fAxnO5U59n5WUpLIR9R2/i6MtmW4o
+         VMdGgxrVzoVpi81+YrA9a3o9ze7oI8jaoz8fedumPUNnRlh6YH2heVAOz8U4z7SNNyNK
+         BT+A==
+X-Gm-Message-State: ACrzQf1Sqvn4gBnMMd+QR7Llg1abmbBMMBUUKxzjCvB5ae88dGCmswPl
+        fYQzn7y7rVr9/J0RTpUDF2eqLw==
+X-Google-Smtp-Source: AMsMyM72ED8ZzC6JbgRFl+31ZVja5BhZrsH/70T4xMBkWdMiLzJ5TL9IGhGG5lH6skvbJG2SNM4Xhw==
+X-Received: by 2002:a17:902:ea11:b0:176:b283:9596 with SMTP id s17-20020a170902ea1100b00176b2839596mr604676plg.69.1663345723538;
+        Fri, 16 Sep 2022 09:28:43 -0700 (PDT)
+Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id h16-20020a17090adb9000b001f5513f6fb9sm1740742pjv.14.2022.09.16.09.28.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 09:24:58 -0700 (PDT)
-Message-ID: <9f2f639e-2ccc-fe53-b285-041cddb9a92b@gmail.com>
-Date:   Fri, 16 Sep 2022 13:25:19 -0300
+        Fri, 16 Sep 2022 09:28:43 -0700 (PDT)
+Message-ID: <adf840d4-b5f1-4b1f-faac-d735465028e9@rivosinc.com>
+Date:   Fri, 16 Sep 2022 09:28:42 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 5.15 102/107] kbuild: Add skip_encoding_btf_enum64 option
- to pahole
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] riscv: ztso: disallow elf binaries needing TSO
 Content-Language: en-US
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220906132821.713989422@linuxfoundation.org>
- <20220906132826.180891759@linuxfoundation.org>
- <20ad29b8-be2c-8c1e-bd34-9709e5a9922f@leemhuis.info>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20ad29b8-be2c-8c1e-bd34-9709e5a9922f@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+To:     Conor.Dooley@microchip.com, linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
+        cmuellner@ventanamicro.com, linux@rivosinc.com
+References: <20220916030552.1396820-1-vineetg@rivosinc.com>
+ <20220916042331.1398823-1-vineetg@rivosinc.com>
+ <67a3aba3-68bb-5e8b-4e4e-869c8e99e879@microchip.com>
+ <9b9ff287-75e5-3ee5-e6c5-1daca6c562dc@microchip.com>
+From:   Vineet Gupta <vineetg@rivosinc.com>
+In-Reply-To: <9b9ff287-75e5-3ee5-e6c5-1daca6c562dc@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/16/22 07:21, Thorsten Leemhuis wrote:
-> On 06.09.22 14:31, Greg Kroah-Hartman wrote:
->> From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
->>
->> New pahole (version 1.24) generates by default new BTF_KIND_ENUM64 BTF tag,
->> which is not supported by stable kernel.
-> 
-> Martin, when you wrote "not supported by stable kernel", did you mean
-> just 5.15.y or 5.19.y as well? Because I ran into...
-> 
->> As a result the kernel with CONFIG_DEBUG_INFO_BTF option will fail to
->> compile with following error:
->>
->>   BTFIDS  vmlinux
->> FAILED: load BTF from vmlinux: Invalid argument
-> 
-> ...this compile error when compiling 5.19.9 for F37 and from a quick
-> look into this it seems this was caused by a update of dwarves to 1.24
-> that recently landed in that distribution. This patch seems to fix the
-> problem (it got past the point of the error, but modules are still
-> compiling).
 
-Thorsten, by stable I've meant both current stable and longterm, i.e.
-5.19 and below, and yes, I didn't sent a patch according to the stable
-submission guidelines for 5.19 in time so I apologize for that. Gonna
-send the patch for it. Thanks for reminding me.
+
+On 9/15/22 23:58, Conor.Dooley@microchip.com wrote:
+> Also, since this is not marked as a fix, why would we not just apply the
+> patchset from Palmer that looks like a more complete version of this
+> patch:
+> https://lore.kernel.org/linux-riscv/20220902034352.8825-1-palmer@rivosinc.com/
+>
+> Maybe you could offer an R-b or some comments on that patch instead?
+
+Sure I didn't know about that patch and my idea was just to get the ball 
+rolling so tooling at least can start having tso bits as last time 
+around that was the blocker to getting stuff in binutils and gcc etc.
+
+-Vineet
