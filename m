@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8365BAD6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4A55BAD74
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiIPM1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S231164AbiIPM3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiIPM1N (ORCPT
+        with ESMTP id S230182AbiIPM3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:27:13 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC3DB24AA
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:27:11 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id t184so32350909yba.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:27:11 -0700 (PDT)
+        Fri, 16 Sep 2022 08:29:34 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD79CD8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r5-20020a1c4405000000b003b494ffc00bso1086618wma.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qBkP79CdibdL0KXmDwvIhKSe/JzNo6nfeWqbrVhoNo0=;
-        b=dzbYY0vlZ7i6Yr8v8Apr+D9xXAqxbRmUiJughxVFjAL6TOyk0vSgprK09vqNX/Je3N
-         o66NEofmPmhKHxB0QvanN8/hcYj7BoCdnyOOHbarUZQ08ZSimNs1jPhugBLpKAcU+1Zu
-         qJU0yAkFA7SgxiyFxQdFXgejHUAAhlboD/x2MLsegN7gspeKAZuoIiNaVS0DE5P9CYX9
-         tn3tYlmiCauzVqoPx2W/yWzIDcJ5ke+fk3kanAKcQ3LRiK8Tmiyts9lAsXtTJWSxLsYT
-         3OYhkupOoIQwwcbmZJak7hQR3xGaapN6GqjO3gZ+W3+7qyAmFiuzbWfFtzoK8QiNW5o/
-         HgYw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=JvFd72KY5D3Wu+OH6yJTfUfgelUDQTYT/Fh6hxhVkjE=;
+        b=LedG/SkaWRkjc78Cb5B832FSMZVHAQoE/yrgB8mA6yYjq7WFPWCuUNu8gmqrEbyPc5
+         c9CVx4EPnufHned/d30gLF9CkSSY1HgU+cSiWPX2EhPCJ4DJ/aIPxyxqWXlqbMby8wR8
+         XWnWi3BPqLwu54YcpFuQ69a1uKxXNJyJ0Plylh3Ejj8sGLopmPdpwSunhBqFgGZjlzrW
+         1SJpEGy6ic7pvk/uRiJY0u0lg+EyyljQOexIcd+q7bUkEuYNd1nyUlgoX3OYWtbAeLtr
+         lNhVvDiJTErSBK3b/GzXLDfvSTh7XQD0T/EaABKgphvNE2epFz9Q0p3B45l1qoC5LlB6
+         tBjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qBkP79CdibdL0KXmDwvIhKSe/JzNo6nfeWqbrVhoNo0=;
-        b=d1phG4n6RPadCwxUU2HjipV8Q2cAhWGenPkSgl0Ho/sXFzeviNKO4+FPV69t7sUoKI
-         +smxexXZtLbqxS+V2g8wrEWL08/qUPGXykjKLylUfpsmYZzZkyyNZD2HifiWvsWDzPgJ
-         bbTQx4C3L7ojJ3cqTPZYluoSkTG0DMotxg+bTlWfZHDmZuX9pJWmsENuEILms1wudoo+
-         1bx9DefhGBaC60ZdPiJQUaSWqDknT4ZqGQA33DpCLoAH1lvx272oUsKHrdXufXrExN64
-         hAoevrBHkrKVWQRWf/jRUxmmagv12RN2FGCEwf820t0Ekpx56ECXG/M41Gx64+wAfJI+
-         GjrQ==
-X-Gm-Message-State: ACrzQf0gJWo2jbwxzwU4H+MsRsEGeXnepnE3M7HTpiJ9vQDYgcWm3eD1
-        edCyrrhhANrphow6bVj8salfWxaLwri1X2ctZqDpeQ==
-X-Google-Smtp-Source: AMsMyM7exBoaSPI97ztz9uzm41FgmreUvtJV9LBBNHgaf3EvM9E/3gry+tdHRjk0JGUiZrtkyBEPOBNexhun2Afb8vs=
-X-Received: by 2002:a25:ba45:0:b0:67a:6298:7bac with SMTP id
- z5-20020a25ba45000000b0067a62987bacmr4566691ybj.194.1663331230592; Fri, 16
- Sep 2022 05:27:10 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=JvFd72KY5D3Wu+OH6yJTfUfgelUDQTYT/Fh6hxhVkjE=;
+        b=IV2tgTYIfB2YP7ooOXJGr1lPSoLa1RGi1mL54BfW9DoymZsN6dqK+I4SK1JIUzuKVY
+         xapMHPcq3m1+V9Knm1Xe4xO4UI6+UTon3oThYf3K5RNb6QYddfrnx2djvnIIfWTtfLM3
+         45S20kDKz5VVpl/X5hFmavMAkVSE7kuV8E2AnBQUHk3SZQIVXtAQpnI2zX+GOiN9xWBS
+         g5wok28oCwo50HwCpxmfxCQuE/1wBZKTc7llYOA5MWT6OKGJNof0ubRAMOltzSwKsH0J
+         ZjJlpxUf572SBTo7+1hPlsurmfAkeLAMXrdK2SOCLIA/dgsZJ3YjMAaFHCpWGU+QQVX2
+         gLIg==
+X-Gm-Message-State: ACrzQf2pE9nazBpMH3YgB4VtyAvXpzu+7vieXejYfnjwevUsdqrB4ADC
+        ztJqebBRKVXT8eNaEheEYNIjwG28Zw5EMg==
+X-Google-Smtp-Source: AMsMyM4o/hRHgK61Qp7vt51SRaaAprtiAoTVmHarhG7yftR0NaGFNmoTgsPTTwi1j+mOmJaF3Jd0aA==
+X-Received: by 2002:a05:600c:4e8c:b0:3a6:11e:cc08 with SMTP id f12-20020a05600c4e8c00b003a6011ecc08mr3228327wmq.198.1663331367148;
+        Fri, 16 Sep 2022 05:29:27 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id m188-20020a1c26c5000000b003b4a68645e9sm1990825wmm.34.2022.09.16.05.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 05:29:26 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/4] slimbus: fixes and cleanup patches
+Date:   Fri, 16 Sep 2022 13:29:06 +0100
+Message-Id: <20220916122910.170730-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220916121204.3880182-1-vkoul@kernel.org> <20220916121204.3880182-7-vkoul@kernel.org>
-In-Reply-To: <20220916121204.3880182-7-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 16 Sep 2022 15:26:59 +0300
-Message-ID: <CAA8EJprcqrmHQCtYbOT=DWp-0iEWWVC0=-KZRz1DZqK6gE94qA@mail.gmail.com>
-Subject: Re: [PATCH 6/6] arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sept 2022 at 15:13, Vinod Koul <vkoul@kernel.org> wrote:
->
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> Introduce support for the Lenovo Flex 5G laptop, built on the Qualcomm
-> SC8180X platform. Supported peripherals includes keyboard, touchpad,
-> UFS storage, external USB and WiFi.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 590 ++++++++++++++++++
->  2 files changed, 591 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
->
+Hi Greg,
+Here are some fe cleanup patches and 2 fixes on SlimBus ngd controller.
 
-[skipped]
+could you pick this up please.
 
-> +&gpu {
-> +       status = "okay";
-> +
-> +       zap-shader {
-> +               memory-region = <&gpu_mem>;
-> +               firmware-name = "qcom/sc8180x/qcdxkmsuc8180.mbn";
+thanks,
+srini
 
-Is the firmware signed with the test key or with the proper vendor
-key? If the latter is true, the firmware should go to the subdir
-inside the SoC (I'd suggest following the example and using
-sc8180x/LENOVO/dmi_id/)
+Krzysztof Kozlowski (4):
+  slimbus: qcom-ngd: use correct error in message of pdr_add_lookup()
+    failure
+  slimbus: qcom-ngd: cleanup in probe error path
+  slimbus: qcom-ngd: simplify error paths with dev_err_probe
+  slimbus: qcom-ngd-ctrl: allow compile testing without
+    QCOM_RPROC_COMMON
 
-> +       };
-> +};
-> +
+ drivers/slimbus/Kconfig         |  3 ++-
+ drivers/slimbus/qcom-ngd-ctrl.c | 23 +++++++++++++++--------
+ 2 files changed, 17 insertions(+), 9 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
+
