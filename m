@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD355BAD79
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3865BAD7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiIPM37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S230099AbiIPMdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiIPM3l (ORCPT
+        with ESMTP id S230516AbiIPMdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:29:41 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFF61116
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:32 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id ay36so6422623wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=aibk6Jc9VAZ5PSG3dauyBZkAwA2GeZcL8c5pEn//11Y=;
-        b=dCMChoikGfDu/Q7zhcPNMzfo026BbCwMA3C7i5Fm9nvwoPi575yXSnt4ZuYHMSk5Sn
-         Tyt1zN7NM59PJkR2Cuisk/zqJOa+u8bU3MRLlLRQJh5HBi/gv3wySgf5clxHTWMjz6rW
-         ErssEs+4vHQy/6Wl6yBWs+x9eq0QRS6TBTynf+YOD/XBL0dDCG+R7H6YCPjSWSA7mWvV
-         +OSfVnV2js8b68fqwJcsOCTXVB5b3+ahiy+vhR+GOdXexkRoeZDvxuFdhcUYmJ6p+nfZ
-         d5NSiBRudN7sjIMzCL4EJA7aodL0tY7BdzZlYR2P+Q67/yId2AvUVoTK172t97fv0eE0
-         7OSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=aibk6Jc9VAZ5PSG3dauyBZkAwA2GeZcL8c5pEn//11Y=;
-        b=i7Lf++4RkShvVvQCFkGJkKO9gJ957aQhposWgg4r2kdBcwBfLRhPhWBoJ2Of1CUFO5
-         hmvUUjo3Rino5ZlaokzgB0QhkgTRseqX3Ko4IatBt/WtMK2BBwPFXPl5FMi2jIp9JDT4
-         8HnBHL+vWL0fP/PE/4FXJFtD4LeLPILzJjU7b7asjipkq+nPF7i/nCD7KaFtENp+b4oX
-         KlbyRpDgOphjpQNd+L9s+/od0FV1ELDG0ch5QPpIHiJFDodkdVHzlmPq/boE//VKRkep
-         0hyYD0cRI+oCHedA3D9tivM8zYp62IBoQ8jy68Sn9hfKZyEMVn7n9NZa/TWi+czZiOiW
-         RkzQ==
-X-Gm-Message-State: ACgBeo1t1W9Wxro+7zOmteObCS3bywEjBx2QObGlyVbbTFzdjym+8v5y
-        fMSaIGbMZA8pPwYiFMCoQHbfKg==
-X-Google-Smtp-Source: AA6agR61DbWvoQEMtBUS/Q/nln2iLqn51Y07MebWxX2PHXX7J9JqoQjso//12id3wZBzWiyzkDCLxQ==
-X-Received: by 2002:a05:600c:348e:b0:3b4:a9f1:c240 with SMTP id a14-20020a05600c348e00b003b4a9f1c240mr6304682wmq.192.1663331371025;
-        Fri, 16 Sep 2022 05:29:31 -0700 (PDT)
-Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id m188-20020a1c26c5000000b003b4a68645e9sm1990825wmm.34.2022.09.16.05.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 05:29:30 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/4] slimbus: qcom-ngd-ctrl: allow compile testing without QCOM_RPROC_COMMON
-Date:   Fri, 16 Sep 2022 13:29:10 +0100
-Message-Id: <20220916122910.170730-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220916122910.170730-1-srinivas.kandagatla@linaro.org>
-References: <20220916122910.170730-1-srinivas.kandagatla@linaro.org>
+        Fri, 16 Sep 2022 08:33:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249DB69F66;
+        Fri, 16 Sep 2022 05:33:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CA862B5C;
+        Fri, 16 Sep 2022 12:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18064C433C1;
+        Fri, 16 Sep 2022 12:33:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663331591;
+        bh=AT8VkjZ1VGWdOKuwt9QtngZWlA97OpwjmY1v0iuej4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nyD4CXjudmPaibcIlDJcd8Hcpc1NTq+tu1fZnRZ/5RrxG8gz1dRUoQFKHQCxOsxsa
+         TfwKL0lOnBT5kjkN3RMn8z8vKqwcb4kUZAbhUtaJsr716Og9+QJwevYBG1nXJjwSqY
+         jXE2vHlP0wefv9hdTylm9GnuSJHexz/yV4x7BxLSo4cf4OYkWWEcEHmacEIuOr7hJg
+         6GQYMvlmZwADW3fGCH1qNGKcoXUF7JOwO+mdzbW6G29Rvfl7B7ZuGjeRz00phr25CY
+         Oi0LAvLXyWuf+Yry7/4rHw24emp3wp5j2Yp/wMv7tH4nyjxGK9op+aVJxv4ovCS03T
+         AkZsPisyEW0RA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oZAWy-00023Z-89; Fri, 16 Sep 2022 14:33:16 +0200
+Date:   Fri, 16 Sep 2022 14:33:16 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] dt-bindings: usb: qcom,dwc3: Add SC8180x binding
+Message-ID: <YyRtDFqSsfPCWWGo@hovoldconsulting.com>
+References: <20220916121204.3880182-1-vkoul@kernel.org>
+ <20220916121204.3880182-4-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220916121204.3880182-4-vkoul@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, Sep 16, 2022 at 05:42:01PM +0530, Vinod Koul wrote:
+> Document the USB dwc3 controller for SC8180x SoC
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index fea3e7092ace..f33735f3702d 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -24,6 +24,7 @@ properties:
+>            - qcom,qcs404-dwc3
+>            - qcom,sc7180-dwc3
+>            - qcom,sc7280-dwc3
+> +          - qcom,sc8180x-dwc3
+>            - qcom,sc8280xp-dwc3
+>            - qcom,sdm660-dwc3
+>            - qcom,sdm845-dwc3
 
-The Qualcomm common remote-proc code (CONFIG_QCOM_RPROC_COMMON) has
-necessary stubs, so it is not needed for compile testing.
+You need to also describe the clocks and interrupts required by this
+platform in the platform-specific sections further down in this file.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/slimbus/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/slimbus/Kconfig b/drivers/slimbus/Kconfig
-index 1235b7dc8496..2ed821f75816 100644
---- a/drivers/slimbus/Kconfig
-+++ b/drivers/slimbus/Kconfig
-@@ -22,7 +22,8 @@ config SLIM_QCOM_CTRL
- 
- config SLIM_QCOM_NGD_CTRL
- 	tristate "Qualcomm SLIMbus Satellite Non-Generic Device Component"
--	depends on HAS_IOMEM && DMA_ENGINE && NET && QCOM_RPROC_COMMON
-+	depends on HAS_IOMEM && DMA_ENGINE && NET
-+	depends on QCOM_RPROC_COMMON || COMPILE_TEST
- 	depends on ARCH_QCOM || COMPILE_TEST
- 	select QCOM_QMI_HELPERS
- 	select QCOM_PDR_HELPERS
--- 
-2.25.1
-
+Johan
