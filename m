@@ -2,131 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA545BA938
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98E75BA8E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiIPJRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S230520AbiIPJC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiIPJRM (ORCPT
+        with ESMTP id S231222AbiIPJCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:17:12 -0400
-X-Greylist: delayed 927 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Sep 2022 02:16:28 PDT
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5CA59A9;
-        Fri, 16 Sep 2022 02:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=misterjones.org; s=dkim20211231; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WpOIYPFmZvX+Hf2mD/HENyssqGqbLDXFAm0gYQobp9o=; b=vw30vGqbyjYmaM3nKnskMxB/y+
-        lw/jA0e/qsYeOLKWeB+M9pBy79w1bxVNFdGPnj1q7bDvJSGbFGE9g/6/s3WogeA7TOX1YXUyGg1x0
-        pTlP11nDz1yB2tnWgOoUfZONTyL1unFVmhgDysLveBpkJ7DtJcohL8NqRL+bFBB7z/KUIt+Jg8S7L
-        /g0VlHBwX0VvkVE6n9reRzOGt0hMoehxgxc6H3FCI/q3fovs9/b6nZbmWJpwad6zQ2KeRKuGadLzE
-        9DCBQxYnOHWwYY4Gvcv0wEak1BiL7zsNN0+ZPOQ2niZSKo3HdGerEmF7aAZ8QPwNPdyuKP+AkoKqD
-        y63NDfkw==;
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@misterjones.org>)
-        id 1oZ7DJ-00AZwo-Lg;
-        Fri, 16 Sep 2022 10:00:45 +0100
-MIME-Version: 1.0
-Date:   Fri, 16 Sep 2022 10:00:45 +0100
-From:   Marc Zyngier <maz@misterjones.org>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        x86@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kvm-riscv@lists.infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
- dependent
-In-Reply-To: <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-References: <20220504074807.3616813-1-aik@ozlabs.ru>
- <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
- <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4884805567a0288ab1dbefb8aec819a2@misterjones.org>
-X-Sender: maz@misterjones.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: aik@ozlabs.ru, kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org, kvm@vger.kernel.org, farosas@linux.ibm.com, x86@kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, alex.williamson@redhat.com, kvm-riscv@lists.infradead.org, pbonzini@redhat.com, linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@misterjones.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 05:02:03 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C6E491CE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:01:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 916DE580E9B;
+        Fri, 16 Sep 2022 05:01:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 16 Sep 2022 05:01:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663318892; x=1663322492; bh=eSy6TVmDPq
+        cwPJ8Iryb7Xwdk6oM2vvcqIdcjswH4P9E=; b=rHo2dTf9SE9S0gj2sOVe8pVO0W
+        Td7NhKdEevcRMSDxrlt5f6VZe80+19QkGriim8Fmm6LnbygI6ZZlbqmXF562LBK/
+        0RlGKgsVwYBRMFQfSYn6mu/yXAv7+PGopEYhS0kdjBDCR6koWscqVFJbqhfJaFD9
+        eTr1x7iI2tcXcAvVVYKlHK3BOfCeurroaxfrSFGsKecX6j6L+kNKbzF4E/9kYNcc
+        EtBzTcyPTiieH3falT3odzwFJflCJRGX+1WkFUE0eMWiaIWYOYssobHpWxbhHzMi
+        IuIDW39V4eJmcivJzq8bZ+ij/N+mVSTk8IWTYIkq1Z+Kz8hPWpy/Pq+VTCXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663318892; x=1663322492; bh=eSy6TVmDPqcwPJ8Iryb7Xwdk6oM2
+        vvcqIdcjswH4P9E=; b=rYMcLawC1WVkZQ5ZsW2j7sIZ7s2vguyxJM6ld7kKlR1o
+        O3igcFxjFQ9aQ+XQH5sV3A7mw1uTWU6slKTdbBmXIGBs725N/yVP5DMR/vXS4Psp
+        kG8iNsh0q2wqBe6FX83eGCCLZdZxn0jddAgIGuOuxTljuz5XMLbJR65jlGtnf7yD
+        y22IS59O3cvlQVxXJ0s8TDNMhE+TDJBVtZ/aJHVzt/7BI5FkEcqbsfBzn9reOtFz
+        r8/w4irSp0HGH5jban+7wZauToQ3uRRt/WeXKg8Gxz/X32L33nsSrHxT3FVfJdof
+        Tc+VK5S51J43zho/10TtaTLW/fYTnf+51hICEdiEFA==
+X-ME-Sender: <xms:bDskYzJ8ujs6qb8cpws1p2sQdxdIUNBVebt7AGW8awR-x1TPHGMwaA>
+    <xme:bDskY3LpCRzh8rHB-CiHP6350nPWwIqjnZqjbL5rVMLqf_z_LRVU4L_dmpc77rMpL
+    N1bB1bu0us_ErcE71I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvtddguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bDskY7spbeCsSuJuDUkb7m3M8dfKgweKqqDMsV4lMlElBnxGZxTY9g>
+    <xmx:bDskY8YyQImQsG7U0ohA7BcYMs6KtM05Ap7DIzCnvrcc30Htx7JtJA>
+    <xmx:bDskY6ZGv9z8vadTzXkJtkoIExr5VRBYMZ6rhHNCBUaMlUbLGOIAxg>
+    <xmx:bDskYwP3dRa-ntBz4APv2sLSWGgP6GwdMsyCVym_q3hR00_zoQxASw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 274D0B60086; Fri, 16 Sep 2022 05:01:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <4dcb0e76-b965-42da-b637-751d2f8e1c51@www.fastmail.com>
+In-Reply-To: <20220916001038.11147-1-ansuelsmth@gmail.com>
+References: <20220916001038.11147-1-ansuelsmth@gmail.com>
+Date:   Fri, 16 Sep 2022 11:01:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christian Marangi" <ansuelsmth@gmail.com>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Vinod Koul" <vkoul@kernel.org>, "Mark Brown" <broonie@kernel.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: handle error pointer from adm
+ prep_slave_sg
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-13 13:50, Alexey Kardashevskiy wrote:
-> Ping? It's been a while and probably got lost :-/
-> 
-> On 18/05/2022 16:27, Alexey Kardashevskiy wrote:
->> 
->> 
->> On 5/4/22 17:48, Alexey Kardashevskiy wrote:
->>> When introduced, IRQFD resampling worked on POWER8 with XICS. However
->>> KVM on POWER9 has never implemented it - the compatibility mode code
->>> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the 
->>> native
->>> XIVE mode does not handle INTx in KVM at all.
->>> 
->>> This moved the capability support advertising to platforms and stops
->>> advertising it on XIVE, i.e. POWER9 and later.
->>> 
->>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
->>> ---
->>> 
->>> 
->>> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
->> 
->> 
->> Ping?
->> 
->>> 
->>> ---
->>>   arch/arm64/kvm/arm.c       | 3 +++
->>>   arch/mips/kvm/mips.c       | 3 +++
->>>   arch/powerpc/kvm/powerpc.c | 6 ++++++
->>>   arch/riscv/kvm/vm.c        | 3 +++
->>>   arch/s390/kvm/kvm-s390.c   | 3 +++
->>>   arch/x86/kvm/x86.c         | 3 +++
->>>   virt/kvm/kvm_main.c        | 1 -
->>>   7 files changed, 21 insertions(+), 1 deletion(-)
->>> 
->>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->>> index 523bc934fe2f..092f0614bae3 100644
->>> --- a/arch/arm64/kvm/arm.c
->>> +++ b/arch/arm64/kvm/arm.c
->>> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, 
->>> long ext)
->>>       case KVM_CAP_SET_GUEST_DEBUG:
->>>       case KVM_CAP_VCPU_ATTRIBUTES:
->>>       case KVM_CAP_PTP_KVM:
->>> +#ifdef CONFIG_HAVE_KVM_IRQFD
->>> +    case KVM_CAP_IRQFD_RESAMPLE:
->>> +#endif
+On Fri, Sep 16, 2022, at 2:10 AM, Christian Marangi wrote:
+> ADM dma engine has changed to also provide error pointer instaed of
+> plain NULL pointer on invalid configuration of prep_slave_sg function.
+> Currently this is not handled and an error pointer is detected as a
+> valid dma_desc. This cause kernel panic as the driver doesn't fail
+> with an invalid dma engine configuration.
+>
+> Correctly handle this case by checking if dma_desc is NULL or IS_ERR.
 
-I don't mind moving this around, but I object to the #ifdefery.
+Using IS_ERR_OR_NULL() is almost never a correct solution. I think
+in this case the problem is the adm_prep_slave_sg() function
+that returns an invalid error code.
 
-This option is always selected on arm64, so it can safely be added
-to the list without any condition.
+While error pointers are often better than NULL pointers for
+passing information to the caller, a driver can't just change
+the calling conventions on its own. If we want to change
+the dmaengine_prep_slave_sg() API, I would suggest coming
+up with a new name for a replacement interface that uses
+error pointers instead of NULL first, and then changing
+all callers to the new interface.
 
-Thanks,
-
-         M.
--- 
-Who you jivin' with that Cosmik Debris?
+       Arnd
