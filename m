@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34EE5BA76A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0295F5BA76C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiIPHYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S229844AbiIPHYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIPHXn (ORCPT
+        with ESMTP id S229745AbiIPHXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:23:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8104A50E5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:42 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTQSD5C5ZzlVkV;
-        Fri, 16 Sep 2022 15:19:40 +0800 (CST)
+        Fri, 16 Sep 2022 03:23:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637BEA50DD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:43 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTQVT4H5LzBsQh;
+        Fri, 16 Sep 2022 15:21:37 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 15:23:40 +0800
+ 2022 15:23:41 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <david@redhat.com>,
         <osalvador@suse.de>, <anshuman.khandual@arm.com>
 CC:     <willy@infradead.org>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2 11/16] mm/page_alloc: make boot_nodestats static
-Date:   Fri, 16 Sep 2022 15:22:52 +0800
-Message-ID: <20220916072257.9639-12-linmiaohe@huawei.com>
+Subject: [PATCH v2 12/16] mm/page_alloc: use helper macro SZ_1{K,M}
+Date:   Fri, 16 Sep 2022 15:22:53 +0800
+Message-ID: <20220916072257.9639-13-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220916072257.9639-1-linmiaohe@huawei.com>
 References: <20220916072257.9639-1-linmiaohe@huawei.com>
@@ -48,43 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's only used in mm/page_alloc.c now. Make it static.
+Use helper macro SZ_1K and SZ_1M to do the size conversion. Minor
+readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
 ---
- mm/internal.h   | 2 --
- mm/page_alloc.c | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ mm/page_alloc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 94d8a976c2e2..b3002e03c28f 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -836,8 +836,6 @@ int migrate_device_coherent_page(struct page *page);
-  */
- struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
- 
--DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
--
- extern bool mirrored_kernelcore;
- 
- static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 83b2cb93d6fd..6bdc98c7019f 100644
+index 6bdc98c7019f..67ec8a2e1db2 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -6571,7 +6571,7 @@ static void per_cpu_pages_init(struct per_cpu_pages *pcp, struct per_cpu_zonesta
- #define BOOT_PAGESET_BATCH	1
- static DEFINE_PER_CPU(struct per_cpu_pages, boot_pageset);
- static DEFINE_PER_CPU(struct per_cpu_zonestat, boot_zonestats);
--DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
-+static DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+@@ -7048,7 +7048,7 @@ static int zone_batchsize(struct zone *zone)
+ 	 * size is striking a balance between allocation latency
+ 	 * and zone lock contention.
+ 	 */
+-	batch = min(zone_managed_pages(zone) >> 10, (1024 * 1024) / PAGE_SIZE);
++	batch = min(zone_managed_pages(zone) >> 10, SZ_1M / PAGE_SIZE);
+ 	batch /= 4;		/* We effectively *= 4 below */
+ 	if (batch < 1)
+ 		batch = 1;
+@@ -8523,8 +8523,8 @@ void __init mem_init_print_info(void)
+ #endif
+ 		")\n",
+ 		K(nr_free_pages()), K(physpages),
+-		codesize >> 10, datasize >> 10, rosize >> 10,
+-		(init_data_size + init_code_size) >> 10, bss_size >> 10,
++		codesize / SZ_1K, datasize / SZ_1K, rosize / SZ_1K,
++		(init_data_size + init_code_size) / SZ_1K, bss_size / SZ_1K,
+ 		K(physpages - totalram_pages() - totalcma_pages),
+ 		K(totalcma_pages)
+ #ifdef	CONFIG_HIGHMEM
+@@ -9049,8 +9049,8 @@ void *__init alloc_large_system_hash(const char *tablename,
+ 		numentries -= arch_reserved_kernel_pages();
  
- static void __build_all_zonelists(void *data)
- {
+ 		/* It isn't necessary when PAGE_SIZE >= 1MB */
+-		if (PAGE_SHIFT < 20)
+-			numentries = round_up(numentries, (1<<20)/PAGE_SIZE);
++		if (PAGE_SIZE < SZ_1M)
++			numentries = round_up(numentries, SZ_1M / PAGE_SIZE);
+ 
+ #if __BITS_PER_LONG > 32
+ 		if (!high_limit) {
 -- 
 2.23.0
 
