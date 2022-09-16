@@ -2,85 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166F25BA787
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B72D5BA750
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiIPHeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S229950AbiIPHQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIPHek (ORCPT
+        with ESMTP id S229808AbiIPHQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:34:40 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E57CDFBF;
-        Fri, 16 Sep 2022 00:34:37 -0700 (PDT)
-Received: from letrec.thunk.org ([185.122.133.20])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28G7XsIY025301
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Sep 2022 03:33:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1663313638; bh=Ff+be2aCuv0yea74ummplMFRZDnk4ZWbn37rurbNeF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=gr+5GH5RLqFulFpsF3k4gAP7e+11xkZg+vg/J7AxAp6kzUip8aOeSAKiISUDdcrUR
-         XbPA0kK/r72MyA3yhTd4GoHHbmUG7DT1SYveDgKGZOZFO2GnV5EiKXjWXzP1ZiYa57
-         TORlt4unerQXInsMP6ttfyv5cuX+oBO3BrV9h/keFbAMRevmAufOoEDumHADbY9zgg
-         glD7pOvpm+MYMMD3YHZioaqvceS5ciQlmvqSnW0W7aUOKBbqLsEn6kFA18pKPifNhl
-         Tn4ta8uu+Db6KKzPI/QmMJWZgdbWIn5WsCC2qF7wM5eEteZZ/v6dO3HoR4s2Oveh7H
-         V00iWyjFqiEow==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id A88908C2B4B; Fri, 16 Sep 2022 03:33:53 -0400 (EDT)
-Date:   Fri, 16 Sep 2022 03:33:53 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Subject: Re: [PATCH 1/5] tty: remove TTY_MAGIC
-Message-ID: <YyQm4dBVyvefVcAd@mit.edu>
-References: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
+        Fri, 16 Sep 2022 03:16:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89397A4065;
+        Fri, 16 Sep 2022 00:16:27 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTQHs2JYnz14QVj;
+        Fri, 16 Sep 2022 15:12:25 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 16 Sep 2022 15:16:24 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+        <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v2 1/2] libbpf: Add pathname_concat() helper
+Date:   Fri, 16 Sep 2022 15:36:59 +0800
+Message-ID: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 03:54:59AM +0200, наб wrote:
-> According to Greg, in the context of magic numbers as defined in
-> magic-number.rst, "the tty layer should not need this and I'll gladly
-> take patches"
-> 
-> Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
+Move snprintf and len check to common helper pathname_concat() to make the
+code simpler.
 
-Well, I would disagree with Greg K-H on this --- but I haven't been
-tty maintainer in well over a decade.  Assuming code is Bug-Free(tm),
-sure, it's not necessary.  But there is any kind of memory bug (e.g.,
-a corrupted pointer, a use-after free, some other structure
-corruption), this catches the problem earlier rather than later, and
-it's a light-weight to do a quick sanity check.
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+ 1 file changed, 29 insertions(+), 47 deletions(-)
 
-It has certainly caught problems in the past, and I still use this
-programming technique in programs that I do maintain, such as
-e2fsprogs.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3ad1392..7ab977c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
+ 	return true;
+ }
+ 
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
+ static int build_map_pin_path(struct bpf_map *map, const char *path)
+ {
+ 	char buf[PATH_MAX];
+-	int len;
++	int err;
+ 
+ 	if (!path)
+ 		path = "/sys/fs/bpf";
+ 
+-	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
+-	if (len < 0)
+-		return -EINVAL;
+-	else if (len >= PATH_MAX)
+-		return -ENAMETOOLONG;
++	err = pathname_concat(path, bpf_map__name(map), buf);
++	if (err)
++		return err;
+ 
+ 	return bpf_map__set_pin_path(map, buf);
+ }
+@@ -7961,17 +7972,9 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 			continue;
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0) {
+-				err = -EINVAL;
+-				goto err_unpin_maps;
+-			} else if (len >= PATH_MAX) {
+-				err = -ENAMETOOLONG;
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
+ 				goto err_unpin_maps;
+-			}
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ 		char buf[PATH_MAX];
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0)
+-				return libbpf_err(-EINVAL);
+-			else if (len >= PATH_MAX)
+-				return libbpf_err(-ENAMETOOLONG);
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
++				return err;
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ {
+ 	struct bpf_program *prog;
++	char buf[PATH_MAX];
+ 	int err;
+ 
+ 	if (!obj)
+@@ -8045,17 +8044,9 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 	}
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin_programs;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
+ 			goto err_unpin_programs;
+-		}
+ 
+ 		err = bpf_program__pin(prog, buf);
+ 		if (err)
+@@ -8066,13 +8057,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 
+ err_unpin_programs:
+ 	while ((prog = bpf_object__prev_program(obj, prog))) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
++		if (pathname_concat(path, prog->name, buf))
+ 			continue;
+ 
+ 		bpf_program__unpin(prog, buf);
+@@ -8091,13 +8076,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			return libbpf_err(-EINVAL);
+-		else if (len >= PATH_MAX)
+-			return libbpf_err(-ENAMETOOLONG);
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
++			return libbpf_err(err);
+ 
+ 		err = bpf_program__unpin(prog, buf);
+ 		if (err)
+-- 
+1.8.3.1
 
-But it's not a big deal either way,
-
-						- Ted
-
-P.S. BTW, I didn't make up this technique; it's a program pattern
-first used in Multics.
