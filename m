@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199305BA490
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293865BA496
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiIPCPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S229706AbiIPCZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIPCPK (ORCPT
+        with ESMTP id S229602AbiIPCZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:15:10 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8282D58DFE;
-        Thu, 15 Sep 2022 19:15:09 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso24243269pjk.0;
-        Thu, 15 Sep 2022 19:15:09 -0700 (PDT)
+        Thu, 15 Sep 2022 22:25:13 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC29031ED6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:25:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a3so21332144lfk.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ETyx8IQCepnGQ6yUcDGyA+MzQ9TZbCoht1acGd3UBlc=;
-        b=O6wPxm/dvX+ifr7286Mn7rOx3FUJwj9pwfiSC8ryHe/NsAJbAWTFh6pXtPIX66Naz1
-         o3haEWZpa1N8TAzqO0+K0QN6BuqByZ4w8AGouP0QXXDs8t9uKI2LIovSe+HQ80pUGKYx
-         BpwhnAwCS4MYsmOVP0lac+QuuZ3X2KFw3ailGyCt+fQ1x3Xe1ch5OiJvzZCXv1dE0D8K
-         E/2DSXbztQpNOXbw63sDa+fD3sCU8/98Ah43RT9SzltDFPHXjz190BQjMM+aq3+9EzyV
-         jqMErCvETCMAGMqjMkBlDMz3/Etguz9Ti2GOJfI/w+7TqUNVCNojF8X38petPm4IXgWo
-         mnOg==
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3g1pfChMrPCGzoHDLIuvi7goXUtH2xCwrvM79pUzgzI=;
+        b=UexWPpGvsEPgSXmhTRD96BEdU4Hf13I3c8OciXhz/Sa3MFOgO521TrTUbeY0UuMgZp
+         XnSOlcg/cSLXpo/XQ+Ie5yi/r7bZC+mM9oOlfL2/60EOcI0DnDtxq58FsDKkeQa5AkBB
+         4khgpj3XcbQTW6IApIy2gCVgMFsxhL2VgyX4jpNd2eqHd22VbEX3BQHLRCA9D39R+2ux
+         aUHDYeI0mRxvBCw2Hae2frsvx6o5NeDkyTfZkNoU2nXmNmd95CPVgzVFOVWruCMazfCw
+         0VPrObFG/Ws9LzrH7odPWBTAl0VF7sGqo9FYkqX7Tuiv0CzAAMW4bFi9BdSCm9+bVCbB
+         hGMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ETyx8IQCepnGQ6yUcDGyA+MzQ9TZbCoht1acGd3UBlc=;
-        b=pAOPONEB2+qoQmnSesdLw2ctp6dcAdDl9COvzbwAr7I2C7iyndXDz1S8LPvXDpxLL0
-         jgdTKtoIsKQ3XR3RAvXyXHj9Y8KVxq3wkVM5TcQ33KRqiu7B15u/pj8sO74WFi47K3vB
-         PruLlAKjOClCe7IQqIrG7AxJA8tZTD3lADuzTB9yu1vs5HLFRgTvnm8PF5oQ5mrXEkdB
-         VfpAA5LuJRj7t+gy5rstwVHTD7MugHwrlMIb663J+uwZw38GAL7Ww5/+ZqbhqKRNHqI4
-         FhK0zC2NJMc7Z1pxTNnuM/B5dAZ847vybOBg/FCtJK4HTMe+nTw9qjnWa5UnR3+29V3b
-         jSUA==
-X-Gm-Message-State: ACrzQf2svIooyb1asDrKLCOthaM2Qbn6fXo55rVoDpe1ew0/9ZPPQqjN
-        3OtIyYbjjDwXWTszsbjmfRo=
-X-Google-Smtp-Source: AMsMyM7nNgtoE1VvKfoFP7+Y97bE9l0C1nG9c/1YlyO8PPdOho8VzQkNuM2KKtY1W12MnJojlL+htg==
-X-Received: by 2002:a17:902:bc44:b0:176:909f:f636 with SMTP id t4-20020a170902bc4400b00176909ff636mr2353932plz.21.1663294507705;
-        Thu, 15 Sep 2022 19:15:07 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:578:40c5:44cb:7b1e:21e9:77e5])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902714100b001780e4e1a0fsm13549334plm.125.2022.09.15.19.15.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Sep 2022 19:15:07 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, keescook@chromium.org,
-        anton@enomsg.org, ccross@android.com, tony.luck@intel.com
-Cc:     cy_huang@richtek.com, gene_chen@richtek.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC] PM: core: Add pm_wakeup_pending check in device suspend_noirq
-Date:   Fri, 16 Sep 2022 10:15:01 +0800
-Message-Id: <1663294501-6377-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3g1pfChMrPCGzoHDLIuvi7goXUtH2xCwrvM79pUzgzI=;
+        b=HiBfu3Xqn4lxFpKIH3ybCOJF5qh+aXHOktObmB2Yh6ZFSAN/dGykcJKuAOmKmvtYRA
+         fRErTM8Xcog70ZaVBBvrdCJTIz7AKIJJ23aHG8H8MHNOiOMQ6FHv1bhDZO4r2hSZXoBz
+         XrlkiO8EGJ8FQh70kXmiKvhZZDwgjmgE6flN4+812gHysr4MSYOLzTGhdKsfBrdgM7cB
+         k+8YwfSo8LsZrJOeserROXVH1bZeVfvkIgwidOzOiNZcyTNYqfmX4+GLYKQBK4g63OlG
+         CZ7CqRMR+L0TO+YOad8cs9NIfzwpTiwWwAcXgHEiCQeQDDF+YY9qZSrE1csW954jOFDz
+         e7yQ==
+X-Gm-Message-State: ACrzQf2Iqoleskx7m3/snjHH8/LH2+3b5H9St/Z39/XoPxFXOjLv0z1/
+        SaJjRGymb6iI+PoXARJB+rvQnHeEiYq579eTy/Mcgjc1c/w=
+X-Google-Smtp-Source: AMsMyM42n1q8iE4ZmVyKUgfz7ioTW4GZ7ESC6v+9tbZSKZ7yah0eBdk7Dhde71sBFjrXQ4ud6gbmk83C3a1tNDyopw0=
+X-Received: by 2002:a05:6512:401f:b0:49e:ea65:cd49 with SMTP id
+ br31-20020a056512401f00b0049eea65cd49mr877570lfb.419.1663295109005; Thu, 15
+ Sep 2022 19:25:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220830044642.566769-1-apatel@ventanamicro.com> <20220830044642.566769-2-apatel@ventanamicro.com>
+In-Reply-To: <20220830044642.566769-2-apatel@ventanamicro.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 16 Sep 2022 07:54:55 +0530
+Message-ID: <CAK9=C2WkqVgg58sKyDEMWue_vL8Pz7bCfERuaW_4DGnYTpcSMw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for
+ systems with Svpbmt
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi Palmer,
 
-In 'dpm_suspend_noirq', it will do the sychronized_irq to guarantee all
-irqs are all done, and then do any wakeup flag set.
+On Tue, Aug 30, 2022 at 10:17 AM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> Currently, all flavors of ioremap_xyz() function maps to the generic
+> ioremap() which means any ioremap_xyz() call will always map the
+> target memory as IO using _PAGE_IOREMAP page attributes. This breaks
+> ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
+> remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
+> page attributes.
+>
+> To address above (just like other architectures), we implement RISC-V
+> specific ioremap_cache() and ioremap_wc() which maps memory using page
+> attributes as defined by the Svpbmt specification.
+>
+> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
+> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-For some peripherial deivces like as I2C/SPI, to speed up the irq handling,
-it may use 'pm_stay_awake' and really handle in another thread context like
-as workqueue.
+This is a crucial RC fix. Can you please take this ?
 
-But in mem suspend flow, after 'dpm_suspend_noirq" stage, the next
-'pm_wakeup_pending' check will be at 'syscore_suspend'.
+Regards,
+Anup
 
-The checkpoint seems too late and cause I2C/SPI fail during 'noirq' to
-'syscore_suspend'. But some adapter was already be marked as 'suspended'
-at 'noirq' callback, any I2C/SPI xfer will return the error flag '-ESHUTDOWN'.
-
-After the code trace, it seems all device callback will do 'pm_wakeup_pending'
-check, except 'noirq'.
-
-This patch is to add 'pm_wakeup_pending' check in 'noirq' sage to prevent this
-kind of usage.
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Hi,
-
-Is there any rule to define when I2C/SPI host controller need to mark adapter as
-'suspended'?
-
-I trace 'drivers/i2c/buses'.It seems there's no common rule, Some are 'suspend',
-others may did it at 'suspend_noirq'.
-
----
- drivers/base/power/main.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index c501392..7cd7dc5 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1210,6 +1210,11 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
- 	if (async_error)
- 		goto Complete;
- 
-+	if (pm_wakeup_pending()) {
-+		async_error = -EBUSY;
-+		goto Complete;
-+	}
-+
- 	if (dev->power.syscore || dev->power.direct_complete)
- 		goto Complete;
- 
--- 
-2.7.4
-
+> ---
+>  arch/riscv/include/asm/io.h      | 10 ++++++++++
+>  arch/riscv/include/asm/pgtable.h |  2 ++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+> index 69605a474270..07ac63999575 100644
+> --- a/arch/riscv/include/asm/io.h
+> +++ b/arch/riscv/include/asm/io.h
+> @@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
+>  #define outsq(addr, buffer, count) __outsq((void __iomem *)addr, buffer, count)
+>  #endif
+>
+> +#ifdef CONFIG_MMU
+> +#define ioremap_wc(addr, size)         \
+> +       ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
+> +#endif
+> +
+>  #include <asm-generic/io.h>
+>
+> +#ifdef CONFIG_MMU
+> +#define ioremap_cache(addr, size)      \
+> +       ioremap_prot((addr), (size), _PAGE_KERNEL)
+> +#endif
+> +
+>  #endif /* _ASM_RISCV_IO_H */
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 7ec936910a96..346b7c1a3eeb 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
+>  #define PAGE_TABLE             __pgprot(_PAGE_TABLE)
+>
+>  #define _PAGE_IOREMAP  ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
+> +#define _PAGE_IOREMAP_WC       ((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
+> +                                _PAGE_NOCACHE)
+>  #define PAGE_KERNEL_IO         __pgprot(_PAGE_IOREMAP)
+>
+>  extern pgd_t swapper_pg_dir[];
+> --
+> 2.34.1
+>
