@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6175BAEA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C001A5BAEA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiIPNyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S231907AbiIPNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiIPNyM (ORCPT
+        with ESMTP id S229881AbiIPNyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:54:12 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF45AAE9D9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:53:58 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id n10so5558521wrw.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=F/++3j5vzbiWV6wQtfbpT+br4B/s5dtmbh359iA+BUU=;
-        b=V4KuezOGi/JTNn5/6GMcwwzbP1cwJ2jYRWRJqXnawM1eJBg+CmGdlw+x/wMldl/++/
-         N55q6J+zmIVsAFrJBtOukfYyPJiCztuNyWmfSVyg3xOZdEINJUhviurCMeII9AD6hKgG
-         l6Z6u8H6TZDX5tcZ0l5GKRI3F1ar0BoCQMfN2kslNgSV8Ym8h+0hcQWpSJ7ECL/H9myy
-         jlLEjswffFwIK4QG5lFLZGkrrJRJlu5z7qqDkdgCzK6uns9MYg6j6xqgHj+/MJliqaLD
-         KPSjgPUkO1l9tdt/zAKVoXiw/NCGHwlL75BH1hin0QqMHw9d2xXeKi8OMMs0usfbhyhO
-         ds1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=F/++3j5vzbiWV6wQtfbpT+br4B/s5dtmbh359iA+BUU=;
-        b=bJvyG9G9hpWKwKhW3oWbGYQUAnGHo80hv5T/SdI7LtI/e4pA0Z4rdKmALQeuohpLpb
-         CvMqnOax1AcSER3TbIay1LW9sTRe6Asl9bAb//O8jsvIiP0puR7UtohIuYwfQqFMrvg9
-         FwHI5cHHF1FJezZQltQH9l3Wp4OZiOYgYxDBR0jzgKs8xg/w2aUfrA03EglcvkaPvlpu
-         vSMv0npBSvbt7v0v8czzTqTyENp2z4CkpERP8LQtLuxNnL65dAo+GZVLHY8NkpxiVsm4
-         aShhfd6ZKkJCjB9jz6D8b1ZB8vYcv7Hg8Y7mNPgL1mBAWHVNOj5M9By/aGAlfm0uFXPI
-         WoTA==
-X-Gm-Message-State: ACrzQf0EHPpdb6C8jiPBSF8/ipdTm5WxmxMu1FpLTxTc9q46RY2xrEEh
-        xjD+uJOxXXeu8FS4SbR+7Ld0xQ==
-X-Google-Smtp-Source: AMsMyM66mtWTrSH2i+OwN4eD0KuYmUQ7/S2/uesxpJ8irrIeofU4OyeQ3mLggy7e1a3yQyB+/AAIHQ==
-X-Received: by 2002:a05:6000:1ace:b0:22a:c9a6:e203 with SMTP id i14-20020a0560001ace00b0022ac9a6e203mr3048283wry.694.1663336435835;
-        Fri, 16 Sep 2022 06:53:55 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id m2-20020a7bce02000000b003b483000583sm2084767wmc.48.2022.09.16.06.53.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:53:55 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 2/2] soundwire: qcom: do not send status of device 0 during alert
-Date:   Fri, 16 Sep 2022 14:53:52 +0100
-Message-Id: <20220916135352.19114-2-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220916135352.19114-1-srinivas.kandagatla@linaro.org>
-References: <20220916135352.19114-1-srinivas.kandagatla@linaro.org>
+        Fri, 16 Sep 2022 09:54:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32626B07CE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663336460; x=1694872460;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ac3JZSw6gM2bS1E/Wns1pqFzoAkPzK9cgfP29j6vLyc=;
+  b=cUVsaY566c7FGmtsdZoXXpvZeXAFyc7SmS60zq188IVrtRWv0C/cqXFq
+   Igobinwn5IXOF4d3WaYFqkpw9a0kz9RbLjYWKmEHDGW8KhjhyxYE5oyzF
+   T91Vh5BdI59Qj/ZpLPkpib48pWEUPXbsVy2quFeuOvXMAAAlGRQ4gLtb4
+   xCnrVmVlX4e/f+62x6NK4EhTMJTtc6qt3B6fABvUrl+WI8Jt28k0J8hqo
+   9xUOZKUU5Su09PkXwnIO2B+juP8xEDpzNoIfIV33eWABNSsKTXFdmoNbP
+   mC8gY14D/UmRoiZSMklio7qQOUybNn0VJX2jLUJSn1VBkGNTuQQ4rKpHV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="300355813"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="300355813"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 06:54:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="568836479"
+Received: from lroque-mobl1.amr.corp.intel.com ([10.251.209.126])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 06:54:12 -0700
+Date:   Fri, 16 Sep 2022 16:54:11 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Hyunwoo Kim <imv4bel@gmail.com>
+cc:     arnd@arndb.de, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] char: pcmcia: synclink_cs: Fix use-after-free in
+ mgslpc_ops
+In-Reply-To: <20220916134751.GA234676@ubuntu>
+Message-ID: <21d84319-4d1a-8d8e-a098-947772406faf@linux.intel.com>
+References: <20220916134751.GA234676@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device0 can not be in alter status. And for consistency reasons do not
-send status of device0 to core.
+On Fri, 16 Sep 2022, Hyunwoo Kim wrote:
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/soundwire/qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> A race condition may occur if the user physically removes
+> the pcmcia device while calling ioctl() for this tty device node.
+> 
+> This is a race condition between the mgslpc_ioctl() function and
+> the mgslpc_detach() function, which may eventually result in UAF.
+> 
+> So, add a refcount check to mgslpc_detach() to free the structure
+> after the tty device node is close()d.
+> 
+> Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index d3ce580cdeaf..a04a8863b228 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -428,7 +428,7 @@ static int qcom_swrm_get_alert_slave_dev_num(struct qcom_swrm_ctrl *ctrl)
- 
- 	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
- 
--	for (dev_num = 0; dev_num <= SDW_MAX_DEVICES; dev_num++) {
-+	for (dev_num = 1; dev_num <= SDW_MAX_DEVICES; dev_num++) {
- 		status = (val >> (dev_num * SWRM_MCP_SLV_STATUS_SZ));
- 
- 		if ((status & SWRM_MCP_SLV_STATUS_MASK) == SDW_SLAVE_ALERT) {
+> @@ -2517,9 +2548,14 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
+>  	if (debug_level >= DEBUG_LEVEL_INFO)
+>  		printk("%s(%d):mgslpc_open(%s) success\n",
+>  			 __FILE__, __LINE__, info->device_name);
+> +
+> +	kref_get(&info->refcnt);
+>  	retval = 0;
+> +	mutex_unlock(&remove_mutex);
+>  
+> +	return retval;
+>  cleanup:
+> +	mutex_unlock(&remove_mutex);
+>  	return retval;
+
+Just move the cleanup label instead.
+
+
 -- 
-2.21.0
+ i.
 
