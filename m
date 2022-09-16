@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CAF5BA9DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B314A5BA9E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiIPKCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S230360AbiIPKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIPKCa (ORCPT
+        with ESMTP id S230322AbiIPKDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:02:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8BE501B0;
-        Fri, 16 Sep 2022 03:02:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF2ABB824F9;
-        Fri, 16 Sep 2022 10:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A61AC433D6;
-        Fri, 16 Sep 2022 10:02:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663322547;
-        bh=dRPEjw9QsUBzaKuoW8W8ZQwQfff1/Q8c7DTD0nfC71A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CtzMwcHuF0Zc4G9d61SsS08dA96Ql8Dvo0Sl2jMyGnOMoFkAlecmOGL3YHj1U9ixR
-         Ce5eqTV3AmHGnRHf5bu2FcF8iit9iybMnOppgZ81JX0c6wRja3EFgxL+IZa2aUelrB
-         ZbgrisVxs8WFBt4Mqr4JGi3q6ID0TFKDMrOCA357c5ySroUMvSSsIrxxN2B3Wgv0jI
-         y31Y9hO4LBA6cun+tuEVtwOG5+bPnEHlMhvc/6c7ECsbeeGBsXBecfVYhivoRzKP8R
-         c6C1UrrswrWQ/hR6tQ42ex0DdHnswED8Rh0r9n3SzjnDL44ECqwpV7nPjD5iwd7cct
-         3pV+7/kLmacoQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oZ8B6-0006Ty-Cf; Fri, 16 Sep 2022 12:02:32 +0200
-Date:   Fri, 16 Sep 2022 12:02:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] phy: qcom-qmp: more fixes and cleanups
-Message-ID: <YyRJuCnuUE+bF7RP@hovoldconsulting.com>
-References: <20220914162545.6289-1-johan+linaro@kernel.org>
- <YyM3o6aSwt0zM0t4@hovoldconsulting.com>
+        Fri, 16 Sep 2022 06:03:00 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF4AB068;
+        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so1379154pjb.0;
+        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=0kJO6sKHhZWzWtdjnIjVe92KBA3BK4LC3Mn37i7AeX8=;
+        b=p5dgLW1X5KELWDXXhAUsrm4m15zadrqj1lyXqbaHgTHEBaqIdsDIec/ASw4PWaCLzl
+         mRjUyPTXf9AwsWy7oc5NgLkSWi6Dd3HtNffTrp7d5AliYRbkhLcw0VhDwwVLpAEWpXhy
+         iDjvoyKXUkLoE22LpTkZAjFSO+uKgW0r6Q/qAVrCZ3tcnDowlFuNnj+mj4Dldy6u5Qbq
+         L1G8HUVCFy7D4Ns/7lnc2iRPilklPtqB1G7czENDScgqa/OdvWBAaaA1QHq0Dm81TKpg
+         mxXD0gAKH66fFzTIuniSjdogWnFvMC5fwBxwFJZjDzlQy8s6NBTvc2uEUwA+1QT/SzBs
+         NzjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=0kJO6sKHhZWzWtdjnIjVe92KBA3BK4LC3Mn37i7AeX8=;
+        b=A8U+CYaODHKnhfEG3rfseHhPi76od6TP276qBtI1YBsvZ7d5TdxYhu14bW1XTfM7T+
+         ovJX2BlH7LE8Ztb1Tk8FoW1zdTqqpahOSRgBbDkuluAB01kyQ0IDf+DoInlnuUR0tjkF
+         iVcNyQ/4OZIbFMCw1lXTqPqtkbjFu7Z60H0Ewfj1Z8D8XFv3J9eXYHzgrz+lXhHci3dq
+         2B36vatFsMzLrbwrAErjSciXPxTzKnMqnEN5W33n2edWtUicExhxJ1Wo1Z0hbuJ00kEX
+         2I/T5KBjvF5Bj/wXjdaogMG7CXsIQQVXSVDOM0K8+AP90BnNNObJhRZXnVRIGA2oGJ8w
+         4eVg==
+X-Gm-Message-State: ACrzQf1GZ0dFuHZTBGMwWh1HzutSf+kCC2haXDBpWOuHaYBFLDhavJuB
+        QOBZJhlFWeA+nVxRYNPIjlU=
+X-Google-Smtp-Source: AMsMyM7k8Y3tBuvK67O01/8DM9XrV7JgALu+SPeEXJUUjRgAjamHbiu7z9m6S031Kj6gZJHX3OmfKA==
+X-Received: by 2002:a17:90b:2496:b0:1ef:a94:7048 with SMTP id nt22-20020a17090b249600b001ef0a947048mr4688475pjb.244.1663322579130;
+        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id y1-20020aa79421000000b00537daf64e8esm14094571pfo.188.2022.09.16.03.02.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 03:02:58 -0700 (PDT)
+Message-ID: <08cd7add-b2a5-da3f-1d2c-efa0e7c80511@gmail.com>
+Date:   Fri, 16 Sep 2022 18:02:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyM3o6aSwt0zM0t4@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH] selftests: kvm: Fix a compile error in
+ selftests/kvm/rseq_test.c
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220802071240.84626-1-cloudliang@tencent.com>
+ <YxjAZOGF9uSE2+AT@google.com>
+ <fdfb143a-45c4-aaff-aa95-d20c076ff555@oracle.com>
+From:   JinrongLiang <ljr.kernel@gmail.com>
+In-Reply-To: <fdfb143a-45c4-aaff-aa95-d20c076ff555@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 04:33:08PM +0200, Johan Hovold wrote:
-> On Wed, Sep 14, 2022 at 06:25:34PM +0200, Johan Hovold wrote:
-> > Here's the next set of QMP PHY cleanups including some non-critical
-> > fixes of tiny memory leaks on probe deferral (I didn't add a stable tag
-> > for any of them on purpose).
+
+
+On 2022/9/8 00:54, Liam Merwick wrote:
+> On 07/09/2022 17:01, Sean Christopherson wrote:
+>> On Tue, Aug 02, 2022, Jinrong Liang wrote:
+>>> From: Jinrong Liang <cloudliang@tencent.com>
+>>>
+>>> The following warning appears when executing:
+>>>     make -C tools/testing/selftests/kvm
+>>>
+>>> rseq_test.c: In function ‘main’:
+>>> rseq_test.c:237:33: warning: implicit declaration of function 
+>>> ‘gettid’; did you mean ‘getgid’? [-Wimplicit-function-declaration]
+>>>            (void *)(unsigned long)gettid());
+>>>                                   ^~~~~~
+>>>                                   getgid
+>>> /usr/bin/ld: /tmp/ccr5mMko.o: in function `main':
+>>> ../kvm/tools/testing/selftests/kvm/rseq_test.c:237: undefined 
+>>> reference to `gettid'
+>>> collect2: error: ld returned 1 exit status
+>>> make: *** [../lib.mk:173: 
+>>> ../kvm/tools/testing/selftests/kvm/rseq_test] Error 1
+>>>
+>>> Use the more compatible syscall(SYS_gettid) instead of gettid() to 
+>>> fix it.
+>>> More subsequent reuse may cause it to be wrapped in a lib file.
+>>>
+>>> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+>>> ---
+>>
+>> Reviewed-by: Sean Christopherson <seanjc@google.com>
+>>
 > 
-> > Johan Hovold (11):
-> >   phy: qcom-qmp-pcie: add pcs_misc sanity check
-> >   phy: qcom-qmp-pcie: fix memleak on probe deferral
-> >   phy: qcom-qmp-pcie-msm8996: fix memleak on probe deferral
-> >   phy: qcom-qmp-combo: fix memleak on probe deferral
-> >   phy: qcom-qmp-ufs: fix memleak on probe deferral
-> >   phy: qcom-qmp-usb: fix memleak on probe deferral
-> >   phy: qcom-qmp-pcie-msm8996: drop unused pcs_misc handling
-> >   phy: qcom-qmp-pcie: drop unused legacy DT workaround
-> >   phy: qcom-qmp-combo: drop unused legacy DT workaround
-> >   phy: qcom-qmp-ufs: drop legacy DT workaround
-> >   phy: qcom-qmp-usb: drop legacy DT workaround
+> Can a 'Cc: stable@vger.kernel.org' be added also as e923b0537d28 got 
+> backported to v5.15.58
 > 
-> Please hold off with applying this series. I realised that we have a
-> couple devicetrees in mainline with overlapping register regions for
-> which the drivers would fail to bind if we start checking checking for
-> that.
+> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
 > 
-> I'll see to fixing those up and look into how to handle backward
-> compatibility first.
-
-So we had four devicetrees (one is new in 6.0) with incorrect serdes
-region sizes that included the adjacent regions. I've sent fixes for
-those now, and I don't think we need to add workarounds for booting
-older malformed dtbs in this case, at least not until someone complains.
-
-We do however have two USB PHY bindings that currently rely on
-overlapping regions which would require some more work to be fixed up.
-
-Specifically, the USB PHY driver uses two separate PCS regions but the
-binding treats them as one and the driver ends up mapping everything in
-between. This sort of works on all platforms but two where the TX and RX
-regions lie in between.
-
-The binding and driver should probably be fixed up to define this
-PCS_USB region explicitly, but that work is left for another day.
-
-Meanwhile, I've implemented a workaround that fall back to using
-non-exclusive mappings for these platforms. I'll send a v2 with this.
-
-Finally, note that new sc8280xp USB4/USB3/DP binding is also broken,
-but that's really a separate issue and we're working on fixing that up.
-
-Johan
+> 
+>>
+>> Paolo, do you want to grab this for 6.0?  It doesn't look like we're 
+>> going to have
+>> a more elegant solution anytime soon...
+> 
+Ping?
