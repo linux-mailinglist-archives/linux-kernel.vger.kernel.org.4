@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B298F5BB23D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CC05BB240
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiIPSgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S230062AbiIPSh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiIPSgd (ORCPT
+        with ESMTP id S229953AbiIPShz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:36:33 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63CCB81EC;
-        Fri, 16 Sep 2022 11:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=PHd6kjLnJ0eKhdd4fw/gC/C7d0LeZYsJWCumoJ4LYDY=; b=SqFbAwCBJ+aLnzqE/IAGgf9qjk
-        I3bRLpsEs5GvSkVyfDD4ftjJQ18I8JpnT+LippC9e751+OoSsdi56VoDucXZLWlFK+mLrvrPi2r8N
-        dr7vuFsqKrWarj+YpWDj6kdZF0srp7IdxT78KK9riADKPBJ5neJUBxmtfb9ibnFJjqfZSFJlgzMYx
-        F4QOW5EXqNuEXEeXod1IguibisyTljzFZWcA87RpA7h6zZRpjl/MuU/XfdKbrlkQ0Fdx+6Vnv58oS
-        2XLG0BV/v6Im84usR2nPaODigeGH7kvjDhF99thqje5M+yKLeqS1nEQkD9QtfH/2CSe/vqcFaUCuA
-        pbLQqzug==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1oZGCR-003JPg-1M; Fri, 16 Sep 2022 12:36:27 -0600
-Message-ID: <c3bc7107-2efd-4d82-6efa-b819aa055def@deltatee.com>
-Date:   Fri, 16 Sep 2022 12:36:26 -0600
+        Fri, 16 Sep 2022 14:37:55 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D2D14D0E;
+        Fri, 16 Sep 2022 11:37:54 -0700 (PDT)
+Message-ID: <7c01a2b8-bfb7-df72-faae-0b940ea0f149@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663353472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F3RNLEuF8buEC8QUWl8Z2CEswmdqvtMcE8bEVXrKec0=;
+        b=TfoqqXo3iCxx0PHrv+jEu26Nlcw222jcGOVZm43Yn+SujQwDsLaOsEz9j5t5UjX/xwtBbE
+        OxALioATvD6PdqBPO2eowC6PR6CqalYKOlOvM9n7UM92jUtsmwT7fsze7zlIZE+AM5LxYB
+        kJTu2TYph7cDk9wZyn6K1gXvdIF1KJA=
+Date:   Fri, 16 Sep 2022 11:37:46 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-CA
-To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
-        guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-References: <20220916113428.774061-1-yukuai1@huaweicloud.com>
- <20220916113428.774061-5-yukuai1@huaweicloud.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220916113428.774061-5-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next] bpf/btf: Use btf_type_str() whenever possible
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220914021328.17039-1-yepeilin.cs@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20220914021328.17039-1-yepeilin.cs@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: yukuai1@huaweicloud.com, song@kernel.org, guoqing.jiang@linux.dev, pmenzel@molgen.mpg.de, linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 4/5] md/raid10: fix improper BUG_ON() in
- raise_barrier()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-09-16 05:34, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On 9/13/22 7:13 PM, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
 > 
-> 'conf->barrier' is protected by 'conf->resync_lock', reading
-> 'conf->barrier' without holding the lock is wrong.
+> We have btf_type_str().  Use it whenever possible in btf.c, instead of
+> "btf_kind_str[BTF_INFO_KIND(t->info)]".
 > 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> ---
+>   kernel/bpf/btf.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index cad4657ba2ce..81dc7423d723 100644
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+This clean up makes sense.  The patch cannot be applied though [0], so 
+it is marked as 'Changes Requested'.  Also, where is the cad4657ba2ce 
+coming from?  It can't be found in the bpf-next tree.  Please rebase on 
+the bpf-next and resend.
 
+
+[0]: 
+https://patchwork.kernel.org/project/netdevbpf/patch/20220914021328.17039-1-yepeilin.cs@gmail.com/
