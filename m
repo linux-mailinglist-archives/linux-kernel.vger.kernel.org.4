@@ -2,95 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4065BAA1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A185BA9FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiIPKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
+        id S230374AbiIPKHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiIPKIO (ORCPT
+        with ESMTP id S229471AbiIPKHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:08:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBEAAB1AB;
-        Fri, 16 Sep 2022 03:08:02 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28GA7kjG068027;
-        Fri, 16 Sep 2022 05:07:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663322866;
-        bh=aXAVZIYPKGzUSDwCBbqD8+m0IZ7vLkkmtiVjqwDBATU=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=zJ9O6OFY/onL2RwISQyxmhmN1u93vD197spJSwxZJjamxa2uCuWHiETe7w+HueS7N
-         EUX4OWjV7lOC+nyYq8iG+6dYbxXuYhGCVQkwiv4W0jK9y+XpLYFVSgerS7Lo4Ry24n
-         FoTJVNrhBcquV9wtyaN3xqVxB07alKbw03dYczH4=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28GA7kaa008764
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 16 Sep 2022 05:07:46 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 16
- Sep 2022 05:07:46 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 16 Sep 2022 05:07:46 -0500
-Received: from [10.24.69.241] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28GA7fFR036036;
-        Fri, 16 Sep 2022 05:07:41 -0500
-Message-ID: <a8a27850-ad83-d010-235b-e97454fde9a9@ti.com>
-Date:   Fri, 16 Sep 2022 15:37:40 +0530
+        Fri, 16 Sep 2022 06:07:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4008E9E2CB;
+        Fri, 16 Sep 2022 03:07:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6D75B82504;
+        Fri, 16 Sep 2022 10:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B165C433C1;
+        Fri, 16 Sep 2022 10:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663322848;
+        bh=uMAL3OQ7hw/VgZxfX56+XFYN5Q9RrubMAyF0Li76AsU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O6rddn38Qv0M/J/RJ0d+0vtwO5uaZ5uL0BWbowbaq079fsnTHn94qIgDm1Mheq34G
+         WZoMuBOL570KJKmQYSrBhEzGI47pyk6Nj2Zwv33w5XRxouNaicn5kyuzr4BKloysMv
+         UuRs72UrDBtZ2CoPv8r/RZewGvC0MPN3cfvclU+o=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.9 0/7] 4.9.329-rc1 review
+Date:   Fri, 16 Sep 2022 12:07:43 +0200
+Message-Id: <20220916100440.995894282@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
-        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH 0/8] Add support for J721e CPSW9G and SGMII mode
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <e6ecf9a3-4e8a-ff2a-aa82-5e65f99d76ac@linaro.org>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <e6ecf9a3-4e8a-ff2a-aa82-5e65f99d76ac@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.329-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.9.329-rc1
+X-KernelTest-Deadline: 2022-09-18T10:04+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+This is the start of the stable review cycle for the 4.9.329 release.
+There are 7 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-On 16/09/22 15:27, Krzysztof Kozlowski wrote:
-> On 14/09/2022 10:50, Siddharth Vadapalli wrote:
->> Add compatible for J721e CPSW9G.
->>
->> Add support to power on and configure SERDES PHY.
->>
->> Add support for SGMII mode for J7200 CPSW5G and J721e CPSW9G.
-> 
-> I got two same patchsets from you... version your patches instead. See
-> submitting-patches doc.
+Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
+Anything received after that time might be too late.
 
-I had posted two series, both v1, with the series corresponding to
-patches meant for the PHY and the NET subsystems. I did not realize
-while posting, that the cover letters for both of them had the same
-subject, making them appear as the same series, but of different
-versions. I apologize for the confusion.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.329-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+and the diffstat can be found below.
 
-Regards,
-Siddharth.
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.9.329-rc1
+
+Brian Norris <briannorris@chromium.org>
+    tracefs: Only clobber mode/uid/gid on remount if asked
+
+Jann Horn <jannh@google.com>
+    mm: Fix TLB flush for not-first PFNMAP mappings in unmap_region()
+
+Hans de Goede <hdegoede@redhat.com>
+    platform/x86: acer-wmi: Acer Aspire One AOD270/Packard Bell Dot keymap fixes
+
+Li Qiong <liqiong@nfschina.com>
+    ieee802154: cc2520: add rc code in cc2520_tx()
+
+Kai-Heng Feng <kai.heng.feng@canonical.com>
+    tg3: Disable tg3 device on system reboot to avoid triggering AER
+
+Jason Wang <wangborong@cdjrlc.com>
+    HID: ishtp-hid-clientHID: ishtp-hid-client: Fix comment typo
+
+Rob Clark <robdclark@chromium.org>
+    drm/msm/rd: Fix FIFO-full deadlock
+
+
+-------------
+
+Diffstat:
+
+ Makefile                              |  4 ++--
+ drivers/gpu/drm/msm/msm_rd.c          |  3 +++
+ drivers/hid/intel-ish-hid/ishtp-hid.h |  2 +-
+ drivers/net/ethernet/broadcom/tg3.c   |  8 ++++++--
+ drivers/net/ieee802154/cc2520.c       |  1 +
+ drivers/platform/x86/acer-wmi.c       |  9 ++++++++-
+ fs/tracefs/inode.c                    | 31 +++++++++++++++++++++++--------
+ mm/mmap.c                             |  9 +++++++--
+ 8 files changed, 51 insertions(+), 16 deletions(-)
+
+
