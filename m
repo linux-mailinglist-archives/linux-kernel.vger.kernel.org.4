@@ -2,182 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7B25BACE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645985BACED
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiIPMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S230306AbiIPMEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIPMCL (ORCPT
+        with ESMTP id S229484AbiIPMEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:02:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1870B27F;
-        Fri, 16 Sep 2022 05:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663329730; x=1694865730;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=I7bEY9XKWq/5NwZYNFjLUnUwGKzFVrZ2+hj0izSWBsQ=;
-  b=Qm1ixPEfcw+2Pd/wEZYTduwIpKEuygU6UgwEd/jPTDfajhf6hPXajZ81
-   mYTjiHmeie4AEjc/prEMOK/W69b5IuWstAsqqC49Kf1aik/mW+5bmZ/kv
-   SoipXPpY8gJPnV1vyKdQ9as7R1H6U6lVcC5aZrg9lI3QY8l9xyRaO3fVI
-   hZhnGTm/QvvkTAJEW0NfDvBXEqgm0HuYwHJf+oSo5SY+l4MU+fkpbd2Sz
-   z80XCKbGuJM0724VnOR5ueMmJlin2CHdUgNVJgvvZ19VqC69GSEqX0Srb
-   5gjVS/Cc+dfqCQ3sB+FL+clPcKCdm0V8NIqkgd15j6lP2vupXeDQM9sdC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360716620"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="360716620"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 05:02:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="679941259"
-Received: from lroque-mobl1.amr.corp.intel.com ([10.251.209.126])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 05:02:06 -0700
-Date:   Fri, 16 Sep 2022 15:02:04 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-In-Reply-To: <YyRiPMa26qDptj3L@wantstofly.org>
-Message-ID: <421c541b-25d7-a1de-8c21-5a164dcf24ef@linux.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org> <YyGoZLTFhYQvlf+P@smile.fi.intel.com> <YyG2tDdq9PWTlaBQ@wantstofly.org> <YyHR4o5bOnODZzZ9@smile.fi.intel.com> <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com> <YyRiPMa26qDptj3L@wantstofly.org>
+        Fri, 16 Sep 2022 08:04:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCABEAC
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFCF862B3C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64738C433D7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663329847;
+        bh=SDyVHic+g5Ln/swY+PozT5sqObg8/WxJ+rqngYuzFro=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DvQwyaMWXD82NwWUoeJrKeV4DUHsMIooQCYHcmXosyl/K7WeLRGRkRndoqJ3SrkK1
+         LcvCsmmGFAY+MhYDrz7xpw3FxMi5d+PzQ0fW/asv+Cr0i1n49A0F1qWoS+FI3A47Xy
+         4B/5WOw0w9/sSli5YXJHD7wXhQ4foTYIZj90a1gBp8ARlG4GJBQK3lyl2LSF6ogojF
+         J6EfBXoXGGAmXN0TxKx6qWywOKVawa0f9COqJsXsBYSXOC1nyzun57z3AbI0LIna/s
+         TwatmS31qbtoiZnWx2n5l9+Hob6BiCu2PxJc5cgSzrVV5jiJdbnLsOTt3755sFgYE1
+         9aCKWkFxhJIoQ==
+Received: by mail-vk1-f170.google.com with SMTP id b5so99905vkb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:07 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1RVpLv1CZJgF1L5GR3jP+fHt5aBoA2lMsca6+Vjt8XOPFkNapR
+        efc3S7E6wOd7L1MVKHT9myNOE7ZOcwMnFp+80w==
+X-Google-Smtp-Source: AMsMyM7R+47aUUSWrJkPcclUE1JWWBatBMqC16j/7ya6IfwoPKPQZf1oKfsbs1hf02nYS8dtX20SyZppgT1c6KwVmjA=
+X-Received: by 2002:a1f:1d4d:0:b0:382:59cd:596c with SMTP id
+ d74-20020a1f1d4d000000b0038259cd596cmr1736330vkd.35.1663329846359; Fri, 16
+ Sep 2022 05:04:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2065269609-1663329729=:1788"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220916094152.87137-1-j@jannau.net> <20220916094152.87137-5-j@jannau.net>
+In-Reply-To: <20220916094152.87137-5-j@jannau.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 16 Sep 2022 07:03:55 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+u5ZjCNbxQd9FfgvHx6BM4AYjMS63qmm22k2zn5Xqtyg@mail.gmail.com>
+Message-ID: <CAL_Jsq+u5ZjCNbxQd9FfgvHx6BM4AYjMS63qmm22k2zn5Xqtyg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/5] iommu/io-pgtable-dart: Add DART PTE support for t6000
+To:     Janne Grunau <j@jannau.net>
+Cc:     iommu@lists.linux.dev,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        asahi@lists.linux.dev, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2065269609-1663329729=:1788
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 16 Sep 2022, Lennert Buytenhek wrote:
-
-> On Thu, Sep 15, 2022 at 07:27:45PM +0300, Ilpo Järvinen wrote:
-> 
-> > > > > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
-> > > > > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
-> > > > > > the UARTs and then re-open that UART.
-> > > > > > 
-> > > > > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
-> > > > > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
-> > > > > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
-> > > > > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
-> > > > > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
-> > > > > > __pci_write_msi_msg():
-> > > > > > 
-> > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > > > 		Address: fee00278  Data: 0000
-> > > > > > [root@icelake ~]# cat hangup.c
-> > > > > > #include <stdio.h>
-> > > > > > #include <sys/ioctl.h>
-> > > > > > 
-> > > > > > int main(int argc, char *argv[])
-> > > > > > {
-> > > > > > 	ioctl(1, TIOCVHANGUP);
-> > > > > > 
-> > > > > > 	return 0;
-> > > > > > }
-> > > > > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
-> > > > > > [root@icelake ~]# ./hangup > /dev/ttyS4
-> > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > > > 		Address: 00000000  Data: 0000
-> > > > > > [root@icelake ~]#
-> > > > > > 
-> > > > > > Opening the serial port device again while the UART is in this state
-> > > > > > then appears to cause the UART to generate an interrupt
-> > > > > 
-> > > > > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
-> > > > > Any of them can be possible, but to be sure, can you add:
-> > > > > 
-> > > > > 	dev_info(p->dev, "FISR: %x\n", fisr);
-> > > > > 
-> > > > > into dnv_handle_irq() before any other code and see which bits we
-> > > > > actually got there before the crash?
-> > > > > 
-> > > > > (If it floods the logs, dev_info_ratelimited() may help)
-> > > > 
-> > > > I think that that wouldn't report anything because when the UART is
-> > > > triggering an interrupt here, the MSI address/data are zero, so the
-> > > > IRQ handler is not actually invoked.
-> > > 
-> > > Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
-> > > 
-> > > > If Ilpo doesn't beat me to it, I'll try adding some debug code to see
-> > > > exactly which UART register write in the tty open path is causing the
-> > > > UART to signal an interrupt before the IRQ handler is set up.
-> > > > 
-> > > > (The IOMMU stops the write in this case, so the machine doesn't crash,
-> > > > we just get an I/O page fault warning in dmesg every time this happens.)
-> > > 
-> > > And I believe you are not using that UART as debug console, so it won't
-> > > dead lock itself. It's then better than I assumed.
-> > > 
-> > > > > > before the
-> > > > > > MSI vector has been set up again, causing a DMA write to I/O virtual
-> > > > > > address zero:
-> > > > > > 
-> > > > > > [root@icelake console]# echo > /dev/ttyS4
-> > > > > > [  979.463307] DMAR: DRHD: handling fault status reg 3
-> > > > > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> > > > > > 
-> > > > > > I'm guessing there's something under tty_open() -> uart_open() ->
-> > > > > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
-> > > > > > serial8250_do_startup() that triggers a UART interrupt before the
-> > > > > > MSI vector has been set up again.
-> > > > > > 
-> > > > > > I did a quick search but it didn't seem like this is a known issue.
-> > > > > 
-> > > > > Thanks for your report and reproducer! Yes, I also never heard about
-> > > > > such an issue before. Ilpo, who is doing more UART work nowadays, might
-> > > > > have an idea, I hope.
-> > 
-> > The patch below seems to avoid the faults. [...]
-> 
-> Thanks for the fix!
-> 
-> 
-> > [...] I'm far from sure if it's the 
-> > best fix though as I don't fully understand what causes the faults during 
-> > the THRE tests because the port->irq is disabled by the THRE test block.
-> 
-> If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-> address/data registers.  Disabling the IRQ at the interrupt controller
-> won't stop the UART from performing a DMA write to the address programmed
-> in its MSI address register (zero) when it wants to signal an interrupt.
-> 
-> (These UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-> capability, so there is no way to mask the interrupt at the source PCI
-> function level, except disabling the MSI capability entirely, but that
-> would cause it to fall back to INTx# assertion, and the PCI specification
-> prohibits disabling the MSI capability as a way to mask a function's
-> interrupt service request.)
+On Fri, Sep 16, 2022 at 4:42 AM Janne Grunau <j@jannau.net> wrote:
 >
-> > Reported-by: Lennert Buytenhek <buytenh@wantstofly.org>
-> 
-> Could you make this buytenh@arista.com ?
+> From: Sven Peter <sven@svenpeter.dev>
+>
+> The DARTs present in the M1 Pro/Max/Ultra SoC use a diffent PTE format.
+> They support a 42bit physical address space by shifting the paddr and
+> extending its mask inside the PTE.
+> They also come with mandatory sub-page protection now which we just
+> configure to always allow access to the entire page. This feature is
+> already present but optional on the previous DARTs which allows to
+> unconditionally configure it.
+>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> Co-developed-by: Janne Grunau <j@jannau.net>
+> Signed-off-by: Janne Grunau <j@jannau.net>
+>
+> ---
+>
+> (no changes since v3)
+>
+> Changes in v3:
+> - apply change to io-pgtable-dart.c
+> - handle pte <> paddr conversion based on the pte format instead of
+>   the output address size
+>
+> Changes in v2:
+> - add APPLE_DART2 PTE format
+>
+>  drivers/iommu/io-pgtable-dart.c | 49 ++++++++++++++++++++++++++++-----
+>  drivers/iommu/io-pgtable.c      |  1 +
+>  include/linux/io-pgtable.h      |  1 +
+>  3 files changed, 44 insertions(+), 7 deletions(-)
 
-Sure. Should I add Tested-by as well?
-
--- 
- i.
-
---8323329-2065269609-1663329729=:1788--
+Reviewed-by: Rob Herring <robh@kernel.org>
