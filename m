@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3C85BA629
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672565BA62A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiIPE7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S229697AbiIPE7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIPE6y (ORCPT
+        with ESMTP id S229711AbiIPE66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:58:54 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4E77550
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:58:54 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id z8-20020a17090a014800b001fac4204c7eso8987857pje.8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:58:54 -0700 (PDT)
+        Fri, 16 Sep 2022 00:58:58 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286E9A0601
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:58:56 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-34546b03773so177971967b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=7KmHy9e59eVoSueoxg3f9FMizbHT1R3TBZY/FxQb18o=;
-        b=S0kR8aRqGLfIuoWgSOPCbfay9hkfcmLaJTniiEy8SDMIt3AsSBj2kdLam9OSWlg/FA
-         7CznN2UhCf9KQ1eIdy7rZKlSY5BSgQ9SYhGwBbT5xLDf0Xk82IVJcmo9zqzh3x0qhA+5
-         XIyYGtQKLvlJs8tYP/FtjCXKQr88TIScLm43ZQZbh0nFoCxgh+WiNAWVi7EaULaljSJs
-         dpw4KL/TYMyQJxOd7EksHiEFP7kHByD6FFdiUU8g62fhU5HUYIiCs+Z2D96prdBoUhLB
-         ihG+zkzTaKW3wvp2YcweEab6HHxLdq32RMhqWlL1LHvqGoIQDccc8CO1zdRevLlvIGYb
-         Bzlw==
+        bh=d5LwRjV7DdKcsn5XLPeYFH5ubqhtVVQS6ixOFLlJHpc=;
+        b=pjGkeZS1M0pZn5rxAC8u92BEcb2IZzGh+0bZhIqBGD5HIJTKOAhqW8QE1t3WdJLYj+
+         HqitiywleZaCUEF6XMF1qPDqSZMOSCOmScsguwxfTUoZfBe4QwolRcAstG89qMdR0+x4
+         4Oa63kdrJdu5kdXhEPi2WMvvXlnbL3Ebd4SAdUYEuLR16gCGEag2ePA7E2FyFF2sTQHM
+         x8r9uxORJ5Hd/GJ7zPF4kwl9IkyQoHOw92FFA4xVllzSXErODfNLT6z5hxzXr+Z4Mr0J
+         hub6x5qdbg8olJhsoahrPZth6XtMK+9xyVawD7H6EAAp6lE194e5QW/qCI9I65wrRqAf
+         y45g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7KmHy9e59eVoSueoxg3f9FMizbHT1R3TBZY/FxQb18o=;
-        b=glUMyujqDB/A00QkvB/49E67DDDABtmtDmawErLNVDgxlU3ziTBbRcHuOw3I+M6N5k
-         c/VRZGjEFOCCDAYwuKxAkSNwW+s/ehprkbM16chtEWAVDH2PQJEpli5TFXo9OCqRmXc8
-         qaRxX6TXo82Vp3vK60jDfzxG/TfRP2iN5DEM96fERaXDRU7Wrd9E0aBDyFLQ3qr8r+2Q
-         f9B5JptCsrj0OkC9Cg1uzsF+aTVCydkbatEqC3sayt83rCWi9Qbo/fKou2rz5L1m2Kee
-         qbyATh0RD6qFSA3SY1sc19IqAczUiKtgD9OWVb+qI7bo7W8mR4g3W/SI5fqtyiW1oopk
-         SsUA==
-X-Gm-Message-State: ACrzQf04c+Ot0nyzvWuNGOvFbCvpZOglY0K2qyUWBI4rftOucaKxNbJW
-        eddh/PUYKsU2rITMs6zd1wt2RuG/nfs7Tg==
-X-Google-Smtp-Source: AMsMyM6vsC5QW2H5IDtqxbXq4QQ2j9p2rtYA2Rsx+YLBuIJm3SCXsGpJ4JdVKURzJ37B6CRXcLGs+UH/oA5vJA==
+        bh=d5LwRjV7DdKcsn5XLPeYFH5ubqhtVVQS6ixOFLlJHpc=;
+        b=dW9sSUGbmbIO+86ZjYb2XqB8yXOJWEtbLsR8CPVPL8xrBQfIsHKhAvg0YKWAC188UR
+         FgSRWfsIMYPmEalsq3kMVHVgnq9MVb7GODdAPofgcaSvBYjCg1v4d0DnXmfa552TWzVU
+         WGKMqjyvnrMgNaNPl7l0mxzzfl4vOxGWcKyvddjXvHjaedCiOeptHTTONbUm5JBBf7bQ
+         vVktOqLuXcBVatcObtDP0BJ2BgDLZ2WnE5Ib13QKAz1YxQrn9ZYzZ5IQ7kAXotZR64s6
+         Khd2mw4eU3TKTP05ivVm7bQlJmOfW/pYIX5YS1PL0WAH5Wfd7s6AjgqDbt4Letjnh/kq
+         IPEQ==
+X-Gm-Message-State: ACrzQf1gv27A8SWzJp4u+5aCM1yJY/EBeoGVSxkMqxDJ+waknSYswtSG
+        c6xuKzRZAI4d6Vz7bITQZ269G53G5KM9Iw==
+X-Google-Smtp-Source: AMsMyM7taiRNCajYl2BjHFX4O9FQcKsPOvQZQ5+DmV43r3eOLv4usqTCNm2CC2+3WQGNXLYPUnpLia7C4QlMvw==
 X-Received: from loggerhead.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:29a])
- (user=jmattson job=sendgmr) by 2002:a17:903:11d2:b0:172:6ea1:b6e6 with SMTP
- id q18-20020a17090311d200b001726ea1b6e6mr3047392plh.72.1663304333667; Thu, 15
- Sep 2022 21:58:53 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 21:58:28 -0700
+ (user=jmattson job=sendgmr) by 2002:a25:2e50:0:b0:669:9a76:beb with SMTP id
+ b16-20020a252e50000000b006699a760bebmr2846065ybn.597.1663304335461; Thu, 15
+ Sep 2022 21:58:55 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 21:58:29 -0700
 In-Reply-To: <20220916045832.461395-1-jmattson@google.com>
 Mime-Version: 1.0
 References: <20220916045832.461395-1-jmattson@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220916045832.461395-2-jmattson@google.com>
-Subject: [PATCH 1/5] x86/cpufeatures: Introduce X86_FEATURE_NO_LMSLE
+Message-ID: <20220916045832.461395-3-jmattson@google.com>
+Subject: [PATCH 2/5] KVM: svm: Disallow EFER.LMSLE on hardware that doesn't
+ support it
 From:   Jim Mattson <jmattson@google.com>
 To:     Avi Kivity <avi@redhat.com>, Babu Moger <babu.moger@amd.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -71,7 +72,7 @@ Cc:     Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,38 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When AMD introduced "Long Mode Segment Limit Enable" (a.k.a. "VMware
-mode"), the feature was not enumerated by a CPUID bit. Now that VMware
-has abandoned binary translation, AMD has deprecated EFER.LMSLE.
+KVM has never properly virtualized EFER.LMSLE. When the "nested"
+module parameter is true, it allows an SVM guest to set EFER.LMSLE,
+and it passes the bit through in the VMCB, but the KVM emulator
+doesn't perform the required data segment limit checks in 64-bit mode.
 
-The absence of the feature *is* now enumerated by a CPUID bit (a la
-Intel's X86_FEATURE_ZERO_FCS_DCS and X86_FEATURE_FDP_EXCPTN_ONLY).
+With Zen3, AMD has dropped support for EFER.LMSLE. Hence, if a Zen3
+guest sets EFER.LMSLE, the next VMRUN will fail with "invalid VMCB."
 
-This defeature bit is already present in feature word 13, but it was
-previously anonymous. Name it X86_FEATURE_NO_LMSLE, so that KVM can
-reference it when deciding whether or not EFER.LMSLE should be a
-reserved bit in a KVM guest.
+When the host reports X86_FEATURE_NO_LMSLE, treat EFER.LMSLE as a
+reserved bit in the guest. Now, if a guest tries to set EFER.LMSLE on
+a host without support for EFER.LMSLE, the WRMSR will raise a #GP.
 
-Since this bit indicates the absence of a feature, don't enumerate it
-in /proc/cpuinfo.
+At the moment, the #GP may come as a surprise, but it's an improvement
+over the failed VMRUN. The #GP will be vindicated anon.
 
+Fixes: eec4b140c924 ("KVM: SVM: Allow EFER.LMSLE to be set with nested svm")
 Signed-off-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/include/asm/cpufeatures.h | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/svm/svm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index ef4775c6db01..0f5a3285d8d8 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -319,6 +319,7 @@
- #define X86_FEATURE_AMD_IBRS		(13*32+14) /* "" Indirect Branch Restricted Speculation */
- #define X86_FEATURE_AMD_STIBP		(13*32+15) /* "" Single Thread Indirect Branch Predictors */
- #define X86_FEATURE_AMD_STIBP_ALWAYS_ON	(13*32+17) /* "" Single Thread Indirect Branch Predictors always-on preferred */
-+#define X86_FEATURE_NO_LMSLE		(13*32+20) /* "" EFER_LMSLE is unsupported */
- #define X86_FEATURE_AMD_PPIN		(13*32+23) /* Protected Processor Inventory Number */
- #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
- #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index f3813dbacb9f..7c4fd594166c 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5012,7 +5012,9 @@ static __init int svm_hardware_setup(void)
+ 
+ 	if (nested) {
+ 		printk(KERN_INFO "kvm: Nested Virtualization enabled\n");
+-		kvm_enable_efer_bits(EFER_SVME | EFER_LMSLE);
++		kvm_enable_efer_bits(EFER_SVME);
++		if (!boot_cpu_has(X86_FEATURE_NO_LMSLE))
++			kvm_enable_efer_bits(EFER_LMSLE);
+ 	}
+ 
+ 	/*
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
