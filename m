@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208CF5BADC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507305BADCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiIPND6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S231411AbiIPNHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIPND4 (ORCPT
+        with ESMTP id S231299AbiIPNHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:03:56 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF6C9E89F;
-        Fri, 16 Sep 2022 06:03:52 -0700 (PDT)
+        Fri, 16 Sep 2022 09:07:00 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D099E2F0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:06:58 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso15115490wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663333434; x=1694869434;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X+f+brxdhEtU2bA0SXyEx650isaGDTLs/vUcZ2C9k2A=;
-  b=iPaLDcb7M1linfQ/QzFBKkR/VukHJm8uTr7qLmm/BbrS/pz6DUzTE6XH
-   VnOOdkncdt0LGZhucUZGp+u1dUax00UGhINUS6Z5hfeb0XZ1HAsx9ucbI
-   IBtI/ba1GOlXZ8gcPo4Jr9flSQ7siINy27XSqIx0SyqA5Oc7fPLMae2ur
-   X3JHTEJmdNg1qCXQguEu0ybhRIaw9aQnlpxkJDXX5phaRl5i3M49V29Na
-   TB1ILezZmDMjMaD9AISZmnO4lR43chemJxxE83Ih6TlT+411wOZ2c4hOf
-   hcHgQu2RotsX9vOfYXVoE2PA84JGfGlGSM4TSWxQKIVchure3olpuC2nE
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,320,1654552800"; 
-   d="scan'208";a="26227510"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Sep 2022 15:03:51 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 16 Sep 2022 15:03:50 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 16 Sep 2022 15:03:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663333431; x=1694869431;
-  h=from:to:cc:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding:subject;
-  bh=X+f+brxdhEtU2bA0SXyEx650isaGDTLs/vUcZ2C9k2A=;
-  b=EEsDRvbVrLlH+CVoDdjDiKxZBlEuJFxK5SRUzRBXHVzSxkfCZk7x+WPR
-   e0E73IO/GdKyNun9nMjHaMhcexcOU+qg1NyLT58EXjSWOERdaYzgTA7cE
-   d3D5si7nv3ljp7Q/U/9W+wtmgyyH4f4hqh4rQlBSgppz+2HkUk7i+OOHe
-   1M88eZMGUVWEosbgOJFk2oy71/ZVuM0/iE2tK7JzDIfFmr/yEReM+oVz5
-   YI4IhyXhSC3xe3YCuM7aTxe3Hx+zdNuUkDGfm1UAgTHu/QMc3q+QSRIVe
-   KZNLNYfVtLEyQeISrmeQxPeoBwLnFHUXAq3KBB1rHhFxW2EXDwmukGjyH
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,320,1654552800"; 
-   d="scan'208";a="26227509"
-Subject: Re: Re: [PATCH 1/2] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Sep 2022 15:03:51 +0200
-Received: from steina-w.localnet (unknown [10.123.49.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4A07A280056;
-        Fri, 16 Sep 2022 15:03:50 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Viorel Suman <viorel.suman@oss.nxp.com>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viorel Suman <viorel.suman@nxp.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Date:   Fri, 16 Sep 2022 15:03:47 +0200
-Message-ID: <24402933.EfDdHjke4D@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220916110936.jmxgjps5zrcndjxn@fsr-ub1664-116>
-References: <20220915181805.424670-1-viorel.suman@oss.nxp.com> <5993734.44csPzL39Z@steina-w> <20220916110936.jmxgjps5zrcndjxn@fsr-ub1664-116>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2e3L0ED1BDpFLdmTFeqIIUKU3RqfHrrBxYTQB/sNCko=;
+        b=WmiEwXzwWnQ7UhY4icQ+KagCVvewZf1BCWbBhzAwP1xnI7f2tTG51N/2zJzL1WOCaR
+         9aiKuOvqAtqtWM2TmvB6sphGRbKpypjiXP2xf0Oguf5qD1YpKuPiehKdu/cx8lnE3gSu
+         4Wm8hfai1x6u8g2wF2fwP63cTurPQ4AA1zOnW9KRXPLYl3lFwmci6Ry3V6aM+6HXqs0H
+         NeNmCgewC1WV22suOCH3lAqR6oPUeqk4VFGIP9LHetVlUc3Dmj5McMfTD94JwuJiEtRW
+         GZMbedYUVdldxNrRt7/dYsxbSVbFiV8iDzn7iKSJ5A6sJilWkEcgUZ+JybSqHWI2oiCe
+         oRHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2e3L0ED1BDpFLdmTFeqIIUKU3RqfHrrBxYTQB/sNCko=;
+        b=0CgRhbOikRjkwVea6Jh7GtVTRXqdWYfZ6kqmLKf9HIMpLcMq8kuVvLSqfXvi2AM+bN
+         D+o/dzolmoWgAgRJHm0q3pydGKoRlc9++wl7E05ePRTbzWT0leLLQNo2JhmazagPYsOR
+         zZCfUzo9r479zCu6bdIV+w8W45xdjdMlCqga8kbnT0wLPP7Atl4EnCx9Mlol/+jCugHA
+         hdP39GGwFc5+lmsiE8K6vYgpBjvjHcVo/ez2EXtrv3zsrA0dSZqGai+dB8R91XMl+I4o
+         mY/gCrsDrK3KgiUyuKRLzbRkoTIMetQKr2jknHWu0AkaZaYMynuks1t/vO00Jo93nIDY
+         vv5A==
+X-Gm-Message-State: ACgBeo2ODC3kI6KMnGDL0M2YIt/bMWlnYxHXy19LBTexcSj/YLxXdjzu
+        W9ZnkIZ5oVzCC+Wn8sXnNYBOwg==
+X-Google-Smtp-Source: AA6agR5UFLsDdB3qilLfFu+EUOFH0MP3U4bh23DIqC90LAY0sDX0eH8fz77Jqg/mU9Yy/mi+bZrsGQ==
+X-Received: by 2002:a05:600c:2142:b0:3b4:92b6:73ba with SMTP id v2-20020a05600c214200b003b492b673bamr10433278wml.139.1663333616920;
+        Fri, 16 Sep 2022 06:06:56 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id y9-20020a05600c20c900b003a541d893desm2063106wmm.38.2022.09.16.06.06.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 06:06:56 -0700 (PDT)
+Message-ID: <65f11ed1-f09f-e0a2-91f5-891394160c96@linaro.org>
+Date:   Fri, 16 Sep 2022 14:06:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/4] slimbus: qcom-ngd-ctrl: Make QMI message rules const
+Content-Language: en-US
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220912232526.27427-1-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-2-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-3-quic_jjohnson@quicinc.com>
+ <20220912232526.27427-4-quic_jjohnson@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220912232526.27427-4-quic_jjohnson@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viorel,
 
-added missing CC.
 
-Am Freitag, 16. September 2022, 13:09:36 CEST schrieb Viorel Suman:
-> On 22-09-16 08:30:46, Alexander Stein wrote:
-> > Am Donnerstag, 15. September 2022, 20:18:04 CEST schrieb Viorel Suman 
-(OSS):
-> > > From: Viorel Suman <viorel.suman@nxp.com>
-> > > 
-> > > Sync defines with the latest available SCFW kit version 1.13.0,
-> > > may be found at the address below:
-> > > 
-> > > https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.
-> > > 0&ap pType=license
-> > > 
-> > > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> > > ---
-> > > 
-> > >  include/dt-bindings/firmware/imx/rsrc.h | 299 ++++++++++++++++--------
-> > >  1 file changed, 203 insertions(+), 96 deletions(-)
-> > 
-> > This is not bisectable and breaks compilation, as this patch removes
-> > symbols which are still used in drivers/clk/imx/clk-imx8qm-rsrc.c
-> > (addressed in 2nd patch). IMHO this series should be squashed into one
-> > patch.
+On 13/09/2022 00:25, Jeff Johnson wrote:
+> Commit ff6d365898d ("soc: qcom: qmi: use con
+
+SHA ID should be at least 12 chars long.
+
+Same comment for all the patches in the series.
+
+
+st for struct
+> qmi_elem_info") allows QMI message encoding/decoding rules to be
+> const, so do that for qcom-ngd-ctrl.
 > 
-> Hi Alexander,
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+
+Other than that it LGTM,
+Once fixed:
+
+Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+
+> ---
+>   drivers/slimbus/qcom-ngd-ctrl.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> Thank you for review, you are right. Is sending a squashed v2 the usual
-> approach in such case or shall I hope that the maintainer will squash them
-> before push ? Just want to avoid unnecessary noise.
-
-AFAIK maintainers will not squash patches. This is something you will need to 
-do yourself. So sending a v2 seems right.
-Also please keep all the other recipients on CC.
-
-Best regards,
-Alexander
-
-
-
+> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+> index 0aa8408464ad..931ab6317467 100644
+> --- a/drivers/slimbus/qcom-ngd-ctrl.c
+> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
+> @@ -220,7 +220,7 @@ struct slimbus_power_resp_msg_v01 {
+>   	struct qmi_response_type_v01 resp;
+>   };
+>   
+> -static struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_UNSIGNED_4_BYTE,
+>   		.elem_len   = 1,
+> @@ -262,7 +262,7 @@ static struct qmi_elem_info slimbus_select_inst_req_msg_v01_ei[] = {
+>   	},
+>   };
+>   
+> -static struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_STRUCT,
+>   		.elem_len   = 1,
+> @@ -284,7 +284,7 @@ static struct qmi_elem_info slimbus_select_inst_resp_msg_v01_ei[] = {
+>   	},
+>   };
+>   
+> -static struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_UNSIGNED_4_BYTE,
+>   		.elem_len   = 1,
+> @@ -324,7 +324,7 @@ static struct qmi_elem_info slimbus_power_req_msg_v01_ei[] = {
+>   	},
+>   };
+>   
+> -static struct qmi_elem_info slimbus_power_resp_msg_v01_ei[] = {
+> +static const struct qmi_elem_info slimbus_power_resp_msg_v01_ei[] = {
+>   	{
+>   		.data_type  = QMI_STRUCT,
+>   		.elem_len   = 1,
