@@ -2,132 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21B75BB173
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4EF5BB17E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiIPRGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 13:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S229976AbiIPRHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 13:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiIPRGD (ORCPT
+        with ESMTP id S229731AbiIPRHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 13:06:03 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8875B515A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:06:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m3so12586636eda.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:06:01 -0700 (PDT)
+        Fri, 16 Sep 2022 13:07:12 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F451B69D7;
+        Fri, 16 Sep 2022 10:07:03 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s18so16059981plr.4;
+        Fri, 16 Sep 2022 10:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Jf4Jw0Mr6mHcpaxKKDf9yH/uSMECnB5VVFRTiPH6N2Y=;
-        b=czwRI/FM2jh6/kmaXuRlb1t3D0Z9udFPCg+05gGRsv5RMIGSlCeVGNpEzuO3KdaVGE
-         Vol5PkVs+tfj6ZXaZs58PUUXZhxv3/UUGlvr57iMDsRy/xUBlImv4eaDWYEk+9DxOWQq
-         bZnuqOyLj55lIXj3ap2mxO6/FKx++EtEQlWJbzBXtZAUy2phPXAnGuehyPZo+FaQX2zo
-         UKCB+IVONQJqyvPd2NT1sfNfnjpJ5LOt5dX5dciZxmCnEnt5Wtidyw3zgMKr61z3PA99
-         bqTgD1xjeC6RzjsnL0vnQC+aOa6gYSt+ZAaYd+wcswT1rYhwSj7XaDZBqZ8Z5GPkdnsj
-         aZ0w==
+        d=gmail.com; s=20210112;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date;
+        bh=ZQ4epJy4kuC71aqt6/p49SxHHX9PRTr4w8eT6UANlFc=;
+        b=UrXbed1sCIkZkoXBLB070iyqZTAzOAN2KFDdu45xcMpXshpGd3wMlebzLUat9IFHMt
+         Y5kJ17jTnRaD8bsyStt0bfoTJv80SeaWYfcs0pTOtcHdsV9DmKouMLlcvsfuE4LPuOF7
+         QAD1TAlbgowEDf0XOGYzNIcB/mNl9+CIr7sAdOBwFOaeyDg/45C7TEdvUxkcNvFhgAWA
+         LjBxZ29QPC94uvnEM3upZDPSZBC9RQtIXM3vpLBqc6eo7TBHgRANzdWNnU8EXSDmzFTr
+         qQZys+qqptAtEqvzt17ZSOLFRv5JCCWqhcJJ6Ky2Ypq2wXQDCTdsdOtSSLNtvsCeRk1V
+         XdGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Jf4Jw0Mr6mHcpaxKKDf9yH/uSMECnB5VVFRTiPH6N2Y=;
-        b=LwUwaxEZp2h3WRSmmpmeiXmaIRD1adtm6iRG2a+xgBmOp+23IH+jctM6W+mWE4VzcV
-         pNq+FaIHD94hAX05hQqSraMux9XuENE3+/P3rirP8tp9jL/YrBQcuai2MRKYhfyx7hEa
-         0IK07ItcLOG+sGZf12iak7Beeqk/NWaeY89lhlMia9JrXMxXF9lrNLxvCKG/05SUUfKk
-         Rw/vOv/9vxwQzWV6tS9jER8Hr99yPdX15Q8jbctsQHcChKn9T+viVvLVQ4ZoIMNjyYM0
-         Ed1ORR6L7JiAXQ6ony/JbxIdFVFsBYXv+/Hm+HGnap+6eg377y4uXBM0bQQJg0gTWhvk
-         5XUA==
-X-Gm-Message-State: ACrzQf0+q7h7vq/IXB5EAXy7esjpCSQX4v1vkVUD//Hj2EEkwd7jvMrs
-        SU+aMzbs0ecA4RFUy1YKuOKorH19maYp5AmPCY2Atw==
-X-Google-Smtp-Source: AMsMyM6IvbGdrxAK3FEcBKUBRjRQ7CJJ76UrRKk0kua5vRl4Px9VRUFVwlYnAqwUgMyDY0xJShAWO3UDN+jXMl7EsMw=
-X-Received: by 2002:a05:6402:40d1:b0:44f:e974:f981 with SMTP id
- z17-20020a05640240d100b0044fe974f981mr4940790edb.222.1663347960267; Fri, 16
- Sep 2022 10:06:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <1662712413-38233-1-git-send-email-quic_aiquny@quicinc.com>
- <20220909192357.GA319190@p14s> <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
-In-Reply-To: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 16 Sep 2022 11:05:48 -0600
-Message-ID: <CANLsYkx0fEyezax_bk50ORGb7vPY3sBegKJcfAmmu366MrQkYw@mail.gmail.com>
-Subject: Re: [PATCH v1] remoteproc: core: do pm relax when not first crash
-To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
-Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_clew@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ZQ4epJy4kuC71aqt6/p49SxHHX9PRTr4w8eT6UANlFc=;
+        b=TW9eLMnD9+4i5p96vlHrDJDTMus13dWF+VyIqrocyNE7dodPccmNVHVvdY1DmnS4PZ
+         g4GuPFhY+xtnGXjQN7AWx4DTifAUFR8EeKUni+dH6+e1eaTlR0nQ0bUmbryqlNrOWQ9o
+         TWXsfehtmdhsX4t3dD+piaPhvoOdiFLGbfgmmY1lwT2yiZ3bHbFgc6au4lr/Qi/V/pxR
+         /fH2iebfBPAznFzP+dho1gVXcqQ5VxTOSUoYcXYlfHTF3YLDxFz64lE7uyAKsQ/1Wbli
+         neX0we0BmjIehTjxnBMeGPwvxLtYV/ESN9nwwPPHp1QPOVEZe4eRav4dcm0j0nuuG7xN
+         XMjg==
+X-Gm-Message-State: ACrzQf2CYzAHwSIQCl4c1dlFQf856IYq469y7yLgIv5EVFO8ChmyW0J3
+        liOvGo6nFMO4GmRmoqAVwoc=
+X-Google-Smtp-Source: AMsMyM7jbIDEJhuPlPlo7kKEFpNNyEEHgQV6Vx9+PE4XLaM6YEfj447Jz2V9H2h1kUCkdvWeAdoSbA==
+X-Received: by 2002:a17:903:2290:b0:178:272b:e414 with SMTP id b16-20020a170903229000b00178272be414mr805886plh.120.1663348022490;
+        Fri, 16 Sep 2022 10:07:02 -0700 (PDT)
+Received: from localhost.localdomain ([117.176.186.9])
+        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b00176d4b093e1sm15386677plg.16.2022.09.16.10.06.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Sep 2022 10:07:02 -0700 (PDT)
+From:   wangyong <yongw.pur@gmail.com>
+X-Google-Original-From: wangyong <wang.yong12@zte.com.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     jaewon31.kim@samsung.com, linux-kernel@vger.kernel.org,
+        mhocko@kernel.org, stable@vger.kernel.org, wang.yong12@zte.com.cn,
+        yongw.pur@gmail.com, Minchan Kim <minchan@kernel.org>,
+        Baoquan He <bhe@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yong-Taek Lee <ytk.lee@samsung.com>, stable@vger.kerenl.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 3/3] page_alloc: fix invalid watermark check on a negative value
+Date:   Fri, 16 Sep 2022 10:05:49 -0700
+Message-Id: <1663347949-20389-4-git-send-email-wang.yong12@zte.com.cn>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1663347949-20389-1-git-send-email-wang.yong12@zte.com.cn>
+References: <YyREk5hHs2F0eWiE@kroah.com>
+ <1663347949-20389-1-git-send-email-wang.yong12@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sept 2022 at 05:03, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
->
-> Hi Mathieu,
->
-> pm_awake and pm_relax needed to be used as a pair. There is chance that
-> pm_relax is not being called, and make the device always in cannot
-> suspend state.
->
-> On 9/10/2022 3:23 AM, Mathieu Poirier wrote:
-> > Hi Maria,
-> >
-> > On Fri, Sep 09, 2022 at 04:33:33PM +0800, Maria Yu wrote:
-> >> Even if it is not first crash, need to relax the pm
-> >> wakelock otherwise the device will stay awake.
-> >>
-> >
-> > The goal is exactly to keep the device awake...
-> >
-> >> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
-> >> ---
-> >>   drivers/remoteproc/remoteproc_core.c | 1 +
-> >>   1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> >> index e5279ed9a8d7..30078043e939 100644
-> >> --- a/drivers/remoteproc/remoteproc_core.c
-> >> +++ b/drivers/remoteproc/remoteproc_core.c
-> >> @@ -1956,6 +1956,7 @@ static void rproc_crash_handler_work(struct work_struct *work)
-> >>      if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
-> >>              /* handle only the first crash detected */
-> >>              mutex_unlock(&rproc->lock);
-> >> +            pm_relax(rproc->dev.parent);
-> >
-> > If we are here it means that rproc_crash_handler_work() has already been called
-> > _and_ that a recovery is in process.  When the first crash handler completes
-> > pm_relax() will be called and the device will go to sleep as expected.
-> If the rproc->state cannot be changed to running state, the device will
-> always be awake from this return.
-> Also APROC_OFFLINE state can be given in other path like an shutdown
-> request is issued.
->
-> While this patch is not considering carefully as well, I think I need to
-> upload a new patchset with an ordered workqueue to make each work have
-> each pm_relax before return.
-> what do you think?
+From: Jaewon Kim <jaewon31.kim@samsung.com>
 
-I was travelling this week and as such did not have the time to
-follow-up with this thread, something I will do next week.
+There was a report that a task is waiting at the
+throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
+increasing.
 
->
-> >
-> > Thanks,
-> > Mathieu
-> >
-> >>              return;
-> >>      }
-> >>
-> >> --
-> >> 2.7.4
-> >>
->
->
-> --
-> Thx and BRs,
-> Aiqun(Maria) Yu
+This is a bug where zone_watermark_fast returns true even when the free
+is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
+reserve in watermark fast") changed the watermark fast to consider
+highatomic reserve. But it did not handle a negative value case which
+can be happened when reserved_highatomic pageblock is bigger than the
+actual free.
+
+If watermark is considered as ok for the negative value, allocating
+contexts for order-0 will consume all free pages without direct reclaim,
+and finally free page may become depleted except highatomic free.
+
+Then allocating contexts may fall into throttle_direct_reclaim. This
+symptom may easily happen in a system where wmark min is low and other
+reclaimers like kswapd does not make free pages quickly.
+
+Handle the negative case by using MIN.
+
+Link: https://lkml.kernel.org/r/20220725095212.25388-1-jaewon31.kim@samsung.com
+Fixes: f27ce0e14088 ("page_alloc: consider highatomic reserve in watermark fast")
+Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+Reported-by: GyeongHwan Hong <gh21.hong@samsung.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Yong-Taek Lee <ytk.lee@samsung.com>
+Cc: <stable@vger.kerenl.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ mm/page_alloc.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 237463d..d6d8a37 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3243,11 +3243,15 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
+ 	 * need to be calculated.
+ 	 */
+ 	if (!order) {
+-		long fast_free;
++		long usable_free;
++		long reserved;
+ 
+-		fast_free = free_pages;
+-		fast_free -= __zone_watermark_unusable_free(z, 0, alloc_flags);
+-		if (fast_free > mark + z->lowmem_reserve[classzone_idx])
++		usable_free = free_pages;
++		reserved = __zone_watermark_unusable_free(z, 0, alloc_flags);
++
++		/* reserved may over estimate high-atomic reserves. */
++		usable_free -= min(usable_free, reserved);
++		if (usable_free > mark + z->lowmem_reserve[classzone_idx])
+ 			return true;
+ 	}
+ 
+-- 
+2.7.4
+
