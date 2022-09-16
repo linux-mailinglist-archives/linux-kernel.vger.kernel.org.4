@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F005BA855
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3545BA856
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiIPIm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 04:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S230418AbiIPInL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIPIm5 (ORCPT
+        with ESMTP id S230237AbiIPInI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:42:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522CD98C81
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:42:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BD86B8247F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353EAC433D6;
-        Fri, 16 Sep 2022 08:42:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663317773;
-        bh=q//Tw/cZDCMYfrc+5KH+QG9LHPSmCS0RQFK/fL7LNww=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ryst4ArblI3iQoFM68HXRdB+vQw60iT6hckhC56MNByf/qS+wMUSrBQc0UR4ABVwm
-         BZCCs+aA1+jRcj37l2ScJeDnfpjZG6K/E8EXrZ5OZDbnoTNTpKxTi3w6YNttvkOQL0
-         BUJzZZRBeUMivkVGdCDfdzJby4B3pixeRPhqI7afVHMc4Bvi+Qt6Q9Nuxtl9Kte/rV
-         2+WV/KN4NnxD1/+aX9ARdJUTE/8L/jXNbXK4j7iKNk/k5SM4jhLkhnjw0ElxJNGwKV
-         nBEm06yiG/G45zKqg6Vql2GHkUK/QruAT0kDHRIhgeTupJCBDljMRe82KbVZ8RiDmo
-         7SpYnJy/UJ3zg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1 1/2] mm/damon/sysfs: avoid call damon_target_has_pid() repeatedly
-Date:   Fri, 16 Sep 2022 08:42:51 +0000
-Message-Id: <20220916084251.105360-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220915142237.92529-1-xhao@linux.alibaba.com>
-References: 
+        Fri, 16 Sep 2022 04:43:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0884BA7AAA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663317786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbO+Lm6okm9qbgHERmbkye329u238iBYwsZHrrR1iRI=;
+        b=aso8VfP/XMU/5aI7dlvAn5VWsZtY7VeJmQVq2JDZKMlQ038J6pYtyc8dEixkBBguZn4MOW
+        gTHSgqTupkGh8pkGS3RGaSflwyrBWTjWjUj0VX6MzFw8NxZF+/T43x3S5Y0XXoeidpX0gD
+        Uw15PH8zhvzIRVjfV974LUiZyhY4slw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-558-EGli8JF5NRuZV1i_nsjLqQ-1; Fri, 16 Sep 2022 04:43:04 -0400
+X-MC-Unique: EGli8JF5NRuZV1i_nsjLqQ-1
+Received: by mail-ej1-f72.google.com with SMTP id go7-20020a1709070d8700b007793ffa7c44so8720257ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:43:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VbO+Lm6okm9qbgHERmbkye329u238iBYwsZHrrR1iRI=;
+        b=VQe1vR4t7kX2tfFr5ajTC7UZtfX8Xym4eL41rX3xw3oMJiOuT4aqVu5p3VmU1QFGlM
+         aNP0WtsBX7KNKS2bgxokpFWFA8X6gLILjwjT/qPJ9L+yJ9tSwhFBRGhM5A079QXxGr30
+         LBdWwYYeLDkyzh1eKJygAu90yJPhqoFwO01Y29fgnt9JfsIxOP5L2GWJRdSdUocbRx6S
+         h5J2/DSInlSuhp4u778IiRq7F4PVdalagSF82XGe40UfGXgGCZogGb/vjth35+fcGSWH
+         Y+46HgowOo6kFomePPUxtdSS/fpVZlOCSYO4qM65952l6Ia9Jg7k4K3wu6vrrMpYZoc4
+         JUSA==
+X-Gm-Message-State: ACrzQf3yqc48PbS31YCe4e/NKrVJdNASk8Kab8bC/2dH78/vFfqVIrPi
+        O37857ASJYQIDTlRXOpjZgiIZ6hZ1Mf/fQwNCWp02VlUw4YIyXwHAQ90MuCtQVRm9DOOe5MBvfN
+        zk1qUQ5NAPnw9gJHr6SiBYoDG
+X-Received: by 2002:a17:906:9bce:b0:770:2600:2cef with SMTP id de14-20020a1709069bce00b0077026002cefmr2695254ejc.611.1663317783705;
+        Fri, 16 Sep 2022 01:43:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM759gvZBCB6O2D2gJJ1AFr4bzGtpik89lSSdGx3I+fQrZSmG1RYEyHiJYSHpT68QQAT/44CcQ==
+X-Received: by 2002:a17:906:9bce:b0:770:2600:2cef with SMTP id de14-20020a1709069bce00b0077026002cefmr2695243ejc.611.1663317783518;
+        Fri, 16 Sep 2022 01:43:03 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056402014100b0044e8d0682b2sm13047094edu.71.2022.09.16.01.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 01:43:02 -0700 (PDT)
+Message-ID: <42663baa-2d8c-a45a-a33e-571119ec12aa@redhat.com>
+Date:   Fri, 16 Sep 2022 10:43:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] ACPI / x86: Add a quirk for Dell Inspiron 14 2-in-1 for
+ StorageD3Enable
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Luya Tshimbalanga <luya@fedoraproject.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+References: <20220915182315.276-1-mario.limonciello@amd.com>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220915182315.276-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 22:22:36 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+Hi,
 
-> In damon_sysfs_destroy_targets(), we call damon_target_has_pid() to
-> check whether the 'ctx' include a valid pid, but there no need to call
-> damon_target_has_pid() to check repeatedly, just need call it once.
-
-Good eyes, nice finding!
-
+On 9/15/22 20:23, Mario Limonciello wrote:
+> Dell Inspiron 14 2-in-1 has two ACPI nodes under GPP1 both with _ADR of
+> 0, both without _HID.  It's ambiguous which the kernel should take, but
+> it seems to take "DEV0".  Unfortunately "DEV0" is missing the device
+> property `StorageD3Enable` which is present on "NVME".
 > 
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> To avoid this causing problems for suspend, add a quirk for this system
+> to behave like `StorageD3Enable` property was found.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216440
+> Reported-and-tested-by: Luya Tshimbalanga <luya@fedoraproject.org>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
 > ---
->  mm/damon/sysfs.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> I had attempted to modify the heuristics for when two ACPI devices
+> have the same _ADR to prefer the one with a _DSD, but this wasn't enough
+> of a help. As the ACPI node doesn't contain anything valuable besides
+> the _DSD, it seems that a quirk for the system is a fine enough solution.
 > 
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index 1fa0023f136e..966ea7892ccf 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -2143,9 +2143,13 @@ static int damon_sysfs_set_attrs(struct damon_ctx *ctx,
->  static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
->  {
->  	struct damon_target *t, *next;
-> +	bool has_pid = false;
+>  drivers/acpi/x86/utils.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+> index 664070fc8349..d7cdd8406c84 100644
+> --- a/drivers/acpi/x86/utils.c
+> +++ b/drivers/acpi/x86/utils.c
+> @@ -207,9 +207,26 @@ static const struct x86_cpu_id storage_d3_cpu_ids[] = {
+>  	{}
+>  };
+>  
+> +static const struct dmi_system_id force_storage_d3_dmi[] = {
+> +	{
+> +		/*
+> +		 * _ADR is ambiguous between GPP1.DEV0 and GPP1.NVME
+> +		 * but .NVME is needed to get StorageD3Enable node
+> +		 * https://bugzilla.kernel.org/show_bug.cgi?id=216440
+> +		 */
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
+> +		}
+> +	},
+> +	{}
+> +};
 > +
-> +	if (damon_target_has_pid(ctx))
-> +		has_pid = true;
+>  bool force_storage_d3(void)
+>  {
+> -	return x86_match_cpu(storage_d3_cpu_ids);
+> +	const struct dmi_system_id *dmi_id = dmi_first_match(force_storage_d3_dmi);
+> +
+> +	return dmi_id || x86_match_cpu(storage_d3_cpu_ids);
+>  }
+>  
+>  /*
 
-How about doing more simple and short like below?
-
-    bool has_pid = damon_target_has_pid(ctx)
-
-Other than this,
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
-> 
->  	damon_for_each_target_safe(t, next, ctx) {
-> -		if (damon_target_has_pid(ctx))
-> +		if (has_pid)
->  			put_pid(t->pid);
->  		damon_destroy_target(t);
->  	}
-> --
-> 2.31.0
