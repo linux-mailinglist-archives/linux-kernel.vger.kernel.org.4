@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138D15BB04A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C425BB050
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiIPPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S231289AbiIPPgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiIPPfa (ORCPT
+        with ESMTP id S229506AbiIPPgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:35:30 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F9F753A1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:35:28 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28G4oFoK017743
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:35:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=cJznvX5vSdufDeB16b7C1iV7PPRU7JyEPDZUIMzKNRk=;
- b=ZXA3LI3kMMmhGkr4UNkOjbQm+xrcnWdEcAhr79GxpE19tSOCdQEr6Xk2xmjszsA0mlPp
- H/dRNZM3vCFZA7SrwkqFotSNx5w3Qcra+Ky5X1z0d0VJgDt9c3bc1p7HRwam7N89zfH5
- nAPjt8/PT9U+HfJVn9PmyswoTt2cgZADceM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jm8y5fdkw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:35:27 -0700
-Received: from twshared25017.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 08:35:26 -0700
-Received: by devvm6390.atn0.facebook.com (Postfix, from userid 352741)
-        id EFC743CD5121; Fri, 16 Sep 2022 08:35:18 -0700 (PDT)
-From:   <alexlzhu@fb.com>
-To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Kernel-team@fb.com>
-CC:     Alexander Zhu <alexlzhu@fb.com>
-Subject: [PATCH v2] docs/mm: Improve grammar on mmu_notifier documentation.
-Date:   Fri, 16 Sep 2022 08:35:16 -0700
-Message-ID: <20220916153516.3253582-1-alexlzhu@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 16 Sep 2022 11:36:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C312F026
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663342604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rcDieOXWzwDYad3Or3UKN2ift/v1pBenSYpheluB7r0=;
+        b=dZTwYhVKP7/QEbTBOqJu/xJHwl998/L5uE0NVyPcWtR408SOE5wgpo2iClGQ141Df/iPCR
+        Vn6Yc3Ce3LvKDAHLYI0XabzMhH3BRSdO4rUk8kzNdXrLSsNURc57dkJfP+Da3Y9O9UAxXZ
+        WHaEqckE2R4k5hHbrzQgKNaN6QYdqhI=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-424-D9LIS7urO9a2bRx1RmfhwQ-1; Fri, 16 Sep 2022 11:36:43 -0400
+X-MC-Unique: D9LIS7urO9a2bRx1RmfhwQ-1
+Received: by mail-pj1-f70.google.com with SMTP id a24-20020a17090a8c1800b0020266349974so3236pjo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:36:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=rcDieOXWzwDYad3Or3UKN2ift/v1pBenSYpheluB7r0=;
+        b=XKm3C5DOezcXYAwnuuYUfCEQfQ03ILtwHGr8vV0LaN8IHprTn81b5nx7HRX4SrtDjF
+         T0VYz05mxlhiI5gdLUw7Zu4IGfF92ui57WeYfl7aYaG0EY57dO3QEyFaSVPgP8hFJqzi
+         Gf3gkMupjEUdfM7xqh4XmRCgY7Sy//8pCo4zldeaK2Io1rbmt2hHhzeYbKdJpXVgYDNP
+         Mab5qTqIX7XsFHsaN2yJg8MrqTmdj11Edwfc0nlgoqZPU/mnotUAfV2eqZaDV3m2U7Lc
+         tw9sSEZ4gSEL2ujkNE8YFZ6LcFOR4pv3/b/17LWIG1O3s6tyoskYEhAkUECBFMric+hN
+         /ggw==
+X-Gm-Message-State: ACrzQf3RZEn509XulZnzFsUA4uci9/5KZkhdbtbf1t+zL7U/1FRhq7RN
+        FNhcp1SBcT5Ucn8Ny9hFDMUqA3/2Ds3zbsk1WtBB+Zw7fI5TyvzqJxCG6vcFGqZ0n7BGONI1KvQ
+        3+L5XF3ID/420mot+A7uU0qwL
+X-Received: by 2002:a17:903:11c4:b0:178:634b:1485 with SMTP id q4-20020a17090311c400b00178634b1485mr416685plh.142.1663342602567;
+        Fri, 16 Sep 2022 08:36:42 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5MxN5GDaKAW0gIQvMUlsiHS3eu5jYGdQYwFNbFfi1lYWJxmztLq24GWXq+Lik+GfMhgVaU3Q==
+X-Received: by 2002:a17:903:11c4:b0:178:634b:1485 with SMTP id q4-20020a17090311c400b00178634b1485mr416662plh.142.1663342602257;
+        Fri, 16 Sep 2022 08:36:42 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id p20-20020a63e654000000b00434abd19eeasm13592258pgj.78.2022.09.16.08.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 08:36:41 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 08:36:40 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: idxd: Fix memory leak in idxd_alloc()
+Message-ID: <20220916153640.qtb74i63upcncpuw@cantor>
+References: <20220914230815.700702-1-rafaelmendsr@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: hSGmjEhS4uBpYcOu09DA95zN1eqOSAtZ
-X-Proofpoint-ORIG-GUID: hSGmjEhS4uBpYcOu09DA95zN1eqOSAtZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-16_10,2022-09-16_01,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914230815.700702-1-rafaelmendsr@gmail.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Zhu <alexlzhu@fb.com>
+On Wed, Sep 14, 2022 at 08:08:14PM -0300, Rafael Mendonca wrote:
+> If the IDA id allocation fails, then the allocated memory for the
+> idxd_device struct doesn't get freed before returning NULL, which leads to
+> a memleak.
+> 
+> Fixes: 47c16ac27d4c ("dmaengine: idxd: fix idxd conf_dev 'struct device' lifetime")
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-Improve grammar on mmu_notifier documentation.
+I think there needs to be a kfree(idxd) where it checks rc < 0 after the call to dev_set_name() as well, yes?
 
-Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
----
-Changes in v2:
-    -add blank line back in to avoid kernel test robot complaining
+Regards,
+Jerry
 
- Documentation/mm/mmu_notifier.rst | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/mm/mmu_notifier.rst b/Documentation/mm/mmu_not=
-ifier.rst
-index df5d7777fc6b..751b6eaf456e 100644
---- a/Documentation/mm/mmu_notifier.rst
-+++ b/Documentation/mm/mmu_notifier.rst
-@@ -7,10 +7,11 @@ When clearing a pte/pmd we are given a choice to notify=
- the event through
- (notify version of \*_clear_flush call mmu_notifier_invalidate_range) un=
-der
- the page table lock. But that notification is not necessary in all cases=
-.
-=20
--For secondary TLB (non CPU TLB) like IOMMU TLB or device TLB (when devic=
-e use
--thing like ATS/PASID to get the IOMMU to walk the CPU page table to acce=
-ss a
--process virtual address space). There is only 2 cases when you need to n=
-otify
--those secondary TLB while holding page table lock when clearing a pte/pm=
-d:
-+For secondary TLB (non CPU TLB) like IOMMU TLB or device TLB (when the d=
-evice
-+uses something like ATS/PASID to get the IOMMU to walk the CPU page tabl=
-e to
-+access a process virtual address space). There are only 2 cases when you=
- need
-+to notify the secondary TLB while holding the page table lock when clear=
-ing
-+a pte/pmd:
-=20
-   A) page backing address is free before mmu_notifier_invalidate_range_e=
-nd()
-   B) a page table entry is updated to point to a new page (COW, write fa=
-ult
-@@ -27,13 +28,13 @@ happen:
-   - set page table entry to point to new page
-=20
- If clearing the page table entry is not followed by a notify before sett=
-ing
--the new pte/pmd value then you can break memory model like C11 or C++11 =
-for
--the device.
-+the new pte/pmd value then you can break the memory model like C11 or C+=
-+11
-+for the device.
-=20
- Consider the following scenario (device use a feature similar to ATS/PAS=
-ID):
-=20
--Two address addrA and addrB such that \|addrA - addrB\| >=3D PAGE_SIZE w=
-e assume
--they are write protected for COW (other case of B apply too).
-+Two addresses addrA and addrB such that \|addrA - addrB\| >=3D PAGE_SIZE=
- we assume
-+they are write protected for COW (other case of B applies as well).
-=20
- ::
-=20
-@@ -87,13 +88,13 @@ they are write protected for COW (other case of B app=
-ly too).
-  DEV-thread-0  {read addrA from old page}
-  DEV-thread-2  {read addrB from new page}
-=20
--So here because at time N+2 the clear page table entry was not pair with=
- a
--notification to invalidate the secondary TLB, the device see the new val=
-ue for
--addrB before seeing the new value for addrA. This break total memory ord=
-ering
-+Here because at time N+2 the clear page table entry was not paired with =
-a
-+notification to invalidate the secondary TLB, the device sees the new va=
-lue for
-+addrB before seeing the new value for addrA. This breaks total memory or=
-dering
- for the device.
-=20
- When changing a pte to write protect or to point to a new write protecte=
-d page
- with same content (KSM) it is fine to delay the mmu_notifier_invalidate_=
-range
- call to mmu_notifier_invalidate_range_end() outside the page table lock.=
- This
- is true even if the thread doing the page table update is preempted righ=
-t after
--releasing page table lock but before call mmu_notifier_invalidate_range_=
-end().
-+releasing the page table lock but before calling mmu_notifier_invalidate=
-_range_end().
---=20
-2.30.2
+> ---
+>  drivers/dma/idxd/init.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> index aa3478257ddb..fdc97519b8fb 100644
+> --- a/drivers/dma/idxd/init.c
+> +++ b/drivers/dma/idxd/init.c
+> @@ -445,8 +445,10 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
+>  	idxd->data = data;
+>  	idxd_dev_set_type(&idxd->idxd_dev, idxd->data->type);
+>  	idxd->id = ida_alloc(&idxd_ida, GFP_KERNEL);
+> -	if (idxd->id < 0)
+> +	if (idxd->id < 0) {
+> +		kfree(idxd);
+>  		return NULL;
+> +	}
+>  
+>  	device_initialize(conf_dev);
+>  	conf_dev->parent = dev;
+> -- 
+> 2.34.1
+> 
 
