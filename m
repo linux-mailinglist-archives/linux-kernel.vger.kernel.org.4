@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3D35BB318
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2ED5BB319
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiIPT52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S229966AbiIPT5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIPT5Y (ORCPT
+        with ESMTP id S229684AbiIPT50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:57:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D19B6D68;
-        Fri, 16 Sep 2022 12:57:23 -0700 (PDT)
+        Fri, 16 Sep 2022 15:57:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EC4B6D68;
+        Fri, 16 Sep 2022 12:57:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 182FEB82919;
-        Fri, 16 Sep 2022 19:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2545C433D7;
-        Fri, 16 Sep 2022 19:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663358240;
-        bh=vCLtuY1TpVMliumE5DbT2WWZvJ7/teLjaPmFO/zeNJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IOX0u1Ga5jI3fyqBR9wRY7ly+OLINlk+lX+/BsGejMs60jVRDL8sIKqdSt3XILF3S
-         3K8SPRau6FUTQjVtbE6TEJNBmBOBPcPVQXi8OX57u4C0HVoKJPkMEEJ00ksU2lEwGs
-         eneNMJ1+ZnjxnQkCh/cvuyCe2+sDYCEoDJMO2dCn8QTVKtHj5HclYZhNhoQ3rUjl8F
-         tLS/O8FsgwubYS4qOpznp7bdKsC95dfNfY+vQCoCjDHNxc5H6XhL91QFFlfKlKIRzu
-         6tQdmHN/uGcOz3u/YXt0EebKPWSOF1vo6zXrc1qJQEZh8QfmRKs6RTMPWgVqS4lGYT
-         5hmw0V5iFK+MA==
-Date:   Fri, 16 Sep 2022 20:57:18 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v1 02/11] dt-bindings: i2c: rockchip: add
- rockchip,rk3128-i2c
-Message-ID: <YyTVHph1bCF/gfjL@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
-        sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vbp8ZsxZHEPG+tBR"
-Content-Disposition: inline
-In-Reply-To: <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E48562CA2;
+        Fri, 16 Sep 2022 19:57:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4599FC433D6;
+        Fri, 16 Sep 2022 19:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663358244;
+        bh=toDD/DKP6ej2h13IFCfqAwO2xnElND7IEzQWcWOhAqI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fhlmuao9gEG+AEm6I2K7+XKwGMFg0YwspJcIDXhJE3SqUlTamt3OveKskBKFPKz7e
+         7vt/kU0mHM9Nzc0uzQSp9mKiWSIbf+Mbfsy6aLoW1h0glwmkKUk8EaeFBHea3rxm0I
+         QJQ64gI3IHdtu9eZ+E6nOBptuTupvwO0jn6Rffoc=
+Date:   Fri, 16 Sep 2022 12:57:23 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 0/3] x86/dumpstack: Inline copy_from_user_nmi()
+Message-Id: <20220916125723.b4c189d09bcd8fd211a73c32@linux-foundation.org>
+In-Reply-To: <20220916135953.1320601-1-keescook@chromium.org>
+References: <20220916135953.1320601-1-keescook@chromium.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,38 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 16 Sep 2022 06:59:51 -0700 Kees Cook <keescook@chromium.org> wrote:
 
---Vbp8ZsxZHEPG+tBR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> This fixes a find_vmap_area() deadlock. The main fix is patch 2, repeated here:
+> 
+>     The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+>     designed to skip any checks where the length is known at compile time as
+>     a reasonable heuristic to avoid "likely known-good" cases. However, it can
+>     only do this when the copy_*_user() helpers are, themselves, inline too.
+> 
+>     Using find_vmap_area() requires taking a spinlock. The check_object_size()
+>     helper can call find_vmap_area() when the destination is in vmap memory.
+>     If show_regs() is called in interrupt context, it will attempt a call to
+>     copy_from_user_nmi(), which may call check_object_size() and then
+>     find_vmap_area(). If something in normal context happens to be in the
+>     middle of calling find_vmap_area() (with the spinlock held), the interrupt
+>     handler will hang forever.
+> 
+>     The copy_from_user_nmi() call is actually being called with a fixed-size
+>     length, so check_object_size() should never have been called in the
+>     first place. In order for check_object_size() to see that the length is
+>     a fixed size, inline copy_from_user_nmi(), as already done with all the
+>     other uaccess helpers.
+> 
 
-On Sat, Sep 10, 2022 at 12:02:30AM +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-i2c compatible string.
->=20
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Why is this so complicated.
 
-Applied to for-next, thanks!
+There's virtually zero value in running all those debug checks from within
+copy_from_user_nmi().
 
+--- a/arch/x86/lib/usercopy.c~a
++++ a/arch/x86/lib/usercopy.c
+@@ -44,7 +44,7 @@ copy_from_user_nmi(void *to, const void
+ 	 * called from other contexts.
+ 	 */
+ 	pagefault_disable();
+-	ret = __copy_from_user_inatomic(to, from, n);
++	ret = raw_copy_from_user(to, from, n);
+ 	pagefault_enable();
+ 
+ 	return ret;
+_
 
---Vbp8ZsxZHEPG+tBR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMk1R4ACgkQFA3kzBSg
-KbY8YxAAqkmITIjJchmw2BH4eehoxFiSAW8VYh6gojn2S2RgQjSwZsHnR8E8FMIu
-eUeROZH0Wd/Mihi8hLz9Fm3/aTSxUss5Zj2hzFr2RGOHqsicHtx622HwdTakfM08
-6NFWuuBya9tGX4iujN+oQsnI1NA8mDPNEIE8tMEh1wBzOY5m/ijAJLIALJ/cB/qj
-4MGIK9aKg9PfU3nSd0b+9Dn7iZDClo6CnBeKCAHhUeF+DoKzdLsl3FQzNtcIxS1+
-+NL48AB8Kst01hfZHKpuUriTDT2lXfBeQi5NEKNRyc+1fEWBshPat1tYRlEfs9BA
-WAHNZkh3q8qsSDPh2lufGmmOhuX3pUumWAwHfHgbZksNtPj5ldSTXhUciPPHeufb
-Rf+Ne4WaMMX4JOJJ70wMKn+ycaJYRulfiOacroqTqTH7rSX+NuioTEtITA2KMa3q
-4WfMmHrJe3qLPhEkLXabhrYwMcAWkHaPDJ6dJJbHfxRtR0F8y0DMpyJrCRsF9TcS
-+8Hqcq+y5bxc9n/eDxSrSQXXoEQLBFjGeJfCz4D+n6oOWv/6dxMe8dZyU7vq/Ea8
-0DApwW0esWTGZuuV5r2xmncP/4+spn2C2FCOI1ZqCPs2T3Kd7DPBEMPnp7UQRZFO
-cVkNoe0c0N9yQjMEVi9+aqqDWefE6imYt3d3PXqcHEYoHYqHON4=
-=t7C7
------END PGP SIGNATURE-----
-
---Vbp8ZsxZHEPG+tBR--
