@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47465BAC24
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286155BAC26
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIPLQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S230391AbiIPLQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 07:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIPLQE (ORCPT
+        with ESMTP id S229557AbiIPLQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:16:04 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C489D4D243
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 04:16:02 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id f20so26528448edf.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 04:16:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CtLmBvSGF9G/cTvO/YKOaNGaTkKUBZ/GK1jqCp97+g8=;
-        b=dANW5krWzq/RisUGlhFvV8rQy2eqvqAxU6Klg4ngeTPRUo2is7byRaVn7wBx0wlU2i
-         2xulGMS3vdBKTF7r1sXh1/DfUdY+AcZKThTs4p5wDS0nrdhWuEiq9IGYJUbKIUQAzg5n
-         OFw8TTAZARbWtuj71UL2iO76QIxMeAAgw0fckUQDgf56tTKUIsKITST76l9Hop2WXeEP
-         gnUo+9921iZvgN12ftErl0mFlskWj3YEtgDiviU+JSiOIXYHjpP2/mYZhaLyVGlqVkvQ
-         IqbkXeBONW3ivp1IYCvr1a/UWax9iHHaVesvtYXnDjZQ7Om831OnI1XDdNInrctEEdZp
-         4e9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CtLmBvSGF9G/cTvO/YKOaNGaTkKUBZ/GK1jqCp97+g8=;
-        b=G2MUuQAvOnq1lGYzK4jpvVak250yScu8uPMS0MYpqEUX+Vrz+ZhhGy2LvD+WMXetHW
-         odAgOwDYtjaUFeabq3GhD9PP9D+u9cGvJRwYGnTSPqs/24xvCrRG2sKgF2qsLgvovL3i
-         h6NY216Ts3Ol+KnVWQI9c9POFEzVPtmpGTdBVMvYdmbNd9CqzxDoAhi9Tcl4Gi5Ctbeo
-         UMjauF6ZpcmstN1UQL5lstX2z/yrEDO1iMKb6HYEUQE5TiMTeJFJTUD58fQb0sBdslOz
-         1/yb9Wwi4UBM2FFk933LSBsb4gYLzXa2OpZblImkY0sgdvKVaHs92E0UoHOm8zoGRF+3
-         eFag==
-X-Gm-Message-State: ACrzQf3cIz9W/mrsOqAMh19nnc6Eq/OdHiQdjrC7zl2ZJLPegybCMw04
-        qng94NANsL7EOZfAGYUde/oW1rEQBj8lUu4WF4nuRA==
-X-Google-Smtp-Source: AMsMyM7xbpcidruWPNfmRr9SYh76gCBUmw46pm0QVUEVrlRhRkDwhYFUwov7WKGgZW6ATKSiY3EKHqEwGRLbD1Ab0nA=
-X-Received: by 2002:a05:6402:f07:b0:450:bf95:59e9 with SMTP id
- i7-20020a0564020f0700b00450bf9559e9mr3579258eda.46.1663326961409; Fri, 16 Sep
- 2022 04:16:01 -0700 (PDT)
+        Fri, 16 Sep 2022 07:16:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552ED4DF0A;
+        Fri, 16 Sep 2022 04:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663326982; x=1694862982;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=m4tsBtMFhubibrEIErC2HWPG+eT5O01SBn3yQEp4Il4=;
+  b=Wy2WjMNV3FfVkjxulrZvqC0Co7DSi5jjN2+ok8P2fyD734UQwKUbvJgs
+   JtP8Km+AgkfP+9Lr+b6xWHXj/66qdf6pwbRVv7+dpOcaPWsSlYF+Xwh2t
+   wfP116lBgX7YKm7EBDGbXPmYEVnxbNxqekEMoIDSVTPDVD4JyVQY86fKN
+   /k22mmRNnMFAIiOLnAqOXz+UjnEMMxefZBgmSv2rVv/9XlPVpBrGTqdAc
+   uG8tbDm7SFjZzZOcRJPYy+vBGB43MlhBcOsCEN6+g4+5HEh9nYFEPw0D1
+   x0K63E2jU4nuYzenpWgldUoNlT7xCUQnJkTaSP1ioBEPYz2o0hrrwq4B9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="297694644"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="297694644"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 04:16:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="617635758"
+Received: from lroque-mobl1.amr.corp.intel.com ([10.251.209.126])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 04:16:19 -0700
+Date:   Fri, 16 Sep 2022 14:16:18 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250: omap: Use serial8250_em485_supported
+In-Reply-To: <20220916110955.161099-1-matthias.schiffer@ew.tq-group.com>
+Message-ID: <1176cc1-342f-ca4d-12a3-b237adca4ccf@linux.intel.com>
+References: <20220916110955.161099-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-References: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
-In-Reply-To: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 16 Sep 2022 13:15:50 +0200
-Message-ID: <CACRpkdbpnT3G4EY_cgQ0dj93F6E6Kr5hW4yKD0vOpS7Zb8fUxA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: module: Teach unwinder about PLTs
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        florian.fainelli@broadcom.com,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-866213968-1663326982=:1788"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 6:33 PM Alexander A Sverdlin
-<alexander.sverdlin@nokia.com> wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
->
-> "unwind: Index not found eef26358" warnings keep popping up on
-> CONFIG_ARM_MODULE_PLTS-enabled systems if the PC points to a PLT veneer.
-> Teach the unwinder how to deal with them, taking into account they don't
-> change state of the stack or register file except loading PC.
->
-> Tested-by: Kursad Oney <kursad.oney@broadcom.com>
-> Link: https://lore.kernel.org/linux-arm-kernel/20200402153845.30985-1-kursad.oney@broadcom.com/
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+--8323329-866213968-1663326982=:1788
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-This looks correct to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Fri, 16 Sep 2022, Matthias Schiffer wrote:
 
-Please add this to Russell's patch tracker.
+> 8250_omap uses em485, fill in rs485_supported accordingly. This makes
+> RS485 work with 8250_omap again, which was broken with the introduction
+> of the RS485 config sanitization.
+> 
+> Fixes: be2e2cb1d2819 ("serial: Sanitize rs485_struct")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
 
-Yours,
-Linus Walleij
+Yes, good catch. I really don't know how I managed to miss it.
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+-- 
+ i.
+
+>  drivers/tty/serial/8250/8250_omap.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> index ff51ff91b9237..38ee3e42251af 100644
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -1337,6 +1337,7 @@ static int omap8250_probe(struct platform_device *pdev)
+>  	up.port.throttle = omap_8250_throttle;
+>  	up.port.unthrottle = omap_8250_unthrottle;
+>  	up.port.rs485_config = serial8250_em485_config;
+> +	up.port.rs485_supported = serial8250_em485_supported;
+>  	up.rs485_start_tx = serial8250_em485_start_tx;
+>  	up.rs485_stop_tx = serial8250_em485_stop_tx;
+>  	up.port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
+> 
+--8323329-866213968-1663326982=:1788--
