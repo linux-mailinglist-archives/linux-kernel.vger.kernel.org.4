@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A95BAE47
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861835BAE5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiIPNgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S231750AbiIPNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiIPNgM (ORCPT
+        with ESMTP id S231720AbiIPNi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:36:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8993BA831D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:36:10 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTZmB6Sh5zBsM7;
-        Fri, 16 Sep 2022 21:34:02 +0800 (CST)
+        Fri, 16 Sep 2022 09:38:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1E2AD9A6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:38:55 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTZn85yWtz14Qc9;
+        Fri, 16 Sep 2022 21:34:52 +0800 (CST)
 Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 21:36:07 +0800
+ 15.1.2375.24; Fri, 16 Sep 2022 21:38:53 +0800
 Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
  (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 16 Sep
- 2022 21:36:06 +0800
+ 2022 21:38:52 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
 CC:     <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH] pktcdvd: use DEFINE_SHOW_ATTRIBUTE to simplify pkt_debugfs
-Date:   Fri, 16 Sep 2022 22:09:53 +0800
-Message-ID: <20220916140953.2172754-1-liushixin2@huawei.com>
+Subject: [PATCH] bus: mvebu-mbus: use DEFINE_SHOW_ATTRIBUTE to simplify mvebu_{sdram/devs}_debug
+Date:   Fri, 16 Sep 2022 22:12:44 +0800
+Message-ID: <20220916141244.2174005-1-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm100009.china.huawei.com (7.185.36.113)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -52,50 +53,53 @@ Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
 
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- drivers/block/pktcdvd.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+ drivers/bus/mvebu-mbus.c | 26 ++------------------------
+ 1 file changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
-index 4cea3b08087e..fe113ac1c1b7 100644
---- a/drivers/block/pktcdvd.c
-+++ b/drivers/block/pktcdvd.c
-@@ -445,23 +445,11 @@ static void pkt_sysfs_cleanup(void)
- 
-  *******************************************************************/
- 
--static int pkt_debugfs_seq_show(struct seq_file *m, void *p)
-+static int pkt_debugfs_show(struct seq_file *m, void *p)
- {
- 	return pkt_seq_show(m, p);
+diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
+index 5dc2669432ba..d51573ac525e 100644
+--- a/drivers/bus/mvebu-mbus.c
++++ b/drivers/bus/mvebu-mbus.c
+@@ -466,18 +466,7 @@ static int mvebu_sdram_debug_show(struct seq_file *seq, void *v)
+ 	struct mvebu_mbus_state *mbus = &mbus_state;
+ 	return mbus->soc->show_cpu_target(mbus, seq, v);
  }
 -
--static int pkt_debugfs_fops_open(struct inode *inode, struct file *file)
+-static int mvebu_sdram_debug_open(struct inode *inode, struct file *file)
 -{
--	return single_open(file, pkt_debugfs_seq_show, inode->i_private);
+-	return single_open(file, mvebu_sdram_debug_show, inode->i_private);
 -}
 -
--static const struct file_operations debug_fops = {
--	.open		= pkt_debugfs_fops_open,
--	.read		= seq_read,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--	.owner		= THIS_MODULE,
+-static const struct file_operations mvebu_sdram_debug_fops = {
+-	.open = mvebu_sdram_debug_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
 -};
-+DEFINE_SHOW_ATTRIBUTE(pkt_debugfs);
++DEFINE_SHOW_ATTRIBUTE(mvebu_sdram_debug);
  
- static void pkt_debugfs_dev_new(struct pktcdvd_device *pd)
+ static int mvebu_devs_debug_show(struct seq_file *seq, void *v)
  {
-@@ -471,8 +459,8 @@ static void pkt_debugfs_dev_new(struct pktcdvd_device *pd)
- 	if (!pd->dfs_d_root)
- 		return;
+@@ -516,18 +505,7 @@ static int mvebu_devs_debug_show(struct seq_file *seq, void *v)
  
--	pd->dfs_f_info = debugfs_create_file("info", 0444,
--					     pd->dfs_d_root, pd, &debug_fops);
-+	pd->dfs_f_info = debugfs_create_file("info", 0444, pd->dfs_d_root,
-+					     pd, &pkt_debugfs_fops);
+ 	return 0;
  }
+-
+-static int mvebu_devs_debug_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, mvebu_devs_debug_show, inode->i_private);
+-}
+-
+-static const struct file_operations mvebu_devs_debug_fops = {
+-	.open = mvebu_devs_debug_open,
+-	.read = seq_read,
+-	.llseek = seq_lseek,
+-	.release = single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(mvebu_devs_debug);
  
- static void pkt_debugfs_dev_remove(struct pktcdvd_device *pd)
+ /*
+  * SoC-specific functions and definitions
 -- 
 2.25.1
 
