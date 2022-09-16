@@ -2,180 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9282C5BA7D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16395BA7D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIPIJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 04:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S229885AbiIPIKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIPIJl (ORCPT
+        with ESMTP id S229703AbiIPIKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:09:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B144213F4A;
-        Fri, 16 Sep 2022 01:09:39 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28G3oinI003897;
-        Fri, 16 Sep 2022 08:09:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=XWQt6XbmcvimFUoy52Add1s9OZBwCF4j/jqklaojP7k=;
- b=md0VJWzb4YJJ5yxrDdlLgYmRfQ4Qv6IHbO/qnIKq8baF/vsJVxM/XAC3GuYMIGCkqP+W
- OakNFASrRwgoATyJtKzTPZfVwUKL2w1mrL2VxY31eEKIwcFbAVYdpMPWKu8kT3ZbsG/P
- 0o4R9LxIVbq9rVSEj1Ph79/eLZqEfFQ8R4dJ7Nd+KQJWZk1ocuKZJEbOWm11nh7ovTqa
- pDh4lvXr/7jVogBFqa25qCeMldW9OtZbiV809X1gFtmcuDuAwT9FYown087BSxT3i6po
- S+POP5jm0MLpljbd6xysXuTD7pK1x3X0f08s82+b7KOkUxFt3w72IpTmWSsjMAFw+YMd jA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jm9m1a7j6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Sep 2022 08:09:22 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28G89Ig6026002;
-        Fri, 16 Sep 2022 08:09:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3jh450cw34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 16 Sep 2022 08:09:18 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28G89IMh025997;
-        Fri, 16 Sep 2022 08:09:18 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 28G89Iod025996;
-        Fri, 16 Sep 2022 08:09:18 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 319D8112E; Fri, 16 Sep 2022 13:39:17 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported max latencies
-Date:   Fri, 16 Sep 2022 13:38:37 +0530
-Message-Id: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: rmdEVe21uGuM9xFrwc1XPWgodjLRIPX4
-X-Proofpoint-GUID: rmdEVe21uGuM9xFrwc1XPWgodjLRIPX4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-16_04,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209160060
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 04:10:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9D92E6B8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663315851; x=1694851851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VF1urHLrZXDb1ERMuLgY6SLME86ioEfo4UKQ1oHzFlE=;
+  b=WUPexV9RUAJpvgmzrY2lxXy9s4adm4pBSIHBodGj2Rd8qTFDxs5tBgXN
+   s0YdUh6FGCxVap15xgGZwUgAxJctpI+ruXxtbWu1B4xi82AJ69VCuowGV
+   QVWSzk/4wahQ692rrTDrQE7EkWLEm61Q2TGyBZL+Zm/PI0+u08mGkWwEy
+   TQa8U5eo5nVXbAeSMmIMYnbJvUVtqymLyN8dawtOxN4PrZz9/f7C/kRO+
+   IibFqd5Pr1+PF/sbeXBpjhUS1Mg2FQAXOH0ixg73pF0StMuXluQr+y/qs
+   N245hz9X6FzGU6dOItqhhM7rKrdmk8B77+0Ezb+4WY3zIvqw9TEQLKxUW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="297665192"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="297665192"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 01:10:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="613185311"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Sep 2022 01:10:48 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZ6Qs-0001Zz-2q;
+        Fri, 16 Sep 2022 08:10:42 +0000
+Date:   Fri, 16 Sep 2022 16:10:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>, Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH 3/3] vmw_balloon: open-code vmballoon_compaction_init()
+Message-ID: <202209161512.GNTVEnlu-lkp@intel.com>
+References: <20220913094306.317734-4-namit@vmware.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913094306.317734-4-namit@vmware.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ASPM driver, LTR threshold scale and value are updated based on
-tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-LTR threshold scale and value are greater values than max snoop/non-snoop
-value.
+Hi Nadav,
 
-Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-reported snoop/no-snoop values is greater than or equal to
-LTR_L1.2_THRESHOLD value.
+I love your patch! Yet something to improve:
 
-Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on linus/master v6.0-rc5 next-20220915]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I am taking this patch forward as prasad is no more working with our org.
-changes since v6:
-	- Rebasing with pci/next.
-changes since v5:
-	- no changes, just reposting as standalone patch instead of reply to
-	  previous patch.
-Changes since v4:
-	- Replaced conditional statements with min and max.
-changes since v3:
-	- Changed the logic to include this condition "snoop/nosnoop
-	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-Changes since v2:
-	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-Changes since v1:
-	- Added missing variable declaration in v1 patch
----
- drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nadav-Amit/vmw_balloon-misc-fixes-and-enhancements/20220914-021333
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git ceecbbddbf549fe0b7ffa3804a6e255b3360030f
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220916/202209161512.GNTVEnlu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/aa1f38765dd703cbeb3450454d0b5b2c7f5a8f8d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nadav-Amit/vmw_balloon-misc-fixes-and-enhancements/20220914-021333
+        git checkout aa1f38765dd703cbeb3450454d0b5b2c7f5a8f8d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 928bf64..2bb8470 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- {
- 	struct pci_dev *child = link->downstream, *parent = link->pdev;
- 	u32 val1, val2, scale1, scale2;
-+	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
- 	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
- 	u32 ctl1 = 0, ctl2 = 0;
- 	u32 pctl1, pctl2, cctl1, cctl2;
-+	u16 ltr;
-+	u16 max_snoop_lat, max_nosnoop_lat;
- 
- 	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
- 		return;
- 
-+	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-+	if (!ltr)
-+		return;
-+
-+	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-+	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-+
-+	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-+	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-+
-+	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-+	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-+
-+	/* choose the greater max scale value between snoop and no snoop value*/
-+	max_scale = max(max_snp_scale, max_nsnp_scale);
-+
-+	/* choose the greater max value between snoop and no snoop scales */
-+	max_val = max(max_snp_val, max_nsnp_val);
-+
- 	/* Choose the greater of the two Port Common_Mode_Restore_Times */
- 	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
- 	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-@@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- 	 */
- 	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
- 	encode_l12_threshold(l1_2_threshold, &scale, &value);
-+
-+	/*
-+	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-+	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
-+	 */
-+	scale = min(scale, max_scale);
-+	value = min(value, max_val);
-+
- 	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
- 
- 	/* Some broken devices only support dword access to L1 SS */
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/misc/vmw_balloon.c:1892:3: error: use of undeclared identifier 'b'
+                   b->b_dev_info.migratepage = vmballoon_migratepage;
+                   ^
+   drivers/misc/vmw_balloon.c:1732:2: error: unterminated conditional directive
+   #ifdef CONFIG_BALLOON_COMPACTION
+    ^
+   2 errors generated.
+
+
+vim +/b +1892 drivers/misc/vmw_balloon.c
+
+  1850	
+  1851	static int __init vmballoon_init(void)
+  1852	{
+  1853		int error;
+  1854	
+  1855		/*
+  1856		 * Check if we are running on VMware's hypervisor and bail out
+  1857		 * if we are not.
+  1858		 */
+  1859		if (x86_hyper_type != X86_HYPER_VMWARE)
+  1860			return -ENODEV;
+  1861	
+  1862		INIT_LIST_HEAD(&balloon.huge_pages);
+  1863		spin_lock_init(&balloon.comm_lock);
+  1864		init_rwsem(&balloon.conf_sem);
+  1865		balloon.vmci_doorbell = VMCI_INVALID_HANDLE;
+  1866		balloon.batch_page = NULL;
+  1867		balloon.page = NULL;
+  1868		balloon.reset_required = true;
+  1869	
+  1870		/*
+  1871		 * Reset the balloon to check that it is indeed supported.
+  1872		 */
+  1873		error = vmballoon_reset(&balloon);
+  1874		if (error) {
+  1875			pr_err("memory ballooning is disabled");
+  1876			goto fail;
+  1877		}
+  1878	
+  1879		INIT_DELAYED_WORK(&balloon.dwork, vmballoon_work);
+  1880	
+  1881		error = vmballoon_register_shrinker(&balloon);
+  1882		if (error)
+  1883			goto fail;
+  1884	
+  1885		/*
+  1886		 * Initialization of compaction must be done after the call to
+  1887		 * balloon_devinfo_init() .
+  1888		 */
+  1889		balloon_devinfo_init(&balloon.b_dev_info);
+  1890	
+  1891		if (IS_ENABLED(CONFIG_BALLOON_COMPACTION))
+> 1892			b->b_dev_info.migratepage = vmballoon_migratepage;
+  1893	
+  1894		queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
+  1895	
+  1896		vmballoon_debugfs_init(&balloon);
+  1897	
+  1898		return 0;
+  1899	fail:
+  1900		vmballoon_unregister_shrinker(&balloon);
+  1901		return error;
+  1902	}
+  1903	
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
