@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97D55BAD22
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB965BAD24
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiIPMMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S231404AbiIPMMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbiIPMMf (ORCPT
+        with ESMTP id S231368AbiIPMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Sep 2022 08:12:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F369B089B;
-        Fri, 16 Sep 2022 05:12:26 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463CAB0B04;
+        Fri, 16 Sep 2022 05:12:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C259B825ED;
-        Fri, 16 Sep 2022 12:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42111C433D6;
-        Fri, 16 Sep 2022 12:12:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C887B62B41;
+        Fri, 16 Sep 2022 12:12:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D7BC43143;
+        Fri, 16 Sep 2022 12:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663330343;
-        bh=1yC4yByue2GYH632QAml0xc+/AbTMt75z9T2KM9E5/8=;
+        s=k20201202; t=1663330347;
+        bh=3gGcMHmFimfPD8rpeW8RQN1ZNlCrlPvnyk0muFEHR1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzBWuMVdTPhMTe7OZeES5V8+g4vhkw12tj9mM/M25RaibgJwfS7C3Jsb7o4GhrMgJ
-         RbsmLfuReB/1BCYW9OP5T/V663gzk1deObXpWwfAm/cLR/HV2MPB7MpTPjWmDE27tX
-         dpM73KAvVZVNQatnfqQtU9Ud0T/rpYZqt4ZlWHrX8kzljTh6frj3apEUTjPRG1esBu
-         BhY8Od0s0ZdU8/MLsXWFAc9JlzJL6TgsTHSzLKNIIV2Lnbh5OuNgai3t7G57b5hIk5
-         cJGFo9nwiE/t/OJKdR7RiPHPjqoNczIdKS9jB2OHFzdGTMiJkDvTPl7bzSVg095lhi
-         2/83eGzL+6yCQ==
+        b=N+tkvv+CSf3zCbI1dirRPAgwseoXj5cvkfdbLhwETGl9HUywBDai8fbyTJuQ72dDO
+         H/no8skPjwqBisbnsJ0Tcm+X5KIBi0aI/WX1VqtvIUZ+aIP2yGnrYOICDk0xTQfoPW
+         vVeYf35NCcampBpmhVg7lv+K5/4tZwjTH6xtN1/4PmVIf5XGhkn+uydHmgZaDpr4Ta
+         KhgJjaCVXY19u5yx5pcbBsD07V50G5noLazKP6KcaMgXS9Z8SZwX/YSKFI35JI4NEH
+         bzUYsYWqUEop+QfvISpYamO7rWRlCJBIaFp7gKeSbApLnTq0oqlXQHt4krUlv5SMJW
+         e5BlCR36bSEmg==
 From:   Vinod Koul <vkoul@kernel.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <andersson@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] scsi: ufs: dt-bindings: Add SC8180x binding
-Date:   Fri, 16 Sep 2022 17:42:00 +0530
-Message-Id: <20220916121204.3880182-3-vkoul@kernel.org>
+Subject: [PATCH 3/6] dt-bindings: usb: qcom,dwc3: Add SC8180x binding
+Date:   Fri, 16 Sep 2022 17:42:01 +0530
+Message-Id: <20220916121204.3880182-4-vkoul@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220916121204.3880182-1-vkoul@kernel.org>
 References: <20220916121204.3880182-1-vkoul@kernel.org>
@@ -59,25 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the UFS HC for SC8180x SoC
+Document the USB dwc3 controller for SC8180x SoC
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index f2d6298d926c..dd0256357247 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -26,6 +26,7 @@ properties:
-           - qcom,msm8994-ufshc
-           - qcom,msm8996-ufshc
-           - qcom,msm8998-ufshc
-+          - qcom,sc8180x-ufshc
-           - qcom,sc8280xp-ufshc
-           - qcom,sdm845-ufshc
-           - qcom,sm6350-ufshc
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index fea3e7092ace..f33735f3702d 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -24,6 +24,7 @@ properties:
+           - qcom,qcs404-dwc3
+           - qcom,sc7180-dwc3
+           - qcom,sc7280-dwc3
++          - qcom,sc8180x-dwc3
+           - qcom,sc8280xp-dwc3
+           - qcom,sdm660-dwc3
+           - qcom,sdm845-dwc3
 -- 
 2.37.3
 
