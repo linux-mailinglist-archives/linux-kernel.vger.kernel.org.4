@@ -2,208 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C685BAF10
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF425BAF14
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiIPOPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S229920AbiIPORJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiIPOPu (ORCPT
+        with ESMTP id S229733AbiIPORH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:15:50 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592B28E988
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:15:49 -0700 (PDT)
-Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28GEFkln074983;
-        Fri, 16 Sep 2022 23:15:46 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
- Fri, 16 Sep 2022 23:15:46 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28GEFjsk074980
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 16 Sep 2022 23:15:46 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <d5393b0e-a296-3296-d376-c9178669747b@I-love.SAKURA.ne.jp>
-Date:   Fri, 16 Sep 2022 23:15:45 +0900
+        Fri, 16 Sep 2022 10:17:07 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED08BB088A;
+        Fri, 16 Sep 2022 07:17:05 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id n124so6318565oih.7;
+        Fri, 16 Sep 2022 07:17:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JhuxjeOKraKJboj/02rtWKx4yslOS5BQGZXJOnVgpXo=;
+        b=oeMj1L5YkNTlDij/7kPtWyN8U1Qk/hHBbmWHknJNyVBELlvQ/jTiKxZHbbmcaZqArR
+         6+211NKcNXLJR6tTPv1UQbzfoKkfzRxmhGMorXDgjSa/OFBSFgkm5TrZQhLY8OVzMoUJ
+         2LUuH/cJIgdCVYZ4K4azRWfHQlRds/ziJOXniqiARs/W5MKtIZBNjWGkmR+khM/U1eya
+         /qzfM0NwLM3+G3gfxecWX+5ffkJMW/kyiqGQx6Vb5cSpGjgCO1Cw97FjjjFq+e5576u8
+         3PClU0UWeHxwgX2oE+xqsYPMDeo5y3QU2rzZeQZBSNcxeQjwxwptYgPQfs9ST3xb16BF
+         TJcw==
+X-Gm-Message-State: ACgBeo1ZKB4wKVcpb4FZdAN0h//02TaQxwV8Txj0x8KjSRdvbd2H4fP0
+        yW9sYUb7RIPx8ATJxbwCcMESIFyREw==
+X-Google-Smtp-Source: AA6agR7Q8MmZmdK7ErfIGsi5C1xJ6G2P8DSYtwbCZC3/T+KyYBpTI0WovQyEPnoyNNFIubnFZbFvMg==
+X-Received: by 2002:a05:6808:1717:b0:334:9342:63f1 with SMTP id bc23-20020a056808171700b00334934263f1mr7048788oib.77.1663337825116;
+        Fri, 16 Sep 2022 07:17:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w128-20020acaad86000000b0034564365bf2sm9023012oie.17.2022.09.16.07.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 07:17:04 -0700 (PDT)
+Received: (nullmailer pid 300358 invoked by uid 1000);
+        Fri, 16 Sep 2022 14:17:03 -0000
+Date:   Fri, 16 Sep 2022 09:17:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: mailbox: Convert mtk-gce to DT schema
+Message-ID: <20220916141703.GA271453-robh@kernel.org>
+References: <20220916080742.26851-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH (repost)] locking/lockdep: add debug_show_all_lock_holders()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220916080742.26851-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, check_hung_uninterruptible_tasks() reports details of locks
-held in the system. Also, lockdep_print_held_locks() does not report
-details of locks held by a thread if that thread is in TASK_RUNNING state.
-Several years of experience of debugging without vmcore tells me that
-these limitations have been a barrier for understanding what went wrong
-in syzbot's "INFO: task hung in" reports.
+On Fri, Sep 16, 2022 at 10:07:41AM +0200, AngeloGioacchino Del Regno wrote:
+> Convert the mtk-gce mailbox binding to DT schema format.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> 
+> A previous attempt for this was made at [1], but it was changing
+> the way of getting clocks (by name for all).
+> Keeping clock-names not required for the multi-gce case makes this
+> binding simpler, hence I chose to abandon the change at [1] and go
+> for this one instead.
+> 
+> Any Reviewed-by or Acked-by tag was dropped, as this conversion was
+> completely redone from scratch and differs from [1] for the
+> aforementioned reasons.
+> 
+> [1]: https://lore.kernel.org/all/20220524151512.247435-1-angelogioacchino.delregno@collabora.com/
+> 
+>  .../mailbox/mediatek,gce-mailbox.yaml         | 104 ++++++++++++++++++
+>  .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 --------------
+>  2 files changed, 104 insertions(+), 82 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+> new file mode 100644
+> index 000000000000..ac6ca7fc5302
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+> @@ -0,0 +1,104 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mailbox.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Global Command Engine Mailbox
+> +
+> +maintainers:
+> +  - Houlong Wei <houlong.wei@mediatek.com>
+> +
+> +description: |
 
-I initially thought that the cause of "INFO: task hung in" reports is
-due to over-stressing. But I understood that over-stressing is unlikely.
-I now consider that there likely is a deadlock/livelock bug where lockdep
-cannot report as a deadlock when "INFO: task hung in" is reported.
+Don't need '|' if not formatting to preserve.
 
-A typical case is that thread-1 is waiting for something to happen (e.g.
-wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-to hold. But currently check_hung_uninterruptible_tasks() cannot report
-the exact location of thread-1 which gives us an important hint for
-understanding why thread-1 is holding that lock for so long period.
+> +  The Global Command Engine (GCE) is used to help read/write registers with
+> +  critical time limitation, such as updating display configuration during the
+> +  vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt6779-gce
+> +      - mediatek,mt8173-gce
+> +      - mediatek,mt8183-gce
+> +      - mediatek,mt8186-gce
+> +      - mediatek,mt8192-gce
+> +      - mediatek,mt8195-gce
+> +
+> +  "#mbox-cells":
+> +    const: 2
+> +    description:
+> +      The first cell describes the Thread ID of the GCE,
+> +      the second cell describes the priority of the GCE thread
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Global Command Engine clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: gce
+> +
+> +required:
+> +  - compatible
+> +  - "#mbox-cells"
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +if:
+> +  not:
+> +    properties:
+> +      compatible:
+> +        contains:
+> +          const: mediatek,mt8195-gce
+> +then:
+> +  required:
+> +    - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Example for a device client and for a MediaTek mutex client
+> +  - |
+> +    #include <dt-bindings/clock/mt8173-clk.h>
+> +    #include <dt-bindings/gce/mt8173-gce.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/power/mt8173-power.h>
+> +
+> +    gce: mailbox@12120000 {
+> +        compatible = "mediatek,mt8173-gce";
+> +        reg = <0x10816000 0x1000>;
+> +        interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
+> +        #mbox-cells = <2>;
+> +        clocks = <&infracfg CLK_INFRA_GCE>;
+> +        clock-names = "gce";
+> +    };
+> +
+> +    syscon@14000000 {
+> +        compatible = "mediatek,mt8173-mmsys", "syscon";
+> +        reg = <0x14000000 0x1000>;
+> +        power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
+> +        #clock-cells = <1>;
+> +        #reset-cells = <1>;
+> +        mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
+> +                 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
+> +        mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
 
-When check_hung_uninterruptible_tasks() reports a thread waiting for a
-lock, it is important to report backtrace of threads which already held
-that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-the exact location of threads which is holding any lock.
+Provider binding examples don't normally show clients in examples (and 
+vice-versa). Presumably we already have this in the 
+"mediatek,mt8173-mmsys" binding.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-This is repost of https://lkml.kernel.org/r/82af40cc-bf85-2b53-b8f9-dfc12e66a781@I-love.SAKURA.ne.jp .
-I think there was no critical objection which blocks this change.
+> +    };
+> +
+> +    mutex@14020000 {
+> +        compatible = "mediatek,mt8173-disp-mutex";
+> +        reg = <0x14020000 0x1000>;
+> +        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
+> +        power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+> +        clocks = <&mmsys CLK_MM_MUTEX_32K>;
+> +        mediatek,gce-client-reg = <&gce SUBSYS_1402XXXX 0 0x1000>;
+> +        mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
+> +                              <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
 
-I wish that lockdep continues tracking locks (i.e. debug_locks remains 1)
-even after something went wrong, for recently I sometimes encounter problems
-that disable lockdep during boot stage.
+ditto.
 
-It would be noisy to report possibility of e.g. circular locking dependency
-every time due to keeping debug_locks enabled. But tracking locks even after
-something went wrong will help debug_show_all_lock_holders() to survive
-problems during boot stage.
-
-I'm not expecting lockdep to report the same problem forever.
-Reporting possibility of each problem pattern (e.g. circular locking dependency)
-up to once, by using cmpxchg() inside reporting functions that call printk(),
-would be enough.
-
-I'm expecting lockdep to continue working without calling printk() even after
-one of problem patterns (e.g. circular locking dependency) was printk()ed, so that
-debug_show_all_locks()/debug_show_all_lock_holders() can call printk() when needed.
-
-Changing debug_locks behavior is a future patch. For now, this patch alone
-will help debugging Greg's usb.git#usb-testing tree which is generating
-many "INFO: task hung in" reports.
-
- include/linux/debug_locks.h |  5 +++++
- kernel/hung_task.c          |  2 +-
- kernel/locking/lockdep.c    | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/debug_locks.h b/include/linux/debug_locks.h
-index dbb409d..0567d5c 100644
---- a/include/linux/debug_locks.h
-+++ b/include/linux/debug_locks.h
-@@ -50,6 +50,7 @@ static __always_inline int __debug_locks_off(void)
- #ifdef CONFIG_LOCKDEP
- extern void debug_show_all_locks(void);
- extern void debug_show_held_locks(struct task_struct *task);
-+extern void debug_show_all_lock_holders(void);
- extern void debug_check_no_locks_freed(const void *from, unsigned long len);
- extern void debug_check_no_locks_held(void);
- #else
-@@ -61,6 +62,10 @@ static inline void debug_show_held_locks(struct task_struct *task)
- {
- }
- 
-+static inline void debug_show_all_lock_holders(void)
-+{
-+}
-+
- static inline void
- debug_check_no_locks_freed(const void *from, unsigned long len)
- {
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index bb2354f..18e22bb 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -205,7 +205,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
-  unlock:
- 	rcu_read_unlock();
- 	if (hung_task_show_lock)
--		debug_show_all_locks();
-+		debug_show_all_lock_holders();
- 
- 	if (hung_task_show_all_bt) {
- 		hung_task_show_all_bt = false;
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 64a13eb..d062541 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -55,6 +55,7 @@
- #include <linux/rcupdate.h>
- #include <linux/kprobes.h>
- #include <linux/lockdep.h>
-+#include <linux/sched/debug.h>
- 
- #include <asm/sections.h>
- 
-@@ -6509,6 +6510,37 @@ void debug_show_all_locks(void)
- 	pr_warn("=============================================\n\n");
- }
- EXPORT_SYMBOL_GPL(debug_show_all_locks);
-+
-+void debug_show_all_lock_holders(void)
-+{
-+	struct task_struct *g, *p;
-+
-+	if (unlikely(!debug_locks)) {
-+		pr_warn("INFO: lockdep is turned off.\n");
-+		return;
-+	}
-+	pr_warn("\nShowing all threads with locks held in the system:\n");
-+
-+	rcu_read_lock();
-+	for_each_process_thread(g, p) {
-+		if (!p->lockdep_depth)
-+			continue;
-+		/*
-+		 * Assuming that the caller of this function is in a process
-+		 * context without any locks held, skip current thread which is
-+		 * holding only RCU read lock.
-+		 */
-+		if (p == current)
-+			continue;
-+		sched_show_task(p);
-+		lockdep_print_held_locks(p);
-+		touch_nmi_watchdog();
-+		touch_all_softlockup_watchdogs();
-+	}
-+	rcu_read_unlock();
-+	pr_warn("\n");
-+	pr_warn("=============================================\n\n");
-+}
- #endif
- 
- /*
--- 
-1.8.3.1
