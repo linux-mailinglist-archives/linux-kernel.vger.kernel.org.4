@@ -2,145 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D273A5BB273
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD165BB279
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiIPSuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
+        id S229510AbiIPSwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIPSux (ORCPT
+        with ESMTP id S229501AbiIPSwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:50:53 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257159F1A3;
-        Fri, 16 Sep 2022 11:50:50 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id n83so7202271oif.11;
-        Fri, 16 Sep 2022 11:50:50 -0700 (PDT)
+        Fri, 16 Sep 2022 14:52:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD23B775F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:52:34 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1966552pjq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=di38Vx0xcwobovXFuqa+aqs6mrMaWt2alUPAsQ25AHE=;
+        b=HMcch5JkSHJGz9ZQUqTzI4QHZMH3bJxFOKm3B2upHhnBl8/9dF5xCiieB6xk0c+KIl
+         q/UQNLIza5wPp9U3ZRDC11bREH40xKg9rwbBLS/9/Ngdpi9jalz5O98gp9u2AmKOwT84
+         PvyXmUaQlLAt3Ta2OHtGUN9Vj0lbmm/pMUAwf7Z3KykezFtqcQz6mZZeR6IVSwkyBA3d
+         EluQsbFtgxctVh2rodhtkv1Aw5XtjXzP3lzDieu3mil82A92fnXrZMquY428RedIw3Dz
+         ZXEjrLpT0t0t35F5zT6pv9mEso44N9Xs3fE4HlTNQTj9jFY7LTvDHbHlzv8x7dAtaPNP
+         4NLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=3UB7ATwI4jkvN5dfzXoHTLYFFznwA2fYTP5Sp8m3D6A=;
-        b=OQ8O5lkpEKmOWYYgc3nYKFBFtxvpveFS/h5fXf1Zg9iAEzHJJJKXA4G6KbQFijtTT0
-         ZnRpX1UTTqvHM5H1plrAxhmoY6XGk9PpHb7xmGYrLVnS7eSDrCGDszPR7uiPHOVXByiu
-         +b62jVC6/7DCYx1nGzp8f+L4m6m82tLeLaodZFsLMofP1MDh5SnRk7E+matKUyQzGqI/
-         hyocPuaNrkaAwQI5yYGerfboPtCvceBVJowGkIL93X5tnkJVUqvZcp8U5WFv34oPHn6n
-         D38aUR/trCWRYNXYyyyKC7wuRvgCj17Zqy3ge1vHF73j1Tqoh23JHaaXV6/yDyKbkgK0
-         86ew==
-X-Gm-Message-State: ACgBeo1IoDlqdZuvAaA3m5Cs+UBmk3vwCAiUmLnfm/HKXIwn5HYrBTFP
-        PnrtPb2xHCpn1aVfalbAKg==
-X-Google-Smtp-Source: AA6agR710WjH2qECtnOYp/b/ibt2BmM7PlV30E4FBE3nldt1uSx9BidvH6yyuvSYQNT0OEBJvdRZbw==
-X-Received: by 2002:a05:6808:1148:b0:344:e58d:7449 with SMTP id u8-20020a056808114800b00344e58d7449mr7495734oiu.209.1663354249346;
-        Fri, 16 Sep 2022 11:50:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k26-20020a056808069a00b0033a11fcb23bsm9346668oig.27.2022.09.16.11.50.48
+        bh=di38Vx0xcwobovXFuqa+aqs6mrMaWt2alUPAsQ25AHE=;
+        b=ygZd3oB5F0dJHaR6RaloRcnZ3JyCju7KMtOrZBykYCuyVOxFftcsvcq1xhHzpNyiH2
+         SVgtK3wrEy4yalBUYfwP8wwIZ8YnDKhl4hKYtKtQ+44eWObRC50OK0U0kdOYWwqKspYr
+         yJo1Y2Fb4EPSW2MTlwqIzQFoT6c7vqJ6f+bEILA9Zp4JQZrSNwGbHvplpnLajtSlEwRp
+         JrK1SWbGko0i1rBzP0DLFVyy2bMVbbrTBRGsrcmzR5cSltMkNsuWOSIMCjq0JQKrJSG0
+         yaEWovXcusjOxubOPP2MbRVOKPEoRXeRVbofUMYtkCHmQKRcv8ta0aMJouMT8wP6+q07
+         fMRA==
+X-Gm-Message-State: ACrzQf1FDzSqg7bUjjBl1S4fXLwV3MHz42BImJiPz9UdB/SJHLV92yw/
+        rcXmYbhfByLfYEl2jrcvVFpFQA==
+X-Google-Smtp-Source: AMsMyM79oWhOrC1Z2hhvwMa6jwFt0c4Pf+jX7H0OuYkUP5Y9m5sL72liu9kfyo9lakjZU8wMGvW9tA==
+X-Received: by 2002:a17:90b:1b4d:b0:202:c05f:6ea0 with SMTP id nv13-20020a17090b1b4d00b00202c05f6ea0mr7040678pjb.7.1663354353552;
+        Fri, 16 Sep 2022 11:52:33 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170902ecca00b0016c574aa0fdsm15487240plh.76.2022.09.16.11.52.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:50:48 -0700 (PDT)
-Received: (nullmailer pid 1065156 invoked by uid 1000);
-        Fri, 16 Sep 2022 18:50:48 -0000
-Date:   Fri, 16 Sep 2022 13:50:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chancel Liu <chancel.liu@nxp.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@gmail.com,
-        shengjiu.wang@nxp.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        nicoleotsuka@gmail.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 1/7] ASoC: dt-bindings: fsl_rpmsg: Add a property to
- assign the rpmsg channel
-Message-ID: <20220916185048.GA1061412-robh@kernel.org>
-References: <20220914105145.2543646-1-chancel.liu@nxp.com>
- <20220914105145.2543646-2-chancel.liu@nxp.com>
+        Fri, 16 Sep 2022 11:52:32 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 18:52:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH v2 13/23] KVM: x86: Disable APIC logical map if vCPUs are
+ aliased in logical mode
+Message-ID: <YyTF7SsMjm+pClqh@google.com>
+References: <20220903002254.2411750-1-seanjc@google.com>
+ <20220903002254.2411750-14-seanjc@google.com>
+ <aedb7677-528a-75b7-6517-ab1865515ad4@amd.com>
+ <YyGF6T/N1l3i7Ded@google.com>
+ <59c2085e-1f0a-fe7d-8146-6c1bc570c97b@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914105145.2543646-2-chancel.liu@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <59c2085e-1f0a-fe7d-8146-6c1bc570c97b@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 06:51:39PM +0800, Chancel Liu wrote:
-> Add a string property to assign the rpmsg channel this sound card sits
-> on. It also represents the name of ASoC platform driver. This property
-> can be omitted if there is only one sound card and it sits on
-> "rpmsg-audio-channel".
+On Wed, Sep 14, 2022, Suthikulpanit, Suravee wrote:
+> > > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > > > index 6b2f538b8fd0..75748c380ceb 100644
+> > > > --- a/arch/x86/kvm/lapic.c
+> > > > +++ b/arch/x86/kvm/lapic.c
+> > > > @@ -303,12 +303,13 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+> > > >    		if (!mask)
+> > > >    			continue;
+> > > > -		if (!is_power_of_2(mask)) {
+> > > > +		ldr = ffs(mask) - 1;
+> > > > +		if (!is_power_of_2(mask) || cluster[ldr]) {
+> > > 
+> > > Should this be checking if the cluster[ldr] is pointing to the same struct
+> > > apic instead? For example:
+> > > 
+> > > 		if (!is_power_of_2(mask) || cluster[ldr] != apic)
+> > > 
+> > >  From my observation, the kvm_recalculate_apic_map() can be called many
+> > > times, and the cluster[ldr] could have already been assigned from the
+> > > previous invocation. So, as long as it is the same, it should be okay.
+> > 
+> > No, because cluster[ldr] can never match "apic".  kvm_recalculate_apic_map()
+> > creates and populates a _new_ kvm_apic_map every time, it doesn't do an in-place
+> > update of the current map.
 > 
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
->  .../devicetree/bindings/sound/fsl,rpmsg.yaml  | 37 ++++++++++++++++++-
->  1 file changed, 35 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> index d370c98a62c7..3744ae794c00 100644
-> --- a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> +++ b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> @@ -11,8 +11,11 @@ maintainers:
->  
->  description: |
->    fsl_rpmsg is a virtual audio device. Mapping to real hardware devices
-> -  are SAI, DMA controlled by Cortex M core. What we see from Linux
-> -  side is a device which provides audio service by rpmsg channel.
-> +  are SAI, MICFIL, DMA controlled by Cortex M core. What we see from
-> +  Linux side is a device which provides audio service by rpmsg channel.
-> +  We can create different sound cards which access different hardwares
-> +  such as SAI, MICFIL, .etc through building rpmsg channels between
-> +  Cortex-A and Cortex-M.
->  
->  properties:
->    compatible:
-> @@ -85,6 +88,17 @@ properties:
->        This is a boolean property. If present, the receiving function
->        will be enabled.
->  
-> +  fsl,rpmsg-channel-name:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: |
-> +      A string property to assign rpmsg channel this sound card sits on.
-> +      It also represents the name of ASoC platform driver. This property
+> Yes, the _new_ is getting created and initialized every time we call
+> kvm_recalculate_apic_map(), and then passed into
+> kvm_apic_map_get_logical_dest() along with the reference of cluster and mask
+> to get populated based on the provided ldr. Please note that the
+> new->phys_map[x2apic_id] is already assigned before the calling of
 
-That's a Linux detail which doesn't belong in DT.
+Ooh, this is what I was missing.  LDR is read-only for x2APIC, and so KVM simply
+uses the phys_map and computes the phys_map indices by reversing the x2APIC=>LDR
+calculation.
 
-> +      can be omitted if there is only one sound card and it sits on
-> +      "rpmsg-audio-channel".
-> +    enum:
-> +      - rpmsg-audio-channel
-> +      - rpmsg-micfil-channel
-> +
->  required:
->    - compatible
->    - model
-> @@ -107,3 +121,22 @@ examples:
->                   <&clk IMX8MN_AUDIO_PLL2_OUT>;
->          clock-names = "ipg", "mclk", "dma", "pll8k", "pll11k";
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/clock/imx8mm-clock.h>
-> +
-> +    rpmsg_micfil: audio-controller {
-> +        compatible = "fsl,imx8mm-rpmsg-audio";
-> +        model = "micfil-audio";
-> +        fsl,rpmsg-channel-name = "rpmsg-micfil-channel";
-> +        fsl,enable-lpa;
-> +        fsl,rpmsg-in;
-> +        clocks = <&clk IMX8MM_CLK_PDM_IPG>,
-> +                 <&clk IMX8MM_CLK_PDM_ROOT>,
-> +                 <&clk IMX8MM_CLK_SDMA3_ROOT>,
-> +                 <&clk IMX8MM_AUDIO_PLL1_OUT>,
-> +                 <&clk IMX8MM_AUDIO_PLL2_OUT>;
-> +        clock-names = "ipg", "mclk", "dma", "pll8k", "pll11k";
-> +    };
-> +
-> +...
-> -- 
-> 2.25.1
-> 
-> 
+So it's so much not that _can_ "apic" can match "cluster[ldr]", it's actually that
+"apic" _must_ match "cluster[ldr]" for this flow.  Overwriting the cluster entry
+is all kinds of pointless.  It's either unnecessary (no bugs) or it breaks things
+(bugs in either LDR calculation or logical dest math).
+
+Rather than add an exception to the cluster[] check, which is very confusing for
+xAPIC, the whole flow can be skipped for x2APIC, with a sanity check that the LDR
+does indeed align with the x2APIC ID.
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 76a19bf1eb55..e9d7c647e8a7 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -347,6 +347,12 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+                }
+                new->logical_mode = logical_mode;
+ 
++               /* I'll add a comment here. */
++               if (apic_x2apic_mode(apic)) {
++                       WARN_ON_ONCE(ldr != kvm_apic_calc_x2apic_ldr(x2apic_id));
++                       continue;
++               }
++
+                if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
+                                                                &cluster, &mask))) {
+                        new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+
+Alternatively, the x2APIC handling could be done after kvm_apic_map_get_logical_dest(),
+e.g. so that KVM can sanity check mask+cluster[ldr], but that's annoying to implement
+and IMO it's overkill since the we can just as easily verify the math via tests on top
+of the LDR sanity check.
+
+I'll do a better job of verifying that APICv + x2APIC yields the correct inhibits.
+I verified x2APIC functional correctness, and that APICv + xAPIC yielded the correct
+inhibits, but I obviously didn't verify APICv + x2APIC yielded the correct inhibits.
+
+Thanks much!
