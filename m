@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3545BA856
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47C85BA86C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiIPInL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 04:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S230262AbiIPIp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiIPInI (ORCPT
+        with ESMTP id S229669AbiIPIp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:43:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0884BA7AAA
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663317786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VbO+Lm6okm9qbgHERmbkye329u238iBYwsZHrrR1iRI=;
-        b=aso8VfP/XMU/5aI7dlvAn5VWsZtY7VeJmQVq2JDZKMlQ038J6pYtyc8dEixkBBguZn4MOW
-        gTHSgqTupkGh8pkGS3RGaSflwyrBWTjWjUj0VX6MzFw8NxZF+/T43x3S5Y0XXoeidpX0gD
-        Uw15PH8zhvzIRVjfV974LUiZyhY4slw=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-558-EGli8JF5NRuZV1i_nsjLqQ-1; Fri, 16 Sep 2022 04:43:04 -0400
-X-MC-Unique: EGli8JF5NRuZV1i_nsjLqQ-1
-Received: by mail-ej1-f72.google.com with SMTP id go7-20020a1709070d8700b007793ffa7c44so8720257ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:43:04 -0700 (PDT)
+        Fri, 16 Sep 2022 04:45:56 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B464C635;
+        Fri, 16 Sep 2022 01:45:54 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id h8so27909068wrf.3;
+        Fri, 16 Sep 2022 01:45:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=VbO+Lm6okm9qbgHERmbkye329u238iBYwsZHrrR1iRI=;
-        b=VQe1vR4t7kX2tfFr5ajTC7UZtfX8Xym4eL41rX3xw3oMJiOuT4aqVu5p3VmU1QFGlM
-         aNP0WtsBX7KNKS2bgxokpFWFA8X6gLILjwjT/qPJ9L+yJ9tSwhFBRGhM5A079QXxGr30
-         LBdWwYYeLDkyzh1eKJygAu90yJPhqoFwO01Y29fgnt9JfsIxOP5L2GWJRdSdUocbRx6S
-         h5J2/DSInlSuhp4u778IiRq7F4PVdalagSF82XGe40UfGXgGCZogGb/vjth35+fcGSWH
-         Y+46HgowOo6kFomePPUxtdSS/fpVZlOCSYO4qM65952l6Ia9Jg7k4K3wu6vrrMpYZoc4
-         JUSA==
-X-Gm-Message-State: ACrzQf3yqc48PbS31YCe4e/NKrVJdNASk8Kab8bC/2dH78/vFfqVIrPi
-        O37857ASJYQIDTlRXOpjZgiIZ6hZ1Mf/fQwNCWp02VlUw4YIyXwHAQ90MuCtQVRm9DOOe5MBvfN
-        zk1qUQ5NAPnw9gJHr6SiBYoDG
-X-Received: by 2002:a17:906:9bce:b0:770:2600:2cef with SMTP id de14-20020a1709069bce00b0077026002cefmr2695254ejc.611.1663317783705;
-        Fri, 16 Sep 2022 01:43:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM759gvZBCB6O2D2gJJ1AFr4bzGtpik89lSSdGx3I+fQrZSmG1RYEyHiJYSHpT68QQAT/44CcQ==
-X-Received: by 2002:a17:906:9bce:b0:770:2600:2cef with SMTP id de14-20020a1709069bce00b0077026002cefmr2695243ejc.611.1663317783518;
-        Fri, 16 Sep 2022 01:43:03 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056402014100b0044e8d0682b2sm13047094edu.71.2022.09.16.01.43.02
+        bh=iZiPe0D4cLkpuFufuNwDu+VYitqmg7bP4qJyg2ltBuk=;
+        b=fsC6gz4wiuXv41B8IjRaHz9u4nJ1+WMb25M6r/XP7B6qWxS08oJYLmEkjWGcRDlNB+
+         IiMy2votgduwMzMr8AC3Vu9nthgmCYe6wb5yOnK/91tSISKwLySfxIyFabXgnZr++tzo
+         lLf+ygvGcSOje1dpWPOqI+AZmu3y3Y3xxBgIkmIH7KCE0s3/R6eE5bx6o6Rr00fy8UUp
+         Wxz2CPiqvorag/lcscO8pq6CZr6jwRtP3FvtFXbmJJQ1M1Tlz4GGz4LLKyFCPz+qjQZE
+         /mejYzJ+DSKsROtwquwAvq9yGU71k672f4PyQuRa3YFodA7+FSCdYeZx/QUhPUXN4qqB
+         qtbg==
+X-Gm-Message-State: ACrzQf2QYj5ZsLFY2aaeQRraJanaHbSytOIzunl3ypXKbjYQWxF9KoIc
+        rgqBVZx7Az7hQd2RpTqYkVw=
+X-Google-Smtp-Source: AMsMyM6ehRST8tEsmn5t138+v3rLwez5vDw/AlYQffbozBfK+ocJiAgXgrdCF6nRoduCMaDWdBpaaQ==
+X-Received: by 2002:a5d:5504:0:b0:228:b90c:e5e0 with SMTP id b4-20020a5d5504000000b00228b90ce5e0mr2122327wrv.624.1663317952504;
+        Fri, 16 Sep 2022 01:45:52 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b00228cd9f6349sm4323553wrp.106.2022.09.16.01.45.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 01:43:02 -0700 (PDT)
-Message-ID: <42663baa-2d8c-a45a-a33e-571119ec12aa@redhat.com>
-Date:   Fri, 16 Sep 2022 10:43:01 +0200
+        Fri, 16 Sep 2022 01:45:51 -0700 (PDT)
+Message-ID: <682df554-0602-2f94-22d1-e39a4dd8f366@kernel.org>
+Date:   Fri, 16 Sep 2022 10:45:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: [PATCH] ACPI / x86: Add a quirk for Dell Inspiron 14 2-in-1 for
- StorageD3Enable
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Luya Tshimbalanga <luya@fedoraproject.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-References: <20220915182315.276-1-mario.limonciello@amd.com>
+Subject: Re: [PATCH 1/5] tty: remove TTY_MAGIC
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220915182315.276-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Theodore Ts'o <tytso@mit.edu>,
+        =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+References: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
+ <YyQm4dBVyvefVcAd@mit.edu>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <YyQm4dBVyvefVcAd@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/15/22 20:23, Mario Limonciello wrote:
-> Dell Inspiron 14 2-in-1 has two ACPI nodes under GPP1 both with _ADR of
-> 0, both without _HID.  It's ambiguous which the kernel should take, but
-> it seems to take "DEV0".  Unfortunately "DEV0" is missing the device
-> property `StorageD3Enable` which is present on "NVME".
+On 16. 09. 22, 9:33, Theodore Ts'o wrote:
+> On Fri, Sep 16, 2022 at 03:54:59AM +0200, наб wrote:
+>> According to Greg, in the context of magic numbers as defined in
+>> magic-number.rst, "the tty layer should not need this and I'll gladly
+>> take patches"
+>>
+>> Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
 > 
-> To avoid this causing problems for suspend, add a quirk for this system
-> to behave like `StorageD3Enable` property was found.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216440
-> Reported-and-tested-by: Luya Tshimbalanga <luya@fedoraproject.org>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Well, I would disagree with Greg K-H on this --- but I haven't been
+> tty maintainer in well over a decade.  Assuming code is Bug-Free(tm),
+> sure, it's not necessary.  But there is any kind of memory bug (e.g.,
+> a corrupted pointer,
 
-Thanks, patch looks good to me:
+I don't think it can help with corrupted pointer much, but:
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> a use-after free, some other structure
+> corruption), this catches the problem earlier rather than later, and
+> it's a light-weight to do a quick sanity check.
 
-Regards,
+Although it's light-weight, it's also NOT that useful. Maybe tty 
+_userspace_ functions return EIO, but that's about it (kernel does not 
+check magic in any of its code paths, if I am looking correctly). I bet 
+users would notice a corrupted tty structure even without this, and 
+maybe earlier. And in that case, kmemcheck is next on the list. And that 
+tells us much more than "we are corrupted".
 
-Hans
+> It has certainly caught problems in the past, and I still use this
+> programming technique in programs that I do maintain, such as
+> e2fsprogs.
 
+Asking google about:
+"tty_paranoia_check" "bad magic number"
+gives ~149 results, the last one from 2008. And it seems to be the only 
+report, the others are links to sources. So yes, it triggered at least 
+once, but is it that useful? Looking at the results, I don't think so.
 
-> ---
-> I had attempted to modify the heuristics for when two ACPI devices
-> have the same _ADR to prefer the one with a _DSD, but this wasn't enough
-> of a help. As the ACPI node doesn't contain anything valuable besides
-> the _DSD, it seems that a quirk for the system is a fine enough solution.
-> 
->  drivers/acpi/x86/utils.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-> index 664070fc8349..d7cdd8406c84 100644
-> --- a/drivers/acpi/x86/utils.c
-> +++ b/drivers/acpi/x86/utils.c
-> @@ -207,9 +207,26 @@ static const struct x86_cpu_id storage_d3_cpu_ids[] = {
->  	{}
->  };
->  
-> +static const struct dmi_system_id force_storage_d3_dmi[] = {
-> +	{
-> +		/*
-> +		 * _ADR is ambiguous between GPP1.DEV0 and GPP1.NVME
-> +		 * but .NVME is needed to get StorageD3Enable node
-> +		 * https://bugzilla.kernel.org/show_bug.cgi?id=216440
-> +		 */
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
-> +		}
-> +	},
-> +	{}
-> +};
-> +
->  bool force_storage_d3(void)
->  {
-> -	return x86_match_cpu(storage_d3_cpu_ids);
-> +	const struct dmi_system_id *dmi_id = dmi_first_match(force_storage_d3_dmi);
-> +
-> +	return dmi_id || x86_match_cpu(storage_d3_cpu_ids);
->  }
->  
->  /*
+thanks,
+-- 
+js
+suse labs
 
