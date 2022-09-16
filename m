@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1085BB3F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F275E5BB3F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiIPVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 17:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S229614AbiIPVeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 17:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiIPVbn (ORCPT
+        with ESMTP id S229457AbiIPVej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 17:31:43 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54ABB02C;
-        Fri, 16 Sep 2022 14:31:38 -0700 (PDT)
-Message-ID: <a774a513-284c-eb1f-7578-bb6d475b0509@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663363896;
+        Fri, 16 Sep 2022 17:34:39 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F097513DF3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 14:34:35 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4MTnQb0KFWz9sQd;
+        Fri, 16 Sep 2022 23:34:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dragonslave.de;
+        s=MBO0001; t=1663364071;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aUusDOzWHis+2UidmSCMnHqSklJAdLsrWVsXfECqtNY=;
-        b=lYsuwfgmyLGn2XjImpB5vaLtD4AB1q+UrezIaQ0GKOgaOkdxm3boMHN3iUPQze3ccbED6y
-        4WUW/rKFNqS0sNy2YL/JSoshVWp0CkTvIWHzlzohUxPUjCNo7pSBsaUi1w+fO95jrSP7WT
-        271VolouyUTVNjdHfEroAJd1Xzco07A=
-Date:   Fri, 16 Sep 2022 14:31:25 -0700
+        bh=BdXu+ZDOuqXStM4nU1Vz36p4CfWjMuPPU8DHgz4RUgA=;
+        b=Rxs4AXROMrfMDnQ9SaiYBBkM/9pmJ3CJWUXi7JpP2sGsH1mkBrKu0rnbcwvV44/2LzVoE+
+        JyQ4bmNkYgcbCL90yivU/HeAZMbKgzXoIO6di79/JryoVSUylp3iem9m3TkPDM3sRAhkdW
+        ByRnK+fU/vdEYgS2wUIrBi/nkxVVGUw3qm8P19IS7Zw2rNPbdV0gYoZ9TOt5ahbe5El7Gv
+        mR6H9DTIjp+b67fAleWp14qpkKkFJCFOSMurDX+Odg1cVArtKfhk/AWpFec8q7v9kD4LWt
+        b5SdgIV2ZkW60/MGyzZ3DhRqiozIfo8Wcx+9DzGixZLIc7szctxfze5veuLalQ==
+Message-ID: <9404d20b-1abc-78dc-d257-521c80f48b3a@dragonslave.de>
+Date:   Fri, 16 Sep 2022 23:34:29 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpf: Move nf_conn extern declarations to
- filter.h
-Content-Language: en-US
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-References: <c4cb11c8ffe732b91c175a0fc80d43b2547ca17e.1662920329.git.dxu@dxuuu.xyz>
- <ada17021-83c9-3dad-5992-4885e824ecac@linux.dev>
- <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
+Subject: Re: Regression in v5.19-rc4 Sound Distortion
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <46fd7a73-06fd-a8a0-8530-0ecf9b18c08d@dragonslave.de>
+Content-Language: en-US, de-DE
+From:   Daniel Exner <dex@dragonslave.de>
+In-Reply-To: <46fd7a73-06fd-a8a0-8530-0ecf9b18c08d@dragonslave.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4MTnQb0KFWz9sQd
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,67 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/16/22 1:35 PM, Kumar Kartikeya Dwivedi wrote:
-> On Fri, 16 Sept 2022 at 22:20, Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>
->> On 9/11/22 11:19 AM, Daniel Xu wrote:
->>> We're seeing the following new warnings on netdev/build_32bit and
->>> netdev/build_allmodconfig_warn CI jobs:
->>>
->>>       ../net/core/filter.c:8608:1: warning: symbol
->>>       'nf_conn_btf_access_lock' was not declared. Should it be static?
->>>       ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
->>>       declared. Should it be static?
->>>
->>> Fix by ensuring extern declaration is present while compiling filter.o.
->>>
->>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->>> ---
->>>    include/linux/filter.h                   | 6 ++++++
->>>    include/net/netfilter/nf_conntrack_bpf.h | 7 +------
->>>    2 files changed, 7 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/include/linux/filter.h b/include/linux/filter.h
->>> index 527ae1d64e27..96de256b2c8d 100644
->>> --- a/include/linux/filter.h
->>> +++ b/include/linux/filter.h
->>> @@ -567,6 +567,12 @@ struct sk_filter {
->>>
->>>    DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
->>>
->>> +extern struct mutex nf_conn_btf_access_lock;
->>> +extern int (*nfct_bsa)(struct bpf_verifier_log *log, const struct btf *btf,
->>> +                    const struct btf_type *t, int off, int size,
->>> +                    enum bpf_access_type atype, u32 *next_btf_id,
->>> +                    enum bpf_type_flag *flag);
->>
->> Can it avoid leaking the nfct specific details like
->> 'nf_conn_btf_access_lock' and the null checking on 'nfct_bsa' to
->> filter.c?  In particular, this code snippet in filter.c:
->>
->>           mutex_lock(&nf_conn_btf_access_lock);
->>           if (nfct_bsa)
->>                   ret = nfct_bsa(log, btf, ....);
->>          mutex_unlock(&nf_conn_btf_access_lock);
->>
->>
->> Can the lock and null check be done as one function (eg.
->> nfct_btf_struct_access()) in nf_conntrack_bpf.c and use it in filter.c
->> instead?
+Hi!
+
+Something in between 6.0.0-rc3 and 6.0.0-rc4 fixed this issue for me.
+
+Greetings
+Daniel
+> Hi everyone,
 > 
-> Don't think so, no. Because we want nf_conntrack to work as a module as well.
-Ah, got it.
-
-I don't see nf_conntrack_btf_struct_access() in nf_conntrack_bpf.h is 
-used anywhere.  Can be removed?
-
-> I was the one who suggested nf_conn specific names for now. There is
-> no other user of such module supplied
-> btf_struct_access callbacks yet, when one appears, we should instead
-> make registration of such callbacks properly generic (i.e. also
-> enforce it is only for module BTF ID etc.).
-> But that would be a lot of code without any users right now.
-
-The lock is the only one needed to be in btf.c and 
-nfct_btf_struct_access() can be an inline in nf_conntrack_bpf.h instead?
+> 
+> (please keep me CC as I am currently not subscribed to LKML)
+> 
+> 
+> Since  v5.19-rc4 this box got some *loud* distorting sound on boot and 
+> after some time without any sound if something plays sound again from 
+> the integrated speakers in my monitor.
+> 
+> 
+> I managed to bisect this down to:
+> 
+>> commit 202773260023b56e868d09d13d3a417028f1ff5b
+>> Author: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> Date:   Fri Jun 17 15:24:02 2022 +0300
+>>
+>>    PM: hibernate: Use kernel_can_power_off()
+>>
+> 
+> Reverting that commit on top of v5.19-rc6 does indeed fix the problem here.
+> 
+> Any ideas?
+> 
+> 
+> Greetings,
+> 
+> Daniel
+> 
 
