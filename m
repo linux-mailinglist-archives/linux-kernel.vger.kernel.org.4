@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95CD5BAAB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512615BAAF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiIPKSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S232125AbiIPK0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiIPKRM (ORCPT
+        with ESMTP id S232090AbiIPKYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:17:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BC6AEDAF;
-        Fri, 16 Sep 2022 03:12:24 -0700 (PDT)
+        Fri, 16 Sep 2022 06:24:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6FC71BE5;
+        Fri, 16 Sep 2022 03:15:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F5A2B8253E;
-        Fri, 16 Sep 2022 10:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7207C433D6;
-        Fri, 16 Sep 2022 10:11:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A6CC62A32;
+        Fri, 16 Sep 2022 10:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45227C433C1;
+        Fri, 16 Sep 2022 10:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323105;
-        bh=vmKrB7uWruve/xUlBF9Cg4D2v9bGJBJGykfyeN0wSKA=;
+        s=korg; t=1663323244;
+        bh=D8OLYocK3VvezB1I385mYwbHg2YAI00QvEOBRPpGGBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SOKVMnce6M1HHKuCHGIINIEVD4/6TY/G7r9hMaBSNDYP7r16z3y+CayhN4J4Ybs3j
-         KFrLK3dmMcRlevbFxniX1OdxhBmSHBFIvDq6PhJ2GtThur4/ogznskV1ycNKy08yO3
-         mChjE+/9CZZf7b9lDys6E8PrbpNsCxHcR8gyqges=
+        b=viPO3Z1yc+vhicVMwesqjrMuTkLVZpFn0cR7uCRJuqIPCHIAAhPT/P80LXRr5wjxA
+         Q8w3/6NgHcpZFDtHeNrNQvLCKWvfDX5Z8fUqhZdB7CqlDauh3d2KiGC8om+zsBlxgr
+         8gZ4aZXNUWwIjwrYosVJDdGtIp70KjV3udZ7nppQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, Michael Guralnik <michaelgur@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 16/35] hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
-Date:   Fri, 16 Sep 2022 12:08:39 +0200
-Message-Id: <20220916100447.621806325@linuxfoundation.org>
+Subject: [PATCH 5.19 06/38] RDMA/mlx5: Fix UMR cleanup on error flow of driver init
+Date:   Fri, 16 Sep 2022 12:08:40 +0200
+Message-Id: <20220916100448.711329829@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-References: <20220916100446.916515275@linuxfoundation.org>
+In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
+References: <20220916100448.431016349@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Maor Gottlieb <maorg@nvidia.com>
 
-[ Upstream commit 09e52d17b72d3a4bf6951a90ccd8c97fae04e5cf ]
+[ Upstream commit 9b7d4be967f16f79a2283b2338709fcc750313ee ]
 
-devm_regulator_register() can return -EPROBE_DEFER, so better use
-dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+The cited commit removed from the cleanup flow of umr the checks
+if the resources were created. This could lead to null-ptr-deref
+in case that we had failure in mlx5_ib_stage_ib_reg_init stage.
 
-It is also more informative, which can't hurt.
+Fix it by adding new state to the umr that can say if the resources
+were created or not and check it in the umr cleanup flow before
+destroying the resources.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 04876c12c19e ("RDMA/mlx5: Move init and cleanup of UMR to umr.c")
+Reviewed-by: Michael Guralnik <michaelgur@nvidia.com>
+Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
+Link: https://lore.kernel.org/r/4cfa61386cf202e9ce330e8d228ce3b25a36326e.1661763459.git.leonro@nvidia.com
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/infiniband/hw/mlx5/mlx5_ib.h | 1 +
+ drivers/infiniband/hw/mlx5/umr.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 63b616ce3a6e9..6d5b228032cad 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2463,11 +2463,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+index 7460e0dfe6db4..c2cca032a6ed4 100644
+--- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
++++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+@@ -718,6 +718,7 @@ struct mlx5_ib_umr_context {
+ };
  
- 		rdev = devm_regulator_register(dev, &info->reg_desc[i],
- 					       &config);
--		if (IS_ERR(rdev)) {
--			dev_err(dev, "Failed to register %s regulator\n",
--				info->reg_desc[i].name);
--			return PTR_ERR(rdev);
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(dev, PTR_ERR(rdev),
-+					     "Failed to register %s regulator\n",
-+					     info->reg_desc[i].name);
- 	}
+ enum {
++	MLX5_UMR_STATE_UNINIT,
+ 	MLX5_UMR_STATE_ACTIVE,
+ 	MLX5_UMR_STATE_RECOVER,
+ 	MLX5_UMR_STATE_ERR,
+diff --git a/drivers/infiniband/hw/mlx5/umr.c b/drivers/infiniband/hw/mlx5/umr.c
+index e00b94d1b1ea1..d5105b5c9979b 100644
+--- a/drivers/infiniband/hw/mlx5/umr.c
++++ b/drivers/infiniband/hw/mlx5/umr.c
+@@ -177,6 +177,7 @@ int mlx5r_umr_resource_init(struct mlx5_ib_dev *dev)
+ 
+ 	sema_init(&dev->umrc.sem, MAX_UMR_WR);
+ 	mutex_init(&dev->umrc.lock);
++	dev->umrc.state = MLX5_UMR_STATE_ACTIVE;
  
  	return 0;
+ 
+@@ -191,6 +192,8 @@ int mlx5r_umr_resource_init(struct mlx5_ib_dev *dev)
+ 
+ void mlx5r_umr_resource_cleanup(struct mlx5_ib_dev *dev)
+ {
++	if (dev->umrc.state == MLX5_UMR_STATE_UNINIT)
++		return;
+ 	ib_destroy_qp(dev->umrc.qp);
+ 	ib_free_cq(dev->umrc.cq);
+ 	ib_dealloc_pd(dev->umrc.pd);
 -- 
 2.35.1
 
