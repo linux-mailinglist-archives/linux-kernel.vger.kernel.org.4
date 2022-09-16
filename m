@@ -2,118 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AAF5BA59B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC055BA5A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIPEEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S229608AbiIPEQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIPEEk (ORCPT
+        with ESMTP id S229544AbiIPEQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:04:40 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB805FDB;
-        Thu, 15 Sep 2022 21:04:37 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v4so19178400pgi.10;
-        Thu, 15 Sep 2022 21:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VrgSKop653uzbaesHvcljAJltI+axahl5nYIdGS3Efo=;
-        b=lWJ80eZ9CT92Tfh/L0WSsneWuoKkY7Rzn8CKtuL2AGRirYrAXb7YbF1YFk0xWzCIib
-         RQc3dAcCvCVPZ9KtN41YwgT3WVw0ki8Ng193Lu4Yb33NNwDpkPXC34rObNcYlnR1b9gW
-         tsviT4PmOelgsw2YtY7RLjTCaZ8Dp3CDChvtTPNtU3904A/WSUR6TwodZCVHZ8Ua/7E+
-         XwQdJCrgMK6eEokGu+ZJ72uJe8T1wdm2rxQBSF9CTG+En8PQ99LKtaz9PyLHqyE6sFHV
-         bxF6k1A7u4PWLn5BkOnDyPNKswqXOP0oo9j3QebGKe4EnDge7WDDFhnBhRkOVTyO+tpq
-         tBBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VrgSKop653uzbaesHvcljAJltI+axahl5nYIdGS3Efo=;
-        b=uwUO7+7g6yU6u5RpS5+OEqQA6CSiP1V3VAYzO4GVS1XCMg82K0BD2bYRn9aVv65Rwn
-         XkZGnMqZaGYnHHV0qpSWU2sz/wkt75S/LEaayRQejsFWP3w23PpgV+ltrDYCY/8PZtSv
-         qOADY7G8HZkUMdU+A95Yh7FJ5n0JbbEexowW0lUR1Q1wLbj5BfPWJR+GiKeCvacTZlxz
-         Hd+wG7TBqpLYgxKGYSzLq9KSZmZ4LMsQB1m5qVFjCWhvl/wZvL1vycQKaQo4F4TdGr3v
-         Jlv/z4pXifGPLJScMSfK/9tjbdEFoaoVU+v7ZK1+/fNMVxEAxCdBvda1+od6azrRYe9B
-         vyLg==
-X-Gm-Message-State: ACrzQf09oXyO3GZRfBsSj96k/yu7N0nokhS/zCzb9dNvGj8GIMCcvBGQ
-        GJf4NtN+5bxpX8d7Omx3fB6Nha7UeZHP49Q+
-X-Google-Smtp-Source: AMsMyM7u93ksKvcY3eedDx54QSCHLbx2y+4hH8cSnbWk95Fkf832yMYYpz5pgVztACyipQgXo0YQpQ==
-X-Received: by 2002:a63:2c8:0:b0:439:3806:32f6 with SMTP id 191-20020a6302c8000000b00439380632f6mr2815202pgc.217.1663301076458;
-        Thu, 15 Sep 2022 21:04:36 -0700 (PDT)
-Received: from localhost.localdomain ([103.150.184.130])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902e75200b0017849a2b56asm7286423plf.46.2022.09.15.21.04.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 21:04:35 -0700 (PDT)
-From:   Yunlong Jia <ecs.beijing2022@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Henry Sun <henrysun@google.com>,
-        Yunlong Jia <yunlong.jia@ecs.com.tw>,
-        Bob Moragues <moragues@chromium.org>,
-        Yunlong Jia <ecs.beijing2022@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: Add touchscreen for pazquel360
-Date:   Fri, 16 Sep 2022 04:04:20 +0000
-Message-Id: <20220916040330.1.Ia3be91283bd937d08e7321140c89e4a0e2b78cf6@changeid>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 00:16:51 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE339F747;
+        Thu, 15 Sep 2022 21:16:50 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B3D845C0082;
+        Fri, 16 Sep 2022 00:16:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 16 Sep 2022 00:16:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1663301809; x=
+        1663388209; bh=hjMcp89C2jkXIYsBxRnx/xoB4u1WmalrxLV/Xe3flCk=; b=m
+        DBiIIiCyDyFeVeQm3ja9dS8EX6NCDF9tzHhW8DHE09A7U3kAckcnhqzJicrEhrrt
+        8vv7t7QuSRe/U1OTpQWipnepf/O9GA+6tNblM8XGeQaxyU0eZa+PZZqvmTVQsxeL
+        k2kVgGikUoWx10lU1UOmd4wrUeQXGGuN0Rd9wjmT+G30KzjRKlBDP3XEaLr/2zCb
+        tho4/T47Y7J2TtT1SB/Vy8yAzd6zIHeSBVBRzL108Gg9r2kUvmC3sI/pZWt+Sztc
+        /lTvzc5SJuVYhnXjnqsvSD2bL7QNjNmCghLOdCTSIyn+sQQH1KwnG6dr9PDHV6yN
+        PGJMUz8XQam13QdK7Q5UQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663301809; x=
+        1663388209; bh=hjMcp89C2jkXIYsBxRnx/xoB4u1WmalrxLV/Xe3flCk=; b=C
+        CYWWIVEE4m7VNW7jhFBd1UIjfS1EslnN1EGBqP4+EgN4Z9hGnYPeKhiBAimVwVkW
+        r8mbXSfdg2aFESQ9CpvZ3G1GGHKoeEPxbCuhBEaIj0xoT1oPI9G38cTLmg14VUqn
+        X+hO4XoBd0+op2WAj7yqtRVMl9Q0UyNOrO1Ez7FeH6pAKftfwRWjvtVt8shqriUw
+        yXj0uz+qiZ0j/B58Nvs0Ib+YIYqMDVHcLy7Or+YHDfKcNSftldjHwVROafz5DicP
+        IoF0pJO74a6/I2Cpw1c1pwTeUJ+em3BRXqtnPVEIKRAHfYl9CvedWXN+cw0rFXG9
+        lW0G4oDobqJZBxK7SbJvQ==
+X-ME-Sender: <xms:sfgjYz4e7MZ42PmEBnedXq5TxML7oaZ6LgnllFHVIQTfH4176evBUg>
+    <xme:sfgjY46w0sLpfSkfwbYQIA3bZa5Idxc2wtLsnKyQqJF3017ntC5hv69Yp8un8a7bt
+    nGn1hRN5-R8rYxXpg>
+X-ME-Received: <xmr:sfgjY6cYnRyoKYgZm3LEvcMJNuP-9m7reDw_SasGJ5AAptkCGmswBkVxG4L3QXU4Kwq8R1zzcbS1bDWaiUNKvr1DnaM9pcTQ4i7oNSnEOdpUrC9Za4jPbn-kzg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeejgfffhfdujeeftdeuudeguedttefgieetffffheejuefguedv
+    heejteeftdfftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:sfgjY0L14CMoVti6SmIHeVX1vQ0b4zYnofIgkJl4I5UN1q8ZcwzhLQ>
+    <xmx:sfgjY3J9PfR1sng34eJL-iSZJDiO9FGZEakjIJsJB6SMzv2lXyngcg>
+    <xmx:sfgjY9xx4T7iVJ82LzvUP1sLynnc5puuVLAEcIEz38B-eBdV9UyDIQ>
+    <xmx:sfgjY4XqBd3fnHIM93wJlm0XJYToap_wV12HbzBvrh6iZSZ3c9GQFw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 16 Sep 2022 00:16:48 -0400 (EDT)
+Message-ID: <4358760c-92b1-f77e-9bed-42e647afbc3e@sholland.org>
+Date:   Thu, 15 Sep 2022 23:16:47 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     wens@csie.org
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev
+References: <20220621034224.38995-1-samuel@sholland.org>
+ <20220621034224.38995-5-samuel@sholland.org>
+ <CAGb2v64Mrn88+w5kCbMn7Z23-UdyrTG-Q2cboPswMj=9z4HgrQ@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v2 4/4] ARM: dts: axp22x/axp809: Add GPIO controller nodes
+In-Reply-To: <CAGb2v64Mrn88+w5kCbMn7Z23-UdyrTG-Q2cboPswMj=9z4HgrQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The model used is elan ekth3915, compatible with ekth3500.
+On 6/26/22 08:03, Chen-Yu Tsai wrote:
+> On Tue, Jun 21, 2022 at 11:42 AM Samuel Holland <samuel@sholland.org> wrote:
+>>
+>> These PMICs all contain a GPIO controller. Now that the binding is
+>> documented, wire up the controller in the device tree.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>  arch/arm/boot/dts/axp22x.dtsi | 18 ++++++++++++++++++
+>>  arch/arm/boot/dts/axp809.dtsi | 19 +++++++++++++++++++
+>>  2 files changed, 37 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/axp22x.dtsi b/arch/arm/boot/dts/axp22x.dtsi
+>> index a020c12b2884..5c233c84be92 100644
+>> --- a/arch/arm/boot/dts/axp22x.dtsi
+>> +++ b/arch/arm/boot/dts/axp22x.dtsi
+>> @@ -67,6 +67,24 @@ battery_power_supply: battery-power {
+>>                 status = "disabled";
+>>         };
+>>
+>> +       axp_gpio: gpio {
+>> +               compatible = "x-powers,axp221-gpio";
+>> +               gpio-controller;
+>> +               #gpio-cells = <2>;
+>> +
+>> +               /omit-if-no-ref/
+>> +               gpio0_ldo: gpio0-ldo-pin {
+>> +                       pins = "GPIO0";
+>> +                       function = "ldo";
+>> +               };
+>> +
+>> +               /omit-if-no-ref/
+>> +               gpio1_ldo: gpio1-ldo-pin {
+>> +                       pins = "GPIO1";
+>> +                       function = "ldo";
+>> +               };
+>> +       };
+>> +
+> 
+> We have
+> 
+>     reg_ldo_io0: ldo-io0 {
+>             pinctrl-names = "default";
+>             pinctrl-0 = <&gpio0_ldo>;
+>             /* Disable by default to avoid conflicts with GPIO */
+>             ...
+>     }
+> 
+> in axp81x.dtsi . Should we add it here and for axp803.dtsi as well?
 
-Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
+Actually, I don't think these pinctrl nodes should exist at all. The
+regulator already sets the pinmux, because that is the only way to turn
+the regulator on/off. So I think we should leave it alone here.
 
----
+Regards,
+Samuel
 
- .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
-index 5702325d0c7b..14ea94ce90c1 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
-@@ -14,6 +14,28 @@
- 	realtek,dmic-clk-rate-hz = <2048000>;
- };
- 
-+ap_ts_pen_1v8: &i2c4 {
-+	status = "okay";
-+	clock-frequency = <400000>;
-+
-+	ap_ts: touchscreen@10 {
-+		compatible = "elan,ekth3500";
-+		reg = <0x10>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-+
-+		hid-descr-addr = <0x0001>;
-+
-+		vcc33-supply = <&pp3300_ts>;
-+		vccio-supply = <&pp1800_l10a>;
-+		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+
- &keyboard_controller {
- 	function-row-physmap = <
- 		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
--- 
-2.17.1
+> Otherwise,
+> 
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
 
