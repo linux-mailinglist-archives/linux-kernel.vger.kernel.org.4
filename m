@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7A85BAF81
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B905BAF74
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiIPOkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S231135AbiIPOfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiIPOkT (ORCPT
+        with ESMTP id S231175AbiIPOfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:40:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F4A36DFB;
-        Fri, 16 Sep 2022 07:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D24AD62C1E;
-        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39D14C433D7;
-        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663339215;
-        bh=BMgQBKNJt/brrMvAlgA6oyjbl+rWt/iab8EHKpRf06M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CiGtpE9mOyb+CgnWFA6VOOMy4xKG26cXtDCNpvWZCNY83XaZCooWP0WcxqIfoviub
-         1ZQ60ure++mQKwPfklJh5biO9+vht9aZtdx7YoR36ZOvEg7yT0OuMN6nGvTdh4GSmo
-         5USZCr9fZJHnKUoO8gVgSzpiYajXwy+Y/dJ7plhhXqElWtIFqaB/mk3GsvhOn+kHGm
-         xJ2gWgU2ZW37twisubr3i4Z4aIOyAnlug+UNEhnEyqDf57q+vCj31W1x9YO9mgBJ3h
-         iz54nW3B6EJXiJyGS2J4wHknABymek/j5CSIeJ7dKbqGSl3z+9wf2f+BdS6tfHTWJK
-         beEvmG9GW4g6w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 160F8C59A58;
-        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Sep 2022 10:35:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBD3AE69
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663338919; x=1694874919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DU0ASoiYHnD2XYvJnAjTDIYjyHka9r6t0mFD1c/2KII=;
+  b=dUQ188Wx6IDpm6doIr+pVwVzkwqbYFilgSJeMdEMJ1njl5C9bEPdoijz
+   VD3BYb6oNiD3RjSjcCZ59vnQ8nkjZIj+PEoYhDM743XExIDPlTyUycA0Q
+   3wQH1aC0sbbqErhuojPfBTlxQKZD5UY1bPIOuks6erdVBES07fgjLPSlK
+   s9n8+I/uKlEPKsQd7ZSi+40kXAL1VbjDF+od2BcJ3t6KBn1Wy3oxgFcFS
+   ga1tcxtscS3VHmH4hmRdeSqlCFdvcNIs9hj8XWO3xyBJISCqVkbsgWfF3
+   t4Rk9ENfD5oZ0hPRavM/WZt5hfkvtdOqFHBMOlzzs7Pq98bHC/vAIL3t1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="297726935"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="297726935"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 07:35:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="793115937"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga005.jf.intel.com with ESMTP; 16 Sep 2022 07:35:18 -0700
+Date:   Fri, 16 Sep 2022 07:41:13 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 01/23] sched/task_struct: Introduce classes of tasks
+Message-ID: <20220916144112.GA29395@ranerica-svr.sc.intel.com>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-2-ricardo.neri-calderon@linux.intel.com>
+ <YyHbOqoH+V6FUY68@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] tcp: Use WARN_ON_ONCE() in tcp_read_skb()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166333921508.20219.3065242215536407480.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Sep 2022 14:40:15 +0000
-References: <20220908231523.8977-1-yepeilin.cs@gmail.com>
-In-Reply-To: <20220908231523.8977-1-yepeilin.cs@gmail.com>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        peilin.ye@bytedance.com, cong.wang@bytedance.com,
-        jakub@cloudflare.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyHbOqoH+V6FUY68@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu,  8 Sep 2022 16:15:23 -0700 you wrote:
-> From: Peilin Ye <peilin.ye@bytedance.com>
+On Wed, Sep 14, 2022 at 03:46:34PM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 09, 2022 at 04:11:43PM -0700, Ricardo Neri wrote:
 > 
-> Prevent tcp_read_skb() from flooding the syslog.
+> >  include/linux/sched.h | 7 +++++++
+> >  init/Kconfig          | 9 +++++++++
+> >  2 files changed, 16 insertions(+)
+> > 
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index e7b2f8a5c711..acc33dbaa47c 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -117,6 +117,8 @@ struct task_group;
+> >  					 __TASK_TRACED | EXIT_DEAD | EXIT_ZOMBIE | \
+> >  					 TASK_PARKED)
+> >  
+> > +#define TASK_CLASS_UNCLASSIFIED		-1
 > 
-> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> > +#ifdef CONFIG_SCHED_TASK_CLASSES
+> > +	/* Class of task that the scheduler uses for task placement decisions */
+> > +	short				class;
+> > +#endif
+
+Thanks for your feedback Peter!
 > 
-> [...]
+> You're missing a hunk for init/init_task.c for this non-zero init value.
 
-Here is the summary with links:
-  - [net] tcp: Use WARN_ON_ONCE() in tcp_read_skb()
-    https://git.kernel.org/netdev/net/c/96628951869c
+Ah, yes. I'll add it.
+> 
+> Does we really have to use a signed type and non-zero init value?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+At least on Intel processors, class 0 is a valid class. The scheduler needs to
+have a notion of unclassified tasks and decide how to handle them, IMO.
 
+Intel processors currently support 8-bit, unsigned classes. I doubt other
+architectures will ever support more than 256 classes. Short can handle all the
+possible classification values and also the unclassified case.
 
+On the other hand, class 0 could be the default classification unless hardware
+classifies differently. 0 would be special and need to be documented clearly.
+This would work for Intel processors.
+
+Thanks and BR,
+Ricardo 
