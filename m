@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C605BAC9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C1A5BAC9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiIPLkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S231362AbiIPLkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 07:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiIPLj5 (ORCPT
+        with ESMTP id S229863AbiIPLkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:39:57 -0400
+        Fri, 16 Sep 2022 07:40:00 -0400
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E329CAA;
-        Fri, 16 Sep 2022 04:39:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C52B602;
+        Fri, 16 Sep 2022 04:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663328395;
-  x=1694864395;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vf3z5znW0KooHgZEWacieLyXs7JGdr3NGOK/5vrCD1M=;
-  b=eFy+FW6CHrDWf1kO4Y3dIcd4NPx0J4mm+wXoPThFKfHkvERl1A7zD7ij
-   3b1SFjJ0lcT2R39ytQ5GY4vnH6GEzbUPo4/T+Ytn4Rc6W31WEMm1pkUey
-   mivygkCkkv0oJun6VFxS4W3YuCo1MvCNtqr+Zr+kfOUGmKLPDJiZN8Zs3
-   UaINdzhG4flDqT5HlI3Q5sE30KNAnizc5oEPEHnAI2aFKxbTkEsYUbmwM
-   /vfPauScaAR/FYcg+BAf36ZwiXaLgSdjdv13icUCY3AIR7+XtkOSiSwuq
-   Fb9PPmBsLtkhBGDNeOHHnh1ShJdVwltxvFKAZjOlOVSnrtS5HuASMbRF+
-   w==;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1663328398;
+  x=1694864398;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0O+QKem305LoINGTWe8PLbq0UAM4vzWU5ktHn5B5a3A=;
+  b=L5guGB2OTf6KAA7BAswqBS/MOwYQk0GNo5Mkyyv5kuS+WzlohbYhJ6IP
+   NjGl9aOAe6yke3BZulIikuVE7jd7xvpZCgJlwG3SuwbSojDAC/3r0m43W
+   1x+s/YhQahY12QQL9N6ySV4IOql0MrZgF+R9KApRkxtZXjGZ5XncS00MT
+   MOKAkChA1tqIs0qGFbWxjNuAeXGOtYcGzv+zSw2O+Fe3AWLPTDG2Ar4gc
+   aBDHM4RYp5ZKHBrLHgCabe3THMwkSs46MAjIomh5q+j56ULUZZEqorFXm
+   dqOAqftNCpQw72E0v/Ky6amnl17JCkJf0NB5C3yK7E43YSf6/GGaRP5zQ
+   A==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <broonie@kernel.org>, <krzysztof.kozlowski@linaro.org>,
         <andi@etezian.org>
@@ -37,10 +37,12 @@ CC:     <kernel@axis.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 0/4] spi: Fix DMA bugs in (not only) spi-s3c64xx
-Date:   Fri, 16 Sep 2022 13:39:47 +0200
-Message-ID: <20220916113951.228398-1-vincent.whitchurch@axis.com>
+Subject: [PATCH 1/4] spi: spi-loopback-test: Add test to trigger DMA/PIO mixing
+Date:   Fri, 16 Sep 2022 13:39:48 +0200
+Message-ID: <20220916113951.228398-2-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220916113951.228398-1-vincent.whitchurch@axis.com>
+References: <20220916113951.228398-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -53,32 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes some bugs I found while running spi-loopback-test with
-spi-s3c64xx.  The first problem (which I actually noticed while trying to fix
-the second problem with transfers >64KiB) seems to be a generic issue which
-affects several drivers so I fixed it in the core.
+Add a test where a small and a large transfer in a message hit the same
+cache line.  This test currently fails on spi-s3c64xx on in DMA mode
+since it ends up mixing DMA and PIO without proper cache maintenance.
 
-The series has been tested on ARTPEC-8, which has a version of the IP similar
-to Exynos 7 and with 64 byte FIFOs (compatible with "tesla,fsd-spi").
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/spi/spi-loopback-test.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Cc: alim.akhtar@samsung.com
-Cc: linux-spi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-
-Vincent Whitchurch (4):
-  spi: spi-loopback-test: Add test to trigger DMA/PIO mixing
-  spi: Save current RX and TX DMA devices
-  spi: Fix cache corruption due to DMA/PIO overlap
-  spi: s3c64xx: Fix large transfers with DMA
-
- drivers/spi/spi-loopback-test.c |  27 +++++++
- drivers/spi/spi-s3c64xx.c       |  10 +++
- drivers/spi/spi.c               | 126 +++++++++++++++++++++++---------
- include/linux/spi/spi.h         |   4 +
- 4 files changed, 131 insertions(+), 36 deletions(-)
-
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 4d4f77a186a9..dd7de8fa37d0 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -313,6 +313,33 @@ static struct spi_test spi_tests[] = {
+ 			},
+ 		},
+ 	},
++	{
++		.description	= "three tx+rx transfers with overlapping cache lines",
++		.fill_option	= FILL_COUNT_8,
++		/*
++		 * This should be large enough for the controller driver to
++		 * choose to transfer it with DMA.
++		 */
++		.iterate_len    = { 512, -1 },
++		.iterate_transfer_mask = BIT(1),
++		.transfer_count = 3,
++		.transfers		= {
++			{
++				.len = 1,
++				.tx_buf = TX(0),
++				.rx_buf = RX(0),
++			},
++			{
++				.tx_buf = TX(1),
++				.rx_buf = RX(1),
++			},
++			{
++				.len = 1,
++				.tx_buf = TX(513),
++				.rx_buf = RX(513),
++			},
++		},
++	},
+ 
+ 	{ /* end of tests sequence */ }
+ };
 -- 
 2.34.1
 
