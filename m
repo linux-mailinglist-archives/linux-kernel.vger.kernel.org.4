@@ -2,81 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6415BAD88
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06B95BAD8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbiIPMgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S230113AbiIPMlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiIPMg2 (ORCPT
+        with ESMTP id S229501AbiIPMld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:36:28 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF2895E4;
-        Fri, 16 Sep 2022 05:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1663331785;
-        bh=t4xnxRq1ZGQzyp5k8NHFr21kJCmtrb7F9WQ+abAovjM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=f44inrQU1lWV8Vo+J8WTnxf0JTL7eB7vMxtgK46KrznQDj+FN1/++jxJEvDRureuA
-         czW5LB+N7jarXEQQFKUREgCZSfoAMB6BDorVuomwXYevIGTXTTPwRy78drkhObJAV6
-         GsssiKrrPXaKOXvAwuFE7abuItFt8LcOaZttdnww=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.35.201]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTAFh-1ojmLu0dBf-00UZDg; Fri, 16
- Sep 2022 14:36:25 +0200
-Message-ID: <a1e7334c-6e53-6af6-24fb-840b06741664@gmx.de>
-Date:   Fri, 16 Sep 2022 14:36:24 +0200
+        Fri, 16 Sep 2022 08:41:33 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3AA6AEB;
+        Fri, 16 Sep 2022 05:41:32 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28GCP112025532;
+        Fri, 16 Sep 2022 12:41:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=8MVoDvB4SqNFBOByHaTdY7CgpP45sKEOY1RYgqE6ac0=;
+ b=mUbv0oH8rIUZgsogEk6hRYrmwdj01DwaVw7YMc79YS8qEUoBCZBVkst57GGIF2PbX0KD
+ 1kbcXX9BkTJs57snbwDesSXzgmpvd/qyYsJ4vew+kTMbJEpf6BY04nIi5tWHtqXk+Rdz
+ wnEOsBnxJVf8UmszmoX9ahGkcXLjWZzUnX2ucYQvEAgcgdUptAFcYjqzLbkRjY+/9e/1
+ 8i9jW3gfxf+Pvmfmaur3nxFZ7wesOn3YUWGHlQtMNSiBa9Xi7OX9qY7lwEl3elLMHqpl
+ RHVzKWfDj6daQiBXdOScGy8nGpITJ2z57r4ueJgvMVOTWEtPvyY84JtL63x+zBpHWJb2 YQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jms4p0sxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Sep 2022 12:41:22 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28GCRr9V012110;
+        Fri, 16 Sep 2022 12:41:22 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jms4p0svb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Sep 2022 12:41:21 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28GCcBc3002645;
+        Fri, 16 Sep 2022 12:41:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3jm91t8r35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Sep 2022 12:41:19 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28GCfGiU42271022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Sep 2022 12:41:16 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA790AE051;
+        Fri, 16 Sep 2022 12:41:16 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F815AE045;
+        Fri, 16 Sep 2022 12:41:16 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Sep 2022 12:41:16 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] kbuild: rpm-pkg: fix breakage when V=1 is used
+Date:   Fri, 16 Sep 2022 14:41:12 +0200
+Message-Id: <20220916124112.1175522-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.19 00/38] 5.19.10-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Ol0kC20tBY7tOi1e2TYdIrBhjePFtA41cSI6+miWs6B787s95EY
- PA8lAYeeS6zcdweuMLeNp5/mWWyC4SsWpYaLfxj0PoamNnSoKdEgyeDk9BujKlOuEWp2x4Y
- JSiYAKYzbb1NFPmsmTCRIktN6qWXe8H5oOYnk7phi2mYeWL7kzBz4R2TX3uQk5t2vxSXtdn
- VWV+1NErVjRJ5jgSbe6UQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W1s+znv9b1s=:/6Fs+PYNbghAVkbhmSDvtH
- or7n+82MolrivZv+Fd0srRTQ32HmARcBJpKNHpa5Ans9Rk2LHP2ffg65S8cK5l2+KZ06up52k
- daqBe+JsMcCiNkzSnukgf2FEOPTa/XLCoBMesHHUlC0AmjNfKmloKhDy2K4APFOTPa40NWhM+
- lkunzYPj7h2kOqxBSynLygvGByXG9QpwsvK0PvcuTzRcXST9zCM9BWIkaN70yC/6PFZe6b3O5
- IUrW/PuF9NChp8Mm07Qo1LThhlz/UYPAOtyNGI+FW9AlrtCSvPFgmjESJiigBinLp1RZZOK4E
- pCovQBjDzJWsAAyQf1UBqtCvblZfDK+jHWzDwzaB2pmnVwWYu8+SAd9rjbUxzTgm7S+jr5FFI
- teHiyn83Og2wLj4scduLrEdhP/6FnkDJbSgANgPGyIJQ1hYxhPfaNeyVb6SSg81aq0nmc4hP7
- uEILR0XzbABWblFmEm2f6UrDES/B32/aBneyU5fu5JtptkzklyDxud9tmklmvf7MRP47U0mTz
- FJAvSvnQc0lttyCCT33B95jx61fAVPGOxRbX8TO8x0IbywKy9YDFt3Cx2Ae9oxSp6Qu+0EsA6
- TFXE6/PCGAVneDlpfjxWIZpo3ePP0Th082ng8FXZi2D5tfFjZByX4lPs2znP3H+/VvUCte+RL
- TzeFWCCcqU7OEq6ZE0yBPlHf6HiLhGLew6y4CtXEmTCUDENzwJTAafiHlLRS0ICriq+Iy2m63
- 1K/kZ80B5Bot3scK7g1Je3gZhB942lXYq8uYGRgHtWVzQMZiiM3MEJDPkMpbx3F8P49ok4AEh
- OaOjGr/wHC54fknCqY6/1uSyMCvFLRpKt61qW7sv0FklbUcA+a9WwGxSVyFsMaSrSdxn2CJX1
- /gfR7l7NzrJYqnAIoqy97Aryz66l5nPqS4YlD9R7EVv4PQB0K+iS90hswkqa8svXadlOp62YN
- jyHyU7BrB9l1hMtXL4YRcCHMdVq0LjP70n3diyCET6C1AqUF7j1+gBWvqfD0hrA+dSfmjHA7S
- X+OTEv0tQlseikmyvqIpLrrysCMSdpevUs5YQWdFRvGCRggmJXP3nq+2FNl2jm/7HR7P6ONQW
- Fsp2l8cye4YUH/1a9WjIo0i4MHfyDGY8A0EfqDDxepB5aCofCkjD9dAentxHgPr/nFKwWGgip
- bC+v0=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lUz6XvSvSx7UF8zcAjmHR8jpqRQPNk2J
+X-Proofpoint-GUID: uU_xWPU3qkZCWUBC4OgQVjjtAS77-eIX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-16_06,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 phishscore=0 clxscore=1011
+ suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209160092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+Doing make V=1 binrpm-pkg results in:
 
-5.19.10-rc1
+ Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.EgV6qJ
+ + umask 022
+ + cd .
+ + /bin/rm -rf /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+ + /bin/mkdir -p /home/scgl/rpmbuild/BUILDROOT
+ + /bin/mkdir /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+ + mkdir -p /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot
+ + make -f ./Makefile image_name
+ + cp test -e include/generated/autoconf.h -a -e include/config/auto.conf || ( \ echo >&2; \ echo >&2 " ERROR: Kernel configuration is invalid."; \ echo >&2 " include/generated/autoconf.h or include/config/auto.conf are missing.";\ echo >&2 " Run 'make oldconfig && make prepare' on kernel src to fix it."; \ echo >&2 ; \ /bin/false) arch/s390/boot/bzImage /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot/vmlinuz-6.0.0-rc5+
+ cp: invalid option -- 'e'
+ Try 'cp --help' for more information.
+ error: Bad exit status from /var/tmp/rpm-tmp.EgV6qJ (%install)
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37 Beta)
+Because the make call to get the image name is verbose and prints
+additional information.
 
-Thanks
+Fixes: 21b42eb46834 ("kbuild: rpm-pkg: fix binrpm-pkg breakage when O= is used")
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+---
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
+I don't know much about Kbuild so there may be better ways to fix this.
+
+
+ scripts/package/mkspec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 8fa7c5b8a1a1..c920c1b18e7a 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -88,10 +88,10 @@ $S
+ 	mkdir -p %{buildroot}/boot
+ 	%ifarch ia64
+ 	mkdir -p %{buildroot}/boot/efi
+-	cp \$($MAKE image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELRELEASE
++	cp \$($MAKE -s image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELRELEASE
+ 	ln -s efi/vmlinuz-$KERNELRELEASE %{buildroot}/boot/
+ 	%else
+-	cp \$($MAKE image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
++	cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
+ 	%endif
+ $M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
+ 	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+-- 
+2.34.1
 
