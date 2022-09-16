@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CBD5BB03E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145105BB040
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiIPPbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S231769AbiIPPbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIPPbO (ORCPT
+        with ESMTP id S231734AbiIPPbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:31:14 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D63390839;
-        Fri, 16 Sep 2022 08:31:12 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1oZDJ7-00Gir7-07; Fri, 16 Sep 2022 15:31:09 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2] ARM: dts: imx6qdl-gw54xx: add CAN regulator
-Date:   Fri, 16 Sep 2022 08:31:07 -0700
-Message-Id: <20220916153107.1802079-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 11:31:21 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD25A5C74
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:31:20 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id ge9so9913201pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date;
+        bh=J3xtITp+FBk+leJje4oS/ahkcyhlokVvO9Au9VXbS3o=;
+        b=APflXrQEeSAodR3aW/lHhrwTb0mv3QkoUrwkaCnf/Ud/yluQnz5uHcshFadb2HNBE/
+         djbfv95JFohSBTsE5jxKqvazVEkKwRv2XIdt6vCzrywIdfttazkSDbngEQa5xp6FhPpL
+         wyl3kCEqZ4tI+ztRYolMLRr9Idle/BtYCpfN0tB8U0VjXuqyl8GAt4PBTyZVOOfMT/6k
+         A5V+K4jHZMWwAtpoBPriW9iuKaHcDcTszC9IlQhaSv8YbXOLtif8xW5FQ8161MCR22aZ
+         i5Zz7WiI6zyVH6AJzrwRHgCF47s/6hKMa79Jx03cU98aAyZ47bqk8Qd6zWigc/OoAyjV
+         Zvig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=J3xtITp+FBk+leJje4oS/ahkcyhlokVvO9Au9VXbS3o=;
+        b=oxUG1XTgazlRjRciG9nMhm5ROGEi109ydM7K2KH/tb3KRE0koSvSEQLik1xKT8/F+v
+         iXNkmdYqOQbjfrn5UFmknLxJ5apg5QHAx9HjB/eYM85fkelsxXt5TGSJcsOIKNjl8toG
+         wEbp3RHX9VPCNzW4LkRfdl40s1lFqTyG1aFFrqKzZE5Jw+4j9ZYqUKm92PA+T1eu7Jic
+         Zb9i601Ae7268vcHO4aj1MyfhwuUhNegLExLsVhlK/GQXt93856T3tfgRF17wJHOvNAm
+         F8DZ1SfKpMRWRNj7FaDi53WYTgbLjupV2Od1rCLsSXXoFPHW1PjE1bRj5rb1UrRmwHjA
+         vDbQ==
+X-Gm-Message-State: ACrzQf2rcQq+X0mxUHE3H4PjCqA3lWVYXs0NtWfNyUz62+8Ae28JI8RK
+        XGGBxb7h06Mtig0Hcnm7byfV1j8qagCnGh71wZI=
+X-Google-Smtp-Source: AMsMyM4Ns3o4TFKs5G1Mi+Ut5fApuqBRUPOUPJZktW5nwF6kbMgiaWfy2K/4RD98XhshOQ5nyfY+hQ==
+X-Received: by 2002:a17:902:b194:b0:176:d229:83bd with SMTP id s20-20020a170902b19400b00176d22983bdmr380983plr.174.1663342279425;
+        Fri, 16 Sep 2022 08:31:19 -0700 (PDT)
+Received: from localhost (vpn-konference.ms.mff.cuni.cz. [195.113.20.101])
+        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b00174d4fabe76sm14979760plh.214.2022.09.16.08.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 08:31:19 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 08:31:19 -0700 (PDT)
+X-Google-Original-Date: Fri, 16 Sep 2022 08:31:08 PDT (-0700)
+Subject: [GIT PULL] RISC-V Fixes for 6.0-rc6
+CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-f5d21762-1321-4d35-927c-d47e0749abc0@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GW54xx has a transceiver with a STBY pin connected to an IMX6 GPIO.
-Configure this as a regulator to drive it low when CAN is in use.
+The following changes since commit 20e0fbab16003ae23a9e86a64bcb93e3121587ca:
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
-v2:
-- move compatible to start of child node
-- fix typo in commit log
----
- arch/arm/boot/dts/imx6qdl-gw54xx.dtsi | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+  perf: RISC-V: fix access beyond allocated array (2022-09-08 13:50:25 -0700)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-gw54xx.dtsi b/arch/arm/boot/dts/imx6qdl-gw54xx.dtsi
-index cda48bf2f168..a9b04f9f1c2b 100644
---- a/arch/arm/boot/dts/imx6qdl-gw54xx.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-gw54xx.dtsi
-@@ -137,6 +137,16 @@ reg_3p3v: regulator@1 {
- 			regulator-always-on;
- 		};
- 
-+		reg_can1_stby: regulator-can1-stby {
-+			compatible = "regulator-fixed";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_reg_can1>;
-+			regulator-name = "can1_stby";
-+			gpio = <&gpio1 2 GPIO_ACTIVE_LOW>;
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
- 		reg_usb_h1_vbus: regulator@2 {
- 			compatible = "regulator-fixed";
- 			reg = <2>;
-@@ -200,6 +210,7 @@ IMX_AUDMUX_V2_PTCR_SYN
- &can1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_flexcan1>;
-+	xceiver-supply = <&reg_can1_stby>;
- 	status = "okay";
- };
- 
-@@ -687,7 +698,6 @@ pinctrl_flexcan1: flexcan1grp {
- 		fsl,pins = <
- 			MX6QDL_PAD_KEY_ROW2__FLEXCAN1_RX	0x1b0b1
- 			MX6QDL_PAD_KEY_COL2__FLEXCAN1_TX	0x1b0b1
--			MX6QDL_PAD_GPIO_2__GPIO1_IO02		0x4001b0b0 /* CAN_STBY */
- 		>;
- 	};
- 
-@@ -786,6 +796,12 @@ MX6QDL_PAD_SD4_DAT2__PWM4_OUT		0x1b0b1
- 		>;
- 	};
- 
-+	pinctrl_reg_can1: regcan1grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_GPIO_2__GPIO1_IO02		0x4001b0b0 /* CAN_STBY */
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA	0x1b0b1
--- 
-2.25.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.0-rc6
+
+for you to fetch changes up to 5b5f6556027ccb04c731988923c051fd2b2bad18:
+
+  RISC-V: Avoid coupling the T-Head CMOs and Zicbom (2022-09-16 02:59:06 -0700)
+
+----------------------------------------------------------------
+RISC-V Fixes for 6.0-rc6
+
+* A handful of build fixes for the T-Head errata, including some
+  functional issues the compilers found.
+* A fix to avoid bad page permission initialization, which manifests on
+  systems that may load modules early.
+* A fix for a nasty sigreturn bug.
+
+----------------------------------------------------------------
+I have one merge conflict as a result of a treewide fix, I'm getting some odd
+output from just showing the merge (it's showing some of the fix too), but I
+think the merge itself is OK.  My fix is to keep the write lock
+
+-       mmap_read_lock(mm);
+++      mmap_write_lock(mm);
+ +      ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
+ +                                  &masks);
+-       mmap_read_unlock(mm);
+++      mmap_write_unlock(mm);
+
+----------------------------------------------------------------
+Al Viro (1):
+      riscv: fix a nasty sigreturn bug...
+
+Heiko Stuebner (1):
+      riscv: make t-head erratas depend on MMU
+
+Palmer Dabbelt (2):
+      RISC-V: Clean up the Zicbom block size probing
+      RISC-V: Avoid coupling the T-Head CMOs and Zicbom
+
+Randy Dunlap (1):
+      riscv: fix RISCV_ISA_SVPBMT kconfig dependency warning
+
+Vladimir Isaev (1):
+      riscv: Fix permissions for all mm's during mm init
+
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/Kconfig.erratas          |  4 +--
+ arch/riscv/errata/thead/errata.c    |  1 +
+ arch/riscv/include/asm/cacheflush.h |  5 +++
+ arch/riscv/include/asm/set_memory.h | 20 +++---------
+ arch/riscv/kernel/setup.c           | 13 +-------
+ arch/riscv/kernel/signal.c          |  2 ++
+ arch/riscv/mm/dma-noncoherent.c     | 23 ++++++++------
+ arch/riscv/mm/init.c                | 29 ++++++++++++++---
+ arch/riscv/mm/pageattr.c            | 62 ++++++++++++++++++++++++++++++++-----
+ 10 files changed, 107 insertions(+), 53 deletions(-)
