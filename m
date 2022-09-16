@@ -2,76 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344355BAD00
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14DD5BAD0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiIPMIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S231293AbiIPMKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiIPMIS (ORCPT
+        with ESMTP id S229501AbiIPMKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:08:18 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193F6AFADC;
-        Fri, 16 Sep 2022 05:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=3sBrLZszBTwXrdkhDhI3TRiPwHJ3gCGVkiN5akonAyA=; b=add+KNbUGfKNimygvqrNno44qk
-        JAtUswvhSwRGSGk1A+1xsjn30E600n9BXMwKkznbrl0TrecSeFh+bbaFOphmXi2CguVh0GDFRBPfi
-        uakL1RO/3UJorlpZpyyaQxjazWqmOrnzeoTZ9MVqd5/Hm3dc4DmRPyW22ygushzxKZWE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oZA8W-00GuiQ-N4; Fri, 16 Sep 2022 14:08:00 +0200
-Date:   Fri, 16 Sep 2022 14:08:00 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [patch net-next] net: phy: micrel: PEROUT support in lan8814
-Message-ID: <YyRnIIZYhnyEXMqA@lunn.ch>
-References: <20220916112042.16501-1-Divya.Koppera@microchip.com>
+        Fri, 16 Sep 2022 08:10:35 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFAFB02A9;
+        Fri, 16 Sep 2022 05:10:33 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3452214cec6so257204957b3.1;
+        Fri, 16 Sep 2022 05:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=CRuPtm9mLoySIqLzdHqyZ1IbgS4zBvwylgrMlMJv3sc=;
+        b=UClSsp/C4HO4xWEczUQVssGecEPz0RD9ZApnbexavm4RlF6z6CrTtavcEvw/7Vr0TT
+         WNQDrrIOiA0BtoHXo8Ns2fRJITmenLUOsFOjKykiaJ6luYE7puP+AXhbbL65kSmMI2yc
+         zazhXXGzwjECxqg6hCH0sSmAGtECSADbzwsoaAS9YBHDM2eQEAwSDqcKTfQcTJvKd1In
+         QWPfySLDeFuuiDxjenxqzsAL2yBwWT3mT0eR5j9nzcY6z7am0DZmSvEHpvNbMI6OOrbg
+         Xv8LHYg867e07o8aKiQfN5uhfPGNQxvMtwbifvRAy4dtK06qvbz/24lVjp7g2qEMF3F4
+         Xpbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CRuPtm9mLoySIqLzdHqyZ1IbgS4zBvwylgrMlMJv3sc=;
+        b=h63IRUlU+5TpF88TRYgzhTfl05X5+4lgvTLaGOCS+ZIse6/YkTPtpE/QeVgHvfxXVP
+         xTDt7XcZZM7TE9Nv2OSiGB04yxUDu6j9/oqgL1EX9kncfjJ01OEu/nUjMYxBvVLV5lBj
+         OTGYHE4OHKttLp6qCtYb/3j0YRCfHqxGZ3Kk9aNahnxfiOpjTUyVTHIKMMQAXOuQxDGx
+         m/fU+ay1u3VvHaqGHDRFKnogD/ANGFLMqfUHEUJTX3mGGXjo493BFstLgUpPa3BlqntI
+         SHC1CbVLiLUy74FQM3BNYItYaHzHgdmY59QR7ySqR2a3egLgk2QJCOUEpwsVmzXbGGBi
+         XFvw==
+X-Gm-Message-State: ACrzQf3NoibEU27v2kQ2DTwJ0DxdHo9aph1LrEzzYNFl497wgdmLzEl5
+        AsG6MA/75hqGqDq63wv0LQZNXuoKGMTfPj9mu5Y=
+X-Google-Smtp-Source: AMsMyM6z53ELXSU8V4/Wie2GOwlyU/rWfkuGiA4kczX8ggJiVxz4SbnIPqprzBbRn+wB47ZDO3hcxlVMj4irzMUXpPc=
+X-Received: by 2002:a0d:d883:0:b0:346:88b5:f4ff with SMTP id
+ a125-20020a0dd883000000b0034688b5f4ffmr4053722ywe.355.1663330232764; Fri, 16
+ Sep 2022 05:10:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916112042.16501-1-Divya.Koppera@microchip.com>
+References: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YyRjiY5XRPglSHuN@paasikivi.fi.intel.com>
+In-Reply-To: <YyRjiY5XRPglSHuN@paasikivi.fi.intel.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 16 Sep 2022 13:10:05 +0100
+Message-ID: <CA+V-a8thLoy1f0-GK05958Qg8CzQ4wU3QHNwSW8-D_DmcZRoYw@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: ov5645: Convert OV5645 binding to a schema
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 04:50:42PM +0530, Divya Koppera wrote:
-> Support Periodic output from lan8814 gpio
-> 
-> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+Hi Sakari,
 
-Please Cc: the PTP Maintainer.
+Thank you for the review.
 
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_5MS_	9
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_1MS_	8
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_500US_	7
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_100US_	6
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_50US_	5
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_10US_	4
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_5US_	3
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_1US_	2
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_500NS_	1
-> +#define LAN88XX_PTP_GENERAL_CONFIG_LTC_EVENT_100NS_	0
-> +static int lan88xx_get_pulsewidth(struct phy_device *phydev,
-> +				  struct ptp_perout_request *perout_request,
-> +				  int *pulse_width)
-> +{
+On Fri, Sep 16, 2022 at 12:52 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, Sep 13, 2022 at 05:02:24PM +0100, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Convert the simple OV5645 Device Tree binding to json-schema.
+<snip>
+> > +        $ref: /schemas/media/video-interfaces.yaml#
+> > +        unevaluatedProperties: false
+> > +
+> > +        properties:
+> > +          clock-lanes:
+> > +            const: 0
+> > +
+> > +          bus-type:
+> > +            const: 4
+>
+> Please drop the two, they provide no information to the driver that already
+> knows this. (Unless of course, the driver supports other bus types these
+> bindings do not document. Some OV sensors do.) clock-lanes needs to go in
+> any case, and data-lanes are dependent on bus-type being 4 I presume.
+>
+Agreed, I will drop the above two and send a v2.
 
+> bus-type is also not present in the example.
+>
+Ahh, I missed that.
 
-A blank line between the #defines and the function would be good.
-
-  Andrew
+Cheers,
+Prabhakar
