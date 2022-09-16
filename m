@@ -2,78 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8D75BA94D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B1B5BA956
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiIPJUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S230151AbiIPJYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiIPJUr (ORCPT
+        with ESMTP id S229612AbiIPJY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:20:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F1A4D24E;
-        Fri, 16 Sep 2022 02:20:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A05A62967;
-        Fri, 16 Sep 2022 09:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1A4C433D6;
-        Fri, 16 Sep 2022 09:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663320043;
-        bh=DedkR12MGDILhlqL2Fcg9L71pkbsanV0/p9k6dJkPw8=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=YrHnKB9aCuyOlStG87qHn2vgKmhB8f/lOLDwdOlecy9wqckxXEOYcYC8qvslx5Da0
-         +mHdd1njdWesH2eDQmIFf1FbmOMdzB98kutUvtwJR2/KqaThjt4evOD0AaaSQXwqZZ
-         82GtuSknC4PPmIk5rjjFh15R631ASoVUf0x1oa2UNuM8e8EzGDKq5JlX8sIJY3gA9T
-         M7fFxAv05VEnhReFRqjAooWJ3HxP1cile2rSmpXDQfvPwYR1ayjvRhIWaxLaUl3UMj
-         J5tdtD2E1D2wdDmb+pxbQLdYuN02hom3VKXVNEya+JKN40iNOZpQMgBMnRnKl+REkB
-         oJ8vdQ7Vg3O1Q==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Sep 2022 05:24:26 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0722C67154
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:24:25 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3457bc84d53so253117867b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=ICLxIYLKXePaeX7uqOrK23uRDuhGBueBgNNfHGZTbYo=;
+        b=iKuPoaJFZuGpISn2LNxjPZDTYltZp2yYz7EjsSDOTMSrsmWKISyQWE+8R0W3Noaxdh
+         J67WD0GhPNbs2ZfwpPxNgbFMM4v//+o2m6W92oNOWGoQp8Pm2HMq1js5UI1sFo87fUI9
+         MvqGeHVFn9D1YGWApSlPSYmnXrGlHwaLfjdQFN0BwObXO3DUgO3RrA6T3xaQqEPGLzXQ
+         0EXws5GnRh/SMbPaMkkyLZ+getRmmxwYdyMEUYQYwgzjcGGlv3ejcfImrZFEFoXl2eih
+         RHAeAef5dhW/OI5ZfMGUohaRMTire37kk8EJdr2qZumLOUhrmXM2g5T6Apj/GBOEG16z
+         rgaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ICLxIYLKXePaeX7uqOrK23uRDuhGBueBgNNfHGZTbYo=;
+        b=4leX2cM4GEyWEddmP3vzK5fhUe7b9bEYCay1W6OdT48t2v68D5KTQd6sxGa7kOLH57
+         RZ+x2YQvUGwmR0Eeqic6qVXb15b8Sf0HZUClvWyWV2R3kX8Hv59dnd2+LgBlo6OFPeBd
+         yB6uxxeyuviHH1hlEGp5u9+Mn+4FYEIAhV3qy17ekaeUc6hdkk45WYefxPLqNivT3Z5r
+         FLg8sBlcIZG8V6QHtThCyfaeg0L95yG4tG8kP10nQNDO+H+Rh8Jv2G4QtosRV8+X45NX
+         5OeSAvkici9gunoSTU7yVMqu+izOiZSdNcnLIQdUks3wvGcSMslzh4dmD2BQkyeM0OY/
+         DG9w==
+X-Gm-Message-State: ACrzQf3Fw2jTq5Ca5Cb65HfZJHT89+HwXFCTZK1FTJqcJB0eK0/YJEpk
+        yebljY6EZjHgd0MITfgkyr2U4YsBGTU9eh+qSuoq1w==
+X-Google-Smtp-Source: AMsMyM4IEyu4SELoiPZYqJXqFSsxD8xWUmDmdqx1BOynAfW+NapM9J/HLecVe0kFGIteirFbOOlJXPKdVbsta53L3Cs=
+X-Received: by 2002:a0d:d64b:0:b0:345:2455:a1c with SMTP id
+ y72-20020a0dd64b000000b0034524550a1cmr3593259ywd.295.1663320264035; Fri, 16
+ Sep 2022 02:24:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: ath11k: Fix kernel-doc issues
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220909151246.22961-1-quic_jjohnson@quicinc.com>
-References: <20220909151246.22961-1-quic_jjohnson@quicinc.com>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <ath11k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166332003954.3127.7361037879109120019.kvalo@kernel.org>
-Date:   Fri, 16 Sep 2022 09:20:41 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909095811.2166073-1-glider@google.com> <20220909095811.2166073-2-glider@google.com>
+In-Reply-To: <20220909095811.2166073-2-glider@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 16 Sep 2022 11:23:47 +0200
+Message-ID: <CAG_fn=UT24yoY=amdXF5gXQjM9jw8bMamjC-mqJndiXNtNhvLA@mail.gmail.com>
+Subject: Re: [PATCH -next 2/2] crypto: x86: kmsan: disable accelerated configs
+ in KMSAN builds
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Robert Elliott <elliott@hpe.com>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
+Hi Stephen,
 
-> Fix documentation issues reported by kernel-doc:
-> - Incorrect use of /** for non-kernel-doc comments
-> - Mismatch between documented and actual identifiers
-> - Incorrect identifier syntax
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Please use this patch to replace "crypto: x86: kmsan: disable
+accelerated configs in KMSAN builds" when merging linux-mm into
+linux-next (assuming arch/x86/crypto/Kconfig is still in -next).
 
-Patch applied to ath-next branch of ath.git, thanks.
+On Fri, Sep 9, 2022 at 11:58 AM Alexander Potapenko <glider@google.com> wro=
+te:
+>
+> KMSAN is unable to understand when initialized values come from assembly.
+> Disable accelerated configs in KMSAN builds to prevent false positive
+> reports.
+>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Robert Elliott <elliott@hpe.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-next@vger.kernel.org
+> ---
+>  crypto/Kconfig | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/crypto/Kconfig b/crypto/Kconfig
+> index 40423a14f86f5..4a2915bd40d1f 100644
+> --- a/crypto/Kconfig
+> +++ b/crypto/Kconfig
+> @@ -1430,7 +1430,9 @@ endif
+>  if SPARC
+>  source "arch/sparc/crypto/Kconfig"
+>  endif
+> -if X86
+> +# KMSAN is unable to understand when initialized values come from assemb=
+ly.
+> +# Disable accelerated configs to prevent false positive reports.
+> +if X86 && !KMSAN
+>  source "arch/x86/crypto/Kconfig"
+>  endif
+>
+> --
+> 2.37.2.789.g6183377224-goog
+>
 
-3f505a30ea6b wifi: ath11k: Fix kernel-doc issues
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220909151246.22961-1-quic_jjohnson@quicinc.com/
+--=20
+Alexander Potapenko
+Software Engineer
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
