@@ -2,149 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645B25BA432
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEB75BA438
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiIPBzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 21:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S229567AbiIPB4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 21:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiIPBze (ORCPT
+        with ESMTP id S229947AbiIPB4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 21:55:34 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB75F30F62
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 18:55:20 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id AC81C1622;
-        Fri, 16 Sep 2022 03:55:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1663293319;
-        bh=l9k1DbKKiMqSObU43xu0T2mj2fDjr0VeGS9y7PQ8jPg=;
-        h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=Bh3hgchMAnvrp8bHQhJt5ll2yDO/+vXV/PUUx6r4R+oSztvKmgVg6zmhk1reW27iR
-         tGgu+5AArFJ8BMWtNZOBlFN/xKI6UMzevCjKMdwjvUKkADW6jw9LH4TAlxiR1Pr2uC
-         vqIRxtSJpEin6x0ieLy4JnCiuGmZ82z7x8K6c3YkMjRDEIODeYnFELjz/6RsS6uoEO
-         43P2rKBBYFDaIindRFHhwGAgbUcUnD56GjiHI7MQJjEsL0taLBYivPj+e+tfwaRMA6
-         528fQa+lcNqqG2BQCA6SMH47Rna1pl2Pwh0BN4Ep+wLLH0zeqSMPkLsm7JPT9ekkZv
-         cm3IkFBEe3IyX0G3lju5NOUQcuuqrIXM94p8jtRorKVAP3CEXd7M8gjQtHIxTAz48y
-         6dIiMJIdaSxubjwDQFOJ4tZRq3tfCHPbRzAbjiQiijrWN6bJ6BOy1wsCG1TLmpdBWY
-         jxS/9lxv2XJ8v54q4SsOyQKjzfmO4HTM2v6uEx82JZWfbjHna2tAnHPn4DVddx1VeD
-         2sRGDCalWHHcFtdQpZ1qW52POJR8AOg0vMGllLfyfc3F3p4Pv5V9pDZcMIGRJludDO
-         h17KsS2yhrx4PezduKSiPiXkGFjFKoiBm678TNzejofOtgtLHmLgXi9kdQ2jJAyBZS
-         GVIh7rR8oWKmadMT9PLmn7eQ=
-Date:   Fri, 16 Sep 2022 03:55:18 +0200
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] tty: hvc: remove HVC_IUCV_MAGIC
-Message-ID: <8c8a2c9dfc1bfbe6ef3f3237368e483865fc1c29.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
+        Thu, 15 Sep 2022 21:56:19 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491D34D839;
+        Thu, 15 Sep 2022 18:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J30JNwom7vQid4zWEaAjuOGQKZP7syeMiY8+9KV+FKY=; b=BvcU3km0KfSNim65iuY74essLc
+        dF427a6nHkyNASvBjaXX4algXt7MW275rBnaScvxth/J8ok2SeGkGhDT8AmmgwgQMt1/IZ/78N/r6
+        fEMS9BysLwz1VYsv6S+TPrR0j0Hdy76hwkH0Vbp9y7jzOr9mCH2Czjrqc7wne1zexm4/o1MwsR7NQ
+        gqkH1VWNs/BVMn+r747M6z0ddhJQ6Qm1OleNiUHkCF+F4e5fnpAa06olO11cYPFjpL6evqQAIUuIU
+        D2+yebeP7+T8GBaRugEqqM6tuz/6RE4Iua5uSzzdSI9CvuXC/djbWCTGlylWgX80SDMhKjzmm2Y7T
+        3XXSZ8hg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oZ0a9-00GsoS-0s;
+        Fri, 16 Sep 2022 01:55:53 +0000
+Date:   Fri, 16 Sep 2022 02:55:53 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <YyPXqfyf37CUbOf0@ZenIV>
+References: <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+ <20220906102106.q23ovgyjyrsnbhkp@quack3>
+ <YxhaJktqtHw3QTSG@infradead.org>
+ <YyFPtTtxYozCuXvu@ZenIV>
+ <20220914145233.cyeljaku4egeu4x2@quack3>
+ <YyIEgD8ksSZTsUdJ@ZenIV>
+ <20220915081625.6a72nza6yq4l5etp@quack3>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rnftti7pthqkpnuy"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        MISSING_HEADERS,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20220915081625.6a72nza6yq4l5etp@quack3>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 15, 2022 at 10:16:25AM +0200, Jan Kara wrote:
 
---rnftti7pthqkpnuy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > How would that work?  What protects the area where you want to avoid running
+> > into pinned pages from previously acceptable page getting pinned?  If "they
+> > must have been successfully unmapped" is a part of what you are planning, we
+> > really do have a problem...
+> 
+> But this is a very good question. So far the idea was that we lock the
+> page, unmap (or writeprotect) the page, and then check pincount == 0 and
+> that is a reliable method for making sure page data is stable (until we
+> unlock the page & release other locks blocking page faults and writes). But
+> once suddently ordinary page references can be used to create pins this
+> does not work anymore. Hrm.
+> 
+> Just brainstorming ideas now: So we'd either need to obtain the pins early
+> when we still have the virtual address (but I guess that is often not
+> practical but should work e.g. for normal direct IO path) or we need some
+> way to "simulate" the page fault when pinning the page, just don't map it
+> into page tables in the end. This simulated page fault could be perhaps
+> avoided if rmap walk shows that the page is already mapped somewhere with
+> suitable permissions.
 
-According to Greg, in the context of magic numbers as defined in
-magic-number.rst, "the tty layer should not need this and I'll gladly
-take patches"
+OK...  I'd done some digging; results so far
 
-This stretches that definition slightly, since it multiplexes it with
-the terminal number as a constant offset, but is equivalent
+	* READ vs. WRITE turned out to be an awful way to specify iov_iter
+data direction.  Local iov_iter branch so far:
+	get rid of unlikely() on page_copy_sane() calls
+	csum_and_copy_to_iter(): handle ITER_DISCARD
+	[s390] copy_oldmem_kernel() - WRITE is "data source", not destination
+	[fsi] WRITE is "data source", not destination...
+	[infiniband] READ is "data destination", not source...
+	[s390] zcore: WRITE is "data source", not destination...
+	[target] fix iov_iter_bvec() "direction" argument
+	[vhost] fix 'direction' argument of iov_iter_{init,bvec}()
+	[xen] fix "direction" argument of iov_iter_kvec()
+	[trace] READ means "data destination", not source...
+	iov_iter: saner checks for attempt to copy to/from iterator
+	use less confusing names for iov_iter direction initializers
+those 8 commits in the middle consist of fixes, some of them with more than
+one call site affected.  Folks keep going "oh, we are going to copy data
+into that iterator, must be WRITE".  Wrong - WRITE means "as for write(2)",
+i.e. the data _source_, not data destination.  And the same kind of bugs
+goes in the opposite direction, of course.
+	I think something like ITER_DEST vs. ITER_SOURCE would be less
+confusing.
 
-Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- drivers/tty/hvc/hvc_iucv.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+	* anything that goes with ITER_SOURCE doesn't need pin.
+	* ITER_IOVEC/ITER_UBUF need pin for get_pages and for nothing else.
+Need to grab reference on get_pages, obviously.
+	* even more obviously, ITER_DISCARD is irrelevant here.
+	* ITER_PIPE only modifies anonymous pages that had been allocated
+by iov_iter primitives and hadn't been observed by anything outside until
+we are done with said ITER_PIPE.
+	* quite a few instances are similar to e.g. REQ_OP_READ handling in
+/dev/loop - we work with ITER_BVEC there and we do modify the page contents,
+but the damn thing would better be given to us locked and stay locked until
+all involved modifications (be it real IO/decoding/whatever) is complete.
+That ought to be safe, unless I'm missing something.
 
-diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
-index 32366caca662..7d49a872de48 100644
---- a/drivers/tty/hvc/hvc_iucv.c
-+++ b/drivers/tty/hvc/hvc_iucv.c
-@@ -29,7 +29,6 @@
-=20
-=20
- /* General device driver settings */
--#define HVC_IUCV_MAGIC		0xc9e4c3e5
- #define MAX_HVC_IUCV_LINES	HVC_ALLOC_TTY_ADAPTERS
- #define MEMPOOL_MIN_NR		(PAGE_SIZE / sizeof(struct iucv_tty_buffer)/4)
-=20
-@@ -131,9 +130,9 @@ static struct iucv_handler hvc_iucv_handler =3D {
-  */
- static struct hvc_iucv_private *hvc_iucv_get_private(uint32_t num)
- {
--	if ((num < HVC_IUCV_MAGIC) || (num - HVC_IUCV_MAGIC > hvc_iucv_devices))
-+	if (num > hvc_iucv_devices)
- 		return NULL;
--	return hvc_iucv_table[num - HVC_IUCV_MAGIC];
-+	return hvc_iucv_table[num];
- }
-=20
- /**
-@@ -1072,8 +1071,8 @@ static int __init hvc_iucv_alloc(int id, unsigned int=
- is_console)
- 	priv->is_console =3D is_console;
-=20
- 	/* allocate hvc device */
--	priv->hvc =3D hvc_alloc(HVC_IUCV_MAGIC + id, /*		  PAGE_SIZE */
--			      HVC_IUCV_MAGIC + id, &hvc_iucv_ops, 256);
-+	priv->hvc =3D hvc_alloc(id, /*		 PAGE_SIZE */
-+			      id, &hvc_iucv_ops, 256);
- 	if (IS_ERR(priv->hvc)) {
- 		rc =3D PTR_ERR(priv->hvc);
- 		goto out_error_hvc;
-@@ -1371,7 +1370,7 @@ static int __init hvc_iucv_init(void)
-=20
- 	/* register the first terminal device as console
- 	 * (must be done before allocating hvc terminal devices) */
--	rc =3D hvc_instantiate(HVC_IUCV_MAGIC, IUCV_HVC_CON_IDX, &hvc_iucv_ops);
-+	rc =3D hvc_instantiate(0, IUCV_HVC_CON_IDX, &hvc_iucv_ops);
- 	if (rc) {
- 		pr_err("Registering HVC terminal device as "
- 		       "Linux console failed\n");
---=20
-2.30.2
-
---rnftti7pthqkpnuy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMj14YACgkQvP0LAY0m
-WPGDlRAAmOsQ96hFk4wbrrr1tz6fBYeA1H7oPGYFhSIPjx2XstzizMg/6MCaYq6K
-wakN5iXs9GFmmpxoX+9MCt7tGbHP5pACaCRb+r/F8wTHFjHe7gAdVuGcVDnhhA1K
-6az+jDCnCHSFpimfjACDEbvzkN7io62V1y0NndI7xDOfzIgr11j5OKTHhKY0e5Em
-yj/SOQ1yIDoNQHJrx1IYK8x18QhLdK8CZWEiQ/HqlO79jQiM3y/TuT3yVJC9hu2v
-gHXLL5bg4M4MwZ9QkKizGcSnFXp3Wg2VwVBsFUdtHAs9df3YOV6CzPlTdGQABcJ4
-RJ68qx0W0o0tVy6obQqyZRP1LJTHbt+Dicw1fdAXMgrcXBhEnEOZzWjSA713MEqZ
-8uYKPle3Tz6wnf0NluBFKOUq0y5eov/GF1YLBWt8jSwa/5YmixHXz4YigCcZ/+1X
-9IMbwiFWXzoDIzO3xwcvHEK/MGMCPgB3a32Fzdx6wwpVVaAm7JKEhDpIMH0zxOor
-/2nJ4pwrtQ3fQI8QsUmZ0h1ylgWM+nBnYvucX/QANC+ihVAUN9WXSfz2Mo2RenAr
-99PAehuHK5wCWApyjgWrJi/8fvzAavjRuCj2sPK5X/HBXIn5gm5q6yClU1BD/0z7
-YjS8CTHUf+eAnvpC8zzY8NpBJJ2C48sBpY/7Kj09Nqbvlc+J1EY=
-=xgyf
------END PGP SIGNATURE-----
-
---rnftti7pthqkpnuy--
+That doesn't cover everything; still going through the list...
