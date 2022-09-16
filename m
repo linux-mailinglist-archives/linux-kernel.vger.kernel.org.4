@@ -2,91 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EF75BA63B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB35C5BA641
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiIPFFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S229925AbiIPFIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiIPFFs (ORCPT
+        with ESMTP id S229809AbiIPFII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:05:48 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8F34DF15;
-        Thu, 15 Sep 2022 22:05:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VPvZJaU_1663304738;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VPvZJaU_1663304738)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Sep 2022 13:05:41 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cuibixuan@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, xueshuai@linux.alibaba.com
-Subject: [PATCH] ACPI: APEI: do not add task_work for outside context error
-Date:   Fri, 16 Sep 2022 13:05:35 +0800
-Message-Id: <20220916050535.26625-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 16 Sep 2022 01:08:08 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014B4E60C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:08:06 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id g12so10268293ilj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=yP5XHXLcK+UX9e2N5YzbTl9a4h8ihKkfwEUan36DPrg=;
+        b=yAWumhzewMa3eEP3CnaMNUvAKmgC8eanQ3L4jWiwdGCcIzPkhFrQzQw0wwV9+O9C/s
+         pWA8px3RR32jSQRkZ724RUliMw1N1pJV7uypHBZtXw/s45KvAkUFFBkjDay0fezO6Q1H
+         n/OjWEaMaEvHTgl1WjFIQhvNgjxtHZeYZXfVlqejl77Y0na9OV31a8qO4TRydLDh9b1J
+         NF1Fubd/swhKTWFgEXpw3HK96R4pCPPNOYmiQOe7Bp9RLaM6/LZ/umsF8xY1IvG5Kb40
+         CBEv7FTQftTVcumiWuAZRwOn7ym/68hjz6J2lRqkwYLZ2FbLbPgjYRH/Tm0ZHhOzbqfn
+         INxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=yP5XHXLcK+UX9e2N5YzbTl9a4h8ihKkfwEUan36DPrg=;
+        b=cDNoBEamdx9WnRxmaPb9s7f2jWXelYhh4itGUYaFpI+OKcv88ziyEw09hQzk5cKyPM
+         OcG+/fr/m4olMHvCJnjhzpMavWAbMPprFY/DBHHL55WUSATk25lZE/RxBCvq8oYsn5Ze
+         sWi/N9MMIbnmyT02UjWODlkkPsH4j6Zh5QeKZ30MBThj4jtAnWygJiJc83kyXFuDHps/
+         GO0pF4lsuYsXWFSwpoiB4DMjd94ORnuAjdUUzvz4qIaYU1Uu4iUnkFm0PHaAgExGOozm
+         givjL9czndLrBfUEBRDhc8NjMaRPx8b9QDfs0e2W6qKu/CACJMCEo3lvKsrmYAvl++HT
+         qZdA==
+X-Gm-Message-State: ACrzQf3wiXbh3473wZLTMmI1wtaIN/dFu6uHKq/q5XsTWVApK/9b7B1E
+        Y0QT+ijmhnpWDtNACpAPTIPgjKKEhqFHPYH+zB1BKQ==
+X-Google-Smtp-Source: AMsMyM5GqgO04FmX/wur2Jt+8ypcoEU8eotcYd1jKm89jw9hQAj1ZhLfSUj5pD6zTUMTtw3xNbjyMSejcFd/JFYW8jo=
+X-Received: by 2002:a05:6e02:164d:b0:2f1:869c:c45b with SMTP id
+ v13-20020a056e02164d00b002f1869cc45bmr1488365ilu.212.1663304885797; Thu, 15
+ Sep 2022 22:08:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220504074807.3616813-1-aik@ozlabs.ru>
+In-Reply-To: <20220504074807.3616813-1-aik@ozlabs.ru>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 16 Sep 2022 10:37:53 +0530
+Message-ID: <CAAhSdy0hxHjQkVj8TLPh4j=vBrX1QoZcJXNeRBPtf5ozdjQaTQ@mail.gmail.com>
+Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform dependent
+To:     Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc:     kvm-ppc@vger.kernel.org, x86@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error is detected as a result of user-space process accessing a
-corrupt memory location, the CPU may take an abort. Then the platform
-firmware reports kernel via NMI like notifications, e.g. NOTIFY_SEA,
-NOTIFY_SOFTWARE_DELEGATED, etc.
+On Wed, May 4, 2022 at 1:18 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+>
+> When introduced, IRQFD resampling worked on POWER8 with XICS. However
+> KVM on POWER9 has never implemented it - the compatibility mode code
+> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
+> XIVE mode does not handle INTx in KVM at all.
+>
+> This moved the capability support advertising to platforms and stops
+> advertising it on XIVE, i.e. POWER9 and later.
+>
+> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> ---
+>
+>
+> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
 
-For NMI like notifications, commit 7f17b4a121d0 ("ACPI: APEI: Kick the
-memory_failure() queue for synchronous errors") keep track of whether
-memory_failure() work was queued, and make task_work pending to flush out
-the queue so that the work is processed before return to user-space.
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
 
-The code use init_mm to check whether the error occurs in user space:
+Thanks,
+Anup
 
-    if (current->mm != &init_mm)
-
-The condition is always true, becase _nobody_ ever has "init_mm" as a real
-VM any more and should generally just do
-
-    if (current->mm)
-
-as described in active_mm.rst documentation.
-
-Then if an error is detected outside of the current execution context (e.g.
-when detected by a background scrubber), do not add task_work as the
-original patch intends to do.
-
-Fixes: 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous errors")
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/acpi/apei/ghes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index d91ad378c00d..80ad530583c9 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -985,7 +985,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 				ghes_estatus_cache_add(generic, estatus);
- 		}
- 
--		if (task_work_pending && current->mm != &init_mm) {
-+		if (task_work_pending && current->mm) {
- 			estatus_node->task_work.func = ghes_kick_task_work;
- 			estatus_node->task_work_cpu = smp_processor_id();
- 			ret = task_work_add(current, &estatus_node->task_work,
--- 
-2.20.1.12.g72788fdb
-
+>
+> ---
+>  arch/arm64/kvm/arm.c       | 3 +++
+>  arch/mips/kvm/mips.c       | 3 +++
+>  arch/powerpc/kvm/powerpc.c | 6 ++++++
+>  arch/riscv/kvm/vm.c        | 3 +++
+>  arch/s390/kvm/kvm-s390.c   | 3 +++
+>  arch/x86/kvm/x86.c         | 3 +++
+>  virt/kvm/kvm_main.c        | 1 -
+>  7 files changed, 21 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 523bc934fe2f..092f0614bae3 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_SET_GUEST_DEBUG:
+>         case KVM_CAP_VCPU_ATTRIBUTES:
+>         case KVM_CAP_PTP_KVM:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>                 r = 1;
+>                 break;
+>         case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..0f3de470a73e 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_READONLY_MEM:
+>         case KVM_CAP_SYNC_MMU:
+>         case KVM_CAP_IMMEDIATE_EXIT:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>                 r = 1;
+>                 break;
+>         case KVM_CAP_NR_VCPUS:
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 875c30c12db0..87698ffef3be 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>                 break;
+>  #endif
+>
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +               r = !xive_enabled();
+> +               break;
+> +#endif
+> +
+>         case KVM_CAP_PPC_ALLOC_HTAB:
+>                 r = hv_enabled;
+>                 break;
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index c768f75279ef..b58579b386bb 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_READONLY_MEM:
+>         case KVM_CAP_MP_STATE:
+>         case KVM_CAP_IMMEDIATE_EXIT:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>                 r = 1;
+>                 break;
+>         case KVM_CAP_NR_VCPUS:
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 156d1c25a3c1..85e093fc8d13 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_SET_GUEST_DEBUG:
+>         case KVM_CAP_S390_DIAG318:
+>         case KVM_CAP_S390_MEM_OP_EXTENSION:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>                 r = 1;
+>                 break;
+>         case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0c0ca599a353..a0a7b769483d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>         case KVM_CAP_SYS_ATTRIBUTES:
+>         case KVM_CAP_VAPIC:
+>         case KVM_CAP_ENABLE_CAP:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +       case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>                 r = 1;
+>                 break;
+>         case KVM_CAP_EXIT_HYPERCALL:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 70e05af5ebea..885e72e668a5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4293,7 +4293,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>  #endif
+>  #ifdef CONFIG_HAVE_KVM_IRQFD
+>         case KVM_CAP_IRQFD:
+> -       case KVM_CAP_IRQFD_RESAMPLE:
+>  #endif
+>         case KVM_CAP_IOEVENTFD_ANY_LENGTH:
+>         case KVM_CAP_CHECK_EXTENSION_VM:
+> --
+> 2.30.2
+>
