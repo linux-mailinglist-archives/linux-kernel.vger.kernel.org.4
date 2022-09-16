@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A69D5BB3ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1085BB3F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiIPVbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 17:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S229743AbiIPVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 17:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiIPVba (ORCPT
+        with ESMTP id S229570AbiIPVbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 17:31:30 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1039BA157
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 14:31:25 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id e68so22442126pfe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 14:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=gAOpf4VaiyzuyzEgBlSDI/rb/mxIT2fGVc3O4sRyz8Q=;
-        b=ESaZCkLet+Qy6/RvuyqCTnQHokSf4VLHnPureVwo7ogYklmGP1Sztila7n66Rd4Rpx
-         p8mM7GZYSPEVPVnneskMYs3iQhwxLf9yo9KPvmptyMHSHdIHgLLpttwzX2mDEzYLLpST
-         vioqg93hpJQCo9Uc4aIg3ueQPLLjc07hHzXxk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gAOpf4VaiyzuyzEgBlSDI/rb/mxIT2fGVc3O4sRyz8Q=;
-        b=zMeXpFXv5tN8OPRt2cH0egAwegtWwBPWCriYFvF3L/yw05NByQPrzwjcQVhlm0Pbv9
-         Ub6NfrsT90+crzko/SmjCrYOqDJydW8BQoKX6OCyNmf6jszRIxOlfv8+rq9yrysLd9I5
-         EkW+pYeiWxXTzTzc28u8/DBmsSdhTWa4H0W98b9zq9C2xOaDqvQn5PwWuYXZLZRs/Yt3
-         LtaaD2e3rqFjHy/ye6SM6l+modFntCAaoLv7g16ERQqqp5TJrCGP8wUaAfUtdpH1QHAP
-         g3TakY5jCi0e2oxlZDCCdLZwRoeA3TzdxjjWVUI4CAKub3u9PvYaqASRmuzbq5JcuRE5
-         xxPg==
-X-Gm-Message-State: ACrzQf390LxNlVOlziD1vuW0ECdaXep970ZaKdNSuBpyIs6HRh8Jpuqa
-        2LRgAgtwCik5Y92IhyX0Qfg9VA==
-X-Google-Smtp-Source: AMsMyM6NXdExmvfrm3oknYIgGPotEd25We5Echz9dev/PyZDMj2iXCY/P49FQgqOgPGc3Lo0M3EjBQ==
-X-Received: by 2002:a05:6a02:309:b0:434:d151:639e with SMTP id bn9-20020a056a02030900b00434d151639emr6100944pgb.124.1663363885331;
-        Fri, 16 Sep 2022 14:31:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z11-20020a170902cccb00b00173cfaed233sm15307582ple.62.2022.09.16.14.31.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 14:31:23 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 14:31:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] i2c: mux: harden i2c_mux_alloc() against integer
- overflows
-Message-ID: <202209160812.2B4AB7FC@keescook>
-References: <YyMM8iVSHJ4ammsg@kili>
- <YyMt2cWtHC2SeG62@work>
- <YyMyKQnWgu0SL6jj@kadam>
- <202209160101.2A240E9@keescook>
- <YyQyfaI0WCsQ8F48@kadam>
- <202209160630.CF7AE9708D@keescook>
- <YySOewo2YUY+fk1l@kadam>
+        Fri, 16 Sep 2022 17:31:43 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54ABB02C;
+        Fri, 16 Sep 2022 14:31:38 -0700 (PDT)
+Message-ID: <a774a513-284c-eb1f-7578-bb6d475b0509@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663363896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aUusDOzWHis+2UidmSCMnHqSklJAdLsrWVsXfECqtNY=;
+        b=lYsuwfgmyLGn2XjImpB5vaLtD4AB1q+UrezIaQ0GKOgaOkdxm3boMHN3iUPQze3ccbED6y
+        4WUW/rKFNqS0sNy2YL/JSoshVWp0CkTvIWHzlzohUxPUjCNo7pSBsaUi1w+fO95jrSP7WT
+        271VolouyUTVNjdHfEroAJd1Xzco07A=
+Date:   Fri, 16 Sep 2022 14:31:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YySOewo2YUY+fk1l@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next] bpf: Move nf_conn extern declarations to
+ filter.h
+Content-Language: en-US
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+References: <c4cb11c8ffe732b91c175a0fc80d43b2547ca17e.1662920329.git.dxu@dxuuu.xyz>
+ <ada17021-83c9-3dad-5992-4885e824ecac@linux.dev>
+ <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 05:55:55PM +0300, Dan Carpenter wrote:
-> On Fri, Sep 16, 2022 at 06:31:45AM -0700, Kees Cook wrote:
-> > On Fri, Sep 16, 2022 at 11:23:25AM +0300, Dan Carpenter wrote:
-> > > [...]
-> > > net/ipv6/mcast.c:450 ip6_mc_source() saving 'size_add' to type 'int'
-> > 
-> > Interesting! Are you able to report the consumer? e.g. I think a bunch
-> > of these would be fixed by:
-> > 
+On 9/16/22 1:35 PM, Kumar Kartikeya Dwivedi wrote:
+> On Fri, 16 Sept 2022 at 22:20, Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>
+>> On 9/11/22 11:19 AM, Daniel Xu wrote:
+>>> We're seeing the following new warnings on netdev/build_32bit and
+>>> netdev/build_allmodconfig_warn CI jobs:
+>>>
+>>>       ../net/core/filter.c:8608:1: warning: symbol
+>>>       'nf_conn_btf_access_lock' was not declared. Should it be static?
+>>>       ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
+>>>       declared. Should it be static?
+>>>
+>>> Fix by ensuring extern declaration is present while compiling filter.o.
+>>>
+>>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>>> ---
+>>>    include/linux/filter.h                   | 6 ++++++
+>>>    include/net/netfilter/nf_conntrack_bpf.h | 7 +------
+>>>    2 files changed, 7 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/include/linux/filter.h b/include/linux/filter.h
+>>> index 527ae1d64e27..96de256b2c8d 100644
+>>> --- a/include/linux/filter.h
+>>> +++ b/include/linux/filter.h
+>>> @@ -567,6 +567,12 @@ struct sk_filter {
+>>>
+>>>    DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+>>>
+>>> +extern struct mutex nf_conn_btf_access_lock;
+>>> +extern int (*nfct_bsa)(struct bpf_verifier_log *log, const struct btf *btf,
+>>> +                    const struct btf_type *t, int off, int size,
+>>> +                    enum bpf_access_type atype, u32 *next_btf_id,
+>>> +                    enum bpf_type_flag *flag);
+>>
+>> Can it avoid leaking the nfct specific details like
+>> 'nf_conn_btf_access_lock' and the null checking on 'nfct_bsa' to
+>> filter.c?  In particular, this code snippet in filter.c:
+>>
+>>           mutex_lock(&nf_conn_btf_access_lock);
+>>           if (nfct_bsa)
+>>                   ret = nfct_bsa(log, btf, ....);
+>>          mutex_unlock(&nf_conn_btf_access_lock);
+>>
+>>
+>> Can the lock and null check be done as one function (eg.
+>> nfct_btf_struct_access()) in nf_conntrack_bpf.c and use it in filter.c
+>> instead?
 > 
-> Are you asking if I can add "passed to sock_kmalloc()" to the report?
+> Don't think so, no. Because we want nf_conntrack to work as a module as well.
+Ah, got it.
 
-Yeah.
+I don't see nf_conntrack_btf_struct_access() in nf_conntrack_bpf.h is 
+used anywhere.  Can be removed?
 
-> It's possible but it's kind of a headache the way this code is written.
+> I was the one who suggested nf_conn specific names for now. There is
+> no other user of such module supplied
+> btf_struct_access callbacks yet, when one appears, we should instead
+> make registration of such callbacks properly generic (i.e. also
+> enforce it is only for module BTF ID etc.).
+> But that would be a lot of code without any users right now.
 
-Okay, no worries -- I was curious if it would be "easy". I can happily
-just spit out the source line.
+The lock is the only one needed to be in btf.c and 
+nfct_btf_struct_access() can be an inline in nf_conntrack_bpf.h instead?
 
--- 
-Kees Cook
