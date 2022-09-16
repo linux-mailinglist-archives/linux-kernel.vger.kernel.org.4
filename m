@@ -2,174 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8076A5BA644
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8AD5BA64A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiIPFKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S229956AbiIPFNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIPFKR (ORCPT
+        with ESMTP id S229635AbiIPFNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:10:17 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71A642AD8;
-        Thu, 15 Sep 2022 22:10:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPvYIal_1663305011;
-Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPvYIal_1663305011)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Sep 2022 13:10:12 +0800
-Message-ID: <a866c880-860c-5558-e5fe-e12afd943324@linux.alibaba.com>
-Date:   Fri, 16 Sep 2022 13:10:11 +0800
+        Fri, 16 Sep 2022 01:13:41 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5D37755D;
+        Thu, 15 Sep 2022 22:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663305220; x=1694841220;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=05dIEm6EDE/FGH5eEhbfF7ohwoCb4JD1+C6lIYEl0D4=;
+  b=PWCm1SGYy2kOr7Q43BM6Drkt7hmk71/QxRDkCIwrPXnnmvPc6EkIyF5Y
+   XaQFgaYzLKhgoXsCXN7jNXJvLWIMlgdN5WJoJGVnooVmYpW7jxUFdXIPm
+   adCtaiIozDJq/ffTrGQFqhvf74ylQwbnUqAJTzWYpQJyjlpdiLykKXXmk
+   v7h1uW/727/63UnXit7MO6SiwA0iwN0QK6M83G+GCpV7vzt4mhLfhiVRF
+   cGe00thH2ulqY1ccLW60uoQMvACrqH5aweyN46VUrhgPPSgF3expz2AxG
+   YJRTEAT+WbhbzqDbd08sJdIAXwNH+I7tYUUtuSsVwa2FFEx80C7HMm0+d
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="281942393"
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="281942393"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 22:13:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="706628953"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Sep 2022 22:13:36 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZ3fT-0001So-22;
+        Fri, 16 Sep 2022 05:13:35 +0000
+Date:   Fri, 16 Sep 2022 13:13:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hayeswang@realtek.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        aaron.ma@canonical.com, jflf_kernel@gmx.com, dober6023@gmail.com,
+        svenva@chromium.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] r8152: Replace conditional statement with
+ min() function
+Message-ID: <202209161313.2l3pzgCV-lkp@intel.com>
+References: <20220914162326.23880-1-cui.jinpeng2@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH V4 6/6] erofs: introduce 'domain_id' mount option
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
- <20220915124213.25767-7-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20220915124213.25767-7-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914162326.23880-1-cui.jinpeng2@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20220914]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/r8152-Replace-conditional-statement-with-min-function/20220915-002537
+base:    f117c01187301a087412bd6697fcf5463cb427d8
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220916/202209161313.2l3pzgCV-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9b5f2fbac752d4608affde065cf64573bdd09564
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/r8152-Replace-conditional-statement-with-min-function/20220915-002537
+        git checkout 9b5f2fbac752d4608affde065cf64573bdd09564
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/usb/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/usb/r8152.c:4832:10: warning: comparison of distinct pointer types ('typeof (2048) *' (aka 'int *') and 'typeof (len) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   size = min(2048, len);
+                          ^~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-On 9/15/22 8:42 PM, Jia Zhu wrote:
-> Introduce 'domain_id' mount option to enable shared domain sementics.
-> In which case, the related cookie is shared if two mountpoints in the
-> same domain have the same data blob. Users could specify the name of
-> domain by this mount option.
-> 
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+vim +4832 drivers/net/usb/r8152.c
 
-LGTM.
-
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-
-
-> ---
->  fs/erofs/super.c | 17 +++++++++++++++++
->  fs/erofs/sysfs.c | 19 +++++++++++++++++--
->  2 files changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index 24bac58285e8..5e55c4fe6220 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -440,6 +440,7 @@ enum {
->  	Opt_dax_enum,
->  	Opt_device,
->  	Opt_fsid,
-> +	Opt_domain_id,
->  	Opt_err
->  };
->  
-> @@ -465,6 +466,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
->  	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
->  	fsparam_string("device",	Opt_device),
->  	fsparam_string("fsid",		Opt_fsid),
-> +	fsparam_string("domain_id",	Opt_domain_id),
->  	{}
->  };
->  
-> @@ -568,6 +570,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
->  			return -ENOMEM;
->  #else
->  		errorfc(fc, "fsid option not supported");
-> +#endif
-> +		break;
-> +	case Opt_domain_id:
-> +#ifdef CONFIG_EROFS_FS_ONDEMAND
-> +		kfree(ctx->opt.domain_id);
-> +		ctx->opt.domain_id = kstrdup(param->string, GFP_KERNEL);
-> +		if (!ctx->opt.domain_id)
-> +			return -ENOMEM;
-> +#else
-> +		errorfc(fc, "domain_id option not supported");
->  #endif
->  		break;
->  	default:
-> @@ -702,6 +714,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->  	sb->s_fs_info = sbi;
->  	sbi->opt = ctx->opt;
->  	ctx->opt.fsid = NULL;
-> +	ctx->opt.domain_id = NULL;
->  	sbi->devs = ctx->devs;
->  	ctx->devs = NULL;
->  
-> @@ -846,6 +859,7 @@ static void erofs_fc_free(struct fs_context *fc)
->  
->  	erofs_free_dev_context(ctx->devs);
->  	kfree(ctx->opt.fsid);
-> +	kfree(ctx->opt.domain_id);
->  	kfree(ctx);
->  }
->  
-> @@ -914,6 +928,7 @@ static void erofs_kill_sb(struct super_block *sb)
->  	fs_put_dax(sbi->dax_dev, NULL);
->  	erofs_fscache_unregister_fs(sb);
->  	kfree(sbi->opt.fsid);
-> +	kfree(sbi->opt.domain_id);
->  	kfree(sbi);
->  	sb->s_fs_info = NULL;
->  }
-> @@ -1067,6 +1082,8 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
->  #ifdef CONFIG_EROFS_FS_ONDEMAND
->  	if (opt->fsid)
->  		seq_printf(seq, ",fsid=%s", opt->fsid);
-> +	if (opt->domain_id)
-> +		seq_printf(seq, ",domain_id=%s", opt->domain_id);
->  #endif
->  	return 0;
->  }
-> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> index c1383e508bbe..341fb43ad587 100644
-> --- a/fs/erofs/sysfs.c
-> +++ b/fs/erofs/sysfs.c
-> @@ -201,12 +201,27 @@ static struct kobject erofs_feat = {
->  int erofs_register_sysfs(struct super_block *sb)
->  {
->  	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> +	char *name;
-> +	char *str = NULL;
->  	int err;
->  
-> +	if (erofs_is_fscache_mode(sb)) {
-> +		if (sbi->opt.domain_id) {
-> +			str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id,
-> +					sbi->opt.fsid);
-> +			if (!str)
-> +				return -ENOMEM;
-> +			name = str;
-> +		} else {
-> +			name = sbi->opt.fsid;
-> +		}
-> +	} else {
-> +		name = sb->s_id;
-> +	}
->  	sbi->s_kobj.kset = &erofs_root;
->  	init_completion(&sbi->s_kobj_unregister);
-> -	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
-> -			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
-> +	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s", name);
-> +	kfree(str);
->  	if (err)
->  		goto put_sb_kobj;
->  	return 0;
+  4808	
+  4809	static void rtl_ram_code_speed_up(struct r8152 *tp, struct fw_phy_speed_up *phy, bool wait)
+  4810	{
+  4811		u32 len;
+  4812		u8 *data;
+  4813	
+  4814		rtl_reset_ocp_base(tp);
+  4815	
+  4816		if (sram_read(tp, SRAM_GPHY_FW_VER) >= __le16_to_cpu(phy->version)) {
+  4817			dev_dbg(&tp->intf->dev, "PHY firmware has been the newest\n");
+  4818			return;
+  4819		}
+  4820	
+  4821		len = __le32_to_cpu(phy->blk_hdr.length);
+  4822		len -= __le16_to_cpu(phy->fw_offset);
+  4823		data = (u8 *)phy + __le16_to_cpu(phy->fw_offset);
+  4824	
+  4825		if (rtl_phy_patch_request(tp, true, wait))
+  4826			return;
+  4827	
+  4828		while (len) {
+  4829			u32 ocp_data, size;
+  4830			int i;
+  4831	
+> 4832			size = min(2048, len);
+  4833	
+  4834			ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL);
+  4835			ocp_data |= GPHY_PATCH_DONE | BACKUP_RESTRORE;
+  4836			ocp_write_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL, ocp_data);
+  4837	
+  4838			generic_ocp_write(tp, __le16_to_cpu(phy->fw_reg), 0xff, size, data, MCU_TYPE_USB);
+  4839	
+  4840			data += size;
+  4841			len -= size;
+  4842	
+  4843			ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL);
+  4844			ocp_data |= POL_GPHY_PATCH;
+  4845			ocp_write_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL, ocp_data);
+  4846	
+  4847			for (i = 0; i < 1000; i++) {
+  4848				if (!(ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL) & POL_GPHY_PATCH))
+  4849					break;
+  4850			}
+  4851	
+  4852			if (i == 1000) {
+  4853				dev_err(&tp->intf->dev, "ram code speedup mode timeout\n");
+  4854				break;
+  4855			}
+  4856		}
+  4857	
+  4858		rtl_reset_ocp_base(tp);
+  4859	
+  4860		rtl_phy_patch_request(tp, false, wait);
+  4861	
+  4862		if (sram_read(tp, SRAM_GPHY_FW_VER) == __le16_to_cpu(phy->version))
+  4863			dev_dbg(&tp->intf->dev, "successfully applied %s\n", phy->info);
+  4864		else
+  4865			dev_err(&tp->intf->dev, "ram code speedup mode fail\n");
+  4866	}
+  4867	
 
 -- 
-Thanks,
-Jingbo
+0-DAY CI Kernel Test Service
+https://01.org/lkp
