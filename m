@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4115BB36C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260BC5BB36E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiIPUWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 16:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S230245AbiIPUWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 16:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiIPUV7 (ORCPT
+        with ESMTP id S230093AbiIPUWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:21:59 -0400
+        Fri, 16 Sep 2022 16:22:00 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D55EA99F2;
-        Fri, 16 Sep 2022 13:21:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9096A98CC
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1663359719; x=1694895719;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=QPu6vBGW7d8GoMFb/py0DCksk1SJKHRz0Nykt/+6h6o=;
-  b=Q7wB9/q6UbXW1/QaGdjXyxlFvvMhUsed70zvWeCLmIIBsldOVrRFAApL
-   QERcV0zzrojU0YQjld89uwihtPykEFHztzkpATU2XOO3X8OLPPEFYmgcv
-   C25U8b5QKjM6dT6UK//E/75uXuWOWenl2zpnsiACw6he7Z1lsPrZsGoUF
-   ifQF7FJLZlN9RTF+nHy/zvKOgiVjE76yYga1+gM8CwjUFHqxYJQR34b/U
-   9Tlf9R6EwAsL8JLaoWUlymUhDXIcBpLFcXG24VMYwR7T01IgFpP6vBxa2
-   n7Vyeq1PZP42wpQG4dOh7snukoDU1xl2W1YfdGyzWD00vLc9vpg1/I4+r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801384"
+  bh=amir2HUPEmO/61A+AAqczzCnbRgaN6rwh/1IJFe05oQ=;
+  b=b5Jbj7d7eS1jUYyUJpHp0xmVE4AKtAdDTbnNvS35QCLdwSzQPY7qyruY
+   duupBF2iYLGjy/xq+fcfHdkdcYQo66jQlYJdoiCfDk31FYNrPK3/b6Li8
+   rFVV+sEbU0mjrCRU4NAftaGChOZU2GHll2r1vITkO7Gciq7n+CGrjPAY9
+   LBF5GnHOo9JnRRQ1b0bOiv77FbRyypR20FIoii23EhnWu5e062fP75AJB
+   ChFqyS+tAh7YTW/1jRxB3K+QGHBTc0PPR2ar1v6DOJk3MfJUTr/jhgB14
+   RRhPO2bDzBJnfX7urdbPSJt//18Jjtk0U52CDiqWkuOUSmWHdiXxCDxWJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801386"
 X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="278801384"
+   d="scan'208";a="278801386"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:21:57 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:21:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="680092296"
+   d="scan'208";a="680092300"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2022 13:21:57 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        chang.seok.bae@intel.com, kvm@vger.kernel.org
-Subject: [PATCH 3/4] x86/fpu: Clarify the XSTATE clearing only for extended components
-Date:   Fri, 16 Sep 2022 13:11:57 -0700
-Message-Id: <20220916201158.8072-4-chang.seok.bae@intel.com>
+        chang.seok.bae@intel.com
+Subject: [PATCH 4/4] x86/fpu: Correct the legacy state offset and size information
+Date:   Fri, 16 Sep 2022 13:11:58 -0700
+Message-Id: <20220916201158.8072-5-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916201158.8072-1-chang.seok.bae@intel.com>
 References: <20220916201158.8072-1-chang.seok.bae@intel.com>
@@ -58,74 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 087df48c298c ("x86/fpu: Replace KVMs xstate component clearing")
-refactored the MPX state clearing code.
+MXCSR is architecturally part of the SSE state. But, the kernel code
+presumes it as part of the FP component. Adjust the offset and size for
+these legacy states.
 
-But, legacy states are not warranted in this routine. Rename the function
-to clarify that only extended components are acceptable.
+Notably, each legacy component area is not contiguous, unlike extended
+components. Add a warning message when these offset and size are
+referenced.
 
+Fixes: ac73b27aea4e ("x86/fpu/xstate: Fix xstate_offsets, xstate_sizes for non-extended xstates")
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Cc: x86@kernel.org
-Cc: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- arch/x86/include/asm/fpu/api.h | 2 +-
- arch/x86/kernel/fpu/xstate.c   | 7 +++++--
- arch/x86/kvm/x86.c             | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ arch/x86/kernel/fpu/xstate.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 503a577814b2..c9d5dc85ca06 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -130,7 +130,7 @@ static inline void fpstate_free(struct fpu *fpu) { }
- #endif
- 
- /* fpstate-related functions which are exported to KVM */
--extern void fpstate_clear_xstate_component(struct fpstate *fps, unsigned int xfeature);
-+extern void fpstate_clear_extended_xstate(struct fpstate *fps, unsigned int xfeature);
- 
- extern u64 xstate_get_guest_group_perm(void);
- 
 diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index d7676cfc32eb..a35f91360e3f 100644
+index a35f91360e3f..2564da50d8bb 100644
 --- a/arch/x86/kernel/fpu/xstate.c
 +++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1371,14 +1371,17 @@ void xrstors(struct xregs_state *xstate, u64 mask)
- }
- 
- #if IS_ENABLED(CONFIG_KVM)
--void fpstate_clear_xstate_component(struct fpstate *fps, unsigned int xfeature)
-+void fpstate_clear_extended_xstate(struct fpstate *fps, unsigned int xfeature)
- {
- 	void *addr = get_xsave_addr(&fps->regs.xsave, xfeature);
- 
-+	if (xfeature <= XFEATURE_SSE)
-+		return;
+@@ -143,8 +143,13 @@ static unsigned int xfeature_get_offset(u64 xcomp_bv, int xfeature)
+ 	 * offsets.
+ 	 */
+ 	if (!cpu_feature_enabled(X86_FEATURE_XCOMPACTED) ||
+-	    xfeature <= XFEATURE_SSE)
++	    xfeature <= XFEATURE_SSE) {
++		if (xfeature <= XFEATURE_SSE)
++			pr_warn("The legacy state (%d) is discontiguously located.\n",
++				xfeature);
 +
- 	if (addr)
- 		memset(addr, 0, xstate_sizes[xfeature]);
- }
--EXPORT_SYMBOL_GPL(fpstate_clear_xstate_component);
-+EXPORT_SYMBOL_GPL(fpstate_clear_extended_xstate);
- #endif
+ 		return xstate_offsets[xfeature];
++	}
  
- #ifdef CONFIG_X86_64
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 43a6a7efc6ec..82ab270ea734 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11760,8 +11760,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 		if (init_event)
- 			kvm_put_guest_fpu(vcpu);
+ 	/*
+ 	 * Compacted format offsets depend on the actual content of the
+@@ -217,14 +222,18 @@ static void __init setup_xstate_cache(void)
+ 	 * The FP xstates and SSE xstates are legacy states. They are always
+ 	 * in the fixed offsets in the xsave area in either compacted form
+ 	 * or standard form.
++	 *
++	 * But, while MXCSR is part of the SSE state, it is located in
++	 * between the FP states. Note that it is erroneous assuming that
++	 * each legacy area is contiguous.
+ 	 */
+ 	xstate_offsets[XFEATURE_FP]	= 0;
+-	xstate_sizes[XFEATURE_FP]	= offsetof(struct fxregs_state,
+-						   xmm_space);
++	xstate_sizes[XFEATURE_FP]	= offsetof(struct fxregs_state, mxcsr) +
++					  sizeof_field(struct fxregs_state, st_space);
  
--		fpstate_clear_xstate_component(fpstate, XFEATURE_BNDREGS);
--		fpstate_clear_xstate_component(fpstate, XFEATURE_BNDCSR);
-+		fpstate_clear_extended_xstate(fpstate, XFEATURE_BNDREGS);
-+		fpstate_clear_extended_xstate(fpstate, XFEATURE_BNDCSR);
+-	xstate_offsets[XFEATURE_SSE]	= xstate_sizes[XFEATURE_FP];
+-	xstate_sizes[XFEATURE_SSE]	= sizeof_field(struct fxregs_state,
+-						       xmm_space);
++	xstate_offsets[XFEATURE_SSE]	= offsetof(struct fxregs_state, mxcsr);
++	xstate_sizes[XFEATURE_SSE]	= MXCSR_AND_FLAGS_SIZE +
++					  sizeof_field(struct fxregs_state, xmm_space);
  
- 		if (init_event)
- 			kvm_load_guest_fpu(vcpu);
+ 	for_each_extended_xfeature(i, fpu_kernel_cfg.max_features) {
+ 		cpuid_count(XSTATE_CPUID, i, &eax, &ebx, &ecx, &edx);
 -- 
 2.17.1
 
