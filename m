@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BDA5BA69F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50455BA6AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiIPGLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 02:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S229735AbiIPGTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 02:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIPGLo (ORCPT
+        with ESMTP id S229528AbiIPGTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 02:11:44 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26590A1D59
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:11:43 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id r18so47077232eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:11:43 -0700 (PDT)
+        Fri, 16 Sep 2022 02:19:13 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC644CA25
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:19:12 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso763175pjq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=T4Qlm7+uR9SVFbfB41B8xYIH44tr4UFSZKNZe5dH1tA=;
-        b=qFW3354HCkHmvxiBRd9HSllHtOFfYEepdnPyBxxjMJ/SJZdnkYXZlNaB3Fpl96Wkie
-         wsBBvLmpN4EdvoiUJM+Z3rrPFiFBRUssIxOuTi+ye9Ct4PH++XVjbR+uapgtehwVjeul
-         KQAxkYM+z6wb5p5OFVzETof/2MCNPjFwKSzma4+IIcDeysVtuyvY1Sq0OHqaPQorXhKH
-         1WfCoOayGLeZibSGCjtzaR1U1oCItW3tLAnFYgV+jyKrr87+RayzGnOS0rI8uTawBL1j
-         6syh/by9BqWfJOrgpA+7ZEB95smNsTnUVHmFeu7h+e/pA9EQ3bSNfTiz+7oa/nTxtbE3
-         AVfQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=avEn3txHBu3dTZu+mmCEsPcvkg2cCwT/97qBAx7lojg=;
+        b=ec7QuVfnIZLQ88jHZoUqWHmt5Tz6VnOx+4TTQPJqAmjTWBV6Z4evvgj89nxPR/PnKv
+         FxGznEljYvSw7kwOhi4jr7CxCiEY0Blo+TX/8Ta2xgp+ubxoMYeNbMGYJk4/KbQ4iAD5
+         gOKxPIQg9fALFSIViKsJu6Fx2WC+d/r4/TPfMvYICGTDOiCvFQxsEMEt4suhqcN5+Upq
+         vw0Easd/AnS0FnAKtSDGBcj/8in/IGWZqe39ihXqzObr5F9ZM7XmTLEexvQBMD89Ympz
+         fm2GO6piOH4WnyN9IlLydw8Af0oBZngODg50dXPjoLKXsIL0X/p6XYKObS5sKeb68CnH
+         C9rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=T4Qlm7+uR9SVFbfB41B8xYIH44tr4UFSZKNZe5dH1tA=;
-        b=pOmLAraT+W8tqmZSXCwrerCq2XoaEjBXR1ko0smPv1yBifY2qz69y9Da6XlUB9B6AZ
-         GGeypQYBX+A+hW8JeVHvAlTDk36qOIcGkUf4qVDgC188FNYFSi5IK6N85Omi0RDx2ozM
-         jwOMSlSILFBLL5BQxyjbQ8bQzmkkk2/PKNAfvW/JlxC8/02kREZ0WFAfj2brYU6lju+g
-         Fi+Get8Cwb2TuQTkd6irjtnDJqpHmFPBiS3+wj2KwMi1udadX26kb30l8tSG/juKuyhj
-         4+0gHYSbOSh/BMHlkDhw67XH0OLtkzNzR/dFslNYyMdWXhL06NfnElDAQgl5ftAdvfU4
-         MuwA==
-X-Gm-Message-State: ACrzQf1uZHvJ84Zq2fdIQT+wXPuK0XbZvkGERcOn0MI0/nKT7CBzsr/d
-        /zVB80BD3By37MlZzLkd8N5tFUS3iA==
-X-Google-Smtp-Source: AMsMyM4aPZnhtH5GGlYP0SOulV2FpitaZP2NAb5dcb5MLBDxacUphrRLGsK6Hxvis2p9jIXN7GiuGQ==
-X-Received: by 2002:a17:907:3fa1:b0:77b:6f08:a2f9 with SMTP id hr33-20020a1709073fa100b0077b6f08a2f9mr2485319ejc.52.1663308701382;
-        Thu, 15 Sep 2022 23:11:41 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.252.126])
-        by smtp.gmail.com with ESMTPSA id x20-20020a170906299400b0074a82932e3bsm9990983eje.77.2022.09.15.23.11.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=avEn3txHBu3dTZu+mmCEsPcvkg2cCwT/97qBAx7lojg=;
+        b=vHdkegzXb05c8VCe7QfQUgb/EGdjYlPvThEve8KGxdzP6nrn6iiof7S7tH1R/HcSVL
+         ben/HSIEVX5fb8qoqMCbgS3zKp3O1yT/lKw+zP4gsC2YRBDjkxmbub4bIIjtm+8u8Puf
+         bGJO6BCFqsbkjGsIfcrW9vJFNAN37jBQ+wWTXbtlbLgNQUXm6fbPVmx8PeEzFLCQ3evj
+         Ygqs01I4rQonFv87i0x8+gMoQ0w/JrbWSwiLHcrRCfcCa4ma2ORBLZwgQgxaLokpqpAq
+         aZbgez7Fc3iAvKA5s3pNg3SVydJ+Y3GpjWtvJJWyZZCmnI8fHgCvawZwuCrPxaC4dNFU
+         qaGA==
+X-Gm-Message-State: ACrzQf0hjDL1DpD3XoJWplLqKJ9waFVwuwDtFJ8bJKyaJZDhdiE1jUac
+        qAHJIQDRbmFfyQlE3tGK//zpdSPQmEo=
+X-Google-Smtp-Source: AMsMyM7/HKAkkyHeAgmYan5gFHmSSBU5HgXDevyu/H/LYekwOwKnnaNMciTFeBFlUC/E0cTeDOZ5kA==
+X-Received: by 2002:a17:90a:c258:b0:202:b93b:cb89 with SMTP id d24-20020a17090ac25800b00202b93bcb89mr14265611pjx.126.1663309152205;
+        Thu, 15 Sep 2022 23:19:12 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r18-20020a170902c7d200b001745662d568sm13741358pla.278.2022.09.15.23.19.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 23:11:40 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 09:11:37 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     yangyicong@hisilicon.com, viro@zeniv.linux.org.uk,
-        jonnyc@amazon.com, hhhawa@amazon.com, andriy.shevchenko@intel.com,
-        farbere@amazon.com, akpm@linux-foundation.org
-Subject: Re: + libfs-fix-error-format-in-simple_attr_write.patch added to
- mm-nonmm-unstable branch
-Message-ID: <YyQTmZG/tNWd/ErO@localhost.localdomain>
-References: <20220915213426.3BC15C433D6@smtp.kernel.org>
+        Thu, 15 Sep 2022 23:19:11 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        yangyingliang@huawei.com, venkataprasad.potturu@amd.com,
+        Vijendar.Mukunda@amd.com, Vsujithkumar.Reddy@amd.com,
+        AjitKumar.Pandey@amd.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] ASoC: amd: acp: use devm_kcalloc() instead of devm_kzalloc()
+Date:   Fri, 16 Sep 2022 06:19:06 +0000
+Message-Id: <20220916061906.152434-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220915213426.3BC15C433D6@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,68 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 02:34:25PM -0700, Andrew Morton wrote:
->      libfs-fix-error-format-in-simple_attr_write.patch
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-> From: Eliav Farber <farbere@amazon.com>
-> Subject: libfs: fix error format in simple_attr_write()
-> Date: Thu, 15 Sep 2022 09:15:44 +0000
-> 
-> In commit 488dac0c9237 ("libfs: fix error cast of negative value in
-> simple_attr_write()"), simple_attr_write() was changed to use kstrtoull()
-> instead of simple_strtoll() to convert a string got from a user.  A user
-> trying to set a negative value will get an error.
-> 
-> This is wrong since it breaks all the places that use
-> DEFINE_DEBUGFS_ATTRIBUTE() with format of a signed integer.
-> 
-> For the record there are 43 current users of signed integer which are
-> likely to be effected by this:
-> 
-> $ git grep -n -A1 -w DEFINE_DEBUGFS_ATTRIBUTE | grep ');' |
-> sed 's,.*\(".*%.*"\).*,\1,' | sort | uniq -c
->   1 "%08llx\n"
->   5 "0x%016llx\n"
->   5 "0x%02llx\n"
->   5 "0x%04llx\n"
->  13 "0x%08llx\n"
->   1 "0x%4.4llx\n"
->   3 "0x%.4llx\n"
->   4 "0x%llx\n"
->   1 "%1lld\n"
->  40 "%lld\n"
->   2 "%lli\n"
-> 129 "%llu\n"
->   1 "%#llx\n"
->   2 "%llx\n"
-> 
-> u64 is not an issue for negative numbers.
-> The %lld and %llu in any case are for 64-bit value, representing it as
-> unsigned simplifies the generic code, but it doesn't mean we can't keep
-> their signed value if we know that.
-> 
-> This change uses sscanf() to fix the problem since it does the conversion
-> based on the supplied format string.
+Use 2-factor multiplication argument form devm_kcalloc() instead
+of devm_kzalloc().
 
-> --- a/fs/libfs.c~libfs-fix-error-format-in-simple_attr_write
-> +++ a/fs/libfs.c
-> @@ -1017,9 +1017,12 @@ ssize_t simple_attr_write(struct file *f
->  		goto out;
->  
->  	attr->set_buf[size] = '\0';
-> -	ret = kstrtoull(attr->set_buf, 0, &val);
-> -	if (ret)
-> +	ret = sscanf(attr->set_buf, attr->fmt, &val);
-> +	if (ret != 1) {
-> +		ret = -EINVAL;
->  		goto out;
-> +	}
-> +
->  	ret = attr->set(attr->data, val);
->  	if (ret == 0)
->  		ret = len; /* on success, claim we got the whole input */
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ sound/soc/amd/acp/acp-pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No scanf please. Just revert original patch if something broke.
-
-scanf may be tolerable if it is just one format conversion but it is
-disaster as an interface.
+diff --git a/sound/soc/amd/acp/acp-pci.c b/sound/soc/amd/acp/acp-pci.c
+index ef2ce083521e..a0c84cd07fde 100644
+--- a/sound/soc/amd/acp/acp-pci.c
++++ b/sound/soc/amd/acp/acp-pci.c
+@@ -107,7 +107,7 @@ static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id
+ 		goto unregister_dmic_dev;
+ 	}
+ 
+-	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * num_res, GFP_KERNEL);
++	res = devm_kcalloc(&pci->dev, num_res, sizeof(struct resource), GFP_KERNEL);
+ 	if (!res) {
+ 		ret = -ENOMEM;
+ 		goto unregister_dmic_dev;
+-- 
+2.25.1
