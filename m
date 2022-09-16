@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF035BAB14
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0635BAA51
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiIPKWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
+        id S230420AbiIPKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiIPKUz (ORCPT
+        with ESMTP id S231892AbiIPKTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:20:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB04BA99E4;
-        Fri, 16 Sep 2022 03:13:42 -0700 (PDT)
+        Fri, 16 Sep 2022 06:19:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F9F13F49;
+        Fri, 16 Sep 2022 03:12:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A421E62A0E;
-        Fri, 16 Sep 2022 10:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92153C433C1;
-        Fri, 16 Sep 2022 10:13:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 138DDB82539;
+        Fri, 16 Sep 2022 10:12:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FD6C433D6;
+        Fri, 16 Sep 2022 10:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323203;
-        bh=/Z5VauDP6NZb5Qbbk5QtyDSUJrRx1CVHUG5+Lgr4zrw=;
+        s=korg; t=1663323171;
+        bh=bUQW0Wp4SnI8PrxP3zvxYr7GetJzUvK5EMTjMqSKClw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQ209Q7NvSMWab9kjSoBLl/4GU2aASfVCYp0YyVVZJ7AjcywRV7AnhNEiYDC3j6mX
-         pT54F2AjC6r9At7OUofdcyVbtz5r114M3Ek1RnGRNjNiLVUHB3eONoLlEd3S56tmky
-         7efG04Cqac/ar0DHo82et+W+pPC3v3qmnAaekmOg=
+        b=mqPqUuWZNC5nJyO3dM6mGun23H2nBS14cjn8ty1lI4uar3CVjoogzzhc0RMjPzT13
+         YAFsSQsMEsmCg24OGgPHx+WVsbD3fgC7GC1Jap8EzhP3kYudFybG4U1CfB08U9sUXk
+         ycLoUlnk0voE271E7eLGm5aTRXScA+EZ86P46JJ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 10/38] drm/msm/rd: Fix FIFO-full deadlock
+Subject: [PATCH 5.15 21/35] gpio: mockup: remove gpio debugfs when remove device
 Date:   Fri, 16 Sep 2022 12:08:44 +0200
-Message-Id: <20220916100448.898505845@linuxfoundation.org>
+Message-Id: <20220916100447.835275499@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
-References: <20220916100448.431016349@linuxfoundation.org>
+In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
+References: <20220916100446.916515275@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,37 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 174974d8463b77c2b4065e98513adb204e64de7d ]
+[ Upstream commit 303e6da99429510b1e4edf833afe90ac8542e747 ]
 
-If the previous thing cat'ing $debugfs/rd left the FIFO full, then
-subsequent open could deadlock in rd_write() (because open is blocked,
-not giving a chance for read() to consume any data in the FIFO).  Also
-it is generally a good idea to clear out old data from the FIFO.
+GPIO mockup debugfs is created in gpio_mockup_probe() but
+forgot to remove when remove device. This patch add a devm
+managed callback for removing them.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/496706/
-Link: https://lore.kernel.org/r/20220807160901.2353471-2-robdclark@gmail.com
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_rd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpio/gpio-mockup.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index a92ffde53f0b3..db2f847c8535f 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -196,6 +196,9 @@ static int rd_open(struct inode *inode, struct file *file)
- 	file->private_data = rd;
- 	rd->open = true;
+diff --git a/drivers/gpio/gpio-mockup.c b/drivers/gpio/gpio-mockup.c
+index d26bff29157b5..369a832d96203 100644
+--- a/drivers/gpio/gpio-mockup.c
++++ b/drivers/gpio/gpio-mockup.c
+@@ -373,6 +373,13 @@ static void gpio_mockup_debugfs_setup(struct device *dev,
+ 	}
+ }
  
-+	/* Reset fifo to clear any previously unread data: */
-+	rd->fifo.head = rd->fifo.tail = 0;
++static void gpio_mockup_debugfs_cleanup(void *data)
++{
++	struct gpio_mockup_chip *chip = data;
 +
- 	/* the parsing tools need to know gpu-id to know which
- 	 * register database to load.
- 	 *
++	debugfs_remove_recursive(chip->dbg_dir);
++}
++
+ static void gpio_mockup_dispose_mappings(void *data)
+ {
+ 	struct gpio_mockup_chip *chip = data;
+@@ -455,7 +462,7 @@ static int gpio_mockup_probe(struct platform_device *pdev)
+ 
+ 	gpio_mockup_debugfs_setup(dev, chip);
+ 
+-	return 0;
++	return devm_add_action_or_reset(dev, gpio_mockup_debugfs_cleanup, chip);
+ }
+ 
+ static const struct of_device_id gpio_mockup_of_match[] = {
 -- 
 2.35.1
 
