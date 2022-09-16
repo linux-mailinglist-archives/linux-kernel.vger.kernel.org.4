@@ -2,158 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F64A5BA916
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73A95BA927
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiIPJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S231219AbiIPJOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiIPJNW (ORCPT
+        with ESMTP id S229812AbiIPJOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:13:22 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECAE6FA33
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:13:21 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-346cd4c3d7aso251871177b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=St+IQCWJacJKbPUwjmk2zZiPvZUfUUJhCu0g3DwZrPg=;
-        b=Tq8+3NsAcC3hZkWZbN2XInttxNbHcPBxQHaxd6kqBbQ+vcToc+f9RVGIsc931BWVYv
-         4QDsKLv0z+ustpPusPz/B9AlixdY/+20yLQ3Nb+Fa7rupRd0naGOVpYYufmEQtlM5DII
-         sx51DqRcgBgYykDI/ks3MxB7qjaAYnoqogbo/7wSk2d8PHFC9DklV/sGJpb1YdiGvdgE
-         cPjNWVgiTi2YeBUpLJNpIVMferIDI3FBXMUngw00uukIFnVZglD7gSlfWfoPoLRHl1sl
-         niGM24A+pcobtBMSFxFNvKxFgeoq4A8ILvrdqwFIbIlpjTDArgzldYkHsYo+IATVq7eN
-         72WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=St+IQCWJacJKbPUwjmk2zZiPvZUfUUJhCu0g3DwZrPg=;
-        b=rkxjndP0hjMCjDCipUFuCkTJJ9cEggSA5CT/HlkTnTtBSFPVXde6pjOVDrpGejlC09
-         p9zddxHkKOeTIkaOrJ9TAZiIcfM5R3cNd3xLyfpGHu3LU0Mp14tJozwXGkx7OBg5WVnx
-         TJx2gxAk0DVjjH0KtozykVThC/lg6NxxaTEuwaWCMwjVXIo/K4tcZlo3fEtEM2aTDOrf
-         CQF3j7vHML0YP4y6ET+M9rjhNwMVjN4wQBSTVRa1Lkp6jPCftLwDQ2P1kx+kyJqJj7PP
-         bUKE17bdMGKYkwCp/eZppGqmcWTVAwAzObUAwb7zKc66rP0m2LL8B8PBYJ/3lfnZ+e16
-         XKSQ==
-X-Gm-Message-State: ACrzQf1P5Sp5KndF0UTKC/5SVuA0RbZ2zEBbZbdOEU8KFgYSY/I+qu2U
-        YMRSEW+skC4wjbQCH6tbvqhelTtXQLTpKsSOewXsUg==
-X-Google-Smtp-Source: AMsMyM6QGrLkBXMbfIPe1G5TGsi0HWQVWE4tx9McXMeIqkGsZpi9tdQNue2OLJQyPpOK052xbeGm8HDCACIsAHD0xIk=
-X-Received: by 2002:a81:1409:0:b0:349:e8bb:1fdb with SMTP id
- 9-20020a811409000000b00349e8bb1fdbmr3573010ywu.299.1663319600558; Fri, 16 Sep
- 2022 02:13:20 -0700 (PDT)
+        Fri, 16 Sep 2022 05:14:18 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8896EF11;
+        Fri, 16 Sep 2022 02:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663319657; x=1694855657;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BG5V+A4uG8HRBRbESp15yu8AT7lZh9mvv40sj/jdHsM=;
+  b=L9iwVakqWjNiN06egHZWkhJpyRdAdYdYxdYzFOQ3d88mcKK0CugTunX5
+   39oZ5Y+8hgY2XERGGcC+yffuWSO1UI0n+gaKk1IBT6bghD35+HlB8nhKV
+   0MdkUcXTSANMWgGEiFwQIgElagwXIj3OMl3A93om1Uko3FWdAuBpW3RdC
+   2lF4xsl/nsEftKkiX09nh+b6EflT1F/qjkAiXyFyUNMb7j6pzQjLclTmY
+   /STedT34mFvd5F7DSujqz2zFFWoy5gkW7xU9E64hBGy8YrIezHySTwRug
+   hXCI+zfauWo3ZD92Jlt3nypyimqb/ZtUXHZKjRvcSarkEwFJuhU/SXAw+
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="180663662"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 02:14:16 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 16 Sep 2022 02:14:16 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 16 Sep 2022 02:14:10 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <arun.ramadoss@microchip.com>,
+        <prasanna.vengateshan@microchip.com>, <hkallweit1@gmail.com>
+Subject: [Patch net-next v3 0/6] net: dsa: microchip: ksz9477: enable interrupt for internal phy link detection
+Date:   Fri, 16 Sep 2022 14:43:42 +0530
+Message-ID: <20220916091348.8570-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220915150417.722975-1-glider@google.com> <20220915150417.722975-28-glider@google.com>
- <20220915135838.8ad6df0363ccbd671d9641a1@linux-foundation.org>
-In-Reply-To: <20220915135838.8ad6df0363ccbd671d9641a1@linux-foundation.org>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 16 Sep 2022 11:12:44 +0200
-Message-ID: <CAG_fn=WJZBK_xypJ-D7NPjGeaQ8c3fs8Ji+-j+=O=9neZjTUBw@mail.gmail.com>
-Subject: Re: [PATCH v7 27/43] kmsan: disable physical page merging in biovec
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 10:58 PM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Thu, 15 Sep 2022 17:04:01 +0200 Alexander Potapenko <glider@google.com=
-> wrote:
->
-> > KMSAN metadata for adjacent physical pages may not be adjacent,
-> > therefore accessing such pages together may lead to metadata
-> > corruption.
-> > We disable merging pages in biovec to prevent such corruptions.
-> >
-> > ...
-> >
-> > --- a/block/blk.h
-> > +++ b/block/blk.h
-> > @@ -88,6 +88,13 @@ static inline bool biovec_phys_mergeable(struct requ=
-est_queue *q,
-> >       phys_addr_t addr1 =3D page_to_phys(vec1->bv_page) + vec1->bv_offs=
-et;
-> >       phys_addr_t addr2 =3D page_to_phys(vec2->bv_page) + vec2->bv_offs=
-et;
-> >
-> > +     /*
-> > +      * Merging adjacent physical pages may not work correctly under K=
-MSAN
-> > +      * if their metadata pages aren't adjacent. Just disable merging.
-> > +      */
-> > +     if (IS_ENABLED(CONFIG_KMSAN))
-> > +             return false;
-> > +
-> >       if (addr1 + vec1->bv_len !=3D addr2)
-> >               return false;
-> >       if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_pag=
-e))
->
-> What are the runtime effects of this?  In other words, how much
-> slowdown is this likely to cause in a reasonable worst-case?
+This patch series implements the common interrupt handling for ksz9477 based
+switches and lan937x. The ksz9477 and lan937x has similar interrupt registers
+except ksz9477 has 4 port based interrupts whereas lan937x has 6 interrupts.
+The patch moves the phy interrupt hanler implemented in lan937x_main.c to
+ksz_common.c, along with the mdio_register functionality.
 
-To be honest, I have no idea. KMSAN already introduces a lot of
-runtime overhead to every memory access, it's unlikely that disabling
-some filesystem optimization will add anything on top of that.
-Anyway, KMSAN is a debugging tool that is not supposed to be used in
-production (there's a big boot-time warning about that now :) )
+v2 -> v3
+- Added the common interrupt routines for girq and pirq
 
---=20
-Alexander Potapenko
-Software Engineer
+v1 -> v2
+- Added the .port_nirqs = 2 for ksz9896
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Changes in RFC -> v1
+- modified the return -ENODEV to 0 if mdio node not present
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Arun Ramadoss (6):
+  net: dsa: microchip: determine number of port irq based on switch type
+  net: dsa: microchip: enable phy interrupts only if interrupt enabled
+    in dts
+  net: dsa: microchip: lan937x: return zero if mdio node not present
+  net: dsa: microchip: move interrupt handling logic from lan937x to
+    ksz_common
+  net: dsa: microchip: use common irq routines for girq and pirq
+  net: phy: micrel: enable interrupt for ksz9477 phy
+
+ drivers/net/dsa/microchip/ksz_common.c   | 320 +++++++++++++++++
+ drivers/net/dsa/microchip/ksz_common.h   |  15 +-
+ drivers/net/dsa/microchip/lan937x_main.c | 425 -----------------------
+ drivers/net/phy/micrel.c                 |   2 +
+ 4 files changed, 336 insertions(+), 426 deletions(-)
+
+
+base-commit: da970726ea872269dc311b6dd87af8cf457b8fe9
+-- 
+2.36.1
+
