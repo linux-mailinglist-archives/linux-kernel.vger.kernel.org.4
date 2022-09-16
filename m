@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30A85BA368
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 02:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3765BA369
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 02:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIPADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 20:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S229548AbiIPAEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 20:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIPADb (ORCPT
+        with ESMTP id S229536AbiIPAEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 20:03:31 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECB52E53
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:03:29 -0700 (PDT)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        Thu, 15 Sep 2022 20:04:06 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8855C61D61
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:04:05 -0700 (PDT)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2FCD13F179
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:03:28 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6ECD93F45E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663286608;
-        bh=XEszTMy4BSHlQ6vsVLVwlRpHC94G5PPukl5GrIlhufc=;
+        s=20210705; t=1663286643;
+        bh=dEt9suttK6bik37ObVLfsquYHcW4B7tPX30QGwKA5II=;
         h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
          To:Cc:Content-Type;
-        b=op9ioO+/qKLFb+pdwjCY1/mLvhPhFGplNYUVYFc+ogDvc7gJlDvdj2/W7iOkH/f8o
-         VyS+kt6DM+YaC9x3se7tUwaV51sb3VAne2RcFfhA8OKGVc64u8DqcKqiB/N521+GBt
-         uvhiAwmRMHIk0TLA24E8GT+OrMKEBBb11mwg1/L4QsH4fun/QeEjvq05zJEpHeHiSA
-         QG9XqYjP27CjNpKJpHrfX4iPCh6OsfHW63SJIMVdp5R7eAU5WI9nDWfx6Hwu2fb8WM
-         aU8MPMLfWl+rmAXc3uFX84NykAs5cGtNl2Q0Twdwa4PDu2N0wsbKzVNAWT3pX+HLAs
-         CueWE+Fq2BNIg==
-Received: by mail-wm1-f70.google.com with SMTP id h133-20020a1c218b000000b003b3263d477eso10311954wmh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:03:28 -0700 (PDT)
+        b=ah6tMDkJ1LKIgkUVGFW34dcDMlxwGJgLrFTYXzX2l7Oir9TzXZ1zZH/JCKX6E2WSY
+         pEvsSgRangYQdciwPzPwKSKV58kuQ2syS+V+vCP6+uhY1KKfVcPOlxDVOeR/pLn1YJ
+         RohsCbO6oOU4UUZxYHMQRYPFuRDQH4doufCmRPR+f20u9A56a1ACGiPEAuq/CPU6xz
+         m+o5voOtNYmFioT24MDDarmkHnG0gIdkgQb/2G7PyTAYIuw5INv9T01Kfn68LwDGUk
+         m8/p29b4vo2bt20zSwlGH4T4h3WpLC7GxkDFeQtvrt5w9v1+c8Ks5WsZvqHH3hV1Ei
+         ll+u8zXA8gCXQ==
+Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso1360147wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:04:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=XEszTMy4BSHlQ6vsVLVwlRpHC94G5PPukl5GrIlhufc=;
-        b=r5EZTdcxopZg+d7cXJJnNWhMM2FWtP4y1M0BG4gtk7M1BeCknkSEJsWFoWVaq/HY1O
-         BLW7uJhJEyjT6D0LSBgTmAxyJ2JxbUWynu6tdwwM8PjzWBDAB6C/9Lm8br7kkU9d0AZh
-         LtkagygIuFKofliuAqOcoSHcCXmI6PF/zptf5u836oP0TtS6tjhEpC24F/nTVb9KivTn
-         +ejXK4WE1zICwTZbSYKVppfEjGw8rABNervtU7DVh+DNplFicpmqS/nAFmLA0jhEV6Pe
-         Bm2v2StRABxSjyziSWxQtiqfPHT2SfBCcBkV6BwEb0ibwHSz+sYOEzh6paPlGQmiXrXy
-         edaA==
-X-Gm-Message-State: ACgBeo0O6nzfKvRqrG4lXRRTsU5lEQupJXuOUC2q2LYxTxK0ql11pbsF
-        j0FtqAQsgxn2PqwhW6ijSeBLHa+WiTmOpXCwZyPkgqjm1Pn0597brcjec3Zmq9a2RLrUxO0VNm+
-        IpUBge0P0f/k8USZzzRYNQZUu2ItKxojqRi3FnFngnMcGLYMv0ErHwlALIw==
-X-Received: by 2002:a05:600c:1e20:b0:3b4:86e4:6857 with SMTP id ay32-20020a05600c1e2000b003b486e46857mr8494592wmb.167.1663286607768;
-        Thu, 15 Sep 2022 17:03:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7juhqsS6LzVQTpv3uXvCGHlwMXNamNlOnD9rBc/A7aqL4qDPZQ+zmIBT6G25WHWodqDyB1pZ/RgkioU/6K/10=
-X-Received: by 2002:a05:600c:1e20:b0:3b4:86e4:6857 with SMTP id
- ay32-20020a05600c1e2000b003b486e46857mr8494570wmb.167.1663286607472; Thu, 15
- Sep 2022 17:03:27 -0700 (PDT)
+        bh=dEt9suttK6bik37ObVLfsquYHcW4B7tPX30QGwKA5II=;
+        b=ojAV+tRFsMe6Pw1cb5hPQM4oCt+h8tOt2r1ehIjRqTtAwfhar6ajplzouQsFLosM5C
+         oe19i+9qboxS8MfGugTttAbk8M3vCMAECpwybLs3J8TFJ1z2PMhYpaXdAphSZvTgWRxh
+         CB/5cWL8T8mXwWdvVwevVkNnOjYkvv4orAm0BfmA6Ulu1Z/A6beFXhvbJIrTu0+GOTBg
+         ZzBF2OsGaQsD7djSqaw48YWYaduSuS7WozJNgmy95RMf2gtXP6HBecV/M+ikR9vDubfu
+         kQtWqy4UaCjCIAnnI7+9zsxN/TzXDnIsgzKsbxMLm4iLgukSWrb0EAqUGG4IIf6f6bU7
+         7fWg==
+X-Gm-Message-State: ACrzQf35nDIUy87fGRk7tTrW2z+C2rAnPu0tseR4dN05kQ3VrJHMPSaT
+        WMEJWHE3dvt+c/l/OGjkYvMEwhSo/TRQfIq34fhFo9zhRd6i+cuqqkCJMBbX3fhr5G4yEMEhIrE
+        C9ATn+/CdsMAaLLBDwvhDPnIfBDeVn88O1N1p16SD/AaXIaheSY2o4tt9Eg==
+X-Received: by 2002:a5d:6d09:0:b0:228:d897:af3c with SMTP id e9-20020a5d6d09000000b00228d897af3cmr1289868wrq.78.1663286641819;
+        Thu, 15 Sep 2022 17:04:01 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6TXwN3hPjyfqhOjz9Yu3dApjEc7WfflxjUkm9GzI89v5Nrm6OB4X8SP1gpyfb4xHMBhxGtE50eMjJAI4kx3TM=
+X-Received: by 2002:a5d:6d09:0:b0:228:d897:af3c with SMTP id
+ e9-20020a5d6d09000000b00228d897af3cmr1289857wrq.78.1663286641609; Thu, 15 Sep
+ 2022 17:04:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220913062042.1977790-1-kai.heng.feng@canonical.com>
- <20220913062042.1977790-2-kai.heng.feng@canonical.com> <44e3e1be-363b-f19b-4907-6990d2f5b24c@collabora.com>
-In-Reply-To: <44e3e1be-363b-f19b-4907-6990d2f5b24c@collabora.com>
+References: <20220913062042.1977790-1-kai.heng.feng@canonical.com> <a88168af-e072-2af6-fca4-0472d3277f68@collabora.com>
+In-Reply-To: <a88168af-e072-2af6-fca4-0472d3277f68@collabora.com>
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 16 Sep 2022 08:03:16 +0800
-Message-ID: <CAAd53p5gYAP4X4AFBf9kGnwFaREucUn2J20U0nw9zjv+nh+=Cw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
+Date:   Fri, 16 Sep 2022 08:03:50 +0800
+Message-ID: <CAAd53p7CcPfu3-=6n6vUXW8=GjC9HEh6jivAHWza5mj77i4GKQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kernel/reboot: Add SYS_OFF_MODE_RESTART_PREPARE mode
 To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Cc:     rafael.j.wysocki@intel.com, lenb@kernel.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+        tangmeng <tangmeng@uniontech.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -77,56 +77,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 11:17 PM Dmitry Osipenko
+On Tue, Sep 13, 2022 at 11:14 PM Dmitry Osipenko
 <dmitry.osipenko@collabora.com> wrote:
 >
 > On 9/13/22 09:20, Kai-Heng Feng wrote:
-> > Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
-> > PowerEdge r440 hangs at reboot.
+> > Add SYS_OFF_MODE_RESTART_PREPARE callbacks can be invoked before system
+> > restart.
 > >
-> > The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
-> > system reboot to avoid triggering AER"), so use the new sysoff API to
-> > reinstate S5 for reboot on ACPI-based systems.
+> > This is a preparation for next patch.
 > >
-> > Cc: Josef Bacik <josef@toxicpanda.com>
 > > Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > > ---
 > > v3:
-> >  - Use new API to invoke ACPI S5.
+> >  - New patch.
 > >
-> > v2:
-> >  - Use do_kernel_power_off_prepare() instead.
+> >  include/linux/reboot.h |  8 ++++++++
+> >  kernel/reboot.c        | 17 +++++++++++++++++
+> >  2 files changed, 25 insertions(+)
 > >
-> >  drivers/acpi/sleep.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> > diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+> > index e5d9ef886179c..ba87cdef2335a 100644
+> > --- a/include/linux/reboot.h
+> > +++ b/include/linux/reboot.h
+> > @@ -105,6 +105,14 @@ enum sys_off_mode {
+> >        */
+> >       SYS_OFF_MODE_POWER_OFF,
 > >
-> > diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> > index ad4b2987b3d6e..dce5460902eed 100644
-> > --- a/drivers/acpi/sleep.c
-> > +++ b/drivers/acpi/sleep.c
-> > @@ -1088,6 +1088,10 @@ int __init acpi_sleep_init(void)
-> >               register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-> >                                        SYS_OFF_PRIO_FIRMWARE,
-> >                                        acpi_power_off, NULL);
-> > +
-> > +             register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
-> > +                                      SYS_OFF_PRIO_FIRMWARE,
-> > +                                      acpi_power_off_prepare, NULL);
+> > +     /**
+> > +      * @SYS_OFF_MODE_RESTART_PREPARE:
+> > +      *
+> > +      * Handlers prepare system to be powered off. Handlers are
 >
-> Maybe you could add a small comment to the code explaining why
-> acpi_power_off_prepare is used for restarting?
+> s/powered off/restarted/
 
-Will do.
-
->
-> Is it safe to use S5 on restart for all devices in general?
-
-S5 should be used, but it may expose some driver bugs like the one
-mentioned in the commit message.
+Will address this in next revision.
 
 Kai-Heng
 
+>
+> > +      * allowed to sleep.
+> > +      */
+> > +     SYS_OFF_MODE_RESTART_PREPARE,
+> > +
+> >       /**
+> >        * @SYS_OFF_MODE_RESTART:
+> >        *
+> > diff --git a/kernel/reboot.c b/kernel/reboot.c
+> > index 3c35445bf5ad3..3bba88c7ffc6b 100644
+> > --- a/kernel/reboot.c
+> > +++ b/kernel/reboot.c
+> > @@ -243,6 +243,17 @@ void migrate_to_reboot_cpu(void)
+> >       set_cpus_allowed_ptr(current, cpumask_of(cpu));
+> >  }
+> >
+> > +/*
+> > + *   Notifier list for kernel code which wants to be called
+> > + *   to prepare system for restart.
+> > + */
+> > +static BLOCKING_NOTIFIER_HEAD(restart_prep_handler_list);
+> > +
+> > +static void do_kernel_restart_prepare(void)
+> > +{
+> > +     blocking_notifier_call_chain(&restart_prep_handler_list, 0, NULL);
+> > +}
+> > +
+> >  /**
+> >   *   kernel_restart - reboot the system
+> >   *   @cmd: pointer to buffer containing command to execute for restart
+> > @@ -254,6 +265,7 @@ void migrate_to_reboot_cpu(void)
+> >  void kernel_restart(char *cmd)
+> >  {
+> >       kernel_restart_prepare(cmd);
+> > +     do_kernel_restart_prepare();
+> >       migrate_to_reboot_cpu();
+> >       syscore_shutdown();
+> >       if (!cmd)
+> > @@ -396,6 +408,11 @@ register_sys_off_handler(enum sys_off_mode mode,
+> >               handler->list = &power_off_handler_list;
+> >               break;
+> >
+> > +     case SYS_OFF_MODE_RESTART_PREPARE:
+> > +             handler->list = &restart_prep_handler_list;
+> > +             handler->blocking = true;
+> > +             break;
+> > +
+> >       case SYS_OFF_MODE_RESTART:
+> >               handler->list = &restart_handler_list;
+> >               break;
+>
+> With the above comment addressed:
+>
+> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 >
 > --
 > Best regards,
