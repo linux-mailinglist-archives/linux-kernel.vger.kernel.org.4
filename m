@@ -2,239 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D381D5BACE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7B25BACE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiIPMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S230200AbiIPMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIPMAF (ORCPT
+        with ESMTP id S229484AbiIPMCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:00:05 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E228C2E9E5;
-        Fri, 16 Sep 2022 04:59:59 -0700 (PDT)
-X-UUID: af663d45d92c4ba1a42c524ddf8e21a2-20220916
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=TYyYRhoJq7fWtmZNRUDZ326SnABMO3rCDovRyIC+c2k=;
-        b=kncM31WKnOLsgTEKsKE/RJkyDjYVEa2dPq9mKhAREVtlkwJYUSfwiR8ftWlIFGLUYMbALORkQEhe7LN3fj3cHlmc76KGL8/PlMpII6kHck8iqjzBGs7wZ+tz9Le0FFeOuIWwz2Hp56Ah186dUazIBSRGKIsw7ledlw75W6H60/M=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:b9341035-ea49-4508-98d5-94a38cd617c2,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:68faa8f6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: af663d45d92c4ba1a42c524ddf8e21a2-20220916
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 846511512; Fri, 16 Sep 2022 19:59:52 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 16 Sep 2022 19:59:50 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 16 Sep 2022 19:59:50 +0800
-Message-ID: <a5ecd1dd567ca58807b289f2488d933f27e087dd.camel@mediatek.com>
-Subject: Re: [PATCH v2 4/9] remoteproc: mediatek: Support probing for the
- 2nd core of dual-core SCP
-From:   TingHan Shen <tinghan.shen@mediatek.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <bjorn.andersson@linaro.org>, <bleung@chromium.org>,
-        <chrome-platform@lists.linux.dev>, <devicetree@vger.kernel.org>,
-        <dnojiri@chromium.org>, <enric.balletbo@collabora.com>,
-        <groeck@chromium.org>, <gustavoars@kernel.org>,
-        <keescook@chromium.org>, <krzk+dt@kernel.org>,
-        <lee.jones@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <matthias.bgg@gmail.com>,
-        <pmalani@chromium.org>, <robh+dt@kernel.org>,
-        <sebastian.reichel@collabora.com>, <weishunc@google.com>
-Date:   Fri, 16 Sep 2022 19:59:50 +0800
-In-Reply-To: <CANLsYkx6kXk8u_ajFbnhdWTkZBLtrq_z02jryLBSVH0x--_ZFw@mail.gmail.com>
-References: <20220829194247.GC2264818@p14s>
-         <20220908111757.14633-1-tinghan.shen@mediatek.com>
-         <CANLsYkx6kXk8u_ajFbnhdWTkZBLtrq_z02jryLBSVH0x--_ZFw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 16 Sep 2022 08:02:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1870B27F;
+        Fri, 16 Sep 2022 05:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663329730; x=1694865730;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=I7bEY9XKWq/5NwZYNFjLUnUwGKzFVrZ2+hj0izSWBsQ=;
+  b=Qm1ixPEfcw+2Pd/wEZYTduwIpKEuygU6UgwEd/jPTDfajhf6hPXajZ81
+   mYTjiHmeie4AEjc/prEMOK/W69b5IuWstAsqqC49Kf1aik/mW+5bmZ/kv
+   SoipXPpY8gJPnV1vyKdQ9as7R1H6U6lVcC5aZrg9lI3QY8l9xyRaO3fVI
+   hZhnGTm/QvvkTAJEW0NfDvBXEqgm0HuYwHJf+oSo5SY+l4MU+fkpbd2Sz
+   z80XCKbGuJM0724VnOR5ueMmJlin2CHdUgNVJgvvZ19VqC69GSEqX0Srb
+   5gjVS/Cc+dfqCQ3sB+FL+clPcKCdm0V8NIqkgd15j6lP2vupXeDQM9sdC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360716620"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="360716620"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 05:02:09 -0700
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="679941259"
+Received: from lroque-mobl1.amr.corp.intel.com ([10.251.209.126])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 05:02:06 -0700
+Date:   Fri, 16 Sep 2022 15:02:04 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lennert Buytenhek <buytenh@wantstofly.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
+In-Reply-To: <YyRiPMa26qDptj3L@wantstofly.org>
+Message-ID: <421c541b-25d7-a1de-8c21-5a164dcf24ef@linux.intel.com>
+References: <YyF/dogp/0C87zLb@wantstofly.org> <YyGoZLTFhYQvlf+P@smile.fi.intel.com> <YyG2tDdq9PWTlaBQ@wantstofly.org> <YyHR4o5bOnODZzZ9@smile.fi.intel.com> <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com> <YyRiPMa26qDptj3L@wantstofly.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-2065269609-1663329729=:1788"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-08 at 14:58 -0600, Mathieu Poirier wrote:
-> On Thu, 8 Sept 2022 at 05:21, Tinghan Shen <tinghan.shen@mediatek.com>
-> wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-2065269609-1663329729=:1788
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+
+On Fri, 16 Sep 2022, Lennert Buytenhek wrote:
+
+> On Thu, Sep 15, 2022 at 07:27:45PM +0300, Ilpo Järvinen wrote:
 > 
-> > Hi Mathieu,
-> > 
-> > > > The mtk_scp.c driver only supports the single core SCP and the
-> > > > 1st core of a dual-core SCP. This patch extends it for the 2nd core.
+> > > > > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
+> > > > > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
+> > > > > > the UARTs and then re-open that UART.
+> > > > > > 
+> > > > > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
+> > > > > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
+> > > > > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
+> > > > > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
+> > > > > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
+> > > > > > __pci_write_msi_msg():
+> > > > > > 
+> > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
+> > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
+> > > > > > 		Address: fee00278  Data: 0000
+> > > > > > [root@icelake ~]# cat hangup.c
+> > > > > > #include <stdio.h>
+> > > > > > #include <sys/ioctl.h>
+> > > > > > 
+> > > > > > int main(int argc, char *argv[])
+> > > > > > {
+> > > > > > 	ioctl(1, TIOCVHANGUP);
+> > > > > > 
+> > > > > > 	return 0;
+> > > > > > }
+> > > > > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
+> > > > > > [root@icelake ~]# ./hangup > /dev/ttyS4
+> > > > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
+> > > > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
+> > > > > > 		Address: 00000000  Data: 0000
+> > > > > > [root@icelake ~]#
+> > > > > > 
+> > > > > > Opening the serial port device again while the UART is in this state
+> > > > > > then appears to cause the UART to generate an interrupt
+> > > > > 
+> > > > > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
+> > > > > Any of them can be possible, but to be sure, can you add:
+> > > > > 
+> > > > > 	dev_info(p->dev, "FISR: %x\n", fisr);
+> > > > > 
+> > > > > into dnv_handle_irq() before any other code and see which bits we
+> > > > > actually got there before the crash?
+> > > > > 
+> > > > > (If it floods the logs, dev_info_ratelimited() may help)
 > > > > 
-> > > > MT8195 SCP is a dual-core MCU. Both cores are housed in the same
-> > 
-> > subsys.
+> > > > I think that that wouldn't report anything because when the UART is
+> > > > triggering an interrupt here, the MSI address/data are zero, so the
+> > > > IRQ handler is not actually invoked.
 > > > 
-> > > s/subsys/subsystem
+> > > Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
 > > > 
-> > > > They have the same viewpoint of registers and memory.
+> > > > If Ilpo doesn't beat me to it, I'll try adding some debug code to see
+> > > > exactly which UART register write in the tty open path is causing the
+> > > > UART to signal an interrupt before the IRQ handler is set up.
 > > > > 
-> > > > Core 1 of the SCP features its own set of core configuration registers,
-> > > > interrupt controller, timers, and DMAs. The rest of the peripherals
-> > > > in this subsystem are shared by core 0 and core 1.
-> > > > 
-> > > > As for memory, core 1 has its own cache memory. the SCP SRAM is shared
+> > > > (The IOMMU stops the write in this case, so the machine doesn't crash,
+> > > > we just get an I/O page fault warning in dmesg every time this happens.)
 > > > 
-> > > /the/The
+> > > And I believe you are not using that UART as debug console, so it won't
+> > > dead lock itself. It's then better than I assumed.
 > > > 
-> > > > by core 0 and core 1.
-> > > > 
-> > > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > > > ---
-> > > >  drivers/remoteproc/mtk_scp.c | 22 ++++++++++++++++++++--
-> > > >  1 file changed, 20 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/remoteproc/mtk_scp.c
+> > > > > > before the
+> > > > > > MSI vector has been set up again, causing a DMA write to I/O virtual
+> > > > > > address zero:
+> > > > > > 
+> > > > > > [root@icelake console]# echo > /dev/ttyS4
+> > > > > > [  979.463307] DMAR: DRHD: handling fault status reg 3
+> > > > > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
+> > > > > > 
+> > > > > > I'm guessing there's something under tty_open() -> uart_open() ->
+> > > > > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
+> > > > > > serial8250_do_startup() that triggers a UART interrupt before the
+> > > > > > MSI vector has been set up again.
+> > > > > > 
+> > > > > > I did a quick search but it didn't seem like this is a known issue.
+> > > > > 
+> > > > > Thanks for your report and reproducer! Yes, I also never heard about
+> > > > > such an issue before. Ilpo, who is doing more UART work nowadays, might
+> > > > > have an idea, I hope.
 > > 
-> > b/drivers/remoteproc/mtk_scp.c
-> > > > index 3510c6d0bbc8..91b4aefde4ac 100644
-> > > > --- a/drivers/remoteproc/mtk_scp.c
-> > > > +++ b/drivers/remoteproc/mtk_scp.c
-> > > > @@ -23,6 +23,10 @@
-> > > >  #define MAX_CODE_SIZE 0x500000
-> > > >  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
-> > > > 
-> > > > +#define SCP_CORE_0 0
-> > > > +#define SCP_CORE_1 1
-> > > > +#define SCP_CORE_SINGLE 0xF
-> > > > +
-> > > >  /**
-> > > >   * scp_get() - get a reference to SCP.
-> > > >   *
-> > > > @@ -836,6 +840,7 @@ static int scp_probe(struct platform_device *pdev)
-> > > >     struct resource *res;
-> > > >     const char *fw_name = "scp.img";
-> > > >     int ret, i;
-> > > > +   u32 core_id = SCP_CORE_SINGLE;
-> > > > 
-> > > >     ret = rproc_of_parse_firmware(dev, 0, &fw_name);
-> > > >     if (ret < 0 && ret != -EINVAL)
-> > > > @@ -851,8 +856,16 @@ static int scp_probe(struct platform_device *pdev)
-> > > >     scp->data = of_device_get_match_data(dev);
-> > > >     platform_set_drvdata(pdev, scp);
-> > > > 
-> > > > +   ret = of_property_read_u32_index(dev->of_node,
-> > 
-> > "mediatek,scp-core", 1, &core_id);
-> > > > +   if (ret == 0)
-> > > > +           dev_info(dev, "Boot SCP dual core %u\n", core_id);
-> > > 
-> > > Why is the DT property "mediatek,scp-core" needed at all?  Since the
-> > 
-> > compatible
-> > > "mediatek,mt8195-scp-dual" has already been defined previously in this
-> > 
-> > patchset,
-> > > initialising the second core, if present, is a matter of looking at the
-> > > compatile string.
-> > 
-> > This idea of identify cores by the compatible looks workable.
-> > I'll update this series at next version.
-> > Thanks!
-> > 
-> > > 
-> > > > +
-> > > >     res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-> > > > -   scp->sram_base = devm_ioremap_resource(dev, res);
-> > > > +   if (core_id == SCP_CORE_1)
-> > > > +           scp->sram_base = devm_ioremap(dev, res->start,
-> > 
-> > resource_size(res));
-> > > > +   else
-> > > > +           scp->sram_base = devm_ioremap_resource(dev, res);
-> > > > +
-> > > 
-> > > This looks very broken...  For this to work you would need to have two DT
-> > > entries with the "mediatek,mt8195-scp-dual" compatible properly, one with
-> > > "mediatek,scp-core = <&scp_dual1 0>;" and another one with
-> > 
-> > "mediatek,scp-core = <&scp_dual0 1>;".
-> > > 
-> > > Which is also very broken...  Here you have a binding whose first
-> > 
-> > argument is a
-> > > reference to the core sibling while the second argument is a
-> > 
-> > characteristic of
-> > > the current core, which is highly confusing.
-> > > 
-> > > I suggest what when you see the compatible binding
-> > 
-> > "mediatek,mt8195-scp", a
-> > > single core is initialized.  If you see "mediatek,mt8195-scp-dual", both
-> > 
-> > cores
-> > > are initialized as part of the _same_ probe.
-> > > 
-> > > If the above analysis is not correct it means I misinterpreted your
-> > > work and if so, a serious amount of comments is needed _and_ a very
-> > 
-> > detailed
-> > > example in "mtk,scp.yaml" that leaves no room for interpretation.
-> > > 
-> > > I will stop reviewing this patchset until you have clarified how this
-> > 
-> > works.
-> > > 
-> > > Thanks,
-> > > Mathieu
-> > 
-> > There's one problem of initializng the CORE1 using the same probe flow.
-> > The register space of CORE0 and CORE1 are overlapped in the device node.
-> > Both cores need to use the 'cfg' registers defined in scp yaml.
-> > The devm_ioremap_resource catches address overlapping and returns error
-> > when
-> > probing CORE1 driver.
-> > 
+> > The patch below seems to avoid the faults. [...]
 > 
-> That is exactly why I suggest to initialise both cores within the same
-> probe() function.
+> Thanks for the fix!
 > 
+> 
+> > [...] I'm far from sure if it's the 
+> > best fix though as I don't fully understand what causes the faults during 
+> > the THRE tests because the port->irq is disabled by the THRE test block.
+> 
+> If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
+> address/data registers.  Disabling the IRQ at the interrupt controller
+> won't stop the UART from performing a DMA write to the address programmed
+> in its MSI address register (zero) when it wants to signal an interrupt.
+> 
+> (These UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
+> capability, so there is no way to mask the interrupt at the source PCI
+> function level, except disabling the MSI capability entirely, but that
+> would cause it to fall back to INTx# assertion, and the PCI specification
+> prohibits disabling the MSI capability as a way to mask a function's
+> interrupt service request.)
+>
+> > Reported-by: Lennert Buytenhek <buytenh@wantstofly.org>
+> 
+> Could you make this buytenh@arista.com ?
 
-Hi Mathieu,
+Sure. Should I add Tested-by as well?
 
-I'm thinking about how to initialise in the same probe() function.
-I'm wondering if this implies that using one scp driver to initialize 2 cores?
-If it is, I assume the dts descriptions for both cores should be contained in one node.
+-- 
+ i.
 
-When there's one node for both cores, it looks like that there is a problem of 
-using dma_allocate_coherent(). Each core has its own reserved memory region. 
-When there's only one device for both cores, it's not able to identify the memory region 
-by the device parameter of dma_allocate_coherent().
-
-Is it acceptable to consider manually allocating core 1 device in the probe() when probing core 0?
-
-
-Best regards,
-TingHan
-
-
-
-
-
-
-
-
+--8323329-2065269609-1663329729=:1788--
