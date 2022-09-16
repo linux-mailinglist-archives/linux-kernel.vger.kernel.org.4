@@ -2,259 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD25BAF23
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF2C5BAF2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiIPOV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S231978AbiIPOWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiIPOVZ (ORCPT
+        with ESMTP id S231961AbiIPOVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:21:25 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA10B24A1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:21:21 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id e131so2112993yba.7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=iR5BONjwpz9Se1WnQ4xbldjKHvjER4CLZPmNi3OwpWM=;
-        b=WDntF1cpYJ8PKekvfh14jCk9tFIm9K6QFtayNUsM22ZS039Tse4eTsQ2mlAxZCeywo
-         AUpDAbIy4KQEFQKU3ybE+N9BThZp9mCbg3aMaNMk47YPyz57C0h2bJt4EJem0rAHk6T0
-         TZ1p3aijBEfGH9Ci8fX/k3B+goEA2BzMGWmVjzCMoALNV0iZNXY8Bqs20gANdz/jVS3e
-         PmaUKeVFekQyKhYKSGwnCEAF1bHpAppnvBU6RZunHN/NRE9r6iIwxd51lC8OuckdHJ76
-         TLH5lQIqfEcsERo8KSd/u7MwjYNaOO79sJEkslADnln5srezGWn5XPnvthRC341ZGFgl
-         nbkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=iR5BONjwpz9Se1WnQ4xbldjKHvjER4CLZPmNi3OwpWM=;
-        b=OMS3KE5tRa9cnxf+NixALmMzoeJmG9WrodyN+QcZ00QjGWPeQJK42NNMMPwnd98FPn
-         OgJy7rWnX7NtfCi+SaoryLFsPGVCkDw4e0v9Jz5wuHOa0Eq7O9jPUzB0VdMPNM+gCMc2
-         hMRdbfSi+hjR1AUr7Lsk4aGlOtDXrPApTG0gIFIJEjEtY2L+nkCSFyjnOZoIXaqUDjHq
-         MVt6d7KVmcInZth2gusLHfe3gbm1A8DUQhGOyIl2sLa1/3Ff5ArVW7VL+qIEN+ErT3Cj
-         nCyN/VSsEN7voL3zWVIx1yzZJllSKxbP6exH0t9Q9end9zxzSnLaOc1afHEKDrY/FvHq
-         Xvmg==
-X-Gm-Message-State: ACrzQf2XpdmbsedD74cVF+8cjFHQ/M4K3v9H4eNe15lz+XWI3NLhacT5
-        4445KTj7/PF1QU6nwPNyp1hYXPy4jOmY8JkTKGpYkg==
-X-Google-Smtp-Source: AMsMyM4s9s+Ffu+AyJJje6DLSFRoZ/jxLLckSjng6rcH6Th4EMV4HIYll7SY1kQzLW9G7GtcWjm7a9ZYwEqb/2NxTeo=
-X-Received: by 2002:a25:81cf:0:b0:6a9:4d0d:5ee6 with SMTP id
- n15-20020a2581cf000000b006a94d0d5ee6mr4594549ybm.153.1663338080452; Fri, 16
- Sep 2022 07:21:20 -0700 (PDT)
+        Fri, 16 Sep 2022 10:21:47 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15EDB2778
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1663338101; x=1694874101;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=84pn1zP6OIV/5QpJPF4VioDf7XMSIZsIpSSdc8bqVLo=;
+  b=r21TF7stftY3vSWifZTH1Xh1lfCV9iA3jJBQatIb+cWE3HEAaEn0f2F8
+   fIw6/LA2BwfIUoB6IUPGznLYevrS23eLux/dWbQlUs/zlV4GiZ56FuH7y
+   nqIoGjcum3apIGcgh2Lu2AzNFIjs+t2oXH88YFdnPfLaGksIY0fk5uqA7
+   zhAyeFmSWc7BFWh34PHwKt5hZWSitfkZsedkv5r0oTxIttZwsUlqnAkd/
+   3f7lXbenRfVtBKGC3SEqklSKFp8r//Q5VX0SnovSVg+Hoglud/naCzRho
+   NHHfwwi0yqakEFIW1tsLPNN3q95JhviVj/VuXYuPRjOJk0EH46SKnLxSu
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,320,1654531200"; 
+   d="scan'208";a="209930966"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Sep 2022 22:21:35 +0800
+IronPort-SDR: 1Ajwym3uW60c11Xh1lSBaoUtMEM1mJBuOz9HGUZCoMWebkRWoCmuPdPu9d8IG+ggYPhtVF0YNM
+ wIKVEa1EnhbX6QapUgmwYIJ7au7sxkznb1xfNiAt4oYaP34WjshM+g0tQg8yUoLohttA4BZ6va
+ 3UvTr5rNkO79B5Yq/3j9ZiFj4tuVHtV+2XOjaNFASEYqJnTm2+o7IvDBxiUZ3iD2Ncx5jI3YgV
+ K2biLLx8i7zVTSruJBVPfgAq7AP3AWZ2VUlz6ojH2heW/IAU5YBPPqtXD5B74xEsMqv37or++C
+ S6HNUt17479T9oYhwvz1K7+P
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2022 06:41:45 -0700
+IronPort-SDR: FVPUQKVMDjbidK4HROhfEYPYQUxy2lwC8hENl+pPy6x0wtoK+D9Kkli8+8oqg8pSn9jvUplih7
+ G28nu/VdBmi+sQIVPkZMRTLK3LB5kQm5liCIyVdz9EG8P2RtsnZaph9xBL7dEleMBCZsZJGnKS
+ /zpWM90aasCAfjNI452KBAOTNMab/zM4ZUGx21auU5eFxbFbTgFI2lXQb8XOD4pv7ePZJbrhao
+ c1BPfHltmuamibIp20iuDtLbkUkH5v1oHs1zyXS6Wjdc+/cObXz6HtWAp+yBEBSaI250pPUbfP
+ GJE=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2022 07:21:35 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MTbq25f8sz1RwqL
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:21:34 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1663338094; x=1665930095; bh=84pn1zP6OIV/5QpJPF4VioDf7XMSIZsIpSS
+        dc8bqVLo=; b=SBl2kAtab+wRZelgXy74wEUdwx+SPFe9Ko2ETaiGfQ9+Bg4hJK9
+        11cxhEpPON0+DY+iQmSLZLgkrPNU6YQN5UIVh33CWfzF5X/xgzjfWfkslhiPgy1T
+        qHI7G+ZggRSWyJxM4eEKUYuTSgIsHmaHauTLW7JAV5HjZT4h+ELeaTojGZoV3Mbw
+        QUWR9KK5n/GkWiSAq8ZtpXnEE0Ez++LzpRVoO3MNcqNvViZOTIYkIkm9rY4luoNI
+        xbF0y6to3XwPlV+mzVOBM+rQD1Wk/ZOk8x+kV8DqV0ujCupbN6bvcs8gXb7pGyxB
+        boXqPtFe9Xq7HgcqNl/AJ2TfGGEaDPjU6AQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cXlS-XipHPuJ for <linux-kernel@vger.kernel.org>;
+        Fri, 16 Sep 2022 07:21:34 -0700 (PDT)
+Received: from [10.225.1.43] (unknown [10.225.1.43])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MTbq03J7tz1RvLy;
+        Fri, 16 Sep 2022 07:21:32 -0700 (PDT)
+Message-ID: <7b7f36d4-9aa5-fff5-bd82-3658be6496f4@opensource.wdc.com>
+Date:   Fri, 16 Sep 2022 15:21:30 +0100
 MIME-Version: 1.0
-References: <20220727100615.638072-1-dmitry.baryshkov@linaro.org>
- <CAL_JsqJjLn8ypBo+bBoO+CE-si7gemP02fi8EWk97QRPPpNoVg@mail.gmail.com>
- <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
- <CAA8EJprM4WAgfVTJ15azFtSH6POL5uuseHO=zVxRd44RmqKZjw@mail.gmail.com>
- <CAK7LNAQU42fpqPqUipZYx+685B+Rc8JGdaKcP3TdfQWUept1nQ@mail.gmail.com>
- <CAA8EJprMsEE-fkpP=QGgpCga5rb9_mJF51cvRjeWsG7NBeijSA@mail.gmail.com>
- <CAL_JsqLptaL_Uv++dEzUx83n3c+AAu9rYUv6Zbb7sLbJE35wWA@mail.gmail.com>
- <CAA8EJprBAtdWAGG=a7BYc_Zwx9B5Dqsy4n3dhvP5cA40agR8ew@mail.gmail.com>
- <CAK7LNARpPvBH0i55nD0v+8KDeqy2eK996TRhwE-KNAF+8mG3xQ@mail.gmail.com>
- <CAA8EJppdS4st0G21Nk1SU9fbXCcEefHO=8E=upOPdjgRYhPBLA@mail.gmail.com> <CAK7LNARZUkkyjUZCp5cXs_ROz+KzJPPGkoFpTKFXJaixXGofkw@mail.gmail.com>
-In-Reply-To: <CAK7LNARZUkkyjUZCp5cXs_ROz+KzJPPGkoFpTKFXJaixXGofkw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 16 Sep 2022 17:21:09 +0300
-Message-ID: <CAA8EJpoDgHeYs2JwBwGksh10_5ZEQvJ7ARLig=HfX4K2uuL2XQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: take into account DT_SCHEMA_FILES changes while
- checking dtbs
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH v2] ata: libata-core: Check errors in
+ sata_print_link_status()
+Content-Language: en-US
+To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org
+References: <20220903231039.2278817-1-floridsleeves@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220903231039.2278817-1-floridsleeves@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sept 2022 at 04:10, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Thu, Sep 15, 2022 at 8:40 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Thu, 15 Sept 2022 at 07:51, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > On Sun, Sep 11, 2022 at 2:36 AM Dmitry Baryshkov
-> > >
-> > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >
-> > > > On Thu, 4 Aug 2022 at 18:27, Rob Herring <robh+dt@kernel.org> wrote:
-> > > > >
-> > > > > On Fri, Jul 29, 2022 at 1:46 AM Dmitry Baryshkov
-> > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > >
-> > > > > > On Fri, 29 Jul 2022 at 10:05, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Fri, Jul 29, 2022 at 3:53 PM Dmitry Baryshkov
-> > > > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, 29 Jul 2022 at 08:55, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Jul 28, 2022 at 2:36 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Wed, Jul 27, 2022 at 4:06 AM Dmitry Baryshkov
-> > > > > > > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > It is useful to be able to recheck dtbs files against a limited set of
-> > > > > > > > > > > DT schema files. This can be accomplished by using differnt
-> > > > > > > > > > > DT_SCHEMA_FILES argument values while rerunning make dtbs_check. However
-> > > > > > > > > > > for some reason if_changed_rule doesn't pick up the rule_dtc changes
-> > > > > > > > > > > (and doesn't retrigger the build).
-> > > > > > > > > > >
-> > > > > > > > > > > Fix this by changing if_changed_rule to if_changed_dep and squashing DTC
-> > > > > > > > > > > and dt-validate into a single new command. Then if_changed_dep triggers
-> > > > > > > > > > > on DT_SCHEMA_FILES changes and reruns the build/check.
-> > > > > > > > > > >
-> > > > > > > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > > > > > ---
-> > > > > > > > > > >  scripts/Makefile.lib | 14 ++++++--------
-> > > > > > > > > > >  1 file changed, 6 insertions(+), 8 deletions(-)
-> > > > > > > > > > >
-> > > > > > > > > > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > > > > > > > > > > index c88b98b5dc44..3df470289382 100644
-> > > > > > > > > > > --- a/scripts/Makefile.lib
-> > > > > > > > > > > +++ b/scripts/Makefile.lib
-> > > > > > > > > > > @@ -383,17 +383,15 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
-> > > > > > > > > > >  DT_BINDING_DIR := Documentation/devicetree/bindings
-> > > > > > > > > > >  DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
-> > > > > > > > > > >
-> > > > > > > > > > > -quiet_cmd_dtb_check =  CHECK   $@
-> > > > > > > > > > > -      cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
-> > > > > > > > > > > +quiet_cmd_dtb =        DTC/CHECK   $@
-> > > > > > > > > >
-> > > > > > > > > > This is supposed to be 7 chars or less. DTCCHK or DTC_CHK perhaps. Or
-> > > > > > > > > > always do just 'DTC'. I can fixup when applying.
-> > > > > > > > > >
-> > > > > > > > > > I'll give it a few days for other comments.
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > When you change DT_SCHEMA_FILES, re-running dt-validate should be enough.
-> > > > > > > > > You do not need to re-run dtc.
-> > > > > > > > >
-> > > > > > > > > I guess the strangeness comes from the fact that you are trying to do the
-> > > > > > > > >  two different things in a single rule.
-> > > > > > > >
-> > > > > > > > The issue is that with the current rules the dt-validate isn't
-> > > > > > > > re-executed on DT_SCHEMA_FILES changes. Thus comes my proposal.
-> > > > > > >
-> > > > > > > Correct.
-> > > > > > >
-> > > > > > > What I said is like this.
-> > > > > > >
-> > > > > > > # touch the timestamp file, %.dtb.checked
-> > > > > > > $(obj)/%.dtb.checked: $(obj)/%.dtb $(DT_TMP_SCHEMA) FORCE
-> > > > >
-> > > > > Not really a fan of the thousands of files that creates. Maybe if it
-> > > > > was turned into something useful like a list of schemas that apply to
-> > > > > the dtb. IOW, a dependency list. That would speed up re-running after
-> > > > > a schema change. Though if a schema change created new dependencies,
-> > > > > that wouldn't work.
-> > > > >
-> > > > > > >         $(call if_changed_rule,dtb_check)
-> > > > > > >
-> > > > > > > $(obj)/%.dtb: $(src)/%.dts $(DTC) $FORCE
-> > > > > > >         $(call if_changed_rule,dtc)
-> > > > > > >
-> > > > > > > $(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-> > > > > > >         $(call if_changed_dep,dtc)
-> > > > > > >
-> > > > > > >
-> > > > > > > With the dtc/check split, we can avoid unneeded regeneration of
-> > > > > > > %.dtb when DT_TMP_SCHEMA or DT_SCHEMA_FILES is
-> > > > > > > changed.
-> > > > > > >
-> > > > > > >
-> > > > > > > One drawback is we track %.dtb.checked and and %.dtb separately,
-> > > > > > > so something like 53182e81f47d4ea0c727c49ad23cb782173ab849
-> > > > > > > may come back.
-> > > > > >
-> > > > > > It's up to you and Rob, but I'd really prefer a simpler solution here.
-> > > > > > Regenerating dtbs sounds like a minor pain compared to hacking the
-> > > > > > top-level Makefile again. What I really like is that if one has
-> > > > > > CHECK_DTBS=y (for whatever reason), he can not generate dtb without
-> > > > > > validation.
-> > > > >
-> > > > > I lean towards just rebuilding the dtbs. That's pretty quick and
-> > > > > ensures we get dtc warnings with schema warnings. In the long run, I
-> > > > > would like to make the schema checks not optional to run. The
-> > > > > impediment to doing that is lots of warnings (but not not some
-> > > > > platforms), adding a tool dependency, and validation time.
-> > > >
-> > > > Rob, Masahiro, do we have any conclusion here? I can change my patch,
-> > > > but I'd like to understand in which way I should change it.
-> > > > Fixing/testing yaml changes is a bit painful w/o this change.
-> > > >
-> > > > --
-> > > > With best wishes
-> > > > Dmitry
-> > >
-> > >
-> > >
-> > >
-> > > I am fine with the patch as long as you fix DTC/CHECK to DTC.
-> >
-> > Ack, I completely forgot about this part. Please excuse me. I'll
-> > change it to DTC_CHK (as suggested before) to fit into 7 chars in v2.
-> >
-> > >
-> > > Another idea is to re-check the schema every time,
-> > > like this:
-> >
-> > I think this will add the external build dependency. We tried a
-> > similar approach several releases ago and had to revert the change.
->
->
-> If you are talking about
-> 75e895343d5a2fcbdf4cb3d31ab7492bd65925f0,
-> you are completely misunderstanding.
->
-> Look at my code closely.
-> It is how the sparse checker works with C=2.
+On 2022/09/04 0:10, Li Zhong wrote:
+> sata_scr_read() could return negative error code on failure. Check the
+> return value when reading the control register.
+> 
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> ---
+>  drivers/ata/libata-core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+> index 826d41f341e4..ae08c7d35cb0 100644
+> --- a/drivers/ata/libata-core.c
+> +++ b/drivers/ata/libata-core.c
+> @@ -3021,7 +3021,8 @@ static void sata_print_link_status(struct ata_link *link)
+>  
+>  	if (sata_scr_read(link, SCR_STATUS, &sstatus))
+>  		return;
+> -	sata_scr_read(link, SCR_CONTROL, &scontrol);
+> +	if (sata_scr_read(link, SCR_CONTROL, &scontrol))
+> +		return;
+>  
+>  	if (ata_phys_link_online(link)) {
+>  		tmp = (sstatus >> 4) & 0xf;
 
-Ah, I see. Then I'm fine with either your patch or mine v2 at your
-(and Rob's) preference.
-
-> > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > > index 3fb6a99e78c4..9fc9f39fb12e 100644
-> > > --- a/scripts/Makefile.lib
-> > > +++ b/scripts/Makefile.lib
-> > > @@ -375,13 +375,9 @@ quiet_cmd_dtb_check =      CHECK   $@
-> > >        cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u
-> > > $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA
-> > > ) $@ || true
-> > >  endif
-> > >
-> > > -define rule_dtc
-> > > -       $(call cmd_and_fixdep,dtc)
-> > > -       $(call cmd,dtb_check)
-> > > -endef
-> > > -
-> > >  $(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
-> > > -       $(call if_changed_rule,dtc)
-> > > +       $(call if_changed_dep,dtc)
-> > > +       $(call cmd,dtb_check)
-> > >
-> > >  $(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
-> > >         $(call if_changed_dep,dtc)
-> > >
-> > >
-
+Applied to for-6.1. Thanks.
 
 -- 
-With best wishes
-Dmitry
+Damien Le Moal
+Western Digital Research
+
