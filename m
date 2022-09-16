@@ -2,108 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC895BA4AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F423C5BA4AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiIPCi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S230002AbiIPCkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiIPCi5 (ORCPT
+        with ESMTP id S229553AbiIPCkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:38:57 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C3696FE1;
-        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w20so8075992ply.12;
-        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=dYL9wlLd/USNcoZdGQTOq8OEjfqINlLA5t7kFKr1hLU=;
-        b=QOs9nlCwzQ4O0onMGYNUHEonyh2ChOvardFTCdDwwZarJZT5Pk3dwm0nItbHKIchel
-         cYYMsG59a4UYPrYgbMjERQcbWu+WcwGIMPufaiRK9ImjIIBnXwM7tbXmqu+U+GWYbYrx
-         HVkBOYhLZAFLf4o+kMlkBKuDSnvpWuuvtixIWCG3OgPLjpEd6Rz0ZcNVAq65T/95tAph
-         sNcvKfTCumFIs+sQrkvmBuSwaN/YIlpRP1wkqWGOasIFzqcCCn46rUvzDqPgoen70m2Y
-         wB3wCIgc+4NIVLAzI3x0yPPEh+GrF2Nk3m/hQZbZvzienBNNuqZtMgcS/LDlmqTWLsta
-         B4jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=dYL9wlLd/USNcoZdGQTOq8OEjfqINlLA5t7kFKr1hLU=;
-        b=1jNPZujHVf+Az8ExoakfDyhHtx4NUF78wQQuw6NtM1ZFxfbxRqkmtOEdzygxLNE5BB
-         6f2nifiszb3FR0lD4ePN8Hj1kiupywcWBNmH2wr88zkJspnYD2ydIWoj6WfPnY6F3pcm
-         F6jB50AHtok64Xds+PkCHJFY1p9GLs77usdQybWXHspTo//eiWjRSSzN65ZeXqZNrzn0
-         a0/uW/EZVRK3esGJQ8PEM3TlM7KGjjFXC5CL02fzd60R35mkPDJ1aoW2/CnFrYNVO8iI
-         KPtoks+oGnY3i/S3NuhfwYJsUbO5J79PTXyOmg+d8jZo7Uv5MG+f/9GbCnp9T5BbMc3a
-         ES7Q==
-X-Gm-Message-State: ACrzQf162wUSgPxAb7fTMxuP1xrqRo02zMoA0l7jjKWYAyWVhQZSSHIH
-        7pTx5rHtncZYVMyFpSbOpik=
-X-Google-Smtp-Source: AMsMyM7HH6nMrLQACZzZgcWn63QuPoiW0OKgwq8iD+IzfoinHYdc086atcyZrpUprByl58WLqVHMag==
-X-Received: by 2002:a17:902:d54e:b0:178:2da7:1bea with SMTP id z14-20020a170902d54e00b001782da71beamr2539423plf.161.1663295936126;
-        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
-Received: from RD-1129-20047.rt.l ([2402:7500:578:40c5:44cb:7b1e:21e9:77e5])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902d40900b0016bedcced2fsm13551480ple.35.2022.09.15.19.38.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Sep 2022 19:38:55 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-Cc:     cy_huang@richtek.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: mfd: mt6370: fix the indentation in the example
-Date:   Fri, 16 Sep 2022 10:38:49 +0800
-Message-Id: <1663295929-9024-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 22:40:16 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1432220CC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663296015; x=1694832015;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dkNSAIpV+3ISrQK8NuEG29Wy4QbSSd3qb7jfOmQtu7w=;
+  b=XMKnOKUwQWfgx4SnNXOshwIxWl7MKAnRjPA+oxrTTvj0JzvyvQzjDem9
+   zW3UposLh4XnXeK9U1azzbsfA6Wn6glD+jGZ//QDQWP1IfgqfjgofHSSj
+   whPsImJsC8byqYqj8t1dCnOSCze+4cUmcnQybItXKzyfJCRMNeLJcP3qu
+   UWgwCkWLcWANwQPOekkeLF72TI7fI8WiRuMh3pLdSsmEbaW+HuRS9m9DM
+   Gvfm9dktE4aGOsKHwZheHNTkDu9Yw7F5r3pQ74a7hBmG0TJBTE/jUZihU
+   fe/sZW/7vUbWtOgX06RfsiS2vTe/l97uL+OGAfM5LmH02UKngZuvULzTA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360635516"
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="360635516"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 19:40:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="568678899"
+Received: from yingjieh-mobl.ccr.corp.intel.com (HELO [10.254.215.99]) ([10.254.215.99])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 19:40:12 -0700
+Message-ID: <78ec0fab-6f69-1d3d-86f3-84f159817707@linux.intel.com>
+Date:   Fri, 16 Sep 2022 10:40:09 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/1] iommu/vt-d: Enable PASID during iommu device probe
+To:     Baolu Lu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
+References: <20220912024826.1684913-1-baolu.lu@linux.intel.com>
+ <046916aa-980c-c40d-1163-6ab839248201@linux.intel.com>
+ <e0c43ca7-0ad3-a4d6-960b-9853bb815438@linux.intel.com>
+ <e26efaee-d84a-3b60-8400-90d8e49a9b25@linux.intel.com>
+ <5415d383-5442-a127-bdab-fce9e9b7a3b2@linux.intel.com>
+From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
+In-Reply-To: <5415d383-5442-a127-bdab-fce9e9b7a3b2@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
 
-Fix the indentation in the binding example. There're two redudant space
-charactors need to be removed.
+在 2022/9/15 11:00, Baolu Lu 写道:
+>
+>
+> On 9/14/22 4:59 PM, Ethan Zhao wrote:
+>>>> What the error path would be if this code runs on some old 
+>>>> platforms don't
+>>>>
+>>>> support PASID, would you print out "this platform doesn't suppor 
+>>>> PASID" and
+>>>>
+>>>> give users an interface function to query if the PASID cap of iommu 
+>>>> is enabled
+>>>>
+>>>> and if not why ?
+>>>
+>>> It's not an error case if the IOMMU doesn't support PASID. But it's an
+>>> error case if any device drivers call PASID related IOMMU interfaces
+>>> (for example, iommu_domain_attach/detach_dev_pasid()). The 
+>>> corresponding
+>>> error code will be returned to the drivers.
+>>>
+>> So iommu driver withdraws the flexibility/rights from device driver 
+>> about the
+>>
+>> ability to enable PASID, looks much more *integrated* iommu works as 
+>> relation
+>
+> No. This patch doesn't withdraw anything. It's just a code refactoring.
+>
+>>
+>> controller in device-iommu-domain by enabling PASID in iommu probe stage
+>>
+>> by default -- iommu decides to enable PASID or not though device-iommu-
+>>
+>> domain might not work ? or they should work because they are hard-wired
+>>
+>> together (device - iommu) even device is hotpluged later.
+>>
+>
+> I may not get you exactly. :-) Some IOMMU features reply on PASID
+> capabilities on both IOMMU and device. The IOMMU drivers enumerate the
+> capabilities and enable them if they are supported.
+I might not express it straightforward,  I mean with this patch iommu 
+deals with
 
-Acked-by: Rob Herring <robh@kernel.org>
-Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-'Acked-by' must be added in v2. But I seen the reply after I sent patch v2.
+the complexity of enabling PASID (globally?)  or not at probing stage , 
+instead
 
-Sorry to add 'Acked-by' only in v3 change.
+of other device driver side decision to request IOMMU PASID enabling during
 
-Since v3:
-- Add 'Acked-by' tag.
+their setup state.  if so you move the decision to iommu probe stage. 
+hmmm...
 
-Since v2:
-- Add Fixes tag in commit message
+Pros,  iommu driver controls everything about PASID enabling.
 
----
- Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cons,  iommu driver handles all possible complexity about capability 
+matching
 
-diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-index 410e2d4..250484d 100644
---- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-+++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-@@ -119,7 +119,7 @@ examples:
-       #address-cells = <1>;
-       #size-cells = <0>;
- 
--        pmic@34 {
-+      pmic@34 {
-         compatible = "mediatek,mt6370";
-         reg = <0x34>;
-         wakeup-source;
+etc.
+
+
+Thanks,
+
+Ethan
+
+>
+> Best regards,
+> baolu
+
 -- 
-2.7.4
+"firm, enduring, strong, and long-lived"
 
