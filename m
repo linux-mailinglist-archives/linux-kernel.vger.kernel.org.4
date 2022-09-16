@@ -2,173 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8E5BA75C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA2A5BA767
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiIPHU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S229996AbiIPHX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiIPHU0 (ORCPT
+        with ESMTP id S230186AbiIPHXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:20:26 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3F04054E;
-        Fri, 16 Sep 2022 00:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Fl6ET6q/kbHiqTOyvXh8EjJEoX+zyv0K+cWNPYPO57Q=; b=orytNymywAhcDPQP1HJw7tGUBw
-        +093CDRGXe1l1oW8uzIVhrwGv+L/VtF1QTjqE+xyJjTZdUHwIg59Zgz6IiQStj8DH4TdkSbVYcR3I
-        dEkteknaCNUwk7zNJFEwW+FgIC27FwZSARWokHRyilCeJFAvOrfCIlgzdshX8jHor1JH9Z81p8Z9I
-        cOCt9k9hcfHTKNEPvf2xPes3Tv+cxjY13fM6QITPytjXrO3bAjFv6L3evQW/tfreBXSo4PKZcXtgu
-        tX2j4Ux3505K1k2nHFnkZD6tQOcuo886gFKI5uK+d4KnHhKjjUu0XYbzrhe4gkQGYH9g39ha99rSz
-        O3NhwKtQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34358)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oZ5e1-0006M8-KM; Fri, 16 Sep 2022 08:20:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oZ5dx-0003NT-Id; Fri, 16 Sep 2022 08:20:09 +0100
-Date:   Fri, 16 Sep 2022 08:20:09 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
-        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kishon@ti.com
-Subject: Re: [PATCH 5/8] net: ethernet: ti: am65-cpsw: Add support for
- fixed-link configuration
-Message-ID: <YyQjqU7O5WRfrush@shell.armlinux.org.uk>
-References: <20220914095053.189851-1-s-vadapalli@ti.com>
- <20220914095053.189851-6-s-vadapalli@ti.com>
- <YyH8us424n3dyLYT@shell.armlinux.org.uk>
- <ab683d52-d469-35cf-b3b5-50c9edfc173b@ti.com>
- <YyL5WyA74/QRe/Y4@shell.armlinux.org.uk>
- <c76fdb7a-a95f-53c6-6e0e-d9283dd2de2d@ti.com>
+        Fri, 16 Sep 2022 03:23:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A34A50DD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:37 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTQSM2072zmVSP;
+        Fri, 16 Sep 2022 15:19:47 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
+ 2022 15:23:34 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <osalvador@suse.de>, <anshuman.khandual@arm.com>
+CC:     <willy@infradead.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH v2 00/16] A few cleanup patches for mm
+Date:   Fri, 16 Sep 2022 15:22:41 +0800
+Message-ID: <20220916072257.9639-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c76fdb7a-a95f-53c6-6e0e-d9283dd2de2d@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 10:24:48AM +0530, Siddharth Vadapalli wrote:
-> On 15/09/22 15:37, Russell King (Oracle) wrote:
-> > Hi,
-> > 
-> > On Thu, Sep 15, 2022 at 02:58:52PM +0530, Siddharth Vadapalli wrote:
-> >> Hello Russell,
-> >>
-> >> On 14/09/22 21:39, Russell King (Oracle) wrote:
-> >>> On Wed, Sep 14, 2022 at 03:20:50PM +0530, Siddharth Vadapalli wrote:
-> >>>> Check for fixed-link in am65_cpsw_nuss_mac_config() using struct
-> >>>> am65_cpsw_slave_data's phy_node property to obtain fwnode. Since
-> >>>> am65_cpsw_nuss_mac_link_up() is not invoked in fixed-link mode, perform
-> >>>> the relevant operations in am65_cpsw_nuss_mac_config() itself.
-> >>>
-> >>> Further to my other comments, you also fail to explain that, when in
-> >>> fixed-link SGMII mode, you _emulate_ being a PHY - which I deduce
-> >>> since you are sending the duplex setting and speed settings via the
-> >>> SGMII control word. Also, as SGMII was invented for a PHY to be able
-> >>> to communicate the media negotiation resolution to the MAC, SGMII
-> >>> defines that the PHY fills in the speed and duplex information in
-> >>> the control word to pass it to the MAC, and the MAC acknowledges this
-> >>> information. There is no need (and SGMII doesn't permit) the MAC to
-> >>> advertise what it's doing.
-> >>>
-> >>> Maybe this needs to be explained in the commit message?
-> >>
-> >> I had tested SGMII fixed-link mode using a bootstrapped ethernet layer-1
-> >> PHY. Based on your clarification in the previous mails that there is an
-> >> issue with the fixed-link mode which I need to debug, I assume that what
-> >> you are referring to here also happens to be a consequence of that.
-> >> Please let me know if I have misunderstood what you meant to convey.
-> > 
-> > I think what you're saying is that you have this setup:
-> > 
-> >   ethernet MAC <--SGMII link--> ethernet PHY <---> media
-> > 
-> > which you are operating in fixed link mode?
-> 
-> Yes, and the other end is connected to my PC's ethernet port.
-> 
-> > 
-> > From the SGMII specification: "This is achieved by using the Auto-
-> > Negotiation functionality defined in Clause 37 of the IEEE
-> > Specification 802.3z. Instead of the ability advertisement, the PHY
-> > sends the control information via its tx_config_Reg[15:0] as specified
-> > in Table 1 whenever the control information changes. Upon receiving
-> > control information, the MAC acknowledges the update of the control
-> > information by asserting bit 14 of its tx_config_reg{15:0] as specified
-> > in Table 1."
-> > 
-> > For the control word sent from the MAC to the PHY, table 1 specifies a
-> > value of 0x4001. All the zero bits in that word which are zero are
-> > marked as "Reserved for future use." There are no fields for speed and
-> > duplex in this acknowledgement word to the PHY.
-> > 
-> > I hope this clears up my point.
-> 
-> Thank you for the detailed explanation. After reading the above, my
-> understanding is that even in the fixed-link mode, the ethernet MAC is
-> not supposed to advertise the speed and duplex settings. The ethernet
-> MACs present on both ends of the connection are supposed to be set to
-> the same speed and duplex settings via the devicetree node. Thus, only
-> for my setup which happens to be a special case of fixed-link mode where
-> the ethernet PHY is present, I am having to send the control word due to
-> the presence of a PHY in between.
+Hi everyone,
+This series contains a few cleanup patches to remove the obsolete
+comments and functions, use helper macro to improve readability and
+so on. More details can be found in the respective changelogs.
+Thanks!
+---
+v2:
+  Thanks David, Oscar, Anshuman and Matthew for review and comment!
+  Collect Reviewed-by and Acked-by tag.
+  3/6: Further remove NR_PCP_ORDER_WIDTH per Matthew.
+  8/16: Tweak changelog to better explain the issue per Oscar.
+  12/16: Adjust if block to match comment per David.
+---
+Miaohe Lin (16):
+  mm/page_alloc: ensure kswapd doesn't accidentally go to sleep
+  mm/page_alloc: make zone_pcp_update() static
+  mm: remove obsolete macro NR_PCP_ORDER_MASK and NR_PCP_ORDER_WIDTH
+  mm/page_alloc: remove obsolete comment in zone_statistics()
+  mm/page_alloc: add __init annotations to
+    init_mem_debugging_and_hardening()
+  mm/page_alloc: fix freeing static percpu memory
+  mm: remove obsolete pgdat_is_empty()
+  mm/page_alloc: add missing is_migrate_isolate() check in
+    set_page_guard()
+  mm/page_alloc: use local variable zone_idx directly
+  mm, memory_hotplug: remove obsolete generic_free_nodedata()
+  mm/page_alloc: make boot_nodestats static
+  mm/page_alloc: use helper macro SZ_1{K,M}
+  mm/page_alloc: init local variable buddy_pfn
+  mm/page_alloc: use costly_order in WARN_ON_ONCE_GFP()
+  mm/page_alloc: remove obsolete gfpflags_normal_context()
+  mm/page_alloc: fix obsolete comment in deferred_pfn_valid()
 
-In SGMII, the control word is only passed between the ethernet MAC and
-the ethernet PHY. It is not conveyed across the media.
-
-> And, I am supposed to mention this in
-> the commit message, which I haven't done. Please let me know if this is
-> what I was supposed to understand.
-
-If you implement this conventionally, then you don't need to mention it
-in the commit message, because you're following the standard.
-
-> I am planning to change to a proper fixed-link setup without any
-> ethernet PHY between the MACs, for debugging the driver's fixed-link
-> mode where the "mac_link_up()" is not invoked.
-
-SGMII is designed for the setup in the diagram I provided in my previous
-email. It is not designed for two MACs to talk direct to each other
-without any ethernet PHY because of the asymmetric nature of the control
-word.
-
-The PHY sends e.g. a control word of 0x9801 for 1G full duplex. On
-reception of that, the MAC responds with 0x4001. Finally, the PHY
-responds with 0xd801 to acknowledge the receipt of the MAC response.
-
-If both ends of the link are SGMII, both ends will be waiting for
-the control word from a PHY which is not present, and the link will
-not come up.
-
-1000base-X is a symmetric protocol where both ends of the link
-advertise their capabilities, acknowledge each others abilities and
-resolve the duplex and pause settings.
-
-SGMII is a Cisco proprietary modification of 1000base-X designed for
-communicating the results of media autonegotiation between an
-ethernet PHY and ethernet MAC.
+ include/linux/gfp.h            | 23 -------------
+ include/linux/memory_hotplug.h |  8 -----
+ include/linux/mm.h             |  2 +-
+ include/linux/mmzone.h         | 12 -------
+ mm/internal.h                  |  3 --
+ mm/page_alloc.c                | 63 ++++++++++++++++------------------
+ 6 files changed, 31 insertions(+), 80 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.23.0
+
