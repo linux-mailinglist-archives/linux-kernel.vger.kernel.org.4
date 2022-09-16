@@ -2,185 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772AB5BB254
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456865BB25F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiIPSl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S229723AbiIPSo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiIPSlq (ORCPT
+        with ESMTP id S229533AbiIPSo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:41:46 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A383CB8A52;
-        Fri, 16 Sep 2022 11:41:41 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id ge9so10362528pjb.1;
-        Fri, 16 Sep 2022 11:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=0/bkNBIX3FOAe3t6O/p7ZuS8G0HQozWMCrCw3+mytvI=;
-        b=GvEkctg++Q6fJds7LzttNVl0aKX4dNXXNkoMO0dhUrNIjoZ9wvpwE+Hd9/C1fZiJXL
-         bDXHvObELfjOqhy9FrzfJE730SLk9vD2A2m5uvjZo93kZixkWCrgBTFdg8V6EqUDv/a2
-         0pLvmgGeWMYD5KmbPTR5IzfOGw6wsoZUPgzLe4ZQyS7vYuwOuzeJPaf4WyzyQYD6n9xM
-         m8WLYBFjQampXy0PM7+SO7gV2ECyPCHx4LmSMam3RwNBJ20+0ZoeDJBS2bXBM4jsaiph
-         JGbTS+47OTz1mnCyc62iCu29Mkj7bf3JtS3Q9egCkhIA4kwpwTy8ZW+lHhgVLAEwmmXC
-         KQhw==
+        Fri, 16 Sep 2022 14:44:57 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0619037;
+        Fri, 16 Sep 2022 11:44:53 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso4950219otb.10;
+        Fri, 16 Sep 2022 11:44:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=0/bkNBIX3FOAe3t6O/p7ZuS8G0HQozWMCrCw3+mytvI=;
-        b=jxOMmMxMSIkKC0j3L1UADTb0m4knNptCB/YOwOcFvSi4Zk4EcsARbcxLFYDdNgeWII
-         coJcLdBuV373oNJDrQMpVeibeN2rNiFRoDwVpSpGTYFLRxpWHUsEBgbg5DTf3OCB+dmF
-         +cQooU5mMkgkpWPFrMWrCWYLmiiYTtaiHE9omq/Miy+NEXUvPpAfcVXckMHDM68xFRVA
-         dqWN5qePXgqR6eWrjg0OcCCFnBKNpoDDujVrJ6dD40NwWzbZmijKWwAEaen514GVJLDX
-         a4ehg2/tqiytuLUQi5rkaEqSB0+aiqxR4OWsNa+xSbnY4dABjhmP3m3kmRCRFi6zTMtw
-         kLgA==
-X-Gm-Message-State: ACrzQf1nPUH7q1SPrFSfvhCvkcOKf3KXUPbcKUDVFPrlU45V3e1LVGC1
-        +4AiHw1yeLxFNkxgvIY1g2Gzc3Mxm9k=
-X-Google-Smtp-Source: AMsMyM7jcgvmzEsZVo12t0OpJ0R1AciFz3zwCi5TRJg0s+6ib/GU+qgvBWSJXeDOaB7b7chBonw2uw==
-X-Received: by 2002:a17:90b:4c45:b0:202:6308:d9c4 with SMTP id np5-20020a17090b4c4500b002026308d9c4mr6982509pjb.40.1663353700675;
-        Fri, 16 Sep 2022 11:41:40 -0700 (PDT)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:2952:dee7:a35e:6428])
-        by smtp.gmail.com with ESMTPSA id y18-20020a170902b49200b0016dcbdf9492sm15093004plr.92.2022.09.16.11.41.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=AcISesseQOa+PI6N+Szu0u2ec8VrM0pL1w8wMuhGk+A=;
+        b=fkBpxGN26ox4PV5QyHbKCkS2ZXsyUmYj9zFYabQjyUILI29ms8+4pbCE14sCRW9x/1
+         bmnw+TB5DiYfgua1lGIc2L1ZN5W5CFS5t4dCBueeP0mKD8XER4EFoM6IjMTmxSpCEaLD
+         wA5FJjj8j/1rb+KJFl16i7sPGHpG1GFjGXD7i1WxwoNzszrfQuwwT13uFLsxkkVjc+u7
+         053QA8Lr2iGDW3A0bFvlitGrOQMMgZF8c8k0j8tRKU6U9rtmrhfp7WujgpFhAsilLSaE
+         MC0ztBjgnVXVM6aV9PC5cEXC9OwvZ4SPXxzwVk4+BtLRDfSWd+XJcKrb4Go5iE1XMGFG
+         4dUQ==
+X-Gm-Message-State: ACrzQf36znK9GLSQS6of72ujQApAnQyayHr+bFah68KFtyNrq1I7cSAr
+        17b5C6s+DQdUkXX3buNwJg==
+X-Google-Smtp-Source: AMsMyM4ZAUR0TYm2dSOQ/wwRxqpVT9kMdKEEWitydHl4jnUcSMBwbd/m+VsvzleoQWixieqvsTeOrg==
+X-Received: by 2002:a05:6830:2a17:b0:636:f7fc:98bb with SMTP id y23-20020a0568302a1700b00636f7fc98bbmr2900347otu.223.1663353892663;
+        Fri, 16 Sep 2022 11:44:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l9-20020a056870204900b00127a6357bd5sm3353805oad.49.2022.09.16.11.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:41:40 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org
-Subject: [PATCH 4/4] perf test: Add a new test for perf stat cgroup BPF counter
-Date:   Fri, 16 Sep 2022 11:41:32 -0700
-Message-Id: <20220916184132.1161506-5-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220916184132.1161506-1-namhyung@kernel.org>
-References: <20220916184132.1161506-1-namhyung@kernel.org>
+        Fri, 16 Sep 2022 11:44:52 -0700 (PDT)
+Received: (nullmailer pid 1054596 invoked by uid 1000);
+        Fri, 16 Sep 2022 18:44:51 -0000
+Date:   Fri, 16 Sep 2022 13:44:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Richter <rric@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-edac@vger.kernel.org,
+        Manish Narani <manish.narani@xilinx.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        devicetree@vger.kernel.org,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        linux-arm-kernel@lists.infradead.org,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Tony Luck <tony.luck@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH v2 14/19] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Message-ID: <20220916184451.GA1054535-robh@kernel.org>
+References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
+ <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220910194237.10142-15-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  $ sudo ./perf test -v each-cgroup
-   96: perf stat --bpf-counters --for-each-cgroup test                 :
-  --- start ---
-  test child forked, pid 79600
-  test child finished with 0
-  ---- end ----
-  perf stat --bpf-counters --for-each-cgroup test: Ok
+On Sat, 10 Sep 2022 22:42:32 +0300, Serge Semin wrote:
+> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
+> the CSRs layout is absolutely different and it doesn't support IRQs unlike
+> DW uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there
+> is no any reason to have these controllers described in the same bindings.
+> Let's split the DT-schema up.
+> 
+> Note since the synopsys,ddrc-ecc.yaml schema describes the Synopsys DW
+> uMCTL2 DDR controller only, we need to accordingly fix the device
+> descriptions.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v2:
+> - Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate
+>   patch. (@Krzysztof)
+> ---
+>  .../memory-controllers/synopsys,ddrc-ecc.yaml | 63 ++++++-------------
+>  .../xlnx,zynq-ddrc-a05.yaml                   | 38 +++++++++++
+>  MAINTAINERS                                   |  1 +
+>  3 files changed, 59 insertions(+), 43 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
+> 
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- .../tests/shell/stat_bpf_counters_cgrp.sh     | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100755 tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
-
-diff --git a/tools/perf/tests/shell/stat_bpf_counters_cgrp.sh b/tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
-new file mode 100755
-index 000000000000..d724855d097c
---- /dev/null
-+++ b/tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
-@@ -0,0 +1,83 @@
-+#!/bin/sh
-+# perf stat --bpf-counters --for-each-cgroup test
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+test_cgroups=
-+if [ "$1" = "-v" ]; then
-+	verbose="1"
-+fi
-+
-+# skip if --bpf-counters --for-each-cgroup is not supported
-+check_bpf_counter()
-+{
-+	if ! perf stat -a --bpf-counters --for-each-cgroup / true > /dev/null 2>&1; then
-+		if [ "${verbose}" = "1" ]; then
-+			echo "Skipping: --bpf-counters --for-each-cgroup not supported"
-+			perf --no-pager stat -a --bpf-counters --for-each-cgroup / true || true
-+		fi
-+		exit 2
-+	fi
-+}
-+
-+# find two cgroups to measure
-+find_cgroups()
-+{
-+	# try usual systemd slices first
-+	if [ -d /sys/fs/cgroup/system.slice -a -d /sys/fs/cgroup/user.slice ]; then
-+		test_cgroups="system.slice,user.slice"
-+		return
-+	fi
-+
-+	# try root and self cgroups
-+	local self_cgrp=$(grep perf_event /proc/self/cgroup | cut -d: -f3)
-+	if [ -z ${self_cgrp} ]; then
-+		# cgroup v2 doesn't specify perf_event
-+		self_cgrp=$(grep ^0: /proc/self/cgroup | cut -d: -f3)
-+	fi
-+
-+	if [ -z ${self_cgrp} ]; then
-+		test_cgroups="/"
-+	else
-+		test_cgroups="/,${self_cgrp}"
-+	fi
-+}
-+
-+# As cgroup events are cpu-wide, we cannot simply compare the result.
-+# Just check if it runs without failure and has non-zero results.
-+check_system_wide_counted()
-+{
-+	local output
-+
-+	output=$(perf stat -a --bpf-counters --for-each-cgroup ${test_cgroups} -e cpu-clock -x, sleep 1  2>&1)
-+	if echo ${output} | grep -q -F "<not "; then
-+		echo "Some system-wide events are not counted"
-+		if [ "${verbose}" = "1" ]; then
-+			echo ${output}
-+		fi
-+		exit 1
-+	fi
-+}
-+
-+check_cpu_list_counted()
-+{
-+	local output
-+
-+	output=$(perf stat -C 1 --bpf-counters --for-each-cgroup ${test_cgroups} -e cpu-clock -x, taskset -c 1 sleep 1  2>&1)
-+	if echo ${output} | grep -q -F "<not "; then
-+		echo "Some CPU events are not counted"
-+		if [ "${verbose}" = "1" ]; then
-+			echo ${output}
-+		fi
-+		exit 1
-+	fi
-+}
-+
-+check_bpf_counter
-+find_cgroups
-+
-+check_system_wide_counted
-+check_cpu_list_counted
-+
-+exit 0
--- 
-2.37.3.968.ga6b4b080e4-goog
-
+Reviewed-by: Rob Herring <robh@kernel.org>
