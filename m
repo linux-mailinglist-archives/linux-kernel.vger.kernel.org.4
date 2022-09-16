@@ -2,102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0130F5BA521
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687F55BA527
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiIPDat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 23:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S229503AbiIPDeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 23:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiIPDap (ORCPT
+        with ESMTP id S229483AbiIPDej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:30:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A364DB04;
-        Thu, 15 Sep 2022 20:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663299044; x=1694835044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W0cfxaJO3/1PDzVFBWy7MMV7m4LDSVvZlQ6U4vLGtjI=;
-  b=cvlCfbKXSrC8tkoDYNlcTUzOxNSOvQzvSN0ygot1m3s6Bm9ZTB7IWEWd
-   8XlGQhsM+jd2dPK5HklFF/2324KNJfrt7pABms1m4W6ErReBG5bwV/tAP
-   6aP1L4ON4J7EfyBmlphncpE5tPsjiGTxYYNNd0rse1eCak72p2CgF7l53
-   CNS0whI7iibo9RQtkpwnK75NhCI+Y5BGBHKNoLKCZtzJmjsLNN7bQ1E0f
-   rIzBNrJySJYGebDxeWJSLMT0z5QWcuc4Fj9uEZOyNsvmfpF0oHEIkIg95
-   WRsx6i05wncEWTvfIIrXK5ppq4razEIDxhUbdLl+gGtJiKZUtYSxa3xim
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="325169597"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="325169597"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 20:30:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="568689707"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Sep 2022 20:30:33 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZ23k-0001OI-1a;
-        Fri, 16 Sep 2022 03:30:32 +0000
-Date:   Fri, 16 Sep 2022 11:29:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     kbuild-all@lists.01.org, jassisinghbrar@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        houlong.wei@mediatek.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
+        Thu, 15 Sep 2022 23:34:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4946C55AB;
+        Thu, 15 Sep 2022 20:34:34 -0700 (PDT)
+X-UUID: fcc5d1b61805480d80e9c56a554ad9b5-20220916
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=uHfb45m1XChImQ98BYTCdPpUchcD7kA9WpfndA6oA2M=;
+        b=gx+8k0NqxKwYgCXSmWyQZzk5BClxrb3McighRkMJuYb0+8E6HdFT9eHAAn3MR0+hbOjBHiG8HV/leBi34xtzWWx2Ob4/aivMBmaYXrGOtFrufjmQUzPQ7f+zaSUtY18gykXtdx86KSVDVicUpJkZRIqaiwwgYuWxDSoxyOZqRWc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:d78917b1-aa95-4643-880a-779e6e1e0ee2,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:fe0b98f6-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: fcc5d1b61805480d80e9c56a554ad9b5-20220916
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1506722192; Fri, 16 Sep 2022 11:34:29 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 16 Sep 2022 11:34:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 16 Sep 2022 11:34:27 +0800
+Message-ID: <f30bd382eb8923256d6f39342ec7832774c0f547.camel@mediatek.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: arm: mediatek: mmsys: change
+ compatible for MT8195
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH] dt-bindings: mailbox: Convert mtk-gce to DT schema
-Message-ID: <202209161109.lJhgeduV-lkp@intel.com>
-References: <20220915101716.70225-1-angelogioacchino.delregno@collabora.com>
+CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Singo Chang" <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 16 Sep 2022 11:34:27 +0800
+In-Reply-To: <e6921ed7-a14c-aadb-abd4-1e7ee0a63be9@gmail.com>
+References: <20220915161817.10307-1-jason-jh.lin@mediatek.com>
+         <20220915161817.10307-2-jason-jh.lin@mediatek.com>
+         <e6921ed7-a14c-aadb-abd4-1e7ee0a63be9@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915101716.70225-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+Hi Matthias,
 
-Thank you for the patch! Perhaps something to improve:
+Thanks for the review.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.0-rc5 next-20220915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Fri, 2022-09-16 at 00:05 +0200, Matthias Brugger wrote:
+> 
+> On 15/09/2022 18:18, Jason-JH.Lin wrote:
+> > For previous MediaTek SoCs, such as MT8173, there are 2 display HW
+> > pipelines binding to 1 mmsys with the same power domain, the same
+> > clock driver and the same mediatek-drm driver.
+> > 
+> > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding
+> > to
+> > 2 different power domains, different clock drivers and different
+> > mediatek-drm drivers.
+> > 
+> > Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
+> > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
+> > Quality)
+> > and they makes VDOSYS0 supports PQ function while they are not
+> > including in VDOSYS1.
+> > 
+> > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
+> > component). It makes VDOSYS1 supports the HDR function while it's
+> > not
+> > including in VDOSYS0.
+> > 
+> > To summarize0:
+> > Only VDOSYS0 can support PQ adjustment.
+> > Only VDOSYS1 can support HDR adjustment.
+> > 
+> > Therefore, we need to separate these two different mmsys hardwares
+> > to
+> > 2 different compatibles for MT8195.
+> > 
+> > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195
+> > SoC binding")
+> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        |
+> > 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > index 6ad023eec193..0e267428eaa6 100644
+> > ---
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
+> > l
+> > @@ -31,7 +31,7 @@ properties:
+> >                 - mediatek,mt8183-mmsys
+> >                 - mediatek,mt8186-mmsys
+> >                 - mediatek,mt8192-mmsys
+> > -              - mediatek,mt8195-mmsys
+> > +              - mediatek,mt8195-vdosys0
+> 
+> Nack, we miss the fallback compatible, as I already said twice.
+> 
+> Regards,
+> Matthias
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-mailbox-Convert-mtk-gce-to-DT-schema/20220915-181923
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/2bc0d648f46bb6438cd4c7a140a613090ee9c1b0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/dt-bindings-mailbox-Convert-mtk-gce-to-DT-schema/20220915-181923
-        git checkout 2bc0d648f46bb6438cd4c7a140a613090ee9c1b0
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+I'm sorry this happened again.
+I'll keep the compatible "mediatek,mt8195-mmsys" at next version.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The patch "dt-bindings: arm: mediatek: mmsys: remove the unused
+compatible for mt8195" should be sent after accepting the vdosys1
+series, right?
 
-All warnings (new ones prefixed by >>):
-
->> Warning: Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-
+Regards,
+Jason-JH.Lin
+> 
+> >                 - mediatek,mt8365-mmsys
+> >             - const: syscon
+> >         - items:
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jason-JH Lin <jason-jh.lin@mediatek.com>
+
