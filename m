@@ -2,86 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21385BB43B
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF1B5BB447
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiIPWCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 18:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S230015AbiIPWIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 18:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiIPWCB (ORCPT
+        with ESMTP id S229553AbiIPWIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 18:02:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA77A74D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663365717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gBWgzFgU3Z8HMeI1bJlxwd6aqGe+i6sH93eJSlpAwmI=;
-        b=e/Otp2beQlmOYXtmfNpTvhoq89Qo7u311ymkqXQTSBUJefOXks2DCgbp4il4sTnp3B4Xf8
-        1QtcYgwtU2kjm034mAPcP4XMG5X/C/Qx/kgCExuafd9JtYh/KgU8xqFsGc37GUE3rh8Bns
-        6dKdyMOIix5pnsjtpMxOq2i5ZwEQT9Y=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-259-xOqaLTmDN4qgzGiY5zDIPA-1; Fri, 16 Sep 2022 18:01:56 -0400
-X-MC-Unique: xOqaLTmDN4qgzGiY5zDIPA-1
-Received: by mail-wm1-f71.google.com with SMTP id q16-20020a1cf310000000b003a626026ed1so326525wmq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:01:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gBWgzFgU3Z8HMeI1bJlxwd6aqGe+i6sH93eJSlpAwmI=;
-        b=Mh0d9x9WBgX381IeAFH5gJ05x2ehK69UrQUAuil84YDnaJyFoS1BxmlFQuE5486ciR
-         syKEeOAXsNfEcmGR8iBZCme6OkrxkJD3AATXhmjrwYMGZk6Ry6zIhD5lMl7s2BNXTzYR
-         fib4QWRn9Bmii6WHAuR3PQ6zW3BjdS+6fwCEuPIUcrZ/73RZZDe2IzGkfARznD70gAZx
-         DKIk1xJIUS6sSE4hILqEFi1Bsc/ohQHGelNdBAVfe9++TVfj9obKfCbquTGob9sXXNWN
-         Z6fnwB26EsN9UJMfPl0yoaKkFYqre3J6n4xWBwcnygY+bLZebxRW7AX/Xr/HzShbSCUZ
-         drGQ==
-X-Gm-Message-State: ACrzQf2H49BJa+gf9pfpu7Y/3ty/V0PgZqdmDiXa2Ug4lbluFfvAt37T
-        eye6IPQGl4jW3WU/vDhjR2cxUADJ4Hw7v7zH6af5z8VcGhh+9NCROnFM0Bog+BY5zmrV1SJhFJ+
-        rPDtctzlI+LIYxnTABN9m0fmrmW/y5idHFFUxXBfIbfcCWOq6XI6yTnMPSKKJkRjeKiCuxD2qgd
-        I=
-X-Received: by 2002:adf:e310:0:b0:226:d19c:de22 with SMTP id b16-20020adfe310000000b00226d19cde22mr4033775wrj.314.1663365713532;
-        Fri, 16 Sep 2022 15:01:53 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM42y1GJjQtjCDbyt3WCVfBYmMlZITlOgwAhJrFqaFC/v09i3hSqlFai21WZKqDUZm5Cz816WA==
-X-Received: by 2002:adf:e310:0:b0:226:d19c:de22 with SMTP id b16-20020adfe310000000b00226d19cde22mr4033758wrj.314.1663365713293;
-        Fri, 16 Sep 2022 15:01:53 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f17-20020a7bcd11000000b003a4efb794d7sm3495213wmj.36.2022.09.16.15.01.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 15:01:52 -0700 (PDT)
-Message-ID: <d29dd847-f5c8-d744-2d18-64f20abc09a1@redhat.com>
-Date:   Sat, 17 Sep 2022 00:01:51 +0200
+        Fri, 16 Sep 2022 18:08:20 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4583381B2A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 15:08:19 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 6AD92C7EF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 16:46:00 -0500 (CDT)
+Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZJ9solxw0CE4UZJ9soc9Wh; Fri, 16 Sep 2022 16:46:00 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6A/1Xc0AcvbQPB1FKwFOyX/vKvUf0YDnXqsk5LaKAZw=; b=F5YG9H6hemKtwL6w7qqOx7Nxwc
+        nC1m48jfOZK5MJ15uWPyF8Mf+re2b2D8UlJpOFHtY//aADTVpurHsX9NoUxQg/5WCil/FGnzAWLPU
+        0dm6LXzEKb1ftFWsgNAzrF96Bsli/QnfuEb5NUqmDIjMJTmFQVL6OrPwWKbx1bXGq5QhgK8gjRi0k
+        0BZpuyJzpA7fZSRg0SNEg1ZzjYwM+eVVavECjpIdobtEAowd+Wb49YBxsvgc1okPzXodfeB/xaEWV
+        Ly6Cwlxp3CyHMI7MzEJ8gHJEcyrMfGTvONt2ntJjb49QyBjbZffDAOBeSKiPYky1Ev0P094HM4QZZ
+        A8uOdf5A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:58452 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <linux@roeck-us.net>)
+        id 1oZJ9r-002btv-6R;
+        Fri, 16 Sep 2022 21:45:59 +0000
+Date:   Fri, 16 Sep 2022 14:45:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.14 0/7] 4.14.294-rc1 review
+Message-ID: <20220916214554.GB3350231@roeck-us.net>
+References: <20220916100441.528608977@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3] drm/plane-helper: Add a
- drm_plane_helper_atomic_check() helper
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-References: <20220913162307.121503-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220913162307.121503-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220916100441.528608977@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1oZJ9r-002btv-6R
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:58452
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 25
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,26 +83,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 18:23, Javier Martinez Canillas wrote:
-> Provides a default plane state check handler for primary planes that are a
-> fullscreen scanout buffer and whose state scale and position can't change.
+On Fri, Sep 16, 2022 at 12:07:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.294 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> There are some drivers that duplicate this logic in their helpers, such as
-> simpledrm and ssd130x. Factor out this common code into a plane helper and
-> make drivers use it.
-> 
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
+> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
+> Anything received after that time might be too late.
 > 
 
-Pushed this to drm-misc (drm-misc-next). Thanks!
+Build results:
+	total: 170 pass: 170 fail: 0
+Qemu test results:
+	total: 422 pass: 422 fail: 0
 
--- 
-Best regards,
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Guenter
