@@ -2,95 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39FD5BA945
+	by mail.lfdr.de (Postfix) with ESMTP id 981AE5BA944
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiIPJSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S230345AbiIPJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIPJSO (ORCPT
+        with ESMTP id S231262AbiIPJSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:18:14 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B3A3135E;
-        Fri, 16 Sep 2022 02:18:12 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8B6692000E;
-        Fri, 16 Sep 2022 09:18:07 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, linus.walleij@linaro.org, david@ixit.cz,
-        jbx6244@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: [PATCH] arm64: dts: rockchip: add i2s0 I2S/PDM/TDM 8ch controller to px30
-Date:   Fri, 16 Sep 2022 11:17:46 +0200
-Message-Id: <20220916091746.35108-1-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.37.3
+        Fri, 16 Sep 2022 05:18:04 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF242A99EF;
+        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id b23so20639161pfp.9;
+        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=RFJvLC3oyKntFrzTiQRhGZVyVO6GPmrCQg8gZcgZyFw=;
+        b=Si6vfDs3bb2P2LS+f46ihWdK3HAyZdel6Ti1Rl2uXqTyVhhM+fRPVv2zmQ4d/VKab8
+         E4MWbu0mTcGqAAdPVQlX+SSKfU7KNUsJrnxmoBrVPgeHoXCdIBpGm9c0rMYAv+TCkITP
+         CrEQiNGzUycaWOLkBp7E1yPKzvFAgYuY/fZAO8XH1XVhBx+LMLqnJpoTapoE/PeMwBdh
+         gR1mmMH6iNh/WBmaizEX2KFNP64aO1OPWnEsFQYWCLpTltBTj52KfzB4SBNaMVGNxlZc
+         4uKj2M4qd/vGEsuKn8Qx6qonwZz8cdIn9MQSREeaVvRUXI8uhZafFWRTbUHEkdBASLVc
+         boHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RFJvLC3oyKntFrzTiQRhGZVyVO6GPmrCQg8gZcgZyFw=;
+        b=54A3nWdRxuXxlksECDGwjlzlODPqF1IEKd8vY4oQFFAhn3dJAEkw9SRmtp9FRw5yR6
+         HTq3y3IP98sxStjDVjwXHKBtkvukVQ3OFB5UbJxL22j6XKvHMAVCTtW5ZOrgeaMvBFJs
+         XkzGxjEpbGcK0ABWAAgGSIWp338yAiznQIn96McKcA0XHZ744Ynym+Zdooa1pp7CMPJ9
+         ILwPhaZWOTFywC/+ZqEhchIyE7Jlfp5G1X/y05GwDDq7gtERdW5PxuHikQ7qLKgZ9Zlp
+         r8YxTYhRkkDmKx73Zs5yj+bEQrDqGRrN3Th1sKKWAOgOjoPrSr1/uS7+zGDV1IPKzrC0
+         sM2w==
+X-Gm-Message-State: ACrzQf1Vv97mG5H9HRamlmbqq5rj6UtDlAOTqAD0s5RtOFFRKSVG7XSI
+        OSkBFvMspXXTI0pWhmIdPMQ=
+X-Google-Smtp-Source: AMsMyM6PMf1pTSKPrEToM1vu4+OPBqOTXE35gLiVtkoVeVNAu/wJ9Awn1DLWt6lUQ0y1S1KgHHMDJw==
+X-Received: by 2002:a63:77c4:0:b0:435:4224:98b6 with SMTP id s187-20020a6377c4000000b00435422498b6mr3751652pgc.94.1663319871288;
+        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-32.three.co.id. [116.206.28.32])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b00174f7d10a03sm14635852plh.86.2022.09.16.02.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 02:17:50 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 5800510322A; Fri, 16 Sep 2022 16:17:48 +0700 (WIB)
+Date:   Fri, 16 Sep 2022 16:17:48 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <YyQ/PHZHkDSgjH/v@debian.me>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-4-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="y7c2sZGFbG3OyuxM"
+Content-Disposition: inline
+In-Reply-To: <20220915142913.2213336-4-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-The Rockchip PX30 SoC has three I2S controllers, i2s1 and i2s2 are
-2-channel I2S/PCM controllers handled by the same controller driver, and
-i2s0 a 8-channel I2S/PCM/TDM controller handled by another controller
-driver.
+--y7c2sZGFbG3OyuxM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This adds the device tree node required to enable I2S0 on PX30.
+On Thu, Sep 15, 2022 at 10:29:08PM +0800, Chao Peng wrote:
+> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+> +   private memory access when the bit is set otherwise the memory error =
+is
+> +   caused by shared memory access when the bit is clear.
 
-This was tested in a 2-channel I2S with TX BCLK/LRCK for both TX and RX
-(rockchip,trcm-sync-tx-only) setup on a soon-to-be-released board.
+s/set otherwise/set. Otherwise,
 
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
- arch/arm64/boot/dts/rockchip/px30.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Thanks.
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 214f94fea3dc..bfa3580429d1 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -365,6 +365,28 @@ uart0: serial@ff030000 {
- 		status = "disabled";
- 	};
- 
-+	i2s0_8ch: i2s@ff060000 {
-+		compatible = "rockchip,px30-i2s-tdm";
-+		reg = <0x0 0xff060000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru SCLK_I2S0_TX>, <&cru SCLK_I2S0_RX>, <&cru HCLK_I2S0>;
-+		clock-names = "mclk_tx", "mclk_rx", "hclk";
-+		dmas = <&dmac 16>, <&dmac 17>;
-+		dma-names = "tx", "rx";
-+		rockchip,grf = <&grf>;
-+		resets = <&cru SRST_I2S0_TX>, <&cru SRST_I2S0_RX>;
-+		reset-names = "tx-m", "rx-m";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&i2s0_8ch_sclktx &i2s0_8ch_sclkrx
-+			     &i2s0_8ch_lrcktx &i2s0_8ch_lrckrx
-+			     &i2s0_8ch_sdo0 &i2s0_8ch_sdi0
-+			     &i2s0_8ch_sdo1 &i2s0_8ch_sdi1
-+			     &i2s0_8ch_sdo2 &i2s0_8ch_sdi2
-+			     &i2s0_8ch_sdo3 &i2s0_8ch_sdi3>;
-+		#sound-dai-cells = <0>;
-+		status = "disabled";
-+	};
-+
- 	i2s1_2ch: i2s@ff070000 {
- 		compatible = "rockchip,px30-i2s", "rockchip,rk3066-i2s";
- 		reg = <0x0 0xff070000 0x0 0x1000>;
--- 
-2.37.3
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--y7c2sZGFbG3OyuxM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYyQ/PAAKCRD2uYlJVVFO
+o+4BAQDezOCiD0NOTihbyDi8bMxnDsZat5ohcP3Z6qp+0VEjSAD+PZb6ujbn8gYi
+c4AOBSOQzNSdKZVaTt8s86rxM84+4gk=
+=Ns2r
+-----END PGP SIGNATURE-----
+
+--y7c2sZGFbG3OyuxM--
