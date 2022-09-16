@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588975BB1CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239E05BB1CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiIPR7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 13:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
+        id S229783AbiIPR7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 13:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiIPR7K (ORCPT
+        with ESMTP id S229728AbiIPR7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Sep 2022 13:59:10 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C262B6D26;
-        Fri, 16 Sep 2022 10:59:07 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so366082pjo.2;
-        Fri, 16 Sep 2022 10:59:07 -0700 (PDT)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235BCB6549;
+        Fri, 16 Sep 2022 10:59:08 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f23so5892699plr.6;
+        Fri, 16 Sep 2022 10:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=3Z1UBNkQWWSj81b1Nj/BZaCfVqWCpu/WDo7Z4K3NP2o=;
-        b=Ioi27MsEZ7IT0HFQdqUMcEN+Nw1807kWs1WHf5FBaT/8JBbigpHd7GdbYm2gUZsTfp
-         r/FD/MSLwbXQcz9U6XKPxfRGYKwCWNcpOPhNCsJU+4WbzTgFU+OSb138eYvOLbiU05IM
-         h73v1L451m4iC21zyLw5zeul3Xe6HiF4tWDSVtwSAEPNpp1NiT+LIKVJ1JSVk33lPCvq
-         Lhr0DLV6q/VBbJ//MivNcA9yHgD34NN/RZ43cm2qKahXjRcR2VhqoY9qoikCjv/y17Gx
-         /H2zzG/pM3iYNxhN9AlZqNQA6pRInMDQGyqNB/GdCKnAKz9BuFTPhGoHDyh4cmuMyU8R
-         KdsQ==
+        bh=fHUO/tTSXGwAYWJl/h0HUVhnDEOopzy02qV2Gf5LuFs=;
+        b=ZK8zrdV8d0dwJcFEu5/64qRd9FaeNiefq6CFkl68lXUVMTGfBNgbTNYZOauC+hVTGb
+         6y3x1XM2mryd1E+ITjTL7KfeRyHT2WSSTHx4gEomFsbrp/f5BU0OetLFSFX6dP7HIiBp
+         Thhskg2kZzIJc15fkUg1C7eTdCqioUhXM/C2GcvPk8MyjRvX7gHduphw87kgv4FNWuXK
+         +ZLCqZT1yhPK84NWUoTvWNR4UvEBgD3l/C58T5otxKUMPmAB+YslGUyFUZZImp6H7n5G
+         KXgN9mMP3mOQGWjQtaNLzSmy7pyPDb0se+vqmWilst4S8EF73NHPDLTmJy/OVpVAuYnI
+         lIUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date;
-        bh=3Z1UBNkQWWSj81b1Nj/BZaCfVqWCpu/WDo7Z4K3NP2o=;
-        b=QphvRHIMFz6I0G5hiNdiIGCwFi3tmcNv+FfQB6HpOuhFsiZEsXaUNLvE7BYY9OV3Uy
-         rLmFv4GliHp0ZWBu50pMMjraT5vTJTjtaaJddGcru+LLr+EJkeWB+p/HgKwG7q6T+gMQ
-         qszqAj3N8zEECDUCDzmRufJO9u0Od1bmq16DxlC4CubW6l0jHBeefZ+thZb+kL91ejLA
-         xwK9+3oIpzowGZvXG0/uQVt2XDnr4tRbMWszgI4Kc7N9ePtlMTchCFuQiUjWkMhpx/Hb
-         O6oNL8F23Pp9Rpc8OYNF2OlPg4KPansVWxw84R8z+8pE+IaXz+y2cpT+O9MX+bt0Qi+o
-         tnlA==
-X-Gm-Message-State: ACrzQf32/sMdJextk4cdVnYe33MXhgUmj5tA4KueDegDitxNROOqzAb8
-        pAVIV+7vKrye/gRrAmbJUcY=
-X-Google-Smtp-Source: AMsMyM4EpAw+rk2ysa2xBRmNCS5vPVVHP4+vjjzX5yAo/4130TLMippq88eB+rRFFCpKSM1Kxp/Q8Q==
-X-Received: by 2002:a17:90b:1e49:b0:203:38c:365a with SMTP id pi9-20020a17090b1e4900b00203038c365amr17922997pjb.133.1663351146601;
-        Fri, 16 Sep 2022 10:59:06 -0700 (PDT)
+        bh=fHUO/tTSXGwAYWJl/h0HUVhnDEOopzy02qV2Gf5LuFs=;
+        b=RgleZHHXzA1QNox/OiJtmxPuMlCy1q5QA38sSMw+IUlRW5CeKrgDdL+XxXkSUtCwsc
+         EndCIIy6iu6RNHdGGfNN40Zue0jLgS5DznUk+RRS9t2+luG/FOjbO0rqBR3jmWiqaIWO
+         2k8VZ8ZA5m1c9BAhTopi78appO8fjbHoJVOnJHNouX/wj8lTdMAlZc6SG4UKePVck3nf
+         aZTZ355cjBItgnbx0A1elqr8W02m6thoCTSV5HhATHL4G91FzRWaCD1KMn0toBT5EC+j
+         olTT/LO9j1OE2ZO4Cf/rh/N6U+5uU5d4t/Wytb4Fzx9RuRiuQt/rLyKysRr5lV9WKpBi
+         Fz0g==
+X-Gm-Message-State: ACrzQf2zFy4hfsEbcp+pkn6/oivGhAnVu4KU7NH+dzlSZFfKFHjGty/T
+        8rt8N5vBwA/4vEqynL+LeSs=
+X-Google-Smtp-Source: AMsMyM4dG4hKzttcx8sac4yQPxAuCp9N3g0k99zv9hMicHD8V+S5LpjBV8yGirFLASDCHSHrpRFvYg==
+X-Received: by 2002:a17:902:cec1:b0:178:cdb:8458 with SMTP id d1-20020a170902cec100b001780cdb8458mr962068plg.161.1663351147621;
+        Fri, 16 Sep 2022 10:59:07 -0700 (PDT)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:2952:dee7:a35e:6428])
-        by smtp.gmail.com with ESMTPSA id jo21-20020a170903055500b001767f6f04efsm15059458plb.242.2022.09.16.10.59.05
+        by smtp.gmail.com with ESMTPSA id jo21-20020a170903055500b001767f6f04efsm15059458plb.242.2022.09.16.10.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 10:59:06 -0700 (PDT)
+        Fri, 16 Sep 2022 10:59:07 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 1/4] perf tools: Move dsos functions to util/dsos.c
-Date:   Fri, 16 Sep 2022 10:58:59 -0700
-Message-Id: <20220916175902.1155177-2-namhyung@kernel.org>
+Subject: [PATCH 2/4] perf tools: Add perf_event__synthesize_{start,stop}()
+Date:   Fri, 16 Sep 2022 10:59:00 -0700
+Message-Id: <20220916175902.1155177-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 In-Reply-To: <20220916175902.1155177-1-namhyung@kernel.org>
 References: <20220916175902.1155177-1-namhyung@kernel.org>
@@ -77,114 +77,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+These functions are to prepare and cleanup necessary work for synthesizing.
+It doesn't do anything yet but later patch will add it.
+
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/dsos.c    | 29 +++++++++++++++++++++++++++++
- tools/perf/util/dsos.h    |  3 +++
- tools/perf/util/machine.c | 29 -----------------------------
- 3 files changed, 32 insertions(+), 29 deletions(-)
+ tools/perf/builtin-inject.c        | 3 +++
+ tools/perf/builtin-record.c        | 3 +++
+ tools/perf/builtin-stat.c          | 2 ++
+ tools/perf/builtin-top.c           | 4 ++++
+ tools/perf/util/auxtrace.c         | 2 ++
+ tools/perf/util/synthetic-events.c | 8 ++++++++
+ tools/perf/util/synthetic-events.h | 3 +++
+ 7 files changed, 25 insertions(+)
 
-diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
-index 2bd23e4cf19e..90a800625110 100644
---- a/tools/perf/util/dsos.c
-+++ b/tools/perf/util/dsos.c
-@@ -12,6 +12,35 @@
- #include <symbol.h> // filename__read_build_id
- #include <unistd.h>
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index e254f18986f7..2e91a887919b 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -2368,9 +2368,12 @@ int cmd_inject(int argc, const char **argv)
+ 	if (ret < 0)
+ 		goto out_delete;
  
-+void dsos__init(struct dsos *dsos)
-+{
-+	INIT_LIST_HEAD(&dsos->head);
-+	dsos->root = RB_ROOT;
-+	init_rwsem(&dsos->lock);
-+}
++	perf_event__synthesize_start();
 +
-+static void dsos__purge(struct dsos *dsos)
-+{
-+	struct dso *pos, *n;
-+
-+	down_write(&dsos->lock);
-+
-+	list_for_each_entry_safe(pos, n, &dsos->head, node) {
-+		RB_CLEAR_NODE(&pos->rb_node);
-+		pos->root = NULL;
-+		list_del_init(&pos->node);
-+		dso__put(pos);
-+	}
-+
-+	up_write(&dsos->lock);
-+}
-+
-+void dsos__exit(struct dsos *dsos)
-+{
-+	dsos__purge(dsos);
-+	exit_rwsem(&dsos->lock);
-+}
-+
- static int __dso_id__cmp(struct dso_id *a, struct dso_id *b)
- {
- 	if (a->maj > b->maj) return -1;
-diff --git a/tools/perf/util/dsos.h b/tools/perf/util/dsos.h
-index 5dbec2bc6966..49f448f106f8 100644
---- a/tools/perf/util/dsos.h
-+++ b/tools/perf/util/dsos.h
-@@ -21,6 +21,9 @@ struct dsos {
- 	struct rw_semaphore lock;
- };
+ 	ret = __cmd_inject(&inject);
  
-+void dsos__init(struct dsos *dsos);
-+void dsos__exit(struct dsos *dsos);
+ 	guest_session__exit(&inject.guest_session);
++	perf_event__synthesize_stop();
+ 
+ out_delete:
+ 	strlist__delete(inject.known_build_ids);
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 02e38f50a138..5b7b9ad2a280 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1966,6 +1966,8 @@ static int record__synthesize(struct record *rec, bool tail)
+ 	if (rec->opts.tail_synthesize != tail)
+ 		return 0;
+ 
++	perf_event__synthesize_start();
 +
- void __dsos__add(struct dsos *dsos, struct dso *dso);
- void dsos__add(struct dsos *dsos, struct dso *dso);
- struct dso *__dsos__addnew(struct dsos *dsos, const char *name);
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 2a16cae28407..4c5540f5c753 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -50,13 +50,6 @@ static struct dso *machine__kernel_dso(struct machine *machine)
- 	return machine->vmlinux_map->dso;
+ 	if (data->is_pipe) {
+ 		err = perf_event__synthesize_for_pipe(tool, session, data,
+ 						      process_synthesized_event);
+@@ -2072,6 +2074,7 @@ static int record__synthesize(struct record *rec, bool tail)
+ 	}
+ 
+ out:
++	perf_event__synthesize_stop();
+ 	return err;
  }
  
--static void dsos__init(struct dsos *dsos)
--{
--	INIT_LIST_HEAD(&dsos->head);
--	dsos->root = RB_ROOT;
--	init_rwsem(&dsos->lock);
--}
--
- static void machine__threads_init(struct machine *machine)
- {
- 	int i;
-@@ -181,28 +174,6 @@ struct machine *machine__new_kallsyms(void)
- 	return machine;
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index e05fe72c1d87..f6f61e08f4c2 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -962,6 +962,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+ 		if (err < 0)
+ 			return err;
+ 
++		perf_event__synthesize_start();
+ 		err = perf_event__synthesize_stat_events(&stat_config, NULL, evsel_list,
+ 							 process_synthesized_event, is_pipe);
+ 		if (err < 0)
+@@ -2641,6 +2642,7 @@ int cmd_stat(int argc, const char **argv)
+ 			perf_session__write_header(perf_stat.session, evsel_list, fd, true);
+ 		}
+ 
++		perf_event__synthesize_stop();
+ 		evlist__close(evsel_list);
+ 		perf_session__delete(perf_stat.session);
+ 	}
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index e89208b4ad4b..1eff894e6b5f 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -1258,6 +1258,8 @@ static int __cmd_top(struct perf_top *top)
+ #endif
+ 	}
+ 
++	perf_event__synthesize_start();
++
+ 	ret = perf_event__synthesize_bpf_events(top->session, perf_event__process,
+ 						&top->session->machines.host,
+ 						&top->record_opts);
+@@ -1273,6 +1275,8 @@ static int __cmd_top(struct perf_top *top)
+ 				    top->evlist->core.threads, true, false,
+ 				    top->nr_threads_synthesize);
+ 
++	perf_event__synthesize_stop();
++
+ 	if (top->nr_threads_synthesize > 1)
+ 		perf_set_singlethreaded();
+ 
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index b59c278fe9ed..1bfe076c22fb 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -1328,6 +1328,7 @@ int perf_event__process_auxtrace_info(struct perf_session *session,
+ 	if (err)
+ 		return err;
+ 
++	perf_event__synthesize_start();
+ 	unleader_auxtrace(session);
+ 
+ 	return 0;
+@@ -2834,6 +2835,7 @@ void auxtrace__free(struct perf_session *session)
+ 	if (!session->auxtrace)
+ 		return;
+ 
++	perf_event__synthesize_stop();
+ 	return session->auxtrace->free(session);
  }
  
--static void dsos__purge(struct dsos *dsos)
--{
--	struct dso *pos, *n;
--
--	down_write(&dsos->lock);
--
--	list_for_each_entry_safe(pos, n, &dsos->head, node) {
--		RB_CLEAR_NODE(&pos->rb_node);
--		pos->root = NULL;
--		list_del_init(&pos->node);
--		dso__put(pos);
--	}
--
--	up_write(&dsos->lock);
--}
--
--static void dsos__exit(struct dsos *dsos)
--{
--	dsos__purge(dsos);
--	exit_rwsem(&dsos->lock);
--}
--
- void machine__delete_threads(struct machine *machine)
- {
- 	struct rb_node *nd;
+diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+index 0ff57ca24577..9d4f5dacd154 100644
+--- a/tools/perf/util/synthetic-events.c
++++ b/tools/perf/util/synthetic-events.c
+@@ -47,6 +47,14 @@
+ 
+ unsigned int proc_map_timeout = DEFAULT_PROC_MAP_PARSE_TIMEOUT;
+ 
++void perf_event__synthesize_start(void)
++{
++}
++
++void perf_event__synthesize_stop(void)
++{
++}
++
+ int perf_tool__process_synth_event(struct perf_tool *tool,
+ 				   union perf_event *event,
+ 				   struct machine *machine,
+diff --git a/tools/perf/util/synthetic-events.h b/tools/perf/util/synthetic-events.h
+index 53737d1619a4..e4414616080c 100644
+--- a/tools/perf/util/synthetic-events.h
++++ b/tools/perf/util/synthetic-events.h
+@@ -43,6 +43,9 @@ int parse_synth_opt(char *str);
+ typedef int (*perf_event__handler_t)(struct perf_tool *tool, union perf_event *event,
+ 				     struct perf_sample *sample, struct machine *machine);
+ 
++void perf_event__synthesize_start(void);
++void perf_event__synthesize_stop(void);
++
+ int perf_event__synthesize_attrs(struct perf_tool *tool, struct evlist *evlist, perf_event__handler_t process);
+ int perf_event__synthesize_attr(struct perf_tool *tool, struct perf_event_attr *attr, u32 ids, u64 *id, perf_event__handler_t process);
+ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16 misc, perf_event__handler_t process, struct machine *machine);
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
