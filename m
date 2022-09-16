@@ -2,165 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535745BA429
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11335BA42F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiIPBzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 21:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S229561AbiIPBzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 21:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIPBzC (ORCPT
+        with ESMTP id S229872AbiIPBzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 21:55:02 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820F713F6D;
-        Thu, 15 Sep 2022 18:55:01 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28FNnFqp013537;
-        Fri, 16 Sep 2022 01:54:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=SnHO15QjOnEElQWEUsZN8hidkT/LrbviWDzTQBrQn3M=;
- b=XHNi0Swpa7iQIJJK5uh7PpRTPqYb3l1Zp8KpK3hXc5ILr9+loLr95n4Iz9cHZq6uOeel
- eewZzP6NbtqVVxJtEMlEh2W+StP9fKI+n5NLTRnVxvd9qbGHQ+pfJ+/HReQZVDgy2M8P
- bnbOVCLx77b/BXtHUKtTnBhn2leC/HvpTQ94k5kOhcUo+pljUxeL6Fhip7h42DOfJ388
- eswVfk3AxNfQE5i4BMVq74stsSFjfVRbKM6szBbrrGjazTqzPUO0EvHlvJLl8Uf1DaWw
- SmATWf6DnpnPQeeWMSNafeYhJ5iO+Hq5K+iTwyDJ1LUBQeLNY+yGdxCWS+33njarJz80 HA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jm8xbs5v8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Sep 2022 01:54:56 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28G04PIu019689;
-        Fri, 16 Sep 2022 01:54:55 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jm8xfdgv9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Sep 2022 01:54:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jIKwAWnhrHlSH+f1rr9JnT1WUUSDfV3b4aIPY7WkX25UZ6TjPBr4r/ZEw3Uj+F0cqMbL7B2dSaaYcarjqIQnxoEo8lPJUGPvgm++S4Q1DNSn9mcBWBf5h9hssHu2YcViYDfKam8HXHwOfhvB2KbmvmZBAoQrKVliwrl6xRcMyVI+frroEWxzA2f8t+fR/APUMBK3gpPAENWD9Md4EErrCaQ4hLzkqkG2YaPxrjEq8zsazwVAPUtNW0NKJPUhKnluoH8LsP62RGaipWM4tOAyFnact7CecY6DJromua+crTCLa2R8x5VP9maW8RShjZw5RAh05lC+JppEP5FzichVDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SnHO15QjOnEElQWEUsZN8hidkT/LrbviWDzTQBrQn3M=;
- b=fwlvz09ZBDlrTjzxU1fxJtCJK7D3bs8vU0DczWak9TgHHWjaFmK3Q7SwASKWt7NZBUc7Mo1826/HxrlohyQqBXbxXqW2MTcg5V2myN+EwZxuHmNTtc45jpiCFA7s9BhjlsBilUC++2ZmcAPNg5BgmgGlwihZO4ZvXRjCiql1KvfZkgiV3c1UjoiJOhVd+4s8ZROzwQHplIu7+zPkgLCH8eW/ukEFdQSS8AyLRJy28giuyANtRyHWfEDZg2qbCgaaCjTyhNRCmYez7frPiNKJ4oZWk9prdUk2J9vm+imGJZl2bKuFZ4W6LsWPqiOsqRn+/lk3n+f7Sg0A9HNLzzokWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SnHO15QjOnEElQWEUsZN8hidkT/LrbviWDzTQBrQn3M=;
- b=tRvD4a7vMXAIcyTnMix3l39l5wXtN0/ElVLuHy9tE116O/rKoH7mjnSqZNkOUajsU6DtgPcgT+273fAQuYjiLlxAX9v7M0ZhOuP2ere+OAus/kDE2ZKRsZKz/AT6MDJZgI8S8KhSyAorIaq+UD10Z46U9l4InKdTh9x5zgxvBto=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM4PR10MB6013.namprd10.prod.outlook.com (2603:10b6:8:ae::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.19; Fri, 16 Sep 2022 01:54:54 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::297f:836:f424:cd75]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::297f:836:f424:cd75%3]) with mapi id 15.20.5632.015; Fri, 16 Sep 2022
- 01:54:53 +0000
-To:     SEO HOYOUNG <hy50.seo@samsung.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Subject: Re: [PATCH v2] scsi: ufs: add a variant operation in struct
- ufs_hba_variant_ops
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1czbw2ihu.fsf@ca-mkp.ca.oracle.com>
-References: <CGME20220913075407epcas2p1075426e0ef45b6969e50823d59c374d3@epcas2p1.samsung.com>
-        <20220912193703.102267-1-hy50.seo@samsung.com>
-Date:   Thu, 15 Sep 2022 21:54:50 -0400
-In-Reply-To: <20220912193703.102267-1-hy50.seo@samsung.com> (SEO HOYOUNG's
-        message of "Tue, 13 Sep 2022 04:37:03 +0900")
-Content-Type: text/plain
-X-ClientProxiedBy: SA9PR13CA0023.namprd13.prod.outlook.com
- (2603:10b6:806:21::28) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Thu, 15 Sep 2022 21:55:10 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D3C1140D2;
+        Thu, 15 Sep 2022 18:55:04 -0700 (PDT)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id BE50F1074;
+        Fri, 16 Sep 2022 03:55:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202205; t=1663293300;
+        bh=i036dqtp+M5F2iUf7rJM+aJuwo1MGvMl7sNUQfom7jo=;
+        h=Date:From:Cc:Subject:From;
+        b=jO4yYTbqKxQRidV2ITu2C9smcNmZQMv3jhS+P36B8OBpk2tfFzCEPRGSg2zgdBLdm
+         95i3qlukPocwJsfOwb+GZ3naz/p9VjXl9CxzML/VdnFazDNL9UEGyqOLnXUDuW9COJ
+         D7iCeC+w7zSugktHa9hIJvz3IWcdzY0AXJVWEAUjM2UXoVejOgbeGQ77hJ7fuYvXGJ
+         dFDwRISCMTMod1Woch1TqDFEehHmuby2V/48UsomAYtB9wqejPbqNNh/jXsOm0Hir7
+         kRTugodsI5plFMwoiOW1DNGYBR0w3dX4YD2LfzUGVoWJrm0XP5eqYzSR5mMCfR6Qu/
+         aXyuxKEffSwqHOtWxrMyQ18szB6oX7CyuqmLK09v3GflYTjmkKHBL+nFNIV8IvZ8tu
+         tJAiIPvy/FOEA8GXzHF5I1uhcVAx8PFnIUQLnvWy6VtZkk5rryoCpK4GPihiJSSKSC
+         cAZWUpTMwTRNFb/0wBGgXXxfKqaqpcGQRG4vCfiSy41C+MlLojxzYlMQYiIYjJ4ngn
+         qFTchflAv4KD+I3DZJ+rdR5Z/988w95/caMDutn7AF/yTr8esQsHDAp04kGMAnEb+j
+         gxmVQbYOj7NDwvJG9LQykm3ZCcY9dGj+pXdaCCfl2SdWpAE9CovP9y2JwF58T20RvE
+         ZuYfXcFe3oOQslZbAOqX/ics=
+Date:   Fri, 16 Sep 2022 03:54:59 +0200
+From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: [PATCH 1/5] tty: remove TTY_MAGIC
+Message-ID: <476d024cd6b04160a5de381ea2b9856b60088cbd.1663288066.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM4PR10MB6013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ad6e104-2d77-40b2-f068-08da978672ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IFR4INiSlVOPf2rv/+Hg3+tbD05wwKhOQQL4hKgdeaP+XwfjtmXAZ8LK7aCJFUiZkLX/l95XagaDrBaatYDXKeqPAcY81ny07ik1MwgHDGL4S7+3kM3ttCrBaqmKHTS6Ah0WuY4RKze+xzKLgCCNRHwD7FAs9aWYhFxsCO/8xwH+Mjk2HJMoLTM8JCp/tpkMea6/ZC2l7RYyxFEt7w17Rah9KAOYNhNsEpT1i3kTRjOBtYfCYtQ9A/KYQT3qAie/gFp5AcJF+cqzPgYvECfBR9FLnGBHzk4NaIRP2YpPEAGgMM8kAwJzrePqFNvd0gYb+6X6x8Dpa5ArnEfdMQ8XkUCbmb+Mmc8eYZMO6ErgN2Z4aoD4KITUfBIil0Tzq4gzFi6tf60AhS8i9SeRuxkS46iwqqrOOkO7Ty9FS6H/fjPxgF+oNxMFc+lscOE6apUyMIwYwAFrsWHdUFsbJ2k7OGJDuE1D0uVhp4BWBUsoczvKqIoccszNjI+ZrBomKJ+ZyyhcKn4rtwQ4Tpa9op3dHyh8sWNZnFOG30nMs2y/dHLkIv0y1Urq9EadqxWBnUJR8KaVhJclLkO4tk+G4RNU1n/mp1uXkQA/1F/4E0eHx52fK34445Gi5VklmePc8cub4VEaHNiSFJuQJ5u2KwaGzJIee1KlbF8UOL4Wrow2POutUePM/JtKrYcuqxyIJosloamQXbSPCQYFRp67p8HRnQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(39860400002)(366004)(396003)(451199015)(478600001)(558084003)(7416002)(2906002)(316002)(86362001)(36916002)(66946007)(8676002)(8936002)(6506007)(4326008)(6512007)(66556008)(66476007)(6486002)(6916009)(38100700002)(26005)(41300700001)(186003)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xy38+C6Mv0HGy6SsmwP8KvxEZIChBNC6rx/jg7y9gUqVaM3g7lnYd/JPk9c/?=
- =?us-ascii?Q?49OAIinxe+6Q65YbKYmijUh7sTjuoNjIzsDyyzQ2NSvpz2gWYPJjg1KvSj9k?=
- =?us-ascii?Q?aY9K+WOKjd5nnp+nGyHyuwuKdup2PouQp+p8mNe+pXuNlxHCg+AG3uYDharO?=
- =?us-ascii?Q?rjGO8Yb+bay2R4KwFdlygxD7wkzn9PLAErgUw3jUH8SNdhb0FqafhbnfzhlL?=
- =?us-ascii?Q?Hn6deaSt76H9uYyswf/PWHdPMrm5/tG8qHF6aoZlMSItPy2G8NCC84hW8DqX?=
- =?us-ascii?Q?4Mxb8tXQZTZDH6JYsNPtm8IhqlnD+lfzoNGzwIi8hKjoV6SI1ULCY4eSfFeX?=
- =?us-ascii?Q?3UaJOF5/29juSrg2l/MLECSR8IqYumSG6OtCEgiHqnCRXK/scUYc2cPNTg1H?=
- =?us-ascii?Q?2Go1gDX9vtzpSzUJU0qJtG32MMXXKRsvhTctRgONuCs8OWVPNJOVXa5/ZrK5?=
- =?us-ascii?Q?YIu8YA9s36iEY6wrUYNbyKr8y58BsHdkx3JNAW2xWAEfpEk/M+a4O2z/3tfu?=
- =?us-ascii?Q?hx7gze4GZuUELSpYDNWZZYwM3E6OgaHUuOoig8CLNZDHBsAfF97uNSEh/D9T?=
- =?us-ascii?Q?NhQ1oOzLey1Q194MfBjRuSB0bHbuSI9mSthdcEO1s0aRVviMCFd3eTblr14G?=
- =?us-ascii?Q?X2PH/BV+lv6KxP9+/3zASw7H3cLziUAn+M72o5fBqtdifsQ7Fs5KkPTrhhiM?=
- =?us-ascii?Q?rNHknn5JPFWefLPtn59joHmPeP99nZdPfEXsf2UOAkK1tYMQgTg4zwuRKZGN?=
- =?us-ascii?Q?Hefl9zwBcOMJkPkO3NmkU94b5WmddA8rlmwlWoDFYBJ8RhGx0P7JzTuivhyQ?=
- =?us-ascii?Q?aGsmF2Pk8MoqNh6XC9rtYVjqOvgZ1QLYymxAGRdLMDnXPEPWgbKFC8kxokqJ?=
- =?us-ascii?Q?s/bZ/33dxlzjJ5ceKfIjsAqtBbsboBHvZ+qxkJxRe6u/flaD90jNpIBw2WY4?=
- =?us-ascii?Q?9skeaFA7m2EjKeOMMcml9bDH32IxWxhrZztMo6z++b1zePjMopgxnAv8Y+U/?=
- =?us-ascii?Q?hiIwyq55Km2OmkBx7tXoAZJjc3FPhRe0hQl4wNBPSg1oc5j+Y/KNBXaMl9HP?=
- =?us-ascii?Q?GhghPxgqJdx7KbZkcwDcPdKNh2Ul3/IDsgJLrhDK3VrfbNKN6cP/V4DOaFmQ?=
- =?us-ascii?Q?8AcNul33mF2NxQv0zXeHDb0cRK+KK1dn3+iKeNKMoY1XHgY0E9m+eORMNQxE?=
- =?us-ascii?Q?QTkVRVwcDDn2kW+6htVSZDVofS4lLRZuigGiYJyHOZduuI4oegO9vEU/sS4S?=
- =?us-ascii?Q?Ueep2jLfPGRQ1+ZZOZzHb2bdxZSAJXmLNakXaV+nQRYf2SqSDf3mvs5+k8CA?=
- =?us-ascii?Q?hia5KKLS1aicyrcySsTh5AdVuq0lDzP/IgYyw939D2sI48eC2cMWVa7yG4gs?=
- =?us-ascii?Q?TC8XKmchVbk8fz2hJHgng8iEhbNq5Nobz+4zvjwKodpJ2hqZ7xBmzxCfJBlX?=
- =?us-ascii?Q?fq0h3P+C0El4VodDYy73DB+gtTmTmHRRwCsZFzUwa66kjgICF+r/MEnEytxu?=
- =?us-ascii?Q?wvB/Y58Ls4R1jHnAd8l6jZA40k+xAUkWD8H/PNHoB/jxj6PdwFFRBTpI12yt?=
- =?us-ascii?Q?gIBo5Dqux11bGqwnNaiZJ0YU84mBpbtEnas7vTc0eM1A+EHTVOwpTxLrAW6p?=
- =?us-ascii?Q?Nw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ad6e104-2d77-40b2-f068-08da978672ce
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 01:54:53.8624
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jl02DApuEmgtEqCpltUa1cjXQ1pWy3Tk/LiEkhifwzhmhGvaIIoERZHRWn+DIk2ayg3bpNyF8XJJGrZvdK1OQdjODw+1nwyEEwrgfo9e0Z0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6013
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209160012
-X-Proofpoint-GUID: BoMFt60prbkgWwYckY5ych4yNYf-BxED
-X-Proofpoint-ORIG-GUID: BoMFt60prbkgWwYckY5ych4yNYf-BxED
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pqehfju4slo4lchw"
+Content-Disposition: inline
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,MISSING_HEADERS,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Seo,
+--pqehfju4slo4lchw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +static inline void ufshcd_vops_check_int_error(struct ufs_hba *hba,
-> +					       bool *queue_eh_work)
-> +{
-> +	if (hba->vops & hba->vops->check_int_error)
+According to Greg, in the context of magic numbers as defined in
+magic-number.rst, "the tty layer should not need this and I'll gladly
+take patches"
 
-Uhm?
+Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+Whole series: amd64 allyesconfig builds; amd64 Debian config boots and
+appears to work; naturally, the HVC stuff is S/390 only, but it's a
+constant offset
 
-> +		hba->vops->check_int_error(hba, queue_eh_work);
-> +}
-> +
+ Documentation/process/magic-number.rst                    | 1 -
+ Documentation/translations/it_IT/process/magic-number.rst | 1 -
+ Documentation/translations/zh_CN/process/magic-number.rst | 1 -
+ Documentation/translations/zh_TW/process/magic-number.rst | 1 -
+ drivers/tty/tty_io.c                                      | 8 --------
+ drivers/tty/tty_mutex.c                                   | 6 ------
+ include/linux/tty.h                                       | 6 ------
+ 7 files changed, 24 deletions(-)
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
+/magic-number.rst
+index f5ba36e96461..b4c7ec61437e 100644
+--- a/Documentation/process/magic-number.rst
++++ b/Documentation/process/magic-number.rst
+@@ -84,7 +84,6 @@ SLIP_MAGIC            0x5302           slip              =
+       ``drivers/net/sl
+ STRIP_MAGIC           0x5303           strip                    ``drivers/=
+net/strip.c``
+ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/=
+net/hamradio/6pack.h``
+ AX25_MAGIC            0x5316           ax_disp                  ``drivers/=
+net/mkiss.h``
+-TTY_MAGIC             0x5401           tty_struct               ``include/=
+linux/tty.h``
+ MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
+char/synclink.c``
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
+cumentation/translations/it_IT/process/magic-number.rst
+index f452fafb1e84..bcb23384fefd 100644
+--- a/Documentation/translations/it_IT/process/magic-number.rst
++++ b/Documentation/translations/it_IT/process/magic-number.rst
+@@ -90,7 +90,6 @@ SLIP_MAGIC            0x5302           slip              =
+       ``drivers/net/sl
+ STRIP_MAGIC           0x5303           strip                    ``drivers/=
+net/strip.c``
+ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/=
+net/hamradio/6pack.h``
+ AX25_MAGIC            0x5316           ax_disp                  ``drivers/=
+net/mkiss.h``
+-TTY_MAGIC             0x5401           tty_struct               ``include/=
+linux/tty.h``
+ MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
+char/synclink.c``
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
+cumentation/translations/zh_CN/process/magic-number.rst
+index 42f0635ca70a..6250087d36c5 100644
+--- a/Documentation/translations/zh_CN/process/magic-number.rst
++++ b/Documentation/translations/zh_CN/process/magic-number.rst
+@@ -73,7 +73,6 @@ SLIP_MAGIC            0x5302           slip              =
+       ``drivers/net/sl
+ STRIP_MAGIC           0x5303           strip                    ``drivers/=
+net/strip.c``
+ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/=
+net/hamradio/6pack.h``
+ AX25_MAGIC            0x5316           ax_disp                  ``drivers/=
+net/mkiss.h``
+-TTY_MAGIC             0x5401           tty_struct               ``include/=
+linux/tty.h``
+ MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
+char/synclink.c``
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
+cumentation/translations/zh_TW/process/magic-number.rst
+index ae321a9aaece..fd169d760bbd 100644
+--- a/Documentation/translations/zh_TW/process/magic-number.rst
++++ b/Documentation/translations/zh_TW/process/magic-number.rst
+@@ -76,7 +76,6 @@ SLIP_MAGIC            0x5302           slip              =
+       ``drivers/net/sl
+ STRIP_MAGIC           0x5303           strip                    ``drivers/=
+net/strip.c``
+ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/=
+net/hamradio/6pack.h``
+ AX25_MAGIC            0x5316           ax_disp                  ``drivers/=
+net/mkiss.h``
+-TTY_MAGIC             0x5401           tty_struct               ``include/=
+linux/tty.h``
+ MGSL_MAGIC            0x5401           mgsl_info                ``drivers/=
+char/synclink.c``
+ TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/=
+linux/tty_driver.h``
+ MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 82a8855981f7..33962109bd10 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -170,7 +170,6 @@ static void free_tty_struct(struct tty_struct *tty)
+ 	tty_ldisc_deinit(tty);
+ 	put_device(tty->dev);
+ 	kvfree(tty->write_buf);
+-	tty->magic =3D 0xDEADDEAD;
+ 	kfree(tty);
+ }
+=20
+@@ -265,11 +264,6 @@ static int tty_paranoia_check(struct tty_struct *tty, =
+struct inode *inode,
+ 			imajor(inode), iminor(inode), routine);
+ 		return 1;
+ 	}
+-	if (tty->magic !=3D TTY_MAGIC) {
+-		pr_warn("(%d:%d): %s: bad magic number\n",
+-			imajor(inode), iminor(inode), routine);
+-		return 1;
+-	}
+ #endif
+ 	return 0;
+ }
+@@ -1533,7 +1527,6 @@ static void release_one_tty(struct work_struct *work)
+ 	if (tty->ops->cleanup)
+ 		tty->ops->cleanup(tty);
+=20
+-	tty->magic =3D 0;
+ 	tty_driver_kref_put(driver);
+ 	module_put(owner);
+=20
+@@ -3093,7 +3086,6 @@ struct tty_struct *alloc_tty_struct(struct tty_driver=
+ *driver, int idx)
+ 		return NULL;
+=20
+ 	kref_init(&tty->kref);
+-	tty->magic =3D TTY_MAGIC;
+ 	if (tty_ldisc_init(tty)) {
+ 		kfree(tty);
+ 		return NULL;
+diff --git a/drivers/tty/tty_mutex.c b/drivers/tty/tty_mutex.c
+index 393518a24cfe..784e46a0a3b1 100644
+--- a/drivers/tty/tty_mutex.c
++++ b/drivers/tty/tty_mutex.c
+@@ -14,8 +14,6 @@
+=20
+ void tty_lock(struct tty_struct *tty)
+ {
+-	if (WARN(tty->magic !=3D TTY_MAGIC, "L Bad %p\n", tty))
+-		return;
+ 	tty_kref_get(tty);
+ 	mutex_lock(&tty->legacy_mutex);
+ }
+@@ -25,8 +23,6 @@ int tty_lock_interruptible(struct tty_struct *tty)
+ {
+ 	int ret;
+=20
+-	if (WARN(tty->magic !=3D TTY_MAGIC, "L Bad %p\n", tty))
+-		return -EIO;
+ 	tty_kref_get(tty);
+ 	ret =3D mutex_lock_interruptible(&tty->legacy_mutex);
+ 	if (ret)
+@@ -36,8 +32,6 @@ int tty_lock_interruptible(struct tty_struct *tty)
+=20
+ void tty_unlock(struct tty_struct *tty)
+ {
+-	if (WARN(tty->magic !=3D TTY_MAGIC, "U Bad %p\n", tty))
+-		return;
+ 	mutex_unlock(&tty->legacy_mutex);
+ 	tty_kref_put(tty);
+ }
+diff --git a/include/linux/tty.h b/include/linux/tty.h
+index 7b0a5d478ef6..ba65043e9029 100644
+--- a/include/linux/tty.h
++++ b/include/linux/tty.h
+@@ -122,8 +122,6 @@ struct tty_operations;
+ /**
+  * struct tty_struct - state associated with a tty while open
+  *
+- * @magic: magic value set early in @alloc_tty_struct to %TTY_MAGIC, for
+- *	   debugging purposes
+  * @kref: reference counting by tty_kref_get() and tty_kref_put(), reachin=
+g zero
+  *	  frees the structure
+  * @dev: class device or %NULL (e.g. ptys, serdev)
+@@ -193,7 +191,6 @@ struct tty_operations;
+  * &struct tty_port.
+  */
+ struct tty_struct {
+-	int	magic;
+ 	struct kref kref;
+ 	struct device *dev;
+ 	struct tty_driver *driver;
+@@ -260,9 +257,6 @@ struct tty_file_private {
+ 	struct list_head list;
+ };
+=20
+-/* tty magic number */
+-#define TTY_MAGIC		0x5401
+-
+ /**
+  * DOC: TTY Struct Flags
+  *
+--=20
+2.30.2
+
+--pqehfju4slo4lchw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMj13AACgkQvP0LAY0m
+WPEqkQ//a9MLJLX11AXclFxX6RLlbIPvkQMpfYkQfUYAhdZfv4t4xBYUBG6ehUup
+OX71YVtBpzrZ1sdJYg53uDEt7Px94XfkB5BispT5SHckwxVEGQ6imsYo0TcmHF8u
+q0ELTGUN2MNTQDGKIDgmK0cAL2EOsjCWFcmS8GHqYq4DZGE6zxsfWF0x4+JkS79Y
+AN1mn6HBniBMzPY41ooh4cBKq9y7nf04T1BkQeMbHhHJ0WPftcFo9CmVdISYllAi
+5QcxV7j7yO9FhXGmktxZ2dsGdt41Gan4jNFOhH0mQh+zC7YjjB4X6c47BijkUy+/
+haAbpBYIvjsMrnZ47xE9UVBOCv1YY9tg+q4nwFZy3ABO2eNCKFu59xQ1TQl6JIzP
+oXjvJCFdfdR2Pzv2O0mAU+9A3T7+x4kyCQ2wwoNXu1sQI6OrdOunpANs1qjP5SGf
+2yv+b7NPSElNIXaL0pob2gCaAnFJI7I56zMJjMHx/yW8W6wY5leg7XtMnnD3XOO9
+/ZmiRsODbH48Z/P8SU1F5Wi0BBrPngmds7K0kkIJrcINLIYVvKKtJgoR1jsU3NnK
+34m9MsIYLL2N7LEo/vNSoqQF58aUz2CfX8Klv5ZYWhEXrYPTpToxb2OSVM2xetxf
+xClMjjbLX96cGt8jHwcN1QpW5QlfMUsvllygW97oU30zXfjGCK0=
+=LmRm
+-----END PGP SIGNATURE-----
+
+--pqehfju4slo4lchw--
