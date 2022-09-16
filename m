@@ -2,133 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5875BB350
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C435A5BB352
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiIPUN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 16:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S229994AbiIPUN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 16:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIPUNY (ORCPT
+        with ESMTP id S230054AbiIPUNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:13:24 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE5CAD9A7;
-        Fri, 16 Sep 2022 13:13:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id sb3so22261107ejb.9;
-        Fri, 16 Sep 2022 13:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date;
-        bh=BuQxitJhdTQh9KhMErUj9P+9zMVr60WmdCStuMhHGJU=;
-        b=Q+EtoZeH2gcdOLQ90dl6pt6+LlaxSpR3is8AWmjykbiuE/rzTdy19XLiKZWxozKRkL
-         CcAkRT3cXrm+lwpoqYZIyTLXyJR7nRejJcWgH+MPX2I7cTGtfNNL5D5BjVivlkF4PFVV
-         PtOV0E6GwbPhsON1aRbRxgqzOx4oeQeTnWrvFGvAIPAekwPQeL3vzdLtYLxfUoGVjNiV
-         Er3GbnF9Gm5FfjTu+lNSECkHuNAvIQDVypC6e7RJvVJ+ZHgNnl6PRlUVShwWOH/fJjK8
-         PLdmMx1ECZCCJ76xmzH++0x9mhJWtFdK+DsdbXIuiPbNExdI/+xTdNGDarCsnqO/Jh6k
-         2rMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=BuQxitJhdTQh9KhMErUj9P+9zMVr60WmdCStuMhHGJU=;
-        b=gcEWty3yy2kNv/ok2ZKWoou5C5jw+d5BvwWkB3ko3+AdTLV6s6aRIuK8V0Z7q0B4CN
-         NeAsQq6g5AxVxPpyKoeiZ/5Mvrhd88MW/48R4SIMJtXE+fJq3n9FONvFs+2rUHhB2iRO
-         93mOPoek6xYaW0JgqTQeN/5vUtEqie4d1/CEHSdqrTLFy/RKQ6H0itwDoCdlF/+4g2GX
-         o0DV5Da2jSx9S6+t+h1NQE/n6JqQogxbLB/KDrlHvedrSEljmMWcna8PeMDIbqcL7Rch
-         v+SJ6kdcuBn0p3dexn7BoT1OR3g2UYYwX/2K5tPil+SsiXOXOIKSA1e8O6UIfnR1nuJY
-         yPKA==
-X-Gm-Message-State: ACrzQf31iwlAbiEd2k62qb+cRQpWpDcsAHzjqZXUBnZFc1cnvs8dau5U
-        howNmZ1PmBqoHHNDGnUvb0ZGvEjzSlo=
-X-Google-Smtp-Source: AMsMyM59nAtMUDMOEeX8JJQXJl6uFv2RZwS4ChgiUu+dWFxy15ZaSFAJ9Usl/S9X3KgcScyrX9qUKA==
-X-Received: by 2002:a17:907:8a03:b0:77f:f5ac:8b46 with SMTP id sc3-20020a1709078a0300b0077ff5ac8b46mr4850480ejc.65.1663359201536;
-        Fri, 16 Sep 2022 13:13:21 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id kw22-20020a170907771600b0077b2b0563f4sm10252803ejc.173.2022.09.16.13.13.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 13:13:21 -0700 (PDT)
-Message-ID: <6324d8e1.170a0220.aba35.ba4f@mx.google.com>
-X-Google-Original-Message-ID: <YyTY3bQoRVdLLxnE@Ansuel-xps.>
-Date:   Fri, 16 Sep 2022 22:13:17 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Marc Herbert <marc.herbert@intel.com>,
-        James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v5 2/5] dt-bindings: arm: msm: Convert kpss-acc driver
- Documentation to yaml
-References: <20220914142256.28775-1-ansuelsmth@gmail.com>
- <20220914142256.28775-3-ansuelsmth@gmail.com>
- <20220916191715.GA1079300-robh@kernel.org>
- <6324d1be.050a0220.9d842.7b47@mx.google.com>
- <CAA8EJprEQOsm4TxGWJYZo04D1PagT3QmhDdYQkEid-KSP-tpTw@mail.gmail.com>
+        Fri, 16 Sep 2022 16:13:50 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED3AADCE2;
+        Fri, 16 Sep 2022 13:13:48 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A135B5C01B5;
+        Fri, 16 Sep 2022 16:13:47 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 16 Sep 2022 16:13:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1663359227; x=
+        1663445627; bh=r+kD9N586GmRcVTBI3Qz83v5UZ83CiKVka4YsRwf+Pc=; b=C
+        3C34kyluypUBPPHY40ETkTOv49+P5NaG4TsQU5eTCq6n3uTHbdfYFCdyZIkiGnev
+        ehwfDpZWAHCZASU/2Zl60c2sleMyeRcEN1sFEWQJ5xUzRb2qwXqyu/cqm8zbDYUU
+        LoQosoHtJD5HbRHX010t3R2woGV9dBRMh/Q/tQ6Rk41CsOxSWK5UWM5jlmXhcna7
+        KMoJgwuYuTSKaDlKxJgQLBNSFeg2ezP2zHlor9tHqOf5qSN6xxrnV3Vi9hI64eWg
+        /jFKzvWBOFLrpyb3bRbcR49pfI54nc4ESQX9jLHo/D5GWLNJZsESgFIcsbJUBzFN
+        lHY7IwCFTRPtzaidicZvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663359227; x=1663445627; bh=r+kD9N586GmRcVTBI3Qz83v5UZ83
+        CiKVka4YsRwf+Pc=; b=GRLhN7RjfqEPyUibtCXy5bjRhgGF7/KGr2tB4vbIJu6l
+        0Q78akX+qq9ecbhnDwr8f0+gjQjuas9+JJK3whbCHpNpTDMXxIve9Fuk2frDZAbv
+        Y1KmDSEqE9N7V2xYD3CyavT7udaUQgEavJ8BUpi9Annh73bg+GIzHEH/LnQs8IzX
+        z2VpKBtFnjaE/WWxQWmWM1slQayH9tdy/fDM4xfc6pIpa6lItmqeX8zQ1dAk/7/O
+        HtfRhvrZlvFGjzhDEV4cw/SD11ntkekq4XUaIPYIhlBDNbn8/tKHobHLGfK35qoj
+        OGmkxUP4vqQbBeq9HLnpqRQ2ZKUrCRuiYjMuruOfpA==
+X-ME-Sender: <xms:-9gkY_rquxM-aletTujXZUBHbMj428CxwPzUNAwxHGQYuWcuz_4b_A>
+    <xme:-9gkY5rEje5DsFI04LLqB0xK1T-RmtrgErdxTPrmIvmGu5tbsSeEZIzQooh6e7L2I
+    lzP3NTx41ts0EuVZUk>
+X-ME-Received: <xmr:-9gkY8NpV7KQukG2z1B-UcKrXdnaZ-Dsd65zOKbtok0lCu5RumDO0mYU8w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvtddgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
+    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
+    cuggftrfgrthhtvghrnhepudeigeehieejuedvtedufeevtdejfeegueefgffhkefgleef
+    teetledvtdfftefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgh
+X-ME-Proxy: <xmx:-9gkYy6m5Fbywx5Oae5nIUYV_2kUrYzbJk35XznsIXkiw6390WMM3w>
+    <xmx:-9gkY-7ZU78k_b31q3vlL2H42DVHcEMrn-_QbEesDah79hYN1fTN3g>
+    <xmx:-9gkY6g6zphFiDn-6aKcu8WAHg5j_3blx2KylgJqUGjFf7j_D5MBxA>
+    <xmx:-9gkY50dVMvlpppradK0zparBJqvkTxPgwX1z3l5_isJ6FmLaSjGjA>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 16 Sep 2022 16:13:46 -0400 (EDT)
+Date:   Fri, 16 Sep 2022 21:13:44 +0100
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search
+ before allocating mm
+Message-ID: <YyTY+OaClK+JHCOw@localhost>
+References: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
+ <202209160727.5FC78B735@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJprEQOsm4TxGWJYZo04D1PagT3QmhDdYQkEid-KSP-tpTw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202209160727.5FC78B735@keescook>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 11:06:35PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 16 Sept 2022 at 22:43, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> >
-> > On Fri, Sep 16, 2022 at 02:17:15PM -0500, Rob Herring wrote:
-> > > On Wed, Sep 14, 2022 at 04:22:53PM +0200, Christian Marangi wrote:
-> > > > Convert kpss-acc driver Documentation to yaml.
-> > > > The original Documentation was wrong all along. Fix it while we are
-> > > > converting it.
-> > > > The example was wrong as kpss-acc-v2 should only expose the regs but we
-> > > > don't have any driver that expose additional clocks. The kpss-acc driver
-> > > > is only specific to v1. For this exact reason, limit all the additional
-> > > > bindings (clocks, clock-names, clock-output-names and #clock-cells) to
-> > > > v1 and also flag that these bindings should NOT be used for v2.
-> > >
-> > > Odd that a clock controller has no clocks, but okay.
-> > >
-> >
-> > As said in the commit v2 is only used for regs. v2 it's only used in
-> > arch/arm/mach-qcom/platsmp.c to setup stuff cpu hotplug and bringup.
-> >
-> > Should we split the 2 driver? To me the acc naming seems to be just
-> > recycled for v2 and it's not really a clk controller.
-> >
-> > So keeping v2 in arm/msm/qcom,kpss-acc-v2.yaml and v1 moved to clock?
+On Fri, Sep 16, 2022 at 07:38:37AM -0700, Kees Cook wrote:
+> On Fri, Sep 16, 2022 at 02:41:30PM +0100, Josh Triplett wrote:
+> > Currently, execve allocates an mm and parses argv and envp before
+> > checking if the path exists. However, the common case of a $PATH search
+> > may have several failed calls to exec before a single success. Do a
+> > filename lookup for the purposes of returning ENOENT before doing more
+> > expensive operations.
 > 
-> I suspect that qcom,kpss-acc-v2 is misnamed as the "clock-controller".
-> According to msm-3.10, these regions are used by the Krait core
-> regulators.
->
+> At first I didn't understand how you were seeing this, since I'm so used
+> to watching shell scripts under tracing, which correctly use stat():
+> 
+> $ strace bash -c foo
+> stat("/home/keescook/bin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
+> stat("/usr/local/sbin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
+> stat("/usr/local/bin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
+> stat("/usr/sbin/foo", 0x7ffe1f9ddea0)   = -1 ENOENT (No such file or directory)
+> stat("/usr/bin/foo", 0x7ffe1f9ddea0)    = -1 ENOENT (No such file or directory)
+> stat("/sbin/foo", 0x7ffe1f9ddea0)       = -1 ENOENT (No such file or directory)
+> stat("/bin/foo", 0x7ffe1f9ddea0)        = -1 ENOENT (No such file or directory)
+> 
+> But I see, yes, glibc tries to actually call execve(), which, as you
+> say, is extremely heavy:
+> 
+> $ strace ./execvpe
+> ...
+> execve("/home/kees/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/usr/local/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/usr/local/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/usr/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/usr/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> execve("/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
+> 
+> This really seems much more like a glibc bug. The shell does it correctly...
 
-Well we need to understand how to handle this... change the compatible
-it's a nono for sure. In platsmp.c they are used for cpu power control
-so could be that they are actually used to regulators. I would honestly
-move v1 to clock and leave v2 to arm/msm but I'm not cetain on what name
-to assign to the 2 yaml.
+musl does the same thing, as do python and perl (likely via execvp or
+posix_spawnp). As does gcc when it executes `as`. And I've seen more
+than a few programs hand-implement a PATH search the same way. Seems
+worth optimizing for.
 
-What do you think?
+And with io_uring_spawn, it'll be the substantially easier approach,
+since it'll just require one pass (series of execs) rather than two
+(stats then exec).
 
--- 
-	Ansuel
+- Josh Triplett
