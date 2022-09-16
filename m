@@ -2,64 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E485BA514
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9007E5BA517
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiIPDRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 23:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S229722AbiIPDTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 23:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIPDRX (ORCPT
+        with ESMTP id S229452AbiIPDTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:17:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A1341999;
-        Thu, 15 Sep 2022 20:17:20 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTK0B6mtJzmVQv;
-        Fri, 16 Sep 2022 11:13:30 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 11:17:18 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 11:17:17 +0800
-Subject: Re: [PATCH v2 0/8] kallsyms: Optimizes the performance of lookup
- symbols
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <453a0f71-7478-f118-d547-aa0547abdd73@huawei.com>
-Message-ID: <f7ee24c4-3d36-90df-20b3-9663364844c7@huawei.com>
-Date:   Fri, 16 Sep 2022 11:17:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 15 Sep 2022 23:19:08 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710ED356F2;
+        Thu, 15 Sep 2022 20:19:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPvGrTJ_1663298342;
+Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPvGrTJ_1663298342)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Sep 2022 11:19:03 +0800
+Message-ID: <6a716712-4a82-32d7-ddcd-3252f69c6454@linux.alibaba.com>
+Date:   Fri, 16 Sep 2022 11:19:02 +0800
 MIME-Version: 1.0
-In-Reply-To: <453a0f71-7478-f118-d547-aa0547abdd73@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH V4 4/6] erofs: introduce a pseudo mnt to manage shared
+ cookies
 Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
+ <20220915124213.25767-5-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220915124213.25767-5-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,65 +48,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/9/16 9:27, Leizhen (ThunderTown) wrote:
-> Hi, everybody:
->   Can anyone review it? Maybe I should split this patch series
-> into two parts: kallsyms and livepatch.
->   In fact, the performance can be improved even if the compression policy
-> of the symbol type is not changed, that is, the scripts/callsyms.c file is
-> not modified, but we perform the len-based filtering first. That way, it'll
-> be easier for everyone to review. OK, I'm ready for v3.
+On 9/15/22 8:42 PM, Jia Zhu wrote:
 
-Sorry, I didn't sleep well yesterday. The length is the length of the
-compressed string. Therefore, the solution is not feasible.
+>  static int erofs_init_fs_context(struct fs_context *fc)
+>  {
+> -	struct erofs_fs_context *ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+> +	struct erofs_fs_context *ctx;
+> +
 
-> 
-> 
-> On 2022/9/9 21:00, Zhen Lei wrote:
->> v1 --> v2:
->> Add self-test facility
->>
->> v1:
->> Currently, to search for a symbol, we need to expand the symbols in
->> 'kallsyms_names' one by one, and then use the expanded string for
->> comparison. This is very slow.
->>
->> In fact, we can first compress the name being looked up and then use
->> it for comparison when traversing 'kallsyms_names'.
->>
->> This patch series optimizes the performance of function kallsyms_lookup_name(),
->> and function klp_find_object_symbol() in the livepatch module. Based on the
->> test results, the performance overhead is reduced to 5%. That is, the
->> performance of these functions is improved by 20 times.
->>
->> To avoid increasing the kernel size in non-debug mode, the optimization is only
->> for the case CONFIG_KALLSYMS_ALL=y.
->>
->> Zhen Lei (8):
->>   scripts/kallsyms: don't compress symbol type when
->>     CONFIG_KALLSYMS_ALL=y
->>   scripts/kallsyms: rename build_initial_tok_table()
->>   kallsyms: Adjust the types of some local variables
->>   kallsyms: Improve the performance of kallsyms_lookup_name()
->>   kallsyms: Add helper kallsyms_on_each_match_symbol()
->>   livepatch: Use kallsyms_on_each_match_symbol() to improve performance
->>   livepatch: Improve the search performance of
->>     module_kallsyms_on_each_symbol()
->>   kallsyms: Add self-test facility
->>
->>  include/linux/kallsyms.h   |   8 ++
->>  init/Kconfig               |  13 ++
->>  kernel/Makefile            |   1 +
->>  kernel/kallsyms.c          | 135 ++++++++++++++++++++-
->>  kernel/kallsyms_selftest.c | 243 +++++++++++++++++++++++++++++++++++++
->>  kernel/livepatch/core.c    |  25 +++-
->>  kernel/module/kallsyms.c   |  13 +-
->>  scripts/kallsyms.c         |  19 ++-
->>  8 files changed, 441 insertions(+), 16 deletions(-)
->>  create mode 100644 kernel/kallsyms_selftest.c
->>
-> 
+We'd better add a simple comment here:
+
++	/* pseudo mount for anon inodes */
+> +	if (fc->sb_flags & SB_KERNMOUNT) {
+> +		fc->ops = &erofs_anon_context_ops;
+> +		return 0;
+> +	}
+
+which will be more friendly to those not familiar with the background.
+
+>  
+> +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+>  	if (!ctx)
+>  		return -ENOMEM;
+>  	ctx->devs = kzalloc(sizeof(struct erofs_dev_context), GFP_KERNEL);
+> @@ -874,6 +896,11 @@ static void erofs_kill_sb(struct super_block *sb)
+>  
+>  	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
+>  
+> +	if (sb->s_flags & SB_KERNMOUNT) {
+> +		kill_litter_super(sb);
+
+I think kill_anon_super() is enough. At least in our case, there's only
+one root dentry inside the anon super and thus d_genocide() is actually
+a noop.
+
+
+Otherwise LGTM.
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 
 -- 
-Regards,
-  Zhen Lei
+Thanks,
+Jingbo
