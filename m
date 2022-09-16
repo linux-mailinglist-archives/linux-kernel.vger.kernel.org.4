@@ -2,227 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A665BA3C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08955BA3C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiIPBL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 21:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S229648AbiIPBQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 21:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiIPBL0 (ORCPT
+        with ESMTP id S229531AbiIPBQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 21:11:26 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370535281B;
-        Thu, 15 Sep 2022 18:11:25 -0700 (PDT)
-X-UUID: 9d14abbb1a114425abe224d8fdd7e27d-20220916
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=aC9p5EUciWE62FXN9xCu29LXkZgaSFsdB9J57e55t1U=;
-        b=bov35MI20lo6NjA1sBWjEIFc2XrdaYjH9hP/GhM5/2AECz4hp2Gq0TxXNzb9Ln90HMOdMZlPlHoswUNc+LohcSwdSqQ45U0xhu8yLzaGUW5LPxIqEIT8e/YDsPAeWSRovW0FP2k8AWvIO6rt5zQAQwSH8K83ECC20RfP1tzviA8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:d17b4d39-36f8-4f9d-b16f-0ec5aff9e2c5,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:aa77d25d-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9d14abbb1a114425abe224d8fdd7e27d-20220916
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1707785144; Fri, 16 Sep 2022 09:11:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 16 Sep 2022 09:11:18 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 16 Sep 2022 09:11:18 +0800
-Message-ID: <d87203dea8d57868751dfbbce33d210e8976da7c.camel@mediatek.com>
-Subject: Re: [PATCH 1/5] dt-bindings: arm: mediatek: mmsys: change
- compatible for MT8195
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "Singo Chang" <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 16 Sep 2022 09:11:18 +0800
-In-Reply-To: <a8e18b62-f49f-7c99-e046-3ee609e11627@gmail.com>
-References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
-         <20220914182331.20515-2-jason-jh.lin@mediatek.com>
-         <1b739216-8bb1-162b-1af5-24acba7324bf@gmail.com>
-         <296155e2a12a474439ba092e73b4bcffbf3d3edc.camel@mediatek.com>
-         <a8e18b62-f49f-7c99-e046-3ee609e11627@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 15 Sep 2022 21:16:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E194F19A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 18:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663290961; x=1694826961;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9Ihfwn7NXOoXT4dpjk6Ow0fAbq9eRKXs7h0VAVEIM00=;
+  b=fkVMtQ25hJVX7VXuIh4XfigaRX2xB9qJ6WbvnZW3oCh3QKGGZpe3xOhq
+   sD3xJudXbW4LbFlqWsKJT/TdTCQgDSJBCAbfm3p73b15vpamqIsukg+bd
+   KE5j+tdAet0tqtV/yTvShHshI7ftFjw0dtskoeR/UaUX43Uq1az+c0AO5
+   OoSfkgmANqOfTN0M8pVY6QFbP/YMAmtbiFeAkWo7MgvoitpVEZs5l7GRF
+   NrmDdKLB/M1ICIdA5H77aBc+hMxPu5U/VEZNK5qoerT/7cjlS1YsUcDhO
+   BTP+19wNsh9lXO6rDQNScdgnwZ1ZTfPhi3SyGwweG0eILomHVJtD6Vj2r
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="325150428"
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="325150428"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 18:16:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
+   d="scan'208";a="946196435"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Sep 2022 18:16:00 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYzxX-0001Gl-29;
+        Fri, 16 Sep 2022 01:15:59 +0000
+Date:   Fri, 16 Sep 2022 09:15:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 3/3] ld:
+ arch/x86/entry/syscall_32.o:undefined reference to
+ `__ia32_sys_vgetrandom_alloc'
+Message-ID: <202209160958.4VsH4AEf-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-15 at 18:20 +0200, Matthias Brugger wrote:
-> Hi Jason,
-> 
-> On 15/09/2022 03:24, Jason-JH Lin wrote:
-> > Hi Matthias,
-> > 
-> > Thanks for the reviews.
-> > 
-> > On Wed, 2022-09-14 at 23:24 +0200, Matthias Brugger wrote:
-> > > 
-> > > On 14/09/2022 20:23, Jason-JH.Lin wrote:
-> > > > For previous MediaTek SoCs, such as MT8173, there are 2 display
-> > > > HW
-> > > > pipelines binding to 1 mmsys with the same power domain, the
-> > > > same
-> > > > clock driver and the same mediatek-drm driver.
-> > > > 
-> > > > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
-> > > > binding
-> > > > to
-> > > > 2 different power domains, different clock drivers and
-> > > > different
-> > > > mediatek-drm drivers.
-> > > > 
-> > > > Moreover, Hardware pipeline of VDOSYS0 has these components:
-> > > > COLOR,
-> > > > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
-> > > > Quality)
-> > > > and they makes VDOSYS0 supports PQ function while they are not
-> > > > including in VDOSYS1.
-> > > > 
-> > > > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR
-> > > > related
-> > > > component). It makes VDOSYS1 supports the HDR function while
-> > > > it's
-> > > > not
-> > > > including in VDOSYS0.
-> > > > 
-> > > > To summarize0:
-> > > > Only VDOSYS0 can support PQ adjustment.
-> > > > Only VDOSYS1 can support HDR adjustment.
-> > > > 
-> > > > Therefore, we need to separate these two different mmsys
-> > > > hardwares
-> > > > to
-> > > > 2 different compatibles for MT8195.
-> > > > 
-> > > > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add
-> > > > mt8195
-> > > > SoC binding")
-> > > > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > 
-> > > I'm not sure Krzysztof gave his Acked-by tag.
-> > 
-> > I'll remove this tag.
-> > > 
-> > > > ---
-> > > >    .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml    
-> > > >     |
-> > > > 2 ++
-> > > >    1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > index 6ad023eec193..a53b32c0a608 100644
-> > > > ---
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > +++
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > @@ -32,6 +32,8 @@ properties:
-> > > >                  - mediatek,mt8186-mmsys
-> > > >                  - mediatek,mt8192-mmsys
-> > > >                  - mediatek,mt8195-mmsys
-> > > > +              - mediatek,mt8195-vdosys0
-> > > 
-> > > As I said in the last submission, we should make mediatek,mt8195-
-> > > mmsys as a
-> > > fallback of vdosys0. Actually mediatek,mt8195-mmsys is only used
-> > > for
-> > > the
-> > > fallback of vdosys0.
-> > 
-> > I think adding both vdosys0 and vdosys1 can make the description of
-> > this patch clearer.
-> > 
-> > It's find to me to only add "mediatek,mt8195-vdosys0" in this
-> > patch.
-> > So I'll remove the "mediatek,mt8195-vdosys1" at the next version.
-> > 
-> 
-> That's not what I wanted to suggest. Up to now in upstream kernel
-> compatible 
-> mediatek,mt8195-mmsys enables support fro vdosys0. The vdosys1 is not
-> yet 
-> upstream, so no support.
-> If we change the compatible, we should keep mediatek,mt8195-mmsys as
-> fallback of 
-> "mediatek,mt8195-vdosys0" so that older device tree blobs won't break
-> with a Mtk811
-> newer kernel.
-> For "mediatek,mt8195-vdosys1" we do not need a fallback compatible as
-> the code 
-> never reached upstream, so no breakage expected.
-> 
-> Hope I explain myself now.
-> 
-> Regards,
-> Matthias
-> 
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
+commit: a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2 [3/3] random: implement getrandom() in vDSO
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220916/202209160958.4VsH4AEf-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I think I misunderstood your reply to the patch "dt-bindings: arm:
-mediatek: mmsys: remove the unused compatible for mt8195", so I merge
-it into this patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for your patient explanation.
-I will keep the "mediatek,mt8195-
-mmsys" in this patch.
+All errors (new ones prefixed by >>):
 
-Regards,
-Jason-JH.Lin
+>> ld: arch/x86/entry/syscall_32.o:(.rodata+0x70c): undefined reference to `__ia32_sys_vgetrandom_alloc'
 
-> 
-> > Regards,
-> > Jason-JH.Lin
-> > > 
-> > > Regards,
-> > > Matthias
-> > > 
-> > > > +              - mediatek,mt8195-vdosys1
-> > > >                  - mediatek,mt8365-mmsys
-> > > >              - const: syscon
-> > > >          - items:
-> > > 
-> > > 
 -- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
