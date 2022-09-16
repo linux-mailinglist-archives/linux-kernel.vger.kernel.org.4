@@ -2,109 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070395BB4DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4B05BB54F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiIQACa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S229850AbiIQBTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 21:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIQAC1 (ORCPT
+        with ESMTP id S229450AbiIQBTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:02:27 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BACEAB046;
-        Fri, 16 Sep 2022 17:02:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kr11so6710193ejc.8;
-        Fri, 16 Sep 2022 17:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=50pfUUj/vgJFWVGyCmPh4h7BWyWJzM6r5aZUYPBRoMw=;
-        b=gX6FWj46IiYEMBWFzAQpW/X9rgfemENCTEGH7qioDntvtkqCifz2ld/bbtzLYyLn3d
-         4PCLXtTYhHukcC4tIj6BY/X530N2+lkUJ+okA7NcKCX4ObLu+N+Fj3WoYKgikvDAsS1T
-         1oIj+JeU1LsBntvA8oagnJAIbaueJXMu/m1AGzpqky1gsc1FWWBeFuMjr3Z4icUbQSNR
-         twRd+k0a4mhqI2YPBVpmQOE9UwxUSUlSpE5OHqgksyIt8xMvlrNSxFWGBVKe2DDelfvA
-         vIPcBaawr1vY/GtU9yI9rqIGPKtdNBVM9LV/QT05IdQt970IzFj5EVLUanspwkSOAIhU
-         2ykA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=50pfUUj/vgJFWVGyCmPh4h7BWyWJzM6r5aZUYPBRoMw=;
-        b=B8yXqu7+X9A5nwKtY6kFHOHb+6YzrsIqD9FSYIR7sae6FmfsxAi4HJbvjScIT/ZKQX
-         /Tjx/9/vbTrz7VK/UqGMii/HiQl37UJg+sspKIEn0WQdlfyt86g/ZdGGK9Elsg/YkXjO
-         VQgFzFxjBwc59cdvNWD+1dvGsFMmy9/BXjx0ASIZB7xY+bkBF8l76crpgdgHCZ3AD9un
-         a2Yh1khSro5IAmzdgIXzGDawLlXIxAyB5NYFznoqPdKP0vHAV6mvYN9n7/oymtbj8LWm
-         A2/ipr89ByU0d8eN0De1xx2ndIDUub5DmBjOGmUEH/hktHoC4z9hbDQ3hZHRLMI0P0DH
-         n8Vw==
-X-Gm-Message-State: ACrzQf2HpOFFQRdqf4zmyjLCNHtAz2U+RGI15mvY3+ol5MNFCz3MBroE
-        KuFTf5bUAkR/MUG1x1yp8vSOtMHip0vLHV76XNs=
-X-Google-Smtp-Source: AMsMyM5mOnaEfXDy8jqFsNuwi+v6tx4gEz61WuQMsLniHsaIqCxIJTFjMs0dk5vg4LmiLerh0z237itaAZymfj+6z2U=
-X-Received: by 2002:a17:907:ea0:b0:779:6c9d:7355 with SMTP id
- ho32-20020a1709070ea000b007796c9d7355mr4956271ejc.542.1663372945402; Fri, 16
- Sep 2022 17:02:25 -0700 (PDT)
+        Fri, 16 Sep 2022 21:19:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ACBE0F5;
+        Fri, 16 Sep 2022 18:19:36 -0700 (PDT)
+Received: from mercury (dyndsl-095-033-170-064.ewe-ip-backbone.de [95.33.170.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D35F7660204C;
+        Sat, 17 Sep 2022 02:19:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663377574;
+        bh=IsuXn3QptS+dxxrin6TxULXzoMk1Gf4+cQTcLgbCwmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bpdI9QuGAegny+PcB1Lyr+xDl3mlldCBg20Q1qjxiqgRleQnsj8g4ABqRNU3+bMsA
+         N6y138Rg9o6kSKT+Cflq3SN9EEZwt/HjzZ6wrby5eahIpZOUF34/Cpb90i9KTxhprK
+         9YlExzv3QIrbA45DpgmdH/zLE84awO5MYZjUkBG8b9EvaLeRAqRz79wzcMVWWEyNEk
+         WRQb8uS1vr+oYpJKmxhoNexQsHNXxHSfzEvyxud9KqzWKsS00gEZxEOACXNTjXXryP
+         Ruv/T1IlB1BPrU3hRtQQl4c+zN02gpBCmlyYxFr7MGo0eM7fcf3D41OWOttTD6qGK6
+         DFtere756kpSQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 752CE1060849; Fri, 16 Sep 2022 20:08:23 +0200 (CEST)
+Date:   Fri, 16 Sep 2022 20:08:23 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
+ sysfs entries
+Message-ID: <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
+References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
+ <1663173015-7934-4-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-References: <20220909041645.2612842-1-floridsleeves@gmail.com> <4ff0b209-2770-3790-ae93-3ea81c15a03e@intel.com>
-In-Reply-To: <4ff0b209-2770-3790-ae93-3ea81c15a03e@intel.com>
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Fri, 16 Sep 2022 17:02:14 -0700
-Message-ID: <CAMEuxRqbmds-XXjbGsgCup1_aj4EMfRO2dVurcS1O4fd0mdygA@mail.gmail.com>
-Subject: Re: [PATCH net-next v1] drivers/net/ethernet/intel/e100: check the
- return value of e100_exec_cmd()
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
-        jesse.brandeburg@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g5wty46coo2wjhpl"
+Content-Disposition: inline
+In-Reply-To: <1663173015-7934-4-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 3:08 PM Tony Nguyen <anthony.l.nguyen@intel.com> wrote:
->
-> On 9/8/2022 9:16 PM, Li Zhong wrote:
-> > Check the return value of e100_exec_cmd() which could return error code
-> > when execution fails.
->
-> Are you coming across this as a real bug or as something reported by
-> static analysis? If the latter, I suggest checking the return value and
-> reporting it as debug, however, not changing existing behavior. We don't
-> have validation on this driver so there is limited ability to check for
-> regressions and the code has been like this for a long time without
-> reported issues.
 
-Thanks for replying and suggestions! This is detected by static analysis.
-I submit a v2 patch that fixes it as debug printk.
+--g5wty46coo2wjhpl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> Thanks,
-> Tony
->
-> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> > ---
-> >   drivers/net/ethernet/intel/e100.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/intel/e100.c b/drivers/net/ethernet/intel/e100.c
-> > index 11a884aa5082..3b84745376fe 100644
-> > --- a/drivers/net/ethernet/intel/e100.c
-> > +++ b/drivers/net/ethernet/intel/e100.c
-> > @@ -1911,7 +1911,8 @@ static inline void e100_start_receiver(struct nic *nic, struct rx *rx)
-> >
-> >       /* (Re)start RU if suspended or idle and RFA is non-NULL */
-> >       if (rx->skb) {
-> > -             e100_exec_cmd(nic, ruc_start, rx->dma_addr);
-> > +             if (!e100_exec_cmd(nic, ruc_start, rx->dma_addr))
-> > +                     return;
-> >               nic->ru_running = RU_RUNNING;
-> >       }
-> >   }
+Hi,
+
+On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> Document the settings exported by rt9471 charger driver through sysfs ent=
+ries:
+> - sysoff_enable
+> - port_detect_enable
+>=20
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v5:
+> - Recover all the change in sysfs-class-power.
+> - New a sysfs-class-power-rt9471 file.
+> - Remove 'charge_term_enable' sysfs entry, directly integrate it in
+>   'charge_term_current' power supply property control.
+>=20
+> ---
+>  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++++++++=
+++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9471
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/Documen=
+tation/ABI/testing/sysfs-class-power-rt9471
+> new file mode 100644
+> index 00000000..ad5b049
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
+> @@ -0,0 +1,29 @@
+> +What:		/sys/class/power_supply/rt9471-*/sysoff_enable
+> +Date:		Oct 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the sysoff mode of rt9471 charger devices.
+> +		If enabled and the input is removed, the internal battery FET is turned
+> +		off to reduce the leakage from the BAT pin. See device datasheet for d=
+etails.
+> +		It's commonly used when the product enter shipping stage.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
+
+I still fail to see why this needs to be controllable at runtime.
+This looks like a hardware property. Are there any known products,
+which need this disabled?
+
+> +What:		/sys/class/power_supply/rt9471-*/port_detect_enable
+> +Date:		Oct 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the USB BC12 port detect function of rt9471=
+ charger
+> +		devices. If enabled and VBUS is inserted, device will start to do the =
+BC12
+> +		port detect and report the usb port type when port detect is done. See
+> +		datasheet for details. Normally controlled when TypeC/USBPD port integ=
+rated.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
+
+So basically this depends on the hardware integration (e.g. it
+should be disabled when power source is a DC barrel jack instead
+of USB) and is not supposed to change at all during runtime? Then
+the information wether it needs to be enabled should be derived
+=66rom the device tree.
+
+-- Sebastian
+
+--g5wty46coo2wjhpl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMku4wACgkQ2O7X88g7
++ppIIQ//UtV9sEuUQW1evu3Xg9UgdWAbELRCg6IJI5rkE/6z8dy1y0u6jTz93BzP
+G/AV4jY8Lk1agbW0SpwXONH//7DHqv7b2EQvOB+SmY2IlDIBxFQYYBkI5oXJ9HO4
+gvBX6xWN/khnQEUuA075AlzUKzL0l9MSTjHbx1bHbuq3jHoAj6Oo+jduofD8OAfI
+hGFyq2icRuJoUGeUREoTc0vIApTjSyWANLwBM1P1sQ0ivJG3R6acPUJQgznQo+W+
+2CKfCZ+QWCyjTAisfTvfPdM+F0mxgpaF2QHHnwa6gP9F5yycxYPEciYq/sNTdL43
+v2aX6A34enMOpMr4BCpieS/bXoPTqxiA1sHE60ZYQNUV4azFkyFw9SMATSAzKYnE
+N9yMthiUuV4TWFTQKdCSPYsf79foJqeDi2UZaSnc92mcTtqMLgT5Lgmairjp/xpw
+QxNDVxRzd9gLeeYU4HTYCpLwxxvilWtXa4pUyR1W+NT+Aaa9o+IMrXSIfOEB2wBU
+YTBrCaH3XVu4l85W5tA3VuSH0KUTkq5kNfNaX8cbZY844aZCcX6NAh1BLm7S3r5i
+msA1hioHCD1OBxh0e7Jt6yL8AIMuJm14Gc7LPa2rRzS9X9slKhFsD8+/VKGdDh+v
+Lztv+jlo/yE6cE+T9mGW6aJddY6zLwldGCQ+THIFHcGRWbLoivw=
+=kE+V
+-----END PGP SIGNATURE-----
+
+--g5wty46coo2wjhpl--
