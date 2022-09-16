@@ -2,296 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C2B5BAE17
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7B25BAE23
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiIPNZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S231604AbiIPN1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiIPNYt (ORCPT
+        with ESMTP id S229718AbiIPN1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:24:49 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CF027FC2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:47 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so19879818wmk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=QFHrDBmOgjQNltcQ0NOpoAX3KMBSQJ+P+IQdQCe6YjM=;
-        b=XWL8wPxIUHiYoj/0qB3Cow1E5n3CxnPfeJ8Z52NlN2YMTA5GTBRZgOyWIGuP8dDZyo
-         Owp4kPFfT2HkMokWvz1J8hmKoB50gq/QZF00wCXdN51cG4R6zbPeqA2FfeG2/ewFZM64
-         Jsz2BuhRtSQMM5Yfw0t+Sz5TU9kGyYZ0FDVjua5dEbT3TbmrO1IBs6QSFm0T1OV4ltjw
-         G5yHVjoPhhsb3nnA6fR4P8WB5QnySfwzezODnw4eUnST/BS+luNS3RrkgO/OKl3GQG7G
-         3/YiQYSb4r1ADg2r+OwT72+eEZ4TPRvpOQf9/ll6ERHjZ0HonRPpq7uZUMIqisgtgUF3
-         gNTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=QFHrDBmOgjQNltcQ0NOpoAX3KMBSQJ+P+IQdQCe6YjM=;
-        b=T36ItKYu6Wlqsi/naWVln893wVO/fM2lwHQPbCXyDiHKfGJ9xW9iipRC5I0ysvVlwK
-         BLaHvAd2Ii06FeVi80dGQ5gnAfwhG6kFzw0SL2vuc7ipr9Qh7wa8znRan/2pkjUnCTW1
-         BfUjG+qx0UL9UL4wY+Abl8qi/hzFg2P0hIaMARnueVljEyTFeF4fAZdxANdXFwZ35MHg
-         8Z8uS56u8orQ0TG+chMsln3rOAcDXK3CojXRWqsCi38z/aaUN+CDhbpEydAgZgoAAs7p
-         6ILvWDMIlR+QUVxjeqnBtc4vJjMSgdTM6gFa0FsBiC28m/HtuhFPMv9K4Z/udFk4QTae
-         k35w==
-X-Gm-Message-State: ACrzQf3HNRPzgVjQV8Bjj7MfXoGtjW0VZz+w4zWQ/pa7MMBfEDEQjLJj
-        /gCX2vueCuwfd5C6HYxYy06x7A==
-X-Google-Smtp-Source: AMsMyM5h3bbfh/0miAnLLu6tTrn07B0ha3jjwBwpQiZB4oPT3wUVa1n6Hv7duVCXKdjuqfuBn1BNlQ==
-X-Received: by 2002:a05:600c:418a:b0:3b4:6708:1e3b with SMTP id p10-20020a05600c418a00b003b467081e3bmr3369426wmh.67.1663334684104;
-        Fri, 16 Sep 2022 06:24:44 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a608d69a64sm2387061wmq.21.2022.09.16.06.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:24:43 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bgoswami@quicinc.com,
-        perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v5 5/5] ASoC: qcom: add machine driver for sc8280xp
-Date:   Fri, 16 Sep 2022 14:24:27 +0100
-Message-Id: <20220916132427.1845-6-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
-References: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
+        Fri, 16 Sep 2022 09:27:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7770C39BB2;
+        Fri, 16 Sep 2022 06:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663334831; x=1694870831;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=HNoxeDL5qT17zhAlh+G+qfDO7ou8sVZ/+dkAXvYVPZw=;
+  b=f4TV8roCms6fGxFG/7IGmRwgHT2Bbfw9oT6Df0fvLgszLN16BYP6xJyg
+   XEfWXvix1lHoh1VTS+A2vnxHD7yMNg9XP+Ztz57ln2zCGDacvGOpvZb5J
+   hcwEpp758yf8rXSU62XgkF7aONE6oq2CUI+sSUY3YpnL66Ng+ZtxOF3x9
+   6TTMli5Xm1E3DRmDPrtGGiTjqnKHKjTRUut9Be0c9oR+if5LheDSTuRbx
+   5LPkEljIGj04yLm2I8wgioLe3hl8/KH4RReSEuX2ID9crgDbby4EHQDgZ
+   OlCkQwl4nqxBSWtiqps1BFLC2W17XgdUHK9HVdF5r2zYmqdXKnfFV9wkM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="286029674"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="286029674"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 06:27:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="793098671"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 16 Sep 2022 06:27:10 -0700
+Received: from [10.252.210.67] (kliang2-mobl1.ccr.corp.intel.com [10.252.210.67])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 8908F5807E8;
+        Fri, 16 Sep 2022 06:27:08 -0700 (PDT)
+Message-ID: <da8fe1d8-8cce-7378-18e8-41fd7009ff8d@linux.intel.com>
+Date:   Fri, 16 Sep 2022 09:27:07 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Liang, Kan" <kan.liang@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>
+Cc:     "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+ <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
+ <815586ac-1eaa-5e38-1e08-492c29d0729d@intel.com>
+ <CY5PR11MB63659EBEAEA0E64812E96111DC469@CY5PR11MB6365.namprd11.prod.outlook.com>
+ <f7cfb391-c38b-84d2-b2fe-5e289d82862c@linux.intel.com>
+ <CY5PR11MB6365676799EBF86B3931D336DC499@CY5PR11MB6365.namprd11.prod.outlook.com>
+ <ef391316-cde5-3cda-ff0d-980e8ecc9aef@linux.intel.com>
+ <CY5PR11MB636535BE57F8CC07B1B2770DDC499@CY5PR11MB6365.namprd11.prod.outlook.com>
+ <4c6a5663-778e-a509-638c-92cfd5315274@linux.intel.com>
+ <CY5PR11MB6365EE3B1C4BCED02A1E40D8DC489@CY5PR11MB6365.namprd11.prod.outlook.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [RFC PATCH 0/2] KVM: VMX: Fix VM entry failure on
+ PT_MODE_HOST_GUEST while host is using PT
+In-Reply-To: <CY5PR11MB6365EE3B1C4BCED02A1E40D8DC489@CY5PR11MB6365.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add machine driver for sc8280xp SoC.
 
-This intial supports only includes WSA883x Speakers and WCD938x based headset.
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/Kconfig    |  12 +++
- sound/soc/qcom/Makefile   |   2 +
- sound/soc/qcom/sc8280xp.c | 157 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 171 insertions(+)
- create mode 100644 sound/soc/qcom/sc8280xp.c
+On 2022-09-15 10:30 p.m., Wang, Wei W wrote:
+> On Thursday, September 15, 2022 11:43 PM, Liang, Kan wrote:
+>> On 2022-09-15 10:39 a.m., Wang, Wei W wrote:
+>>> On Thursday, September 15, 2022 9:55 PM Liang, Kan wrote:
+>>>> On 2022-09-14 10:46 p.m., Wang, Wei W wrote:
+>>>>> On Thursday, September 15, 2022 4:26 AM, Liang, Kan wrote:
+>>>>>> The perf_event_disable() eventually invokes the intel_pt_stop().
+>>>>>> We already expose the intel_pt_stop()/cpu_emergency_stop_pt() to
+>>>>>> other modules. I don't think we have to use the perf_event_disable().
+>>>>>> Also, the
+>>>>>> perf_event_disable() requires extra codes.
+>>>>>>
+>>>>>> I went through the discussions. I agree with Sean's suggestion.
+>>>>>> We should only put the logic in the KVM but all the MSR access
+>>>>>> details into the PT driver.
+>>>>>
+>>>>> Even the driver itself doesn’t drive the save/restore of the MSRs,
+>>>>> it is drived
+>>>> by perf.
+>>>>
+>>>> It through perf_event, not driven by perf_event. The perf_event
+>>>> generic code never knows when should invokes each driver to
+>>>> save/restore information. It should be driven by the other subsystem e.g.,
+>> scheduler.
+>>>
+>>> Yes. The cpu scheduler does this via the perf subsystem, though.
+>>>
+>>>>
+>>>> For this case, KVM should drive the save/restore, and the PT driver
+>>>> eventually does all the MSR access details.
+>>>>
+>>>>> 1. If we make KVM a user of perf, we should do this via
+>>>> perf_event_disable/enable_*.
+>>>>> 2. If we make KVM an alternative to perf (i.e. have direct control
+>>>>> over PMU HW), we can do this via driver interfaces like perf.
+>>>>> Per my experience, we should go for 1. Probably need Peter's
+>>>>> opinions on
+>>>> this.
+>>>>>
+>>>>
+>>>> For 1, the perf_event_disable/enable_* are not enough. They don't
+>>>> save/restore MSRs.
+>>>
+>>> perf_event_disable will go through perf to call pt_event_stop which saves
+>> the related MSRs, right?
+>>
+>> I don't think so. The pt_event_stop() doesn't save all the
+>> MSR_IA32_RTIT_* MSRs.
+> 
+> Not all the MSRs are required to be saved. In general, pt_event_stop should have
+> saved all the MSRs required for an event switching. Otherwise the general usages
+> of PT have been broken. To be more precise, the following MSRs are not saved by
+> pt_event_stop, but I don’t see they are required to be saved:
+> 
+> - MSR_IA32_RTIT_CR3_MATCH: I don’t see it is used by perf. 
+> Seems like KVM saved an MSR that's not even used by the host.
+> 
+> - Address range MSRs (MSR_IA32_RTIT_ADDR0_A etc.): Those are provided by s/w and not updated by h/w.
+> So they're just set to MSRs when event gets scheduled in. There is no need to save. 
+>
 
-diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
-index 750653404ba3..1b0252ec4665 100644
---- a/sound/soc/qcom/Kconfig
-+++ b/sound/soc/qcom/Kconfig
-@@ -173,6 +173,18 @@ config SND_SOC_SM8250
- 	  SM8250 SoC-based systems.
- 	  Say Y if you want to use audio device on this SoCs.
- 
-+config SND_SOC_SC8280XP
-+	tristate "SoC Machine driver for SC8280XP boards"
-+	depends on QCOM_APR || COMPILE_TEST
-+	depends on SOUNDWIRE
-+	depends on COMMON_CLK
-+	select SND_SOC_QDSP6
-+	select SND_SOC_QCOM_COMMON
-+	help
-+	  To add support for audio on Qualcomm Technologies Inc.
-+	  SC8280XP SoC-based systems.
-+	  Say Y if you want to use audio device on this SoCs.
-+
- config SND_SOC_SC7180
- 	tristate "SoC Machine driver for SC7180 boards"
- 	depends on I2C && GPIOLIB
-diff --git a/sound/soc/qcom/Makefile b/sound/soc/qcom/Makefile
-index 8b7b876899a8..8b97172cf990 100644
---- a/sound/soc/qcom/Makefile
-+++ b/sound/soc/qcom/Makefile
-@@ -26,6 +26,7 @@ snd-soc-sc7180-objs := sc7180.o
- snd-soc-sc7280-objs := sc7280.o
- snd-soc-sdm845-objs := sdm845.o
- snd-soc-sm8250-objs := sm8250.o
-+snd-soc-sc8280xp-objs := sc8280xp.o
- snd-soc-qcom-common-objs := common.o
- 
- obj-$(CONFIG_SND_SOC_STORM) += snd-soc-storm.o
-@@ -33,6 +34,7 @@ obj-$(CONFIG_SND_SOC_APQ8016_SBC) += snd-soc-apq8016-sbc.o
- obj-$(CONFIG_SND_SOC_MSM8996) += snd-soc-apq8096.o
- obj-$(CONFIG_SND_SOC_SC7180) += snd-soc-sc7180.o
- obj-$(CONFIG_SND_SOC_SC7280) += snd-soc-sc7280.o
-+obj-$(CONFIG_SND_SOC_SC8280XP) += snd-soc-sc8280xp.o
- obj-$(CONFIG_SND_SOC_SDM845) += snd-soc-sdm845.o
- obj-$(CONFIG_SND_SOC_SM8250) += snd-soc-sm8250.o
- obj-$(CONFIG_SND_SOC_QCOM_COMMON) += snd-soc-qcom-common.o
-diff --git a/sound/soc/qcom/sc8280xp.c b/sound/soc/qcom/sc8280xp.c
-new file mode 100644
-index 000000000000..ade44ad7c585
---- /dev/null
-+++ b/sound/soc/qcom/sc8280xp.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2022, Linaro Limited
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/of_device.h>
-+#include <sound/soc.h>
-+#include <sound/soc-dapm.h>
-+#include <sound/pcm.h>
-+#include <linux/soundwire/sdw.h>
-+#include <sound/jack.h>
-+#include <linux/input-event-codes.h>
-+#include "qdsp6/q6afe.h"
-+#include "common.h"
-+
-+#define DRIVER_NAME		"sc8280xp"
-+
-+struct sc8280xp_snd_data {
-+	bool stream_prepared[AFE_PORT_MAX];
-+	struct snd_soc_card *card;
-+	struct sdw_stream_runtime *sruntime[AFE_PORT_MAX];
-+	struct snd_soc_jack jack;
-+	bool jack_setup;
-+};
-+
-+static int sc8280xp_snd_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct sc8280xp_snd_data *data = snd_soc_card_get_drvdata(rtd->card);
-+
-+	return qcom_snd_wcd_jack_setup(rtd, &data->jack, &data->jack_setup);
-+}
-+
-+static int sc8280xp_be_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-+				     struct snd_pcm_hw_params *params)
-+{
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct snd_interval *rate = hw_param_interval(params,
-+					SNDRV_PCM_HW_PARAM_RATE);
-+	struct snd_interval *channels = hw_param_interval(params,
-+					SNDRV_PCM_HW_PARAM_CHANNELS);
-+
-+	rate->min = rate->max = 48000;
-+	channels->min = 2;
-+	channels->max = 2;
-+	switch (cpu_dai->id) {
-+	case TX_CODEC_DMA_TX_0:
-+	case TX_CODEC_DMA_TX_1:
-+	case TX_CODEC_DMA_TX_2:
-+	case TX_CODEC_DMA_TX_3:
-+		channels->min = 1;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+
-+	return 0;
-+}
-+
-+static int sc8280xp_snd_hw_params(struct snd_pcm_substream *substream,
-+				struct snd_pcm_hw_params *params)
-+{
-+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct sc8280xp_snd_data *pdata = snd_soc_card_get_drvdata(rtd->card);
-+
-+	return qcom_snd_sdw_hw_params(substream, params, &pdata->sruntime[cpu_dai->id]);
-+}
-+
-+static int sc8280xp_snd_prepare(struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct sc8280xp_snd_data *data = snd_soc_card_get_drvdata(rtd->card);
-+	struct sdw_stream_runtime *sruntime = data->sruntime[cpu_dai->id];
-+
-+	return qcom_snd_sdw_prepare(substream, sruntime,
-+				    &data->stream_prepared[cpu_dai->id]);
-+}
-+
-+static int sc8280xp_snd_hw_free(struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
-+	struct sc8280xp_snd_data *data = snd_soc_card_get_drvdata(rtd->card);
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct sdw_stream_runtime *sruntime = data->sruntime[cpu_dai->id];
-+
-+	return qcom_snd_sdw_hw_free(substream, sruntime,
-+				    &data->stream_prepared[cpu_dai->id]);
-+}
-+
-+static const struct snd_soc_ops sc8280xp_be_ops = {
-+	.hw_params = sc8280xp_snd_hw_params,
-+	.hw_free = sc8280xp_snd_hw_free,
-+	.prepare = sc8280xp_snd_prepare,
-+};
-+
-+static void sc8280xp_add_be_ops(struct snd_soc_card *card)
-+{
-+	struct snd_soc_dai_link *link;
-+	int i;
-+
-+	for_each_card_prelinks(card, i, link) {
-+		if (link->no_pcm == 1) {
-+			link->init = sc8280xp_snd_init;
-+			link->be_hw_params_fixup = sc8280xp_be_hw_params_fixup;
-+			link->ops = &sc8280xp_be_ops;
-+		}
-+	}
-+}
-+
-+static int sc8280xp_platform_probe(struct platform_device *pdev)
-+{
-+	struct snd_soc_card *card;
-+	struct sc8280xp_snd_data *data;
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+
-+	card = devm_kzalloc(dev, sizeof(*card), GFP_KERNEL);
-+	if (!card)
-+		return -ENOMEM;
-+	card->owner = THIS_MODULE;
-+	/* Allocate the private data */
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	card->dev = dev;
-+	dev_set_drvdata(dev, card);
-+	snd_soc_card_set_drvdata(card, data);
-+	ret = qcom_snd_parse_of(card);
-+	if (ret)
-+		return ret;
-+
-+	card->driver_name = DRIVER_NAME;
-+	sc8280xp_add_be_ops(card);
-+	return devm_snd_soc_register_card(dev, card);
-+}
-+
-+static const struct of_device_id snd_sc8280xp_dt_match[] = {
-+	{.compatible = "qcom,sc8280xp-sndcard",},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, snd_sc8280xp_dt_match);
-+
-+static struct platform_driver snd_sc8280xp_driver = {
-+	.probe  = sc8280xp_platform_probe,
-+	.driver = {
-+		.name = "snd-sc8280xp",
-+		.of_match_table = snd_sc8280xp_dt_match,
-+	},
-+};
-+module_platform_driver(snd_sc8280xp_driver);
-+MODULE_AUTHOR("Srinivas Kandagatla <srinivas.kandagatla@linaro.org");
-+MODULE_DESCRIPTION("SC8280XP ASoC Machine Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.21.0
+OK. I think you need a clean-up patch to fix them first.
 
+
+>>
+>>> (if so, what large changes did you mean?)
+>>>
+>>>> If we go to this way, we have to introduce a new generic interface to
+>>>> ask each driver to save/restore their MSRs when the guest is
+>>>> entering/exiting. We'd better combine the new interface with the
+>>>> existing
+>>>> perf_guest_get_msrs() of the core driver.
+>>>> I think that's an ideal solution, but requires big changes in the code.
+>>>>
+>>>> 2 is the current KVM implementation. See pt_save_msr()/pt_load_msr().
+>>>> I don't think it's a right way. We'd better fix it.
+>>>>
+>>>> The suggestion should be 3. The KVM notify the PT driver via the
+>>>> interface provided by PT. The PT driver save/restore all the registers.
+>>>> I think it's an acceptable solution with small code changes.
+>>>
+>>> This looks like we just relocate the save/restore functions to the PT driver
+>> and KVM still directly call them - still not going through perf's management.
+>> Imagine every user operates on the pmu h/w directly like this, things would be
+>> a mess.
+>>>
+>>
+>>
+>> The pt_event_stop() and the proposed interface still manipulate the PT event
+>> pt->handle.event. The event status is updated as well. It's still under control of
+>> the perf_event.
+> 
+> Did you mean to handle the PT event in the proposed driver API? Event status is just
+> one of the things. There are other things if we want to make it complete for this,
+> e.g. event->oncpu = -1, and eventually seems we will re-implement perf_event_disable_*.
+>
+
+As my understand, perf always check the status first. If it's a stopped
+or inactivated event, I don't think event->oncpu will be touched. That's
+why I think the proposed driver API should be acceptable.
+
+> Btw, Xiaoyao has made it work with perf_event_disable_local, and don’t have that many changes.
+> If necessary, we can post the 2nd version out to double check.
+>
+
+I'm not worry about which ways (either perf_event_disable_local() or the
+proposed PT driver API) are chosen to stop the PT. If the existing
+perf_event interfaces can meet your requirement, that's perfect.
+
+My real concern is the pt_save_msr()/pt_load_msr(). I don't think it's a
+job for KVM. See atomic_switch_perf_msrs(). It is the perf core driver
+rather than KVM that tells which MSRs should be saved/restored in VMCS.
+We should do the same thing for PT. (Actually, I think we already
+encounter issues with the current KVM-dominated method. KVM
+saves/restores unnecessary MSRs. Right?)
+
+To do so, I think there may be two ways.
+- Since MSRs have to be switched for both PT and core drivers, it sounds
+reasonable to provide a new generic interface in the perf_event. The new
+interface is to tell KVM which MSRs should be saved/restored. Then KVM
+can decide to save/restore via VMCS or direct MSR access. I suspect this
+way requires big change, but it will benefit all the drivers which have
+similar requirements.
+- The proposed driver API. The MSRs are saved/restored in the PT driver.
+
+
+Thanks,
+Kan
