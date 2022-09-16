@@ -2,208 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B565BB205
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F8C5BB20D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiIPSWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S229809AbiIPS0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIPSWG (ORCPT
+        with ESMTP id S229599AbiIPS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:22:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DA4A2219;
-        Fri, 16 Sep 2022 11:22:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FCB662825;
-        Fri, 16 Sep 2022 18:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96793C433D6;
-        Fri, 16 Sep 2022 18:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663352523;
-        bh=cXG4mz4VLHkvGGqt/TMJdy6nVcg80MERhm9gkrbpRF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lgSwyqGxLEr7/sYmHe9XLtpXA47ZKh3azzeVD0JvpF4STLi2ADKI0wIg69LZapcDd
-         vQDE+l9ut4odKBwW08MNlYB8C9sh32F9RSDPcwVm4mR+NnW8Of7md1Q/iHmpE/tXxT
-         7XVFiFMVyPIK1ACk5dd/QvWLWoNTgFofEteeK34bbnEKTts4khVGvrrQN3Ui1wDkcm
-         +/lvRFrV9vercN2hhFUivQBGooAK0eTJCqZfYmR+8Mc/emv6YCpSD/GnDUlsKyfCmZ
-         Fvx9o251Gx8E1QiLy7hn2dZd0I5OxL4cE+HELm1IifG+E0ppr23C9GfF+oIi3N4Q5l
-         y2PqPREGkHrVg==
-Date:   Fri, 16 Sep 2022 11:22:02 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix missing mapping caused by the
- mount/umount race
-Message-ID: <YyS+ynUThdcBP7WF@google.com>
-References: <20220829215206.3082124-1-jaegeuk@kernel.org>
- <cbc4bfe5-14f9-a4e0-c9c5-6b6b06437d5d@kernel.org>
- <Yw55Ebk8zLIgBFfn@google.com>
- <Yw7P6BkNZmqxji3B@google.com>
- <2b669973-caf0-75e8-f421-7647dddf03ce@kernel.org>
- <YyHwDVk96qvKn9eQ@google.com>
- <c4c9d239-8147-99c9-eea4-e9ea722f7fd8@kernel.org>
+        Fri, 16 Sep 2022 14:26:21 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A7BB4E8D;
+        Fri, 16 Sep 2022 11:26:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XP4qxwdwPNz4RusU+say+zwHpmSW1E2pqY9qfQIDb7xH1IxOeWlwpzDPKOu30tmj1jWwrEDw/+vgVaT1brICZfYpB9XlkL2aRjzkXQLLxLBa7AcNkmefH2C628kh+dEVkfqcEE6OiYQw/IpxDpqECeu+y4AZFPdFUs2yfDXRM3eIfFVkPzbl2NQ+OAGwF78YdDTUmYUnX4c64aua/oLxL3Tcr1wIQlZ0yzwBYk3ap+KpqaVjfRrMoYriOEpC8ACF6sZCQbH42+1w99eHfoTXLC03myWgtqME/Zm8uf7f3WDaeZ9MnJ+xxVNP6FNCGKWMQXEjW2abDDaQhc5lAYDkeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0Us7N/QSuHQnzyOwQg4A487ax+zBoqjncvimXDfqEc0=;
+ b=f9n2PE0TRSY2GrGlET4xA4pEMacj413aORzW03lBUip4BZrcd5KQbmsjz3gqKSvSaERAUIR0XDhcdUtqnpgeDlAg0p6Qy5uRpgl6r8sNPjyZs9yHywzJNMQu58OmLA5kKSUk+hNIEgJi1Q0WyVBXHdvoHCtDsc4GIitYVXFPkEZwY6UudA09mBWf0O3H1LtWiDxHv2NuYW+rlDatxW2Yi40i+Cw/2pTWbTPP4vW4djyQTMpD6vYQdRIho67tXuGqtfaIItlnaYzDF2KMQ4ksRQaA1MOQDXkEBoKNrN7DSHrxd7j8/mf8T3BZwLhXzGinfPOKiqT5c0ZG+e2DFcjbIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0Us7N/QSuHQnzyOwQg4A487ax+zBoqjncvimXDfqEc0=;
+ b=yAEl2bwtEeVoQFJr9kdlTyf4ftqyx3J1KKGuLVm675NznOPZbxYP4pEyJi1leQm1aokFkMg3UAWiCD2Xb6dnW8xKZIhKr4EsXGaYYzuDFc/+lP7sfFF/MECu+AjX1hDYpJlyY44yU3EGa/uK492YC1sag0wNoCHxsM7uCV4Svco=
+Received: from MW4PR04CA0121.namprd04.prod.outlook.com (2603:10b6:303:84::6)
+ by SA1PR12MB7104.namprd12.prod.outlook.com (2603:10b6:806:29e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Fri, 16 Sep
+ 2022 18:26:18 +0000
+Received: from CO1PEPF00001A63.namprd05.prod.outlook.com
+ (2603:10b6:303:84:cafe::68) by MW4PR04CA0121.outlook.office365.com
+ (2603:10b6:303:84::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16 via Frontend
+ Transport; Fri, 16 Sep 2022 18:26:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A63.mail.protection.outlook.com (10.167.241.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.12 via Frontend Transport; Fri, 16 Sep 2022 18:26:18 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 16 Sep
+ 2022 13:26:16 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>
+CC:     <travisghansen@yahoo.com>, <catalin@antebit.com>,
+        <Shyam-sundar.S-k@amd.com>,
+        Matthew Anderson <ruinairas1992@gmail.com>,
+        <philipp.zabel@gmail.com>, "Sebastian S ." <iam@decentr.al>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Len Brown" <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] Fixups for s2idle on various Rembrandt laptops
+Date:   Fri, 16 Sep 2022 13:26:02 -0500
+Message-ID: <20220916182609.3039-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c4c9d239-8147-99c9-eea4-e9ea722f7fd8@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A63:EE_|SA1PR12MB7104:EE_
+X-MS-Office365-Filtering-Correlation-Id: b6b87b0f-344c-4eb4-d7db-08da9810f297
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xOGLjkhV69geGEq3jcdp+kbk1TlWDZOOsUYHiOFby1bMmrxN/xJhRM2xArRbVPa5+Ng9Cb0BxT64QG7EWr9ixARTJR750hykda+o/lI7CUg746P8nSt+2olQymBerH5s3jHZ3MOdOG0uIiaDAMGP3iYSn9iqgrfl2xBGGg65RYVkQ+B3hge95iCDsR5JceN462pBzDlpCSS2oHf4zix7v13T6+0mmjKTU3lnf4OUSmz+fJGOtcQ1AvP1K7lnTlQrmnv2GzXytMGWA4yKmhCbjHuIH9NNOm6p0GnsKspcHs18MkkSNqs2EwrcASiXAz9CxpTlIzgd2eLNRX89GVFkcRHYJ8jT3Wsp02l+feewH+7WuzUNy9aODwzW8+efMZlkt7+9UQYS41yWMTHzDBndS4Y5IIVdQ0eO2tvNOwgRlsih9lNuU1x679XVoPmttZyevVfmsQNEUFv6Xfgxfb6oVUrBgRG8htIJ0Bz7L5rBPUMDF2UjGYINlsosFOkFkszFOgggPGiT7T+ys5wLotTCbM/75das0io2yLwZxw86ELuLQ3VL0fbCto4hueDCm+I3/I5Rwv7VmXGUAqwFseLd0dHmR7eXSX28dwN4t5Y1G0uoaJqb3Q5VJNMHOcirdzGnWZawflXEDbQTP7kW5WWwvIlB+DIsDk0zLLZ/2ni82YRAYh0ztBZYBEGayvFBHrwLMLsQZtX3kGX/nhKoCW1XfmZVMiOVkBDyKzgjcREgyqrvM+pGfILRf6DGpZuG0M3pBNXv9WDZMlQoENYzSETUkyXSPJQU7D9yz9OOurkXaZ2okp+CeK7n2diG4brGWpqq
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(356005)(81166007)(26005)(36860700001)(40480700001)(40460700003)(2906002)(36756003)(186003)(16526019)(47076005)(7416002)(2616005)(44832011)(5660300002)(83380400001)(8936002)(426003)(41300700001)(1076003)(336012)(6666004)(70206006)(70586007)(4326008)(8676002)(82310400005)(7696005)(86362001)(478600001)(82740400003)(316002)(6916009)(45080400002)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 18:26:18.1563
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6b87b0f-344c-4eb4-d7db-08da9810f297
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A63.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7104
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/14, Chao Yu wrote:
-> On 2022/9/14 23:15, Jaegeuk Kim wrote:
-> > On 09/14, Chao Yu wrote:
-> > > On 2022/8/31 11:05, Jaegeuk Kim wrote:
-> > > > On 08/30, Jaegeuk Kim wrote:
-> > > > > On 08/30, Chao Yu wrote:
-> > > > > > On 2022/8/30 5:52, Jaegeuk Kim wrote:
-> > > > > > > Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
-> > > > > > > all the time to fix the below panic.
-> > > > > > > 
-> > > > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> > > > > > > Mem abort info:
-> > > > > > >      ESR = 0x0000000086000004
-> > > > > > >      EC = 0x21: IABT (current EL), IL = 32 bits
-> > > > > > >      SET = 0, FnV = 0
-> > > > > > >      EA = 0, S1PTW = 0
-> > > > > > >      FSC = 0x04: level 0 translation fault
-> > > > > > > user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
-> > > > > > > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-> > > > > > > Internal error: Oops: 86000004 [#1] PREEMPT SMP
-> > > > > > > Modules linked in:
-> > > > > > > CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-> > > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > > > > > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > > > > > pc : 0x0
-> > > > > > > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
-> > > > > > > sp : ffff800012783970
-> > > > > > > x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
-> > > > > > > x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
-> > > > > > > x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
-> > > > > > > x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
-> > > > > > > x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
-> > > > > > > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > > > > > > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
-> > > > > > > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-> > > > > > > x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
-> > > > > > > x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
-> > > > > > > Call trace:
-> > > > > > >     0x0
-> > > > > > >     set_page_dirty+0x38/0xbc mm/folio-compat.c:62
-> > > > > > >     f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
-> > > > > > >     do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
-> > > > > > >     f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
-> > > > > > > 
-> > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
-> > > > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > > > > ---
-> > > > > > >     fs/f2fs/inode.c | 13 ++++++++-----
-> > > > > > >     1 file changed, 8 insertions(+), 5 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > > > > > index 6d11c365d7b4..1feb0a8a699e 100644
-> > > > > > > --- a/fs/f2fs/inode.c
-> > > > > > > +++ b/fs/f2fs/inode.c
-> > > > > > > @@ -490,10 +490,7 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
-> > > > > > >     	if (!inode)
-> > > > > > >     		return ERR_PTR(-ENOMEM);
-> > > > > > > -	if (!(inode->i_state & I_NEW)) {
-> > > > > > > -		trace_f2fs_iget(inode);
-> > > > > > > -		return inode;
-> > > > > > > -	}
-> > > > > > > +	/* We can see an old cached inode. Let's set the aops all the time. */
-> > > > > > 
-> > > > > > Why an old cached inode (has no I_NEW flag) has NULL a_ops pointer? If it is a bad
-> > > > > > inode, it should be unhashed before unlock_new_inode().
-> > > > > 
-> > > > > I'm trying to dig further tho, it's not a bad inode, nor I_FREEING | I_CLEAR.
-> > > > > It's very werid that thie meta inode is found in newly created superblock by
-> > > > > the global hash table. I've checked that the same superblock pointer was used
-> > > > > in the previous tests, but inode was evictied all the time.
-> > > > 
-> > > > I'll drop this patch, since it turned out there is a bug in reiserfs which
-> > > > doesn't free the root inode (ino=2). That leads f2fs to find an ino=2 with
-> > > > the previous superblock point used by reiserfs. That stale inode has no valid
-> > > 
-> > > One more question, why stale inode could be remained in inode hash table,
-> > > shouldn't the stale inode be evicted/unhashed in below path during reiserfs
-> > > umount:
-> > > 
-> > > - reiserfs_kill_sb
-> > >   - kill_block_super
-> > >    - generic_shutdown_super
-> > >     - evict_inodes
-> > >      - dispose_list
-> > >       - evict
-> > >        - remove_inode_hash
-> > 
-> > Yes, that's why I didn't dive into further, as it's odd.
-> 
-> Alright, this bug was reproducable w/ below testcase, right? :)
+It was reported that an ASUS Rembrandt laptop has problems with seemingly
+unrelated ACPI events after resuming from s2idle. Debugging the issue
+proved it's because ASUS has ASL that is only called when using the
+Microsoft GUID, not the AMD GUID.
 
-Yea, it was 100% reproduced.
+This is a bug from ASUS firmware but this series reworks the s2idle
+handling for AMD to allow accounting for this in a quirk.
 
-> 
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=167b5e33080000
-> 
-> Thanks,
-> 
-> > 
-> > > 
-> > > Thanks,
-> > > 
-> > > > inode that f2fs can use. I tried to find where the root cause is in reiserfs,
-> > > > but it seems quite hard to catch one.
-> > > > 
-> > > > - reiserfs_fill_super
-> > > >    - reiserfs_xattr_init
-> > > >     - create_privroot
-> > > >      - xattr_mkdir
-> > > >       - reiserfs_new_inode
-> > > >        - reiserfs_get_unused_objectid returned 0 due to map crash
-> > > > 
-> > > > It seems the error path doesn't handle the root inode properly.
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > Thanks,
-> > > > > > 
-> > > > > > >     	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
-> > > > > > >     		goto make_now;
-> > > > > > > @@ -502,6 +499,11 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
-> > > > > > >     		goto make_now;
-> > > > > > >     #endif
-> > > > > > > +	if (!(inode->i_state & I_NEW)) {
-> > > > > > > +		trace_f2fs_iget(inode);
-> > > > > > > +		return inode;
-> > > > > > > +	}
-> > > > > > > +
-> > > > > > >     	ret = do_read_inode(inode);
-> > > > > > >     	if (ret)
-> > > > > > >     		goto bad_inode;
-> > > > > > > @@ -557,7 +559,8 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
-> > > > > > >     		file_dont_truncate(inode);
-> > > > > > >     	}
-> > > > > > > -	unlock_new_inode(inode);
-> > > > > > > +	if (inode->i_state & I_NEW)
-> > > > > > > +		unlock_new_inode(inode);
-> > > > > > >     	trace_f2fs_iget(inode);
-> > > > > > >     	return inode;
-> > > > > 
-> > > > > 
-> > > > > _______________________________________________
-> > > > > Linux-f2fs-devel mailing list
-> > > > > Linux-f2fs-devel@lists.sourceforge.net
-> > > > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Additionally as this is a problem that may pop up again on other models
+add a module parameter that can be used to try the Microsoft GUID on a
+given system.
+
+This module parameter intentionally applies to both Intel and AMD systems
+as the same problem could potentially exist on Intel systems that support
+both the Intel GUID or the Microsoft GUID.
+
+v2->v3:
+ * Add more systems
+v1->v2:
+ * Add two more systems that are reported to be helped by this series.
+
+Mario Limonciello (7):
+  acpi/x86: s2idle: Move _HID handling for AMD systems into structures
+  acpi/x86: s2idle: If a new AMD _HID is missing assume Rembrandt
+  acpi/x86: s2idle: Add module parameter to prefer Microsoft GUID
+  acpi/x86: s2idle: Add a quirk for ASUS TUF Gaming A17 FA707RE
+  acpi/x86: s2idle: Add a quirk for ASUS ROG Zephyrus G14
+  acpi/x86: s2idle: Add a quirk for Lenovo Slim 7 Pro 14ARH7
+  acpi/x86: s2idle: Add a quirk for ASUSTeK COMPUTER INC. ROG Flow X13
+
+ drivers/acpi/x86/s2idle.c | 136 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 112 insertions(+), 24 deletions(-)
+
+-- 
+2.34.1
+
