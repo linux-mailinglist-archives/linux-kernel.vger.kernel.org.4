@@ -2,227 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E2C5BA488
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7E55BA48A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiIPCHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S229814AbiIPCH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIPCHI (ORCPT
+        with ESMTP id S229881AbiIPCHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:07:08 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1E746239
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:07:06 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220916020704epoutp01f3e9a6a078226db6ed7818e17c456e4d~VNRpA7-8o0144501445epoutp01C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:07:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220916020704epoutp01f3e9a6a078226db6ed7818e17c456e4d~VNRpA7-8o0144501445epoutp01C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663294024;
-        bh=dIE6n6B/JTYadhxIQ3uaS2kqdQe8Fv4KYHNiQIu+LxA=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=XayJD26hfMinfLgAEY3LmPZe3VMkruP9NqsfxG2uUHyqw8gwPgiXq2wFXX44hl9vK
-         Ix1DPDOEkwAYVqtzxO4DmDUgZ7GuHl0aDh1zgPJfAEKeOBJxVLkf5IMFeYB+hM4M4b
-         /tmJRUuNxVIpPJIKYDv2C6jRReUvLSVB/DodgyJ4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220916020703epcas2p104c73e4cc0fc9a23e9727f6f8eff7e46~VNRofYr-80916609166epcas2p1T;
-        Fri, 16 Sep 2022 02:07:03 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MTHWW1FlHz4x9QR; Fri, 16 Sep
-        2022 02:07:03 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.A5.06255.74AD3236; Fri, 16 Sep 2022 11:07:03 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9~VNRndE7Gc1762517625epcas2p2s;
-        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220916020702epsmtrp208c5667f05db7b731aaa3056a670f1ae~VNRnb-Rlq1884618846epsmtrp2o;
-        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
-X-AuditID: b6c32a48-f77ff7000000186f-0e-6323da4780ee
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.96.18644.64AD3236; Fri, 16 Sep 2022 11:07:02 +0900 (KST)
-Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220916020702epsmtip26a609f5b3c8775b019cf720184bf757c~VNRnPsiL52062520625epsmtip2J;
-        Fri, 16 Sep 2022 02:07:02 +0000 (GMT)
-From:   SEO HOYOUNG <hy50.seo@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
-Subject: [PATCH v3] scsi: ufs: add a variant operation in struct
- ufs_hba_variant_ops
-Date:   Thu, 15 Sep 2022 22:49:56 +0900
-Message-Id: <20220915134956.90086-1-hy50.seo@samsung.com>
-X-Mailer: git-send-email 2.26.0
+        Thu, 15 Sep 2022 22:07:23 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D279091080;
+        Thu, 15 Sep 2022 19:07:21 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28G1wwrS013432;
+        Fri, 16 Sep 2022 02:02:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=scCH+h51keDgOLhbGIcaAGqj3bs+A1rdoNJQN/gdVAE=;
+ b=sGvV3thvz/YuXYXUh/OlKxfzkSxMm5xDivaU5JMpYFocfr1bLCbpiJE4ohAC7nXmUvma
+ C+JEwV2uFtJMUW4fjhv1ez9lPbT6/fTEEGqYMA4apVMkNKaHLL/3RLzwOMpdXeCN+WCr
+ stc18szhkbpy5zWPHkgNp0FgCCvDjJOCHB2mQPiN/sBIf3PjptQWqWYLNvCTmwEtFBGL
+ DZTVuYokjSfTOORC7prrLziIt5N8KkWnxF3BekzS5DPcH8q6pHkZoAQsMA31pheLvkjT
+ STXrYxcenrdEjX0age9JdAuTEyfQaS9PCfRGdMtLTll0Rov8dhDE5bybdEmDaEPhJkuB aQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jm8xb94dj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Sep 2022 02:02:12 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28G0OxxF040138;
+        Fri, 16 Sep 2022 02:02:11 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jm8x6ngut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Sep 2022 02:02:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YlCjNpJysfpCf5jMie/Eal7OlCF7P5yPo+R4l+W7ulrM48/eL1FV2Q1AJUWXYQ6sUzr7WOaMQPGuYzjuoVBextWprbVYktLVTa32eIWTkJAiEf1wbPHnGI+9tI+2AuAmG18H70bEB1T5Bmu7eKZVCthfOLir/E+RkZNSO9rowFwjuQAKsGL0y6xDNrKt0Dhliyyo+N4Ra75rRm06kQxPN7NcetfL7l+MVDtAnYm/zZUCMJUNxKLDwWFKvA4xukmOlYbXA+36hkdDNaXlfyjmf9EICmtnRGyj0/n1qgXDF+I0zn4A85pL4Xjo+u7EEe5fV9n7eBHceODoGxF6ONE8HQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=scCH+h51keDgOLhbGIcaAGqj3bs+A1rdoNJQN/gdVAE=;
+ b=HeS+ClqZOM8H+GLC1PZtCJ+DoGObvv5ApIy7YFxsHa/1qlWfXdDRIsw4ZkDpCrlMBjP5PxKfVozDoI+WlWx0R+Lh0/1Yz/2Lc8lo1coZYvumFw2xoX0TMj01F0NVIBDRCstBsf1urNV56qQ/o7AXyrcy3KnIxSNm5zSwFGtZ9OKVevXee4maIkPTwN5lZPZ0UGUD7a0QCZmOmrWrZRc0wFOxbz2GWzF+M3qeR4D8aCviZqMrSQh7fWYdnT1L4Z83DmtJntm4ZlwkJo9rP4fUvQivvrfkHgp6tqHBpL34N2KoXwBjdEvYGmDIRc3eZnrqhhh2HD2p8RKRIpN0H21oUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=scCH+h51keDgOLhbGIcaAGqj3bs+A1rdoNJQN/gdVAE=;
+ b=rCCNVL81pdGrZCqIcvsvAe44SSJficRBIjX85JU9kR5bDJpiNhSE4aEND65DTQX5pVQOFv6rlacqG+u47WmYtCAlHVeYcUejj9wE1pMOdHC8rHy3Aui1Ark1rhTsxvkiARkkH6DuT0DGwWj15iuErNLw85nFHziGIUy+tElaewA=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM4PR10MB6013.namprd10.prod.outlook.com (2603:10b6:8:ae::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.19; Fri, 16 Sep 2022 02:02:09 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::297f:836:f424:cd75]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::297f:836:f424:cd75%3]) with mapi id 15.20.5632.015; Fri, 16 Sep 2022
+ 02:02:09 +0000
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Hannes Reinecke <hare@suse.com>,
+        David Malcolm <dmalcolm@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: aic79xx: Use __ro_after_init explicitly
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq17d242i26.fsf@ca-mkp.ca.oracle.com>
+References: <20220914115953.3854029-1-keescook@chromium.org>
+Date:   Thu, 15 Sep 2022 22:02:06 -0400
+In-Reply-To: <20220914115953.3854029-1-keescook@chromium.org> (Kees Cook's
+        message of "Wed, 14 Sep 2022 04:59:53 -0700")
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR05CA0015.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::28) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmqa77LeVkgxO72C0ezNvGZvHy51U2
-        i4MPO1ksvi59xmox7cNPZovVix+wWCy6sY3J4uaWoywWl3fNYbPovr6DzWL58X9MDtwel694
-        e0xYdIDR4/v6DjaPj09vsXj0bVnF6PF5k5xH+4FupgD2qGybjNTElNQihdS85PyUzLx0WyXv
-        4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKAblRTKEnNKgUIBicXFSvp2NkX5pSWpChn5
-        xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGR/mf2Aq2CBT8fjDO9YGxpPiXYyc
-        HBICJhJ3vi9h72Lk4hAS2MEoMXlaBwuE84lR4tj3G1CZz4wS3We2McG07LjdzgqR2MUocWvt
-        CUYI5wejxIV5D1hBqtgENCTWHDvEBJIQAUl8vbgCrJ1ZQE3i891lLCC2sECYxMOmFewgNouA
-        qsSJ3TfAmnkFLCUebzwDtU5eYlHDbyaIuKDEyZlPWCDmyEs0b53NDLJAQuAvu8SJJZ+BHA4g
-        x0XiTX8cRK+wxKvjW9ghbCmJz+/2skHYxRI/3qxmguhtYJRY2n6MGSJhLDHrWTsjyBxmAU2J
-        9bv0IUYqSxy5BbWWT6Lj8F92iDCvREebEESjksSZubehwhISB2fnQJgeEtNeioBUCAnESsw9
-        eIx1AqP8LCSvzELyyiyErQsYmVcxiqUWFOempxYbFZjA4zQ5P3cTIziVannsYJz99oPeIUYm
-        DsZDjBIczEoivH0hCslCvCmJlVWpRfnxRaU5qcWHGE2BgTuRWUo0OR+YzPNK4g1NLA1MzMwM
-        zY1MDcyVxHldtBmThQTSE0tSs1NTC1KLYPqYODilGphEjoZucnMrftuhY3/G5vPtiUlFl+q9
-        JPJln87z+LS+riSl3/V5bNltU++rXK45zlzZFowcR40Tkh0v7ePytXHWn1x67vm7q9o9B5Mi
-        mIUdSif3yOk4e31+sC/8RG9Q86/Fr45P+7mQdcniM/fauLP2vAkRuemplOf/xnBieWRJ5IRf
-        38VTZCaK3tt08b68A8u0Fe8LjohoJPJJPIjps/XerVR4YsIafr1LConhbQWf9pUdPNi7TdSe
-        dV9ppehK7rcb+q3lpojL84SXP5Tza/zSKBA0vV9Coel+sfeUC8fY5yXvD1qisWqSQsjvzZME
-        PuSKOpz9t5fjQdP9zzesg08Fbb6QfT/1R7rhFOENMUosxRmJhlrMRcWJAESem4AuBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSvK7bLeVkg4YlshYP5m1js3j58yqb
-        xcGHnSwWX5c+Y7WY9uEns8XqxQ9YLBbd2MZkcXPLURaLy7vmsFl0X9/BZrH8+D8mB26Py1e8
-        PSYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7FJdNSmpOZllqkb5dAlfGh/kfmAo2
-        yFQ8/vCOtYHxpHgXIyeHhICJxI7b7axdjFwcQgI7GCV6Gl+yQyQkJP4vbmKCsIUl7rccYQWx
-        hQS+MUp8+lgPYrMJaEisOXaICaRZRKCFSaL19StmkASzgJrE57vLWEBsYYEQiaYJu8GaWQRU
-        JU7svgFm8wpYSjzeeAZqgbzEoobfTBBxQYmTM5+wQMyRl2jeOpt5AiPfLCSpWUhSCxiZVjFK
-        phYU56bnFhsWGOWllusVJ+YWl+al6yXn525iBAe4ltYOxj2rPugdYmTiYDzEKMHBrCTC2xei
-        kCzEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU1jOahMR
-        zYwFXHvecp2U+parn5nxa9nD11POlUyuXnnrwH2L4y+WnTwTLZ2y0zGuyrT5wPHoyr3fcpNe
-        /nnPJ7IoKvZ42Yyjofyhzr8s16hcmLHR/c6KW3q9F1bzRF44myRm/G++dUj0s2U3ZzI+ezEz
-        YJ6emHDm6SNWVyNN1S68c9grrTLF+OPttolFn5RMDBYWX9PJnrtlp6bG4eWdbsKTnn2t5r/C
-        u+tJ4xFlDm41DmvdnovXbdfdTpMo9UgvXvy6f07Iql7NkzUfucM1+nZfWPD6t0qoysN3F2R3
-        7Snim+7T8NpSaWGijz9L4auXCSXyx8qvu22cMrF4QoI9r0NtfYzJolmKZ89KGd8Ve6jEUpyR
-        aKjFXFScCADIRe9s3wIAAA==
-X-CMS-MailID: 20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9
-References: <CGME20220916020702epcas2p2c4f7c7bcc1507db171b40aa45d7fa7d9@epcas2p2.samsung.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM4PR10MB6013:EE_
+X-MS-Office365-Filtering-Correlation-Id: de61fb2a-dd4c-4f1d-0ca1-08da978776b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BODlKSsPJM8/7LGufMCT4LbmoXOScbQP4p0PUseRaJF+6/U+LmKXrCNsBxjLKpiFHCbydOlMauZLiaTRc7DgQUsSBeVorGopfCtx3d5kScX1FEd12cJfvED6rFcWyLC0ibTcu7x7Lz454NBDZi1yC/fS2Zr0E/Gc0ROza64qwceFFWwWzOQ9+s9dSFt1muSBVLfl5EZq/dwRmO9pAAq08Dh11IE9bP2zcZfrlC/RVfLBJalvcdSjY5b2VnDGLZThBssCu6d8oljUOge3/tTxVE1YmU4tFWnX8Y5rqtzwxJZ7No1Y5AjY4xKfi14xXs/pJZJX7h6Y7Q56SFKsaDDab36NJfZrSOANevq5B29Egv7auM6PTdTAVUZoeClGMpD18lLs3+PFlokL4MlilOaUxFq2mhxp++vfEac45WMd/3B3Abm06vevBKoOXaY5uJrBvmFC0l34VB62gLPywLXim1rxJ3HP5bpWwr9Koz14Irwya7tJnlFi4qXtAjuFssTlZQhyOWayu6+8/64Yco+T6m0pHe6NFpVomjr/tzOw3LRzqYh25J9Ny3rR690Zy3Zt/rWiEylqItXWt4YohhkkErtC6QHcW8o/4r07fq32nJ22ZQvd3BtxiaohRujJ489b9zoUfFwo+WBW21TH7wV1K2ipFw88IQ5tBnvBMcNyvZj5kcHT9yA0u3qplDJk6lnankdjNzG0SrR9351uN86Hlw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(39860400002)(366004)(396003)(451199015)(478600001)(2906002)(4744005)(316002)(86362001)(36916002)(66946007)(8676002)(6666004)(8936002)(6506007)(4326008)(6512007)(66556008)(66476007)(6486002)(6916009)(38100700002)(54906003)(26005)(41300700001)(186003)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?haOrWD8XIEOC9nn0c4Yoh27ixLLKCJf5GtqH/P033etxdSCc3bA+kD9ik7uC?=
+ =?us-ascii?Q?rHQe65xyFBZgYeD6ouGinPnFdfl+F1yjhHAM3quIVVffuuiHHT4q6YuRC7kK?=
+ =?us-ascii?Q?lPGfeIsEDrLASWBfGYaUEmy6IulRKczpRhAkbyyCJWQZzls8lDFhHFhidaq5?=
+ =?us-ascii?Q?AnuVD7C9GpWT4/ss3od+pm1pWQWmKnWa674jCEpwqscgUERdYkUg58BTfdSQ?=
+ =?us-ascii?Q?DtB2hlX6OgRai18xZp7vwsunDjjzZ9MXd1NirEBqkdSqilPzkEiTn0DHI2PY?=
+ =?us-ascii?Q?QqNZBdneb3HLFfZRM+mwvy5hZBPflJ782DugMMehP111QH+y2IpOrCMrrjMY?=
+ =?us-ascii?Q?XRGdnuBuwgtCD0XKoDjvbcwrGRUGH9g56u5AWYanRTrrWk8wArEdtnc29i/D?=
+ =?us-ascii?Q?WSyuifikLmqRNl21acWBT+uikjPfv5afz+nTOAllEkjNHxOvoGw1Abo2HMij?=
+ =?us-ascii?Q?cSLttuc5xpDAJtSLvnvsm0XWV4IaP4HAwrJGk6JW9QFpfLvfp3Wu++I7SDrr?=
+ =?us-ascii?Q?Uw5Yi/+BbsO/KpSbOoCMeuO0OLJBJREIPuaD6912ZzAC0keGTAgXcupgeQPw?=
+ =?us-ascii?Q?z8odIo4cpgzAp6nBW660ctxcrrgG20dfwDZw9Jwzads7O+41Iu+xZI+fsBqg?=
+ =?us-ascii?Q?yJb7vn1DsDtiTZ5NzcfVY1SzJU+mBJRcEpI7wpuGcxcIXXUJOdfjeI1fbbiJ?=
+ =?us-ascii?Q?Jhbp6A9s+AgCOAKwPx8f61GtdPDrFXRc6FI95MWHh/JdKXjB3S3t+JFT6X3Y?=
+ =?us-ascii?Q?pFLwjUw/tSTL/+EgeVXyW3Vd8puRJSinK+0owUo52vwZ/sEbvl2wp111J+QP?=
+ =?us-ascii?Q?ojHm4uemmQgvpNryLocXGVlkClE6BYvdSDjK0ShNDqEHvBgK8W9zfsldFG1p?=
+ =?us-ascii?Q?pdphAwPW0SraeTKM4FIJ8Qqh9/w60uPh9h3S3criS19uhtnrNIn+Aqsxpzu4?=
+ =?us-ascii?Q?Umco2E3A/84gKPWOmIzaO8s5oEEPFGm83tM3zkN6vR4nFtUGN71kKqxrDhyL?=
+ =?us-ascii?Q?nPdj2UmX8QJYKF/fcbIOst2GFcTH3FeExrHDUOna3lsRhSDffxRtgHKi8gqT?=
+ =?us-ascii?Q?hg/javTngGT+TUMdK0sOPOWevdvCscB9zdee1Sr0/pjf93H+eLPDb3TdhLsk?=
+ =?us-ascii?Q?+QKuz73NircBZR7o5Asjh7UEsSqVunKVCf3R7WoxDU90dPNP9zrdMKlzCgH1?=
+ =?us-ascii?Q?K10MTHJG+TjipFcr+Xeank+V782tq21+Wfrj99j12xHHo6NQJoB+w1mCK1vG?=
+ =?us-ascii?Q?MLDg1ssj1p6DXmoEcRmI6BUSnukkXneMP+5pAezPbpZgw/tM0xn/808mBxv7?=
+ =?us-ascii?Q?3QJZZELAK8C1p/ZiND6YZ/8kOy95xeNDMNtxVA8BqhNlWNIDRhN7XWBz5249?=
+ =?us-ascii?Q?dIyw06LQwceXNy8POyJuR2+ejGOmKPj5Wp0/8/nZI7vmln6ZY39qUxWe8zKM?=
+ =?us-ascii?Q?0mbI4PCKeYCuEVf25e6JbMPSNJ8+q3oCCEzfCHxsWCYjWlELB6vGpA0d5kHq?=
+ =?us-ascii?Q?OrrieFiwj2A+Vli9Be6SKDbAYrJP3k4PvcNrKdTBnvDHMxMke9PTemRnpDbG?=
+ =?us-ascii?Q?PSs2uacidV0ogasJEF6EKCeuTeQP2JJZ8uk+i42G1bgMrx4aj09SW7fQntBU?=
+ =?us-ascii?Q?0w=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de61fb2a-dd4c-4f1d-0ca1-08da978776b0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 02:02:09.6161
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uxhODeOpk/dpd84CmylCwwhzxqS6I0VENdbKDU5w/jsHgmwoyZWZNLGRI/5L1lwIXB9d7rGzMYXnnOYEUkzOIjAukH6vtADC0LF/DVkblh8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6013
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-15_10,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=842 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209160013
+X-Proofpoint-ORIG-GUID: X7ku0oNU4dLm0IDC3cHtCs0j9vUglGz2
+X-Proofpoint-GUID: X7ku0oNU4dLm0IDC3cHtCs0j9vUglGz2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ufs_hba_variant_ops about vendor error in check_error.
-It need to reset when occurred ah8 related error.
-At that time could not recovery with pwr cmd.
-So add vendor error check function at ufs_hba_variant_ops.
 
-v1->v2
-fixed warm message of auto build test
+Kees,
 
-v2->v3
-fixed operator error
+> ahd_linux_setup_iocell_info() intentionally writes to the const-marked
+> aic79xx_iocell_info array, but is called during __init, so the
+> location is actually writable at this point on most
+> architectures. Annotate this explicitly with __ro_after_init to avoid
+> static analysis confusion.
 
-Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
----
- drivers/ufs/core/ufshcd-priv.h |  7 +++++++
- drivers/ufs/core/ufshcd.c      |  2 ++
- drivers/ufs/host/ufs-exynos.c  | 20 ++++++++++++++++++++
- include/ufs/ufshcd.h           |  1 +
- 4 files changed, 30 insertions(+)
+Applied to 6.1/scsi-staging, thanks!
 
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index d00dba17297d..a615f3533d75 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -221,6 +221,13 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
- 		hba->vops->config_scaling_param(hba, p, data);
- }
- 
-+static inline void ufshcd_vops_check_int_error(struct ufs_hba *hba,
-+					       bool *queue_eh_work)
-+{
-+	if (hba->vops && hba->vops->check_int_error)
-+		hba->vops->check_int_error(hba, queue_eh_work);
-+}
-+
- extern const struct ufs_pm_lvl_states ufs_pm_lvl_states[];
- 
- /**
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7c15cbc737b4..39ee5192f26a 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -6542,6 +6542,8 @@ static irqreturn_t ufshcd_check_errors(struct ufs_hba *hba, u32 intr_status)
- 		queue_eh_work = true;
- 	}
- 
-+	ufshcd_vops_check_int_error(hba, &queue_eh_work);
-+
- 	if (queue_eh_work) {
- 		/*
- 		 * update the transfer error masks to sticky bits, let's do this
-diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
-index eced97538082..5d9db6870a66 100644
---- a/drivers/ufs/host/ufs-exynos.c
-+++ b/drivers/ufs/host/ufs-exynos.c
-@@ -67,6 +67,10 @@
- #define CLK_CTRL_EN_MASK	(REFCLK_CTRL_EN |\
- 				 UNIPRO_PCLK_CTRL_EN |\
- 				 UNIPRO_MCLK_CTRL_EN)
-+
-+#define HCI_AH8_STATE		0x50C
-+#define HCI_AH8_STATE_ERROR	BIT(16)
-+
- /* Device fatal error */
- #define DFES_ERR_EN		BIT(31)
- #define DFES_DEF_L2_ERRS	(UIC_DATA_LINK_LAYER_ERROR_RX_BUF_OF |\
-@@ -1376,6 +1380,21 @@ static void exynos_ufs_hibern8_notify(struct ufs_hba *hba,
- 	}
- }
- 
-+static void exynos_ufs_check_int_error(struct ufs_hba *hba, bool *queue_eh_work)
-+{
-+	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
-+	u32 val;
-+
-+	if (ufshcd_is_auto_hibern8_supported(hba)) {
-+		val = hci_readl(ufs, HCI_AH8_STATE);
-+
-+		if (val & HCI_AH8_STATE_ERROR) {
-+			ufshcd_set_link_broken(hba);
-+			*queue_eh_work = true;
-+		}
-+	}
-+}
-+
- static int exynos_ufs_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 	enum ufs_notify_change_status status)
- {
-@@ -1569,6 +1588,7 @@ static const struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
- 	.setup_xfer_req			= exynos_ufs_specify_nexus_t_xfer_req,
- 	.setup_task_mgmt		= exynos_ufs_specify_nexus_t_tm_req,
- 	.hibern8_notify			= exynos_ufs_hibern8_notify,
-+	.check_int_error		= exynos_ufs_check_int_error,
- 	.suspend			= exynos_ufs_suspend,
- 	.resume				= exynos_ufs_resume,
- };
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 24c97e0772bb..40078c4b9f55 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -335,6 +335,7 @@ struct ufs_hba_variant_ops {
- 			       const union ufs_crypto_cfg_entry *cfg, int slot);
- 	void	(*event_notify)(struct ufs_hba *hba,
- 				enum ufs_event_type evt, void *data);
-+	void	(*check_int_error)(struct ufs_hba *hba, bool *queue_eh_work);
- };
- 
- /* clock gating state  */
 -- 
-2.26.0
-
+Martin K. Petersen	Oracle Linux Engineering
