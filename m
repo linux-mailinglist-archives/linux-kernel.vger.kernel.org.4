@@ -2,182 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E612D5BA3A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 02:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB9D5BA3A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiIPA6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 20:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S229635AbiIPBAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 21:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIPA6A (ORCPT
+        with ESMTP id S229548AbiIPBAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 20:58:00 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2030399F4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 17:57:56 -0700 (PDT)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOIOyiNjobUaAA--.38123S3;
-        Fri, 16 Sep 2022 08:57:50 +0800 (CST)
-Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
- kswapd
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
- <YyLUGnqtZXn4MjJF@casper.infradead.org>
- <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
- <YyLpls9/t6LKQefS@casper.infradead.org>
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-Message-ID: <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
-Date:   Fri, 16 Sep 2022 08:57:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 15 Sep 2022 21:00:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C466068D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 18:00:43 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTFyK0B85zlVk0;
+        Fri, 16 Sep 2022 08:56:41 +0800 (CST)
+Received: from [10.67.110.73] (10.67.110.73) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
+ 2022 09:00:40 +0800
+Message-ID: <fff8db8f-7b8c-2050-2d95-50db0f2c033e@huawei.com>
+Date:   Fri, 16 Sep 2022 09:00:40 +0800
 MIME-Version: 1.0
-In-Reply-To: <YyLpls9/t6LKQefS@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxYOIOyiNjobUaAA--.38123S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF4UKF45KrW5Kw1UGw4Uurg_yoW7Cr1rpF
-        15tFZrKF4kJr4Utr4UKw4vqr109F1DC3W5WryrGrnruF1jvwn8J3y8Gr45K3W3Jr1Uurya
-        qrW5Xw12vr17JaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07
-        bOoGdUUUUU=
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH -next] genirq: Change can_request_irq() return value type
+ to bool
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <tglx@linutronix.de>, <samuel@sholland.org>, <brgl@bgdev.pl>,
+        <mark.rutland@arm.com>, <lvjianmin@loongson.cn>,
+        <linux-kernel@vger.kernel.org>
+References: <20220914110615.3570933-1-chris.zjh@huawei.com>
+ <87wna6kvv5.wl-maz@kernel.org>
+From:   "zhangjianhua (E)" <chris.zjh@huawei.com>
+In-Reply-To: <87wna6kvv5.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew ,
+Fine, thanks.
 
-On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
-> On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
->> Hi Matthew,
->> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
->>> On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
->>>> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
->>>> seconds.
->>>> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
->>>> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
->>>> this message.
->>>> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
->>>> 77327 flags:0x00004002
->>>> [ 3748.483358] Call Trace:
->>>> [ 3748.485964]  <TASK>
->>>> [ 3748.488150]  __schedule+0x23d/0x590
->>>> [ 3748.491804]  schedule+0x4e/0xc0
->>>> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
->>>> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
->>>> [ 3748.505181]  down_read+0x43/0xa0
->>>> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
->>>> [ 3748.512799]  exc_page_fault+0x77/0x170
->>>> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
->>>> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
->>>> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
->>>> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
->>>> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
->>>> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
->>>> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
->>>> 0000000000000010
->>>> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
->>>> 00007f99faa1a000
->>>> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
->>>> 0000000000000014
->>>> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
->>>> 0000000000001000
->>>> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
->>>> ffffaa9248fffd98
->>>> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
->>>> [ 3748.592614]  filemap_read+0x174/0x3e0
->>>
->>> Interesting; it wasn't the process itself which triggered the page
->>> fault; the process called read() and the kernel took the page fault to
->>> satisfy the read() call.
->>>
->>>> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
->>>> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
->>>> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
->>>> [ 3748.609164]  ? aa_file_perm+0x102/0x250
->>>> [ 3748.613125]  new_sync_read+0x10d/0x1a0
->>>> [ 3748.617009]  vfs_read+0x103/0x1a0
->>>> [ 3748.620423]  ksys_read+0x67/0xf0
->>>> [ 3748.623743]  __x64_sys_read+0x19/0x20
->>>> [ 3748.627511]  do_syscall_64+0x59/0xc0
->>>> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
->>>> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
->>>> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
->>>> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
->>>> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
->>>> [ 3748.653737]  ? exc_page_fault+0x89/0x170
->>>> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
->>>> [ 3748.663030] RIP: 0033:0x7f9a852989cc
->>>> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
->>>> 0000000000000000
->>>> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
->>>> 00007f9a852989cc
->>>> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
->>>> 0000000000000061
->>>> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
->>>> 00007f99faa18010
->>>> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
->>>> 00007f99faa18010
->>>> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
->>>> 0000000000027100
->>>
->>> ORIG_RAX is 0, which matches sys_read.
->>> RDI is file descriptor 0x61
->>> RSI is plausibly a userspace pointer, 0x7f99faa18010
->>> RDX is the length, 0x27100 or 160kB.
->>>
->>> That all seems reasonable.
->>>
->>> What I really want to know is who is _holding_ the lock.  We stash
->>> a pointer to the task_struct in 'owner', so we could clearly find this
->>> out in the 'blocked for too long' report, and print their stack trace.
->>>
->> As described in the comment for __rwsem_set_reader_owned,it is hard to track
->> read owners.So we could not clearly find out who blocked the process,it was
->> caused by multiple tasks.
-> 
-> Readers don't block readers.  You have a reader here, so it's being
-> blocked by a writer.  And that writer's task_struct is stashed in
-> rwsem->owner.  It would be nice if we dumped that information
-> automatically ... but we don't do that today.  Perhaps you could
-> grab that information from a crash dump if you have one.
-> 
->>> You must have done something like this already in order to deduce that
->>> it was the direct reclaim path that was the problem?
->>>
->> The method we used is to track the direct reclaim using the
->> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
->> occurred,we could get a very large "nr_reclaimed" which is not a desirable
->> value for process except kswapd.
-> 
-> I disagree.  If a process needs to allocate memory then it should be
-> paying the cost of reclaiming that memory itself.  kswapd is a last
-> resort to reclaim memory when we have a workload (eg a network router)
-> that does its memory allocation primarily in interrupt context.
-> 
-What's your opinion about this scan adjust issue? Is there a better way 
-to fix this issue?
-
-Thanks
-Hongchen Zhang
-
+在 2022/9/14 20:01, Marc Zyngier 写道:
+> On Wed, 14 Sep 2022 12:06:15 +0100,
+> Zhang Jianhua <chris.zjh@huawei.com> wrote:
+>> The function can_request_irq() is used to judge whether the irq can be
+>> allocated, so bool type would be more suitable for it.
+>>
+>> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+>> ---
+>>   include/linux/irq.h | 2 +-
+>>   kernel/irq/manage.c | 8 ++++----
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/linux/irq.h b/include/linux/irq.h
+>> index c3eb89606c2b..3a60c2313fb9 100644
+>> --- a/include/linux/irq.h
+>> +++ b/include/linux/irq.h
+>> @@ -707,7 +707,7 @@ extern void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret);
+>>   extern int noirqdebug_setup(char *str);
+>>   
+>>   /* Checks whether the interrupt can be requested by request_irq(): */
+>> -extern int can_request_irq(unsigned int irq, unsigned long irqflags);
+>> +extern bool can_request_irq(unsigned int irq, unsigned long irqflags);
+>>   
+>>   /* Dummy irq-chip implementations: */
+>>   extern struct irq_chip no_irq_chip;
+>> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+>> index 40fe7806cc8c..d6940d15bf56 100644
+>> --- a/kernel/irq/manage.c
+>> +++ b/kernel/irq/manage.c
+>> @@ -925,19 +925,19 @@ EXPORT_SYMBOL(irq_set_irq_wake);
+>>    * particular irq has been exclusively allocated or is available
+>>    * for driver use.
+>>    */
+>> -int can_request_irq(unsigned int irq, unsigned long irqflags)
+>> +bool can_request_irq(unsigned int irq, unsigned long irqflags)
+>>   {
+>>   	unsigned long flags;
+>>   	struct irq_desc *desc = irq_get_desc_lock(irq, &flags, 0);
+>> -	int canrequest = 0;
+>> +	bool canrequest = false;
+>>   
+>>   	if (!desc)
+>> -		return 0;
+>> +		return false;
+>>   
+>>   	if (irq_settings_can_request(desc)) {
+>>   		if (!desc->action ||
+>>   		    irqflags & desc->action->flags & IRQF_SHARED)
+>> -			canrequest = 1;
+>> +			canrequest = true;
+>>   	}
+>>   	irq_put_desc_unlock(desc, flags);
+>>   	return canrequest;
+> I'm sorry, but this is a very pointless change. Not only this doesn't
+> change anything for this particular code other than being cosmetic,
+> but it also doesn't help any of the callers which are still using an
+> int.
+>
+> In general, this sort of patch only adds noise, and I'd like to see
+> less of them.
+>
+> Thanks,
+>
+> 	M.
+>
