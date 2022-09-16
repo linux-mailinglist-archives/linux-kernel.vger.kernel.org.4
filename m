@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A14F5BB43F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380495BB44C
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 00:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIPWEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 18:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S230046AbiIPWJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 18:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiIPWEg (ORCPT
+        with ESMTP id S230031AbiIPWJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 18:04:36 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B0DE8E;
-        Fri, 16 Sep 2022 15:04:26 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 16 Sep 2022 18:09:49 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6D81209A;
+        Fri, 16 Sep 2022 15:09:43 -0700 (PDT)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 52E7C1F8BA;
-        Sat, 17 Sep 2022 00:04:23 +0200 (CEST)
-Date:   Sat, 17 Sep 2022 00:04:19 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        konrad.dybcio@somainline.org, agross@kernel.org,
-        angelogioacchino.delregno@somainline.org, rnayak@codeaurora.org,
-        jamipkettunen@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        martin.botka@somainline.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: power: rpmpd: Add SM6375 power
- domains
-Message-ID: <20220916220419.nk66b2ub634l6wsf@SoMainline.org>
-References: <20220716193201.455728-1-konrad.dybcio@somainline.org>
- <166321302060.788007.3857501388494145309.b4-ty@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B2D71EC0754;
+        Sat, 17 Sep 2022 00:09:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1663366177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=pi/ThYMMvWpMaKV1N3tail3zxhGqRMvrp+4EnPCu9OM=;
+        b=jgHcd7ncTZaHyhMNg/eVeEADeladLatoLsLZViRGZoyhpbq8Vt1twRP/LQTFOpKzJkmm8f
+        TrSWRqKGczffo+4tCK5/VUQ4JdxTJwInmmNLhckfVDpxA/Cy/pVHV11zJrS+RhmxFC9ney
+        z84WGAWpfYiB0M2Sy3u9noW2Lm2U/y4=
+Date:   Sat, 17 Sep 2022 00:09:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Avi Kivity <avi@redhat.com>, Babu Moger <babu.moger@amd.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joerg Roedel <joerg.roedel@amd.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org
+Subject: Re: [PATCH 2/5] KVM: svm: Disallow EFER.LMSLE on hardware that
+ doesn't support it
+Message-ID: <YyT0G9y0RRyBDiPD@zn.tnic>
+References: <20220916045832.461395-1-jmattson@google.com>
+ <20220916045832.461395-3-jmattson@google.com>
+ <YyTZFzaDOufASxqd@google.com>
+ <CALMp9eQXroxQYiWUCejd0Cj7kD5g5navWY_E2O_vzbVAQjLyNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <166321302060.788007.3857501388494145309.b4-ty@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALMp9eQXroxQYiWUCejd0Cj7kD5g5navWY_E2O_vzbVAQjLyNg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-14 22:36:54, Bjorn Andersson wrote:
-> On Sat, 16 Jul 2022 21:32:00 +0200, Konrad Dybcio wrote:
-> > Add the bindings for SM6375 RPMPDs.
-> > 
-> > 
-> 
-> Applied, thanks!
-> 
-> [1/2] dt-bindings: power: rpmpd: Add SM6375 power domains
->       commit: 2d48e6ea3080ef7b2424dabfb500e29b030129d6
+On Fri, Sep 16, 2022 at 02:00:26PM -0700, Jim Mattson wrote:
+> It's possible that SLES11 Xen 4.0 sets the bit, but never actually
+> uses truncated segments in 64-bit mode. In any case, according to the
+> original commit, it won't boot if setting EFER.LMSLE is not allowed.
 
-It looks like my request [1] to move these rpmpd definitions from the
-rpm*H*pd section of this file down to sit with the rest of the rpmpd
-definitions hasn't made its way through?
+How is SLE11 at all relevant to the upstream kernel?
 
-> [2/2] soc: qcom: rpmpd: Add SM6375 support
->       commit: df646a17f103c6f18ab85c5e3773763d18dc528b
+-- 
+Regards/Gruss,
+    Boris.
 
-[1]: https://lore.kernel.org/linux-arm-msm/20220721095946.wy3wbeib4ycwghzl@SoMainline.org/
-
-- Marijn
+https://people.kernel.org/tglx/notes-about-netiquette
