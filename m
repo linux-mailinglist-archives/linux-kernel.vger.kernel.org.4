@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985025BA77F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC32A5BA785
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiIPHbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S229519AbiIPHd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIPHbD (ORCPT
+        with ESMTP id S229787AbiIPHdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:31:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D7B67C9C;
-        Fri, 16 Sep 2022 00:30:58 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTQcc44YFzlVxM;
-        Fri, 16 Sep 2022 15:26:56 +0800 (CST)
-Received: from kwepemm600006.china.huawei.com (7.193.23.105) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 15:30:57 +0800
-Received: from huawei.com (10.44.142.108) by kwepemm600006.china.huawei.com
- (7.193.23.105) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 15:30:56 +0800
-From:   <luolongjun@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <sangyan@huawei.com>, <luanjianhai@huawei.com>,
-        <zhuling8@huawei.com>, <lizongwu@huawei.com>,
-        Longjun Luo <luolongjun@huawei.com>
-Subject: [PATCH] uprobe: add UPROBE_ALTER_PC flag for uprobe handlers
-Date:   Fri, 16 Sep 2022 15:28:46 +0800
-Message-ID: <20220916072846.2145735-1-luolongjun@huawei.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 16 Sep 2022 03:33:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512C369F62;
+        Fri, 16 Sep 2022 00:33:36 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 957C56601FA1;
+        Fri, 16 Sep 2022 08:33:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663313614;
+        bh=aWtRXRI7fxQBjROCdpFicK7krf9njG3Luudt99ZAeAo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZTeH9hWylUWWDYAaQO0o4OhhOY5Bn9HdDkUrinzDSsrVSDTaTF8y8f0As5M9EBwxL
+         o+fphIvpgDmSRDWkhdQW2JdY5dIHZoOYkFvcg07IT0EmNNtMCtqeb1FNP1qJkT2aQf
+         N4FuWYkjCVAOPMA8taDAHbZ+CTUk8da4e2Fm7ssosj84DI9zREw4MdYG2QdsMPcV+5
+         ECshjxW9VgHmAu3IRSR85tbWs7b1FPOo10Dhj/8h5PEPighiA48tLa0ydZDE/4ccKb
+         l8N5X48BGQr2YJ6tcYKcVr7P7wIRwKuHQA4wcFI7FnoXhnFRXyjlTureF27e+giOPx
+         ucoaa/7eiJCbA==
+Message-ID: <ccd27ec5-6bce-0f5c-1b58-b7bfcbccdeed@collabora.com>
+Date:   Fri, 16 Sep 2022 09:33:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.44.142.108]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600006.china.huawei.com (7.193.23.105)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v9,4/7] thermal: mediatek: Add LVTS driver for mt8192
+ thermal zones
+Content-Language: en-US
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+References: <20220817080757.352021-1-bchihi@baylibre.com>
+ <20220817080757.352021-5-bchihi@baylibre.com>
+ <8d6383e0-329e-ca91-6e79-85b3806a2af3@collabora.com>
+ <CAGuA+ooEHPiHuGYXOh7s68HRTv9HSr-BexFsCLUPWTMQ3szCfg@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGuA+ooEHPiHuGYXOh7s68HRTv9HSr-BexFsCLUPWTMQ3szCfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Longjun Luo <luolongjun@huawei.com>
+Il 15/09/22 18:58, Balsam CHIHI ha scritto:
+> Hi Angelo,
+> 
+>>> +static int soc_temp_lvts_read_temp(void *data, int *temperature)
+>>> +{
+>>> +     struct soc_temp_tz *lvts_tz = (struct soc_temp_tz *)data;
+>>> +     struct lvts_data *lvts_data = lvts_tz->lvts_data;
+>>> +     struct device *dev = lvts_data->dev;
+>>> +     unsigned int msr_raw;
+>>> +
+>>> +     msr_raw = readl(lvts_data->reg[lvts_tz->id]) & MRS_RAW_MASK;
+>>> +     if (msr_raw == 0) {
+>>> +             /* Prevents a false critical temperature trap */
+>>> +             *temperature = 0;
+>>> +             dev_dbg(dev, "LVTS not yet ready\n");
+>>
+>> ...and you're not returning an error code, despite this function was called
+>> while LVTS is still not ready? :-)
+>>
+> 
+> if I add "return -ENAVAIL;" here, I will get the following errors on boot :
+> [    0.292094] thermal thermal_zone0: failed to read out thermal zone (-119)
+> [    0.293019] thermal thermal_zone1: failed to read out thermal zone (-119)
+> [    0.294158] thermal thermal_zone6: failed to read out thermal zone (-119)
+> [    0.295697] thermal thermal_zone9: failed to read out thermal zone (-119)
+> [    0.296600] thermal thermal_zone10: failed to read out thermal zone (-119)
+> [    0.297698] thermal thermal_zone15: failed to read out thermal zone (-119)
+> [    0.298625] thermal thermal_zone16: failed to read out thermal zone (-119)
+> 
+> I just preferred : *temperature = 0; to avoid a false critical temperature trap,
+> and "return 0;" to suppress these errors.
+> After that (first read at boot when LVTS is not fully ready),
+> "msr_raw" will be always != 0.
+> And I did not want to add a "delay" or a "sleep".
+> Please let me know if you have any suggestions that could fix it in a
+> better way.
+> 
 
-Within uprobe handlers, the pc register could be
-modified. In this situation, there is no need to
-do a single stepping. Just like the kprobe, we
-skip it.
+It's the wrong error number. You have to return -EAGAIN :-)
 
-Signed-off-by: Longjun Luo <luolongjun@huawei.com>
----
- include/linux/uprobes.h |  5 +++--
- kernel/events/uprobes.c | 16 +++++++++++++---
- 2 files changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f46e0ca0169c..0670fecbe1ce 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -22,8 +22,9 @@ struct inode;
- struct notifier_block;
- struct page;
- 
--#define UPROBE_HANDLER_REMOVE		1
--#define UPROBE_HANDLER_MASK		1
-+#define UPROBE_HANDLER_REMOVE   0x1
-+#define UPROBE_ALTER_PC         0x2
-+#define UPROBE_HANDLER_MASK     0x3 /* (UPROBE_HANDLER_REMOVE | UPROBE_ALTER_PC) */
- 
- #define MAX_URETPROBE_DEPTH		64
- 
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 2eaa327f8158..d01a668fecae 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -2064,10 +2064,16 @@ static struct uprobe *find_active_uprobe(unsigned long bp_vaddr, int *is_swbp)
- 	return uprobe;
- }
- 
--static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
-+/*
-+ * The return value of handler_chain tags events that happen during
-+ * calling handlers. If UPROBE_ALTER_PC happens, we must skip the
-+ * single stepping.
-+ */
-+static int handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
- {
- 	struct uprobe_consumer *uc;
- 	int remove = UPROBE_HANDLER_REMOVE;
-+	int all_events = 0;
- 	bool need_prep = false; /* prepare return uprobe, when needed */
- 
- 	down_read(&uprobe->register_rwsem);
-@@ -2084,6 +2090,7 @@ static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
- 			need_prep = true;
- 
- 		remove &= rc;
-+		all_events |= rc;
- 	}
- 
- 	if (need_prep && !remove)
-@@ -2094,6 +2101,7 @@ static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
- 		unapply_uprobe(uprobe, current->mm);
- 	}
- 	up_read(&uprobe->register_rwsem);
-+	return all_events;
- }
- 
- static void
-@@ -2183,7 +2191,7 @@ static void handle_swbp(struct pt_regs *regs)
- {
- 	struct uprobe *uprobe;
- 	unsigned long bp_vaddr;
--	int is_swbp;
-+	int is_swbp, all_events;
- 
- 	bp_vaddr = uprobe_get_swbp_addr(regs);
- 	if (bp_vaddr == get_trampoline_vaddr())
-@@ -2235,7 +2243,9 @@ static void handle_swbp(struct pt_regs *regs)
- 	if (arch_uprobe_ignore(&uprobe->arch, regs))
- 		goto out;
- 
--	handler_chain(uprobe, regs);
-+	all_events = handler_chain(uprobe, regs);
-+	if (all_events & UPROBE_ALTER_PC)
-+		goto out;
- 
- 	if (arch_uprobe_skip_sstep(&uprobe->arch, regs))
- 		goto out;
--- 
-2.37.3
+>>> +
+>>> +     } else
+>>> +             *temperature = lvts_raw_to_temp(&lvts_data->coeff, msr_raw);
+>>> +
+>>> +     return 0;
+>>> +}
+> 
+> Best regards,
+> Balsam
 
