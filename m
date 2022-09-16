@@ -2,108 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF215BAF7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1BB5BAF7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiIPOio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S231322AbiIPOi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIPOik (ORCPT
+        with ESMTP id S231326AbiIPOiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:38:40 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F62CB3B30
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:40 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r23so11965559pgr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:40 -0700 (PDT)
+        Fri, 16 Sep 2022 10:38:46 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53610B40D7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:45 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so49808388ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=cKDTNYSujMHhHC8oskKxTsGs14KRpTgwA0hXaRQXqJE=;
-        b=LHdnib7NohNt/B5VsHS71bRWCyRwWHlluIwZWIqC++4bLbYNnIejD0i+Vmu2TXtlsD
-         9EuBpBms8xebBJVcdKpNFvqK+AUgmJ8GriGB8g8/+s+JFFGbWp44RBMzhdfoguAAvaM9
-         Iab+b9A4XMNstm4V+iyB4SyEu89dq6ySAc6pk=
+        bh=2hekt6nHmDXb09svRYspIovCwUxYyIVHgZSXoQyIl+k=;
+        b=SFH1piZ1wl+dYjTFfiOzjwm5fI+/WSD0vBB9yBMmjrbolDnWC/6U9TVbGpDPit/0ES
+         UUWUzIMXDJswTFPpUSs2bQz1HKHAlff4k2OO982m7E2ogYAaAlCcz+v6pL6YXHn7JZ09
+         263HOyhB9k8djHzypKXBiHPWGswf9IMrrY0odun/7GVSrmRHrtorYPkfRwkXf79IOyhU
+         rsTJO7Kie/UsasSir2ML+YdjREDVgRnjk1VSA1ZA7xpfUu60Xu2CKXq5NELJHbDCB2To
+         IoR0qoMNN7IOJY031zmLjTFaKb1fNbBHf+e6M0wKl30ktbsDQdlx9EZwtUk9ydlQK7Qu
+         myEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cKDTNYSujMHhHC8oskKxTsGs14KRpTgwA0hXaRQXqJE=;
-        b=OIBYl0UigNEqefyxUEPHlsYKr7XVdtj1CTT009llFnzIcKSipgB1EEcD18/EvnNT9R
-         66F67oLDZJpTm1/6Q6U2FrUc67FmLJFGmvS7Q5eFD1oTAnT/6sEFXxTY8j9CE9FPQnoM
-         HDYFSNhoHB4aIyS+MIJ57mLzZ3Pi9DXFmVnjnNSMWOWdXsr65Jm/asm+6K+s/2RcJpCs
-         o6sRLSvGicG0Sl/t1mDx7iml/t6XP/zCXKv3gJLC08K5VyGHk6ltrh5eMcwzIXc+47iR
-         K+5Pu3pcEAJQogSA6Kfx1Poa6tkJ+ilnFW6ImBDF1hwQ08JFSRv74mgYRvTenrccl8tp
-         sLyA==
-X-Gm-Message-State: ACrzQf1Y0ZN80wDO2G9xc6BlbU+Cs0WH/nnatF3avjG8rUrDJtpRIL35
-        goQf7cmJY9buoSz5zLOW8rzk2Q==
-X-Google-Smtp-Source: AMsMyM5y2H35r4+gPV2IegQA4AFtLolRboe7pBtrjBSrgvkHNeL6xS5tbIfEhmbPm8A5jhIzxJ93AQ==
-X-Received: by 2002:a05:6a00:1823:b0:544:b4db:50c with SMTP id y35-20020a056a00182300b00544b4db050cmr5039980pfa.33.1663339119577;
-        Fri, 16 Sep 2022 07:38:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170903228f00b001784a45511asm8184760plh.79.2022.09.16.07.38.38
+        bh=2hekt6nHmDXb09svRYspIovCwUxYyIVHgZSXoQyIl+k=;
+        b=XaJ/8vaaGN7S3r7oRxicrPonssr0qvYUQLH4yewbgHGB/vaWdNWJLVbyOVJnG18+bx
+         kK+ZHkQpwa4oi2QGKSsbu8PcODd3EJ53GRTZN+nGhnMi9bnl2/6hExikeWMPN4MKvxcx
+         XcIbG7WucJEJ+WxEAB7niIOapECML1b07FPkf+KJX/LN+0GGFxM4KCRXyCHBTmfjyTH2
+         yKAnB7chEGw7srqkaXLYeKBmdz+Aas0MUie9aL7FYU8yi6eo9ZgXHODqz8utrJsVMDnA
+         0L4ESOnt3KmE6RlrciaDdHxvJ2++E8LIzASfeo/k/DsLtOd5LFEXkd6BAn8kldV7ang+
+         6Byg==
+X-Gm-Message-State: ACrzQf1rVPIvHr5XDMedXFeDgxQPnOq2Jcmcw9SPRTt+YwAnle+bv+/q
+        bNvCTjJMYeQbdLj8HPn5DTRTWQ==
+X-Google-Smtp-Source: AMsMyM520XIqN6p3HKYAlwE92zHeNJJ+Fe5xeWMnuVrGvp0QrtwA4dQnKiX2weHwOi8VZ2B4Q7JoXw==
+X-Received: by 2002:a17:906:7944:b0:73c:838:ac3d with SMTP id l4-20020a170906794400b0073c0838ac3dmr3824004ejo.242.1663339123786;
+        Fri, 16 Sep 2022 07:38:43 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id p21-20020a170906499500b0078082f95e5csm1393062eju.204.2022.09.16.07.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:38:38 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 07:38:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search
- before allocating mm
-Message-ID: <202209160727.5FC78B735@keescook>
-References: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
+        Fri, 16 Sep 2022 07:38:41 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 17:38:40 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
+        Bharath Kumar <bkumar@qti.qualcomm.com>,
+        Himateja Reddy <hmreddy@quicinc.com>,
+        Anirudh Raghavendra <araghave@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 08/10] misc: fastrpc: Safekeep mmaps on interrupted
+ invoke
+Message-ID: <YySKcI3dwv9b4ri0@linaro.org>
+References: <20220909133938.3518520-1-abel.vesa@linaro.org>
+ <20220909133938.3518520-9-abel.vesa@linaro.org>
+ <a71b5f36-8a81-3aa6-6aee-655878b5d4af@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a71b5f36-8a81-3aa6-6aee-655878b5d4af@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:41:30PM +0100, Josh Triplett wrote:
-> Currently, execve allocates an mm and parses argv and envp before
-> checking if the path exists. However, the common case of a $PATH search
-> may have several failed calls to exec before a single success. Do a
-> filename lookup for the purposes of returning ENOENT before doing more
-> expensive operations.
+On 22-09-16 13:58:35, Srinivas Kandagatla wrote:
+> 
+> 
+> On 09/09/2022 14:39, Abel Vesa wrote:
+> > If the userspace daemon is killed in the middle of an invoke (e.g.
+> > audiopd listerner invoke), we need to skip the unmapping on device
+> > release, otherwise the DSP will crash. So lets safekeep all the maps
+> > only if there is in invoke interrupted, by attaching them to the channel
+> > context (which is resident until RPMSG driver is removed), and free them
+> > on RPMSG driver remove.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >   drivers/misc/fastrpc.c | 15 +++++++++++++++
+> >   1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> > index 6b2a552dbdba..bc1e8f003d7a 100644
+> > --- a/drivers/misc/fastrpc.c
+> > +++ b/drivers/misc/fastrpc.c
+> > @@ -275,6 +275,7 @@ struct fastrpc_channel_ctx {
+> >   	struct fastrpc_device *secure_fdevice;
+> >   	struct fastrpc_device *fdevice;
+> >   	struct fastrpc_buf *remote_heap;
+> > +	struct list_head invoke_interrupted_mmaps;
+> >   	bool secure;
+> >   	bool unsigned_support;
+> >   };
+> > @@ -1119,6 +1120,8 @@ static int fastrpc_internal_invoke(struct fastrpc_user *fl,  u32 kernel,
+> >   				   struct fastrpc_invoke_args *args)
+> >   {
+> >   	struct fastrpc_invoke_ctx *ctx = NULL;
+> > +	struct fastrpc_buf *buf, *b;
+> > +
+> >   	int err = 0;
+> >   	if (!fl->sctx)
+> > @@ -1182,6 +1185,13 @@ static int fastrpc_internal_invoke(struct fastrpc_user *fl,  u32 kernel,
+> >   		fastrpc_context_put(ctx);
+> >   	}
+> > +	if (err == -ERESTARTSYS) {
+> > +		list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+> > +			list_del(&buf->node);
+> > +			list_add_tail(&buf->node, &fl->cctx->invoke_interrupted_mmaps);
+> > +		}
+> > +	}
+> > +
+> >   	if (err)
+> >   		dev_dbg(fl->sctx->dev, "Error: Invoke Failed %d\n", err);
+> > @@ -2277,6 +2287,7 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+> >   	dev_set_drvdata(&rpdev->dev, data);
+> >   	dma_set_mask_and_coherent(rdev, DMA_BIT_MASK(32));
+> >   	INIT_LIST_HEAD(&data->users);
+> > +	INIT_LIST_HEAD(&data->invoke_interrupted_mmaps);
+> >   	spin_lock_init(&data->lock);
+> >   	idr_init(&data->ctx_idr);
+> >   	data->domain_id = domain_id;
+> > @@ -2301,6 +2312,7 @@ static void fastrpc_notify_users(struct fastrpc_user *user)
+> >   static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+> >   {
+> >   	struct fastrpc_channel_ctx *cctx = dev_get_drvdata(&rpdev->dev);
+> > +	struct fastrpc_buf *buf, *b;
+> >   	struct fastrpc_user *user;
+> >   	unsigned long flags;
+> > @@ -2315,6 +2327,9 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+> >   	if (cctx->secure_fdevice)
+> >   		misc_deregister(&cctx->secure_fdevice->miscdev);
+> > +	list_for_each_entry_safe(buf, b, &cctx->invoke_interrupted_mmaps, node)
+> > +		list_del(&buf->node);
+> > +
+> When would you free these?
+> looks like we are leaking even after dsp is down..
+> Should we not do fastrpc_buf_free() here?
 
-At first I didn't understand how you were seeing this, since I'm so used
-to watching shell scripts under tracing, which correctly use stat():
+Yes, we should. I forgot to add it.
 
-$ strace bash -c foo
-stat("/home/keescook/bin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
-stat("/usr/local/sbin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
-stat("/usr/local/bin/foo", 0x7ffe1f9ddea0) = -1 ENOENT (No such file or directory)
-stat("/usr/sbin/foo", 0x7ffe1f9ddea0)   = -1 ENOENT (No such file or directory)
-stat("/usr/bin/foo", 0x7ffe1f9ddea0)    = -1 ENOENT (No such file or directory)
-stat("/sbin/foo", 0x7ffe1f9ddea0)       = -1 ENOENT (No such file or directory)
-stat("/bin/foo", 0x7ffe1f9ddea0)        = -1 ENOENT (No such file or directory)
+Will send a new version.
 
-But I see, yes, glibc tries to actually call execve(), which, as you
-say, is extremely heavy:
+Thanks.
 
-$ strace ./execvpe
-...
-execve("/home/kees/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/usr/local/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/usr/local/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/usr/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/usr/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/sbin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-execve("/bin/foo", ["./execvpe"], 0x7ffc542bff38 /* 33 vars */) = -1 ENOENT (No such file or directory)
-
-This really seems much more like a glibc bug. The shell does it correctly...
-
--Kees
-
--- 
-Kees Cook
+> 
+> 
+> 
+> --srini
+> 
+> >   	if (cctx->remote_heap)
+> >   		fastrpc_buf_free(cctx->remote_heap);
