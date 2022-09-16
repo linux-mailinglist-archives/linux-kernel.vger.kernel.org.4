@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752275BAED3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4B85BAEEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiIPOEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S231911AbiIPOGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiIPOEA (ORCPT
+        with ESMTP id S231852AbiIPOFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:04:00 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C9AB1A0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:03:58 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so25801476pjm.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:03:58 -0700 (PDT)
+        Fri, 16 Sep 2022 10:05:45 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232C027FFD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:44 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id s6so24546156lfo.7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=3OTmyo1mGiZf3mgRMhkIq5B8t/bRaWvcsZUDxYNGD4A=;
-        b=TGEinON0Fded7JJVqfGVD7Q/qOeKWkV8DGi5bWLJ3mthsbDuQQ8q6uCwXWAf91mWnl
-         v3z5140uvzSc6mdXF2Baw6so5TmYMtA7MgMdw35gagK6Jr+CrjzoaPJhWLBYFLvoK0Jk
-         lEbGN0yZnz99b0NjirxwuH9xL9Yg7FhuHXR1QP6K/bBQaiStONMWht+VLE8dueKNCiXO
-         pD3gvMlOtfIieYnkvvJEfoTss2NWIaSwbMNAYz65FqrCAaplNYKN5zIVoZOiEczzMHxf
-         LGvVuSTASt6AWNpb6vGMbsCDSYj733xJkGzKEb9qd5tAclQP3ZyE92cxnQ086q8WYKS7
-         Qyug==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nPsSPucMBuKtAd8AfZmYJlLAtpXVu8go4ahtDG4VctY=;
+        b=UmQ9IXGR6XcCNXRD2DdV5uYcKzvLhdmr2An44e3UEarwwC0ssykFVCSD9XSpivnMJS
+         BTCNHB5aEiYWmpQ0B0Ha17T53z8CXBxGc6u0cf6KqNzgqalgKi69MrSZHYHD85ib0qVA
+         D43sGYn6lNB3T7DBJ56h64qScbc/4GBc6bHr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=3OTmyo1mGiZf3mgRMhkIq5B8t/bRaWvcsZUDxYNGD4A=;
-        b=YB5j4Lgslhp8NK/pc9g+OEWt2iTjB+grVNfwzG16pMxUWLkox9aR/cx7CF5hgEN3qP
-         uc3cRi8jB5FsxHBmMwHFVGPfmp1jORRnaFNOgeXiYEZRAF7c6JBStGjoHP1na4YceUcr
-         4Sl70/rHSXq5TcT04oPcSureL42nkQ9XEt9KP74GjKw0bWmPYXcBXr6ppTJL4XR0KxXI
-         J4w/PV0+Q22eGB7MV/JpFA/9emrhmw/LgA/6vrzJa6Isk7w9RYi+Tme6BDHcCxr7FsnM
-         MdtqWIMa8eSwq54E4eXlk8o/Qw2R+SgiXD1MLiF4a2Xr369Hxi0OUfQfapnSu1nUfQXp
-         9xIw==
-X-Gm-Message-State: ACrzQf2xTUpAnNobkkjA7UPq4BWzlpWAuZJDtNqts4lmCXXEbi6iaEsk
-        RUtTijcq26VusfufdED8Y4k=
-X-Google-Smtp-Source: AMsMyM4XuEI0vhu5Nb9fu3ZnB1EKYwamXS5oYBSxEyx/lHPF5HC4b/t4CR+N/4trHM3EkZDbfy00PQ==
-X-Received: by 2002:a17:90b:1bd2:b0:202:56b2:4f35 with SMTP id oa18-20020a17090b1bd200b0020256b24f35mr16343239pjb.65.1663337038235;
-        Fri, 16 Sep 2022 07:03:58 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b001743be790b4sm14868872pls.215.2022.09.16.07.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:03:57 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 07:03:53 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     arnd@arndb.de, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, imv4bel@gmail.com
-Subject: Re: [PATCH v3] char: pcmcia: synclink_cs: Fix use-after-free in
- mgslpc_ops
-Message-ID: <20220916140353.GA235538@ubuntu>
-References: <20220916134751.GA234676@ubuntu>
- <21d84319-4d1a-8d8e-a098-947772406faf@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nPsSPucMBuKtAd8AfZmYJlLAtpXVu8go4ahtDG4VctY=;
+        b=1BQI8vYIkoeQKClGi5YzItpCAVpU7mLFUU7vW70cO938steN/PaY0pzF1OWLYL2Ynz
+         Ic6MmrCR4lbuOSJfoy0D0RLH8YakQffz/yFIGDD/fSmslWQ4IHZSym5bRB6Sib558aQk
+         55Y0+LprnajxCMiRFDrn4W0gW56JbSwcwHCxPN5rjmiFIjdh7OOGoVUQgPIlReI7ODjv
+         dmWc8Z3WwdE+JiSfyNVe/Xk/FmiQPqHmqwSo0B3UXl/FlXGeNWJEUTNKrkf2f7KY3z/P
+         dRkGG6Fx5nsn3Qy9Ds7rhi1JxRGUymUhSkdu2E2ZFuh0TUYE+Vrjtbz5DQarS99pcP91
+         HHCw==
+X-Gm-Message-State: ACrzQf2h/PU5hbq7qHaRRTvxABWBzMn0bzn/IfkANLqehCS9e88imz73
+        002FM1ZncecWiOwaA0jMjuY5/u59P9tV0uZu1l0=
+X-Google-Smtp-Source: AMsMyM5dADF7wFp6uiIM32Son1X8Rn1+QFpvB/QVE8snSkAqaWJgsUzvnCXZpvwiQQKgO8ZxqtMfSw==
+X-Received: by 2002:a05:6512:1287:b0:49e:f94f:eb72 with SMTP id u7-20020a056512128700b0049ef94feb72mr1898308lfs.376.1663337142151;
+        Fri, 16 Sep 2022 07:05:42 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id r23-20020a2e8e37000000b00261e3856abcsm3557232ljk.102.2022.09.16.07.05.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 07:05:41 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id x27so2540598lfu.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:05:41 -0700 (PDT)
+X-Received: by 2002:a05:6512:31c1:b0:498:fe7:b46 with SMTP id
+ j1-20020a05651231c100b004980fe70b46mr1699244lfe.549.1663337140735; Fri, 16
+ Sep 2022 07:05:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <21d84319-4d1a-8d8e-a098-947772406faf@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220916074253.781428-1-brgl@bgdev.pl>
+In-Reply-To: <20220916074253.781428-1-brgl@bgdev.pl>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 16 Sep 2022 07:05:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh7XqYTJgDHGF5xYBNJEKtf1wQ7Gg3vjr+onevNN8uHvw@mail.gmail.com>
+Message-ID: <CAHk-=wh7XqYTJgDHGF5xYBNJEKtf1wQ7Gg3vjr+onevNN8uHvw@mail.gmail.com>
+Subject: Re: [GIT PULL] gpio: fixes for v6.0-rc6
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 04:54:11PM +0300, Ilpo Järvinen wrote:
-> On Fri, 16 Sep 2022, Hyunwoo Kim wrote:
-> 
-> > A race condition may occur if the user physically removes
-> > the pcmcia device while calling ioctl() for this tty device node.
-> > 
-> > This is a race condition between the mgslpc_ioctl() function and
-> > the mgslpc_detach() function, which may eventually result in UAF.
-> > 
-> > So, add a refcount check to mgslpc_detach() to free the structure
-> > after the tty device node is close()d.
-> > 
-> > Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
-> 
-> > @@ -2517,9 +2548,14 @@ static int mgslpc_open(struct tty_struct *tty, struct file * filp)
-> >  	if (debug_level >= DEBUG_LEVEL_INFO)
-> >  		printk("%s(%d):mgslpc_open(%s) success\n",
-> >  			 __FILE__, __LINE__, info->device_name);
-> > +
-> > +	kref_get(&info->refcnt);
-> >  	retval = 0;
-> > +	mutex_unlock(&remove_mutex);
-> >  
-> > +	return retval;
-> >  cleanup:
-> > +	mutex_unlock(&remove_mutex);
-> >  	return retval;
-> 
-> Just move the cleanup label instead.
+On Fri, Sep 16, 2022 at 12:42 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-fixes-for-v6.0-rc6
 
-I'm sorry, but could you please explain a bit more?
+I think you forgot to push the tag, there's no such thing.
 
+I see the branch ("gpio/for-current") that contains that top commit,
+but no fixes tag by that name.
 
-Best Regards,
-Hyunwoo Kim.
+              Linus
