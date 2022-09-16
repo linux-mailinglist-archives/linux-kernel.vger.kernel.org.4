@@ -2,163 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC055BA5A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BEF5BA5AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiIPEQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S229663AbiIPERa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiIPEQv (ORCPT
+        with ESMTP id S229544AbiIPER0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:16:51 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE339F747;
-        Thu, 15 Sep 2022 21:16:50 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B3D845C0082;
-        Fri, 16 Sep 2022 00:16:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 16 Sep 2022 00:16:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1663301809; x=
-        1663388209; bh=hjMcp89C2jkXIYsBxRnx/xoB4u1WmalrxLV/Xe3flCk=; b=m
-        DBiIIiCyDyFeVeQm3ja9dS8EX6NCDF9tzHhW8DHE09A7U3kAckcnhqzJicrEhrrt
-        8vv7t7QuSRe/U1OTpQWipnepf/O9GA+6tNblM8XGeQaxyU0eZa+PZZqvmTVQsxeL
-        k2kVgGikUoWx10lU1UOmd4wrUeQXGGuN0Rd9wjmT+G30KzjRKlBDP3XEaLr/2zCb
-        tho4/T47Y7J2TtT1SB/Vy8yAzd6zIHeSBVBRzL108Gg9r2kUvmC3sI/pZWt+Sztc
-        /lTvzc5SJuVYhnXjnqsvSD2bL7QNjNmCghLOdCTSIyn+sQQH1KwnG6dr9PDHV6yN
-        PGJMUz8XQam13QdK7Q5UQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663301809; x=
-        1663388209; bh=hjMcp89C2jkXIYsBxRnx/xoB4u1WmalrxLV/Xe3flCk=; b=C
-        CYWWIVEE4m7VNW7jhFBd1UIjfS1EslnN1EGBqP4+EgN4Z9hGnYPeKhiBAimVwVkW
-        r8mbXSfdg2aFESQ9CpvZ3G1GGHKoeEPxbCuhBEaIj0xoT1oPI9G38cTLmg14VUqn
-        X+hO4XoBd0+op2WAj7yqtRVMl9Q0UyNOrO1Ez7FeH6pAKftfwRWjvtVt8shqriUw
-        yXj0uz+qiZ0j/B58Nvs0Ib+YIYqMDVHcLy7Or+YHDfKcNSftldjHwVROafz5DicP
-        IoF0pJO74a6/I2Cpw1c1pwTeUJ+em3BRXqtnPVEIKRAHfYl9CvedWXN+cw0rFXG9
-        lW0G4oDobqJZBxK7SbJvQ==
-X-ME-Sender: <xms:sfgjYz4e7MZ42PmEBnedXq5TxML7oaZ6LgnllFHVIQTfH4176evBUg>
-    <xme:sfgjY46w0sLpfSkfwbYQIA3bZa5Idxc2wtLsnKyQqJF3017ntC5hv69Yp8un8a7bt
-    nGn1hRN5-R8rYxXpg>
-X-ME-Received: <xmr:sfgjY6cYnRyoKYgZm3LEvcMJNuP-9m7reDw_SasGJ5AAptkCGmswBkVxG4L3QXU4Kwq8R1zzcbS1bDWaiUNKvr1DnaM9pcTQ4i7oNSnEOdpUrC9Za4jPbn-kzg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeejgfffhfdujeeftdeuudeguedttefgieetffffheejuefguedv
-    heejteeftdfftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:sfgjY0L14CMoVti6SmIHeVX1vQ0b4zYnofIgkJl4I5UN1q8ZcwzhLQ>
-    <xmx:sfgjY3J9PfR1sng34eJL-iSZJDiO9FGZEakjIJsJB6SMzv2lXyngcg>
-    <xmx:sfgjY9xx4T7iVJ82LzvUP1sLynnc5puuVLAEcIEz38B-eBdV9UyDIQ>
-    <xmx:sfgjY4XqBd3fnHIM93wJlm0XJYToap_wV12HbzBvrh6iZSZ3c9GQFw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 16 Sep 2022 00:16:48 -0400 (EDT)
-Message-ID: <4358760c-92b1-f77e-9bed-42e647afbc3e@sholland.org>
-Date:   Thu, 15 Sep 2022 23:16:47 -0500
+        Fri, 16 Sep 2022 00:17:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4C9F74A;
+        Thu, 15 Sep 2022 21:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=MEez9kK9Q97P1sNxTGr3lx3ZTRfEr4B4CaTzZ35o3+U=; b=YIWUCsCzoDIpAz4Rd/l7Q5gAp1
+        h05ASEEwsY6s/Y348jsKaoQMlveis882eVIUvW8Nfk4v/Y1fMCQoZ0WaxoLwRvYPz5Q6z6uVQuO6F
+        EPApgKdv1xYkkm2Z48VDd7Sia5UTpDeni2zylLp4+K679Pfi0vep6z3AP3yFryI5tZHREqT9qNdyI
+        71xwY6UiAgxUUsEDGWO8LUuIwdrQ6cusT+sQ2HJGPPWflXg7pLPOC0YTDdcq0S3+Jx3CDJEAO0ajv
+        yNQUS5oXVQyNo8PPzTSuCOSymv7RaEdqFuqSOZm4tJjFFtcSCshAQGRpehpKeVeJ5TjHA4wx1TWyR
+        sxFt+A3g==;
+Received: from [2601:1c2:d80:3110::c55a]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oZ2mq-001qML-Dj; Fri, 16 Sep 2022 04:17:08 +0000
+Message-ID: <293d8d5b-8423-a8bc-a42f-34b08ee65717@infradead.org>
+Date:   Thu, 15 Sep 2022 21:17:00 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
+Subject: Re: [PATCH] liquidio: CN23XX: delete repeated words
+To:     Ruffalo Lavoisier <ruffalolavoisier@gmail.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220915084637.5165-1-RuffaloLavoisier@gmail.com>
 Content-Language: en-US
-To:     wens@csie.org
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev
-References: <20220621034224.38995-1-samuel@sholland.org>
- <20220621034224.38995-5-samuel@sholland.org>
- <CAGb2v64Mrn88+w5kCbMn7Z23-UdyrTG-Q2cboPswMj=9z4HgrQ@mail.gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v2 4/4] ARM: dts: axp22x/axp809: Add GPIO controller nodes
-In-Reply-To: <CAGb2v64Mrn88+w5kCbMn7Z23-UdyrTG-Q2cboPswMj=9z4HgrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220915084637.5165-1-RuffaloLavoisier@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/22 08:03, Chen-Yu Tsai wrote:
-> On Tue, Jun 21, 2022 at 11:42 AM Samuel Holland <samuel@sholland.org> wrote:
->>
->> These PMICs all contain a GPIO controller. Now that the binding is
->> documented, wire up the controller in the device tree.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->> (no changes since v1)
->>
->>  arch/arm/boot/dts/axp22x.dtsi | 18 ++++++++++++++++++
->>  arch/arm/boot/dts/axp809.dtsi | 19 +++++++++++++++++++
->>  2 files changed, 37 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/axp22x.dtsi b/arch/arm/boot/dts/axp22x.dtsi
->> index a020c12b2884..5c233c84be92 100644
->> --- a/arch/arm/boot/dts/axp22x.dtsi
->> +++ b/arch/arm/boot/dts/axp22x.dtsi
->> @@ -67,6 +67,24 @@ battery_power_supply: battery-power {
->>                 status = "disabled";
->>         };
->>
->> +       axp_gpio: gpio {
->> +               compatible = "x-powers,axp221-gpio";
->> +               gpio-controller;
->> +               #gpio-cells = <2>;
->> +
->> +               /omit-if-no-ref/
->> +               gpio0_ldo: gpio0-ldo-pin {
->> +                       pins = "GPIO0";
->> +                       function = "ldo";
->> +               };
->> +
->> +               /omit-if-no-ref/
->> +               gpio1_ldo: gpio1-ldo-pin {
->> +                       pins = "GPIO1";
->> +                       function = "ldo";
->> +               };
->> +       };
->> +
-> 
-> We have
-> 
->     reg_ldo_io0: ldo-io0 {
->             pinctrl-names = "default";
->             pinctrl-0 = <&gpio0_ldo>;
->             /* Disable by default to avoid conflicts with GPIO */
->             ...
->     }
-> 
-> in axp81x.dtsi . Should we add it here and for axp803.dtsi as well?
+Hi--
 
-Actually, I don't think these pinctrl nodes should exist at all. The
-regulator already sets the pinmux, because that is the only way to turn
-the regulator on/off. So I think we should leave it alone here.
+There are several other problems here also.
+Preferably fix all of them.
 
-Regards,
-Samuel
-
-> Otherwise,
+On 9/15/22 01:46, Ruffalo Lavoisier wrote:
+> - Delete the repeated word 'to' in the comment
 > 
-> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+> ---
+>   drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
+>   drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> index 3f1c189646f4..9a994b5bfff5 100644
+> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> @@ -88,7 +88,7 @@
+>   #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
+>   /* The input jabber is used to determine the TSO max size.
+>    * Due to H/W limitation, this need to be reduced to 60000
 
+                               this needs
+
+> - * in order to to H/W TSO and avoid the WQE malfarmation > + * in order to H/W TSO and avoid the WQE malfarmation
+
+Now it is missing some word. Something like
+       in order to use H/W TSO
+makes some sense.
+
+Also, s/malfarmation/malformation/
+
+>    * PKO_BUG_24989_WQE_LEN
+>    */
+>   #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> index d33dd8f4226f..19894b7c1ce8 100644
+> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> @@ -37,7 +37,7 @@
+>   
+>   /* The input jabber is used to determine the TSO max size.
+>    * Due to H/W limitation, this need to be reduced to 60000
+> - * in order to to H/W TSO and avoid the WQE malfarmation
+> + * in order to H/W TSO and avoid the WQE malfarmation
+
+Same as comments above.
+
+>    * PKO_BUG_24989_WQE_LEN
+>    */
+>   #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
