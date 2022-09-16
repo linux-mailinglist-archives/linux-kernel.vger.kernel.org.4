@@ -2,83 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44555BB222
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A845BB227
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiIPS2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S229863AbiIPSa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiIPS2w (ORCPT
+        with ESMTP id S229471AbiIPSax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:28:52 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC8CB72B8;
-        Fri, 16 Sep 2022 11:28:48 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11e9a7135easo53319419fac.6;
-        Fri, 16 Sep 2022 11:28:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zi1Bcco3wttFztQb7EEIQxAraREvY1fhjOcV7AduqQA=;
-        b=InTLDbhaTclTTIcawx5+Omo47pM+nBex0K5dneDPxi1daCqePGdw/x4EyE/nVtM+1m
-         Lv/EIiK6MIPyxNehcpiLC1UzoiahUxu+KoS7he7di3Nm4a5SYRW0rqXz4fKKqVwVRPM6
-         kyeE6w4PiL5Ub4s6dGfj78L8FxPpI+7wLlRaHtUOKAF4iYgoJLcMJCpSCHHlrFNUNQUW
-         Un+iTyj/50ORXO0I4yJ70ljBaHkSBn2XPGBEMl0TODDNmOvJWBAzYmwSBBRFXS69RFSW
-         /9bH+UY1HeRO5BalzqRfbb0jsWhE0MeFFtWZj0srwYxWFP13tnHz3RVLeotCmXMhCSzJ
-         DKbw==
-X-Gm-Message-State: ACrzQf3RemKcx6vZg2jkra+dcD3kFKpO9ZeOQTfik7e9K/zK7nwIGo5+
-        dGqIsCINv6QZNjaTeFVr+omKt3SBOCvLXkf/Zny/Yve0
-X-Google-Smtp-Source: AMsMyM6Gt/OveS0+hy3cvyZwJzsJtpB4g7r8DX03Z7lVkFPK14eMTjFW1Bl7Rou4e2n3TlKYXBprEZzjrQ+mqrmkOcU=
-X-Received: by 2002:a05:6870:45a9:b0:10a:9ebc:63ab with SMTP id
- y41-20020a05687045a900b0010a9ebc63abmr3518844oao.209.1663352927308; Fri, 16
- Sep 2022 11:28:47 -0700 (PDT)
+        Fri, 16 Sep 2022 14:30:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B7FB6D68;
+        Fri, 16 Sep 2022 11:30:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E64262D20;
+        Fri, 16 Sep 2022 18:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D295EC433D6;
+        Fri, 16 Sep 2022 18:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663353051;
+        bh=rTXxekar6BUr3NqL11nr6Y4XlSVqvxsIDBF+BWHm6mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z4M9QHdfCMcL1aOVzy5o6NFcDFwMWvfNc4xOSFgoQiYcBngzGSx8u0AN6eaNii6iF
+         aLYQXz0MFuW/niUGo3ft4Yedjv2cCci8SX75yN2kx7QJZ8B7GiPXwRvZ/mzypMWXnL
+         /cgsaur0rjlyolmIMjGLap6FTR02aUl2Wjk57R1EW7xlppgpnmIs/EGRV2xYca3aCV
+         Vc3dGOWseQvo32iPfrf86Wii+tcgdZ90SHVv9lhGfrSFn7wyFlMQAu3d73v1FLaNqq
+         H+upXXgfomsTUvw0xzWjFTOkHmjHOlpDV7JDUs3A+70yzZHC19YIbTYcbtqPQyTTki
+         +CWXF76Siftzg==
+Date:   Fri, 16 Sep 2022 13:30:48 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: spmi: Add qcom,bus-id
+Message-ID: <20220916183048.mxsxnk7xli2mwmig@builder.lan>
+References: <20220914165212.3705892-1-vkoul@kernel.org>
+ <20220914165212.3705892-2-vkoul@kernel.org>
 MIME-Version: 1.0
-References: <20220915122612.81738-1-adrian.hunter@intel.com>
-In-Reply-To: <20220915122612.81738-1-adrian.hunter@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 16 Sep 2022 11:28:35 -0700
-Message-ID: <CAM9d7chkt13mLFfFhYZJpHHYi83-f-BxdGs1Eyw8sF9X9BX2jQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] perf tools: Fixes for mixing per-thread and per-cpu mmaps
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914165212.3705892-2-vkoul@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Hi
->
-> Here are a couple more small fixes.
->
->
-> Adrian Hunter (2):
->       perf record: Fix cpu mask bit setting for mixed mmaps
->       libperf evlist: Fix polling of system-wide events
+On Wed, Sep 14, 2022 at 10:22:11PM +0530, Vinod Koul wrote:
+> For PMIC arbiter version 7 and beyond we need to define if we are using
+> primary or secondary bus, so add a new property of qcom,bus-id
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-Thanks,
-Namhyung
-
-
->
->  tools/lib/perf/evlist.c     | 5 +++--
->  tools/perf/builtin-record.c | 2 ++
->  2 files changed, 5 insertions(+), 2 deletions(-)
->
->
-> Regards
-> Adrian
+> ---
+>  .../devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml   | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+> index fee4f0eb4665..f983b4af6db9 100644
+> --- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+> +++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+> @@ -85,6 +85,14 @@ properties:
+>      description: >
+>        which of the PMIC Arb provided channels to use for accesses
+>  
+> +  qcom,bus-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 1
+> +    description: >
+> +      SPMI bus instance. only applicable to PMIC arbiter version 7 and beyond.
+> +      Supported values, 0 = primary bus, 1 = secondary bus
+> +
+>  required:
+>    - compatible
+>    - reg-names
+> @@ -113,5 +121,7 @@ examples:
+>  
+>          interrupt-controller;
+>          #interrupt-cells = <4>;
+> +
+> +        qcom,bus-id = <0>;
+>      };
+>  
+> -- 
+> 2.37.3
+> 
