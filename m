@@ -2,208 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB35C5BA641
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8076A5BA644
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiIPFIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S229939AbiIPFKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiIPFII (ORCPT
+        with ESMTP id S229669AbiIPFKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:08:08 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014B4E60C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:08:06 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id g12so10268293ilj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yP5XHXLcK+UX9e2N5YzbTl9a4h8ihKkfwEUan36DPrg=;
-        b=yAWumhzewMa3eEP3CnaMNUvAKmgC8eanQ3L4jWiwdGCcIzPkhFrQzQw0wwV9+O9C/s
-         pWA8px3RR32jSQRkZ724RUliMw1N1pJV7uypHBZtXw/s45KvAkUFFBkjDay0fezO6Q1H
-         n/OjWEaMaEvHTgl1WjFIQhvNgjxtHZeYZXfVlqejl77Y0na9OV31a8qO4TRydLDh9b1J
-         NF1Fubd/swhKTWFgEXpw3HK96R4pCPPNOYmiQOe7Bp9RLaM6/LZ/umsF8xY1IvG5Kb40
-         CBEv7FTQftTVcumiWuAZRwOn7ym/68hjz6J2lRqkwYLZ2FbLbPgjYRH/Tm0ZHhOzbqfn
-         INxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yP5XHXLcK+UX9e2N5YzbTl9a4h8ihKkfwEUan36DPrg=;
-        b=cDNoBEamdx9WnRxmaPb9s7f2jWXelYhh4itGUYaFpI+OKcv88ziyEw09hQzk5cKyPM
-         OcG+/fr/m4olMHvCJnjhzpMavWAbMPprFY/DBHHL55WUSATk25lZE/RxBCvq8oYsn5Ze
-         sWi/N9MMIbnmyT02UjWODlkkPsH4j6Zh5QeKZ30MBThj4jtAnWygJiJc83kyXFuDHps/
-         GO0pF4lsuYsXWFSwpoiB4DMjd94ORnuAjdUUzvz4qIaYU1Uu4iUnkFm0PHaAgExGOozm
-         givjL9czndLrBfUEBRDhc8NjMaRPx8b9QDfs0e2W6qKu/CACJMCEo3lvKsrmYAvl++HT
-         qZdA==
-X-Gm-Message-State: ACrzQf3wiXbh3473wZLTMmI1wtaIN/dFu6uHKq/q5XsTWVApK/9b7B1E
-        Y0QT+ijmhnpWDtNACpAPTIPgjKKEhqFHPYH+zB1BKQ==
-X-Google-Smtp-Source: AMsMyM5GqgO04FmX/wur2Jt+8ypcoEU8eotcYd1jKm89jw9hQAj1ZhLfSUj5pD6zTUMTtw3xNbjyMSejcFd/JFYW8jo=
-X-Received: by 2002:a05:6e02:164d:b0:2f1:869c:c45b with SMTP id
- v13-20020a056e02164d00b002f1869cc45bmr1488365ilu.212.1663304885797; Thu, 15
- Sep 2022 22:08:05 -0700 (PDT)
+        Fri, 16 Sep 2022 01:10:17 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71A642AD8;
+        Thu, 15 Sep 2022 22:10:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VPvYIal_1663305011;
+Received: from 30.221.130.67(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VPvYIal_1663305011)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Sep 2022 13:10:12 +0800
+Message-ID: <a866c880-860c-5558-e5fe-e12afd943324@linux.alibaba.com>
+Date:   Fri, 16 Sep 2022 13:10:11 +0800
 MIME-Version: 1.0
-References: <20220504074807.3616813-1-aik@ozlabs.ru>
-In-Reply-To: <20220504074807.3616813-1-aik@ozlabs.ru>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 16 Sep 2022 10:37:53 +0530
-Message-ID: <CAAhSdy0hxHjQkVj8TLPh4j=vBrX1QoZcJXNeRBPtf5ozdjQaTQ@mail.gmail.com>
-Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform dependent
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     kvm-ppc@vger.kernel.org, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH V4 6/6] erofs: introduce 'domain_id' mount option
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20220915124213.25767-1-zhujia.zj@bytedance.com>
+ <20220915124213.25767-7-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220915124213.25767-7-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 1:18 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
->
-> When introduced, IRQFD resampling worked on POWER8 with XICS. However
-> KVM on POWER9 has never implemented it - the compatibility mode code
-> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
-> XIVE mode does not handle INTx in KVM at all.
->
-> This moved the capability support advertising to platforms and stops
-> advertising it on XIVE, i.e. POWER9 and later.
->
-> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+
+
+On 9/15/22 8:42 PM, Jia Zhu wrote:
+> Introduce 'domain_id' mount option to enable shared domain sementics.
+> In which case, the related cookie is shared if two mountpoints in the
+> same domain have the same data blob. Users could specify the name of
+> domain by this mount option.
+> 
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+
+LGTM.
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+
 > ---
->
->
-> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
+>  fs/erofs/super.c | 17 +++++++++++++++++
+>  fs/erofs/sysfs.c | 19 +++++++++++++++++--
+>  2 files changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index 24bac58285e8..5e55c4fe6220 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -440,6 +440,7 @@ enum {
+>  	Opt_dax_enum,
+>  	Opt_device,
+>  	Opt_fsid,
+> +	Opt_domain_id,
+>  	Opt_err
+>  };
+>  
+> @@ -465,6 +466,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
+>  	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
+>  	fsparam_string("device",	Opt_device),
+>  	fsparam_string("fsid",		Opt_fsid),
+> +	fsparam_string("domain_id",	Opt_domain_id),
+>  	{}
+>  };
+>  
+> @@ -568,6 +570,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
+>  			return -ENOMEM;
+>  #else
+>  		errorfc(fc, "fsid option not supported");
+> +#endif
+> +		break;
+> +	case Opt_domain_id:
+> +#ifdef CONFIG_EROFS_FS_ONDEMAND
+> +		kfree(ctx->opt.domain_id);
+> +		ctx->opt.domain_id = kstrdup(param->string, GFP_KERNEL);
+> +		if (!ctx->opt.domain_id)
+> +			return -ENOMEM;
+> +#else
+> +		errorfc(fc, "domain_id option not supported");
+>  #endif
+>  		break;
+>  	default:
+> @@ -702,6 +714,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	sb->s_fs_info = sbi;
+>  	sbi->opt = ctx->opt;
+>  	ctx->opt.fsid = NULL;
+> +	ctx->opt.domain_id = NULL;
+>  	sbi->devs = ctx->devs;
+>  	ctx->devs = NULL;
+>  
+> @@ -846,6 +859,7 @@ static void erofs_fc_free(struct fs_context *fc)
+>  
+>  	erofs_free_dev_context(ctx->devs);
+>  	kfree(ctx->opt.fsid);
+> +	kfree(ctx->opt.domain_id);
+>  	kfree(ctx);
+>  }
+>  
+> @@ -914,6 +928,7 @@ static void erofs_kill_sb(struct super_block *sb)
+>  	fs_put_dax(sbi->dax_dev, NULL);
+>  	erofs_fscache_unregister_fs(sb);
+>  	kfree(sbi->opt.fsid);
+> +	kfree(sbi->opt.domain_id);
+>  	kfree(sbi);
+>  	sb->s_fs_info = NULL;
+>  }
+> @@ -1067,6 +1082,8 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
+>  #ifdef CONFIG_EROFS_FS_ONDEMAND
+>  	if (opt->fsid)
+>  		seq_printf(seq, ",fsid=%s", opt->fsid);
+> +	if (opt->domain_id)
+> +		seq_printf(seq, ",domain_id=%s", opt->domain_id);
+>  #endif
+>  	return 0;
+>  }
+> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+> index c1383e508bbe..341fb43ad587 100644
+> --- a/fs/erofs/sysfs.c
+> +++ b/fs/erofs/sysfs.c
+> @@ -201,12 +201,27 @@ static struct kobject erofs_feat = {
+>  int erofs_register_sysfs(struct super_block *sb)
+>  {
+>  	struct erofs_sb_info *sbi = EROFS_SB(sb);
+> +	char *name;
+> +	char *str = NULL;
+>  	int err;
+>  
+> +	if (erofs_is_fscache_mode(sb)) {
+> +		if (sbi->opt.domain_id) {
+> +			str = kasprintf(GFP_KERNEL, "%s,%s", sbi->opt.domain_id,
+> +					sbi->opt.fsid);
+> +			if (!str)
+> +				return -ENOMEM;
+> +			name = str;
+> +		} else {
+> +			name = sbi->opt.fsid;
+> +		}
+> +	} else {
+> +		name = sb->s_id;
+> +	}
+>  	sbi->s_kobj.kset = &erofs_root;
+>  	init_completion(&sbi->s_kobj_unregister);
+> -	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
+> -			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
+> +	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s", name);
+> +	kfree(str);
+>  	if (err)
+>  		goto put_sb_kobj;
+>  	return 0;
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
-
+-- 
 Thanks,
-Anup
-
->
-> ---
->  arch/arm64/kvm/arm.c       | 3 +++
->  arch/mips/kvm/mips.c       | 3 +++
->  arch/powerpc/kvm/powerpc.c | 6 ++++++
->  arch/riscv/kvm/vm.c        | 3 +++
->  arch/s390/kvm/kvm-s390.c   | 3 +++
->  arch/x86/kvm/x86.c         | 3 +++
->  virt/kvm/kvm_main.c        | 1 -
->  7 files changed, 21 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 523bc934fe2f..092f0614bae3 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_SET_GUEST_DEBUG:
->         case KVM_CAP_VCPU_ATTRIBUTES:
->         case KVM_CAP_PTP_KVM:
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +#endif
->                 r = 1;
->                 break;
->         case KVM_CAP_SET_GUEST_DEBUG2:
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index a25e0b73ee70..0f3de470a73e 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_READONLY_MEM:
->         case KVM_CAP_SYNC_MMU:
->         case KVM_CAP_IMMEDIATE_EXIT:
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +#endif
->                 r = 1;
->                 break;
->         case KVM_CAP_NR_VCPUS:
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 875c30c12db0..87698ffef3be 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->                 break;
->  #endif
->
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +               r = !xive_enabled();
-> +               break;
-> +#endif
-> +
->         case KVM_CAP_PPC_ALLOC_HTAB:
->                 r = hv_enabled;
->                 break;
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index c768f75279ef..b58579b386bb 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_READONLY_MEM:
->         case KVM_CAP_MP_STATE:
->         case KVM_CAP_IMMEDIATE_EXIT:
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +#endif
->                 r = 1;
->                 break;
->         case KVM_CAP_NR_VCPUS:
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 156d1c25a3c1..85e093fc8d13 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_SET_GUEST_DEBUG:
->         case KVM_CAP_S390_DIAG318:
->         case KVM_CAP_S390_MEM_OP_EXTENSION:
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +#endif
->                 r = 1;
->                 break;
->         case KVM_CAP_SET_GUEST_DEBUG2:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0c0ca599a353..a0a7b769483d 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_SYS_ATTRIBUTES:
->         case KVM_CAP_VAPIC:
->         case KVM_CAP_ENABLE_CAP:
-> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> +       case KVM_CAP_IRQFD_RESAMPLE:
-> +#endif
->                 r = 1;
->                 break;
->         case KVM_CAP_EXIT_HYPERCALL:
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 70e05af5ebea..885e72e668a5 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -4293,7 +4293,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->  #endif
->  #ifdef CONFIG_HAVE_KVM_IRQFD
->         case KVM_CAP_IRQFD:
-> -       case KVM_CAP_IRQFD_RESAMPLE:
->  #endif
->         case KVM_CAP_IOEVENTFD_ANY_LENGTH:
->         case KVM_CAP_CHECK_EXTENSION_VM:
-> --
-> 2.30.2
->
+Jingbo
