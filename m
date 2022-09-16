@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5801B5BB369
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49865BB36B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiIPUWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 16:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        id S230235AbiIPUWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 16:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiIPUV6 (ORCPT
+        with ESMTP id S229484AbiIPUV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:21:58 -0400
+        Fri, 16 Sep 2022 16:21:59 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F03A99F2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:21:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D9DA98CC
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:21:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663359717; x=1694895717;
-  h=from:to:cc:subject:date:message-id;
-  bh=TFzU5cNGC3kT0081tbIPcYTZ977rZ6o1QozBEG50zJE=;
-  b=LTSAuTxHEri1AOdI517eIlwSrI68tAYLCUXszVLFc5gXydbFRi49hHWf
-   rqGaljhcXge/gHfjycdILv6hZiTVX3b6XqUoaZkAifwhbDNSPtTCzY/XR
-   s3LtE9jw+pS4GCTfix7Xl8GBO/gCwJf9NSEfB09zFHHvnJT2cf4XfBo5T
-   ECI25QqkIz5jPvEOSSkbRqRIbtG6CCEYP4FRRitX286D7Q0NEKY97IFi8
-   pBCln1bVEMSJNQ7sPuqhUZpn9kb0MS1ZpdU0v4bABdxeM7AjDwErOOfwN
-   h1EAXjwkM1uu67raYihjWlB/O2KkIa3XHsf7GrH466P+LSmnKhfokh0OF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801379"
+  t=1663359718; x=1694895718;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=2wQU5u0JEJI3UkDRA0Tf2j+yl1WWuKxxoHm3zoZx9Lc=;
+  b=bVJwFWgVXBTkRxtPE6kRbhSal6ttlJ2cdvvjfk6DAyzPEKepacA3SI3E
+   kJlbFnsqIh+CFV+iHxETk98HXwPJ9D3tF2NkEKzoPItgcXciPvI8VQvFe
+   Ay5gwSCBAQG4qTkaeYg9BZXNDyyfhgLCq34lBqt5Pe+gZe0RRoEqwHdMu
+   ooOTUBoAzi3g5t/SGnedTUEm+4AGPX2gncSvevPBMIZD1+man3YEw/9u3
+   lwV9NAq2b+BtWzw3c2j6CRKer0AbU3t/n4Sz7vXuZS2d9wdLdhugULsba
+   W0/9Lmji7CarkMuiWRtgTMS42gORWf4BriepZOs7qlooiG7Pt7w57DNU6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801381"
 X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="278801379"
+   d="scan'208";a="278801381"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:21:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="680092285"
+   d="scan'208";a="680092288"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2022 13:21:57 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
@@ -42,82 +43,187 @@ To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
         chang.seok.bae@intel.com
-Subject: [PATCH 0/4] x86/fpu: Fix MXCSR handling and SSE component definition
-Date:   Fri, 16 Sep 2022 13:11:54 -0700
-Message-Id: <20220916201158.8072-1-chang.seok.bae@intel.com>
+Subject: [PATCH 1/4] x86/fpu: Fix the MXCSR state reshuffling between userspace and kernel buffers
+Date:   Fri, 16 Sep 2022 13:11:55 -0700
+Message-Id: <20220916201158.8072-2-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220916201158.8072-1-chang.seok.bae@intel.com>
+References: <20220916201158.8072-1-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+== Hardware Background ==
 
-Andrei's report [1] triggered reviewing the MXCSR-related code. My
-responded change [2] has been revised along with some additional fixes in
-this series.
+The MXCSR state, as part of the SSE component, has different treatments
+with XSAVE*/XRSTOR* between the two XSAVE formats:
 
-While Dave Hansen alluded another version [3] for the fix, as I couldn't
-locate it so far, sending patches as one of proposals in this regard.
+- When the MXCSR state is XSAVEd in the non-compacted format, the feature
+bit in XSTATE_BV pertains to the XMM registers. XRSTOR restores the MXCSR
+state without referencing XSTATE_BV.
+
+- But, on XSAVE* with the compacted format, the SSE bit is set in XSTATE_BV
+if MXCSR is not in the init state on XSAVE*. Then, on XRSTOR*, the state is
+restored only when the SSE bit is set in XSTATE_BV.
 
 == Regression ==
 
-Recently the XSTATE copy functions were unitized together [4]. At a glance,
-this change appears to relapse the ptrace write on the MXCSR state when
-the non-compacted format is used in the kernel.
+The XSTATE copy routine between userspace and kernel buffers used to be
+separate for different XSAVE formats. Commit 43be46e89698 ("x86/fpu:
+Sanitize xstateregs_set()") combined them together.
 
-But, this regression appears to root in the XSAVES-enabling code [5] that
-introduced the XSTATE conversion along with the MXCSR mistreatment.
+This change appears to be a regression on XSAVES-less systems. But, the
+merged code is based on the original conversion code with commit
+91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES").
 
-== MXCSR Hindsight ==
+That has such oversight as:
+- Mistreating MXCSR as part of the FP state instead of the SSE component.
+- Taking the SSE bit in XSTATE_BV always for all the SSE states.
 
-MXCSR is architecturally part of the SSE component. The MXCSR association
-of XSTATE_BV depends on the XSAVE format.
+== Correction ==
 
-The change [5], however, presumed MXCSR as part of the X87 component and
-made the kernel referencing XSTATE_BV regardless of the format.
+Update the XSTATE conversion code:
+- Refactor the copy routine for legacy states. Treat MXCSR as part of SSE.
+- Copying MXCSR, reference XSTATE_BV only with the compacted format.
+- Also, flip the SSE bit in XSTATE_BV accordingly to the format.
 
-== Patches ==
+Reported-by: Andrei Vagin <avagin@gmail.com>
+Fixes: 91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES")
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Link: https://lore.kernel.org/lkml/CANaxB-wkcNKWjyNGFuMn6f6H2DQSGwwQjUgg1eATdUgmM-Kg+A@mail.gmail.com/
+---
+ arch/x86/kernel/fpu/xstate.c | 70 +++++++++++++++++++++++++-----------
+ 1 file changed, 49 insertions(+), 21 deletions(-)
 
-* Fix the MXCSR conversion code along with adding the test case.
-* Then, fixing MXCSR, one of the other call sites is also updated to
-  exclude legacy states.
-* The hard-coded legacy state offset and size are adjusted in the end.
-
-These patches can be also found in this repository:
-  git://github.com/intel/amx-linux.git mxcsr
-
-Thanks,
-Chang
-
-[1] https://lore.kernel.org/lkml/CANaxB-wkcNKWjyNGFuMn6f6H2DQSGwwQjUgg1eATdUgmM-Kg+A@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/37ba2de3-26b3-12eb-6a9d-c0f0572b832c@intel.com/
-[3] https://lore.kernel.org/lkml/1660cdf4-96c1-b6bb-a3be-d02c7a3affb9@intel.com/
-[4] Commit 43be46e89698 ("x86/fpu: Sanitize xstateregs_set()")
-[5] Commit 91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES")
-
-Chang S. Bae (4):
-  x86/fpu: Fix the MXCSR state reshuffling between userspace and kernel
-    buffers
-  selftests/x86/mxcsr: Test the MXCSR state write via ptrace
-  x86/fpu: Clarify the XSTATE clearing only for extended components
-  x86/fpu: Correct the legacy state offset and size information
-
- arch/x86/include/asm/fpu/api.h       |   2 +-
- arch/x86/kernel/fpu/xstate.c         |  98 +++++++++----
- arch/x86/kvm/x86.c                   |   4 +-
- tools/testing/selftests/x86/Makefile |   2 +-
- tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
- 5 files changed, 273 insertions(+), 33 deletions(-)
- create mode 100644 tools/testing/selftests/x86/mxcsr.c
-
-
-base-commit: 82eedfedea446ae448f0975f1db7d1631cd24330
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c8340156bfd2..d7676cfc32eb 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1064,6 +1064,7 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 			       u32 pkru_val, enum xstate_copy_mode copy_mode)
+ {
+ 	const unsigned int off_mxcsr = offsetof(struct fxregs_state, mxcsr);
++	bool compacted = cpu_feature_enabled(X86_FEATURE_XCOMPACTED);
+ 	struct xregs_state *xinit = &init_fpstate.regs.xsave;
+ 	struct xregs_state *xsave = &fpstate->regs.xsave;
+ 	struct xstate_header header;
+@@ -1093,8 +1094,13 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 	copy_feature(header.xfeatures & XFEATURE_MASK_FP, &to, &xsave->i387,
+ 		     &xinit->i387, off_mxcsr);
+ 
+-	/* Copy MXCSR when SSE or YMM are set in the feature mask */
+-	copy_feature(header.xfeatures & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM),
++	/*
++	 * Copy MXCSR depending on the XSAVE format. If compacted,
++	 * reference the feature mask. Otherwise, check if any of related
++	 * features is valid.
++	 */
++	copy_feature(compacted ? header.xfeatures & XFEATURE_MASK_SSE :
++		     fpstate->user_xfeatures & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM),
+ 		     &to, &xsave->i387.mxcsr, &xinit->i387.mxcsr,
+ 		     MXCSR_AND_FLAGS_SIZE);
+ 
+@@ -1199,6 +1205,11 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 			       const void __user *ubuf)
+ {
++	const unsigned int off_stspace = offsetof(struct fxregs_state, st_space);
++	const unsigned int off_xmm = offsetof(struct fxregs_state, xmm_space);
++	const unsigned int off_mxcsr = offsetof(struct fxregs_state, mxcsr);
++	bool compacted = cpu_feature_enabled(X86_FEATURE_XCOMPACTED);
++	struct fxregs_state *fxsave = &fpstate->regs.fxsave;
+ 	struct xregs_state *xsave = &fpstate->regs.xsave;
+ 	unsigned int offset, size;
+ 	struct xstate_header hdr;
+@@ -1212,38 +1223,48 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 	if (validate_user_xstate_header(&hdr, fpstate))
+ 		return -EINVAL;
+ 
+-	/* Validate MXCSR when any of the related features is in use */
+-	mask = XFEATURE_MASK_FP | XFEATURE_MASK_SSE | XFEATURE_MASK_YMM;
+-	if (hdr.xfeatures & mask) {
++	if (hdr.xfeatures & XFEATURE_MASK_FP) {
++		if (copy_from_buffer(fxsave, 0, off_mxcsr, kbuf, ubuf))
++			return -EINVAL;
++		if (copy_from_buffer(fxsave->st_space, off_stspace, sizeof(fxsave->st_space),
++				     kbuf, ubuf))
++			return -EINVAL;
++	}
++
++	/* Validate MXCSR when any of the related features is valid. */
++	mask = XFEATURE_MASK_SSE | XFEATURE_MASK_YMM;
++	if (fpstate->user_xfeatures & mask) {
+ 		u32 mxcsr[2];
+ 
+-		offset = offsetof(struct fxregs_state, mxcsr);
+-		if (copy_from_buffer(mxcsr, offset, sizeof(mxcsr), kbuf, ubuf))
++		if (copy_from_buffer(mxcsr, off_mxcsr, sizeof(mxcsr), kbuf, ubuf))
+ 			return -EFAULT;
+ 
+ 		/* Reserved bits in MXCSR must be zero. */
+ 		if (mxcsr[0] & ~mxcsr_feature_mask)
+ 			return -EINVAL;
+ 
+-		/* SSE and YMM require MXCSR even when FP is not in use. */
+-		if (!(hdr.xfeatures & XFEATURE_MASK_FP)) {
+-			xsave->i387.mxcsr = mxcsr[0];
+-			xsave->i387.mxcsr_mask = mxcsr[1];
+-		}
++		/*
++		 * Copy MXCSR regardless of the feature mask as userspace
++		 * uses the uncompacted format.
++		 */
++		fxsave->mxcsr = mxcsr[0];
++		fxsave->mxcsr_mask = mxcsr[1];
+ 	}
+ 
+-	for (i = 0; i < XFEATURE_MAX; i++) {
+-		mask = BIT_ULL(i);
++	if (hdr.xfeatures & XFEATURE_MASK_SSE) {
++		if (copy_from_buffer(fxsave->xmm_space, off_xmm, sizeof(fxsave->xmm_space),
++				     kbuf, ubuf))
++			return -EINVAL;
++	}
+ 
+-		if (hdr.xfeatures & mask) {
+-			void *dst = __raw_xsave_addr(xsave, i);
++	for_each_extended_xfeature(i, hdr.xfeatures) {
++		void *dst = __raw_xsave_addr(xsave, i);
+ 
+-			offset = xstate_offsets[i];
+-			size = xstate_sizes[i];
++		offset = xstate_offsets[i];
++		size = xstate_sizes[i];
+ 
+-			if (copy_from_buffer(dst, offset, size, kbuf, ubuf))
+-				return -EFAULT;
+-		}
++		if (copy_from_buffer(dst, offset, size, kbuf, ubuf))
++			return -EFAULT;
+ 	}
+ 
+ 	/*
+@@ -1256,6 +1277,13 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 	 * Add back in the features that came in from userspace:
+ 	 */
+ 	xsave->header.xfeatures |= hdr.xfeatures;
++	/*
++	 * Convert the SSE bit in the feature mask as it implies
++	 * differently between the formats. It indicates the MXCSR state
++	 * if compacted; otherwise, it pertains to XMM registers.
++	 */
++	if (compacted && fxsave->mxcsr != MXCSR_DEFAULT)
++		xsave->header.xfeatures |= XFEATURE_MASK_SSE;
+ 
+ 	return 0;
+ }
 -- 
 2.17.1
 
