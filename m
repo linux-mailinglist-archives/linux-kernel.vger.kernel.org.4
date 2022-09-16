@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736AD5BAD78
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD355BAD79
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbiIPM34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S231651AbiIPM37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiIPM3l (ORCPT
+        with ESMTP id S231486AbiIPM3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Sep 2022 08:29:41 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB01103
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:31 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id n8so8471006wmr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:31 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFF61116
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:32 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id ay36so6422623wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ZIu7s3K4+u7oP2s+yRQB4MCBJbH4a9+nIR767W2HTCo=;
-        b=HM0PX8aBtfDpBSw8wWnR+KIEZ5a+cvTFkcvdZLX41FPb2v5LpVB4XaCOUdCO3NHX/N
-         msjEPqqhauJ/vGN7IGoHL0dCihZ/POVO10DiF5QIjnI8w9AaRMNd1EJTBo6fOqr6ExsJ
-         8LT5qQPclOQ0H8j2ZgcXno1rp1/wgiMV/Xn7hUynite/sshc7hbG9cgJC4ywlES95ITy
-         oW+h9g4JSaC9L9YJUl9M75vSmbvGIm3nebis86mN4zVpREMZSVUofCdjUasT1FYcvG7y
-         xg6+YnbFUFZfDDsBDyMWddwCYTwHMo+8Ku1wcTYsKZw3xrBAVKvY+KLc2d84F/cjZGuM
-         c0Ag==
+        bh=aibk6Jc9VAZ5PSG3dauyBZkAwA2GeZcL8c5pEn//11Y=;
+        b=dCMChoikGfDu/Q7zhcPNMzfo026BbCwMA3C7i5Fm9nvwoPi575yXSnt4ZuYHMSk5Sn
+         Tyt1zN7NM59PJkR2Cuisk/zqJOa+u8bU3MRLlLRQJh5HBi/gv3wySgf5clxHTWMjz6rW
+         ErssEs+4vHQy/6Wl6yBWs+x9eq0QRS6TBTynf+YOD/XBL0dDCG+R7H6YCPjSWSA7mWvV
+         +OSfVnV2js8b68fqwJcsOCTXVB5b3+ahiy+vhR+GOdXexkRoeZDvxuFdhcUYmJ6p+nfZ
+         d5NSiBRudN7sjIMzCL4EJA7aodL0tY7BdzZlYR2P+Q67/yId2AvUVoTK172t97fv0eE0
+         7OSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ZIu7s3K4+u7oP2s+yRQB4MCBJbH4a9+nIR767W2HTCo=;
-        b=e8UB182IhLVqJokd7VA71+CGCuxP+GXmHt7Vvcg80bm1HhzyD3uAwjYuurFDscAaj0
-         VZgO206tEHCKLsxMO9nhegEeyD8/MiZZFtTaL+Ltg0lHvOOWaW0Ad7rv5uP9p6e+MSrG
-         ndPtIn9yjC3IHpf+XQ7ZqS14ll3w/KNBYBTSjkznpQig4dfSLDbIN8k2m1wVMzpvm/eA
-         E8QWn6M0Tb8wyXFg8WEdOk2H29ukWwoijUjbbDtzkuCSQ1BmlAD/RItq/oCMl4l9MXI5
-         X5exofYEoBmAbC9JMy/lIgjKs12YR72Jlsw/6kFLALrE7DLC1uiR1RPKG0KdN77nhhB7
-         MagA==
-X-Gm-Message-State: ACrzQf11Ve0bWIjQmzmboB3Iv7NmvVrjv4Y+YOe1DR+R/ukjyAdKbjDy
-        cRbetxztLog7ezCQ5/cHLn6DIw==
-X-Google-Smtp-Source: AMsMyM4XDPi1HUFDfx+5m1YH4AhqH2iOV44V4I7kCA1hJXDpEsim4II/VGFLyyUOJ5EQbgVBizhexA==
-X-Received: by 2002:a05:600c:4f11:b0:3b4:bf6c:4566 with SMTP id l17-20020a05600c4f1100b003b4bf6c4566mr1048183wmq.34.1663331370096;
-        Fri, 16 Sep 2022 05:29:30 -0700 (PDT)
+        bh=aibk6Jc9VAZ5PSG3dauyBZkAwA2GeZcL8c5pEn//11Y=;
+        b=i7Lf++4RkShvVvQCFkGJkKO9gJ957aQhposWgg4r2kdBcwBfLRhPhWBoJ2Of1CUFO5
+         hmvUUjo3Rino5ZlaokzgB0QhkgTRseqX3Ko4IatBt/WtMK2BBwPFXPl5FMi2jIp9JDT4
+         8HnBHL+vWL0fP/PE/4FXJFtD4LeLPILzJjU7b7asjipkq+nPF7i/nCD7KaFtENp+b4oX
+         KlbyRpDgOphjpQNd+L9s+/od0FV1ELDG0ch5QPpIHiJFDodkdVHzlmPq/boE//VKRkep
+         0hyYD0cRI+oCHedA3D9tivM8zYp62IBoQ8jy68Sn9hfKZyEMVn7n9NZa/TWi+czZiOiW
+         RkzQ==
+X-Gm-Message-State: ACgBeo1t1W9Wxro+7zOmteObCS3bywEjBx2QObGlyVbbTFzdjym+8v5y
+        fMSaIGbMZA8pPwYiFMCoQHbfKg==
+X-Google-Smtp-Source: AA6agR61DbWvoQEMtBUS/Q/nln2iLqn51Y07MebWxX2PHXX7J9JqoQjso//12id3wZBzWiyzkDCLxQ==
+X-Received: by 2002:a05:600c:348e:b0:3b4:a9f1:c240 with SMTP id a14-20020a05600c348e00b003b4a9f1c240mr6304682wmq.192.1663331371025;
+        Fri, 16 Sep 2022 05:29:31 -0700 (PDT)
 Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id m188-20020a1c26c5000000b003b4a68645e9sm1990825wmm.34.2022.09.16.05.29.29
+        by smtp.gmail.com with ESMTPSA id m188-20020a1c26c5000000b003b4a68645e9sm1990825wmm.34.2022.09.16.05.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 05:29:29 -0700 (PDT)
+        Fri, 16 Sep 2022 05:29:30 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 3/4] slimbus: qcom-ngd: simplify error paths with dev_err_probe
-Date:   Fri, 16 Sep 2022 13:29:09 +0100
-Message-Id: <20220916122910.170730-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 4/4] slimbus: qcom-ngd-ctrl: allow compile testing without QCOM_RPROC_COMMON
+Date:   Fri, 16 Sep 2022 13:29:10 +0100
+Message-Id: <20220916122910.170730-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220916122910.170730-1-srinivas.kandagatla@linaro.org>
 References: <20220916122910.170730-1-srinivas.kandagatla@linaro.org>
@@ -73,51 +73,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Use dev_err_probe to skip printing of deferred probe errors and to
-simplify error paths.
+The Qualcomm common remote-proc code (CONFIG_QCOM_RPROC_COMMON) has
+necessary stubs, so it is not needed for compile testing.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/slimbus/qcom-ngd-ctrl.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/slimbus/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index bacc6af1d51e..cec11aa106bf 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1543,10 +1543,8 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
+diff --git a/drivers/slimbus/Kconfig b/drivers/slimbus/Kconfig
+index 1235b7dc8496..2ed821f75816 100644
+--- a/drivers/slimbus/Kconfig
++++ b/drivers/slimbus/Kconfig
+@@ -22,7 +22,8 @@ config SLIM_QCOM_CTRL
  
- 	ret = devm_request_irq(dev, ret, qcom_slim_ngd_interrupt,
- 			       IRQF_TRIGGER_HIGH, "slim-ngd", ctrl);
--	if (ret) {
--		dev_err(&pdev->dev, "request IRQ failed\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "request IRQ failed\n");
- 
- 	ctrl->nb.notifier_call = qcom_slim_ngd_ssr_notify;
- 	ctrl->notifier = qcom_register_ssr_notifier("lpass", &ctrl->nb);
-@@ -1575,15 +1573,14 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
- 
- 	ctrl->pdr = pdr_handle_alloc(slim_pd_status, ctrl);
- 	if (IS_ERR(ctrl->pdr)) {
--		dev_err(dev, "Failed to init PDR handle\n");
--		ret = PTR_ERR(ctrl->pdr);
-+		ret = dev_err_probe(dev, PTR_ERR(ctrl->pdr),
-+				    "Failed to init PDR handle\n");
- 		goto err_pdr_alloc;
- 	}
- 
- 	pds = pdr_add_lookup(ctrl->pdr, "avs/audio", "msm/adsp/audio_pd");
- 	if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
--		ret = PTR_ERR(pds);
--		dev_err(dev, "pdr add lookup failed: %d\n", ret);
-+		ret = dev_err_probe(dev, PTR_ERR(pds), "pdr add lookup failed\n");
- 		goto err_pdr_lookup;
- 	}
- 
+ config SLIM_QCOM_NGD_CTRL
+ 	tristate "Qualcomm SLIMbus Satellite Non-Generic Device Component"
+-	depends on HAS_IOMEM && DMA_ENGINE && NET && QCOM_RPROC_COMMON
++	depends on HAS_IOMEM && DMA_ENGINE && NET
++	depends on QCOM_RPROC_COMMON || COMPILE_TEST
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	select QCOM_QMI_HELPERS
+ 	select QCOM_PDR_HELPERS
 -- 
 2.25.1
 
