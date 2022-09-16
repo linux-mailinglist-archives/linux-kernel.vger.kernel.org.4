@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5406D5BB4C6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389DF5BB4C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiIPXU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 19:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S229849AbiIPXdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 19:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiIPXU4 (ORCPT
+        with ESMTP id S229519AbiIPXdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 19:20:56 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F554AE9F2;
-        Fri, 16 Sep 2022 16:20:54 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id g23so12559855qtu.2;
-        Fri, 16 Sep 2022 16:20:54 -0700 (PDT)
+        Fri, 16 Sep 2022 19:33:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D0CB9595;
+        Fri, 16 Sep 2022 16:33:22 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r23so13113105pgr.6;
+        Fri, 16 Sep 2022 16:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=funh6DJxWPKQkGfqUouZIN3Ckh5ufZaw1R0aisyo43c=;
-        b=l328SO8TvVV7UOhz1dOPe/bmFOmHvWUkrjVaJ0F+GwdsDP9wYS2oYd9MHN5CT8x/rB
-         syWkCxANnXOc2rELuAzgablk5E4p6BNFm0CPmEYWY8DmwmBI0A0HZL3Vk7TgBdJKiSBJ
-         YJ/I7CYHd75D24Wdti8hQPslJKIpTk/28AWSqIt96mFCPlkrE9XieXfJdH0JZbsA22v5
-         ER1OfvGZARJK0aidVc/4zhtH5Rbl+jO6hrYm8uy9AlHJDucPWZcbDos2UtZUNzSPBo6Y
-         hxIe1p4Rlp73HP48R9EK74OdoG16Xx5e8404+ELuZsyuwZy+gDLdR9mhl0bCoaH18dfQ
-         L+8A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FkwcMuPKAyIP/oOmQ4uH+hyF+kMKI0zxNAQqGfbM4Z8=;
+        b=S9cmbn4CyhtMlh6aNtSmNTJvFCO+Yuk/HR7QzXFPqpi2dDaDucz2dfmEcw/fswaD0u
+         vCn+FvnuVGFtJ0lX49P4LuJHW50golAAP+ehiTfuV4WcWJcjLDv+8c8oqajhE52hSU9S
+         3b/X0EqXFkHkCzD9K+qbnJq4fwYM/lUMh1aAfRX+9fWc5hzuGr/CGQtalLuPjwvajL3t
+         4Z7klohE2d00G2bCBnrkINzOrND/AcgRZmwNfYCTGNxYmWwmbY+SRF4cuBD46V3D34zt
+         Wy+EBjmoII++9HSuIZkc1xgLXJvGyUsrtDZX8oAeVl3+eT9at7TURsRiNDbgNc0Ej/4d
+         4jjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=funh6DJxWPKQkGfqUouZIN3Ckh5ufZaw1R0aisyo43c=;
-        b=xAq//KuCmUzpekyGytY4l28RpZSpJ9OOTNXnt9pVEF+UEDNeBydT+XkaPKxivI02mb
-         mnF4cb7IslQ7QFBoPt7rIXhfaziPnVFVjN9rD6202CvwtengDA0dYF4h/I/P8sIsgIpZ
-         O7I57b7sx01s+h1QY2spIUGal9lk0nWGE6uC7oecs56eckvEPlo9GY/skMCliKcJjKgT
-         y094KT649ZvdMXKD1Uscrpb5AUHqnHJvzDgUiyrlSRFTU0ZWuJchGyBza+o1YFCIRu2i
-         2wRb4KUT0ywiI2tql76YeWp1q9YCY+jwX2a8eMjZh6LbGxsdXoI1LfELTk9g5FeXup3I
-         1//w==
-X-Gm-Message-State: ACrzQf3f0hUWQIdAUZMPpdtGN9qYB9hdUOL+jT5sFg4eBywI4fqESHAV
-        pSV/oJt862rgRsu80FP7kZI=
-X-Google-Smtp-Source: AMsMyM4J7SATRwEjRfc/V0Dc1cogL1hJjn0iSCjjwp7Qe/DFPqAU16QehsKCVvs3nobNbaBaW+iRmg==
-X-Received: by 2002:a05:622a:141:b0:35c:d7b7:62c1 with SMTP id v1-20020a05622a014100b0035cd7b762c1mr3179178qtw.376.1663370453665;
-        Fri, 16 Sep 2022 16:20:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:90c9:b1c1:5c9e:9030? ([2600:1700:2442:6db0:90c9:b1c1:5c9e:9030])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05620a408c00b006bb78d095c5sm7916099qko.79.2022.09.16.16.20.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 16:20:53 -0700 (PDT)
-Message-ID: <1a4381ea-53a6-1ed0-100f-e622457ccc87@gmail.com>
-Date:   Fri, 16 Sep 2022 18:20:52 -0500
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FkwcMuPKAyIP/oOmQ4uH+hyF+kMKI0zxNAQqGfbM4Z8=;
+        b=s0eAbKnMr20Qq6avWrDB3sQzSwVzTacLUyrq8GiHN1V5KrD12t+OqsZ65o/HZ2CCoT
+         UC4Bj2nY9NHHeWcVu0l3b1esvmxyr0e2i8v8yExE+tQu2fAE31wMpeEYp6kqSDP5Bdbr
+         Ce5ehsUXzJqKKLAKjVvGVjv7QwV56de43YnE8mVm784mJSVbN+zpsg8eiPAJ6JoNr+3h
+         RMlBdH1n/BOGLjJtZqB+95u/Z+TP/1rop8bNdGwUfx7sPYHd4kZCd3DfgWVE71FLCWSx
+         y6MA3YPK7U6YVmmNMujEZDt8ilhFU8EJ9yAtOxYqUK1+8g4xNlLQsbFijth+soTXO+zz
+         QwtQ==
+X-Gm-Message-State: ACrzQf3yZ0MdnXdhkdiVkPM0dAKAumBXxn9QYoAPmNotMzNr/ADwWnU/
+        XM4mptZwOVeewF1VaWhO10q6WXbMAmk=
+X-Google-Smtp-Source: AMsMyM54vHxTNdmLHLU1J//l6ttbSdd442EteUL6rW2u3LeoAdFWAJeGCW+zEpHLpwdaEd/qTAnSmw==
+X-Received: by 2002:a63:4714:0:b0:42b:82d9:b617 with SMTP id u20-20020a634714000000b0042b82d9b617mr6308979pga.223.1663371201616;
+        Fri, 16 Sep 2022 16:33:21 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id g2-20020a170902d1c200b001781a7c28b9sm14578525plb.240.2022.09.16.16.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 16:33:20 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org
+Cc:     song@kernel.org, Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v2] drivers/md/md-bitmap: check the return value of md_bitmap_get_counter()
+Date:   Fri, 16 Sep 2022 16:33:05 -0700
+Message-Id: <20220916233305.3784826-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC 2/2] pci: create device tree node for selected devices
-Content-Language: en-US
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@amd.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, helgaas@kernel.org,
-        clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <1661809417-11370-3-git-send-email-lizhi.hou@amd.com>
- <20220902185403.GA173255-robh@kernel.org>
- <dd823b9c-fe7f-7c47-520c-bad5a798efc2@gmail.com>
- <63c31198-ac4d-f3c7-9259-ea7dc6373b23@gmail.com>
-In-Reply-To: <63c31198-ac4d-f3c7-9259-ea7dc6373b23@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,39 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/13/22 02:03, Frank Rowand wrote:
-> On 9/12/22 01:33, Frank Rowand wrote:
->> On 9/2/22 13:54, Rob Herring wrote:
->>> On Mon, Aug 29, 2022 at 02:43:37PM -0700, Lizhi Hou wrote:
->>>> The PCI endpoint device such as Xilinx Alveo PCI card maps the register
->>>> spaces from multiple hardware peripherals to its PCI BAR. Normally,
->>>> the PCI core discovers devices and BARs using the PCI enumeration process.
->>>> And the process does not provide a way to discover the hardware peripherals
->>>> been mapped to PCI BARs.
->>
->> < snip >
->>
->>>
->>> The above bits aren't really particular to PCI, so they probably 
->>> belong in the DT core code. Frank will probably have thoughts on what 
->>> this should look like.
->>
->> < snip >
->>
->> I will try to look through this patch series later today (Monday 9/12
->> USA time - I will not be in Dublin for the conferences this week.)
->>
->> -Frank
-> 
-> I have collected nearly 500 emails on the history behind this patch and
-> also another set of patch series that has been trying to achieve some
-> somewhat similar functionality.  Expect me to take a while to wade through
-> all of this.
+Check the return value of md_bitmap_get_counter() in case it returns
+NULL pointer, which will result in a null pointer dereference.
 
-I'm still working at understanding the full picture of patch 2/2.
+v2: update the check to include other dereference
 
--Frank
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+---
+ drivers/md/md-bitmap.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-> 
-> -Frank
+diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
+index bf6dffadbe6f..63ece30114e5 100644
+--- a/drivers/md/md-bitmap.c
++++ b/drivers/md/md-bitmap.c
+@@ -2195,20 +2195,23 @@ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
+ 
+ 		if (set) {
+ 			bmc_new = md_bitmap_get_counter(&bitmap->counts, block, &new_blocks, 1);
+-			if (*bmc_new == 0) {
+-				/* need to set on-disk bits too. */
+-				sector_t end = block + new_blocks;
+-				sector_t start = block >> chunkshift;
+-				start <<= chunkshift;
+-				while (start < end) {
+-					md_bitmap_file_set_bit(bitmap, block);
+-					start += 1 << chunkshift;
++			if (bmc_new) {
++				if (*bmc_new == 0) {
++					/* need to set on-disk bits too. */
++					sector_t end = block + new_blocks;
++					sector_t start = block >> chunkshift;
++
++					start <<= chunkshift;
++					while (start < end) {
++						md_bitmap_file_set_bit(bitmap, block);
++						start += 1 << chunkshift;
++					}
++					*bmc_new = 2;
++					md_bitmap_count_page(&bitmap->counts, block, 1);
++					md_bitmap_set_pending(&bitmap->counts, block);
+ 				}
+-				*bmc_new = 2;
+-				md_bitmap_count_page(&bitmap->counts, block, 1);
+-				md_bitmap_set_pending(&bitmap->counts, block);
++				*bmc_new |= NEEDED_MASK;
+ 			}
+-			*bmc_new |= NEEDED_MASK;
+ 			if (new_blocks < old_blocks)
+ 				old_blocks = new_blocks;
+ 		}
+-- 
+2.25.1
 
