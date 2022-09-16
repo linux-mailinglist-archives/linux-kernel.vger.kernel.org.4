@@ -2,633 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147395BAF70
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CE45BAF73
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiIPOde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S230367AbiIPOfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiIPOd3 (ORCPT
+        with ESMTP id S229581AbiIPOfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:33:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175D941D12;
-        Fri, 16 Sep 2022 07:33:28 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (unknown [104.132.8.103])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B372440;
-        Fri, 16 Sep 2022 16:33:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663338806;
-        bh=0mq6iLjBRXE5LO1vAZY1gNiVywyq6U+Bz30w2WEJ6W0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFOXZCjlrBQLXWQVyj4ZYr+ig3ENlC0wfxUIL2C3aKei8hr+pAgbpWkDF8+4BdlCl
-         +yeOJcWbv60wj4es3VfrER/TBurm/yyeKBuZDwpAvEpFIHDMJquJEvOXgHLbRECoUQ
-         RGBlyg0gbDBV0jRAIpxOs0l+95zluKk/tPnRbRvs=
-Date:   Fri, 16 Sep 2022 17:33:12 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org, kishon@ti.com,
-        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
-        jacopo@jmondi.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 4/4] media: tc358746: add Toshiba TC358746 Parallel to
- CSI-2 bridge driver
-Message-ID: <YySJKFdB+a8zxRLS@pendragon.ideasonboard.com>
-References: <20220818143307.967150-1-m.felsch@pengutronix.de>
- <20220818143307.967150-5-m.felsch@pengutronix.de>
- <YxZWB3mE1Mk4JV/c@pendragon.ideasonboard.com>
- <20220915165404.ghcjntxom7kzqyuy@pengutronix.de>
+        Fri, 16 Sep 2022 10:35:14 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9E13A48E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1663338911; x=1694874911;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zQmowXYSqfWbx6tOz5B0DjjiQiWzPuRxrCsV4TcaO2E=;
+  b=CjDlgY5hKj8+72oA1v6b4hPeZg/fBweZSaRcnPD+57zy2xKI7RkJyC4P
+   qMv2+svw6/Ye6qWL4G4glw/hOZ0PAibPoXoziDpWuF9BnjcGj/1UZtaTG
+   nequMaJct36MWe6Aqr/f3Zm+iLORWRJd2uY/D/NEH2HXNJqOiNwz9nE9j
+   k7nqd/NTx/60HW/0I9uNRJOrfoaw7JPtJjh9DXOXHodM9kiiWtsisZwGK
+   +QrOzKACekdBamIzJOzypbWkK0hWCW3gTmOiXhfBi9oeAzAn8kbGrJPRw
+   Kzr0hBz/zF08TG0Ffw0EfNuWmyKjd+ys+Sce7e88M/fzHkTgddyhL89hH
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,320,1654531200"; 
+   d="scan'208";a="216708398"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Sep 2022 22:35:10 +0800
+IronPort-SDR: 9XlF6KIl6blxa9dYcjuhOx1TLrFKWBG3CGPTau/aaSOwxS2qJ07PvSPffR7cLXE0BUD9kTAYgE
+ lYwdHMuiK4Su6b0Ea8NWUSA8nRSnglY1j+24u9bNLy/10ghhI4ybeXMuHyG1HOPGPDIlze7UDL
+ VL2scDjC/+dgFINsxvL5vrTibGnV7MebvmTe4GmQGBxaPIPbSclltzOrG2bNHi3ZZBDEHGzUL0
+ rOyed728LtCyc5OH1Ag02O3wrcLG79S3XUKmbkRIWam/rJbpHGY/j9vOAeRADW1DgAb9Dz/AB5
+ GJPinlxVHruF98nSY2uSupcP
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2022 06:49:49 -0700
+IronPort-SDR: qDTlEOKnUXSEOXQO+JsF1Vmyc5pgEzgI6B35z3BasU3lXKBPyyYWOxiMRO+1zsEZPDqt+E+/2q
+ uSg5yJsJgvgyNgV33i0fuO5j9lggV4bi7jR8HDse2kbTkDWscCeHcCG78CdFW5dPmc1kc+tetl
+ jG16153j2fXIbTPtWhkOS8zD+ABJxF8VI+idPbBVRxzIFZDPAoeBrakdL8n7USPUuU0uKyUEC+
+ uqNRg1aUNlj45yIQwpTYtoW9fzm/0hxXT21fut8AFt8ndQ0LHRxSG98jSoG+53zrdEO13/Db9U
+ dyk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2022 07:35:08 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MTc6f74vvz1Rwrq
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:35:06 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1663338905; x=1665930906; bh=zQmowXYSqfWbx6tOz5B0DjjiQiWzPuRxrCs
+        V4TcaO2E=; b=f3KsCnrRvJhqK9TSc2CVwA16RKiXI35/sBLaAjQcN6OmOVDoeaL
+        VOFRGJJajkAH9p7ztw7JrOLwrrjZiPai7UbmTLa38P+ADr487JWxxJ//D+7hre6O
+        wBv2xaDeh9RHmKme3B75QDOxzSwkpkY8CujbtO94m2X70yiqk46YWzLBpF1YONBi
+        k9D/GsqOFas0DovUyU3G32wPO5hkys8l3ZvEKO2XFfQ2renqDbgZ+i7uOnHr/JV7
+        9/NOAOigNk0Fzf+yinEexB/ERoLx6O6rEPhjINTTo1REHepGNRarYVxr4aefrrSK
+        acx2Ap24pS445+NxbB/8gm/DujFfKXSmeJA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5GTsxpUgKm6j for <linux-kernel@vger.kernel.org>;
+        Fri, 16 Sep 2022 07:35:05 -0700 (PDT)
+Received: from [10.225.1.43] (unknown [10.225.1.43])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MTc6Z0PwKz1RvLy;
+        Fri, 16 Sep 2022 07:35:01 -0700 (PDT)
+Message-ID: <58614969-46e3-cb76-6f5e-139c555dcca1@opensource.wdc.com>
+Date:   Fri, 16 Sep 2022 15:35:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220915165404.ghcjntxom7kzqyuy@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH] ata: ahci: Add initialization quirk for JMicron
+ JMB585/JMB582 controllers
+Content-Language: en-US
+To:     MD Lin <mdlin@jmicron.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kevinliu@jmicron.com, charonchen@jmicron.com,
+        corahuang@jmicron.com, mhchen@jmicron.com, georgechao@jmicron.com,
+        banks@jmicron.com, tzuwei@jmicron.com
+References: <20220915001149.24241-1-mdlin@jmicron.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220915001149.24241-1-mdlin@jmicron.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
-
-On Thu, Sep 15, 2022 at 06:54:04PM +0200, Marco Felsch wrote:
-> On 22-09-05, Laurent Pinchart wrote:
-> > On Thu, Aug 18, 2022 at 04:33:07PM +0200, Marco Felsch wrote:
-> > > Adding support for the TC358746 parallel <-> MIPI CSI bridge. This chip
-> > > supports two operating modes:
-> > >   1st) parallel-in -> mipi-csi out
-> > >   2nd) mipi-csi in -> parallel out
-> > > 
-> > > This patch only adds the support for the 1st mode.
-> > > 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > >  drivers/media/i2c/Kconfig    |   17 +
-> > >  drivers/media/i2c/Makefile   |    1 +
-> > >  drivers/media/i2c/tc358746.c | 1645 ++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 1663 insertions(+)
-> > >  create mode 100644 drivers/media/i2c/tc358746.c
-
-[snip]
-
-> > > diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
-> > > new file mode 100644
-> > > index 000000000000..7b71d0cf72a9
-> > > --- /dev/null
-> > > +++ b/drivers/media/i2c/tc358746.c
-
-[snip]
-
-> > > +struct tc358746 {
-> > > +	struct v4l2_subdev		sd;
-> > > +	struct media_pad		pads[TC358746_NR_PADS];
-> > > +	struct v4l2_async_notifier	notifier;
-> > > +	struct v4l2_mbus_framefmt	mbusfmt;
-> > 
-> > Could you use the active state API instead of manually storing mbusfmt
-> > here ? It involves
+On 2022/09/15 1:11, MD Lin wrote:
+> JMicron JMB585/JMB582 does not enable specific error bit handling functions
+> by default so this patch enable these functions for better compatibility.
+> Besides, these patches also adjust SATA RX/TX_GEN1/TX_GEN2 parameters for
+> better compatibility. These patches had been tested in JMicron Test
+> Laboratory and been implemented to our customers.
 > 
-> I will do that, thanks for the hint and it also elimates a few basic
-> checks like the pad-num check.
-
-Even nicer :-)
-
-> > - Implementing the .init_cfg() operation
-> > - Calling v4l2_subdev_init_finalize() in probe
-> > - Replacing calls to __tc358746_get_pad_format() with
-> >   v4l2_subdev_get_pad_format()
-> > - Propagating the format from sink to source in tc358746_set_fmt()
-> > - Dropping tc358746_src_mbus_code() from tc358746_get_fmt() and simply
-> >   retrieving the format using v4l2_subdev_get_pad_format() there
-> > - Dropping this field
-> > 
-> > The formats for both the ACTIVE and TRY states will then be stored in
-> > the subdev state, unconditionally. You can retrieve the active state
-> > with v4l2_subdev_get_locked_active_state() in tc358746_s_stream().
-> > 
-> > > +	struct v4l2_fwnode_endpoint	csi_vep;
-> > > +
-> > > +	struct v4l2_ctrl_handler	ctrl_hdl;
-> > > +
-> > > +	struct regmap			*regmap;
-> > > +	struct clk			*refclk;
-> > > +	struct gpio_desc		*reset_gpio;
-> > > +	struct regulator_bulk_data	supplies[ARRAY_SIZE(tc358746_supplies)];
-> > > +
-> > > +	struct clk_hw			mclk_hw;
-> > > +	unsigned long			mclk_rate;
-> > > +	u8				mclk_prediv;
-> > > +	u16				mclk_postdiv;
-> > > +
-> > > +	unsigned long			pll_rate;
-> > > +	u8				pll_post_div;
-> > > +	u16				pll_pre_div;
-> > > +	u16				pll_mul;
-> > > +
-> > > +	struct v4l2_ctrl		*sensor_pclk_ctrl;
-> > > +
-> > > +#define TC358746_VB_MAX_SIZE		(511 * 32)
-> > > +#define TC358746_VB_DEFAULT_SIZE	  (1 * 32)
-> > > +	unsigned int			vb_size; /* Video buffer size in bits */
-> > > +
-> > > +	struct phy_configure_opts_mipi_dphy dphy_cfg;
-> > > +};
-
-[snip]
-
-> > > +#ifndef MHZ
-> > 
-> > Where would it be previously defined ? This sounds like asking for
-> > trouble later.
+> Signed-off-by: MD Lin <mdlin@jmicron.com>
+> ---
+>  drivers/ata/ahci.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/ata/ahci.h | 23 +++++++++++++++
+>  2 files changed, 94 insertions(+)
+>  mode change 100755 => 100644 drivers/ata/ahci.h
 > 
-> Sorry I don't get that, do you mean that I should define it at the very
-> beginning?
+> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+> index 505920d45..3e9e3b8f8 100644
+> --- a/drivers/ata/ahci.c
+> +++ b/drivers/ata/ahci.c
+> @@ -1657,6 +1657,75 @@ static void ahci_intel_pcs_quirk(struct pci_dev *pdev, struct ahci_host_priv *hp
+>  	}
+>  }
+>  
+> +static void ahci_jmb58x_write_sata(void __iomem *mmio, u32 addr, u32 data)
+> +{
+> +	writel((addr & 0x01FFFUL) + (1UL << 18UL), mmio + 0xC0);
+> +	writel(data, mmio + 0xC8);
+> +}
+> +
+> +static void ahci_jmb58x_quirk(void __iomem *mmio)
+> +{
+> +	u32 pi = readl(mmio + HOST_PORTS_IMPL);
+> +	u32 b8_data;
+> +
+> +	/*
+> +	 * JMB582: PI is 0x03
+> +	 * JMB585: PI is 0x1f
+> +	 */
 
-I mean that either MHZ is defined somewhere in the kernel already, in
-case we should include the corresponding header, or it's not, and I
-wouldn't add an #ifndev here. Otherwise, if someone adds a MHZ macro
-later that gets pulled in through one of the kernel headers used by the
-driver, it may cause subtle bugs if the definition is different. Of
-course nobody will
+What is this comment for ?
 
-#define MHZ		42
+> +
+> +	/*
+> +	 * enable error bit handling functions, these might overwrite
+> +	 * the setting which loads from external SPI flash.
+> +	 * the address and value are defined in adapter specs.
+> +	 */
+> +	b8_data = (pi > 3) ? 0x13 : 0x92;
 
-but we could get
+This looks strange. If pi is fixed depending on the controller type, why not use
+a switch-case here with the values in the comments above defined as macros ?
+Something like:
 
-#define MHZ		1000 * 1000
+	switch (pi) {
+	case JMB582:
+		b8_data = 0x92;
+	case JMB585:
+	default:
+		b8_data = 0x13;
+	}
 
-and something could break here. I'd drop the #ifndef to get the compiler
-to complain if there's a redefinition.
+This is a lot more readable.
 
-> > > +#define MHZ		(1000 * 1000)
-> > > +#endif
+> +	writel(JMB58X_EH_MODIFY_ON + b8_data,  mmio + 0xB8);
+> +	writel(JMB58X_EH_GENERAL,              mmio + 0x30);
+> +	writel(JMB58X_EH_CFIS_RETRY,           mmio + 0x34);
+> +	writel(JMB58X_EH_DROP_D2H,             mmio + 0x38);
+> +	writel(JMB58X_EH_MODIFY_OFF + b8_data, mmio + 0xB8);
+> +	writel(JMB58X_EH_TX_LOCK,              mmio + 0xB0);
 
-[snip]
+Why not define all these magic values as macros using the register names ?
+Anyone comparing the code to the controller specs will more easily understand.
 
-> > > +static int
-> > > +tc358746_link_validate(struct v4l2_subdev *sd, struct media_link *link,
-> > > +		       struct v4l2_subdev_format *source_fmt,
-> > > +		       struct v4l2_subdev_format *sink_fmt)
-> > > +{
-> > > +	struct tc358746 *tc358746 = to_tc358746(sd);
-> > > +	unsigned long csi_bitrate, sensor_bitrate;
-> > > +	const struct tc358746_format *fmt;
-> > > +	unsigned int fifo_sz, tmp, n;
-> > > +	s64 sensor_pclk_rate;
-> > > +
-> > > +	/* Check the FIFO settings */
-> > > +	fmt = tc358746_get_format_by_code(TC358746_SINK, tc358746->mbusfmt.code);
-> > > +	if (IS_ERR(fmt))
-> > > +		return PTR_ERR(fmt);
-> > > +
-> > > +	sensor_pclk_rate = v4l2_ctrl_g_ctrl_int64(tc358746->sensor_pclk_ctrl);
-> > > +	sensor_bitrate = sensor_pclk_rate * fmt->bus_width;
-> > > +
-> > > +	csi_bitrate = tc358746->dphy_cfg.lanes * tc358746->pll_rate;
-> > > +
-> > > +	dev_dbg(tc358746->sd.dev,
-> > > +		"Fifo settings params: sensor-bitrate:%lu csi-bitrate:%lu",
-> > > +		sensor_bitrate, csi_bitrate);
-> > > +
-> > > +	/* Avoid possible FIFO overflows */
-> > > +	if (csi_bitrate < sensor_bitrate) {
-> > > +		dev_err(sd->dev,
-> > > +			"Link validation failed csi-bitrate:%lu < sensor-bitrate:%lu\n",
-> > > +			csi_bitrate, sensor_bitrate);
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	/* Best case */
-> > > +	if (csi_bitrate == sensor_bitrate) {
-> > > +		tc358746->vb_size = TC358746_VB_DEFAULT_SIZE;
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * Avoid possible FIFO underflow in case of
-> > > +	 * csi_bitrate > sensor_bitrate. For such case the chip has a internal
-> > > +	 * fifo which can be used to delay the line output.
-> > > +	 *
-> > > +	 * Fifo size calculation:
-> > > +	 *
-> > > +	 * fifo-sz, image-width - in bits
-> > > +	 * sbr                  - sensor_bitrate in bits/s
-> > > +	 * csir                 - csi_bitrate in bits/s
-> > > +	 *
-> > > +	 *                1             1      1
-> > > +	 * image-width * --- + fifo-sz --- >= ---- * image-width
-> > > +	 *               sbr           sbr    csir
-> > > +	 *
-> > > +	 * fifo-sz >= abs(sbr/csir * image-width - image-width)
-> > > +	 *                `-----´
-> > > +	 *                   n
-> > > +	 *
-> > > +	 */
-> > > +
-> > > +	sensor_bitrate /= TC358746_PRECISION;
-> > > +	n = csi_bitrate / sensor_bitrate;
-> > > +	tmp = (tc358746->mbusfmt.width * TC358746_PRECISION) / n;
-> > > +	fifo_sz = tc358746->mbusfmt.width - tmp;
-> > > +	fifo_sz *= fmt->bpp;
-> > > +	tc358746->vb_size = round_up(fifo_sz, 32);
-> > > +
-> > 
-> > Please also call v4l2_subdev_link_validate_default() here.
-> 
-> Did it in my internal prepared v2 ^^ I call it now at the very
-> beginning of this function.
-> 
-> > I wonder if the above calculation wouldn't be better performed in
-> > .s_stream() (or rather in a function being called by .s_stream()) when
-> > enabling streaming.
-> 
-> No I wouldn't shift that, since the link validation is in IMHO the
-> correct place to inform the user that the pipeline can't negotiate if
-> the fifo can't be configured correctly. Therefore I placed it here.
+> +
+> +	/*
+> +	 * set SATA configuration, these might overwrite
+> +	 * the setting which loads from external SPI flash.
+> +	 * the address and value are defined in adapter specs.
+> +	 */
+> +	ahci_jmb58x_write_sata(mmio, 0x06, JMB58X_SATA0_RX);
+> +	ahci_jmb58x_write_sata(mmio, 0x13, JMB58X_SATA1_RX);
+> +	ahci_jmb58x_write_sata(mmio, 0x73, JMB58X_SATA0_TX_GEN2);
+> +	ahci_jmb58x_write_sata(mmio, 0x75, JMB58X_SATA1_TX_GEN2);
+> +	ahci_jmb58x_write_sata(mmio, 0x74, JMB58X_SATA0_TX_GEN1);
+> +	ahci_jmb58x_write_sata(mmio, 0x80, JMB58X_SATA1_TX_GEN1);
+> +	if (pi > 3) {
+> +		ahci_jmb58x_write_sata(mmio, 0x20, JMB58X_SATA2_RX);
+> +		ahci_jmb58x_write_sata(mmio, 0x2D, JMB58X_SATA3_RX);
+> +		ahci_jmb58x_write_sata(mmio, 0x3A, JMB58X_SATA4_RX);
+> +		ahci_jmb58x_write_sata(mmio, 0x79, JMB58X_SATA3_TX_GEN2);
+> +		ahci_jmb58x_write_sata(mmio, 0x83, JMB58X_SATA3_TX_GEN2_EXT);
+> +		ahci_jmb58x_write_sata(mmio, 0x7A, JMB58X_SATA3_TX_GEN1);
+> +		ahci_jmb58x_write_sata(mmio, 0x84, JMB58X_SATA3_TX_GEN1_EXT);
+> +	}
 
-The issue is that the user could enable the link first, and then change
-the V4L2_CID_LINK_FREQ of the sensor and push the pixel rate above what
-the TC358746 can support. Given the model that configures subdevs
-independently, you can only validate the pipeline at stream on time.
+Same comment here.
 
-> > > +out:
-> > > +	dev_dbg(tc358746->sd.dev,
-> > > +		"Found FIFO size[bits]:%u -> aligned to size[bits]:%u\n",
-> > > +		fifo_sz, tc358746->vb_size);
-> > > +
-> > > +	return tc358746->vb_size > TC358746_VB_MAX_SIZE ? -EINVAL : 0;
-> > > +}
+> +}
+> +
+> +static void ahci_jmicron_quirk(struct pci_dev *pdev,
+> +			struct ahci_host_priv *hpriv)
+> +{
+> +	void __iomem *mmio = hpriv->mmio;
+> +	u8 tmp8;
+> +
+> +	if (pdev->vendor != PCI_VENDOR_ID_JMICRON)
+> +		return;
+> +
+> +	switch (pdev->device) {
+> +	case 0x585:
+> +		tmp8 = readb(mmio + 0x44);
+> +		if (tmp8)  /* check controller version */
+> +			ahci_jmb58x_quirk(mmio);
 
-[snip]
+The tmp8 variable is not needed:
 
-> > > +static int tc358746_probe(struct i2c_client *client)
-> > > +{
-> > > +	struct clk_init_data mclk_initdata = { };
-> > > +	struct device *dev = &client->dev;
-> > > +	struct v4l2_fwnode_endpoint *vep;
-> > > +	unsigned long csi_link_rate;
-> > > +	struct tc358746 *tc358746;
-> > > +	struct fwnode_handle *ep;
-> > > +	unsigned char csi_lanes;
-> > > +	struct v4l2_subdev *sd;
-> > > +	struct v4l2_ctrl *ctrl;
-> > > +	unsigned long refclk;
-> > > +	unsigned int i;
-> > > +	int err;
-> > > +	u32 val;
-> > > +
-> > > +	tc358746 = devm_kzalloc(&client->dev, sizeof(*tc358746), GFP_KERNEL);
-> > > +	if (!tc358746)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	tc358746->regmap = devm_regmap_init_i2c(client, &tc358746_regmap_config);
-> > > +	if (IS_ERR(tc358746->regmap))
-> > > +		return dev_err_probe(dev, PTR_ERR(tc358746->regmap),
-> > > +				     "Failed to init regmap\n");
-> > > +
-> > > +	tc358746->refclk = devm_clk_get(dev, "refclk");
-> > > +	if (IS_ERR(tc358746->refclk))
-> > > +		return dev_err_probe(dev, PTR_ERR(tc358746->refclk),
-> > > +				     "Failed to get refclk\n");
-> > > +
-> > > +	err = clk_prepare_enable(tc358746->refclk);
-> > > +	if (err)
-> > > +		return dev_err_probe(dev, err,
-> > > +				     "Failed to enable refclk\n");
-> > > +
-> > > +	refclk = clk_get_rate(tc358746->refclk);
-> > > +	clk_disable_unprepare(tc358746->refclk);
-> > > +
-> > > +	if (refclk < 6 * MHZ || refclk > 40 * MHZ)
-> > > +		return dev_err_probe(dev, -EINVAL, "Invalid refclk range\n");
-> > > +
-> > > +	for (i = 0; i < ARRAY_SIZE(tc358746_supplies); i++)
-> > > +		tc358746->supplies[i].supply = tc358746_supplies[i];
-> > > +
-> > > +	err = devm_regulator_bulk_get(dev, ARRAY_SIZE(tc358746_supplies),
-> > > +				      tc358746->supplies);
-> > > +	if (err)
-> > > +		return dev_err_probe(dev, err, "Failed to get supplies\n");
-> > > +
-> > > +	tc358746->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> > > +						       GPIOD_OUT_HIGH);
-> > > +	if (IS_ERR(tc358746->reset_gpio))
-> > > +		return dev_err_probe(dev, PTR_ERR(tc358746->reset_gpio),
-> > > +				     "Failed to get reset-gpios\n");
-> > > +
-> > > +	sd = &tc358746->sd;
-> > > +	v4l2_i2c_subdev_init(sd, client, &tc358746_ops);
-> > > +	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > > +	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> > > +	sd->entity.ops = &tc358746_entity_ops;
-> > > +
-> > > +	tc358746->pads[TC358746_SINK].flags = MEDIA_PAD_FL_SINK;
-> > > +	tc358746->pads[TC358746_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-> > > +	err = media_entity_pads_init(&sd->entity, TC358746_NR_PADS,
-> > > +				     tc358746->pads);
-> > > +	if (err)
-> > > +		return dev_err_probe(dev, err,
-> > > +				     "Failed to setup media-entity pads\n");
-> > > +
-> > > +	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), TC358746_SOURCE,
-> > > +					     0, 0);
-> > > +	if (!ep) {
-> > > +		dev_err(dev, "Missing endpoint node\n");
-> > > +		err = -EINVAL;
-> > > +		goto err_mc;
-> > > +	}
-> > > +
-> > > +	/* Currently we only support 'parallel in' -> 'csi out' */
-> > > +	vep = &tc358746->csi_vep;
-> > > +	vep->bus_type = V4L2_MBUS_CSI2_DPHY;
-> > > +	err = v4l2_fwnode_endpoint_alloc_parse(ep, vep);
-> > > +	fwnode_handle_put(ep);
-> > > +	if (err) {
-> > > +		dev_err(dev, "Failed to parse source endpoint\n");
-> > > +		goto err_mc;
-> > > +	}
-> > > +
-> > > +	csi_lanes = vep->bus.mipi_csi2.num_data_lanes;
-> > > +	if (csi_lanes == 0 || csi_lanes > 4 ||
-> > > +	    vep->nr_of_link_frequencies == 0) {
-> > > +		dev_err(dev, "error: Invalid CSI-2 settings\n");
-> > > +		err = -EINVAL;
-> > > +		goto err_vep;
-> > > +	}
-> > > +
-> > > +	/* TODO: Add support to handle multiple link frequencies */
-> > > +	csi_link_rate = (unsigned long)vep->link_frequencies[0];
-> > > +	tc358746->pll_rate = tc358746_find_pll_settings(tc358746, refclk,
-> > > +							csi_link_rate * 2);
-> > > +	if (!tc358746->pll_rate) {
-> > > +		err = -EINVAL;
-> > > +		goto err_vep;
-> > > +	}
-> > > +
-> > > +	err = phy_mipi_dphy_get_default_config_for_hsclk(tc358746->pll_rate,
-> > > +							 csi_lanes,
-> > > +							 &tc358746->dphy_cfg);
-> > > +	if (err)
-> > > +		goto err_vep;
-> > > +
-> > > +	tc358746->mbusfmt = tc358746_def_fmt;
-> > > +	tc358746->vb_size = TC358746_VB_DEFAULT_SIZE;
-> > > +
-> > > +	dev_set_drvdata(dev, tc358746);
-> > > +	pm_runtime_set_autosuspend_delay(dev, 200);
-> > > +	pm_runtime_use_autosuspend(dev);
-> > > +	pm_runtime_enable(dev);
-> > > +
-> > > +	err = pm_runtime_resume_and_get(dev);
-> > > +	if (err < 0) {
-> > > +		dev_err(dev, "Failed to resume the device\n");
-> > > +		goto err_vep;
-> > > +	}
-> > > +
-> > > +	 /* Ensure that CSI interface is put into LP-11 state */
-> > > +	err = tc358746_sw_reset(tc358746);
-> > > +	if (err) {
-> > > +		pm_runtime_put_noidle(dev);
-> > > +		dev_err(dev, "Failed to reset the device\n");
-> > > +		goto err_pm;
-> > > +	}
-> > > +
-> > > +	err = tc358746_read(tc358746, CHIPID_REG, &val);
-> > > +	pm_runtime_mark_last_busy(dev);
-> > > +	pm_runtime_put_sync_autosuspend(dev);
-> > > +	if (err) {
-> > > +		dev_err(dev, "Failed to read chipid\n");
-> > > +		err = -ENODEV;
-> > > +		goto err_pm;
-> > > +	}
-> > > +
-> > > +	if (FIELD_GET(CHIPID, val) != 0x44) {
-> > > +		dev_err(dev, "Invalid chipid 0x%02x\n",
-> > > +			(u32)FIELD_GET(CHIPID, val));
-> > > +		err = -ENODEV;
-> > > +		goto err_pm;
-> > > +	}
-> > > +
-> > > +	/* Optional MCLK provider support */
-> > > +	if (device_property_present(dev, "#clock-cells")) {
-> > > +		const char *mclk_name;
-> > > +
-> > > +		/* Init to highest possibel MCLK */
-> > > +		tc358746->mclk_postdiv = 512;
-> > > +		tc358746->mclk_prediv = 8;
-> > > +
-> > > +		mclk_name = "tc358746-mclk";
-> > > +		device_property_read_string(dev, "clock-output-names",
-> > > +					    &mclk_name);
-> > > +
-> > > +		mclk_initdata.name = mclk_name;
-> > > +		mclk_initdata.ops = &tc358746_mclk_ops;
-> > > +		tc358746->mclk_hw.init = &mclk_initdata;
-> > > +
-> > > +		err = devm_clk_hw_register(dev, &tc358746->mclk_hw);
-> > > +		if (err) {
-> > > +			dev_err(dev, "Failed to register mclk provider\n");
-> > > +			goto err_pm;
-> > > +		}
-> > > +
-> > > +		err = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-> > > +						  &tc358746->mclk_hw);
-> > > +		if (err) {
-> > > +			dev_err(dev, "Failed to add mclk provider\n");
-> > > +			goto err_pm;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	v4l2_ctrl_handler_init(&tc358746->ctrl_hdl, 1);
-> > > +
-> > > +	ctrl = v4l2_ctrl_new_int_menu(&tc358746->ctrl_hdl, NULL,
-> > > +				      V4L2_CID_LINK_FREQ, 0, 0,
-> > > +				      vep->link_frequencies);
-> > > +	if (ctrl)
-> > > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > > +
-> > > +	tc358746->sd.ctrl_handler = &tc358746->ctrl_hdl;
-> > > +	if (tc358746->ctrl_hdl.error) {
-> > > +		err = tc358746->ctrl_hdl.error;
-> > > +		goto err_pm;
-> > > +	}
-> > > +
-> > > +	v4l2_ctrl_handler_setup(&tc358746->ctrl_hdl);
-> > > +
-> > > +	err = tc358746_async_register(tc358746);
-> > > +	if (err < 0)
-> > > +		goto err_ctrl;
-> > > +
-> > > +	dev_info(dev, "%s found @ 0x%x (%s)\n", client->name,
-> > > +		  client->addr, client->adapter->name);
-> > 
-> > I'd skip this to avoid adding noise to the kernel log at boot time. I
-> > would also probably split some of the code out of the probe function as
-> > it's fairly large. Up to you.
-> 
-> Yes it is large but most of it is just requesting stuff and so..
-> Therefore I kept it here since I don't need it elsewhere. What about
-> setting it to dev_dbg()? Sometimes it can be useful e.g. to find the
-> problem why /dev/media is not comming up..
+		if (readb(mmio + 0x44))
+			ahci_jmb58x_quirk(mmio);
 
-I find that enabling dev_dbg() messages from drivers/base/dd.c are
-helpful for that, but a dev_dbg() message here is fine too.
+is fine, with the magic value 0x44 defined as a macro with a descriptive name.
 
-> > > +
-> > > +	return 0;
-> > > +
-> > > +err_ctrl:
-> > > +	v4l2_ctrl_handler_free(&tc358746->ctrl_hdl);
-> > > +err_pm:
-> > > +	pm_runtime_disable(dev);
-> > > +	pm_runtime_set_suspended(dev);
-> > > +	pm_runtime_dont_use_autosuspend(dev);
-> > > +err_vep:
-> > > +	v4l2_fwnode_endpoint_free(vep);
-> > > +err_mc:
-> > > +	media_entity_cleanup(&sd->entity);
-> > > +
-> > > +	return err;
-> > > +}
-> > > +
-> > > +static int tc358746_remove(struct i2c_client *client)
-> > > +{
-> > > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> > > +	struct tc358746 *tc358746 = to_tc358746(sd);
-> > > +
-> > > +	v4l2_ctrl_handler_free(&tc358746->ctrl_hdl);
-> > > +	v4l2_fwnode_endpoint_free(&tc358746->csi_vep);
-> > > +	v4l2_async_nf_unregister(&tc358746->notifier);
-> > > +	v4l2_async_nf_cleanup(&tc358746->notifier);
-> > > +	v4l2_async_unregister_subdev(sd);
-> > > +	v4l2_device_unregister_subdev(sd);
-> > 
-> > This shouldn't be needed v4l2_async_unregister_subdev() should be
-> > enough.
-> 
-> Okay, thanks. There are a lot of unregister helpers in the v4l2 space..
-
-Too many of them indeed. I'd like to simplify all that.
-
-> > > +	media_entity_cleanup(&sd->entity);
-> > > +
-> > > +	pm_runtime_disable(sd->dev);
-> > > +	pm_runtime_set_suspended(sd->dev);
-> > > +	pm_runtime_dont_use_autosuspend(sd->dev);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int tc358746_suspend(struct device *dev)
-> > > +{
-> > > +	struct tc358746 *tc358746 = dev_get_drvdata(dev);
-> > > +
-> > > +	clk_disable_unprepare(tc358746->refclk);
-> > > +
-> > > +	return regulator_bulk_disable(ARRAY_SIZE(tc358746_supplies),
-> > > +				      tc358746->supplies);
-> > 
-> > Shouldn't you reenable the clock if this fails ?
-> 
-> Hm.. if this fails I could end in a undefined chip state. But I got the
-> point that the framework would be in a bad state if it tries again to
-> suspend the device.
-
-It would be, and without a way to recover, so that could be an issue.
-
-> > > +}
-> > > +
-> > > +static int tc358746_resume(struct device *dev)
-> > > +{
-> > > +	struct tc358746 *tc358746 = dev_get_drvdata(dev);
-> > > +	int err;
-> > > +
-> > > +	gpiod_set_value(tc358746->reset_gpio, 1);
-> > > +
-> > > +	err = regulator_bulk_enable(ARRAY_SIZE(tc358746_supplies),
-> > > +				    tc358746->supplies);
-> > > +	if (err)
-> > > +		return err;
-> > > +
-> > > +	/* min. 200ns */
-> > > +	usleep_range(10, 20);
-> > > +
-> > > +	gpiod_set_value(tc358746->reset_gpio, 0);
-> > > +
-> > > +	err = clk_prepare_enable(tc358746->refclk);
-> > > +	if (err)
-> > > +		return err;
-> > 
-> > The regulators need to be disabled in case of failure here and below
-> > (and so does the clock below).
-> 
-> Yes, you're right.
-> 
-> > > +
-> > > +	/* min. 700us ... 1ms */
-> > > +	usleep_range(1000, 1500);
-> > > +
-> > > +	/* Sync state */
-> > > +	err = tc358746_apply_pll_config(tc358746);
-> > > +	if (err)
-> > > +		return err;
-> > > +
-> > > +	err = tc358746_apply_dphy_config(tc358746);
-> > > +	if (err)
-> > > +		return err;
-> > > +
-> > > +	return tc358746_apply_misc_config(tc358746);
-> > 
-> > Does all this belong to the PM resume handler ? It seems configuration
-> > could be handled in .s_stream() instead.
-> 
-> This gets called by the s_stream() during getting the power state but I
-> can move the dphy/misc_config to the .s_stream() of course.
-
-That would be nice, thanks.
-
-> The pll
-> needs to be there since the device can be a clock provider e.g. for the
-> sensor.
-
-OK.
-
-> Thanks for the review :)
-> 
-> > > +}
-> > > +
-> > > +DEFINE_RUNTIME_DEV_PM_OPS(tc358746_pm_ops, tc358746_suspend,
-> > > +			  tc358746_resume, NULL);
-> > > +
-> > > +static const struct of_device_id __maybe_unused tc358746_of_match[] = {
-> > > +	{ .compatible = "toshiba,tc358746" },
-> > > +	{ },
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, tc358746_of_match);
-> > > +
-> > > +static struct i2c_driver tc358746_driver = {
-> > > +	.driver = {
-> > > +		.name = "tc358746",
-> > > +		.pm = pm_ptr(&tc358746_pm_ops),
-> > > +		.of_match_table = tc358746_of_match,
-> > > +	},
-> > > +	.probe_new = tc358746_probe,
-> > > +	.remove = tc358746_remove,
-> > > +};
-> > > +
-> > > +module_i2c_driver(tc358746_driver);
-> > > +
-> > > +MODULE_DESCRIPTION("Toshiba TC358746 Parallel to CSI-2 bridge driver");
-> > > +MODULE_AUTHOR("Marco Felsch <kernel@pengutronix.de>");
-> > > +MODULE_LICENSE("GPL");
+> +		break;
+> +	}
+> +}
+> +
+>  static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  {
+>  	unsigned int board_id = ent->driver_data;
+> @@ -1775,6 +1844,8 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  	 */
+>  	ahci_intel_pcs_quirk(pdev, hpriv);
+>  
+> +	ahci_jmicron_quirk(pdev, hpriv);
+> +
+>  	/* prepare host */
+>  	if (hpriv->cap & HOST_CAP_NCQ) {
+>  		pi.flags |= ATA_FLAG_NCQ;
+> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> old mode 100755
+> new mode 100644
+> index 9290e787a..82ecc6f2c
+> --- a/drivers/ata/ahci.h
+> +++ b/drivers/ata/ahci.h
+> @@ -52,6 +52,29 @@
+>  #define EM_MSG_LED_VALUE_OFF          0xfff80000
+>  #define EM_MSG_LED_VALUE_ON           0x00010000
+>  
+> +/* JMicron JMB585/JMB582 Error Bit Handling Register Value */
+> +#define JMB58X_EH_MODIFY_ON           0x03060004
+> +#define JMB58X_EH_MODIFY_OFF          0x03060000
+> +#define JMB58X_EH_GENERAL             0x00FF0B01
+> +#define JMB58X_EH_CFIS_RETRY          0x0000003F
+> +#define JMB58X_EH_DROP_D2H            0x0000001F
+> +#define JMB58X_EH_TX_LOCK             0xF9E4EFBF
+> +
+> +/* JMicron JMB585/JMB582 SATA PHY Register Value */
+> +#define JMB58X_SATA0_RX               0x70005BE3
+> +#define JMB58X_SATA1_RX               0x70005BE3
+> +#define JMB58X_SATA2_RX               0x70005BE3
+> +#define JMB58X_SATA3_RX               0x70005BE3
+> +#define JMB58X_SATA4_RX               0x70005BE3
+> +#define JMB58X_SATA0_TX_GEN1          0x00000024
+> +#define JMB58X_SATA1_TX_GEN1          0x250B0003
+> +#define JMB58X_SATA3_TX_GEN1          0x00000024
+> +#define JMB58X_SATA3_TX_GEN1_EXT      0x250B0003
+> +#define JMB58X_SATA0_TX_GEN2          0x000001E5
+> +#define JMB58X_SATA1_TX_GEN2          0x000001E5
+> +#define JMB58X_SATA3_TX_GEN2          0x000001E5
+> +#define JMB58X_SATA3_TX_GEN2_EXT      0x250B0003
+> +
+>  enum {
+>  	AHCI_MAX_PORTS		= 32,
+>  	AHCI_MAX_CLKS		= 5,
 
 -- 
-Regards,
+Damien Le Moal
+Western Digital Research
 
-Laurent Pinchart
