@@ -2,179 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31DA5BAB54
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901185BAB95
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiIPKcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S230084AbiIPKrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiIPKcE (ORCPT
+        with ESMTP id S231538AbiIPKqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:32:04 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70072.outbound.protection.outlook.com [40.107.7.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C22EAFAD6;
-        Fri, 16 Sep 2022 03:19:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OagK+bqEA6wu/tcKjayI2HjF6kfUsQm33OxaA5XJJ5fkSY5GbbyoctIbGxY3JnPDa9uRYf766Fzb3ZqcHvnb/F4Ax1783LqRooRXRpBSRBz5AMtLv/tjQ4tSTF4xoTvr5V1nOx0T9o24LV6tUo9cLr/BvMt6RdbEoIHk8BMBaqCu8LifrH8rJsNPt+mom0XZCZ/tQjwrZv2L9mUxwG6P/koghr6bpaJxtnDp4X5eFyyMn3tDAmxwKEELe2unDxvrlftEGFsUf4Q5FuY+0ov76Sul+UPcNqKs0alMBerZ7TDBeqRAQ0U88AXuDeiCLRK+fEPu7SpSovWqfZW2SBpPrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D+VqnzUl5Z7hfweJG11an1Y83cEXeGWUbndlGwEHYlI=;
- b=Pt23YU+xrZ86TLicU4I6EfktE0mu+rvDfFPQZu0rCkQA+K1GJFfm2cPPDWzsBqEouMgYA85XHl6CdNbjKL29wEAR0G78ozdBhr9R1AVSCctqUHelVvsAvSvSE+Rvl/E7f8OeDn7xxVpRGL+nJJGAzW4UUrHdBJ8dQTSPTssDY3+ohCxzh/rQQA2Avw1mO9hLk8s+IvvidCtJxi9RQqklJQV1lQ2Oebhu6jPdX8DpjgtkpcpWCx8T1kZOcC/h7fzByyMazErm+lqU3U3htHpjqCwAQKU/ya/vPfjRDjVwNb4nB1zHFqOc4Hu+tIUCkMf3d4JyZvaxSBfQnsTpdd1Qlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D+VqnzUl5Z7hfweJG11an1Y83cEXeGWUbndlGwEHYlI=;
- b=cbYDTcaW5Zlpu/f/MX3ZdMAbELBgMEykGkeGq38D+cf1qq8Sy7OnW9e4x2hO3JoFk3598+/fWvy3A9S7fUQJrg/0JGGH0H6YnoRnjj0AzD5K1f9AS+L4m0/ts1W2l9COitY5QLBA9yzakfR1ooMfgbABAc3y+UAM3Vt7eGaQTYw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by AS8PR04MB8833.eurprd04.prod.outlook.com (2603:10a6:20b:42c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Fri, 16 Sep
- 2022 10:17:54 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::9466:d44b:804:72ef]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::9466:d44b:804:72ef%5]) with mapi id 15.20.5632.016; Fri, 16 Sep 2022
- 10:17:54 +0000
-Date:   Fri, 16 Sep 2022 13:17:38 +0300
-From:   Viorel Suman <viorel.suman@oss.nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viorel Suman <viorel.suman@nxp.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: firmware: imx: sync with SCFW kit
- v1.13.0
-Message-ID: <20220916101738.xn7xx7ipf7p5dbok@fsr-ub1664-116>
-References: <20220915181805.424670-1-viorel.suman@oss.nxp.com>
- <20220915181805.424670-2-viorel.suman@oss.nxp.com>
- <42e78db0-74f9-3098-0cf2-908092a0b594@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42e78db0-74f9-3098-0cf2-908092a0b594@linaro.org>
-X-ClientProxiedBy: AM0PR10CA0048.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:150::28) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
+        Fri, 16 Sep 2022 06:46:35 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDDF7BD175
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:26:29 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXWvLTSRjPxwbAA--.42504S3;
+        Fri, 16 Sep 2022 18:19:55 +0800 (CST)
+Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
+ kswapd
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+ <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+ <YyLUGnqtZXn4MjJF@casper.infradead.org>
+ <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
+ <YyLpls9/t6LKQefS@casper.infradead.org>
+ <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
+ <YyQ2m9vU/plyBNas@casper.infradead.org>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
+Date:   Fri, 16 Sep 2022 18:19:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5005:EE_|AS8PR04MB8833:EE_
-X-MS-Office365-Filtering-Correlation-Id: c67bd8a9-f200-4756-9719-08da97ccb80a
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yoXEJK/OiqfM5XwO5pkPKZUEmICqwvGXSYhzrjhF/pS3G05uB+o0TtyDXN9jm9asm8SGzP7kkSADO/CTgXJa4Ik1/iIl0/CHVATQNkdE4Qas91kIitzVI8sNEpsNE81lC1laMTRs/nBikaL1BhmU/wF0lmenAWTKf6gpe1RPy6yPWVhQ6DZpqkW71X8BJCLc1kEASDMCujOG4yH56XvgslJ9Vohpa6cU62CjM9hRGqW7PbsxFpAWgddfHbtZPIFxZgW0POQUhyWch/L9Oa6xxeC7HxnQa/q3o33ndxbEU0WQwfH3LN4dKNt9IdsmfBzsUtCLbY7muOteaW3L0q+knrEljZr/6ME30Dq+ps5NTKcavnc7cOPWeqby3qX/zvDYvfwk16GnLnGK73TqBJ/kqqU+uHOotUcvM/2yMN9NQBsD82/TjuW3k1SRUj/Q966C9l/1ZjQwn/+tG6D/RzkOBQfkPGNTXAczhCd8RMtrZbQ8xSv4P+S4S9xpv4qv9MbHX+sSBZ15VMWc9SvezUwcTDXtHxpLL6jkCF1GP1t6zAnEkvaak8AFPmO7y2tBxG7C3nK/Yqra9Okmmmp8zjYpG3vFoXRWPcUXTZWf9hPhPTCGrXyGfHIn86KobJbSDtvXDONEq1QB73pS3COhDOQHM5B019aGaKYK3ZmqkPhFlG2NB5Q0IKclWbST+hfh+D9pQyMzAsPbwyQX0TY8gOQhCJyAoEOR67xJhR3Gco6Ywe0IAluco3oqkg57+4RNqJBr920Ti5XhkYSRhrJry36woS8K39/6xgBMOM8oz1dAgI4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199015)(8676002)(6506007)(53546011)(6512007)(966005)(26005)(9686003)(7416002)(86362001)(6486002)(44832011)(38350700002)(478600001)(38100700002)(1076003)(186003)(83380400001)(41300700001)(33716001)(6666004)(52116002)(4326008)(2906002)(66946007)(5660300002)(8936002)(316002)(6916009)(66556008)(66476007)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MjF5T+Sc3B7OqQm5tnLW8QrO0fjFkq4dSqhrXHasmteZz5uitvY4E/y4cqo2?=
- =?us-ascii?Q?CL/7dQ3aaWyAyonfPRoL7Qik570J2rAdqYsoxlhJQ5r05N06Q3o6HUMdI+TR?=
- =?us-ascii?Q?5HG7PBQhHOE/x0+ry53BSlT98LlDFjI9x5DN8rbYkjUe8F3S25wTdvq9Pg+a?=
- =?us-ascii?Q?HnxQtBdZHD/DOyR6RvEhg1GxunnYkAAzcO+9x4QVnIylGjZ0kC0ONgSrERby?=
- =?us-ascii?Q?117Kmq4djE/djjeGUcqqefkcL0tFLmy7XbEgahttQBDmVwQAA3iAjc9PiSUe?=
- =?us-ascii?Q?IlCnF/guhdJcVqfyHaojHV7JrGBpfD4/qQgZKj2ZtEXx0H5jrTyfy8MSo/DY?=
- =?us-ascii?Q?RkIXTMboJO2wYrPIVrULfv0iEP5vA8OKL2xM+tjC+VNQgulNnN+1fVeC73dk?=
- =?us-ascii?Q?WdTv03o/x+bOj0sSfhMpzeSlc46brUBPWncgWNRT7dmQNrmmqfpjz3T4GcEi?=
- =?us-ascii?Q?Ri6B+Yy3MN8+tFMLErAo0FzLWnFnMFPUemvOS7q9yiTE4MvhwMMumg2Mm86/?=
- =?us-ascii?Q?dtBHtvvIMwsd39/a2nJH8bAmkkzTyGaw9Hnwqf6YJtivqscfC26TMZmVUOEz?=
- =?us-ascii?Q?Vu8VdI/el/BKgCEFbVgW9MEA6KnytKtqHUbBnoiVDwCFqWG/suwPyAP2Q9Uw?=
- =?us-ascii?Q?UCliutRkOuuljzAfftS6A3lpegZgeTOlagTU8VY5z4EiF90/wzVXRC88ezA7?=
- =?us-ascii?Q?65gnTnK/CVGZekm8yHBqUN2CUeOhWnnFXNKUHhGfBeCmu9445J5KNeCrfd0k?=
- =?us-ascii?Q?1VDY70a/WNI1iTxt++tccnbauH7vz7/n6tYmTa/bw7v+S746J73GZeFmSeYi?=
- =?us-ascii?Q?CnR86AwVsZaVeGyRYt+topwRfvXQ6i+7kC2Qi2v/oqxTnNoY0UJLSA1a1Qu4?=
- =?us-ascii?Q?wYXap02tpZzIuqfbk4/D2Z3rDQRLNSzSA+/HcTSVK6CyzS/f42BCTmq/7mev?=
- =?us-ascii?Q?MGnUM1ShiVw38qhN3SZvo3JrLkhZxEvy0i4wPBfYYxwVuVH6uuMfothoJTiP?=
- =?us-ascii?Q?2/rbh4cobatiD5qepQ8EJx7GL+ogUwisUZRQYN1BDtADw1tLntHAIdH62oxV?=
- =?us-ascii?Q?LAsngw5clfj4vbHAN6BQHBXYGiOgJB2nc9DWFz2t4rrM6ea6mydnEVYDb5aW?=
- =?us-ascii?Q?gPaLCecV9sJFfVKdBIgc9R+GarIsjwmzUNryZ7A9NIGQ9bMam/5/jTwpfrwL?=
- =?us-ascii?Q?9iS4pPHDLto9EEN2StqyP0meNEkw9pqP9ON2T57DEV5B7S1+uaOo6QBdvsx6?=
- =?us-ascii?Q?S+xCxnnQvOkum6SDFicF8yifm979QTKKwvOZ+XVwt8OoWncs3+kLhNJVZY7x?=
- =?us-ascii?Q?po30IO4gCwJpKF7BNPx/JDvCgPi7QCqT9ml0F7oF1BRvl1ui1Qd+evECoAaZ?=
- =?us-ascii?Q?9LZG5Zc4NURKXlo4xAgLf2MrXTA1d+d38GU0xbvxMFrAeETF2KnBud8KmUeR?=
- =?us-ascii?Q?6piwZjbt0gUIdETtX0Tr7Qa2PjsV/VuSPXmGOYHOOtTDNSz2JDuALU629aJf?=
- =?us-ascii?Q?gkauvB/wTpqGmiCufi89aZO14YTg17YKPjn+jtcs3YLcpdExVRdzahbD5RUM?=
- =?us-ascii?Q?Zr2rOdSSnXXJ8GQNfhX3EJYTuVbvVGBjG86qhUU0?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c67bd8a9-f200-4756-9719-08da97ccb80a
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 10:17:54.6920
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SYpyffW3oCetockp9TtBCThKt1GXTR/IWeOe+KYYW574AUTqLIllDnNcmcFmIUaeEbWYmj2A2IWC8JwEPfaU5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8833
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyQ2m9vU/plyBNas@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxXWvLTSRjPxwbAA--.42504S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Aryftr4kWFyUuFW8Kr47XFb_yoWxCry8pF
+        1UtFsrKF48JrWjyr4UKw4vqr10gr1DC3W5Wry8Gr17uF1qvr15J3y8Gr45K3Z8Gr1Uury2
+        qrW5Xr12vr17XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvjb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
+        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUgg
+        _TUUUUU
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-16 10:38:30, Krzysztof Kozlowski wrote:
-> On 15/09/2022 19:18, Viorel Suman (OSS) wrote:
-> > From: Viorel Suman <viorel.suman@nxp.com>
-> > 
-> > Sync defines with the latest available SCFW kit version 1.13.0,
-> > may be found at the address below:
-> > 
-> > https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
-> > 
-> > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> > ---
-> >  include/dt-bindings/firmware/imx/rsrc.h | 299 ++++++++++++++++--------
-> >  1 file changed, 203 insertions(+), 96 deletions(-)
-> > 
-> > diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
-> > index 43885056557c..a4c68f394986 100644
-> > --- a/include/dt-bindings/firmware/imx/rsrc.h
-> > +++ b/include/dt-bindings/firmware/imx/rsrc.h
-> > @@ -13,34 +13,38 @@
-> >   * never be changed or removed (only added to at the end of the list).
-> >   */
-> >  
-> > -#define IMX_SC_R_A53			0
-> > -#define IMX_SC_R_A53_0			1
+Hi Andrew and Matthew,
+
+On 2022/9/16 pm 4:40, Matthew Wilcox wrote:
+> On Fri, Sep 16, 2022 at 08:57:50AM +0800, Hongchen Zhang wrote:
+>> Hi Andrew ,
+>>
+>> On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
+>>> On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
+>>>> Hi Matthew,
+>>>> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
+>>>>> On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
+>>>>>> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
+>>>>>> seconds.
+>>>>>> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
+>>>>>> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>>>>>> this message.
+>>>>>> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
+>>>>>> 77327 flags:0x00004002
+>>>>>> [ 3748.483358] Call Trace:
+>>>>>> [ 3748.485964]  <TASK>
+>>>>>> [ 3748.488150]  __schedule+0x23d/0x590
+>>>>>> [ 3748.491804]  schedule+0x4e/0xc0
+>>>>>> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
+>>>>>> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
+>>>>>> [ 3748.505181]  down_read+0x43/0xa0
+>>>>>> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
+>>>>>> [ 3748.512799]  exc_page_fault+0x77/0x170
+>>>>>> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
+>>>>>> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
+>>>>>> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
+>>>>>> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
+>>>>>> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
+>>>>>> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
+>>>>>> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
+>>>>>> 0000000000000010
+>>>>>> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
+>>>>>> 00007f99faa1a000
+>>>>>> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
+>>>>>> 0000000000000014
+>>>>>> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
+>>>>>> 0000000000001000
+>>>>>> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
+>>>>>> ffffaa9248fffd98
+>>>>>> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
+>>>>>> [ 3748.592614]  filemap_read+0x174/0x3e0
+>>>>>
+>>>>> Interesting; it wasn't the process itself which triggered the page
+>>>>> fault; the process called read() and the kernel took the page fault to
+>>>>> satisfy the read() call.
+>>>>>
+>>>>>> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
+>>>>>> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
+>>>>>> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
+>>>>>> [ 3748.609164]  ? aa_file_perm+0x102/0x250
+>>>>>> [ 3748.613125]  new_sync_read+0x10d/0x1a0
+>>>>>> [ 3748.617009]  vfs_read+0x103/0x1a0
+>>>>>> [ 3748.620423]  ksys_read+0x67/0xf0
+>>>>>> [ 3748.623743]  __x64_sys_read+0x19/0x20
+>>>>>> [ 3748.627511]  do_syscall_64+0x59/0xc0
+>>>>>> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
+>>>>>> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
+>>>>>> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
+>>>>>> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
+>>>>>> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
+>>>>>> [ 3748.653737]  ? exc_page_fault+0x89/0x170
+>>>>>> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+>>>>>> [ 3748.663030] RIP: 0033:0x7f9a852989cc
+>>>>>> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
+>>>>>> 0000000000000000
+>>>>>> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
+>>>>>> 00007f9a852989cc
+>>>>>> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
+>>>>>> 0000000000000061
+>>>>>> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
+>>>>>> 00007f99faa18010
+>>>>>> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
+>>>>>> 00007f99faa18010
+>>>>>> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
+>>>>>> 0000000000027100
+>>>>>
+>>>>> ORIG_RAX is 0, which matches sys_read.
+>>>>> RDI is file descriptor 0x61
+>>>>> RSI is plausibly a userspace pointer, 0x7f99faa18010
+>>>>> RDX is the length, 0x27100 or 160kB.
+>>>>>
+>>>>> That all seems reasonable.
+>>>>>
+>>>>> What I really want to know is who is _holding_ the lock.  We stash
+>>>>> a pointer to the task_struct in 'owner', so we could clearly find this
+>>>>> out in the 'blocked for too long' report, and print their stack trace.
+>>>>>
+>>>> As described in the comment for __rwsem_set_reader_owned,it is hard to track
+>>>> read owners.So we could not clearly find out who blocked the process,it was
+>>>> caused by multiple tasks.
+>>>
+>>> Readers don't block readers.  You have a reader here, so it's being
+>>> blocked by a writer.  And that writer's task_struct is stashed in
+>>> rwsem->owner.  It would be nice if we dumped that information
+>>> automatically ... but we don't do that today.  Perhaps you could
+>>> grab that information from a crash dump if you have one.
+>>>
+>>>>> You must have done something like this already in order to deduce that
+>>>>> it was the direct reclaim path that was the problem?
+>>>>>
+>>>> The method we used is to track the direct reclaim using the
+>>>> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
+>>>> occurred,we could get a very large "nr_reclaimed" which is not a desirable
+>>>> value for process except kswapd.
+>>>
+>>> I disagree.  If a process needs to allocate memory then it should be
+>>> paying the cost of reclaiming that memory itself.  kswapd is a last
+>>> resort to reclaim memory when we have a workload (eg a network router)
+>>> that does its memory allocation primarily in interrupt context.
+>>>
+>> What's your opinion about this scan adjust issue? Is there a better way to
+>> fix this issue?
 > 
-> You cannot change binding constants... Aren't you breaking all possible
-> boards and users?
+> Yes, but we need you to gather more information about what's causing
+> the issue before we can suggest what that is.
+> 
+I think the following scenery triggers the scan adjust issue:
+In function shrink_lruvec, we call get_scan_count and get the following 
+values:
+targets[LRU_INACTIVE_ANON]=50000
+targets[LRU_ACTIVE_ANON]=50000
+targets[LRU_INACTIVE_FILE]=128
+targets[LRU_ACTIVE_FILE]=129
 
-Hi Krzysztof,
+After the first scan, we get more than nr_to_reclaim pages, but the 
+percentage of scanning nr[LRU_INACTIVE_FILE+LRU_ACTIVE_FILE] is 256/257, 
 
-There is a backward compatibility section added in the end of the patch,
-it follows the same approach as in SCFW kit v1.13.0:
+Then when we scan adjust, we must scan(possibly reclaim) 
+256*(50000+50000)/257-256=99354 pages, which is too large and would 
+waste too many time.
+If it is not kswapd, it is unacceptable to reclaim so many pages.
+So we should limit the number of pages of scan adjust.
 
-+/*
-+ * Compatibility defines for sc_rsrc_t
-+ */
-+#define IMX_SC_R_A35                   IMX_SC_R_AP_2
-+#define IMX_SC_R_A35_0                 IMX_SC_R_AP_2_0
-+#define IMX_SC_R_A35_1                 IMX_SC_R_AP_2_1
-+#define IMX_SC_R_A35_2                 IMX_SC_R_AP_2_2
-+#define IMX_SC_R_A35_3                 IMX_SC_R_AP_2_3
-+#define IMX_SC_R_A53                   IMX_SC_R_AP_0
-+#define IMX_SC_R_A53_0                 IMX_SC_R_AP_0_0
-+#define IMX_SC_R_A53_1                 IMX_SC_R_AP_0_1
-+#define IMX_SC_R_A53_2                 IMX_SC_R_AP_0_2
-+#define IMX_SC_R_A53_3                 IMX_SC_R_AP_0_3
-
-Regards,
-Viorel
+Thanks
+Hongchen Zhang
 
