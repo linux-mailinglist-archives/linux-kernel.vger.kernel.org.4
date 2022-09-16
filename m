@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2C65BACF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FF25BACF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiIPMHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
+        id S231226AbiIPMH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiIPMHk (ORCPT
+        with ESMTP id S230428AbiIPMHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:07:40 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DFAFADA
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:07:38 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u9so49033962ejy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:07:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=OQ8zHrIX70m98Oe3Z2xil8x9KKcY+DJQWerhvs21yklCJbj0er4JrSdkhrWEdL4cdw
-         p703XLHfp6ksj7uFlg56h5KuWoxdB0Z5qMNDTsjT9a3QQxZe40q4Dcl1AEtgYFRUmRgb
-         JyO6tzyZJxrUPdaH/m9I99qLd33lnQgiA3fBkgIKy4qvAm4KNap5pnKipqw/pDQdOsF2
-         RMVosVZX40XjPNoppGc1VxTGF/4qg7I9MhjgMiHH+8ARRhtbE4XdLcvqGqdTtxhpoOwr
-         yl4T1vsmWlC0wf/mYdDRVvQVSQruQmelYMxnEFt0ILguRW8+tpUXQssBQnqOj4h3j9f7
-         ENpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=GpKdwOONgb7EhaWXGUGQrKTTvYm9SftbUgWE/wofkiqMySdsI+y2reBzxdQ7jUePnr
-         Q0Mlmp8vSeZlemrwfi4JElryrFsVE6wxVcztLFDbisj8LOQZQLheSzWTn8pIhE/xQCKC
-         ZnEK+5pDbqwsQ6s5Rbl//CkySnshMpKZc7xikgRfXsv9u2OqpPqs/zhiu0LL/6KKoD7p
-         I7InNYhCpnKO3vHVK+pnXMha4fmr9jfK+IzHKPyqpNitGnTmINtZ5kcppck48N2jAcWl
-         x0ELRom26ZE850gbsUKUTT2VIZAZhkravChWVYdyFyYi2ICpVThYNfxakxfWQ28j7hV5
-         O/0Q==
-X-Gm-Message-State: ACrzQf2dnaAsiPOm0faaTINIa7YTY5f9+EydDQ4cTNB5PRjwV5plvzZL
-        u0UZJlZ4L4R1HXzya1s77P5RQ8Hvi2cSTfHFtPw=
-X-Google-Smtp-Source: AMsMyM50Qt7qDEVjUjOeh4Zr3qhxIqEfsGOFmjXgAwKOxJcISlt17Ll3jPrBgOzPcw9B4a7Th2rv4TTzjVtoMHfw+4M=
-X-Received: by 2002:a17:906:7312:b0:780:9b5e:36dd with SMTP id
- di18-20020a170906731200b007809b5e36ddmr2568880ejc.200.1663330057120; Fri, 16
- Sep 2022 05:07:37 -0700 (PDT)
+        Fri, 16 Sep 2022 08:07:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE25AFAD0;
+        Fri, 16 Sep 2022 05:07:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4163B82681;
+        Fri, 16 Sep 2022 12:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A424CC433C1;
+        Fri, 16 Sep 2022 12:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663330068;
+        bh=WC4VvAJYYKJVw/vMeKdu4prcV6pqAqVXKadEN3iBG5Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s4U68EZj8EG/aSWZ0SAu2e+83+OzL0scCS7LtKbtD4tf+gGwy3q1KOYjsJc0e0VEC
+         4dnxzJHkENXX7fZqfQbJzm9yUejXC+VLYknZW0gDID8oDWnFMR2zOyQ1HCBEjc8ldH
+         QrHgd9/ghCevCGE/53fAnNyr2cudhjTzoR5h3e2Ax6zpoA54xTevSg50YdqgpY3MRi
+         czxvvVYUGQF0USg0tI5Jn65zW2TqcpaNzPtm1S6gKz4vqInUu+k+/VvEhioON/CD5O
+         qVCbXvH/vyoIxKBZHBrwiAZ2NSiVc43l0C6qw2ENPCCprDG+jzPvTCGZJaJxrllyM3
+         bankcFNHLfxTA==
+Date:   Fri, 16 Sep 2022 20:07:42 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] ARM: dts: imx6qdl-gw52xx: add CAN regulator
+Message-ID: <20220916120742.GN1728671@dragon>
+References: <20220912215312.964722-1-tharvey@gateworks.com>
 MIME-Version: 1.0
-Received: by 2002:a98:cb43:0:b0:181:f8b4:ef08 with HTTP; Fri, 16 Sep 2022
- 05:07:36 -0700 (PDT)
-Reply-To: maryalbertt00045@gmail.com
-From:   Mary Albert <edithbrown048@gmail.com>
-Date:   Fri, 16 Sep 2022 13:07:36 +0100
-Message-ID: <CAKt8mnavM=Bdn-e0nh0YT2-GEYodvmchN=5ouka8rEQP1p3qVQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:629 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4817]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [edithbrown048[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [maryalbertt00045[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [edithbrown048[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912215312.964722-1-tharvey@gateworks.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On Mon, Sep 12, 2022 at 02:53:12PM -0700, Tim Harvey wrote:
+> The GW52xx has a tranceiver with a STBY pin connected to an IMX6 GPIO.
+> Configure this as a regulator to drive it low when CAN is in use.
+> 
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  arch/arm/boot/dts/imx6qdl-gw52xx.dtsi | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/imx6qdl-gw52xx.dtsi b/arch/arm/boot/dts/imx6qdl-gw52xx.dtsi
+> index b1df2beb2832..ec6b55bf77d9 100644
+> --- a/arch/arm/boot/dts/imx6qdl-gw52xx.dtsi
+> +++ b/arch/arm/boot/dts/imx6qdl-gw52xx.dtsi
+> @@ -137,6 +137,16 @@ reg_5p0v: regulator-5p0v {
+>  		regulator-always-on;
+>  	};
+>  
+> +	reg_can1_stby: regulator-can1-stby {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_reg_can1>;
+> +		compatible = "regulator-fixed";
+
+Can we have properties start with 'compatible' just like other nodes?
+
+Shawn
+
+> +		regulator-name = "can1_stby";
+> +		gpio = <&gpio1 9 GPIO_ACTIVE_LOW>;
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+>  	reg_usb_otg_vbus: regulator-usb-otg-vbus {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "usb_otg_vbus";
+> @@ -170,6 +180,7 @@ &audmux {
+>  &can1 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_flexcan1>;
+> +	xceiver-supply = <&reg_can1_stby>;
+>  	status = "okay";
+>  };
+>  
+> @@ -612,7 +623,6 @@ pinctrl_flexcan1: flexcan1grp {
+>  		fsl,pins = <
+>  			MX6QDL_PAD_KEY_ROW2__FLEXCAN1_RX	0x1b0b1
+>  			MX6QDL_PAD_KEY_COL2__FLEXCAN1_TX	0x1b0b1
+> -			MX6QDL_PAD_GPIO_9__GPIO1_IO09		0x4001b0b0 /* CAN_STBY */
+>  		>;
+>  	};
+>  
+> @@ -702,6 +712,12 @@ MX6QDL_PAD_SD1_CMD__PWM4_OUT		0x1b0b1
+>  		>;
+>  	};
+>  
+> +	pinctrl_reg_can1: regcan1grp {
+> +		fsl,pins = <
+> +			MX6QDL_PAD_GPIO_9__GPIO1_IO09		0x4001b0b0 /* CAN_STBY */
+> +		>;
+> +	};
+> +
+>  	pinctrl_uart1: uart1grp {
+>  		fsl,pins = <
+>  			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA	0x1b0b1
+> -- 
+> 2.25.1
+> 
