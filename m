@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C575BAD57
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8C25BAD58
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiIPMWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S231736AbiIPMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiIPMV3 (ORCPT
+        with ESMTP id S231388AbiIPMVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:21:29 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD7B14F4
+        Fri, 16 Sep 2022 08:21:48 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E97DB0B04
         for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:22 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id d2so201097wrq.2
+Received: by mail-wm1-x32e.google.com with SMTP id l8so10614403wmi.2
         for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:21:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=h5pjjtpvuIBmXpwkOM+KyNe1mesHrCkdZB5vEBZPnfc=;
-        b=Qfolmw2zjYhSKK7DBk+XSztHeKQFLTZ4/K7LkB5pJ9Jgtklf7UEBbwJ+xbVt3tvblo
-         +05C5qdIenx66Mfsv4o1WUYEg5yIypu2NReVJmLGHSph4tVJdCPzjTiZnuR6hUlP2XeT
-         e8XXlZOCjF0P+WQkfPnoGOzdcd14WKI9Y7AIaODgibFj/eP0L5Wryx5p6w7UCwpmxOPR
-         g4qf0WT/dGJuXrXVP4EFXHZ+FhSawl/QYoxOnBhociex3yKwcZYti0Wmu//Zf0L0lJil
-         2yyqv8WGcUtDvg5FQGpc7Gque1ZW8My5zdZzytlcYtXtjlNqlxptCX2VzghkEu3QBG4R
-         kgVg==
+        bh=faurfbZAdufbwG0Pq7O5pFThfS/Hbeg3b/K0Ts9wUP4=;
+        b=Yu6U7+5FEvjJr//foJmjT1es1X7vn8Uqz0Yx1FabUFRM4If9vTWuDpeGpFxEBk7ThK
+         MEFLNRMuadX0T636jpZ57y5A7jSenX5nosWO5s/mbRRxAo3XffCzWnbVL/KmxMS+hnvq
+         F8k47OnRaBfDP9CZvijlWWASPVSI3oEFVTgFq4EVFEADaG5RhQMGcm8XmZZEBbFf559H
+         SwD3fpfagHkgBFPtQWEHBnncJkxznSSnwyLm4X+v9+aTTnrACuVab1dJ057ZkGoWfWFu
+         fngf5cTXcd/FncreqMYJSjFC4HrfDcvoAA1J+nasW+LGk4bOZEkvTSVhjeLyjIwvfT/R
+         oU8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=h5pjjtpvuIBmXpwkOM+KyNe1mesHrCkdZB5vEBZPnfc=;
-        b=nmrgo8IiCUp72rf7rmd2YP20Eg3HCkSuIxE+k/mZ4d+eBY4oMl7/9Q17xfV5b/zeLL
-         5y7yXJuNywEiiNH7FVxN+2Sr1c/JHdVpjoLIepzWmjsHEs6Osgen7WGHfXg6bqtgdbWX
-         Zd1aI+15k/D+6j71ztTZ8GTHI67O8rR/TQT5XbWgnieJQFy3xJ6AgDGZSR3it+BJbR0o
-         VSYfKmpw/+O41ZBvN0+Z7s2tJVx9Sh4j1EIgFJNdPYJVE8Wr8qaa9JqCgVTxqs67tGCK
-         ZVwy8JbuZ9Z+VvdT1o2zGkfkQ5L6Ft6vQ0Ts/6oMMxqhVVPzHlI2BO5NUgvkTITNPcli
-         UfWg==
-X-Gm-Message-State: ACrzQf3sgzWWpBahNKovboEOj2xXMmyoStT2vWB3w3wo1eNOdpWM4YVp
-        +j/7ojNJnvDAlEGKK4bRrn/Fww==
-X-Google-Smtp-Source: AMsMyM4/rSE1ktxoe4RBjklMEhVyFkCvyFkwHpJ+nLxp5wVdQ5dG4DPrCU6zfs5spsVR7goNt+KKhw==
-X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id r16-20020a5d52d0000000b0021e4923fa09mr2800095wrv.244.1663330880338;
-        Fri, 16 Sep 2022 05:21:20 -0700 (PDT)
+        bh=faurfbZAdufbwG0Pq7O5pFThfS/Hbeg3b/K0Ts9wUP4=;
+        b=dP7GS/f8vwfk27UFUJT9MdXzxYDBfOrCMq6mPejiBr2oQMOaHs2oXkgTVYtIeQ1dBB
+         P30GqX3MvbrYaDU5olICtupqb1K78dXMS5IrY6YvLTjEM34K2i29sm7Jodr6xmsVaGpq
+         oB9EceA8pjhme6foKoPcQYFNMrZodrqns3DQw5mIFZFQocFuytXo2RVnsUQC4hBg1+mw
+         V+7J1l4y7C6yQ1vbmM1wDx4CO3+vo1eUT+ZqCcUXpaw0pud/amf/L8JdRwoI94YcWjJd
+         QJ7RUzoYWa0Bt2dl4rZGf9vqrBEh5jX5oMb05GeIBD4NlYISldt02uhWEP8PZ5bGKMaF
+         FCZg==
+X-Gm-Message-State: ACgBeo0psM16+q6jhMpdkn/s16g05YD9BZ40Xr/1Uk8uWTPrh2kLxOJy
+        fu/5n45K8kaAtFGMAXIa1FV6Rw==
+X-Google-Smtp-Source: AA6agR6iOvhLTJ8EncEWyfPK4O5Pw7I5NIOHHns+DFS7//6mAiYaA5trXVfx4YibURs07qaOuO3nKA==
+X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr9872798wmq.189.1663330881325;
+        Fri, 16 Sep 2022 05:21:21 -0700 (PDT)
 Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id u11-20020adfdb8b000000b0022add371ed2sm1540015wri.55.2022.09.16.05.21.19
+        by smtp.gmail.com with ESMTPSA id u11-20020adfdb8b000000b0022add371ed2sm1540015wri.55.2022.09.16.05.21.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 05:21:19 -0700 (PDT)
+        Fri, 16 Sep 2022 05:21:20 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        kernel test robot <lkp@intel.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 12/13] nvmem: lan9662-otp: add support
-Date:   Fri, 16 Sep 2022 13:20:59 +0100
-Message-Id: <20220916122100.170016-13-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 13/13] nvmem: u-boot-env: fix crc32 casting type
+Date:   Fri, 16 Sep 2022 13:21:00 +0100
+Message-Id: <20220916122100.170016-14-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220916122100.170016-1-srinivas.kandagatla@linaro.org>
 References: <20220916122100.170016-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,282 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Add support for OTP controller available on LAN9662. The OTPC controls
-the access to a non-volatile memory. The size of the memory is 8KB.
-The OTPC can access the memory based on an offset.
-Implement both the read and the write functionality.
+This fixes:
+drivers/nvmem/u-boot-env.c:141:17: sparse: sparse: cast to restricted __le32
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment variables")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/Kconfig        |   8 ++
- drivers/nvmem/Makefile       |   2 +
- drivers/nvmem/lan9662-otpc.c | 222 +++++++++++++++++++++++++++++++++++
- 3 files changed, 232 insertions(+)
- create mode 100644 drivers/nvmem/lan9662-otpc.c
+ drivers/nvmem/u-boot-env.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 7f2557934834..ec8a49c04003 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -98,6 +98,14 @@ config NVMEM_JZ4780_EFUSE
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called nvmem_jz4780_efuse.
+diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+index d17a164ae705..8e72d1bbd649 100644
+--- a/drivers/nvmem/u-boot-env.c
++++ b/drivers/nvmem/u-boot-env.c
+@@ -139,7 +139,7 @@ static int u_boot_env_parse(struct u_boot_env *priv)
+ 		data_offset = offsetof(struct u_boot_env_image_redundant, data);
+ 		break;
+ 	}
+-	crc32 = le32_to_cpu(*(uint32_t *)(buf + crc32_offset));
++	crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
+ 	crc32_data_len = priv->mtd->size - crc32_data_offset;
+ 	data_len = priv->mtd->size - data_offset;
  
-+config NVMEM_LAN9662_OTPC
-+	tristate "Microchip LAN9662 OTP controller support"
-+	depends on SOC_LAN966 || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	help
-+	  This driver enables the OTP controller available on Microchip LAN9662
-+	  SoCs. It controls the access to the OTP memory connected to it.
-+
- config NVMEM_LAYERSCAPE_SFP
- 	tristate "Layerscape SFP (Security Fuse Processor) support"
- 	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index bac799b2fa8d..fa80fe17e567 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -21,6 +21,8 @@ obj-$(CONFIG_NVMEM_IMX_OCOTP_SCU)	+= nvmem-imx-ocotp-scu.o
- nvmem-imx-ocotp-scu-y			:= imx-ocotp-scu.o
- obj-$(CONFIG_NVMEM_JZ4780_EFUSE)	+= nvmem_jz4780_efuse.o
- nvmem_jz4780_efuse-y			:= jz4780-efuse.o
-+obj-$(CONFIG_NVMEM_LAN9662_OTPC)	+= nvmem-lan9662-otpc.o
-+nvmem-lan9662-otpc-y		:= lan9662-otpc.o
- obj-$(CONFIG_NVMEM_LAYERSCAPE_SFP)	+= nvmem-layerscape-sfp.o
- nvmem-layerscape-sfp-y			:= layerscape-sfp.o
- obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)	+= nvmem_lpc18xx_eeprom.o
-diff --git a/drivers/nvmem/lan9662-otpc.c b/drivers/nvmem/lan9662-otpc.c
-new file mode 100644
-index 000000000000..f6732fd216d8
---- /dev/null
-+++ b/drivers/nvmem/lan9662-otpc.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#define OTP_OTP_PWR_DN(t)			(t + 0x00)
-+#define OTP_OTP_PWR_DN_OTP_PWRDN_N		BIT(0)
-+#define OTP_OTP_ADDR_HI(t)			(t + 0x04)
-+#define OTP_OTP_ADDR_LO(t)			(t + 0x08)
-+#define OTP_OTP_PRGM_DATA(t)			(t + 0x10)
-+#define OTP_OTP_PRGM_MODE(t)			(t + 0x14)
-+#define OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE	BIT(0)
-+#define OTP_OTP_RD_DATA(t)			(t + 0x18)
-+#define OTP_OTP_FUNC_CMD(t)			(t + 0x20)
-+#define OTP_OTP_FUNC_CMD_OTP_PROGRAM		BIT(1)
-+#define OTP_OTP_FUNC_CMD_OTP_READ		BIT(0)
-+#define OTP_OTP_CMD_GO(t)			(t + 0x28)
-+#define OTP_OTP_CMD_GO_OTP_GO			BIT(0)
-+#define OTP_OTP_PASS_FAIL(t)			(t + 0x2c)
-+#define OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED	BIT(3)
-+#define OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED	BIT(2)
-+#define OTP_OTP_PASS_FAIL_OTP_FAIL		BIT(0)
-+#define OTP_OTP_STATUS(t)			(t + 0x30)
-+#define OTP_OTP_STATUS_OTP_CPUMPEN		BIT(1)
-+#define OTP_OTP_STATUS_OTP_BUSY			BIT(0)
-+
-+#define OTP_MEM_SIZE 8192
-+#define OTP_SLEEP_US 10
-+#define OTP_TIMEOUT_US 500000
-+
-+struct lan9662_otp {
-+	struct device *dev;
-+	void __iomem *base;
-+};
-+
-+static bool lan9662_otp_wait_flag_clear(void __iomem *reg, u32 flag)
-+{
-+	u32 val;
-+
-+	return readl_poll_timeout(reg, val, !(val & flag),
-+				  OTP_SLEEP_US, OTP_TIMEOUT_US);
-+}
-+
-+static int lan9662_otp_power(struct lan9662_otp *otp, bool up)
-+{
-+	void __iomem *pwrdn = OTP_OTP_PWR_DN(otp->base);
-+
-+	if (up) {
-+		writel(readl(pwrdn) & ~OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+		if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+						OTP_OTP_STATUS_OTP_CPUMPEN))
-+			return -ETIMEDOUT;
-+	} else {
-+		writel(readl(pwrdn) | OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan9662_otp_execute(struct lan9662_otp *otp)
-+{
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_CMD_GO(otp->base),
-+					OTP_OTP_CMD_GO_OTP_GO))
-+		return -ETIMEDOUT;
-+
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+					OTP_OTP_STATUS_OTP_BUSY))
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static void lan9662_otp_set_address(struct lan9662_otp *otp, u32 offset)
-+{
-+	writel(0xff & (offset >> 8), OTP_OTP_ADDR_HI(otp->base));
-+	writel(0xff & offset, OTP_OTP_ADDR_LO(otp->base));
-+}
-+
-+static int lan9662_otp_read_byte(struct lan9662_otp *otp, u32 offset, u8 *dst)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_FUNC_CMD_OTP_READ, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED)
-+			return -EACCES;
-+		*dst = (u8) readl(OTP_OTP_RD_DATA(otp->base));
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_write_byte(struct lan9662_otp *otp, u32 offset, u8 data)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE, OTP_OTP_PRGM_MODE(otp->base));
-+	writel(data, OTP_OTP_PRGM_DATA(otp->base));
-+	writel(OTP_OTP_FUNC_CMD_OTP_PROGRAM, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED)
-+			return -EACCES;
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_FAIL)
-+			return -EIO;
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_read(void *context, unsigned int offset,
-+			    void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	uint8_t data;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+		if (rc < 0)
-+			break;
-+		*val++ = data;
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static int lan9662_otp_write(void *context, unsigned int offset,
-+			     void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	u8 data, newdata;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		/* Skip zero bytes */
-+		if (val[i]) {
-+			rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+			if (rc < 0)
-+				break;
-+
-+			newdata = data | val[i];
-+			if (newdata == data)
-+				continue;
-+
-+			rc = lan9662_otp_write_byte(otp, offset + i,
-+						      newdata);
-+			if (rc < 0)
-+				break;
-+		}
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static struct nvmem_config otp_config = {
-+	.name = "lan9662-otp",
-+	.stride = 1,
-+	.word_size = 1,
-+	.reg_read = lan9662_otp_read,
-+	.reg_write = lan9662_otp_write,
-+	.size = OTP_MEM_SIZE,
-+};
-+
-+static int lan9662_otp_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct nvmem_device *nvmem;
-+	struct lan9662_otp *otp;
-+
-+	otp = devm_kzalloc(&pdev->dev, sizeof(*otp), GFP_KERNEL);
-+	if (!otp)
-+		return -ENOMEM;
-+
-+	otp->dev = dev;
-+	otp->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(otp->base))
-+		return PTR_ERR(otp->base);
-+
-+	otp_config.priv = otp;
-+	otp_config.dev = dev;
-+
-+	nvmem = devm_nvmem_register(dev, &otp_config);
-+
-+	return PTR_ERR_OR_ZERO(nvmem);
-+}
-+
-+static const struct of_device_id lan9662_otp_match[] = {
-+	{ .compatible = "microchip,lan9662-otp", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, lan9662_otp_match);
-+
-+static struct platform_driver lan9662_otp_driver = {
-+	.probe = lan9662_otp_probe,
-+	.driver = {
-+		.name = "lan9662-otp",
-+		.of_match_table = lan9662_otp_match,
-+	},
-+};
-+module_platform_driver(lan9662_otp_driver);
-+
-+MODULE_AUTHOR("Horatiu Vultur <horatiu.vultur@microchip.com>");
-+MODULE_DESCRIPTION("lan9662 OTP driver");
-+MODULE_LICENSE("GPL");
 -- 
 2.25.1
 
