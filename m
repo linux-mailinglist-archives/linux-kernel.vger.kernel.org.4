@@ -2,127 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D4E5BAE57
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B625BAE65
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiIPNiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S230266AbiIPNll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiIPNii (ORCPT
+        with ESMTP id S229581AbiIPNlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:38:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D655AD993
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:38:31 -0700 (PDT)
-X-UUID: 3c5e513d455341108e71528621dc34f0-20220916
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=//32S1i46vXVRy+d0zvrACix42xN5G/83NKutSBPkE8=;
-        b=WF+qMb9NQ3nk/GfQ4gLnS9j1JpfdqEnVY+EaPLrn86JZRkrMzM/N89txDMcEyUmX6YoAcUvfg8eoZHehDeTi5dvTh8ZpdSUo3SZH1OmxMTzWyxmAoyzdHitgafIpP4fxfbmTI4xaDhzJP6BaSY3mBIpDMIQQ4AwaK8Mt/Z2YPa0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:aba5fa93-a516-4317-9101-b7e19cb507b1,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.11,REQID:aba5fa93-a516-4317-9101-b7e19cb507b1,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:39a5ff1,CLOUDID:2996aaf6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:2209162138263WOOHPZ9,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
-        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: 3c5e513d455341108e71528621dc34f0-20220916
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1849799012; Fri, 16 Sep 2022 21:38:24 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 16 Sep 2022 21:38:23 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 16 Sep 2022 21:38:23 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>
-CC:     <matthias.bgg@gmail.com>, <granquet@baylibre.com>,
-        <daniel@ffwll.ch>, <jitao.shi@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v2 3/3] drm/mediatek: dp: Fix warning in mtk_dp_video_mute()
-Date:   Fri, 16 Sep 2022 21:38:21 +0800
-Message-ID: <20220916133821.27980-4-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
-References: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
+        Fri, 16 Sep 2022 09:41:37 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D925FF56;
+        Fri, 16 Sep 2022 06:41:35 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id B37B85C01E7;
+        Fri, 16 Sep 2022 09:41:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 16 Sep 2022 09:41:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663335692; x=1663422092; bh=yKfhkt+nNY
+        e7MJg9PTxKXWyH3AaqpGz2T9Q7AFW5CyE=; b=H9bEUU0sl289Dfe6Z3OILZXJy0
+        pbNxJPMD7xpYYQ8oX7c7+4rZJXMq8ewyhkCS30NarFu6G8nT1bNiyKr94G/hzPW9
+        yvpcLdbxROmISaC3gEj7LOV2M7fcNvi7O37tqrLn586hwR1mWsUhOFh4L653ZTUa
+        iJmWXMWvIPnrZOCWn8C7aaJRGbP8ovJea+hJU92A0WwN+j0JB4rHmXmgd4goHrMi
+        TgmQQ3tfsXp9n6012Rr3PJrmtb68M/qGoKRwk0gDjSQ1TpPYj+0Ve8IGT/Klls8m
+        EgbWgAlV1YEC02JG0cIxwSSZ3Tc+jB0mVHNNDOz8l01sCOWPaW3XeBmZQFlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663335692; x=
+        1663422092; bh=yKfhkt+nNYe7MJg9PTxKXWyH3AaqpGz2T9Q7AFW5CyE=; b=Z
+        7kTJ1kOl9TZDg/jeNqY0Rv1GqINBx845N+Ar9670OK/2mlJFHjkLbq6ARcI/U5Mb
+        lo+6Yo4Gg5GABL+3JEKMMd5bq5YjQVtdjid6QQh124eSNt9PAWogOyamVsP2Mqix
+        x239FQIoHNulFN0OQOWU7113qHNzxFpeSx3+m/e9uCD9sgMhw26SkwTD5TJ7z3zs
+        QANvn/VZknO6DjCbqB7+Hy24HEWwXYZudOz+JjqirqrlRESfEWOeWvVlj9OMhKUy
+        D0nau9T/rorYSgf2cdlN6Y4dCm6o8CbnImfcf3AkpumGs/CctDQ0ycfdqNhUN5KQ
+        2qZUXCmBzBttgsJexkCgw==
+X-ME-Sender: <xms:DH0kYzyVziDUak7yh6LDOHZJoyIM_UCp4OR4G_FOLyXUu6LndjbD9g>
+    <xme:DH0kY7SOT3XCDWnUUuXWeJwn8JW-GR3XduoLbqnbl4CDCTnzZpZqvpf5ifq6zo9kE
+    qYPaxScPjRM22wdBYg>
+X-ME-Received: <xmr:DH0kY9XSZQr158XVoiighu-1aS4dhwfNabuqZPqF_NeQYVF28e80DObYPN6e>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvtddgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomheplfhoshhhucfv
+    rhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeduvdelheettdfgvddvleegueefudegudevffekjeegffefvdeikeeh
+    vdehleekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
+X-ME-Proxy: <xmx:DH0kY9iOBUDnWM0fNV6Q1Rc6MLyuarRXI4pd7qWJkkq_AGYTA_E95g>
+    <xmx:DH0kY1CmF3xy7GPZjWonL7U3fXtEcIc-ff1eZeBe3ntOFLXbNfadQQ>
+    <xmx:DH0kY2JMJEiy-P1Hn2Lj_BX_VNIWtzwJFxBphcSrrvVuvxNvOEDmMA>
+    <xmx:DH0kYw_aZEcZfuc7KwE8W9h0L4BaMNUHR-PB9OP4vAH_j8z-ECHDxw>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 16 Sep 2022 09:41:31 -0400 (EDT)
+Date:   Fri, 16 Sep 2022 14:41:30 +0100
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search before
+ allocating mm
+Message-ID: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Warning:
-../drivers/gpu/drm/mediatek/mtk_dp.c: In function ‘mtk_dp_video_mute’:
-../drivers/gpu/drm/mediatek/mtk_dp.c:947:23: warning: format ‘%x’
-expects argument of type ‘unsigned int’, but argument 4 has type ‘long
-unsigned int’ [-Wformat=]
-  947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../include/linux/dev_printk.h:129:27: note: in definition of macro ‘dev_printk’
-  129 |   _dev_printk(level, dev, fmt, ##__VA_ARGS__);  \
-      |                           ^~~
-../include/linux/dev_printk.h:163:31: note: in expansion of macro ‘dev_fmt’
-  163 |   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-      |                               ^~~~~~~
-../drivers/gpu/drm/mediatek/mtk_dp.c:947:2: note: in expansion of
-macro ‘dev_dbg’
-  947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
-      |  ^~~~~~~
-../drivers/gpu/drm/mediatek/mtk_dp.c:947:36: note: format string is defined here
-  947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
-      |                                   ~^
-      |                                    |
-      |                                    unsigned int
-      |                                   %lx
+Currently, execve allocates an mm and parses argv and envp before
+checking if the path exists. However, the common case of a $PATH search
+may have several failed calls to exec before a single success. Do a
+filename lookup for the purposes of returning ENOENT before doing more
+expensive operations.
 
-To fix this issue, we use %s to replace 0x%x.
+This does not create a TOCTTOU race, because this can only happen if the
+file didn't exist at some point during the exec call, and that point is
+permitted to be when we did our lookup.
 
-Fixes: f70ac097a2cf ("drm/mediatek: Add MT8195 Embedded DisplayPort driver")
-Reported-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+To measure performance, I ran 2000 fork and execvpe calls with a
+seven-element PATH in which the file was found in the seventh directory
+(representative of the common case as /usr/bin is the seventh directory
+on my $PATH), as well as 2000 fork and execve calls with an absolute
+path to an existing binary. I recorded the minimum time for each, to
+eliminate noise from context switches and similar.
+
+Without fast-path:
+fork/execvpe: 49876ns
+fork/execve:  32773ns
+
+With fast-path:
+fork/execvpe: 36890ns
+fork/execve:  32069ns
+
+The cost of the additional lookup seems to be in the noise for a
+successful exec, but it provides a 26% improvement for the path search
+case by speeding up the six failed execs.
+
+Signed-off-by: Josh Triplett <josh@joshtriplett.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index c72c646e25e9..d58e98b2f83a 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -1222,8 +1222,8 @@ static void mtk_dp_video_mute(struct mtk_dp *mtk_dp, bool enable)
- 		      mtk_dp->data->smc_cmd, enable,
- 		      0, 0, 0, 0, 0, &res);
+Discussed this at Plumbers with Kees Cook; turned out to be even more of
+a win than anticipated.
+
+ fs/exec.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 9a5ca7b82bfc..fe786aeb2f1b 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1881,6 +1881,16 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	if (IS_ERR(filename))
+ 		return PTR_ERR(filename);
  
--	dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
--		mtk_dp->data->smc_cmd, enable, res.a0, res.a1);
-+	dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: %s, ret: 0x%lx-0x%lx\n",
-+		mtk_dp->data->smc_cmd, enable ? "enable" : "disable", res.a0, res.a1);
- }
- 
- static void mtk_dp_audio_mute(struct mtk_dp *mtk_dp, bool mute)
++	/* Fast-path ENOENT for $PATH search failures, before we alloc an mm or
++	 * parse arguments. */
++	if (fd == AT_FDCWD && flags == 0 && filename->name[0] == '/') {
++		struct path path;
++		retval = filename_lookup(AT_FDCWD, filename, 0, &path, NULL);
++		if (retval == -ENOENT)
++			goto out_ret;
++		path_put(&path);
++	}
++
+ 	/*
+ 	 * We move the actual failure in case of RLIMIT_NPROC excess from
+ 	 * set*uid() to execve() because too many poorly written programs
 -- 
-2.18.0
+2.37.2
 
