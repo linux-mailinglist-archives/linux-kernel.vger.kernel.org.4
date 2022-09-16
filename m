@@ -2,180 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8AD5BA64A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8047F5BA67D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiIPFNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S229972AbiIPFsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiIPFNl (ORCPT
+        with ESMTP id S229613AbiIPFr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:13:41 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5D37755D;
-        Thu, 15 Sep 2022 22:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663305220; x=1694841220;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=05dIEm6EDE/FGH5eEhbfF7ohwoCb4JD1+C6lIYEl0D4=;
-  b=PWCm1SGYy2kOr7Q43BM6Drkt7hmk71/QxRDkCIwrPXnnmvPc6EkIyF5Y
-   XaQFgaYzLKhgoXsCXN7jNXJvLWIMlgdN5WJoJGVnooVmYpW7jxUFdXIPm
-   adCtaiIozDJq/ffTrGQFqhvf74ylQwbnUqAJTzWYpQJyjlpdiLykKXXmk
-   v7h1uW/727/63UnXit7MO6SiwA0iwN0QK6M83G+GCpV7vzt4mhLfhiVRF
-   cGe00thH2ulqY1ccLW60uoQMvACrqH5aweyN46VUrhgPPSgF3expz2AxG
-   YJRTEAT+WbhbzqDbd08sJdIAXwNH+I7tYUUtuSsVwa2FFEx80C7HMm0+d
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="281942393"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="281942393"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 22:13:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="706628953"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Sep 2022 22:13:36 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZ3fT-0001So-22;
-        Fri, 16 Sep 2022 05:13:35 +0000
-Date:   Fri, 16 Sep 2022 13:13:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hayeswang@realtek.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        aaron.ma@canonical.com, jflf_kernel@gmx.com, dober6023@gmail.com,
-        svenva@chromium.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] r8152: Replace conditional statement with
- min() function
-Message-ID: <202209161313.2l3pzgCV-lkp@intel.com>
-References: <20220914162326.23880-1-cui.jinpeng2@zte.com.cn>
+        Fri, 16 Sep 2022 01:47:58 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9675680F55
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:47:55 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id r18so46975873eja.11
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OcKeKVWdaipsZM2UXTtbaHbEX8KKigHs/WLUeqGJyHY=;
+        b=psTtztujExWhwXzL+eRUtUEvxJJbEpLnI5q55XOCsBzFnBRzclZFK6B29YS0L5Enhq
+         y/TAOyrFrzMDkxUec72fZOkEu0ql05Ax5bwJm9Stz41cy6AQC1rM5d5vZ0CA6OWHeXX9
+         kFkyaWHS69YJyNxa2WnksNso7WbfyjGTTvEvBTIqFp/vrD28gtt2ZFz1kzy6PsZacS/0
+         EoXYrPAiOP4fm2ZgwkATvyctxLjuB0M87LclaDWfTKp1IYfEJI5693vZX0WHpoGhpm+Y
+         +7CJ3xsEUFUvWWcahtA1+o2Cn5mhgDdUb+UK9dHyaxwpNbcbfwjb0vWq6JhD8LA5C2DX
+         FDtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OcKeKVWdaipsZM2UXTtbaHbEX8KKigHs/WLUeqGJyHY=;
+        b=d4GpEdnBdGcfKjiHvvQalVw9yoZE+1dh60ZXUWE/CQFxx2zXvMn+8p85ypg4tsJuUL
+         gf/ppc0KZTh3WrinTQLIhOYoIKG/oTkk6X2ubUT2AU+7ECZ5Jwc2fldhp6Xdjon/UJxW
+         as7tnqNZusssthRUJnf33zbQyMshTSQLnmLiTOn0idZ5HbC1BN1RSUmltnklBWk8AayM
+         tzUniFSWlw88ArHNZALAbU0C1ERzvxXi8+oM9GGQIwfmyqwvSCBIEzliMuJXep+0Q4/Y
+         PagkQMm/xLJlUXfRvKAbjn4CHKB2Uwmuh5y9VvSA50jfPZ8k03Nne51kk9vHbUcv8lzY
+         tvOg==
+X-Gm-Message-State: ACrzQf0kNgAqg63IfQY3hZl0agliqK/g/L9VL6giDAVRuP7xdjuRm0BN
+        dy+dzzcOew2Ri0ZbvRSe1ZA=
+X-Google-Smtp-Source: AMsMyM6uhas3Fz5dnSqdHcgb/U3UrpdfYmITTCxc7j4Wj7u/JDOb8t5KwTwRBFqUJ/JT1bbCXPVRAw==
+X-Received: by 2002:a17:907:a06:b0:77b:6eca:c089 with SMTP id bb6-20020a1709070a0600b0077b6ecac089mr2286316ejc.362.1663307274012;
+        Thu, 15 Sep 2022 22:47:54 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id fw18-20020a170907501200b0073dbaeb50f6sm9901865ejc.169.2022.09.15.22.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 22:47:53 -0700 (PDT)
+Message-ID: <28159639-c011-62a0-e8bd-07a79aadca91@gmail.com>
+Date:   Fri, 16 Sep 2022 07:47:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914162326.23880-1-cui.jinpeng2@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Staging: rtl8192e: fixed brace, space, and align coding
+ style issues
+Content-Language: en-US
+To:     Anjandev Momi <anjan@momi.ca>, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220916030655.11105-1-anjan@momi.ca>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220916030655.11105-1-anjan@momi.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 9/16/22 05:06, Anjandev Momi wrote:
+> After applying this patch, file drivers/staging/rtl8192e/rtl819x_BAProc.c only
+> has "Avoid CamelCase" coding style issue
+> 
 
-Thank you for the patch! Perhaps something to improve:
+The patch description needs to describe _why_ the change is required or 
+makes sense.
 
-[auto build test WARNING on next-20220914]
+Have a look at:
+https://lore.kernel.org/linux-staging/
+https://lore.kernel.org/linux-staging/20220911174933.3784-3-straube.linux@gmail.com/T/#u
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/r8152-Replace-conditional-statement-with-min-function/20220915-002537
-base:    f117c01187301a087412bd6697fcf5463cb427d8
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220916/202209161313.2l3pzgCV-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9b5f2fbac752d4608affde065cf64573bdd09564
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/r8152-Replace-conditional-statement-with-min-function/20220915-002537
-        git checkout 9b5f2fbac752d4608affde065cf64573bdd09564
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/usb/
+> Signed-off-by: Anjandev Momi <anjan@momi.ca>
+> ---
+>   drivers/staging/rtl8192e/rtl819x_BAProc.c | 16 +++++++---------
+>   1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> index 7d04966af..b4e565af1 100644
+> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> @@ -62,6 +62,7 @@ void ResetBaEntry(struct ba_record *pBA)
+>   	pBA->dialog_token		  = 0;
+>   	pBA->ba_start_seq_ctrl.short_data = 0;
+>   }
+> +
+>   static struct sk_buff *rtllib_ADDBA(struct rtllib_device *ieee, u8 *Dst,
+>   				    struct ba_record *pBA,
+>   				    u16 StatusCode, u8 type)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This makes sense
 
-All warnings (new ones prefixed by >>):
+> @@ -113,7 +114,7 @@ static struct sk_buff *rtllib_ADDBA(struct rtllib_device *ieee, u8 *Dst,
+>   	tag += 2;
+>   
+>   	if (type == ACT_ADDBAREQ) {
+> -		memcpy(tag, (u8 *)&(pBA->ba_start_seq_ctrl), 2);
+> +		memcpy(tag, (u8 *)&pBA->ba_start_seq_ctrl, 2);
+>   		tag += 2;
+>   	}
+>   
 
->> drivers/net/usb/r8152.c:4832:10: warning: comparison of distinct pointer types ('typeof (2048) *' (aka 'int *') and 'typeof (len) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   size = min(2048, len);
-                          ^~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+This makes sense
+
+> @@ -161,7 +162,6 @@ static struct sk_buff *rtllib_DELBA(struct rtllib_device *ieee, u8 *dst,
+>   	*tag++ = ACT_CAT_BA;
+>   	*tag++ = ACT_DELBA;
+>   
+> -
+>   	put_unaligned_le16(DelbaParamSet.short_data, tag);
+>   	tag += 2;
+>   
+
+This makes sense
+
+> @@ -258,8 +258,8 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
+>   			    ieee->pHTInfo->bCurrentHTSupport);
+>   		goto OnADDBAReq_Fail;
+>   	}
+> -	if (!GetTs(ieee, (struct ts_common_info **)(&pTS), dst,
+> -	    (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
+> +	if (!GetTs(ieee, (struct ts_common_info **)(&pTS),
+> +		   dst, (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
+>   		rc = ADDBA_STATUS_REFUSED;
+>   		netdev_warn(ieee->dev, "%s(): can't get TS\n", __func__);
+>   		goto OnADDBAReq_Fail;
+
+Why do you need to put the "dst" to the next line?
+
+> @@ -282,7 +282,7 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
+>   	pBA->ba_start_seq_ctrl = *pBaStartSeqCtrl;
+>   
+>   	if (ieee->GetHalfNmodeSupportByAPsHandler(ieee->dev) ||
+> -	   (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
+> +	    (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
+>   		pBA->ba_param_set.field.buffer_size = 1;
+>   	else
+>   		pBA->ba_param_set.field.buffer_size = 32;
+
+Did checkpatch tell you to do so?
+
+> @@ -380,7 +380,6 @@ int rtllib_rx_ADDBARsp(struct rtllib_device *ieee, struct sk_buff *skb)
+>   			goto OnADDBARsp_Reject;
+>   		}
+>   
+> -
+>   		pAdmittedBA->dialog_token = *pDialogToken;
+>   		pAdmittedBA->ba_timeout_value = *pBaTimeoutVal;
+>   		pAdmittedBA->ba_start_seq_ctrl = pPendingBA->ba_start_seq_ctrl;
+
+This makes sense
+
+> @@ -419,8 +418,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
+>   		return -1;
+>   	}
+>   
+> -	if (!ieee->current_network.qos_data.active ||
+> -		!ieee->pHTInfo->bCurrentHTSupport) {
+> +	if (!ieee->current_network.qos_data.active || !ieee->pHTInfo->bCurrentHTSupport) {
+>   		netdev_warn(ieee->dev,
+>   			    "received DELBA while QOS or HT is not supported(%d, %d)\n",
+>   			    ieee->current_network. qos_data.active,
+
+This makes sense
+
+> @@ -440,7 +438,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
+>   		struct rx_ts_record *pRxTs;
+>   
+>   		if (!GetTs(ieee, (struct ts_common_info **)&pRxTs, dst,
+> -		    (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
+> +			   (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
+>   			netdev_warn(ieee->dev,
+>   				    "%s(): can't get TS for RXTS. dst:%pM TID:%d\n",
+>   				    __func__, dst,
+
+Did checkpatch tell you to do so? Checkpatch is not always right. I see 
+what you want to do but I cannot say that this is really improving 
+readability.
+
+Always consider that I am not the maintainer. Those are just my opinions.
+
+I can apply and compile your patch. Connection works.
+
+I am sure you need a v2 of this patch with an updated description. 
+Please do include a change history.
+
+Bye Philipp
 
 
-vim +4832 drivers/net/usb/r8152.c
 
-  4808	
-  4809	static void rtl_ram_code_speed_up(struct r8152 *tp, struct fw_phy_speed_up *phy, bool wait)
-  4810	{
-  4811		u32 len;
-  4812		u8 *data;
-  4813	
-  4814		rtl_reset_ocp_base(tp);
-  4815	
-  4816		if (sram_read(tp, SRAM_GPHY_FW_VER) >= __le16_to_cpu(phy->version)) {
-  4817			dev_dbg(&tp->intf->dev, "PHY firmware has been the newest\n");
-  4818			return;
-  4819		}
-  4820	
-  4821		len = __le32_to_cpu(phy->blk_hdr.length);
-  4822		len -= __le16_to_cpu(phy->fw_offset);
-  4823		data = (u8 *)phy + __le16_to_cpu(phy->fw_offset);
-  4824	
-  4825		if (rtl_phy_patch_request(tp, true, wait))
-  4826			return;
-  4827	
-  4828		while (len) {
-  4829			u32 ocp_data, size;
-  4830			int i;
-  4831	
-> 4832			size = min(2048, len);
-  4833	
-  4834			ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL);
-  4835			ocp_data |= GPHY_PATCH_DONE | BACKUP_RESTRORE;
-  4836			ocp_write_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL, ocp_data);
-  4837	
-  4838			generic_ocp_write(tp, __le16_to_cpu(phy->fw_reg), 0xff, size, data, MCU_TYPE_USB);
-  4839	
-  4840			data += size;
-  4841			len -= size;
-  4842	
-  4843			ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL);
-  4844			ocp_data |= POL_GPHY_PATCH;
-  4845			ocp_write_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL, ocp_data);
-  4846	
-  4847			for (i = 0; i < 1000; i++) {
-  4848				if (!(ocp_read_word(tp, MCU_TYPE_PLA, PLA_POL_GPIO_CTRL) & POL_GPHY_PATCH))
-  4849					break;
-  4850			}
-  4851	
-  4852			if (i == 1000) {
-  4853				dev_err(&tp->intf->dev, "ram code speedup mode timeout\n");
-  4854				break;
-  4855			}
-  4856		}
-  4857	
-  4858		rtl_reset_ocp_base(tp);
-  4859	
-  4860		rtl_phy_patch_request(tp, false, wait);
-  4861	
-  4862		if (sram_read(tp, SRAM_GPHY_FW_VER) == __le16_to_cpu(phy->version))
-  4863			dev_dbg(&tp->intf->dev, "successfully applied %s\n", phy->info);
-  4864		else
-  4865			dev_err(&tp->intf->dev, "ram code speedup mode fail\n");
-  4866	}
-  4867	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+
+
+
+
+
+
