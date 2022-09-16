@@ -2,178 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574045BB381
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D053B5BB386
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiIPU2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 16:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S229652AbiIPUcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 16:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiIPU2O (ORCPT
+        with ESMTP id S229724AbiIPUcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:28:14 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BBA9C06;
-        Fri, 16 Sep 2022 13:28:13 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 78so21330581pgb.13;
-        Fri, 16 Sep 2022 13:28:13 -0700 (PDT)
+        Fri, 16 Sep 2022 16:32:03 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4ADB6D2E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:32:01 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e187so27969119ybh.10
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 13:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=CjL7owck1dNbP/thPcZ5UQpXADCiYYzVUdGfT1CXMn8=;
-        b=TIxLJgD58yFPG1Vw5L8sUGiVdd+z5VsjexqSt2OTRNGD3zaVwGo6HMwzkt4pPhm2+w
-         y+MPvW28JqWpVbvTAeB7FWQ8v2Lz0ROqVLNagiEeRAsA51W6dA7vfL+sKcVhUZ7vdnkj
-         +/x/AxtU331P2T7tWUWKTU8rPeA44CwaCmnWkjRE0j5RgJT1WCHrcPLxQJQSHSjdMjja
-         HYFAxFIe0XTO1UJl9vJL1bCFzNUldQWv8iYq7RLEnfZC0g2gH6r1b0n3VaigzjtKfNGP
-         uZFNXp1drl6N/Z3nGkpJJKPU5WgVyWiLxJo7UG/xcvr6tjORYac13c/mODR53E1m7sFe
-         XaxQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=GRh26cFwQmVn7OIiMmR3DjGYjriMibnaOhbeY2+3sjM=;
+        b=BfoyE0LkVmBBKGIHuxpDCE+BCln/CDNhvbxAl7sMmIyBU3SrU4fVaCUh2bS2EgKVGk
+         ADDCoyn9+yimo2xfpSpUlaI6QmCJgYTZP75RwL3E7BBOSU5mnh7DvqJcGPPM85v7ujUL
+         JVRuxaCXp6WnoG2HXf8o26x8KPSrJFQcdsR18WoODlHY/LvOf1TBv+HxbF37FYhy3AsD
+         RudWNISblVl1rlRxGi057rp7nGt443lh9mGJPSnLml5yZw1roMH6XR2Q80PHea7iK4Uk
+         6bvknnPdHU0wKG6YUWaJZ0W84/xK4nknEWyxub1RUCsOM/Cj0IG1DG/Yp9mutqB7RmTx
+         7Qkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=CjL7owck1dNbP/thPcZ5UQpXADCiYYzVUdGfT1CXMn8=;
-        b=0Mud6s/E1DRXcVHDgaMIwW10DYr9/liz9fjE4Vu653TAkv+bcAYN+u5cA2/CXIaNr6
-         NRgVJU80KoZIHh/QEAN5bwlpZlnF172x/kr9qACs7mucKYyX82CCC4waZx7du8wsIj2p
-         30GDjkrE5xkP37Yzrei+W3w2oorQuZYV2KaRDyiI2K+w1jMsWytxHtuuhPzB733k9Z0f
-         BvcQGE8DEA4obgEXqu7Tm+ETxi6p4rQgyXU6Hy4WOZPVRvwDuBSALRH0ERXBInnhN6Dv
-         m+fDmHOoc229zN4cJxnLoS9b5jUaWaJERgidfNnCwmPxnzaN5snyjGwg474MxQtwV+8A
-         4J1g==
-X-Gm-Message-State: ACrzQf0bJKh11XdfZ0sB068ot+L8mUu8aIQSxxM04MBHF+NCCCVuPfWk
-        rAnP9JCD7UVMeY4ri5nVqg==
-X-Google-Smtp-Source: AMsMyM5EmEl4XSD4uMcxPYJ3HZXqfiW5qWLAWr8vWOWVvsIXwDsTDwGvSC7hPtr7l9OK+fokmrti0Q==
-X-Received: by 2002:a05:6a00:d60:b0:53e:576e:bd8c with SMTP id n32-20020a056a000d6000b0053e576ebd8cmr6672425pfv.4.1663360092955;
-        Fri, 16 Sep 2022 13:28:12 -0700 (PDT)
-Received: from bytedance.bytedance.net ([12.125.146.54])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709026f0100b00178650510f9sm5054515plk.160.2022.09.16.13.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 13:28:12 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH bpf-next v2] bpf/btf: Use btf_type_str() whenever possible
-Date:   Fri, 16 Sep 2022 13:28:00 -0700
-Message-Id: <20220916202800.31421-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914021328.17039-1-yepeilin.cs@gmail.com>
-References: <20220914021328.17039-1-yepeilin.cs@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GRh26cFwQmVn7OIiMmR3DjGYjriMibnaOhbeY2+3sjM=;
+        b=6gkH/u5VkklBSzaLECau5FKwiEXuRFd0PhxmgTX1qT5WVf6a6Z1WBqQxsWPVZCh7Jl
+         g+VYRMVSMRcZfJju2tK9xGuHoUv67/OlGGAYfzCB3svxGxm2bE7KELOADz+rzXrRNLr5
+         +1tforZzhoq29u5VqwvdPkqCRxD5wRYWgZzEU4rgtMB8TIGxy3qncHpyphqKWqVF4hk7
+         fCrigMZ4txa7uw9WSXB0OWfUOt+8cSa+BV7I4UjUyLDWt44AO+polaOB6U52TJ+EM/xF
+         tjm4ALNJ50a74WDmJFiUy1JTQH5VlZ4PiAsc3vnqr1cvPKdPwYzOCkFShXCPCBOsQQs4
+         jGKg==
+X-Gm-Message-State: ACrzQf2swDjIPQXieoEpBgJwtlyovJSMDpqgN4Dv82bsr6vNWqxTT6xG
+        rx1/PzyHPG7vATQVjD9X1u6G1F6pZ4kcPsyZLOmMhQ==
+X-Google-Smtp-Source: AMsMyM47ZFSxFzPSeM9JxQQYj7YoU1ApWVX4CGB1O21SkKvkUUp0w154rWQAB652f3pFKP7WrHw01ot/5jKhwkb1hb8=
+X-Received: by 2002:a5b:2ce:0:b0:67a:6054:9eb0 with SMTP id
+ h14-20020a5b02ce000000b0067a60549eb0mr5692895ybp.15.1663360320932; Fri, 16
+ Sep 2022 13:32:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220914142256.28775-1-ansuelsmth@gmail.com> <20220914142256.28775-3-ansuelsmth@gmail.com>
+ <20220916191715.GA1079300-robh@kernel.org> <6324d1be.050a0220.9d842.7b47@mx.google.com>
+ <CAA8EJprEQOsm4TxGWJYZo04D1PagT3QmhDdYQkEid-KSP-tpTw@mail.gmail.com>
+ <6324d8e1.170a0220.aba35.ba4f@mx.google.com> <CAA8EJpowLvkuiYupqS0WEhnMR8q=R1YUUFgdFVCAx1PXyoo1xw@mail.gmail.com>
+ <6324dc1b.df0a0220.97787.083c@mx.google.com>
+In-Reply-To: <6324dc1b.df0a0220.97787.083c@mx.google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 16 Sep 2022 23:31:49 +0300
+Message-ID: <CAA8EJpo08WoQ_LYOtg5C2BB=Q6GR_cftLjaWHWjYD6BjfDZcsg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] dt-bindings: arm: msm: Convert kpss-acc driver
+ Documentation to yaml
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Marc Herbert <marc.herbert@intel.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Fri, 16 Sept 2022 at 23:27, Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> On Fri, Sep 16, 2022 at 11:22:17PM +0300, Dmitry Baryshkov wrote:
+> > On Fri, 16 Sept 2022 at 23:13, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > >
+> > > On Fri, Sep 16, 2022 at 11:06:35PM +0300, Dmitry Baryshkov wrote:
+> > > > On Fri, 16 Sept 2022 at 22:43, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Sep 16, 2022 at 02:17:15PM -0500, Rob Herring wrote:
+> > > > > > On Wed, Sep 14, 2022 at 04:22:53PM +0200, Christian Marangi wrote:
+> > > > > > > Convert kpss-acc driver Documentation to yaml.
+> > > > > > > The original Documentation was wrong all along. Fix it while we are
+> > > > > > > converting it.
+> > > > > > > The example was wrong as kpss-acc-v2 should only expose the regs but we
+> > > > > > > don't have any driver that expose additional clocks. The kpss-acc driver
+> > > > > > > is only specific to v1. For this exact reason, limit all the additional
+> > > > > > > bindings (clocks, clock-names, clock-output-names and #clock-cells) to
+> > > > > > > v1 and also flag that these bindings should NOT be used for v2.
+> > > > > >
+> > > > > > Odd that a clock controller has no clocks, but okay.
+> > > > > >
+> > > > >
+> > > > > As said in the commit v2 is only used for regs. v2 it's only used in
+> > > > > arch/arm/mach-qcom/platsmp.c to setup stuff cpu hotplug and bringup.
+> > > > >
+> > > > > Should we split the 2 driver? To me the acc naming seems to be just
+> > > > > recycled for v2 and it's not really a clk controller.
+> > > > >
+> > > > > So keeping v2 in arm/msm/qcom,kpss-acc-v2.yaml and v1 moved to clock?
+> > > >
+> > > > I suspect that qcom,kpss-acc-v2 is misnamed as the "clock-controller".
+> > > > According to msm-3.10, these regions are used by the Krait core
+> > > > regulators.
+> > > >
+> > >
+> > > Well we need to understand how to handle this... change the compatible
+> > > it's a nono for sure. In platsmp.c they are used for cpu power control
+> > > so could be that they are actually used to regulators. I would honestly
+> > > move v1 to clock and leave v2 to arm/msm but I'm not cetain on what name
+> > > to assign to the 2 yaml.
+> > >
+> > > What do you think?
+> >
+> > This is fine for me. If somebody gets better understanding of
+> > underlying hardware and works on actually using these blocks, he will
+> > update the bindings.
+> >
+> > My only suggestion would be to rename kpss-acc-v2 nodes to
+> > 'power-controller@address' and document them so.
+> >
+>
+> Ok so something like this?
+>
+>     power-controller@f9088000 {
+>       compatible = "qcom,kpss-acc-v2";
+>       reg = <0xf9088000 0x1000>,
+>             <0xf9008000 0x1000>;
+>     };
+>
+> (and I will have to fix dtbs warning as they will be unmatched I think.)
+> Yaml naming:
+> qcom,kpss-acc-v1.yaml
+> qcom,kpss-acc-v2.yaml
+> Right?
 
-We have btf_type_str().  Use it whenever possible in btf.c, instead of
-"btf_kind_str[BTF_INFO_KIND(t->info)]".
+Sounds good to me.
 
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-change since v1:
-  - rebase on bpf-next (Martin KaFai Lau)
-  - also use btf_type_str() in __btf_verifier_log_type()
+I'd even say clock/qcom,kpss-acc-v1.yaml and
+arm/msm/qcom,kpss-acc-v2.yaml or maybe power/qcom,kpss-acc-v2.yaml
 
- kernel/bpf/btf.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+>
+>
+> --
+>         Ansuel
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 98be25d13325..b3940c605aac 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1397,7 +1397,6 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
- 						   const char *fmt, ...)
- {
- 	struct bpf_verifier_log *log = &env->log;
--	u8 kind = BTF_INFO_KIND(t->info);
- 	struct btf *btf = env->btf;
- 	va_list args;
- 
-@@ -1413,7 +1412,7 @@ __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,
- 
- 	__btf_verifier_log(log, "[%u] %s %s%s",
- 			   env->log_type_id,
--			   btf_kind_str[kind],
-+			   btf_type_str(t),
- 			   __btf_name_by_offset(btf, t->name_off),
- 			   log_details ? " " : "");
- 
-@@ -5427,7 +5426,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 			if (!btf_type_is_small_int(t)) {
- 				bpf_log(log,
- 					"ret type %s not allowed for fmod_ret\n",
--					btf_kind_str[BTF_INFO_KIND(t->info)]);
-+					btf_type_str(t));
- 				return false;
- 			}
- 			break;
-@@ -5454,7 +5453,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 			"func '%s' arg%d '%s' has type %s. Only pointer access is allowed\n",
- 			tname, arg,
- 			__btf_name_by_offset(btf, t->name_off),
--			btf_kind_str[BTF_INFO_KIND(t->info)]);
-+			btf_type_str(t));
- 		return false;
- 	}
- 
-@@ -5538,11 +5537,11 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	if (!btf_type_is_struct(t)) {
- 		bpf_log(log,
- 			"func '%s' arg%d type %s is not a struct\n",
--			tname, arg, btf_kind_str[BTF_INFO_KIND(t->info)]);
-+			tname, arg, btf_type_str(t));
- 		return false;
- 	}
- 	bpf_log(log, "func '%s' arg%d has btf_id %d type %s '%s'\n",
--		tname, arg, info->btf_id, btf_kind_str[BTF_INFO_KIND(t->info)],
-+		tname, arg, info->btf_id, btf_type_str(t),
- 		__btf_name_by_offset(btf, t->name_off));
- 	return true;
- }
-@@ -5950,7 +5949,7 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
- 	if (ret < 0 || __btf_type_is_struct(t)) {
- 		bpf_log(log,
- 			"The function %s return type %s is unsupported.\n",
--			tname, btf_kind_str[BTF_INFO_KIND(t->info)]);
-+			tname, btf_type_str(t));
- 		return -EINVAL;
- 	}
- 	m->ret_size = ret;
-@@ -5968,7 +5967,7 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
- 		if (ret < 0 || ret > 16) {
- 			bpf_log(log,
- 				"The function %s arg%d type %s is unsupported.\n",
--				tname, i, btf_kind_str[BTF_INFO_KIND(t->info)]);
-+				tname, i, btf_type_str(t));
- 			return -EINVAL;
- 		}
- 		if (ret == 0) {
-@@ -6727,7 +6726,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
- 			continue;
- 		}
- 		bpf_log(log, "Arg#%d type %s in %s() is not supported yet.\n",
--			i, btf_kind_str[BTF_INFO_KIND(t->info)], tname);
-+			i, btf_type_str(t), tname);
- 		return -EINVAL;
- 	}
- 	return 0;
+
+
 -- 
-2.20.1
-
+With best wishes
+Dmitry
