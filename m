@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CF65BAC67
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E945BAC6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiIPL2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S231337AbiIPL2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 07:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiIPL1i (ORCPT
+        with ESMTP id S231191AbiIPL1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:27:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEFAA3D62;
-        Fri, 16 Sep 2022 04:27:34 -0700 (PDT)
+        Fri, 16 Sep 2022 07:27:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ADAA407D;
+        Fri, 16 Sep 2022 04:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663327654; x=1694863654;
+  t=1663327660; x=1694863660;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rZMihXhOLlKxYs0tCwQAUj7e9S0faqqljRoP4WeBM6o=;
-  b=INTN/Ke5V9LbQFU+4Rb4W5/SunNTQMvRh0S3OnAtvKZsB3CoZwI3QH5h
-   s+RsganrXw91M5ZdBWFj5rJyolZzr9r/J4gSmeaKTAqA8zNQak9fs9HZf
-   riLlApfN+fEO/1pR5z4mpcDYCpB+vIBT4ySFkigFUi9hMeDejlcyX+40R
-   h9cSaBiy0jyO6VrDBMa/lSc5+ijfg6q8nh8x2uO7pCVuBPp5KsJThw8Yj
-   PeXn6XBLORsI4/fWQiWPKDmUAUeeqgcg5oLk73hW3GX0TfI0nDpQfEp7D
-   ztSt3+1T4v1lHYzxBBMPs7caILkUWW8CUhcQufctnC1dHN24BgphjBo0l
+  bh=YhYXviQLdmzZaww64eXm52VKSDr5s7UwTuPOh/Kuq5o=;
+  b=KnjNFnhcOhaaYFsAhbv2e1cWDd+ohq0RQyTwhZKZmfmA+Hl3in8JJ6Yt
+   2ueoCajVOJCdau82lQpN+jTYVN642yRI+RnMFd3U83o4It6Czutt0NxmG
+   5vh7BT4qMY8Iv65GEMxPzJg6qFEcbq/wwJjy0BO/lXbQaW1cSq/B5Obxk
+   qYy5TCJwmM9X2HRgFIIcxcsWLPtwgYNiYvDWeQZRbYBAna6LSkEMOyLaI
+   FZXIHidZC+fLZjEzuqlrAZP9hTTBK4+8TkGrjwnGRJ9ExT5uXBSD3fEOi
+   bz3icURpcX30nuY/3N1ZaIqjxgvjG4A30ENN0ktBm6H7iZy/SwAPT27cb
    A==;
 X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="191137828"
+   d="scan'208";a="174187651"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 04:27:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 04:27:38 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 16 Sep 2022 04:27:33 -0700
+ 15.1.2507.12; Fri, 16 Sep 2022 04:27:36 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 16 Sep 2022 04:27:31 -0700
+ Transport; Fri, 16 Sep 2022 04:27:34 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -55,9 +55,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Hugh Breslin <hugh.breslin@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 07/10] riscv: dts: microchip: icicle: re-jig fabric peripheral addresses
-Date:   Fri, 16 Sep 2022 12:26:43 +0100
-Message-ID: <20220916112645.567794-8-conor.dooley@microchip.com>
+Subject: [PATCH v5 08/10] riscv: dts: microchip: reduce the fic3 clock rate
+Date:   Fri, 16 Sep 2022 12:26:44 +0100
+Message-ID: <20220916112645.567794-9-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220916112645.567794-1-conor.dooley@microchip.com>
 References: <20220916112645.567794-1-conor.dooley@microchip.com>
@@ -73,44 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When users try to add onto the reference design, they find that the
-current addresses that peripherals connected to Fabric InterConnect
-(FIC) 3 use are restrictive. For the v2022.09 reference design, the
-peripherals have been shifted down, leaving more contiguous address
-space for their custom IP/peripherals.
+For the v2022.09 release of the reference design, the fic3 clock rate
+been reduced from 62.5 MHz to 50 MHz as it allows timing to be closed
+significantly more quickly by customers who chose to build the
+reference design themselves.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-index 32d51c4a5b0c..98f04be0dc6b 100644
+index 98f04be0dc6b..c2aac1a7e862 100644
 --- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
 +++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-@@ -6,18 +6,18 @@ / {
- 	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs-icicle-kit",
- 		     "microchip,mpfs";
- 
--	core_pwm0: pwm@41000000 {
-+	core_pwm0: pwm@40000000 {
- 		compatible = "microchip,corepwm-rtl-v4";
--		reg = <0x0 0x41000000 0x0 0xF0>;
-+		reg = <0x0 0x40000000 0x0 0xF0>;
- 		microchip,sync-update-mask = /bits/ 32 <0>;
- 		#pwm-cells = <2>;
- 		clocks = <&fabric_clk3>;
- 		status = "disabled";
+@@ -30,7 +30,7 @@ i2c2: i2c@40000200 {
+ 	fabric_clk3: fabric-clk3 {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
+-		clock-frequency = <62500000>;
++		clock-frequency = <50000000>;
  	};
  
--	i2c2: i2c@44000000 {
-+	i2c2: i2c@40000200 {
- 		compatible = "microchip,corei2c-rtl-v7";
--		reg = <0x0 0x44000000 0x0 0x1000>;
-+		reg = <0x0 0x40000200 0x0 0x1000>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		clocks = <&fabric_clk3>;
+ 	fabric_clk1: fabric-clk1 {
 -- 
 2.36.1
 
