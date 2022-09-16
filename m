@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964585BA6B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6BA5BA6B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiIPGUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 02:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
+        id S229761AbiIPGWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 02:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiIPGUe (ORCPT
+        with ESMTP id S229581AbiIPGV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 02:20:34 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D444B726B0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:20:32 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p18so20499120plr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:20:32 -0700 (PDT)
+        Fri, 16 Sep 2022 02:21:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33E976442
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:21:53 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id e68so20304214pfe.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 23:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=B/KZqyCS3W8efvkmSNeLGFSECJIUK/0eUjH5dQQxYAE=;
-        b=gBpgxF3wg+gZHtpenxDvB6qtS/e4OB0t84WEdbfd6echN2ZwI5vpbiHrlZ2T/faKq9
-         ptI4EQZG9V97HluvJlf5R+ps8OBkE/Sj40mYUbFQ7BOkDAya68OjLQYRUi3nlpi3c8g2
-         s8sq1JcXclfkqChL7MpKYfPie7upMzOBE1slSSj9dwQ+1bxEGdBecul8wk71JBC7//Rj
-         xYZvZs8zo6PbTxtzYLXk0a1Tbibt7TNYezGwbSGVRT423qHpCMEZJRx/MgrPkKpK6C9I
-         d9eLYy+H4c3iPX1/PtjGGY1F7WPV9oT53qBxw9nimr1r0zk070VG9iPngp2mwW7LEdGj
-         mG2g==
+        bh=Jj7/OL2eAqo8lI0rpxiTJPMY8c9JRtqqMwO4KPdPLeU=;
+        b=nal/o+O3eJncjRsZGGpMQv+2GWSnSNTfo2mqaEFt2WZQFfUVjftZl0aYv70EGSlvqd
+         espf7tC8p47zmJtrJhK9uXL7WlKXedffzsUjhKve3/7NSyOaXOlTenmBmG/z3Nrp4Rij
+         FELLoQT5RFnJ/bAQvKJsAJbNHademq3eV8ufZ4TBvgyt8AavJjwLyZA+jj7y9OHr2Dw4
+         WyZZbLyn1YxVQr6A5aL64XCByooz6xdR4LJzrJ2OQuQX1ZCEr15ruNToE6Oz1lvhi6Xm
+         DDgEtrAKDJN1+oQtLDCCY/kJ8aQjHSqXRKap6OqqIeL+kn+aRvgGqm1S1sUDRCJym7bq
+         H73w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=B/KZqyCS3W8efvkmSNeLGFSECJIUK/0eUjH5dQQxYAE=;
-        b=eiLkmVDFCZnLTRH8NjQrxVZXF6BK2hC51XBPLnM0YZIPrO8MBMMzgihjNn3WugKV+V
-         wiKFA/nLl61gxpFVrVJ2nkcmpaMkhbujSs+6qSzYyUTYkPGKsGi18BgYR4KGTkTS06A1
-         zRQXCjOHDAWL9D8CF50pjTNTNNUBjktaJeoiHQDxQTU/cGHtj3CkCASwbaF/NCr+IuQd
-         I9smqEkPEvFHmulr2w5jy/Gksu4SXgyTOvnI1nhfypgu5bE3rWLIK/tdTYxKUKHJNeqY
-         Dqw9o0HrVbi/eC9Es/Bzf7IM4DjondIiOhrrDz/ZrWMg0Vm5Zjuj7WQ/YMuRbIM6g9Rg
-         Wojw==
-X-Gm-Message-State: ACrzQf2NF94h8I6vpj8SJKrhskm77i7Hbh8I+SJYUKZLdOYvDE7/r07V
-        X3VnekSPomIMvFOvkALULjU=
-X-Google-Smtp-Source: AMsMyM7tULTs63HRISt+17Wr58NGvjlbAiBrcc6asNPP1uQnYW/K6JYPBmH1AGsYbwX+ygKY++oDGw==
-X-Received: by 2002:a17:90b:3b90:b0:202:80ac:467c with SMTP id pc16-20020a17090b3b9000b0020280ac467cmr14130663pjb.17.1663309232370;
-        Thu, 15 Sep 2022 23:20:32 -0700 (PDT)
+        bh=Jj7/OL2eAqo8lI0rpxiTJPMY8c9JRtqqMwO4KPdPLeU=;
+        b=pxwBwSSxEesS2EZHX9U0rjva/KcZF+g5d6yQwfoT3fXW7uBTm0MItvRoHL9r8tXekx
+         /OuI3xK3lp2b5H+OCXu39yHsIZvlf2GTRcjzmMfKMcjbEWLT5sEbCi0nFj/kgMD5Eeni
+         gEjYGHTZqhDFgKgECeAbcKkc0uletWF9rExRKIGCF0u05T5cDMrPZagLkgAB5gAEADtg
+         rf8NqkiycQ1qQLsBSaxU7vGBqj/33W3Xf8S/aIzyYkLkfdzJhbSj/JVV4b8q2PA4aox+
+         aAhQWniepXYDinfEOZrlAoewk8yzMS7z4siSfdI8qAaGFNJs34pial0LhwHFNwDKoe7v
+         GOhA==
+X-Gm-Message-State: ACrzQf3ugicEd2IRgQLPR+cFiiUrEdlTsiGu9e2xA02Vbom1rUNO/FkZ
+        DPVkD4b7t1aq4L1B2BbRq7tVNHCpSno=
+X-Google-Smtp-Source: AMsMyM5QO7rfjdJwjmcPfcEly/IZWfWK9JNGayYfv+GpRNG27/ZOH+GqVUsicuohhMFhgkfwtH4HUw==
+X-Received: by 2002:a65:4941:0:b0:42a:8c1b:6b6c with SMTP id q1-20020a654941000000b0042a8c1b6b6cmr3164083pgs.375.1663309313479;
+        Thu, 15 Sep 2022 23:21:53 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902f60300b00174c0dd29f0sm13934831plg.144.2022.09.15.23.20.30
+        by smtp.gmail.com with ESMTPSA id a12-20020a170902eccc00b00168dadc7354sm14177639plh.78.2022.09.15.23.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 23:20:32 -0700 (PDT)
+        Thu, 15 Sep 2022 23:21:53 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        AjitKumar.Pandey@amd.com, Vsujithkumar.Reddy@amd.com,
-        akihiko.odaki@gmail.com, baijiaju1990@gmail.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
+To:     vkoul@kernel.org
+Cc:     kishon@ti.com, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] ASoC: amd: acp: use function devm_kcalloc() instead of devm_kzalloc()
-Date:   Fri, 16 Sep 2022 06:20:27 +0000
-Message-Id: <20220916062027.152815-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] phy: broadcom: use function devm_kcalloc() instead of devm_kzalloc()
+Date:   Fri, 16 Sep 2022 06:21:50 +0000
+Message-Id: <20220916062150.153104-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,30 +78,21 @@ of devm_kzalloc().
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- sound/soc/amd/acp/acp-mach-common.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/phy/broadcom/phy-bcm-sr-usb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
-index f0c49127aad1..4c69cb6e3400 100644
---- a/sound/soc/amd/acp/acp-mach-common.c
-+++ b/sound/soc/amd/acp/acp-mach-common.c
-@@ -584,7 +584,7 @@ int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
- 	if (drv_data->dmic_cpu_id)
- 		num_links++;
+diff --git a/drivers/phy/broadcom/phy-bcm-sr-usb.c b/drivers/phy/broadcom/phy-bcm-sr-usb.c
+index 0002da3b5b5d..0d393e0cc7bb 100644
+--- a/drivers/phy/broadcom/phy-bcm-sr-usb.c
++++ b/drivers/phy/broadcom/phy-bcm-sr-usb.c
+@@ -236,7 +236,7 @@ static int bcm_usb_phy_create(struct device *dev, struct device_node *node,
+ 	int idx;
  
--	links = devm_kzalloc(dev, sizeof(struct snd_soc_dai_link) * num_links, GFP_KERNEL);
-+	links = devm_kcalloc(dev, num_links, sizeof(struct snd_soc_dai_link), GFP_KERNEL);
- 	if (!links)
- 		return -ENOMEM;
- 
-@@ -749,7 +749,7 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
- 	if (drv_data->dmic_cpu_id)
- 		num_links++;
- 
--	links = devm_kzalloc(dev, sizeof(struct snd_soc_dai_link) * num_links, GFP_KERNEL);
-+	links = devm_kcalloc(dev, num_links, sizeof(struct snd_soc_dai_link), GFP_KERNEL);
- 	if (!links)
- 		return -ENOMEM;
- 
+ 	if (version == BCM_SR_USB_COMBO_PHY) {
+-		phy_cfg = devm_kzalloc(dev, NUM_BCM_SR_USB_COMBO_PHYS *
++		phy_cfg = devm_kcalloc(dev, NUM_BCM_SR_USB_COMBO_PHYS,
+ 				       sizeof(struct bcm_usb_phy_cfg),
+ 				       GFP_KERNEL);
+ 		if (!phy_cfg)
 -- 
 2.25.1
