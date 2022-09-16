@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD1F5BA4B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC895BA4AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiIPClO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S229991AbiIPCi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiIPCkv (ORCPT
+        with ESMTP id S229967AbiIPCi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:40:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4FA9858D;
-        Thu, 15 Sep 2022 19:40:48 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTJ952jpNzNm8K;
-        Fri, 16 Sep 2022 10:36:09 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 16 Sep 2022 10:40:46 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 10:40:45 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huangguangbin2@huawei.com>, <lipeng321@huawei.com>,
-        <lanhao@huawei.com>, <shenjian15@huawei.com>
-Subject: [PATCH net-next 4/4] net: hns3: add judge fd ability for sync and clear process of flow director
-Date:   Fri, 16 Sep 2022 10:38:03 +0800
-Message-ID: <20220916023803.23756-5-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220916023803.23756-1-huangguangbin2@huawei.com>
-References: <20220916023803.23756-1-huangguangbin2@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 22:38:57 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C3696FE1;
+        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w20so8075992ply.12;
+        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=dYL9wlLd/USNcoZdGQTOq8OEjfqINlLA5t7kFKr1hLU=;
+        b=QOs9nlCwzQ4O0onMGYNUHEonyh2ChOvardFTCdDwwZarJZT5Pk3dwm0nItbHKIchel
+         cYYMsG59a4UYPrYgbMjERQcbWu+WcwGIMPufaiRK9ImjIIBnXwM7tbXmqu+U+GWYbYrx
+         HVkBOYhLZAFLf4o+kMlkBKuDSnvpWuuvtixIWCG3OgPLjpEd6Rz0ZcNVAq65T/95tAph
+         sNcvKfTCumFIs+sQrkvmBuSwaN/YIlpRP1wkqWGOasIFzqcCCn46rUvzDqPgoen70m2Y
+         wB3wCIgc+4NIVLAzI3x0yPPEh+GrF2Nk3m/hQZbZvzienBNNuqZtMgcS/LDlmqTWLsta
+         B4jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=dYL9wlLd/USNcoZdGQTOq8OEjfqINlLA5t7kFKr1hLU=;
+        b=1jNPZujHVf+Az8ExoakfDyhHtx4NUF78wQQuw6NtM1ZFxfbxRqkmtOEdzygxLNE5BB
+         6f2nifiszb3FR0lD4ePN8Hj1kiupywcWBNmH2wr88zkJspnYD2ydIWoj6WfPnY6F3pcm
+         F6jB50AHtok64Xds+PkCHJFY1p9GLs77usdQybWXHspTo//eiWjRSSzN65ZeXqZNrzn0
+         a0/uW/EZVRK3esGJQ8PEM3TlM7KGjjFXC5CL02fzd60R35mkPDJ1aoW2/CnFrYNVO8iI
+         KPtoks+oGnY3i/S3NuhfwYJsUbO5J79PTXyOmg+d8jZo7Uv5MG+f/9GbCnp9T5BbMc3a
+         ES7Q==
+X-Gm-Message-State: ACrzQf162wUSgPxAb7fTMxuP1xrqRo02zMoA0l7jjKWYAyWVhQZSSHIH
+        7pTx5rHtncZYVMyFpSbOpik=
+X-Google-Smtp-Source: AMsMyM7HH6nMrLQACZzZgcWn63QuPoiW0OKgwq8iD+IzfoinHYdc086atcyZrpUprByl58WLqVHMag==
+X-Received: by 2002:a17:902:d54e:b0:178:2da7:1bea with SMTP id z14-20020a170902d54e00b001782da71beamr2539423plf.161.1663295936126;
+        Thu, 15 Sep 2022 19:38:56 -0700 (PDT)
+Received: from RD-1129-20047.rt.l ([2402:7500:578:40c5:44cb:7b1e:21e9:77e5])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902d40900b0016bedcced2fsm13551480ple.35.2022.09.15.19.38.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Sep 2022 19:38:55 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
+Cc:     cy_huang@richtek.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: mfd: mt6370: fix the indentation in the example
+Date:   Fri, 16 Sep 2022 10:38:49 +0800
+Message-Id: <1663295929-9024-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, driver will always clear user defined field of flow director
-in uninit process and sync flow director table in periodic task. However,
-if hardware does not support flow director driver should not do those
-processes, so add fd ability judgement.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-The fd ability judgement in function hclge_clear_fd_rules_in_list() is
-redundant, so delete it.
+Fix the indentation in the binding example. There're two redudant space
+charactors need to be removed.
 
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+'Acked-by' must be added in v2. But I seen the reply after I sent patch v2.
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 66436801fb8e..7b25d8f89427 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -6628,9 +6628,6 @@ static void hclge_clear_fd_rules_in_list(struct hclge_dev *hdev,
- 	struct hlist_node *node;
- 	u16 location;
+Sorry to add 'Acked-by' only in v3 change.
+
+Since v3:
+- Add 'Acked-by' tag.
+
+Since v2:
+- Add Fixes tag in commit message
+
+---
+ Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+index 410e2d4..250484d 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+@@ -119,7 +119,7 @@ examples:
+       #address-cells = <1>;
+       #size-cells = <0>;
  
--	if (!hnae3_ae_dev_fd_supported(hdev->ae_dev))
--		return;
--
- 	spin_lock_bh(&hdev->fd_rule_lock);
- 
- 	for_each_set_bit(location, hdev->fd_bmap,
-@@ -6655,6 +6652,9 @@ static void hclge_clear_fd_rules_in_list(struct hclge_dev *hdev,
- 
- static void hclge_del_all_fd_entries(struct hclge_dev *hdev)
- {
-+	if (!hnae3_ae_dev_fd_supported(hdev->ae_dev))
-+		return;
-+
- 	hclge_clear_fd_rules_in_list(hdev, true);
- 	hclge_fd_disable_user_def(hdev);
- }
-@@ -7488,6 +7488,9 @@ static void hclge_sync_fd_list(struct hclge_dev *hdev, struct hlist_head *hlist)
- 
- static void hclge_sync_fd_table(struct hclge_dev *hdev)
- {
-+	if (!hnae3_ae_dev_fd_supported(hdev->ae_dev))
-+		return;
-+
- 	if (test_and_clear_bit(HCLGE_STATE_FD_CLEAR_ALL, &hdev->state)) {
- 		bool clear_list = hdev->fd_active_type == HCLGE_FD_ARFS_ACTIVE;
- 
+-        pmic@34 {
++      pmic@34 {
+         compatible = "mediatek,mt6370";
+         reg = <0x34>;
+         wakeup-source;
 -- 
-2.33.0
+2.7.4
 
