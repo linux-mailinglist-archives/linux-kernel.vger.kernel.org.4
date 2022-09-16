@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362495BA50B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7095BA50C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiIPDHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 23:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S230045AbiIPDHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 23:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiIPDHB (ORCPT
+        with ESMTP id S230136AbiIPDHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:07:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1949FAA6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 20:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663297552; x=1694833552;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=AA4yM8sBHYK6jyGEDMWq+oJQ1iHOxkryKHMct2cC2aU=;
-  b=UFWKlLtP0dGWYCDaNUwdOGfrH4NyWJ3Q/8PI7TQC6woLy3HoZjVIUhRX
-   s75yZEneubM29suvRP5CAc23Y3gtMS/PrRlhVZ7AqBHLkhxtMDqQw2IU9
-   9OI/l8GtkYK7yA3L25Z5Vcqrnvcpa2xjrZ0J9fuh7Jw6yOV/j3ntipnjI
-   0QRPssQBKPRVlsZgNQz5ObntAeBOxEB6jjQWpYhEOANnkgzoRWvGVEhHo
-   bTZLjcPZDPG1j6YC9AxEBTr2zfUryHNg80Pb8+uFcdilmfxmcNaJWwSPx
-   SVINGnHxS24QeInC6fR+gLOO2elP5OCVuZsUq4vzDy3THfT6h+/hG3n0h
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="281926880"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="281926880"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 20:05:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="613120043"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.216]) ([10.254.214.216])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 20:05:49 -0700
-Message-ID: <fc1f5412-6041-71b8-2a87-84f2f32456fc@linux.intel.com>
-Date:   Fri, 16 Sep 2022 11:05:47 +0800
+        Thu, 15 Sep 2022 23:07:05 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E738F272E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 20:06:02 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so24280530pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 20:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FiKTe8Q+mkTmykXyhObB1oFwfgvUMBsktlVZrzooRCs=;
+        b=R9C8eSFRs6joqTEO2h/L1RdY1JKj0nMTZECQsHTHnH64wBgqPmGGb4Dp33SRbI4Hv0
+         OptYZh62jSWuzrh/GoQCvnPj+4IswqwFBUp0ZbocUm/NInGbMPX93uFv0iOHQgh07IPi
+         6cmgqUDiiBUV0ZaznQ2xnWsC3H/SNBfQQkJljJeAOp8IdDWyTC1VtTCuecgdI59firWO
+         Z66CqesK4qwtUtAVgO6fYqaGJ3pPl4jcu1sq65RmpbrDsO0mHtbn2sV0j6xn36Re9KMV
+         GPfJQUBhbwglvcqOstujo0Ebnfq5J6y+p099HChg+UzwRv2PYqUNgxsVchgeP2PfMYIe
+         pjsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FiKTe8Q+mkTmykXyhObB1oFwfgvUMBsktlVZrzooRCs=;
+        b=4OuTFCIyLeFoMNAclIuSkRKJvov/6U+No8iPmHAzzqiE6fETnle8OR3LWrPUSgX+A2
+         oTj3jhCEymRfkNz2OAkLD0iPT8LXT8mGFur/1saXaLNUO4AfaAG0jiSLDo34vMB+5qis
+         LdUd85Y47gAILCZFVnsh8I+ytaDH/NtMX5mfTGnio5vNvdWePsqPq4BtE38Ke/+v4T3Y
+         yi4UKBoShMmuMJhRgy8tt0CEz45vKb2OrF3tM1e8IxijlWGIsECTfCzdyS/FpOFWQZ+f
+         idIF0TH3ka+ZcYu3WnwxMrOv+KMEDEvjjlXfVz4bumTL/HeygwBTPXpKcDN0M4ltDnZL
+         09mQ==
+X-Gm-Message-State: ACrzQf0pU2WAx0/VcNVK4xGInSH85PDwYXnNi9HUosMF4AyHqULLAXXu
+        oCsDh7IIk17zc6yRxtjNXZW7QA==
+X-Google-Smtp-Source: AMsMyM5Rvlb83UyNtOwLareUqsGwv3iM1I/eh9HRlOh/vlLu/kt3jxbJPpZgXvukl2uiUtkJXmYltw==
+X-Received: by 2002:a17:90b:38cb:b0:203:100:bb53 with SMTP id nn11-20020a17090b38cb00b002030100bb53mr3164068pjb.107.1663297562360;
+        Thu, 15 Sep 2022 20:06:02 -0700 (PDT)
+Received: from vineet-framework.ba.rivosinc.com (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id l16-20020a17090a071000b00200b2894648sm330518pjl.52.2022.09.15.20.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 20:06:02 -0700 (PDT)
+From:   Vineet Gupta <vineetg@rivosinc.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Christoph Muellner <cmuellner@ventanamicro.com>,
+        linu@rivosinc.com, Vineet Gupta <vineetg@rivosinc.com>
+Subject: [PATCH] riscv: ztso: disallow elf binaries needing TSO
+Date:   Thu, 15 Sep 2022 20:05:52 -0700
+Message-Id: <20220916030552.1396820-1-vineetg@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
-To:     Ethan Zhao <haifeng.zhao@linux.intel.com>, iommu@lists.linux.dev
-References: <20220912024826.1684913-1-baolu.lu@linux.intel.com>
- <046916aa-980c-c40d-1163-6ab839248201@linux.intel.com>
- <e0c43ca7-0ad3-a4d6-960b-9853bb815438@linux.intel.com>
- <e26efaee-d84a-3b60-8400-90d8e49a9b25@linux.intel.com>
- <5415d383-5442-a127-bdab-fce9e9b7a3b2@linux.intel.com>
- <78ec0fab-6f69-1d3d-86f3-84f159817707@linux.intel.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 1/1] iommu/vt-d: Enable PASID during iommu device probe
-In-Reply-To: <78ec0fab-6f69-1d3d-86f3-84f159817707@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/16 10:40, Ethan Zhao wrote:
->>
->> I may not get you exactly. 😄 Some IOMMU features reply on PASID
->> capabilities on both IOMMU and device. The IOMMU drivers enumerate the
->> capabilities and enable them if they are supported.
-> I might not express it straightforward,  I mean with this patch iommu 
-> deals with
-> 
-> the complexity of enabling PASID (globally?)  or not at probing stage , 
-> instead
-> 
-> of other device driver side decision to request IOMMU PASID enabling during
-> 
-> their setup state.  if so you move the decision to iommu probe stage. 
-> hmmm...
+As of now the software stack needs work to support ztso. Until that work
+is finished, disallow binaries needing TSO.
 
-I am sorry that the commit message was a bit confusing. Actually we
-always enable PASID at iommu probe path w/ or w/o this patch.
+This patch is needed to help ztso ratification and prolifiration of tso
+bits in tooling.
 
-> 
-> Pros,  iommu driver controls everything about PASID enabling.
-> 
-> Cons,  iommu driver handles all possible complexity about capability 
-> matching
+Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
+---
+ arch/riscv/include/asm/elf.h      | 11 ++++++++++-
+ arch/riscv/include/uapi/asm/elf.h |  2 ++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-Do device drivers need to configure PCI PASID without IOMMU? I searched
-the tree and found nothing.
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index f53c40026c7a..37a47352f633 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -26,10 +26,19 @@
+ 
+ #define ELF_DATA	ELFDATA2LSB
+ 
++/*
++ * Make sure the extensions are compatible.
++ *
++ * In the final incarnation this will get the features as provided by DT and
++ * make sure kernel build is compatible.
++ * For now disallow TSO built binaries.
++ */
++#define rv_ext_ok(x)	(!((x)->e_flags & EF_RISCV_TSO))
++
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+-#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++#define elf_check_arch(x) ((x)->e_machine == EM_RISCV && rv_ext_ok())
+ 
+ #define CORE_DUMP_USE_REGSET
+ #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
+diff --git a/arch/riscv/include/uapi/asm/elf.h b/arch/riscv/include/uapi/asm/elf.h
+index d696d6610231..fa9e4c52c7ac 100644
+--- a/arch/riscv/include/uapi/asm/elf.h
++++ b/arch/riscv/include/uapi/asm/elf.h
+@@ -32,6 +32,8 @@ typedef union __riscv_fp_state elf_fpregset_t;
+ #define ELF_RISCV_R_TYPE(r_info)	ELF32_R_TYPE(r_info)
+ #endif
+ 
++#define EF_RISCV_TSO		(1 << 3)
++
+ /*
+  * RISC-V relocation types
+  */
+-- 
+2.34.1
 
-Best regards,
-baolu
