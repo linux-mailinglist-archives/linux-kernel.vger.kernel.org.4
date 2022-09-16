@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B314A5BA9E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC705BA9E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiIPKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S230429AbiIPKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIPKDA (ORCPT
+        with ESMTP id S230372AbiIPKDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:03:00 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF4AB068;
-        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so1379154pjb.0;
-        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
+        Fri, 16 Sep 2022 06:03:10 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E880AB180;
+        Fri, 16 Sep 2022 03:03:06 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id cc5so25351198wrb.6;
+        Fri, 16 Sep 2022 03:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=0kJO6sKHhZWzWtdjnIjVe92KBA3BK4LC3Mn37i7AeX8=;
-        b=p5dgLW1X5KELWDXXhAUsrm4m15zadrqj1lyXqbaHgTHEBaqIdsDIec/ASw4PWaCLzl
-         mRjUyPTXf9AwsWy7oc5NgLkSWi6Dd3HtNffTrp7d5AliYRbkhLcw0VhDwwVLpAEWpXhy
-         iDjvoyKXUkLoE22LpTkZAjFSO+uKgW0r6Q/qAVrCZ3tcnDowlFuNnj+mj4Dldy6u5Qbq
-         L1G8HUVCFy7D4Ns/7lnc2iRPilklPtqB1G7czENDScgqa/OdvWBAaaA1QHq0Dm81TKpg
-         mxXD0gAKH66fFzTIuniSjdogWnFvMC5fwBxwFJZjDzlQy8s6NBTvc2uEUwA+1QT/SzBs
-         NzjQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Nfu4jbyiIWMFkY+HaHxsAx5hZmCA7LP0E6OJ69aVXfM=;
+        b=C/Sh2hiT1LT2Gc0Sf6D+PolCRdD3eiDxQZaf9gySo+WrgTH57+9iw/OiHI8sL43LZj
+         L3YiSsfOHF+V6G65wLA6ASrTvW9eV9veWQxsb6zBvFu4FsgAKGGQnmRpZScNx/qK089B
+         3HudYX2l+tfRKt4o2xc2/CWZt+kHSRER3d28emrqVgqkQVaHgDjz2LodKloEUotm9WO+
+         FxuatBVRmpmYpADnPf/bHPdmv4tGn6QckMoFnw/ySiVOE5wQTOUKuB94Cxi/W+qT2rc4
+         eVAS0e76IQHQcXXcsq3Srsvt5FvKQydvvJrUl+qBoHMm4GQz4qjZWUfazX3VA4QE5gy9
+         OqxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=0kJO6sKHhZWzWtdjnIjVe92KBA3BK4LC3Mn37i7AeX8=;
-        b=A8U+CYaODHKnhfEG3rfseHhPi76od6TP276qBtI1YBsvZ7d5TdxYhu14bW1XTfM7T+
-         ovJX2BlH7LE8Ztb1Tk8FoW1zdTqqpahOSRgBbDkuluAB01kyQ0IDf+DoInlnuUR0tjkF
-         iVcNyQ/4OZIbFMCw1lXTqPqtkbjFu7Z60H0Ewfj1Z8D8XFv3J9eXYHzgrz+lXhHci3dq
-         2B36vatFsMzLrbwrAErjSciXPxTzKnMqnEN5W33n2edWtUicExhxJ1Wo1Z0hbuJ00kEX
-         2I/T5KBjvF5Bj/wXjdaogMG7CXsIQQVXSVDOM0K8+AP90BnNNObJhRZXnVRIGA2oGJ8w
-         4eVg==
-X-Gm-Message-State: ACrzQf1GZ0dFuHZTBGMwWh1HzutSf+kCC2haXDBpWOuHaYBFLDhavJuB
-        QOBZJhlFWeA+nVxRYNPIjlU=
-X-Google-Smtp-Source: AMsMyM7k8Y3tBuvK67O01/8DM9XrV7JgALu+SPeEXJUUjRgAjamHbiu7z9m6S031Kj6gZJHX3OmfKA==
-X-Received: by 2002:a17:90b:2496:b0:1ef:a94:7048 with SMTP id nt22-20020a17090b249600b001ef0a947048mr4688475pjb.244.1663322579130;
-        Fri, 16 Sep 2022 03:02:59 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa79421000000b00537daf64e8esm14094571pfo.188.2022.09.16.03.02.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 03:02:58 -0700 (PDT)
-Message-ID: <08cd7add-b2a5-da3f-1d2c-efa0e7c80511@gmail.com>
-Date:   Fri, 16 Sep 2022 18:02:48 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Nfu4jbyiIWMFkY+HaHxsAx5hZmCA7LP0E6OJ69aVXfM=;
+        b=wF1/frhDauQeUnrQzeEs6qbeKppXN1x+4PnT+H/mQTqRqh9C1XTy7/mdizRTPo0hDt
+         E8rh+uT0nWUJFHgaNnVwQBrsDXkK0BXUgbOw/tFttONPHxFTfQVz02xVL2eKB3+fJ/sj
+         eHkQee8nMSSI3h1ZC48FkN+h6iX1ZD+J+oWIA+xpXHD83JsuuWH7ngFUMcTyxe4b8Fow
+         3eN85RjDuCVANGktmf8b0iXAucIR2J2TtD856FCuocxjKmmCqOZQRSIisr9ccZvLse7J
+         PsFy++GjQwMShIg1aXU1A+jDqZyiDLHpeKF29fJRnoDer31Mhjw35rmqoUFy55q3Hobb
+         vz3Q==
+X-Gm-Message-State: ACrzQf11o6osqh+PHydB2znHIdGAzld9pUAzMFwUszRAovxS0m5jrtXQ
+        OCDRm0I/IpqkChdSDGufilKNoZuQ50lsYQ==
+X-Google-Smtp-Source: AMsMyM6bKnPSD8sPETVPpx5ETWKeHIlMmO5gxFWnDcpUgM/fPWUhx2LuNiOGcqCe/g7AaoqV/7ROFw==
+X-Received: by 2002:adf:fd47:0:b0:228:dbab:8f5d with SMTP id h7-20020adffd47000000b00228dbab8f5dmr2243749wrs.524.1663322584420;
+        Fri, 16 Sep 2022 03:03:04 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:453:ec29:bd55:6b15])
+        by smtp.gmail.com with ESMTPSA id a8-20020adfe5c8000000b0021db7b0162esm4725069wrn.105.2022.09.16.03.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 03:03:03 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] arm64: dts: renesas: Adjust whitespace around '{'
+Date:   Fri, 16 Sep 2022 11:02:51 +0100
+Message-Id: <20220916100251.20329-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH] selftests: kvm: Fix a compile error in
- selftests/kvm/rseq_test.c
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220802071240.84626-1-cloudliang@tencent.com>
- <YxjAZOGF9uSE2+AT@google.com>
- <fdfb143a-45c4-aaff-aa95-d20c076ff555@oracle.com>
-From:   JinrongLiang <ljr.kernel@gmail.com>
-In-Reply-To: <fdfb143a-45c4-aaff-aa95-d20c076ff555@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,48 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
+Drop extra space around the '{' sign. No functional changes (same DTB).
 
-On 2022/9/8 00:54, Liam Merwick wrote:
-> On 07/09/2022 17:01, Sean Christopherson wrote:
->> On Tue, Aug 02, 2022, Jinrong Liang wrote:
->>> From: Jinrong Liang <cloudliang@tencent.com>
->>>
->>> The following warning appears when executing:
->>>     make -C tools/testing/selftests/kvm
->>>
->>> rseq_test.c: In function ‘main’:
->>> rseq_test.c:237:33: warning: implicit declaration of function 
->>> ‘gettid’; did you mean ‘getgid’? [-Wimplicit-function-declaration]
->>>            (void *)(unsigned long)gettid());
->>>                                   ^~~~~~
->>>                                   getgid
->>> /usr/bin/ld: /tmp/ccr5mMko.o: in function `main':
->>> ../kvm/tools/testing/selftests/kvm/rseq_test.c:237: undefined 
->>> reference to `gettid'
->>> collect2: error: ld returned 1 exit status
->>> make: *** [../lib.mk:173: 
->>> ../kvm/tools/testing/selftests/kvm/rseq_test] Error 1
->>>
->>> Use the more compatible syscall(SYS_gettid) instead of gettid() to 
->>> fix it.
->>> More subsequent reuse may cause it to be wrapped in a lib file.
->>>
->>> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
->>> ---
->>
->> Reviewed-by: Sean Christopherson <seanjc@google.com>
->>
-> 
-> Can a 'Cc: stable@vger.kernel.org' be added also as e923b0537d28 got 
-> backported to v5.15.58
-> 
-> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-> 
-> 
->>
->> Paolo, do you want to grab this for 6.0?  It doesn't look like we're 
->> going to have
->> a more elegant solution anytime soon...
-> 
-Ping?
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi | 2 +-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 2 +-
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+index ff6aab388eb7..689aa4ba416b 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+@@ -619,7 +619,7 @@ gic: interrupt-controller@11900000 {
+ 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
+ 		};
+ 
+-		sdhi0: mmc@11c00000  {
++		sdhi0: mmc@11c00000 {
+ 			compatible = "renesas,sdhi-r9a07g043",
+ 				     "renesas,rcar-gen3-sdhi";
+ 			reg = <0x0 0x11c00000 0 0x10000>;
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index 35e7255471b8..2283d4fb8736 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -778,7 +778,7 @@ gic: interrupt-controller@11900000 {
+ 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
+ 		};
+ 
+-		sdhi0: mmc@11c00000  {
++		sdhi0: mmc@11c00000 {
+ 			compatible = "renesas,sdhi-r9a07g044",
+ 				     "renesas,rcar-gen3-sdhi";
+ 			reg = <0x0 0x11c00000 0 0x10000>;
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+index d27b6c388580..358d4c34465f 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+@@ -784,7 +784,7 @@ gic: interrupt-controller@11900000 {
+ 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_LOW>;
+ 		};
+ 
+-		sdhi0: mmc@11c00000  {
++		sdhi0: mmc@11c00000 {
+ 			compatible = "renesas,sdhi-r9a07g054",
+ 				     "renesas,rcar-gen3-sdhi";
+ 			reg = <0x0 0x11c00000 0 0x10000>;
+-- 
+2.25.1
+
