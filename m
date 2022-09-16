@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695665BA8B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2995BA8B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 10:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiIPIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 04:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S230497AbiIPIym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 04:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiIPIwn (ORCPT
+        with ESMTP id S230488AbiIPIyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 04:52:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABDA9274
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 01:52:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF820B8247F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3F1C4347C;
-        Fri, 16 Sep 2022 08:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663318333;
-        bh=ORLPPUm7jIn9UYwzTmcaba0vRBvlY+HfDx9nbA/WNDM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NuUpZPc9CGfYCBUXG6Gx+Txjv7/oe2sYhpERMldiqz9g+j/To/0Ts11n4wQycLsqf
-         f5GHIkdiyCDnl0/J72xZ+GSB6wcPz4bNI7ld7kO15bUC5AMKQnGQfcFB065YU1gpV3
-         64tlV9nopEN5n16lB1QwOEVcrJCGJQWHwG8hSx06xETJH+QC2z+u2HJUmnnNRxvVlH
-         zTDA1JWBI8WsUUuXoYT26xg/wtVAvSWIw3FzO7XaYrZcREvBkdGIdK+8z8XtbSIIu4
-         L3bDAOv9oU/RAZU/58lkd+SZaZZFIBtHKM5N7MVfLDgXUXxJET5JA0q27dc49Kxj2K
-         xL5JCjbP2adqA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oZ751-00AZmg-81;
-        Fri, 16 Sep 2022 09:52:11 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] irqchip fixes for 6.0, take #2
-Date:   Fri, 16 Sep 2022 09:51:58 +0100
-Message-Id: <20220916085158.2592518-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, antonio.borneo@foss.st.com, dan.carpenter@oracle.com, chenhuacai@loongson.cn, lvjianmin@loongson.cn, pierre.gondois@arm.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 04:54:08 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816AAA9254;
+        Fri, 16 Sep 2022 01:53:08 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DC374580E35;
+        Fri, 16 Sep 2022 04:53:07 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 16 Sep 2022 04:53:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663318387; x=1663321987; bh=ZFtMGAa129
+        Cr8RDhpd8v9Ui9QHwxY8QKFU+/h7fj6XQ=; b=gWg3mZo9s5TlBI9yv/BxqQZOZw
+        1ZfOCrayhnJUa/V3wtJz10UO0UQK6jZEugRvKOuadIbjJVIjE14dJfLzqufIyl7T
+        JKWXguoxPYQqk7GGGLVhSy7CWoJudeWl7/iPpMnlyxUY/o/q/ex35KoNJH+8fZR9
+        ZdrXrnRXkSJ5LTpt2rEEX/0+fMAQBFNU8HvzUSyokM3iSUYYe8FUPWEMhGOx5t6o
+        fQ1wsSaf0vDuNvhS3sUSnMZNqx5jqU1mpUhBTr3ScsQJSZ3+Bdqs9e4Tz7YC7X44
+        HT+6q5l2Q3HlsBeh86zSd3vmpBlLYBJPwe3ZQ8V9Dp3rpqgQyjW0rlDxAscg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663318387; x=1663321987; bh=ZFtMGAa129Cr8RDhpd8v9Ui9QHwx
+        Y8QKFU+/h7fj6XQ=; b=GMfE+QHqHY8DvFPc5wS/gYUVndeUmb4XlY9Ge1HmYh76
+        /55jOjdVCT0SWUNI3C3P7yKinX6eFYD7MKqX9pdbftMKRkKoRGlutyophwC+0DkM
+        CgtzbwfCI6gUc9wOVCRSPO8HGjpTo0mvVDlnHfxBT7CjGySv1Vf3DkTGgoObp9FQ
+        26eMpo+C6swJEXjWeEaL2jA+ONEPeE3BFQlmElfCBLOlPFk6pBNcrtTJ5sH+tXs7
+        3DNxfIB3yNWo1Nt8TEZeMtFzFN5+wgXzyw/5Bg1LjTL0VUxoFZqffsH0idAyQfYL
+        oVXKJstZj1GsWqkra9GbpGB4xY+THRN/1suOODNryQ==
+X-ME-Sender: <xms:cjkkYxByAD8WY1jjqGvKcu6gaN_-LLv2lpPQnPdpZ1w-USi0zNjbYQ>
+    <xme:cjkkY_gMYYhvDZAqPcC2VzRCSKeS5OIpOcofZzCTJbTIHvgo07HZ2jusfF8uL7KRL
+    YoZaIuNPmNb92aTf6U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvtddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeetiefhjedvhfeffffhvddvvdffgfetvdetiefghefhheduffeljeeuuddv
+    lefgnecuffhomhgrihhnpehprghsthgvsghinhdrtghomhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:cjkkY8mt-T6hs-vzmr2eDer5cUMI6T9SKNR5CnF5rblc4_T2aHh0Cw>
+    <xmx:cjkkY7wAoerWWOo6_Rf1Er1y_JnDclRfJ2nRtmSQPMfTPjPc7iPD7A>
+    <xmx:cjkkY2T8yX6G_uqsNQdRU31LHhBv96s3Kq3LaVgtB15dcvFtp6CSSg>
+    <xmx:czkkYzJVIfwPMEUT1-cOqx74WLNWWcAIEzuUZb3vyBqda3a7DTAtSA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B8C3AB60086; Fri, 16 Sep 2022 04:53:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <e020ff7a-d58e-481d-bb1c-980fe5e13c3e@www.fastmail.com>
+In-Reply-To: <6c0d4973-7f7e-1893-58b2-9bbe19160045@ideasonboard.com>
+References: <202209160259.7f3Z5krO-lkp@intel.com>
+ <9b4152e9-34cb-4ed6-b5e3-ef045b40dff2@www.fastmail.com>
+ <6c0d4973-7f7e-1893-58b2-9bbe19160045@ideasonboard.com>
+Date:   Fri, 16 Sep 2022 10:52:46 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
+        "kernel test robot" <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        "Tomi Valkeinen" <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: drivers/gpu/drm/omapdrm/dss/dsi.c:1126:1: warning: the frame size of 1060
+ bytes is larger than 1024 bytes
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Fri, Sep 16, 2022, at 10:24 AM, Tomi Valkeinen wrote:
+> On 15/09/2022 21:49, Arnd Bergmann wrote:
+>> On Thu, Sep 15, 2022, at 8:17 PM, kernel test robot wrote:
+>> I think hte problem is that struct dsi_irq_stats is just too
+>> large, at 776 bytes. The interrupts are disabled during a copy
+>> from 'dsi->irq_stats' into 'stats'. A trivial workaround would
+>> avoid the local copy and keep interrupts disabled through
+>> the entire function so it can operate directly on the source
+>> data, but that would introduce a longer time with irqs disabled,
+>> which might be bad as well.
+>> 
+>> Since this is only called from a debugfs file, and reading that
+>> file is probably not performance critical itself, maybe
+>> using kmalloc on the large structure would be best.
+>
+> I think that makes sense. I have sent a patch using kmalloc.
+>
+> Oddly enough, I was not able to reproduce the warning with my normal 
+> toolchain, gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf. I even 
+> reduced the frame size limit to 700, and saw warnings from other places, 
+> but not from omapdrm.
 
-Here's a small crop of simple fixes for 6.0, two of them mopping up
-the merge of the Loongarch drivers. The rest is a fix for an ITS splat,
-and another one to keep the 0-day robot happy.
+I had another look and found that this only happens with
+CONFIG_INIT_STACK_ALL_PATTERN=y or CONFIG_INIT_STACK_ALL_ZERO=y,
+which are only available with gcc-12.x or clang.
 
-I expect this is the last set of fixes before 6.1 opens (fingers crossed).
+It looks like without that, gcc can reduce the size of the
+on-stack variable by only copying the members that it actually
+needs, see https://pastebin.com/8dDRE1bX for the gcc-11
+output.
 
-Please pull,
-
-        M.
-
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
-
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-6.0-2
-
-for you to fetch changes up to e7ccba7728cff0e0f1299951571f209fcadcb7b1:
-
-  irqchip/loongson-pch-lpc: Add dependence on LoongArch (2022-09-16 09:25:51 +0100)
-
-----------------------------------------------------------------
-irqchip fixes for 6.0, take #2
-
-- A couple of configuration fixes for the recently merged Loongarch drivers
-
-- A fix to avoid dynamic allocation of a cpumask which was causing issues
-  with PREEMPT_RT and the GICv3 ITS
-
-- A tightening of an error check in the stm32 exti driver
-
-----------------------------------------------------------------
-Antonio Borneo (1):
-      irqchip/stm32-exti: Remove check on always false condition
-
-Huacai Chen (1):
-      irqchip: Select downstream irqchip drivers for LoongArch CPU
-
-Jianmin Lv (1):
-      irqchip/loongson-pch-lpc: Add dependence on LoongArch
-
-Pierre Gondois (1):
-      irqchip/gic-v3-its: Remove cpumask_var_t allocation
-
- drivers/irqchip/Kconfig          |  8 +++++++-
- drivers/irqchip/irq-gic-v3-its.c | 14 ++++++++------
- drivers/irqchip/irq-stm32-exti.c |  2 +-
- 3 files changed, 16 insertions(+), 8 deletions(-)
+      Arnd
