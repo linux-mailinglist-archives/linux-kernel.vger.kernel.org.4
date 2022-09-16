@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEEF5BADBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C8B5BADC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiIPNAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S231402AbiIPNBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiIPNAj (ORCPT
+        with ESMTP id S231364AbiIPNBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:00:39 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9BE9A9D5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:00:38 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k10so35439132lfm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:00:38 -0700 (PDT)
+        Fri, 16 Sep 2022 09:01:41 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5DA8CF3;
+        Fri, 16 Sep 2022 06:01:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z21so31389527edi.1;
+        Fri, 16 Sep 2022 06:01:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=Q0URTlted5oUvua00OsPVDwnxLG4UAMpMxvyNUqDnP5eswZH98Ha9FkWNdXJvksdNS
-         cLFeFdQfbMCDWjsA8nKeLk0zUtwfW6kJVbpbDxfsBsZ+a9gmXpetH4YXHV5XZ2ncMfr8
-         TIied8S388UD7Gij3iQR7Vt1kcy1bvbdXqi6ZxXha1555NWPU3cm41m/BfK5NXoa+eaK
-         1uN/xOM9MIygAREMuxwRwt8c1ACEW8s5JSpwh3iAnd6WYokYNSb7e4a3zxd4n7SsWehk
-         I3zb20o/e27LDYiIBbrQo37azREMKNgJgHZ+dvqSn0BhLSh0vAJzW53mmQLVOmBpidsv
-         ASvw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=wcWSAqU0RnI6c//4sqrGDKdpSAoCJZ3J96FsLTUPuas=;
+        b=nhYa1Y4o0rFmzOmkVxzBk+0avswF1nz1+vTZAu1wwRIax52Lc4T7Us7s1R1uJomXJz
+         yLqK/k4w37w/YtFjW1iejEUg7qw6XHLX+hhoQMaSVC+lCDJI3vUrtOtyWfilsXrobTGb
+         AmfDT3biRelLi6Ab38ejZq3RX084JiDwrw9Mxs1CChAkWV6hKCVJfGBpzIPQmDuGt6vE
+         7fWyuRi6iq8O1tOkRWtfgjJbng7AVtCijKZ/rZJIGYeLH6fKh3+bzo1PFFmD9rVW5TSr
+         /HAKgIxyxpi3Nd+hK3xRb6b1vkGm+ktH+CDeegBmvkAmyVcoCUcD7bjapZmjOPozeeJt
+         9FqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=L5wWDUyIzfwtx5RMIz2Ly4jPTEmXM7djGXbcKNAtRZtlt9LU6dLz2DD8YrUYWtyWiI
-         ATk5BxF4Q5e9uZ5sKtXtZtfTcw0AWjfHXzkaCHWWCvuh2HrKyxfzmXcHgOIVO8uG0VKh
-         ue+n0vLNxALzHncD2wRkwmVG/j+bgPTfz+Iis0td8MPAvRX4I9gM3zr8/VKfnWW/qcar
-         YORz3qpZSz4PbmHQZx3L3wWAR0DI3vj9EvdF2iOjfBRxW0Ab9VEgRpuaEnKI69f80m/F
-         lY5GVw8Sl9HAJUiC0R2DudoSi7NxrzPdaVNQry7aBKiUs/cTWiTei8FIy/a2WP1gsC73
-         AU0w==
-X-Gm-Message-State: ACrzQf3E9dTBv4Ns/5ZO6a+VijhnhFR4v6aOwtSkhReTl7Rtq/+zmjSu
-        nvNMiFSkVjricyeeCTGUmhekQjQho0k8BlHnMHw=
-X-Google-Smtp-Source: AMsMyM44yKtfk+kCQwBi8WzxIT3ePBFrW6wehO9h72bPVEDCKjKlMscmTPZPReH+U0oXXZbiYn96WCuEEk35o7RcThU=
-X-Received: by 2002:a05:6512:22c9:b0:499:cb5d:c138 with SMTP id
- g9-20020a05651222c900b00499cb5dc138mr1619325lfu.490.1663333236624; Fri, 16
- Sep 2022 06:00:36 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=wcWSAqU0RnI6c//4sqrGDKdpSAoCJZ3J96FsLTUPuas=;
+        b=b0TZI48TDKe45ksE3AEjbGuIuTe8+sN4V9jTCJYvTXfsX4pdB+xRmRQgYF0SPH1vC/
+         //YZmm6Rxfwj6s0mnYRKVMfbtDNSN82BYN33q5xDcXE5THbmZxWLfKohqrVtxeeFwRUU
+         mpQvZ5sfYXjRKBlRN9V1R+sejwbsMjrj0Z+z49TGkPX9dZT5xQAluCrs+tqvfmcMOuXM
+         z1HDEGObWdcqAVUyqRjk2YmndVYphTbEWpZjA4ZHJNVnqBc7lME+JACcDuEkHsJpQKeG
+         Z6bS+trLKnh63twfuIW1i6aX/w2LzPl+5aH5+ZOVbLzb2zivtklK+y2atS2W3TWjqwje
+         znkw==
+X-Gm-Message-State: ACrzQf0CqT+gtkSRvuYDTQ4iqgcjAOd3pVwcS2MrQK2VEzK1rllUwFAI
+        LoVjmlxqRaygOj1NrJuNbdY=
+X-Google-Smtp-Source: AMsMyM4Sc91X47MIkkBgsd8SFs3gOQzTVf/6f/BFLL0h17Ai5vnhAzVIHZSB5iFlYQ6CIIixATKNnw==
+X-Received: by 2002:a05:6402:3806:b0:450:bad8:8cd5 with SMTP id es6-20020a056402380600b00450bad88cd5mr3938589edb.305.1663333287882;
+        Fri, 16 Sep 2022 06:01:27 -0700 (PDT)
+Received: from krava ([2a00:102a:500c:b611:39fb:ad02:4ca6:a08])
+        by smtp.gmail.com with ESMTPSA id my39-20020a1709065a6700b0073d9a0d0cbcsm10287474ejc.72.2022.09.16.06.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 06:01:27 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 16 Sep 2022 15:01:24 +0200
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 102/107] kbuild: Add skip_encoding_btf_enum64 option
+ to pahole
+Message-ID: <YyRzpJ1dzAPpMBz7@krava>
+References: <20220906132821.713989422@linuxfoundation.org>
+ <20220906132826.180891759@linuxfoundation.org>
+ <20ad29b8-be2c-8c1e-bd34-9709e5a9922f@leemhuis.info>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:334a:b0:21e:7225:5daa with HTTP; Fri, 16 Sep 2022
- 06:00:35 -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   john mark <johncp5547@gmail.com>
-Date:   Fri, 16 Sep 2022 13:00:35 +0000
-Message-ID: <CAEvS9HGKECuzhWLJqj2Bo448rRGs3-kdEBqvF7KNhJF7ghZnLg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20ad29b8-be2c-8c1e-bd34-9709e5a9922f@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [johncp5547[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [johncp5547[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+On Fri, Sep 16, 2022 at 11:21:46AM +0100, Thorsten Leemhuis wrote:
+> On 06.09.22 14:31, Greg Kroah-Hartman wrote:
+> > From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > 
+> > New pahole (version 1.24) generates by default new BTF_KIND_ENUM64 BTF tag,
+> > which is not supported by stable kernel.
+> 
+> Martin, when you wrote "not supported by stable kernel", did you mean
+> just 5.15.y or 5.19.y as well? Because I ran into...
+> 
+> > As a result the kernel with CONFIG_DEBUG_INFO_BTF option will fail to
+> > compile with following error:
+> > 
+> >   BTFIDS  vmlinux
+> > FAILED: load BTF from vmlinux: Invalid argument
+> 
+> ...this compile error when compiling 5.19.9 for F37 and from a quick
+> look into this it seems this was caused by a update of dwarves to 1.24
+> that recently landed in that distribution. This patch seems to fix the
+> problem (it got past the point of the error, but modules are still
+> compiling).
+
+hi,
+IIUC Martin planned to send that for 5.19, I can do that if needed
+
+jirka
+
+> 
+> Ciao, Thorsten
+> 
+> > New pahole provides --skip_encoding_btf_enum64 option to skip BTF_KIND_ENUM64
+> > generation and produce BTF supported by stable kernel.
+> > 
+> > Adding this option to scripts/pahole-flags.sh.
+> > 
+> > This change does not have equivalent commit in linus tree, because linus tree
+> > has support for BTF_KIND_ENUM64 tag, so it does not need to be disabled.
+> > 
+> > Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  scripts/pahole-flags.sh |    4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > --- a/scripts/pahole-flags.sh
+> > +++ b/scripts/pahole-flags.sh
+> > @@ -17,4 +17,8 @@ if [ "${pahole_ver}" -ge "121" ]; then
+> >  	extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
+> >  fi
+> >  
+> > +if [ "${pahole_ver}" -ge "124" ]; then
+> > +	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
+> > +fi
+> > +
+> >  echo ${extra_paholeopt}
+> > 
+> > 
