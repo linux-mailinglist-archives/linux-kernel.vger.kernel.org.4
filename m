@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BC55BAB08
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31315BAA77
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbiIPKZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S231862AbiIPKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiIPKW6 (ORCPT
+        with ESMTP id S232018AbiIPKTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:22:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15815B14D7;
-        Fri, 16 Sep 2022 03:14:13 -0700 (PDT)
+        Fri, 16 Sep 2022 06:19:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902F713D77;
+        Fri, 16 Sep 2022 03:13:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ED8CB82549;
-        Fri, 16 Sep 2022 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED970C433B5;
-        Fri, 16 Sep 2022 10:13:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C9262A0E;
+        Fri, 16 Sep 2022 10:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02CCC433C1;
+        Fri, 16 Sep 2022 10:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323209;
-        bh=TEg6ARWhMYcT0ex9y+chGkYhGquiKD2maBKxPOGkBGs=;
+        s=korg; t=1663323181;
+        bh=zGUf+dIncbfBmDbOFyCW2gzyXF8Db5DU0ihwD6D1D48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AuGMG76Ikaxr1huEv+WakKI1HKavYoPEXvSJs576nu4BoBBkkH9IRu0sHXxKJJ/eb
-         uALtOAvqMNQZcZTRJAJ3zcUBGlOe+C0PxmuDwuh6R5ppSAsAJ74Wt2DwX4xCTE50OE
-         7zzS+4JkyGQvfLTANNP3WL8/wli4F2VIPS9a6BoE=
+        b=2I6E68aMgArukDqbBXGi9jLAdL4W3e4yQbakHgQZbTnYlSnFnCKxwfQEW+hMOi7SZ
+         i2D7DjcEnb/8JgXiyvzMlM9udMaH/SwPoA4PTRAsMVRVByHbFwk5QaPGiAOgzXSM+U
+         jlJz5aD+Bo9L16LJpeqBJRA/t5V37+fNtYE2I0XQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 12/38] hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
-Date:   Fri, 16 Sep 2022 12:08:46 +0200
-Message-Id: <20220916100448.984892617@linuxfoundation.org>
+        stable@vger.kernel.org, Maurizio Lombardi <mlombard@redhat.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 24/35] nvmet-tcp: fix unhandled tcp states in nvmet_tcp_state_change()
+Date:   Fri, 16 Sep 2022 12:08:47 +0200
+Message-Id: <20220916100447.962278530@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
-References: <20220916100448.431016349@linuxfoundation.org>
+In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
+References: <20220916100446.916515275@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Maurizio Lombardi <mlombard@redhat.com>
 
-[ Upstream commit 09e52d17b72d3a4bf6951a90ccd8c97fae04e5cf ]
+[ Upstream commit 478814a5584197fa1fb18377653626e3416e7cd6 ]
 
-devm_regulator_register() can return -EPROBE_DEFER, so better use
-dev_err_probe() instead of dev_err(), it is less verbose in such a case.
+TCP_FIN_WAIT2 and TCP_LAST_ACK were not handled, the connection is closing
+so we can ignore them and avoid printing the "unhandled state"
+warning message.
 
-It is also more informative, which can't hurt.
+[ 1298.852386] nvmet_tcp: queue 2 unhandled state 5
+[ 1298.879112] nvmet_tcp: queue 7 unhandled state 5
+[ 1298.884253] nvmet_tcp: queue 8 unhandled state 5
+[ 1298.889475] nvmet_tcp: queue 9 unhandled state 5
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/3adf1cea6e32e54c0f71f4604b4e98d992beaa71.1660741419.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+v2: Do not call nvmet_tcp_schedule_release_queue(), just ignore
+the fin_wait2 and last_ack states.
+
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/nvme/target/tcp.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 02912022853d8..e81609bf47021 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2730,11 +2730,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
+index 889c5433c94d2..fba5a77c58d6b 100644
+--- a/drivers/nvme/target/tcp.c
++++ b/drivers/nvme/target/tcp.c
+@@ -1501,6 +1501,9 @@ static void nvmet_tcp_state_change(struct sock *sk)
+ 		goto done;
  
- 		rdev = devm_regulator_register(dev, &info->reg_desc[i],
- 					       &config);
--		if (IS_ERR(rdev)) {
--			dev_err(dev, "Failed to register %s regulator\n",
--				info->reg_desc[i].name);
--			return PTR_ERR(rdev);
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(dev, PTR_ERR(rdev),
-+					     "Failed to register %s regulator\n",
-+					     info->reg_desc[i].name);
- 	}
- 
- 	return 0;
+ 	switch (sk->sk_state) {
++	case TCP_FIN_WAIT2:
++	case TCP_LAST_ACK:
++		break;
+ 	case TCP_FIN_WAIT1:
+ 	case TCP_CLOSE_WAIT:
+ 	case TCP_CLOSE:
 -- 
 2.35.1
 
