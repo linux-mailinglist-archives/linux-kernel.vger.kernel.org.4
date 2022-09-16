@@ -2,85 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06985BB01D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62775BB01F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiIPPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S231373AbiIPPWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiIPPVy (ORCPT
+        with ESMTP id S230411AbiIPPWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:21:54 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5AAA4DF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:21:48 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sb3so20541026ejb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 08:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=FAZ1nZoda0LvxFO03fEct6+OY7sOs5EIJLDowUOvXx4=;
-        b=i3EM54wqEUd4S0hEjrVzr83R6YfecGIo0DsXnpvu9Xi5oB1vfFa8ZVBK2Is2icTZWm
-         X5hso/7NBeg9mGUsZNtQzLp7jv/OTgknKbmhMgB4znO6wmSipfbNDVNKwdd/spAXbwL4
-         yVQWrtWpdhgdoaYh5zmlRXLyokBMUZXmQlOnKfqultK8EcRuQ5lTU9qONFYronuMziCP
-         La1Rml9QYllS1G3sqFsNVEpqcaF3HSK2nY1c5Wpgt8fVVo6YBLBTBCUkP+xZHDWYy2Ds
-         SzQjOdH8HgLucw29Hg2ugKqSYNh6Ewx+S0j0u+0N/4IHqbsTwuk8ffu8qg4/Z0N2pqzS
-         gv8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=FAZ1nZoda0LvxFO03fEct6+OY7sOs5EIJLDowUOvXx4=;
-        b=49p9s5/y45TKSv912kDg1ZBST+r9RVPJh+T9wRKLV/4rIAePzkVoXZMK/av6P7NV0D
-         XbpvR+BRmrXyzOQpaHistrWgK6RGF83KsrD5BZ29oxlQDFZOV1QMjS7rPoBI883gB++k
-         i2XIppt549nhqjriXAMvlqArWixNFqNwraI9fe22IXp5IGfcItxzzwfYeMjrpoCFYoTP
-         2kRrTLzeU+7BjYc2MKAWjCMbzdtn7/j3oG68xbWJmI3wOtwmKvyJsSpPb0WWP1E+nGag
-         WCyv2CfF5pfS0Ugn2xethHMB1k5/cm2aE0Yn+HZWTEXhadtp5DKVelbMQ4NyAilSHwgx
-         FOCw==
-X-Gm-Message-State: ACrzQf2Y6917Ywhn0FdrfKDv9Pzl0sL4EhaWr4GfFrlKaCBasOOZXKdS
-        UNCkfhPogxWBvV1n0I4O9asiBziroxP/4/4n09g=
-X-Google-Smtp-Source: AMsMyM7VdObrUWQ3oMSH0uIBXnSpYn73/MNnHRJRFIMKRcnMR0VWDex5xXR94UsnsJLt5amN0/PYib0/nXhnk1LrGNk=
-X-Received: by 2002:a17:906:8a77:b0:780:a02d:ca4a with SMTP id
- hy23-20020a1709068a7700b00780a02dca4amr2762440ejc.488.1663341707544; Fri, 16
- Sep 2022 08:21:47 -0700 (PDT)
+        Fri, 16 Sep 2022 11:22:19 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6258E4DB;
+        Fri, 16 Sep 2022 08:22:17 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MTd7y3bc7z67W0D;
+        Fri, 16 Sep 2022 23:21:18 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 16 Sep 2022 17:22:15 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
+ 2022 16:22:15 +0100
+Date:   Fri, 16 Sep 2022 16:22:14 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Crt Mori <cmo@melexis.com>
+CC:     Jonathan Cameron <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v3 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+Message-ID: <20220916162214.00002fd0@huawei.com>
+In-Reply-To: <CAKv63utO6_vPtuCZKSa5MFFKbSYPQbrAGytiiqT+CZ402rO9fA@mail.gmail.com>
+References: <cover.1662454215.git.cmo@melexis.com>
+        <32c4b72624e4a3480b202f24f506ca91029e47f7.1662454215.git.cmo@melexis.com>
+        <20220915150752.643a3e7d@jic23-huawei>
+        <CAKv63utO6_vPtuCZKSa5MFFKbSYPQbrAGytiiqT+CZ402rO9fA@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
- <CAJedcCw1eJqjSK+yR7eQMDheNtH3Mjm+viwt00xAhnmrfpq2pw@mail.gmail.com>
- <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com>
- <YxWtfjfpNsoPUrgh@kroah.com> <CAJedcCzMo51aiy=Dv7zn7VmL3gwkw7JgzwAPAB2Z27C9CnhoYA@mail.gmail.com>
- <20220907030754.GU1089@zhen-hp.sh.intel.com> <CAJedcCxO_Rq0qMeLiHtY5+FuN1A1pDGsZd3gMtvUpm1xbAK3aA@mail.gmail.com>
- <Yxmzj2nCoTKurCY8@kroah.com> <CAJedcCwVC6Rg+wF7h6GhFvL6BGkKV=DS9Mo9fOf-gfDAk9VqPg@mail.gmail.com>
- <CAJedcCxRQ4h-ChNsD4OWpDMUJd3JNaQrvD=uVKxMpYONGFUgzA@mail.gmail.com> <YyQzDlM5n7mOLh5Q@kroah.com>
-In-Reply-To: <YyQzDlM5n7mOLh5Q@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 16 Sep 2022 23:21:35 +0800
-Message-ID: <CAJedcCy-beMX=ytszAWMu28FH0qGKCsLC=0bJPL_Tmh35wigKw@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>,
-        "security@kernel.org" <security@kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        xmzyshypnc <1002992920@qq.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,59 +57,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi greg,
+On Thu, 15 Sep 2022 16:35:33 +0200
+Crt Mori <cmo@melexis.com> wrote:
 
-Thanks for pointing that out. Working on it now :)
+> > > +     pm_runtime_get_sync(dev);  
+> > So, this isn't quite enough.
+> >
+> > Take a look at what devm_pm_runtime_enable()
+> > does as the documentation for
+> > pm_runtime_use_autosuspend()
+> >
+> > I'd suggest using devm_pm_runtime_enable() and
+> > an additional callback to turn the device on that
+> > is registered after devm_pm_runtime_enable()
+> > (so will maintain the ordering you have here).
+> >
+> >
+ Oops. I should have looked for a reply before responding to your v4.
 
-Best wishes,
-Zheng Wang
+> >  
+> I copied this from pressure/bmp280-core driver. I had devm_pm
+> originally, but was asked to replace it.
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=8816=E6=
-=97=A5=E5=91=A8=E4=BA=94 16:25=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Sep 16, 2022 at 02:39:21PM +0800, Zheng Hacker wrote:
-> > >From 8d95c1399e3ff345500a575e21254a73b0c89144 Mon Sep 17 00:00:00 2001
-> > From: xmzyshypnc <1002992920@qq.com>
-> > Date: Fri, 16 Sep 2022 14:37:48 +0800
-> > Subject: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_ent=
-ry
+It is a little odd to mix and match, but I think it makes sense in
+this case.  Can see why people might disagree (maybe it was me!)
+
+> 
+> > > +     pm_runtime_put_noidle(dev);
+> > > +     pm_runtime_disable(dev);
+> > > +}
+> > > +
+> > >  static int mlx90632_probe(struct i2c_client *client,
+> > >                         const struct i2c_device_id *id)
+> > >  {
+> > > @@ -902,6 +1132,7 @@ static int mlx90632_probe(struct i2c_client *client,
+> > >       mlx90632->client = client;
+> > >       mlx90632->regmap = regmap;
+> > >       mlx90632->mtyp = MLX90632_MTYP_MEDICAL;
+> > > +     mlx90632->powerstatus = MLX90632_PWR_STATUS_HALT;
+> > >
+> > >       mutex_init(&mlx90632->lock);
+> > >       indio_dev->name = id->name;
+> > > @@ -961,16 +1192,25 @@ static int mlx90632_probe(struct i2c_client *client,
+> > >
+> > >       mlx90632->emissivity = 1000;
+> > >       mlx90632->object_ambient_temperature = 25000; /* 25 degrees milliCelsius */
+> > > +     mlx90632->interaction_ts = jiffies; /* Set initial value */
+> > >
+> > > -     pm_runtime_disable(&client->dev);
+> > > +     pm_runtime_get_noresume(&client->dev);
+> > >       ret = pm_runtime_set_active(&client->dev);
+> > >       if (ret < 0) {
+> > >               mlx90632_sleep(mlx90632);
+> > >               return ret;
+> > >       }
+> > > +
+> > >       pm_runtime_enable(&client->dev);
+> > >       pm_runtime_set_autosuspend_delay(&client->dev, MLX90632_SLEEP_DELAY_MS);
+> > >       pm_runtime_use_autosuspend(&client->dev);
+> > > +     pm_runtime_put_autosuspend(&client->dev);
+> > > +
+> > > +     ret = devm_add_action_or_reset(&client->dev, mlx90632_pm_disable, &client->dev);  
 > >
-> > There is a double-free security bug in split_2MB_gtt_entry.
-> >
-> > Here is a calling chain :
-> > ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
-> > If intel_gvt_dma_map_guest_page failed, it will call
-> > ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
-> > kfree(spt). But the caller does not notice that, and it will call
-> > ppgtt_free_spt again in error path.
-> >
-> > Fix this by only freeing spt in ppgtt_invalidate_spt in good case.
-> >
-> > Signed-off-by: xmzyshypnc <1002992920@qq.com>
-> > ---
-> >  drivers/gpu/drm/i915/gvt/gtt.c | 16 +++++++++-------
-> >  1 file changed, 9 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/=
-gtt.c
-> > index 9f14fded8c0c..31d2a8d56384 100644
-> > --- a/drivers/gpu/drm/i915/gvt/gtt.c
-> > +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-> > @@ -959,7 +959,7 @@ static inline int ppgtt_put_spt(struct
-> > intel_vgpu_ppgtt_spt *spt)
-> >   return atomic_dec_return(&spt->refcount);
-> >  }
-> >
-> > -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
-> > +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *sptm,
-> > int is_error);
->
-> Your patch is whitespace damaged and linewrapped and can not be applied,
-> and can only barely read :(
->
-> Please fix up your email client to not do this so that the change can be
-> properly reviewed and accepted if correct.
->
-> thanks,
->
-> greg k-h
+> > Having moved those over to devm you need to also have dropped the calls in remove()
+> > (I only noticed this whilst trying to fix the autosuspend issue above.)  
+> 
+> So in remove, there should be no pm calls, because mlx90632_pm_disable
+> function handle all of it? I still keep the sleep call, so that it
+> also puts the sensor in lowest state, or I rather keep it only in
+> regulator_disable (which should also be called at removal)?
+
+No, you still need some calls, because the devm_pm_runtime_enable()
+registers a callback that only does part of what you have - it leaves
+the device in an unknown state. If you want to power it up again so
+that you can in turn switch it off cleanly (and hence handle the
+non runtime pm case nicely) then you still need to do that.
+
+The sleep is still useful because we may not have a controllable regulator.
+In that case we want to go to a low power state anyway.
+
+If we do have a controllable regulator, then sleeping followed by hitting
+the power button does no harm.
+
+
+Jonathan
+
+
+> 
+> > > +     if (ret) {
+> > > +             mlx90632_sleep(mlx90632);
+> > > +             return ret;
+> > > +     }
+> > >
+> > >       return iio_device_register(indio_dev);
+> > >  }  
+> >  
+
