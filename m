@@ -2,187 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEB55BA4C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C93A5BA4CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiIPCvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S229667AbiIPCzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiIPCvO (ORCPT
+        with ESMTP id S229487AbiIPCzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:51:14 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC498A71;
-        Thu, 15 Sep 2022 19:51:08 -0700 (PDT)
-X-UUID: 98d6e13a38484344b6306fc1dd2ee21a-20220916
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=o4SwcYmQeEsPhNZNiOlAz3LSIKt52BQiCkN0gMjK+lM=;
-        b=GjhWbedZDVF/70SBb29RJFIaXfiDZxyenGtPssYc3Lu3Mqu3YnwMgnWXewr849KjU9uPONu33kLjX5zsbEczi35zZd465teaPvjxVvBwW9FnwXHeGZItqd2dVxRe8hR5o/LBfJVgJeV8C/sosZ1HID7cAmQG4LsW3egXXgewtmo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:0bbf3912-1f5c-4fe3-80df-5f368f312e3f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.11,REQID:0bbf3912-1f5c-4fe3-80df-5f368f312e3f,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:39a5ff1,CLOUDID:d65bd65d-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:220916105103D597RE6C,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 98d6e13a38484344b6306fc1dd2ee21a-20220916
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 211661015; Fri, 16 Sep 2022 10:51:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 16 Sep 2022 10:51:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 16 Sep 2022 10:51:01 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v3 4/4] arm64: dts: mediatek: cherry: Add edptx and dptx support
-Date:   Fri, 16 Sep 2022 10:50:59 +0800
-Message-ID: <20220916025059.16673-5-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220916025059.16673-1-rex-bc.chen@mediatek.com>
-References: <20220916025059.16673-1-rex-bc.chen@mediatek.com>
+        Thu, 15 Sep 2022 22:55:48 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D84A99266
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:55:46 -0700 (PDT)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWul5SNj08gaAA--.56059S2;
+        Fri, 16 Sep 2022 10:55:34 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/10] LoongArch: Add ftrace support
+Date:   Fri, 16 Sep 2022 10:55:23 +0800
+Message-Id: <20220916025533.18771-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxbWul5SNj08gaAA--.56059S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyDuw4UKr1ruw17XF1UZFb_yoW5KF1kpr
+        W3ZFn3Gr4UCFs3twnxK34rurn5Ar4xGryag3W3JryrCr47Zr1UXr1vyrykXa45t393Gry0
+        qF1rWw47KF4qva7anT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY
+        62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7V
+        C2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF
+        7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+        IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bwl1PUUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cherry projects, we use edptx as the internal display interface
-and use dptx as the external display interface. To support this, we
-need to add more properties.
+This patch series to support basic and dynamic ftrace.
 
-- Add pinctrls for edptx and dptx.
-- Add ports for edptx and dptx.
+1) -pg
+Use `-pg` makes stub like a child function `void _mcount(void *ra)`.
+Thus, it can be seen store RA and open stack before `call _mcount`.
+Find `open stack` at first, and then find `store RA`.
 
-The port connections for the internal and external display:
-dp-intf0 -> edptx -> panel
-dp-intf1 -> dptx
+2) -fpatchable-function-entry=2
+The compiler has inserted 2 NOPs before the regular function prologue.
+T series registers are available and safe because of LoongArch psABI.
 
-The edptx endpoint is kept empty for now, as the panel addition will
-come in a later commit.
+At runtime, replace nop with bl to enable ftrace call and replace bl with
+nop to disable ftrace call. The bl requires us to save the original RA value,
+so here it saves RA at t0.
+details are:
 
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+| Compiled   |       Disabled         |        Enabled         |
++------------+------------------------+------------------------+
+| nop        | move     t0, ra        | move     t0, ra        |
+| nop        | nop                    | bl      ftrace_caller  |
+| func_body  | func_body              | func_body              |
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 303dc32c64dc..560103e29017 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -125,6 +125,7 @@
- 
- 	port {
- 		dp_intf0_out: endpoint {
-+			remote-endpoint = <&edp_in>;
- 		};
- 	};
- };
-@@ -134,6 +135,59 @@
- 
- 	port {
- 		dp_intf1_out: endpoint {
-+			remote-endpoint = <&dptx_in>;
-+		};
-+	};
-+};
-+
-+&edp_tx {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&edptx_pins_default>;
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			edp_in: endpoint {
-+				remote-endpoint = <&dp_intf0_out>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			edp_out: endpoint {
-+				data-lanes = <0 1 2 3>;
-+			};
-+		};
-+	};
-+};
-+
-+&dp_tx {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&dptx_pin>;
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			dptx_in: endpoint {
-+				remote-endpoint = <&dp_intf1_out>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			dptx_out: endpoint {
-+				data-lanes = <0 1 2 3>;
-+			};
- 		};
- 	};
- };
-@@ -497,6 +551,20 @@
- 		};
- 	};
- 
-+	edptx_pins_default: edptx-default-pins {
-+		pins-cmd-dat {
-+			pinmux = <PINMUX_GPIO7__FUNC_EDP_TX_HPD>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	dptx_pin: dptx-default-pins {
-+		pins-cmd-dat {
-+			pinmux = <PINMUX_GPIO18__FUNC_DP_TX_HPD>;
-+			bias-pull-up;
-+		};
-+	};
-+
- 	i2c0_pins: i2c0-default-pins {
- 		pins-bus {
- 			pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+The RA value will be recovered by ftrace_regs_entry, and restored into RA
+before returning to the regular function prologue. When a function is not
+being traced, the move t0, ra is not harmful.
+
+performs a series of startup tests on ftrace and The test cases in selftests
+has passed on LoongArch.
+
+Changes in v2:
+ - Remove patch "LoongArch: ftrace: Add CALLER_ADDRx macros" there are other
+   better ways
+ Suggested by Steve:
+ - Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support (6/10)
+ Suggested by Jinyang:
+ - Change addu16id to lu12iw and Adjust module_finalize return value (7/10)
+ - Use the "jr" pseudo-instruction where applicable (1/10)
+ - Use the "la.pcrel" instead of "la" (3/10)
+
+Changes in v3:
+ Reported by Jeff: 
+ - Fix unwind state when option func_stack_trace (10/10)
+
+Changes in v4:
+ - No comments. Just resend the series.
+ - Rebased onto v6.0.0-rc4.
+
+Qing Zhang (10):
+  LoongArch/ftrace: Add basic support
+  LoongArch/ftrace: Add recordmcount support
+  LoongArch/ftrace: Add dynamic function tracer support
+  LoongArch/ftrace: Add dynamic function graph tracer support
+  LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_REGS support
+  LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support
+  LoongArch: modules/ftrace: Initialize PLT at load time
+  LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
+  LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
+  LoongArch/ftrace: Fix unwind state when option func_stack_trace
+
+ arch/loongarch/Kconfig                     |   7 +
+ arch/loongarch/Makefile                    |   5 +
+ arch/loongarch/configs/loongson3_defconfig |   2 +
+ arch/loongarch/include/asm/ftrace.h        |  61 +++++
+ arch/loongarch/include/asm/inst.h          |  18 ++
+ arch/loongarch/include/asm/module.h        |   5 +-
+ arch/loongarch/include/asm/module.lds.h    |   1 +
+ arch/loongarch/include/asm/unwind.h        |   3 +-
+ arch/loongarch/kernel/Makefile             |  13 +
+ arch/loongarch/kernel/entry_dyn.S          | 154 ++++++++++++
+ arch/loongarch/kernel/ftrace.c             |  74 ++++++
+ arch/loongarch/kernel/ftrace_dyn.c         | 264 +++++++++++++++++++++
+ arch/loongarch/kernel/inst.c               | 127 ++++++++++
+ arch/loongarch/kernel/mcount.S             |  94 ++++++++
+ arch/loongarch/kernel/module-sections.c    |  11 +
+ arch/loongarch/kernel/module.c             |  47 ++++
+ arch/loongarch/kernel/unwind_guess.c       |   4 +-
+ arch/loongarch/kernel/unwind_prologue.c    |  44 +++-
+ scripts/recordmcount.c                     |  23 ++
+ 19 files changed, 947 insertions(+), 10 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/ftrace.h
+ create mode 100644 arch/loongarch/kernel/entry_dyn.S
+ create mode 100644 arch/loongarch/kernel/ftrace.c
+ create mode 100644 arch/loongarch/kernel/ftrace_dyn.c
+ create mode 100644 arch/loongarch/kernel/mcount.S
+
 -- 
-2.18.0
+2.36.1
 
