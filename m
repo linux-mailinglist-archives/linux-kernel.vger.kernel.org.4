@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6634E5BAF99
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F8C5BAF9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbiIPOtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S230131AbiIPOvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiIPOtc (ORCPT
+        with ESMTP id S229714AbiIPOvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:49:32 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A7B26E2;
-        Fri, 16 Sep 2022 07:49:31 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id q21so31844990edc.9;
-        Fri, 16 Sep 2022 07:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Udhk4Q2S/+kZ/4kuQfb/Q3gnhZBJAS7E9brlINKWaBA=;
-        b=mM2JRZPp+c5UJqx940V5iM59hJC0QcbIOAt3KcNOuW+DqYVp6zTlXPFaiwEMcWIrlE
-         cK6B7yUmmJsaL0yNjfRkGHWWoaCEcNaBdcFp8zMmEnBpAHV7s621GO00GvS0waLllgyH
-         nJXdVde/QH0u5+bLwgxWCRo/fp2jyn8l91o0zwVmlShXeoeToeEEjFKJvjXaQUs0sa/f
-         ET9Du3muo4NojEp2iOBQU0GBR0aKqAm8y3Y7X6TA6HMpPC0BYG/i8/HeAUUIOY2K+klG
-         1MivcFhQigyzuZ4B3fHD7NSiF5cfY4aMDFStsb4VjnArVCLEe3aTsYcMNHCKJ4trpoHn
-         d6XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Udhk4Q2S/+kZ/4kuQfb/Q3gnhZBJAS7E9brlINKWaBA=;
-        b=PzFI8LzwIP2B3RqdAdH9CYKlpdZqbSsp3dU6u0VgO+KkQgK6ilVLhwDK5CZmE613y4
-         YbXrzOdLfrei1vM52H6n9JzTldDjryHyKbWHvZ7YfSoDPk0aDExUmzesCXFOZoc3sUgw
-         7KcMiUNRLP1pLYHfMgZP42AGX+JkiXeM1BBVNhsHPwcvxdWZUw0VSwX4bA9Lrw050kuF
-         u/uIeV/zTwKN2s/iA///0sdr3to8igCi+VeGHZ0KZb6Nh0WT5gjcTlf7wtFKcEVuaRLv
-         8W4Y2bTyhXRKenRPRTGxiBclVqGUid5BT17q8Uax70o6EXq/mIPyGmrC+YaN5lwHr7Kf
-         iwKg==
-X-Gm-Message-State: ACrzQf1tNV065IlTUFjK556iJn4robIy1J9Z/FnGFAgq/IbvBe/Ub2Us
-        G/BGnsDsZ42IK77Xb+ZIyjY=
-X-Google-Smtp-Source: AMsMyM4wosS/9EUN4XPzsd9E3cF+/d3pcXKnlIvOr72RSZ9iMIfHqeHq0GM7ZSII6npMLsrAq3roHA==
-X-Received: by 2002:a05:6402:161a:b0:451:ea13:572e with SMTP id f26-20020a056402161a00b00451ea13572emr4293402edv.41.1663339769879;
-        Fri, 16 Sep 2022 07:49:29 -0700 (PDT)
-Received: from felia.fritz.box (200116b82618570059b736ec202ba767.dip.versatel-1u1.de. [2001:16b8:2618:5700:59b7:36ec:202b:a767])
-        by smtp.gmail.com with ESMTPSA id s25-20020aa7cb19000000b004531b137e4bsm2735103edt.67.2022.09.16.07.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:49:28 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] drm: make DRM_DEBUG_MODESET_LOCK depend on DRM
-Date:   Fri, 16 Sep 2022 16:49:05 +0200
-Message-Id: <20220916144905.18253-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 16 Sep 2022 10:51:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A98A572E;
+        Fri, 16 Sep 2022 07:51:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2EEF62C52;
+        Fri, 16 Sep 2022 14:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58EBC43470;
+        Fri, 16 Sep 2022 14:51:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KlnuYh1s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663339856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AQYiQoE1MzbspExjoxRIxp8659JqC9N66qASNbjnQqI=;
+        b=KlnuYh1sIGr8iLDnyM+oR6yvdq24Mjt7ZamBZ0JSxxSGkgc4FRdQprP+5+Bjt3yAL6YIB7
+        yqOyyKBd6P9kvimEiqKEMUDql0NS6+PZNFNjavhEaVHVq5YER6w0tDUwuDpWXJ4FBwbo79
+        gRldpBdze8LjSuUu0ZMBXHkrXyE0qYE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1f8ea2d5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 16 Sep 2022 14:50:55 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3450990b0aeso262117667b3.12;
+        Fri, 16 Sep 2022 07:50:55 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2BAoZuRL2Uk/12ojcGA6HEUcIrGFUp9jQ8SO8ca83DtEhAguDa
+        nFtlgTj1fy5rIS354EphiTazMUKmOvfuxKMQoKc=
+X-Google-Smtp-Source: AMsMyM51XqKQyk4s+gVt6jlmvoxBMaNxeULYyZNPUl7oFIcgBDfSa9yp9k6H0qwzA8LOD3vyzz1NfXzFWJtdMAVT2qo=
+X-Received: by 2002:a81:d97:0:b0:348:f982:e2f7 with SMTP id
+ 145-20020a810d97000000b00348f982e2f7mr4722516ywn.414.1663339853668; Fri, 16
+ Sep 2022 07:50:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+In-Reply-To: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 16 Sep 2022 15:50:41 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rhunb05DEnc=UfGr8k9_LBi1NW2Hi0OsRbGwcCN2NzjQ@mail.gmail.com>
+Message-ID: <CAHmME9rhunb05DEnc=UfGr8k9_LBi1NW2Hi0OsRbGwcCN2NzjQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] random: move add_hwgenerator_randomness()'s wait
+ outside function
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Olivia Mackall <olivia@selenic.com>,
+        Alex Levin <levinale@google.com>,
+        Andrey Pronin <apronin@google.com>,
+        Stephen Boyd <swboyd@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +76,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DEBUG_KERNEL is selected with a kernel build without DRM, Kconfig still
-asks if DRM_DEBUG_MODESET_LOCK is to be selected or not, although this has
-no influence on the kernel without DRM.
+Hi Sven,
 
-Make DRM_DEBUG_MODESET_LOCK depend on DRM to avoid needless questions
-during kernel build configuration.
+On Thu, Sep 15, 2022 at 1:22 AM Sven van Ashbrook <svenva@chromium.org> wrote:
+> -       if (!kthread_should_stop() && crng_ready())
+> -               schedule_timeout_interruptible(CRNG_RESEED_INTERVAL);
+> +       return crng_ready() ? CRNG_RESEED_INTERVAL : 0;
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/gpu/drm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+I was thinking the other day that under certain circumstances, it
+would be nice if random.c could ask hwrng for more bytes NOW, rather
+than waiting. With the code as it is currently, this could be
+accomplished by having a completion event or something similar to
+that. With your proposed change, now it's left up to the hwrng
+interface to handle.
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 198ba846d34b..393d6da0d0f7 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -96,6 +96,7 @@ config DRM_DEBUG_DP_MST_TOPOLOGY_REFS
- 
- config DRM_DEBUG_MODESET_LOCK
- 	bool "Enable backtrace history for lock contention"
-+	depends on DRM
- 	depends on STACKTRACE_SUPPORT
- 	depends on DEBUG_KERNEL
- 	depends on EXPERT
--- 
-2.17.1
+That's not the end of the world, but it does mean we'd have to come up
+with a patch down the line that exports a hwrng function saying, "stop
+the delays and schedule the worker NOW". Now impossible, just more
+complex, as now the state flow is split across two places. Wondering
+if you have any thoughts about this.
 
+The other thing that occurred to me when reading this patch in context
+of the other one is that this sleep you're removing here is not the
+only sleep in the call chain. Each hwrng driver can also sleep, and
+many do, sometimes for a long time, blocking until there's data
+available, which might happen after minutes in some cases. So maybe
+that's something to think about in context of this patchset -- that
+just moving this to a delayed worker might not actually fix the issue
+you're having with sleeps.
+
+Jason
