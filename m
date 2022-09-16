@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E935BB2D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2F65BB2D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiIPTcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S230209AbiIPTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiIPTcM (ORCPT
+        with ESMTP id S229509AbiIPTdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:32:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B42B0B18;
-        Fri, 16 Sep 2022 12:32:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8025DB82921;
-        Fri, 16 Sep 2022 19:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D74C433C1;
-        Fri, 16 Sep 2022 19:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663356728;
-        bh=//xoDX9kOXmkp982WJui+uOT9DeSmbvciR+NGZPx6EU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bK4Vpr7ZMnK1HS7eGhhmG9DvDRAwdhutjJR60Pa+S5R85TA3EA/BA7vIqp84S1vVZ
-         t0BcT/iSnmUpJrvRNvxR1axHAsuZJQVkYvPVE2sEMKOaiATvv9ua5bXkP9TdNvJ8VW
-         NE3R3ast7xLOagKx1tDNTrGLeYmxAtIs3DPZvjZn9elABCqhv3nqbna/HJjlUcSepc
-         7qANe6kK/vWBlH4G4NYM+6yOCAFpD+1wlhBdgAujge58I3HvRQO9Kuz2GGBPx9wx0T
-         Qagk8veUoGrQRPvTleHMgzr4IJWWeUzWfbHvdTsx38yZ91oioZ7hEDMTvwN8uD0xJP
-         /P86z9AmTEIqw==
-Date:   Fri, 16 Sep 2022 20:31:58 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Kees Cook <keescook@chromium.org>, Peter Rosin <peda@axentia.se>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] i2c: mux: harden i2c_mux_alloc() against integer
- overflows
-Message-ID: <YyTPLkOfPlgkLaxq@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Kees Cook <keescook@chromium.org>, Peter Rosin <peda@axentia.se>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <YyMM8iVSHJ4ammsg@kili>
- <202209160046.016AC8B4@keescook>
- <YyQxuHi2iQIvj0Lj@kadam>
+        Fri, 16 Sep 2022 15:33:39 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D76B0B18
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:33:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so597403pjl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=7koUmLdWd3oEgwetevFBcgnuG0GVKxojKR8I+sUBlm8=;
+        b=bP5yedyAXi7WDrG/FFmAEiTMdMkkudI5cP9ED/DF56Kof4boDDYNcpCpYMPnXkKrg4
+         ujqkBFTI9wqTn+/w2Rr0zYuMlMXL8hzgwdb88DnxyrIhCqy19p+XzNMMiRLYfdcRuKUX
+         nu5PhJo7e/Ne+i9ncLJasmEcEfNLfuN8y1evlNvmdlZHAfxoR1aPqocR10BLUEgcaowu
+         LNKLG/2NjDH+zWjFMdVi20i/KXRM57VYWS1o1Jo3pPmgdYyuLHDVJojta2xIZHMxb3G/
+         U5j63Ur+XVi2+F2jcCa87/m0B+icKHxHTr0fkbsQA6n9p02cKITP0BA4O50QxHcZG7iw
+         y+zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=7koUmLdWd3oEgwetevFBcgnuG0GVKxojKR8I+sUBlm8=;
+        b=hTMb5rqje08O61D2d7gevJ2A3EbGcsuuBqpXvry4qpD8+Mys3bS8ITSlzeg7+8Tlpe
+         DhcvmiLpIC7RHlnkZdLVXzZSjBkz6e/KOIxkb8qZ1zZYAiMPfYUp/G2tEnH+XZngLl8Y
+         7Xj+uuPUbNVr1EFmzcdG1MHdemBcwt0xOotJ20juTHQY4jfBPKSkRB3bDxODhWpfuR7V
+         R1iTd7jFOmRnOfv1Ya3t9Z6Aokf7Wt9CYVvJF9lNdCVJh4GVYeLgIakpI63yD68e9NEh
+         LlgGgal7qcgDxCwAwr6ix6cMdK/4zB8j8SJSd10a6a7XLTp1iMvCaPSiXJAcRsBlsp68
+         HVmQ==
+X-Gm-Message-State: ACrzQf0zEHjqLe5Mh6f8s7GdS7mqi0KJzvlMjqjHWWLex+YtEyrTeDdw
+        wdkt3YCTJT/4ayQRgmSVYd7XlA==
+X-Google-Smtp-Source: AMsMyM4oimrpkumsosCVMs3B9/WKzAd0DHlcSmg3LTcPU4vkIyDhae7RO57hjNIG3ht9++EePRARiQ==
+X-Received: by 2002:a17:90b:3809:b0:202:b482:b7d6 with SMTP id mq9-20020a17090b380900b00202b482b7d6mr17580055pjb.209.1663356817295;
+        Fri, 16 Sep 2022 12:33:37 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 129-20020a620487000000b0053e984a887csm15130733pfe.96.2022.09.16.12.33.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 12:33:36 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 19:33:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 6/6] KVM: x86/mmu: Use 1 as the size of gfn range for
+ tlb flushing in FNAME(invlpg)()
+Message-ID: <YyTPjSl8lNPWWSlL@google.com>
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+ <8baa40dad8496abb2adb1096e0cf50dcc5f66802.1661331396.git.houwenlong.hwl@antgroup.com>
+ <YxjXgERSNIk4ZaN+@google.com>
+ <20220913125833.GC113257@k08j02272.eu95sqa>
+ <CALzav=c7Y_Do0vk_AtezYMBss6eRDGzyHovMYArXQ4JfmfKoOw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LH3CZH+3vzn5Op2u"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyQxuHi2iQIvj0Lj@kadam>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALzav=c7Y_Do0vk_AtezYMBss6eRDGzyHovMYArXQ4JfmfKoOw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 13, 2022, David Matlack wrote:
+> On Tue, Sep 13, 2022 at 5:58 AM Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> >
+> > On Thu, Sep 08, 2022 at 01:40:16AM +0800, David Matlack wrote:
+> > > On Wed, Aug 24, 2022 at 05:29:23PM +0800, Hou Wenlong wrote:
+> > > > Only SP with PG_LEVLE_4K level could be unsync, so the size of gfn range
+> > > > must be 1.
+> > > >
+> > > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > > > ---
+> > > >  arch/x86/kvm/mmu/paging_tmpl.h | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> > > > index 04149c704d5b..486a3163b1e4 100644
+> > > > --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> > > > +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> > > > @@ -937,7 +937,8 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+> > > >
+> > > >                     mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
+> > > >                     if (is_shadow_present_pte(old_spte))
+> > > > -                           kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
+> > > > +                           kvm_flush_remote_tlbs_gfn(vcpu->kvm,
+> > > > +                                   kvm_mmu_page_get_gfn(sp, sptep - sp->spt), 1);
+> > >
+> > > The third argument to kvm_flush_remote_tlbs_gfn() is the level, not the
+> > > number of pages. But that aside, I don't understand why this patch is
+> > > necessary. kvm_flush_remote_tlbs_sptep() should already do the right
+> > > thing.
+> > >
+> > Since only SP with PG_LEVEL_4K level could be unsync, so the level must
+> > be PG_LEVEL_4K, then sp->role.level access could be dropped. However,
+> > I'm not sure whether it is useful. I can drop it if it is useless.
+> 
+> Ah, I see. I would be surprised if avoiding the read of sp->role.level
+> has any noticeable impact on VM performance so I vote to drop this patch.
 
---LH3CZH+3vzn5Op2u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Agreed, the cost of the sp->role.level lookup is negligible in this case, and IMO
+using kvm_flush_remote_tlbs_sptep() is more intuitive.
 
-
-> > The new variable makes it more readable, but beyond that, do you see any
-> > reason not to just directly compose the calls?
-> >=20
->=20
-> You could do that too.
->=20
-> You pointed this out in your other email but the one thing that people
-> have to be careful of when assigning struct_size() is that the
-> "mux_size" variable has to be size_t.
->=20
-> The math in submit_create() from drivers/gpu/drm/msm/msm_gem_submit.c
-> is so terribly unreadable.  It works but it's so ugly.  Unfortunately,
-> I'm the person who wrote it.
-
-I can't parse from that if the patch in question is okay or needs a
-respin? Could you kindly enlighten me?
-
-
---LH3CZH+3vzn5Op2u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMkzy0ACgkQFA3kzBSg
-Kbaztw/+N9X2QXwxeCMfK355UzAvNqP0fyKw/53SNJxPqJzaWafNStUjc6C3ADP2
-sKfB/I2gjBm+sAso9p1XcIDlV8Cxbdxyt5h+xCWQt1Ybm6XpUIVlapux0gNOX2ER
-Y2pc5De4V89fuIY6ZjQMvjwAm4mEsRH25zcXhpS0lVhX2JGeaGDGXc9Iv34L0CW3
-qDJOUlF78YJcIoTew5EGmz4WmExudT7Z3RwNKFQOmTuHK4Swmux6rwI18ekAbHHf
-s7Cvlc3EpxMYYFPR4ReFQg8wnsHrVbyQ6TJP8flGZ1XL59/N9xwhvPTPcQIjWVI3
-O2s7xef3USuyT0m2o+S5VsN4whdLVn3TkvxI9tLz9hEFoBOs7zPP3C5iTy8g9ds5
-dUpk+J4tC+cagZahifx4+SM8fBvGxlo6BxU+qjhZUihxE8d8kQcrp0/xQCL+lT2x
-2eEjPSuYuBLvUqJata/ccnw70VTPSgqyPiV0DeboK3trFVM+ZBOiQXcvAT4UGoyE
-egT1IozpmnunXR8bgLS1al8Bqbz0AzbGg1xB9G0fqg/F/jpixMZh6BVP8qkHTEgK
-gs8ysFdupJjLS3fIVDuY/2Jyta1QuBrULQpznjeUFld8QjA8Gy9k2XYBu5UgrcOT
-eVm8alL5rMthCrqpP138W6Mes+shwVZG6Nj7LCHx7n8ALrzdHyQ=
-=fKpo
------END PGP SIGNATURE-----
-
---LH3CZH+3vzn5Op2u--
+If kvm_flush_remote_tlbs_sptep() didn't exist and this was open coding the use of
+kvm_flush_remote_tlbs_with_address() + KVM_PAGES_PER_HPAGE(), then I would be in
+favor of hardcoding '1', because at that point the use of KVM_PAGES_PER_HPAGE() is
+misleading in its own way.
