@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2BB5BAE12
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331CB5BAE13
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiIPNY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S231640AbiIPNZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiIPNYn (ORCPT
+        with ESMTP id S230503AbiIPNYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:24:43 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF8222B2B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:42 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id n8so8567617wmr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:42 -0700 (PDT)
+        Fri, 16 Sep 2022 09:24:44 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2C51837F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:43 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id c11so36018030wrp.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=bXYtZk9DuHwMmE7lTTFLwrOctNB6LlU7vnhCjjk89UE=;
-        b=ZH0sIZgnFki3bD+19ezSXw9QfGCvGCSJUkIVLslojq8WR8i/6sqIDtCQPe+TmU6BWE
-         6lREtR+DhB3Hfx7pvjDEDI/q3+d9OvTdr7bM8EL3mfTiOWNROCc4iNZwpRi6TegQheJJ
-         1/tuRJHOc9kT3jC4J65Kerc1W+b8NGWKqpCbVITCjo4rG5v3KKm252HAwaPt/xK032e6
-         I1VTRsV0BYYjsz0LzM6qzsvKSYKNTe9WQ6QgqFfiVFfzNQR9x2wn0VZ7y3tZ+VqOnEdd
-         KGCFlmi9pVfSPHV/YLeTIrPQrVNsdPqsxH0+z+plEy5NY0eB4E5Fqqkub1R1Z4GEukA1
-         PnIA==
+        bh=+W+mJGcR2EndruN0lglfV6ZFhxv7HYvptaoPjmljPEQ=;
+        b=vZoDLfSLqQEgTYVavNcrVAvUnwNBVnu2uL/Hrd6HyBmmXLkf/10NuukyptOlvS5UHo
+         z7ST7w7cP6evDi+WKJ9Qmkba+o8nfUVB8mTISbz+Q4v810ZCX2FN+PFPBGA1CAYvGLtH
+         YL5WOlhPiKXophIAMEEJQc4QMSTzMlOfUIN1j/LV1dpZS4xkSgnsP7wgQI38ImPFjMk9
+         KA/DGy/aSc/tJAThdedMXwJcRFFi5YYOgK1pr7MMOBhjEujqKlT+ELtJHecp0synIZu7
+         ECgO4nf+W9Gw1Jui2G2Mq7EU01QGR1il7a8lmYlVuOcqdLKX81aA7n0Gf3yrt94bDrHy
+         PcWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=bXYtZk9DuHwMmE7lTTFLwrOctNB6LlU7vnhCjjk89UE=;
-        b=CIFZJ84tVVFiZsjN1zduAV1zIqD9QhQ22L95PlmEZh4uVl9Ft/Mh6qrHyFWVdyNF25
-         8ovnXw0mppICGPAdGVhAJIKJAki0PvU1gEKN/NfybSOw7DG0GjvxuhOt7v4BoQwCeK3r
-         OWKc3BFtrSYkrd0efViq2dStl3/dI7puwTVWGTrkCqqOfdTf4PmEfa/qQaeqBQn8DzWP
-         0no6uwE1cOIdLMfGcK4ljzGkBhQ0251vLau7VUG+HYFSwIF+e4jxl8iwhyrjL19RXknd
-         cAKyK/nK7JwbOBtBMUeB2LWh2IW19taj17uIrE9xlTx8ED6HXVyBbLWGhO+nlxOVvMr/
-         lJDg==
-X-Gm-Message-State: ACrzQf11sIVdpYU8R2lPOOBrzUk66JWRw3yLEdeusWrS0h0mY7MP0vPC
-        WDQPdehN9eEQzx/K8zzdq9uEvw==
-X-Google-Smtp-Source: AMsMyM4NYRajmi6DsUcjnbjh29HTN041/86Ue8INhhNHcP+iIJ+j/ghsUNko/iPFBv9z40nElL79Lg==
-X-Received: by 2002:a05:600c:4211:b0:3b4:6334:9940 with SMTP id x17-20020a05600c421100b003b463349940mr3405497wmh.166.1663334680996;
-        Fri, 16 Sep 2022 06:24:40 -0700 (PDT)
+        bh=+W+mJGcR2EndruN0lglfV6ZFhxv7HYvptaoPjmljPEQ=;
+        b=wBOrOLx93rxfFV8TUAstYfd9WzT1su1Wg+S2Rn62bdufXRAVeUlONQuyKxB99X/+pg
+         aavKwbgQXdGUU9EiTaer4M5Dn+9jJgyrqexe81g8dHLZjCdV8jRzmcx07fMc7bPc4HI9
+         zAsyf4uLEt/JQFsxi7pc84JkjFcZ5o6hj+7GukOT70xNOgxnA3jOKbLOKY145GUAE61v
+         ArRrlZFzqGAtTi+faSb5dbuVxkSw7o4XOiIhEEvun9Pqd/jLP03yFvAunvFObw7CvFgG
+         kCdBVoJuni9uSVQtWaa1X3dh91JRtE0Fo51kl3eG4ZXhCsZ0I0GcFERWos8e6OvNhpyJ
+         iplQ==
+X-Gm-Message-State: ACrzQf17bfY32YTDxmgcDdO8UcVDyK1Y31d4/wz/XAhfjMhUPpR06RMr
+        NKrrqMgaMUVSwDkk3Hl/6Ohi8g==
+X-Google-Smtp-Source: AMsMyM65rHm2cl2xkabgfqjleJ+Ut49AmRpBnqIa4zx8l1mPDXedZJjTcAdd/NSjcB4nW9/5wDCY2A==
+X-Received: by 2002:a05:6000:1363:b0:228:d605:f9dc with SMTP id q3-20020a056000136300b00228d605f9dcmr2703108wrz.109.1663334681983;
+        Fri, 16 Sep 2022 06:24:41 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a608d69a64sm2387061wmq.21.2022.09.16.06.24.40
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a608d69a64sm2387061wmq.21.2022.09.16.06.24.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:24:40 -0700 (PDT)
+        Fri, 16 Sep 2022 06:24:41 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
@@ -56,10 +56,12 @@ Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
         perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v5 2/5] ASoC: dt-bindings: qcom: sort compatible strings
-Date:   Fri, 16 Sep 2022 14:24:24 +0100
-Message-Id: <20220916132427.1845-3-srinivas.kandagatla@linaro.org>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 3/5] ASoC: dt-bindings: qcom,sm8250: add compatibles for sm8450 and sm8250
+Date:   Fri, 16 Sep 2022 14:24:25 +0100
+Message-Id: <20220916132427.1845-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
 References: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
@@ -67,33 +69,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sort compatible strings for consistency reasons.
+Add compatibles for sm8450 and sm8250xp based soundcards.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/sound/qcom,sm8250.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/sound/qcom,sm8250.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-index a3a4289f713e..bab1a6f1890f 100644
+index bab1a6f1890f..70080d04ddc9 100644
 --- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
 +++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
-@@ -20,9 +20,9 @@ properties:
-       - qcom,apq8016-sbc-sndcard
+@@ -21,8 +21,10 @@ properties:
        - qcom,db845c-sndcard
        - qcom,msm8916-qdsp6-sndcard
-+      - qcom,qrb5165-rb5-sndcard
+       - qcom,qrb5165-rb5-sndcard
++      - qcom,sc8280xp-sndcard
        - qcom,sdm845-sndcard
        - qcom,sm8250-sndcard
--      - qcom,qrb5165-rb5-sndcard
++      - qcom,sm8450-sndcard
  
    audio-routing:
      $ref: /schemas/types.yaml#/definitions/non-unique-string-array
