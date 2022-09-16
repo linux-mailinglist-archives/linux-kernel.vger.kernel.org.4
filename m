@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAF25BA5FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8F95BA604
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiIPEkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S229495AbiIPEv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiIPEkd (ORCPT
+        with ESMTP id S229454AbiIPEvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:40:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E4B52804;
-        Thu, 15 Sep 2022 21:40:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 16 Sep 2022 00:51:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D521EA00C9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663303911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZrlYoSR0t0sSR123GOVAJxEfCWOvnKpItP6M0/Vrog0=;
+        b=L8Q8pVkXAXlyhc9bJidMelrqFDxcdqbCODQBFo2Un4S05cguVx6JiT2QLqwKkCdS7BffZn
+        bp85BLxcrrOgTzZY2a9G+pYInUj5hkb+4ly6cZD3HkuMbpLfrUR9Nwka8adlMoEawm75vD
+        HnWgJeUrhdgY5DC0yjU/OSDsNShaLNM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-HQsuENMbNjO1T32TYAyMaA-1; Fri, 16 Sep 2022 00:51:48 -0400
+X-MC-Unique: HQsuENMbNjO1T32TYAyMaA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A309B82394;
-        Fri, 16 Sep 2022 04:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB67C433C1;
-        Fri, 16 Sep 2022 04:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663303229;
-        bh=FxIIBNOiH+QYHDwcMlk7y0PQANGV3n3aMaOGnUbOzp4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PwRb0rUL/sItWHKfdbaDVmHdVq+yL8xKQTP+kP0STMzgYni6v/8TAh56r6FdC9Yc/
-         wikzt+JjtI00As4SH6jquYn/vAiof5LlmfbJ3lyNhXNBU7UjB079DMQ2iAr7rle9J8
-         z6B8kh8A28c0+DUcVbCIL0aGSfEpb9oJIIO38pv4GeVkNv//bbBmEibQM0gDR1r52k
-         c/48Bvx4L3dkH9S0MzX1/RekZrV605Py3j7R3yt9dWY7jEKBc4iXnfOXdt0msj7jH2
-         NgKeuSbPDABg/81eLHIMANdmJ5nPcixkdBn8kUHJlG4P4zL9cTUZ4umsjeBIyg77Cq
-         4c9z2+tqn6pog==
-Date:   Fri, 16 Sep 2022 10:10:25 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: spmi: Add qcom,bus-id
-Message-ID: <YyP+OXD5yPWBCkQb@matsya>
-References: <20220914165212.3705892-1-vkoul@kernel.org>
- <20220914165212.3705892-2-vkoul@kernel.org>
- <20220915095103.7qys3ixd6yyngkzs@krzk-bin>
- <20220915115955.GA986622-robh@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFB52862FDF;
+        Fri, 16 Sep 2022 04:51:47 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2795D140EBF3;
+        Fri, 16 Sep 2022 04:51:40 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        catalin.marinas@arm.com, linux-kselftest@vger.kernel.org,
+        bgardon@google.com, shuah@kernel.org, corbet@lwn.net,
+        maz@kernel.org, drjones@redhat.com, will@kernel.org,
+        zhenyzha@redhat.com, dmatlack@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, peterx@redhat.com, oliver.upton@linux.dev,
+        shan.gavin@gmail.com
+Subject: [PATCH v2 0/5] KVM: arm64: Enable ring-based dirty memory tracking
+Date:   Fri, 16 Sep 2022 12:51:30 +0800
+Message-Id: <20220916045135.154505-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915115955.GA986622-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-09-22, 06:59, Rob Herring wrote:
-> On Thu, Sep 15, 2022 at 10:51:03AM +0100, Krzysztof Kozlowski wrote:
-> > On Wed, 14 Sep 2022 22:22:11 +0530, Vinod Koul wrote:
-> > > For PMIC arbiter version 7 and beyond we need to define if we are using
-> > > primary or secondary bus, so add a new property of qcom,bus-id
-> > > 
-> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > Acked-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > >  .../devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml   | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > > 
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: Unevaluated properties are not allowed ('dma-channels', 'dma-masters', 'dma-requests' were unexpected)
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
-> 
-> Ignore this. Unrelated.
+This series enables the ring-based dirty memory tracking for ARM64.
+The feature has been available and enabled on x86 for a while. It
+is beneficial when the number of dirty pages is small in a checkpointing
+system or live migration scenario. More details can be found from
+fb04a1eddb1a ("KVM: X86: Implement ring-based dirty memory tracking").
 
-Right!
+The generic part has been comprehensive, meaning there isn't too much
+work, needed to extend it to ARM64.
+
+- PATCH[1]   introduces KVM_REQ_RING_SOFT_FULL for x86
+- PATCH[2]   enables the feature on ARM64
+- PATCH[3-5] improves kvm/selftests/dirty_log_test
+
+v1: https://lore.kernel.org/lkml/20220819005601.198436-1-gshan@redhat.com
+
+Testing
+=======
+
+(1) kvm/selftests/dirty_log_test
+(2) Live migration by QEMU
+
+Changelog
+=========
+v2:
+  * Introduce KVM_REQ_RING_SOFT_FULL                         (Marc)
+  * Changelog improvement                                    (Marc)
+  * Fix dirty_log_test without knowing host page size        (Drew)
+
+Gavin Shan (5):
+  KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
+  KVM: arm64: Enable ring-based dirty memory tracking
+  KVM: selftests: Use host page size to map ring buffer in
+    dirty_log_test
+  KVM: selftests: Clear dirty ring states between two modes in
+    dirty_log_test
+  KVM: selftests: Automate choosing dirty ring size in dirty_log_test
+
+ Documentation/virt/kvm/api.rst               |  2 +-
+ arch/arm64/include/uapi/asm/kvm.h            |  1 +
+ arch/arm64/kvm/Kconfig                       |  1 +
+ arch/arm64/kvm/arm.c                         |  8 +++
+ arch/x86/kvm/x86.c                           |  5 +-
+ include/linux/kvm_host.h                     |  1 +
+ tools/testing/selftests/kvm/dirty_log_test.c | 53 ++++++++++++++------
+ tools/testing/selftests/kvm/lib/kvm_util.c   |  2 +-
+ virt/kvm/dirty_ring.c                        |  4 ++
+ 9 files changed, 59 insertions(+), 18 deletions(-)
 
 -- 
-~Vinod
+2.23.0
+
