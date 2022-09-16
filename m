@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645985BACED
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541E45BACEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiIPMEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        id S231130AbiIPMET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIPMEI (ORCPT
+        with ESMTP id S230343AbiIPMEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:04:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCABEAC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFCF862B3C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64738C433D7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 12:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663329847;
-        bh=SDyVHic+g5Ln/swY+PozT5sqObg8/WxJ+rqngYuzFro=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DvQwyaMWXD82NwWUoeJrKeV4DUHsMIooQCYHcmXosyl/K7WeLRGRkRndoqJ3SrkK1
-         LcvCsmmGFAY+MhYDrz7xpw3FxMi5d+PzQ0fW/asv+Cr0i1n49A0F1qWoS+FI3A47Xy
-         4B/5WOw0w9/sSli5YXJHD7wXhQ4foTYIZj90a1gBp8ARlG4GJBQK3lyl2LSF6ogojF
-         J6EfBXoXGGAmXN0TxKx6qWywOKVawa0f9COqJsXsBYSXOC1nyzun57z3AbI0LIna/s
-         TwatmS31qbtoiZnWx2n5l9+Hob6BiCu2PxJc5cgSzrVV5jiJdbnLsOTt3755sFgYE1
-         9aCKWkFxhJIoQ==
-Received: by mail-vk1-f170.google.com with SMTP id b5so99905vkb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:07 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1RVpLv1CZJgF1L5GR3jP+fHt5aBoA2lMsca6+Vjt8XOPFkNapR
-        efc3S7E6wOd7L1MVKHT9myNOE7ZOcwMnFp+80w==
-X-Google-Smtp-Source: AMsMyM7R+47aUUSWrJkPcclUE1JWWBatBMqC16j/7ya6IfwoPKPQZf1oKfsbs1hf02nYS8dtX20SyZppgT1c6KwVmjA=
-X-Received: by 2002:a1f:1d4d:0:b0:382:59cd:596c with SMTP id
- d74-20020a1f1d4d000000b0038259cd596cmr1736330vkd.35.1663329846359; Fri, 16
- Sep 2022 05:04:06 -0700 (PDT)
+        Fri, 16 Sep 2022 08:04:16 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4A3112B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:15 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b5so35659100wrr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=mPLFhGHVYS4W9tS1dcvfB9NP8UzfLXVqTT8hwLQ6Qp8=;
+        b=D5OHODgvzrWdOm7CQw9H47TsZxfYEVRdG8l5BxLnaZzAntR3XCxVdNxm32MLZTS7k2
+         24kxzEBVVOUCJ+ZG5/aQ7iN/IRQlybypFd0PnSfXmlw/j3nfHhTL+5tUtLvNjv7Wr0fi
+         mqYk7IWN4ZyARHNSd8iMqU3UM0ufh7dacX7OnnVz0YNe2LdMFvtEE7zAdyNKpllfHMrd
+         gRWNAD+Plu6iVvJ1EDq8NnhXoTY2u4ZbmbNht5v1fYM6ojWB/P3IicMMIDGwrSAQoy6H
+         RPw7+c+RqBu6iOqlm6TKsFH3vDCc1l164K2nw/LCKxhgOHX2nGcrjeffiRtdqox1u3RV
+         +rnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=mPLFhGHVYS4W9tS1dcvfB9NP8UzfLXVqTT8hwLQ6Qp8=;
+        b=llBkMd8MmZPXRhbwLMWZxpqiuAYhbgaSQc82TxXknte4MemU5+JLlqvQ3zgluWsTs5
+         CRia8T4CdzoFqkMOVm9rp9MsMLw4ph9Jmlr0QqsCE9DZ+QFE405WDFKcJKhYIJMMR7ll
+         kZzPl/XS5AI3H7atiryq7N83ZgIqvdka4V8VCogrP/dEqJNgkZqIE2/HqVYuTqcufHuW
+         I8kRVYTDBFdbQk85NYoAY0wVcq/kgGZiyX9MO8VJG2yX5L269ZgATmwF6QWHEDAszBoD
+         KJejBbBTa7UOPP3rte1/x1DzPM9bTGxIcmRmaBp7esx+m7/iwGAyjGc4NAqYDkPsk0Ze
+         uImw==
+X-Gm-Message-State: ACrzQf2Fr3GhFU6n8eHssuhVWVrK5+KDstvazs27xImBuqgNvdQiZW8i
+        MsAwWXWimFVL//A/CStK0JB2Sw==
+X-Google-Smtp-Source: AMsMyM6cWFe2TlELuBCJ85zIT1+UECvePc5f3DSP3FM/W9vpA5+gaADTwK9AWZjW6rj0dcUVLx3fTQ==
+X-Received: by 2002:a5d:5848:0:b0:22a:c104:c2f1 with SMTP id i8-20020a5d5848000000b0022ac104c2f1mr2700157wrf.699.1663329853500;
+        Fri, 16 Sep 2022 05:04:13 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id l7-20020adffe87000000b00228da396f9dsm4733168wrr.84.2022.09.16.05.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 05:04:12 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Gaosheng Cui <cuigaosheng1@huawei.com>, stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] nvmem: core: Fix memleak in nvmem_register()
+Date:   Fri, 16 Sep 2022 13:04:02 +0100
+Message-Id: <20220916120402.38753-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220916094152.87137-1-j@jannau.net> <20220916094152.87137-5-j@jannau.net>
-In-Reply-To: <20220916094152.87137-5-j@jannau.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 16 Sep 2022 07:03:55 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+u5ZjCNbxQd9FfgvHx6BM4AYjMS63qmm22k2zn5Xqtyg@mail.gmail.com>
-Message-ID: <CAL_Jsq+u5ZjCNbxQd9FfgvHx6BM4AYjMS63qmm22k2zn5Xqtyg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/5] iommu/io-pgtable-dart: Add DART PTE support for t6000
-To:     Janne Grunau <j@jannau.net>
-Cc:     iommu@lists.linux.dev,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        asahi@lists.linux.dev, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,37 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 4:42 AM Janne Grunau <j@jannau.net> wrote:
->
-> From: Sven Peter <sven@svenpeter.dev>
->
-> The DARTs present in the M1 Pro/Max/Ultra SoC use a diffent PTE format.
-> They support a 42bit physical address space by shifting the paddr and
-> extending its mask inside the PTE.
-> They also come with mandatory sub-page protection now which we just
-> configure to always allow access to the entire page. This feature is
-> already present but optional on the previous DARTs which allows to
-> unconditionally configure it.
->
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> Co-developed-by: Janne Grunau <j@jannau.net>
-> Signed-off-by: Janne Grunau <j@jannau.net>
->
-> ---
->
-> (no changes since v3)
->
-> Changes in v3:
-> - apply change to io-pgtable-dart.c
-> - handle pte <> paddr conversion based on the pte format instead of
->   the output address size
->
-> Changes in v2:
-> - add APPLE_DART2 PTE format
->
->  drivers/iommu/io-pgtable-dart.c | 49 ++++++++++++++++++++++++++++-----
->  drivers/iommu/io-pgtable.c      |  1 +
->  include/linux/io-pgtable.h      |  1 +
->  3 files changed, 44 insertions(+), 7 deletions(-)
+From: Gaosheng Cui <cuigaosheng1@huawei.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+dev_set_name will alloc memory for nvmem->dev.kobj.name in
+nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+memory will be freed and return, but nobody will free memory
+for nvmem->dev.kobj.name, there will be memleak, so moving
+nvmem_validate_keepouts() after device_register() and let
+the device core deal with cleaning name in error cases.
+
+Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+Hi Greg,
+
+Here is a fix in nvmem core which can possibly go in next rc.
+Could you please pick this up.
+
+thanks,
+Srini
+
+ drivers/nvmem/core.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1e3c754efd0d..2164efd12ba9 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -829,21 +829,18 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->dev.groups = nvmem_dev_groups;
+ #endif
+ 
+-	if (nvmem->nkeepout) {
+-		rval = nvmem_validate_keepouts(nvmem);
+-		if (rval) {
+-			ida_free(&nvmem_ida, nvmem->id);
+-			kfree(nvmem);
+-			return ERR_PTR(rval);
+-		}
+-	}
+-
+ 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+ 
+ 	rval = device_register(&nvmem->dev);
+ 	if (rval)
+ 		goto err_put_device;
+ 
++	if (nvmem->nkeepout) {
++		rval = nvmem_validate_keepouts(nvmem);
++		if (rval)
++			goto err_device_del;
++	}
++
+ 	if (config->compat) {
+ 		rval = nvmem_sysfs_setup_compat(nvmem, config);
+ 		if (rval)
+-- 
+2.25.1
+
