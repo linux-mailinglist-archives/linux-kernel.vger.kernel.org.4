@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1BB5BAF7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7A85BAF81
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiIPOi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S231450AbiIPOkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiIPOiq (ORCPT
+        with ESMTP id S231326AbiIPOkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:38:46 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53610B40D7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:45 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bj12so49808388ejb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2hekt6nHmDXb09svRYspIovCwUxYyIVHgZSXoQyIl+k=;
-        b=SFH1piZ1wl+dYjTFfiOzjwm5fI+/WSD0vBB9yBMmjrbolDnWC/6U9TVbGpDPit/0ES
-         UUWUzIMXDJswTFPpUSs2bQz1HKHAlff4k2OO982m7E2ogYAaAlCcz+v6pL6YXHn7JZ09
-         263HOyhB9k8djHzypKXBiHPWGswf9IMrrY0odun/7GVSrmRHrtorYPkfRwkXf79IOyhU
-         rsTJO7Kie/UsasSir2ML+YdjREDVgRnjk1VSA1ZA7xpfUu60Xu2CKXq5NELJHbDCB2To
-         IoR0qoMNN7IOJY031zmLjTFaKb1fNbBHf+e6M0wKl30ktbsDQdlx9EZwtUk9ydlQK7Qu
-         myEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2hekt6nHmDXb09svRYspIovCwUxYyIVHgZSXoQyIl+k=;
-        b=XaJ/8vaaGN7S3r7oRxicrPonssr0qvYUQLH4yewbgHGB/vaWdNWJLVbyOVJnG18+bx
-         kK+ZHkQpwa4oi2QGKSsbu8PcODd3EJ53GRTZN+nGhnMi9bnl2/6hExikeWMPN4MKvxcx
-         XcIbG7WucJEJ+WxEAB7niIOapECML1b07FPkf+KJX/LN+0GGFxM4KCRXyCHBTmfjyTH2
-         yKAnB7chEGw7srqkaXLYeKBmdz+Aas0MUie9aL7FYU8yi6eo9ZgXHODqz8utrJsVMDnA
-         0L4ESOnt3KmE6RlrciaDdHxvJ2++E8LIzASfeo/k/DsLtOd5LFEXkd6BAn8kldV7ang+
-         6Byg==
-X-Gm-Message-State: ACrzQf1rVPIvHr5XDMedXFeDgxQPnOq2Jcmcw9SPRTt+YwAnle+bv+/q
-        bNvCTjJMYeQbdLj8HPn5DTRTWQ==
-X-Google-Smtp-Source: AMsMyM520XIqN6p3HKYAlwE92zHeNJJ+Fe5xeWMnuVrGvp0QrtwA4dQnKiX2weHwOi8VZ2B4Q7JoXw==
-X-Received: by 2002:a17:906:7944:b0:73c:838:ac3d with SMTP id l4-20020a170906794400b0073c0838ac3dmr3824004ejo.242.1663339123786;
-        Fri, 16 Sep 2022 07:38:43 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170906499500b0078082f95e5csm1393062eju.204.2022.09.16.07.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:38:41 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 17:38:40 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
-        Bharath Kumar <bkumar@qti.qualcomm.com>,
-        Himateja Reddy <hmreddy@quicinc.com>,
-        Anirudh Raghavendra <araghave@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 08/10] misc: fastrpc: Safekeep mmaps on interrupted
- invoke
-Message-ID: <YySKcI3dwv9b4ri0@linaro.org>
-References: <20220909133938.3518520-1-abel.vesa@linaro.org>
- <20220909133938.3518520-9-abel.vesa@linaro.org>
- <a71b5f36-8a81-3aa6-6aee-655878b5d4af@linaro.org>
+        Fri, 16 Sep 2022 10:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F4A36DFB;
+        Fri, 16 Sep 2022 07:40:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D24AD62C1E;
+        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39D14C433D7;
+        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663339215;
+        bh=BMgQBKNJt/brrMvAlgA6oyjbl+rWt/iab8EHKpRf06M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CiGtpE9mOyb+CgnWFA6VOOMy4xKG26cXtDCNpvWZCNY83XaZCooWP0WcxqIfoviub
+         1ZQ60ure++mQKwPfklJh5biO9+vht9aZtdx7YoR36ZOvEg7yT0OuMN6nGvTdh4GSmo
+         5USZCr9fZJHnKUoO8gVgSzpiYajXwy+Y/dJ7plhhXqElWtIFqaB/mk3GsvhOn+kHGm
+         xJ2gWgU2ZW37twisubr3i4Z4aIOyAnlug+UNEhnEyqDf57q+vCj31W1x9YO9mgBJ3h
+         iz54nW3B6EJXiJyGS2J4wHknABymek/j5CSIeJ7dKbqGSl3z+9wf2f+BdS6tfHTWJK
+         beEvmG9GW4g6w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 160F8C59A58;
+        Fri, 16 Sep 2022 14:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a71b5f36-8a81-3aa6-6aee-655878b5d4af@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] tcp: Use WARN_ON_ONCE() in tcp_read_skb()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166333921508.20219.3065242215536407480.git-patchwork-notify@kernel.org>
+Date:   Fri, 16 Sep 2022 14:40:15 +0000
+References: <20220908231523.8977-1-yepeilin.cs@gmail.com>
+In-Reply-To: <20220908231523.8977-1-yepeilin.cs@gmail.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        peilin.ye@bytedance.com, cong.wang@bytedance.com,
+        jakub@cloudflare.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,89 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-16 13:58:35, Srinivas Kandagatla wrote:
-> 
-> 
-> On 09/09/2022 14:39, Abel Vesa wrote:
-> > If the userspace daemon is killed in the middle of an invoke (e.g.
-> > audiopd listerner invoke), we need to skip the unmapping on device
-> > release, otherwise the DSP will crash. So lets safekeep all the maps
-> > only if there is in invoke interrupted, by attaching them to the channel
-> > context (which is resident until RPMSG driver is removed), and free them
-> > on RPMSG driver remove.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/misc/fastrpc.c | 15 +++++++++++++++
-> >   1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> > index 6b2a552dbdba..bc1e8f003d7a 100644
-> > --- a/drivers/misc/fastrpc.c
-> > +++ b/drivers/misc/fastrpc.c
-> > @@ -275,6 +275,7 @@ struct fastrpc_channel_ctx {
-> >   	struct fastrpc_device *secure_fdevice;
-> >   	struct fastrpc_device *fdevice;
-> >   	struct fastrpc_buf *remote_heap;
-> > +	struct list_head invoke_interrupted_mmaps;
-> >   	bool secure;
-> >   	bool unsigned_support;
-> >   };
-> > @@ -1119,6 +1120,8 @@ static int fastrpc_internal_invoke(struct fastrpc_user *fl,  u32 kernel,
-> >   				   struct fastrpc_invoke_args *args)
-> >   {
-> >   	struct fastrpc_invoke_ctx *ctx = NULL;
-> > +	struct fastrpc_buf *buf, *b;
-> > +
-> >   	int err = 0;
-> >   	if (!fl->sctx)
-> > @@ -1182,6 +1185,13 @@ static int fastrpc_internal_invoke(struct fastrpc_user *fl,  u32 kernel,
-> >   		fastrpc_context_put(ctx);
-> >   	}
-> > +	if (err == -ERESTARTSYS) {
-> > +		list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
-> > +			list_del(&buf->node);
-> > +			list_add_tail(&buf->node, &fl->cctx->invoke_interrupted_mmaps);
-> > +		}
-> > +	}
-> > +
-> >   	if (err)
-> >   		dev_dbg(fl->sctx->dev, "Error: Invoke Failed %d\n", err);
-> > @@ -2277,6 +2287,7 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
-> >   	dev_set_drvdata(&rpdev->dev, data);
-> >   	dma_set_mask_and_coherent(rdev, DMA_BIT_MASK(32));
-> >   	INIT_LIST_HEAD(&data->users);
-> > +	INIT_LIST_HEAD(&data->invoke_interrupted_mmaps);
-> >   	spin_lock_init(&data->lock);
-> >   	idr_init(&data->ctx_idr);
-> >   	data->domain_id = domain_id;
-> > @@ -2301,6 +2312,7 @@ static void fastrpc_notify_users(struct fastrpc_user *user)
-> >   static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
-> >   {
-> >   	struct fastrpc_channel_ctx *cctx = dev_get_drvdata(&rpdev->dev);
-> > +	struct fastrpc_buf *buf, *b;
-> >   	struct fastrpc_user *user;
-> >   	unsigned long flags;
-> > @@ -2315,6 +2327,9 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
-> >   	if (cctx->secure_fdevice)
-> >   		misc_deregister(&cctx->secure_fdevice->miscdev);
-> > +	list_for_each_entry_safe(buf, b, &cctx->invoke_interrupted_mmaps, node)
-> > +		list_del(&buf->node);
-> > +
-> When would you free these?
-> looks like we are leaking even after dsp is down..
-> Should we not do fastrpc_buf_free() here?
+Hello:
 
-Yes, we should. I forgot to add it.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Will send a new version.
+On Thu,  8 Sep 2022 16:15:23 -0700 you wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Prevent tcp_read_skb() from flooding the syslog.
+> 
+> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> [...]
 
-Thanks.
+Here is the summary with links:
+  - [net] tcp: Use WARN_ON_ONCE() in tcp_read_skb()
+    https://git.kernel.org/netdev/net/c/96628951869c
 
-> 
-> 
-> 
-> --srini
-> 
-> >   	if (cctx->remote_heap)
-> >   		fastrpc_buf_free(cctx->remote_heap);
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
