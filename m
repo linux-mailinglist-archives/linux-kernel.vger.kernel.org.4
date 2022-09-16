@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843975BAA60
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1DB5BAAD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiIPKVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S231338AbiIPKPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiIPKS7 (ORCPT
+        with ESMTP id S231637AbiIPKOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:18:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C141B029E;
-        Fri, 16 Sep 2022 03:12:50 -0700 (PDT)
+        Fri, 16 Sep 2022 06:14:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933B9AE84E;
+        Fri, 16 Sep 2022 03:11:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4A9762A0E;
-        Fri, 16 Sep 2022 10:11:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7212C433C1;
-        Fri, 16 Sep 2022 10:11:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07AA5B82524;
+        Fri, 16 Sep 2022 10:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E6CC433C1;
+        Fri, 16 Sep 2022 10:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323111;
-        bh=CDsStmIrPeAHmX1Ml4M5Nc0oNw9u01LP4Yp6v594aKQ=;
+        s=korg; t=1663323031;
+        bh=r3AOt/UinTmkKytVgah9WWipiOgfRN/VZBI8HsmGJPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9M/eId35FDt2d0PZ0TiM98n7ub+aZLkhsxh7O9UoHoMFUqQB10oRAVWoSDymRc6e
-         plf6u2+qEiCFWSXm/BmXJQalUdwW/llp7w6Ik+JHhi+WiZrOq+33MW+Vkfz5PVLGKH
-         W1dS0V4rgCnv2V6j5eXzT3CA/0p0r6QzBLGPivoE=
+        b=T0f46L+5iunNc1T5VdmWYOEBNxSGjR2V4q8Hsb0TTdaUcfOdHBfMOUEGvw7+pLkbF
+         yJjdKw3PcEWQW9BnbJjOqLaatCuEhQaCurut3oGRSpFti9Utw85cwqmpfH/qivh8LO
+         vaVT9BlPfzdyw8tYDfMKdYp//KYknPRTlzFZXkPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 18/35] HID: ishtp-hid-clientHID: ishtp-hid-client: Fix comment typo
-Date:   Fri, 16 Sep 2022 12:08:41 +0200
-Message-Id: <20220916100447.711742281@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 17/24] platform/x86: acer-wmi: Acer Aspire One AOD270/Packard Bell Dot keymap fixes
+Date:   Fri, 16 Sep 2022 12:08:42 +0200
+Message-Id: <20220916100446.131483054@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-References: <20220916100446.916515275@linuxfoundation.org>
+In-Reply-To: <20220916100445.354452396@linuxfoundation.org>
+References: <20220916100445.354452396@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <wangborong@cdjrlc.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 94553f8a218540d676efbf3f7827ed493d1057cf ]
+[ Upstream commit c3b82d26bc85f5fc2fef5ec8cce17c89633a55a8 ]
 
-The double `like' is duplicated in the comment, remove one.
+2 keymap fixes for the Acer Aspire One AOD270 and the same hardware
+rebranded as Packard Bell Dot SC:
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+1. The F2 key is marked with a big '?' symbol on the Packard Bell Dot SC,
+this sends WMID_HOTKEY_EVENTs with a scancode of 0x27 add a mapping
+for this.
+
+2. Scancode 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate
+input event with the "Video Bus" input device events. But on these devices
+the "Video Bus" does not send events for this key. Map 0x61 to KEY_UNKNOWN
+instead of using KE_IGNORE so that udev/hwdb can override it on these devs.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220829163544.5288-1-hdegoede@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/intel-ish-hid/ishtp-hid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/x86/acer-wmi.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/intel-ish-hid/ishtp-hid.h b/drivers/hid/intel-ish-hid/ishtp-hid.h
-index 6a5cc11aefd89..35dddc5015b37 100644
---- a/drivers/hid/intel-ish-hid/ishtp-hid.h
-+++ b/drivers/hid/intel-ish-hid/ishtp-hid.h
-@@ -105,7 +105,7 @@ struct report_list {
-  * @multi_packet_cnt:	Count of fragmented packet count
-  *
-  * This structure is used to store completion flags and per client data like
-- * like report description, number of HID devices etc.
-+ * report description, number of HID devices etc.
-  */
- struct ishtp_cl_data {
- 	/* completion flags */
+diff --git a/drivers/platform/x86/acer-wmi.c b/drivers/platform/x86/acer-wmi.c
+index 80983f9dfcd55..8e696262215fc 100644
+--- a/drivers/platform/x86/acer-wmi.c
++++ b/drivers/platform/x86/acer-wmi.c
+@@ -93,6 +93,7 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
+ 	{KE_KEY, 0x22, {KEY_PROG2} },    /* Arcade */
+ 	{KE_KEY, 0x23, {KEY_PROG3} },    /* P_Key */
+ 	{KE_KEY, 0x24, {KEY_PROG4} },    /* Social networking_Key */
++	{KE_KEY, 0x27, {KEY_HELP} },
+ 	{KE_KEY, 0x29, {KEY_PROG3} },    /* P_Key for TM8372 */
+ 	{KE_IGNORE, 0x41, {KEY_MUTE} },
+ 	{KE_IGNORE, 0x42, {KEY_PREVIOUSSONG} },
+@@ -106,7 +107,13 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
+ 	{KE_IGNORE, 0x48, {KEY_VOLUMEUP} },
+ 	{KE_IGNORE, 0x49, {KEY_VOLUMEDOWN} },
+ 	{KE_IGNORE, 0x4a, {KEY_VOLUMEDOWN} },
+-	{KE_IGNORE, 0x61, {KEY_SWITCHVIDEOMODE} },
++	/*
++	 * 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate input event
++	 * with the "Video Bus" input device events. But sometimes it is not
++	 * a dup. Map it to KEY_UNKNOWN instead of using KE_IGNORE so that
++	 * udev/hwdb can override it on systems where it is not a dup.
++	 */
++	{KE_KEY, 0x61, {KEY_UNKNOWN} },
+ 	{KE_IGNORE, 0x62, {KEY_BRIGHTNESSUP} },
+ 	{KE_IGNORE, 0x63, {KEY_BRIGHTNESSDOWN} },
+ 	{KE_KEY, 0x64, {KEY_SWITCHVIDEOMODE} },	/* Display Switch */
 -- 
 2.35.1
 
