@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143965BA51C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E5A5BA51F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 05:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiIPDYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 23:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S229847AbiIPD1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 23:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiIPDX7 (ORCPT
+        with ESMTP id S229503AbiIPD1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:23:59 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DD8844CB;
-        Thu, 15 Sep 2022 20:23:58 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTK9r3LjHzBsNY;
-        Fri, 16 Sep 2022 11:21:52 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 11:23:56 +0800
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:23:55 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <haoluo@google.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
-        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
-        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
-        <yanan@huawei.com>, <yhs@fb.com>, <zhudi2@huawei.com>
-Subject: Re: [PATCH] libbpf: adjust OPTS_VALID logic, so that it can be used correctly
-Date:   Fri, 16 Sep 2022 11:22:47 +0800
-Message-ID: <20220916032247.27207-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <CA+khW7hS=c4PSo4coBmw+6VReWNhj+4Bnsr+r+mGsG4tCZ8KnQ@mail.gmail.com>
-References: <CA+khW7hS=c4PSo4coBmw+6VReWNhj+4Bnsr+r+mGsG4tCZ8KnQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Thu, 15 Sep 2022 23:27:11 -0400
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [221.176.66.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E4B074E0C;
+        Thu, 15 Sep 2022 20:27:08 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.15])
+        by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66323ed0b9d8-61dc4;
+        Fri, 16 Sep 2022 11:27:07 +0800 (CST)
+X-RM-TRANSID: 2ee66323ed0b9d8-61dc4
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.108.79.97])
+        by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86323ed02ed3-af15b;
+        Fri, 16 Sep 2022 11:27:07 +0800 (CST)
+X-RM-TRANSID: 2ee86323ed02ed3-af15b
+From:   liujing <liujing@cmss.chinamobile.com>
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        liujing <liujing@cmss.chinamobile.com>
+Subject: [PATCH] KVM: duplicate code
+Date:   Thu, 15 Sep 2022 23:26:56 -0400
+Message-Id: <20220916032656.6264-1-liujing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,27 +45,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 at 6:15:39 PM Hao Luo <haoluo@google.com> wrote:
-> Hi Xin,
->
-> On Wed, Sep 14, 2022 at 5:35 AM Xin Liu <liuxin350@huawei.com> wrote:
-> >
-> > We found that function btf_dump__dump_type_data can be called by the user
-> > as an api, but in this function, the `opts` parameter may be used as a
-> > null pointer, because OPTS_VALID can't properly prevent opts used as null
-> > pointers during verification. Therefore, we fix this problem through this
-> > modification.
-> >
-> > This modification has no impact on other places where OPTS_VALID has been
-> > used.
->
-> I think this is a bug of btf_dump__dump_type_data(), not OPTS_VALID.
-> It seems allowing OPTS_VALID to accept NULL is the intended behavior.
->
-> >
-> [...]
-> >
+in "static int FNAME(walk_addr_generic)" function,
+there is an explanation that uses two to's, which is redundant code
 
-Thank you for your review.
-You are right, OPTS_GET should be used to get data from opts and determine if
-opts is NULL. Here I'll use OPTS_GET to fix the bug in the v2 version.
+Signed-off-by: liujing <liujing@cmss.chinamobile.com>
+---
+ arch/x86/kvm/mmu/paging_tmpl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 39e0205e7300..5ab5f94dcb6f 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -472,7 +472,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+ 
+ #if PTTYPE == PTTYPE_EPT
+ 	/*
+-	 * Use PFERR_RSVD_MASK in error_code to to tell if EPT
++	 * Use PFERR_RSVD_MASK in error_code to tell if EPT
+ 	 * misconfiguration requires to be injected. The detection is
+ 	 * done by is_rsvd_bits_set() above.
+ 	 *
+-- 
+2.18.2
+
+
+
