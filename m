@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9C75BAE10
+	by mail.lfdr.de (Postfix) with ESMTP id DB2BB5BAE12
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiIPNYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S231589AbiIPNY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiIPNYn (ORCPT
+        with ESMTP id S230238AbiIPNYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Sep 2022 09:24:43 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3B1CFFF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:41 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n10so5430100wrw.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:41 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF8222B2B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:42 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n8so8567617wmr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:24:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=lGIzKCCzT9Z91pOhcVsZGKjotZcXBUNtgUUXIg8kGbo=;
-        b=jYtg6/mJRPsHpWerRPXAXDrZns01WqbBzMrstF5f9SmWFzNRjtwf7mPRxTboENGqgs
-         Mk2qfOGO0vHw42sq4hlfIyt00rHusd6vCrG1r4cr+IvF9LjEKr/SpBCr6EYdSW1LWG40
-         FxFqFDLXgPZYy9v4gOxgPY90tDRUYZdnolHS1Bjq8qcZpyH6izPWhiSy3u0Fi/PbCNpX
-         vGx8C413GepqlLZs2oeyM7Z8GqhuaWuBjjzG3NjHm1xM5ppSlRmEhkNJq4zKRQuQeEBu
-         kuV64FdhtnnGp9kgZNea11FiL1CAhdQ/xbMHcZqRfw2gyX7jl7g9ozXFZsQnxgr3CK1F
-         6o6w==
+        bh=bXYtZk9DuHwMmE7lTTFLwrOctNB6LlU7vnhCjjk89UE=;
+        b=ZH0sIZgnFki3bD+19ezSXw9QfGCvGCSJUkIVLslojq8WR8i/6sqIDtCQPe+TmU6BWE
+         6lREtR+DhB3Hfx7pvjDEDI/q3+d9OvTdr7bM8EL3mfTiOWNROCc4iNZwpRi6TegQheJJ
+         1/tuRJHOc9kT3jC4J65Kerc1W+b8NGWKqpCbVITCjo4rG5v3KKm252HAwaPt/xK032e6
+         I1VTRsV0BYYjsz0LzM6qzsvKSYKNTe9WQ6QgqFfiVFfzNQR9x2wn0VZ7y3tZ+VqOnEdd
+         KGCFlmi9pVfSPHV/YLeTIrPQrVNsdPqsxH0+z+plEy5NY0eB4E5Fqqkub1R1Z4GEukA1
+         PnIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=lGIzKCCzT9Z91pOhcVsZGKjotZcXBUNtgUUXIg8kGbo=;
-        b=qs9TJ7yZAbG9YSDoSReRPsfmNpqHXzz4WzmnF6PIzoI4DuFKqO5ivOXlbRgxtitCBA
-         enFLnzBQTIDqkZoU6NnZCq6biRu6nXPgN70l1RW3sXO1C+HL0cauof3Bn8uqrq3AtjNi
-         iZ40XiGCF+MzXjwCTQR8imNNbnzCKyGCeV/nekZLwEhjoq9HcUjagvOO7ScKlj7SMEN1
-         AS3I//wC6u8iKlSRmPCziSc2dhyrSDjw/SiHQ41DJrJb7BuWQUoWHbdVYty2qU1dNMfK
-         XQLb+yjMGvcopI18LcFr3mlqsGNTnP0e9a2jMNC2LXxpGS6FxBX70Rbh2DePXl9I9Gll
-         cB9g==
-X-Gm-Message-State: ACrzQf18DYWD1UNzmNVBX2KJI+uccjOBnRkO9scTjLmYxcUMk6ZzSWCV
-        DGdMVQaxreUCEYOAon4jLg5W92vs/zksoQ==
-X-Google-Smtp-Source: AMsMyM7o0ljWelmEHySCByBq5ilh+1KD65ObHLXkmzd1QE1nONf5ejt92ifAmjxnVdcfkt1jcsA6/A==
-X-Received: by 2002:adf:d1e4:0:b0:22a:34a4:79ab with SMTP id g4-20020adfd1e4000000b0022a34a479abmr2756020wrd.188.1663334679968;
-        Fri, 16 Sep 2022 06:24:39 -0700 (PDT)
+        bh=bXYtZk9DuHwMmE7lTTFLwrOctNB6LlU7vnhCjjk89UE=;
+        b=CIFZJ84tVVFiZsjN1zduAV1zIqD9QhQ22L95PlmEZh4uVl9Ft/Mh6qrHyFWVdyNF25
+         8ovnXw0mppICGPAdGVhAJIKJAki0PvU1gEKN/NfybSOw7DG0GjvxuhOt7v4BoQwCeK3r
+         OWKc3BFtrSYkrd0efViq2dStl3/dI7puwTVWGTrkCqqOfdTf4PmEfa/qQaeqBQn8DzWP
+         0no6uwE1cOIdLMfGcK4ljzGkBhQ0251vLau7VUG+HYFSwIF+e4jxl8iwhyrjL19RXknd
+         cAKyK/nK7JwbOBtBMUeB2LWh2IW19taj17uIrE9xlTx8ED6HXVyBbLWGhO+nlxOVvMr/
+         lJDg==
+X-Gm-Message-State: ACrzQf11sIVdpYU8R2lPOOBrzUk66JWRw3yLEdeusWrS0h0mY7MP0vPC
+        WDQPdehN9eEQzx/K8zzdq9uEvw==
+X-Google-Smtp-Source: AMsMyM4NYRajmi6DsUcjnbjh29HTN041/86Ue8INhhNHcP+iIJ+j/ghsUNko/iPFBv9z40nElL79Lg==
+X-Received: by 2002:a05:600c:4211:b0:3b4:6334:9940 with SMTP id x17-20020a05600c421100b003b463349940mr3405497wmh.166.1663334680996;
+        Fri, 16 Sep 2022 06:24:40 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a608d69a64sm2387061wmq.21.2022.09.16.06.24.38
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a608d69a64sm2387061wmq.21.2022.09.16.06.24.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 06:24:39 -0700 (PDT)
+        Fri, 16 Sep 2022 06:24:40 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
@@ -56,11 +56,10 @@ Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
         perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 1/5] ASoC: qcom: common: use EXPORT_SYMBOL_GPL instead of EXPORT_SYMBOL
-Date:   Fri, 16 Sep 2022 14:24:23 +0100
-Message-Id: <20220916132427.1845-2-srinivas.kandagatla@linaro.org>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v5 2/5] ASoC: dt-bindings: qcom: sort compatible strings
+Date:   Fri, 16 Sep 2022 14:24:24 +0100
+Message-Id: <20220916132427.1845-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
 References: <20220916132427.1845-1-srinivas.kandagatla@linaro.org>
@@ -68,34 +67,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qcom_snd_parse_of depends on ASoC EXPORT_SYMBOL_GPL functions,
-so make qcom_snd_parse_of and EXPORT_SYMBOL_GPL.
+Sort compatible strings for consistency reasons.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/qcom/common.c | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,sm8250.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/common.c b/sound/soc/qcom/common.c
-index c407684ce1a2..e53ad84f8ff5 100644
---- a/sound/soc/qcom/common.c
-+++ b/sound/soc/qcom/common.c
-@@ -175,6 +175,6 @@ int qcom_snd_parse_of(struct snd_soc_card *card)
- 	of_node_put(np);
- 	return ret;
- }
--EXPORT_SYMBOL(qcom_snd_parse_of);
-+EXPORT_SYMBOL_GPL(qcom_snd_parse_of);
+diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+index a3a4289f713e..bab1a6f1890f 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+@@ -20,9 +20,9 @@ properties:
+       - qcom,apq8016-sbc-sndcard
+       - qcom,db845c-sndcard
+       - qcom,msm8916-qdsp6-sndcard
++      - qcom,qrb5165-rb5-sndcard
+       - qcom,sdm845-sndcard
+       - qcom,sm8250-sndcard
+-      - qcom,qrb5165-rb5-sndcard
  
- MODULE_LICENSE("GPL v2");
+   audio-routing:
+     $ref: /schemas/types.yaml#/definitions/non-unique-string-array
 -- 
 2.21.0
 
