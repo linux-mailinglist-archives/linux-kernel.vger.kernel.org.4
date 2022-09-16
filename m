@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771BA5BAA6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549035BAB32
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiIPKV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S231598AbiIPKSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiIPKTR (ORCPT
+        with ESMTP id S231543AbiIPKRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:19:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6A3B07D1;
-        Fri, 16 Sep 2022 03:13:06 -0700 (PDT)
+        Fri, 16 Sep 2022 06:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0869FAF486;
+        Fri, 16 Sep 2022 03:12:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 102EFB82547;
-        Fri, 16 Sep 2022 10:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB3FC433D6;
-        Fri, 16 Sep 2022 10:12:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0822DB82542;
+        Fri, 16 Sep 2022 10:11:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B00AC433D7;
+        Fri, 16 Sep 2022 10:11:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323135;
-        bh=l7ifI2D61ypQD6Xd9t895tJj406Be87y8pTmmgihQz8=;
+        s=korg; t=1663323086;
+        bh=P53QdZZFSJ/F9zvjV/u3B2BVYcTSEk5IMiu3Bl0qHc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PeSucU/qqRSaNJjsLT8vJrhZfv7Aiunww6TyGIZfpMFcxM2it2pPx37dd19R1K0d1
-         9a+zSgiLUygVMluPyF0Plr0bfpKKp8z68v5/87g6alKxe+j0qFSL0k3P7JK+Ls1Taf
-         bGJ12kivpPr/9diwU5pQSXsAYhvz+qXNe6/m3CsM=
+        b=UAmKFuaC+QhaEyjKJTaix+pIXT24EJTiph8WqmT8hHMZa5QhKZ2vg/QGz4DH2yIN5
+         e7mxyFtKN/qLQQCsjEE3yXbvk23rnKnu3VjaSXej26g9JNHY8WKHlcGN+dLdJ6M7yw
+         c2+R6iNZJ5EfifmoAKpbtyfJullSvkxr6PxKT8WU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Yipeng Zou <zouyipeng@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 09/35] task_stack, x86/cea: Force-inline stack helpers
-Date:   Fri, 16 Sep 2022 12:08:32 +0200
-Message-Id: <20220916100447.330584007@linuxfoundation.org>
+Subject: [PATCH 5.15 10/35] tracing: hold caller_addr to hardirq_{enable,disable}_ip
+Date:   Fri, 16 Sep 2022 12:08:33 +0200
+Message-Id: <20220916100447.371727278@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
 References: <20220916100446.916515275@linuxfoundation.org>
@@ -54,51 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Yipeng Zou <zouyipeng@huawei.com>
 
-[ Upstream commit e87f4152e542610d0b4c6c8548964a68a59d2040 ]
+[ Upstream commit 54c3931957f6a6194d5972eccc36d052964b2abe ]
 
-Force-inline two stack helpers to fix the following objtool warnings:
+Currently, The arguments passing to lockdep_hardirqs_{on,off} was fixed
+in CALLER_ADDR0.
+The function trace_hardirqs_on_caller should have been intended to use
+caller_addr to represent the address that caller wants to be traced.
 
-  vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_stack() leaves .noinstr.text section
+For example, lockdep log in riscv showing the last {enabled,disabled} at
+__trace_hardirqs_{on,off} all the time(if called by):
+[   57.853175] hardirqs last  enabled at (2519): __trace_hardirqs_on+0xc/0x14
+[   57.853848] hardirqs last disabled at (2520): __trace_hardirqs_off+0xc/0x14
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220324183607.31717-2-bp@alien8.de
-Stable-dep-of: 54c3931957f6 ("tracing: hold caller_addr to hardirq_{enable,disable}_ip")
+After use trace_hardirqs_xx_caller, we can get more effective information:
+[   53.781428] hardirqs last  enabled at (2595): restore_all+0xe/0x66
+[   53.782185] hardirqs last disabled at (2596): ret_from_exception+0xa/0x10
+
+Link: https://lkml.kernel.org/r/20220901104515.135162-2-zouyipeng@huawei.com
+
+Cc: stable@vger.kernel.org
+Fixes: c3bc8fd637a96 ("tracing: Centralize preemptirq tracepoints and unify their usage")
+Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/cpu_entry_area.h | 2 +-
- include/linux/sched/task_stack.h      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ kernel/trace/trace_preemptirq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-index dd5ea1bdf04c5..75efc4c6f0766 100644
---- a/arch/x86/include/asm/cpu_entry_area.h
-+++ b/arch/x86/include/asm/cpu_entry_area.h
-@@ -143,7 +143,7 @@ extern void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags);
+diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+index 95b58bd757ce4..1e130da1b742c 100644
+--- a/kernel/trace/trace_preemptirq.c
++++ b/kernel/trace/trace_preemptirq.c
+@@ -95,14 +95,14 @@ __visible void trace_hardirqs_on_caller(unsigned long caller_addr)
+ 	}
  
- extern struct cpu_entry_area *get_cpu_entry_area(int cpu);
+ 	lockdep_hardirqs_on_prepare();
+-	lockdep_hardirqs_on(CALLER_ADDR0);
++	lockdep_hardirqs_on(caller_addr);
+ }
+ EXPORT_SYMBOL(trace_hardirqs_on_caller);
+ NOKPROBE_SYMBOL(trace_hardirqs_on_caller);
  
--static inline struct entry_stack *cpu_entry_stack(int cpu)
-+static __always_inline struct entry_stack *cpu_entry_stack(int cpu)
+ __visible void trace_hardirqs_off_caller(unsigned long caller_addr)
  {
- 	return &get_cpu_entry_area(cpu)->entry_stack_page.stack;
- }
-diff --git a/include/linux/sched/task_stack.h b/include/linux/sched/task_stack.h
-index d10150587d819..1009b6b5ce403 100644
---- a/include/linux/sched/task_stack.h
-+++ b/include/linux/sched/task_stack.h
-@@ -16,7 +16,7 @@
-  * try_get_task_stack() instead.  task_stack_page will return a pointer
-  * that could get freed out from under you.
-  */
--static inline void *task_stack_page(const struct task_struct *task)
-+static __always_inline void *task_stack_page(const struct task_struct *task)
- {
- 	return task->stack;
- }
+-	lockdep_hardirqs_off(CALLER_ADDR0);
++	lockdep_hardirqs_off(caller_addr);
+ 
+ 	if (!this_cpu_read(tracing_irq_cpu)) {
+ 		this_cpu_write(tracing_irq_cpu, 1);
 -- 
 2.35.1
 
