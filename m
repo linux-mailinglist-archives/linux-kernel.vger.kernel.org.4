@@ -2,159 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B4C5BB1F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022E85BB200
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiIPSTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S229809AbiIPSVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIPSTR (ORCPT
+        with ESMTP id S229507AbiIPSVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:19:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEDDB6D49
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663352356; x=1694888356;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AX8WPJSoE1iegzEIPKYPAudRkoCG92AyTwp6vTEzpcc=;
-  b=TLCnnHVOftecxsQtM1GWGlGWjmBYcq8N57OLqKm6o8c1AsTJDdzQDMq9
-   4nH0N9xs7vnlfN7J5YFAZVRC8KzXTYuxw8HV1gPlEuU7Q4LxmjPvBIfQz
-   VNt5MfBw/dZypVpE5JA8+G8OmRUjzNRdTK8fblhNjmbSp0SxKe4VlbH9l
-   OceotRpCm8EZ4dTy1zXV2wbYimtX+C4e5PIwHNMBPeizZw5mtxamQag6r
-   2AP54v0nfgeumLVGNhj/Cu8B65bkSV5AxZhTIkoxPeJWaO7FxNnlwNvCe
-   6nMGqCHlNl29DK+j/fz9q/3X/OhXcNXKgT400Q773CEC6Gnxxsu+FuA8n
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="282075941"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="282075941"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 11:19:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="595341274"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Sep 2022 11:19:14 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZFvl-00022A-1x;
-        Fri, 16 Sep 2022 18:19:13 +0000
-Date:   Sat, 17 Sep 2022 02:18:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.4.y 5364/5387]
- drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: cast to pointer from
- integer of different size
-Message-ID: <202209170232.grVMomkJ-lkp@intel.com>
+        Fri, 16 Sep 2022 14:21:07 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA67A1D1A;
+        Fri, 16 Sep 2022 11:21:01 -0700 (PDT)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28GHdif4003235;
+        Fri, 16 Sep 2022 11:19:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PPS06212021;
+ bh=4Bl1oOzxnloiv5lBZu0sTycNMhJ6BoRjgmbXTEm4F3U=;
+ b=BqwncfYrEqbB4J0TOeA/YUU3Y4GvKH0Q3i2TJiI+lPvaXUQPNgSUJ79UKmDSaqbvJN0c
+ KN3nER0W1aJD5P1ZNHr1h+5QBQUN3cKC2I8xq/YLvDD+SNS3E8MbARiiAigh0vUjmJAj
+ U/MKsokCMTfBnNf6miDpHVw7vJCoutI11swZ5pqr9tydiUm19R9dlfTkdBRxCFHEjbDz
+ rvQuAjEn2McYOQ1zXT58qKzuXrfKZj5k/J4cL3XtJ3OvfUUwYzDqcTmnLeGhJd57OaRf
+ 7pGx3Ep0aYDNaRj1fFwyYJeFGNji/8OZ68mjNzryuAefSGYUA4LUK4VjA08FyM/ORcXv kg== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3jm8ye8x8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 16 Sep 2022 11:19:38 -0700
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Fri, 16 Sep 2022 11:19:37 -0700
+Received: from yow-lpggp3.wrs.com (128.224.137.13) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Fri, 16 Sep 2022 11:19:37 -0700
+Received: by yow-lpggp3.wrs.com (Postfix, from userid 8023)
+        id 494092003A; Fri, 16 Sep 2022 14:19:37 -0400 (EDT)
+Date:   Fri, 16 Sep 2022 14:19:37 -0400
+From:   Paul Gortmaker <paul.gortmaker@windriver.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Matthew Brost <matthew.brost@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        <dri-devel@lists.freedesktop.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Bruce Chang <yu.bruce.chang@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Clark Williams <clrkwllms@kernel.org>,
+        <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH v5 0/2] Fix TLB invalidate issues with Broadwell
+ [preempt-rt regression]
+Message-ID: <20220916181934.GA16961@windriver.com>
+References: <cover.1657639152.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1657639152.git.mchehab@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-GUID: 35mH7Uo2DatrHXmJyPSAceB3PLOJ6EMQ
+X-Proofpoint-ORIG-GUID: 35mH7Uo2DatrHXmJyPSAceB3PLOJ6EMQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-16_12,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 adultscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209160133
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-head:   ba0de553122f5be5dde3102746a1060fd2737e63
-commit: e7f78835d551bb2deb5aa3346d84c8f03ade313d [5364/5387] RDMA/siw: Pass a pointer to virt_to_page()
-config: riscv-randconfig-r013-20220916 (https://download.01.org/0day-ci/archive/20220917/202209170232.grVMomkJ-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e7f78835d551bb2deb5aa3346d84c8f03ade313d
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.4.y
-        git checkout e7f78835d551bb2deb5aa3346d84c8f03ade313d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/infiniband/sw/siw/
+[[PATCH v5 0/2] Fix TLB invalidate issues with Broadwell] On 12/07/2022 (Tue 16:21) Mauro Carvalho Chehab wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> i915 selftest hangcheck is causing the i915 driver timeouts, as reported
+> by Intel CI bot:
+> 
+> http://gfx-ci.fi.intel.com/cibuglog-ng/issuefilterassoc/24297?query_key=42a999f48fa6ecce068bc8126c069be7c31153b4
 
-All warnings (new ones prefixed by >>):
+[...]
 
-   In file included from arch/riscv/include/asm/page.h:130,
-                    from arch/riscv/include/asm/thread_info.h:11,
-                    from include/linux/thread_info.h:39,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/riscv/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/prandom.h:12,
-                    from include/linux/random.h:101,
-                    from include/linux/net.h:18,
-                    from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-   drivers/infiniband/sw/siw/siw_qp_tx.c: In function 'siw_get_pblpage':
->> drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-      32 |                 return virt_to_page((void *)paddr);
-         |                                     ^
-   include/asm-generic/memory_model.h:69:32: note: in definition of macro '__pfn_to_page'
-      69 | ({      unsigned long __pfn = (pfn);                    \
-         |                                ^~~
-   arch/riscv/include/asm/page.h:100:34: note: in expansion of macro 'PFN_DOWN'
-     100 | #define phys_to_pfn(phys)       (PFN_DOWN(phys))
-         |                                  ^~~~~~~~
-   arch/riscv/include/asm/page.h:103:34: note: in expansion of macro 'phys_to_pfn'
-     103 | #define virt_to_pfn(vaddr)      (phys_to_pfn(__pa(vaddr)))
-         |                                  ^~~~~~~~~~~
-   arch/riscv/include/asm/page.h:103:46: note: in expansion of macro '__pa'
-     103 | #define virt_to_pfn(vaddr)      (phys_to_pfn(__pa(vaddr)))
-         |                                              ^~~~
-   arch/riscv/include/asm/page.h:106:46: note: in expansion of macro 'virt_to_pfn'
-     106 | #define virt_to_page(vaddr)     (pfn_to_page(virt_to_pfn(vaddr)))
-         |                                              ^~~~~~~~~~~
-   drivers/infiniband/sw/siw/siw_qp_tx.c:32:24: note: in expansion of macro 'virt_to_page'
-      32 |                 return virt_to_page((void *)paddr);
-         |                        ^~~~~~~~~~~~
+> After that, the machine just silently hangs.
+> 
+> Bisecting the issue, the patch that introduced the regression is:
+> 
+>     7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+> 
+> Reverting it fix the issues, but introduce other problems, as TLB
+> won't be invalidated anymore. So, instead, let's fix the root cause.
+> 
+> It turns that the TLB flush logic ends conflicting with i915 reset,
+> which is called during selftest hangcheck. So, the TLB cache should
+> be serialized together with i915 reset.
+> 
+> Tested on an Intel NUC5i7RYB with an i7-5557U Broadwell CPU.
 
+It turns out that this breaks PM-suspend operations on preempt-rt, on
+multiple versions, due to all the linux-stable backports.  This happens
+because the uncore->lock is now used in atomic contexts.
 
-vim +32 drivers/infiniband/sw/siw/siw_qp_tx.c
+As the uncore->lock is widely used, conversion to a raw lock seems
+inappropriate at 1st glance, and hence some alternate solution will
+likely be required.
 
-     5	
-     6	#include <linux/errno.h>
-     7	#include <linux/types.h>
-   > 8	#include <linux/net.h>
-     9	#include <linux/scatterlist.h>
-    10	#include <linux/highmem.h>
-    11	#include <net/tcp.h>
-    12	
-    13	#include <rdma/iw_cm.h>
-    14	#include <rdma/ib_verbs.h>
-    15	#include <rdma/ib_user_verbs.h>
-    16	
-    17	#include "siw.h"
-    18	#include "siw_verbs.h"
-    19	#include "siw_mem.h"
-    20	
-    21	#define MAX_HDR_INLINE					\
-    22		(((uint32_t)(sizeof(struct siw_rreq_pkt) -	\
-    23			     sizeof(struct iwarp_send))) & 0xF8)
-    24	
-    25	static struct page *siw_get_pblpage(struct siw_mem *mem, u64 addr, int *idx)
-    26	{
-    27		struct siw_pbl *pbl = mem->pbl;
-    28		u64 offset = addr - mem->va;
-    29		dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
-    30	
-    31		if (paddr)
-  > 32			return virt_to_page((void *)paddr);
-    33	
-    34		return NULL;
-    35	}
-    36	
+Below is an example of the regression on v5.15-rt, with backport:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+commit 0ee5874dad61d2b154a9e3db196fc33e8208ce1b
+  Author: Chris Wilson <chris@chris-wilson.co.uk>
+  Date:   Tue Jul 12 16:21:32 2022 +0100
+
+    drm/i915/gt: Serialize GRDOM access between multiple engine resets
+        
+    [ Upstream commit b24dcf1dc507f69ed3b5c66c2b6a0209ae80d4d4 ]
+	        
+Reverting the engine reset serialization change avoids the PM-suspend
+regression and is a temporary workaround for -rt users, but of course
+leaves this original TLB issue exposed.
+
+  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 45092, name: kworker/u8:4
+  preempt_count: 1, expected: 0
+  RCU nest depth: 0, expected: 0
+  INFO: lockdep is turned off.
+  Preemption disabled at:
+  [<ffffffffc0636522>] __intel_gt_reset+0x92/0x100 [i915]
+  CPU: 3 PID: 45092 Comm: kworker/u8:4 Tainted: G        W  O      5.15.59-rt48-preempt-rt #1
+  Hardware name: Intel(R) Client Systems NUC7i5DNKE/NUC7i5DNB, BIOS DNKBLi5v.86A.0064.2019.0523.1933 05/23/2019
+  Workqueue: events_unbound async_run_entry_fn
+  Call Trace:
+   <TASK>
+   show_stack+0x52/0x5c
+   dump_stack_lvl+0x5b/0x86
+   dump_stack+0x10/0x16
+   __might_resched.cold+0xf7/0x12f
+   ? __gen6_reset_engines.constprop.0+0x80/0x80 [i915]
+   rt_spin_lock+0x4e/0xf0
+   ? gen8_reset_engines+0x2e/0x1e0 [i915]
+   gen8_reset_engines+0x2e/0x1e0 [i915]
+   ? __gen6_reset_engines.constprop.0+0x80/0x80 [i915]
+   __intel_gt_reset+0x9d/0x100 [i915]
+   gt_sanitize+0x16c/0x190 [i915]
+   intel_gt_suspend_late+0x3d/0xc0 [i915]
+   i915_gem_suspend_late+0x57/0x130 [i915]
+   i915_drm_suspend_late+0x38/0x110 [i915]
+   i915_pm_suspend_late+0x1d/0x30 [i915]
+   pm_generic_suspend_late+0x28/0x40
+   pci_pm_suspend_late+0x37/0x50
+   ? pci_pm_poweroff_late+0x50/0x50
+   dpm_run_callback.cold+0x3c/0xa8
+   __device_suspend_late+0xa4/0x1e0
+   async_suspend_late+0x20/0xa0
+   async_run_entry_fn+0x28/0xc0
+   process_one_work+0x239/0x6c0
+   worker_thread+0x58/0x3e0
+   kthread+0x1a9/0x1d0
+   ? process_one_work+0x6c0/0x6c0
+   ? set_kthread_struct+0x50/0x50
+   ret_from_fork+0x1f/0x30
+   </TASK>
+  PM: late suspend of devices complete after 26.497 msecs
+
+Paul.
+--
+
+> 
+> v5:
+> - Added a missing SoB on patch 2.
+> - No other changes.
+> 
+> v4:
+> - No functional changes. All changes are at the patch descriptions:
+>   - collected acked-by/reviewed-by;
+>   - use the same e-mail on Author and SoB on patch 1.
+> 
+> v3:
+> - Removed the logic that would check if the engine is awake before doing
+>   TLB flush invalidation as backporting PM logic up to Kernel 4.x could be
+>   too painful. After getting this one merged, I'll submit a separate patch
+>   with the PM awake logic.
+> 
+> v2:
+> 
+> - Reduced to bare minimum fixes, as this shoud be backported deeply
+>   into stable.
+> 
+> Chris Wilson (2):
+>   drm/i915/gt: Serialize GRDOM access between multiple engine resets
+>   drm/i915/gt: Serialize TLB invalidates with GT resets
+> 
+>  drivers/gpu/drm/i915/gt/intel_gt.c    | 15 ++++++++++-
+>  drivers/gpu/drm/i915/gt/intel_reset.c | 37 ++++++++++++++++++++-------
+>  2 files changed, 42 insertions(+), 10 deletions(-)
+> 
+> -- 
+> 2.36.1
+> 
+> 
