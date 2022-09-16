@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD7F5BAEC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3525BAEBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiIPOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 10:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S231672AbiIPOBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiIPOBK (ORCPT
+        with ESMTP id S231627AbiIPOA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 10:01:10 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5874AB1A0;
-        Fri, 16 Sep 2022 07:01:09 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id B32061C000E; Fri, 16 Sep 2022 16:01:08 +0200 (CEST)
-Date:   Fri, 16 Sep 2022 16:01:08 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.9 0/7] 4.9.329-rc1 review
-Message-ID: <20220916140108.GC29693@duo.ucw.cz>
-References: <20220916100440.995894282@linuxfoundation.org>
+        Fri, 16 Sep 2022 10:00:57 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B438A6C22
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:00:54 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTbJ06Qs6znV6c;
+        Fri, 16 Sep 2022 21:58:08 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 16 Sep 2022 22:00:52 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 16 Sep
+ 2022 22:00:52 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <cezary.rojewski@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <broonie@kernel.org>,
+        <tiwai@suse.de>
+Subject: [PATCH -next] ASoC: Intel: skylake: remove unnecessary dev_set_drvdata()
+Date:   Fri, 16 Sep 2022 22:07:57 +0800
+Message-ID: <20220916140757.681414-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="2/5bycvrmDh4d1IB"
-Content-Disposition: inline
-In-Reply-To: <20220916100440.995894282@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove unnecessary dev_set_drvdata() in skl_remove(), the driver_data
+will be set to NULL in device_unbind_cleanup() after calling ->remove().
 
---2/5bycvrmDh4d1IB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ sound/soc/intel/skylake/skl.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Hi!
+diff --git a/sound/soc/intel/skylake/skl.c b/sound/soc/intel/skylake/skl.c
+index 52a041d6144c..22d9873d12d7 100644
+--- a/sound/soc/intel/skylake/skl.c
++++ b/sound/soc/intel/skylake/skl.c
+@@ -1152,7 +1152,6 @@ static void skl_remove(struct pci_dev *pci)
+ 	if (skl->nhlt)
+ 		intel_nhlt_free(skl->nhlt);
+ 	skl_free(bus);
+-	dev_set_drvdata(&pci->dev, NULL);
+ }
+ 
+ /* PCI IDs */
+-- 
+2.25.1
 
-> This is the start of the stable review cycle for the 4.9.329 release.
-> There are 7 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.9.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---2/5bycvrmDh4d1IB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYySBpAAKCRAw5/Bqldv6
-8uQgAJ9WBhX8jyu/ymJAZNpvLsgLAz2DMwCglpmY8mNZ4/d6qc2lzF0Ib+QRpY4=
-=viob
------END PGP SIGNATURE-----
-
---2/5bycvrmDh4d1IB--
