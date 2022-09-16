@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3935BA5AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0155BA5D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 06:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiIPEXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 00:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S229599AbiIPE14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 00:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIPEXo (ORCPT
+        with ESMTP id S229452AbiIPE1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 00:23:44 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BFB6E883
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:23:35 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bh13so19241299pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 21:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=gvdjpHS/YRkH0vho3frtzgK80BilJG2+eEXjf2bW/zQ=;
-        b=JcV1gWeBnsQpr8IFqM1+cNtK3uJZja8fNUZDQ9YI32sLk50HAJeJHl8CtuLS0PXkF1
-         bt8oDuJ+JN1bl77ccVAq5lwZQNC7l++U2iAztTCBPnoSxu1cTU+6Dr9hs2glfYM4yf09
-         8kmNhFJRFeOsax8NwX9CBfSKXbeMXz2OHU3cGE3e9PbAsbQTZ0v8JoOO+0yHnQXU5OtV
-         GDf+DQDJjUGr4ucmj+WbBhKV8+M03WKpLvZR68yhxLFN6GhWtkPbT5jhahFYTtdPE2SX
-         BYRR6rco9AMkf69xO+CGlY/878xxKJA3DNg3hv8A+uZwjXcyp64zU/wnKB7rLAqunwgu
-         cBBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=gvdjpHS/YRkH0vho3frtzgK80BilJG2+eEXjf2bW/zQ=;
-        b=2/WgK6QdNelYfLBQQqTmfd4aYGe7WxZcEBIaoCFWt2TH1Vilz3ciYg0QR+355yOUGr
-         ymU9r5ilDslhv0U8LsuLRP4YLzd1Dh+yUsgtWxK7KLiDoXZKHiCK/580J9qZuxFCjVNU
-         mM1PLjmFX7sGNsLrBzCthgImSCeVw5IG72UIqSgfh5ZPCHW11Q9rKOzK/HtMYy/HXnU5
-         20D773vfTIs2NqInGLQEmXNQihK2bg5kTQZUDLlbIpc3OR1D5apyTH1fzWg8QEK9bp39
-         eFnksgSUNKJbEZhwiQtADHO/wqzjUIHdW72y2QZ8UMuNSIv5pL4SK9s0x/Etjc6MA9ii
-         S7zg==
-X-Gm-Message-State: ACrzQf1FirVSYT9Vvn669NmTU2kam//W3Yi1QOR8ILwq79riRg+WQMEO
-        icpFKQ4RrwbxXh5PhkvL09/4ng==
-X-Google-Smtp-Source: AMsMyM4cNNU9y7eTJK5lmnGYbYr9GG/UfHslV3Qdx3TRxlr05zTuKGANPDIp17c/0MkdgUZJJIB8Jw==
-X-Received: by 2002:a65:56ca:0:b0:439:169f:f027 with SMTP id w10-20020a6556ca000000b00439169ff027mr2792866pgs.580.1663302214959;
-        Thu, 15 Sep 2022 21:23:34 -0700 (PDT)
-Received: from vineet-framework.ba.rivosinc.com (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id x4-20020a623104000000b0053e6eae9668sm13257286pfx.2.2022.09.15.21.23.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 21:23:34 -0700 (PDT)
-From:   Vineet Gupta <vineetg@rivosinc.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Christoph Muellner <cmuellner@ventanamicro.com>,
-        linux@rivosinc.com, Vineet Gupta <vineetg@rivosinc.com>
-Subject: [PATCH v2] riscv: ztso: disallow elf binaries needing TSO
-Date:   Thu, 15 Sep 2022 21:23:31 -0700
-Message-Id: <20220916042331.1398823-1-vineetg@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220916030552.1396820-1-vineetg@rivosinc.com>
-References: <20220916030552.1396820-1-vineetg@rivosinc.com>
+        Fri, 16 Sep 2022 00:27:54 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DA47DF6F;
+        Thu, 15 Sep 2022 21:27:54 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7D93F5C0219;
+        Fri, 16 Sep 2022 00:27:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 16 Sep 2022 00:27:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1663302473; x=1663388873; bh=k9Qt81M4LKuSOwQceO20Bstmi
+        DW44X4V/oE0ozyjyII=; b=RXhYNqONt8eRZbleg7ML1aBZO1oVH1pIHXYXaPwb6
+        zJXkpNulFH81v0kpNT022wLT75cEtmm9DOrzWsGYFG2hxZT6VHBxs9hoHfPBgXxm
+        0K9NZC+cIUBEugBPGTTMLuWRf3nCzTyUTNG4cRcxzJgnXsk6W9uAOHsdACSv3zvo
+        PpK9y2gsz/JbP+x1F5f2TZ3KwENxQ35fnHeWC5yTCvJ1P+HQL+U5jJVPl8Ab77vk
+        GDHF932/YDm7ZncT43rSeHktfSWLz3zB3621nzEhm7puxRG7pp3q6Ubq+DmpKJaH
+        StlPFjTPvtuBMPHMZQ3KDpP7RFeSadrNi3fyhj7jigjrw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663302473; x=1663388873; bh=k9Qt81M4LKuSOwQceO20BstmiDW44X4V/oE
+        0ozyjyII=; b=SN/tmMhFr0kGmlHYQJZMdCkwPpXvyVn0PLeLu6bnXhuQlvQcu8V
+        Uk+EdyNy5qqv4xcnIXaI6fRY78o3BJIEvbZnG076AdaGYDRv1mVwV+ElGZcfcZIn
+        juhZnGuAZ1NlQaQCEgB8EuyszhdLL51nRb3GVImfrgDsNaJClwQXO3QrgtZEY6m1
+        rjhIXEAmonui+7E1CB9foI1ZHVOOZdXnmlR5rk9DkW3f0M79WTyk8ZqTWGXzjxAW
+        4YE/VQMG5KDEY1vN/YIm7+1UJRZiyVFLkm9Tt146zlxNEqIV8r+7IKRuBGnny9HB
+        mEG+VsTr6vk3UKJYYWOLTMLrNf0fG2S/32g==
+X-ME-Sender: <xms:SPsjYyywpAQ4oG3FPHSKz1e3lRby60FBzJVQTaYUfX_5UlVVCLmDKg>
+    <xme:SPsjY-Sm7MiGILJXvXpcb9SwHotNjNTWjkvOCRSvoat6ZQhcZbvPdM7CVKTotaUhY
+    TmSSbsuukqD6W5_lg>
+X-ME-Received: <xmr:SPsjY0U_RLRZeZRhNZQSUktzeYSasY0g1aIirW11UDtzbAyGyi1iyXkvsqOFDOQGkRFzFScgKzP9ajHRtBXOEJgC5hDQg_3GazYWWmhN_eWHr8-JE-NYJEVOGuH-frtghpXN3Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:SPsjY4haZoBFk6iU4Iqgp_kNDmFcZX5Fv5M58x_BM9C3M53uLsgOug>
+    <xmx:SPsjY0CAjkJ7o0ChtutLa1iKr9B9sW6wn3hD3W4KoBg14LK6GyjI7w>
+    <xmx:SPsjY5K3zJkI3E4BbtJDKqxeMl5hdVwr0nNACdJoyOWnuCQuWu2Aqw>
+    <xmx:SfsjYyCyHe_e-wpSs0Q6Pk5h2gyJeC0xr1RYprFEoANNIHeQ_V_b6Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 16 Sep 2022 00:27:52 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v3 0/2] AXP221/AXP223/AXP809 GPIO support
+Date:   Thu, 15 Sep 2022 23:27:49 -0500
+Message-Id: <20220916042751.47906-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of now the software stack needs work to support ztso. Until that work
-is finished, disallow binaries needing TSO.
+This series hooks up the GPIO controller found in some older X-Powers
+PMICs. The main motivation is converting the U-Boot driver over to use
+devicetree, but Linux might as well gain support for the hardware too.
 
-This patch is needed to help ztso ratification and prolifiration of tso
-bits in tooling.
+Changes in v3:
+ - Added patch to remove existing "ldo" pinctrl nodes
+ - Drop already-merged binding and driver patches
+ - Remove "ldo" pinctrl children from new nodes
 
-Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
----
-Changes since v1
-  - Build error (and boot tested on qemu)
-  - Improved the comments a bit
----
- arch/riscv/include/asm/elf.h      | 11 ++++++++++-
- arch/riscv/include/uapi/asm/elf.h |  2 ++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Samuel Holland (2):
+  ARM: dts: axp803/axp81x: Drop GPIO LDO pinctrl nodes
+  ARM: dts: axp22x/axp809: Add GPIO controller nodes
 
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index f53c40026c7a..b6b4542b3039 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -26,10 +26,19 @@
- 
- #define ELF_DATA	ELFDATA2LSB
- 
-+/*
-+ * Make sure the elf being loaded is compatible with extensions.
-+ *
-+ * In the final incarnation this will get the extension list from DT and
-+ * make sure elf can run on given hardware+kernel.
-+ * For now disallow TSO built binaries.
-+ */
-+#define rv_ext_ok(x)	(!((x)->e_flags & EF_RISCV_TSO))
-+
- /*
-  * This is used to ensure we don't load something for the wrong architecture.
-  */
--#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
-+#define elf_check_arch(x) ((x)->e_machine == EM_RISCV && rv_ext_ok(x))
- 
- #define CORE_DUMP_USE_REGSET
- #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
-diff --git a/arch/riscv/include/uapi/asm/elf.h b/arch/riscv/include/uapi/asm/elf.h
-index d696d6610231..fa9e4c52c7ac 100644
---- a/arch/riscv/include/uapi/asm/elf.h
-+++ b/arch/riscv/include/uapi/asm/elf.h
-@@ -32,6 +32,8 @@ typedef union __riscv_fp_state elf_fpregset_t;
- #define ELF_RISCV_R_TYPE(r_info)	ELF32_R_TYPE(r_info)
- #endif
- 
-+#define EF_RISCV_TSO		(1 << 3)
-+
- /*
-  * RISC-V relocation types
-  */
+ arch/arm/boot/dts/axp22x.dtsi             |  6 ++++++
+ arch/arm/boot/dts/axp809.dtsi             |  7 +++++++
+ arch/arm/boot/dts/axp81x.dtsi             | 14 --------------
+ arch/arm64/boot/dts/allwinner/axp803.dtsi | 10 ----------
+ 4 files changed, 13 insertions(+), 24 deletions(-)
+
 -- 
-2.34.1
+2.35.1
 
