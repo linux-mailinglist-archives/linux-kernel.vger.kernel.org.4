@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3875BB0A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557735BB0A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 17:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiIPP60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 11:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S230084AbiIPP7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 11:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIPP6U (ORCPT
+        with ESMTP id S230073AbiIPP7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 11:58:20 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91E2B514E;
-        Fri, 16 Sep 2022 08:58:17 -0700 (PDT)
+        Fri, 16 Sep 2022 11:59:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8455A237C5;
+        Fri, 16 Sep 2022 08:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663343898; x=1694879898;
+  t=1663343983; x=1694879983;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=yqivP4w3Zoc56KlvA0QO/7RlBp2naUi73D5D7vf/mlU=;
-  b=OOu+MEQiTFm8hiQhgDluvh5qofgtaLiQsIHfx9cGFIp3YT1VB49n3J+T
-   N86HcJ5zBD6ayAxYfYaNlq0nHJLxjbG8ZTlsohSTarufRbH+iOXJJY71a
-   FeOU7RI0g/B51UBzx24dO7NJ9X9izP0NUGfZltqVHskidgbnaksaC5acq
-   K9JSDZSIDUu00HdnxvM5hTuvVSPys6Qz7Wow0ROHRZGpGce3niIt+g158
-   iZOL/A/IcOIeSLDS2daMMJ57skw3mCPd4JsvAZKXuYqQ/eS7wu3sNUQ/0
-   Vp+xg/64F+h7iXBra8ZzMF4UpIY3F5QmLBi3VkjrXhfpsvNviiRPtD8NO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="360759835"
+  bh=3dlr6QwHHV4fwB+YQ7qqVqGJHrWIkJE/3wJu4/J92Q4=;
+  b=EbwXw5HCQ1ljXp56Uo5QIzrQ76bN6GPg59blwaKJdn2AsaSsH4YXfPci
+   flvW6mlT3G70xOs49ppMFsfRBWlStxwe8HuNnWJ4EJlI0dIcLjuHElU6x
+   vTo1flPRXImuPNHUUOmsoDCsUhUx4FUXhzV5JfkH70kzLLJYjwE9d9K5N
+   tFgLIAXT7xVmLn2IVaFqrjjbeeF6nJ7/a/HjVNpErGVBhbcNdP9MMpQId
+   vEWe669gPXAyrgln4GdplA1USib/Zse2mvRXRHtf5dBMHhFMUaT+26rru
+   uBchkUPKltzGoUnjqhsTmd6Dj5nFtgFKoXRfgH+odfkyR5/+EJ911UVJs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="385311643"
 X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="360759835"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 08:58:16 -0700
+   d="scan'208";a="385311643"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 08:59:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="721467122"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Sep 2022 08:58:16 -0700
+   d="scan'208";a="686183271"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 08:59:42 -0700
 Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 08:58:16 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ 15.1.2375.31; Fri, 16 Sep 2022 08:59:42 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
  fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 16 Sep 2022 08:58:16 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2375.31; Fri, 16 Sep 2022 08:59:41 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 16 Sep 2022 08:59:41 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 16 Sep 2022 08:58:15 -0700
+ 15.1.2375.31; Fri, 16 Sep 2022 08:59:41 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gEIT2KK2cgbeT4W23Bf3TJranp0DEaMOAOUDJ5oryo+NcOTbJQm296Mi9X4B7EF0JtWjybgtIb6lEnYlFs/I0gUry2CqbTzk0nl6Ika3qvRX+KSg9LRyhjCfZOSARVYMB3FoehyWRWy5BrWwq9F8YdJYZ40uxrbSvgr6TQRJpR4t4pzXtksvYfjxF+Tt/zvGZ3jJ2+BV1sGKXC2EOY/WDOj+qD2bZsGGPzgRv67lYDIKYuMpSS/ts38mvKSrkrx12y9lJwkcn/745bDGPWm6iHfdTtbG1xYeLjU8fhLZg19r+9zuIK8X0MSNEEyPJnSUjJ+4TEXl1ntIso97q86Bcg==
+ b=hH0ER4UihpwUuzDVY2bWHzKEzC5J/zGo6AWpaJA2TIA3FZAx6P2XGViazh64qTs91oyfq/30lDFPr7He+/UefegmGURoVJiJhlcFBYi3FjeukYlExuJq0Qb3AF4X8xeeu38nR81KgSI7Cq9kw3+wGIeUhg3d/p9iRfBNn8MBjzrLkjOmXdzs/ygs7mkleTWCoSPsD+ZE/ObHs2DSgG50CxpbnN8KJxeNhhfaSebV/UeTSAcU8MsmBh5pa0AsSOvURVAlWc1zpcqsQuK5O027bglF6tGzOf1S81SC3n762xw7ZsgWVBKpYGWq2IxbHrCITux4wiNfE5qlimBayAUVKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5t9KXs733rHspivMxeKl2zVKbbpQZHZp8bAwGCFARYU=;
- b=dAFgsiWay37iBy/MY3JQFAUT4LY2KMwDgJV6/qqsFfgI2xAKqoKeTdOQrMjCSLC2oRI3bILcR93iXWHUOmFkdn+/tnrJanE0IrPxgrr2lFwXtKysUUex5lNMpec1TW1eI5tJlnPJQeC8p34j0SynZwatxUkv2W1tq51zu7hr64i/qOZahGE8tMXwlQXbqa60ucbqKuYuvbu4rhme8c2zS2WGnHFlUZsYiT6ejT2bAsLY7O+8a9sQ7D9dhhpEBHh0VmcmxCcrq/bX65mTc9SVdq78+gKu1aICsdCjzsEfQuO7wM9AUeiaj6v+78yUh/sqM5y5N8XWp1/3qZo4lmDdMQ==
+ bh=/dbTm1qckY4lwqx4qi62MLmoWAYsu6/wU4VBrHwsmkE=;
+ b=DL/t4EFmZyFprMKaI0m04X9vw0CwUngqO9iL1s5zA35DGVdrdMJ3SXKd9oCI809QNvpbklbIto7iPQjuqYPfwJVOJwXYKNwqrykdR2GkY7aEJuSYCTFQsS2Aom8pMAXfNDWj3jtbaUeT6PEd+fQKhZ+UK+12Xsk3Vg6oObLkM0403mGpwa/9JVMXGMx6VUxyW89d7Ul8gTaqqBDFAJT7WMz/YEu6FdWJa13BJ2BwDLa64mDiBApXl2fD2dljWuZGLZ6xiYxfgoSdkEvEnWUydfJjl504mxkW0SLWIGaT6Bf8J4w/KePj+cS30lLdmHtpolIT85DmHB/roSP++aYTng==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -66,17 +70,17 @@ Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
  by CY8PR11MB7172.namprd11.prod.outlook.com (2603:10b6:930:93::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Fri, 16 Sep
- 2022 15:58:10 +0000
+ 2022 15:59:36 +0000
 Received: from CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::a824:112:52f7:5743]) by CY4PR11MB1862.namprd11.prod.outlook.com
  ([fe80::a824:112:52f7:5743%12]) with mapi id 15.20.5632.016; Fri, 16 Sep 2022
- 15:58:10 +0000
-Message-ID: <13294a8f-e76f-a6a9-284c-67adbc80ec7c@intel.com>
-Date:   Fri, 16 Sep 2022 08:58:06 -0700
+ 15:59:36 +0000
+Message-ID: <36f0466f-517e-050d-5fae-9325ec28ebd6@intel.com>
+Date:   Fri, 16 Sep 2022 08:59:32 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v4 09/13] x86/resctrl: Add sysfs interface files to
- read/write event configuration
+Subject: Re: [PATCH v4 10/13] x86/resctrl: Add the sysfs interface to read the
+ event configuration
 Content-Language: en-US
 To:     Babu Moger <babu.moger@amd.com>, <corbet@lwn.net>,
         <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
@@ -93,71 +97,71 @@ CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
         <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
         <eranian@google.com>
 References: <166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu>
- <166257366204.1043018.4834615270384002210.stgit@bmoger-ubuntu>
+ <166257366902.1043018.16087054015308149859.stgit@bmoger-ubuntu>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <166257366204.1043018.4834615270384002210.stgit@bmoger-ubuntu>
+In-Reply-To: <166257366902.1043018.16087054015308149859.stgit@bmoger-ubuntu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR03CA0021.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::31) To CY4PR11MB1862.namprd11.prod.outlook.com
+X-ClientProxiedBy: SJ0PR03CA0118.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::33) To CY4PR11MB1862.namprd11.prod.outlook.com
  (2603:10b6:903:124::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|CY8PR11MB7172:EE_
-X-MS-Office365-Filtering-Correlation-Id: f236d355-75ab-4bce-9c25-08da97fc40b7
+X-MS-Office365-Filtering-Correlation-Id: 10c53cd1-d575-4f84-e909-08da97fc73f1
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wD+pkMhdarICbeFXaPLgz0G6i4W2gyPBbLovE+zNiRp8d4PO0nZclFt5OXlxXKe5KcbgpPWGYMDK5hKm3CuQxvNuXbfXTXeOscZRoINlHjYx/J6MUgFTZvp+lkSfAf5wdpTADdnIUan25Nhv1HqbOO8yTMyuiCOvQXY2W5/JkdvHkeqdzKq526hSFE+NLh1tPQ7zsN3h5oBNkC8PTRE3NFpXNWxCPpHEOong9+DBvJIScHVg99x0f2OXsfbtzodRP6XwMnMvOQYkDEH1xu79z/aiDZ+ERCoiQ6gODLE5Q9DgyhNsz6pVgXCi/LqEqDmW8NzW/50+lrRgLL63w5k2kBOUJ4fEKLdq49je/kknCWJdv2eGHpU4/9umwgdpPLSEPX3Y/Xt+9MKS9gQvgpCvDGMFdpu1aDXQ/ATuxmvFuzI01IYcElFF6OnMrSL7wEWnaolhjwS8X0UwVKhDclXVe6z0x+dOSED4H8A6cbMbfSl+/ImFJLaoL/lsLZQffik370ORyfORW9NI/Lj5V41KBvP2VcWsv3KuPvucJy+2SLqGcxxP7D8Tqn+Lu094XH9C8cXE0Q7D1BKS0TKSctKd48bO+JwZSF3ic3+kKgZHsSO0usmeShfIAKK17l2MubMpYwpWrKSqkBw2QfS4Kblz22TEliIduqiVPAulcQvBiYMijz9L32ikqX5qtnEySF047jSobSp4phE8vUSQvw8e6hAvpgN/EMVbOldS87uQtDDsX7sJ2ehrR27zKZf9gr15pqcBBZaKDUOPIz5iOquexXDQJ7ikFJI6jiAqeZUfNWk=
+X-Microsoft-Antispam-Message-Info: SnW/5We8wxyc0p7KyhAhFQizN5AaVEKFZnFgVwz3LIiCFw49g+0OSPG9MeLgqtM+3UYexmA2n2Fkd6F5VL0619kxnD6wVLTdPU3sN+Bv9oCna9N020/pJdQCvu7L8paMmXUdhmQDEvyKFVVByKHIglA2WMXrMY857qf5NCHPyn9uYYlMjQ1EcYgdE2do4c5rqqyj5HJ9ScEIVFzqf4h/wLKRzilgXVSKfWjMwowQHR7Zfun11UKygoObrP5hqr9FRIj+w2uP/D1exRbn/4WIKDiXFFAoPkESCEbUzilQptU/WXnLIasFWhbGniZaism76sGOxYdYyW8vhQJ5zk2NW4Dq5MTX9f6zV9dBgKeEpyEvN5o/j4HZy1vVreqJ9rQ0beqBXHgZ6iqIBWYEQ2+gwlVef3clV8+MMUgr/oc4iuWUnRRGlKH2kwxt56OosJEwR5HqHkJ8oTamRi+2OvaurU1DUPzrO2YJkTVu9/nwc7srDvJKKidbNMN/uETgdanL6CbG7qa12rerTz2a4tag6PdRI7HPrx9PNsh+E2YlJmW8mwX5x52CQI6qatETP5vy7KbtQh7g3ZXb08/FRMZV+do07OpKSZYAd9ylT1IIAr4frb9t+IKkC0X4bmwEKKsysc3IyNNQocmxVnYDDiFAnPIOv3Hx5G8iksTaYEOnC/Et15auv/h7wpX0jGsJaAL+FJmClnNf0VAwPP31Pe87S5wJVdpGOqN/WgsJmeLdEEkvHVO1lvT/RG728pafqQInieAGCgP+pAUGFijkUa7Yo1qSlwrk8m7gEtDpMWVb4vU=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(396003)(39860400002)(376002)(366004)(451199015)(26005)(6512007)(41300700001)(6506007)(53546011)(6666004)(31686004)(36756003)(66476007)(66556008)(4326008)(66946007)(31696002)(83380400001)(86362001)(8676002)(82960400001)(8936002)(6486002)(186003)(478600001)(2616005)(38100700002)(44832011)(316002)(2906002)(5660300002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dldQMWlJOWswVStxT3o0R2xUeUFOUkFGbnAzWG9ULzJpNy9uYmkvbVJkaGJl?=
- =?utf-8?B?LzdHZWYzZWlxNnpYYndMYy9JcEhjS1FtNk5qWmVaaDQxV3RzejZja0poMkdL?=
- =?utf-8?B?UFdFYzF6MWhqTDBVZnQ0NjNWUm53OWJEZE5OUTk3SXFZRkdaK1hlc3gyVUxJ?=
- =?utf-8?B?UjRKbWxaSFQ4TEUzTTd0eDd0R3NNR1BxQlIxNEYreGVwNHNsS3NickhBcngz?=
- =?utf-8?B?Y0MvODBEMEdoaFJ4QmZFZXBuZHplLzhkQmVQanVneEJMclBRRmNNUE9CMHNS?=
- =?utf-8?B?ZWdLdGhMWHRBaHNjaVoxanRQQ3hwZXkrYnVnVWJOZkFRQTJ0dk05dzZVTGFq?=
- =?utf-8?B?cnFLQUpnYkE4ZG85L0xONzF3UVRzOFpDODBmdGhEZXFXVzNPR1RpNFQrL0tr?=
- =?utf-8?B?akJZbXh2VDZBWWpiak03UlZqOTQwYTU3S1lqMFJvWVRUclRBMlZnY2crZjlQ?=
- =?utf-8?B?SlFKSmxNUnB1WDVWNjVWWU5lVlVMUnJrcmRBeVdPcmtnVU5wcnJCL1JrYXor?=
- =?utf-8?B?UzJkaXh3L3FydGVDVWxDWDMzU0ZQejZ3d3dGN3NKSi90eDJVNGhUaEQ1Y2Zs?=
- =?utf-8?B?UXFWNlFmd2J2YXZ3WnMxbUd5a0RaaUJVdTZRTW80cHNFdENYZXE0MHhBMXBW?=
- =?utf-8?B?NUZ6L2RHSnZsU3NZNGQ4RUJ0dGpET1NnYnRHdG05aGlHM3dXQkpleXB6OElW?=
- =?utf-8?B?alk5RURTMzJKdHV1VGVoOGhIY1RUVy9HZllieEN4QWFGbmU2YmJiRkZnTXRo?=
- =?utf-8?B?Ti9nRjNYN2E0Uys4QmRoaThTV2hJS0twOXlpdVhwRWkvd0c2eFdBV0M0SDNu?=
- =?utf-8?B?Tkc3SlZFQ0VrZnRxSVJoUUpLKzdHMjUvVEltUEtQUUMwYWs5a2I2aHBJRnNx?=
- =?utf-8?B?RWpER2dYdnN4UlN4RE5GYWkxQVZwNis4NWh0K2c0OW5zelFKa0tuaWpMb1BL?=
- =?utf-8?B?dDFyNGRVRVR0Zm9FTW8wcm9TaXBQQU1pTXJ1UzhrS21DRXZPZWNDWDV3OUxm?=
- =?utf-8?B?YnZPd3FSa0tqelZiNWlvNkFBZXNoY3RhN0pVTm9sbitkZUlMOUxzdGJ5MUtk?=
- =?utf-8?B?YmFjZFhyVFFoNnZMYm5weWxLTmFtUkVZZmVCM2tvdXhsRGl4bzBsVGVyYWJr?=
- =?utf-8?B?TlQzekcvTyt6Mms5RENNc3hXaW1VV1A2bi9McHQyVU1nZGlVaXU2cC9oS3ZF?=
- =?utf-8?B?M1RGZ0Zteno2cDl1bGRWc2gyTHZHT0VITkp6STJ3eDcwVFN5SXg5ek9CRTI5?=
- =?utf-8?B?SGJYQ2Y2ZG5iU2lhR3J1V25VTFdycVVCNk5HUnM2T1llU0grWmJYaFlUU0lV?=
- =?utf-8?B?ODNxRFlDbWdDSXBtYUczMXBBQVp3VTU4VHRFdVE3N2ZUclRBQWNDREh2a09j?=
- =?utf-8?B?ZlhJcE00VTlaN1ZRd24vSU1vSGhkb3dTZmRYcDduc3pPTmdROWM0WVBtc0px?=
- =?utf-8?B?TDNscURnelhKS3FYTlAvUEp4RzY4WGtUVkZVRzJyU2YyWk9sRU9pRVVJN2Ja?=
- =?utf-8?B?aU5vY1pYeDJIOUw2MWpXTzhhR3B4aXhaenRnUUJ1WTVQbjJ5UlV6WkYxYjRt?=
- =?utf-8?B?N2YwbDgyb3h6K3RFUDREQUFqVXVEUUhEbTFPN0VqZzVmbkp5QXMvVTM2V2Fh?=
- =?utf-8?B?UHQrU1J4U2g5aW16UklzTTI4UmtVYlZCL0RvaFlIK3hsVUZCeExMMFY1cGE0?=
- =?utf-8?B?VEI3bDJPVGJCKzNCUXM4U3RUaDd2aWV1MHRRWWY2TXh1NzF6NzlZMHRXV1Nk?=
- =?utf-8?B?Qjl3R3k5N0hjcklaZjVVb0U2QmxWUldNT2ptT0NuaWl2VnF5bXR4QTdtbWdz?=
- =?utf-8?B?enlPeU9wZ2I4VDNXUjZ3VWYxVmtQMkpDWGhXMDVVUW0rR0tTODh0RTdtREtq?=
- =?utf-8?B?dUtlSkRCV0J1eTNTMzlRcmk5TkR0OEJ4Vm1VVHhLeHlxakpKdWhlYmFLSzlV?=
- =?utf-8?B?Q0FoS0ZXekU3NnUwWUJHOVhycTNUMlVucmxkWWx5RGgwOUJIWVg1ZmlsdzFp?=
- =?utf-8?B?aWsyVVR4TjM2eDhZK1V0L1dBTVk4bzRNMlRmVE9rcFlsUDBYM2lpSFluNW84?=
- =?utf-8?B?MXlmZEdRVit1em42SjFEMEc5QmFHRzdUWWp2T2YxRjBmM25UY3MzWHhoWndK?=
- =?utf-8?B?UkZXQ2RtMjlZeTJwR1FLb2JuU0N3a1IybGR5T1BwS0hmYjN6L3JDUENpQnZB?=
- =?utf-8?B?dHc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f236d355-75ab-4bce-9c25-08da97fc40b7
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVFkZGVJZmo3RUdVbE1DK3hXSUFMa0dIWHg5V29DNDJYeGsxOERDYUE0UnNu?=
+ =?utf-8?B?bWkzTTkzNDVjbWhjRmtJaTlSV3FvUVFlSmhHN1NTbWRlMWFvRUduUTNiN2NV?=
+ =?utf-8?B?MW5YTmw2TmxQN0V5NllITWcrMEd4clNmVk9NSEljcDZhamNjTUxVNXhyYnM2?=
+ =?utf-8?B?UGtwa3JubHVTaVZxRDV5RjVlSnRqT25wME1mcUxFMnUxSnE1aklzQ2M3Ni9L?=
+ =?utf-8?B?bWNaRTRyc24wZStQS0VTUTJsMVRnVkhtNFcxZzBTZnpsUnRGSXFlelBqbGo4?=
+ =?utf-8?B?RTJITlc3MmQ3TnVJbmJyTFlDb3p4SVcxanJCeEpMUnczNFdEY0J5NDJ4Rlc5?=
+ =?utf-8?B?eFNsT051ZUJhR0lTd1ZEK29MRXhud3c4cDl2eUlnU3laSGNZYzlPRVpqbVN2?=
+ =?utf-8?B?cDBjLzYvZjhmakU1VTBIQWt3M2xJSXlRVlQ2UTRiWGl4bzU5K2h5MHZCV1F1?=
+ =?utf-8?B?K2VNcHJlTzVKekdrQlBNenpmbURjT01KbXJFUWQ2OVhjRVJad1phMW4xZHNm?=
+ =?utf-8?B?b0dsbmZiQ3ZhOG9ucXRsTEVNaVd1N2EyRm9qdEhGL2R3VmRDL1M5SEkzUVVp?=
+ =?utf-8?B?THk2VHpIR2tCSXppK2hzNEpRRjN2amVIUklFTGlkdXI0Q05TaGhjcXBzQXRq?=
+ =?utf-8?B?Y2ZWcm1TaTdkWVVNenpUZDl2czVRb0hDd1ZHVVJiYk1ReUpKNUF5RS90bGFy?=
+ =?utf-8?B?bGVqZXVaa25nR1JTLy9FMXpUVmJLQW1oUTV4ZUdPbHV3N2JLRFU5MTlSVlB4?=
+ =?utf-8?B?MDJmSXoyNVZLZFZNV2NMbW12Wkl1UWVrcVI3WEJnRFB1Z2NhZ0pmdGlFVG1C?=
+ =?utf-8?B?eHdKTDQxL2VXd01XYkl1NmtkaExCWU1ESHRDWmJ0NHozcSszcUFlK1hKSTRJ?=
+ =?utf-8?B?RWpzdEkxdDZLYWVGS28yVkxGVlZ5UnBJeGs0dTVnN3B3cWVTTjJaWUJEWjA0?=
+ =?utf-8?B?RUppYklHNklHY0orVzhkRnMrbG9xc2JONXBDcys0ZjNFQWczc2hYRFFya1d3?=
+ =?utf-8?B?TU9jZnAzblRRTWF4YzdkYnlIbUJ1WFAwNnhFQ2c3eHc5aXpUVkk5bHVCb2NM?=
+ =?utf-8?B?MGx2dDNBLzc4NHlqK2FJalZFdEZkWU5GWkpLYWxSSWlIOFJZcHdLN3VGOWtR?=
+ =?utf-8?B?TFNlMEd0amw5a2p1ejF4Y0ljRkJleE9DaTN0RjZuWUc2aG9TM0VBVXhWU0ZY?=
+ =?utf-8?B?TXhXejVFVkltMTZQeEtxNUt1Vi82Zm8zK3A0Z05nanl3cm5rNGdqZnZJbFZz?=
+ =?utf-8?B?WXEzc0FNdlhSSnEyQ0lWWktsU2ZQSXlzeVNQRmtTM3hxNzhuTDQ4cU11TXJS?=
+ =?utf-8?B?eHh1Umh3TUFQRnJWTjNOaU5mNTJaOHlBeCtHMUw2L0xicVJYaUsrSEdnMHZX?=
+ =?utf-8?B?QzBoQ29oK3V2aG1kTlJSNFFEK2NZYUkwUmdsN3NBRzBadTFMb3NvaitrQTRn?=
+ =?utf-8?B?bDdpUHEzamhTT1hKdWZkeU9XOHdIS040R1ZrbnZIUmYrTGpFMDhaNC9IRDdO?=
+ =?utf-8?B?aUJYV05WVE9JUkdhS25WRWRSTk9pS2pqQ1RQbVR5czRWL09XMDBFamJEaW92?=
+ =?utf-8?B?OFp2U3dzbVoyeXc3Sjh6WHUvRzlhOHlvNWJVanNQNHl3d1g2MTFMQ0FwcTV3?=
+ =?utf-8?B?R3JhT3NwRW8vTTMxT2tiTFJPMGRyemJpZ1ZYR0wwbUVtRkUzU1kxWHdaS0lF?=
+ =?utf-8?B?SVBxSWFzeldpcUZWd2o1M0g2Zk1ZYUp3SzlZa2MzL2hIT2pvczhFaFZaWWpp?=
+ =?utf-8?B?NkFXaDM2SFB2d2t5Vk5CRDlKT0J1czhMeW9uTENwM2s4K3NEa3huSHBXZFNV?=
+ =?utf-8?B?ZFFja0Y4OUwydThJSVUzOG5yYi9BL09qVEpnZVJYYmllVzc5dkExUXhnOHov?=
+ =?utf-8?B?NFk1azZ1NUdDRHB3Ty9jM3M0WWNIYU9sdjRKTjVRZUhlcmRwdVZQSlZLRVBB?=
+ =?utf-8?B?Y2x3akZLcEVYVUIxZHFuOXJjRlRVd2JEbFlMSE1iaGxHUzFEMlllcStVNzNh?=
+ =?utf-8?B?Nk95QzhxVmZXbGhneUZQeFQ2cm1oTThWOTFtV2hWU2k3OWVKeDZ5cUxlMkd4?=
+ =?utf-8?B?SUJNc3RlL3ZZa3BhZzBWY2luYzdkcm4wQ2xBMGdCMyswVkI4LzU4djVDRVVF?=
+ =?utf-8?B?T2tFR2VpMjlQS2JWR3lBV3BRZTFyVHVRdjRTVXZpVWR0Z3oxTFZrenB6ZHBQ?=
+ =?utf-8?B?a2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10c53cd1-d575-4f84-e909-08da97fc73f1
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 15:58:10.1705
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 15:59:36.1007
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +f8+wNo8WqdtrVS1MaDmPqa52tHVrwqrjA/B0DIJrDjU3yTul+iOzeO15onj+Mnzd4o8h2Cvbh5xHk7nJvt2LUN+1BekOmbnQSBd8jz/zt0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: aEPnMWC8Xic88ETXbaZBnjMWfo6MyQz/gKvIyeZ5Ufgi6uTYVfafK7gl2Crzki5TBiMZrEb7cFt8Sv+5VmSO2XWMj/6WF6ML6Hpv1OPah/8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7172
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -173,141 +177,177 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Hi Babu,
 
 On 9/7/2022 11:01 AM, Babu Moger wrote:
-> Add two new sysfs files to read/write the event configuration if
-> the feature Bandwidth Monitoring Event Configuration (BMEC) is
-> supported. The file mbm_local_config is for the configuration
-> of the event mbm_local_bytes and the file mbm_total_config is
-> for the configuration of mbm_total_bytes.
+> The current event configuration can be viewed by the user by reading
+> the sysfs configuration file.
 > 
-> $ls /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local*
-> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local_bytes
-> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local_config
+> Following are the types of events supported:
 > 
-> $ls /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total*
-> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes
-> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_config
+> ====  ===========================================================
+> Bits   Description
+> ====  ===========================================================
+> 6      Dirty Victims from the QOS domain to all types of memory
+> 5      Reads to slow memory in the non-local NUMA domain
+> 4      Reads to slow memory in the local NUMA domain
+> 3      Non-temporal writes to non-local NUMA domain
+> 2      Non-temporal writes to local NUMA domain
+> 1      Reads to memory in the non-local NUMA domain
+> 0      Reads to memory in the local NUMA domain
+> ====  ===========================================================
 > 
 
-This patch makes the mbm*config files per monitor group. Looking
-ahead at later patches how the configuration is set it is not clear
-to me that this is the right place for these configuration files.
+...
 
-Looking ahead to patch 10 there is neither rmid nor closid within
-the (MSR_IA32_EVT_CFG_BASE + index) register - it only takes
-the bits indicating what access types needs to be counted. Also
-in patch 10 I understand that the scope of this register is per L3 cache
-domain.
+> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+> index 45923eb4022f..96f439324d78 100644
+> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> @@ -15,6 +15,7 @@
+>  #define MSR_IA32_MBA_THRTL_BASE		0xd50
+>  #define MSR_IA32_MBA_BW_BASE		0xc0000200
+>  #define MSR_IA32_SMBA_BW_BASE		0xc0000280
+> +#define MSR_IA32_EVT_CFG_BASE		0xc0000400
+>  
+>  #define MSR_IA32_QM_CTR			0x0c8e
+>  #define MSR_IA32_QM_EVTSEL		0x0c8d
+> @@ -50,6 +51,29 @@
+>   */
+>  #define MBM_CNTR_WIDTH_OFFSET_MAX (62 - MBM_CNTR_WIDTH_BASE)
+>  
+> +/* Reads to Local DRAM Memory */
 
-Considering this, why is the sysfs file associated with each
-monitor group?
+What prompted the terminology switch between the
+changelog ("local NUMA")  and the comments ("DRAM")?
 
-For example, consider the following scenario:
-# cd /sys/fs/resctrl
-# mkdir g2
-# mkdir mon_groups/m1
-# mkdir mon_groups/m2
-# find . | grep mbm_local_config
-./mon_data/mon_L3_00/mbm_local_config
-./mon_data/mon_L3_01/mbm_local_config
-./g2/mon_data/mon_L3_00/mbm_local_config
-./g2/mon_data/mon_L3_01/mbm_local_config
-./mon_groups/m2/mon_data/mon_L3_00/mbm_local_config
-./mon_groups/m2/mon_data/mon_L3_01/mbm_local_config
-./mon_groups/m1/mon_data/mon_L3_00/mbm_local_config
-./mon_groups/m1/mon_data/mon_L3_01/mbm_local_config
+> +#define READS_TO_LOCAL_MEM		BIT(0)
+> +
+> +/* Reads to Remote DRAM Memory */
+> +#define READS_TO_REMOTE_MEM		BIT(1)
+> +
+> +/* Non-Temporal Writes to Local Memory */
+> +#define NON_TEMP_WRITE_TO_LOCAL_MEM	BIT(2)
+> +
+> +/* Non-Temporal Writes to Remote Memory */
+> +#define NON_TEMP_WRITE_TO_REMOTE_MEM	BIT(3)
+> +
+> +/* Reads to Local Memory the system identifies as "Slow Memory" */
+> +#define READS_TO_LOCAL_S_MEM		BIT(4)
+> +
+> +/* Reads to Remote Memory the system identifies as "Slow Memory" */
+> +#define READS_TO_REMOTE_S_MEM		BIT(5)
+> +
+> +/* Dirty Victims to All Types of Memory */
+> +#define  DIRTY_VICTIMS_TO_ALL_MEM	BIT(6)
+> +
 
+Could you please fixup the comments to only capitalize 
+the first word of each sentence (unless it is an acronym
+or required for some other reason)?
 
-From what I understand, the following sysfs files are
-associated with cache domain #0 and thus writing to any of these
-files would change the same configuration:
-./mon_data/mon_L3_00/mbm_local_config
-./g2/mon_data/mon_L3_00/mbm_local_config
-./mon_groups/m2/mon_data/mon_L3_00/mbm_local_config
-./mon_groups/m1/mon_data/mon_L3_00/mbm_local_config
-
-Could you please correct me where I am wrong?
-
-
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   40 ++++++++++++++++++++++++--------
->  1 file changed, 30 insertions(+), 10 deletions(-)
-> 
+> +/* Max event bits supported */
+> +#define MAX_EVT_CONFIG_BITS		GENMASK(6, 0)
+>  
+>  struct rdt_fs_context {
+>  	struct kernfs_fs_context	kfc;
 > diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index f55a693fa958..da11fdad204d 100644
+> index da11fdad204d..6f067c1ac7c1 100644
 > --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 > +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -254,6 +254,10 @@ static const struct kernfs_ops kf_mondata_ops = {
+> @@ -254,8 +254,85 @@ static const struct kernfs_ops kf_mondata_ops = {
 >  	.seq_show		= rdtgroup_mondata_show,
 >  };
 >  
-> +static const struct kernfs_ops kf_mondata_config_ops = {
-> +	.atomic_write_len       = PAGE_SIZE,
+> +struct mon_config_info {
+> +	u32 evtid;
+> +	u32 mon_config;
 > +};
 > +
+> +/*
+> + * This is called via IPI to read the CQM/MBM counters
+> + * in a domain.
 
-Please use coding style (tabs vs spaces) that is consistent with area
-you are contributing to.
+This comment does not seem accurate - it is not reading the
+actual counters but the configuration of the counters?
 
->  static bool is_cpu_list(struct kernfs_open_file *of)
->  {
->  	struct rftype *rft = of->kn->priv;
-> @@ -2478,24 +2482,40 @@ static struct file_system_type rdt_fs_type = {
->  	.kill_sb		= rdt_kill_sb,
->  };
->  
-> -static int mon_addfile(struct kernfs_node *parent_kn, const char *name,
-> +static int mon_addfile(struct kernfs_node *parent_kn, struct mon_evt *mevt,
->  		       void *priv)
->  {
-> -	struct kernfs_node *kn;
-> +	struct kernfs_node *kn_evt, *kn_evt_config;
->  	int ret = 0;
->  
-> -	kn = __kernfs_create_file(parent_kn, name, 0444,
-> -				  GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, 0,
-> -				  &kf_mondata_ops, priv, NULL, NULL);
-> -	if (IS_ERR(kn))
-> -		return PTR_ERR(kn);
-> +	kn_evt = __kernfs_create_file(parent_kn, mevt->name, 0444,
-> +			GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, 0,
-> +			&kf_mondata_ops, priv, NULL, NULL);
-
-Please run your series through checkpatch (alignment issue above)
-
-> +	if (IS_ERR(kn_evt))
-> +		return PTR_ERR(kn_evt);
->  
-> -	ret = rdtgroup_kn_set_ugid(kn);
-> +	ret = rdtgroup_kn_set_ugid(kn_evt);
->  	if (ret) {
-> -		kernfs_remove(kn);
-> +		kernfs_remove(kn_evt);
->  		return ret;
->  	}
->  
-> +	if (mevt->configurable) {
-> +		kn_evt_config = __kernfs_create_file(parent_kn,
-> +				mevt->config_name, 0644,
-> +				GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, 0,
-> +				&kf_mondata_config_ops, priv, NULL, NULL);
-> +		if (IS_ERR(kn_evt_config))
-> +			return PTR_ERR(kn_evt_config);
+> + */
+> +void mon_event_config_read(void *info)
+> +{
+> +	struct mon_config_info *mon_info = info;
+> +	u32 h, msr_index;
 > +
-
-Since an error is returned here it seems that some cleanup (kn_evt) is missing?
-
-
-> +		ret = rdtgroup_kn_set_ugid(kn_evt_config);
-> +		if (ret) {
-> +			kernfs_remove(kn_evt_config);
-> +			kernfs_remove(kn_evt);
-> +			return ret;
-> +		}
+> +	switch (mon_info->evtid) {
+> +	case QOS_L3_MBM_TOTAL_EVENT_ID:
+> +		msr_index = 0;
+> +		break;
+> +	case QOS_L3_MBM_LOCAL_EVENT_ID:
+> +		msr_index = 1;
+> +		break;
+> +	default:
+> +		/* Not expected to come here */
+> +		return;
 > +	}
 > +
->  	return ret;
->  }
->  
+> +	rdmsr(MSR_IA32_EVT_CFG_BASE + msr_index, mon_info->mon_config, h);
+> +}
+> +
+> +void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
+> +{
+> +	smp_call_function_any(&d->cpu_mask, mon_event_config_read, mon_info, 1);
+> +}
+> +
+> +int rdtgroup_mondata_config_show(struct seq_file *m, void *arg)
+> +{
+> +	struct kernfs_open_file *of = m->private;
+> +	struct mon_config_info mon_info;
+
+Could you please initialize this struct? I think this is important considering
+that there is an (albeit unlikely) chance that uninitialized data can be returned
+to user space.
+
+> +	struct rdt_hw_resource *hw_res;
+> +	u32 resid, evtid, domid;
+> +	struct rdtgroup *rdtgrp;
+> +	struct rdt_resource *r;
+> +	union mon_data_bits md;
+> +	struct rdt_domain *d;
+> +	int ret = 0;
+> +
+> +	rdtgrp = rdtgroup_kn_lock_live(of->kn);
+> +	if (!rdtgrp) {
+> +		ret = -ENOENT;
+> +		goto out;
+> +	}
+> +
+> +	md.priv = of->kn->priv;
+> +	resid = md.u.rid;
+> +	domid = md.u.domid;
+> +	evtid = md.u.evtid;
+> +
+> +	hw_res = &rdt_resources_all[resid];
+> +	r = &hw_res->r_resctrl;
+> +
+> +	d = rdt_find_domain(r, domid, NULL);
+> +	if (IS_ERR_OR_NULL(d)) {
+> +		ret = -ENOENT;
+> +		goto out;
+> +	}
+> +
+> +	mon_info.evtid = evtid;
+> +	mondata_config_read(d, &mon_info);
+> +
+> +	seq_printf(m, "0x%x\n", mon_info.mon_config);
+> +
+> +out:
+> +	rdtgroup_kn_unlock(of->kn);
+> +	return ret;
+> +}
+> +
+>  static const struct kernfs_ops kf_mondata_config_ops = {
+>  	.atomic_write_len       = PAGE_SIZE,
+> +	.seq_show               = rdtgroup_mondata_config_show,
+>  };
+  
+>  static bool is_cpu_list(struct kernfs_open_file *of)
+> 
+> 
 
 Reinette
