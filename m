@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512695BAC61
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A8D5BAC63
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiIPL1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S231381AbiIPL1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 07:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiIPL1a (ORCPT
+        with ESMTP id S231168AbiIPL1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:27:30 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C1A3D62;
-        Fri, 16 Sep 2022 04:27:23 -0700 (PDT)
+        Fri, 16 Sep 2022 07:27:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9141A4B0C;
+        Fri, 16 Sep 2022 04:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663327643; x=1694863643;
+  t=1663327647; x=1694863647;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VqcEjdujxakv3noDHpoHtBuaB79FIa784j+2h1ikqjc=;
-  b=RKOA0hvf3E/8FWa/aNzpyCMN7HilEHrPwc7CfaltYEEjmzX87IuuQCG8
-   kGl8aAjc+tAsMjkfekhMV+P2SKBE92pH7inwB7OXsZeuzVi9qhvHKw9Zs
-   pSbjafGRx6/lEsP7GKKeA4DRWzGpA6SobWdoTGh38B5ySeQNXj9xzorUP
-   HjRWvsH2hqeEevw7oJZgOCQ3KyXirSHzy5E690R8BlOYpdGhsgWtApOnx
-   7EOAkIJumYXDHYGRnqStZW6BD4xNlak+5+tj0ISo2Cp6Y/yWIEZPVgC/R
-   DUzX1B/m1NWjRK2DRGgA9tJk0MEiTXF4VPm+9RDunPI5OgM3QYmWILwuf
+  bh=hyLDKbNNI38wXrC5Tei7bV2mB9uLlpphPD5ViUjlS80=;
+  b=Gu73X08GaNR79I2hTzf/awwLNnW/ob9SVkhBlo5FbEUVku5LTJcmV9Pt
+   4voqN7c2kiqBod5Su8F1FNoxI2atv/bDcwBAUJBudr2T7Vm+VdsSdqhGs
+   AS1+MsGfCGT5ZtDWJLTtZJg8JopplrlEL5MEu3+A7MZEN+KY/GghqyPB1
+   XvAJBi8mXa9CFC0Jfq0vF1AHCi4NRZ3x4FB5MtBMp/rDsAnzYBt2EJb2x
+   Ck7e7GngGvjM1IrQkBkGXBtuw0Wknb3IteH2xDu9u1l01CYMTjqTvR4ON
+   1vak8n1vl0RcRm6t5augz9/YJ30+v9cSvFJc0qBMQ8jxvPVBKlEcm2HmZ
    g==;
 X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="114001499"
+   d="scan'208";a="180674454"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 04:27:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 04:27:25 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 16 Sep 2022 04:27:22 -0700
+ 15.1.2507.12; Fri, 16 Sep 2022 04:27:25 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 16 Sep 2022 04:27:19 -0700
+ Transport; Fri, 16 Sep 2022 04:27:22 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -54,11 +54,10 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Wolfgang Grandegger <wg@aries-embedded.de>,
         Hugh Breslin <hugh.breslin@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 03/10] dt-bindings: riscv: microchip: document the sev kit
-Date:   Fri, 16 Sep 2022 12:26:39 +0100
-Message-ID: <20220916112645.567794-4-conor.dooley@microchip.com>
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 04/10] riscv: dts: microchip: add pci dma ranges for the icicle kit
+Date:   Fri, 16 Sep 2022 12:26:40 +0100
+Message-ID: <20220916112645.567794-5-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220916112645.567794-1-conor.dooley@microchip.com>
 References: <20220916112645.567794-1-conor.dooley@microchip.com>
@@ -74,31 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+The recently removed, accidentally included, "matr0" property was used
+in place of a dma-ranges property. The PCI controller is non-functional
+with mainline Linux in the v2022.02 or later reference designs and has
+not worked without configuration of address-translation since v2021.08.
 
-Update devicetree bindings document with PolarFire SoC Video Kit, known
-by its "sev-kit" product code.
+Add the address translation that will be used by the v2022.09 reference
+design & update the compatible used by the dts.
 
-Link: https://onlinedocs.microchip.com/pr/GUID-404D3738-DC76-46BA-8683-6A77E837C2DD-en-US-1/index.html?GUID-065AEBEE-7B2C-4895-8579-B1D73D797F06
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi | 7 ++++++-
+ arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts         | 3 ++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
-index 630f82c85a0c..ab0a64cd5386 100644
---- a/Documentation/devicetree/bindings/riscv/microchip.yaml
-+++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
-@@ -28,6 +28,7 @@ properties:
-       - items:
-           - enum:
-               - aries,m100pfsevp
-+              - microchip,mpfs-sev-kit
-               - sundance,polarberry
-           - const: microchip,mpfs
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
+index 0d28858b83f2..c0fb9dd7b2c8 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
+@@ -2,7 +2,8 @@
+ /* Copyright (c) 2020-2021 Microchip Technology Inc */
  
+ / {
+-	compatible = "microchip,mpfs-icicle-reference-rtlv2203", "microchip,mpfs";
++	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs-icicle-kit",
++		     "microchip,mpfs";
+ 
+ 	core_pwm0: pwm@41000000 {
+ 		compatible = "microchip,corepwm-rtl-v4";
+@@ -37,3 +38,7 @@ fabric_clk1: fabric-clk1 {
+ 		clock-frequency = <125000000>;
+ 	};
+ };
++
++&pcie {
++	dma-ranges = <0x02000000 0x0 0x00000000 0x0 0x00000000 0x1 0x00000000>;
++};
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+index f3f87ed2007f..5e2b8aa2ff64 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
++++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+@@ -11,7 +11,8 @@
+ 
+ / {
+ 	model = "Microchip PolarFire-SoC Icicle Kit";
+-	compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs";
++	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs-icicle-kit",
++		     "microchip,mpfs";
+ 
+ 	aliases {
+ 		ethernet0 = &mac1;
 -- 
 2.36.1
 
