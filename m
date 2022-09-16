@@ -2,87 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19575BB16B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE7A5BB16E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiIPREv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 13:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S229812AbiIPRFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 13:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiIPREp (ORCPT
+        with ESMTP id S229844AbiIPRFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 13:04:45 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8F4DFE2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:04:42 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id kr11so4776143ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lupBfLHVS7iObivxfHvMcw7u8808lL7OhJRfW9tv68U=;
-        b=N5f/pMRQqpYVV1MpiJNdzuPpGKs8iP0HUnXbJWdLuX2YzcSB4u9I6dsQCYPesmAKfr
-         irbw6/HKc2szlKfB7h5p8nV0geYjnEG9gdv9OCCjnntJAHwjf0yeZjEXdM1MyYqUaV3d
-         BOjzWFd1AEJWXEEWMJ8hhMNSwil8VNPfSkzYy5Ecj2Hg0DebA/G8/QWc3w5cFcs+nQk8
-         Dr6/bmfSInl6zMvJ0z28xLebKQvED4GRn+x/LQHQH0ON3MK/ajVS6ijA0s8x4b+MqPAh
-         Q+CwrS4u7YHJalLGbQb4zmgcuZjHSBEs0Y3jPVeE0sXMGhzR58lpI/XwkYJ5UUQyCcRO
-         SV9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lupBfLHVS7iObivxfHvMcw7u8808lL7OhJRfW9tv68U=;
-        b=zATSQVWTQ41j60nr6/b/No5n+yfAR7xINqHrM6qY+YPksuaZR8OV0nunu6a8sNjEz+
-         7Maa7VkC8NQOZzjV5Rpmp4zpXRoHcJR/LkFcenxRw9vhnuho+PYq5HdwiqH172ugXqCu
-         ye5c4tXj5Mi1BIChtTNxY6GhAU4FSz9xy3CTk2zbTQEkMDh45bL5iVmFesZzfgA97Tk9
-         zmvgoGOOu5btC172Sz6rqnCyb1WM5QFThhbVYpHIn6nyVICJ4P5QOYQiSiovl20TQfV6
-         fKxmB5bdSKpX1G8eoyTbyVxvK43zvu2VgS1s7h+hIPk7GMSKiQVr89ArD3aCosO97hq4
-         PfTw==
-X-Gm-Message-State: ACrzQf0Vx0iMRu6gL2q8B39mtqtYt9bjikSGRkhJY/pSV6o8VjIP4YPG
-        hmMSobezmdskt3UIwLU2zDxZQ6TowPFxt0DU41k=
-X-Google-Smtp-Source: AMsMyM608VMgpaAHn/4GIjDJKg3le3DXTcJzSrr02XPuu8Wj+5b032pcv9E33Fw+ux9JwktMhxM/jaWpuhyafH5V2gY=
-X-Received: by 2002:a17:907:3e89:b0:779:4869:b799 with SMTP id
- hs9-20020a1709073e8900b007794869b799mr3943312ejc.91.1663347880720; Fri, 16
- Sep 2022 10:04:40 -0700 (PDT)
+        Fri, 16 Sep 2022 13:05:19 -0400
+Received: from sonic304-27.consmr.mail.ne1.yahoo.com (sonic304-27.consmr.mail.ne1.yahoo.com [66.163.191.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DB332050
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663347914; bh=g1U1TCuQXVzueLMImuBTzqE+VJ+3TVNeqRBztp6aiMI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=WzEC0ZXEDEWEI0bzR/lxbMRhqTRVzzB3PcpIGKSLvMMMkJzI9ZjDGZK9m3RkLOk90l6dS9ss7qLZnEgfVt6zra2PCxS8MCEiVy+FLGUxBu03rfIroXWxkWvTsvqkmjhj5iKbWao1MzkCGIGHM6iXnOYb2koY4gJI0CvGApBUQEy9zG7QAnU0Z8zeo9wys44kJ83gK1c2TCaLrwSXqTbHWa++o0YXKwZfYfJcJHlAQaAYnp8CzOEdRr3e78Kq4ZAWl8h+XHoCCXFxso1RJj1G7K026VJHWcpQTy9gqMfyvyaoSXL+ZkbhcgCMDrzzVjDaDNLVAJjiMcHo1VXA3m4VkA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663347914; bh=zelXIpfF+2mxzWQ1TTSNFjaFjrt3Qf6WaG/Z7cDRc3D=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=TmdILDmsovZjS2pkOtgzdC22LK2zSwzEaafwMfF4bn15UyTv2L64fFWS4ojdzOmYS70m4YFAcXjq8Qt6COHknfibS85YbQEPrqhYJgCs2kKk8Q7//VBBNyVOJoZr42C/wsbErgXqdq5rvsfS6xyyPuiiYHAwli6CB/YOiLRr2lfP71ZOpiSNnQWvZ/z4OuG2RsxrJGRHnB+wOoBI2L1QVhm7sJGzO3oCoM8kldtH3GoVajeFzfR8ll1CU24HTroBfoblEN7+y9fOrJPTOvVwNztqOH9Gz8W/ZDxRioSvl1kwTIzhs5KFZjO1yJb3JPIN+myQhOlpfiNcThk+2XRbCQ==
+X-YMail-OSG: p3D10AIVM1mHdApZPrFMZpYQtknLkmpd1rnoh8EYlAotfbcgnW1LdWoP5GSJr69
+ TWX9FcrO..eSPemWqOeaOUDsPDxV3c3LsmJ1o63hHA7rqC59N9z9v0VH7AlPXXM008wql7GeL_.U
+ MBI0.zSyWuYoRIbPj5luBjeQaxy0ceTSU9yMui6.GYiTNchin6IlLtet2nUn.1z0vjnmkdYremi7
+ EI922FtFYsd5QZUt26c9lSX4kTdr1DyPJ3reyTY4VsDARMyY3tdGU0nw9kFvJrIxTWEO2eXLFReQ
+ 1GFuZFbdIWzsISTI4Ez4A77rDJpY.66BvbEujt8KO7WI6sW.XFw9MblqMaAy7fZErmrV6BjOL0ML
+ x7YwdreLZaMqQyEib7iZJxo0RBRgNizkUssGDB4J0a_C98eprcgzqdEBiUPSpXbh36L4dc_0W7dv
+ KBMZQNmkviIYxs.FEi6Fzya7VEkhANphb4bITN6BUrFkArsuWVkiGaVEfMfQ.piuSTBbUtSiBfog
+ jR0TsQ9Y532YZh0A2LLmGNVGR4FbsqtQ_OiWSr.mratSHKcAshIQabzAqiIupCw83W7UEmq_DHQc
+ _qAq4FZtqXXEwhaVL1wuiimElYc2gzDCe2UZ0587m4AZa9pz4ki6l7zsSFRmXKdOGvC7yJt73_M6
+ ne2O7G_6IFL_lxinAxjXV4M3dZm1WBij7XEp5dggcU95530rN7wJer9pSOJ1pomReupQsDx9URbK
+ aL_N2cIBCzwQISgJ5qiyY1ArRmnrhrQynCUcicnluPli40Ou9QEVn0xwP0.hihkv3kAq21t.cLjK
+ 9KCjBwkOxenZ2pVl1V2MgTySdbyQ.zNdtow6WrFLXW71LlxTsveCWz2__z.OM_q.BW6aFrdWCW5h
+ B2rmUZG1bjIE5anjyKAApuGc70BoVAt.0tAjkaxLPwS57q0uMYac0dA_7opvVqjY4FXUFOqU7Tdf
+ fzXMbMG_f3iZIiAIebfh5KPzeMXdNyebSpG3HUIhxyXM7EfZC_0wwHx2dJbZJQiubaT56hMwW6n4
+ oaysm7NrhKZkXdK9DMJDu2DP55uO7EiJwQxgXhDCdHjsWupWdmaXZEw8bL7C1nnB9FZNBwnPTaY5
+ 15pgNIEEfYxPtVFWGOTWBN1U26DfrSgMw3DHz0iJI3QuxGRiRxOCOMFPDDMn4kvf50Ch9n3wf_HC
+ llfB2715pQmtSUw91VXfMii61hUQJeuHJ9hWzL.c_j.F6pHXkbaUp5RNSDK1EKKMQAHshAwHkJ8Z
+ J3y..pQeN01XwbEOz8.q1oqVAaWmdqaznaeQ77rjqdZWSaLFI5tKo4nDURVKnYIN1Gwb7nbqOoPH
+ KToVfH4OqtSrcl.vJEQolZXkj8uj0HrEAsLWuRbrHE1dh4k.aa3SyaTjq5kAMyGpgjPr1RD6mDXY
+ jFlQsWmWKuzF3NLDXDoWK9aObODRS.Y0bZIH1DXQ9i0bFxjRJtwy2WyGVIZ9L9oAGIquc_IIVQW8
+ MGnsbE8HjJxocyejkea7IVefKcN6HW2K48wx_xlv1ItY47raKovZoA5xacRXjeS1Fqo_T4a4Gei.
+ 42MKZCkNYklQ.iOzLbwTU3OtOzj5_2YGWcnCVuaeLJiYotTURM4NSF4PcJgbhd9HmWe7GrjPL_LE
+ quJDeSBQJAMNjiQoHbAHylJf3LZCfl_MvkHBRU8lm8a1XvZh53u_SqFTROUY_..fz_jgTFs7_C.L
+ vs_4WYAGItiGgKY81Pxl2hvg7wOaZS4P9vA7A1B6uftB3o1KyEg9gHlJuF7I1Cgqy1KnynbvKuW0
+ bWY7wzoEAtuybikDupyu9rOMwl.z5VenOmdubgzuW9pfvpHUmlf.MdOZGVX7bT3dK6u6yGnpxMul
+ bth1liOR29m15MOtx1czniOHM0EwIwMrE5Apl6_Q39iv7zKTpc8lQRlQYKxIiKn2.pt2OHXFwYTK
+ pwERqHse5cLzvikvLa7.00ZeW6eMdHIk55lr3qWf9U7.uriPVxc2w4rZppXcbzz364n4ttdBmqOX
+ YINtxZxT6fco9TshVUJBC10vWsBZNERqfL8T_B1REuadxpM7nTKO.x.yqfIIz5C43LcPkfQXTzSV
+ q7UA7enAdbUdek6BHoW4wmGTPHYi.ZxJB2MUtAHIB_VeKG_8wEcCEkXE7XgjfoDHNNsaF7gBE4BA
+ sqpCCakrAgac3UJ4LDbRGw5MECc5OKFZBXXHljRoxlnd8fNUqbA7zAOn4w7KEIEOTGZZ_94DXBdq
+ jEaEUFXgtp_TIUxB2ep9Pfx283LF0OYeemjm_Rv0PJTxFgu1lT3KMgLxui7AEOwdn4XOBulouZTI
+ P3Q--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Sep 2022 17:05:14 +0000
+Received: by hermes--production-ne1-544744cc75-zkxbp (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3068443257e4cf01d6b889e5ae3c073f;
+          Fri, 16 Sep 2022 17:05:11 +0000 (UTC)
+Message-ID: <49617fa0-998d-1e6d-7d86-212139dff51b@schaufler-ca.com>
+Date:   Fri, 16 Sep 2022 10:05:09 -0700
 MIME-Version: 1.0
-References: <20220915164730.515767-1-e.shatokhin@yadro.com> <20220915164730.515767-3-e.shatokhin@yadro.com>
-In-Reply-To: <20220915164730.515767-3-e.shatokhin@yadro.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Fri, 16 Sep 2022 12:04:29 -0500
-Message-ID: <CABb+yY2Yg1J4WZeB5MKmOONKNsS8468rJmeGkG1TS0Uw71bwYw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mailbox: Error out early if the mbox driver has
- failed to submit the message
-To:     Evgenii Shatokhin <e.shatokhin@yadro.com>
-Cc:     linux-kernel@vger.kernel.org, Ilya Kuznetsov <ilya@yadro.com>,
-        linux@yadro.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v14 00/26] ima: Namespace IMA with audit support in IMA-ns
+Content-Language: en-US
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com, brauner@kernel.org,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, casey@schaufler-ca.com
+References: <20220915193221.1728029-1-stefanb@linux.ibm.com>
+ <7234a3e5-8b3c-3ac4-2e06-c6cffa46c10e@schaufler-ca.com>
+ <556b21f9-56ae-7ff6-c38a-9ca856438a66@linux.ibm.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <556b21f9-56ae-7ff6-c38a-9ca856438a66@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20663 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 11:50 AM Evgenii Shatokhin
-<e.shatokhin@yadro.com> wrote:
+On 9/16/2022 3:54 AM, Stefan Berger wrote:
 >
-> mbox_send_message() places the pointer to the message to the queue
-> (add_to_rbuf) then calls msg_submit(chan) to submit the first of the
-> queued messaged to the mailbox. Some of mailbox drivers can return
-> errors from their .send_data() callbacks, e.g., if the message is
-> invalid or there is something wrong with the mailbox device.
 >
-The message can't be invalid because the client code is written for a
-particular provider.
+> On 9/15/22 20:56, Casey Schaufler wrote:
+>> On 9/15/2022 12:31 PM, Stefan Berger wrote:
+>>> The goal of this series of patches is to start with the namespacing of
+>>> IMA and support auditing within an IMA namespace (IMA-ns) as the first
+>>> step.
+>>>
+>>> In this series the IMA namespace is piggybacking on the user namespace
+>>> and therefore an IMA namespace is created when a user namespace is
+>>> created, although this is done late when SecurityFS is mounted inside
+>>> a user namespace. The advantage of piggybacking on the user namespace
+>>> is that the user namespace can provide the keys infrastructure that IMA
+>>> appraisal support will need later on.
+>>>
+>>> We chose the goal of supporting auditing within an IMA namespace
+>>> since it
+>>> requires the least changes to IMA. Following this series, auditing
+>>> within
+>>> an IMA namespace can be activated by a root running the following lines
+>>> that rely on a statically linked busybox to be installed on the host
+>>> for
+>>> execution within the minimal container environment:
+>>>
+>>> As root (since audit rules may now only be set by root):
+>>
+>> How about calling out the required capabilities? You don't need
+>> to be root, you need a specific set of capabilities. It would be
+>> very useful for the purposes of understanding the security value
+>> of the patch set to know this.
+>>
+> CAP_AUDIT_WRITE?
 
-Though it is possible for the mailbox controller to break down for
-some reason. In that case, the blocking api will keep retrying until
-successful. But ideally the client, upon getting -ETIME, should free()
-and request() the channel reset it (because controller drivers usually
-don't contain the logic to automatically reset upon some error).
+Not everyone is going to know that. And, is it the only capability
+required to make "things work"? If you call it out in the take message
+people are going to have a better idea about the relationships between
+IMA, audit and capabilities. That's pretty important for unprivileged
+containers.
 
-thanks.
+
