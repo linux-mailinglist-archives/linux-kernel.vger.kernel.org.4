@@ -2,155 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D271B5BB271
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017325BB275
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiIPSsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S230216AbiIPSvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiIPSst (ORCPT
+        with ESMTP id S229510AbiIPSvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:48:49 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD418B8F0C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:48:47 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a26so22747953ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=SdKZkQSOOeZ73NFTfXwaDLPs0+FX9IJxa8fOyAWvQWo=;
-        b=jPbxqkcJ18+RZwG4Xt8jUmsZkdqH2rsOtYcfpH9++ASA+lpXozL6u8Xpcawj7xrriu
-         zylCptexZ4/vToAy5m1VgKpvp8wdlA7c0oByY7fIAp8hStBk9mBFWHnIUnZJAXhrT+dW
-         1uLVgpXxBuAXs/wLz9oAgKyYBMlq8Eze6MK2Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=SdKZkQSOOeZ73NFTfXwaDLPs0+FX9IJxa8fOyAWvQWo=;
-        b=WJVfJX8fqmHbqR6v2RjUFu0xMl3qifnNGGx93s3iN0jkhF55YoYf5E6ydz2qWpiC6V
-         7vCY9js+3qPI5CXhgsQvR9AWrSqvmMdXLQrKtBdkhUOOhQ4ZqXLS1PLGxelaLsWQHKXd
-         IZG0IagShvjIEzROURVvhb6ey/usqeF7nc1lWNjXoPeMpndFTLaqvHjy/Q9UFRcE6hot
-         P6oIK95iS/HIGlEaYnccoTF/2HuOz7PJYctn1M5TdC5y7SROqmLneHzF6gtcQ4sgDM4L
-         2wanq1g0xOB5NJYo7Xq3+PEHNE5vBUzROvPGnpaVVo/W66w2IHimXeFceDLm9uljH0XY
-         tv+g==
-X-Gm-Message-State: ACrzQf1Lw7vJr7lQ177CnoWmJ+hfpfF4XSk5HqDQCJks6qVfwySSW64K
-        KyMmJTH84vKed8sA286XX6GBah85hgh+/GcAaotFKQ==
-X-Google-Smtp-Source: AMsMyM4H50Nh3fB15dbYJDOgQVr7DWdwSoN47hKf8GNOPyV4RnAetL9SU78eAuiLXsBmxUNOb3xdb298jwC8+0N02/8=
-X-Received: by 2002:a17:907:628a:b0:72f:678d:6047 with SMTP id
- nd10-20020a170907628a00b0072f678d6047mr4442324ejc.456.1663354126400; Fri, 16
- Sep 2022 11:48:46 -0700 (PDT)
+        Fri, 16 Sep 2022 14:51:21 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D56A6C57
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663354279; x=1694890279;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=An2zso0Ry4s+z2vyFjJyS5fl3zC7siypLDshTVXPuvs=;
+  b=KNnDCkbkUmzC2vg9F6LqrpluxXSDkSxv13H/wxcnLFJsyO59o7JygNB+
+   7cL6KUyjMD4fdItU8szSM3ZVw+aAxuaSsQcWWhprCWmMJlTgrpfGd5yLd
+   Q673CmMw10hboArEoOKyLxMHfPcD6K7MbBmCJu7oF7p1o7NxO+gAhb8bv
+   2NL1yqZo18o4H2HrDv5KzBApekb6Xh8LP6Ldx6+BX8LIRrS4EHsZN+oTl
+   EtGaLOi62UgjhrW+WY2FnoO4DXW8sUcfJ6HundxMDaR1JjxK6jFa1Bm1B
+   7Jfdg0+04EiHNbnQXSg/WWqufy5GpIasPIdM1+a3V/R1J3mzYnK2vOFM8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="286097031"
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="286097031"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 11:51:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="686234503"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 11:51:17 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZGQm-00023k-1b;
+        Fri, 16 Sep 2022 18:51:16 +0000
+Date:   Sat, 17 Sep 2022 02:50:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:967:12:
+ warning: stack frame size (1040) exceeds limit (1024) in
+ 'hclge_dbg_dump_tm_pri'
+Message-ID: <202209170244.YEyh6kEm-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220915164826.1396245-1-sarthakkukreti@google.com> <YyQTM5PRT2o/GDwy@fedora>
-In-Reply-To: <YyQTM5PRT2o/GDwy@fedora>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Fri, 16 Sep 2022 11:48:34 -0700
-Message-ID: <CAG9=OMPHZqdDhX=M+ovdg5fa3x4-Q_1r5SWPa8pMTQw0mr5fPg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/8] Introduce provisioning primitives for thinly
- provisioned storage
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 11:10 PM Stefan Hajnoczi <stefanha@redhat.com> wrot=
-e:
->
-> On Thu, Sep 15, 2022 at 09:48:18AM -0700, Sarthak Kukreti wrote:
-> > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> >
-> > Hi,
-> >
-> > This patch series is an RFC of a mechanism to pass through provision re=
-quests on stacked thinly provisioned storage devices/filesystems.
-> >
-> > The linux kernel provides several mechanisms to set up thinly provision=
-ed block storage abstractions (eg. dm-thin, loop devices over sparse files)=
-, either directly as block devices or backing storage for filesystems. Curr=
-ently, short of writing data to either the device or filesystem, there is n=
-o way for users to pre-allocate space for use in such storage setups. Consi=
-der the following use-cases:
-> >
-> > 1) Suspend-to-disk and resume from a dm-thin device: In order to ensure=
- that the underlying thinpool metadata is not modified during the suspend m=
-echanism, the dm-thin device needs to be fully provisioned.
-> > 2) If a filesystem uses a loop device over a sparse file, fallocate() o=
-n the filesystem will allocate blocks for files but the underlying sparse f=
-ile will remain intact.
-> > 3) Another example is virtual machine using a sparse file/dm-thin as a =
-storage device; by default, allocations within the VM boundaries will not a=
-ffect the host.
-> > 4) Several storage standards support mechanisms for thin provisioning o=
-n real hardware devices. For example:
-> >   a. The NVMe spec 1.0b section 2.1.1 loosely talks about thin provisio=
-ning: "When the THINP bit in the NSFEAT field of the Identify Namespace dat=
-a structure is set to =E2=80=981=E2=80=99, the controller ... shall track t=
-he number of allocated blocks in the Namespace Utilization field"
-> >   b. The SCSi Block Commands reference - 4 section references "Thin pro=
-visioned logical units",
-> >   c. UFS 3.0 spec section 13.3.3 references "Thin provisioning".
->
-> When REQ_OP_PROVISION is sent on an already-allocated range of blocks,
-> are those blocks zeroed? NVMe Write Zeroes with Deallocate=3D0 works this
-> way, for example. That behavior is counterintuitive since the operation
-> name suggests it just affects the logical block's provisioning state,
-> not the contents of the blocks.
->
-No, the blocks are not zeroed. The current implementation (in the dm
-patch) is to indeed look at the provisioned state of the logical block
-and provision if it is unmapped. if the block is already allocated,
-REQ_OP_PROVISION should have no effect on the contents of the block.
-Similarly, in the file semantics, sending an FALLOC_FL_PROVISION
-requests for extents already mapped should not affect the contents in
-the extents.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6879c2d3b96039ff1668b4328a4d0dd3ea952cff
+commit: 69d0db01e210e07fe915e5da91b54a867cda040f ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+date:   8 months ago
+config: powerpc-randconfig-r023-20220916 (https://download.01.org/0day-ci/archive/20220917/202209170244.YEyh6kEm-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d0db01e210e07fe915e5da91b54a867cda040f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 69d0db01e210e07fe915e5da91b54a867cda040f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/hns3pf/
 
-> > In all of the above situations, currently the only way for pre-allocati=
-ng space is to issue writes (or use WRITE_ZEROES/WRITE_SAME). However, that=
- does not scale well with larger pre-allocation sizes.
->
-> What exactly is the issue with WRITE_ZEROES scalability? Are you
-> referring to cases where the device doesn't support an efficient
-> WRITE_ZEROES command and actually writes blocks filled with zeroes
-> instead of updating internal allocation metadata cheaply?
->
-Yes. On ChromiumOS, we regularly deal with storage devices that don't
-support WRITE_ZEROES or that need to have it disabled, via a quirk,
-due to a bug in the vendor's implementation. Using WRITE_ZEROES for
-allocation makes the allocation path quite slow for such devices (not
-to mention the effect on storage lifetime), so having a separate
-provisioning construct is very appealing. Even for devices that do
-support an efficient WRITE_ZEROES implementation but don't support
-logical provisioning per-se, I suppose that the allocation path might
-be a bit faster (the device driver's request queue would report
-'max_provision_sectors'=3D0 and the request would be short circuited
-there) although I haven't benchmarked the difference.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sarthak
+All warnings (new ones prefixed by >>):
 
-> Stefan
+>> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:967:12: warning: stack frame size (1040) exceeds limit (1024) in 'hclge_dbg_dump_tm_pri' [-Wframe-larger-than]
+   static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
+              ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+
+
+vim +/hclge_dbg_dump_tm_pri +967 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
+
+04d96139ddb32d Guangbin Huang 2021-08-30   966  
+04987ca1b9b684 Guangbin Huang 2021-01-28  @967  static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
+04987ca1b9b684 Guangbin Huang 2021-01-28   968  {
+04d96139ddb32d Guangbin Huang 2021-08-30   969  	char data_str[ARRAY_SIZE(tm_pri_items)][HCLGE_DBG_DATA_STR_LEN];
+04d96139ddb32d Guangbin Huang 2021-08-30   970  	struct hclge_tm_shaper_para c_shaper_para, p_shaper_para;
+04d96139ddb32d Guangbin Huang 2021-08-30   971  	char *result[ARRAY_SIZE(tm_pri_items)], *sch_mode_str;
+04d96139ddb32d Guangbin Huang 2021-08-30   972  	char content[HCLGE_DBG_TM_INFO_LEN];
+04d96139ddb32d Guangbin Huang 2021-08-30   973  	u8 pri_num, sch_mode, weight, i, j;
+04d96139ddb32d Guangbin Huang 2021-08-30   974  	int pos, ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   975  
+04987ca1b9b684 Guangbin Huang 2021-01-28   976  	ret = hclge_tm_get_pri_num(hdev, &pri_num);
+04987ca1b9b684 Guangbin Huang 2021-01-28   977  	if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   978  		return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   979  
+04d96139ddb32d Guangbin Huang 2021-08-30   980  	for (i = 0; i < ARRAY_SIZE(tm_pri_items); i++)
+04d96139ddb32d Guangbin Huang 2021-08-30   981  		result[i] = &data_str[i][0];
+04d96139ddb32d Guangbin Huang 2021-08-30   982  
+04d96139ddb32d Guangbin Huang 2021-08-30   983  	hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
+04d96139ddb32d Guangbin Huang 2021-08-30   984  			       NULL, ARRAY_SIZE(tm_pri_items));
+04d96139ddb32d Guangbin Huang 2021-08-30   985  	pos = scnprintf(buf, len, "%s", content);
+04987ca1b9b684 Guangbin Huang 2021-01-28   986  
+04987ca1b9b684 Guangbin Huang 2021-01-28   987  	for (i = 0; i < pri_num; i++) {
+04987ca1b9b684 Guangbin Huang 2021-01-28   988  		ret = hclge_tm_get_pri_sch_mode(hdev, i, &sch_mode);
+04987ca1b9b684 Guangbin Huang 2021-01-28   989  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   990  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   991  
+04987ca1b9b684 Guangbin Huang 2021-01-28   992  		ret = hclge_tm_get_pri_weight(hdev, i, &weight);
+04987ca1b9b684 Guangbin Huang 2021-01-28   993  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   994  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   995  
+04987ca1b9b684 Guangbin Huang 2021-01-28   996  		ret = hclge_tm_get_pri_shaper(hdev, i,
+04987ca1b9b684 Guangbin Huang 2021-01-28   997  					      HCLGE_OPC_TM_PRI_C_SHAPPING,
+04987ca1b9b684 Guangbin Huang 2021-01-28   998  					      &c_shaper_para);
+04987ca1b9b684 Guangbin Huang 2021-01-28   999  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28  1000  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28  1001  
+04987ca1b9b684 Guangbin Huang 2021-01-28  1002  		ret = hclge_tm_get_pri_shaper(hdev, i,
+04987ca1b9b684 Guangbin Huang 2021-01-28  1003  					      HCLGE_OPC_TM_PRI_P_SHAPPING,
+04987ca1b9b684 Guangbin Huang 2021-01-28  1004  					      &p_shaper_para);
+04987ca1b9b684 Guangbin Huang 2021-01-28  1005  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28  1006  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28  1007  
+04987ca1b9b684 Guangbin Huang 2021-01-28  1008  		sch_mode_str = sch_mode & HCLGE_TM_TX_SCHD_DWRR_MSK ? "dwrr" :
+04987ca1b9b684 Guangbin Huang 2021-01-28  1009  			       "sp";
+04987ca1b9b684 Guangbin Huang 2021-01-28  1010  
+04d96139ddb32d Guangbin Huang 2021-08-30  1011  		j = 0;
+04d96139ddb32d Guangbin Huang 2021-08-30  1012  		sprintf(result[j++], "%04u", i);
+04d96139ddb32d Guangbin Huang 2021-08-30  1013  		sprintf(result[j++], "%4s", sch_mode_str);
+04d96139ddb32d Guangbin Huang 2021-08-30  1014  		sprintf(result[j++], "%3u", weight);
+04d96139ddb32d Guangbin Huang 2021-08-30  1015  		hclge_dbg_fill_shaper_content(&c_shaper_para, result, &j);
+04d96139ddb32d Guangbin Huang 2021-08-30  1016  		hclge_dbg_fill_shaper_content(&p_shaper_para, result, &j);
+04d96139ddb32d Guangbin Huang 2021-08-30  1017  		hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
+04d96139ddb32d Guangbin Huang 2021-08-30  1018  				       (const char **)result,
+04d96139ddb32d Guangbin Huang 2021-08-30  1019  				       ARRAY_SIZE(tm_pri_items));
+04d96139ddb32d Guangbin Huang 2021-08-30  1020  		pos += scnprintf(buf + pos, len - pos, "%s", content);
+04987ca1b9b684 Guangbin Huang 2021-01-28  1021  	}
+04987ca1b9b684 Guangbin Huang 2021-01-28  1022  
+04987ca1b9b684 Guangbin Huang 2021-01-28  1023  	return 0;
+04987ca1b9b684 Guangbin Huang 2021-01-28  1024  }
+04987ca1b9b684 Guangbin Huang 2021-01-28  1025  
+
+:::::: The code at line 967 was first introduced by commit
+:::::: 04987ca1b9b6841cfa5f9b459c5a270b75c89345 net: hns3: add debugfs support for tm nodes, priority and qset info
+
+:::::: TO: Guangbin Huang <huangguangbin2@huawei.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
