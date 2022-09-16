@@ -2,244 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B675BA3BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A665BA3C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 03:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIPBKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 21:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S229749AbiIPBL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 21:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiIPBKh (ORCPT
+        with ESMTP id S229579AbiIPBL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 21:10:37 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6371150076;
-        Thu, 15 Sep 2022 18:10:35 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id j12so19711281pfi.11;
-        Thu, 15 Sep 2022 18:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=hr/gJPcU5hvQZ/MKgVwi2KwSsJ/0TzKkNDXlKjCB2Yw=;
-        b=hq/LIZNAoz+v9v5PWfa/0aKD/JB/tXkKxHIojwHn30BdKNQ5Be3G0BaUU/zSYBJeE9
-         ZLRcqcxf0IDv61ZhN3/kOqcYUToLQAGW/EjhSW4TrFFz9Bqw+yJyw6+Y21pYn3ywkugA
-         JniDjX5JcG8m+H85hzbd3loI476IGJYE6L2/G3cL1NfdXgiVnH9OkTHI/WNBlcsCgoy5
-         g9uCl3lHdNcq9lab3lKR95Gy8j5E77OSw8jBZYVJGKBEcNBuiYVGD3iTUzbt+3PGUA5n
-         JN6BFkpeFxXKeqmd35cSdKJ5epc1LwvYjnXD/rPy7wE+YH+9cFaQxJc+tbgJ5HWLDqSc
-         5Zhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=hr/gJPcU5hvQZ/MKgVwi2KwSsJ/0TzKkNDXlKjCB2Yw=;
-        b=cCBmv2qfxgMP+orlpGYYEHbuJotF8OBPH0PqmNWszLLoIUZKYllO7wHjhb9Kd3uat8
-         BZ9wStvUXe53K23PSTG6kGRc863Q9UXhqP2rrSEMaNAMvcyZ1NFeMy9WJ1eyl/12S94o
-         yn3jAQxDrYBzoXFHjgrdZHKHMEhvDmBIpu++oxkH+XJqV8zUMxlQjpG3rLKgnhfnPNjd
-         SeRN1ZgPRVdFZZTPBDKMA/BwQT7aeAWW6iOk1lvj9u7V2/79cUHfhN9B9bYb6MjdxsUA
-         7MaludLurT4XdU6KrcXUlOyZzjeZdFF/qb4XpxsduSNx6/Na1rPRJ+uSLXQre7yJT2QD
-         54Xg==
-X-Gm-Message-State: ACrzQf13poYiRjnG39LLMcHrxtxWS+J9RATB2lRib5bv9C7HGfr2gqvD
-        82seE5OLJ1u0qimy+8jdNRWYv0/HMkA=
-X-Google-Smtp-Source: AMsMyM5HLVuDEFZ7yFGWlTXtrR5ixkZIR3wBKnru30CnmTKTvOjZydafHw2K7xojMyDBGaMDjl15+A==
-X-Received: by 2002:a05:6a00:1342:b0:545:4d30:eecb with SMTP id k2-20020a056a00134200b005454d30eecbmr2511913pfu.69.1663290634936;
-        Thu, 15 Sep 2022 18:10:34 -0700 (PDT)
-Received: from localhost ([118.210.107.131])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b00176b3d7db49sm13769119plg.0.2022.09.15.18.10.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 18:10:33 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 16 Sep 2022 11:10:25 +1000
-Message-Id: <CMXFBGZGQCQR.2FRWNY2JHBVL9@bobo>
-Cc:     <linux-s390@vger.kernel.org>, <kvm@vger.kernel.org>,
-        "Fabiano Rosas" <farosas@linux.ibm.com>, <x86@kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Alex Williamson" <alex.williamson@redhat.com>,
-        <kvm-riscv@lists.infradead.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        <linux-riscv@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <kvmarm@lists.cs.columbia.edu>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
- dependent
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Alexey Kardashevskiy" <aik@ozlabs.ru>, <kvm-ppc@vger.kernel.org>
-X-Mailer: aerc 0.11.0
-References: <20220504074807.3616813-1-aik@ozlabs.ru>
- <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
- <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-In-Reply-To: <59dfb450-5a91-f27b-6edf-0adfa89729b7@ozlabs.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Sep 2022 21:11:26 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370535281B;
+        Thu, 15 Sep 2022 18:11:25 -0700 (PDT)
+X-UUID: 9d14abbb1a114425abe224d8fdd7e27d-20220916
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=aC9p5EUciWE62FXN9xCu29LXkZgaSFsdB9J57e55t1U=;
+        b=bov35MI20lo6NjA1sBWjEIFc2XrdaYjH9hP/GhM5/2AECz4hp2Gq0TxXNzb9Ln90HMOdMZlPlHoswUNc+LohcSwdSqQ45U0xhu8yLzaGUW5LPxIqEIT8e/YDsPAeWSRovW0FP2k8AWvIO6rt5zQAQwSH8K83ECC20RfP1tzviA8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:d17b4d39-36f8-4f9d-b16f-0ec5aff9e2c5,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:aa77d25d-5ed4-4e28-8b00-66ed9f042fbd,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9d14abbb1a114425abe224d8fdd7e27d-20220916
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1707785144; Fri, 16 Sep 2022 09:11:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 16 Sep 2022 09:11:18 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 16 Sep 2022 09:11:18 +0800
+Message-ID: <d87203dea8d57868751dfbbce33d210e8976da7c.camel@mediatek.com>
+Subject: Re: [PATCH 1/5] dt-bindings: arm: mediatek: mmsys: change
+ compatible for MT8195
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Singo Chang" <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 16 Sep 2022 09:11:18 +0800
+In-Reply-To: <a8e18b62-f49f-7c99-e046-3ee609e11627@gmail.com>
+References: <20220914182331.20515-1-jason-jh.lin@mediatek.com>
+         <20220914182331.20515-2-jason-jh.lin@mediatek.com>
+         <1b739216-8bb1-162b-1af5-24acba7324bf@gmail.com>
+         <296155e2a12a474439ba092e73b4bcffbf3d3edc.camel@mediatek.com>
+         <a8e18b62-f49f-7c99-e046-3ee609e11627@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Seems okay to me, it probably better go through the KVM tree though.
+On Thu, 2022-09-15 at 18:20 +0200, Matthias Brugger wrote:
+> Hi Jason,
+> 
+> On 15/09/2022 03:24, Jason-JH Lin wrote:
+> > Hi Matthias,
+> > 
+> > Thanks for the reviews.
+> > 
+> > On Wed, 2022-09-14 at 23:24 +0200, Matthias Brugger wrote:
+> > > 
+> > > On 14/09/2022 20:23, Jason-JH.Lin wrote:
+> > > > For previous MediaTek SoCs, such as MT8173, there are 2 display
+> > > > HW
+> > > > pipelines binding to 1 mmsys with the same power domain, the
+> > > > same
+> > > > clock driver and the same mediatek-drm driver.
+> > > > 
+> > > > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
+> > > > binding
+> > > > to
+> > > > 2 different power domains, different clock drivers and
+> > > > different
+> > > > mediatek-drm drivers.
+> > > > 
+> > > > Moreover, Hardware pipeline of VDOSYS0 has these components:
+> > > > COLOR,
+> > > > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
+> > > > Quality)
+> > > > and they makes VDOSYS0 supports PQ function while they are not
+> > > > including in VDOSYS1.
+> > > > 
+> > > > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR
+> > > > related
+> > > > component). It makes VDOSYS1 supports the HDR function while
+> > > > it's
+> > > > not
+> > > > including in VDOSYS0.
+> > > > 
+> > > > To summarize0:
+> > > > Only VDOSYS0 can support PQ adjustment.
+> > > > Only VDOSYS1 can support HDR adjustment.
+> > > > 
+> > > > Therefore, we need to separate these two different mmsys
+> > > > hardwares
+> > > > to
+> > > > 2 different compatibles for MT8195.
+> > > > 
+> > > > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add
+> > > > mt8195
+> > > > SoC binding")
+> > > > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > 
+> > > I'm not sure Krzysztof gave his Acked-by tag.
+> > 
+> > I'll remove this tag.
+> > > 
+> > > > ---
+> > > >    .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml    
+> > > >     |
+> > > > 2 ++
+> > > >    1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
+> > > > .yam
+> > > > l
+> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
+> > > > .yam
+> > > > l
+> > > > index 6ad023eec193..a53b32c0a608 100644
+> > > > ---
+> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
+> > > > .yam
+> > > > l
+> > > > +++
+> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
+> > > > .yam
+> > > > l
+> > > > @@ -32,6 +32,8 @@ properties:
+> > > >                  - mediatek,mt8186-mmsys
+> > > >                  - mediatek,mt8192-mmsys
+> > > >                  - mediatek,mt8195-mmsys
+> > > > +              - mediatek,mt8195-vdosys0
+> > > 
+> > > As I said in the last submission, we should make mediatek,mt8195-
+> > > mmsys as a
+> > > fallback of vdosys0. Actually mediatek,mt8195-mmsys is only used
+> > > for
+> > > the
+> > > fallback of vdosys0.
+> > 
+> > I think adding both vdosys0 and vdosys1 can make the description of
+> > this patch clearer.
+> > 
+> > It's find to me to only add "mediatek,mt8195-vdosys0" in this
+> > patch.
+> > So I'll remove the "mediatek,mt8195-vdosys1" at the next version.
+> > 
+> 
+> That's not what I wanted to suggest. Up to now in upstream kernel
+> compatible 
+> mediatek,mt8195-mmsys enables support fro vdosys0. The vdosys1 is not
+> yet 
+> upstream, so no support.
+> If we change the compatible, we should keep mediatek,mt8195-mmsys as
+> fallback of 
+> "mediatek,mt8195-vdosys0" so that older device tree blobs won't break
+> with a Mtk811
+> newer kernel.
+> For "mediatek,mt8195-vdosys1" we do not need a fallback compatible as
+> the code 
+> never reached upstream, so no breakage expected.
+> 
+> Hope I explain myself now.
+> 
+> Regards,
+> Matthias
+> 
 
-Acked-by: Nicholas Piggin <npiggin@gmail.com>
+I think I misunderstood your reply to the patch "dt-bindings: arm:
+mediatek: mmsys: remove the unused compatible for mt8195", so I merge
+it into this patch.
 
-Thanks,
-Nick
+Thanks for your patient explanation.
+I will keep the "mediatek,mt8195-
+mmsys" in this patch.
 
-On Tue Sep 13, 2022 at 10:50 PM AEST, Alexey Kardashevskiy wrote:
-> Ping? It's been a while and probably got lost :-/
->
-> On 18/05/2022 16:27, Alexey Kardashevskiy wrote:
-> >=20
-> >=20
-> > On 5/4/22 17:48, Alexey Kardashevskiy wrote:
-> >> When introduced, IRQFD resampling worked on POWER8 with XICS. However
-> >> KVM on POWER9 has never implemented it - the compatibility mode code
-> >> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
-> >> XIVE mode does not handle INTx in KVM at all.
-> >>
-> >> This moved the capability support advertising to platforms and stops
-> >> advertising it on XIVE, i.e. POWER9 and later.
-> >>
-> >> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> >> ---
-> >>
-> >>
-> >> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
-> >=20
-> >=20
-> > Ping?
-> >=20
-> >>
-> >> ---
-> >> =C2=A0 arch/arm64/kvm/arm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++=
-+
-> >> =C2=A0 arch/mips/kvm/mips.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++=
-+
-> >> =C2=A0 arch/powerpc/kvm/powerpc.c | 6 ++++++
-> >> =C2=A0 arch/riscv/kvm/vm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
- 3 +++
-> >> =C2=A0 arch/s390/kvm/kvm-s390.c=C2=A0=C2=A0 | 3 +++
-> >> =C2=A0 arch/x86/kvm/x86.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 3 +++
-> >> =C2=A0 virt/kvm/kvm_main.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
- 1 -
-> >> =C2=A0 7 files changed, 21 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> >> index 523bc934fe2f..092f0614bae3 100644
-> >> --- a/arch/arm64/kvm/arm.c
-> >> +++ b/arch/arm64/kvm/arm.c
-> >> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
-=20
-> >> long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_VCPU_ATTRIBUTES:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_PTP_KVM:
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +#endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG2:
-> >> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> >> index a25e0b73ee70..0f3de470a73e 100644
-> >> --- a/arch/mips/kvm/mips.c
-> >> +++ b/arch/mips/kvm/mips.c
-> >> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm=20
-> >> *kvm, long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_READONLY_MEM:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SYNC_MMU:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IMMEDIATE_EXIT:
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +#endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_NR_VCPUS:
-> >> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> >> index 875c30c12db0..87698ffef3be 100644
-> >> --- a/arch/powerpc/kvm/powerpc.c
-> >> +++ b/arch/powerpc/kvm/powerpc.c
-> >> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
-=20
-> >> long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0 #endif
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D !xive_enabled();
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> +#endif
-> >> +
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_PPC_ALLOC_HTAB:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D hv_enable=
-d;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> >> index c768f75279ef..b58579b386bb 100644
-> >> --- a/arch/riscv/kvm/vm.c
-> >> +++ b/arch/riscv/kvm/vm.c
-> >> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=20
-> >> long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_READONLY_MEM:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_MP_STATE:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IMMEDIATE_EXIT:
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +#endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_NR_VCPUS:
-> >> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> >> index 156d1c25a3c1..85e093fc8d13 100644
-> >> --- a/arch/s390/kvm/kvm-s390.c
-> >> +++ b/arch/s390/kvm/kvm-s390.c
-> >> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
-=20
-> >> long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_S390_DIAG318:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_S390_MEM_OP_EXTENSION:
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +#endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SET_GUEST_DEBUG2:
-> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> >> index 0c0ca599a353..a0a7b769483d 100644
-> >> --- a/arch/x86/kvm/x86.c
-> >> +++ b/arch/x86/kvm/x86.c
-> >> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm=20
-> >> *kvm, long ext)
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_SYS_ATTRIBUTES:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_VAPIC:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_ENABLE_CAP:
-> >> +#ifdef CONFIG_HAVE_KVM_IRQFD
-> >> +=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> +#endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r =3D 1;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_EXIT_HYPERCALL:
-> >> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> >> index 70e05af5ebea..885e72e668a5 100644
-> >> --- a/virt/kvm/kvm_main.c
-> >> +++ b/virt/kvm/kvm_main.c
-> >> @@ -4293,7 +4293,6 @@ static long=20
-> >> kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
-> >> =C2=A0 #endif
-> >> =C2=A0 #ifdef CONFIG_HAVE_KVM_IRQFD
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD:
-> >> -=C2=A0=C2=A0=C2=A0 case KVM_CAP_IRQFD_RESAMPLE:
-> >> =C2=A0 #endif
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_IOEVENTFD_ANY_LENGTH:
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case KVM_CAP_CHECK_EXTENSION_VM:
-> >=20
->
-> --=20
-> Alexey
+Regards,
+Jason-JH.Lin
+
+> 
+> > Regards,
+> > Jason-JH.Lin
+> > > 
+> > > Regards,
+> > > Matthias
+> > > 
+> > > > +              - mediatek,mt8195-vdosys1
+> > > >                  - mediatek,mt8365-mmsys
+> > > >              - const: syscon
+> > > >          - items:
+> > > 
+> > > 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 
