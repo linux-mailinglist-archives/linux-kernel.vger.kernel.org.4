@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7495BA68B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 07:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665C65BA690
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 08:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiIPFvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 01:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S229850AbiIPF75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 01:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiIPFvv (ORCPT
+        with ESMTP id S229635AbiIPF7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 01:51:51 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73D9E8A9;
-        Thu, 15 Sep 2022 22:51:50 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id f26so12734767qto.11;
-        Thu, 15 Sep 2022 22:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kggedIvIRcJ9fW7Igti3Aql/4k9JWgjH7PUpussM7vs=;
-        b=hQQaWLQ8iZG5QN/0DW3UtKJ2IuUmIaam9fihoRTY5kWbSrMvL2zGffjw/y27ZIvciB
-         hq7dB23Uie5SdvfmOdXax5mvT45FjtlS6jbhA7r1BdCKA6iPMWkbuT/BckPIlgiTI1mN
-         lrOWsbQ1KJN0jzPjRt24sC97XRCtp+Ezkrk5npVKNd6yOz2i4yos+ESXwMNgKmapW05T
-         W5WeAnPW/UkhRkuJAiWUplMjaKFg0tF920fgLGdYROqHxJ5bk3/4Qgb9IOR8aKyzV91a
-         CYPjth7a0W9Kad3wLOYzp2KtiB3uzXFbOhIE9fVkV8URqHbhqBQMYYX6zoxI99WvCIZ2
-         rN1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kggedIvIRcJ9fW7Igti3Aql/4k9JWgjH7PUpussM7vs=;
-        b=VvUGJ0LLXrgO7o0MHpNwL/+yRG7byHTXA6soWsBb3p7HsZ5+xGGhKLIjy2mqqWth2z
-         6Byy67akUoUhWycTtLRBtHnbwgeFwtf8HUReU49tIpcSBJVgM2yc9EfrCdkIxiLMzIG5
-         ISzdctCDstA79I88THou62W7i4UYK5zHSiRD9E7CDYfG0yXfPMPHrqbDuRN70O2dLhU/
-         evT/idiOC1EnD6Dukd0pjNyweyFCZRDlZINRcqNSfKZxBvUqbSn9grTHaBX8pWQfNbVR
-         j3xykflVMuD5lmDR6ROXrzIvd1mQer4z5qWNzF038Cfn4p8ugvHpNFCHUcMQxPCwJ/QR
-         4hiA==
-X-Gm-Message-State: ACrzQf2rj2WR/rp683UGCMMSi6e/56xSu5PyFnzp0akj8Y2orNF7Bspm
-        bksx2uWcVF5+5bv+enniasZLP8NIQuKzwI4mKcqmrPw75zE=
-X-Google-Smtp-Source: AMsMyM6ChniVrKH1pwNnF1z/D15EMOmEgjkuKdLHxx/9vovYMjBGmdhd6F6iqGR2QQiMZsHK8yKn7INL3MTo2Uls0kU=
-X-Received: by 2002:a05:622a:1701:b0:35b:b3bb:7c4e with SMTP id
- h1-20020a05622a170100b0035bb3bb7c4emr2939434qtk.195.1663307509413; Thu, 15
- Sep 2022 22:51:49 -0700 (PDT)
+        Fri, 16 Sep 2022 01:59:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8161C1C92F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 22:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663307982; x=1694843982;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w0qqJosfPVrIgxuOR6YYYTKrfFKZQ4iaFYo5f9yH9hc=;
+  b=f8XiQEynyAIQR3Ink2+EaxkYC7WYhJ7pPk50DRQ0uYtw5lpbdmRgvr64
+   nVhYn6HM1ALLYHryan3cPkZv4tAMiKDEnJXrKuDcIJoCQqZ8ylvtT880y
+   DMzyDe/PEL7qXglim0smMCvwkodbg+4wkRUK/Z+Z4D028lRWzR2YzSVIl
+   ecIvV6N+wvsovudMnx0QdSBz/bdqS2Qoigvcel0KePFXGk87ee4i/FOn4
+   vW4tn8Ix6kq22ZULnp5IrWTN+uyRfTnxd6+Y+u6d80BgSHdy7MmeThLSS
+   4kcvxfumkXWADGN1dDPWuqJdYfLYtAdZtz2+yRKVySZuFCc8+3LSenDn4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="298912549"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="298912549"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 22:59:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="706637186"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Sep 2022 22:59:39 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZ4O2-0001Uu-1E;
+        Fri, 16 Sep 2022 05:59:38 +0000
+Date:   Fri, 16 Sep 2022 13:59:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: drivers/irqchip/irq-loongson-pch-lpc.c:151:13: warning: declaration
+ of 'struct acpi_madt_lpc_pic' will not be visible outside of this function
+Message-ID: <202209161317.b47Av73d-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220915195719.136812-1-eajames@linux.ibm.com> <20220915195719.136812-3-eajames@linux.ibm.com>
-In-Reply-To: <20220915195719.136812-3-eajames@linux.ibm.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 16 Sep 2022 08:51:13 +0300
-Message-ID: <CAHp75VfEktq10YcQMF9D9cQWtVsR+gx+3_PAq1YNoKUWEZaC1Q@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] iio: pressure: dps310: Reset chip after timeout
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
-        joel@jms.id.au, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 10:57 PM Eddie James <eajames@linux.ibm.com> wrote:
->
-> The DPS310 chip has been observed to get "stuck" such that pressure
-> and temperature measurements are never indicated as "ready" in the
-> MEAS_CFG register. The only solution is to reset the device and try
-> again. In order to avoid continual failures, use a boolean flag to
-> only try the reset after timeout once if errors persist.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
+commit: ee73f14ee9eb7e1a04051b303b56130c4dd6e048 irqchip: Add Loongson PCH LPC controller support
+date:   8 weeks ago
+config: mips-randconfig-r023-20220915 (https://download.01.org/0day-ci/archive/20220916/202209161317.b47Av73d-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ee73f14ee9eb7e1a04051b303b56130c4dd6e048
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ee73f14ee9eb7e1a04051b303b56130c4dd6e048
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/irqchip/
 
-...
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
-> +{
-> +       int rc;
-> +
-> +       rc = dps310_ready_status(data, ready_bit, timeout);
-> +       if (rc) {
+All warnings (new ones prefixed by >>):
 
-> +               if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
+>> drivers/irqchip/irq-loongson-pch-lpc.c:151:13: warning: declaration of 'struct acpi_madt_lpc_pic' will not be visible outside of this function [-Wvisibility]
+                                           struct acpi_madt_lpc_pic *acpi_pchlpc)
+                                                  ^
+   drivers/irqchip/irq-loongson-pch-lpc.c:164:34: error: incomplete definition of type 'struct acpi_madt_lpc_pic'
+           priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
+                                ~~~~~~~~~~~^
+   arch/mips/include/asm/io.h:180:16: note: expanded from macro 'ioremap'
+           ioremap_prot((offset), (size), _CACHE_UNCACHED)
+                         ^~~~~~
+   drivers/irqchip/irq-loongson-pch-lpc.c:151:13: note: forward declaration of 'struct acpi_madt_lpc_pic'
+                                           struct acpi_madt_lpc_pic *acpi_pchlpc)
+                                                  ^
+   drivers/irqchip/irq-loongson-pch-lpc.c:164:56: error: incomplete definition of type 'struct acpi_madt_lpc_pic'
+           priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
+                                                      ~~~~~~~~~~~^
+   arch/mips/include/asm/io.h:180:26: note: expanded from macro 'ioremap'
+           ioremap_prot((offset), (size), _CACHE_UNCACHED)
+                                   ^~~~
+   drivers/irqchip/irq-loongson-pch-lpc.c:151:13: note: forward declaration of 'struct acpi_madt_lpc_pic'
+                                           struct acpi_madt_lpc_pic *acpi_pchlpc)
+                                                  ^
+   drivers/irqchip/irq-loongson-pch-lpc.c:188:31: error: incomplete definition of type 'struct acpi_madt_lpc_pic'
+           fwspec.param[0] = acpi_pchlpc->cascade + GSI_MIN_PCH_IRQ;
+                             ~~~~~~~~~~~^
+   drivers/irqchip/irq-loongson-pch-lpc.c:151:13: note: forward declaration of 'struct acpi_madt_lpc_pic'
+                                           struct acpi_madt_lpc_pic *acpi_pchlpc)
+                                                  ^
+   drivers/irqchip/irq-loongson-pch-lpc.c:188:43: error: use of undeclared identifier 'GSI_MIN_PCH_IRQ'
+           fwspec.param[0] = acpi_pchlpc->cascade + GSI_MIN_PCH_IRQ;
+                                                    ^
+>> drivers/irqchip/irq-loongson-pch-lpc.c:150:12: warning: no previous prototype for function 'pch_lpc_acpi_init' [-Wmissing-prototypes]
+   int __init pch_lpc_acpi_init(struct irq_domain *parent,
+              ^
+   drivers/irqchip/irq-loongson-pch-lpc.c:150:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init pch_lpc_acpi_init(struct irq_domain *parent,
+   ^
+   static 
+   2 warnings and 4 errors generated.
 
-Here you compare rc with a certain error code...
 
-> +                       /* Reset and reinitialize the chip. */
-> +                       if (dps310_reset_reinit(data)) {
-> +                               data->timeout_recovery_failed = true;
-> +                       } else {
-> +                               /* Try again to get sensor ready status. */
+vim +151 drivers/irqchip/irq-loongson-pch-lpc.c
 
-> +                               if (dps310_ready_status(data, ready_bit, timeout))
-
-...but here you assume that the only error code is -ETIMEDOUT. It's
-kinda inconsistent (if you rely on internals of ready_status, then why
-to check the certain error code, or otherwise why not to return a real
-second error code). That's why I asked about re-using rc here.
-
-In any case I don't think this justifies a v9, let's wait for your
-answer and Jonathan's opinion.
-
-> +                                       data->timeout_recovery_failed = true;
-> +                               else
-> +                                       return 0;
-> +                       }
-> +               }
-> +
-> +               return rc;
-> +       }
-> +
-> +       data->timeout_recovery_failed = false;
-> +       return 0;
-> +}
+   149	
+ > 150	int __init pch_lpc_acpi_init(struct irq_domain *parent,
+ > 151						struct acpi_madt_lpc_pic *acpi_pchlpc)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp
