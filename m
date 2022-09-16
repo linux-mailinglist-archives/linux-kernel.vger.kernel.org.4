@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C371C5BB1DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C735BB1DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiIPSKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S229674AbiIPSL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiIPSKA (ORCPT
+        with ESMTP id S229572AbiIPSLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:10:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC07527B24
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663351796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
-        b=L+nDd7drQ18V/4o+P3iWlEwbGCTApKViDUYJSuQiyuYGZvXm8ZoeFu9zf7M0agV5Afg8Es
-        ASqGEL7SAI5ROEiWOJhW1QYhZyQY5gkw60kg9knoPc+BhNLgD8iDkP27vtIUr3URpIZe0z
-        NkwzgdT52RXTrK92Fv1TJ7sQ/SqCrhc=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-480-GoN8AAOuPES_BcodPtpqfA-1; Fri, 16 Sep 2022 14:09:55 -0400
-X-MC-Unique: GoN8AAOuPES_BcodPtpqfA-1
-Received: by mail-qk1-f199.google.com with SMTP id s17-20020a05620a255100b006c9cefbc68eso18931861qko.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
+        Fri, 16 Sep 2022 14:11:23 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24641AB184
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:11:23 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id h194so16316532iof.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 11:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=MqXEURyLnpmL3G43dGeg3N/8zDnGsAGL3mOe1kcuvho=;
+        b=CLz9mygkk22dS6Zysvq67YjGUob2U2cPE9UZq2PGUL07eySSV82cgbacNTFBHiKehc
+         03zux8CUm/9XDwT8g5lbrTOSt/uLOTn8VlBOvMWYOIpjrsl5CZF9LQiOoR2juWxYj8g6
+         c2CktvmHV6bzcNOl+ra684/vT0uWo5P+AI1A0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
-        b=jxtQpV9JAfniAM9QU7Dt58nDjljKvVU/pDIvZFPZZdxKe9njoVFiz/CmSrPggmOTYf
-         uhMWKo07jVqAGXTBAt/HuF+w9nbeHSXFL6A3dPJBeGHgMhdjJX+ii9N8+pJPu1CemlYp
-         p8jms2Kk6Jz2QNJf0a55lURpjO7pUR3l+FMXuM0MUE8DQTmmUUvBt7aR6M1t2Ck8qq7I
-         Xf1osOHZYN0Mw4nH8F58DGDSX4f+xUpF2K5JAApURcPk0fjBlbQMRfhTcAOOr/BQevb6
-         JKM3RTkdks33AtVklnw8eLOW6Nalq/bLa1u1b6dqyE6oCA4UDUdqmAYRbUMn9oiCoJxl
-         gtyw==
-X-Gm-Message-State: ACrzQf3uuO55V9zb1XY3mg95G4BzElhmw+X7E9phBzc0vimOyhYj5nKM
-        CevHr5IjLX1lzFdoHmmKzqtDFgFHuSQzNM0pqIOnaDWSA2LJ6yjZL/m17VG1kBn6BwUwL2bob7i
-        ZsNSp9bVdFHc/rhG/bGkAqDuD
-X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516870qta.26.1663351795091;
-        Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Eq8nutd1y8SgkrtcXFUsUl9UMHM0MnxQbGXx8ngkMtdvW9XgFJl7Id6By2Z5c1AZ7GoPT7w==
-X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516842qta.26.1663351794880;
-        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006b60d5a7205sm7398453qkp.51.2022.09.16.11.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 14:09:52 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
-        linux-kselftest@vger.kernel.org, bgardon@google.com,
-        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
-        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
-        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, shan.gavin@gmail.com
-Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
-Message-ID: <YyS78BqsQxKkLOiW@xz-m1.local>
-References: <20220916045135.154505-1-gshan@redhat.com>
- <20220916045135.154505-2-gshan@redhat.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=MqXEURyLnpmL3G43dGeg3N/8zDnGsAGL3mOe1kcuvho=;
+        b=Ff1OBmxNBa7Dz3JqZbky4ubjPiIQueO+ijl7hGB6+SyvXuE8oZS8pznq2F10OQbQPN
+         M8N0fUkokX/Y2mX9bIbyD2vQBn27F6d13t4+iIK+HbkBn0Ja2Y8Zv+BZIHz02N/dWGiC
+         50B3K9apzvZFlv73lA4wYW2Flfk659rU/SMYdOcCZiPlWo4kYpKqZfcYtT2i/7Hto4Tv
+         unVbEyulEbGAw9SfXHDwOHsiXzgs4kk+Z6tN3vMxv5WA3ApteVn0i0621gZ2BFIzd6zf
+         HmGmh8Qxo/AxmA+MUjV0peQy0lAPwHFlWf2namheMvCdqJLk671aVqQmiS970FIPiDsD
+         kQXg==
+X-Gm-Message-State: ACrzQf20Aao8nYuSgObax9LMI0l2uNS8oVcUeZEhBj6bJq31l3juxRcL
+        dF8zbmnRLk+uCmcJE/Q5Q0HAF8V5umQEWtyw1QPEoA==
+X-Google-Smtp-Source: AMsMyM5xt+1XNtpGt15WPYuaOUG8TAbossPcoZfNedS+xRkp7vr0QS1phTSKLTsv9pfes4Et9zQ7cJYt1uTvF2qszYM=
+X-Received: by 2002:a05:6638:2391:b0:35a:19da:f05f with SMTP id
+ q17-20020a056638239100b0035a19daf05fmr3064144jat.232.1663351882449; Fri, 16
+ Sep 2022 11:11:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916045135.154505-2-gshan@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1> <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+ <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1> <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1> <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+In-Reply-To: <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 16 Sep 2022 14:11:10 -0400
+Message-ID: <CAEXW_YTN7mnQSN2eJCysLsZOq+8JEOV6pvgw3LDTT=0mnkC2SA@mail.gmail.com>
+Subject: Re: RCU vs NOHZ
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,64 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:51:31PM +0800, Gavin Shan wrote:
-> This adds KVM_REQ_RING_SOFT_FULL, which is raised when the dirty
-> ring of the specific VCPU becomes softly full in kvm_dirty_ring_push().
-> The VCPU is enforced to exit when the request is raised and its
-> dirty ring is softly full on its entrance.
-> 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  arch/x86/kvm/x86.c       | 5 +++--
->  include/linux/kvm_host.h | 1 +
->  virt/kvm/dirty_ring.c    | 4 ++++
->  3 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 43a6a7efc6ec..7f368f59f033 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10265,8 +10265,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	bool req_immediate_exit = false;
->  
->  	/* Forbid vmenter if vcpu dirty ring is soft-full */
-> -	if (unlikely(vcpu->kvm->dirty_ring_size &&
-> -		     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
-> +	if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
-> +	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
-> +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
->  		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->  		trace_kvm_dirty_ring_exit(vcpu);
->  		r = 0;
+Hi Peter,
 
-As commented previously - can we use kvm_test_request() instead? because we
-don't want to unconditionally clear the bit.  Instead of making the request
-again, we can clear request only if !full.
+On Fri, Sep 16, 2022 at 5:20 AM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+[...]
+> > It wasn't enabled for ChromeOS.
+> >
+> > When fully enabled, it gave them the energy-efficiency advantages Joel
+> > described.  And then Joel described some additional call_rcu_lazy()
+> > changes that provided even better energy efficiency.  Though I believe
+> > that the application should also be changed to avoid incessantly openin=
+g
+> > and closing that file while the device is idle, as this would remove
+> > -all- RCU work when nearly idle.  But some of the other call_rcu_lazy()
+> > use cases would likely remain.
+>
+> So I'm thinking the scheme I outlined gets you most if not all of what
+> lazy would get you without having to add the lazy thing. A CPU is never
+> refused deep idle when it passes off the callbacks.
+>
+> The NOHZ thing is a nice hook for 'this-cpu-wants-to-go-idle-long-term'
+> and do our utmost bestest to move work away from it. You *want* to break
+> affinity at this point.
+>
+> If you hate on the global, push it to a per rcu_node offload list until
+> the whole node is idle and then push it up the next rcu_node level until
+> you reach the top.
+>
+> Then when the top rcu_node is full idle; you can insta progress the QS
+> state and run the callbacks and go idle.
 
-We can also safely move this into the block of below kvm_request_pending()
-as Marc used to suggest.
+In my opinion the speed brakes have to be applied before the GP and
+other threads are even awakened. The issue Android and ChromeOS
+observe is that even a single CB queued every few jiffies can cause
+work that can be otherwise delayed / batched, to be scheduled in. I am
+not sure if your suggestions above address that. Does it?
 
-To explicitly use kvm_clear_request(), we may need to be careful on the
-memory barriers.  I'm wondering whether we should have moved
-smp_mb__after_atomic() into kvm_clear_request() because kvm_clear_request()
-is used outside kvm_check_request() and IIUC all the call sites should
-better have that barrier too to be safe.
+Try this experiment on your ADL system (for fun). Boot to the login
+screen on any distro, and before logging in, run turbostat over ssh
+and observe PC8 percent residencies. Now increase
+jiffies_till_first_fqs boot parameter value to 64 or so and try again.
+You may be surprised how much PC8 percent increases by delaying RCU
+and batching callbacks (via jiffies boot option) Admittedly this is
+more amplified on ADL because of package-C-states, firmware and what
+not, and isn=E2=80=99t as much a problem on Android; but still gives a nice
+power improvement there.
 
-Side note: when I read the code around I also see some mis-use of clear
-request where it can be omitted, e.g.:
+thanks,
 
-		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
-			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
-			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
-		}
-
-Maybe it's a sign of bad naming, so we should renamed kvm_check_request()
-to kvm_test_clear_request() too to show that clearing after that is not
-needed?
-
-Thanks,
-
--- 
-Peter Xu
-
+ - Joel
