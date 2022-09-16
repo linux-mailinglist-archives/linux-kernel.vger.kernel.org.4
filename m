@@ -2,139 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F423C5BA4AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD675BA4C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 04:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiIPCkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Sep 2022 22:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S229669AbiIPCt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Sep 2022 22:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiIPCkQ (ORCPT
+        with ESMTP id S229479AbiIPCtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Sep 2022 22:40:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1432220CC
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Sep 2022 19:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663296015; x=1694832015;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dkNSAIpV+3ISrQK8NuEG29Wy4QbSSd3qb7jfOmQtu7w=;
-  b=XMKnOKUwQWfgx4SnNXOshwIxWl7MKAnRjPA+oxrTTvj0JzvyvQzjDem9
-   zW3UposLh4XnXeK9U1azzbsfA6Wn6glD+jGZ//QDQWP1IfgqfjgofHSSj
-   whPsImJsC8byqYqj8t1dCnOSCze+4cUmcnQybItXKzyfJCRMNeLJcP3qu
-   UWgwCkWLcWANwQPOekkeLF72TI7fI8WiRuMh3pLdSsmEbaW+HuRS9m9DM
-   Gvfm9dktE4aGOsKHwZheHNTkDu9Yw7F5r3pQ74a7hBmG0TJBTE/jUZihU
-   fe/sZW/7vUbWtOgX06RfsiS2vTe/l97uL+OGAfM5LmH02UKngZuvULzTA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360635516"
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="360635516"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 19:40:14 -0700
-X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="568678899"
-Received: from yingjieh-mobl.ccr.corp.intel.com (HELO [10.254.215.99]) ([10.254.215.99])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 19:40:12 -0700
-Message-ID: <78ec0fab-6f69-1d3d-86f3-84f159817707@linux.intel.com>
-Date:   Fri, 16 Sep 2022 10:40:09 +0800
+        Thu, 15 Sep 2022 22:49:53 -0400
+Received: from out0-130.mail.aliyun.com (out0-130.mail.aliyun.com [140.205.0.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22A52317D;
+        Thu, 15 Sep 2022 19:49:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047207;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---.PGlDdQN_1663296586;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PGlDdQN_1663296586)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Sep 2022 10:49:47 +0800
+Date:   Fri, 16 Sep 2022 10:49:46 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     Liam Ni <zhiguangni01@gmail.com>
+Cc:     David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
+ in validate_direct_spte()
+Message-ID: <20220916024946.GA2451@k08j02272.eu95sqa>
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+ <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
+ <YxjYWtgLZMxFBrjl@google.com>
+ <20220913120721.GA113257@k08j02272.eu95sqa>
+ <CACZJ9cWP6fXNHuL6r3sHkTDEtR8q1Aw=7DG2Mkj24XCONNL+Yg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/1] iommu/vt-d: Enable PASID during iommu device probe
-To:     Baolu Lu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
-References: <20220912024826.1684913-1-baolu.lu@linux.intel.com>
- <046916aa-980c-c40d-1163-6ab839248201@linux.intel.com>
- <e0c43ca7-0ad3-a4d6-960b-9853bb815438@linux.intel.com>
- <e26efaee-d84a-3b60-8400-90d8e49a9b25@linux.intel.com>
- <5415d383-5442-a127-bdab-fce9e9b7a3b2@linux.intel.com>
-From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
-In-Reply-To: <5415d383-5442-a127-bdab-fce9e9b7a3b2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=gb2312
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACZJ9cWP6fXNHuL6r3sHkTDEtR8q1Aw=7DG2Mkj24XCONNL+Yg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/9/15 11:00, Baolu Lu 写道:
+On Thu, Sep 15, 2022 at 07:47:35PM +0800, Liam Ni wrote:
+> On Tue, 13 Sept 2022 at 20:13, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> >
+> > On Thu, Sep 08, 2022 at 01:43:54AM +0800, David Matlack wrote:
+> > > On Wed, Aug 24, 2022 at 05:29:18PM +0800, Hou Wenlong wrote:
+> > > > The spte pointing to the children SP is dropped, so the
+> > > > whole gfn range covered by the children SP should be flushed.
+> > > > Although, Hyper-V may treat a 1-page flush the same if the
+> > > > address points to a huge page, it still would be better
+> > > > to use the correct size of huge page. Also introduce
+> > > > a helper function to do range-based flushing when a direct
+> > > > SP is dropped, which would help prevent future buggy use
+> > > > of kvm_flush_remote_tlbs_with_address() in such case.
+> > > >
+> > > > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
+> > > > Suggested-by: David Matlack <dmatlack@google.com>
+> > > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > > > ---
+> > > >  arch/x86/kvm/mmu/mmu.c | 10 +++++++++-
+> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index e418ef3ecfcb..a3578abd8bbc 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -260,6 +260,14 @@ void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
+> > > >     kvm_flush_remote_tlbs_with_range(kvm, &range);
+> > > >  }
+> > > >
+> > > > +/* Flush all memory mapped by the given direct SP. */
+> > > > +static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+> > > > +{
+> > > > +   WARN_ON_ONCE(!sp->role.direct);
+> > > > +   kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
+> > > > +                                      KVM_PAGES_PER_HPAGE(sp->role.level + 1));
+> 
+> Do we need "+1" here?    sp->role.level=1 means 4k page.
+> I think here should be   ��KVM_PAGES_PER_HPAGE(sp->role.level)��
 >
->
-> On 9/14/22 4:59 PM, Ethan Zhao wrote:
->>>> What the error path would be if this code runs on some old 
->>>> platforms don't
->>>>
->>>> support PASID, would you print out "this platform doesn't suppor 
->>>> PASID" and
->>>>
->>>> give users an interface function to query if the PASID cap of iommu 
->>>> is enabled
->>>>
->>>> and if not why ?
->>>
->>> It's not an error case if the IOMMU doesn't support PASID. But it's an
->>> error case if any device drivers call PASID related IOMMU interfaces
->>> (for example, iommu_domain_attach/detach_dev_pasid()). The 
->>> corresponding
->>> error code will be returned to the drivers.
->>>
->> So iommu driver withdraws the flexibility/rights from device driver 
->> about the
->>
->> ability to enable PASID, looks much more *integrated* iommu works as 
->> relation
->
-> No. This patch doesn't withdraw anything. It's just a code refactoring.
->
->>
->> controller in device-iommu-domain by enabling PASID in iommu probe stage
->>
->> by default -- iommu decides to enable PASID or not though device-iommu-
->>
->> domain might not work ? or they should work because they are hard-wired
->>
->> together (device - iommu) even device is hotpluged later.
->>
->
-> I may not get you exactly. :-) Some IOMMU features reply on PASID
-> capabilities on both IOMMU and device. The IOMMU drivers enumerate the
-> capabilities and enable them if they are supported.
-I might not express it straightforward,  I mean with this patch iommu 
-deals with
+This helper function is used to flush all memory mapped by the given
+SP, not one spte in the SP. If sp->role.level=1, the size of memory
+mapped by the SP is 2M, but KVM_PAGES_PER_HPAGE(sp->role.level) is
+1.
 
-the complexity of enabling PASID (globally?)  or not at probing stage , 
-instead
-
-of other device driver side decision to request IOMMU PASID enabling during
-
-their setup state.  if so you move the decision to iommu probe stage. 
-hmmm...
-
-Pros,  iommu driver controls everything about PASID enabling.
-
-Cons,  iommu driver handles all possible complexity about capability 
-matching
-
-etc.
-
-
-Thanks,
-
-Ethan
-
->
-> Best regards,
-> baolu
-
--- 
-"firm, enduring, strong, and long-lived"
-
+> > >
+> > > nit: I think it would make sense to introduce
+> > > kvm_flush_remote_tlbs_gfn() in this patch since you are going to
+> > > eventually use it here anyway.
+> > >
+> > OK, I'll do it in the next version. Thanks!
+> >
+> > > > +}
+> > > > +
+> > > >  static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+> > > >                        unsigned int access)
+> > > >  {
+> > > > @@ -2341,7 +2349,7 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+> > > >                     return;
+> > > >
+> > > >             drop_parent_pte(child, sptep);
+> > > > -           kvm_flush_remote_tlbs_with_address(vcpu->kvm, child->gfn, 1);
+> > > > +           kvm_flush_remote_tlbs_direct_sp(vcpu->kvm, child);
+> > > >     }
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.31.1
+> > > >
