@@ -2,134 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E36F5BA911
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F64A5BA916
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiIPJMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S231211AbiIPJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIPJMS (ORCPT
+        with ESMTP id S231132AbiIPJNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:12:18 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4171C6F251
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:12:16 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r5-20020a1c4405000000b003b494ffc00bso755743wma.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:12:16 -0700 (PDT)
+        Fri, 16 Sep 2022 05:13:22 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECAE6FA33
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:13:21 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-346cd4c3d7aso251871177b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=mlaT4dkUmey+WYaJiYLCVZ+l1HaRfFbeV5h9SKJM/6M=;
-        b=d2qcsHqlhbDrF7hMGXrk69KrkRyLIM0KsG91A88dSqc6m9oNU1AhLqbkfHn8VmenI/
-         faZhxTdqbshYTPV9bEjex0lIx+MEaqaRYWNMjODryyYJghYdTfe+IM44WgcXKC0+Xk3E
-         tHgLeNzdUd8oDDGNNqs6zSfLOBfoJb9Va6Wu2yltaC76HdSpeKeqiU1PxmT087DesfNO
-         YGti+RSQwXKJ1t8reFU09wD/o3J2G7aQa2WkTWfG3TuRUiV26WyvB/CWS/kpYI5PtDD9
-         IrF1hnEVclUlYlEZ28m0i2nD++dPzrUOX4OaWIWt1mHoNweIcgpi3xfaMyo+ylLk7oMC
-         Nptw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=St+IQCWJacJKbPUwjmk2zZiPvZUfUUJhCu0g3DwZrPg=;
+        b=Tq8+3NsAcC3hZkWZbN2XInttxNbHcPBxQHaxd6kqBbQ+vcToc+f9RVGIsc931BWVYv
+         4QDsKLv0z+ustpPusPz/B9AlixdY/+20yLQ3Nb+Fa7rupRd0naGOVpYYufmEQtlM5DII
+         sx51DqRcgBgYykDI/ks3MxB7qjaAYnoqogbo/7wSk2d8PHFC9DklV/sGJpb1YdiGvdgE
+         cPjNWVgiTi2YeBUpLJNpIVMferIDI3FBXMUngw00uukIFnVZglD7gSlfWfoPoLRHl1sl
+         niGM24A+pcobtBMSFxFNvKxFgeoq4A8ILvrdqwFIbIlpjTDArgzldYkHsYo+IATVq7eN
+         72WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=mlaT4dkUmey+WYaJiYLCVZ+l1HaRfFbeV5h9SKJM/6M=;
-        b=uTBM3XETqFnOix169lURrQ/CBma2PY0Ad712tr4IS+01mWsH9amY7gQcii/xoBzC58
-         mnVxD3PGwfEWakZC/RQ5YiAu4N2fUhOq4kjLMO9RWmB2z7Jcy3LESqagbVpj4K/eIdX/
-         2vp025N6KWfIOrbT+6QGNtI/GNBt8bNv3CFUIQ9slAYxVAKBQ/hN9V1pSMe0qcm8kI7k
-         WnDAz/vBkBk91o/WH6HkcUNy/iTHfb3DivaTdSNkFibowGzrfUuqbO8WrpIe4F9tRvul
-         nblORj/v6luXfSMqNZpDG+KQsXJ4Y/TzgpPIHQJZQOH3WAmXx+5893tsuQ/aR8KZpF+T
-         IbFg==
-X-Gm-Message-State: ACrzQf2V9hpps0pC64PREGmowwqC908m/wVC5RX2uoEWUzjjH1PafB1v
-        6kNDnaSL2r9utZ4wluh7m9TZPzUxEr3JTw==
-X-Google-Smtp-Source: AMsMyM79yY6pM1sgA9nNRpDt7+rngES5wrlzIG0j+hKlNPLl69x36Kw8WIt0JsZYVmOh4GFlD5sIKQ==
-X-Received: by 2002:a05:600c:3d05:b0:3b4:9a42:10d0 with SMTP id bh5-20020a05600c3d0500b003b49a4210d0mr2682614wmb.135.1663319534795;
-        Fri, 16 Sep 2022 02:12:14 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id e4-20020a05600c4e4400b003a6a3595edasm1580200wmq.27.2022.09.16.02.12.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 02:12:13 -0700 (PDT)
-Message-ID: <bffab27c-6e25-5787-6958-648f9f2e2686@linaro.org>
-Date:   Fri, 16 Sep 2022 10:12:12 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=St+IQCWJacJKbPUwjmk2zZiPvZUfUUJhCu0g3DwZrPg=;
+        b=rkxjndP0hjMCjDCipUFuCkTJJ9cEggSA5CT/HlkTnTtBSFPVXde6pjOVDrpGejlC09
+         p9zddxHkKOeTIkaOrJ9TAZiIcfM5R3cNd3xLyfpGHu3LU0Mp14tJozwXGkx7OBg5WVnx
+         TJx2gxAk0DVjjH0KtozykVThC/lg6NxxaTEuwaWCMwjVXIo/K4tcZlo3fEtEM2aTDOrf
+         CQF3j7vHML0YP4y6ET+M9rjhNwMVjN4wQBSTVRa1Lkp6jPCftLwDQ2P1kx+kyJqJj7PP
+         bUKE17bdMGKYkwCp/eZppGqmcWTVAwAzObUAwb7zKc66rP0m2LL8B8PBYJ/3lfnZ+e16
+         XKSQ==
+X-Gm-Message-State: ACrzQf1P5Sp5KndF0UTKC/5SVuA0RbZ2zEBbZbdOEU8KFgYSY/I+qu2U
+        YMRSEW+skC4wjbQCH6tbvqhelTtXQLTpKsSOewXsUg==
+X-Google-Smtp-Source: AMsMyM6QGrLkBXMbfIPe1G5TGsi0HWQVWE4tx9McXMeIqkGsZpi9tdQNue2OLJQyPpOK052xbeGm8HDCACIsAHD0xIk=
+X-Received: by 2002:a81:1409:0:b0:349:e8bb:1fdb with SMTP id
+ 9-20020a811409000000b00349e8bb1fdbmr3573010ywu.299.1663319600558; Fri, 16 Sep
+ 2022 02:13:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] soundwire: qcom: update status from device id 1
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220915124215.13703-1-srinivas.kandagatla@linaro.org>
- <3962348a-33b4-5941-4a0b-cb447a513a41@linux.intel.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <3962348a-33b4-5941-4a0b-cb447a513a41@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915150417.722975-1-glider@google.com> <20220915150417.722975-28-glider@google.com>
+ <20220915135838.8ad6df0363ccbd671d9641a1@linux-foundation.org>
+In-Reply-To: <20220915135838.8ad6df0363ccbd671d9641a1@linux-foundation.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 16 Sep 2022 11:12:44 +0200
+Message-ID: <CAG_fn=WJZBK_xypJ-D7NPjGeaQ8c3fs8Ji+-j+=O=9neZjTUBw@mail.gmail.com>
+Subject: Re: [PATCH v7 27/43] kmsan: disable physical page merging in biovec
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 15, 2022 at 10:58 PM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Thu, 15 Sep 2022 17:04:01 +0200 Alexander Potapenko <glider@google.com=
+> wrote:
+>
+> > KMSAN metadata for adjacent physical pages may not be adjacent,
+> > therefore accessing such pages together may lead to metadata
+> > corruption.
+> > We disable merging pages in biovec to prevent such corruptions.
+> >
+> > ...
+> >
+> > --- a/block/blk.h
+> > +++ b/block/blk.h
+> > @@ -88,6 +88,13 @@ static inline bool biovec_phys_mergeable(struct requ=
+est_queue *q,
+> >       phys_addr_t addr1 =3D page_to_phys(vec1->bv_page) + vec1->bv_offs=
+et;
+> >       phys_addr_t addr2 =3D page_to_phys(vec2->bv_page) + vec2->bv_offs=
+et;
+> >
+> > +     /*
+> > +      * Merging adjacent physical pages may not work correctly under K=
+MSAN
+> > +      * if their metadata pages aren't adjacent. Just disable merging.
+> > +      */
+> > +     if (IS_ENABLED(CONFIG_KMSAN))
+> > +             return false;
+> > +
+> >       if (addr1 + vec1->bv_len !=3D addr2)
+> >               return false;
+> >       if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_pag=
+e))
+>
+> What are the runtime effects of this?  In other words, how much
+> slowdown is this likely to cause in a reasonable worst-case?
 
+To be honest, I have no idea. KMSAN already introduces a lot of
+runtime overhead to every memory access, it's unlikely that disabling
+some filesystem optimization will add anything on top of that.
+Anyway, KMSAN is a debugging tool that is not supposed to be used in
+production (there's a big boot-time warning about that now :) )
 
-On 15/09/2022 14:10, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 9/15/22 14:42, Srinivas Kandagatla wrote:
->> By default autoenumeration is enabled on QCom SoundWire controller
->> which means the core should not be dealing with device 0 w.r.t enumeration.
->> Currently device 0 status is also shared with SoundWire core which confuses
->> the core sometimes and we endup adding 0:0:0:0 slave device.
-> 
-> The change looks fine, but the description of the issue is surprising.
+--=20
+Alexander Potapenko
+Software Engineer
 
-Thanks Pierre,
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-> 
-> Whether autoenumeration is enabled or not is irrelevant, by spec the
-> device0 cannot be in ALERT status and throw in-band interrupts to the
-> host with this mechanism.
-
-This issue is more of around enumeration stage in specific during device 
-status change interrupt from controller. Sharing the device 0 status 
-with core makes it think that there is a device with 0:0:0:0 address and 
-it tries to park device to group 13.
-
-
---srini
-
-> 
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
->>   drivers/soundwire/qcom.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
->> index e21a3306bf01..871e4d8b32c7 100644
->> --- a/drivers/soundwire/qcom.c
->> +++ b/drivers/soundwire/qcom.c
->> @@ -428,7 +428,7 @@ static int qcom_swrm_get_alert_slave_dev_num(struct qcom_swrm_ctrl *ctrl)
->>   
->>   	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
->>   
->> -	for (dev_num = 0; dev_num <= SDW_MAX_DEVICES; dev_num++) {
->> +	for (dev_num = 1; dev_num <= SDW_MAX_DEVICES; dev_num++) {
->>   		status = (val >> (dev_num * SWRM_MCP_SLV_STATUS_SZ));
->>   
->>   		if ((status & SWRM_MCP_SLV_STATUS_MASK) == SDW_SLAVE_ALERT) {
->> @@ -448,7 +448,7 @@ static void qcom_swrm_get_device_status(struct qcom_swrm_ctrl *ctrl)
->>   	ctrl->reg_read(ctrl, SWRM_MCP_SLV_STATUS, &val);
->>   	ctrl->slave_status = val;
->>   
->> -	for (i = 0; i <= SDW_MAX_DEVICES; i++) {
->> +	for (i = 1; i <= SDW_MAX_DEVICES; i++) {
->>   		u32 s;
->>   
->>   		s = (val >> (i * 2));
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
