@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49ED25BA932
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39FD5BA945
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiIPJSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S231254AbiIPJSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiIPJR5 (ORCPT
+        with ESMTP id S229471AbiIPJSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:17:57 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8BF9C8D6
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 02:17:43 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 28G8uZ30084624;
-        Fri, 16 Sep 2022 16:56:35 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 16 Sep
- 2022 17:17:06 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <airlied@redhat.com>, <tzimmermann@suse.de>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/ast: Fix video broken in some resolutions on ast2600
-Date:   Fri, 16 Sep 2022 17:17:06 +0800
-Message-ID: <20220916091706.4559-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 16 Sep 2022 05:18:14 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B3A3135E;
+        Fri, 16 Sep 2022 02:18:12 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8B6692000E;
+        Fri, 16 Sep 2022 09:18:07 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, linus.walleij@linaro.org, david@ixit.cz,
+        jbx6244@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        foss+kernel@0leil.net,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH] arm64: dts: rockchip: add i2s0 I2S/PDM/TDM 8ch controller to px30
+Date:   Fri, 16 Sep 2022 11:17:46 +0200
+Message-Id: <20220916091746.35108-1-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 28G8uZ30084624
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cases are not handled well for ast2600.
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+The Rockchip PX30 SoC has three I2S controllers, i2s1 and i2s2 are
+2-channel I2S/PCM controllers handled by the same controller driver, and
+i2s0 a 8-channel I2S/PCM/TDM controller handled by another controller
+driver.
+
+This adds the device tree node required to enable I2S0 on PX30.
+
+This was tested in a 2-channel I2S with TX BCLK/LRCK for both TX and RX
+(rockchip,trcm-sync-tx-only) setup on a soon-to-be-released board.
+
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- drivers/gpu/drm/ast/ast_mode.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/px30.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index d327dcbaf032..be9bbc888ac3 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -314,7 +314,7 @@ static void ast_set_crtc_reg(struct ast_private *ast,
- 	u8 jreg05 = 0, jreg07 = 0, jreg09 = 0, jregAC = 0, jregAD = 0, jregAE = 0;
- 	u16 temp, precache = 0;
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index 214f94fea3dc..bfa3580429d1 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -365,6 +365,28 @@ uart0: serial@ff030000 {
+ 		status = "disabled";
+ 	};
  
--	if ((ast->chip == AST2500) &&
-+	if ((ast->chip == AST2500 || ast->chip == AST2600) &&
- 	    (vbios_mode->enh_table->flags & AST2500PreCatchCRT))
- 		precache = 40;
- 
-@@ -355,6 +355,12 @@ static void ast_set_crtc_reg(struct ast_private *ast,
- 	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xAC, 0x00, jregAC);
- 	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xAD, 0x00, jregAD);
- 
-+	// Workaround for HSync Time non octave pixels (1920x1080@60Hz HSync 44 pixels);
-+	if ((ast->chip == AST2600) && (mode->crtc_vdisplay == 1080))
-+		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xFC, 0xFD, 0x02);
-+	else
-+		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xFC, 0xFD, 0x00);
++	i2s0_8ch: i2s@ff060000 {
++		compatible = "rockchip,px30-i2s-tdm";
++		reg = <0x0 0xff060000 0x0 0x1000>;
++		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru SCLK_I2S0_TX>, <&cru SCLK_I2S0_RX>, <&cru HCLK_I2S0>;
++		clock-names = "mclk_tx", "mclk_rx", "hclk";
++		dmas = <&dmac 16>, <&dmac 17>;
++		dma-names = "tx", "rx";
++		rockchip,grf = <&grf>;
++		resets = <&cru SRST_I2S0_TX>, <&cru SRST_I2S0_RX>;
++		reset-names = "tx-m", "rx-m";
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2s0_8ch_sclktx &i2s0_8ch_sclkrx
++			     &i2s0_8ch_lrcktx &i2s0_8ch_lrckrx
++			     &i2s0_8ch_sdo0 &i2s0_8ch_sdi0
++			     &i2s0_8ch_sdo1 &i2s0_8ch_sdi1
++			     &i2s0_8ch_sdo2 &i2s0_8ch_sdi2
++			     &i2s0_8ch_sdo3 &i2s0_8ch_sdi3>;
++		#sound-dai-cells = <0>;
++		status = "disabled";
++	};
 +
- 	/* vert timings */
- 	temp = (mode->crtc_vtotal) - 2;
- 	if (temp & 0x100)
-@@ -432,7 +438,7 @@ static void ast_set_dclk_reg(struct ast_private *ast,
- {
- 	const struct ast_vbios_dclk_info *clk_info;
- 
--	if (ast->chip == AST2500)
-+	if ((ast->chip == AST2500) || (ast->chip == AST2600))
- 		clk_info = &dclk_table_ast2500[vbios_mode->enh_table->dclk_index];
- 	else
- 		clk_info = &dclk_table[vbios_mode->enh_table->dclk_index];
+ 	i2s1_2ch: i2s@ff070000 {
+ 		compatible = "rockchip,px30-i2s", "rockchip,rk3066-i2s";
+ 		reg = <0x0 0xff070000 0x0 0x1000>;
 -- 
-2.25.1
+2.37.3
 
