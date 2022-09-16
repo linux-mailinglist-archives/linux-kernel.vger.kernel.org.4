@@ -2,82 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8145BAEB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B205BAEC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 16:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiIPN7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S230404AbiIPOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 10:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiIPN7t (ORCPT
+        with ESMTP id S231840AbiIPOBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:59:49 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B54DFF4;
-        Fri, 16 Sep 2022 06:59:46 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id C8DB11C0006; Fri, 16 Sep 2022 15:59:42 +0200 (CEST)
-Date:   Fri, 16 Sep 2022 15:59:42 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/24] 5.10.144-rc1 review
-Message-ID: <20220916135942.GA29693@duo.ucw.cz>
-References: <20220916100445.354452396@linuxfoundation.org>
+        Fri, 16 Sep 2022 10:01:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB7AF0C3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:01:36 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c2so21530607plo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 07:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=dshUPBRJIl5fQ3m+ssb6SG/5FdHYdXyc9t5E5ytWG7A=;
+        b=KJywVQRZtjplc5TGof+5IB3YhDZ1cj4PaRPTirKpaoAWiDyUT37EbdBi/Y6B5Gkr8z
+         ZDGs/2FeL1kKj4BlkwYnaHp7WI0rXBLKeFN8+DRFRPbwxeTpjaP1Wch813VfZj3402OV
+         NBI/x++MrNCGX13ciSjAaHPqJlIQFUpAaYvDs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=dshUPBRJIl5fQ3m+ssb6SG/5FdHYdXyc9t5E5ytWG7A=;
+        b=SROxjJMGae7okXioW9D3K7JavlB7mV8oN5VT+CDCFFjnDKO22IPkGEVkL/r0w35kyI
+         B13z4XpZ3ikwG6XGw9n/q915VGlhRxruREzVCe/GkaW48fylT0mOOBK8+5fWqLCSWEPq
+         yaeMeNUcc3M71JKI4BtX/ExnjEgXWbxnyLFabXPls5SrsUKb5eJO+3tGmu69ackJJ+Aq
+         s3mtwau10g/QRjJvVfr1vcDqyscGujN8WMfbkSwXtJFe136iD0p5rX7S6IfZrKXsuyaL
+         3iYLKSe0iO9U0mejuFXVd3cy+hoaBHWPBTwPBGzVNVUPoszwCWcSuvicUtM2ueCzYPGw
+         NZwg==
+X-Gm-Message-State: ACrzQf1I+DxOYIWZNzjsKqinP2AaGH2jVfjKVOWL8Xjcbzi3zdmHFP8F
+        Ko+Opb5vV+c2WqmQGAaneoSwEKurGtexUG++
+X-Google-Smtp-Source: AMsMyM7FPr3ttzTgQ3tdx2Q+bJSysj1THjM5T1H6W7iKbf+UddOl/uTNkl6+XFWhGvTzSAnFX79yeA==
+X-Received: by 2002:a17:902:7586:b0:172:d0de:7a3c with SMTP id j6-20020a170902758600b00172d0de7a3cmr32332pll.38.1663336895957;
+        Fri, 16 Sep 2022 07:01:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b0017693bb573bsm14977334plh.219.2022.09.16.07.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 07:01:26 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH 0/3] x86/dumpstack: Inline copy_from_user_nmi()
+Date:   Fri, 16 Sep 2022 06:59:51 -0700
+Message-Id: <20220916135953.1320601-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="pf9I7BMVVzbSWLtt"
-Content-Disposition: inline
-In-Reply-To: <20220916100445.354452396@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2403; h=from:subject; bh=jSBWpoIe+6cXWMHiTXIhWphUWHU4ykwNIRUXr/4DVx4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjJIFYo65hwFSmDvAvVocaTPb9H0pjJ5jbJ7o1uk2n 7dnNUeyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYySBWAAKCRCJcvTf3G3AJn3rD/ 9E8k/SZ03fsh80iTtJMwqtgbWeq4LfkrcDgACQDybAdhEFe8UHobkHfxFqe6Z7tB1wx1vROAEIMkv9 OrPukObMRJnjWlBukozI//Ks1UA9gQ3KJn7BbLOEGbxc9AMfj7Wop2uuKRIOggTLyxe3tdhzGyykf5 bhkr2yF1yC9qMEDhRZc3HSEPVb7OEONYglnwtkW1kYNxp6oxLocVk2cAic+RN30J2kTVBD3eh7cc1k PIsEwvnF5H5tYncJ3OuXpeOr8bNwOBowuiIz+GZjpjAZbIOo46wxO1Vr+nk7EsvnJOitcIshSkSXIN l6NITgMsLU/1+lKx8HewHzXqdxutwRZHQSR2ktPvG9Iz4BPlk5IYve4WaGayIGX3XJtl8+dhWFq3mS aBjA/aeSmI/+C49lcOiRqtaSe9++BLdnXoxn76HMoSeu+zvratvPEr1qquwMW9zd1bDy1Rs85XPDDS v6KoaYTS7+tYjgb+7O0UbVD4gcQSjy7WIdZIKAAEbR8Ndy4rIN11XJUBUjmRVFrA3KHRgVSJswyH+B 24ev76tRD9itGgmlrzqJ8J52zbYZeHFfnP75AomCUdEmHSmE+BRq8QqZl4PtZAi1BMhPupcPrRa+Nz 0vC/C3W6/62vDvtjpsXdYhWvTyMhYjvTmeW7lyuBJqY6RKIjzU+i+yrN+Idw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---pf9I7BMVVzbSWLtt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This fixes a find_vmap_area() deadlock. The main fix is patch 2, repeated here:
 
-Hi!
+    The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+    designed to skip any checks where the length is known at compile time as
+    a reasonable heuristic to avoid "likely known-good" cases. However, it can
+    only do this when the copy_*_user() helpers are, themselves, inline too.
 
-> This is the start of the stable review cycle for the 5.10.144 release.
-> There are 24 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+    Using find_vmap_area() requires taking a spinlock. The check_object_size()
+    helper can call find_vmap_area() when the destination is in vmap memory.
+    If show_regs() is called in interrupt context, it will attempt a call to
+    copy_from_user_nmi(), which may call check_object_size() and then
+    find_vmap_area(). If something in normal context happens to be in the
+    middle of calling find_vmap_area() (with the spinlock held), the interrupt
+    handler will hang forever.
 
-CIP testing did not find any problems here:
+    The copy_from_user_nmi() call is actually being called with a fixed-size
+    length, so check_object_size() should never have been called in the
+    first place. In order for check_object_size() to see that the length is
+    a fixed size, inline copy_from_user_nmi(), as already done with all the
+    other uaccess helpers.
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
+    Reported-by: Yu Zhao <yuzhao@google.com>
+    Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+    Reported-by: dev@der-flo.net
 
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+Patch 1 is a refactor for patch 2, and patch 3 should make sure we avoid
+future deadlocks.
 
-Best regards,
-                                                                Pavel
+Thanks,
 
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+-Kees
 
---pf9I7BMVVzbSWLtt
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Kees Cook (3):
+  x86/uaccess: Move nmi_uaccess_okay() into uaccess.h
+  x86/dumpstack: Inline copy_from_user_nmi()
+  usercopy: Add find_vmap_area_try() to avoid deadlocks
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYySBTgAKCRAw5/Bqldv6
-8qvNAJ46kjBKG+WSVg999YTphENAcG3FiQCeL++CN9cqUogHxrX0dBh49PvURJE=
-=/dBo
------END PGP SIGNATURE-----
+ arch/x86/events/core.c          |  1 -
+ arch/x86/include/asm/tlbflush.h |  3 --
+ arch/x86/include/asm/uaccess.h  |  5 ++--
+ arch/x86/kernel/dumpstack.c     |  4 +--
+ arch/x86/lib/Makefile           |  2 +-
+ arch/x86/lib/usercopy.c         | 52 ---------------------------------
+ include/asm-generic/tlb.h       |  9 ------
+ include/linux/uaccess.h         | 50 +++++++++++++++++++++++++++++++
+ include/linux/vmalloc.h         |  1 +
+ kernel/trace/bpf_trace.c        |  2 --
+ mm/usercopy.c                   | 11 ++++++-
+ mm/vmalloc.c                    | 11 +++++++
+ 12 files changed, 78 insertions(+), 73 deletions(-)
+ delete mode 100644 arch/x86/lib/usercopy.c
 
---pf9I7BMVVzbSWLtt--
+-- 
+2.34.1
+
