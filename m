@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0285BAB39
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7ED5BAB0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbiIPKVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        id S232198AbiIPK1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiIPKSy (ORCPT
+        with ESMTP id S232050AbiIPK0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:18:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE76DF20;
-        Fri, 16 Sep 2022 03:12:45 -0700 (PDT)
+        Fri, 16 Sep 2022 06:26:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5A3B2CCA;
+        Fri, 16 Sep 2022 03:16:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B85EE62A18;
-        Fri, 16 Sep 2022 10:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0241C433D7;
-        Fri, 16 Sep 2022 10:12:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6570EB824B2;
+        Fri, 16 Sep 2022 10:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08FEC433D6;
+        Fri, 16 Sep 2022 10:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323165;
-        bh=fsCkcg9eLrtnwopzlQbz4pY3sh8MxH9tjwwq5p3jSHM=;
+        s=korg; t=1663323305;
+        bh=XzJqPGh8ad7ZjLoasVaoLcyVIViWOGhH2VlHRi/F3rU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0S3fsaQMl/bcSSqQ5X6O/85sAypdbN9WPWQhiFMq8zVue99LmnVknuCtuGW0s4aPq
-         kvbV51jBTcKoOjKneps5AiZR9K4VmNqTjc/OC4U+mQ5+NKbmD1TufmMnm5a8b6d1RU
-         dR9eGqxH3bazoU/prnwBcsfVQ8O/g9v2wLQwKXJY=
+        b=acyjlkmG7QKCVM0tUOX6jpPC5p40ZS+6jLUX+p/apZYgj7WziBzImnJJK/B5M5uGC
+         li9Zs/1ciJm2Bv1LrUjESuRd4+gZhzFZoxCpG2QXadshIQTOME3jVxHPiFNpDeh+zT
+         gD2eO7AiWvtlzLiKU7XTOIOEVhrQEwDDqYdKcnrU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sindhu-Devale <sindhu.devale@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: [PATCH 5.15 34/35] RDMA/irdma: Use s/g array in post send only when its valid
-Date:   Fri, 16 Sep 2022 12:08:57 +0200
-Message-Id: <20220916100448.397377086@linuxfoundation.org>
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        Kenneth Feng <kenneth.feng@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 24/38] drm/amd/pm: use vbios carried pptable for all SMU13.0.7 SKUs
+Date:   Fri, 16 Sep 2022 12:08:58 +0200
+Message-Id: <20220916100449.481667755@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-References: <20220916100446.916515275@linuxfoundation.org>
+In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
+References: <20220916100448.431016349@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sindhu-Devale <sindhu.devale@intel.com>
+From: Evan Quan <evan.quan@amd.com>
 
-commit 2c8844431d065ae15a6b442f5769b60aeaaa07af upstream.
+[ Upstream commit b023053592646b1da9477b0b598f2cdd5d3f89d8 ]
 
-Send with invalidate verb call can pass in an
-uninitialized s/g array with 0 sge's which is
-filled into irdma WQE and causes a HW asynchronous
-event.
+For those SMU13.0.7 unsecure SKUs, the vbios carried pptable is ready to go.
+Use that one instead of hardcoded softpptable.
 
-Fix this by using the s/g array in irdma post send
-only when its valid.
-
-Fixes: 551c46e ("RDMA/irdma: Add user/kernel shared libraries")
-Signed-off-by: Sindhu-Devale <sindhu.devale@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Link: https://lore.kernel.org/r/20220906223244.1119-5-shiraz.saleem@intel.com
-Signed-off-by: Leon Romanovsky <leon@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Evan Quan <evan.quan@amd.com>
+Reviewed-by: Kenneth Feng <kenneth.feng@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/uk.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 35 ++++++++++++-------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
---- a/drivers/infiniband/hw/irdma/uk.c
-+++ b/drivers/infiniband/hw/irdma/uk.c
-@@ -501,7 +501,8 @@ enum irdma_status_code irdma_uk_send(str
- 			      FIELD_PREP(IRDMAQPSQ_IMMDATA, info->imm_data));
- 		i = 0;
- 	} else {
--		qp->wqe_ops.iw_set_fragment(wqe, 0, op_info->sg_list,
-+		qp->wqe_ops.iw_set_fragment(wqe, 0,
-+					    frag_cnt ? op_info->sg_list : NULL,
- 					    qp->swqe_polarity);
- 		i = 1;
- 	}
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+index 9cde13b07dd26..d9a5209aa8433 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+@@ -382,11 +382,27 @@ static int smu_v13_0_7_append_powerplay_table(struct smu_context *smu)
+ 	return 0;
+ }
+ 
++static int smu_v13_0_7_get_pptable_from_pmfw(struct smu_context *smu,
++					     void **table,
++					     uint32_t *size)
++{
++	struct smu_table_context *smu_table = &smu->smu_table;
++	void *combo_pptable = smu_table->combo_pptable;
++	int ret = 0;
++
++	ret = smu_cmn_get_combo_pptable(smu);
++	if (ret)
++		return ret;
++
++	*table = combo_pptable;
++	*size = sizeof(struct smu_13_0_7_powerplay_table);
++
++	return 0;
++}
+ 
+ static int smu_v13_0_7_setup_pptable(struct smu_context *smu)
+ {
+ 	struct smu_table_context *smu_table = &smu->smu_table;
+-	void *combo_pptable = smu_table->combo_pptable;
+ 	struct amdgpu_device *adev = smu->adev;
+ 	int ret = 0;
+ 
+@@ -395,18 +411,11 @@ static int smu_v13_0_7_setup_pptable(struct smu_context *smu)
+ 	 * be used directly by driver. To get the raw pptable, we need to
+ 	 * rely on the combo pptable(and its revelant SMU message).
+ 	 */
+-	if (adev->scpm_enabled) {
+-		ret = smu_cmn_get_combo_pptable(smu);
+-		if (ret)
+-			return ret;
+-
+-		smu->smu_table.power_play_table = combo_pptable;
+-		smu->smu_table.power_play_table_size = sizeof(struct smu_13_0_7_powerplay_table);
+-	} else {
+-		ret = smu_v13_0_setup_pptable(smu);
+-		if (ret)
+-			return ret;
+-	}
++	ret = smu_v13_0_7_get_pptable_from_pmfw(smu,
++						&smu_table->power_play_table,
++						&smu_table->power_play_table_size);
++	if (ret)
++		return ret;
+ 
+ 	ret = smu_v13_0_7_store_powerplay_table(smu);
+ 	if (ret)
+-- 
+2.35.1
+
 
 
