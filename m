@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E265BB1C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE045BB1C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiIPR5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 13:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S229696AbiIPR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 13:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIPR5p (ORCPT
+        with ESMTP id S229497AbiIPR6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 13:57:45 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FF6A6C77
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:57:31 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220916175727euoutp02022ddbd9268bbf3a5d478332660c18aa~VaPcTw1Qc2770927709euoutp02O
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:57:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220916175727euoutp02022ddbd9268bbf3a5d478332660c18aa~VaPcTw1Qc2770927709euoutp02O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663351047;
-        bh=k7hjlb6AiF7jh1iuh9LKDhE7ZOyrX7xUup0+nfGc/5s=;
-        h=Date:Subject:From:To:CC:In-Reply-To:References:From;
-        b=D+pdMVtQ8bxrwLYytL7X0K38R6vQ6LW1kOJce7HKao8/VYbNAFSktF9XgHWQj+T64
-         N+2a6A7LZc0Yfwkx5PsFLdFOLbjJwo4Pdwot/C9gbWMEw3XRZb4FK/r4R/2mLiIOTf
-         yvjurKXfcWX+oR5Zl5xkbAKy/PfXwLDouzruhZx8=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220916175727eucas1p29f8779dd295b1870898730a928a1732e~VaPbzdcPJ0630006300eucas1p2i;
-        Fri, 16 Sep 2022 17:57:27 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id B3.EC.29727.709B4236; Fri, 16
-        Sep 2022 18:57:27 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220916175726eucas1p2b96d3dda893b1e3b47e0ae4f22da13d5~VaPa0z9ck0629506295eucas1p2x;
-        Fri, 16 Sep 2022 17:57:26 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220916175726eusmtrp20aec6fd837cb9c97323960623fd98cb1~VaPaz9JkG2811228112eusmtrp2i;
-        Fri, 16 Sep 2022 17:57:26 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-45-6324b9075764
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 85.B7.07473.609B4236; Fri, 16
-        Sep 2022 18:57:26 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220916175725eusmtip282c3befede6e547a184672cacca605db~VaPanlpJO0439104391eusmtip2m;
-        Fri, 16 Sep 2022 17:57:25 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.192) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 16 Sep 2022 18:57:21 +0100
-Message-ID: <622ae86d-39ad-c45e-ec48-42abf4b257d2@samsung.com>
-Date:   Fri, 16 Sep 2022 19:57:19 +0200
+        Fri, 16 Sep 2022 13:58:54 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12130A6ADE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:58:53 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dv25so51124376ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Zd/o9M8DI6uCrxhdOmsIDeIBqPxRjAyKBLA8DBswRu4=;
+        b=m90z0oUISdCEVrhjQ9uxUANR3NM+rrTnamL16T2Nn3vpLe8WXEL5NAp9AqZl3J8vn3
+         O1bpIw1FDkyRbTfK3j31cJfLWEUs8sjFb6PpwBZNdO8ZdCnnCBOMYLvGkwaiS+jSe0yh
+         LITIPcmoQS+/LNf6Lmk5/rkBj/Av0e9+yhuhi6wIOH04IRjfPAZnrBkEo5esTJ+nFUq8
+         CoG5N3mYBX7CpdlAG3aRZKeoyPvu3UUiNwtWBc68j19ZR8uAOMN5UuxUiVXtvvgdqp9d
+         ju1FyVwDb+4eFmf7i+v3y4zmgTNKp6u/69gro38QCm3jEeL2rpi11snDAX9wOz2FlVSK
+         sD7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Zd/o9M8DI6uCrxhdOmsIDeIBqPxRjAyKBLA8DBswRu4=;
+        b=AhoMS7NxQ7BxFj7c6vDnG9Vr2IKNvC+9VwKg330isZ9zr5cHAMRXYFu+HeNvw96BBw
+         dTQXeV76Ysg8gImXAY0c5KISB/nwHXKiJSWIJzqnd0FmOjXoqjTrk8WJsg2BZCmxSfpV
+         BvUsEFk7Zdvd7ejgzqwY0dkhYksjxZxPqA8tB6JwmyuRQ7p97I9EPZ95JF/O8NIsbwHa
+         sQguSvfGJ+f3QP8fBkQ0nJWmN7oM0v3J2Rgdd3V0h0y/3paCkhhpE+Vyv7VS5+ob75Z1
+         AKdC+2/RcJbGiA395z6g56SLWZUrBx0JhYVLTUo4gcCvPj5Jm/AVBmSR5U3HCIQGzR7p
+         710w==
+X-Gm-Message-State: ACrzQf3tscvLKRcwCOud+PWWZebJq/jxELiFkvM4eIfHYIIgbwdCAYDT
+        7uW1ObFjYuBgnfK//O3Lshfa6Cv7JHrwMQDWGkiWPA==
+X-Google-Smtp-Source: AMsMyM69Euu4DOD30Wd1AHTVKT487yinq2VcXobq8TR0kzMsZGA+ymFgkuKfAvxrsz9WGg22sPg7VqALnRIfWZ//76g=
+X-Received: by 2002:a17:907:3f26:b0:77c:2508:3c08 with SMTP id
+ hq38-20020a1709073f2600b0077c25083c08mr4403073ejc.532.1663351131443; Fri, 16
+ Sep 2022 10:58:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [PATCH v13 13/13] dm: add power-of-2 target for zoned devices
- with non power-of-2 zone sizes
-Content-Language: en-US
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     Mike Snitzer <snitzer@redhat.com>
-CC:     <hch@lst.de>, <agk@redhat.com>, <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <snitzer@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <Johannes.Thumshirn@wdc.com>,
-        <linux-nvme@lists.infradead.org>, <pankydev8@gmail.com>,
-        <matias.bjorling@wdc.com>, <linux-block@vger.kernel.org>,
-        <bvanassche@acm.org>, <gost.dev@samsung.com>,
-        <dm-devel@redhat.com>, <hare@suse.de>, <jaegeuk@kernel.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>
-In-Reply-To: <e42a0579-61b2-7b77-08cb-6723278490cc@samsung.com>
+References: <20220912212847.1337868-1-ptf@google.com> <925b6e37-051f-927c-350a-cd767d88d72b@intel.com>
+In-Reply-To: <925b6e37-051f-927c-350a-cd767d88d72b@intel.com>
+From:   Patrick Thompson <ptf@google.com>
+Date:   Fri, 16 Sep 2022 13:58:40 -0400
+Message-ID: <CAJs+hrEiMP1hxZ06rnHWeUbvsau5C3D3aScSTmU4tEwvQ8Zm5w@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-pci-core: Disable cqe for ASUS 1100FK family devices
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Linux MMC development <linux-mmc@vger.kernel.org>,
+        Sangwhan Moon <sxm@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.192]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKKsWRmVeSWpSXmKPExsWy7djPc7rsO1WSDQ6f4rBYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLNFa/s3Jou972azWuxZNInJYuXqo0wWT9bPYrb423UPKHFL2+LyrjlsFvOX
-        PWW3mND2ldlizc2nLBYnbklbtG38yugg6HH5irfHzll32T0uny312LSqk81j85J6j903G9g8
-        drbeZ/V4v+8qUOh0tcfnTXIe7Qe6mQK4o7hsUlJzMstSi/TtErgyGrfFF2xgqbg+LaGBcTVz
-        FyMnh4SAicSF31tZuhi5OIQEVjBKXFnyCcr5wiixu20LG4TzmVGi51ATI0xLz4w5jBCJ5YwS
-        +6/8Zoer2tWznBXC2c0o8enwC3aQFl4BO4mbZ98zgdgsAqoSM7/dZoKIC0qcnPmEBcQWFYiU
-        WLP7LFi9sEC2xMFrm8AuZBYQl7j1ZD5QPQcHm4CWRGMnO4gpAjTm1jQXiIr9zBL98yxAbE4B
-        e4l9Gy4wQcQ1JVq3/2aHsOUltr+dA/WzssTMm1Oh7FqJtcfOsEPYjzglNrVZgIyXEHCR2Nkc
-        BxEWlnh1fAtUiYzE/53zmSDsaomnN34zg3wrIdDCKNG/cz0bRK+1RN+ZHIgaR4mGaT+ZIcJ8
-        EjfeCkJcwycxadt05gmMqrOQgmEWkndnIXlgFpIHFjCyrGIUTy0tzk1PLTbMSy3XK07MLS7N
-        S9dLzs/dxAhMiaf/Hf+0g3Huq496hxiZOBgPMUpwMCuJ8Kp6qiQL8aYkVlalFuXHF5XmpBYf
-        YpTmYFES503O3JAoJJCeWJKanZpakFoEk2Xi4JRqYJK1vHtb8uOdE7m/Ledwej2dFbBxUQHT
-        nNOB2/9Pz4pSkSitr5vjIfjox66JDtHSp1WKTL5Vxfoz7eeO6fvxaGJabP/7ILc7Ch+S3D8v
-        /v2Mw1Iy+qOT4GKGq2snfn958eS6MqHm+XnGFWkhU/yYZkU3zVVwXlQu+JnVs/TG3jW6lq/1
-        7TmmOWTbn5h17EtE/uwKxyz5x1rxOpPWH2tViJaovvVD+di6loC4++v+LPl/ZOFJE4uZvtE7
-        LgX0GNpvdLG62r/j9fzEq028vas1u1dwRrwKElfx3MBTxJIk3LOQ75I0c27P/M+W/iuao5Oi
-        2zTvcTM9PjX7VFjj/rdf77ZYn9r/2j6kPem58rJWUSWW4oxEQy3mouJEAEG+Xgj4AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsVy+t/xe7psO1WSDd69ZLVYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLNFa/s3Jou972azWuxZNInJYuXqo0wWT9bPYrb423UPKHFL2+LyrjlsFvOX
-        PWW3mND2ldlizc2nLBYnbklbtG38yugg6HH5irfHzll32T0uny312LSqk81j85J6j903G9g8
-        drbeZ/V4v+8qUOh0tcfnTXIe7Qe6mQK4o/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyN
-        zWOtjEyV9O1sUlJzMstSi/TtEvQyGrfFF2xgqbg+LaGBcTVzFyMnh4SAiUTPjDmMXYxcHEIC
-        Sxkl1i1dywqRkJH4dOUjO4QtLPHnWhcbRNFHRomFuxayQzi7GSVOLL3EBlLFK2AncfPseyYQ
-        m0VAVWLmt9tMEHFBiZMzn7CA2KICkRIPlzWBxYUFsiUOXtsEdgazgLjErSfzgeIcHGwCWhKN
-        newgpgjQmFvTXCAq9jNL9M+zgFg7kUni34E7YGs5Bewl9m24wARRpCnRuv03O4QtL7H97Ryo
-        L5UlZt6cCmXXSry6v5txAqPoLCTXzUJyxSwko2YhGbWAkWUVo0hqaXFuem6xoV5xYm5xaV66
-        XnJ+7iZGYDLZduzn5h2M81591DvEyMTBeIhRgoNZSYRX1VMlWYg3JbGyKrUoP76oNCe1+BCj
-        KTCIJjJLiSbnA9NZXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQQHpiSWp2ampBahFMHxMHp1QD
-        0542hevvdr8ydz6+61fYTyfWvYalBXcjfgXLprX/WZmizajYcbPOID2kdeeyp5u9/IJCJZo3
-        iWQWPzpvN8vFX+V8VOKqmFPdLDv5DRJ2pi+e/cQh/sDK96r9v8W0FxwwdZ6ffdwsJln056vV
-        C8JibDeu5pDamlGTlZImHu0gtr3rh9vjumXrozwqj8vE7/C0aGdvOu9YpdkmuefI/Yynju/m
-        mZxI2PVy0d1cnjl1yf3VUv2OK969DokssnuQdizg2N1DE2IPe1meaVR/+DQqfrXz7dPtDkY5
-        uab/f35pbftTfEd3ZpHLmVtuQREnn4jf/b1apaZI+aRw8F3FalcjzetPU64ZTEnzPZytWfxU
-        iaU4I9FQi7moOBEAgMk2La8DAAA=
-X-CMS-MailID: 20220916175726eucas1p2b96d3dda893b1e3b47e0ae4f22da13d5
-X-Msg-Generator: CA
-X-RootMTR: 20220912082220eucas1p24605fdcf22aedc4c40d5303da8f17ad5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220912082220eucas1p24605fdcf22aedc4c40d5303da8f17ad5
-References: <20220912082204.51189-1-p.raghav@samsung.com>
-        <CGME20220912082220eucas1p24605fdcf22aedc4c40d5303da8f17ad5@eucas1p2.samsung.com>
-        <20220912082204.51189-14-p.raghav@samsung.com> <YyIG3i++QriS9Gyy@redhat.com>
-        <e42a0579-61b2-7b77-08cb-6723278490cc@samsung.com>
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>
->> Are you certain you shouldn't at least be exposing a different
->> logical_block_size to upper layers?
->>
-> To be honest, I tested my patches in QEMU with 4k Logical block size and on
-> a device with 4k LBA size.
-> 
-> I did a quick test with 512B LBA size in QEMU, and I didn't see any
-> failures when I ran my normal test suite.
-> 
-> Do you see any problem with exposing the same LBA as the underlying device?
-> 
+Hi again,
 
-Do you see any issues here? If not, I can send the next version with the
-other two changes you suggested.
+I made a mistake while testing this patch, please do not merge it as
+it does not fix any issues. We will send out a v2 patch shortly.
 
 Thanks,
-Pankaj
+Patrick
+
+
+On Tue, Sep 13, 2022 at 2:34 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 13/09/22 00:28, Patrick Thompson wrote:
+> > From: ptf <ptf@google.com>
+> >
+> > The CQE implementation for the eMMC in the ASUS 1100FK family of devices
+> > is broken. This causes installations to fail and thus we are disabling
+> > CQE for this family of devices.
+> >
+> > Signed-off-by: Patrick Thompson <ptf@google.com>
+>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+>
+> > ---
+> >
+> > Hello,
+> >
+> > I was hoping to get some advice on adapting this patch to target the
+> > eMMC directly instead of a family of laptops. One idea is to use the
+> > PCI-id of the controller (in this case [8086:4dc4]). Would that make
+> > sense? Is there someone with more knowledge on the subject that could
+> > confirm that the [8086:4dc4] device doesn't have a working CQE?
+>
+> In these cases the issue is suspected to be BIOS. Best solution is to
+> disable CQE.
+>
+> >
+> > Thank you,
+> > Patrick
+> >
+> >
+> >  drivers/mmc/host/sdhci-pci-core.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> > index 622b7de96c7f..3ba0250559e7 100644
+> > --- a/drivers/mmc/host/sdhci-pci-core.c
+> > +++ b/drivers/mmc/host/sdhci-pci-core.c
+> > @@ -890,7 +890,8 @@ static bool glk_broken_cqhci(struct sdhci_pci_slot *slot)
+> >  {
+> >       return slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_GLK_EMMC &&
+> >              (dmi_match(DMI_BIOS_VENDOR, "LENOVO") ||
+> > -             dmi_match(DMI_SYS_VENDOR, "IRBIS"));
+> > +             dmi_match(DMI_SYS_VENDOR, "IRBIS") ||
+> > +             dmi_match(DMI_PRODUCT_FAMILY, "ASUS BR1100FKA"));
+> >  }
+> >
+> >  static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+>
