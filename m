@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77325BADDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FA65BADDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 15:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiIPNM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 09:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S231463AbiIPNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 09:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiIPNM0 (ORCPT
+        with ESMTP id S229703AbiIPNNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:12:26 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAE393502;
-        Fri, 16 Sep 2022 06:12:18 -0700 (PDT)
-Received: from [89.101.193.70] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oZB8d-00035v-NI; Fri, 16 Sep 2022 15:12:11 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alessandro Carminati <alessandro.carminati@gmail.com>
-Subject: Re: [PATCH 2/2] Add sata version of the quartz64-a board
-Date:   Fri, 16 Sep 2022 15:12:10 +0200
-Message-ID: <2385186.jE0xQCEvom@phil>
-In-Reply-To: <YyRxx4zovhMMeQYV@lab.hqhome163.com>
-References: <YyRxx4zovhMMeQYV@lab.hqhome163.com>
+        Fri, 16 Sep 2022 09:13:04 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93329323E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:12:40 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id e18so31458965edj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 06:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hOaONVosDHKGcKcdd79IN/qOAa8ODfx3cQY74s6WQyo=;
+        b=SU8nSZjp1VUobJqjGTpgJWn8xDpxg4WLlqHITE2oPUcXGUQCW2nmJXG2M1vDbfSiCe
+         WZIS8pZTDnswXKVPxZSJfDtDySgNI6HVHKG5FxRJTJi2C9UE8K95MOSgEU66OsTBThYK
+         t5FGkoPDYgYwZQ8ipe9IVumeWzSSnIoVLDoMKGXrSkWfyb7r4OkEdvq6u9vzrCyunVee
+         ZZkDHLECPFY+cexVdh9otrCL0YQxfuOWGPi0vUJ6RT19aLWxVTbpPpRlxYOUhFURRTAU
+         NUXvMqtchDqA638TTyluS9ya5BDcsXg8c/eeVo1TGHocmm2oejGupIGzEpluFA7bd7if
+         8Kzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hOaONVosDHKGcKcdd79IN/qOAa8ODfx3cQY74s6WQyo=;
+        b=dOXStGcviZ9GHIE46q7UVmldCviwldwjdYqURT9/prTvrO7Yc/y0fKGzJRuDrI57X6
+         42gEwb635vgqq1cgjfyjwKsVyllTkjfUp4BcREsRguThJDZfhwNoiz13PTi7FgXXD+qE
+         z1yc2pgqdPVsECMV6zGkA2F9X905rSdLzemFLDvnoLjWZU8DyY0os0p+UpndLWKOBdkS
+         nFH87nmHaEqgCkRAj2+jCGxd9kfs5xY75f9Kxbcs21UxRaZW21daTtrWYiM8X8VRpJgP
+         Z1/B5wR3QVrWKAAwAVcyhazThq0IcsMx8VAdBwb8bI7fZoLcLT1X+eBlmF7G4f2kTivy
+         qB8Q==
+X-Gm-Message-State: ACrzQf0d8j6GQjDNrxIc0SqdTELpBfqGbklxzcpO5ii0QS+YWLONDThM
+        r1/ESI0K2fFbso0EIlgSl4BOswqDOT9qVIX7fm2BIQ==
+X-Google-Smtp-Source: AMsMyM7jvz/MCPoNJ+YdiuZGmryTSHtIUn4Ti0WQr1gKjxtorbmEISu95NSdN5RA0PBGHZL1EpgY3sJqP/q/CY4WZ/M=
+X-Received: by 2002:a05:6402:190f:b0:452:d6ba:a150 with SMTP id
+ e15-20020a056402190f00b00452d6baa150mr3957922edz.126.1663333959316; Fri, 16
+ Sep 2022 06:12:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20220914151145.73253-1-brgl@bgdev.pl> <CACRpkdZaSL_pkmrVGOT-y7+3i4y6f6Cjgehycq2FKLwPxrbFvw@mail.gmail.com>
+ <CAMRc=Me+srb_rwwaUxx1a=8+Wqm5sc2APzfCoFG3+QxRK5kEKA@mail.gmail.com>
+In-Reply-To: <CAMRc=Me+srb_rwwaUxx1a=8+Wqm5sc2APzfCoFG3+QxRK5kEKA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 16 Sep 2022 15:12:28 +0200
+Message-ID: <CACRpkdZwsLM64m7xHgNg=FPqTYaou9=KpN2rckyp6sKiJokU7A@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: TODO: add an item about GPIO safe-state
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alessandro,
+On Fri, Sep 16, 2022 at 9:11 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Am Freitag, 16. September 2022, 14:53:27 CEST schrieb Alessandro Carminati:
-> The Quartz64 board is built upon Rockchip RK3566.
-> Rockchip RK3566 has two combo phys.
-> The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-> ctrl2.
-> The second combo phy is hardwired to the PCIe slot, where for the first,
-> the hardware on the board provides both the USB3 connector and the SATA
-> connector.
-> This DT allows the users to switch the combo phy to the SATA connector.
-> 
-> Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+> Of course we were not the first ones to think about it...
 
-I'm not really sure what the best way to do this is.
+:D
 
-For one, this is mainly a configuration thing, so I was more thinking
-about a devicetree-overlay as the right thing to use.
+> I'll read through it later. Was there any particular reason why this
+> never made its way into the kernel?
 
-On the other hand this is touches essential a device you may want to
-boot from. Though an initramfs may be able to solve this.
+Inability to drive through a DT binding that was acceptable for the
+DT binding maintainers.
 
-So I'm really not sure - maybe the dt-maintainers can provide some
-direction :-)
+A good idea to get it passed I think would be to ask Rob (with some
+examples) how he thinks it should look and finalize the bindings
+before coding.
 
-
-Some more general stuff below (and here):
-
-Please always use prefixes in your patch subject matching
-the subsystem - can be found by just using "git log" on the directory.
-
-Here it would be "arm64: dts: rockchip: foo"
-
-> ---
->  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
->  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts | 9 +++++++++
->  2 files changed, 10 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> index 97ec6c156346..5c82881a92d3 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.usb3.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.sata.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> new file mode 100644
-> index 000000000000..8620df7ec01e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.sata.dts
-> @@ -0,0 +1,9 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +
-> +/dts-v1/;
-> +
-> +#include "rk3566-quartz64-a.dtsi"
-> +
-> +&sata1 {
-> +	status = "okay";
-> +};
-
-I guess you may want to disable the now unused usb controller?
-
-
-Heiko
-
-
-
-
-
-
+Yours,
+Linus Walleij
