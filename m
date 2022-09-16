@@ -2,165 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4A65BACF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2C65BACF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiIPMIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 08:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S230349AbiIPMHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIPMH5 (ORCPT
+        with ESMTP id S229863AbiIPMHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 08:07:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D029BAFAC0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663330075; x=1694866075;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gzalq6mLhvry+CNbvFNURWSHXjt8ZM/cgS6R+jiYAHI=;
-  b=JlZJvu1RiLRVqzU4/Q7ADxymtPWFDQzp6ykMeUZQBNBo9T5YG6Nhiasu
-   OIuaBgrkabsW9jDPHHzNEX6vJ3WrSIM27jckwWHRo4tUgHiCa3vPZpdWR
-   uInXrxS5u7r/tJTDrvC/uA8sRuEomybI/kEGH2RujkVO1+jgIGl252y7a
-   QznCNtlyTBv/8BVR+m0JKTAn2UIC5gMtnZZxW4VWA5kXOnjpPcEyKHSWf
-   spTqM/7g+P6ivXes11htzUdtkOdRctxb8rtjaDZZrPWH6DoNwpDvp5slK
-   l70Evzyfyc38uDZ2Wu2OouOyp7Wj9fAVSJa7Ln6vFQxLoY7l13U4++YwM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360717730"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="360717730"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 05:07:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="568809104"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Sep 2022 05:07:53 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZA8O-0001ko-26;
-        Fri, 16 Sep 2022 12:07:52 +0000
-Date:   Fri, 16 Sep 2022 20:07:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hyunwoo Kim <imv4bel@gmail.com>, laforge@gnumonks.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, imv4bel@gmail.com
-Subject: Re: [PATCH] char: pcmcia: cm4040_cs: Fix use-after-free in
- reader_fops
-Message-ID: <202209161923.cDLX4oW9-lkp@intel.com>
-References: <20220916045834.GA188033@ubuntu>
+        Fri, 16 Sep 2022 08:07:40 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DFAFADA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:07:38 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u9so49033962ejy.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 05:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=OQ8zHrIX70m98Oe3Z2xil8x9KKcY+DJQWerhvs21yklCJbj0er4JrSdkhrWEdL4cdw
+         p703XLHfp6ksj7uFlg56h5KuWoxdB0Z5qMNDTsjT9a3QQxZe40q4Dcl1AEtgYFRUmRgb
+         JyO6tzyZJxrUPdaH/m9I99qLd33lnQgiA3fBkgIKy4qvAm4KNap5pnKipqw/pDQdOsF2
+         RMVosVZX40XjPNoppGc1VxTGF/4qg7I9MhjgMiHH+8ARRhtbE4XdLcvqGqdTtxhpoOwr
+         yl4T1vsmWlC0wf/mYdDRVvQVSQruQmelYMxnEFt0ILguRW8+tpUXQssBQnqOj4h3j9f7
+         ENpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=GpKdwOONgb7EhaWXGUGQrKTTvYm9SftbUgWE/wofkiqMySdsI+y2reBzxdQ7jUePnr
+         Q0Mlmp8vSeZlemrwfi4JElryrFsVE6wxVcztLFDbisj8LOQZQLheSzWTn8pIhE/xQCKC
+         ZnEK+5pDbqwsQ6s5Rbl//CkySnshMpKZc7xikgRfXsv9u2OqpPqs/zhiu0LL/6KKoD7p
+         I7InNYhCpnKO3vHVK+pnXMha4fmr9jfK+IzHKPyqpNitGnTmINtZ5kcppck48N2jAcWl
+         x0ELRom26ZE850gbsUKUTT2VIZAZhkravChWVYdyFyYi2ICpVThYNfxakxfWQ28j7hV5
+         O/0Q==
+X-Gm-Message-State: ACrzQf2dnaAsiPOm0faaTINIa7YTY5f9+EydDQ4cTNB5PRjwV5plvzZL
+        u0UZJlZ4L4R1HXzya1s77P5RQ8Hvi2cSTfHFtPw=
+X-Google-Smtp-Source: AMsMyM50Qt7qDEVjUjOeh4Zr3qhxIqEfsGOFmjXgAwKOxJcISlt17Ll3jPrBgOzPcw9B4a7Th2rv4TTzjVtoMHfw+4M=
+X-Received: by 2002:a17:906:7312:b0:780:9b5e:36dd with SMTP id
+ di18-20020a170906731200b007809b5e36ddmr2568880ejc.200.1663330057120; Fri, 16
+ Sep 2022 05:07:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916045834.GA188033@ubuntu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a98:cb43:0:b0:181:f8b4:ef08 with HTTP; Fri, 16 Sep 2022
+ 05:07:36 -0700 (PDT)
+Reply-To: maryalbertt00045@gmail.com
+From:   Mary Albert <edithbrown048@gmail.com>
+Date:   Fri, 16 Sep 2022 13:07:36 +0100
+Message-ID: <CAKt8mnavM=Bdn-e0nh0YT2-GEYodvmchN=5ouka8rEQP1p3qVQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:629 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4817]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [edithbrown048[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [maryalbertt00045[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [edithbrown048[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hyunwoo,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on soc/for-next linus/master v6.0-rc5 next-20220916]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hyunwoo-Kim/char-pcmcia-cm4040_cs-Fix-use-after-free-in-reader_fops/20220916-125917
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git ceecbbddbf549fe0b7ffa3804a6e255b3360030f
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220916/202209161923.cDLX4oW9-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/578c8f062f3dcbc2fb85f060f74d0522bcf34815
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hyunwoo-Kim/char-pcmcia-cm4040_cs-Fix-use-after-free-in-reader_fops/20220916-125917
-        git checkout 578c8f062f3dcbc2fb85f060f74d0522bcf34815
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/char/pcmcia/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/char/pcmcia/cm4040_cs.c:472:17: warning: variable 'dev' is uninitialized when used here [-Wuninitialized]
-                   mutex_unlock(&dev->lock);
-                                 ^~~
-   drivers/char/pcmcia/cm4040_cs.c:460:24: note: initialize the variable 'dev' to silence this warning
-           struct reader_dev *dev;
-                                 ^
-                                  = NULL
-   1 warning generated.
-
-
-vim +/dev +472 drivers/char/pcmcia/cm4040_cs.c
-
-   457	
-   458	static int cm4040_open(struct inode *inode, struct file *filp)
-   459	{
-   460		struct reader_dev *dev;
-   461		struct pcmcia_device *link;
-   462		int minor = iminor(inode);
-   463		int ret;
-   464	
-   465		if (minor >= CM_MAX_DEV)
-   466			return -ENODEV;
-   467	
-   468		mutex_lock(&cm4040_mutex);
-   469	
-   470		link = dev_table[minor];
-   471		if (link == NULL || !pcmcia_dev_present(link)) {
- > 472			mutex_unlock(&dev->lock);
-   473			mutex_unlock(&cm4040_mutex);
-   474			return -ENODEV;
-   475		}
-   476	
-   477		if (link->open) {
-   478			mutex_unlock(&dev->lock);
-   479			mutex_unlock(&cm4040_mutex);
-   480			return -EBUSY;
-   481		}
-   482	
-   483		dev = link->priv;
-   484		mutex_lock(&dev->lock);
-   485	
-   486		filp->private_data = dev;
-   487	
-   488		if (filp->f_flags & O_NONBLOCK) {
-   489			DEBUGP(4, dev, "filep->f_flags O_NONBLOCK set\n");
-   490			mutex_unlock(&dev->lock);
-   491			mutex_unlock(&cm4040_mutex);
-   492			return -EAGAIN;
-   493		}
-   494	
-   495		link->open = 1;
-   496	
-   497		mod_timer(&dev->poll_timer, jiffies + POLL_PERIOD);
-   498	
-   499		DEBUGP(2, dev, "<- cm4040_open (successfully)\n");
-   500		ret = nonseekable_open(inode, filp);
-   501	
-   502		kref_get(&dev->refcnt);
-   503	
-   504		mutex_unlock(&dev->lock);
-   505		mutex_unlock(&cm4040_mutex);
-   506	
-   507		return ret;
-   508	}
-   509	
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello,
+how are you?
