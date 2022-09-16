@@ -2,175 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C0A5BB2B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576755BB2B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 21:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiIPTPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 15:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S230106AbiIPTRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 15:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIPTPg (ORCPT
+        with ESMTP id S229471AbiIPTRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 15:15:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048ACAB071;
-        Fri, 16 Sep 2022 12:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ypkdyUP1JcI6s7cVs4ktcAodUubTPEOwr3HQWpEnFKY=; b=Pw3hxWjjBMOCUduKA/HxQ14yPx
-        EtpjxuqhNVlO7xUAG1GiuC9mpTmG/QTVPro7HxagyGxN9VkBlmLvx7NMHh9wSumjLFYepfiELs9Cd
-        L/F8LVbEUlI/SOg273mukg4YjcT9UvosbxETburGeC8B4GIgZIn7VUaChHcA6m/iOWjes4AkxKI+U
-        bimitz6WRDlt12TsreTRphNaObbIwWrzmCYNmcmsdtqtqwKy36NMaDH9g55Q+UE+jHuQbArDIH+mt
-        EHMkZ3fvkf3sOqfueGzEP/a22mk7pmGwjlYP7tZ7dsmsMc08W0SHQAwpqWR80JJbmUFra+g5P6dGf
-        gh9aVtwA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZGo8-002Xle-ME; Fri, 16 Sep 2022 19:15:24 +0000
-Date:   Fri, 16 Sep 2022 20:15:24 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <YyTLTBM4OC6/RnjG@casper.infradead.org>
-References: <20220916135953.1320601-1-keescook@chromium.org>
- <20220916135953.1320601-4-keescook@chromium.org>
- <YySML2HfqaE/wXBU@casper.infradead.org>
- <202209160805.CA47B2D673@keescook>
+        Fri, 16 Sep 2022 15:17:19 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8FEB6D1F;
+        Fri, 16 Sep 2022 12:17:18 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id o204so7286770oia.12;
+        Fri, 16 Sep 2022 12:17:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zCLPn/HwN1TiefL3Aqe+h98I2D++Or1my8mtlgETcOo=;
+        b=7fLH8Eyh3AtcSPgce5RYt638GFsluBzTOMtwCxN4rkBifPed6l6pdNJ5xlh9hSDTlS
+         lVW3mQ9Ozh2EjBKhpzj5MG2R4C4XnvJoBH1pc8MbHD5qapC84w3mbJB97M3lo7mCYoe7
+         FD9vX0H/flNKLTWyTlRlJdPmswgFCwtbUC3eNiPeniHR0x3Z54E6cR9hh39Ttp1/Z+Ts
+         UhLD1tOcjXIUVQYNNB8v2j0STN+5zKxU1kiGEMwQIrhgX83nYzuju/q7B/yYMHLKBYu5
+         htPvCToIudbhX5nwA9at1bgvZtFTASGsIoahCAR1hGQ10s6kj/QaNOTVkNcJ8QwL3iNO
+         xodA==
+X-Gm-Message-State: ACgBeo0SkBLcUvNCcuwq11jrl9g5EyCCm5T/hxO54R62ETwvSSinOqCA
+        AV4FGMk/N8/ruiImAIWxsg==
+X-Google-Smtp-Source: AA6agR6eqlyPtQkJJrob+G2quqPI7sfi/F3WkYcp9vGnrwH1R0gDagteP5k5KoZaheCaltHQNzyJbg==
+X-Received: by 2002:a05:6808:1987:b0:34f:c567:8592 with SMTP id bj7-20020a056808198700b0034fc5678592mr7079773oib.229.1663355836930;
+        Fri, 16 Sep 2022 12:17:16 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id be36-20020a05687058a400b000f5e89a9c60sm3696268oab.3.2022.09.16.12.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 12:17:16 -0700 (PDT)
+Received: (nullmailer pid 1109013 invoked by uid 1000);
+        Fri, 16 Sep 2022 19:17:15 -0000
+Date:   Fri, 16 Sep 2022 14:17:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Marc Herbert <marc.herbert@intel.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] dt-bindings: arm: msm: Convert kpss-acc driver
+ Documentation to yaml
+Message-ID: <20220916191715.GA1079300-robh@kernel.org>
+References: <20220914142256.28775-1-ansuelsmth@gmail.com>
+ <20220914142256.28775-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202209160805.CA47B2D673@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220914142256.28775-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 08:09:16AM -0700, Kees Cook wrote:
-> On Fri, Sep 16, 2022 at 03:46:07PM +0100, Matthew Wilcox wrote:
-> > On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> > > The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> > > more defensive against running from interrupt context. Use a best-effort
-> > > check for VMAP areas when running in interrupt context
-> > 
-> > I had something more like this in mind:
+On Wed, Sep 14, 2022 at 04:22:53PM +0200, Christian Marangi wrote:
+> Convert kpss-acc driver Documentation to yaml.
+> The original Documentation was wrong all along. Fix it while we are
+> converting it.
+> The example was wrong as kpss-acc-v2 should only expose the regs but we
+> don't have any driver that expose additional clocks. The kpss-acc driver
+> is only specific to v1. For this exact reason, limit all the additional
+> bindings (clocks, clock-names, clock-output-names and #clock-cells) to
+> v1 and also flag that these bindings should NOT be used for v2.
+
+Odd that a clock controller has no clocks, but okay.
+
 > 
-> Yeah, I like -EAGAIN. I'd like to keep the interrupt test to choose lock
-> vs trylock, otherwise it's trivial to bypass the hardening test by having
-> all the other CPUs beating on the spinlock.
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
+>  .../bindings/arm/msm/qcom,kpss-acc.yaml       | 93 +++++++++++++++++++
 
-I was thinking about this:
+As this is a clock controller, please move to bindings/clock/
 
-+++ b/mm/vmalloc.c
-@@ -1844,12 +1844,19 @@
- {
- 	struct vmap_area *va;
+>  2 files changed, 93 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
 
--	if (!spin_lock(&vmap_area_lock))
--		return ERR_PTR(-EAGAIN);
-+	/*
-+	 * It's safe to walk the rbtree under the RCU lock, but we may
-+	 * incorrectly find no vmap_area if the tree is being modified.
-+	 */
-+	rcu_read_lock();
- 	va = __find_vmap_area(addr, &vmap_area_root);
--	spin_unlock(&vmap_area_lock);
-+	if (!va && in_interrupt())
-+		va = ERR_PTR(-EAGAIN);
-+	rcu_read_unlock();
+> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+> new file mode 100644
+> index 000000000000..5e16121d9f0d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-acc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC)
+> +
+> +maintainers:
+> +  - Christian Marangi <ansuelsmth@gmail.com>
+> +
+> +description: |
 
--	return va;
-+	if (va)
-+		return va;
-+	return find_vmap_area(addr);
- }
+Don't need '|' if no formatting to preserve.
 
- /*** Per cpu kva allocator ***/
+> +  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
+> +  There is one ACC register region per CPU within the KPSS remapped region as
+> +  well as an alias register region that remaps accesses to the ACC associated
+> +  with the CPU accessing the region.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,kpss-acc-v1
+> +      - qcom,kpss-acc-v2
+> +
+> +  reg:
+> +    items:
+> +      - description: Base address and size of the register region
+> +      - description: Optional base address and size of the alias register region
+> +
+> +  clocks:
+> +    items:
+> +      - description: phandle to pll8_vote
 
-... but I don't think that works since vmap_areas aren't freed by RCU,
-and I think they're reused without going through an RCU cycle.
+Always a phandle (and arg), so that's redundant. Really, if there's not 
+more to add that what clock-names says, then just 'maxItems: 2' is fine.
 
-So here's attempt #4, which actually compiles, and is, I think, what you
-had in mind.
-
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 096d48aa3437..2b7c52e76856 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
- void free_vm_area(struct vm_struct *area);
- extern struct vm_struct *remove_vm_area(const void *addr);
- extern struct vm_struct *find_vm_area(const void *addr);
--struct vmap_area *find_vmap_area(unsigned long addr);
-+struct vmap_area *find_vmap_area_try(unsigned long addr);
- 
- static inline bool is_vm_area_hugepages(const void *addr)
- {
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index c1ee15a98633..e0fb605c1b38 100644
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
- 	}
- 
- 	if (is_vmalloc_addr(ptr)) {
--		struct vmap_area *area = find_vmap_area(addr);
-+		struct vmap_area *area = find_vmap_area_try(addr);
-+
-+		/* We may be in NMI context */
-+		if (area == ERR_PTR(-EAGAIN))
-+			return;
- 
- 		if (!area)
- 			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index dd6cdb201195..c47b3b5d1c2d 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
- 	free_vmap_area_noflush(va);
- }
- 
--struct vmap_area *find_vmap_area(unsigned long addr)
-+static struct vmap_area *find_vmap_area(unsigned long addr)
- {
- 	struct vmap_area *va;
- 
-@@ -1840,6 +1840,26 @@ struct vmap_area *find_vmap_area(unsigned long addr)
- 	return va;
- }
- 
-+/*
-+ * The vmap_area_lock is not interrupt-safe, and we can end up here from
-+ * NMI context, so it's not worth even trying to make it IRQ-safe.
-+ */
-+struct vmap_area *find_vmap_area_try(unsigned long addr)
-+{
-+	struct vmap_area *va;
-+
-+	if (in_interrupt()) {
-+		if (!spin_trylock(&vmap_area_lock))
-+			return ERR_PTR(-EAGAIN);
-+	} else {
-+		spin_lock(&vmap_area_lock);
-+	}
-+	va = __find_vmap_area(addr, &vmap_area_root);
-+	spin_unlock(&vmap_area_lock);
-+
-+	return va;
-+}
-+
- /*** Per cpu kva allocator ***/
- 
- /*
+> +      - description: phandle to pxo_board
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pll8_vote
+> +      - const: pxo
+> +
+> +  clock-output-names:
+> +    description: Name of the aux clock. Krait can have at most 4 cpu.
+> +    enum:
+> +      - acpu0_aux
+> +      - acpu1_aux
+> +      - acpu2_aux
+> +      - acpu3_aux
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: qcom,kpss-acc-v1
+> +then:
+> +  required:
+> +    - clocks
+> +    - clock-names
+> +    - clock-output-names
+> +    - '#clock-cells'
+> +else:
+> +  properties:
+> +    clocks: false
+> +    clock-names: false
+> +    clock-output-names: false
+> +    '#clock-cells': false
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
+> +
+> +    clock-controller@2088000 {
+> +      compatible = "qcom,kpss-acc-v1";
+> +      reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+> +      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +      clock-names = "pll8_vote", "pxo";
+> +      clock-output-names = "acpu0_aux";
+> +      #clock-cells = <0>;
+> +    };
+> +
+> +  - |
+> +    clock-controller@f9088000 {
+> +      compatible = "qcom,kpss-acc-v2";
+> +      reg = <0xf9088000 0x1000>,
+> +            <0xf9008000 0x1000>;
+> +    };
+> +...
+> -- 
+> 2.37.2
+> 
+> 
