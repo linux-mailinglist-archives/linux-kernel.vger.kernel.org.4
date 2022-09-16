@@ -2,215 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022E85BB200
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A613D5BB202
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 20:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiIPSVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 14:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S229956AbiIPSVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 14:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIPSVH (ORCPT
+        with ESMTP id S229938AbiIPSV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:21:07 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA67A1D1A;
-        Fri, 16 Sep 2022 11:21:01 -0700 (PDT)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28GHdif4003235;
-        Fri, 16 Sep 2022 11:19:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PPS06212021;
- bh=4Bl1oOzxnloiv5lBZu0sTycNMhJ6BoRjgmbXTEm4F3U=;
- b=BqwncfYrEqbB4J0TOeA/YUU3Y4GvKH0Q3i2TJiI+lPvaXUQPNgSUJ79UKmDSaqbvJN0c
- KN3nER0W1aJD5P1ZNHr1h+5QBQUN3cKC2I8xq/YLvDD+SNS3E8MbARiiAigh0vUjmJAj
- U/MKsokCMTfBnNf6miDpHVw7vJCoutI11swZ5pqr9tydiUm19R9dlfTkdBRxCFHEjbDz
- rvQuAjEn2McYOQ1zXT58qKzuXrfKZj5k/J4cL3XtJ3OvfUUwYzDqcTmnLeGhJd57OaRf
- 7pGx3Ep0aYDNaRj1fFwyYJeFGNji/8OZ68mjNzryuAefSGYUA4LUK4VjA08FyM/ORcXv kg== 
-Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3jm8ye8x8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 16 Sep 2022 11:19:38 -0700
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 16 Sep 2022 11:19:37 -0700
-Received: from yow-lpggp3.wrs.com (128.224.137.13) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Fri, 16 Sep 2022 11:19:37 -0700
-Received: by yow-lpggp3.wrs.com (Postfix, from userid 8023)
-        id 494092003A; Fri, 16 Sep 2022 14:19:37 -0400 (EDT)
-Date:   Fri, 16 Sep 2022 14:19:37 -0400
-From:   Paul Gortmaker <paul.gortmaker@windriver.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Matthew Brost <matthew.brost@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Bruce Chang <yu.bruce.chang@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        <intel-gfx@lists.freedesktop.org>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Clark Williams <clrkwllms@kernel.org>,
-        <linux-rt-users@vger.kernel.org>
-Subject: Re: [PATCH v5 0/2] Fix TLB invalidate issues with Broadwell
- [preempt-rt regression]
-Message-ID: <20220916181934.GA16961@windriver.com>
-References: <cover.1657639152.git.mchehab@kernel.org>
+        Fri, 16 Sep 2022 14:21:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B2EA3D15;
+        Fri, 16 Sep 2022 11:21:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57290B828DF;
+        Fri, 16 Sep 2022 18:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8DF5C433C1;
+        Fri, 16 Sep 2022 18:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663352484;
+        bh=QSRaazKnpcvj8AxVHtAgH0r/tpYN7JP98ko1Eco340g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SYClVRLMluzxvlhl+T6Z19t/cHoFOz/nTO/jP1ibjBU/p3HOaNZsj9TJPklk+t7K4
+         TrMbeMfHm7rACu5nSrHWVP1HEgAf29EdqUinVTlJSfKmeHIeRyQAMON6sVCbB6FFuz
+         vTPugeEestxXSFdH3A9UCJqdaf8VuFjTc3jRNaqzOLnqHPdrGcQhmnmagVNSto9BER
+         rDlUrP8I2K3T9hPMHvU1ib4/U4evB544YMdY6SlLgZUDeBORhSgM3EZB3sKozccx8X
+         ekFBviH9LQCh8gVSb9SKF4F0dE9yiGOG7O2BKhBCYQewlIeRE9/+eABCSP/34zXcV4
+         5KHFQtc2Nu0EA==
+Date:   Fri, 16 Sep 2022 11:21:22 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+Subject: Re: [PATCH] f2fs: fix to detect obsolete inner inode during
+ fill_super()
+Message-ID: <YyS+otPNtdnztfao@google.com>
+References: <20220908105334.98572-1-chao@kernel.org>
+ <Yx9SVsxVzNErMDpv@google.com>
+ <a03417f6-e4fa-2b1a-34f8-bd5d52c1e853@kernel.org>
+ <YyAdapWpgTIXa2R5@google.com>
+ <c29df38b-18d7-506b-59a1-d471f2769667@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1657639152.git.mchehab@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: 35mH7Uo2DatrHXmJyPSAceB3PLOJ6EMQ
-X-Proofpoint-ORIG-GUID: 35mH7Uo2DatrHXmJyPSAceB3PLOJ6EMQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-16_12,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209160133
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c29df38b-18d7-506b-59a1-d471f2769667@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[[PATCH v5 0/2] Fix TLB invalidate issues with Broadwell] On 12/07/2022 (Tue 16:21) Mauro Carvalho Chehab wrote:
-
-> i915 selftest hangcheck is causing the i915 driver timeouts, as reported
-> by Intel CI bot:
+On 09/14, Chao Yu wrote:
+> On 2022/9/13 14:04, Jaegeuk Kim wrote:
+> > On 09/13, Chao Yu wrote:
+> > > On 2022/9/12 23:37, Jaegeuk Kim wrote:
+> > > > On 09/08, Chao Yu wrote:
+> > > > > Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
+> > > > > all the time to fix the below panic.
+> > > > > 
+> > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> > > > > Mem abort info:
+> > > > >     ESR = 0x0000000086000004
+> > > > >     EC = 0x21: IABT (current EL), IL = 32 bits
+> > > > >     SET = 0, FnV = 0
+> > > > >     EA = 0, S1PTW = 0
+> > > > >     FSC = 0x04: level 0 translation fault
+> > > > > user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
+> > > > > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> > > > > Internal error: Oops: 86000004 [#1] PREEMPT SMP
+> > > > > Modules linked in:
+> > > > > CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > > > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > > > pc : 0x0
+> > > > > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+> > > > > sp : ffff800012783970
+> > > > > x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
+> > > > > x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
+> > > > > x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
+> > > > > x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
+> > > > > x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
+> > > > > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > > > > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
+> > > > > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+> > > > > x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
+> > > > > x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
+> > > > > Call trace:
+> > > > >    0x0
+> > > > >    set_page_dirty+0x38/0xbc mm/folio-compat.c:62
+> > > > >    f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
+> > > > >    do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
+> > > > >    f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
+> > > > > 
+> > > > > The root cause is, quoted from Jaegeuk:
+> > > > > 
+> > > > > It turned out there is a bug in reiserfs which doesn't free the root
+> > > > > inode (ino=2). That leads f2fs to find an ino=2 with the previous
+> > > > > superblock point used by reiserfs. That stale inode has no valid
+> > > > > mapping that f2fs can use, result in kernel panic.
+> > > > > 
+> > > > > This patch adds sanity check in f2fs_iget() to avoid finding stale
+> > > > > inode during inner inode initialization.
+> > > > > 
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+> > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > > > ---
+> > > > >    fs/f2fs/inode.c | 11 +++++++++++
+> > > > >    1 file changed, 11 insertions(+)
+> > > > > 
+> > > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > > > index ccb29034af59..df1a82fbfaf2 100644
+> > > > > --- a/fs/f2fs/inode.c
+> > > > > +++ b/fs/f2fs/inode.c
+> > > > > @@ -493,6 +493,17 @@ struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino)
+> > > > >    	struct inode *inode;
+> > > > >    	int ret = 0;
+> > > > > +	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
+> > > > > +					ino == F2FS_COMPRESS_INO(sbi)) {
+> > > > > +		inode = ilookup(sb, ino);
+> > > > > +		if (inode) {
+> > > > > +			iput(inode);
+> > > > > +			f2fs_err(sbi, "there is obsoleted inner inode %lu cached in hash table",
+> > > > > +					ino);
+> > > > > +			return ERR_PTR(-EFSCORRUPTED);
+> > > > 
+> > > > Well, this does not indicate f2fs is corrupted. I'd rather expect to fix
+> > > > reiserfs instead of f2fs workaround which hides the bug.
+> > > 
+> > > Well, is there a fixing patch for reiserfs? If not, how about applying this
+> > > patch first, later, we can revert it after reiserfs has been fixed.
+> > 
+> > I don't feel this is a right way to deal with that. If we think it'd be worth
+> > checking any stale inode object during f2fs_fill_super, we'd better check any
+> > cached inode given superblock pointer rather than our inner inodes only.
 > 
-> http://gfx-ci.fi.intel.com/cibuglog-ng/issuefilterassoc/24297?query_key=42a999f48fa6ecce068bc8126c069be7c31153b4
+> Well, something like this?
 
-[...]
-
-> After that, the machine just silently hangs.
-> 
-> Bisecting the issue, the patch that introduced the regression is:
-> 
->     7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-> 
-> Reverting it fix the issues, but introduce other problems, as TLB
-> won't be invalidated anymore. So, instead, let's fix the root cause.
-> 
-> It turns that the TLB flush logic ends conflicting with i915 reset,
-> which is called during selftest hangcheck. So, the TLB cache should
-> be serialized together with i915 reset.
-> 
-> Tested on an Intel NUC5i7RYB with an i7-5557U Broadwell CPU.
-
-It turns out that this breaks PM-suspend operations on preempt-rt, on
-multiple versions, due to all the linux-stable backports.  This happens
-because the uncore->lock is now used in atomic contexts.
-
-As the uncore->lock is widely used, conversion to a raw lock seems
-inappropriate at 1st glance, and hence some alternate solution will
-likely be required.
-
-Below is an example of the regression on v5.15-rt, with backport:
-
-commit 0ee5874dad61d2b154a9e3db196fc33e8208ce1b
-  Author: Chris Wilson <chris@chris-wilson.co.uk>
-  Date:   Tue Jul 12 16:21:32 2022 +0100
-
-    drm/i915/gt: Serialize GRDOM access between multiple engine resets
-        
-    [ Upstream commit b24dcf1dc507f69ed3b5c66c2b6a0209ae80d4d4 ]
-	        
-Reverting the engine reset serialization change avoids the PM-suspend
-regression and is a temporary workaround for -rt users, but of course
-leaves this original TLB issue exposed.
-
-  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 45092, name: kworker/u8:4
-  preempt_count: 1, expected: 0
-  RCU nest depth: 0, expected: 0
-  INFO: lockdep is turned off.
-  Preemption disabled at:
-  [<ffffffffc0636522>] __intel_gt_reset+0x92/0x100 [i915]
-  CPU: 3 PID: 45092 Comm: kworker/u8:4 Tainted: G        W  O      5.15.59-rt48-preempt-rt #1
-  Hardware name: Intel(R) Client Systems NUC7i5DNKE/NUC7i5DNB, BIOS DNKBLi5v.86A.0064.2019.0523.1933 05/23/2019
-  Workqueue: events_unbound async_run_entry_fn
-  Call Trace:
-   <TASK>
-   show_stack+0x52/0x5c
-   dump_stack_lvl+0x5b/0x86
-   dump_stack+0x10/0x16
-   __might_resched.cold+0xf7/0x12f
-   ? __gen6_reset_engines.constprop.0+0x80/0x80 [i915]
-   rt_spin_lock+0x4e/0xf0
-   ? gen8_reset_engines+0x2e/0x1e0 [i915]
-   gen8_reset_engines+0x2e/0x1e0 [i915]
-   ? __gen6_reset_engines.constprop.0+0x80/0x80 [i915]
-   __intel_gt_reset+0x9d/0x100 [i915]
-   gt_sanitize+0x16c/0x190 [i915]
-   intel_gt_suspend_late+0x3d/0xc0 [i915]
-   i915_gem_suspend_late+0x57/0x130 [i915]
-   i915_drm_suspend_late+0x38/0x110 [i915]
-   i915_pm_suspend_late+0x1d/0x30 [i915]
-   pm_generic_suspend_late+0x28/0x40
-   pci_pm_suspend_late+0x37/0x50
-   ? pci_pm_poweroff_late+0x50/0x50
-   dpm_run_callback.cold+0x3c/0xa8
-   __device_suspend_late+0xa4/0x1e0
-   async_suspend_late+0x20/0xa0
-   async_run_entry_fn+0x28/0xc0
-   process_one_work+0x239/0x6c0
-   worker_thread+0x58/0x3e0
-   kthread+0x1a9/0x1d0
-   ? process_one_work+0x6c0/0x6c0
-   ? set_kthread_struct+0x50/0x50
-   ret_from_fork+0x1f/0x30
-   </TASK>
-  PM: late suspend of devices complete after 26.497 msecs
-
-Paul.
---
+Any chance to get a better way?
 
 > 
-> v5:
-> - Added a missing SoB on patch 2.
-> - No other changes.
+> f2fs_fill_super()
 > 
-> v4:
-> - No functional changes. All changes are at the patch descriptions:
->   - collected acked-by/reviewed-by;
->   - use the same e-mail on Author and SoB on patch 1.
+> 	for (ino = root_ino; ino < max_nid; ino++) {
+> 		inode = iget_locked(sb, ino);
+> 		if (!inode)
+> 			continue;
+> 		iput(inode);
+> 		ret = -EFSCORRUPTED;
+> 		goto error_handling;
+> 	}
 > 
-> v3:
-> - Removed the logic that would check if the engine is awake before doing
->   TLB flush invalidation as backporting PM logic up to Kernel 4.x could be
->   too painful. After getting this one merged, I'll submit a separate patch
->   with the PM awake logic.
-> 
-> v2:
-> 
-> - Reduced to bare minimum fixes, as this shoud be backported deeply
->   into stable.
-> 
-> Chris Wilson (2):
->   drm/i915/gt: Serialize GRDOM access between multiple engine resets
->   drm/i915/gt: Serialize TLB invalidates with GT resets
-> 
->  drivers/gpu/drm/i915/gt/intel_gt.c    | 15 ++++++++++-
->  drivers/gpu/drm/i915/gt/intel_reset.c | 37 ++++++++++++++++++++-------
->  2 files changed, 42 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.36.1
-> 
-> 
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > >    	inode = iget_locked(sb, ino);
+> > > > >    	if (!inode)
+> > > > >    		return ERR_PTR(-ENOMEM);
+> > > > > -- 
+> > > > > 2.25.1
