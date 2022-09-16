@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE045BB1C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E93375BB1CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 19:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIPR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 13:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S229877AbiIPR7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 13:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIPR6y (ORCPT
+        with ESMTP id S229872AbiIPR7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 13:58:54 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12130A6ADE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:58:53 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dv25so51124376ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 10:58:52 -0700 (PDT)
+        Fri, 16 Sep 2022 13:59:09 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9582AB6D23;
+        Fri, 16 Sep 2022 10:59:06 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so367260pja.1;
+        Fri, 16 Sep 2022 10:59:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Zd/o9M8DI6uCrxhdOmsIDeIBqPxRjAyKBLA8DBswRu4=;
-        b=m90z0oUISdCEVrhjQ9uxUANR3NM+rrTnamL16T2Nn3vpLe8WXEL5NAp9AqZl3J8vn3
-         O1bpIw1FDkyRbTfK3j31cJfLWEUs8sjFb6PpwBZNdO8ZdCnnCBOMYLvGkwaiS+jSe0yh
-         LITIPcmoQS+/LNf6Lmk5/rkBj/Av0e9+yhuhi6wIOH04IRjfPAZnrBkEo5esTJ+nFUq8
-         CoG5N3mYBX7CpdlAG3aRZKeoyPvu3UUiNwtWBc68j19ZR8uAOMN5UuxUiVXtvvgdqp9d
-         ju1FyVwDb+4eFmf7i+v3y4zmgTNKp6u/69gro38QCm3jEeL2rpi11snDAX9wOz2FlVSK
-         sD7Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=tRAA+E/aZ0xiHg9vChgfLqoCdmlsysypclNjGI6q1Cw=;
+        b=V6MLItuOP77XFx9Hqo1Q3gSRFJcZ3QRC1t0Hos78M0E1YpdhrOTaEVK4SSyNeqaIUr
+         zTPyRvR994g/t2tjRJkwl1p8bKoBNlzuW8DcwqRS9MKVJH8n4HUmwJtIlygia/nrwK+I
+         MZwcVTXwaZinT2Dt5pLYsukR7Fqojepeg0o+6WKlpxg02vs+1Ma3giY+EjT+SXIC6U4D
+         wPwDONMK5blbzqpC1Am/0KoDnPmIGa9XT0pXn543rJthGA4ckJptRB8kx/PxgBGPkCn9
+         e0PUA5R+QQl8bp25VcKIuDitG4IlZ1MoBmfRCJ06hbofBWEe+CkOByBQo+youwGRTuZQ
+         WekA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Zd/o9M8DI6uCrxhdOmsIDeIBqPxRjAyKBLA8DBswRu4=;
-        b=AhoMS7NxQ7BxFj7c6vDnG9Vr2IKNvC+9VwKg330isZ9zr5cHAMRXYFu+HeNvw96BBw
-         dTQXeV76Ysg8gImXAY0c5KISB/nwHXKiJSWIJzqnd0FmOjXoqjTrk8WJsg2BZCmxSfpV
-         BvUsEFk7Zdvd7ejgzqwY0dkhYksjxZxPqA8tB6JwmyuRQ7p97I9EPZ95JF/O8NIsbwHa
-         sQguSvfGJ+f3QP8fBkQ0nJWmN7oM0v3J2Rgdd3V0h0y/3paCkhhpE+Vyv7VS5+ob75Z1
-         AKdC+2/RcJbGiA395z6g56SLWZUrBx0JhYVLTUo4gcCvPj5Jm/AVBmSR5U3HCIQGzR7p
-         710w==
-X-Gm-Message-State: ACrzQf3tscvLKRcwCOud+PWWZebJq/jxELiFkvM4eIfHYIIgbwdCAYDT
-        7uW1ObFjYuBgnfK//O3Lshfa6Cv7JHrwMQDWGkiWPA==
-X-Google-Smtp-Source: AMsMyM69Euu4DOD30Wd1AHTVKT487yinq2VcXobq8TR0kzMsZGA+ymFgkuKfAvxrsz9WGg22sPg7VqALnRIfWZ//76g=
-X-Received: by 2002:a17:907:3f26:b0:77c:2508:3c08 with SMTP id
- hq38-20020a1709073f2600b0077c25083c08mr4403073ejc.532.1663351131443; Fri, 16
- Sep 2022 10:58:51 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=tRAA+E/aZ0xiHg9vChgfLqoCdmlsysypclNjGI6q1Cw=;
+        b=dW7p1X7TPZ+Szfw6RLdCCfnuZV/k9vKaG5W1g7GF6VjByLip763Ko9augz2Xox3LQ4
+         RkLu5X4jzgGG3kY3b8DHxStznKjXElvZH1MjB9bJ4qn2ANHwotosLU5NWIcVWLWuxgNU
+         x3ashboCTwAypgkDOAScdLF6Oa+WL2kQxaJKwonv+QhM/YLU3xFdC/sFm7+4OlrnocKZ
+         ujvV7aVRg/jZnRYQeKFtetDAy80QvmlBDxFWdoe4odmiXvSQ3ZA/Kufi7XiimGCcV6ot
+         Ukb514rCH4KwHSo5Cn8DSmUgG0C82R5W2rYlbpsTxrhLJ+i4DM4V155ZmKah7rF1lx/P
+         ruGQ==
+X-Gm-Message-State: ACrzQf0AaUlAh0QQd1KwAnDIa22z6ycInelpGMjnbPDooVlAnkIBNJur
+        RzswwNpnjUYeMHnCprT6MQ0=
+X-Google-Smtp-Source: AMsMyM6OszkoMEcwKsk477YoosB/TDoancb8k0Dx/0gBB2WWEHtHxVlFbZSVATEYXryXaSU4XsGxBg==
+X-Received: by 2002:a17:902:784d:b0:178:6946:3ff7 with SMTP id e13-20020a170902784d00b0017869463ff7mr976449pln.133.1663351145576;
+        Fri, 16 Sep 2022 10:59:05 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:2952:dee7:a35e:6428])
+        by smtp.gmail.com with ESMTPSA id jo21-20020a170903055500b001767f6f04efsm15059458plb.242.2022.09.16.10.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 10:59:05 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/4] perf tools: Fix MMAP2 build-ID synthesis in namespaces (v1)
+Date:   Fri, 16 Sep 2022 10:58:58 -0700
+Message-Id: <20220916175902.1155177-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-References: <20220912212847.1337868-1-ptf@google.com> <925b6e37-051f-927c-350a-cd767d88d72b@intel.com>
-In-Reply-To: <925b6e37-051f-927c-350a-cd767d88d72b@intel.com>
-From:   Patrick Thompson <ptf@google.com>
-Date:   Fri, 16 Sep 2022 13:58:40 -0400
-Message-ID: <CAJs+hrEiMP1hxZ06rnHWeUbvsau5C3D3aScSTmU4tEwvQ8Zm5w@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-pci-core: Disable cqe for ASUS 1100FK family devices
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Linux MMC development <linux-mmc@vger.kernel.org>,
-        Sangwhan Moon <sxm@google.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+Hello,
 
-I made a mistake while testing this patch, please do not merge it as
-it does not fix any issues. We will send out a v2 patch shortly.
+The perf record --buildid-mmap enables PERF_RECORD_MISC_MMAP_BUILD_ID
+which includes a build-ID of the DSO.  It requires to read the info from the
+file when synthesizing.  But I found some issues in the current code that it
+didn't check duplicate files and didn't handle namespaces.
+
+I think chroot is not a concern since perf will see it from the outside so
+that it can see the full path.
+
+The code is available at 'perf/mmap2-buildid-fix-v1' branch on
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
 Thanks,
-Patrick
+Namhyung
 
 
-On Tue, Sep 13, 2022 at 2:34 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 13/09/22 00:28, Patrick Thompson wrote:
-> > From: ptf <ptf@google.com>
-> >
-> > The CQE implementation for the eMMC in the ASUS 1100FK family of devices
-> > is broken. This causes installations to fail and thus we are disabling
-> > CQE for this family of devices.
-> >
-> > Signed-off-by: Patrick Thompson <ptf@google.com>
->
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
->
-> > ---
-> >
-> > Hello,
-> >
-> > I was hoping to get some advice on adapting this patch to target the
-> > eMMC directly instead of a family of laptops. One idea is to use the
-> > PCI-id of the controller (in this case [8086:4dc4]). Would that make
-> > sense? Is there someone with more knowledge on the subject that could
-> > confirm that the [8086:4dc4] device doesn't have a working CQE?
->
-> In these cases the issue is suspected to be BIOS. Best solution is to
-> disable CQE.
->
-> >
-> > Thank you,
-> > Patrick
-> >
-> >
-> >  drivers/mmc/host/sdhci-pci-core.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-> > index 622b7de96c7f..3ba0250559e7 100644
-> > --- a/drivers/mmc/host/sdhci-pci-core.c
-> > +++ b/drivers/mmc/host/sdhci-pci-core.c
-> > @@ -890,7 +890,8 @@ static bool glk_broken_cqhci(struct sdhci_pci_slot *slot)
-> >  {
-> >       return slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_GLK_EMMC &&
-> >              (dmi_match(DMI_BIOS_VENDOR, "LENOVO") ||
-> > -             dmi_match(DMI_SYS_VENDOR, "IRBIS"));
-> > +             dmi_match(DMI_SYS_VENDOR, "IRBIS") ||
-> > +             dmi_match(DMI_PRODUCT_FAMILY, "ASUS BR1100FKA"));
-> >  }
-> >
-> >  static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
->
+Namhyung Kim (4):
+  perf tools: Move dsos functions to util/dsos.c
+  perf tools: Add perf_event__synthesize_{start,stop}()
+  perf record: Save DSO build-ID for synthesizing
+  perf tools: Honor namespace when synthesizing build-id
+
+ tools/perf/builtin-inject.c        |  3 ++
+ tools/perf/builtin-record.c        |  3 ++
+ tools/perf/builtin-stat.c          |  2 +
+ tools/perf/builtin-top.c           |  4 ++
+ tools/perf/util/auxtrace.c         |  2 +
+ tools/perf/util/dsos.c             | 29 +++++++++++++
+ tools/perf/util/dsos.h             |  3 ++
+ tools/perf/util/machine.c          | 29 -------------
+ tools/perf/util/synthetic-events.c | 65 ++++++++++++++++++++++++++----
+ tools/perf/util/synthetic-events.h |  3 ++
+ 10 files changed, 107 insertions(+), 36 deletions(-)
+
+
+base-commit: 62e64c9d2fd12839c02f1b3e8b873e7cb34e8720
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
