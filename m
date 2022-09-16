@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475385BB417
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387E15BB41C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIPVr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 17:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S229781AbiIPVsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 17:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiIPVr5 (ORCPT
+        with ESMTP id S229501AbiIPVso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 17:47:57 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5B5BB023
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 14:47:56 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 57BE717D20
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 16:47:56 -0500 (CDT)
-Received: from 162-215-252-169.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZJBjoMMCAQLX5ZJBkoDBca; Fri, 16 Sep 2022 16:47:56 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M6cwx3xuhfMkbVKSOo06oqVf7+dyE6bffxQBuaKJBiA=; b=vOol3xWm7sW7IbQcq0gZVCNfLF
-        WuAxq1edJQdEgn1lZslCMD1GYdMi8Nedv5cwsrVYro64jgExVXD1lG7G7qeuBCsp8i+5fG8fhsnki
-        Y/uq86K8snO2iy6l5CWoY7DymMrrVcAKwavUTE6hb96AMm/jb4WJxi1xIojZVk/wQZmsWRN6bpzUR
-        OPqdKrqyo76ZlLn7lQX4S8LXKDt4mUEmfU26eZBg22oy0ff9Mlw0rclpPvBSKeztbRwIBLq2uBlZE
-        8wfdKHZJRKnVWI/FFobVIR9X+eEA7umZ1G+Y1CbNVvX0DMHxrRMpTemli+WfpLlF7fhk+9A7QYHBe
-        cGB70+DQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50852 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <linux@roeck-us.net>)
-        id 1oZJBj-002dw0-69;
-        Fri, 16 Sep 2022 21:47:55 +0000
-Date:   Fri, 16 Sep 2022 14:47:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/24] 5.10.144-rc1 review
-Message-ID: <20220916214750.GE3350231@roeck-us.net>
-References: <20220916100445.354452396@linuxfoundation.org>
+        Fri, 16 Sep 2022 17:48:44 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF984BB684;
+        Fri, 16 Sep 2022 14:48:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663364891; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=JLDt2/kFU7PEotggDN6j70oCTJcAHSNiwJtnJ1rZreVe/BBDf5r+1CV56T1eNKPU5d9NAH6+M7hl/yI+IMt3H1vlDspeZkffUpMV85tUqjpahNVK75vSlnPJPhdHEsr/CictAMNkcmgUyss2Wxodr1WwPbHNBfSjyIw2fJ3jpyw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663364891; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=4GuRfMhQm5Rn+M8LeHVMrehMbznHw6jGuLiFJ01zG90=; 
+        b=dJakwSFQqzlM+viBJlYBIek0BmV9zBFURPWIoqrwq+zimAd/A4aJEQT+rrF31JZbRq3PAcQZu7TCHX7n155j3507EvDOw5lk1OaXxdAr9n348QoblStf5kS73xGOn6w4Eo8IfZ++piDDlUH7WbtmBonWuU9aRDFX6HQn7OtmlOU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663364891;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=4GuRfMhQm5Rn+M8LeHVMrehMbznHw6jGuLiFJ01zG90=;
+        b=LQoYNqy7ViPr/6u6w5K5bvlvGOtK8xyG6VcNvYCqeoLe11wbFdwuCn2ZqvlHTCpn
+        hRzyOKvjoj1NnsK3vwvEdPem9Z+rJvDJy86QqmUuNVswWyAZXsHxmLAwA/1D0eVChvp
+        kqXB4x6YxoKx1529sEx75tRjnZJoa6M1lQO7xa6g=
+Received: from [10.10.10.122] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1663364890239371.4567564648436; Fri, 16 Sep 2022 14:48:10 -0700 (PDT)
+Message-ID: <bc066578-e229-7f08-d6c0-5dc2fede6be7@arinc9.com>
+Date:   Sat, 17 Sep 2022 00:48:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916100445.354452396@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1oZJBj-002dw0-69
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:50852
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 64
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 net-next 04/10] dt-bindings: memory: mt7621: add syscon
+ as compatible string
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220915065542.13150-1-arinc.unal@arinc9.com>
+ <20220915065542.13150-5-arinc.unal@arinc9.com>
+ <20220916194127.GA1139257-robh@kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20220916194127.GA1139257-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:08:25PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.144 release.
-> There are 24 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 16.09.2022 22:41, Rob Herring wrote:
+> On Thu, Sep 15, 2022 at 09:55:36AM +0300, Arınç ÜNAL wrote:
+>> Add syscon as a constant string on the compatible property as it's required
+>> for the SoC to work. Update the example accordingly.
 > 
-> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
-> Anything received after that time might be too late.
+> I read this and start to give you the same reply as v1. Then I remember
+> saying this already...
 > 
+> Update the commit message such that it answers my question and I don't
+> think you just ignored me and have to go find v1. The fact that this
+> change makes the binding match what is already in use in dts files is an
+> important detail.
 
-Build results:
-	total: 163 pass: 163 fail: 0
-Qemu test results:
-	total: 475 pass: 475 fail: 0
+Sure Rob, will do.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Arınç
