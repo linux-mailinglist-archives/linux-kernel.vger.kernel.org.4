@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F09B5BA770
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34EE5BA76A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiIPHY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S230270AbiIPHYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiIPHXn (ORCPT
+        with ESMTP id S229625AbiIPHXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Sep 2022 03:23:43 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6922EA50E2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8104A50E5
         for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:23:42 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTQSD1RYCzlW09;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTQSD5C5ZzlVkV;
         Fri, 16 Sep 2022 15:19:40 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>, <david@redhat.com>,
         <osalvador@suse.de>, <anshuman.khandual@arm.com>
 CC:     <willy@infradead.org>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2 10/16] mm, memory_hotplug: remove obsolete generic_free_nodedata()
-Date:   Fri, 16 Sep 2022 15:22:51 +0800
-Message-ID: <20220916072257.9639-11-linmiaohe@huawei.com>
+Subject: [PATCH v2 11/16] mm/page_alloc: make boot_nodestats static
+Date:   Fri, 16 Sep 2022 15:22:52 +0800
+Message-ID: <20220916072257.9639-12-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220916072257.9639-1-linmiaohe@huawei.com>
 References: <20220916072257.9639-1-linmiaohe@huawei.com>
@@ -48,43 +48,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 390511e1476e ("mm, memory_hotplug: drop arch_free_nodedata")
-drops the last caller of generic_free_nodedata(). Remove it too.
+It's only used in mm/page_alloc.c now. Make it static.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Reviewed-by: Oscar Salvador <osalvador@suse.de>
 ---
- include/linux/memory_hotplug.h | 8 --------
- 1 file changed, 8 deletions(-)
+ mm/internal.h   | 2 --
+ mm/page_alloc.c | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index 51052969dbfe..9fcbf5706595 100644
---- a/include/linux/memory_hotplug.h
-+++ b/include/linux/memory_hotplug.h
-@@ -43,11 +43,6 @@ extern void arch_refresh_nodedata(int nid, pg_data_t *pgdat);
- ({								\
- 	memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);	\
- })
--/*
-- * This definition is just for error path in node hotadd.
-- * For node hotremove, we have to replace this.
-- */
--#define generic_free_nodedata(pgdat)	kfree(pgdat)
+diff --git a/mm/internal.h b/mm/internal.h
+index 94d8a976c2e2..b3002e03c28f 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -836,8 +836,6 @@ int migrate_device_coherent_page(struct page *page);
+  */
+ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
  
- extern pg_data_t *node_data[];
- static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-@@ -63,9 +58,6 @@ static inline pg_data_t *generic_alloc_nodedata(int nid)
- 	BUG();
- 	return NULL;
- }
--static inline void generic_free_nodedata(pg_data_t *pgdat)
--{
--}
- static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
+-DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+-
+ extern bool mirrored_kernelcore;
+ 
+ static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 83b2cb93d6fd..6bdc98c7019f 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6571,7 +6571,7 @@ static void per_cpu_pages_init(struct per_cpu_pages *pcp, struct per_cpu_zonesta
+ #define BOOT_PAGESET_BATCH	1
+ static DEFINE_PER_CPU(struct per_cpu_pages, boot_pageset);
+ static DEFINE_PER_CPU(struct per_cpu_zonestat, boot_zonestats);
+-DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
++static DEFINE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+ 
+ static void __build_all_zonelists(void *data)
  {
- }
 -- 
 2.23.0
 
