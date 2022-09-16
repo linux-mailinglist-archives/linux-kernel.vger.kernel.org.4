@@ -2,366 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5097F5BB14A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBE45BB15D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiIPQu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 12:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S229832AbiIPQ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 12:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIPQuZ (ORCPT
+        with ESMTP id S229509AbiIPQ4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 12:50:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117DC86FC9;
-        Fri, 16 Sep 2022 09:50:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FBB5B82882;
-        Fri, 16 Sep 2022 16:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9866AC433D6;
-        Fri, 16 Sep 2022 16:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663347020;
-        bh=yycVGinXhAQj/B6lw2iCL7uGdFzgjWT//2xXGijCZ0w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WMEY0KYnlhcneHCw8J5mBpEFNjYQuby70tDzqktv9pDXjqg1RjKnLaoW9GJzMly0o
-         +R8W7yH4uHSmkbCaDUCp4bPI7dhTdUcw5dzuGoMPgQ1z4U0Zc68lTs88RRPhS8MZc5
-         JkuLATi8nyQgbxGQ1kcd2q0Iafe2pvoH0mkZ5+LqOswXVKgVCZVwMowtbKRtYZlL+l
-         pkdmwaQYLVOHT3v/so+Kc6QNCAT+IetKprWUSd0iMojVVlOkWk8+P0b2B8LypYfOOM
-         A6X8y60G0tIK6KPl76sA1PxfGvudT+SUspgzHL5mWG56Kf/y/x+7/AgEVkXwkJKFaw
-         9fGgmDcCrZ8VA==
-Message-ID: <ec81e01d-7e91-386c-b6a2-0f32ccd09750@kernel.org>
-Date:   Fri, 16 Sep 2022 10:50:19 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [net-next v2 3/3] selftests: seg6: add selftest for NEXT-C-SID
- flavor in SRv6 End behavior
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Fri, 16 Sep 2022 12:56:07 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2097.outbound.protection.outlook.com [40.107.244.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD87AAB4FB;
+        Fri, 16 Sep 2022 09:56:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eQC/7kMLdpcLyj0LxKjOvjQQ6dQeDnj+v3KoKUB82T3ARwSd8/3oNPTpjJOEnmnIjDbOy8T1o4+5V5MQ14LsGF2AgMjf8QKz3aT4j/mP2C1asfh4FIpjdez1/CedezYSBpCM3M9eGNp9EC9jSDGXHYkdqJQWPkYT+D8G2IaiRKF32MjyDz0VKRhVCyfG6R2deuJO09Bk1i//8Vdo+RbYloqAOR9WRQwM4gVAz24hf2OtESBtMgjVQ1Vf13rMZghiu/diml71+HejZSOqMEtwGBUnGDuhwh6zTHbSKGf8953vlYlPRXmPHyIHIqMGnOxO5mUKf2/lwaPVe5xInxBIIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PH71J2d4VUE8i6wE1QJELT6TLfPv5mvfi6mejJsqw0Q=;
+ b=mwBe11Jjm41/EyJoUzVCQlEa4A43yppjzU7thbBwkOWra6bYx+IQljqUtTNM+iAyspiGqnLcBYSrUOjYmiS5nvE3xU7VmSC6iafmPi9VFLR8id4HhBgfIruiPB8DDmV9wey3pp0zwGXxzVTW49aw1JtNVHUb4z4CxwklfomFJHw5inBpVox6lT4ZXqPnYhkj0iyIShDMjr/aLSHNzI0yhllClKGH+5L0fRBcM98mC33d4+9s3glKVyA9LpGfEkxsOJNPvqGo1B8ul2e+glnuocTUHR4550jIRobSYzZco0ZYfx2O2W6r3dpagcIjmgWxO19ZT/kcuZQqZtITiP5d/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PH71J2d4VUE8i6wE1QJELT6TLfPv5mvfi6mejJsqw0Q=;
+ b=eqBAtSEcFo2pGJO/CElJPPDUdJe9DWEOeDbCrdtZrFgrdJ2xtb8pm6gpDqhSEm2eT+0bg/3qZgOxXIFgdFRd+MFPPU9DPc5Uii3sAps4gOqsEL1uLL/fDKrKZFPNTrP2DzC/jSYh/K0tSCcosabetTj/HvGUK9TPPhDHtnyI74k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH3PR10MB6692.namprd10.prod.outlook.com
+ (2603:10b6:610:148::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Fri, 16 Sep
+ 2022 16:56:00 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::dcf2:ddbd:b18d:bb49]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::dcf2:ddbd:b18d:bb49%3]) with mapi id 15.20.5632.015; Fri, 16 Sep 2022
+ 16:56:00 +0000
+Date:   Fri, 16 Sep 2022 09:55:55 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
- <20220912171619.16943-4-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220912171619.16943-4-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [RFC v1 net-next 8/8] net: dsa: ocelot: add external ocelot
+ switch control
+Message-ID: <YySqm8t0pbH4cqR/@euler>
+References: <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-1-colin.foster@in-advantage.com>
+ <20220911200244.549029-9-colin.foster@in-advantage.com>
+ <20220911200244.549029-9-colin.foster@in-advantage.com>
+ <20220912172109.ezilo6su5w6dihrk@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912172109.ezilo6su5w6dihrk@skbuf>
+X-ClientProxiedBy: SJ0PR03CA0111.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::26) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CH3PR10MB6692:EE_
+X-MS-Office365-Filtering-Correlation-Id: 049b1b1c-aa43-4d02-6fe4-08da98045500
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rzce5XYviZOtHqTrA3A18Y4KGBqQA9FdhIcUoNdqPPxrgFCHQkfwRlMIP4ilhyFpxS+l7EB9yya7Nor8jXcJnZ/v8ddHnhlbuBBVrnwNNkirAnGSoywx28IukVqPXBylh2DTsw3s7YVnlDJjAB+xHI1lVUFTMT+GpA/fApTiYBq/dKDaxhZ4v2Lk1V2/jUFeoj538f04XE1TgZfstndEAgB8h8/em4c0zN56o6xHPwykqm/hb/yn2t1cpbcDvUoxNChfBu4bvQZhfneQRUFT8x6YwZAxjROUkxX8AIBrrfdjpiOYzI1OY1OXq6Ot0dIYT7YAt/IiC+r9p2PzcEzaCVcEijeuvPAss5k0V9QZ7WZIfsPfMOVAYlxCHFKtmOFqtdACwltP+w+MR0N9iUhlr9fvHgYkzIThnXlCJ1GMo10gk1yH8myI5EXTUtFuwzJp9Dl4Xx1MiyN5XylDa+BTA57SWPWfw/a4jFNomTv8cDXLEt+WadOtsFYvLeEgalOgoTYkDhw8DfANtJPmDTXN4E6s8ik+pFoQBlwDP0kcdpAhWwPs4o0z63CSfcpNGE9ebEsLe35IkFZ/38v5KR4t+q09iSDaLIHQ6wywPEvlNuzc2Qi0cLE7S2Ma7pT1qKu/KKpNvCwBjgNb2HQXwbv00kdFZ0e1rF2FzL+TN5ikjpBl3FtTeF3f47U/ueiCn4u0R9okySBVm/FzOAZBEnXhFA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39830400003)(376002)(396003)(136003)(366004)(346002)(451199015)(86362001)(7416002)(44832011)(5660300002)(8676002)(6512007)(26005)(33716001)(66946007)(66476007)(54906003)(2906002)(66556008)(4326008)(8936002)(6916009)(41300700001)(316002)(478600001)(6506007)(6666004)(9686003)(38100700002)(186003)(6486002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?M7MQLM++3Vgg5PwKJVw5369hUH7+8MuCgc7ZDybYkdJ0TqKHmWaRbbUAWHtv?=
+ =?us-ascii?Q?8MhLux4NCZ4rFMj2mPrNGVusINKnibqZC9wTYvMA79VQNwyHMYVlTuiLINmf?=
+ =?us-ascii?Q?xFKZK65g8jF9K0Eu9/J6T8OryOSWmmgUqPAAM0b8ugrOlffRSJohrNkTJMqM?=
+ =?us-ascii?Q?AwXB9cbtt0YD9HC5aNWhhYdWY+y7oCmzq4fDJFOsMfihAhYeZrdcu2F6nktB?=
+ =?us-ascii?Q?WDypsKdITk8tdEsc4Zjg4mqFiQSAjvr+Z+tt4q0s8BYneAs4nDk6iVUoxfOK?=
+ =?us-ascii?Q?3xT7wdEakAGgtoKYjAD0PpGcN6nw+sKMhYgBEMOUvXvDNwN3BJgSEXM6xp33?=
+ =?us-ascii?Q?32sV2XfbILBgygx+YM8IimF3P2WI7cRjKrhFPppainrEU1Xtaj9Df9e/wXaB?=
+ =?us-ascii?Q?6M+mym0Zf9x3+mTO4obiuOInGIkgqSAJrepvzOQTez3r5/y+l2Ocd1FnAfFg?=
+ =?us-ascii?Q?gwHyK0S8+JlYrqMERUKLRh0cw5J7Rz+7SNBaIOSYPCuJtHKiQrRr72JPT1Xo?=
+ =?us-ascii?Q?vj3wIp6tn0toJxh/8NGeSKntDOxdu4jqPbfj/XG8E5tzs6GWKzdPbJe3EfGZ?=
+ =?us-ascii?Q?Egqv4t1gbnwm4FQnRzEZy4Cg62sC8BrB59xZ6DYiEv6chk43+sGjcOKYhWhX?=
+ =?us-ascii?Q?BYgO0KcTcp/G9gMNN5I1ir2UOohe1s25w27S8BwrW6apG5i68tk0cumET4F4?=
+ =?us-ascii?Q?ymR5bKPZs7fa81FPAR5wUfn1062XemHMLB14sz3op3qMYM1RohvaSIDIVF33?=
+ =?us-ascii?Q?hPwzH7unTKKMiO53hW+X2q+ZTDH3VFpqwbRzCfV+GcYLmn0SoYVr0S0QU0ct?=
+ =?us-ascii?Q?cL92zOJ1VfGxjJq+XNMxsD4YWC3vFXzs9aVNIWesD+Cwk6qpvIdWFgMGDGfd?=
+ =?us-ascii?Q?20aqd7Xz7fO8NMrgqn9DDiHAIpXocbp9CmPJlSoe5EU6jwdUi0iNig0tjCay?=
+ =?us-ascii?Q?ok+aZXCSw2pGpzxM0GymOXsQi1iTZF1DOBaO1fFXrIJtOaqDKxiLTExW8aPf?=
+ =?us-ascii?Q?Fon8FVa3qtkUrCybBmabqLIFYt62H1kA1w32O3PTQN/NopADyniaFckNFpqk?=
+ =?us-ascii?Q?NQPygsJFYw/ZZxCbobpyNFGxzVBCiF7zvNNy2qMIXmVFGcffNxLugfiVm1QC?=
+ =?us-ascii?Q?A/0Ebg4fd6twshP49SxMMZl9HP02GOC2E3UsckQ8KCj0+IE0y4TrqC8WCDK5?=
+ =?us-ascii?Q?38me9A3YZXQnemh7yTJc2Jd55Y+ecBkOO+nXAEGFBwkGYq1kJFo1UAn+Yfww?=
+ =?us-ascii?Q?FZzjbLfXh9Kz5EbDA2opwCKqWlKTRNBiOyrFxzTkY1xg2/fHzD53+5Pd0k1N?=
+ =?us-ascii?Q?YsQC+5nyUUXr8oJPP86WDa/FoY/meODNtxm+2hjyRcORzaU+MUXJRyE67syD?=
+ =?us-ascii?Q?K7FIhK/GnfWybMpA3NR0OBJMbZ4rINYp+HYHiR1mN7ED4ewqlWo8rNWhG+p9?=
+ =?us-ascii?Q?i6ImS5j64DOVlNFwzh6ylmW8q5UCFh9c6D28iydBw6XxWrVA3M2NwzhpnZ6Y?=
+ =?us-ascii?Q?+X5YiZAvTA5E4VsCKaEMvStTIueOGklk9CPLPkaCpDYmfTgfXrokfdnK/t4Z?=
+ =?us-ascii?Q?+XatpWCSr2vUtjZw/mHrK9YOGsvbwtfovpeU2e1i/HiaGtQoTleWtwijoRnq?=
+ =?us-ascii?Q?9w=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 049b1b1c-aa43-4d02-6fe4-08da98045500
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 16:56:00.2229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zNS5AoA3QeMj14bBgn60LhjQ31cptn9DQ94rl11vSF3FnMRTT25phMJjpHVdtwWfXWRh57LF318ZHPdI6U7dUFmTk4a9yi+f/LQ4nm0sPNg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6692
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 11:16 AM, Andrea Mayer wrote:
-> This selftest is designed for testing the support of NEXT-C-SID flavor
-> for SRv6 End behavior. It instantiates a virtual network composed of
-> several nodes: hosts and SRv6 routers. Each node is realized using a
-> network namespace that is properly interconnected to others through veth
-> pairs.
-> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
-> by hosts for communicating with each other. Such routers i) apply
-> different SRv6 Policies to the traffic received from connected hosts,
-> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
-> compression mechanism for encoding several SRv6 segments within a single
-> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
+On Mon, Sep 12, 2022 at 05:21:10PM +0000, Vladimir Oltean wrote:
+> On Sun, Sep 11, 2022 at 01:02:44PM -0700, Colin Foster wrote:
+> > +
+> > +#define OCELOT_EXT_MEM_INIT_SLEEP_US	1000
+> > +#define OCELOT_EXT_MEM_INIT_TIMEOUT_US	100000
+> > +
+> > +#define OCELOT_EXT_PORT_MODE_SERDES	(OCELOT_PORT_MODE_SGMII | \
+> > +					 OCELOT_PORT_MODE_QSGMII)
 > 
-> The NEXT-C-SID is provided as a "flavor" of the SRv6 End behavior,
-> enabling it to properly process the C-SID containers. The correct
-> execution of the enabled NEXT-C-SID SRv6 End behavior is verified
-> through reachability tests carried out between hosts belonging to the
-> same VPN.
+> There are places where OCELOT_EXT doesn't make too much sense, like here.
+> The capabilities of the SERDES ports do not change depending on whether
+> the switch is controlled externally or not. Same for the memory init
+> delays. Maybe OCELOT_MEM_INIT_*, OCELOT_PORT_MODE_SERDES etc?
 > 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  tools/testing/selftests/net/Makefile          |    1 +
->  .../net/srv6_end_next_csid_l3vpn_test.sh      | 1145 +++++++++++++++++
->  2 files changed, 1146 insertions(+)
->  create mode 100755 tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
+> There are more places as well below in function names, I'll let you be
+> the judge if whether ocelot is controlled externally is relevant to what
+> they do in any way.
 > 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index f5ac1433c301..d87e8739bb30 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -37,6 +37,7 @@ TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
->  TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
->  TEST_PROGS += srv6_hencap_red_l3vpn_test.sh
->  TEST_PROGS += srv6_hl2encap_red_l2vpn_test.sh
-> +TEST_PROGS += srv6_end_next_csid_l3vpn_test.sh
->  TEST_PROGS += vrf_strict_mode_test.sh
->  TEST_PROGS += arp_ndisc_evict_nocarrier.sh
->  TEST_PROGS += ndisc_unsolicited_na_test.sh
-> diff --git a/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
-> new file mode 100755
-> index 000000000000..87e414cc417c
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/srv6_end_next_csid_l3vpn_test.sh
-> @@ -0,0 +1,1145 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-> +#
-> +# This script is designed for testing the support of NEXT-C-SID flavor for SRv6
-> +# End behavior.
-> +# A basic knowledge of SRv6 architecture [1] and of the compressed SID approach
-> +# [2] is assumed for the reader.
-> +#
-> +# The network topology used in the selftest is depicted hereafter, composed by
-> +# two hosts and four routers. Hosts hs-1 and hs-2 are connected through an
-> +# IPv4/IPv6 L3 VPN service, offered by routers rt-1, rt-2, rt-3 and rt-4 using
-> +# the NEXT-C-SID flavor. The key components for such VPNs are:
-> +#
-> +#    i) The SRv6 H.Encaps/H.Encaps.Red behaviors [1] apply SRv6 Policies on
-> +#       traffic received by connected hosts, initiating the VPN tunnel;
-> +#
-> +#   ii) The SRv6 End behavior [1] advances the active SID in the SID List
-> +#       carried by the SRH;
-> +#
-> +#  iii) The NEXT-C-SID mechanism [2] offers the possibility of encoding several
-> +#       SRv6 segments within a single 128-bit SID address, referred to as a
-> +#       Compressed SID (C-SID) container. In this way, the length of the SID
-> +#       List can be drastically reduced.
-> +#       The NEXT-C-SID is provided as a "flavor" of the SRv6 End behavior
-> +#       which advances the current C-SID (i.e. the Locator-Node Function defined
-> +#       in [2]) with the next one carried in the Argument, if available.
-> +#       When no more C-SIDs are available in the Argument, the SRv6 End behavior
-> +#       will apply the End function selecting the next SID in the SID List.
-> +#
-> +#   iv) The SRv6 End.DT46 behavior [1] is used for removing the SRv6 Policy and,
-> +#       thus, it terminates the VPN tunnel. Such a behavior is capable of
-> +#       handling, at the same time, both tunneled IPv4 and IPv6 traffic.
-> +#
-> +# [1] https://datatracker.ietf.org/doc/html/rfc8986
-> +# [2] https://datatracker.ietf.org/doc/html/draft-ietf-spring-srv6-srh-compression
-> +#
-> +#
-> +#               cafe::1                      cafe::2
-> +#              10.0.0.1                     10.0.0.2
-> +#             +--------+                   +--------+
-> +#             |        |                   |        |
-> +#             |  hs-1  |                   |  hs-2  |
-> +#             |        |                   |        |
-> +#             +---+----+                   +----+---+
-> +#    cafe::/64    |                             |      cafe::/64
-> +#  10.0.0.0/24    |                             |    10.0.0.0/24
-> +#             +---+----+                   +----+---+
-> +#             |        |  fcf0:0:1:2::/64  |        |
-> +#             |  rt-1  +-------------------+  rt-2  |
-> +#             |        |                   |        |
-> +#             +---+----+                   +----+---+
-> +#                 |      .               .      |
-> +#                 |  fcf0:0:1:3::/64   .        |
-> +#                 |          .       .          |
-> +#                 |            .   .            |
-> +# fcf0:0:1:4::/64 |              .              | fcf0:0:2:3::/64
-> +#                 |            .   .            |
-> +#                 |          .       .          |
-> +#                 |  fcf0:0:2:4::/64   .        |
-> +#                 |      .               .      |
-> +#             +---+----+                   +----+---+
-> +#             |        |                   |        |
-> +#             |  rt-4  +-------------------+  rt-3  |
-> +#             |        |  fcf0:0:3:4::/64  |        |
-> +#             +---+----+                   +----+---+
-> +#
-> +# Every fcf0:0:x:y::/64 network interconnects the SRv6 routers rt-x with rt-y in
-> +# the selftest network.
-> +#
-> +# Local SID/C-SID table
-> +# =====================
-> +#
-> +# Each SRv6 router is configured with a Local SID/C-SID table in which
-> +# SIDs/C-SIDs are stored. Considering an SRv6 router rt-x, SIDs/C-SIDs are
-> +# configured in the Local SID/C-SIDs table as follows:
-> +#
-> +#   Local SID/C-SID table for SRv6 router rt-x
-> +#   +-----------------------------------------------------------+
-> +#   |fcff:x::d46 is associated with the non-compressed SRv6     |
-> +#   |   End.DT46 behavior                                       |
-> +#   +-----------------------------------------------------------+
-> +#   |fcbb:0:0x00::/48 is associated with the NEXT-C-SID flavor  |
-> +#   |   of SRv6 End behavior                                    |
-> +#   +-----------------------------------------------------------+
-> +#   |fcbb:0:0x00:d46::/64 is associated with the SRv6 End.DT46  |
-> +#   |   behavior when NEXT-C-SID compression is turned on       |
-> +#   +-----------------------------------------------------------+
-> +#
-> +# The fcff::/16 prefix is reserved for implementing SRv6 services with regular
-> +# (non compressed) SIDs. Reachability of SIDs is ensured by proper configuration
-> +# of the IPv6 routing tables in the routers.
-> +# Similarly, the fcbb:0::/32 prefix is reserved for implementing SRv6 VPN
-> +# services leveraging the NEXT-C-SID compression mechanism. Indeed, the
-> +# fcbb:0::/32 is used for encoding the Locator-Block while the Locator-Node
-> +# Function is encoded with 16 bits.
-> +#
-> +# Incoming traffic classification and application of SRv6 Policies
-> +# ================================================================
-> +#
-> +# An SRv6 ingress router applies different SRv6 Policies to the traffic received
-> +# from a connected host, considering the IPv4 or IPv6 destination address.
-> +# SRv6 policy enforcement consists of encapsulating the received traffic into a
-> +# new IPv6 packet with a given SID List contained in the SRH.
-> +# When the SID List contains only one SID, the SRH could be omitted completely
-> +# and that SID is stored directly in the IPv6 Destination Address (DA) (this is
-> +# called "reduced" encapsulation).
-> +#
-> +# Test cases for NEXT-C-SID
-> +# =========================
-> +#
-> +# We consider two test cases for NEXT-C-SID: i) single SID and ii) double SID.
-> +#
-> +# In the single SID test case we have a number of segments that are all
-> +# contained in a single Compressed SID (C-SID) container. Therefore the
-> +# resulting SID List has only one SID. Using the reduced encapsulation format
-> +# this will result in a packet with no SRH.
-> +#
-> +# In the double SID test case we have one segment carried in a Compressed SID
-> +# (C-SID) container, followed by a regular (non compressed) SID. The resulting
-> +# SID List has two segments and it is possible to test the advance to the next
-> +# SID when all the C-SIDs in a C-SID container have been processed. Using the
-> +# reduced encapsulation format this will result in a packet with an SRH
-> +# containing 1 segment.
-> +#
-> +# For the single SID test case, we use the IPv4 addresses of hs-1 and hs-2, for
-> +# the double SID test case, we use their IPv6 addresses. This is only done to
-> +# simplify the test setup and avoid adding other hosts or multiple addresses on
-> +# the same interface of a host.
-> +#
-> +# Traffic from hs-1 to hs-2
-> +# -------------------------
-> +#
-> +# Packets generated from hs-1 and directed towards hs-2 are handled by rt-1
-> +# which applies the SRv6 Policies as follows:
-> +#
-> +#   i) IPv6 DA=cafe::2, H.Encaps.Red with SID List=fcbb:0:0400:0300:0200:d46::
-> +#  ii) IPv4 DA=10.0.0.2, H.Encaps.Red with SID List=fcbb:0:0300::,fcff:2::d46
-> +#
-> +# ### i) single SID
-> +#
-> +# The router rt-1 is configured to enforce the given Policy through the SRv6
-> +# H.Encaps.Red behavior which avoids the presence of the SRH at all, since it
-> +# pushes the single SID directly in the IPv6 DA. Such a SID encodes a whole
-> +# C-SID container carrying several C-SIDs (e.g. 0400, 0300, etc).
-> +#
-> +# As the packet reaches the router rt-4, the enabled NEXT-C-SID SRv6 End
-> +# behavior (associated with fcbb:0:0400::/48) is triggered. This behavior
-> +# analyzes the IPv6 DA and checks whether the Argument of the C-SID container
-> +# is zero or not. In this case, the Argument is *NOT* zero and the IPv6 DA is
-> +# updated as follows:
-> +#
-> +# +---------------------------------------------------------------+
-> +# | Before applying the rt-4 enabled NEXT-C-SID SRv6 End behavior |
-> +# +---------------------------------------------------------------+
-> +# |                            +---------- Argument               |
-> +# |                     vvvvvvvvvvvvvvvv                          |
-> +# | IPv6 DA fcbb:0:0400:0300:0200:d46::                           |
-> +# |                ^^^^    <-- shifting                           |
-> +# |                  |                                            |
-> +# |          Locator-Node Function                                |
-> +# +---------------------------------------------------------------+
-> +# | After applying the rt-4 enabled NEXT-C-SID SRv6 End behavior  |
-> +# +---------------------------------------------------------------+
-> +# |                          +---------- Argument                 |
-> +# |                    vvvvvvvvvvvv                               |
-> +# | IPv6 DA fcbb:0:0300:0200:d46::                                |
-> +# |                ^^^^                                           |
-> +# |                  |                                            |
-> +# |          Locator-Node Function                                |
-> +# +---------------------------------------------------------------+
-> +#
-> +# After having applied the enabled NEXT-C-SID SRv6 End behavior, the packet is
-> +# sent to the next node, i.e. rt-3.
-> +#
-> +# The enabled NEXT-C-SID SRv6 End behavior on rt-3 is executed as the packet is
-> +# received. This behavior processes the packet and updates the IPv6 DA with
-> +# fcbb:0:0200:d46::, since the Argument is *NOT* zero. Then, the packet is sent
-> +# to the router rt-2.
-> +#
-> +# The router rt-2 is configured for decapsulating the inner IPv6 packet and,
-> +# for this reason, it applies the SRv6 End.DT46 behavior on the received
-> +# packet. It is worth noting that the SRv6 End.DT46 behavior does not require
-> +# the presence of the SRH: it is fully capable to operate properly on
-> +# IPv4/IPv6-in-IPv6 encapsulations.
-> +# At the end of the decap operation, the packet is sent to the
-> +# host hs-2.
-> +#
-> +# ### ii) double SID
-> +#
-> +# The router rt-1 is configured to enforce the given Policy through the SRv6
-> +# H.Encaps.Red. As a result, the first SID fcbb:0:0300:: is stored into the
-> +# IPv6 DA, while the SRH pushed into the packet is made of only one SID, i.e.
-> +# fcff:2::d46. Hence, the packet sent by hs-1 to hs-2 is encapsulated in an
-> +# outer IPv6 header plus the SRH.
-> +#
-> +# As the packet reaches the node rt-3, the router applies the enabled NEXT-C-SID
-> +# SRv6 End behavior.
-> +#
-> +# +---------------------------------------------------------------+
-> +# | Before applying the rt-3 enabled NEXT-C-SID SRv6 End behavior |
-> +# +---------------------------------------------------------------+
-> +# |                            +---------- Argument               |
-> +# |                      vvvv (Argument is all filled with zeros) |
-> +# | IPv6 DA fcbb:0:0300::                                         |
-> +# |                ^^^^                                           |
-> +# |                  |                                            |
-> +# |          Locator-Node Function                                |
-> +# +---------------------------------------------------------------+
-> +# | After applying the rt-3 enabled NEXT-C-SID SRv6 End behavior  |
-> +# +---------------------------------------------------------------+
-> +# |                                                               |
-> +# | IPv6 DA fcff:2::d46                                           |
-> +# |         ^^^^^^^^^^^                                           |
-> +# |              |                                                |
-> +# |        SID copied from the SID List contained in the SRH      |
-> +# +---------------------------------------------------------------+
-> +#
-> +# Since the Argument of the C-SID container is zero, the behavior can not
-> +# update the Locator-Node function with the next C-SID carried in the Argument
-> +# itself. Thus, the enabled NEXT-C-SID SRv6 End behavior operates as the
-> +# traditional End behavior: it updates the IPv6 DA by copying the next
-> +# available SID in the SID List carried by the SRH. After that, the packet is
-> +# sent to the node rt-2.
-> +#
-> +# Once the packet is received by rt-2, the router decapsulates the inner IPv6
-> +# packet using the SRv6 End.DT46 behavior (associated with the SID fcff:2::d46)
-> +# and sends it to the host hs-2.
-> +#
-> +# Traffic from hs-2 to hs-1
-> +# -------------------------
-> +#
-> +# Packets generated from hs-2 and directed towards hs-1 are handled by rt-2
-> +# which applies the SRv6 Policies as follows:
-> +#
-> +#   i) IPv6 DA=cafe::1, SID List=fcbb:0:0300:0400:0100:d46::
-> +#  ii) IPv4 DA=10.0.0.1, SID List=fcbb:0:0300::,fcff:1::d46
-> +#
-> +# For simplicity, such SRv6 Policies were chosen so that, in both use cases (i)
-> +# and (ii), the network paths crossed by traffic from hs-2 to hs-1 are the same
-> +# as those taken by traffic from hs-1 to hs-2.
-> +# In this way, traffic from hs-2 to hs-1 is processed similarly to traffic from
-> +# hs-1 to hs-2. So, the traffic processing scheme turns out to be the same as
-> +# that adopted in the use cases already examined (of course, it is necessary to
-> +# consider the different SIDs/C-SIDs).
-> +
+> > +static int ocelot_ext_reset(struct ocelot *ocelot)
 
-Thanks for the verbose description of the tests.
+I'm looking into these changes now. I was using "ocelot_ext_" not
+necessarily as an indication as "this only matters when it is controlled
+externally" but rather "this is a function within ocelot_ext.c"
 
-Acked-by: David Ahern <dsahern@kernel.org>
+So there's a weird line between what constitutes "external control" vs
+"generic"
+
+There are only two things that really matter for external control:
+1. The regmaps are set up in a specific way by ocelot-mfd
+2. The existence of a DSA CPU port
+
+Going by 1 only - there's basically nothing in
+drivers/net/dsa/ocelot/ocelot_ext.c that is inherently "external only".
+And that's kindof the point. The only thing that can be done externally
+that isn't done internally would be a whole chip reset.
+
+Going by 2 only - the simple fact that it is in drivers/net/dsa/ means
+that there is a CPU port, and therefore everything in the file requires
+that it is externally controlled.
 
 
+
+Unless you're going another way, and you're not actually talking about
+"function names" but instead "should this actually live in ocelot_lib"
+
+While I don't think that's what you were directly suggesting - I like
+this! ocelot_ext_reset() shouldn't exist - I should move, update, and
+utilize ocelot_reset() from drivers/net/ethernet/mscc/ocelot_vsc7514.c.
+
+The ocelot_ext function list will dwindle down to:
+*_probe
+*_remove
+*_shutdown
+*_regmap_init
+*_phylink_validate
