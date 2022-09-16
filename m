@@ -2,148 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D2E5BB4B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC825BB4B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiIPXMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 19:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S229786AbiIPXPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 19:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiIPXMT (ORCPT
+        with ESMTP id S229505AbiIPXPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 19:12:19 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2104.outbound.protection.outlook.com [40.107.100.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5918275B;
-        Fri, 16 Sep 2022 16:12:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aRwaTKGpMI7F1rlx6p5vYR9n0zcsuqeOAugN8SP7FYLGjP8eLn0tvhrSYWFqxqFa7KTr9UmWxIcSL6MnlLcWKhVsGVBEf68uaC/FyjBQeNxpHBhjCEbk7qetQHECVy8N7Ck7fHv02mKU/JPQOONx/2N/tVOBxzeZBTkHhGf7iIAKjTvLx60qpYm638+krgzqji+HEKVyn0YyrdsJ2ZSdzvWCQtcunM/RMgfeD0prBcElWQQz9Fwh+9duqb8M6/cXCKlw8UA59hLXsZO85kdKjhH5zissO1faTxtXpoMlMcYdidvKHJH1h+sv2A2o5MwjykKmuXz8+6ItbA7w/iXbHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tTXAPV8BVYXxBagD3b9dEcWltqeolf3pHS6cHZwPO7E=;
- b=iyaLC6QIxdT4YGYAfnYPvnGIcYn8+8qkOxdIcys/c86lZi9mx7UOUqTrjT7lbGSHQtq6PA0lzAKLbjFumt/xUojGpszzpq183ZTUcY1FkbqkRWW3azmthuc1eolWSdxxm8dXNikLkdnZ/dCT09GP1Kv/GIE+WW9QV/HrgndN1Q2rTBkPlVwKbCWaVjxygL8npUwd9cTlnEcbfxkGsQ4bgUnumWB/MgTsw3U1fI+/bsxPomiele6Vf20Me7HggaCwFEk8O5FyQ9SX4L6Nd7Ms9Yn1yx802nWn6h7/cIOoPy17yB+D88nTj2GEzZ7YY/u0L5M0chz5MrpAiSZY9dMfzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Fri, 16 Sep 2022 19:15:18 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95867EFCA;
+        Fri, 16 Sep 2022 16:15:16 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id c6so17763820qvn.6;
+        Fri, 16 Sep 2022 16:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tTXAPV8BVYXxBagD3b9dEcWltqeolf3pHS6cHZwPO7E=;
- b=eN9qzay5DyWIr5K76lP3/kLeZyC5gFfdrAi1BRaseDSonkS2haf4klu3rirs/OGp8Akac2L6AJ73czBDunh5RswamTRfWb+rTrLVowdn3Vm8E8ZGNM4e0AOjwDj4I3j/vxxGCWouMF3QHZENqmYv7ivrfhcWd5eTWmuRrG3CgwQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by PH7PR10MB6202.namprd10.prod.outlook.com
- (2603:10b6:510:1f2::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Fri, 16 Sep
- 2022 23:12:17 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49%3]) with mapi id 15.20.5632.015; Fri, 16 Sep 2022
- 23:12:17 +0000
-Date:   Fri, 16 Sep 2022 16:12:14 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v1 net-next 2/2] net: mscc: ocelot: check return values
- of writes during reset
-Message-ID: <YyUCzh0HdEZ3DlQa@euler>
-References: <20220916191349.1659269-1-colin.foster@in-advantage.com>
- <20220916191349.1659269-1-colin.foster@in-advantage.com>
- <20220916191349.1659269-3-colin.foster@in-advantage.com>
- <20220916191349.1659269-3-colin.foster@in-advantage.com>
- <20220916224009.g4prlpphnji5i4zi@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916224009.g4prlpphnji5i4zi@skbuf>
-X-ClientProxiedBy: BY5PR17CA0004.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::17) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=+bv5lr59/g1aPozwq5SSmg1kLWkBcrS80IisdYpq8ds=;
+        b=WbHEOiZiAG1GeZU84P3nUVJ87vS7kj2ncGiul4s+LkbfxX4BeZH1LsknTAioFVF7tF
+         vJzQG99N6DuYi6mjdydEAL78XOzFiZekhypavFZgbBFGEzRN6zPPfCh+I2xGIgbOmh1J
+         tybc4KXxIKvXaQwxq2JPsHhup3ZN2fC0k5hfKqychAG9Ghalq2D3WERCsyjxxHfLxwCZ
+         6s7769LkbfQ5NglQU0dRuvNEsbYh95QIlV4MFw9+XzvfYZGK25s2gz8cxlTW5xLBqgs3
+         ZOQMCoL2D1XBXmQSWVzT7C2EUYvZPaNzZVwNgDN169+j7R8VvQ7DZverJ0b/mEdgLNGP
+         rkcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+bv5lr59/g1aPozwq5SSmg1kLWkBcrS80IisdYpq8ds=;
+        b=k61dQWrzKKJgI40Hi8DYkYTOuuORfF7dK80rvj3lRtuyeyEsWOceQAYb5fkNldOFpH
+         T1wWtZFNVHg/1+JG6zYZi+8l8B8X9alYoFyeZ0cmw+q38D5fqQ5pZ204dgTPRbVWG+xK
+         Ld2IEVC0Zplzxjw8BmeN/5fI3i2JNBIjRNujRZtVTVwDhRJ4LzOrarhhwjfozETO3mtR
+         Fmxny0lAzVQXWDBRACBF3NRLVlC+RszfmN9weTsdW4Sd9JLFS9mwaQH3F2dRjgwpmF36
+         dyg4n8qrVdJ8Qnr8NqqujCZYp2qj17g97XFalFEGdxTeEumZqiSyJ7YoRoDu5/e+MpCM
+         Ux1g==
+X-Gm-Message-State: ACrzQf39Atw8LnNtAINWliDcpvwdl96THwHWh4uVtB7imuXsfztUvYqf
+        5xrtjQ9JgGS4THJkgJ5N/j4=
+X-Google-Smtp-Source: AMsMyM4mj8y0FfOLKhpY+5s2482ObrhIYlObLAVkaag0S8ugH4uq5lLpx5TUxIwCCxZXYeGdERtG0w==
+X-Received: by 2002:a05:6214:2385:b0:474:78de:f8dd with SMTP id fw5-20020a056214238500b0047478def8ddmr5950432qvb.66.1663370116062;
+        Fri, 16 Sep 2022 16:15:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:90c9:b1c1:5c9e:9030? ([2600:1700:2442:6db0:90c9:b1c1:5c9e:9030])
+        by smtp.gmail.com with ESMTPSA id p11-20020ac8460b000000b003435bb7fe9csm5907640qtn.78.2022.09.16.16.15.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 16:15:15 -0700 (PDT)
+Message-ID: <f831f62b-004b-4f73-2a66-de9d675c44b6@gmail.com>
+Date:   Fri, 16 Sep 2022 18:15:14 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|PH7PR10MB6202:EE_
-X-MS-Office365-Filtering-Correlation-Id: 536a50f1-bf3e-4c44-cd22-08da9838e60d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l0yTDdH8UEBM0F7q8+3GtqzDW1GbHgYSyvYB/Yt8Wqz6nbuBU5p8cr/QJzEOxxbVgNDmhCOijwkDU0TPsGH3fzuOXm8dH2uE0Wg9Rq0YSTCQecHxaDljmQVDMUos9KMORHiW2AN0i0siHVPxQzVHzs82YWiNfirToPSx1tHx65EZCPpU2JrOGg4zm1p1AZdqMUarwh3SuO/QT6yvI0+RK4jf6h2zj4Mc4SBRvyItRhcNCA8K6IArEYAahpSHUGKNOZGcLp98qurV8AbVEEQL9G5v8BMtVwSDCAeMCBfsphlZE3N4odnRZjr2Z0pWtGrmltOC1ldtBnB+kB77igoQuaAGYvlEKrO9Lj40TkPdrGydCeQ4Z2E6aXx73+wNvB2VIGjbnDCCfQvWBZnYOr0y8f4YaTsaz9/u1S+2oFGfWEOmMVolLOIM6vSzyXBncfRfUOiO3Tuni45dYWC43MCdzTSD7Km6tIavDRi3R45jPhpc8yNkiIq64gdsLhMvoaIUTrGfAjfIVeAP/cpa0QDI+yG3/i1Gbrsh5AqM+KIXyR9SM99Bkc8MlM2df2cE3kkyNEvFIei/tSy3h5g9JzAT6Vv0zoUW4URI7SQRycpv/aWQuRE1yL0K0tST7q1QmmQAVV15v85wcfhZ476ZRTxkrauWecSScxeSI4bK0smrdKYVUR5mpM+63ZjEHSB1x3sAB4jz85RYqgLTrOplS+YrAA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39840400004)(366004)(136003)(376002)(346002)(451199015)(86362001)(316002)(41300700001)(66476007)(4744005)(33716001)(26005)(186003)(6512007)(2906002)(6506007)(66946007)(5660300002)(6486002)(7416002)(38100700002)(4326008)(54906003)(478600001)(9686003)(66556008)(44832011)(8936002)(8676002)(6666004)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?npzk+FgIzzPShnKeSigK182u96iAPiTVGyHqpMpAEehI7fyQr1axQtkdFdRo?=
- =?us-ascii?Q?mX8OdIWMe2aX4wkMuB/XO9aadRmT3oUJKPbq7c2kFyeOytTH0gTeSC1JPqJs?=
- =?us-ascii?Q?Ze+SI7f+DNtcFizoEe/SjsP0onZXr9XKTVnCOprKZEpOi7wc99b7MlsKmfB9?=
- =?us-ascii?Q?UMVD9i8ur5evGO5AV0ELcUKfVF3GaVnp952Txit5Tc7uIwtD0yV43oWOiutF?=
- =?us-ascii?Q?QJ+KxBEVVEfc4fJEIIf31FOF9CQhfkIaQ6y8ab6oUM2ZQ8GWxb4d2xQ7xUmz?=
- =?us-ascii?Q?i8vuPSqaxqDMQQg4XSYcx6A03O6Sh2YFNKRCcZAqotXa+65gApaX3jOjEn1b?=
- =?us-ascii?Q?gLcMKfe5NC7fd171PG6CLIzKqJyve567n+p7BdbH8UaayoxuKnFetvxMpJkK?=
- =?us-ascii?Q?XD3EhiLBFSMF31F4HLhWFbMiIhs6dju53QkDNpsJOEITTAzUw1UIJj+/Osa+?=
- =?us-ascii?Q?G/1ujsX7KnM1LUEx3h+B14kldzYJ8uW5jWSZnc35YexwO2QsYqIyhymEFkmK?=
- =?us-ascii?Q?vFiH91VLcp5Z0UjEXen+to0l9+o5A6j06jQLKhqW3veIwC+WdMoGgEHErmO/?=
- =?us-ascii?Q?j6YdwqYQ92ejn4fkL3QfkUu5Fi7h+1KXY/p4HoGzTboJ9uIlcQOuIfuOH0Wj?=
- =?us-ascii?Q?d24YyVFRNsZmmPcQeweZoeDEKho9RQArvDzcGBCEKiVn0/TVuo5zoco9/ZM9?=
- =?us-ascii?Q?B+2PgmvbtvpaNOHcCbT12n8zSqDPF5sN4JLUFQ3JmfMEwkPzCateW6HANLHq?=
- =?us-ascii?Q?wnqYSps77sY+y5Gm/5K7wTryaSrsF6oRYUXrO5b7xRZqqba8c3/dAV6NaVSJ?=
- =?us-ascii?Q?Qz78JDJQOoTFGSaIHG0DbSzVpYLPc78uDDTqN1bVmkqmoC+HqZEfhu8vjIqU?=
- =?us-ascii?Q?6lIa6YFwwapQ2nfH3+kcOcIaSmCjrfqgdeUGoToWtiG2Qb9OdxyXtAQA93BX?=
- =?us-ascii?Q?5Y4Ci8hUktPbSyiZzF8WX3ju3atTNeM0IH9mW9FseCvaP53Aw6CI9xfyD5is?=
- =?us-ascii?Q?vKyAEpdp6fsJuUB5n+PykcbsTpZHh4jliE7ffbd+CGx6uStB8Xu8CB9gj7p2?=
- =?us-ascii?Q?kz4Lvxm/eEtbYS5orGoOKodK75qlmE3uVIVKoNYxjZM3C8aFQZicKLUvtWF4?=
- =?us-ascii?Q?jkO7Wf8J/ZeJoz1xlYPFjLepqkebHF2Q0GAuc29avJOIoKy5gHoebUjhkBbz?=
- =?us-ascii?Q?/Uu5oFCTI9IVvGkdRgZwIYTpRggkaeexlhzrtqvIVYJAij2nPP0ymb4F1iSZ?=
- =?us-ascii?Q?Ei0nGiQ0/Irqcn3IXggFN8J1/kUB28/pGZ4Dj6f28jpfu3PjW7Rz8JUgS6fx?=
- =?us-ascii?Q?WJPvy6lWtN8tbEszRh3qmVabiu0VOrXnu7KBPRIrcILmE2zFOt2QL9RA0wLS?=
- =?us-ascii?Q?ughFzBWpiW9O9JXdWDNbx5PxjBzm2+I4PuymkxtPx/nlnMW28p18ENCF/7ka?=
- =?us-ascii?Q?A/rnqfN39SplCxhn6A0FAnH5uPBLmPvbcT1+qi8hLiMG5Zg3cKPZUjq7Fo+S?=
- =?us-ascii?Q?iXv8bBgsTejSjWJRj7KyrzOoNnyA5TnRNTEZcIJlCEgghcwbrDp1JIMoG9i/?=
- =?us-ascii?Q?dQYNHkYN7pSBpzMrESk0+pTf64GFc5WppBEgZWoATov8fycmQ6CS1WAEmxAd?=
- =?us-ascii?Q?xVrhNlGKsgRHFHleRKmaJy0=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 536a50f1-bf3e-4c44-cd22-08da9838e60d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 23:12:17.3163
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gv8CUpKSaArOTxt425qDPSYGYchbKgkwiWs2IROabUL+9i5s3ew6bH3WKNcfyaOdtNtCB+GlP+5fzT2oMvrBVojP46t6OP/rX+eRgmwqgGg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6202
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
+Content-Language: en-US
+To:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh@kernel.org, helgaas@kernel.org
+Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
+        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
+        trix@redhat.com
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 10:40:10PM +0000, Vladimir Oltean wrote:
-> On Fri, Sep 16, 2022 at 12:13:49PM -0700, Colin Foster wrote:
-> > -	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-> > -	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
-> > +	err = regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-> > +	if (err)
-> > +		return err;
-> >  
-> > -	return 0;
-> > +	err = regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
-> > +
-> > +	return err;
-> >  }
+On 8/29/22 16:43, Lizhi Hou wrote:
+> This patch series introduces OF overlay support for PCI devices which
+> primarily addresses two use cases. First, it provides a data driven method
+> to describe hardware peripherals that are present in a PCI endpoint and
+> hence can be accessed by the PCI host. An example device is Xilinx/AMD
+> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
+> driver -- often used in SoC platforms -- in a PCI host based system. An
+> example device is Microchip LAN9662 Ethernet Controller.
 > 
-> A kernel janitor will come and patch this up to:
+> This patch series consolidates previous efforts to define such an
+> infrastructure:
+> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
+> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
 > 
-> 	return regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
-> 
-> so it's better to do it yourself.
+> Normally, the PCI core discovers PCI devices and their BARs using the
+> PCI enumeration process. However, the process does not provide a way to
+> discover the hardware peripherals that are present in a PCI device, and
+> which can be accessed through the PCI BARs. Also, the enumeration process
+> does not provide a way to associate MSI-X vectors of a PCI device with the
+> hardware peripherals that are present in the device. PCI device drivers
+> often use header files to describe the hardware peripherals and their
+> resources as there is no standard data driven way to do so. This patch> series proposes to use flattened device tree blob to describe the
+> peripherals in a data driven way.
 
-Good catch. That and removing the IS_ERR_VALUE macro from patch 1 and
-I'll resubmit after the weekend.
+> Based on previous discussion, using
+> device tree overlay is the best way to unflatten the blob and populate
+> platform devices.
+
+I still do not agree with this statement.  The device tree overlay
+implementation is very incomplete and should not be used until it
+becomes more complete.  No need to debate this right now, but I don't want
+to let this go unchallenged.
+
+If there is no base system device tree on an ACPI based system, then I
+am not convinced that a mixed ACPI / device tree implementation is
+good architecture.  I might be more supportive of using a device tree
+description of a PCI device in a detached device tree (not linked to
+the system device tree, but instead freestanding).  Unfortunately the
+device tree functions assume a single system devicetree, with no concept
+of a freestanding tree (eg, if a NULL device tree node is provided to
+a function or macro, it often defaults to the root of the system device
+tree).  I need to go look at whether the flag OF_DETACHED handles this,
+or if it could be leveraged to do so.
+
+> To use device tree overlay, there are three obvious
+> problems that need to be resolved.
+> 
+> First, we need to create a base tree for non-DT system such as x86_64. A
+> patch series has been submitted for this:
+> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
+> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
+> 
+> Second, a device tree node corresponding to the PCI endpoint is required
+> for overlaying the flattened device tree blob for that PCI endpoint.
+> Because PCI is a self-discoverable bus, a device tree node is usually not
+> created for PCI devices. This series adds support to generate a device
+> tree node for a PCI device which advertises itself using PCI quirks
+> infrastructure.
+> 
+> Third, we need to generate device tree nodes for PCI bridges since a child
+> PCI endpoint may choose to have a device tree node created.
+> 
+> This patch series is made up of two patches.
+> 
+> The first patch is adding OF interface to allocate an OF node. It is copied
+> from:
+> https://lore.kernel.org/lkml/20220620104123.341054-5-clement.leger@bootlin.com/
+> 
+> The second patch introduces a kernel option, CONFIG_PCI_OF. When the option
+> is turned on, the kernel will generate device tree nodes for all PCI
+> bridges unconditionally. The patch also shows how to use the PCI quirks
+> infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device tree node for
+> a device. Specifically, the patch generates a device tree node for Xilinx
+> Alveo U50 PCIe accelerator device. The generated device tree nodes do not
+> have any property. Future patches will add the necessary properties.
+> 
+> Clément Léger (1):
+>   of: dynamic: add of_node_alloc()
+> 
+> Lizhi Hou (1):
+>   pci: create device tree node for selected devices
+> 
+>  drivers/of/dynamic.c        |  50 +++++++++++++----
+>  drivers/pci/Kconfig         |  11 ++++
+>  drivers/pci/bus.c           |   2 +
+>  drivers/pci/msi/irqdomain.c |   6 +-
+>  drivers/pci/of.c            | 106 ++++++++++++++++++++++++++++++++++++
+>  drivers/pci/pci-driver.c    |   3 +-
+>  drivers/pci/pci.h           |  16 ++++++
+>  drivers/pci/quirks.c        |  11 ++++
+>  drivers/pci/remove.c        |   1 +
+>  include/linux/of.h          |   7 +++
+>  10 files changed, 200 insertions(+), 13 deletions(-)
+> 
+
