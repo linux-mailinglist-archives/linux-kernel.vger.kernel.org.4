@@ -2,134 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981AE5BA944
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E635BA93C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 11:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIPJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 05:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
+        id S230037AbiIPJTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 05:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiIPJSE (ORCPT
+        with ESMTP id S229612AbiIPJTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 05:18:04 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF242A99EF;
-        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id b23so20639161pfp.9;
-        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=RFJvLC3oyKntFrzTiQRhGZVyVO6GPmrCQg8gZcgZyFw=;
-        b=Si6vfDs3bb2P2LS+f46ihWdK3HAyZdel6Ti1Rl2uXqTyVhhM+fRPVv2zmQ4d/VKab8
-         E4MWbu0mTcGqAAdPVQlX+SSKfU7KNUsJrnxmoBrVPgeHoXCdIBpGm9c0rMYAv+TCkITP
-         CrEQiNGzUycaWOLkBp7E1yPKzvFAgYuY/fZAO8XH1XVhBx+LMLqnJpoTapoE/PeMwBdh
-         gR1mmMH6iNh/WBmaizEX2KFNP64aO1OPWnEsFQYWCLpTltBTj52KfzB4SBNaMVGNxlZc
-         4uKj2M4qd/vGEsuKn8Qx6qonwZz8cdIn9MQSREeaVvRUXI8uhZafFWRTbUHEkdBASLVc
-         boHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RFJvLC3oyKntFrzTiQRhGZVyVO6GPmrCQg8gZcgZyFw=;
-        b=54A3nWdRxuXxlksECDGwjlzlODPqF1IEKd8vY4oQFFAhn3dJAEkw9SRmtp9FRw5yR6
-         HTq3y3IP98sxStjDVjwXHKBtkvukVQ3OFB5UbJxL22j6XKvHMAVCTtW5ZOrgeaMvBFJs
-         XkzGxjEpbGcK0ABWAAgGSIWp338yAiznQIn96McKcA0XHZ744Ynym+Zdooa1pp7CMPJ9
-         ILwPhaZWOTFywC/+ZqEhchIyE7Jlfp5G1X/y05GwDDq7gtERdW5PxuHikQ7qLKgZ9Zlp
-         r8YxTYhRkkDmKx73Zs5yj+bEQrDqGRrN3Th1sKKWAOgOjoPrSr1/uS7+zGDV1IPKzrC0
-         sM2w==
-X-Gm-Message-State: ACrzQf1Vv97mG5H9HRamlmbqq5rj6UtDlAOTqAD0s5RtOFFRKSVG7XSI
-        OSkBFvMspXXTI0pWhmIdPMQ=
-X-Google-Smtp-Source: AMsMyM6PMf1pTSKPrEToM1vu4+OPBqOTXE35gLiVtkoVeVNAu/wJ9Awn1DLWt6lUQ0y1S1KgHHMDJw==
-X-Received: by 2002:a63:77c4:0:b0:435:4224:98b6 with SMTP id s187-20020a6377c4000000b00435422498b6mr3751652pgc.94.1663319871288;
-        Fri, 16 Sep 2022 02:17:51 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-32.three.co.id. [116.206.28.32])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b00174f7d10a03sm14635852plh.86.2022.09.16.02.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 02:17:50 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5800510322A; Fri, 16 Sep 2022 16:17:48 +0700 (WIB)
-Date:   Fri, 16 Sep 2022 16:17:48 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <YyQ/PHZHkDSgjH/v@debian.me>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-4-chao.p.peng@linux.intel.com>
+        Fri, 16 Sep 2022 05:19:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688761719;
+        Fri, 16 Sep 2022 02:19:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAA4AB8249D;
+        Fri, 16 Sep 2022 09:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98032C433D6;
+        Fri, 16 Sep 2022 09:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663319942;
+        bh=aiE0aNs/n84c+xuU+XoKoBmHaYfUU8+iVr1pUZCDPTg=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=ZMb2L73zBT8/jNipi1PHoOjPT+X2yU5J6G9Z5JPRUSLmShMm58j55f74drDjCDLO6
+         5rXCGi5Hf1WKQwCMSSJT2VX+8LrBJTdgwlCD9IZR9VseqrgbGh8AsKGa5SftvHybGP
+         NFqSZBB0GE4Eu4X6OQc/SxG3917mT/p9ofJyvAjT4AIly7tP7WtHLjLKSqBJcSBrle
+         S8JwCrbsPHTkCXndH6RMGM3PZFM5fJxHDkM5MKQsRZF8Ky3SH3X0sFDb+UwpnbuIf6
+         5sstBBHiRv81lIn6fUYOtVwgRB2L0YFZMnjP6U/kLHqE3tcg065sV0S+JEFGynbsnB
+         4//V9RSeRZiSQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="y7c2sZGFbG3OyuxM"
-Content-Disposition: inline
-In-Reply-To: <20220915142913.2213336-4-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: ath10k: Fix miscellaneous spelling errors
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220909145300.19223-1-quic_jjohnson@quicinc.com>
+References: <20220909145300.19223-1-quic_jjohnson@quicinc.com>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <ath10k@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166331993629.3127.6990826637982175822.kvalo@kernel.org>
+Date:   Fri, 16 Sep 2022 09:19:00 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
 
---y7c2sZGFbG3OyuxM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Fix misspellings flagged by 'codespell'.
+> 
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-On Thu, Sep 15, 2022 at 10:29:08PM +0800, Chao Peng wrote:
-> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
-> +   private memory access when the bit is set otherwise the memory error =
-is
-> +   caused by shared memory access when the bit is clear.
+Patch applied to ath-next branch of ath.git, thanks.
 
-s/set otherwise/set. Otherwise,
+b8a71b953653 wifi: ath10k: Fix miscellaneous spelling errors
 
-Thanks.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220909145300.19223-1-quic_jjohnson@quicinc.com/
 
---=20
-An old man doll... just what I always wanted! - Clara
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
---y7c2sZGFbG3OyuxM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYyQ/PAAKCRD2uYlJVVFO
-o+4BAQDezOCiD0NOTihbyDi8bMxnDsZat5ohcP3Z6qp+0VEjSAD+PZb6ujbn8gYi
-c4AOBSOQzNSdKZVaTt8s86rxM84+4gk=
-=Ns2r
------END PGP SIGNATURE-----
-
---y7c2sZGFbG3OyuxM--
