@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EF25BAA00
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B925BAA1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiIPKJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S231237AbiIPKJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiIPKIm (ORCPT
+        with ESMTP id S231264AbiIPKIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:08:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6747FABD4B;
-        Fri, 16 Sep 2022 03:08:15 -0700 (PDT)
+        Fri, 16 Sep 2022 06:08:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E003ABD5F;
+        Fri, 16 Sep 2022 03:08:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5871B8250D;
-        Fri, 16 Sep 2022 10:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE954C433D7;
-        Fri, 16 Sep 2022 10:08:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EA7E629EB;
+        Fri, 16 Sep 2022 10:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFB4C433C1;
+        Fri, 16 Sep 2022 10:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663322892;
-        bh=5d1gcZu3g64lFbFQtJHcc3lz3f22++oEQ2WVyfr0LSg=;
+        s=korg; t=1663322895;
+        bh=LzV4F/MDDvs2PsNWQ4DkbtFiMj0IuYqEthpNVbJpyNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=asXcNqI5HYDJMarYD2YlgLj8NsZaLAd81LtWD8D/ChjgUcnYDem7I7gXWZYGHazTn
-         pk6Z276ILOV3qH6axHpgFt5mXG/y4PYHyupYklWeVAGOZaiQF0fBa58l8SQOkXA6Ki
-         +1CetxWJ1A6qiWJzSwBHq906qWndUJn0+5RNUlLM=
+        b=iQvnqgSKwWb+PzagDmoxwl1RV0qWUbrrJqwuNP4PTx5MejQ3VFxXOlHLpl3m46744
+         m95tyOsZCwzDo4GQDq604dwk8zHnChL02AgB60L0Tf5NWxKU9U1QMiNth9/FF+DYt3
+         04f33pSeJVX9ivUnrzNpacFyC0s7Y3ruZlYRKvPM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 6/7] platform/x86: acer-wmi: Acer Aspire One AOD270/Packard Bell Dot keymap fixes
-Date:   Fri, 16 Sep 2022 12:07:58 +0200
-Message-Id: <20220916100441.859089614@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.14 7/7] tracefs: Only clobber mode/uid/gid on remount if asked
+Date:   Fri, 16 Sep 2022 12:07:59 +0200
+Message-Id: <20220916100441.914631914@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220916100441.528608977@linuxfoundation.org>
 References: <20220916100441.528608977@linuxfoundation.org>
@@ -53,58 +53,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit c3b82d26bc85f5fc2fef5ec8cce17c89633a55a8 ]
+commit 47311db8e8f33011d90dee76b39c8886120cdda4 upstream.
 
-2 keymap fixes for the Acer Aspire One AOD270 and the same hardware
-rebranded as Packard Bell Dot SC:
+Users may have explicitly configured their tracefs permissions; we
+shouldn't overwrite those just because a second mount appeared.
 
-1. The F2 key is marked with a big '?' symbol on the Packard Bell Dot SC,
-this sends WMID_HOTKEY_EVENTs with a scancode of 0x27 add a mapping
-for this.
+Only clobber if the options were provided at mount time.
 
-2. Scancode 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate
-input event with the "Video Bus" input device events. But on these devices
-the "Video Bus" does not send events for this key. Map 0x61 to KEY_UNKNOWN
-instead of using KE_IGNORE so that udev/hwdb can override it on these devs.
+Note: the previous behavior was especially surprising in the presence of
+automounted /sys/kernel/debug/tracing/.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220829163544.5288-1-hdegoede@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Existing behavior:
+
+  ## Pre-existing status: tracefs is 0755.
+  # stat -c '%A' /sys/kernel/tracing/
+  drwxr-xr-x
+
+  ## (Re)trigger the automount.
+  # umount /sys/kernel/debug/tracing
+  # stat -c '%A' /sys/kernel/debug/tracing/.
+  drwx------
+
+  ## Unexpected: the automount changed mode for other mount instances.
+  # stat -c '%A' /sys/kernel/tracing/
+  drwx------
+
+New behavior (after this change):
+
+  ## Pre-existing status: tracefs is 0755.
+  # stat -c '%A' /sys/kernel/tracing/
+  drwxr-xr-x
+
+  ## (Re)trigger the automount.
+  # umount /sys/kernel/debug/tracing
+  # stat -c '%A' /sys/kernel/debug/tracing/.
+  drwxr-xr-x
+
+  ## Expected: the automount does not change other mount instances.
+  # stat -c '%A' /sys/kernel/tracing/
+  drwxr-xr-x
+
+Link: https://lkml.kernel.org/r/20220826174353.2.Iab6e5ea57963d6deca5311b27fb7226790d44406@changeid
+
+Cc: stable@vger.kernel.org
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/acer-wmi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/tracefs/inode.c |   31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/platform/x86/acer-wmi.c b/drivers/platform/x86/acer-wmi.c
-index 5ddc359135a85..8b4af118ff94b 100644
---- a/drivers/platform/x86/acer-wmi.c
-+++ b/drivers/platform/x86/acer-wmi.c
-@@ -106,6 +106,7 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_KEY, 0x22, {KEY_PROG2} },    /* Arcade */
- 	{KE_KEY, 0x23, {KEY_PROG3} },    /* P_Key */
- 	{KE_KEY, 0x24, {KEY_PROG4} },    /* Social networking_Key */
-+	{KE_KEY, 0x27, {KEY_HELP} },
- 	{KE_KEY, 0x29, {KEY_PROG3} },    /* P_Key for TM8372 */
- 	{KE_IGNORE, 0x41, {KEY_MUTE} },
- 	{KE_IGNORE, 0x42, {KEY_PREVIOUSSONG} },
-@@ -119,7 +120,13 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_IGNORE, 0x48, {KEY_VOLUMEUP} },
- 	{KE_IGNORE, 0x49, {KEY_VOLUMEDOWN} },
- 	{KE_IGNORE, 0x4a, {KEY_VOLUMEDOWN} },
--	{KE_IGNORE, 0x61, {KEY_SWITCHVIDEOMODE} },
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -142,6 +142,8 @@ struct tracefs_mount_opts {
+ 	kuid_t uid;
+ 	kgid_t gid;
+ 	umode_t mode;
++	/* Opt_* bitfield. */
++	unsigned int opts;
+ };
+ 
+ enum {
+@@ -242,6 +244,7 @@ static int tracefs_parse_options(char *d
+ 	kgid_t gid;
+ 	char *p;
+ 
++	opts->opts = 0;
+ 	opts->mode = TRACEFS_DEFAULT_MODE;
+ 
+ 	while ((p = strsep(&data, ",")) != NULL) {
+@@ -276,24 +279,36 @@ static int tracefs_parse_options(char *d
+ 		 * but traditionally tracefs has ignored all mount options
+ 		 */
+ 		}
++
++		opts->opts |= BIT(token);
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static int tracefs_apply_options(struct super_block *sb)
++static int tracefs_apply_options(struct super_block *sb, bool remount)
+ {
+ 	struct tracefs_fs_info *fsi = sb->s_fs_info;
+ 	struct inode *inode = sb->s_root->d_inode;
+ 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
+ 
+-	inode->i_mode &= ~S_IALLUGO;
+-	inode->i_mode |= opts->mode;
 +	/*
-+	 * 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate input event
-+	 * with the "Video Bus" input device events. But sometimes it is not
-+	 * a dup. Map it to KEY_UNKNOWN instead of using KE_IGNORE so that
-+	 * udev/hwdb can override it on systems where it is not a dup.
++	 * On remount, only reset mode/uid/gid if they were provided as mount
++	 * options.
 +	 */
-+	{KE_KEY, 0x61, {KEY_UNKNOWN} },
- 	{KE_IGNORE, 0x62, {KEY_BRIGHTNESSUP} },
- 	{KE_IGNORE, 0x63, {KEY_BRIGHTNESSDOWN} },
- 	{KE_KEY, 0x64, {KEY_SWITCHVIDEOMODE} },	/* Display Switch */
--- 
-2.35.1
-
++
++	if (!remount || opts->opts & BIT(Opt_mode)) {
++		inode->i_mode &= ~S_IALLUGO;
++		inode->i_mode |= opts->mode;
++	}
+ 
+-	inode->i_uid = opts->uid;
++	if (!remount || opts->opts & BIT(Opt_uid))
++		inode->i_uid = opts->uid;
+ 
+-	/* Set all the group ids to the mount option */
+-	set_gid(sb->s_root, opts->gid);
++	if (!remount || opts->opts & BIT(Opt_gid)) {
++		/* Set all the group ids to the mount option */
++		set_gid(sb->s_root, opts->gid);
++	}
+ 
+ 	return 0;
+ }
+@@ -308,7 +323,7 @@ static int tracefs_remount(struct super_
+ 	if (err)
+ 		goto fail;
+ 
+-	tracefs_apply_options(sb);
++	tracefs_apply_options(sb, true);
+ 
+ fail:
+ 	return err;
+@@ -360,7 +375,7 @@ static int trace_fill_super(struct super
+ 
+ 	sb->s_op = &tracefs_super_operations;
+ 
+-	tracefs_apply_options(sb);
++	tracefs_apply_options(sb, false);
+ 
+ 	return 0;
+ 
 
 
