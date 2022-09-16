@@ -2,101 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934D05BA721
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C8C5BA725
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiIPHA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S229898AbiIPHIK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Sep 2022 03:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIPHAU (ORCPT
+        with ESMTP id S229557AbiIPHIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:00:20 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB54459B9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:00:09 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 109575810C7;
-        Fri, 16 Sep 2022 03:00:06 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 16 Sep 2022 03:00:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663311606; x=1663315206; bh=Jy5IMsflTG
-        UOnBMaDBoxhuUXVOkL2vtNuhacCgu+FE8=; b=gkEGluXcYFL0nhK5fZWtlvW2Co
-        GkDw8cJ/5L7Tww0Na4mf+SkYqTzQ7Y4uLGjA3hsfSpkp87p0FCA/LPmCo5/xBOvF
-        P9oAKssi/Uua2YuBy4RxQrnUSP5jQNDpnUfMGB+kZWd92nFa4ArE7RywpGo8POsF
-        aWU9/xLdacLVLns/dvwniVbwsTxoDTOlycyJjyAf4aTPbEMDs7nkbdafHBKaTfcF
-        rd+LSak/nD11+4vJIDjYh23KEqwJi6YTCF376xz7QZmO3ARUqTLG3pTwXCmQI9BZ
-        NcDCMId9vIsvSM0w/FEQZnJbLgr9/+nEY7eKjo8CLfzWYDsG61hE0EdbC5+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663311606; x=1663315206; bh=Jy5IMsflTGUOnBMaDBoxhuUXVOkL
-        2vtNuhacCgu+FE8=; b=q35jvGMb2MoJLxxi99r9DET3u0O2eYwi4oTvjo0GToLQ
-        COgOJLOriKnEJevrz6UbGcCxh4MtzPwmn2NQSo5nJteI307nsuGhE7u1nuXvFKES
-        8/9XBNKe0EFtO9kfvPhRyro9ZF7EalmWdlj6+z8Vr8KuPJUDHiNPQb/RS5mnAeVW
-        kgpKHrQaQabOI+kJhR2BDq88FwsrE/vM+TUQdjn6TaK/P2qUbgkcPfEqfT1IQBND
-        GkWCIo0OPL3eddxtoE/H89jt8XhG3kdltktEDJvUPk4+haXFHql9svhL+KCzWW/t
-        v+rxyYKbmba7o18KlBsu72WXkvpfKvFQZznbf/bN4Q==
-X-ME-Sender: <xms:9R4kY4UbWDLXcjRQWWj6-3tiDr0Tt7sMXu-DL8qP1wNeL-C5KgRnYg>
-    <xme:9R4kY8lRz5Sg55oqNFYL-mZbNaKHfF-dzbOsTxdaTBYK4adNFEsF_KGO10fleY54w
-    Ww_S4tP4IRKv0eIGmc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduledgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:9R4kY8bAbEqIRe0UEYzG9nnA8o2XKstN5Am6XSEfbcz4CMxqR9IJOw>
-    <xmx:9R4kY3Vk6xR_sZhA-uEv5ONLT-K-zVhoPibika9WEk1eVefDV7hwJA>
-    <xmx:9R4kYymomrIVQCtpsk7mbaOPTyuQlMilbvxmIddy7XVybQYQCLHXbw>
-    <xmx:9R4kY2up_DA1hV9ls43b4eXH9uVVSo_OCYja5J8Nvf7gtwPec3qXHQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A80E1B60086; Fri, 16 Sep 2022 03:00:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <d28d59c1-1ed0-422b-b749-0082de05e7ee@www.fastmail.com>
-In-Reply-To: <20220916050006.GA188273@ubuntu>
-References: <20220916050006.GA188273@ubuntu>
-Date:   Fri, 16 Sep 2022 08:59:44 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Hyunwoo Kim" <imv4bel@gmail.com>,
-        "Lubomir Rintel" <lkundrak@v3.sk>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] char: pcmcia: scr24x_cs: Fix use-after-free in scr24x_fops
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 03:08:07 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FA58C447;
+        Fri, 16 Sep 2022 00:08:05 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VPw-tZN_1663312082;
+Received: from smtpclient.apple(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VPw-tZN_1663312082)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Sep 2022 15:08:03 +0800
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH RESEND v1 0/9] Drivers for Alibaba YCC (Yitian
+ Cryptography Complex) cryptographic accelerator
+From:   guanjun <guanjun@linux.alibaba.com>
+In-Reply-To: <1662435353-114812-1-git-send-email-guanjun@linux.alibaba.com>
+Date:   Fri, 16 Sep 2022 15:08:01 +0800
+Cc:     "zelin.deng@linux.alibaba.com" <zelin.deng@linux.alibaba.com>,
+        xuchun.shang@linux.alibaba.com,
+        "artie.ding@linux.alibaba.com" <artie.ding@linux.alibaba.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <60CD0494-8A0F-4234-9599-21C94221FF32@linux.alibaba.com>
+References: <1662435353-114812-1-git-send-email-guanjun@linux.alibaba.com>
+To:     herbert@gondor.apana.org.au,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022, at 7:00 AM, Hyunwoo Kim wrote:
-> @@ -298,9 +300,10 @@ static void scr24x_remove(struct pcmcia_device *link)
->  	cdev_del(&dev->c_dev);
->  	clear_bit(dev->devno, scr24x_minors);
->  	dev->dev = NULL;
-> -	mutex_unlock(&dev->lock);
+
+
+> 2022年9月6日 上午11:35，Guanjun <guanjun@linux.alibaba.com> 写道：
 > 
->  	kref_put(&dev->refcnt, scr24x_delete);
-> +
-> +	mutex_unlock(&dev->lock);
->  }
+> From: Guanjun <guanjun@linux.alibaba.com>
+> 
+> Hi,
+> 
+> This patch series aims to add drivers for Alibaba YCC (Yitian Cryptography Complex)
+> cryptographic accelerator. Enables the on-chip cryptographic accelerator of
+> Alibaba Yitian SoCs which based on ARMv9 architecture.
+> 
+> It includes PCIe enabling, skcipher, aead, rsa, sm2 support.
+> 
+> I resend this patchset (see [1]) due to Herbert missed this email.
+> 
+> I list the differences between the former version under [1]. Mainly according to Elliott's comments.
+> 
+> Please help to review.
+> 
+> Thanks,
+> Guanjun.
+> 
+> [1] https://lore.kernel.org/all/1661334621-44413-1-git-send-email-guanjun@linux.alibaba.com/
+> 
+> v1 -> v1 RESEND:
+>  - [01/09] Adjust the Kconfig entry in alphabetical order
+>  - [05/09][07/09][08/09] Adjust the format of algorithm names
 
-This appears to introduce a new use-after-free, when the kref_put()
-frees the 'dev' structure and you unlock the mutex in that structure
-afterwards.
 
-       Arnd
+This is a kindly ping :)
+
+BR,
+Guanjun
+
+> 
+> Guanjun (3):
+>  crypto/ycc: Add skcipher algorithm support
+>  crypto/ycc: Add aead algorithm support
+>  crypto/ycc: Add rsa algorithm support
+> 
+> Xuchun Shang (1):
+>  crypto/ycc: Add sm2 algorithm support
+> 
+> Zelin Deng (5):
+>  crypto/ycc: Add YCC (Yitian Cryptography Complex) accelerator driver
+>  crypto/ycc: Add ycc ring configuration
+>  crypto/ycc: Add irq support for ycc kernel rings
+>  crypto/ycc: Add device error handling support for ycc hw errors
+>  MAINTAINERS: Add Yitian Cryptography Complex (YCC) driver maintainer
+>    entry
+> 
+> MAINTAINERS                            |   8 +
+> drivers/crypto/Kconfig                 |   2 +
+> drivers/crypto/Makefile                |   1 +
+> drivers/crypto/ycc/Kconfig             |  18 +
+> drivers/crypto/ycc/Makefile            |   4 +
+> drivers/crypto/ycc/sm2signature_asn1.c |  38 ++
+> drivers/crypto/ycc/sm2signature_asn1.h |  13 +
+> drivers/crypto/ycc/ycc_aead.c          | 646 ++++++++++++++++++++++
+> drivers/crypto/ycc/ycc_algs.h          | 176 ++++++
+> drivers/crypto/ycc/ycc_cdev.c          |  86 +++
+> drivers/crypto/ycc/ycc_cdev.h          |  18 +
+> drivers/crypto/ycc/ycc_dev.h           | 157 ++++++
+> drivers/crypto/ycc/ycc_drv.c           | 574 ++++++++++++++++++++
+> drivers/crypto/ycc/ycc_isr.c           | 279 ++++++++++
+> drivers/crypto/ycc/ycc_isr.h           |  12 +
+> drivers/crypto/ycc/ycc_pke.c           | 944 +++++++++++++++++++++++++++++++++
+> drivers/crypto/ycc/ycc_ring.c          | 652 +++++++++++++++++++++++
+> drivers/crypto/ycc/ycc_ring.h          | 168 ++++++
+> drivers/crypto/ycc/ycc_ske.c           | 925 ++++++++++++++++++++++++++++++++
+> 19 files changed, 4721 insertions(+)
+> create mode 100644 drivers/crypto/ycc/Kconfig
+> create mode 100644 drivers/crypto/ycc/Makefile
+> create mode 100644 drivers/crypto/ycc/sm2signature_asn1.c
+> create mode 100644 drivers/crypto/ycc/sm2signature_asn1.h
+> create mode 100644 drivers/crypto/ycc/ycc_aead.c
+> create mode 100644 drivers/crypto/ycc/ycc_algs.h
+> create mode 100644 drivers/crypto/ycc/ycc_cdev.c
+> create mode 100644 drivers/crypto/ycc/ycc_cdev.h
+> create mode 100644 drivers/crypto/ycc/ycc_dev.h
+> create mode 100644 drivers/crypto/ycc/ycc_drv.c
+> create mode 100644 drivers/crypto/ycc/ycc_isr.c
+> create mode 100644 drivers/crypto/ycc/ycc_isr.h
+> create mode 100644 drivers/crypto/ycc/ycc_pke.c
+> create mode 100644 drivers/crypto/ycc/ycc_ring.c
+> create mode 100644 drivers/crypto/ycc/ycc_ring.h
+> create mode 100644 drivers/crypto/ycc/ycc_ske.c
+> 
+> -- 
+> 1.8.3.1
+
