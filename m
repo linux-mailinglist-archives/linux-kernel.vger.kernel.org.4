@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43585BA771
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985025BA77F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 09:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiIPH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 03:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S230093AbiIPHbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 03:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiIPH1S (ORCPT
+        with ESMTP id S229479AbiIPHbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 03:27:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A691E1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663313237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Of9F6D0XG0kz29dHaaaRnZmMTmIQ7SApcigqeqNHsck=;
-        b=eq1q5yzfohmGurTA8i11/bhzVfvX4eem7BpygXiVfP+GNuunw9+sErLjjstijcpNUfOoL8
-        rXsr5pxAkbWeVDN8qtpzfMf1NxM+U2zTvBxR1ki/yxlQf3/A+1eFx96BWkxx0WbZFrkkRZ
-        yVgAA4Pqjlm7F1AgPd7urnGbnCNL9DU=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-578-hr4xlMfeN9ikimccRsnUCQ-1; Fri, 16 Sep 2022 03:27:15 -0400
-X-MC-Unique: hr4xlMfeN9ikimccRsnUCQ-1
-Received: by mail-vk1-f197.google.com with SMTP id h194-20020a1f9ecb000000b003a29cd56380so2883884vke.15
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 00:27:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Of9F6D0XG0kz29dHaaaRnZmMTmIQ7SApcigqeqNHsck=;
-        b=kF90crtweqISPjdzSWMGwC6+8+2S8QlbknmDPyCsmEH/w2hVQayIFqYDyAvkcLQwGC
-         K8fILp4/yx/XNT+U3Odm8KGEx+2QYejyjV7eBU/6OsAQpEUgEEuOjhSp2JXzG3I8587o
-         ow2yu3F+NOrhpnnpM65f9kf67hvUpjZzfKnb98FsjlZabHy3rC2VxFunGY5Z/TViiOIa
-         fXaYY1atPO/4i5a0kA3EOizpWlnsUfs26O12F5iB/2zlKAsKWOb2k079aOeFKevH41dJ
-         uOHgKpzzatYT29QD0Rtmc10jVApMXPXAzeVpynz//6S/UugWkDoexIAp0ao44QJ/xV6W
-         nGzA==
-X-Gm-Message-State: ACrzQf2TRKdrTdhfYbusVrbAuVx+z6zCx/EQKcgovo6WZ6pxC6Q70Hyp
-        Au0o/nzi8VxLE5GmYaZRHbCxsp5odji4XAKR8f3p6R5S0VqgemApamIVzs5Zkg2H9HMTCCAVvPv
-        1tEqzR6xIFF+6g53oxsAP3Mw3KnXanR62Ugx/1AxB
-X-Received: by 2002:a67:ec82:0:b0:388:fefa:2467 with SMTP id h2-20020a67ec82000000b00388fefa2467mr1503175vsp.67.1663313235240;
-        Fri, 16 Sep 2022 00:27:15 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5xMrLs26c52lN9gK3YyGVQL3n3xVFjzBpm2yGpQ+A9J0bntdHsO2kin0KVBZ7r4qv5ElrakEPqWpP0T6Y1Md0=
-X-Received: by 2002:a67:ec82:0:b0:388:fefa:2467 with SMTP id
- h2-20020a67ec82000000b00388fefa2467mr1503172vsp.67.1663313235031; Fri, 16 Sep
- 2022 00:27:15 -0700 (PDT)
+        Fri, 16 Sep 2022 03:31:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D7B67C9C;
+        Fri, 16 Sep 2022 00:30:58 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTQcc44YFzlVxM;
+        Fri, 16 Sep 2022 15:26:56 +0800 (CST)
+Received: from kwepemm600006.china.huawei.com (7.193.23.105) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 16 Sep 2022 15:30:57 +0800
+Received: from huawei.com (10.44.142.108) by kwepemm600006.china.huawei.com
+ (7.193.23.105) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
+ 2022 15:30:56 +0800
+From:   <luolongjun@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <sangyan@huawei.com>, <luanjianhai@huawei.com>,
+        <zhuling8@huawei.com>, <lizongwu@huawei.com>,
+        Longjun Luo <luolongjun@huawei.com>
+Subject: [PATCH] uprobe: add UPROBE_ALTER_PC flag for uprobe handlers
+Date:   Fri, 16 Sep 2022 15:28:46 +0800
+Message-ID: <20220916072846.2145735-1-luolongjun@huawei.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220912161140.34281-1-mlombard@redhat.com> <YyMe8LvKxc5juCfr@hyeyoo>
-In-Reply-To: <YyMe8LvKxc5juCfr@hyeyoo>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Fri, 16 Sep 2022 09:27:04 +0200
-Message-ID: <CAFL455kQaTb=6NFUbDdpP051nc2=LwpJxAOFicdAeoFjDXvgMQ@mail.gmail.com>
-Subject: Re: [PATCH V2] mm: slub: fix flush_cpu_slab()/__free_slab()
- invocations in task context.
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm <linux-mm@kvack.org>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.44.142.108]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600006.china.huawei.com (7.193.23.105)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C4=8Dt 15. 9. 2022 v 14:48 odes=C3=ADlatel Hyeonggon Yoo <42.hyeyoo@gmail.=
-com> napsal:
-> No objection about this patch,
-> but it seems create_workqueue is deprecated?
+From: Longjun Luo <luolongjun@huawei.com>
 
-You're right, the documentation says that create_workqueue() is deprecated,
-too bad there is not a comment in the source code.
-Thanks for reporting this.
+Within uprobe handlers, the pc register could be
+modified. In this situation, there is no need to
+do a single stepping. Just like the kprobe, we
+skip it.
 
-I will wait for the maintainers to review this one and eventually I
-will submit a V3.
+Signed-off-by: Longjun Luo <luolongjun@huawei.com>
+---
+ include/linux/uprobes.h |  5 +++--
+ kernel/events/uprobes.c | 16 +++++++++++++---
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-Maurizio
-
-
-
->
->
-> --
-> Thanks,
-> Hyeonggon
->
+diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+index f46e0ca0169c..0670fecbe1ce 100644
+--- a/include/linux/uprobes.h
++++ b/include/linux/uprobes.h
+@@ -22,8 +22,9 @@ struct inode;
+ struct notifier_block;
+ struct page;
+ 
+-#define UPROBE_HANDLER_REMOVE		1
+-#define UPROBE_HANDLER_MASK		1
++#define UPROBE_HANDLER_REMOVE   0x1
++#define UPROBE_ALTER_PC         0x2
++#define UPROBE_HANDLER_MASK     0x3 /* (UPROBE_HANDLER_REMOVE | UPROBE_ALTER_PC) */
+ 
+ #define MAX_URETPROBE_DEPTH		64
+ 
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 2eaa327f8158..d01a668fecae 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -2064,10 +2064,16 @@ static struct uprobe *find_active_uprobe(unsigned long bp_vaddr, int *is_swbp)
+ 	return uprobe;
+ }
+ 
+-static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
++/*
++ * The return value of handler_chain tags events that happen during
++ * calling handlers. If UPROBE_ALTER_PC happens, we must skip the
++ * single stepping.
++ */
++static int handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
+ {
+ 	struct uprobe_consumer *uc;
+ 	int remove = UPROBE_HANDLER_REMOVE;
++	int all_events = 0;
+ 	bool need_prep = false; /* prepare return uprobe, when needed */
+ 
+ 	down_read(&uprobe->register_rwsem);
+@@ -2084,6 +2090,7 @@ static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
+ 			need_prep = true;
+ 
+ 		remove &= rc;
++		all_events |= rc;
+ 	}
+ 
+ 	if (need_prep && !remove)
+@@ -2094,6 +2101,7 @@ static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)
+ 		unapply_uprobe(uprobe, current->mm);
+ 	}
+ 	up_read(&uprobe->register_rwsem);
++	return all_events;
+ }
+ 
+ static void
+@@ -2183,7 +2191,7 @@ static void handle_swbp(struct pt_regs *regs)
+ {
+ 	struct uprobe *uprobe;
+ 	unsigned long bp_vaddr;
+-	int is_swbp;
++	int is_swbp, all_events;
+ 
+ 	bp_vaddr = uprobe_get_swbp_addr(regs);
+ 	if (bp_vaddr == get_trampoline_vaddr())
+@@ -2235,7 +2243,9 @@ static void handle_swbp(struct pt_regs *regs)
+ 	if (arch_uprobe_ignore(&uprobe->arch, regs))
+ 		goto out;
+ 
+-	handler_chain(uprobe, regs);
++	all_events = handler_chain(uprobe, regs);
++	if (all_events & UPROBE_ALTER_PC)
++		goto out;
+ 
+ 	if (arch_uprobe_skip_sstep(&uprobe->arch, regs))
+ 		goto out;
+-- 
+2.37.3
 
