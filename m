@@ -2,154 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5975BABD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EF75BABDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiIPK5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S230283AbiIPK7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiIPK4s (ORCPT
+        with ESMTP id S231538AbiIPK6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:56:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4F52B241
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:44:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663325091; x=1694861091;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cmfy2CsDStN+b85QNz1p0ONaXHNh6BP4Ebk5ImS3v6A=;
-  b=j7ULq/grLvq1jewtZsVdwPsvgM1tlX6DXIkPgOzfBY3o4WYTx/mGIzGr
-   SCBWJ9WXNlc4CmFgQHK9BHMA/B3shEV2sGDAyaLCyLHO/o8GoBNClYOG1
-   FrxHvmMMBuoVhNMTy1FLo3dZcGQc+/7pboHk1dz9J/14yxNeZWCGJPnmz
-   zyk/Lj2R9hnQ8tc1TbIsxmpo61aI6F1WobivymOqjWGnAPBwGTMikYVqh
-   3vH7JeYHOMGDP9M05aXSxpydik1+7TobrqxDkfCqNZ7b3qNjiDTY1mGGo
-   LdlFPaVJkI/wocGL8+2ciG/iTxvf5V1/cMxi/mgZaXOyiahzfKKtNdPVz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="325238526"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="325238526"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 03:44:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="595212787"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Sep 2022 03:44:48 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZ8pz-0001hU-1u;
-        Fri, 16 Sep 2022 10:44:47 +0000
-Date:   Fri, 16 Sep 2022 18:44:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Brent Lu <brent.lu@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set
- but not used
-Message-ID: <202209161811.hAq3MGyI-lkp@intel.com>
+        Fri, 16 Sep 2022 06:58:16 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C64B6D75
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:46:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w28so6941757edi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 03:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9nGXI3rWxOZ8NHTVQvlMO9I4kmNG+wDn/0VKOuYYbWY=;
+        b=fE2f0sdwj7xt5sk8vnG5J2uHo1AAJ25Dy0BoEyDsqQy1D4SUogDm9xAJtD77fIN+Ie
+         EEEQ902UP8j0IXjey3sbypI3qT2R7G0xHLLkppeHs700m7BBUNXXqNzIK5s9F9Ul0ohV
+         oM+NGwPtcgVuLjwxXSS75Mq7qccOBlAMU4lQd5bum18LC6i+DLvuZmT6McfX4wGETGL+
+         1tGTVdWUzjm3bungP1MSKwCx3MiRE1aDtfjxlCOrH8dOzGYPjU7hFQNMNheIWnRuRRHH
+         1VcT4Of+KhH4RkyguiX6wvJx26akjR9hLhrc/PDca1n1c23PW9JocEvtM7OFpXFJBnrh
+         Afkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9nGXI3rWxOZ8NHTVQvlMO9I4kmNG+wDn/0VKOuYYbWY=;
+        b=tjQArhD8Bnyc2q/CPSqFMUa0HDA2KA6B9lXZJIhqD1jfkLxUgdDk+qusuHWVkhWiha
+         dKyEsscSlMr0ozoxF5CHuOGG2XQ2a1jh7Zfglg6TRdQWwp3iaskCr2bOJR2HflwNWkB6
+         UHzs3P6MBcO4ZWN8vfkMTSUv2SUJhss5pmIizi/UEl2S9nemeBLYcE4zNS/ezAQB8J7G
+         VpjdscB2WPRMpYXNO9zX1kJhNmxvMDgDxlWTM1QHNw3KNytgpXI3ivhhLJzlRAXeR0Fo
+         p932e9qAaAKdcDnr1LKUNZnHk6cegGrsuA58Aw/mWJwoDqMJ0DzFtT7Lks+w7D7tAfk1
+         5evQ==
+X-Gm-Message-State: ACrzQf3bfHXfUjwC1PT53uVXoVNo9yYBKgoa6jXRyBu9xQyumhuOUhki
+        ClBQEYTmgp8zx/CuPUwGBtGq0A==
+X-Google-Smtp-Source: AMsMyM6bpuSzPsKAI4XGGueEEUQjuAHWhExoZiL6HgwVKGcwKfqvm+/F3L+9U6zXVBBpLocLWodR6A==
+X-Received: by 2002:aa7:d614:0:b0:453:f01:75c4 with SMTP id c20-20020aa7d614000000b004530f0175c4mr3431232edr.302.1663325170983;
+        Fri, 16 Sep 2022 03:46:10 -0700 (PDT)
+Received: from cmo-ThinkPad-T495.telenet.be (ptr-4xh0y3vvunoijj2gi1k.18120a2.ip6.access.telenet.be. [2a02:1810:a44c:8f00:cef1:93b4:727b:dd58])
+        by smtp.gmail.com with ESMTPSA id fi24-20020a1709073ad800b0072af4af2f46sm10148434ejc.74.2022.09.16.03.46.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 03:46:10 -0700 (PDT)
+From:   cmo@melexis.com
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Crt Mori <cmo@melexis.com>
+Subject: [PATCH v4 0/3] iio: temperature: mlx90632: Add powermanagement
+Date:   Fri, 16 Sep 2022 12:45:49 +0200
+Message-Id: <cover.1663324968.git.cmo@melexis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brent,
+From: Crt Mori <cmo@melexis.com>
 
-FYI, the error/warning still remains.
+As discussed previously on the group under the
+"Controlling device power management from terminal" thread the mlx90632
+sensor provides measurement capabilities under sleep_step mode. This
+series runtime suspends the unused chip to sleep step mode to save power
+but in case of continuous sequential reading it switches to continuous
+mode for faster readouts. This value is hardcoded to
+MLX90632_MEAS_MAX_TIME (with some buffer) and not user configurable.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
-commit: 2fe14ff61bd6d4fabe313435dd378b5a38eb6102 ASoC: Intel: sof_ssp_amp: rename driver and support cs35l41 amplifier
-date:   7 months ago
-config: arm64-randconfig-r023-20220916 (https://download.01.org/0day-ci/archive/20220916/202209161811.hAq3MGyI-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fe14ff61bd6d4fabe313435dd378b5a38eb6102
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2fe14ff61bd6d4fabe313435dd378b5a38eb6102
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/intel/boards/
+The sensor runtime suspension is set to MLX90632_SLEEP_DELAY_MS which is
+hardcoded to 3 times as much as MEAS_MAX_TIME.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Changes in v4 (per review comments from Jonathan Cameron):
 
-All warnings (new ones prefixed by >>):
+ - Migrate back to devm_pm_runtime_enable and remove the pm_disable function
+ - Remove pm stuff from remove and also sleep, since when iio device is
+   not registered also sleep makes no sense.
+ - Replace use EOPNOTSUPP as per checkpatch suggestion although some drivers
+   still use ENOTSUPP.
+ - Change the style of read frequency
 
->> sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
-           int i = 0;
-               ^
-   1 warning generated.
+Changes in v3 (per review comments from Jonathan Cameron):
 
+ - Change the "available" attribute presentation to more recent way
+   suggested
+ - Replace devm_pm_runtime_enable with enable and devm_add_action_or_reset
+ - When suspending device also put it to lower power mode in case there is
+   dummy regulator
+ - Use more switch cases instead of if/else
 
-vim +/i +97 sound/soc/intel/boards/sof_ssp_amp.c
+Changes in v2:
 
-    89	
-    90	static int sof_card_late_probe(struct snd_soc_card *card)
-    91	{
-    92		struct sof_card_private *ctx = snd_soc_card_get_drvdata(card);
-    93		struct snd_soc_component *component = NULL;
-    94		char jack_name[NAME_SIZE];
-    95		struct sof_hdmi_pcm *pcm;
-    96		int err;
-  > 97		int i = 0;
-    98	
-    99		if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
-   100			return 0;
-   101	
-   102		/* HDMI is not supported by SOF on Baytrail/CherryTrail */
-   103		if (!ctx->idisp_codec)
-   104			return 0;
-   105	
-   106		if (list_empty(&ctx->hdmi_pcm_list))
-   107			return -EINVAL;
-   108	
-   109		if (ctx->common_hdmi_codec_drv) {
-   110			pcm = list_first_entry(&ctx->hdmi_pcm_list, struct sof_hdmi_pcm,
-   111					       head);
-   112			component = pcm->codec_dai->component;
-   113			return hda_dsp_hdmi_build_controls(card, component);
-   114		}
-   115	
-   116		list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
-   117			component = pcm->codec_dai->component;
-   118			snprintf(jack_name, sizeof(jack_name),
-   119				 "HDMI/DP, pcm=%d Jack", pcm->device);
-   120			err = snd_soc_card_jack_new(card, jack_name,
-   121						    SND_JACK_AVOUT, &pcm->sof_hdmi,
-   122						    NULL, 0);
-   123	
-   124			if (err)
-   125				return err;
-   126	
-   127			err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
-   128						  &pcm->sof_hdmi);
-   129			if (err < 0)
-   130				return err;
-   131	
-   132			i++;
-   133		}
-   134	
-   135		return hdac_hdmi_jack_port_init(component, &card->dapm);
-   136	}
-   137	
+ - apply review comments from Andy Shevchenko
+
+Crt Mori (3):
+  iio: temperature: mlx90632 Add runtime powermanagement modes
+  iio: temperature: mlx90632 Read sampling frequency
+  iio: temperature: mlx90632 Change return value of sensor measurement
+    channel
+
+ drivers/iio/temperature/mlx90632.c | 402 +++++++++++++++++++++++++----
+ 1 file changed, 347 insertions(+), 55 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
