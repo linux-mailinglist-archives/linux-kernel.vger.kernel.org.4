@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE40C5BAADD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537CD5BAAE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 12:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiIPKW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 06:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S231714AbiIPKWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 06:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiIPKVg (ORCPT
+        with ESMTP id S231881AbiIPKVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 06:21:36 -0400
+        Fri, 16 Sep 2022 06:21:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6332AB06D;
-        Fri, 16 Sep 2022 03:13:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F48A831F;
+        Fri, 16 Sep 2022 03:13:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B093B8254B;
-        Fri, 16 Sep 2022 10:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB6CC433D6;
-        Fri, 16 Sep 2022 10:13:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 968C9B82487;
+        Fri, 16 Sep 2022 10:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D37C433C1;
+        Fri, 16 Sep 2022 10:13:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663323222;
-        bh=AfdJmkxYl4fp0gaMB1jEJ0ekn7GLEIObkapGRoAp1ck=;
+        s=korg; t=1663323225;
+        bh=wmRTbkNoy8Zu27AllxgCCaSC6UIUZ/PeINE7D8BHCA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OrfKdzxkwzp62eu7nTzlEItyFZp9K6YcpIpuT+ZY/2w+sqMYbv0vBAEPb2c93+6ma
-         FnQVu/9MPKQuFT7HzaWHuhoirZfdYw23WoB6WcbW+QBwCv5CxQ/5TYeGnhcfr2ZL2Y
-         3xR6MBQjftThgNax0ytfQAEE+7TG1/VGWCttAbFM=
+        b=UYHnl58jeP7uZerCE+MwJWhzvvmVMNLtcPhXpwv/nk/D77sPTiOSwWccxcPWwoans
+         DLMd+XCDSV3RngBAEXz+l1Lp0rVh2E5oxYJcMcx8pEkw6R7P6lJDdkDYvXc9VS+5F8
+         3+r8zbV2JMmBW//yWcmnp3O2SITztjIQx5D6kzvw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Even Xu <even.xu@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 16/38] hid: intel-ish-hid: ishtp: Fix ishtp client sending disordered message
-Date:   Fri, 16 Sep 2022 12:08:50 +0200
-Message-Id: <20220916100449.153131207@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 17/38] Bluetooth: MGMT: Fix Get Device Flags
+Date:   Fri, 16 Sep 2022 12:08:51 +0200
+Message-Id: <20220916100449.193916032@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
 References: <20220916100448.431016349@linuxfoundation.org>
@@ -54,150 +54,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Even Xu <even.xu@intel.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit e1fa076706209cc447d7a2abd0843a18277e5ef7 ]
+[ Upstream commit 23b72814da1a094b4c065e0bb598249f310c5577 ]
 
-There is a timing issue captured during ishtp client sending stress tests.
-It was observed during stress tests that ISH firmware is getting out of
-ordered messages. This is a rare scenario as the current set of ISH client
-drivers don't send much data to firmware. But this may not be the case
-going forward.
+Get Device Flags don't check if device does actually use an RPA in which
+case it shall only set HCI_CONN_FLAG_REMOTE_WAKEUP if LL Privacy is
+enabled.
 
-When message size is bigger than IPC MTU, ishtp splits the message into
-fragments and uses serialized async method to send message fragments.
-The call stack:
-ishtp_cl_send_msg_ipc->ipc_tx_callback(first fregment)->
-ishtp_send_msg(with callback)->write_ipc_to_queue->
-write_ipc_from_queue->callback->ipc_tx_callback(next fregment)......
-
-When an ipc write complete interrupt is received, driver also calls
-write_ipc_from_queue->ipc_tx_callback in ISR to start sending of next fragment.
-
-Through ipc_tx_callback uses spin_lock to protect message splitting, as the
-serialized sending method will call back to ipc_tx_callback again, so it doesn't
-put sending under spin_lock, it causes driver cannot guarantee all fragments
-be sent in order.
-
-Considering this scenario:
-ipc_tx_callback just finished a fragment splitting, and not call ishtp_send_msg
-yet, there is a write complete interrupt happens, then ISR->write_ipc_from_queue
-->ipc_tx_callback->ishtp_send_msg->write_ipc_to_queue......
-
-Because ISR has higher exec priority than normal thread, this causes the new
-fragment be sent out before previous fragment. This disordered message causes
-invalid message to firmware.
-
-The solution is, to send fragments synchronously:
-Use ishtp_write_message writing fragments into tx queue directly one by one,
-instead of ishtp_send_msg only writing one fragment with completion callback.
-As no completion callback be used, so change ipc_tx_callback to ipc_tx_send.
-
-Signed-off-by: Even Xu <even.xu@intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/intel-ish-hid/ishtp/client.c | 68 ++++++++++++++----------
- 1 file changed, 39 insertions(+), 29 deletions(-)
+ net/bluetooth/mgmt.c | 71 ++++++++++++++++++++++++++------------------
+ 1 file changed, 42 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/hid/intel-ish-hid/ishtp/client.c b/drivers/hid/intel-ish-hid/ishtp/client.c
-index 405e0d5212cc8..df0a825694f52 100644
---- a/drivers/hid/intel-ish-hid/ishtp/client.c
-+++ b/drivers/hid/intel-ish-hid/ishtp/client.c
-@@ -626,13 +626,14 @@ static void ishtp_cl_read_complete(struct ishtp_cl_rb *rb)
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index cbdf0e2bc5ae0..d0fb74b0db1d5 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -4420,6 +4420,22 @@ static int set_exp_feature(struct sock *sk, struct hci_dev *hdev,
+ 			       MGMT_STATUS_NOT_SUPPORTED);
  }
  
- /**
-- * ipc_tx_callback() - IPC tx callback function
-+ * ipc_tx_send() - IPC tx send function
-  * @prm: Pointer to client device instance
-  *
-- * Send message over IPC either first time or on callback on previous message
-- * completion
-+ * Send message over IPC. Message will be split into fragments
-+ * if message size is bigger than IPC FIFO size, and all
-+ * fragments will be sent one by one.
-  */
--static void ipc_tx_callback(void *prm)
-+static void ipc_tx_send(void *prm)
++static u32 get_params_flags(struct hci_dev *hdev,
++			    struct hci_conn_params *params)
++{
++	u32 flags = hdev->conn_flags;
++
++	/* Devices using RPAs can only be programmed in the acceptlist if
++	 * LL Privacy has been enable otherwise they cannot mark
++	 * HCI_CONN_FLAG_REMOTE_WAKEUP.
++	 */
++	if ((flags & HCI_CONN_FLAG_REMOTE_WAKEUP) && !use_ll_privacy(hdev) &&
++	    hci_find_irk_by_addr(hdev, &params->addr, params->addr_type))
++		flags &= ~HCI_CONN_FLAG_REMOTE_WAKEUP;
++
++	return flags;
++}
++
+ static int get_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
+ 			    u16 data_len)
  {
- 	struct ishtp_cl	*cl = prm;
- 	struct ishtp_cl_tx_ring	*cl_msg;
-@@ -677,32 +678,41 @@ static void ipc_tx_callback(void *prm)
- 			    list);
- 	rem = cl_msg->send_buf.size - cl->tx_offs;
+@@ -4451,10 +4467,10 @@ static int get_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
+ 	} else {
+ 		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
+ 						le_addr_type(cp->addr.type));
+-
+ 		if (!params)
+ 			goto done;
  
--	ishtp_hdr.host_addr = cl->host_client_id;
--	ishtp_hdr.fw_addr = cl->fw_client_id;
--	ishtp_hdr.reserved = 0;
--	pmsg = cl_msg->send_buf.data + cl->tx_offs;
-+	while (rem > 0) {
-+		ishtp_hdr.host_addr = cl->host_client_id;
-+		ishtp_hdr.fw_addr = cl->fw_client_id;
-+		ishtp_hdr.reserved = 0;
-+		pmsg = cl_msg->send_buf.data + cl->tx_offs;
-+
-+		if (rem <= dev->mtu) {
-+			/* Last fragment or only one packet */
-+			ishtp_hdr.length = rem;
-+			ishtp_hdr.msg_complete = 1;
-+			/* Submit to IPC queue with no callback */
-+			ishtp_write_message(dev, &ishtp_hdr, pmsg);
-+			cl->tx_offs = 0;
-+			cl->sending = 0;
- 
--	if (rem <= dev->mtu) {
--		ishtp_hdr.length = rem;
--		ishtp_hdr.msg_complete = 1;
--		cl->sending = 0;
--		list_del_init(&cl_msg->list);	/* Must be before write */
--		spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
--		/* Submit to IPC queue with no callback */
--		ishtp_write_message(dev, &ishtp_hdr, pmsg);
--		spin_lock_irqsave(&cl->tx_free_list_spinlock, tx_free_flags);
--		list_add_tail(&cl_msg->list, &cl->tx_free_list.list);
--		++cl->tx_ring_free_size;
--		spin_unlock_irqrestore(&cl->tx_free_list_spinlock,
--			tx_free_flags);
--	} else {
--		/* Send IPC fragment */
--		spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
--		cl->tx_offs += dev->mtu;
--		ishtp_hdr.length = dev->mtu;
--		ishtp_hdr.msg_complete = 0;
--		ishtp_send_msg(dev, &ishtp_hdr, pmsg, ipc_tx_callback, cl);
-+			break;
-+		} else {
-+			/* Send ipc fragment */
-+			ishtp_hdr.length = dev->mtu;
-+			ishtp_hdr.msg_complete = 0;
-+			/* All fregments submitted to IPC queue with no callback */
-+			ishtp_write_message(dev, &ishtp_hdr, pmsg);
-+			cl->tx_offs += dev->mtu;
-+			rem = cl_msg->send_buf.size - cl->tx_offs;
-+		}
++		supported_flags = get_params_flags(hdev, params);
+ 		current_flags = params->flags;
  	}
-+
-+	list_del_init(&cl_msg->list);
-+	spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
-+
-+	spin_lock_irqsave(&cl->tx_free_list_spinlock, tx_free_flags);
-+	list_add_tail(&cl_msg->list, &cl->tx_free_list.list);
-+	++cl->tx_ring_free_size;
-+	spin_unlock_irqrestore(&cl->tx_free_list_spinlock,
-+		tx_free_flags);
- }
  
- /**
-@@ -720,7 +730,7 @@ static void ishtp_cl_send_msg_ipc(struct ishtp_device *dev,
- 		return;
+@@ -4523,38 +4539,35 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
+ 			bt_dev_warn(hdev, "No such BR/EDR device %pMR (0x%x)",
+ 				    &cp->addr.bdaddr, cp->addr.type);
+ 		}
+-	} else {
+-		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
+-						le_addr_type(cp->addr.type));
+-		if (params) {
+-			/* Devices using RPAs can only be programmed in the
+-			 * acceptlist LL Privacy has been enable otherwise they
+-			 * cannot mark HCI_CONN_FLAG_REMOTE_WAKEUP.
+-			 */
+-			if ((current_flags & HCI_CONN_FLAG_REMOTE_WAKEUP) &&
+-			    !use_ll_privacy(hdev) &&
+-			    hci_find_irk_by_addr(hdev, &params->addr,
+-						 params->addr_type)) {
+-				bt_dev_warn(hdev,
+-					    "Cannot set wakeable for RPA");
+-				goto unlock;
+-			}
  
- 	cl->tx_offs = 0;
--	ipc_tx_callback(cl);
-+	ipc_tx_send(cl);
- 	++cl->send_msg_cnt_ipc;
- }
+-			params->flags = current_flags;
+-			status = MGMT_STATUS_SUCCESS;
++		goto unlock;
++	}
+ 
+-			/* Update passive scan if HCI_CONN_FLAG_DEVICE_PRIVACY
+-			 * has been set.
+-			 */
+-			if (params->flags & HCI_CONN_FLAG_DEVICE_PRIVACY)
+-				hci_update_passive_scan(hdev);
+-		} else {
+-			bt_dev_warn(hdev, "No such LE device %pMR (0x%x)",
+-				    &cp->addr.bdaddr,
+-				    le_addr_type(cp->addr.type));
+-		}
++	params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
++					le_addr_type(cp->addr.type));
++	if (!params) {
++		bt_dev_warn(hdev, "No such LE device %pMR (0x%x)",
++			    &cp->addr.bdaddr, le_addr_type(cp->addr.type));
++		goto unlock;
++	}
++
++	supported_flags = get_params_flags(hdev, params);
++
++	if ((supported_flags | current_flags) != supported_flags) {
++		bt_dev_warn(hdev, "Bad flag given (0x%x) vs supported (0x%0x)",
++			    current_flags, supported_flags);
++		goto unlock;
+ 	}
+ 
++	params->flags = current_flags;
++	status = MGMT_STATUS_SUCCESS;
++
++	/* Update passive scan if HCI_CONN_FLAG_DEVICE_PRIVACY
++	 * has been set.
++	 */
++	if (params->flags & HCI_CONN_FLAG_DEVICE_PRIVACY)
++		hci_update_passive_scan(hdev);
++
+ unlock:
+ 	hci_dev_unlock(hdev);
  
 -- 
 2.35.1
