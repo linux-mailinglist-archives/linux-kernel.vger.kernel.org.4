@@ -2,1439 +2,770 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A035BB3AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 22:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7F45BB3C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 23:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiIPUwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 16:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S230160AbiIPVDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 17:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIPUwT (ORCPT
+        with ESMTP id S230062AbiIPVDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:52:19 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5E5ACA00;
-        Fri, 16 Sep 2022 13:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663361536; x=1694897536;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NYcHJljmn6TCY0PQRGYjQst54L9Tyzj2Oh/b8vGxnTo=;
-  b=jolMXznD6TPH7Qwranm9Jryd7sbxfftFEQweCfT0GWpDaGatpmBavA6S
-   ksVMx25VxqPFw8/fVprtu+My68zdJcGLD2POXkpTew1DGtF+SOuLyN+Lw
-   b3+vyhX3Fja+Q4/psTjVYzeJaxBEJ0VB502/ltz+WGdpM87Jz11LVXXdj
-   LWAgezYZIEADuNFV8em2oal/3yO+uu+Dv4RrlIvnpKCSA/CWpZpNp2TOp
-   Nsg+946FXqkeduonOgC49bA/aQ4q9x0gPBmqOJQ+uz3ninpUn9F7coSZq
-   ssfOi5bd1z1c5rSufffrRn7t4KVYuPmCBjJ4gLPbacZlK1WAIAcJwOQxp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="296664716"
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="296664716"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:52:16 -0700
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="620213817"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.64.121]) ([10.212.64.121])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:52:15 -0700
-Message-ID: <4185a20a-1f33-dbf7-0b19-979c8cf54cce@intel.com>
-Date:   Fri, 16 Sep 2022 13:52:14 -0700
+        Fri, 16 Sep 2022 17:03:09 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Sep 2022 14:03:03 PDT
+Received: from mta01.cne.gob.ve (mta01.cne.gob.ve [201.130.83.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A76BB011
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 14:03:03 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mta01.cne.gob.ve (Postfix) with ESMTP id B33EB5B4C7F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:13:48 -0400 (-04)
+Received: from mta01.cne.gob.ve ([127.0.0.1])
+        by localhost (mta01.cne.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id gUJo3KJ62J7E for <linux-kernel@vger.kernel.org>;
+        Fri, 16 Sep 2022 17:13:48 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mta01.cne.gob.ve (Postfix) with ESMTP id 6B25D5B58C1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:13:48 -0400 (-04)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mta01.cne.gob.ve 6B25D5B58C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cne.gob.ve;
+        s=cnemailcorp; t=1663362828;
+        bh=P3yYICdDBfIinG6V4QAkYxj5Dcosa8JW+CLLNWe5iX0=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=ZjDaZ/oYYnVUjBXWwoJmtafl1Nh1QENHnfOyZmd4XaBk70QeoBAuSBKG8141sDJKI
+         770nJLk9c8GURtksR/5g4rSCANPEhHIF58tfk4a0hf45p4F1LlMoAYfvUirGMroJb9
+         rEn5vwrU9HV7zuGY2tqjkwd6nMZn3+KvFw3TUtMUMKpI5gF+kzJT5kIkY0o1bl7c+5
+         GT1q7Ke7WRx18EO7ghI+9o9VoKbB6Krf426YY1f2buYzs51jFsPE+nzGsmdKOmND0a
+         ecXeGxhkWssMMSL0l2qz3jGT8MX8PCzalmSLe+7Sw/ewY0v421PzBTo47lKnyBzvcW
+         2aOvWVKGDZPbg==
+X-Virus-Scanned: amavisd-new at cne.gob.ve
+Received: from mta01.cne.gob.ve ([127.0.0.1])
+        by localhost (mta01.cne.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4yUsE1WSrWZI for <linux-kernel@vger.kernel.org>;
+        Fri, 16 Sep 2022 17:13:48 -0400 (-04)
+Received: from [107.174.142.89] (unknown [107.174.142.89])
+        by mta01.cne.gob.ve (Postfix) with ESMTPSA id DC67A5B4C7F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:13:47 -0400 (-04)
+Content-Type: multipart/mixed; boundary="===============0394466641=="
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH V2 XDMA 1/1] dmaengine: xilinx: xdma: add xilinx xdma
- driver
-Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com
-Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com
-References: <1663341985-65589-1-git-send-email-lizhi.hou@amd.com>
- <1663341985-65589-2-git-send-email-lizhi.hou@amd.com>
- <2e57bfa5-48e8-ee05-39d9-0cb6bdf0c017@intel.com>
- <46bd74b5-8bb8-406c-c555-3c0dbad605c6@amd.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <46bd74b5-8bb8-406c-c555-3c0dbad605c6@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Delivery Failure Notification
+To:     linux-kernel@vger.kernel.org
+From:   "USPS" <cdiaz@cne.gob.ve>
+Date:   Fri, 16 Sep 2022 15:53:55 -0500
+Message-Id: <20220916211347.DC67A5B4C7F@mta01.cne.gob.ve>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/16/2022 1:10 PM, Lizhi Hou wrote:
->
-> On 9/16/22 08:39, Dave Jiang wrote:
->>
->> On 9/16/2022 8:26 AM, Lizhi Hou wrote:
->>> Add driver to enable PCIe board which uses XDMA (the DMA/Bridge 
->>> Subsystem
->>> for PCI Express). For example, Xilinx Alveo PCIe devices.
->>> https://www.xilinx.com/products/boards-and-kits/alveo.html
->>>
->>> The XDMA engine support up to 4 Host to Card (H2C) and 4 Card to 
->>> Host (C2H)
->>> channels. Memory transfers are specified on a per-channel basis in
->>> descriptor linked lists, which the DMA fetches from host memory and
->>> processes. Events such as descriptor completion and errors are signaled
->>> using interrupts. The hardware detail is provided by
->>> https://docs.xilinx.com/r/en-US/pg195-pcie-dma/Introduction
->>>
->>> This driver implements dmaengine APIs.
->>>      - probe the available DMA channels
->>>      - use dma_slave_map for channel lookup
->>>      - use virtual channel to manage dmaengine tx descriptors
->>>      - implement device_prep_slave_sg callback to handle host 
->>> scatter gather
->>>        list
->>>      - implement device_config to config device address for DMA 
->>> transfer
->>>
->>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
->>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
->>> Signed-off-by: Max Zhen <max.zhen@amd.com>
->>> Signed-off-by: Brian Xu <brian.xu@amd.com>
->>> ---
->>>   MAINTAINERS                            |  10 +
->>>   drivers/dma/Kconfig                    |  13 +
->>>   drivers/dma/xilinx/Makefile            |   1 +
->>>   drivers/dma/xilinx/xdma-regs.h         | 171 +++++
->>>   drivers/dma/xilinx/xdma.c              | 982 
->>> +++++++++++++++++++++++++
->>>   include/linux/platform_data/amd_xdma.h |  34 +
->>>   6 files changed, 1211 insertions(+)
->>>   create mode 100644 drivers/dma/xilinx/xdma-regs.h
->>>   create mode 100644 drivers/dma/xilinx/xdma.c
->>>   create mode 100644 include/linux/platform_data/amd_xdma.h
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index e8c52d0192a6..c1be0b2e378a 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -21683,6 +21683,16 @@ F: 
->>> Documentation/devicetree/bindings/media/xilinx/
->>>   F:    drivers/media/platform/xilinx/
->>>   F:    include/uapi/linux/xilinx-v4l2-controls.h
->>>   +XILINX XDMA DRIVER
->>> +M:    Lizhi Hou <lizhi.hou@amd.com>
->>> +M:    Brian Xu <brian.xu@amd.com>
->>> +M:    Raj Kumar Rampelli <raj.kumar.rampelli@amd.com>
->>> +L:    dmaengine@vger.kernel.org
->>> +S:    Supported
->>> +F:    drivers/dma/xilinx/xdma-regs.h
->>> +F:    drivers/dma/xilinx/xdma.c
->>> +F:    include/linux/platform_data/amd_xdma.h
->>> +
->>>   XILINX ZYNQMP DPDMA DRIVER
->>>   M:    Hyun Kwon <hyun.kwon@xilinx.com>
->>>   M:    Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
->>> index d5de3f77d3aa..4d90f2f51655 100644
->>> --- a/drivers/dma/Kconfig
->>> +++ b/drivers/dma/Kconfig
->>> @@ -733,6 +733,19 @@ config XILINX_ZYNQMP_DPDMA
->>>         driver provides the dmaengine required by the DisplayPort 
->>> subsystem
->>>         display driver.
->>>   +config XILINX_XDMA
->>> +    tristate "Xilinx DMA/Bridge Subsystem DMA Engine"
->>> +    select DMA_ENGINE
->>> +    select DMA_VIRTUAL_CHANNELS
->>> +    select REGMAP_MMIO
->>> +    help
->>> +      Enable support for Xilinx DMA/Bridge Subsystem DMA engine. 
->>> The DMA
->>> +      provides high performance block data movement between Host 
->>> memory
->>> +      and the DMA subsystem. These direct memory transfers can be 
->>> both in
->>> +      the Host to Card (H2C) and Card to Host (C2H) transfers.
->>> +      The core also provides up to 16 user interrupt wires that 
->>> generate
->>> +      interrupts to the host.
->>> +
->>>   # driver files
->>>   source "drivers/dma/bestcomm/Kconfig"
->>>   diff --git a/drivers/dma/xilinx/Makefile 
->>> b/drivers/dma/xilinx/Makefile
->>> index 767bb45f641f..c7a538a56643 100644
->>> --- a/drivers/dma/xilinx/Makefile
->>> +++ b/drivers/dma/xilinx/Makefile
->>> @@ -2,3 +2,4 @@
->>>   obj-$(CONFIG_XILINX_DMA) += xilinx_dma.o
->>>   obj-$(CONFIG_XILINX_ZYNQMP_DMA) += zynqmp_dma.o
->>>   obj-$(CONFIG_XILINX_ZYNQMP_DPDMA) += xilinx_dpdma.o
->>> +obj-$(CONFIG_XILINX_XDMA) += xdma.o
->>> diff --git a/drivers/dma/xilinx/xdma-regs.h 
->>> b/drivers/dma/xilinx/xdma-regs.h
->>> new file mode 100644
->>> index 000000000000..c42df0ed4aca
->>> --- /dev/null
->>> +++ b/drivers/dma/xilinx/xdma-regs.h
->>> @@ -0,0 +1,171 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->>> +/*
->>> + * Copyright (C) 2017-2020 Xilinx, Inc. All rights reserved.
->>> + * Copyright (C) 2022 Advanced Micro Devices, Inc. All rights 
->>> reserved.
->>> + */
->>> +
->>> +#ifndef __DMA_XDMA_REGS_H
->>> +#define __DMA_XDMA_REGS_H
->>> +
->>> +/* The length of register space exposed to host */
->>> +#define XDMA_REG_SPACE_LEN    65536
->>> +
->>> +/*
->>> + * maximum number of DMA channels for each direction:
->>> + * Host to Card (H2C) or Card to Host (C2H)
->>> + */
->>> +#define XDMA_MAX_CHANNELS    4
->>> +
->>> +/* macros to get higher and lower 32-bit address */
->>> +#define XDMA_HI_ADDR_MASK    GENMASK_ULL(63, 32)
->>> +#define XDMA_LO_ADDR_MASK    GENMASK_ULL(31, 0)
->>> +
->>> +/*
->>> + * macros to define the number of descriptor blocks can be used in one
->>> + * DMA transfer request.
->>> + * the DMA engine uses a linked list of descriptor blocks that 
->>> specify the
->>> + * source, destination, and length of the DMA transfers.
->>> + */
->>> +#define XDMA_DESC_BLOCK_NUM        BIT(7)
->>> +#define XDMA_DESC_BLOCK_MASK        (XDMA_DESC_BLOCK_NUM - 1)
->>> +
->>> +/* descriptor definitions */
->>> +#define XDMA_DESC_ADJACENT        BIT(5)
->>> +#define XDMA_DESC_ADJACENT_MASK        (XDMA_DESC_ADJACENT - 1)
->>> +#define XDMA_DESC_MAGIC            0xad4bUL
->>> +#define XDMA_DESC_MAGIC_SHIFT        16
->>> +#define XDMA_DESC_ADJACENT_SHIFT    8
->>> +#define XDMA_DESC_STOPPED        BIT(0)
->>> +#define XDMA_DESC_COMPLETED        BIT(1)
->>> +#define XDMA_DESC_BLEN_BITS        28
->>> +#define XDMA_DESC_BLEN_MAX        (BIT(XDMA_DESC_BLEN_BITS) - 
->>> PAGE_SIZE)
->>> +
->>> +/* macros to construct the descriptor control word */
->>> +#define XDMA_DESC_CONTROL(adjacent, flag)                \
->>> +    ((XDMA_DESC_MAGIC << XDMA_DESC_MAGIC_SHIFT) |            \
->>> +     (((adjacent) - 1) << XDMA_DESC_ADJACENT_SHIFT) | (flag))
->>> +#define XDMA_DESC_CONTROL_LAST                        \
->>> +    XDMA_DESC_CONTROL(1, XDMA_DESC_STOPPED | XDMA_DESC_COMPLETED)
->>> +
->>> +/*
->>> + * Descriptor for a single contiguous memory block transfer.
->>> + *
->>> + * Multiple descriptors are linked by means of the next pointer. An 
->>> additional
->>> + * extra adjacent number gives the amount of extra contiguous 
->>> descriptors.
->>> + *
->>> + * The descriptors are in root complex memory, and the bytes in the 
->>> 32-bit
->>> + * words must be in little-endian byte ordering.
->>> + */
->>> +struct xdma_hw_desc {
->>> +    __le32        control;
->>> +    __le32        bytes;
->>> +    __le64        src_addr;
->>> +    __le64        dst_addr;
->>> +    __le64        next_desc;
->>> +};
->>> +
->>> +#define XDMA_DESC_SIZE        sizeof(struct xdma_hw_desc)
->>> +#define XDMA_DESC_BLOCK_SIZE    (XDMA_DESC_SIZE * XDMA_DESC_ADJACENT)
->>> +#define XDMA_DESC_BLOCK_ALIGN    4096
->>> +
->>> +/*
->>> + * Channel registers
->>> + */
->>> +#define XDMA_CHAN_IDENTIFIER        0x0
->>> +#define XDMA_CHAN_CONTROL        0x4
->>> +#define XDMA_CHAN_CONTROL_W1S        0x8
->>> +#define XDMA_CHAN_CONTROL_W1C        0xc
->>> +#define XDMA_CHAN_STATUS        0x40
->>> +#define XDMA_CHAN_COMPLETED_DESC    0x48
->>> +#define XDMA_CHAN_ALIGNMENTS        0x4c
->>> +#define XDMA_CHAN_INTR_ENABLE        0x90
->>> +#define XDMA_CHAN_INTR_ENABLE_W1S    0x94
->>> +#define XDMA_CHAN_INTR_ENABLE_W1C    0x9c
->>> +
->>> +#define XDMA_CHAN_STRIDE    0x100
->>> +#define XDMA_CHAN_H2C_OFFSET    0x0
->>> +#define XDMA_CHAN_C2H_OFFSET    0x1000
->>> +#define XDMA_CHAN_H2C_TARGET    0x0
->>> +#define XDMA_CHAN_C2H_TARGET    0x1
->>> +
->>> +/* macro to check if channel is available */
->>> +#define XDMA_CHAN_MAGIC        0x1fc0
->>> +#define XDMA_CHAN_CHECK_TARGET(id, target)        \
->>> +    (((u32)(id) >> 16) == XDMA_CHAN_MAGIC + (target))
->>> +
->>> +/* bits of the channel control register */
->>> +#define CHAN_CTRL_RUN_STOP            BIT(0)
->>> +#define CHAN_CTRL_IE_DESC_STOPPED        BIT(1)
->>> +#define CHAN_CTRL_IE_DESC_COMPLETED        BIT(2)
->>> +#define CHAN_CTRL_IE_DESC_ALIGN_MISMATCH    BIT(3)
->>> +#define CHAN_CTRL_IE_MAGIC_STOPPED        BIT(4)
->>> +#define CHAN_CTRL_IE_IDLE_STOPPED        BIT(6)
->>> +#define CHAN_CTRL_IE_READ_ERROR            (0x1FUL << 9)
->>> +#define CHAN_CTRL_IE_DESC_ERROR            (0x1FUL << 19)
->>> +#define CHAN_CTRL_NON_INCR_ADDR            BIT(25)
->>> +#define CHAN_CTRL_POLL_MODE_WB            BIT(26)
->>> +
->>> +#define CHAN_CTRL_START    (CHAN_CTRL_RUN_STOP | \
->>> +             CHAN_CTRL_IE_DESC_STOPPED |            \
->>> +             CHAN_CTRL_IE_DESC_COMPLETED |            \
->>> +             CHAN_CTRL_IE_DESC_ALIGN_MISMATCH |        \
->>> +             CHAN_CTRL_IE_MAGIC_STOPPED |            \
->>> +             CHAN_CTRL_IE_READ_ERROR |            \
->>> +             CHAN_CTRL_IE_DESC_ERROR)
->>> +
->>> +/* bits of the channel interrupt enable mask */
->>> +#define CHAN_IM_DESC_ERROR            BIT(19)
->>> +#define CHAN_IM_READ_ERROR            BIT(9)
->>> +#define CHAN_IM_IDLE_STOPPED            BIT(6)
->>> +#define CHAN_IM_MAGIC_STOPPED            BIT(4)
->>> +#define CHAN_IM_DESC_COMPLETED            BIT(2)
->>> +#define CHAN_IM_DESC_STOPPED            BIT(1)
->>> +
->>> +#define CHAN_IM_ALL    (CHAN_IM_DESC_ERROR | CHAN_IM_READ_ERROR |    \
->>> +             CHAN_IM_IDLE_STOPPED | CHAN_IM_MAGIC_STOPPED | \
->>> +             CHAN_IM_DESC_COMPLETED | CHAN_IM_DESC_STOPPED)
->>> +
->>> +/*
->>> + * Channel SGDMA registers
->>> + */
->>> +#define XDMA_SGDMA_IDENTIFIER    0x0
->>> +#define XDMA_SGDMA_DESC_LO    0x80
->>> +#define XDMA_SGDMA_DESC_HI    0x84
->>> +#define XDMA_SGDMA_DESC_ADJ    0x88
->>> +#define XDMA_SGDMA_DESC_CREDIT    0x8c
->>> +
->>> +#define XDMA_SGDMA_BASE(chan_base)    ((chan_base) + 0x4000)
->>> +
->>> +/* bits of the SG DMA control register */
->>> +#define XDMA_CTRL_RUN_STOP            BIT(0)
->>> +#define XDMA_CTRL_IE_DESC_STOPPED        BIT(1)
->>> +#define XDMA_CTRL_IE_DESC_COMPLETED        BIT(2)
->>> +#define XDMA_CTRL_IE_DESC_ALIGN_MISMATCH    BIT(3)
->>> +#define XDMA_CTRL_IE_MAGIC_STOPPED        BIT(4)
->>> +#define XDMA_CTRL_IE_IDLE_STOPPED        BIT(6)
->>> +#define XDMA_CTRL_IE_READ_ERROR            (0x1FUL << 9)
->>> +#define XDMA_CTRL_IE_DESC_ERROR            (0x1FUL << 19)
->>> +#define XDMA_CTRL_NON_INCR_ADDR            BIT(25)
->>> +#define XDMA_CTRL_POLL_MODE_WB            BIT(26)
->>> +
->>> +/*
->>> + * interrupt registers
->>> + */
->>> +#define XDMA_IRQ_IDENTIFIER        0x0
->>> +#define XDMA_IRQ_USER_INT_EN        0x04
->>> +#define XDMA_IRQ_USER_INT_EN_W1S    0x08
->>> +#define XDMA_IRQ_USER_INT_EN_W1C    0x0c
->>> +#define XDMA_IRQ_CHAN_INT_EN        0x10
->>> +#define XDMA_IRQ_CHAN_INT_EN_W1S    0x14
->>> +#define XDMA_IRQ_CHAN_INT_EN_W1C    0x18
->>> +#define XDMA_IRQ_USER_INT_REQ        0x40
->>> +#define XDMA_IRQ_CHAN_INT_REQ        0x44
->>> +#define XDMA_IRQ_USER_INT_PEND        0x48
->>> +#define XDMA_IRQ_CHAN_INT_PEND        0x4c
->>> +#define XDMA_IRQ_USER_VEC_NUM        0x80
->>> +#define XDMA_IRQ_CHAN_VEC_NUM        0xa0
->>> +
->>> +#define XDMA_IRQ_BASE            0x2000
->>> +#define XDMA_IRQ_VEC_SHIFT        8
->>> +
->>> +#endif /* __DMA_XDMA_REGS_H */
->>> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
->>> new file mode 100644
->>> index 000000000000..59797ae5251c
->>> --- /dev/null
->>> +++ b/drivers/dma/xilinx/xdma.c
->>> @@ -0,0 +1,982 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>> +/*
->>> + * DMA driver for Xilinx DMA/Bridge Subsystem
->>> + *
->>> + * Copyright (C) 2017-2020 Xilinx, Inc. All rights reserved.
->>> + * Copyright (C) 2022 Advanced Micro Devices, Inc. All rights 
->>> reserved.
->>> + */
->>> +
->>> +/*
->>> + * The DMA/Bridge Subsystem for PCI Express allows for the movement 
->>> of data
->>> + * between Host memory and the DMA subsystem. It does this by 
->>> operating on
->>> + * 'descriptors' that contain information about the source, 
->>> destination and
->>> + * amount of data to transfer. These direct memory transfers can be 
->>> both in
->>> + * the Host to Card (H2C) and Card to Host (C2H) transfers. The DMA 
->>> can be
->>> + * configured to have a single AXI4 Master interface shared by all 
->>> channels
->>> + * or one AXI4-Stream interface for each channel enabled. Memory 
->>> transfers are
->>> + * specified on a per-channel basis in descriptor linked lists, 
->>> which the DMA
->>> + * fetches from host memory and processes. Events such as 
->>> descriptor completion
->>> + * and errors are signaled using interrupts. The core also provides 
->>> up to 16
->>> + * user interrupt wires that generate interrupts to the host.
->>> + */
->>> +
->>> +#include <linux/mod_devicetable.h>
->>> +#include <linux/bitfield.h>
->>> +#include <linux/dmapool.h>
->>> +#include <linux/regmap.h>
->>> +#include <linux/dmaengine.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/platform_data/amd_xdma.h>
->>> +#include <linux/dma-mapping.h>
->>> +#include "../virt-dma.h"
->>> +#include "xdma-regs.h"
->>> +
->>> +/* mmio regmap config for all XDMA registers */
->>> +static const struct regmap_config xdma_regmap_config = {
->>> +    .reg_bits = 32,
->>> +    .val_bits = 32,
->>> +    .reg_stride = 4,
->>> +    .max_register = XDMA_REG_SPACE_LEN,
->>> +};
->>> +
->>> +/**
->>> + * struct xdma_desc_block - Descriptor block
->>> + * @virt_addr: Virtual address of block start
->>> + * @dma_addr: DMA address of block start
->>> + */
->>> +struct xdma_desc_block {
->>> +    void        *virt_addr;
->>> +    dma_addr_t    dma_addr;
->>> +};
->>> +
->>> +/**
->>> + * struct xdma_chan - Driver specific DMA channel structure
->>> + * @vchan: Virtual channel
->>> + * @xdev_hdl: Pointer to DMA device structure
->>> + * @base: Offset of channel registers
->>> + * @desc_pool: Descriptor pool
->>> + * @busy: Busy flag of the channel
->>> + * @dir: Transferring direction of the channel
->>> + * @cfg: Transferring config of the channel
->>> + * @irq: IRQ assigned to the channel
->>> + * @tasklet: Channel tasklet
->>> + */
->>> +struct xdma_chan {
->>> +    struct virt_dma_chan        vchan;
->>> +    void                *xdev_hdl;
->>> +    u32                base;
->>> +    struct dma_pool            *desc_pool;
->>> +    bool                busy;
->>> +    enum dma_transfer_direction    dir;
->>> +    struct dma_slave_config        cfg;
->>> +    u32                irq;
->>> +    struct tasklet_struct        tasklet;
->>> +};
->>> +
->>> +/**
->>> + * struct xdma_desc - DMA desc structure
->>> + * @vdesc: Virtual DMA descriptor
->>> + * @dir: Transferring direction of the request
->>> + * @dev_addr: Physical address on DMA device side
->>> + * @desc_blocks: Hardware descriptor blocks
->>> + * @dblk_num: Number of hardware descriptor blocks
->>> + * @desc_num: Number of hardware descriptors
->>> + * @completed_desc_num: Completed hardware descriptors
->>> + */
->>> +struct xdma_desc {
->>> +    struct virt_dma_desc        vdesc;
->>> +    struct xdma_chan        *chan;
->>> +    enum dma_transfer_direction    dir;
->>> +    u64                dev_addr;
->>> +    struct xdma_desc_block        *desc_blocks;
->>> +    u32                dblk_num;
->>> +    u32                desc_num;
->>> +    u32                completed_desc_num;
->>> +};
->>> +
->>> +#define XDMA_DEV_STATUS_REG_DMA        BIT(0)
->>> +#define XDMA_DEV_STATUS_INIT_MSIX    BIT(1)
->>> +
->>> +/**
->>> + * struct xdma_device - DMA device structure
->>> + * @pdev: Platform device pointer
->>> + * @dma_dev: DMA device structure
->>> + * @regmap: MMIO regmap for DMA registers
->>> + * @h2c_chans: Host to Card channels
->>> + * @c2h_chans: Card to Host channels
->>> + * @h2c_chan_num: Number of H2C channels
->>> + * @c2h_chan_num: Number of C2H channels
->>> + * @irq_start: Start IRQ assigned to device
->>> + * @irq_num: Number of IRQ assigned to device
->>> + * @status: Initialization status
->>> + */
->>> +struct xdma_device {
->>> +    struct platform_device    *pdev;
->>> +    struct dma_device    dma_dev;
->>> +    struct regmap        *regmap;
->>> +    struct xdma_chan    *h2c_chans;
->>> +    struct xdma_chan    *c2h_chans;
->>> +    u32            h2c_chan_num;
->>> +    u32            c2h_chan_num;
->>> +    u32            irq_start;
->>> +    u32            irq_num;
->>> +    u32            status;
->>> +};
->>> +
->>> +#define xdma_err(xdev, fmt, args...)                    \
->>> +    dev_err(&(xdev)->pdev->dev, fmt, ##args)
->>> +
->>> +/* Read and Write DMA registers */
->>> +static inline int xdma_read_reg(struct xdma_device *xdev, u32 base, 
->>> u32 reg,
->>> +                u32 *val)
->>> +{
->>> +    return regmap_read(xdev->regmap, base + reg, val);
->>> +}
->>> +
->>> +static inline int xdma_write_reg(struct xdma_device *xdev, u32 
->>> base, u32 reg,
->>> +                 u32 val)
->>> +{
->>> +    return regmap_write(xdev->regmap, base + reg, val);
->>> +}
->>> +
->>> +/* Get the last desc in a desc block */
->>> +static inline void *xdma_blk_last_desc(struct xdma_desc_block *block)
->>> +{
->>> +    return block->virt_addr + (XDMA_DESC_ADJACENT - 1) * 
->>> XDMA_DESC_SIZE;
->>> +}
->>> +
->>> +/**
->>> + * xdma_link_desc_blocks - Link descriptor blocks for DMA transfer
->>> + * @sw_desc: Tx descriptor pointer
->>> + */
->>> +static void xdma_link_desc_blocks(struct xdma_desc *sw_desc)
->>> +{
->>> +    struct xdma_desc_block *block;
->>> +    u32 last_blk_desc_num, desc_control;
->>> +    struct xdma_hw_desc *desc;
->>> +    int i;
->>> +
->>> +    desc_control = XDMA_DESC_CONTROL(XDMA_DESC_ADJACENT, 0);
->>> +    for (i = 1; i < sw_desc->dblk_num; i++) {
->>> +        block = &sw_desc->desc_blocks[i - 1];
->>> +        desc = xdma_blk_last_desc(block);
->>> +
->>> +        if (!(i & XDMA_DESC_BLOCK_MASK)) {
->>> +            desc->control = cpu_to_le32(XDMA_DESC_CONTROL_LAST);
->>> +            continue;
->>> +        }
->>> +        desc->control = cpu_to_le32(desc_control);
->>> +        desc->next_desc = cpu_to_le64(block[1].dma_addr);
->>> +    }
->>> +
->>> +    /* update the last block */
->>> +    last_blk_desc_num = sw_desc->desc_num & XDMA_DESC_ADJACENT_MASK;
->>> +    if ((sw_desc->dblk_num & XDMA_DESC_BLOCK_MASK) > 1 &&
->>> +        last_blk_desc_num) {
->>> +        block = &sw_desc->desc_blocks[sw_desc->dblk_num - 2];
->>> +        desc = xdma_blk_last_desc(block);
->>> +        desc_control = XDMA_DESC_CONTROL(last_blk_desc_num, 0);
->>> +        desc->control = cpu_to_le32(desc_control);
->>> +    }
->>> +
->>> +    block = &sw_desc->desc_blocks[sw_desc->dblk_num - 1];
->>> +    desc = block->virt_addr + (last_blk_desc_num - 1) * 
->>> XDMA_DESC_SIZE;
->>> +    desc->control = cpu_to_le32(XDMA_DESC_CONTROL_LAST);
->>> +}
->>> +
->>> +static inline struct xdma_chan *to_xdma_chan(struct dma_chan *chan)
->>> +{
->>> +    return container_of(chan, struct xdma_chan, vchan.chan);
->>> +}
->>> +
->>> +static inline struct xdma_desc *to_xdma_desc(struct virt_dma_desc 
->>> *vdesc)
->>> +{
->>> +    return container_of(vdesc, struct xdma_desc, vdesc);
->>> +}
->>> +
->>> +static int xdma_enable_intr(struct xdma_device *xdev)
->>> +{
->>> +    int ret;
->>> +
->>> +    ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, 
->>> XDMA_IRQ_CHAN_INT_EN_W1S, ~0);
->>> +    if (ret)
->>> +        xdma_err(xdev, "enable channel intr failed: %d", ret);
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static int xdma_disable_intr(struct xdma_device *xdev)
->>> +{
->>> +    int ret;
->>> +
->>> +    ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, 
->>> XDMA_IRQ_CHAN_INT_EN_W1C, ~0);
->>> +    if (ret)
->>> +        xdma_err(xdev, "disable channel intr failed: %d", ret);
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +/**
->>> + * xdma_channel_init - Initialize DMA channel registers
->>> + * @chan: DMA channel pointer
->>> + */
->>> +static int xdma_channel_init(struct xdma_chan *chan)
->>> +{
->>> +    struct xdma_device *xdev = chan->xdev_hdl;
->>> +    int ret;
->>> +
->>> +    ret = xdma_write_reg(xdev, chan->base, XDMA_CHAN_CONTROL_W1C,
->>> +                 CHAN_CTRL_NON_INCR_ADDR);
->>> +    if (ret) {
->>> +        xdma_err(xdev, "clear non incr addr failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = xdma_write_reg(xdev, chan->base, XDMA_CHAN_INTR_ENABLE,
->>> +                 CHAN_IM_ALL);
->>> +    if (ret) {
->>> +        xdma_err(xdev, "failed to set interrupt mask: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_free_desc - Free descriptor
->>> + * @vdesc: Virtual DMA descriptor
->>> + */
->>> +static void xdma_free_desc(struct virt_dma_desc *vdesc)
->>> +{
->>> +    struct xdma_desc *sw_desc;
->>> +    int i;
->>> +
->>> +    sw_desc = to_xdma_desc(vdesc);
->>> +    for (i = 0; i < sw_desc->dblk_num; i++) {
->>> +        if (!sw_desc->desc_blocks[i].virt_addr)
->>> +            break;
->>> +        dma_pool_free(sw_desc->chan->desc_pool,
->>> +                  sw_desc->desc_blocks[i].virt_addr,
->>> +                  sw_desc->desc_blocks[i].dma_addr);
->>> +    }
->>> +    kfree(sw_desc->desc_blocks);
->>> +    kfree(sw_desc);
->>> +}
->>> +
->>> +/**
->>> + * xdma_alloc_desc - Allocate descriptor
->>> + * @chan: DMA channel pointer
->>> + * @desc_num: Number of hardware descriptors
->>> + */
->>> +static struct xdma_desc *
->>> +xdma_alloc_desc(struct xdma_chan *chan, u32 desc_num)
->>> +{
->>> +    struct xdma_desc *sw_desc;
->>> +    struct xdma_hw_desc *desc;
->>> +    dma_addr_t dma_addr;
->>> +    u32 dblk_num;
->>> +    void *addr;
->>> +    int i, j;
->>> +
->>> +    sw_desc = kzalloc(sizeof(*sw_desc), GFP_NOWAIT);
->>> +    if (!sw_desc)
->>> +        return NULL;
->>> +
->>> +    sw_desc->chan = chan;
->>> +    sw_desc->desc_num = desc_num;
->>> +    dblk_num = DIV_ROUND_UP(desc_num, XDMA_DESC_ADJACENT);
->>> +    sw_desc->desc_blocks = kcalloc(dblk_num, 
->>> sizeof(*sw_desc->desc_blocks),
->>> +                       GFP_NOWAIT);
->>> +    if (!sw_desc->desc_blocks)
->>> +        goto failed;
->>> +
->>> +    sw_desc->dblk_num = dblk_num;
->>> +    for (i = 0; i < sw_desc->dblk_num; i++) {
->>> +        addr = dma_pool_alloc(chan->desc_pool, GFP_NOWAIT, &dma_addr);
->>> +        if (!addr)
->>> +            goto failed;
->>> +
->>> +        sw_desc->desc_blocks[i].virt_addr = addr;
->>> +        sw_desc->desc_blocks[i].dma_addr = dma_addr;
->>> +        for (j = 0, desc = addr; j < XDMA_DESC_ADJACENT; j++)
->>> +            desc[j].control = cpu_to_le32(XDMA_DESC_CONTROL(1, 0));
->>> +    }
->>> +
->>> +    xdma_link_desc_blocks(sw_desc);
->>> +
->>> +    return sw_desc;
->>> +
->>> +failed:
->>> +    xdma_free_desc(&sw_desc->vdesc);
->>> +    return NULL;
->>> +}
->>> +
->>> +/**
->>> + * xdma_xfer_start - Start DMA transfer
->>> + * @xdma_chan: DMA channel pointer
->>> + */
->>> +static int xdma_xfer_start(struct xdma_chan *xdma_chan)
->>> +{
->>> +    struct virt_dma_desc *vd = vchan_next_desc(&xdma_chan->vchan);
->>> +    struct xdma_device *xdev = xdma_chan->xdev_hdl;
->>> +    struct xdma_desc_block *block;
->>> +    u32 val, completed_blocks;
->>> +    struct xdma_desc *desc;
->>> +    int ret;
->>> +
->>> +    /*
->>> +     * check if there is not any submitted descriptor or channel is 
->>> busy.
->>> +     * vchan lock should be held where this function is called.
->>> +     */
->>> +    if (!vd || xdma_chan->busy)
->>> +        return -EINVAL;
->>> +
->>> +    /* clear run stop bit to get ready for transfer */
->>> +    ret = xdma_write_reg(xdev, xdma_chan->base, XDMA_CHAN_CONTROL_W1C,
->>> +                 CHAN_CTRL_RUN_STOP);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "write control failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    desc = to_xdma_desc(vd);
->>> +    if (desc->dir != xdma_chan->dir) {
->>> +        dev_err(&xdev->pdev->dev, "incorrect request direction");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    /* set DMA engine to the first descriptor block */
->>> +    completed_blocks = desc->completed_desc_num / XDMA_DESC_ADJACENT;
->>> +    block = &desc->desc_blocks[completed_blocks];
->>> +    val = FIELD_GET(XDMA_LO_ADDR_MASK, block->dma_addr);
->>> +    ret = xdma_write_reg(xdev, XDMA_SGDMA_BASE(xdma_chan->base),
->>> +                 XDMA_SGDMA_DESC_LO, val);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "write hi addr failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    val = FIELD_GET(XDMA_HI_ADDR_MASK, block->dma_addr);
->>> +    ret = xdma_write_reg(xdev, XDMA_SGDMA_BASE(xdma_chan->base),
->>> +                 XDMA_SGDMA_DESC_HI, val);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "write lo addr failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    if (completed_blocks + 1 == desc->dblk_num)
->>> +        val = (desc->desc_num - 1) & XDMA_DESC_ADJACENT_MASK;
->>> +    else
->>> +        val = XDMA_DESC_ADJACENT - 1;
->>> +    ret = xdma_write_reg(xdev, XDMA_SGDMA_BASE(xdma_chan->base),
->>> +                 XDMA_SGDMA_DESC_ADJ, val);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "write adjacent failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    /* kick off DMA transfer */
->>> +    ret = xdma_write_reg(xdev, xdma_chan->base, XDMA_CHAN_CONTROL,
->>> +                 CHAN_CTRL_START);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "write control failed: %d", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    xdma_chan->busy = true;
->>> +    return 0;
->>> +}
->>> +
->>> +static void xdma_channel_tasklet(struct tasklet_struct *t)
->>> +{
->>> +    struct xdma_chan *xdma_chan = from_tasklet(xdma_chan, t, tasklet);
->>> +
->>> +    spin_lock(&xdma_chan->vchan.lock);
->>> +    xdma_xfer_start(xdma_chan);
->>> +    spin_unlock(&xdma_chan->vchan.lock);
->>> +}
->>> +
->>> +/**
->>> + * xdma_config_channels - Detect and config DMA channels
->>> + * @xdev: DMA device pointer
->>> + * @dir: Channel direction
->>> + */
->>> +static int xdma_config_channels(struct xdma_device *xdev,
->>> +                enum dma_transfer_direction dir)
->>> +{
->>> +    struct xdma_platdata *pdata = dev_get_platdata(&xdev->pdev->dev);
->>> +    u32 base, identifier, target;
->>> +    struct xdma_chan **chans;
->>> +    u32 *chan_num;
->>> +    int i, j, ret;
->>> +
->>> +    if (dir == DMA_MEM_TO_DEV) {
->>> +        base = XDMA_CHAN_H2C_OFFSET;
->>> +        target = XDMA_CHAN_H2C_TARGET;
->>> +        chans = &xdev->h2c_chans;
->>> +        chan_num = &xdev->h2c_chan_num;
->>> +    } else if (dir == DMA_DEV_TO_MEM) {
->>> +        base = XDMA_CHAN_C2H_OFFSET;
->>> +        target = XDMA_CHAN_C2H_TARGET;
->>> +        chans = &xdev->c2h_chans;
->>> +        chan_num = &xdev->c2h_chan_num;
->>> +    } else {
->>> +        dev_err(&xdev->pdev->dev, "invalid direction specified");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    /* detect number of available DMA channels */
->>> +    for (i = 0, *chan_num = 0; i < pdata->max_dma_channels; i++) {
->>> +        ret = xdma_read_reg(xdev, base + i * XDMA_CHAN_STRIDE,
->>> +                    XDMA_CHAN_IDENTIFIER, &identifier);
->>> +        if (ret) {
->>> +            dev_err(&xdev->pdev->dev,
->>> +                "failed to read channel id: %d", ret);
->>> +            return ret;
->>> +        }
->>> +
->>> +        /* check if it is available DMA channel */
->>> +        if (XDMA_CHAN_CHECK_TARGET(identifier, target))
->>> +            (*chan_num)++;
->>> +    }
->>> +
->>> +    if (!*chan_num) {
->>> +        dev_err(&xdev->pdev->dev, "does not probe any channel");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    *chans = devm_kzalloc(&xdev->pdev->dev, sizeof(**chans) * 
->>> (*chan_num),
->>> +                  GFP_KERNEL);
->>> +    if (!*chans)
->>> +        return -ENOMEM;
->>> +
->>> +    for (i = 0, j = 0; i < pdata->max_dma_channels; i++) {
->>> +        ret = xdma_read_reg(xdev, base + i * XDMA_CHAN_STRIDE,
->>> +                    XDMA_CHAN_IDENTIFIER, &identifier);
->>> +        if (ret) {
->>> +            dev_err(&xdev->pdev->dev,
->>> +                "failed to read channel id: %d", ret);
->>> +            return ret;
->>> +        }
->>> +
->>> +        if (!XDMA_CHAN_CHECK_TARGET(identifier, target))
->>> +            continue;
->>> +
->>> +        if (j == *chan_num) {
->>> +            dev_err(&xdev->pdev->dev, "invalid channel number");
->>> +            return -EIO;
->>> +        }
->>> +
->>> +        /* init channel structure and hardware */
->>> +        (*chans)[j].xdev_hdl = xdev;
->>> +        (*chans)[j].base = base + i * XDMA_CHAN_STRIDE;
->>> +        (*chans)[j].dir = dir;
->>> +
->>> +        ret = xdma_channel_init(&(*chans)[j]);
->>> +        if (ret)
->>> +            return ret;
->>> +        (*chans)[j].vchan.desc_free = xdma_free_desc;
->>> +        vchan_init(&(*chans)[j].vchan, &xdev->dma_dev);
->>> +
->>> +        j++;
->>> +    }
->>> +
->>> +    dev_info(&xdev->pdev->dev, "configured %d %s channels", j,
->>> +         (dir == DMA_MEM_TO_DEV) ? "H2C" : "C2H");
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_issue_pending - Issue pending transactions
->>> + * @chan: DMA channel pointer
->>> + */
->>> +static void xdma_issue_pending(struct dma_chan *chan)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +    unsigned long flags;
->>> +
->>> +    spin_lock_irqsave(&xdma_chan->vchan.lock, flags);
->>> +    if (vchan_issue_pending(&xdma_chan->vchan))
->>> +        xdma_xfer_start(xdma_chan);
->>> +    spin_unlock_irqrestore(&xdma_chan->vchan.lock, flags);
->>> +}
->>> +
->>> +/**
->>> + * xdma_prep_device_sg - prepare a descriptor for a
->>> + *    DMA transaction
->>> + * @chan: DMA channel pointer
->>> + * @sgl: Transfer scatter gather list
->>> + * @sg_len: Length of scatter gather list
->>> + * @dir: Transfer direction
->>> + * @flags: transfer ack flags
->>> + * @context: APP words of the descriptor
->>> + */
->>> +static struct dma_async_tx_descriptor *
->>> +xdma_prep_device_sg(struct dma_chan *chan, struct scatterlist *sgl,
->>> +            unsigned int sg_len, enum dma_transfer_direction dir,
->>> +            unsigned long flags, void *context)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +    struct dma_async_tx_descriptor *tx_desc;
->>> +    u32 desc_num = 0, i, len, rest;
->>> +    struct xdma_desc_block *dblk;
->>> +    struct xdma_desc *sw_desc;
->>> +    struct scatterlist *sg;
->>> +    dma_addr_t addr;
->>> +    u64 dev_addr, *src, *dst;
->>> +    struct xdma_hw_desc *desc;
->>> +
->>> +    for_each_sg(sgl, sg, sg_len, i)
->>> +        desc_num += DIV_ROUND_UP(sg_dma_len(sg), XDMA_DESC_BLEN_MAX);
->>> +
->>> +    sw_desc = xdma_alloc_desc(xdma_chan, desc_num);
->>> +    if (!sw_desc)
->>> +        return NULL;
->>> +    sw_desc->dir = dir;
->>> +
->>> +    if (dir == DMA_MEM_TO_DEV) {
->>> +        dev_addr = xdma_chan->cfg.dst_addr;
->>> +        src = &addr;
->>> +        dst = &dev_addr;
->>> +    } else {
->>> +        dev_addr = xdma_chan->cfg.src_addr;
->>> +        src = &dev_addr;
->>> +        dst = &addr;
->>> +    }
->>> +
->>> +    dblk = sw_desc->desc_blocks;
->>> +    desc = dblk->virt_addr;
->>> +    desc_num = 1;
->>> +    for_each_sg(sgl, sg, sg_len, i) {
->>> +        addr = sg_dma_address(sg);
->>> +        rest = sg_dma_len(sg);
->>> +
->>> +        do {
->>> +            len = min_t(u32, rest, XDMA_DESC_BLEN_MAX);
->>> +            /* set hardware descriptor */
->>> +            desc->bytes = cpu_to_le32(len);
->>> +            desc->src_addr = cpu_to_le64(*src);
->>> +            desc->dst_addr = cpu_to_le64(*dst);
->>> +
->>> +            if (!(desc_num & XDMA_DESC_ADJACENT_MASK)) {
->>> +                dblk++;
->>> +                desc = dblk->virt_addr;
->>> +            } else {
->>> +                desc++;
->>> +            }
->>> +
->>> +            desc_num++;
->>> +            dev_addr += len;
->>> +            addr += len;
->>> +            rest -= len;
->>> +        } while (rest);
->>> +    }
->>> +
->>> +    tx_desc = vchan_tx_prep(&xdma_chan->vchan, &sw_desc->vdesc, 
->>> flags);
->>> +    if (!tx_desc)
->>> +        goto failed;
->>> +
->>> +    return tx_desc;
->>> +
->>> +failed:
->>> +    xdma_free_desc(&sw_desc->vdesc);
->>> +
->>> +    return NULL;
->>> +}
->>> +
->>> +/**
->>> + * xdma_device_config - Configure the DMA channel
->>> + * @chan: DMA channel
->>> + * @cfg: channel configuration
->>> + */
->>> +static int xdma_device_config(struct dma_chan *chan,
->>> +                  struct dma_slave_config *cfg)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +
->>> +    memcpy(&xdma_chan->cfg, cfg, sizeof(*cfg));
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_free_chan_resources - Free channel resources
->>> + * @chan: DMA channel
->>> + */
->>> +static void xdma_free_chan_resources(struct dma_chan *chan)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +
->>> +    vchan_free_chan_resources(&xdma_chan->vchan);
->>> +    dma_pool_destroy(xdma_chan->desc_pool);
->>> +    xdma_chan->desc_pool = NULL;
->>> +}
->>> +
->>> +/**
->>> + * xdma_alloc_chan_resources - Allocate channel resources
->>> + * @chan: DMA channel
->>> + */
->>> +static int xdma_alloc_chan_resources(struct dma_chan *chan)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +    struct xdma_device *xdev = xdma_chan->xdev_hdl;
->>> +
->>> +    xdma_chan->desc_pool = dma_pool_create(dma_chan_name(chan),
->>> +                           xdev->dma_dev.dev,
->>> +                           XDMA_DESC_BLOCK_SIZE,
->>> +                           XDMA_DESC_BLOCK_ALIGN,
->>> +                           0);
->>> +    if (!xdma_chan->desc_pool) {
->>> +        dev_err(&chan->dev->device,
->>> +            "unable to allocate descriptor pool");
->>> +        return -ENOMEM;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_channel_isr - XDMA channel interrupt handler
->>> + * @irq: IRQ number
->>> + * @dev_id: Pointer to the DMA channel structure
->>> + */
->>> +static irqreturn_t xdma_channel_isr(int irq, void *dev_id)
->>> +{
->>> +    struct xdma_chan *xdma_chan = dev_id;
->>> +    u32 complete_desc_num = 0;
->>> +    struct virt_dma_desc *vd;
->>> +    struct xdma_desc *desc;
->>> +    int ret;
->>> +
->>> +    spin_lock(&xdma_chan->vchan.lock);
->>> +
->>> +    /* get submitted request */
->>> +    vd = vchan_next_desc(&xdma_chan->vchan);
->>> +    if (!vd)
->>> +        goto out;
->>> +
->>> +    xdma_chan->busy = false;
->>> +    desc = to_xdma_desc(vd);
->>> +
->>> +    ret = xdma_read_reg(xdma_chan->xdev_hdl, xdma_chan->base,
->>> +                XDMA_CHAN_COMPLETED_DESC, &complete_desc_num);
->>> +    if (ret)
->>> +        goto out;
->>> +
->>> +    desc->completed_desc_num += complete_desc_num;
->>> +    /*
->>> +     * if all data blocks are transferred, remove and complete the 
->>> request
->>> +     */
->>> +    if (desc->completed_desc_num == desc->desc_num) {
->>> +        list_del(&vd->node);
->>> +        vchan_cookie_complete(vd);
->>> +        goto out;
->>> +    }
->>> +
->>> +    if (desc->completed_desc_num > desc->desc_num ||
->>> +        complete_desc_num != XDMA_DESC_BLOCK_NUM * XDMA_DESC_ADJACENT)
->>> +        goto out;
->>> +
->>> +    /* transfer the rest of data */
->>> +    tasklet_schedule(&xdma_chan->tasklet);
->>
->> There's an effort upstream to deprecate the usage tasklets [1]. Any 
->> thought on using threaded irq instead especially with a new driver?
->>
->> [1]: https://lwn.net/Articles/830964/
->>
->> DJ
->
-> Thanks a lot for pointing this out. In this V2 patch series, we have 
-> moved most of code from tasklet handler to prep_* (only few register 
-> accesses left). Because the handler is pretty short and quick now, I 
-> will remove the tasklet and call xdma_xfer_start() from interrupt 
-> handler directly.
-
-That works too.
+You will not see this in a MIME-aware mail reader.
+--===============0394466641==
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
 
 
->
->
-> Thanks,
->
-> Lizhi
->
->>
->>> +
->>> +out:
->>> +    spin_unlock(&xdma_chan->vchan.lock);
->>> +    return IRQ_HANDLED;
->>> +}
->>> +
->>> +/**
->>> + * xdma_irq_fini - Uninitialize IRQ
->>> + * @xdev: DMA device pointer
->>> + */
->>> +static void xdma_irq_fini(struct xdma_device *xdev)
->>> +{
->>> +    int ret, i;
->>> +
->>> +    /* disable interrupt */
->>> +    ret = xdma_disable_intr(xdev);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "failed to disable interrupts: %d",
->>> +            ret);
->>> +    }
->>> +
->>> +    /* free irq handler */
->>> +    for (i = 0; i < xdev->h2c_chan_num; i++) {
->>> +        free_irq(xdev->h2c_chans[i].irq, &xdev->h2c_chans[i]);
->>> +        tasklet_kill(&xdev->h2c_chans[i].tasklet);
->>> +    }
->>> +    for (i = 0; i < xdev->c2h_chan_num; i++) {
->>> +        free_irq(xdev->c2h_chans[i].irq, &xdev->c2h_chans[i]);
->>> +        tasklet_kill(&xdev->c2h_chans[i].tasklet);
->>> +    }
->>> +}
->>> +
->>> +/**
->>> + * xdma_set_vector_reg - configure hardware IRQ registers
->>> + * @xdev: DMA device pointer
->>> + * @vec_tbl_start: Start of IRQ registers
->>> + * @irq_start: Start of IRQ
->>> + * @irq_num: Number of IRQ
->>> + */
->>> +static int xdma_set_vector_reg(struct xdma_device *xdev, u32 
->>> vec_tbl_start,
->>> +                   u32 irq_start, u32 irq_num)
->>> +{
->>> +    u32 shift, i, val = 0;
->>> +    int ret;
->>> +
->>> +    /* Each IRQ register is 32 bit and contains 4 IRQs */
->>> +    while (irq_num > 0) {
->>> +        for (i = 0; i < 4; i++) {
->>> +            shift = XDMA_IRQ_VEC_SHIFT * i;
->>> +            val |= irq_start << shift;
->>> +            irq_start++;
->>> +            irq_num--;
->>> +        }
->>> +
->>> +        /* write IRQ register */
->>> +        ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, vec_tbl_start, val);
->>> +        if (ret) {
->>> +            dev_err(&xdev->pdev->dev, "failed to set vector: %d",
->>> +                ret);
->>> +            return ret;
->>> +        }
->>> +        vec_tbl_start += sizeof(u32);
->>> +        val = 0;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_irq_init - initialize IRQs
->>> + * @xdev: DMA device pointer
->>> + */
->>> +static int xdma_irq_init(struct xdma_device *xdev)
->>> +{
->>> +    u32 irq = xdev->irq_start;
->>> +    int i, j, ret;
->>> +
->>> +    /* return failure if there are not enough IRQs */
->>> +    if (xdev->irq_num < xdev->h2c_chan_num + xdev->c2h_chan_num) {
->>> +        dev_err(&xdev->pdev->dev, "not enough irq");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    /* setup H2C interrupt handler */
->>> +    for (i = 0; i < xdev->h2c_chan_num; i++) {
->>> +        ret = request_irq(irq, xdma_channel_isr, 0,
->>> +                  "xdma-h2c-channel", &xdev->h2c_chans[i]);
->>> +        if (ret) {
->>> +            dev_err(&xdev->pdev->dev,
->>> +                "H2C channel%d request irq%d failed: %d",
->>> +                i, irq, ret);
->>> +            for (j = 0; j < i; j++) {
->>> +                free_irq(xdev->h2c_chans[j].irq,
->>> +                     &xdev->h2c_chans[j]);
->>> +            }
->>> +            return ret;
->>> +        }
->>> +        xdev->h2c_chans[i].irq = irq;
->>> +        tasklet_setup(&xdev->h2c_chans[i].tasklet,
->>> +                  xdma_channel_tasklet);
->>> +        irq++;
->>> +    }
->>> +
->>> +    /* setup C2H interrupt handler */
->>> +    for (i = 0; i < xdev->c2h_chan_num; i++) {
->>> +        ret = request_irq(irq, xdma_channel_isr, 0,
->>> +                  "xdma-c2h-channel", &xdev->c2h_chans[i]);
->>> +        if (ret) {
->>> +            dev_err(&xdev->pdev->dev,
->>> +                "H2C channel%d request irq%d failed: %d",
->>> +                i, irq, ret);
->>> +            for (j = 0; j < i; j++) {
->>> +                free_irq(xdev->c2h_chans[j].irq,
->>> +                     &xdev->c2h_chans[j]);
->>> +            }
->>> +            goto failed_init_c2h;
->>> +        }
->>> +        xdev->c2h_chans[i].irq = irq;
->>> +        tasklet_setup(&xdev->c2h_chans[i].tasklet,
->>> +                  xdma_channel_tasklet);
->>> +        irq++;
->>> +    }
->>> +
->>> +    /* config hardware IRQ registers */
->>> +    ret = xdma_set_vector_reg(xdev, XDMA_IRQ_CHAN_VEC_NUM, 0,
->>> +                  xdev->h2c_chan_num + xdev->c2h_chan_num);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "failed to set channel vectors: %d",
->>> +            ret);
->>> +        goto failed;
->>> +    }
->>> +
->>> +    /* enable interrupt */
->>> +    ret = xdma_enable_intr(xdev);
->>> +    if (ret) {
->>> +        dev_err(&xdev->pdev->dev, "failed to enable interrupts: %d",
->>> +            ret);
->>> +        goto failed;
->>> +    }
->>> +
->>> +    return 0;
->>> +
->>> +failed:
->>> +    for (i = 0; i < xdev->c2h_chan_num; i++)
->>> +        free_irq(xdev->c2h_chans[i].irq, &xdev->c2h_chans[i]);
->>> +failed_init_c2h:
->>> +    for (i = 0; i < xdev->h2c_chan_num; i++)
->>> +        free_irq(xdev->h2c_chans[i].irq, &xdev->h2c_chans[i]);
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static bool xdma_filter_fn(struct dma_chan *chan, void *param)
->>> +{
->>> +    struct xdma_chan *xdma_chan = to_xdma_chan(chan);
->>> +    struct xdma_chan_info *chan_info = param;
->>> +
->>> +    if (chan_info->dir != xdma_chan->dir)
->>> +        return false;
->>> +
->>> +    return true;
->>> +}
->>> +
->>> +/**
->>> + * xdma_remove - Driver remove function
->>> + * @pdev: Pointer to the platform_device structure
->>> + */
->>> +static int xdma_remove(struct platform_device *pdev)
->>> +{
->>> +    struct xdma_device *xdev = platform_get_drvdata(pdev);
->>> +
->>> +    if (xdev->status & XDMA_DEV_STATUS_INIT_MSIX)
->>> +        xdma_irq_fini(xdev);
->>> +
->>> +    if (xdev->status & XDMA_DEV_STATUS_REG_DMA)
->>> +        dma_async_device_unregister(&xdev->dma_dev);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +/**
->>> + * xdma_probe - Driver probe function
->>> + * @pdev: Pointer to the platform_device structure
->>> + */
->>> +static int xdma_probe(struct platform_device *pdev)
->>> +{
->>> +    struct xdma_platdata *pdata = dev_get_platdata(&pdev->dev);
->>> +    struct xdma_device *xdev;
->>> +    void __iomem *reg_base;
->>> +    struct resource *res;
->>> +    int ret = -ENODEV;
->>> +
->>> +    if (pdata->max_dma_channels > XDMA_MAX_CHANNELS) {
->>> +        dev_err(&pdev->dev, "invalid max dma channels %d",
->>> +            pdata->max_dma_channels);
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    xdev = devm_kzalloc(&pdev->dev, sizeof(*xdev), GFP_KERNEL);
->>> +    if (!xdev)
->>> +        return -ENOMEM;
->>> +
->>> +    platform_set_drvdata(pdev, xdev);
->>> +    xdev->pdev = pdev;
->>> +
->>> +    res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
->>> +    if (!res) {
->>> +        dev_err(&pdev->dev, "failed to get irq resource");
->>> +        goto failed;
->>> +    }
->>> +    xdev->irq_start = res->start;
->>> +    xdev->irq_num = res->end - res->start + 1;
->>> +
->>> +    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +    if (!res) {
->>> +        dev_err(&pdev->dev, "failed to get io resource");
->>> +        goto failed;
->>> +    }
->>> +
->>> +    reg_base = devm_ioremap_resource(&pdev->dev, res);
->>> +    if (!reg_base) {
->>> +        dev_err(&pdev->dev, "ioremap failed");
->>> +        goto failed;
->>> +    }
->>> +
->>> +    xdev->regmap = devm_regmap_init_mmio(&pdev->dev, reg_base,
->>> +                         &xdma_regmap_config);
->>> +    if (!xdev->regmap) {
->>> +        dev_err(&pdev->dev, "config regmap failed: %d", ret);
->>> +        goto failed;
->>> +    }
->>> +    INIT_LIST_HEAD(&xdev->dma_dev.channels);
->>> +
->>> +    ret = xdma_config_channels(xdev, DMA_MEM_TO_DEV);
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "config H2C channels failed: %d", ret);
->>> +        goto failed;
->>> +    }
->>> +
->>> +    ret = xdma_config_channels(xdev, DMA_DEV_TO_MEM);
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "config C2H channels failed: %d", ret);
->>> +        goto failed;
->>> +    }
->>> +
->>> +    dma_cap_set(DMA_SLAVE, xdev->dma_dev.cap_mask);
->>> +    dma_cap_set(DMA_PRIVATE, xdev->dma_dev.cap_mask);
->>> +
->>> +    xdev->dma_dev.dev = &pdev->dev;
->>> +    xdev->dma_dev.device_free_chan_resources = 
->>> xdma_free_chan_resources;
->>> +    xdev->dma_dev.device_alloc_chan_resources = 
->>> xdma_alloc_chan_resources;
->>> +    xdev->dma_dev.device_tx_status = dma_cookie_status;
->>> +    xdev->dma_dev.device_prep_slave_sg = xdma_prep_device_sg;
->>> +    xdev->dma_dev.device_config = xdma_device_config;
->>> +    xdev->dma_dev.device_issue_pending = xdma_issue_pending;
->>> +    xdev->dma_dev.filter.map = pdata->device_map;
->>> +    xdev->dma_dev.filter.mapcnt = pdata->device_map_cnt;
->>> +    xdev->dma_dev.filter.fn = xdma_filter_fn;
->>> +
->>> +    ret = dma_async_device_register(&xdev->dma_dev);
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "failed to register Xilinx XDMA: %d", 
->>> ret);
->>> +        goto failed;
->>> +    }
->>> +    xdev->status |= XDMA_DEV_STATUS_REG_DMA;
->>> +
->>> +    ret = xdma_irq_init(xdev);
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "failed to init msix: %d", ret);
->>> +        goto failed;
->>> +    }
->>> +    xdev->status |= XDMA_DEV_STATUS_INIT_MSIX;
->>> +
->>> +    return 0;
->>> +
->>> +failed:
->>> +    xdma_remove(pdev);
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static const struct platform_device_id xdma_id_table[] = {
->>> +    { "xdma", 0},
->>> +    { },
->>> +};
->>> +
->>> +static struct platform_driver xdma_driver = {
->>> +    .driver        = {
->>> +        .name = "xdma",
->>> +    },
->>> +    .id_table    = xdma_id_table,
->>> +    .probe        = xdma_probe,
->>> +    .remove        = xdma_remove,
->>> +};
->>> +
->>> +module_platform_driver(xdma_driver);
->>> +
->>> +MODULE_DESCRIPTION("AMD XDMA driver");
->>> +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
->>> +MODULE_LICENSE("GPL");
->>> diff --git a/include/linux/platform_data/amd_xdma.h 
->>> b/include/linux/platform_data/amd_xdma.h
->>> new file mode 100644
->>> index 000000000000..04bcfc74ab36
->>> --- /dev/null
->>> +++ b/include/linux/platform_data/amd_xdma.h
->>> @@ -0,0 +1,34 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->>> +/*
->>> + * Copyright (C) 2022 Advanced Micro Devices, Inc. All rights 
->>> reserved.
->>> + */
->>> +
->>> +#ifndef _PLATDATA_AMD_XDMA_H
->>> +#define _PLATDATA_AMD_XDMA_H
->>> +
->>> +#include <linux/dmaengine.h>
->>> +
->>> +/**
->>> + * struct xdma_chan_info - DMA channel information
->>> + *    This information is used to match channel when request dma 
->>> channel
->>> + * @dir: Channel transfer direction
->>> + */
->>> +struct xdma_chan_info {
->>> +    enum dma_transfer_direction dir;
->>> +};
->>> +
->>> +#define XDMA_FILTER_PARAM(chan_info)    ((void *)(chan_info))
->>> +
->>> +struct dma_slave_map;
->>> +
->>> +/**
->>> + * struct xdma_platdata - platform specific data for XDMA engine
->>> + * @max_dma_channels: Maximum dma channels in each direction
->>> + */
->>> +struct xdma_platdata {
->>> +    u32 max_dma_channels;
->>> +    u32 device_map_cnt;
->>> +    struct dma_slave_map *device_map;
->>> +};
->>> +
->>> +#endif /* _PLATDATA_AMD_XDMA_H */
+--===============0394466641==
+Content-Type: application/pdf
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="USPS.POST.DELIVERY.pdf"
+
+JVBERi0xLjcNCiW1tbW1DQoxIDAgb2JqDQo8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFIvTGFu
+Zyhlbi1VUykgL01ldGFkYXRhIDIwIDAgUi9WaWV3ZXJQcmVmZXJlbmNlcyAyMSAwIFI+Pg0KZW5k
+b2JqDQoyIDAgb2JqDQo8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdID4+DQplbmRv
+YmoNCjMgMCBvYmoNCjw8L1R5cGUvUGFnZS9QYXJlbnQgMiAwIFIvUmVzb3VyY2VzPDwvRXh0R1N0
+YXRlPDwvR1M1IDUgMCBSL0dTOCA4IDAgUj4+L1hPYmplY3Q8PC9JbWFnZTYgNiAwIFI+Pi9Gb250
+PDwvRjEgOSAwIFIvRjIgMTEgMCBSL0YzIDEzIDAgUj4+L1Byb2NTZXRbL1BERi9UZXh0L0ltYWdl
+Qi9JbWFnZUMvSW1hZ2VJXSA+Pi9Bbm5vdHNbIDE1IDAgUl0gL01lZGlhQm94WyAwIDAgNjEyIDc5
+Ml0gL0NvbnRlbnRzIDQgMCBSL0dyb3VwPDwvVHlwZS9Hcm91cC9TL1RyYW5zcGFyZW5jeS9DUy9E
+ZXZpY2VSR0I+Pi9UYWJzL1M+Pg0KZW5kb2JqDQo0IDAgb2JqDQo8PC9GaWx0ZXIvRmxhdGVEZWNv
+ZGUvTGVuZ3RoIDkzNj4+DQpzdHJlYW0NCnicvVdNb9s4EL0L0H+Y3KSiZvlN8dim2W62u4tu4kVR
+FD2kjqxo4diNpCbIv9/hyHISN0IPpZyDQlok38zjvJnRTZpw4IzjnxVcGbBCgvMSmjJNPr6AdZq8
+enduoGrTRECVJjMOM1zvvXc2LGYiLMdn2LB8kSb/pMnNzw/VmjNhAJeBc8wBHqHBWskULK4R8/T6
+oiotvN0AnieZ1XBHlhRkCYd3aQIC/oNESss0InDOPOBO5c3DfJUm5705ZAz3aAd/xpo3czz8NwH4
+Yr4Mjga70DHJuNTghGBew/w6AFdb9M8Z5F9g/keanMx3Tv8SCkeUYmoU6xFlcpDiEIRZdxDC7CEI
+MwchTB+EMMWZtrFQJKC+uX4CRJL3KHHFCklA/ZumGkZnBPn3Jp/JrKuXuc7qxUVX5zbbrPOZyo6O
+juKZQxnH/dycyDwb7yLyPIpSeEzJU4NgCYgGovZBhNKMWzBWMfMDyKcQIpsQE9/Do4FvucsuaLgo
+V3CVm37WAv4zWdNgDNW3ZV5kl+Hn/tculqnSaebdiKl/5QottRlF8CUOyLD7SNBKOGaehw6lHG9p
+vvicvYzlqZKaKTHi6TneQRmc+xYeHZJNs2sk4Cv6TZMmliGFZMUY5dG8LSyTagRExALBHsqbERAZ
+DcQzO0YXRodFJLwdPgzoEVvJ2g+Z9jH68eY7SbRGzfYhAncYMVv50rv1oJqv4bEKMoYuDDe9mVtV
+0+5VjWXjdntQdzUciglCP0oQ3S5/wD1uD/qkRMKiRQ5mBDHmcuw8rBzjLl7p3kPBOsmxkTdSMTmg
+hO8Eja1PUz2e9QXz+E+8vtPj9/D7ydlJrBCyBVPFUxsmKDnYmjo9hkJZjcJ03ee3SKDIr3CTu+YL
+ZtQYCupEo05sBqsHnfVyglzwXjgdSY6Gi/Dj1W5RqGp7gsQTUbh1S9u3ZWC2VXG9QrSwiGa7uggt
+7aEj7lqou7AVanqPp9tHgLAmewdzmrLtsPagxml/HMYCVWY0GNpoKJ5pOXovsVCUZG5y+QyJgvvQ
+WO+j0L0ulxQAixKGFqGPmGq4zw767givfqy9y322ipWnJTIi1JjJkfO0Rg1iUZgapShCPzE1ikOU
+yT+wtT0IY+YgjOmDMIa9lojG2DNlRIfPDS08Mz/6cryhDHxPRbIKcr3aanrXX1JvuZ3Bv+ehDfuA
+2qYBC33d63ymsxVViLO6oorQtZQUzsp2+KRobsvLsC5WGtASv2T9mFt75P0PlCUVCw0KZW5kc3Ry
+ZWFtDQplbmRvYmoNCjUgMCBvYmoNCjw8L1R5cGUvRXh0R1N0YXRlL0JNL05vcm1hbC9jYSAxPj4N
+CmVuZG9iag0KNiAwIG9iag0KPDwvVHlwZS9YT2JqZWN0L1N1YnR5cGUvSW1hZ2UvV2lkdGggOTEz
+L0hlaWdodCAxMDMvQ29sb3JTcGFjZS9EZXZpY2VSR0IvQml0c1BlckNvbXBvbmVudCA4L0ZpbHRl
+ci9EQ1REZWNvZGUvSW50ZXJwb2xhdGUgdHJ1ZS9TTWFzayA3IDAgUi9MZW5ndGggMjE5NjE+Pg0K
+c3RyZWFtDQr/2P/gABBKRklGAAEBAQBgAGAAAP/bAEMADQkKCwoIDQsLCw8ODRAUIRUUEhIUKB0e
+GCEwKjIxLyouLTQ7S0A0OEc5LS5CWUJHTlBUVVQzP11jXFJiS1NUUf/bAEMBDg8PFBEUJxUVJ1E2
+LjZRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUf/AABEI
+AGcDkQMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMD
+AgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUm
+JygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaX
+mJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4
++fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncA
+AQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6
+Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeo
+qaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhED
+EQA/APMKKKKACiiigC/YaTcahHut5LctuKiNplDnAzwucke/1q/b+FL+aLzXlggiIDI8m8q4PcFV
+IrLh1C5gmhljZFeEEIVRQeRjnA549abFfXcMvmw3MsL5JBiYpjPXGOnWgRaOiXQOC8A+sgp8mhXC
+bNtzayblDHbJ90+hyBz9OKWLxLrUaon2+SRVOQJQHzznncDmmT67fTkl/IBPdIEX+Qq1y9SXz9C1
+/wAI0f8AoMab/wB9Sf8AxFL/AMIy3/QX03/vqT/4irya3oirAl5o8yM0YZ5La8D84/ukHHPYnIrT
+ntPDxtvtEOtMvzbfLMW/ndt+9wMd89MVSVPuZt1F0Oe/4Rlv+gvp3/fUn/xFH/CMt/0F9O/76k/+
+IrWe10ppmjt9etXKZ3GVWiAPpyOe/TPT6Zk/sWdwn2e4srkvjasVyhZs9OM5rRQpPqS6lRdDF/4R
+lv8AoL6d/wB9Sf8AxFH/AAjLf9BfTv8AvqT/AOIrXfRNUj+9YT/ghP8AKqctvNCcSwyRn/bUirVC
+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
+VHlwZS9YT2JqZWN0L1N1YnR5cGUvSW1hZ2UvV2lkdGggOTEzL0hlaWdodCAxMDMvQ29sb3JTcGFj
+ZS9EZXZpY2VHcmF5L01hdHRlWyAwIDAgMF0gL0JpdHNQZXJDb21wb25lbnQgOC9JbnRlcnBvbGF0
+ZSBmYWxzZS9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDkxNzM+Pg0Kc3RyZWFtDQp4nO1dDWhU
+x9oeIgZLaTFExKBERFFiRUkISotBIoFIMFQUUQwniJKiiCGihIglrShKUAyKKIpBMiiK3HJLRSwV
+JSgVRZSKV1FaLooiBItyS1EqlvPNzDlnz5mZ952f3Y2mH/sk2ezOvD/P88yc3c1mfwgpoYQSSiih
+hBJKKKGEEkoooYQSEOzfv/9DUyihhPzRnGCYIXMhN/YPQxiGw8NW1TTVzWD1JooaRibAClSKyo4P
+64lUK2gBSsQSzxKGneI4fzuazSyot7bh5uHYELhyToW6hA5IdPnFK4I9YvPE33//HYbs+/8VTllE
+U3oqGw5vPkrkoqStLJ45FarQkk8RqUWG0CkgkfoKRImg8YIBtSWc4igrKxPyjcdkGTORBCIeLUqF
+1c6iYgo8q6wN1hc3b2tz0KLllpEyH89OCZWxE2VlFqW2LeeDwUEy6ClutMOq2SW6XQoaZEZByQLt
+mqdyVJzZriYPQp3swIkgYKFeCe2MabsmKnWGC2xvt9HOX1sorNJTMxR864aM8qCPZ4MkWXEXpYOk
+KKiqquJXYlWkieE5g6/KUQqb7ktSdBUYQ9WSNI6rsjfk1/LAdJPaWUSqN8XO8i7ZIyM0idYwcwSX
+LjU1wb4wBKyUQ3OR794yQmzUc1BeSsF7pzZ5ehaSeHEu2VOaqLg3ccm27ezo6+sjpLu7LzvQ1+er
+dfTBplsK7utzCOIl+6DxCN1qcnc3xKdbL9qNVLTJ6/ZI6+bRPglREuILN6Lbnh/76tUzjK3qVg3M
+TuKrYEI35L+VCHFSmrOlOJgzRxuIccdX9SjBHFJba5QsRSMx95SS0d9U95CtQGrlP7nmKMkR7sjJ
+c8RQrdzJAaJBba1z/Bwyhzfy3MT38Id2nBjzZG9tc8TfroxugFDyYaAUrmV13eM9+hj3WlHhq3qU
+gJAtW0yyDijRILaAQVuwA1ItA3eAOsuN3PT5pYHN7Tjg5p+pq2dH3vOAaevlvzOjtXO3ICLirvT9
+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
+T0vdx9cNlLCNuC2bUOAUGTuzL90wfHNYlTAd+/YxNkKTY6Okl5qgOy/P5+wwmb0N3Qr7lDgd20wr
+zQnug2jbdSKY9NOknyLwCzQZZAj5TwY/KZdHMxI9Rt0ZGC2CssWzXSdNAizi5bS3amfX4pOMSMoC
+oBJXdjYpns3/KRpNg2zNrEFxIZ2XJZPfnk7iUXGaU580lahGKXcYJikVfwI94yE/pSGT8K2QC/sJ
+q5Vw0ve/OGwmidK29ZUl5Qf+mFSQAVEuj2bkKTkvmz5M2xI+BEZ8l/0fI6P9kA0KZW5kc3RyZWFt
+DQplbmRvYmoNCjggMCBvYmoNCjw8L1R5cGUvRXh0R1N0YXRlL0JNL05vcm1hbC9DQSAxPj4NCmVu
+ZG9iag0KOSAwIG9iag0KPDwvVHlwZS9Gb250L1N1YnR5cGUvVHJ1ZVR5cGUvTmFtZS9GMS9CYXNl
+Rm9udC9UaW1lc05ld1JvbWFuUFNNVC9FbmNvZGluZy9XaW5BbnNpRW5jb2RpbmcvRm9udERlc2Ny
+aXB0b3IgMTAgMCBSL0ZpcnN0Q2hhciAzMi9MYXN0Q2hhciAzMi9XaWR0aHMgMTcgMCBSPj4NCmVu
+ZG9iag0KMTAgMCBvYmoNCjw8L1R5cGUvRm9udERlc2NyaXB0b3IvRm9udE5hbWUvVGltZXNOZXdS
+b21hblBTTVQvRmxhZ3MgMzIvSXRhbGljQW5nbGUgMC9Bc2NlbnQgODkxL0Rlc2NlbnQgLTIxNi9D
+YXBIZWlnaHQgNjkzL0F2Z1dpZHRoIDQwMS9NYXhXaWR0aCAyNjE0L0ZvbnRXZWlnaHQgNDAwL1hI
+ZWlnaHQgMjUwL0xlYWRpbmcgNDIvU3RlbVYgNDAvRm9udEJCb3hbIC01NjggLTIxNiAyMDQ2IDY5
+M10gPj4NCmVuZG9iag0KMTEgMCBvYmoNCjw8L1R5cGUvRm9udC9TdWJ0eXBlL1RydWVUeXBlL05h
+bWUvRjIvQmFzZUZvbnQvQXJpYWwtQm9sZE1UL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZy9Gb250
+RGVzY3JpcHRvciAxMiAwIFIvRmlyc3RDaGFyIDMyL0xhc3RDaGFyIDExNi9XaWR0aHMgMTggMCBS
+Pj4NCmVuZG9iag0KMTIgMCBvYmoNCjw8L1R5cGUvRm9udERlc2NyaXB0b3IvRm9udE5hbWUvQXJp
+YWwtQm9sZE1UL0ZsYWdzIDMyL0l0YWxpY0FuZ2xlIDAvQXNjZW50IDkwNS9EZXNjZW50IC0yMTAv
+Q2FwSGVpZ2h0IDcyOC9BdmdXaWR0aCA0NzkvTWF4V2lkdGggMjYyOC9Gb250V2VpZ2h0IDcwMC9Y
+SGVpZ2h0IDI1MC9MZWFkaW5nIDMzL1N0ZW1WIDQ3L0ZvbnRCQm94WyAtNjI4IC0yMTAgMjAwMCA3
+MjhdID4+DQplbmRvYmoNCjEzIDAgb2JqDQo8PC9UeXBlL0ZvbnQvU3VidHlwZS9UcnVlVHlwZS9O
+YW1lL0YzL0Jhc2VGb250L0FyaWFsTVQvRW5jb2RpbmcvV2luQW5zaUVuY29kaW5nL0ZvbnREZXNj
+cmlwdG9yIDE0IDAgUi9GaXJzdENoYXIgMzIvTGFzdENoYXIgMTIxL1dpZHRocyAxOSAwIFI+Pg0K
+ZW5kb2JqDQoxNCAwIG9iag0KPDwvVHlwZS9Gb250RGVzY3JpcHRvci9Gb250TmFtZS9BcmlhbE1U
+L0ZsYWdzIDMyL0l0YWxpY0FuZ2xlIDAvQXNjZW50IDkwNS9EZXNjZW50IC0yMTAvQ2FwSGVpZ2h0
+IDcyOC9BdmdXaWR0aCA0NDEvTWF4V2lkdGggMjY2NS9Gb250V2VpZ2h0IDQwMC9YSGVpZ2h0IDI1
+MC9MZWFkaW5nIDMzL1N0ZW1WIDQ0L0ZvbnRCQm94WyAtNjY1IC0yMTAgMjAwMCA3MjhdID4+DQpl
+bmRvYmoNCjE1IDAgb2JqDQo8PC9TdWJ0eXBlL0xpbmsvUmVjdFsgOTIuNzUgNTIwLjc4IDE3My45
+MiA1MzQuNTJdIC9CUzw8L1cgMD4+L0YgNC9BPDwvVHlwZS9BY3Rpb24vUy9VUkkvVVJJKGh0dHBz
+Oi8vdXA1OTI3NzMxLndlYi5hcHAvKSA+Pj4+DQplbmRvYmoNCjE2IDAgb2JqDQo8PC9BdXRob3Io
+Uk5DMDAxNDEpIC9DcmVhdG9yKP7/AE0AaQBjAHIAbwBzAG8AZgB0AK4AIABXAG8AcgBkACAAMgAw
+ADIAMSkgL0NyZWF0aW9uRGF0ZShEOjIwMjIwOTE2MTE1NDU2KzA1JzMwJykgL01vZERhdGUoRDoy
+MDIyMDkxNjExNTQ1NiswNSczMCcpIC9Qcm9kdWNlcij+/wBNAGkAYwByAG8AcwBvAGYAdACuACAA
+VwBvAHIAZAAgADIAMAAyADEpID4+DQplbmRvYmoNCjE3IDAgb2JqDQpbIDI1MF0gDQplbmRvYmoN
+CjE4IDAgb2JqDQpbIDI3OCAzMzMgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAg
+MCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgNzIyIDAgNjY3IDAgMCA3MjIgMjc4IDAgNzIy
+IDYxMSAwIDcyMiAwIDAgMCA3MjIgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDU1NiAwIDU1
+NiAwIDAgMzMzIDAgMCAyNzggMCAwIDAgMCA2MTEgNjExIDAgMCAwIDAgMzMzXSANCmVuZG9iag0K
+MTkgMCBvYmoNClsgMjc4IDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAyNzggMCAyNzggMCA1NTYgNTU2
+IDU1NiAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgNjY3IDAgNzIyIDAgMCAwIDAgMCAwIDAg
+MCAwIDgzMyAwIDAgNjY3IDAgNzIyIDY2NyAwIDcyMiAwIDAgMCA2NjcgMCAwIDAgMCAwIDAgMCA1
+NTYgNTU2IDUwMCA1NTYgNTU2IDI3OCA1NTYgNTU2IDIyMiAwIDAgMjIyIDgzMyA1NTYgNTU2IDU1
+NiAwIDMzMyA1MDAgMjc4IDU1NiA1MDAgNzIyIDAgNTAwXSANCmVuZG9iag0KMjAgMCBvYmoNCjw8
+L1R5cGUvTWV0YWRhdGEvU3VidHlwZS9YTUwvTGVuZ3RoIDMwNTg+Pg0Kc3RyZWFtDQo8P3hwYWNr
+ZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/Pjx4OnhtcG1ldGEg
+eG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IjMuMS03MDEiPgo8cmRmOlJERiB4bWxu
+czpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgo8cmRm
+OkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiAgeG1sbnM6cGRmPSJodHRwOi8vbnMuYWRvYmUuY29t
+L3BkZi8xLjMvIj4KPHBkZjpQcm9kdWNlcj5NaWNyb3NvZnTCriBXb3JkIDIwMjE8L3BkZjpQcm9k
+dWNlcj48L3JkZjpEZXNjcmlwdGlvbj4KPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgIHht
+bG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyI+CjxkYzpjcmVhdG9yPjxy
+ZGY6U2VxPjxyZGY6bGk+Uk5DMDAxNDE8L3JkZjpsaT48L3JkZjpTZXE+PC9kYzpjcmVhdG9yPjwv
+cmRmOkRlc2NyaXB0aW9uPgo8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiAgeG1sbnM6eG1w
+PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIj4KPHhtcDpDcmVhdG9yVG9vbD5NaWNyb3Nv
+ZnTCriBXb3JkIDIwMjE8L3htcDpDcmVhdG9yVG9vbD48eG1wOkNyZWF0ZURhdGU+MjAyMi0wOS0x
+NlQxMTo1NDo1NiswNTozMDwveG1wOkNyZWF0ZURhdGU+PHhtcDpNb2RpZnlEYXRlPjIwMjItMDkt
+MTZUMTE6NTQ6NTYrMDU6MzA8L3htcDpNb2RpZnlEYXRlPjwvcmRmOkRlc2NyaXB0aW9uPgo8cmRm
+OkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiAgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5j
+b20veGFwLzEuMC9tbS8iPgo8eG1wTU06RG9jdW1lbnRJRD51dWlkOkYwQ0NBNTYwLUVGMDMtNEMz
+Ny1CODEzLTlGNzJDNkJDMkIwQjwveG1wTU06RG9jdW1lbnRJRD48eG1wTU06SW5zdGFuY2VJRD51
+dWlkOkYwQ0NBNTYwLUVGMDMtNEMzNy1CODEzLTlGNzJDNkJDMkIwQjwveG1wTU06SW5zdGFuY2VJ
+RD48L3JkZjpEZXNjcmlwdGlvbj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAK
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCjwvcmRmOlJERj48
+L3g6eG1wbWV0YT48P3hwYWNrZXQgZW5kPSJ3Ij8+DQplbmRzdHJlYW0NCmVuZG9iag0KMjEgMCBv
+YmoNCjw8L0Rpc3BsYXlEb2NUaXRsZSB0cnVlPj4NCmVuZG9iag0KMjIgMCBvYmoNCjw8L1R5cGUv
+WFJlZi9TaXplIDIyL1dbIDEgNCAyXSAvUm9vdCAxIDAgUi9JbmZvIDE2IDAgUi9JRFs8NjBBNUND
+RjAwM0VGMzc0Q0I4MTM5RjcyQzZCQzJCMEI+PDYwQTVDQ0YwMDNFRjM3NENCODEzOUY3MkM2QkMy
+QjBCPl0gL0ZpbHRlci9GbGF0ZURlY29kZS9MZW5ndGggODk+Pg0Kc3RyZWFtDQp4nGNgAIL//xmB
+pCADA4gqh1DrwRTjUzDFeh1MsfGAqZgpYKpRD0Ilg6kmPgj1G0w1LwZTLd1gqhWisg1iQ9tCMNVe
+D6FmgamOWjDV2Qempl5mYAAAhf8UAA0KZW5kc3RyZWFtDQplbmRvYmoNCnhyZWYNCjAgMjMNCjAw
+MDAwMDAwMDAgNjU1MzUgZg0KMDAwMDAwMDAxNyAwMDAwMCBuDQowMDAwMDAwMTE5IDAwMDAwIG4N
+CjAwMDAwMDAxNzUgMDAwMDAgbg0KMDAwMDAwMDQ4NSAwMDAwMCBuDQowMDAwMDAxNDk1IDAwMDAw
+IG4NCjAwMDAwMDE1NDggMDAwMDAgbg0KMDAwMDAyMzcwMCAwMDAwMCBuDQowMDAwMDMzMDcwIDAw
+MDAwIG4NCjAwMDAwMzMxMjMgMDAwMDAgbg0KMDAwMDAzMzI5NCAwMDAwMCBuDQowMDAwMDMzNTMx
+IDAwMDAwIG4NCjAwMDAwMzM2OTkgMDAwMDAgbg0KMDAwMDAzMzkzMSAwMDAwMCBuDQowMDAwMDM0
+MDk0IDAwMDAwIG4NCjAwMDAwMzQzMjEgMDAwMDAgbg0KMDAwMDAzNDQ2NSAwMDAwMCBuDQowMDAw
+MDM0Njg3IDAwMDAwIG4NCjAwMDAwMzQ3MTQgMDAwMDAgbg0KMDAwMDAzNDk0MSAwMDAwMCBuDQow
+MDAwMDM1MjE0IDAwMDAwIG4NCjAwMDAwMzgzNTUgMDAwMDAgbg0KMDAwMDAzODQwMCAwMDAwMCBu
+DQp0cmFpbGVyDQo8PC9TaXplIDIzL1Jvb3QgMSAwIFIvSW5mbyAxNiAwIFIvSURbPDYwQTVDQ0Yw
+MDNFRjM3NENCODEzOUY3MkM2QkMyQjBCPjw2MEE1Q0NGMDAzRUYzNzRDQjgxMzlGNzJDNkJDMkIw
+Qj5dID4+DQpzdGFydHhyZWYNCjM4Njg5DQolJUVPRg0KeHJlZg0KMCAwDQp0cmFpbGVyDQo8PC9T
+aXplIDIzL1Jvb3QgMSAwIFIvSW5mbyAxNiAwIFIvSURbPDYwQTVDQ0YwMDNFRjM3NENCODEzOUY3
+MkM2QkMyQjBCPjw2MEE1Q0NGMDAzRUYzNzRDQjgxMzlGNzJDNkJDMkIwQj5dIC9QcmV2IDM4Njg5
+L1hSZWZTdG0gMzg0MDA+Pg0Kc3RhcnR4cmVmDQozOTMwNg0KJSVFT0Y=
+--===============0394466641==--
