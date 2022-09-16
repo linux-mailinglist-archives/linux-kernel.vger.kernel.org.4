@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19055BB124
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718B75BB12F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 18:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiIPQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 12:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229487AbiIPQnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 12:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiIPQhY (ORCPT
+        with ESMTP id S229454AbiIPQnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 12:37:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E199088DF2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 09:37:23 -0700 (PDT)
+        Fri, 16 Sep 2022 12:43:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E59915FD0;
+        Fri, 16 Sep 2022 09:43:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8AF1B82865
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 16:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4795C433C1;
-        Fri, 16 Sep 2022 16:37:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B06AE62C22;
+        Fri, 16 Sep 2022 16:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0A9C433D7;
+        Fri, 16 Sep 2022 16:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663346241;
-        bh=vLKW3Gq6muuTLKVz5phR18jx4OuzQbbEePlcPKmt4oo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sj+xbk4MXxrHXdhICPcKsreC2faYMsGk+DvIEUmZ9rbxopWBVIaSfPMVS4MB3z0fX
-         bwrOfcnvn2C8tK8+O5zANRFoMd9TfsPZ29Vy8mcAWkIihafPE0Wqe/uHR1Ozko0/ED
-         VKEPQfi+y3MYSLYh5YzaIMKN3a15EjKt44aG2hcNfm+TwQJTiQIcP5v+9QOsBqb2QB
-         01fjiK8lJ1XRuXHnJ+jpHXlmuycYsYLMmCGWRRuMBIO2UejhRsidKd5T2+TgUlEuTw
-         p8Futp9m2xy4jDbtd6JWYYeVDUo2JwXjHEZvZ04qu2y3uSoOsrLnxtdbO+TlFEWjdh
-         TVLGslW9yRcQg==
-From:   SeongJae Park <sj@kernel.org>
-To:     xiakaixu1987@gmail.com
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon: return void from damon_set_schemes()
-Date:   Fri, 16 Sep 2022 16:37:19 +0000
-Message-Id: <20220916163719.17577-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1663341635-12675-1-git-send-email-kaixuxia@tencent.com>
-References: 
+        s=k20201202; t=1663346583;
+        bh=UmsHj7RKIsPQ6Gwcuw/nAlwsZUANyOdOwRkhC5DlIlA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q+MvSDJNvYsAGXBuFUlrG09/stqFoapplIlPRQgFQVvJgfC6rMy5NLwQB77CQxul4
+         qYB640QLfxErr8XyvX5D5Qp3xIUAbqEAYOnsS13/oqpie38U9F/4SLT1HD8AkHH+o9
+         It5PVx1zS9qRi6Gr3t0UzhtbAypW1Z4T6uS/aBcrp9ji1iNmnfd120OhHYaI04+pGj
+         KeipG5t8Eus87efmYVmlp2qvLEh1GHKF3dnrKSDg0w+7aoEykM3zTVB/CeWwUMkLN3
+         HkWLSeOmV25HJtnfqZNSX0d7CVG1syTqh7QfXcNq9BdyajzQGGD47bjRMYeniUNPMV
+         s60eUtxyA/ZcA==
+Message-ID: <75585c26-b4bc-8004-dc45-cedba6b8b392@kernel.org>
+Date:   Fri, 16 Sep 2022 10:43:01 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [net-next v2 1/3] seg6: add netlink_ext_ack support in parsing
+ SRv6 behavior attributes
+Content-Language: en-US
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
+ <20220912171619.16943-2-andrea.mayer@uniroma2.it>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220912171619.16943-2-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 23:20:35 +0800 xiakaixu1987@gmail.com wrote:
-
-> From: Kaixu Xia <kaixuxia@tencent.com>
+On 9/12/22 11:16 AM, Andrea Mayer wrote:
+> An SRv6 behavior instance can be set up using mandatory and/or optional
+> attributes.
+> In the setup phase, each supplied attribute is parsed and processed. If
+> the parsing operation fails, the creation of the behavior instance stops
+> and an error number/code is reported to the user.  In many cases, it is
+> challenging for the user to figure out exactly what happened by relying
+> only on the error code.
 > 
-> There is no point in returning an int from damon_set_schemes().
-> It always returns 0 which is meaningless for the caller, so
-> change it to return void directly.
+> For this reason, we add the support for netlink_ext_ack in parsing SRv6
+> behavior attributes. In this way, when an SRv6 behavior attribute is
+> parsed and an error occurs, the kernel can send a message to the
+> userspace describing the error through a meaningful text message in
+> addition to the classic error code.
 > 
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  net/ipv6/seg6_local.c | 44 +++++++++++++++++++++++++++----------------
+>  1 file changed, 28 insertions(+), 16 deletions(-)
+> 
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
 
-Thanks,
-SJ
-
-[...]
