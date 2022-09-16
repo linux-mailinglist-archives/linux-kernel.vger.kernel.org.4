@@ -2,360 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40065BACDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 13:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D381D5BACE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Sep 2022 14:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiIPL6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 07:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S230165AbiIPMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 08:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiIPL6N (ORCPT
+        with ESMTP id S229557AbiIPMAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 07:58:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78122AF4BA;
-        Fri, 16 Sep 2022 04:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663329491; x=1694865491;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4+24eBORt66p9b5rpYsXshjKEdrYtNAgW+s0dQMWcV4=;
-  b=J9n+DBtqySLC77/y6XDAoc/5BWXpetplY2Lsa7sxNzgc0yUKL+mN8DlN
-   NvwHxgx1bnS5HZ7G9mdBILjc1gHctPOf8/gqZ2fkoW/bmq9DI3+N10NAE
-   q0rArWd4XypYOC1Sz7k2JNrXXyC7l+ML1TzmHyAPjVh/Ee5KnCirfKcaq
-   RxVGgUBqq/Bs1i9W7aLZq0OixD2BuW0OUG2ZCw+7WDWZXLNiE4zLNoq1E
-   4wNYdH4z07suxo/VvwejwY2CzNlxkubXl/Gj5n6Jf6eDFDJwVd7n4dRAS
-   fIjnLuHDJ4/xn9ribtEgdc+tG9GDUGvGCTMHOLSatzuIslC5iJyvJw/9U
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="114005095"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 04:58:10 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 16 Sep 2022 04:58:10 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 16 Sep 2022 04:58:07 -0700
-From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
-        <Ian.Saturley@microchip.com>
-Subject: [PATCH net-next V1 2/2] net: lan743x: Add support to SGMII register dump for PCI11010/PCI11414 chips
-Date:   Fri, 16 Sep 2022 17:27:58 +0530
-Message-ID: <20220916115758.73560-3-Raju.Lakkaraju@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220916115758.73560-1-Raju.Lakkaraju@microchip.com>
-References: <20220916115758.73560-1-Raju.Lakkaraju@microchip.com>
+        Fri, 16 Sep 2022 08:00:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E228C2E9E5;
+        Fri, 16 Sep 2022 04:59:59 -0700 (PDT)
+X-UUID: af663d45d92c4ba1a42c524ddf8e21a2-20220916
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=TYyYRhoJq7fWtmZNRUDZ326SnABMO3rCDovRyIC+c2k=;
+        b=kncM31WKnOLsgTEKsKE/RJkyDjYVEa2dPq9mKhAREVtlkwJYUSfwiR8ftWlIFGLUYMbALORkQEhe7LN3fj3cHlmc76KGL8/PlMpII6kHck8iqjzBGs7wZ+tz9Le0FFeOuIWwz2Hp56Ah186dUazIBSRGKIsw7ledlw75W6H60/M=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:b9341035-ea49-4508-98d5-94a38cd617c2,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:68faa8f6-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: af663d45d92c4ba1a42c524ddf8e21a2-20220916
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 846511512; Fri, 16 Sep 2022 19:59:52 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 16 Sep 2022 19:59:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 16 Sep 2022 19:59:50 +0800
+Message-ID: <a5ecd1dd567ca58807b289f2488d933f27e087dd.camel@mediatek.com>
+Subject: Re: [PATCH v2 4/9] remoteproc: mediatek: Support probing for the
+ 2nd core of dual-core SCP
+From:   TingHan Shen <tinghan.shen@mediatek.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <bjorn.andersson@linaro.org>, <bleung@chromium.org>,
+        <chrome-platform@lists.linux.dev>, <devicetree@vger.kernel.org>,
+        <dnojiri@chromium.org>, <enric.balletbo@collabora.com>,
+        <groeck@chromium.org>, <gustavoars@kernel.org>,
+        <keescook@chromium.org>, <krzk+dt@kernel.org>,
+        <lee.jones@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <matthias.bgg@gmail.com>,
+        <pmalani@chromium.org>, <robh+dt@kernel.org>,
+        <sebastian.reichel@collabora.com>, <weishunc@google.com>
+Date:   Fri, 16 Sep 2022 19:59:50 +0800
+In-Reply-To: <CANLsYkx6kXk8u_ajFbnhdWTkZBLtrq_z02jryLBSVH0x--_ZFw@mail.gmail.com>
+References: <20220829194247.GC2264818@p14s>
+         <20220908111757.14633-1-tinghan.shen@mediatek.com>
+         <CANLsYkx6kXk8u_ajFbnhdWTkZBLtrq_z02jryLBSVH0x--_ZFw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to SGMII register dump
+On Thu, 2022-09-08 at 14:58 -0600, Mathieu Poirier wrote:
+> On Thu, 8 Sept 2022 at 05:21, Tinghan Shen <tinghan.shen@mediatek.com>
+> wrote:
+> 
+> > Hi Mathieu,
+> > 
+> > > > The mtk_scp.c driver only supports the single core SCP and the
+> > > > 1st core of a dual-core SCP. This patch extends it for the 2nd core.
+> > > > 
+> > > > MT8195 SCP is a dual-core MCU. Both cores are housed in the same
+> > 
+> > subsys.
+> > > 
+> > > s/subsys/subsystem
+> > > 
+> > > > They have the same viewpoint of registers and memory.
+> > > > 
+> > > > Core 1 of the SCP features its own set of core configuration registers,
+> > > > interrupt controller, timers, and DMAs. The rest of the peripherals
+> > > > in this subsystem are shared by core 0 and core 1.
+> > > > 
+> > > > As for memory, core 1 has its own cache memory. the SCP SRAM is shared
+> > > 
+> > > /the/The
+> > > 
+> > > > by core 0 and core 1.
+> > > > 
+> > > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > > > ---
+> > > >  drivers/remoteproc/mtk_scp.c | 22 ++++++++++++++++++++--
+> > > >  1 file changed, 20 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/remoteproc/mtk_scp.c
+> > 
+> > b/drivers/remoteproc/mtk_scp.c
+> > > > index 3510c6d0bbc8..91b4aefde4ac 100644
+> > > > --- a/drivers/remoteproc/mtk_scp.c
+> > > > +++ b/drivers/remoteproc/mtk_scp.c
+> > > > @@ -23,6 +23,10 @@
+> > > >  #define MAX_CODE_SIZE 0x500000
+> > > >  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
+> > > > 
+> > > > +#define SCP_CORE_0 0
+> > > > +#define SCP_CORE_1 1
+> > > > +#define SCP_CORE_SINGLE 0xF
+> > > > +
+> > > >  /**
+> > > >   * scp_get() - get a reference to SCP.
+> > > >   *
+> > > > @@ -836,6 +840,7 @@ static int scp_probe(struct platform_device *pdev)
+> > > >     struct resource *res;
+> > > >     const char *fw_name = "scp.img";
+> > > >     int ret, i;
+> > > > +   u32 core_id = SCP_CORE_SINGLE;
+> > > > 
+> > > >     ret = rproc_of_parse_firmware(dev, 0, &fw_name);
+> > > >     if (ret < 0 && ret != -EINVAL)
+> > > > @@ -851,8 +856,16 @@ static int scp_probe(struct platform_device *pdev)
+> > > >     scp->data = of_device_get_match_data(dev);
+> > > >     platform_set_drvdata(pdev, scp);
+> > > > 
+> > > > +   ret = of_property_read_u32_index(dev->of_node,
+> > 
+> > "mediatek,scp-core", 1, &core_id);
+> > > > +   if (ret == 0)
+> > > > +           dev_info(dev, "Boot SCP dual core %u\n", core_id);
+> > > 
+> > > Why is the DT property "mediatek,scp-core" needed at all?  Since the
+> > 
+> > compatible
+> > > "mediatek,mt8195-scp-dual" has already been defined previously in this
+> > 
+> > patchset,
+> > > initialising the second core, if present, is a matter of looking at the
+> > > compatile string.
+> > 
+> > This idea of identify cores by the compatible looks workable.
+> > I'll update this series at next version.
+> > Thanks!
+> > 
+> > > 
+> > > > +
+> > > >     res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+> > > > -   scp->sram_base = devm_ioremap_resource(dev, res);
+> > > > +   if (core_id == SCP_CORE_1)
+> > > > +           scp->sram_base = devm_ioremap(dev, res->start,
+> > 
+> > resource_size(res));
+> > > > +   else
+> > > > +           scp->sram_base = devm_ioremap_resource(dev, res);
+> > > > +
+> > > 
+> > > This looks very broken...  For this to work you would need to have two DT
+> > > entries with the "mediatek,mt8195-scp-dual" compatible properly, one with
+> > > "mediatek,scp-core = <&scp_dual1 0>;" and another one with
+> > 
+> > "mediatek,scp-core = <&scp_dual0 1>;".
+> > > 
+> > > Which is also very broken...  Here you have a binding whose first
+> > 
+> > argument is a
+> > > reference to the core sibling while the second argument is a
+> > 
+> > characteristic of
+> > > the current core, which is highly confusing.
+> > > 
+> > > I suggest what when you see the compatible binding
+> > 
+> > "mediatek,mt8195-scp", a
+> > > single core is initialized.  If you see "mediatek,mt8195-scp-dual", both
+> > 
+> > cores
+> > > are initialized as part of the _same_ probe.
+> > > 
+> > > If the above analysis is not correct it means I misinterpreted your
+> > > work and if so, a serious amount of comments is needed _and_ a very
+> > 
+> > detailed
+> > > example in "mtk,scp.yaml" that leaves no room for interpretation.
+> > > 
+> > > I will stop reviewing this patchset until you have clarified how this
+> > 
+> > works.
+> > > 
+> > > Thanks,
+> > > Mathieu
+> > 
+> > There's one problem of initializng the CORE1 using the same probe flow.
+> > The register space of CORE0 and CORE1 are overlapped in the device node.
+> > Both cores need to use the 'cfg' registers defined in scp yaml.
+> > The devm_ioremap_resource catches address overlapping and returns error
+> > when
+> > probing CORE1 driver.
+> > 
+> 
+> That is exactly why I suggest to initialise both cores within the same
+> probe() function.
+> 
 
-Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
----
-Changes:
-V0 -> V1:
- - Removed unwanted code
+Hi Mathieu,
 
- .../net/ethernet/microchip/lan743x_ethtool.c  | 100 +++++++++++++++++-
- .../net/ethernet/microchip/lan743x_ethtool.h  |  70 ++++++++++++
- drivers/net/ethernet/microchip/lan743x_main.c |  14 +++
- drivers/net/ethernet/microchip/lan743x_main.h |   6 +-
- 4 files changed, 187 insertions(+), 3 deletions(-)
+I'm thinking about how to initialise in the same probe() function.
+I'm wondering if this implies that using one scp driver to initialize 2 cores?
+If it is, I assume the dts descriptions for both cores should be contained in one node.
 
-diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.c b/drivers/net/ethernet/microchip/lan743x_ethtool.c
-index c739d60ee17d..463d107b3ad0 100644
---- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
-+++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
-@@ -24,6 +24,9 @@
- #define LOCK_TIMEOUT_MAX_CNT		    (100) // 1 sec (10 msce * 100)
- 
- #define LAN743X_CSR_READ_OP(offset)	     lan743x_csr_read(adapter, offset)
-+#define VSPEC1			MDIO_MMD_VEND1
-+#define VSPEC2			MDIO_MMD_VEND2
-+#define SGMII_RD(adp, dev, adr) lan743x_sgmii_dump_read(adp, dev, adr)
- 
- static int lan743x_otp_power_up(struct lan743x_adapter *adapter)
- {
-@@ -582,6 +585,7 @@ static void lan743x_ethtool_get_drvinfo(struct net_device *netdev,
- 	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
- 	strscpy(info->bus_info,
- 		pci_name(adapter->pdev), sizeof(info->bus_info));
-+	info->n_priv_flags = adapter->flags;
- }
- 
- static u32 lan743x_ethtool_get_msglevel(struct net_device *netdev)
-@@ -796,6 +800,7 @@ static const u32 lan743x_set2_hw_cnt_addr[] = {
- 
- static const char lan743x_priv_flags_strings[][ETH_GSTRING_LEN] = {
- 	"OTP_ACCESS",
-+	"SGMII_REG_DUMP",
- };
- 
- static void lan743x_ethtool_get_strings(struct net_device *netdev,
-@@ -1190,6 +1195,76 @@ static int lan743x_ethtool_set_wol(struct net_device *netdev,
- }
- #endif /* CONFIG_PM */
- 
-+static void lan743x_sgmii_regs(struct net_device *dev,
-+			       struct ethtool_regs *regs, void *p)
-+{
-+	struct lan743x_adapter *adp = netdev_priv(dev);
-+	u32 *rb = p;
-+
-+	rb[ETH_SR_VSMMD_DEV_ID1]                = SGMII_RD(adp, VSPEC1, 0x0002);
-+	rb[ETH_SR_VSMMD_DEV_ID2]                = SGMII_RD(adp, VSPEC1, 0x0003);
-+	rb[ETH_SR_VSMMD_PCS_ID1]                = SGMII_RD(adp, VSPEC1, 0x0004);
-+	rb[ETH_SR_VSMMD_PCS_ID2]                = SGMII_RD(adp, VSPEC1, 0x0005);
-+	rb[ETH_SR_VSMMD_STS]                    = SGMII_RD(adp, VSPEC1, 0x0008);
-+	rb[ETH_SR_VSMMD_CTRL]                   = SGMII_RD(adp, VSPEC1, 0x0009);
-+	rb[ETH_SR_MII_CTRL]                     = SGMII_RD(adp, VSPEC2, 0x0000);
-+	rb[ETH_SR_MII_STS]                      = SGMII_RD(adp, VSPEC2, 0x0001);
-+	rb[ETH_SR_MII_DEV_ID1]                  = SGMII_RD(adp, VSPEC2, 0x0002);
-+	rb[ETH_SR_MII_DEV_ID2]                  = SGMII_RD(adp, VSPEC2, 0x0003);
-+	rb[ETH_SR_MII_AN_ADV]                   = SGMII_RD(adp, VSPEC2, 0x0004);
-+	rb[ETH_SR_MII_LP_BABL]                  = SGMII_RD(adp, VSPEC2, 0x0005);
-+	rb[ETH_SR_MII_EXPN]                     = SGMII_RD(adp, VSPEC2, 0x0006);
-+	rb[ETH_SR_MII_EXT_STS]                  = SGMII_RD(adp, VSPEC2, 0x000F);
-+	rb[ETH_SR_MII_TIME_SYNC_ABL]            = SGMII_RD(adp, VSPEC2, 0x0708);
-+	rb[ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x0709);
-+	rb[ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070A);
-+	rb[ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070B);
-+	rb[ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070C);
-+	rb[ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070D);
-+	rb[ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070E);
-+	rb[ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070F);
-+	rb[ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x0710);
-+	rb[ETH_VR_MII_DIG_CTRL1]                = SGMII_RD(adp, VSPEC2, 0x8000);
-+	rb[ETH_VR_MII_AN_CTRL]                  = SGMII_RD(adp, VSPEC2, 0x8001);
-+	rb[ETH_VR_MII_AN_INTR_STS]              = SGMII_RD(adp, VSPEC2, 0x8002);
-+	rb[ETH_VR_MII_TC]                       = SGMII_RD(adp, VSPEC2, 0x8003);
-+	rb[ETH_VR_MII_DBG_CTRL]                 = SGMII_RD(adp, VSPEC2, 0x8005);
-+	rb[ETH_VR_MII_EEE_MCTRL0]               = SGMII_RD(adp, VSPEC2, 0x8006);
-+	rb[ETH_VR_MII_EEE_TXTIMER]              = SGMII_RD(adp, VSPEC2, 0x8008);
-+	rb[ETH_VR_MII_EEE_RXTIMER]              = SGMII_RD(adp, VSPEC2, 0x8009);
-+	rb[ETH_VR_MII_LINK_TIMER_CTRL]          = SGMII_RD(adp, VSPEC2, 0x800A);
-+	rb[ETH_VR_MII_EEE_MCTRL1]               = SGMII_RD(adp, VSPEC2, 0x800B);
-+	rb[ETH_VR_MII_DIG_STS]                  = SGMII_RD(adp, VSPEC2, 0x8010);
-+	rb[ETH_VR_MII_ICG_ERRCNT1]              = SGMII_RD(adp, VSPEC2, 0x8011);
-+	rb[ETH_VR_MII_GPIO]                     = SGMII_RD(adp, VSPEC2, 0x8015);
-+	rb[ETH_VR_MII_EEE_LPI_STATUS]           = SGMII_RD(adp, VSPEC2, 0x8016);
-+	rb[ETH_VR_MII_EEE_WKERR]                = SGMII_RD(adp, VSPEC2, 0x8017);
-+	rb[ETH_VR_MII_MISC_STS]                 = SGMII_RD(adp, VSPEC2, 0x8018);
-+	rb[ETH_VR_MII_RX_LSTS]                  = SGMII_RD(adp, VSPEC2, 0x8020);
-+	rb[ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0]    = SGMII_RD(adp, VSPEC2, 0x8038);
-+	rb[ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0]    = SGMII_RD(adp, VSPEC2, 0x803A);
-+	rb[ETH_VR_MII_GEN2_GEN4_TXGENCTRL0]     = SGMII_RD(adp, VSPEC2, 0x803C);
-+	rb[ETH_VR_MII_GEN2_GEN4_TXGENCTRL1]     = SGMII_RD(adp, VSPEC2, 0x803D);
-+	rb[ETH_VR_MII_GEN4_TXGENCTRL2]          = SGMII_RD(adp, VSPEC2, 0x803E);
-+	rb[ETH_VR_MII_GEN2_GEN4_TX_STS]         = SGMII_RD(adp, VSPEC2, 0x8048);
-+	rb[ETH_VR_MII_GEN2_GEN4_RXGENCTRL0]     = SGMII_RD(adp, VSPEC2, 0x8058);
-+	rb[ETH_VR_MII_GEN2_GEN4_RXGENCTRL1]     = SGMII_RD(adp, VSPEC2, 0x8059);
-+	rb[ETH_VR_MII_GEN4_RXEQ_CTRL]           = SGMII_RD(adp, VSPEC2, 0x805B);
-+	rb[ETH_VR_MII_GEN4_RXLOS_CTRL0]         = SGMII_RD(adp, VSPEC2, 0x805D);
-+	rb[ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0]     = SGMII_RD(adp, VSPEC2, 0x8078);
-+	rb[ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1]     = SGMII_RD(adp, VSPEC2, 0x8079);
-+	rb[ETH_VR_MII_GEN2_GEN4_MPLL_STS]       = SGMII_RD(adp, VSPEC2, 0x8088);
-+	rb[ETH_VR_MII_GEN2_GEN4_LVL_CTRL]       = SGMII_RD(adp, VSPEC2, 0x8090);
-+	rb[ETH_VR_MII_GEN4_MISC_CTRL2]          = SGMII_RD(adp, VSPEC2, 0x8093);
-+	rb[ETH_VR_MII_GEN2_GEN4_MISC_CTRL0]     = SGMII_RD(adp, VSPEC2, 0x8099);
-+	rb[ETH_VR_MII_GEN2_GEN4_MISC_CTRL1]     = SGMII_RD(adp, VSPEC2, 0x809A);
-+	rb[ETH_VR_MII_SNPS_CR_CTRL]             = SGMII_RD(adp, VSPEC2, 0x80A0);
-+	rb[ETH_VR_MII_SNPS_CR_ADDR]             = SGMII_RD(adp, VSPEC2, 0x80A1);
-+	rb[ETH_VR_MII_SNPS_CR_DATA]             = SGMII_RD(adp, VSPEC2, 0x80A2);
-+	rb[ETH_VR_MII_DIG_CTRL2]                = SGMII_RD(adp, VSPEC2, 0x80E1);
-+	rb[ETH_VR_MII_DIG_ERRCNT]               = SGMII_RD(adp, VSPEC2, 0x80E2);
-+}
-+
- static void lan743x_common_regs(struct net_device *dev,
- 				struct ethtool_regs *regs, void *p)
- 
-@@ -1222,15 +1297,36 @@ static void lan743x_common_regs(struct net_device *dev,
- 
- static int lan743x_get_regs_len(struct net_device *dev)
- {
--	return MAX_LAN743X_ETH_REGS * sizeof(u32);
-+	struct lan743x_adapter *adapter = netdev_priv(dev);
-+	u32 priv_flags = adapter->flags;
-+	int regs;
-+
-+	if (adapter->is_sgmii_en && priv_flags & LAN743X_SGMII_REG_DUMP)
-+		regs = MAX_LAN743X_ETH_SGMII_REGS;
-+	else
-+		regs = MAX_LAN743X_ETH_REGS;
-+
-+	return regs * sizeof(u32);
- }
- 
- static void lan743x_get_regs(struct net_device *dev,
- 			     struct ethtool_regs *regs, void *p)
- {
-+	struct lan743x_adapter *adapter = netdev_priv(dev);
-+	int regs_len;
-+	u32 *rb = p;
-+
- 	regs->version = LAN743X_ETH_REG_VERSION;
- 
--	lan743x_common_regs(dev, regs, p);
-+	regs_len = lan743x_get_regs_len(dev);
-+	memset(p, 0, regs_len);
-+
-+	if (adapter->is_sgmii_en && adapter->flags & LAN743X_SGMII_REG_DUMP) {
-+		rb[ETH_SGMII_PRIV_FLAGS]  = adapter->flags;
-+		lan743x_sgmii_regs(dev, regs, p);
-+	} else {
-+		lan743x_common_regs(dev, regs, p);
-+	}
- }
- 
- const struct ethtool_ops lan743x_ethtool_ops = {
-diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.h b/drivers/net/ethernet/microchip/lan743x_ethtool.h
-index 7f5996a52488..2828e88a29b7 100644
---- a/drivers/net/ethernet/microchip/lan743x_ethtool.h
-+++ b/drivers/net/ethernet/microchip/lan743x_ethtool.h
-@@ -32,6 +32,76 @@ enum {
- 	MAX_LAN743X_ETH_REGS
- };
- 
-+enum {
-+	ETH_SGMII_PRIV_FLAGS,
-+	/* SGMII Register */
-+	ETH_SR_VSMMD_DEV_ID1,
-+	ETH_SR_VSMMD_DEV_ID2,
-+	ETH_SR_VSMMD_PCS_ID1,
-+	ETH_SR_VSMMD_PCS_ID2,
-+	ETH_SR_VSMMD_STS,
-+	ETH_SR_VSMMD_CTRL,
-+	ETH_SR_MII_CTRL,
-+	ETH_SR_MII_STS,
-+	ETH_SR_MII_DEV_ID1,
-+	ETH_SR_MII_DEV_ID2,
-+	ETH_SR_MII_AN_ADV,
-+	ETH_SR_MII_LP_BABL,
-+	ETH_SR_MII_EXPN,
-+	ETH_SR_MII_EXT_STS,
-+	ETH_SR_MII_TIME_SYNC_ABL,
-+	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR,
-+	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR,
-+	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR,
-+	ETH_VR_MII_DIG_CTRL1,
-+	ETH_VR_MII_AN_CTRL,
-+	ETH_VR_MII_AN_INTR_STS,
-+	ETH_VR_MII_TC,
-+	ETH_VR_MII_DBG_CTRL,
-+	ETH_VR_MII_EEE_MCTRL0,
-+	ETH_VR_MII_EEE_TXTIMER,
-+	ETH_VR_MII_EEE_RXTIMER,
-+	ETH_VR_MII_LINK_TIMER_CTRL,
-+	ETH_VR_MII_EEE_MCTRL1,
-+	ETH_VR_MII_DIG_STS,
-+	ETH_VR_MII_ICG_ERRCNT1,
-+	ETH_VR_MII_GPIO,
-+	ETH_VR_MII_EEE_LPI_STATUS,
-+	ETH_VR_MII_EEE_WKERR,
-+	ETH_VR_MII_MISC_STS,
-+	ETH_VR_MII_RX_LSTS,
-+	ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TXGENCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_TXGENCTRL1,
-+	ETH_VR_MII_GEN4_TXGENCTRL2,
-+	ETH_VR_MII_GEN2_GEN4_TX_STS,
-+	ETH_VR_MII_GEN2_GEN4_RXGENCTRL0,
-+	ETH_VR_MII_GEN2_GEN4_RXGENCTRL1,
-+	ETH_VR_MII_GEN4_RXEQ_CTRL,
-+	ETH_VR_MII_GEN4_RXLOS_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1,
-+	ETH_VR_MII_GEN2_GEN4_MPLL_STS,
-+	ETH_VR_MII_GEN2_GEN4_LVL_CTRL,
-+	ETH_VR_MII_GEN4_MISC_CTRL2,
-+	ETH_VR_MII_GEN2_GEN4_MISC_CTRL0,
-+	ETH_VR_MII_GEN2_GEN4_MISC_CTRL1,
-+	ETH_VR_MII_SNPS_CR_CTRL,
-+	ETH_VR_MII_SNPS_CR_ADDR,
-+	ETH_VR_MII_SNPS_CR_DATA,
-+	ETH_VR_MII_DIG_CTRL2,
-+	ETH_VR_MII_DIG_ERRCNT,
-+
-+	/* Add new registers above */
-+	MAX_LAN743X_ETH_SGMII_REGS
-+};
-+
- extern const struct ethtool_ops lan743x_ethtool_ops;
- 
- #endif /* _LAN743X_ETHTOOL_H */
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
-index 2599dfffd1da..a070d0e6ed56 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.c
-+++ b/drivers/net/ethernet/microchip/lan743x_main.c
-@@ -25,6 +25,20 @@
- #define PCS_POWER_STATE_DOWN	0x6
- #define PCS_POWER_STATE_UP	0x4
- 
-+static int lan743x_sgmii_read(struct lan743x_adapter *adapter,
-+			      u8 mmd, u16 addr);
-+int lan743x_sgmii_dump_read(struct lan743x_adapter *adapter,
-+			    u8 dev, u16 adr)
-+{
-+	int ret;
-+
-+	ret = lan743x_sgmii_read(adapter, dev, adr);
-+	if (ret < 0)
-+		pr_warn("SGMII read fail\n");
-+
-+	return ret;
-+}
-+
- static void pci11x1x_strap_get_status(struct lan743x_adapter *adapter)
- {
- 	u32 chip_rev;
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.h b/drivers/net/ethernet/microchip/lan743x_main.h
-index 67877d3b6dd9..db4d6bdcfc35 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.h
-+++ b/drivers/net/ethernet/microchip/lan743x_main.h
-@@ -1039,11 +1039,13 @@ struct lan743x_adapter {
- 	u8			used_tx_channels;
- 	u8			max_vector_count;
- 
--#define LAN743X_ADAPTER_FLAG_OTP		BIT(0)
- 	u32			flags;
- 	u32			hw_cfg;
- };
- 
-+#define LAN743X_ADAPTER_FLAG_OTP		BIT(0)
-+#define LAN743X_SGMII_REG_DUMP			BIT(1)
-+
- #define LAN743X_COMPONENT_FLAG_RX(channel)  BIT(20 + (channel))
- 
- #define INTR_FLAG_IRQ_REQUESTED(vector_index)	BIT(0 + vector_index)
-@@ -1159,5 +1161,7 @@ u32 lan743x_csr_read(struct lan743x_adapter *adapter, int offset);
- void lan743x_csr_write(struct lan743x_adapter *adapter, int offset, u32 data);
- int lan743x_hs_syslock_acquire(struct lan743x_adapter *adapter, u16 timeout);
- void lan743x_hs_syslock_release(struct lan743x_adapter *adapter);
-+int lan743x_sgmii_dump_read(struct lan743x_adapter *adapter,
-+			    u8 dev, u16 adr);
- 
- #endif /* _LAN743X_H */
--- 
-2.25.1
+When there's one node for both cores, it looks like that there is a problem of 
+using dma_allocate_coherent(). Each core has its own reserved memory region. 
+When there's only one device for both cores, it's not able to identify the memory region 
+by the device parameter of dma_allocate_coherent().
+
+Is it acceptable to consider manually allocating core 1 device in the probe() when probing core 0?
+
+
+Best regards,
+TingHan
+
+
+
+
+
+
+
 
