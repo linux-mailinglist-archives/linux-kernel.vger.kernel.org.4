@@ -2,106 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7003D5BB4D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 01:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBC85BB4D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiIPXwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 19:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S229671AbiIQABZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiIPXwh (ORCPT
+        with ESMTP id S229561AbiIQABW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 19:52:37 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE1B99E4;
-        Fri, 16 Sep 2022 16:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663372356; x=1694908356;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5QqU6/PjWI46gAIHkqTe2uJoC21ULzDVvGSKXDHWr0U=;
-  b=oKLTOCjrdzfoeEGt7LIUgGvkqbD+PmNpj+4fOJWPfAwcVe73IUB8djQl
-   pmTZoP4IR6zL146L7WFnc6ucuFHWkPo4VcnwCfm1v44iGJ4dgX07x9kI3
-   3TOIWYTMNfAg7+7JcMwShEJUWzuBxXXahX4pUtCZPHmFL4aNE3G9Hy9Qf
-   akaRYxuXvXDNjBzX6JaZDNdC7T22eJeYBYl/3db8SbuI/Y33yliYNEQe8
-   b7x5IHD0zgKCyw+mkpJomRcow5BVntifeNqfAarDuAWeSgb4w68N19h13
-   TWKcCVGhuNgMhGcaiTUlEUFu/0niYjxapr1/YZwNjdwsMZ7+yHmX0F7Lq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278830517"
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="278830517"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 16:52:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="595426903"
-Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.255.230.2])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 16:52:35 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, marpagan@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v1 1/1] fpga: m10bmc-sec: Fix possible memory leak of flash_buf
-Date:   Fri, 16 Sep 2022 16:52:05 -0700
-Message-Id: <20220916235205.106873-1-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 20:01:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53BA9C27;
+        Fri, 16 Sep 2022 17:01:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 631EBB8299C;
+        Sat, 17 Sep 2022 00:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F9EC433D6;
+        Sat, 17 Sep 2022 00:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663372877;
+        bh=pC/Zqjp4o0E3LYANuehsjm/nSSR6oLHYY0mTJm0FXHA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tpI1TtkXX3ZdqEwU880NQ0dedHNsr1MQYTTQhqABv/M7Wms/VG+In4wr3yq6KZmgE
+         VO74NU7yLT4XiXgoB1xlIq7OZ7oDJjisvdfu+hahf9vje6jS3uoQgxGAKeXVV+0uaT
+         iz5c4aWsiylEp4u9kyt1dWCMFAMZSbjIkQqZJ3DY=
+Date:   Fri, 16 Sep 2022 17:01:15 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, Kalesh Singh <kaleshsingh@google.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC] proc: report open files as size in stat() for
+ /proc/pid/fd
+Message-Id: <20220916170115.35932cba34e2cc2d923b03b5@linux-foundation.org>
+In-Reply-To: <20220916230853.49056-1-ivan@cloudflare.com>
+References: <20220916230853.49056-1-ivan@cloudflare.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an error check following the allocation of flash_buf that returns
-without freeing flash_buf. It makes more sense to do the error check
-before the allocation and the reordering eliminates the memory leak.
+(cc's added)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Fixes: 154afa5c31cd ("fpga: m10bmc-sec: expose max10 flash update count")
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Cc: <stable@vger.kernel.org>
----
- drivers/fpga/intel-m10-bmc-sec-update.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Fri, 16 Sep 2022 16:08:52 -0700 Ivan Babrou <ivan@cloudflare.com> wrote:
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 526c8cdd1474..79d48852825e 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -148,10 +148,6 @@ static ssize_t flash_count_show(struct device *dev,
- 	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
- 	num_bits = FLASH_COUNT_SIZE * 8;
- 
--	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
--	if (!flash_buf)
--		return -ENOMEM;
--
- 	if (FLASH_COUNT_SIZE % stride) {
- 		dev_err(sec->dev,
- 			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
-@@ -160,6 +156,10 @@ static ssize_t flash_count_show(struct device *dev,
- 		return -EINVAL;
- 	}
- 
-+	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
-+	if (!flash_buf)
-+		return -ENOMEM;
-+
- 	ret = regmap_bulk_read(sec->m10bmc->regmap, STAGING_FLASH_COUNT,
- 			       flash_buf, FLASH_COUNT_SIZE / stride);
- 	if (ret) {
--- 
-2.25.1
+> Many monitoring tools include open file count as a metric. Currently
+> the only way to get this number is to enumerate the files in /proc/pid/fd.
+> 
+> The problem with the current approach is that it does many things people
+> generally don't care about when they need one number for a metric.
+> In our tests for cadvisor, which reports open file counts per cgroup,
+> we observed that reading the number of open files is slow. Out of 35.23%
+> of CPU time spent in `proc_readfd_common`, we see 29.43% spent in
+> `proc_fill_cache`, which is responsible for filling dentry info.
+> Some of this extra time is spinlock contention, but it's a contention
+> for the lock we don't want to take to begin with.
+> 
+> We considered putting the number of open files in /proc/pid/stat.
+> Unfortunately, counting the number of fds involves iterating the fdtable,
+> which means that it might slow down /proc/pid/stat for processes
+> with many open files. Instead we opted to put this info in /proc/pid/fd
+> as a size member of the stat syscall result. Previously the reported
+> number was zero, so there's very little risk of breaking anything,
+> while still providing a somewhat logical way to count the open files.
 
+Documentation/filesystems/proc.rst would be an appropriate place to
+document this ;)
+
+> Previously:
+> 
+> ```
+> $ sudo stat /proc/1/fd | head -n2
+>   File: /proc/1/fd
+>   Size: 0         	Blocks: 0          IO Block: 1024   directory
+> ```
+> 
+> With this patch:
+> 
+> ```
+> $ sudo stat /proc/1/fd | head -n2
+>   File: /proc/1/fd
+>   Size: 65        	Blocks: 0          IO Block: 1024   directory
+> ```
+> 
+> Correctness check:
+> 
+> ```
+> $ sudo ls /proc/1/fd | wc -l
+> 65
+> ```
+> 
+> There are two alternatives to this approach that I can see:
+> 
+> * Expose /proc/pid/fd_count with a count there
+> * Make fd count acces O(1) and expose it in /proc/pid/status
+> 
+> I can probably figure out how to do the former, but the latter
+> will require somebody with more experience in file code than myself.
+> 
+> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+> ---
+>  fs/proc/fd.c | 47 +++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+> index 913bef0d2a36..c7ac142500a8 100644
+> --- a/fs/proc/fd.c
+> +++ b/fs/proc/fd.c
+> @@ -279,6 +279,29 @@ static int proc_readfd_common(struct file *file, struct dir_context *ctx,
+>  	return 0;
+>  }
+>  
+> +static int proc_readfd_count(struct inode *inode)
+> +{
+> +	struct task_struct *p = get_proc_task(inode);
+> +	unsigned int fd = 0, count = 0;
+> +
+> +	if (!p)
+> +		return -ENOENT;
+> +
+> +	rcu_read_lock();
+> +	while (task_lookup_next_fd_rcu(p, &fd)) {
+> +		rcu_read_unlock();
+> +
+> +		count++;
+> +		fd++;
+> +
+> +		cond_resched();
+> +		rcu_read_lock();
+> +	}
+> +	rcu_read_unlock();
+> +	put_task_struct(p);
+> +	return count;
+> +}
+> +
+>  static int proc_readfd(struct file *file, struct dir_context *ctx)
+>  {
+>  	return proc_readfd_common(file, ctx, proc_fd_instantiate);
+> @@ -319,9 +342,33 @@ int proc_fd_permission(struct user_namespace *mnt_userns,
+>  	return rv;
+>  }
+>  
+> +int proc_fd_getattr(struct user_namespace *mnt_userns,
+> +			const struct path *path, struct kstat *stat,
+> +			u32 request_mask, unsigned int query_flags)
+> +{
+> +	struct inode *inode = d_inode(path->dentry);
+> +	struct proc_dir_entry *de = PDE(inode);
+> +
+> +	if (de) {
+> +		nlink_t nlink = READ_ONCE(de->nlink);
+> +
+> +		if (nlink > 0)
+> +			set_nlink(inode, nlink);
+> +	}
+> +
+> +	generic_fillattr(&init_user_ns, inode, stat);
+> +
+> +	/* If it's a directory, put the number of open fds there */
+> +	if (S_ISDIR(inode->i_mode))
+> +		stat->size = proc_readfd_count(inode);
+> +
+> +	return 0;
+> +}
+> +
+>  const struct inode_operations proc_fd_inode_operations = {
+>  	.lookup		= proc_lookupfd,
+>  	.permission	= proc_fd_permission,
+> +	.getattr	= proc_fd_getattr,
+>  	.setattr	= proc_setattr,
+>  };
+>  
+> -- 
+> 2.37.2
