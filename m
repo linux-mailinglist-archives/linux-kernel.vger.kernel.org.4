@@ -2,96 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F229B5BB594
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B635BB597
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiIQCal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 22:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S229725AbiIQCdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 22:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIQCai (ORCPT
+        with ESMTP id S229515AbiIQCdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 22:30:38 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A13184ECC;
-        Fri, 16 Sep 2022 19:30:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso2534536pjq.1;
-        Fri, 16 Sep 2022 19:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=zFwcid0Q8E2gf9MQQjQKHEHwun7GkfVCpiWkqyhDqh4=;
-        b=G8854RFIbUsqLAvs+PS5n+DTD8Di9YVJ3g/J2nlPxPCzyoP07VEGUwIe9IN7PLjN7/
-         Gsnj0WUD612Gp7xtM0dZlyUO5TTGM4hEDL5cHE8DooSU/VY2OxFHPfdVMwv8OvEHRfXp
-         C+RwPQXoX/7FT1bnqjnYNegaHXZeMqGCGfSlYTbmBP9xdwuZQG+sAS73R2NqVu/nnidG
-         yJ6TA2a5zCpt5WKmgnmG8xjnVfaOXmCXDdF2U2mSsahy8t6Jfs+ZjFnLrfmhU1R6U+OF
-         hHBVwZ53U3ZvCKbbwMa/TTucgsLuUgmiPB7iAnXuiAndsAeWLk77j3nZqNMEyF7KhDw+
-         8XTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zFwcid0Q8E2gf9MQQjQKHEHwun7GkfVCpiWkqyhDqh4=;
-        b=LMK//abI6Dpw8+9Djni9d0DPQ3fa3HEEIlJzynDUlt61MbPeQQWCH8K0PVaDThavck
-         K9A9gkOTwwtOWqQq6VeAfXBKEeepZaTpuTDvgLGZmMtiGv1VKBCqBi66b0KHTppvWt1S
-         CF3iSQQTke9q+ARGATr47FWPi3W2w2/aiL1DLryEaeI8mdRNk5qKUm/g3CWvZjzkOqQt
-         MHPYrDD5SMa1MwPHWwJvn4C/WlPJbbpBojFJqZNA/XAq4MrHXaX5d+ZtVWKGfNKYe5/8
-         ARnPh+BuqXeGblu1LQVNqGg+mOKk3hke96zyHsKKPzoI8rS9P9HJC7W/mTcRpB1r1bDC
-         qDyw==
-X-Gm-Message-State: ACrzQf3BVlEykOZTIBZnM/ygWL6XzfbHZ5ApKu/ObLTQizxVRfGjLDZR
-        LiiAMUasa494hfhWvFcSr+qXSTBKyWOnFQ==
-X-Google-Smtp-Source: AMsMyM52K6PD5NHVorAXxob07dnYphcH3O0/Ww7sz7ZAXaoxTwZzNEyycs3s3xY03DQLTWNfFI4Diw==
-X-Received: by 2002:a17:902:dad2:b0:178:401c:f672 with SMTP id q18-20020a170902dad200b00178401cf672mr2570615plx.168.1663381836083;
-        Fri, 16 Sep 2022 19:30:36 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id m8-20020a62a208000000b005386b58c8a3sm15129454pff.100.2022.09.16.19.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 19:30:35 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] net/ipv4/nexthop: check the return value of nexthop_find_by_id()
-Date:   Fri, 16 Sep 2022 19:30:20 -0700
-Message-Id: <20220917023020.3845137-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 22:33:31 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E68399B77;
+        Fri, 16 Sep 2022 19:33:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VPzHIFq_1663381981;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VPzHIFq_1663381981)
+          by smtp.aliyun-inc.com;
+          Sat, 17 Sep 2022 10:33:27 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: [PATCH] sbitmap: fix permanent io blocking caused by insufficient wakeup times
+Date:   Sat, 17 Sep 2022 10:33:01 +0800
+Message-Id: <1663381981-6413-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of nexthop_find_by_id(), which could be NULL on
-when not found. So we check to avoid null pointer dereference.
+From: Liu Song <liusong@linux.alibaba.com>
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+In "sbitmap_queue_clear_batch", a batch of completed requests may be
+processed at once, but "wait_cnt" is only reduced once by
+"sbitmap_queue_wake_up".
+In our environment, if "/sys/block/nvme0n1/nr_requests" is adjusted to
+32, it is easily because no tag and then enter the waiting situation,
+if continue change "nr_requests" to 1023 at this time, it will basically
+fall into the situation of permanent blocking. Because there will be
+"blk_freeze_queue" in "blk_mq_update_nr_requests", which will prevent
+any new requests, but due to insufficient wake-up, there are tasks
+waiting for wake-up, but no new wake-up opportunities will be generated
+at this time, so this situation needs to be repaired.
+
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
 ---
- net/ipv4/nexthop.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/sbitmap.h |  8 ++++++++
+ lib/sbitmap.c           | 22 ++++++++++++++++++----
+ 2 files changed, 26 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
-index 853a75a8fbaf..9f91bb78eed5 100644
---- a/net/ipv4/nexthop.c
-+++ b/net/ipv4/nexthop.c
-@@ -2445,6 +2445,10 @@ static struct nexthop *nexthop_create_group(struct net *net,
- 		struct nh_info *nhi;
+diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+index 8f5a86e..153382e 100644
+--- a/include/linux/sbitmap.h
++++ b/include/linux/sbitmap.h
+@@ -579,6 +579,14 @@ static inline struct sbq_wait_state *sbq_wait_ptr(struct sbitmap_queue *sbq,
+ void sbitmap_queue_wake_up(struct sbitmap_queue *sbq);
  
- 		nhe = nexthop_find_by_id(net, entry[i].id);
-+		if (!nhe) {
-+			err = -EINVAL;
-+			goto out_no_nh;
-+		}
- 		if (!nexthop_get(nhe)) {
- 			err = -ENOENT;
- 			goto out_no_nh;
+ /**
++ * sbitmap_queue_wake_up_batch() - Attempt to wake up waiters in batches
++ * on a &struct sbitmap_queue.
++ * @sbq: Bitmap queue to wake up.
++ * @nr: The number of attempts to wake the waiter.
++ */
++void sbitmap_queue_wake_up_batch(struct sbitmap_queue *sbq, int nr);
++
++/**
+  * sbitmap_queue_show() - Dump &struct sbitmap_queue information to a &struct
+  * seq_file.
+  * @sbq: Bitmap queue to show.
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index 29eb048..f2aa1da 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -600,7 +600,7 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+ 	return NULL;
+ }
+ 
+-static bool __sbq_wake_up(struct sbitmap_queue *sbq)
++static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+ {
+ 	struct sbq_wait_state *ws;
+ 	unsigned int wake_batch;
+@@ -610,6 +610,7 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+ 	if (!ws)
+ 		return false;
+ 
++again:
+ 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+ 	if (wait_cnt <= 0) {
+ 		int ret;
+@@ -632,10 +633,14 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+ 		if (ret == wait_cnt) {
+ 			sbq_index_atomic_inc(&sbq->wake_index);
+ 			wake_up_nr(&ws->wait, wake_batch);
+-			return false;
++			if (!nr || *nr <= 0)
++				return false;
+ 		}
+ 
+ 		return true;
++	} else if (nr && *nr) {
++		(*nr)--;
++		goto again;
+ 	}
+ 
+ 	return false;
+@@ -643,11 +648,20 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+ 
+ void sbitmap_queue_wake_up(struct sbitmap_queue *sbq)
+ {
+-	while (__sbq_wake_up(sbq))
++	while (__sbq_wake_up(sbq, NULL))
+ 		;
+ }
+ EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up);
+ 
++void sbitmap_queue_wake_up_batch(struct sbitmap_queue *sbq, int nr)
++{
++	int i = SBQ_WAIT_QUEUES;
++
++	while (__sbq_wake_up(sbq, &nr) && --i)
++		;
++}
++EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up_batch);
++
+ static inline void sbitmap_update_cpu_hint(struct sbitmap *sb, int cpu, int tag)
+ {
+ 	if (likely(!sb->round_robin && tag < sb->depth))
+@@ -683,7 +697,7 @@ void sbitmap_queue_clear_batch(struct sbitmap_queue *sbq, int offset,
+ 		atomic_long_andnot(mask, (atomic_long_t *) addr);
+ 
+ 	smp_mb__after_atomic();
+-	sbitmap_queue_wake_up(sbq);
++	sbitmap_queue_wake_up_batch(sbq, nr_tags);
+ 	sbitmap_update_cpu_hint(&sbq->sb, raw_smp_processor_id(),
+ 					tags[nr_tags - 1] - offset);
+ }
 -- 
-2.25.1
+1.8.3.1
 
