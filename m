@@ -2,174 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C195BB9C6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 19:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3445BB9CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiIQRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 13:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S229532AbiIQSAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 14:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIQRvq (ORCPT
+        with ESMTP id S229483AbiIQSAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 13:51:46 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2136.outbound.protection.outlook.com [40.107.244.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2506527CC9;
-        Sat, 17 Sep 2022 10:51:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B7X5mzs9Whna/oIF/DkAkdeiBwXEkZdQCEq/s6mmjmjsrh9ccKeM9NrYTaiy2Qw+4GGc38ltlIfU80OsLM5UoTQfmaE14aYv9OO41UKWPAYzfh7TMgtdDgdxb86/uI5x/NtI4knq8eexM+K1llIC5DvVBp5tbtBelIty+qrLNuDWwlRS8qVYcCn/3ylXk6qyhhtH0eljWGaqRaNUPsUeJFyIN8BYb1QaVgkBnmHXWvMsDP23nPiVO4WwWSneRnSfgOO2EEEYLjaaSAHNBZ+M3mYL/CeBpd8Ra7x3FVyOZwqhhMCmOVwdOuwJJruHCzTTUmkL2gDWP8XxMSi9JR0TYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BLnXy1snSQcnSi8vxiR/A8j7yP0N54nPVaYfN7HRKCc=;
- b=ZPy8CjMdvmI5PI5QkWkp1c1PIocaAPsyhCZhPNm5LbNYC2CXo/djKlQ1e22xwlYtd//wq0gnuVG8MBhNw1UR2IT6mioYoA9rDLWTDpQ8qOd8uKSCEu1bpMfXONmcuH9cMEjeGBBZM8gPQPs5b7jsfR8iAzbNUo27MrTTIakaoCS5oNF2srCtITZS3crlcQpNj1u9Gy/lobL5OKpz5MWxgW3w39pBuKwtPb565dj7L70DwxZNjt4CxkcicgL/KFjP+yQiRw94q6JoTC5KsdZenNT5CZ9Pl+TyiVDaec3/UOxMprlzQE+qM4oJHTXCMh+R7O18GwF2qaeZYShDGgDBmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BLnXy1snSQcnSi8vxiR/A8j7yP0N54nPVaYfN7HRKCc=;
- b=xhO5E3Ofkw5QvrDS+ijWEOrK3PVDzT/AOtWOf1W/0tZO2EnkhhNKERWq0fYeLtLYQ9+EsztOTSPAue82tkotQw4cUgZ5/Oj/BhiYMALkqPN/QQcZaeFltmd7DUVW5inkcdL7T4HRQTIJ/a9PUSoNEtrZHb01JUmNBWyB3wo13h0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by SA2PR10MB4523.namprd10.prod.outlook.com
- (2603:10b6:806:113::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.18; Sat, 17 Sep
- 2022 17:51:43 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::dcf2:ddbd:b18d:bb49%3]) with mapi id 15.20.5632.018; Sat, 17 Sep 2022
- 17:51:43 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH v2 net-next 2/2] net: mscc: ocelot: check return values of writes during reset
-Date:   Sat, 17 Sep 2022 10:51:27 -0700
-Message-Id: <20220917175127.161504-3-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220917175127.161504-1-colin.foster@in-advantage.com>
-References: <20220917175127.161504-1-colin.foster@in-advantage.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0148.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::33) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Sat, 17 Sep 2022 14:00:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D332610F
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663437635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JgKYNIVGHgBOnvrxN4mdypOW9y4btqV8BpaMbCRfOfQ=;
+        b=RGLS/fCyFgEy42n9pWopShVLU1oYxgyixVHGwYVd9k2/8pvAMdlSco5hn0dpasPugRHOQZ
+        OT5PRvNrvx+6W0Fso1e/SBS41N5T1A3ui0FN5o8Qvgpk/fKzUCm04B0tXAJXT4M+9GbSM6
+        G+7++TjfaH6Kt7ujDd0LHcQalMcDphM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-640-dSRkXIbTM2WcMBKuy2G5Bw-1; Sat, 17 Sep 2022 14:00:31 -0400
+X-MC-Unique: dSRkXIbTM2WcMBKuy2G5Bw-1
+Received: by mail-ed1-f69.google.com with SMTP id e15-20020a056402190f00b0044f41e776a0so17138450edz.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:00:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JgKYNIVGHgBOnvrxN4mdypOW9y4btqV8BpaMbCRfOfQ=;
+        b=tLE1PnzFeOz0aZm58jhrDmc2iwyiEMn8ijKp7e3tGhn+2PbjWSF1WSnPfo490PuN7B
+         IrzdZh8Q/ooOhsdPz7k8/xgUBCdkxwjaO4Y3EXCpgeC35Ess/kH0KQdJDsIBTGVhYsae
+         q8fo25owiXohnjB2FpRq/X7HyMDVOZgPf7P3QqaKWFzG7i5FD9GaQrMt6OqOXjrRDA2B
+         EKQY/Uy2e5REASeoqYoChR2MJZ5gZ/NKdzkC2VNbYN5eSYCoQqVrg7M79Ku3MhpqDfSR
+         laUeQexvXHTCqIAI1wAf1JC1XlvtdIlegYdl1cEHTLUW4ZE8V1IsKyWK6WfJBBTE+T6B
+         HSHQ==
+X-Gm-Message-State: ACrzQf2UfmnaWC/OSN0uG1jFmScG/+otHnUFd0yp2/MXsO1PFTlZEqFy
+        hQipUEmISCJROtNC4Cw4d8akFKmJg3IDHsKn0AaDVXiW3hjv+a8HIqEhZQFkuixFrLiuay+/YV5
+        jmym2fJDBXQjMpklKp2E4U5Jr
+X-Received: by 2002:a17:907:6093:b0:780:7671:2c97 with SMTP id ht19-20020a170907609300b0078076712c97mr7395618ejc.8.1663437630813;
+        Sat, 17 Sep 2022 11:00:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5h86bQDJL4fYqYdDnP4hpCMXC7RFEqgLZ2bqYMWLCyEFoUeiqC+9aCPZXcQITcOoPsX3cV3A==
+X-Received: by 2002:a17:907:6093:b0:780:7671:2c97 with SMTP id ht19-20020a170907609300b0078076712c97mr7395605ejc.8.1663437630619;
+        Sat, 17 Sep 2022 11:00:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id r17-20020a17090609d100b0077ce503bd77sm9933293eje.129.2022.09.17.11.00.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 11:00:29 -0700 (PDT)
+Message-ID: <b245787a-38fa-4202-cc7a-8fe18bc2308d@redhat.com>
+Date:   Sat, 17 Sep 2022 20:00:29 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SA2PR10MB4523:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5213f95-1d4e-4830-7eaf-08da98d547d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6kI2ppEoQpZ1Mmz/Tw7NKTbYVj4rGKyRddMs87ykyGYP93CWqIsU4rMIkbQaP3+qI4fuCwGOdSgn486q4TEGbE/x/NNIGtJCYATAffTQe9n1eM8zCE4Hr8j5owJM5Vq14hjQdR1wKlMsGlt2hCzmtemUDwlJQkD9etBYQj2bBNgdK/+ZieSAcM3wHU7i5nkqOuigaE/kiWQLtMVjw+IAQ4CXGG36Hc4ehYLpeqYhlIeyuy94qMd7Ya7wB5PWqJ7RAWUt4RRWMvDD2U/c7XuCSxnq7WH/c4wwgSIdcR9UA8+za1S91Vb8GbtilwW5VoUTHDet/0O184vPvQPjYqr6zxc1CLmMnH/HdhH8TPTCibC3+7koueO9xE+Wt3wVCfcwKTPMLoParqJX7jC8WvBsSiGK0nXhn7ujeotYGVtoKW6NZb46TImyLvbitlzICNJjiDX2by21re6o1TybOAUKqFdA5ig+cReFZfZkKV8X83j+dbkx6Nc4d//kKQwut9lXBts6JjRijP+u44fDj+bCyOaYyAacz56glpfCI6/GZyM0kJShLkdS6ckXDGZsDZS8Bl4WaPH5lVaoMXtFLZffft2LeYGhr1H4Pd07HwNfJ6e1FRbskcMJPnw/wHRiL91CQ8aZF9jwu7kiXHUOqJf1/KFUgknsqFFORoCPEGpl8tuWUODVgWLmy2jeIaHzit8bnjL0bnNrZHbivlAD1Fzwx2GV8W0RK8ooiVfEq/FXxr7w25j99yyXxZJToQy5sjaML0lz4iEqjyvCMxhfY62/Og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39830400003)(366004)(376002)(346002)(396003)(451199015)(36756003)(5660300002)(8936002)(2616005)(7416002)(38350700002)(66556008)(66946007)(38100700002)(8676002)(66476007)(86362001)(44832011)(2906002)(4326008)(54906003)(478600001)(6486002)(83380400001)(1076003)(186003)(52116002)(316002)(6506007)(41300700001)(6666004)(26005)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bh1yBHA2BizGjrE7oa84Xllc3TZmYL7BF/9HyHBtdt3fEUJJzpgpojHfBBEW?=
- =?us-ascii?Q?0kfuadRAa37/YzisWzqGeSHG0V5eYzPKaOo6hYpdXCel4cUtbm6XQvg6Wzzw?=
- =?us-ascii?Q?ivqCJiBIDJEGIgkjxAi/G4DuBFnTH6O2eJzR73ukIX1tsrjrYypCoMRP36Ew?=
- =?us-ascii?Q?H2LFnY5zKgw941qVnP5Inc6/gMj8cmVB+sFHUc7VXtKykMY6niZ11S133LnM?=
- =?us-ascii?Q?cHC1bdAe9G8o1Fj1l2Ehs9zHGlFTv3xNOLJhhNOQv4e0GLx8rf39gT1LWNt5?=
- =?us-ascii?Q?v46SXHsApHUaW8JPl4uxHxPp9T1a5eIagviPzS1nSxpQKedVONg8+xHK8SUn?=
- =?us-ascii?Q?EVN3+GwErJti7JXOs3q5M9bJc8hjfZwPcpOSj7risogRwTKqu7oPLh50FVAq?=
- =?us-ascii?Q?RX+IseHUR02JUlptUo1hqRWv7TqbPVC3iAwQcLatiZlRDQalytUNKKGGBmdR?=
- =?us-ascii?Q?Jd5r2XRsL2bGywHTJPB3SJL+D8ogyaBs7Qq1nn5IrWhiD6h/NsVknu711cqS?=
- =?us-ascii?Q?Wx+FasKOyu9KvxFqUjjQd5NxjDWVbL1CQ/oVagfIH9vOauV56SZ9grWyO6dH?=
- =?us-ascii?Q?eHPKsM/x87vdKNhQKixwLb4z0wPDFZxp98+gfSVTdCUKjsJFe1IFFuftHDo/?=
- =?us-ascii?Q?tTj1cllGkqfCDBKuhwL+CrH5I6HnbxgVvCjhZj9421Y/c4QwmfUBeLOYe60i?=
- =?us-ascii?Q?Z/qUQ9XVfSNggLBp6Z20AOYMXlRFvlV0Zt/ijtZWuTBh6WJtwSYazgM7uZU+?=
- =?us-ascii?Q?r4ThCwk1HyvfMbVOBYDHNxnLs2rCtbZDUgRx4AxlmYDighfsOa+hGdCPx7WP?=
- =?us-ascii?Q?mXmk8fToUnNfVuAAPM7ByKRX2qm/mk3hjwv67L9i6PPRyV50364L1ocvLDK1?=
- =?us-ascii?Q?DpLCz/gofX9QbMex8WbmHo8TsZVwEjR36hH8xLxqqy9qPVgXfrN7ZK0szgMB?=
- =?us-ascii?Q?X8dVozdGrgDwwUqWI9Ic9kSe/yZx4WialsFb5lewEoS77RYzvOFED5dF3JlH?=
- =?us-ascii?Q?AGPq0PWzIDVHMC/b9IKQyhFTY7Ezf66jcetGhy2toQ8yB9wcmEUANki2zuEH?=
- =?us-ascii?Q?y2YyKf3jmRqOG5KTkbIlGceEObrFM2C0P/OZdwUvylSDHeLWGJtf1kXcHcLs?=
- =?us-ascii?Q?jb2uVTLkOKGrQMuZVRn3+C8sWfgyiZOlJs2WKkY2QklSapgcToNIA5s9ZmKi?=
- =?us-ascii?Q?G4D0mnFAduMwU1C6x2OGT/HBHHxmoqlUk2SJr6SGkBA/4jwcdtI7NlLIsfhc?=
- =?us-ascii?Q?D3PaaeL2VNkIeMA4JLSuT71pb11LLux9g9GjNIGj5hQZRrNLgrWd+uHIKux8?=
- =?us-ascii?Q?F+EPB8iXhld85BgUhWEwOSIUTFDCVG+9fUpzbPon6mK2t78GlRjx0agN9ON4?=
- =?us-ascii?Q?J7VvkMEkn3hDG0S7cTFUs8KmyTETI5BB0hV5NaZuexWk6EJy2aVbnRZXFbjQ?=
- =?us-ascii?Q?R0gZqjKdsnGT7UtSzhbLiIXkY7jFSAkBdvF/mEkegBgVCQPsZ4LHEfiXQKef?=
- =?us-ascii?Q?Hx8sLFtis8bXQSWfzyK745N0jzJAW/fdgcZgzBafE0J5ETSucFh2iCC1Fc+z?=
- =?us-ascii?Q?vsrhSzYgLda7/V+KhVWhytdJBJ22l5ob8Vw2SujHeV9mh482WPxfUaYP8CcP?=
- =?us-ascii?Q?XejkyaugU24ql05rfRXqkts=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5213f95-1d4e-4830-7eaf-08da98d547d2
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2022 17:51:42.8810
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BmoVvVGriPNoiHkC9ji3b70WtIf3InoOF+a7DySpsPhuFm9Qk79Vk+FqbF+TQPWnGUFp1swwhpmMnoNCU95tL/s2w1nRusAmf7Pz/QxXuIM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4523
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: drm: panel-orientation-quirks: Add quirk for Aya Neo Air
+Content-Language: en-US
+To:     Maccraft123 <maccraft123mc@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220825191946.1678798-1-maccraft123mc@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220825191946.1678798-1-maccraft123mc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ocelot_reset() function utilizes regmap_field_write() but wasn't
-checking return values. While this won't cause issues for the current MMIO
-regmaps, it could be an issue for externally controlled interfaces.
+Hi,
 
-Add checks for these return values.
+On 8/25/22 21:19, Maccraft123 wrote:
+> From: Maya Matuszczyk <maccraft123mc@gmail.com>
+> 
+> Yet another x86 gaming handheld.
+> 
+> This one has many SKUs with quite a few of DMI strings,
+> so let's just use a catchall, just as with Aya Neo Next.
+> 
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
+Thanks, I have pushed this out to drm-misc-next now.
 
-v2:
-    Change "err = ...; return err" to just "return ..."
+Note for future drm_panel_orientation_quirks.c patches please Cc me,
+I am not subscribed to dri-devel.
 
----
- drivers/net/ethernet/mscc/ocelot_vsc7514.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+Regards,
 
-diff --git a/drivers/net/ethernet/mscc/ocelot_vsc7514.c b/drivers/net/ethernet/mscc/ocelot_vsc7514.c
-index 3fb9183c1159..6f22aea08a64 100644
---- a/drivers/net/ethernet/mscc/ocelot_vsc7514.c
-+++ b/drivers/net/ethernet/mscc/ocelot_vsc7514.c
-@@ -211,8 +211,13 @@ static int ocelot_reset(struct ocelot *ocelot)
- 	int err;
- 	u32 val;
- 
--	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_INIT], 1);
--	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-+	err = regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_INIT], 1);
-+	if (err)
-+		return err;
-+
-+	err = regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-+	if (err)
-+		return err;
- 
- 	/* MEM_INIT is a self-clearing bit. Wait for it to be cleared (should be
- 	 * 100us) before enabling the switch core.
-@@ -222,10 +227,11 @@ static int ocelot_reset(struct ocelot *ocelot)
- 	if (err)
- 		return err;
- 
--	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
--	regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
-+	err = regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-+	if (err)
-+		return err;
- 
--	return 0;
-+	return regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
- }
- 
- /* Watermark encode
--- 
-2.25.1
+Hans
+
+
+> ---
+>  drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index fc1728d46ac2..0b011b615495 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data lcd800x1280_rightside_up = {
+>  	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+>  };
+>  
+> +static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftside_up = {
+> +	.width = 1080,
+> +	.height = 1920,
+> +	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+> +};
+> +
+>  static const struct drm_dmi_panel_orientation_data lcd1200x1920_rightside_up = {
+>  	.width = 1200,
+>  	.height = 1920,
+> @@ -152,6 +158,12 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "AYA NEO 2021"),
+>  		},
+>  		.driver_data = (void *)&lcd800x1280_rightside_up,
+> +	}, {	/* AYA NEO AIR */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
+> +		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
+> +		},
+> +		.driver_data = (void *)&lcd1080x1920_leftside_up,
+>  	}, {	/* AYA NEO NEXT */
+>  		.matches = {
+>  		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
 
