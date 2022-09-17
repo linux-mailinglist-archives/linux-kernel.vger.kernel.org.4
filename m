@@ -2,254 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6FB5BB76E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586615BB771
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiIQJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 05:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S229769AbiIQJK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIQJKA (ORCPT
+        with ESMTP id S229548AbiIQJKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:10:00 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC801120AF
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:09:52 -0700 (PDT)
-X-UUID: ef08d10da28c497091475c20b575e2b0-20220917
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=PYYFMRcPQW3ZdJsCN7MYnL4roheIU49u8URy+7ml9HQ=;
-        b=QTJRd4NZi8xpxn1XN5v1f7q+KoYDtCA+JeIjcFbFLNYmrElCkcVDVhWYUy5OCKg1Z55Rm2Q86vIzFGgR++mG1+lZILKiQ+ZLUctGCY7gQ885257njkKCphKjnsGkxcgcGNPzr5uuVtvFpok5e81Hv23RLSrInACG2eEaUK1qrGE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:1162a7cc-4509-4c3e-9146-9b47670351d0,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.11,REQID:1162a7cc-4509-4c3e-9146-9b47670351d0,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:39a5ff1,CLOUDID:45d38b8a-35ad-4537-90e7-b56a69d5f8a4,B
-        ulkID:220917170947WRAO1WVQ,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
-        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: ef08d10da28c497091475c20b575e2b0-20220917
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2133475290; Sat, 17 Sep 2022 17:09:44 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 17 Sep 2022 17:09:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Sat, 17 Sep 2022 17:09:42 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>
-CC:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
-        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
-Subject: [PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
-Date:   Sat, 17 Sep 2022 17:09:40 +0800
-Message-ID: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
+        Sat, 17 Sep 2022 05:10:12 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC431FCF9
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:10:08 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 2064 invoked from network); 17 Sep 2022 11:10:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1663405805; bh=bdpWMldszljR9IIl+SiHjMb2AqiP59bitQfYai6g6Gs=;
+          h=From:To:Cc:Subject;
+          b=miQ/uhsAqKHFrHhaYizz7E9AhPT90d3buuS12qv+3sTlF+jVmQbNPTW0zuvaLuFM/
+           hwCGeeG9ppK2kvDgYsHDH9egn97z5HJ51QQgD6MYWNowIcACX4RJVAdbKkn7utm/6r
+           sCiVS0/RIxDP1v7RcPNR1FkTt7eya5Sl720/6sNc=
+Received: from aafb69.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.131.69])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 17 Sep 2022 11:10:05 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>
+Subject: [PATCH v2] acpi,pci: handle duplicate IRQ routing entries returned from _PRT
+Date:   Sat, 17 Sep 2022 11:09:44 +0200
+Message-Id: <20220917090944.110885-1-mat.jonczyk@o2.pl>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
-        autolearn_force=no version=3.4.6
+X-WP-MailID: 4cb65835fd21cc6015c53d8ff4cb259a
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [YVO0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
+On some platforms, the ACPI _PRT function returns duplicate interrupt
+routing entries. Linux uses the first matching entry, but sometimes the
+second matching entry contains the correct interrupt vector.
 
-1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
-and disable gce ddr enable when gce work job done
-2. split cmdq clk enable/disable api, and control gce ddr enable/disable
-in clk enable/disable function to make sure it could protect when cmdq
-is multiple used by display and mdp
+This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+SMBus controller. This controller was nonfunctional unless its interrupt
+usage was disabled (using the "disable_features=0x10" module parameter).
 
-this is only for some SOC which has flag "control_by_sw".
-for this kind of gce, there is a handshake flow between gce and ddr
-hardware,
-if not set ddr enable flag of gce, ddr will fall into idle mode,
-then gce instructions will not process done.
-we need set this flag of gce to tell ddr when gce is idle or busy
-controlled by software flow.
+After investigation, it turned out that the driver was using an
+incorrect interrupt vector: in lspci output for this device there was:
+        Interrupt: pin B routed to IRQ 19
+but after running i2cdetect (without using any i2c-i801 module
+parameters) the following was logged to dmesg:
 
-ddr problem is a special case.
-when test suspend/resume case, gce sometimes will pull ddr, and ddr can
-not go to suspend.
-if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
-as you have referred [1] and [2] (8192 and 8195)
-but for mt8186, the gce is more special, except setting of [1] and [2],
-we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
-when gce working to make sure gce could process all instructions ok.
-this case just need normal bootup, if we not set this, display cmdq
-task will timeout, and chrome homescreen will always black screen.
+        [...]
+        [  132.248657] i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        [  132.248669] i801_smbus 0000:00:1f.3: Transaction timeout
+        [  132.452649] i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        [  132.452662] i801_smbus 0000:00:1f.3: Transaction timeout
+        [  132.467682] irq 17: nobody cared (try booting with the "irqpoll" option)
 
-and with this patch, we have done these test on mt8186:
-1.suspend/resume
-2.boot up to home screen
-3.playback video with youtube.
+Existence of duplicate entries in a table returned by the _PRT method
+was confirmed by disassembling the ACPI DSTD table.
 
-suspend issue is special gce hardware issue, gce client  driver
-command already process done, but gce still pull ddr.
+Linux used the first matching entry, which was incorrect. In order not
+to disrupt existing systems, use the first matching entry unless the
+pci=prtlast kernel parameter is used or a Dell Latitude E6500 laptop is
+detected.
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
-Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+Disclaimer: there is nothing really interesting connected to the SMBus
+controller on this laptop, but this change may help other systems.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+
 ---
- drivers/mailbox/mtk-cmdq-mailbox.c | 67 +++++++++++++++++++++++++++---
- 1 file changed, 61 insertions(+), 6 deletions(-)
+v2: do not quote the disassembled ACPI DSDT table - for copyright reasons.
+---
+ .../admin-guide/kernel-parameters.txt         |  8 ++
+ drivers/acpi/pci_irq.c                        | 89 ++++++++++++++++++-
+ drivers/pci/pci.c                             |  9 ++
+ 3 files changed, 102 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 9465f9081515..adb6fce1c90f 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -80,7 +80,10 @@ struct cmdq {
- 	bool			suspended;
- 	u8			shift_pa;
- 	bool			control_by_sw;
-+	bool			sw_ddr_en;
- 	u32			gce_num;
-+	atomic_t		usage;
-+	spinlock_t		lock;
- };
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 426fa892d311..2ff351db10b8 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4190,6 +4190,14 @@
+ 				bridge windows. This is the default on modern
+ 				hardware. If you need to use this, please report
+ 				a bug to <linux-pci@vger.kernel.org>.
++		prtlast		If the _PRT ACPI method returns duplicate
++				IRQ routing entries, use the last matching entry
++				for a given device. If the platform may be
++				affected by this problem, an error message is
++				printed to dmesg - this parameter is
++				ineffective otherwise. If you need to use this,
++				please report a bug to
++				<linux-pci@vger.kernel.org>.
+ 		routeirq	Do IRQ routing for all PCI devices.
+ 				This is normally done in pci_enable_device(),
+ 				so this option is a temporary workaround
+diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+index 08e15774fb9f..5cead840de0b 100644
+--- a/drivers/acpi/pci_irq.c
++++ b/drivers/acpi/pci_irq.c
+@@ -196,12 +196,73 @@ static int acpi_pci_irq_check_entry(acpi_handle handle, struct pci_dev *dev,
+ 	return 0;
+ }
  
- struct gce_plat {
-@@ -90,6 +93,46 @@ struct gce_plat {
- 	u32 gce_num;
- };
- 
-+static s32 cmdq_clk_enable(struct cmdq *cmdq)
++extern bool pci_prtlast;
++
++static const struct dmi_system_id pci_prtlast_dmi[] = {
++	{
++		.ident = "Dell Latitude E6500",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6500"),
++		},
++	},
++	{ }
++};
++
++static bool acpi_pci_prt_use_last(struct acpi_prt_entry *curr,
++				  const char *current_source,
++				  const char *previous_match_source,
++				  int previous_match_index)
 +{
-+	s32 usage, ret;
-+	unsigned long flags;
++	bool ret;
++	const struct dmi_system_id *id;
++	const int msg_bufsize = 512;
++	char *msg = kmalloc(msg_bufsize, GFP_KERNEL);
 +
-+	spin_lock_irqsave(&cmdq->lock, flags);
++	if (!msg)
++		return false;
 +
-+	usage = atomic_inc_return(&cmdq->usage);
++	snprintf(msg, msg_bufsize,
++		 FW_BUG
++		 "ACPI _PRT returned duplicate IRQ routing entries for PCI device "
++		 "%04x:%02x:%02x[INT%c]: %s[%d] and %s[%d]. ",
++		 curr->id.segment, curr->id.bus, curr->id.device,
++		 pin_name(curr->pin),
++		 previous_match_source, previous_match_index,
++		 current_source, curr->index);
 +
-+	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
-+	if (usage <=0 || ret < 0) {
-+		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
-+			usage, ret, cmdq->suspended);
-+	} else if (usage == 1) {
-+		if (cmdq->sw_ddr_en)
-+			writel((0x7 << 16) + 0x7, cmdq->base + GCE_GCTL_VALUE);
++	id = dmi_first_match(pci_prtlast_dmi);
++
++	if (id) {
++		pr_warn("%s%s detected, using last entry.\n",
++			msg, id->ident);
++
++		ret = true;
++	} else if (pci_prtlast) {
++		pr_err(
++"%sUsing last entry, as directed on the command line. If this helps, report a bug.\n",
++		       msg);
++
++		ret = true;
++	} else {
++		pr_err("%sIf necessary, use \"pci=prtlast\" and report a bug.\n",
++		       msg);
++
++		ret = false;
 +	}
 +
-+	spin_unlock_irqrestore(&cmdq->lock, flags);
-+
++	kfree(msg);
 +	return ret;
 +}
 +
-+static void cmdq_clk_disable(struct cmdq *cmdq)
-+{
-+	s32 usage;
-+
-+	usage = atomic_dec_return(&cmdq->usage);
-+
-+	if (usage < 0) {
-+		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
-+			usage, cmdq->suspended);
-+	} else if (usage == 0) {
-+		if (cmdq->sw_ddr_en)
-+			writel(0x7, cmdq->base + GCE_GCTL_VALUE);
-+	}
-+
-+	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+}
-+
- u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+-			  int pin, struct acpi_prt_entry **entry_ptr)
++			  int pin, struct acpi_prt_entry **entry_ptr_out)
  {
- 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
-@@ -266,7 +309,8 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
+ 	acpi_status status;
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+ 	struct acpi_pci_routing_table *entry;
++	struct acpi_prt_entry *match = NULL;
++	const char *match_source = NULL;
+ 	acpi_handle handle = NULL;
  
- 	if (list_empty(&thread->task_busy_list)) {
- 		cmdq_thread_disable(cmdq, thread);
--		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
+ 	if (dev->bus->bridge)
+@@ -219,13 +280,33 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 
+ 	entry = buffer.pointer;
+ 	while (entry && (entry->length > 0)) {
+-		if (!acpi_pci_irq_check_entry(handle, dev, pin,
+-						 entry, entry_ptr))
+-			break;
++		struct acpi_prt_entry *curr;
 +
-+		cmdq_clk_disable(cmdq);
- 	}
- }
- 
-@@ -355,8 +399,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 	task->pkt = pkt;
- 
- 	if (list_empty(&thread->task_busy_list)) {
--		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
--
-+		WARN_ON(cmdq_clk_enable(cmdq) < 0);
- 		/*
- 		 * The thread reset will clear thread related register to 0,
- 		 * including pc, end, priority, irq, suspend and enable. Thus
-@@ -428,7 +471,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
- 	}
- 
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	cmdq_clk_disable(cmdq);
- 
- done:
- 	/*
-@@ -468,7 +511,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
- 
- 	cmdq_thread_resume(thread);
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
++			if (!match) {
++				// first match
++				match = curr;
++				match_source = entry->source;
++			} else if (!acpi_pci_prt_use_last(curr,
++							  entry->source,
++							  match_source,
++							  match->index)) {
++				// duplicates found, use first entry
++				kfree(curr);
++			} else {
++				// duplicates found, use last entry
++				kfree(match);
++				match = curr;
++				match_source = entry->source;
++			}
++		}
 +
-+	cmdq_clk_disable(cmdq);
+ 		entry = (struct acpi_pci_routing_table *)
+ 		    ((unsigned long)entry + entry->length);
+ 	}
  
- out:
- 	spin_unlock_irqrestore(&thread->chan->lock, flags);
-@@ -479,7 +523,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
- 	spin_unlock_irqrestore(&thread->chan->lock, flags);
- 	if (readl_poll_timeout_atomic(thread->base + CMDQ_THR_ENABLE_TASK,
- 				      enable, enable == 0, 1, timeout)) {
--		dev_err(cmdq->mbox.dev, "Fail to wait GCE thread 0x%x done\n",
-+		dev_err(cmdq->mbox.dev,
-+			"Fail to wait GCE thread 0x%x done\n",
- 			(u32)(thread->base - cmdq->base));
- 
- 		return -EFAULT;
-@@ -615,6 +660,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 
- 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
- 
-+	spin_lock_init(&cmdq->lock);
- 	cmdq_init(cmdq);
- 
++	*entry_ptr_out = match;
++
+ 	kfree(buffer.pointer);
  	return 0;
-@@ -660,9 +706,18 @@ static const struct gce_plat gce_plat_v6 = {
- 	.gce_num = 2
- };
+ }
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 95bc329e74c0..a14a2e4e4197 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -155,6 +155,11 @@ static bool pci_bridge_d3_disable;
+ /* Force bridge_d3 for all PCIe ports */
+ static bool pci_bridge_d3_force;
  
-+static const struct gce_plat gce_plat_v7 = {
-+	.thread_nr = 24,
-+	.shift = 3,
-+	.control_by_sw = true,
-+	.sw_ddr_en = true,
-+	.gce_num = 1
-+};
++#ifdef CONFIG_ACPI
++/* Use the last matching entry from the table returned by the _PRT ACPI method. */
++bool pci_prtlast;
++#endif
 +
- static const struct of_device_id cmdq_of_ids[] = {
- 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
- 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
-+	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
- 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
- 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
- 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
+ static int __init pcie_port_pm_setup(char *str)
+ {
+ 	if (!strcmp(str, "off"))
+@@ -6896,6 +6901,10 @@ static int __init pci_setup(char *str)
+ 				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
+ 			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
+ 				disable_acs_redir_param = str + 18;
++#ifdef CONFIG_ACPI
++			} else if (!strncmp(str, "prtlast", 7)) {
++				pci_prtlast = true;
++#endif
+ 			} else {
+ 				pr_err("PCI: Unknown option `%s'\n", str);
+ 			}
+
+base-commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
 -- 
 2.25.1
 
