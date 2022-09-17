@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F170A5BB55D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC435BB55F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIQBfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 21:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S229831AbiIQBkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 21:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIQBfW (ORCPT
+        with ESMTP id S229627AbiIQBkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 21:35:22 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0687F6564E
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 18:35:21 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1278624b7c4so54564787fac.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 18:35:21 -0700 (PDT)
+        Fri, 16 Sep 2022 21:40:22 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10659C226;
+        Fri, 16 Sep 2022 18:40:19 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d2so3060380wrq.2;
+        Fri, 16 Sep 2022 18:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=dmQ9XKJfChmsPIu86m8JjBcrt6ehVCRM1Vo83PzNbxM=;
-        b=P/cnvPmXjsGXjEzEvO4iJ4xNAr0ndzmuID2cN+GMJd5BA4dDGRXtwsfsCuGzm9PEA4
-         bG464HVkAh/sme7YHpcoXQXfPvoIas19aO7uM6X+hF+pc7OPHxE7V9ujHDhDn24tNCa2
-         57DYR2XWXNZV0UFL1c68DsVIqrULrvhoZqas9CWdUTBfJe1htOG/4ySq0GdlH0bAgimU
-         SicpZxc+faR6/F06H8HgRm88Llcvma8fjnBs6G6JYDZfHB+SzKaEFpLHcIKkl5H2AdjY
-         Qggu+pm8SU5wRWtSwxNmK+12DRx0Xos0yed3YNjkCGQSqfLVnmB6x4PaOX5Svp+a86f0
-         8jng==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=n9n8tkr4zFtS3Gqksx14AwLvb33nBr6DZn7TLl3O0b8=;
+        b=lIPZjSDpaEpyLGb30qkJZZTnrdz4VXMJzfCY4sA8XK7Lk3pWzWBBV0HneizM0Y27YU
+         zzk9S3FLFJnnX43iFrRFtv41QZS2O+rOcQXm4KVPiVvILCE/gE1gGP+Ac2ew8AR18xyY
+         Y9bn/cLS3oKmIQY/0z7+MBPLy5uuQ3j7h2aLvFkj/yqUNc0ez8JhhI0zKPuXVDc/i+GD
+         OcgDae24sXTk07m2cPbBiqg/zFAYu5yZ0wmpv6s7Hjszq6XIksAV7+7Ps+YCJVKDzf+D
+         wVvWXeaX8EWiAl0jaKTxnKzxt/v7fsekXh8/MvJYMEoSmsAt2fJPWjmNuuYNbTeUHClO
+         SvPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dmQ9XKJfChmsPIu86m8JjBcrt6ehVCRM1Vo83PzNbxM=;
-        b=Da/uYKGNqSc1OlqcE5lPGtdb+YhaGaFpN1eKUogFqjwxUmGbE78YcXvhP49jUyCEc9
-         SGl2G+QUBhcf5aieoC+/DaAz6VqAB2tAmFaeG5TueiknAQ8FfhQ9s2WM4Zm1cWl5lnLR
-         4bAZazmka541w5D8DbZ69TfiCVuv/MakOo4zB5IZSGxUeugpAHR4pVsKxYc/RMyhPxGR
-         bUeKvZVB1e+jzd41Im7gI2c7L0t8n8LTl4qLs9GXvywFr28ACS/d5+ROHX9bHi0L1pru
-         xhpbXVTbC/4gcQjUdo4aCGjvq1WNh//CeRA/V+Vn9um6YF6+nTYwcM5vx+0BRROPssIX
-         t3XQ==
-X-Gm-Message-State: ACgBeo0TmQAzNzKAWDanaV2ehK9unLdOj1SsXz5V53Xvnl+U0hna5UR+
-        BifuQ/XNy5Ks4YfIkAct/Pmdz28cWO3yaqMCs5M=
-X-Google-Smtp-Source: AA6agR4hZGOogsZ7/cAzo5EVDUr5b8XsxcqRXTIgmlY5sUF+N/75QgIMzp2hj+USGJAwPfek3gcWgqfRSQLln1xxhZ8=
-X-Received: by 2002:a05:6870:7394:b0:126:6f7b:15a2 with SMTP id
- z20-20020a056870739400b001266f7b15a2mr9537079oam.227.1663378519750; Fri, 16
- Sep 2022 18:35:19 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=n9n8tkr4zFtS3Gqksx14AwLvb33nBr6DZn7TLl3O0b8=;
+        b=mtvZ3WbLFtc/TFW9iAXsH3r233J+vYWodLj7YgqDV5tucO0pUWcf6sxxnezi71T41X
+         1Opwfjnum2AbpU5yShb2ZlVqEZJHzD86pv6vUWmhl10VYq0ejLeNUF9DWB2pBNw2HSlr
+         1GdKh8bqKGoDbOSJkc54cR3mNY5TSYIfZy6lZmDAO2RaGxnJhhIPjZZvPJUyN1m6QooI
+         vQfGo5IWa4L+Ph20O593hXV1O2ksyCCa1WWqnzxYm+a+7Bvk6IWVIrIJN8TpxIi5mr5L
+         hBtrETMEe0h/kuWhIcoKxUCPKQSZ9bgg/8DxcNX8PgoJ2WMQ8mDymx7r380WDPGQYRUQ
+         pbaw==
+X-Gm-Message-State: ACrzQf0WEkp751whJ0C6dDPWSuFyn5Ru4AWCz0ff3hFXD8lFgkpYRCgK
+        p8ZpSukeZbGg91CLW50YibwQaIjtORsXUC9tK6M=
+X-Google-Smtp-Source: AMsMyM4v0vEb/RzDwFzi8XMH1K+KBvYVKNWnXZo51ZhOesp+cgw/Z7rqE2eD3iHn7w+A53KKYl9PRUoK4tGE2QHMBOs=
+X-Received: by 2002:a5d:598a:0:b0:22a:45af:1ce2 with SMTP id
+ n10-20020a5d598a000000b0022a45af1ce2mr4387382wri.539.1663378818197; Fri, 16
+ Sep 2022 18:40:18 -0700 (PDT)
 MIME-Version: 1.0
-Sender: luiskane20@gmail.com
-Received: by 2002:ac9:2f4a:0:0:0:0:0 with HTTP; Fri, 16 Sep 2022 18:35:18
- -0700 (PDT)
-From:   Mrs Aisha Gaddafi <aishagaddafiaisha20@gmail.com>
-Date:   Fri, 16 Sep 2022 18:35:18 -0700
-X-Google-Sender-Auth: QQ3ZIYPsKG5ciI6CVvFyEgtoIYs
-Message-ID: <CADDFH=Z27T3fBOTJFD8Ls7ymYLOuFLwWFtrh7pF3Wqj6R77WYg@mail.gmail.com>
-Subject: ATTENTION PLEASE
-To:     undisclosed-recipients:;
+References: <YySdhiqZgXpl0q/g@lab.hqhome163.com>
+In-Reply-To: <YySdhiqZgXpl0q/g@lab.hqhome163.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 16 Sep 2022 21:40:07 -0400
+Message-ID: <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: k3566-quartz64-a: adds sata variant
+To:     Alessandro Carminati <alessandro.carminati@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MILLION_USD,MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,
-        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY,URG_BIZ autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:2b listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9839]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [luiskane20[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafiaisha20[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  1.4 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.2 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May i use this opportunity to create a mutual conversation with you
-seeking for your acceptance on investing in your country under your
-care as my  business partner, My name is Aisha  Gaddafi and presently
-living in Oman, i am a Widow and single Mother with three Children,
-the only biological Daughter of Late Colonel Muammar Gaddafi [late
-Libyan President]  and presently i am under political asylum
-protection by the Omani Government.
+On Fri, Sep 16, 2022 at 12:06 PM Alessandro Carminati
+<alessandro.carminati@gmail.com> wrote:
+>
+> The Quartz64 board is built upon Rockchip RK3566.
+> Rockchip RK3566 has two combo phys.
+> The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
+> ctrl2.
+> The second combo phy is hardwired to the PCIe slot, where for the first,
+> the hardware on the board provides both the USB3 connector and the SATA
+> connector.
+> This DT allows the users to switch the combo phy to the SATA connector.
 
-I have funds worth " Seven Million Five Hundred Thousand United State
-Dollars" [$7.500.000.00 US Dollars] which I want to entrust to you for
-investment  in your country. If you are willing to handle this project
-on my behalf, kindly reply urgent to enable me provide you more
-details to start the transfer process, I will appreciate your urgent
-response through my private email address below:
+Good Evening,
 
-aishagaddafiaisha20@gmail.com
+NACK to this whole series. Neither works correctly in the hardware as
+is, and USB3 was decided to be left enabled as the SATA port will be
+removed completely in the next revision.
 
-You can know more through the BBC news links below:
+Very Respectfully,
+Peter Geis
 
-http://www.bbc.com/news/world-africa-19966059
-
-
-Thanks
-Yours Truly Aisha
-aishagaddafiaisha20@gmail.com
+>
+> Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
+>  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts | 9 +++++++++
+>  2 files changed, 10 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 8c843f6fc3cc..1d5dd91d1a34 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-usb3.dts
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-sata.dts
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+> new file mode 100644
+> index 000000000000..8620df7ec01e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +
+> +/dts-v1/;
+> +
+> +#include "rk3566-quartz64-a.dtsi"
+> +
+> +&sata1 {
+> +       status = "okay";
+> +};
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
