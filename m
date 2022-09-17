@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5945BBA27
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 21:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7235BBA2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 21:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIQTmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 15:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S229450AbiIQToK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 15:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIQTmL (ORCPT
+        with ESMTP id S229436AbiIQToH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 15:42:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4F52BB19;
-        Sat, 17 Sep 2022 12:42:09 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y3so56380944ejc.1;
-        Sat, 17 Sep 2022 12:42:09 -0700 (PDT)
+        Sat, 17 Sep 2022 15:44:07 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5852BB24;
+        Sat, 17 Sep 2022 12:44:05 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso1833268wmb.0;
+        Sat, 17 Sep 2022 12:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=CLQ627bvA6g1Nc29K4V1qYeubKsKhvm7FZqgOaOV0JU=;
-        b=fpqOgsgO1oi0uxKU6EE/HhfV+NMAj7IoS7T6XWJtR0i3wUgpqqQPjSRsv3L6wQh+Tc
-         7VWQqzEqrnw4SoMDCJKIZjI032Q1xwUGgN5c3qD3ddFWLZID4QGFlqrRJiE1ax4Wb11J
-         ZEbz61w6d+iVmWEl6sAwOziW5AySYMrfixuth6EMf33vzZdGuWli7IudHCJoYtZLxW9T
-         +Zte/QIEThUoMzwUJMwuWnJM3N1xmBQT6cPyl6ZT7hS7zVVjt7eBV3g9RACGc2tBC+NX
-         AfRru1Bo1pz6NieDJop4iuhyvZEyol3vFhxlpt4xRXBg4ErM0piuorRgS6XMwXgcAkPi
-         QCkw==
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date;
+        bh=9MOtt1g/rm8xaea/35yg7P6pO/gnunYbV8isjRoBVdg=;
+        b=e8xu9MRfatjxNk6m/3A+pZqn221lwHNckzcTpWFacpW/cj9zvojW+ULn/yJYpIJmYD
+         sdqEUdqDUaIf7gOXWUfvuzyyoyaor5eYTUxivJZ4taNd4L2DL7vrbkPIm0RdaO/eDXnT
+         rNDfMaFC9uoe7mYu801u/WrRONvaih/K3xE1u7UdIRNB2f/XezkCkDuL4BdDVrADgTcT
+         eqFTw2MwNf411fiuva/KErGnIKRvTuYrnc73JZjPCtvlGfQFGVAVEyiX6IjLFSegXIMp
+         mJRFCJa9ANG3ID63U1cIQjO9RQQsLBZLRXlHRRHRIonAE0qgIUiXHxm584tPCfY1NUbm
+         YlEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=CLQ627bvA6g1Nc29K4V1qYeubKsKhvm7FZqgOaOV0JU=;
-        b=Cm4W9f9tl+04c0sNMVoKpAtxLuhEAwz5P0z5TWTNMhBhQPjTyhv3sishqEEUiOlpnA
-         VWS4/LO5J3I6mFR7R3RGeRz9d/eBQMsuMD+z28qAaEIYYoou9kSSA+Cu5WQDxlS/DyCg
-         e8a5YEnfFMy3X5gvvF6hsmR4ZcZ8K0soKagEVu6DKneHIE49CztzAGE3WL+PfO5aYhGM
-         3oaQv3fO6NiNlvRc1yA3S7kPW8VCCXdy0+q0CDsK8IEagg/hcr1izih3enPhXB1niS1E
-         IkM512I1iu8qpcuFFZj598oCpkw8XMbQfp1vO4vCf7pVOXnAkPQpIEchQv64W1UvPD6B
-         YVQw==
-X-Gm-Message-State: ACrzQf0ui0ZmXHPZYNPNaR6IpkW2M3JsDNxdQAnYBW6K7VnVikcDg1Wz
-        Qpf/RrH0TvS3QLc4cfbSm2U=
-X-Google-Smtp-Source: AMsMyM7jLjrtYaOXMnxRLFhqP75wdZVPpFnUnEeOJGnJG/R+UWwRW2Ac4DoFjxqvQMVVIn8BzOEBjw==
-X-Received: by 2002:a17:906:7c8f:b0:771:3912:3942 with SMTP id w15-20020a1709067c8f00b0077139123942mr7855927ejo.387.1663443727868;
-        Sat, 17 Sep 2022 12:42:07 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id w22-20020a17090633d600b0073d7e58b1bcsm12401924eja.157.2022.09.17.12.42.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 12:42:07 -0700 (PDT)
-Message-ID: <614ccc3b-eb65-450e-d015-9c615a09a701@gmail.com>
-Date:   Sat, 17 Sep 2022 21:42:06 +0200
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=9MOtt1g/rm8xaea/35yg7P6pO/gnunYbV8isjRoBVdg=;
+        b=gd8U2mHsQyx4FmACixfVJaxnoNNWZRPYdUQZpZiCQj51do37i5ugePjW72O2e1QEwH
+         wlB8bLyo6omSuzWs3+kQErLK77jOsPdASzeHH6gMEMIKh5aP3aX10wmpTUoUL2nPk2rA
+         6bfNbPKpFCQxfsL4r1LjUoxCpKizRuf3JGpLC44shKW8+GzeWBvh7wdfKZ8hEOeHkxhd
+         1xvhXhdf5+fvzbXXfCcmOEdPTdxenZnj6fgw+1OqSJsfH9nvNobeC80BvodXo51bicdV
+         fw/EeZYhLYlqrIVtsu5wybNgp3+QlPOrnu9e1c1z1Z2/1g9nRtmriTPf9gbagXOqYzsR
+         KYtA==
+X-Gm-Message-State: ACrzQf2osQR7ZBbV0LgWyI17lVye3MR/u6T9KoB8yxB1F0lZpCzGIHAX
+        9ga8qPR4cuD3Dy2MFGhheDk=
+X-Google-Smtp-Source: AMsMyM6yF5xqGZYQUON3LyUEhYWCuF4gl3rbiaAjHSdxKZsmF+LTWXIcg40eqORnx77JZRP0tf8njA==
+X-Received: by 2002:a7b:c2a2:0:b0:3a8:4959:a327 with SMTP id c2-20020a7bc2a2000000b003a84959a327mr7329658wmk.50.1663443844289;
+        Sat, 17 Sep 2022 12:44:04 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.gmail.com with ESMTPSA id d8-20020adfef88000000b002250c35826dsm8604667wro.104.2022.09.17.12.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 12:44:03 -0700 (PDT)
+Message-ID: <63262383.df0a0220.27cbb.1c41@mx.google.com>
+X-Google-Original-Message-ID: <YyYjgPeHn6nvaFcV@Ansuel-xps.>
+Date:   Sat, 17 Sep 2022 21:44:00 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Marc Herbert <marc.herbert@intel.com>,
+        James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] dt-bindings: arm: msm: Convert kpss-acc driver
+ Documentation to yaml
+References: <20220916191715.GA1079300-robh@kernel.org>
+ <6324d1be.050a0220.9d842.7b47@mx.google.com>
+ <CAA8EJprEQOsm4TxGWJYZo04D1PagT3QmhDdYQkEid-KSP-tpTw@mail.gmail.com>
+ <6324d8e1.170a0220.aba35.ba4f@mx.google.com>
+ <CAA8EJpowLvkuiYupqS0WEhnMR8q=R1YUUFgdFVCAx1PXyoo1xw@mail.gmail.com>
+ <6324dc1b.df0a0220.97787.083c@mx.google.com>
+ <CAA8EJpo08WoQ_LYOtg5C2BB=Q6GR_cftLjaWHWjYD6BjfDZcsg@mail.gmail.com>
+ <6324f087.1c0a0220.7123d.8665@mx.google.com>
+ <CAA8EJprhLUybqmPhFmit6LGaNOxz=-9+8xADXowJuzU5BtjjtA@mail.gmail.com>
+ <632618ac.050a0220.bda86.d7a8@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2] dt-bindings: clock: convert rockchip,rk3128-cru.txt to
- YAML
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <632618ac.050a0220.bda86.d7a8@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,182 +97,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip,rk3128-cru.txt to YAML.
+On Sat, Sep 17, 2022 at 08:57:44PM +0200, Christian Marangi wrote:
+> On Sat, Sep 17, 2022 at 04:45:21PM +0300, Dmitry Baryshkov wrote:
+> > On Sat, 17 Sept 2022 at 00:54, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > >
+> > > On Fri, Sep 16, 2022 at 11:31:49PM +0300, Dmitry Baryshkov wrote:
+> > > > On Fri, 16 Sept 2022 at 23:27, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Sep 16, 2022 at 11:22:17PM +0300, Dmitry Baryshkov wrote:
+> > > > > > On Fri, 16 Sept 2022 at 23:13, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, Sep 16, 2022 at 11:06:35PM +0300, Dmitry Baryshkov wrote:
+> > > > > > > > On Fri, 16 Sept 2022 at 22:43, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, Sep 16, 2022 at 02:17:15PM -0500, Rob Herring wrote:
+> > > > > > > > > > On Wed, Sep 14, 2022 at 04:22:53PM +0200, Christian Marangi wrote:
+> > > > > > > > > > > Convert kpss-acc driver Documentation to yaml.
+> > > > > > > > > > > The original Documentation was wrong all along. Fix it while we are
+> > > > > > > > > > > converting it.
+> > > > > > > > > > > The example was wrong as kpss-acc-v2 should only expose the regs but we
+> > > > > > > > > > > don't have any driver that expose additional clocks. The kpss-acc driver
+> > > > > > > > > > > is only specific to v1. For this exact reason, limit all the additional
+> > > > > > > > > > > bindings (clocks, clock-names, clock-output-names and #clock-cells) to
+> > > > > > > > > > > v1 and also flag that these bindings should NOT be used for v2.
+> > > > > > > > > >
+> > > > > > > > > > Odd that a clock controller has no clocks, but okay.
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > As said in the commit v2 is only used for regs. v2 it's only used in
+> > > > > > > > > arch/arm/mach-qcom/platsmp.c to setup stuff cpu hotplug and bringup.
+> > > > > > > > >
+> > > > > > > > > Should we split the 2 driver? To me the acc naming seems to be just
+> > > > > > > > > recycled for v2 and it's not really a clk controller.
+> > > > > > > > >
+> > > > > > > > > So keeping v2 in arm/msm/qcom,kpss-acc-v2.yaml and v1 moved to clock?
+> > > > > > > >
+> > > > > > > > I suspect that qcom,kpss-acc-v2 is misnamed as the "clock-controller".
+> > > > > > > > According to msm-3.10, these regions are used by the Krait core
+> > > > > > > > regulators.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Well we need to understand how to handle this... change the compatible
+> > > > > > > it's a nono for sure. In platsmp.c they are used for cpu power control
+> > > > > > > so could be that they are actually used to regulators. I would honestly
+> > > > > > > move v1 to clock and leave v2 to arm/msm but I'm not cetain on what name
+> > > > > > > to assign to the 2 yaml.
+> > > > > > >
+> > > > > > > What do you think?
+> > > > > >
+> > > > > > This is fine for me. If somebody gets better understanding of
+> > > > > > underlying hardware and works on actually using these blocks, he will
+> > > > > > update the bindings.
+> > > > > >
+> > > > > > My only suggestion would be to rename kpss-acc-v2 nodes to
+> > > > > > 'power-controller@address' and document them so.
+> > > > > >
+> > > > >
+> > > > > Ok so something like this?
+> > > > >
+> > > > >     power-controller@f9088000 {
+> > > > >       compatible = "qcom,kpss-acc-v2";
+> > > > >       reg = <0xf9088000 0x1000>,
+> > > > >             <0xf9008000 0x1000>;
+> > > > >     };
+> > > > >
+> > > > > (and I will have to fix dtbs warning as they will be unmatched I think.)
+> > > > > Yaml naming:
+> > > > > qcom,kpss-acc-v1.yaml
+> > > > > qcom,kpss-acc-v2.yaml
+> > > > > Right?
+> > > >
+> > > > Sounds good to me.
+> > > >
+> > > > I'd even say clock/qcom,kpss-acc-v1.yaml and
+> > > > arm/msm/qcom,kpss-acc-v2.yaml or maybe power/qcom,kpss-acc-v2.yaml
+> > > >
+> > >
+> > > Wonder if the gcc driver should have the same tretement? It's also a
+> > > clock-controller driver that doesn't use clock at all... Do you have
+> > > some info about it?
+> > 
+> > As far as I understand, the kpss-gcc is a normal clock controller,
+> > isn't it? It provides clocks to other devices.
+> > 
+> 
+> Hi again... Having acc-v2 as power-controller would require to set
+> #power-domain-cells = <0>;
+> 
+> Would that be acceptable? Considering it wouldn't expose any PM domain?
+> 
+> About kpss-gcc we have some device that for some reason doesn't have the
+> required clocks defined in the dts. I checked the related gcc and no PXO
+> defined and no pll8_vote clock defined. (the affected dts are all listed
+> in the related Documentation)
+> 
+> No idea how they currently work with the kpss-gcc driver as these
+> parents are missing. Guess the driver just fails to probe?
+> So this was the question if you had more info about it... since to me it
+> seems just another gcc v2 that doesn't expose clocks but it's just a
+> power-controller just like acc-v2. 
+> 
+> -- 
+> 	Ansuel
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+(Also sorry for the double email)
+I'm checking the regs for apq8084 for example (from the dtsi)
+Are we really sure they are power-controller?
+Checking the regs it seems they just changed the location and they
+placed clock-controller and right after the power-controller.
+So one can get confused and say that 0xf9... can be all related to power
+controller. I posted the regs for reference.
 
-Changed V2:
-  Use SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-  Add more clocks
+acc0 0xf9088000 0x1000
+saw0 0xf9089000 0x1000
 
----
+acc1 0xf9098000 0x1000
+saw1 0xf9099000 0x1000
 
-Rockchip recently replied on other clock-patches to dual-license the
-binding.
+acc2 0xf90a8000 0x1000
+saw2 0xf90b9000 0x1000
 
-https://lore.kernel.org/all/510d1180-bc8e-7820-c772-ed7f35447087@rock-chips.com/
-From Finley with an  @rock-chips.com address, so this should be ok.
+Anyway while at it there seems to be a bit of confusion about the naming
+here... We have on ipq8064 and ipq4019 the saw node set as regulator and
+with the regulator binding but on msm8974 and apq8084 the saw node set
+as power-controller (with the l2 node with the regulator binding).
 
-Document history:
+Think we should chose a name and fix every dts.
+So the main question here is...
+Should we keep acc as clock-controller or change it to power-controller
+(for v2)?
 
-git log Documentation/devicetree/bindings/clock/*rk312*.txt
+Should we change saw node to regulator or power-controller?
 
-Author: Elaine Zhang <zhangqing@rock-chips.com>
-    dt-bindings: add documentation for rk3126 clock
-Author: Elaine Zhang <zhangqing@rock-chips.com>
-    dt-bindings: add bindings for rk3128 clock controller
----
- .../bindings/clock/rockchip,rk3128-cru.txt    | 58 ---------------
- .../bindings/clock/rockchip,rk3128-cru.yaml   | 74 +++++++++++++++++++
- 2 files changed, 74 insertions(+), 58 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
+From what I know acc are used to enable the cpu so it seems sane to keep
+them as clock-controller (even if v2 doesn't export clock)
+Saw node handle power (and in theory even low power state) so it seems
+sane to change them to power-controller.
 
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-deleted file mode 100644
-index 6f8744fd301b..000000000000
---- a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-+++ /dev/null
-@@ -1,58 +0,0 @@
--* Rockchip RK3126/RK3128 Clock and Reset Unit
--
--The RK3126/RK3128 clock controller generates and supplies clock to various
--controllers within the SoC and also implements a reset controller for SoC
--peripherals.
--
--Required Properties:
--
--- compatible: should be "rockchip,rk3126-cru" or "rockchip,rk3128-cru"
--  "rockchip,rk3126-cru" - controller compatible with RK3126 SoC.
--  "rockchip,rk3128-cru" - controller compatible with RK3128 SoC.
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- #clock-cells: should be 1.
--- #reset-cells: should be 1.
--
--Optional Properties:
--
--- rockchip,grf: phandle to the syscon managing the "general register files"
--  If missing pll rates are not changeable, due to the missing pll lock status.
--
--Each clock is assigned an identifier and client nodes can use this identifier
--to specify the clock which they consume. All available clocks are defined as
--preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
--used in device tree sources. Similar macros exist for the reset sources in
--these files.
--
--External clocks:
--
--There are several clocks that are generated outside the SoC. It is expected
--that they are defined using standard clock bindings with following
--clock-output-names:
-- - "xin24m" - crystal input - required,
-- - "ext_i2s" - external I2S clock - optional,
-- - "gmac_clkin" - external GMAC clock - optional
--
--Example: Clock controller node:
--
--	cru: cru@20000000 {
--		compatible = "rockchip,rk3128-cru";
--		reg = <0x20000000 0x1000>;
--		rockchip,grf = <&grf>;
--
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--Example: UART controller node that consumes the clock generated by the clock
--  controller:
--
--	uart2: serial@20068000 {
--		compatible = "rockchip,serial";
--		reg = <0x20068000 0x100>;
--		interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
--		clock-frequency = <24000000>;
--		clocks = <&cru SCLK_UART2>, <&cru PCLK_UART2>;
--		clock-names = "sclk_uart", "pclk_uart";
--	};
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-new file mode 100644
-index 000000000000..b77aec3a6f8d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/rockchip,rk3128-cru.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3126/RK3128 Clock and Reset Unit (CRU)
-+
-+maintainers:
-+  - Elaine Zhang <zhangqing@rock-chips.com>
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+description: |
-+  The RK3126/RK3128 clock controller generates and supplies clock to various
-+  controllers within the SoC and also implements a reset controller for SoC
-+  peripherals.
-+  Each clock is assigned an identifier and client nodes can use this identifier
-+  to specify the clock which they consume. All available clocks are defined as
-+  preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
-+  used in device tree sources. Similar macros exist for the reset sources in
-+  these files.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk3126-cru
-+      - rockchip,rk3128-cru
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  "#reset-cells":
-+    const: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 3
-+
-+  clock-names:
-+    minItems: 1
-+    maxItems: 3
-+    items:
-+      enum:
-+        - xin24m
-+        - ext_i2s
-+        - gmac_clkin
-+
-+  rockchip,grf:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to the syscon managing the "general register files" (GRF),
-+      if missing pll rates are not changeable, due to the missing pll
-+      lock status.
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - "#reset-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    cru: clock-controller@20000000 {
-+      compatible = "rockchip,rk3128-cru";
-+      reg = <0x20000000 0x1000>;
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
+Currently we have no warning for saw node as they are not converted to
+yaml but as soon as someone convert the txt to yaml then we will have
+all sort of inconsistency so better take a decision now instead of
+convert saw to yaml and then change acc node again to fix them for good.
+
 -- 
-2.20.1
-
+	Ansuel
