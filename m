@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3F15BB7F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 12:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F54A5BB7F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 13:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiIQK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 06:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S229593AbiIQLMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 07:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIQK7O (ORCPT
+        with ESMTP id S229379AbiIQLMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 06:59:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22740419B2;
-        Sat, 17 Sep 2022 03:59:12 -0700 (PDT)
+        Sat, 17 Sep 2022 07:12:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D87326EF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 04:12:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACD86B80D31;
-        Sat, 17 Sep 2022 10:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA25C433D7;
-        Sat, 17 Sep 2022 10:59:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F8A6B80B0C
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F72EC433C1;
+        Sat, 17 Sep 2022 11:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663412350;
-        bh=4YhfXXVITaxyZ7ickgJk1+TK+jaPswSVW817YmzQetg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mlHCnKP0WB2uWbChrk4q6RL0Qx2r/gHQDC9oSJpxW2EbflDButPVeikbnLPDqRuAa
-         uMBNIAxUK9YP6cJ8t088PZToAtuG+fNjSjR1cCN+UFjy1NSR4Fe+vii3eIQ++5/J2t
-         G32gzhZbqibD7HIndba0d3nwaO6DhkgEj8JWwI484H7lSPNjcKiuf+lKgZzp145UKc
-         /rWyFp393Jz382lw1mp0vKr2MFARtOSXzRJp2N2/VdtnThMFXTJB+055ZPSba5Qla3
-         eNal325u2+WTwCZYezJX9gJTu2HlqZJ1v6xPyr5h7svm/gR+KopGdwkenk6Ht9hg4Y
-         p3TMKbSRfTsXg==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-12b542cb1d3so45846254fac.13;
-        Sat, 17 Sep 2022 03:59:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2gA5hQW41IZNTfbbaN6JnxCrOOkENcL2knzPs4YVmtEyH5J3oA
-        Rvq06M1fkvQLw/lMZCbMDXKHTE9ypd6TaVGgyck=
-X-Google-Smtp-Source: AA6agR4sClFlGuDsJqtKaYj0hkDas61Hr4pLmOYJ+LWicDByGyz5Jc5/SoMTyBglnH1gA6Au8ZBBCEB98KwdYTTgtGU=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr10590424oao.112.1663412349408; Sat, 17
- Sep 2022 03:59:09 -0700 (PDT)
+        s=k20201202; t=1663413152;
+        bh=6zgW0jH+FYXoff9unH4qY7BhAxpjuAZOYZY6rw5rGo4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kg29XTolKJSbkf5tyeOGyUift9/qaSrMMWEQhsAUJdsYrpR3ZXa60w9k5CwXZWBTL
+         PaoDepwhgikAqkTqq+pRpBwQ0zuet4qO8QfvSd3wN1URFY8iKje1Q1VJq9DRWhzc8m
+         IlzCuMvIn9Ev0loSj/Y6c6/P/fUwKmU4roHEHZ6yIc6MvhzHWL027rQa3rskKhW/DF
+         90mjvczNVTP2XLC5uvBmIdpIUFqS6oqLlm2gnang0cFLcZ4O8xAGI+ZAO2pgfiozDQ
+         i0uzWtMcn1myteXWIEYa5geMD/tP/HOeMqdfWLltQ4q3haWlgi3dhi0rXRQEVHmnia
+         TRbB74lOPuD/Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     xiakaixu1987@gmail.com
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH] mm/damon: rename damon_pageout_score() to damon_cold_score()
+Date:   Sat, 17 Sep 2022 11:12:29 +0000
+Message-Id: <20220917111230.114618-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1663407558-21316-1-git-send-email-kaixuxia@tencent.com>
+References: 
 MIME-Version: 1.0
-References: <20220917015522.44583-1-zouyipeng@huawei.com>
-In-Reply-To: <20220917015522.44583-1-zouyipeng@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 17 Sep 2022 18:58:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRDspQZUZk=KAC_P+YCr=86o4EgOGAVGcB1kdgsymhyVQ@mail.gmail.com>
-Message-ID: <CAJF2gTRDspQZUZk=KAC_P+YCr=86o4EgOGAVGcB1kdgsymhyVQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] make weak attributes in {k,u}probes
-To:     Yipeng Zou <zouyipeng@huawei.com>
-Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        linux-s390@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        borntraeger@linux.ibm.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, mhiramat@kernel.org,
-        namit@vmware.com, catalin.marinas@arm.com, peterz@infradead.org,
-        mark.rutland@arm.com, liaochang1@huawei.com, chris.zjh@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,38 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's a riskless cleanup.
+On Sat, 17 Sep 2022 17:39:18 +0800 xiakaixu1987@gmail.com wrote:
 
-Acked-by: Guo Ren <guoren@kernel.org>
+> From: Kaixu Xia <kaixuxia@tencent.com>
+> 
+> In the beginning there is only one damos_action 'DAMOS_PAGEOUT'
+> that need to get the coldness score of a region for a scheme,
+> which using damon_pageout_score() to do that. But now there are
+> also other damos_action actions need the coldness score, so
+> rename it to damon_cold_score() to make more sense.
 
-On Sat, Sep 17, 2022 at 9:59 AM Yipeng Zou <zouyipeng@huawei.com> wrote:
->
-> We have some function implementation under some arch does nothing.
-> We can mark it with weak attributes to improve.
-> 1. arch_init_kprobes in kprobes
-> 2. arch_uprobe_exception_notify in uprobes
->
-> Yipeng Zou (2):
->   kprobes: make arch_init_kprobes as weak
->   uprobes: make arch_uprobe_exception_notify as weak
->
->  arch/arm/probes/uprobes/core.c     | 6 ------
->  arch/arm64/kernel/probes/uprobes.c | 6 ------
->  arch/csky/kernel/probes/kprobes.c  | 5 -----
->  arch/csky/kernel/probes/uprobes.c  | 6 ------
->  arch/riscv/kernel/probes/kprobes.c | 5 -----
->  arch/riscv/kernel/probes/uprobes.c | 6 ------
->  arch/s390/kernel/kprobes.c         | 5 -----
->  arch/x86/kernel/kprobes/core.c     | 5 -----
->  kernel/events/uprobes.c            | 6 ++++++
->  kernel/kprobes.c                   | 5 +++++
->  10 files changed, 11 insertions(+), 44 deletions(-)
->
-> --
-> 2.17.1
->
+Good idea.
+
+> 
+> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> ---
+>  mm/damon/ops-common.c | 2 +-
+>  mm/damon/ops-common.h | 2 +-
+>  mm/damon/paddr.c      | 5 ++---
+>  mm/damon/vaddr.c      | 2 +-
+>  4 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
+> index 9310df72e1c5..75409601f934 100644
+> --- a/mm/damon/ops-common.c
+> +++ b/mm/damon/ops-common.c
+> @@ -130,7 +130,7 @@ int damon_hot_score(struct damon_ctx *c, struct damon_region *r,
+>  	return hotness;
+>  }
+>  
+> -int damon_pageout_score(struct damon_ctx *c, struct damon_region *r,
+> +int damon_cold_score(struct damon_ctx *c, struct damon_region *r,
+>  			struct damos *s)
+>  {
+>  	int hotness = damon_hot_score(c, r, s);
+> diff --git a/mm/damon/ops-common.h b/mm/damon/ops-common.h
+> index 52329ff361cd..8d82d3722204 100644
+> --- a/mm/damon/ops-common.h
+> +++ b/mm/damon/ops-common.h
+> @@ -12,7 +12,7 @@ struct page *damon_get_page(unsigned long pfn);
+>  void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
+>  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+>  
+> -int damon_pageout_score(struct damon_ctx *c, struct damon_region *r,
+> +int damon_cold_score(struct damon_ctx *c, struct damon_region *r,
+>  			struct damos *s);
+>  int damon_hot_score(struct damon_ctx *c, struct damon_region *r,
+>  			struct damos *s);
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index dfeebffe82f4..e495146e49e9 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -287,11 +287,10 @@ static int damon_pa_scheme_score(struct damon_ctx *context,
+>  {
+>  	switch (scheme->action) {
+>  	case DAMOS_PAGEOUT:
+> -		return damon_pageout_score(context, r, scheme);
+> +	case DAMOS_LRU_DEPRIO:
+> +		return damon_cold_score(context, r, scheme);
+>  	case DAMOS_LRU_PRIO:
+>  		return damon_hot_score(context, r, scheme);
+> -	case DAMOS_LRU_DEPRIO:
+> -		return damon_pageout_score(context, r, scheme);
+
+I'm not a big fan of switch-case fall-through, and want to keep the order of
+cases here more similar to that in damos_action definition.  Let's change only 
+the function name.
+
+Other than that,
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
 
--- 
-Best Regards
- Guo Ren
+Thanks,
+SJ
+
+>  	default:
+>  		break;
+>  	}
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index f53c2ff2bcc8..ea94e0b2c311 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -673,7 +673,7 @@ static int damon_va_scheme_score(struct damon_ctx *context,
+>  
+>  	switch (scheme->action) {
+>  	case DAMOS_PAGEOUT:
+> -		return damon_pageout_score(context, r, scheme);
+> +		return damon_cold_score(context, r, scheme);
+>  	default:
+>  		break;
+>  	}
+> -- 
+> 2.27.0
+> 
+> 
