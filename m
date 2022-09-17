@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF4B5BB856
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887305BB85A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIQNDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 09:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S229623AbiIQNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 09:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQNDd (ORCPT
+        with ESMTP id S229648AbiIQNEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 09:03:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8AA33A16
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:03:30 -0700 (PDT)
+        Sat, 17 Sep 2022 09:04:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D972B33A1C
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663419809;
+        s=mimecast20190719; t=1663419860;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WFKTAY2KdmvVhG4mVk5ksHM9On8VSZSUeVOe+Zo5PYw=;
-        b=HwLSgwFgnoc3Wqsq4uBAvG8yH83cdh8/iYiphyn+x+XMHMzaR5Pd/X3MnlV0KmVlknqrXc
-        HWVxzXoLrvU6z5ULygKZY8swps6cyKSApM0GgWsQageZmGzUD8J+OJhIj7+jIKy2pQcik+
-        EkBCYI4/wXY78iD4SnSlLcTFKiPsOyU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=IB1HQdme8YEeD8Kj1n47Nas4fnkU0luDWqOLkZyPEI8=;
+        b=UDhaA6vtQ241d/LQWj8VbVK/i9+dQ2HG3xygCnOYAVMFkrVCa8MTxp7XzOwfADKMWMDutn
+        mvPWvgkjQbX6uXrScRvL71FZ/2qGjyKvBBNdPCJtUGLC0UC+Ljwy2Gqic058Qy3yrHDcrV
+        /ce/ydkoqZapjQxhFz67WsbnNai/M1I=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-474-Qr3zdEhNP9CsXXtGT2kH_Q-1; Sat, 17 Sep 2022 09:03:28 -0400
-X-MC-Unique: Qr3zdEhNP9CsXXtGT2kH_Q-1
-Received: by mail-ej1-f69.google.com with SMTP id sa22-20020a1709076d1600b0077bab1f70a3so7697463ejc.12
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:03:27 -0700 (PDT)
+ us-mta-561-C9JM6KSTMYG51bhfObb_kw-1; Sat, 17 Sep 2022 09:04:18 -0400
+X-MC-Unique: C9JM6KSTMYG51bhfObb_kw-1
+Received: by mail-ed1-f72.google.com with SMTP id b17-20020a056402351100b00453b19d9bd0so425360edd.4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:04:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=WFKTAY2KdmvVhG4mVk5ksHM9On8VSZSUeVOe+Zo5PYw=;
-        b=LZQiI/3TWNkp6Gqrqtuy7PqZ7lwhKoAt0Xh0eGUzVB4IGa8DPcS40a7DNg7TfZD1lf
-         EHW11l5dUTPmn5xHzLw+95ZHxLzWOYE7tBfBKcN/B8EcbaI4e3lATVEw/JBTXwBbSkoF
-         ScCGE5xs8nZavfzHQ6zAaikPqtMCJELA+VzwojR9tVetRlko34m5uKxRwfmvJpmbOVP6
-         fM19mm6tRUQoQcZ0x3aa6mWrx4sNhHhpnlc7sNmLj02/H/7ItlJS5Gu1MdI5XGLFJPXj
-         ufyCDg/I+T7QzxOKaasbhUykqdOBjQO1h5ECF7uQX7DrINob3xoIdZscSAtQ1G+Hmhhq
-         b6VQ==
-X-Gm-Message-State: ACrzQf1OE+wb1XIJWBLPZ8dePLLcmIJf7ItPG24kCmG3E7pd4x9V+n+0
-        rtOs//J4wPJl0zr4emN5BTxwIGg59u/eTPGcBsMCrng1l81tjLjIRW4s7n2G1y+TBZH34MA3lkt
-        eldAAbh3o0NEZdEfTOVLm7Nm3
-X-Received: by 2002:a05:6402:1a4f:b0:44e:f731:f7d5 with SMTP id bf15-20020a0564021a4f00b0044ef731f7d5mr7674565edb.357.1663419806894;
-        Sat, 17 Sep 2022 06:03:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6TW9DUcujFVXamr90lXX/vora3cXH38exH0amphyAyGDcARckDksaj8d4kVVegyUocYnJKGg==
-X-Received: by 2002:a05:6402:1a4f:b0:44e:f731:f7d5 with SMTP id bf15-20020a0564021a4f00b0044ef731f7d5mr7674555edb.357.1663419806755;
-        Sat, 17 Sep 2022 06:03:26 -0700 (PDT)
+        bh=IB1HQdme8YEeD8Kj1n47Nas4fnkU0luDWqOLkZyPEI8=;
+        b=SKacBA6s76i0ogcGeIWtJk1mA875gUX9C7/L1asBdBBBg+UQGcm7eM7QGplTeiYVsl
+         7RHCZWzHHhUD+vkJQZP+vwsS0ZVbC4sgk9AII5EomspzmmwGr7LirijGI7rHB34ITHc3
+         mD5O2LH8QuQ/iNiZDb56oEd2+iE/woCRBwWxlpEnTbeImBNPZfPptg0hiVlbuYrVmXkH
+         OFQarLDCAVbmK9PzBh/eIKAoF9pq3RR2X72tP2tfmc9BjCD8ARZRlMkn8rwI97DFRR0J
+         iM/XzjOvYXmOLuPMO2VUvV2Dlc0woAI7XtAFeBV6LtZK50ZMuSW4/MLcFvx62xAwCgKM
+         LozQ==
+X-Gm-Message-State: ACrzQf3qXGOnAAzyWxNHPX88Biwb8IsTHHVh8y1qSq3Q0daAMZoHONeC
+        /Jn0boie9yVKI6tjllY4d+CE7bAfUy6OKk6kFX1wEoSRJbl+wpztSFvOUepfVgSOcOZCGBRLxvA
+        h8Hnn75WJEFl+cRir7vYVn4wd
+X-Received: by 2002:a17:907:2bdd:b0:77d:e0f3:81e5 with SMTP id gv29-20020a1709072bdd00b0077de0f381e5mr6715850ejc.328.1663419857336;
+        Sat, 17 Sep 2022 06:04:17 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5DA5wCcsH5iDV6cyNETXig/uwsG/BWf9W8xSsm4akO2vs30QZ2677QvL2RXV5XAdhbL/QNsA==
+X-Received: by 2002:a17:907:2bdd:b0:77d:e0f3:81e5 with SMTP id gv29-20020a1709072bdd00b0077de0f381e5mr6715837ejc.328.1663419857180;
+        Sat, 17 Sep 2022 06:04:17 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170906364b00b007803cffd31fsm5100377ejb.215.2022.09.17.06.03.26
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b0071cbc7487e1sm12079684eje.69.2022.09.17.06.04.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 06:03:26 -0700 (PDT)
-Message-ID: <83c3c020-40e3-3114-ca77-997e0c1d2579@redhat.com>
-Date:   Sat, 17 Sep 2022 15:03:25 +0200
+        Sat, 17 Sep 2022 06:04:16 -0700 (PDT)
+Message-ID: <4e145e1d-db9a-0edb-cdd4-1da3e02131fd@redhat.com>
+Date:   Sat, 17 Sep 2022 15:04:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: drm/vboxvideo: fix repeated words in comments
+Subject: Re: [PATCH] drm: panel-orientation-quirks: Add quirk for Anbernic
+ Win600
 Content-Language: en-US
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220824130226.33980-1-yuanjilin@cdjrlc.com>
+To:     Maccraft123 <maccraft123mc@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220803182402.1217293-1-maccraft123mc@gmail.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220824130226.33980-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220803182402.1217293-1-maccraft123mc@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -83,15 +88,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 8/24/22 15:02, Jilin Yuan wrote:
-> Delete the redundant word 'the'.
+On 8/3/22 20:24, Maccraft123 wrote:
+> From: Maya Matuszczyk <maccraft123mc@gmail.com>
 > 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> This device is another x86 gaming handheld, and as (hopefully) there is
+> only one set of DMI IDs it's using DMI_EXACT_MATCH
+> 
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
 
 Thanks I have added this patch to my local drm-misc-next branch.
 
 I will push this out to the official drm-misc-next branch after
 running some local tests.
+
+(unfortunately it is too late now to push this to drm-misc-fixes
+for this cycle, sorry).
 
 Regards,
 
@@ -100,20 +111,24 @@ Hans
 
 
 > ---
->  drivers/gpu/drm/vboxvideo/vboxvideo.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/vboxvideo/vboxvideo.h b/drivers/gpu/drm/vboxvideo/vboxvideo.h
-> index a5de40fe1a76..f60d82504da0 100644
-> --- a/drivers/gpu/drm/vboxvideo/vboxvideo.h
-> +++ b/drivers/gpu/drm/vboxvideo/vboxvideo.h
-> @@ -43,7 +43,7 @@
->   * VBE_DISPI_INDEX_VBOX_VIDEO is used to read the configuration information
->   * from the host and issue commands to the host.
->   *
-> - * The guest writes the VBE_DISPI_INDEX_VBOX_VIDEO index register, the the
-> + * The guest writes the VBE_DISPI_INDEX_VBOX_VIDEO index register, the
->   * following operations with the VBE data register can be performed:
->   *
->   * Operation            Result
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index d4e0f2e85548..a8681610ede7 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -128,6 +128,12 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "One S1003"),
+>  		},
+>  		.driver_data = (void *)&lcd800x1280_rightside_up,
+> +	}, {	/* Anbernic Win600 */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Anbernic"),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Win600"),
+> +		},
+> +		.driver_data = (void *)&lcd720x1280_rightside_up,
+>  	}, {	/* Asus T100HA */
+>  		.matches = {
+>  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
 
