@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE595BB57F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F55BB587
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiIQCNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 22:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S229675AbiIQCUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 22:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQCNU (ORCPT
+        with ESMTP id S229379AbiIQCUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 22:13:20 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006CBC831
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:13:17 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id e68so22913208pfe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:13:17 -0700 (PDT)
+        Fri, 16 Sep 2022 22:20:39 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5B8644E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:20:38 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id k2so24467960vsk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=O/wHfSygLsTDmbVML9jL5HVnMqDKxLwyjweHfisFexo=;
-        b=hkpFE9dY8zc+Tj/9KFsk0wgqf7HV2Vezb5hXqx4WGnDt6gWbT8Oo2Mm/WniNar0pjZ
-         axB4dbEGB4QUVsmTeFErEpIpUoOK+9fHkROm67WOLblpmqgjMoGBpUNsaB/0cWDEcvZP
-         6Jw8EIKe/7w3+jCTuy2gt1cMlwCaMbzVBkDiMMSXFmlXRauiQpcRy/XIwSiT6QtelneC
-         8LEfZwtbUlvV6Jpb7W9DxRKSzG3oTthsYAZmAsV9bEyQpF0sXHtt5ham7Da91bzhppLx
-         AY6DtdzzaUHtLmU5YIVJsCGL/x3G2wGU+3xq3Ckv7QU8hzbrDXe0LNWaClm54Q35Rp3B
-         Wp0A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=oGVwvUbROocDCKmIi63dwILH5RW1QiYjDieu+3HIGsc=;
+        b=p4xe7FkTwPfgqVWHMfckvfXbZ74PEfbA+zGhE3mwURum3Wtwo6VikqJgSAObdpAFke
+         MHgaf3cMGbcsp7NKYQST+kgVWi7QA/7EfeeoGpttq5en4rUxgqRWjbhB3n/S//vgR2uv
+         S6WlzAYbgM9x6YRypeUAifzcU+4agyXG2WIF5YjQTmbFQQQ9PuFPqhCcTxCqC21V8Oma
+         fehUSROGSD31s8uKBl1as5duo/aDD+hrtnyxHZxLITS42/VP+0byTiZn/qi2IZK9QjXQ
+         G0LgZLpYHmcT0na0Uoui2L7qNB6jaNUt1Ej0X2zNAazPs/ALCYW+dn5M3uVKopRR+64h
+         qv+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=O/wHfSygLsTDmbVML9jL5HVnMqDKxLwyjweHfisFexo=;
-        b=ELTBXathHA0bWGO0LSCjvjwI3kDEJMHAkzlpmRqmQj2LRRJxNzrEnJALJ9xgDXIAUI
-         LSNZ4V6qsqEWYFMWOSCtQV+Xp/MmZ7ShD3ZNA8hXtbZemq2V4pTRwn9rEZC8/AmNenX+
-         sSN/d7nvcPkX6ZCuYE0RVwIYF8LQpu2FehSobHNZAm3OTt6oNgvqvb6VdHUe1CU1rB2I
-         pLobY2v1UEVlVFf/Xt9dTMGgIlYL5/wAz6CVToMPy4lyTC1zk3eopJ9KjssC849UWXe2
-         wOea/snWt22YYH8DTvABwHfuvzO8Z43nnjrNcIzSumVk5bPd7up0+o3HrYMBh1kHdQyp
-         E0hA==
-X-Gm-Message-State: ACrzQf0Kota0EiLyHXC+4UFGu+TluFZGSiZJ+t5jEXAxc48fEEnd8HST
-        Ma2MXOqZvVbolfdef3qNuFzSs8DWk190cg==
-X-Google-Smtp-Source: AMsMyM4wSunl1Ehj83giXSNRzm8v0AxUUnGmsIK5jCr7OOe0AbFT0IYYcCJ0U4URWNWErqSPiRxzNQ==
-X-Received: by 2002:a63:1349:0:b0:438:fa5a:b6f1 with SMTP id 9-20020a631349000000b00438fa5ab6f1mr7201270pgt.250.1663380796804;
-        Fri, 16 Sep 2022 19:13:16 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id oj5-20020a17090b4d8500b0020263b7177csm9753575pjb.3.2022.09.16.19.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 19:13:15 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] mm/vmscan: check the return value of migrate_pages()
-Date:   Fri, 16 Sep 2022 19:12:57 -0700
-Message-Id: <20220917021257.3840548-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=oGVwvUbROocDCKmIi63dwILH5RW1QiYjDieu+3HIGsc=;
+        b=ka9VA53dHRGQKANP+w070a1bs10HJev5dZ1a4YnvZgaTPPPTh1QNy6BURMDGV8jhaZ
+         eU0zlXYf68M0ruau/g8vb/Yu4tKpdWFo0GiDZlnJDiZQ04v44Hv3AcE4K4udABKrIJGb
+         CA2+DxVvF4bT9XrrUjPYgc28XG7uQRKCB92AbtnGMm2A40ETJgm46WQqSi8253MvJN0Y
+         Jc+R1x/2rj3+t1Z5QNt9x2lqf8RunicAfDJIt2RGT/11cJ5p9P8QzM3cZsFWDMBH0aa6
+         Nfvm8RxUR8xz3muwAcQeHtXkp3xZC43OsgEI+TQHuxcRW6BqS+vByZ2xPHwu1mntE9hi
+         M4MA==
+X-Gm-Message-State: ACrzQf2qB6KDOjFakbCClemwcAhEJ++Wny+pka4vfoLrWqVPJ69dbz7I
+        /iVRiRA5TwCM8ALndz2GEr0haWgg8XfonGPRvapB+18I1k4=
+X-Google-Smtp-Source: AMsMyM5q6QRJAwXaZJ4XFbVgFggwa1+pamVcYJuzMq6iNMYJMIVWBOPdicQlAri+7OMdOIMIErnmt4nZD65EK0hktVA=
+X-Received: by 2002:a67:ed55:0:b0:39a:7942:f574 with SMTP id
+ m21-20020a67ed55000000b0039a7942f574mr3217830vsp.65.1663381237345; Fri, 16
+ Sep 2022 19:20:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220916135953.1320601-1-keescook@chromium.org>
+In-Reply-To: <20220916135953.1320601-1-keescook@chromium.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 16 Sep 2022 20:20:00 -0600
+Message-ID: <CAOUHufbUUf1--=qiseAYzjN2DdyCkf_x=CQboWYDduH7VgpXmQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] x86/dumpstack: Inline copy_from_user_nmi()
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, dev@der-flo.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-perf-users@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-hardening@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of migrate_pages() to check error exeuction.
+On Fri, Sep 16, 2022 at 8:01 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Hi,
+>
+> This fixes a find_vmap_area() deadlock. The main fix is patch 2, repeated here:
+>
+>     The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+>     designed to skip any checks where the length is known at compile time as
+>     a reasonable heuristic to avoid "likely known-good" cases. However, it can
+>     only do this when the copy_*_user() helpers are, themselves, inline too.
+>
+>     Using find_vmap_area() requires taking a spinlock. The check_object_size()
+>     helper can call find_vmap_area() when the destination is in vmap memory.
+>     If show_regs() is called in interrupt context, it will attempt a call to
+>     copy_from_user_nmi(), which may call check_object_size() and then
+>     find_vmap_area(). If something in normal context happens to be in the
+>     middle of calling find_vmap_area() (with the spinlock held), the interrupt
+>     handler will hang forever.
+>
+>     The copy_from_user_nmi() call is actually being called with a fixed-size
+>     length, so check_object_size() should never have been called in the
+>     first place. In order for check_object_size() to see that the length is
+>     a fixed size, inline copy_from_user_nmi(), as already done with all the
+>     other uaccess helpers.
+>
+>     Reported-by: Yu Zhao <yuzhao@google.com>
+>     Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+>     Reported-by: dev@der-flo.net
+>
+> Patch 1 is a refactor for patch 2, and patch 3 should make sure we avoid
+> future deadlocks.
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- mm/vmscan.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b2b1431352dc..50aaaa9377e2 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1547,6 +1547,7 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
- {
- 	int target_nid = next_demotion_node(pgdat->node_id);
- 	unsigned int nr_succeeded;
-+	int ret;
- 
- 	if (list_empty(demote_pages))
- 		return 0;
-@@ -1555,10 +1556,13 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
- 		return 0;
- 
- 	/* Demotion ignores all cpuset and mempolicy settings */
--	migrate_pages(demote_pages, alloc_demote_page, NULL,
-+	ret = migrate_pages(demote_pages, alloc_demote_page, NULL,
- 			    target_nid, MIGRATE_ASYNC, MR_DEMOTION,
- 			    &nr_succeeded);
- 
-+	if (ret)
-+		putback_movable_pages(&pagelist);
-+
- 	if (current_is_kswapd())
- 		__count_vm_events(PGDEMOTE_KSWAPD, nr_succeeded);
- 	else
--- 
-2.25.1
+Tested-by: Yu Zhao <yuzhao@google.com>
 
+The same test has been holding up well for a few hours now. It used to
+throw that warning in less than half an hour.
