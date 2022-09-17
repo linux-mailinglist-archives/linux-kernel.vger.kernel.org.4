@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F54A5BB7F7
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE8F5BB7F6
 	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 13:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIQLMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 07:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S229606AbiIQLRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 07:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQLMg (ORCPT
+        with ESMTP id S229581AbiIQLRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 07:12:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D87326EF
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 04:12:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F8A6B80B0C
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F72EC433C1;
-        Sat, 17 Sep 2022 11:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663413152;
-        bh=6zgW0jH+FYXoff9unH4qY7BhAxpjuAZOYZY6rw5rGo4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kg29XTolKJSbkf5tyeOGyUift9/qaSrMMWEQhsAUJdsYrpR3ZXa60w9k5CwXZWBTL
-         PaoDepwhgikAqkTqq+pRpBwQ0zuet4qO8QfvSd3wN1URFY8iKje1Q1VJq9DRWhzc8m
-         IlzCuMvIn9Ev0loSj/Y6c6/P/fUwKmU4roHEHZ6yIc6MvhzHWL027rQa3rskKhW/DF
-         90mjvczNVTP2XLC5uvBmIdpIUFqS6oqLlm2gnang0cFLcZ4O8xAGI+ZAO2pgfiozDQ
-         i0uzWtMcn1myteXWIEYa5geMD/tP/HOeMqdfWLltQ4q3haWlgi3dhi0rXRQEVHmnia
-         TRbB74lOPuD/Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     xiakaixu1987@gmail.com
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon: rename damon_pageout_score() to damon_cold_score()
-Date:   Sat, 17 Sep 2022 11:12:29 +0000
-Message-Id: <20220917111230.114618-1-sj@kernel.org>
+        Sat, 17 Sep 2022 07:17:03 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4189232DB0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 04:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663413422; x=1694949422;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=r5R83j4pOSZlr5q6a2Hps+vq4FBEXptw1GqH09jMVRM=;
+  b=WcCqlrMtFUE9ty00gf+lQYQ96Gp8dP2G6HoD73jLn3vg3azTw12l2sNC
+   Ulf+SQ6xiN8KwCrnnREenNs6AUjgE4CyUnMwNmSQJG4++uuRVGzspoS5R
+   KqfvE4/V1TpPxpuGHrQN1jVE7RVntZeslWAsEgsJ9LAuhiU5/lkMhM7MT
+   E3xKwr2XG9UG0dpWMmudC96bldHXm0ebgyhsDsK/B1dPgAR9GOv/6+A30
+   8RsVUQgFXIgThw8lzTyYYDz72kblhdZGRLfs7gF59e//LPzEPMB45CR6w
+   bCEVmJCH+QjMhRHHuN99o5YWIjJmn5yBqrygjnmYeCQEAMOut/VV8Be5S
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="363107123"
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="363107123"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 04:17:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="743609171"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by orsmga004.jf.intel.com with ESMTP; 17 Sep 2022 04:16:59 -0700
+From:   niravkumar.l.rabara@intel.com
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mtd: spi-nor: macronix: Add support for mx66u1g45g
+Date:   Sat, 17 Sep 2022 19:16:40 +0800
+Message-Id: <20220917111640.977243-1-niravkumar.l.rabara@intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1663407558-21316-1-git-send-email-kaixuxia@tencent.com>
-References: 
+In-Reply-To: <20220916082215.883184-1-niravkumar.l.rabara@intel.com>
+References: <20220916082215.883184-1-niravkumar.l.rabara@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Sep 2022 17:39:18 +0800 xiakaixu1987@gmail.com wrote:
+From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 
-> From: Kaixu Xia <kaixuxia@tencent.com>
-> 
-> In the beginning there is only one damos_action 'DAMOS_PAGEOUT'
-> that need to get the coldness score of a region for a scheme,
-> which using damon_pageout_score() to do that. But now there are
-> also other damos_action actions need the coldness score, so
-> rename it to damon_cold_score() to make more sense.
+The MX66U1G45G is the smaller sibling (128MB) of the MX66U2G45G (256MB)
+that is already supported.
 
-Good idea.
+Tested on Intel N5X socdk board,
+- random data write, erase, read   - verified erase operations
+- random data write, read and compare  - verified write/read operations
 
-> 
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-> ---
->  mm/damon/ops-common.c | 2 +-
->  mm/damon/ops-common.h | 2 +-
->  mm/damon/paddr.c      | 5 ++---
->  mm/damon/vaddr.c      | 2 +-
->  4 files changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
-> index 9310df72e1c5..75409601f934 100644
-> --- a/mm/damon/ops-common.c
-> +++ b/mm/damon/ops-common.c
-> @@ -130,7 +130,7 @@ int damon_hot_score(struct damon_ctx *c, struct damon_region *r,
->  	return hotness;
->  }
->  
-> -int damon_pageout_score(struct damon_ctx *c, struct damon_region *r,
-> +int damon_cold_score(struct damon_ctx *c, struct damon_region *r,
->  			struct damos *s)
->  {
->  	int hotness = damon_hot_score(c, r, s);
-> diff --git a/mm/damon/ops-common.h b/mm/damon/ops-common.h
-> index 52329ff361cd..8d82d3722204 100644
-> --- a/mm/damon/ops-common.h
-> +++ b/mm/damon/ops-common.h
-> @@ -12,7 +12,7 @@ struct page *damon_get_page(unsigned long pfn);
->  void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
->  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
->  
-> -int damon_pageout_score(struct damon_ctx *c, struct damon_region *r,
-> +int damon_cold_score(struct damon_ctx *c, struct damon_region *r,
->  			struct damos *s);
->  int damon_hot_score(struct damon_ctx *c, struct damon_region *r,
->  			struct damos *s);
-> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-> index dfeebffe82f4..e495146e49e9 100644
-> --- a/mm/damon/paddr.c
-> +++ b/mm/damon/paddr.c
-> @@ -287,11 +287,10 @@ static int damon_pa_scheme_score(struct damon_ctx *context,
->  {
->  	switch (scheme->action) {
->  	case DAMOS_PAGEOUT:
-> -		return damon_pageout_score(context, r, scheme);
-> +	case DAMOS_LRU_DEPRIO:
-> +		return damon_cold_score(context, r, scheme);
->  	case DAMOS_LRU_PRIO:
->  		return damon_hot_score(context, r, scheme);
-> -	case DAMOS_LRU_DEPRIO:
-> -		return damon_pageout_score(context, r, scheme);
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+---
+root@n5x:~# find / -iname spi-nor
+/sys/kernel/debug/spi-nor
+/sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor
+/sys/bus/spi/drivers/spi-nor
+root@n5x:~# ls -al /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/
+drwxr-xr-x    2 root     root             0 Dec 16 17:26 .
+drwxr-xr-x    6 root     root             0 Dec 16 17:25 ..
+-r--r--r--    1 root     root          4096 Dec 16 17:26 jedec_id
+-r--r--r--    1 root     root          4096 Dec 16 17:26 manufacturer
+-r--r--r--    1 root     root          4096 Dec 16 17:26 partname
+-r--r--r--    1 root     root             0 Dec 16 17:26 sfdp
+root@n5x:~#  cat  /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id
+c2253b
+root@n5x:~# cat  /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer
+macronix
+root@n5x:~# cat  /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/partname
+mx66u1g45g
+root@n5x:~# cat  /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp > mx66u1g45g-sfdp
+root@n5x:~# hexdump mx66u1g45g-sfdp
+0000000 4653 5044 0106 ff02 0600 1001 0030 ff00
+0000010 00c2 0401 0110 ff00 0084 0201 00c0 ff00
+0000020 ffff ffff ffff ffff ffff ffff ffff ffff
+0000030 20e5 fffb ffff 3fff eb44 6b08 3b08 bb04
+0000040 fffe ffff ffff ff00 ffff eb44 200c 520f
+0000050 d810 ff00 4987 00b5 d282 e204 0344 3867
+0000060 b030 b030 bdf7 5cd5 9e4a ff29 50f0 85f9
+0000070 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+00000c0 8f7f ffff 5c21 ffdc ffff ffff ffff ffff
+00000d0 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+0000110 2000 1600 f99d 64c0 cb85 ffff ffff ffff
+0000120
+---
+ drivers/mtd/spi-nor/macronix.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I'm not a big fan of switch-case fall-through, and want to keep the order of
-cases here more similar to that in damos_action definition.  Let's change only 
-the function name.
+diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
+index d81a4cb2812b..07ace9da74b7 100644
+--- a/drivers/mtd/spi-nor/macronix.c
++++ b/drivers/mtd/spi-nor/macronix.c
+@@ -97,6 +97,10 @@ static const struct flash_info macronix_nor_parts[] = {
+ 			      SPI_NOR_QUAD_READ) },
+ 	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
+ 		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
++	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
++		PARSE_SFDP
++		FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
++		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+ 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+ 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+-- 
+2.25.1
 
-Other than that,
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
->  	default:
->  		break;
->  	}
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index f53c2ff2bcc8..ea94e0b2c311 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -673,7 +673,7 @@ static int damon_va_scheme_score(struct damon_ctx *context,
->  
->  	switch (scheme->action) {
->  	case DAMOS_PAGEOUT:
-> -		return damon_pageout_score(context, r, scheme);
-> +		return damon_cold_score(context, r, scheme);
->  	default:
->  		break;
->  	}
-> -- 
-> 2.27.0
-> 
-> 
