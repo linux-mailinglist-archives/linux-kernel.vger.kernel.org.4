@@ -2,136 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7FB5BB5F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 05:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE65BB5F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 05:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiIQDpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 23:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S229624AbiIQDxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 23:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIQDo6 (ORCPT
+        with ESMTP id S229379AbiIQDx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 23:44:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47A53D5B2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 20:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663386297; x=1694922297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AC5wnii6Fg80ze8oiZurueSnr0pXH0g3PuvD0DaCL6s=;
-  b=R3/kq+PX9bdY7prNUe1RIkUaEMpzN/YbliJpaHVp+XklyD+/v/Rv0FAD
-   7mTEgLvhixSmatc20cpkGWMRG1b/OksxCi/2btkR9zMW90vJ/GvWcURvv
-   TWqQ+Owg+qWs7zubhIJPCjVY75pPwlwwZ7/BZkWSCwtbDMBfoHgW9AeXc
-   2oL8uPG8WKBQnfkYuP8zULAUSueoPQqbyezl9/J5bsf5mlnE37FEywtmq
-   evexaNbQNnLV6Tv0oqdRTHCiCSh3lB7LZq9AC95jIGgldm3pvSkDkztnL
-   +ScIEFpIHU2gHgfWWuVxcUFX2SRvr+ZIPGOpsGylnxJpOSFcuvyWso/4J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="363082726"
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="363082726"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 20:44:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="686363703"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 20:44:54 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZOlB-0002Ri-1V;
-        Sat, 17 Sep 2022 03:44:53 +0000
-Date:   Sat, 17 Sep 2022 11:44:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "brookxu.cn" <brookxu.cn@gmail.com>, robin.murphy@arm.com,
-        joro@8bytes.org, will@kernel.org
-Cc:     kbuild-all@lists.01.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/iova: using separate rcache for SAC and DAC
-Message-ID: <202209171115.TzR7T0b4-lkp@intel.com>
-References: <20220916154613.104965-1-brookxu.cn@gmail.com>
+        Fri, 16 Sep 2022 23:53:29 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404D213F3B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 20:53:28 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id c198so23016808pfc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 20:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vt6MRk9DQDvzYW2dWjPKi1EOqMrnAagET9zwi8q0O88=;
+        b=PVhkUs3foGq5cnMoSiBAE0rqukWtMOYwf2cNOR4WGPaMbbfZ/JIxX8Zja/GrQ9NXk6
+         +sYqjzTmBQFh9s+js2iDt8E6YMJlokKm0w2EQhoIi1t0n+X+8mGVEcNfZGIUYgYZX9b/
+         PUtOOvYWMK7Ds9GNg+EacGZtI2vsxp40SKOs9VNdTXTx6AxzdNVbcx8XvLNGqTDQ43xz
+         XiV9wXJdxhl4g8qfh1N1LJZBotlXfAuQjHf7za0cxQd9eT1Zv6PQ2QU9ZQp5s6XjcJaQ
+         F40DJ2ozmOSwh2zqqU13j8aQxkXBMtoJVMiqc/iq0lXJkZgEWDsQyJxqcKPKSbN+WxfE
+         7TlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vt6MRk9DQDvzYW2dWjPKi1EOqMrnAagET9zwi8q0O88=;
+        b=0RKuRjCyI4WD1ah7oM0ihF82llbY1RwGJaTH6GpaI7s99TiygB4zHSq9brbAtqXpOJ
+         Q6LegGR5ArcYaxKZPI3NZH/nEFrf6vbtaCljQWL1yfXOo0aQIpPTzIl1DaksW9qcdFLN
+         +gzQ/B01655RlY6KVSCCmlDc9Z8kkhsHs41+QxtdZWHvxGqSJy41uq5jPn/Q+ZLqUtFg
+         BMm9OUVr5jdLx88q03WYvtw6uDUGZttkYjaGrA/5sHnEGbpfDEWpObGoM+ZTgvgYUk2D
+         VffveUOUbtBMXFuv7zdYNXu/UXcswdU86schc0n4jVMvm4WRbyrekp/Ia9O23BVwQCdA
+         XJvw==
+X-Gm-Message-State: ACrzQf3G6FFgHTu5oG/Vfhaz73DSoN2qLikesbsjT8Pb20FIjE8b9I4J
+        CI5jnwrylBZGOS3XmUPCNX+XuK5O8ts=
+X-Google-Smtp-Source: AMsMyM6O7n0e/oD3jDpyiWnZH+OynTKlminYOoVVMB/6bnqB1AN6GsZmzl2kz3dCg+q0nh3pe61edw==
+X-Received: by 2002:a05:6a00:228c:b0:542:e65c:98 with SMTP id f12-20020a056a00228c00b00542e65c0098mr7850986pfe.79.1663386807655;
+        Fri, 16 Sep 2022 20:53:27 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b001714c36a6e7sm15596808plb.284.2022.09.16.20.53.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 16 Sep 2022 20:53:27 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 11:56:01 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com,
+        shaojunjun@coolpad.com, Yue Hu <huyue2@coolpad.com>
+Subject: Re: [RFC PATCH v4 2/2] erofs: support on-disk compressed fragments
+ data
+Message-ID: <20220917115601.00004eb5.zbestahu@gmail.com>
+In-Reply-To: <YyQ9I5aJh/acVbjD@B-P7TQMD6M-0146.local>
+References: <cover.1663066966.git.huyue2@coolpad.com>
+        <6ded0c212d7da65b70c853fd04f21da229cdefb1.1663066966.git.huyue2@coolpad.com>
+        <YyQ9I5aJh/acVbjD@B-P7TQMD6M-0146.local>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916154613.104965-1-brookxu.cn@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi brookxu.cn",
+On Fri, 16 Sep 2022 17:08:51 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+> On Tue, Sep 13, 2022 at 07:05:52PM +0800, Yue Hu wrote:
+> > From: Yue Hu <huyue2@coolpad.com>
+> > 
+> > Introduce on-disk compressed fragments data feature.
+> > 
+> > This approach adds a new field called `h_fragmentoff' in the per-file
+> > compression header to indicate the fragment offset of each tail pcluster
+> > or the whole file in the special packed inode.
+> > 
+> > Similar to ztailpacking, it will also find and record the 'headlcn'
+> > of the tail pcluster when initializing per-inode zmap for making
+> > follow-on requests more easy.
+> > 
+> > Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> > ---
+> >  fs/erofs/erofs_fs.h | 29 +++++++++++++++++++++------
+> >  fs/erofs/internal.h | 16 ++++++++++++---
+> >  fs/erofs/super.c    | 15 ++++++++++++++
+> >  fs/erofs/sysfs.c    |  2 ++
+> >  fs/erofs/zdata.c    | 48 ++++++++++++++++++++++++++++++++++++++++++++-
+> >  fs/erofs/zmap.c     | 48 +++++++++++++++++++++++++++++++++++++++++++--
+> >  6 files changed, 146 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+> > index 5c1de6d7ad71..aa976757328b 100644
+> > --- a/fs/erofs/erofs_fs.h
+> > +++ b/fs/erofs/erofs_fs.h
+> > @@ -25,6 +25,7 @@
+> >  #define EROFS_FEATURE_INCOMPAT_DEVICE_TABLE	0x00000008
+> >  #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
+> >  #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
+> > +#define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
+> >  #define EROFS_ALL_FEATURE_INCOMPAT		\
+> >  	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
+> >  	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
+> > @@ -32,7 +33,8 @@
+> >  	 EROFS_FEATURE_INCOMPAT_CHUNKED_FILE | \
+> >  	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
+> >  	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
+> > -	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING)
+> > +	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
+> > +	 EROFS_FEATURE_INCOMPAT_FRAGMENTS)
+> >  
+> >  #define EROFS_SB_EXTSLOT_SIZE	16
+> >  
+> > @@ -71,7 +73,9 @@ struct erofs_super_block {
+> >  	} __packed u1;
+> >  	__le16 extra_devices;	/* # of devices besides the primary device */
+> >  	__le16 devt_slotoff;	/* startoff = devt_slotoff * devt_slotsize */
+> > -	__u8 reserved2[38];
+> > +	__u8 reserved[6];
+> > +	__le64 packed_nid;	/* nid of the special packed inode */
+> > +	__u8 reserved2[24];
+> >  };
+> >  
+> >  /*
+> > @@ -296,17 +300,26 @@ struct z_erofs_lzma_cfgs {
+> >   * bit 2 : HEAD2 big pcluster (0 - off; 1 - on)
+> >   * bit 3 : tailpacking inline pcluster (0 - off; 1 - on)
+> >   * bit 4 : interlaced plain pcluster (0 - off; 1 - on)
+> > + * bit 5 : fragment pcluster (0 - off; 1 - on)
+> >   */
+> >  #define Z_EROFS_ADVISE_COMPACTED_2B		0x0001
+> >  #define Z_EROFS_ADVISE_BIG_PCLUSTER_1		0x0002
+> >  #define Z_EROFS_ADVISE_BIG_PCLUSTER_2		0x0004
+> >  #define Z_EROFS_ADVISE_INLINE_PCLUSTER		0x0008
+> >  #define Z_EROFS_ADVISE_INTERLACED_PCLUSTER	0x0010
+> > +#define Z_EROFS_ADVISE_FRAGMENT_PCLUSTER	0x0020
+> >  
+> > +#define Z_EROFS_FRAGMENT_INODE_BIT              7
+> >  struct z_erofs_map_header {
+> > -	__le16	h_reserved1;
+> > -	/* indicates the encoded size of tailpacking data */
+> > -	__le16  h_idata_size;
+> > +	union {
+> > +		/* fragment data offset in the packed inode */
+> > +		__le32  h_fragmentoff;
+> > +		struct {
+> > +			__le16  h_reserved1;
+> > +			/* indicates the encoded size of tailpacking data */
+> > +			__le16  h_idata_size;
+> > +		};
+> > +	};
+> >  	__le16	h_advise;
+> >  	/*
+> >  	 * bit 0-3 : algorithm type of head 1 (logical cluster type 01);
+> > @@ -315,7 +328,8 @@ struct z_erofs_map_header {
+> >  	__u8	h_algorithmtype;
+> >  	/*
+> >  	 * bit 0-2 : logical cluster bits - 12, e.g. 0 for 4096;
+> > -	 * bit 3-7 : reserved.
+> > +	 * bit 3-6 : reserved;
+> > +	 * bit 7   : move the whole file into packed inode or not.
+> >  	 */
+> >  	__u8	h_clusterbits;
+> >  };
+> > @@ -421,6 +435,9 @@ static inline void erofs_check_ondisk_layout_definitions(void)
+> >  
+> >  	BUILD_BUG_ON(BIT(Z_EROFS_VLE_DI_CLUSTER_TYPE_BITS) <
+> >  		     Z_EROFS_VLE_CLUSTER_TYPE_MAX - 1);
+> > +	WARN_ON(*(__le64 *)&(struct z_erofs_map_header) {
+> > +			.h_clusterbits = 1 << Z_EROFS_FRAGMENT_INODE_BIT
+> > +		} != cpu_to_le64(1ULL << 63));  
+> 
+> why not BUILD_BUG_ON here?
 
-[auto build test ERROR on v6.0-rc5]
-[also build test ERROR on linus/master next-20220916]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+There's compiling error, let me check further.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/brookxu-cn/iommu-iova-using-separate-rcache-for-SAC-and-DAC/20220916-234845
-base:    80e78fcce86de0288793a0ef0f6acf37656ee4cf
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220917/202209171115.TzR7T0b4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/fa50a31c6b74157cac20cd44b3717c19b934ff76
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review brookxu-cn/iommu-iova-using-separate-rcache-for-SAC-and-DAC/20220916-234845
-        git checkout fa50a31c6b74157cac20cd44b3717c19b934ff76
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+> 
+> >  }
+> >  
+> >  #endif
+> > diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> > index f3ed36445d73..b133664b4ad2 100644
+> > --- a/fs/erofs/internal.h
+> > +++ b/fs/erofs/internal.h
+> > @@ -120,6 +120,7 @@ struct erofs_sb_info {
+> >  	struct inode *managed_cache;
+> >  
+> >  	struct erofs_sb_lz4_info lz4;
+> > +	struct inode *packed_inode;
+> >  #endif	/* CONFIG_EROFS_FS_ZIP */
+> >  	struct erofs_dev_context *devs;
+> >  	struct dax_device *dax_dev;
+> > @@ -306,6 +307,7 @@ EROFS_FEATURE_FUNCS(chunked_file, incompat, INCOMPAT_CHUNKED_FILE)
+> >  EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
+> >  EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
+> >  EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
+> > +EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
+> >  EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
+> >  
+> >  /* atomic flag definitions */
+> > @@ -341,8 +343,13 @@ struct erofs_inode {
+> >  			unsigned char  z_algorithmtype[2];
+> >  			unsigned char  z_logical_clusterbits;
+> >  			unsigned long  z_tailextent_headlcn;
+> > -			erofs_off_t    z_idataoff;
+> > -			unsigned short z_idata_size;
+> > +			union {
+> > +				struct {
+> > +					erofs_off_t    z_idataoff;
+> > +					unsigned short z_idata_size;
+> > +				};
+> > +				erofs_off_t z_fragmentoff;
+> > +			};
+> >  		};
+> >  #endif	/* CONFIG_EROFS_FS_ZIP */
+> >  	};
+> > @@ -400,6 +407,7 @@ extern const struct address_space_operations z_erofs_aops;
+> >  enum {
+> >  	BH_Encoded = BH_PrivateStart,
+> >  	BH_FullMapped,
+> > +	BH_Fragment,
+> >  };
+> >  
+> >  /* Has a disk mapping */
+> > @@ -410,6 +418,8 @@ enum {
+> >  #define EROFS_MAP_ENCODED	(1 << BH_Encoded)
+> >  /* The length of extent is full */
+> >  #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
+> > +/* Located in the special packed inode */
+> > +#define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
+> >  
+> >  struct erofs_map_blocks {
+> >  	struct erofs_buf buf;
+> > @@ -431,7 +441,7 @@ struct erofs_map_blocks {
+> >  #define EROFS_GET_BLOCKS_FIEMAP	0x0002
+> >  /* Used to map the whole extent if non-negligible data is requested for LZMA */
+> >  #define EROFS_GET_BLOCKS_READMORE	0x0004
+> > -/* Used to map tail extent for tailpacking inline pcluster */
+> > +/* Used to map tail extent for tailpacking inline or fragment pcluster */
+> >  #define EROFS_GET_BLOCKS_FINDTAIL	0x0008
+> >  
+> >  enum {
+> > diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> > index 3173debeaa5a..8170c0d8ab92 100644
+> > --- a/fs/erofs/super.c
+> > +++ b/fs/erofs/super.c
+> > @@ -381,6 +381,17 @@ static int erofs_read_superblock(struct super_block *sb)
+> >  #endif
+> >  	sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+> >  	sbi->root_nid = le16_to_cpu(dsb->root_nid);
+> > +#ifdef CONFIG_EROFS_FS_ZIP
+> > +	sbi->packed_inode = NULL;
+> > +	if (erofs_sb_has_fragments(sbi)) {
+> > +		sbi->packed_inode =
+> > +			erofs_iget(sb, le64_to_cpu(dsb->packed_nid), false);
+> > +		if (IS_ERR(sbi->packed_inode)) {
+> > +			ret = PTR_ERR(sbi->packed_inode);
+> > +			goto out;
+> > +		}
+> > +	}
+> > +#endif
+> >  	sbi->inos = le64_to_cpu(dsb->inos);
+> >  
+> >  	sbi->build_time = le64_to_cpu(dsb->build_time);
+> > @@ -411,6 +422,8 @@ static int erofs_read_superblock(struct super_block *sb)
+> >  		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+> >  	if (erofs_is_fscache_mode(sb))
+> >  		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+> > +	if (erofs_sb_has_fragments(sbi))
+> > +		erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
+> >  out:
+> >  	erofs_put_metabuf(&buf);
+> >  	return ret;
+> > @@ -908,6 +921,8 @@ static void erofs_put_super(struct super_block *sb)
+> >  #ifdef CONFIG_EROFS_FS_ZIP
+> >  	iput(sbi->managed_cache);
+> >  	sbi->managed_cache = NULL;
+> > +	iput(sbi->packed_inode);
+> > +	sbi->packed_inode = NULL;
+> >  #endif
+> >  	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+> >  }
+> > diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+> > index c1383e508bbe..1b52395be82a 100644
+> > --- a/fs/erofs/sysfs.c
+> > +++ b/fs/erofs/sysfs.c
+> > @@ -76,6 +76,7 @@ EROFS_ATTR_FEATURE(device_table);
+> >  EROFS_ATTR_FEATURE(compr_head2);
+> >  EROFS_ATTR_FEATURE(sb_chksum);
+> >  EROFS_ATTR_FEATURE(ztailpacking);
+> > +EROFS_ATTR_FEATURE(fragments);
+> >  
+> >  static struct attribute *erofs_feat_attrs[] = {
+> >  	ATTR_LIST(zero_padding),
+> > @@ -86,6 +87,7 @@ static struct attribute *erofs_feat_attrs[] = {
+> >  	ATTR_LIST(compr_head2),
+> >  	ATTR_LIST(sb_chksum),
+> >  	ATTR_LIST(ztailpacking),
+> > +	ATTR_LIST(fragments),
+> >  	NULL,
+> >  };
+> >  ATTRIBUTE_GROUPS(erofs_feat);
+> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> > index 5792ca9e0d5e..aa2a3cdeea57 100644
+> > --- a/fs/erofs/zdata.c
+> > +++ b/fs/erofs/zdata.c
+> > @@ -650,6 +650,33 @@ static bool should_alloc_managed_pages(struct z_erofs_decompress_frontend *fe,
+> >  		la < fe->headoffset;
+> >  }
+> >  
+> > +static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
+> > +				 struct page *page, unsigned int pageofs,
+> > +				 unsigned int len)
+> > +{
+> > +	struct inode *packed_inode = EROFS_I_SB(inode)->packed_inode;
+> > +	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+> > +	u8 *src, *dst;
+> > +	unsigned int i, cnt;
+> > +
+> > +	pos += EROFS_I(inode)->z_fragmentoff;
+> > +	for (i = 0; i < len; i += cnt) {
+> > +		cnt = min_t(unsigned int, len - i,
+> > +			    EROFS_BLKSIZ - erofs_blkoff(pos));
+> > +		src = erofs_bread(&buf, packed_inode,
+> > +				  erofs_blknr(pos), EROFS_KMAP);
+> > +		if (IS_ERR(src))  
+> 
+> 			^
+> 			need to erofs_put_metabuf() here anyway?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+rt, need it.
 
-All errors (new ones prefixed by >>):
+Thanks.
 
-   drivers/iommu/iova.c: In function 'iova_rcache_get':
->> drivers/iommu/iova.c:902:24: error: expected ';' before '}' token
-     902 |         return iova_pfn
-         |                        ^
-         |                        ;
-     903 | }
-         | ~                       
+> 
+> > +			return PTR_ERR(src);
+> > +
+> > +		dst = kmap_local_page(page);
+> > +		memcpy(dst + pageofs + i, src + erofs_blkoff(pos), cnt);
+> > +		kunmap_local(dst);
+> > +		pos += cnt;
+> > +	}
+> > +	erofs_put_metabuf(&buf);
+> > +	return 0;
+> > +}  
+> 
+> Thanks,
+> Gao Xiang
 
-
-vim +902 drivers/iommu/iova.c
-
-   878	
-   879	/*
-   880	 * Try to satisfy IOVA allocation range from rcache.  Fail if requested
-   881	 * size is too big or the DMA limit we are given isn't satisfied by the
-   882	 * top element in the magazine.
-   883	 */
-   884	static unsigned long iova_rcache_get(struct iova_domain *iovad,
-   885					     unsigned long size,
-   886					     unsigned long limit_pfn)
-   887	{
-   888		unsigned int log_size = order_base_2(size);
-   889		unsigned long iova_pfn;
-   890		unsigned int index;
-   891	
-   892		if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
-   893			return 0;
-   894	
-   895		iova_pfn = __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
-   896	
-   897		if (!iova_pfn && limit_pfn > DMA_BIT_MASK(32)) {
-   898			index = log_size + IOVA_RANGE_CACHE_MAX_SIZE;
-   899			iova_pfn = __iova_rcache_get(&iovad->rcaches[index], limit_pfn - size);
-   900		}
-   901	
- > 902		return iova_pfn
-   903	}
-   904	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
