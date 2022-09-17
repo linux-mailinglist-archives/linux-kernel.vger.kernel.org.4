@@ -2,87 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889725BBA73
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 22:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EBD5BBA77
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 22:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiIQUqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 16:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S229514AbiIQUwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 16:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiIQUqd (ORCPT
+        with ESMTP id S229532AbiIQUwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 16:46:33 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50FF27FD1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:46:30 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a21so13557699ljq.7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date;
-        bh=KuXvhF9KldhDK2ZH0oBRmMUJV90s+/AHiLgTmmdgWUQ=;
-        b=EyHfgV0/wR81r4wjhBrSg96m0SNDpoYVE4lR2aG4jebgecvwYyLOEVn1Cy6/Cgkg7M
-         ZLMVZVz128bIjkZ744+UiUoGkpXsh+GrfJj7WbHVHmeaVCR5uwvFWkBinO6BjZDPWyQn
-         /iNPfLwlpvqg3vRXelV3A36EQPL8y9gLl7eaanFukRUMKvm2uBI4ea4XOmCx0nJpZBt4
-         HWfzpEIAUvqKQUqtHUM/edriFafUwUoGmHQE177MxYIlkUr326+awJ9iCvLEgf/uIgEh
-         dMdbM4kN9/TtAbYZQU0lvPV2TIza48r9cKv28VLv3RxuK31VU29bFTD+tPv0kzy49tIV
-         ZUFw==
+        Sat, 17 Sep 2022 16:52:40 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA852B243
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:52:38 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id x14-20020a056e021cae00b002f1d5aca8c6so16496674ill.5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:52:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=KuXvhF9KldhDK2ZH0oBRmMUJV90s+/AHiLgTmmdgWUQ=;
-        b=BhNGJVK2t6iLc0FexDrHM4UQt0FNqXAJ+2My7zmREOH2ie4KQkF1gLMjiKcBVK588S
-         ctLOJ7Teay4YfDIBcEO0XlKhmXweynoWNtV/dFYOarsflEUHgJfNr3fwW/aXiZJjwdp6
-         al1Z1U2gfwFWOBYX1mHBm5nS6dfCI2fi3WlIPIBujeWCLG1UzJ1YGnVUfFhXOpW25A+/
-         SZ7uoCmzlPcCdJbgrqhp+8WsXnVB0NiSI8k751MgpwupdizD5Kb3MTyZ+gPUN+CVX86Z
-         77w3lkNXvVemvzgwtqrRI4MdXzJe1A/qmWW26T45lmmkAs3flaJh5sYUb16fSIWSYoLx
-         IU5w==
-X-Gm-Message-State: ACrzQf3fBaiV4Z7OyZ1fjyA7i+aUsuCgHB5yvgOWMPN/HVhKOfJNRrh1
-        2H0X7XnB8heOu8F37eqqotSytQ==
-X-Google-Smtp-Source: AMsMyM7MO114St+nXQYxfZqj20JfkM6MHWUpKUy5NeFyDAftKvGhetvKelcxFuYxojuXxHTyHF4o+A==
-X-Received: by 2002:a2e:8881:0:b0:255:7790:25e6 with SMTP id k1-20020a2e8881000000b00255779025e6mr3090895lji.525.1663447589100;
-        Sat, 17 Sep 2022 13:46:29 -0700 (PDT)
-Received: from [127.0.0.1] ([188.162.64.169])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05651238c300b00498f36bce07sm4258485lft.214.2022.09.17.13.46.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 17 Sep 2022 13:46:28 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 23:46:23 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-CC:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Marc Herbert <marc.herbert@intel.com>,
-        James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_2/5=5D_dt-bindings=3A_arm=3A_msm=3A_C?= =?US-ASCII?Q?onvert_kpss-acc_driver_Documentation_to_yaml?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <63262383.df0a0220.27cbb.1c41@mx.google.com>
-References: <20220916191715.GA1079300-robh@kernel.org> <6324d1be.050a0220.9d842.7b47@mx.google.com> <CAA8EJprEQOsm4TxGWJYZo04D1PagT3QmhDdYQkEid-KSP-tpTw@mail.gmail.com> <6324d8e1.170a0220.aba35.ba4f@mx.google.com> <CAA8EJpowLvkuiYupqS0WEhnMR8q=R1YUUFgdFVCAx1PXyoo1xw@mail.gmail.com> <6324dc1b.df0a0220.97787.083c@mx.google.com> <CAA8EJpo08WoQ_LYOtg5C2BB=Q6GR_cftLjaWHWjYD6BjfDZcsg@mail.gmail.com> <6324f087.1c0a0220.7123d.8665@mx.google.com> <CAA8EJprhLUybqmPhFmit6LGaNOxz=-9+8xADXowJuzU5BtjjtA@mail.gmail.com> <632618ac.050a0220.bda86.d7a8@mx.google.com> <63262383.df0a0220.27cbb.1c41@mx.google.com>
-Message-ID: <7F54CF10-F2EF-46C6-B291-9339FE5D10E4@linaro.org>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=bfXbTKLbXHZLIP+W+CGghsYmmEe01ZlFPvP4RL9ydzU=;
+        b=EaKYihSabSTsAWBj2XxE2fcQtTyvk8Hi7PHQXQyMqeS1sDzahRyG1ZPm90n6e820dh
+         svRiqU+BDdTh72ZitY6Rb9BRrihZ0usgsEMvOm0cuBl4fuGzV9TeMQSjX4qOlwUaWqiO
+         NfhIkbLg0dSlehJulZUINi2f6neYT6sUpzicUW4PQictJVTTlpmXUw07rsIAS4xAG+R3
+         cm/AYW9dxAGoBEuCvpAwjfENGO+Ba2FWSU9Yg3sq3LeM9VQCVZsZ+t+VNvROAwbLenz/
+         EQoPD+1YuR8Hhaqe3xqB8oaqjU1CzeiijPJy/ijubuX+2jn7o/dByKkVDMMes7yQ/Y/U
+         8AcA==
+X-Gm-Message-State: ACrzQf2dKdv2PBM9JFBNbPOOIgKPGHJRccGK4J/MB78v6kBTOMOGyoAM
+        Py7gjab5QY6UEGtfANOYfps12Q4UZXI/xYH/yz54UHefP9F1
+X-Google-Smtp-Source: AMsMyM4JZTW40HSumUKVXiAcjH7xMEjL+2oTdZgfKTKLgjpIx/EgK9vN5yRQuPGCrjGVqMlm1Ik1cdbe4Q/oDIm3iimnSXZTDZ64
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a05:6e02:1caf:b0:2f2:1639:63a0 with SMTP id
+ x15-20020a056e021caf00b002f2163963a0mr4599491ill.5.1663447956659; Sat, 17 Sep
+ 2022 13:52:36 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 13:52:36 -0700
+In-Reply-To: <000000000000f296b105e799d0d6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008f273a05e8e5a8be@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in powermate_config_complete (4)
+From:   syzbot <syzbot+0434ac83f907a1dbdd1e@syzkaller.appspotmail.com>
+To:     dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mailhol.vincent@wanadoo.fr,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,204 +57,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    7eb2bf871454 usb: misc: usb3503: call clk_disable_unprepar..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c5ded8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c3701a9706c1806e
+dashboard link: https://syzkaller.appspot.com/bug?extid=0434ac83f907a1dbdd1e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12137fbf080000
 
-On 17 September 2022 22:44:00 GMT+03:00, Christian Marangi <ansuelsmth@gma=
-il=2Ecom> wrote:
->On Sat, Sep 17, 2022 at 08:57:44PM +0200, Christian Marangi wrote:
->> On Sat, Sep 17, 2022 at 04:45:21PM +0300, Dmitry Baryshkov wrote:
->> > On Sat, 17 Sept 2022 at 00:54, Christian Marangi <ansuelsmth@gmail=2E=
-com> wrote:
->> > >
->> > > On Fri, Sep 16, 2022 at 11:31:49PM +0300, Dmitry Baryshkov wrote:
->> > > > On Fri, 16 Sept 2022 at 23:27, Christian Marangi <ansuelsmth@gmai=
-l=2Ecom> wrote:
->> > > > >
->> > > > > On Fri, Sep 16, 2022 at 11:22:17PM +0300, Dmitry Baryshkov wrot=
-e:
->> > > > > > On Fri, 16 Sept 2022 at 23:13, Christian Marangi <ansuelsmth@=
-gmail=2Ecom> wrote:
->> > > > > > >
->> > > > > > > On Fri, Sep 16, 2022 at 11:06:35PM +0300, Dmitry Baryshkov =
-wrote:
->> > > > > > > > On Fri, 16 Sept 2022 at 22:43, Christian Marangi <ansuels=
-mth@gmail=2Ecom> wrote:
->> > > > > > > > >
->> > > > > > > > > On Fri, Sep 16, 2022 at 02:17:15PM -0500, Rob Herring w=
-rote:
->> > > > > > > > > > On Wed, Sep 14, 2022 at 04:22:53PM +0200, Christian M=
-arangi wrote:
->> > > > > > > > > > > Convert kpss-acc driver Documentation to yaml=2E
->> > > > > > > > > > > The original Documentation was wrong all along=2E F=
-ix it while we are
->> > > > > > > > > > > converting it=2E
->> > > > > > > > > > > The example was wrong as kpss-acc-v2 should only ex=
-pose the regs but we
->> > > > > > > > > > > don't have any driver that expose additional clocks=
-=2E The kpss-acc driver
->> > > > > > > > > > > is only specific to v1=2E For this exact reason, li=
-mit all the additional
->> > > > > > > > > > > bindings (clocks, clock-names, clock-output-names a=
-nd #clock-cells) to
->> > > > > > > > > > > v1 and also flag that these bindings should NOT be =
-used for v2=2E
->> > > > > > > > > >
->> > > > > > > > > > Odd that a clock controller has no clocks, but okay=
-=2E
->> > > > > > > > > >
->> > > > > > > > >
->> > > > > > > > > As said in the commit v2 is only used for regs=2E v2 it=
-'s only used in
->> > > > > > > > > arch/arm/mach-qcom/platsmp=2Ec to setup stuff cpu hotpl=
-ug and bringup=2E
->> > > > > > > > >
->> > > > > > > > > Should we split the 2 driver? To me the acc naming seem=
-s to be just
->> > > > > > > > > recycled for v2 and it's not really a clk controller=2E
->> > > > > > > > >
->> > > > > > > > > So keeping v2 in arm/msm/qcom,kpss-acc-v2=2Eyaml and v1=
- moved to clock?
->> > > > > > > >
->> > > > > > > > I suspect that qcom,kpss-acc-v2 is misnamed as the "clock=
--controller"=2E
->> > > > > > > > According to msm-3=2E10, these regions are used by the Kr=
-ait core
->> > > > > > > > regulators=2E
->> > > > > > > >
->> > > > > > >
->> > > > > > > Well we need to understand how to handle this=2E=2E=2E chan=
-ge the compatible
->> > > > > > > it's a nono for sure=2E In platsmp=2Ec they are used for cp=
-u power control
->> > > > > > > so could be that they are actually used to regulators=2E I =
-would honestly
->> > > > > > > move v1 to clock and leave v2 to arm/msm but I'm not cetain=
- on what name
->> > > > > > > to assign to the 2 yaml=2E
->> > > > > > >
->> > > > > > > What do you think?
->> > > > > >
->> > > > > > This is fine for me=2E If somebody gets better understanding =
-of
->> > > > > > underlying hardware and works on actually using these blocks,=
- he will
->> > > > > > update the bindings=2E
->> > > > > >
->> > > > > > My only suggestion would be to rename kpss-acc-v2 nodes to
->> > > > > > 'power-controller@address' and document them so=2E
->> > > > > >
->> > > > >
->> > > > > Ok so something like this?
->> > > > >
->> > > > >     power-controller@f9088000 {
->> > > > >       compatible =3D "qcom,kpss-acc-v2";
->> > > > >       reg =3D <0xf9088000 0x1000>,
->> > > > >             <0xf9008000 0x1000>;
->> > > > >     };
->> > > > >
->> > > > > (and I will have to fix dtbs warning as they will be unmatched =
-I think=2E)
->> > > > > Yaml naming:
->> > > > > qcom,kpss-acc-v1=2Eyaml
->> > > > > qcom,kpss-acc-v2=2Eyaml
->> > > > > Right?
->> > > >
->> > > > Sounds good to me=2E
->> > > >
->> > > > I'd even say clock/qcom,kpss-acc-v1=2Eyaml and
->> > > > arm/msm/qcom,kpss-acc-v2=2Eyaml or maybe power/qcom,kpss-acc-v2=
-=2Eyaml
->> > > >
->> > >
->> > > Wonder if the gcc driver should have the same tretement? It's also =
-a
->> > > clock-controller driver that doesn't use clock at all=2E=2E=2E Do y=
-ou have
->> > > some info about it?
->> >=20
->> > As far as I understand, the kpss-gcc is a normal clock controller,
->> > isn't it? It provides clocks to other devices=2E
->> >=20
->>=20
->> Hi again=2E=2E=2E Having acc-v2 as power-controller would require to se=
-t
->> #power-domain-cells =3D <0>;
+Downloadable assets:
+disk image: https://storage.googleapis.com/41793befa693/disk-7eb2bf87.raw.xz
+vmlinux: https://storage.googleapis.com/354080f0592d/vmlinux-7eb2bf87.xz
 
-Why? I don't think so=2E Rob/Krzysztof, please correct me if I'm wrong=2E
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0434ac83f907a1dbdd1e@syzkaller.appspotmail.com
 
->>=20
->> Would that be acceptable? Considering it wouldn't expose any PM domain?
->>=20
->> About kpss-gcc we have some device that for some reason doesn't have th=
-e
->> required clocks defined in the dts=2E I checked the related gcc and no =
-PXO
->> defined and no pll8_vote clock defined=2E (the affected dts are all lis=
-ted
->> in the related Documentation)
->>=20
->> No idea how they currently work with the kpss-gcc driver as these
->> parents are missing=2E Guess the driver just fails to probe?
->> So this was the question if you had more info about it=2E=2E=2E since t=
-o me it
->> seems just another gcc v2 that doesn't expose clocks but it's just a
->> power-controller just like acc-v2=2E=20
->>=20
->> --=20
->> 	Ansuel
->
->(Also sorry for the double email)
->I'm checking the regs for apq8084 for example (from the dtsi)
->Are we really sure they are power-controller?
+powermate 3-1:0.0: powermate_irq - usb_submit_urb failed with result: -19
+powermate: config urb returned -71
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
+Read of size 8 at addr ffff88811c320858 by task ksoftirqd/0/13
 
-It looks like it's a regularor on steroids=2E See krait-regulator=2Ec and =
-corresponding bindings in msm-3=2E10/3=2E14=2E So I'd use either the regula=
-tor or the power-controller (with significant bias towards controller)
+CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 6.0.0-rc4-syzkaller-00066-g7eb2bf871454 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4923
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ powermate_config_complete+0x79/0xb0 drivers/input/misc/powermate.c:202
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1671
+ usb_hcd_giveback_urb+0x380/0x430 drivers/usb/core/hcd.c:1754
+ dummy_timer+0x11ff/0x32c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
+ call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
+ __run_timers kernel/time/timer.c:1768 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+ __do_softirq+0x1c0/0x9a9 kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:934 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
->Checking the regs it seems they just changed the location and they
->placed clock-controller and right after the power-controller=2E
->So one can get confused and say that 0xf9=2E=2E=2E can be all related to =
-power
->controller=2E I posted the regs for reference=2E
->
->acc0 0xf9088000 0x1000
->saw0 0xf9089000 0x1000
->
->acc1 0xf9098000 0x1000
->saw1 0xf9099000 0x1000
->
->acc2 0xf90a8000 0x1000
->saw2 0xf90b9000 0x1000
->
->Anyway while at it there seems to be a bit of confusion about the naming
->here=2E=2E=2E We have on ipq8064 and ipq4019 the saw node set as regulato=
-r and
->with the regulator binding but on msm8974 and apq8084 the saw node set
->as power-controller (with the l2 node with the regulator binding)=2E
->
->Think we should chose a name and fix every dts=2E
->So the main question here is=2E=2E=2E
->Should we keep acc as clock-controller or change it to power-controller
->(for v2)?
->
->Should we change saw node to regulator or power-controller?
->
->From what I know acc are used to enable the cpu so it seems sane to keep
->them as clock-controller (even if v2 doesn't export clock)
->Saw node handle power (and in theory even low power state) so it seems
->sane to change them to power-controller=2E
->
->Currently we have no warning for saw node as they are not converted to
->yaml but as soon as someone convert the txt to yaml then we will have
->all sort of inconsistency so better take a decision now instead of
->convert saw to yaml and then change acc node again to fix them for good=
-=2E
+Allocated by task 12:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ __kasan_kmalloc+0x81/0xa0 mm/kasan/common.c:525
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ powermate_probe+0x24a/0x12a0 drivers/input/misc/powermate.c:323
+ usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
+ hub_port_connect drivers/usb/core/hub.c:5353 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+ port_event drivers/usb/core/hub.c:5653 [inline]
+ hub_event+0x26c7/0x4610 drivers/usb/core/hub.c:5735
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
+Freed by task 4017:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:367 [inline]
+ ____kasan_slab_free+0x14a/0x1b0 mm/kasan/common.c:329
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1754 [inline]
+ slab_free_freelist_hook mm/slub.c:1780 [inline]
+ slab_free mm/slub.c:3534 [inline]
+ kfree+0xca/0x5c0 mm/slub.c:4562
+ powermate_disconnect+0x1ce/0x250 drivers/input/misc/powermate.c:432
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:550 [inline]
+ device_remove+0x11f/0x170 drivers/base/dd.c:542
+ __device_release_driver drivers/base/dd.c:1249 [inline]
+ device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
+ bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
+ device_del+0x4f3/0xc80 drivers/base/core.c:3704
+ usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
+ hub_port_connect drivers/usb/core/hub.c:5197 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+ port_event drivers/usb/core/hub.c:5653 [inline]
+ hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
-The saw is definitely a bigger thing than just a regularor (or a set of th=
-em)=2E It is used to control pmics, it handles low-power states, so `power-=
-controller'=2E
+The buggy address belongs to the object at ffff88811c320800
+ which belongs to the cache kmalloc-256 of size 256
+The buggy address is located 88 bytes inside of
+ 256-byte region [ffff88811c320800, ffff88811c320900)
 
---=20
-With best wishes
-Dmitry
+The buggy address belongs to the physical page:
+page:ffffea000470c800 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88811c320a00 pfn:0x11c320
+head:ffffea000470c800 order:1 compound_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head|node=0|zone=2)
+raw: 0200000000010200 ffffea0004630180 dead000000000002 ffff888100041b40
+raw: ffff88811c320a00 000000008010000b 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 1179, tgid 1179 (udevd), ts 1649194346318, free_ts 1649184314294
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ __alloc_pages_node include/linux/gfp.h:243 [inline]
+ alloc_slab_page mm/slub.c:1826 [inline]
+ allocate_slab+0x80/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7b4/0xda0 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ __kmalloc_node+0x12a/0x360 mm/slub.c:4468
+ kmalloc_array_node include/linux/slab.h:695 [inline]
+ kcalloc_node include/linux/slab.h:700 [inline]
+ memcg_alloc_slab_cgroups+0x8b/0x140 mm/memcontrol.c:2830
+ account_slab mm/slab.h:630 [inline]
+ allocate_slab+0x2db/0x3d0 mm/slub.c:1985
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7b4/0xda0 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+ kmem_cache_alloc_lru+0x4f5/0x6e0 mm/slub.c:3275
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ alloc_inode+0x168/0x230 fs/inode.c:262
+ iget_locked+0x1b7/0x6f0 fs/inode.c:1287
+ kernfs_get_inode+0x47/0x520 fs/kernfs/inode.c:254
+ kernfs_iop_lookup+0x1e5/0x320 fs/kernfs/dir.c:1153
+ lookup_open.isra.0+0x76a/0x12a0 fs/namei.c:3391
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5d2/0xb80 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x420 mm/page_alloc.c:3476
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x78/0x80 mm/kasan/common.c:447
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3243 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ kmem_cache_alloc_trace+0x2b3/0x3b0 mm/slub.c:3282
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ dev_new drivers/usb/gadget/legacy/raw_gadget.c:191 [inline]
+ raw_open+0x87/0x500 drivers/usb/gadget/legacy/raw_gadget.c:385
+ misc_open+0x376/0x4a0 drivers/char/misc.c:143
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x49c/0x1240 fs/open.c:878
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x1c92/0x28f0 fs/namei.c:3691
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1338
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88811c320700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88811c320780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88811c320800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff88811c320880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88811c320900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
