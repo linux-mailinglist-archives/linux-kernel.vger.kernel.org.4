@@ -2,108 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951505BB73E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F495BB746
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiIQI35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S229561AbiIQIiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 04:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIQI3x (ORCPT
+        with ESMTP id S229511AbiIQIiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:29:53 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2AA1DA6A
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:29:52 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z21so34594546edi.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:29:52 -0700 (PDT)
+        Sat, 17 Sep 2022 04:38:22 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F075A2D2;
+        Sat, 17 Sep 2022 01:38:21 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id o13so18348959qvw.12;
+        Sat, 17 Sep 2022 01:38:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=vqIwZcKbluvTMAjTQnpYPyZCNj+oMkHihHLd47ipyyI=;
-        b=Ef7g1m4+vE1Dt7lR3DUQwBwTEgs0WbZr/amckJGN+EOQd+CrTqhZbebMrT+mSohUrD
-         F9LVB8+udY3wh9btWp80YNqBtZNKoIkFqhBoIM3NiC0bihx9q3PrEs27bwFPTXVpLW4O
-         ZfBNtA6iycztalaD13pWRObb3AQH9z7ug7JpOK1v3yX58zWvDsio/N6vqd4Z0tlg7m1C
-         VvcApICnw8fTjarDEIBhI4OGDuoriLh5yoBESYfssj6qjtNL4nN2bYpk7G/OekMyYMEH
-         I4OoubY0L+6CHIiOsc0Hth49BPelD+nXWiKJiQZiZxnmG26coMzQcEINy5enuCP3Vv8q
-         uzGg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=I74yKbbEKIm/62gbVurzxkM05YVP2M1gGHJOakj6RhM=;
+        b=UzJAxgBK88Q9X98yO6Ry9S576TEhYe8m6bW24XhKVf8UrDUtkQLAWVNMgHXZpxIpSu
+         9/Bt3ZWrBTQqK3ApqsYLh5coQOsYLZwK09pJl+pUPXIPmj3wgKRyxwL/858eMEa0Dkaj
+         c+ttL9iUnxPs64IoN2DXODHddnsKpyBo9EPPOO3RBRmatuS86bMvzhVFqh42UtcSx8VI
+         JaJsXCMyokuukvZPmhMd4e0VAT1bBOYRqlYKfsNEprfNFM4u86z3icZl5qMtWG7b2K7+
+         1MIpc04emAJz3/t+pxa5mkpwXWmPt3NRPLV8P2Me/ipHDYjtGewgDI6+Ww1JDPcYz8ru
+         sKfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=vqIwZcKbluvTMAjTQnpYPyZCNj+oMkHihHLd47ipyyI=;
-        b=xiwnNfGBLNzkSbAMklprfPOE5yBPTfx3hxL9DvyJWD5xSucfLlkZUYtYpCx/d1LOnn
-         JPZG2fX9/2xIwNH0RLfjKDAdA4sjMVJD0EXgKNvwDiEifVb5a9/1VPc/huiScFpI5fLX
-         Bf50aFQcpNwn9lVbmEOYYesKa+q5Dkjp7yAoaaIiSysXqOGdIGJnjGZHiLIMGvn9Uav5
-         pq03xg3eY39NLty962O7Ayd0MVUHUd/8dQhXNtTwFSQT8SjPV3AWMldB2Ykb1sOxi8bA
-         y8c+rRrZN58GAwoVWaknlf+/ywVZkbANLaC0e2mT4J0dR0kGoG/6OALmhO1dfRw+MoKy
-         P1rA==
-X-Gm-Message-State: ACrzQf3oiRhK0x6Tk+GtzkpYObaykddQDMkR89S2xNLiuZ/rBuDgNI2Y
-        2YNDuTlK9PciQk6bfS0+oxTAvD83VMkdSyGb
-X-Google-Smtp-Source: AMsMyM7EyMFffzy6qRli3UphFPopTqdnqcsuJ37K7YpUjlhPvPRqxoGcjDhC8EKCmvi5oXl8pEx1Pw==
-X-Received: by 2002:aa7:c0c5:0:b0:453:9a23:a0cd with SMTP id j5-20020aa7c0c5000000b004539a23a0cdmr1725459edp.286.1663403390628;
-        Sat, 17 Sep 2022 01:29:50 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id v23-20020aa7cd57000000b0044e796598bdsm15260506edw.11.2022.09.17.01.29.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 01:29:50 -0700 (PDT)
-Message-ID: <9974177e-7067-aacd-1c53-7e82616f3c3f@blackwall.org>
-Date:   Sat, 17 Sep 2022 11:29:48 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=I74yKbbEKIm/62gbVurzxkM05YVP2M1gGHJOakj6RhM=;
+        b=nrhnnCxonR2TDpy4IiA/Ig1ngTVe37uq2sNxwF0ee139UjB7Pfgkk3uwz8btdfhJTi
+         jVsjg0FsbXAyhlgfXHYlXbMU6N+5csw9LO6mvBTBMzZCx2JEV1JQKEUvfINvAUpyKSod
+         S6copGqDqz5usgb6cUOi7FPe7P/FudWaYrILY81mitLBFH5lFFcMpndx/IdZUxKd4gJe
+         Ln9b/5nVa+re7xXRcReNQrskvgXA+9/WL9mLxDArYaDWEupTeATjKXNz+mXCf9NyriFd
+         x7d9mgfbtcEsFCbBgM1QYKnOAyUeNKpjbEyQ4Ly0veT55I4rthkBVh5hsEzigvXOkgJT
+         TwCA==
+X-Gm-Message-State: ACrzQf0QdpnzpnnREpZoU2Hy6MqiXGSv0pMjony6o55x/v+IZG/E4tN+
+        ythNi9c18L0BYFxWKySCJkryJKoeiLZ3iFazId8=
+X-Google-Smtp-Source: AMsMyM6Nut1PvGPyZJQY1STA9ugOVAi671m8yr/TdAPuzXvmcGey3RmevAnlc6+5wuQvtZwYUzIjdLCxC6Wj2435vR0=
+X-Received: by 2002:ad4:5b8d:0:b0:4ad:22e7:ae4c with SMTP id
+ 13-20020ad45b8d000000b004ad22e7ae4cmr1530243qvp.48.1663403900104; Sat, 17 Sep
+ 2022 01:38:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v1] net/ipv4/nexthop: check the return value of
- nexthop_find_by_id()
-To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org
-References: <20220917023020.3845137-1-floridsleeves@gmail.com>
-Content-Language: en-US
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220917023020.3845137-1-floridsleeves@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220917081339.3354075-1-jjhiblot@traphandler.com> <20220917081339.3354075-5-jjhiblot@traphandler.com>
+In-Reply-To: <20220917081339.3354075-5-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 17 Sep 2022 11:37:44 +0300
+Message-ID: <CAHp75VeAnJQt7kS8UE+OKcqnScYnmHnVvL+QNW6jR=yF0=oMAA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 4/4] leds: Add a multicolor LED driver to group
+ monochromatic LEDs
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        sven.schwermer@disruptive-technologies.com,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        marijn.suijten@somainline.org, bjorn.andersson@linaro.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sha@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/09/2022 05:30, Li Zhong wrote:
-> Check the return value of nexthop_find_by_id(), which could be NULL on
-> when not found. So we check to avoid null pointer dereference.
-> 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  net/ipv4/nexthop.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
-> index 853a75a8fbaf..9f91bb78eed5 100644
-> --- a/net/ipv4/nexthop.c
-> +++ b/net/ipv4/nexthop.c
-> @@ -2445,6 +2445,10 @@ static struct nexthop *nexthop_create_group(struct net *net,
->  		struct nh_info *nhi;
->  
->  		nhe = nexthop_find_by_id(net, entry[i].id);
-> +		if (!nhe) {
-> +			err = -EINVAL;
-> +			goto out_no_nh;
-> +		}
->  		if (!nexthop_get(nhe)) {
->  			err = -ENOENT;
->  			goto out_no_nh;
+On Sat, Sep 17, 2022 at 11:14 AM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> By allowing to group multiple monochrome LED into multicolor LEDs,
+> all involved LEDs can be controlled in-sync. This enables using effects
+> using triggers, etc.
 
-These are validated in nh_check_attr_group() and should exist at this point.
-Since remove_nexthop() should run under rtnl I don't see a way for a nexthop
-to disappear after nh_check_attr_group() and before nexthop_create_group().
+...
 
-Did you notice a problem or have a stack dump?
+> +config LEDS_GRP_MULTICOLOR
+> +       tristate "Multi-color LED grouping support"
+> +       help
+> +         This option enables support for monochrome LEDs that are
+> +         grouped into multicolor LEDs.
 
+What will be the module name in case of "m" choice?
+
+...
+
+> +       struct led_mcg_priv *priv =
+> +               container_of(mc_cdev, struct led_mcg_priv, mc_cdev);
+
+One line?
+
+...
+
+> +               /*
+> +                * Scale the intensity according the max brightness of the
+> +                * monochromatic LED
+
+Usually we put a grammar period at the end of sentences in multi-line comments.
+
+> +                */
+
+...
+
+> +               actual_led_brightness = DIV_ROUND_CLOSEST(
+> +                       mono->max_brightness * mc_cdev->subled_info[i].brightness,
+> +                       mc_cdev->led_cdev.max_brightness);
+
+Can you fix an indentation, so it won't leave the line ending by open
+parenthesis? I believe with the help of a temporary variable it can be
+easily achieved.
+
+...
+
+> +       for (;;) {
+> +               struct led_classdev *led_cdev;
+
+> +               led_cdev = devm_of_led_get(dev, count);
+
+Why _of_ variant? Please, make this OF independent since it's
+pretending to cover not only OF-based systems.
+
+
+> +               if (IS_ERR(led_cdev)) {
+
+> +                       /* Reached the end of the list ? */
+> +                       if (PTR_ERR(led_cdev) == -ENOENT)
+> +                               break;
+
+Looks like the above needs an _optional() variant
+
+> +                       return dev_err_probe(dev, PTR_ERR(led_cdev),
+> +                                            "Unable to get led #%d", count);
+> +               }
+
+...
+
+> +               priv->monochromatics = devm_krealloc(dev, priv->monochromatics,
+> +                                       count * sizeof(*priv->monochromatics),
+> +                                       GFP_KERNEL);
+
+This needs at minimum to use one of the helpers from overflow.h,
+ideally you may implement devm_krealloc_array() as a suitable wrapper
+for that.
+
+> +               if (!priv->monochromatics)
+> +                       return -ENOMEM;
+
+...
+
+> +       subled = devm_kzalloc(dev, count * sizeof(*subled), GFP_KERNEL);
+
+NIH devm_kcalloc()
+
+> +       if (!subled)
+> +               return -ENOMEM;
+
+--
+With Best Regards,
+Andy Shevchenko
