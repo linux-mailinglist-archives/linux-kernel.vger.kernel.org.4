@@ -2,117 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85245BBAA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 23:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094295BBABC
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 23:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIQVTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 17:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S229488AbiIQVnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 17:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIQVTK (ORCPT
+        with ESMTP id S229379AbiIQVnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 17:19:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A63275CA
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 14:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663449548; x=1694985548;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9e36sAeWHdkpRtQMbPWe++XKnl9dnfw1iywNX9erSA8=;
-  b=N/wGHRRYFWlFiHysRtLAbAATciMYgPF8kkukVuQ1LsxS6ML5jkmA4/pe
-   C9P/+sJSOi5TS/lrvP/UYritYK8C8iOjXzmwW03vgInFmqG/JafxooqUZ
-   GtyIwiLCNV1nkKwJ/pZkmzWp9eVEMEOSAsYN/ZfW6FpzyEWu6mEixFo0S
-   1LWLGTe0A/jKcRwmP7nX1d/8cwUpEgFPlB7ZrSSHq0LwIW/GLW0qeGgYB
-   rndaY5VARuyHIaqEfPFf97bmU4yHyl42o/6F0RB5XBuife0mxA9+fx5JU
-   f85a8XkZTgQ4zQn7reWLJCbSBImF2zNq7Zbg80R9pbJvMntSa/9ey2jkG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="297909876"
-X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="297909876"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 14:19:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="863088869"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Sep 2022 14:19:07 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZfDO-0000c5-2m;
-        Sat, 17 Sep 2022 21:19:06 +0000
-Date:   Sun, 18 Sep 2022 05:18:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/omap/lcd_mipid.c:451:23: sparse: sparse: cast to
- restricted __be32
-Message-ID: <202209180507.z4LLyzZO-lkp@intel.com>
+        Sat, 17 Sep 2022 17:43:19 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93AF2E9CE
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 14:43:17 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id g8so17517097iob.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 14:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=b9bwUAUeen3ZxuyndIbZYoAduo/aHvBL3BmOUTyZqvE=;
+        b=CM3cRv7m9TdrNLRi6rmQ9jU84QtM6gTd1m+k4MPbENvwXrBaNmXJ9aBHpXFQC+yE/E
+         QnAGN/VRjYdEwgSN6P0oFywzdvT0POfMc4vaL3/ZXXFRUNiBdABnI8plMiNCyaQmQq95
+         0HhwHv2ts064bm9DKlbpcKaTMdJupT6pNrh4w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=b9bwUAUeen3ZxuyndIbZYoAduo/aHvBL3BmOUTyZqvE=;
+        b=aULS4P6dmogfyD9EAF5um+MEGtif8Fp2JDksTHv5HmGZVvi0TRmBjMHnzl3aLWUzSO
+         rhMcoVYOcAsd597F4jBgafkhiyF7Dej9+bePclnoXWisemO5vZqGIVw4nnHeQ/OhEt0D
+         4AqwZFtK4AYyvqxPwkwE/K37Rk7OzHJgUdQSfTZOMLJcg/p/DQDHbth8+6e74zIqGdv9
+         hKlzafw6g95UwmPdlwzyQga3X9TcQemu94tcHxxdEZtMJV5Y9R0pi1PyZkPtJp/5yI1Y
+         AXThXxSQEWcS0y82PXeG1Bwum8NgT573sQvLYihsus4R+IM4V+d8xpcFiNNyhV/YDyoA
+         Zkmg==
+X-Gm-Message-State: ACrzQf209m39oYHWIEwt4iVB61sBuWNe/wABgucnCQYi68o0XB3vMqdW
+        vjTPkJ7Mi873P3izfqCFhS2EUt/9giaflzdJM3zabg==
+X-Google-Smtp-Source: AMsMyM4AGE4CG1BNZBSt3toXCS8NcpeYiEEPPXKMjJbkwtML5PP1t0OfOJ62bApctQfdhMxJwvnflyru33gD/zK4jbA=
+X-Received: by 2002:a05:6602:26d5:b0:68a:db5d:2923 with SMTP id
+ g21-20020a05660226d500b0068adb5d2923mr4409914ioo.175.1663450997039; Sat, 17
+ Sep 2022 14:43:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220917164200.511783-1-joel@joelfernandes.org>
+ <20220917164200.511783-4-joel@joelfernandes.org> <20220917195807.GA39579@lothringen>
+In-Reply-To: <20220917195807.GA39579@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sat, 17 Sep 2022 17:43:06 -0400
+Message-ID: <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com>
+Subject: Re: [PATCH rcu/next 3/3] rcu: Call trace_rcu_callback() also for
+ bypass queuing (v2)
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Sat, Sep 17, 2022 at 3:58 PM Frederic Weisbecker <frederic@kernel.org> w=
+rote:
+>
+> On Sat, Sep 17, 2022 at 04:42:00PM +0000, Joel Fernandes (Google) wrote:
+> > @@ -2809,17 +2825,15 @@ void call_rcu(struct rcu_head *head, rcu_callba=
+ck_t func)
+> >       }
+> >
+> >       check_cb_ovld(rdp);
+> > -     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
+> > +
+> > +     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags)) {
+> > +             __trace_rcu_callback(head, rdp);
+> >               return; // Enqueued onto ->nocb_bypass, so just leave.
+> > +     }
+>
+> I think the bypass enqueues should be treated differently. Either with ex=
+tending
+> the current trace_rcu_callback/trace_rcu_kvfree_callback (might break too=
+ls)
+>
+> or
+> with creating a new trace_rcu_callback_bypass()/trace_rcu_kvfree_callback=
+_bypass().
+>
+> Those could later be paired with a trace_rcu_bypass_flush().
 
-First bad commit (maybe != root cause):
+I am having a hard time seeing why it should be treated differently.
+We already increment the length of the main segcblist even when
+bypassing. Why not just call the trace point instead of omitting it?
+Otherwise it becomes a bit confusing IMO (say someone does not enable
+your proposed new bypass tracepoint and only enables the existing one,
+then they would see weird traces where call_rcu is called but their
+traces are missing trace_rcu_callback). Not to mention - your
+suggestion will also complicate writing tools that use the existing
+rcu_callback tracepoint to monitor call_rcu().
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
-commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
-date:   5 months ago
-config: arm-randconfig-s033-20220918 (https://download.01.org/0day-ci/archive/20220918/202209180507.z4LLyzZO-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/fbdev/omap/
+Also if you see the definition of rcu_callback, "Tracepoint for the
+registration of a single RCU callback function.".  That pretty much
+fits the usage here.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As for tracing of the flushing, I don=E2=80=99t care about tracing that at =
+the
+moment using tracepoints, but I don=E2=80=99t mind if it is added later.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/omap/lcd_mipid.c:451:23: sparse: sparse: cast to restricted __be32
+Maybe let=E2=80=99s let Paul help resolve our disagreement on this one? :)
 
-vim +451 drivers/video/fbdev/omap/lcd_mipid.c
+thanks,
 
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  444  
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  445  static int panel_enabled(struct mipid_device *md)
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  446  {
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  447  	u32 disp_status;
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  448  	int enabled;
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  449  
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  450  	mipid_read(md, MIPID_CMD_READ_DISP_STATUS, (u8 *)&disp_status, 4);
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22 @451  	disp_status = __be32_to_cpu(disp_status);
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  452  	enabled = (disp_status & (1 << 17)) && (disp_status & (1 << 10));
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  453  	dev_dbg(&md->spi->dev,
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  454  		"LCD panel %senabled by bootloader (status 0x%04x)\n",
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  455  		enabled ? "" : "not ", disp_status);
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  456  	return enabled;
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  457  }
-66d2f99d0bb5a2 drivers/video/omap/lcd_mipid.c Imre Deak 2009-09-22  458  
+ - Joel
 
-:::::: The code at line 451 was first introduced by commit
-:::::: 66d2f99d0bb5a2972fb5c1d88b61169510e540d6 omapfb: add support for MIPI-DCS compatible LCDs
-
-:::::: TO: Imre Deak <imre.deak@nokia.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+>
+> Thanks.
+>
+>
+> > +
+> >       // If no-CBs CPU gets here, rcu_nocb_try_bypass() acquired ->nocb=
+_lock.
+> >       rcu_segcblist_enqueue(&rdp->cblist, head);
+> > -     if (__is_kvfree_rcu_offset((unsigned long)func))
+> > -             trace_rcu_kvfree_callback(rcu_state.name, head,
+> > -                                      (unsigned long)func,
+> > -                                      rcu_segcblist_n_cbs(&rdp->cblist=
+));
+> > -     else
+> > -             trace_rcu_callback(rcu_state.name, head,
+> > -                                rcu_segcblist_n_cbs(&rdp->cblist));
+> > +     __trace_rcu_callback(head, rdp);
+> >
+> >       trace_rcu_segcb_stats(&rdp->cblist, TPS("SegCBQueued"));
+> >
+> > --
+> > 2.37.3.968.ga6b4b080e4-goog
+> >
