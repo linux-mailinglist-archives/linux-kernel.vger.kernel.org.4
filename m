@@ -2,536 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA25A5BB4EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0C85BB4F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiIQAQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S229606AbiIQAUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIQAQX (ORCPT
+        with ESMTP id S229457AbiIQAUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:16:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453B0ABD4D;
-        Fri, 16 Sep 2022 17:16:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8FE462DFE;
-        Sat, 17 Sep 2022 00:16:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39584C433D7;
-        Sat, 17 Sep 2022 00:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663373781;
-        bh=p+sbQs1h3etxLXiD+vlVYS26NWcTi2InbPH5gOh7IEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wy5dRbEDWf6QLmfS9SgP8mjI0bQdRkkKg7y8IcjhlSMD3Y1EZmx0SUxJLE7Qqp7WI
-         s9iAt6/aYUfeAnQuukwpCop0JzGXseh0X/Cj55JsUN+l1fuZS0+DkePEMUlfxE3E+U
-         lqxejwdrMzBME/28GMwa5zPyvcQd/EuG10tF11JABe4mAwdFxcwNptaYIA4LN0Q7A/
-         +273RIJ6TWLJRoqQxny3K6q/UjUnnT2/wGbaqFS82lFNDo5IHXQJ7WYH8ZyPunpVhO
-         e/UzuCTFSs13CCTST8crZ4LJlIvzE8KDW0TsPnQFOs/TklfZimCeGyuVjCI3XtZBFt
-         vyrIteE4ppA8g==
-Date:   Fri, 16 Sep 2022 19:16:18 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Alex Elder <elder@ieee.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
-Subject: Re: [PATCH V11 2/7] soc: qcom: dcc: Add driver support for Data
- Capture and Compare unit(DCC)
-Message-ID: <20220917001618.au7hlduxntj6i4no@builder.lan>
-References: <cover.1663313821.git.quic_schowdhu@quicinc.com>
- <453efd9a436868a125225226dad9cc28965b75c1.1663313821.git.quic_schowdhu@quicinc.com>
+        Fri, 16 Sep 2022 20:20:37 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2043.outbound.protection.outlook.com [40.107.21.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175194E62D;
+        Fri, 16 Sep 2022 17:20:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EbTpnQugHxJXWrz61vXbHmN8xZISifJoIao8NfWug1e2MCdmJS78Ka1WpX9V+DqIrM2kMLz3VoGUOHuvM8IhieU7XX3y1NtcTqXy708GNhHAIXW0XiKf3lnnIiavM/uEo/lUpGPNWQMUGez1hvT+2MpOl/ZnUFKUxGsCeEOowGb023pUDatnBTo/SGRcIaXb0mJQdtinDnQ000zZkVZXZK1BF8rT3xZdMTd6XGI8z5gONyQJRQ18cRRJEWQrcei3j6EYq+UwXbsdP73ZAP01yS0hpVZm0e+9ZZvIHlJm+lO9E4fk3CnBJdmij+vp+4MuFSQwAKaRsUm1Ek/ZAN82Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eyWv4A2PrIe3ZxjMYNU8ijssZNaqRGo+PM9u2myjLGY=;
+ b=khr3mOu+/NHfkpvcHXGEj5ZCQh+qVV/rAe+KqDYKd+PkOu+tnrDMTxrb+iI6A4PDN/W8PuPc+BKYpMrUSCqoaVG03dCHhe9POCXZlu5C1dJrvr5h0v8q87fF3BSPmLpKrBw9/T9HZP2TZP5xF3G782pHcFT7e6Iu2I2Ba82F2KVGp6LzCFpcTXFHWyRyPnO8dkUIaaZib6eYZkNIXn4yrNAf6wCMbdR70sp3V82r07Oz3M7+HI4miGfmlwrhLYBfa2avLcwVy+VUAXWouK4XcO1ehUWRFaqmeptCV4cwFOd7H08mvXsTguv4h67EmyghNdhIFAUCZO6/tiiCx772Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eyWv4A2PrIe3ZxjMYNU8ijssZNaqRGo+PM9u2myjLGY=;
+ b=HLNDIw/OrxpKf0gIF0FoCb3eErTG6RE9D0oYX5seamxhUZH0I2B80EAbAGONyW5yObwkNgq2kWkksKpHlsVOj8Ye/dlbR4U850Wi/qruFZVI0vjxV59xM+3LT6/9HAypw3JoQbA4vttUICF01QTuLB815fzGR5CeQW2EaHgEUzM=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM9PR04MB8667.eurprd04.prod.outlook.com (2603:10a6:20b:43e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.17; Sat, 17 Sep
+ 2022 00:20:32 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.016; Sat, 17 Sep 2022
+ 00:20:31 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 0/5] net: ipqess: introduce Qualcomm IPQESS
+ driver
+Thread-Topic: [PATCH net-next v4 0/5] net: ipqess: introduce Qualcomm IPQESS
+ driver
+Thread-Index: AQHYxGBV/lOKpVb8gEC8qOCt/3pDRq3izdaA
+Date:   Sat, 17 Sep 2022 00:20:31 +0000
+Message-ID: <20220917002031.f7jddzi7ppciusie@skbuf>
+References: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
+In-Reply-To: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AM9PR04MB8667:EE_
+x-ms-office365-filtering-correlation-id: 421628ef-fc73-408e-73c1-08da98426eb7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qpLdZSNuQviD2QR6IvfusHFqKx2u8aFOn4hC0I2TsWHhICbO2ZdlDfbmkMEgkboKwJDeDM0T/C0X9sLQO8ew/z4AWMPk2Q2zmNwOI9o0gssB0htsnOtyhtFQ7PxQ4vUz0qkzFRcGPAsOaLNCKX8hFnUSOs2u/S0/d2UKzLOZpdP34w6GWmODU94t/le5X/Owgxj5bSFqlqQtJnEGNcCDdjqVXqb3ZBywD1dS5yxltBnfOPwrQLrV86ktYSeuXr31MOkC02sSjws9ult2O7PHNC/L6a0jtk4D9Q2u1hUtLBcWA1CNOLsKCCKkZXW6C+wvwRwvIDJhS3nETIFC5ZWWGFZpO/myTGNZyQ0/zEPqPeEGJRw2FgdjhDRtCxTEE5n90ZgrhJe2A1IjqGkI7qgBP7pMuMZEGHbutK6JmHl2sn9UFo3D9MCVEoAwpnJZbXu7pFl4wKMGnGK8oI/Wm7PGFL3tOdCY13/a3X93z4AJHW7qxBz3pOZ3D8tywq8/5Mxpwhn6YstfqpH6BQTTl8PThbuHi3FBlmc1+Q15VPVVdeJ1vjACeZi03dCpvohTSva9J6+DXw+AB/3rj0gwVCbwFljhp/fTcS/qe4GTMBSWJR0hhK6qtEvF3HMmr2mR+zJnGAeBf3K5gmCjRDIp1ekbuZvIHDrDWyMEygEYnYWTB7rudsHv18Xw888u2KtdcHfn9gkHw9DTcScG5aVE0qhDwov8MqyfZ5maXuziTYxBUpWYTwJYhlYvbjEKXwauIluINsTizVXa209bjtx7KIk5ZA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(8936002)(86362001)(2906002)(7416002)(5660300002)(66446008)(64756008)(8676002)(44832011)(66476007)(66556008)(4326008)(66946007)(76116006)(91956017)(4744005)(38070700005)(122000001)(54906003)(316002)(6916009)(38100700002)(6512007)(26005)(9686003)(6506007)(41300700001)(6486002)(33716001)(186003)(1076003)(478600001)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V76I+Ii/L/MFo/mc9gBJQQcn4kLqiFSDMzPSY7PcOWEjxM7SmMrhNUgCQUne?=
+ =?us-ascii?Q?CzQ8yONg1xrKHhSECROZxv3dW2QM6ybrcWv7z5BG5hay/5SFedBLRe63Imoq?=
+ =?us-ascii?Q?wAz1uyNsOYy9copFTEL1dF1ofEw9H9GsoF+OYr1OnjUmF1zE+bTZGJGLdAdc?=
+ =?us-ascii?Q?GsUSD1l2sEakWxQP9KfKfOhcHfitJzdNQlGc9tH44tArgx0dDyzwwtVq8rLJ?=
+ =?us-ascii?Q?jpzitskSQAJG+YUknwNQExFAZMvaFQL6+8QNrtQzXkM/iDGliu0KcBiUPtou?=
+ =?us-ascii?Q?6p1wqElpW7aaqPQeNiLI0o612z5WtNs9KVmA5+cc2xGheojx1OR8WdNyVLtk?=
+ =?us-ascii?Q?gSwRiTSjead9zAPwMmKcDFFXw9Klyhd/BZrTVdV4aC7ByjM1aHgH/ZcW6tRR?=
+ =?us-ascii?Q?ZApYK61BXMboX5tWzrsKbnkS+kcrCsvLYjIYuYvqiPB4U9uDENGm3xqNDli3?=
+ =?us-ascii?Q?E4HkDVp/a0uVhjFdJuuutIGuAlHuaDYkHOylV1rObV1ZGjKxBXnDTSi5kHhR?=
+ =?us-ascii?Q?dhDSaVpMsaHnoRwwldZ09owa6p7+8DdZIKEfi+Yzk8L0oHmma+/XEMoXEgV1?=
+ =?us-ascii?Q?dOGAk582Fi3QQRWbkmPR2PQjoG5bBU4W/gaw3zwqG3NSjfyHDxL64rKimChi?=
+ =?us-ascii?Q?A780ZVGYoBcwfctlWFiOti5fwYE+mqaHBkHNdoKRfeKV+AeaWFcBAZruaAxT?=
+ =?us-ascii?Q?+P+z12LMSO/ZpA1IaMyRfrR0MLmaIHmctNlvwp0aKpVQx1BumZmOFAwC8MK4?=
+ =?us-ascii?Q?5u29y7Drk0cdxBrymRF9hU0BERvRvU/ilW8RF6HIY/4uS/+i5JIsvNLORiPA?=
+ =?us-ascii?Q?yP9ywB92NLVPMENbxrO2h1XE4N9geCKzucDrqlaxS4E26VYwW5RZjkm0wFDr?=
+ =?us-ascii?Q?eHF7xaovQvtj0B1+vPa9ft14N6IiJD9PoRbo17hBw7gRNYK9ZgDJrdJ3Hc7T?=
+ =?us-ascii?Q?rcb7jhDSFIVdeuhkeVcQS5vhjkN36uJZbg+DTtefI3s2O5QOBPOeoywLPf1u?=
+ =?us-ascii?Q?KnGKEagGcRZrE2v7wV8bVcwDKJtB6D1SKW55hkJv4HYtXe9Yuflo5kfutqeQ?=
+ =?us-ascii?Q?VTqGf3hdLOCXV9etdMq0w3AJ6ffSbpLhhGN3Mkl9kWp5keMTf9Gr8EuwxZvo?=
+ =?us-ascii?Q?QNiZMOsDm3CZOiZSHBmEeM5Ck/nQWzui4cPq+41k3k8/5sVDc8pJg2Qifpjp?=
+ =?us-ascii?Q?HB/eih3h54v2gv1efv5o2kxmYg+3IHqQUdjB6ynzDAodHb69jdSFjcuOTSMI?=
+ =?us-ascii?Q?2UxujfJbTZ7UW56zoDh8E1qx6rY73ZXXIAah+A8Z16AJ6L6Ri1GIuIGaJGXc?=
+ =?us-ascii?Q?CDI+hE9Eo5L5oIJFnz6QxgXfOf7tBh03xBPvv7xi9tREI5iJe0ynaNpFT+Gg?=
+ =?us-ascii?Q?ywyf41F9UiYPck/8VE3Qp9BtzIwZ1BNBf/xeO8D/3cNnmXgV736lzXKoZeB8?=
+ =?us-ascii?Q?Ndc6q4/8AHEMGx/xW3cyuFQdGXhbmZjUkvb+MZPn0utd0V6UQ9uP0sSjoPbj?=
+ =?us-ascii?Q?WbrRQ6inxs6DLL5fEOfj56uXQjeFZNIBE83iyNwHXK3HHUrvVH8iWLzeN2hY?=
+ =?us-ascii?Q?n3mwiY8oSsSJbDDfd3z+wEosYxfINzzxX0qxqNjLGVJ9T9fg4ctqTi11ccmE?=
+ =?us-ascii?Q?Iw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <ECB66C3F6A36D24CA9C9BF182F94A5A3@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <453efd9a436868a125225226dad9cc28965b75c1.1663313821.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 421628ef-fc73-408e-73c1-08da98426eb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2022 00:20:31.8970
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HwPa4FrJ+9/1ICyggIqW6sh+LIh0FDlGWj3GHDi38O79OYIPZqS/LVCgIGC2WZkI9TF7jT95dvsuCDjNYm2U6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8667
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:20:14PM +0530, Souradeep Chowdhury wrote:
-> The DCC is a DMA Engine designed to capture and store data
-> during system crash or software triggers. The DCC operates
-> based on user inputs via the debugfs interface. The user gives
-> addresses as inputs and these addresses are stored in the
-> dcc sram. In case of a system crash or a manual software
-> trigger by the user through the debugfs interface,
-> the dcc captures and stores the values at these addresses.
-> This patch contains the driver which has all the methods
-> pertaining to the debugfs interface, auxiliary functions to
-> support all the four fundamental operations of dcc namely
-> read, write, read/modify/write and loop. The probe method
-> here instantiates all the resources necessary for dcc to
-> operate mainly the dedicated dcc sram where it stores the
-> values. The DCC driver can be used for debugging purposes
-> without going for a reboot since it can perform software
-> triggers as well based on user inputs.
-> 
-> Also added the documentation for debugfs entries and explained
-> the functionalities of each debugfs file that has been created
-> for dcc.
-> 
-> The following is the justification of using debugfs interface
-> over the other alternatives like sysfs/ioctls
-> 
-> i) As can be seen from the debugfs attribute descriptions,
-> some of the debugfs attribute files here contains multiple
-> arguments which needs to be accepted from the user. This goes
-> against the design style of sysfs.
-> 
-> ii) The user input patterns have been made simple and convenient
-> in this case with the use of debugfs interface as user doesn't
-> need to shuffle between different files to execute one instruction
-> as was the case on using other alternatives.
-> 
+On Fri, Sep 09, 2022 at 05:24:49PM +0200, Maxime Chevallier wrote:
+> The DSA out-of-band tagging is still using the skb->headroom part, but
+> there doesn't seem to be any better way for now without adding fields to
+> struct sk_buff.
 
-Thanks for fixing up the checkpatch warnings.
-
-I did unfortunately find a few more things as I was looking through this
-revision.
-
-> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
-> new file mode 100644
-> index 0000000..7e07f1a
-> --- /dev/null
-> +++ b/drivers/soc/qcom/dcc.c
-> @@ -0,0 +1,1341 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copneight (c) 2015-2021, The Linex Fnendation. All rights reserved.
-
-Something funny happened to Copneight, Linuex and Fnendation.
-
-Should you perhaps also bump the year to 2022?
-
-> + */
-[..]
-> +/**
-> + * struct dcc_drvdata - configuration information related to a dcc device
-> + * @base:	      Base Address of the dcc device
-> + * @dev:	      The device attached to the driver data
-> + * @mutex:	      Lock to protect access and manipulation of dcc_drvdata
-> + * @ram_base:         Base address for the SRAM dedicated for the dcc device
-
-@ram_size missing
-
-> + * @ram_offset:       Offset to the SRAM dedicated for dcc device
-> + * @mem_map_ver:      Memory map version of DCC hardware
-> + * @ram_cfg:          Used for address limit calculation for dcc
-> + * @ram_start:        Starting address of DCC SRAM
-> + * @sram_dev:	      Micellaneous device equivalent of dcc SRAM
-> + * @cfg_head:	      Points to the head of the linked list of addresses
-> + * @dbg_dir:          The dcc debugfs directory under which all the debugfs files are placed
-> + * @nr_link_list:     Total number of linkedlists supported by the DCC configuration
-> + * @loopoff:          Loop offset bits range for the addresses
-> + * @enable:           This contains an array of linkedlist enable flags
-> + */
-> +struct dcc_drvdata {
-> +	void __iomem		*base;
-> +	struct device		*dev;
-> +	struct mutex		mutex;
-> +	void __iomem		*ram_base;
-> +	size_t			ram_size;
-> +	size_t			ram_offset;
-> +	int			mem_map_ver;
-> +	phys_addr_t		ram_cfg;
-> +	phys_addr_t		ram_start;
-> +	struct miscdevice	sram_dev;
-> +	struct list_head	*cfg_head;
-> +	struct dentry		*dbg_dir;
-> +	size_t			nr_link_list;
-> +	u8			loopoff;
-> +	bool                    *enable;
-> +};
-[..]
-> +static int dcc_read_and_clear(struct dcc_drvdata *drvdata)
-> +{
-> +	int i;
-> +	u32 bus_status;
-> +	u32 ll_cfg;
-> +	u32 tmp_ll_cfg;
-> +
-> +	for (i = 0; i < drvdata->nr_link_list; i++) {
-> +		if (!drvdata->enable[i])
-> +			continue;
-> +
-> +		bus_status = dcc_ll_readl(drvdata, i, DCC_LL_BUS_ACCESS_STATUS);
-> +		if (!bus_status)
-> +			continue;
-> +
-> +		dev_err(drvdata->dev,
-> +			"Read access error for list %d err: 0x%x.\n", i, bus_status);
-
-This can be unwrapped, or it would look more natural if you wrapped it
-after the string.
-
-You should also drop the '.' at the end of the message.
-
-If you want to shorten it down a little bit more, you could rename
-bus_status to status, as there's no ambiguity here.
-
-> +		ll_cfg = dcc_ll_readl(drvdata, i, DCC_LL_CFG);
-> +		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-> +		dcc_ll_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
-> +		dcc_ll_writel(drvdata, DCC_STATUS_MASK, i,
-> +			      DCC_LL_BUS_ACCESS_STATUS);
-
-This can be unwrapped.
-
-> +		dcc_ll_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
-> +		return -ENODATA;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
-> +{
-> +	void __iomem *addr;
-> +	int ret;
-> +	int i;
-> +	u32 ll_cfg;
-> +	u32 tmp_ll_cfg;
-> +	u32 val;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	for (i = 0; i < drvdata->nr_link_list; i++) {
-> +		if (!drvdata->enable[i])
-> +			continue;
-> +		ll_cfg = dcc_ll_readl(drvdata, i, DCC_LL_CFG);
-> +		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
-> +		dcc_ll_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
-> +		dcc_ll_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
-> +		dcc_ll_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
-> +	}
-> +
-> +	addr = drvdata->base + DCC_STATUS(drvdata->mem_map_ver);
-> +	if (readl_poll_timeout(addr, val, (FIELD_GET(DCC_STATUS_MASK, val) == 0),
-> +			       1, STATUS_READY_TIMEOUT)) {
-> +		dev_err(drvdata->dev,
-> +			"DCC is busy after receiving sw tigger.\n");
-
-Unwrapp this please, and drop the '.' at the end.
-
-> +		ret = -EBUSY;
-> +		goto out_unlock;
-> +	}
-> +
-> +	ret = dcc_read_and_clear(drvdata);
-> +
-> +out_unlock:
-> +	mutex_unlock(&drvdata->mutex);
-> +	return ret;
-> +}
-> +
-> +static void _dcc_ll_cfg_reset_link(struct dcc_cfg_attr *cfg)
-> +{
-> +	cfg->addr = 0x00;
-> +	cfg->link = 0;
-> +	cfg->prev_off = 0;
-> +	cfg->prev_addr = cfg->addr;
-> +}
-> +
-> +static void _dcc_emit_read_write(struct dcc_drvdata *drvdata,
-> +				 struct dcc_config_entry *entry,
-> +				 struct dcc_cfg_attr *cfg)
-> +{
-> +	if (cfg->link) {
-> +		/*
-> +		 * write new offset = 1 to continue
-> +		 * processing the list
-> +		 */
-> +
-> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
-> +
-> +		/* Reset link and prev_off */
-> +		_dcc_ll_cfg_reset_link(cfg);
-> +	}
-> +
-> +	cfg->addr = DCC_RD_MOD_WR_DESCRIPTOR;
-> +	dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
-> +
-> +	dcc_sram_write_auto(drvdata, entry->mask, &cfg->sram_offset);
-> +
-> +	dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
-> +
-> +	cfg->addr = 0;
-> +}
-> +
-> +static void _dcc_emit_loop(struct dcc_drvdata *drvdata, struct dcc_config_entry *entry,
-> +			   struct dcc_cfg_attr *cfg,
-> +			   struct dcc_cfg_loop_attr *cfg_loop,
-> +			   u32 *total_len)
-> +{
-> +	/* Check if we need to write link of prev entry */
-> +	if (cfg->link)
-> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
-> +
-> +	if (cfg_loop->loop_start) {
-> +		cfg_loop->loop = (cfg->sram_offset - cfg_loop->loop_off) / 4;
-> +		cfg_loop->loop |= (cfg_loop->loop_cnt << drvdata->loopoff) &
-> +		GENMASK(DCC_ADDR_LIMIT, drvdata->loopoff);
-
-Odd line wrap. Please indent better.
-
-> +		cfg_loop->loop |= DCC_LOOP_DESCRIPTOR;
-> +		*total_len += (*total_len - cfg_loop->loop_len) * cfg_loop->loop_cnt;
-> +
-> +		dcc_sram_write_auto(drvdata, cfg_loop->loop, &cfg->sram_offset);
-> +
-> +		cfg_loop->loop_start = false;
-> +		cfg_loop->loop_len = 0;
-> +		cfg_loop->loop_off = 0;
-> +	} else {
-> +		cfg_loop->loop_start = true;
-> +		cfg_loop->loop_cnt = entry->loop_cnt - 1;
-> +		cfg_loop->loop_len = *total_len;
-> +		cfg_loop->loop_off = cfg->sram_offset;
-> +	}
-> +
-> +	/* Reset link and prev_off */
-> +	_dcc_ll_cfg_reset_link(cfg);
-> +}
-> +
-> +static void _dcc_emit_write(struct dcc_drvdata *drvdata,
-> +			    struct dcc_config_entry *entry,
-> +			    struct dcc_cfg_attr *cfg,
-> +			    u32 *total_len)
-> +{
-> +	u32 off;
-> +
-> +	if (cfg->link) {
-> +		/*
-> +		 * write new offset = 1 to continue
-> +		 * processing the list
-> +		 */
-> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
-> +
-> +		/* Reset link and prev_off */
-> +		cfg->addr = 0x00;
-> +		cfg->prev_off = 0;
-> +		cfg->prev_addr = cfg->addr;
-> +	}
-> +
-> +	off = entry->offset / 4;
-> +	/* write new offset-length pair to correct position */
-> +	cfg->link |= ((off & GENMASK(7, 0)) | BIT(15) | ((entry->len << 8) & GENMASK(14, 8)));
-
-Would it be possible to get some defines for these masks and bits?
-Perhaps use FIELD_PREP() instead of manually mask and shift the values.
-
-> +	cfg->link |= DCC_LINK_DESCRIPTOR;
-> +
-> +	/* Address type */
-> +	cfg->addr = (entry->base >> 4) & GENMASK(DCC_ADDR_LIMIT, 0);
-> +	if (entry->apb_bus)
-> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_APB_IND;
-> +	else
-> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_AHB_IND;
-> +	dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
-> +
-> +	dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
-> +
-> +	dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
-> +
-> +	cfg->addr = 0x00;
-> +	cfg->link = 0;
-> +}
-[..]
-> +static ssize_t dcc_config_add_write(struct dcc_drvdata *drvdata, char *buf, int curr_list)
-> +{
-> +	int ret, bus;
-> +	int nval;
-> +	unsigned int addr, write_val;
-> +	char apb_bus[4];
-> +
-> +	nval = sscanf(buf, "%x %x %s", &addr, &write_val, apb_bus);
-> +
-> +	if (nval <= 1 || nval > 3)
-> +		return -EINVAL;
-> +
-> +	if (nval == 3) {
-> +		if (!strcmp("apb", apb_bus))
-> +			bus = 1;
-> +		else if (!strcmp("apb", apb_bus))
-> +			bus = 0;
-> +		else
-> +			return -EINVAL;
-> +	}
-> +
-> +	ret = dcc_add_write(drvdata, addr, write_val, bus, curr_list);
-
-return dcc_add_write(); and you can drop the local variable.
-
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t config_read(struct file *filp, char __user *userbuf,
-> +			   size_t count, loff_t *ppos)
-> +{
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +	struct dcc_config_entry *entry;
-> +	char local_buf[64], buf[100] = "\0";
-> +	int len = 0, tot_len = 0, index = 0, curr_list;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +	curr_list = dcc_filp_curr_list(filp);
-> +	if (curr_list < 0)
-> +		return curr_list;
-> +
-> +	list_for_each_entry(entry,
-> +			    &drvdata->cfg_head[curr_list], list) {
-> +		index++;
-> +		switch (entry->desc_type) {
-> +		case DCC_READ_WRITE_TYPE:
-> +			len = snprintf(local_buf, 64,
-> +				       "Index: 0x%x, mask: 0x%x, val: 0x%x\n",
-
-Wouldn't it be nice if this matches the format used to specify the
-instructions?
-
-I.e. "RW <addr> <value> <mask>"
-
-> +				       index, entry->mask, entry->write_val);
-> +			break;
-> +		case DCC_LOOP_TYPE:
-> +			len = snprintf(local_buf, 64, "Index: 0x%x, Loop: %d\n",
-> +				       index, entry->loop_cnt);
-> +			break;
-> +		case DCC_WRITE_TYPE:
-> +			len = snprintf(local_buf, 64,
-> +				       "Write Index: 0x%x, Base: 0x%x, Offset: 0x%x, len: 0x%x APB: %d\n",
-> +				       index, entry->base, entry->offset, entry->len,
-> +				       entry->apb_bus);
-> +			break;
-> +		case DCC_READ_TYPE:
-> +			len = snprintf(local_buf, 64,
-> +				       "Read Index: 0x%x, Base: 0x%x, Offset: 0x%x, len: 0x%x APB: %d\n",
-
-Can't this generate something like:
-  Read Index: 0x1, Base: 0xaabbccdd, Offset: 0xaa, len: 0xaa APB: 1
-Afaict that's 65 bytes.
-
-If that's the case you will end up with tot_len > strlen(buf). You
-probably meant to use scnprintf(), which would return 63.
-
-But either way, the tail would be chopped of.
-
-> +				       index, entry->base, entry->offset,
-> +				       entry->len, entry->apb_bus);
-> +		}
-> +		tot_len += len;
-> +		strlcat(buf, local_buf, sizeof(local_buf));
-
-The limit should be the destination buffer, i.e. sizeof(buf).
-
-But why is sizeof(buf) only 100? If you have a RMW in there you will fit
-1.5 entries in the buffer.
-
-
-I think it would be better to use single_open() and use the seq_file()
-interface for generating your data. That will handle the buffer
-management for you, among other things.
-
-> +	}
-> +	mutex_unlock(&drvdata->mutex);
-> +	return simple_read_from_buffer(userbuf, count, ppos, buf, tot_len);
-> +}
-> +
-> +static ssize_t config_write(struct file *filp,
-> +			    const char __user *user_buf, size_t count,
-> +			    loff_t *ppos)
-> +{
-> +	int ret, curr_list;
-> +	char *token, buf[50];
-> +	char *delim = " ";
-> +	struct dcc_drvdata *drvdata = filp->private_data;
-> +
-> +	ret = copy_from_user(buf, user_buf, count);
-
-count might be > sizeof(buf).
-
-> +	if (ret)
-> +		return -EFAULT;
-> +
-> +	curr_list = dcc_filp_curr_list(filp);
-> +	if (curr_list < 0)
-> +		return curr_list;
-> +
-> +	if (buf[count - 1] == '\n')
-
-count can be 0.
-
-> +		buf[count - 1] = '\0';
-
-buf[] might not be \n or NUL-terminated.
-
-> +
-> +	token = strsep((char **)&buf, delim);
-> +
-> +	if (!strcmp("R", token)) {
-> +		ret = dcc_config_add_read(drvdata, buf, curr_list);
-> +	} else if (!strcmp("W", token)) {
-> +		ret = dcc_config_add_write(drvdata, buf, curr_list);
-> +	} else if (!strcmp("RW", token)) {
-> +		ret = dcc_config_add_read_write(drvdata, buf, curr_list);
-> +	} else if (!strcmp("L", token)) {
-> +		ret = dcc_config_add_loop(drvdata, buf, curr_list);
-> +	} else {
-> +		dev_err(drvdata->dev, "%s is not a correct input\n", token);
-> +		return -EINVAL;
-> +	}
-[..]
-> +static ssize_t dcc_sram_read(struct file *file, char __user *data,
-> +			     size_t len, loff_t *ppos)
-> +{
-> +	unsigned char *buf;
-> +	struct dcc_drvdata *drvdata = container_of(file->private_data,
-> +		struct dcc_drvdata,
-> +		sram_dev);
-> +
-> +	/* EOF check */
-> +	if (*ppos > drvdata->ram_size)
-> +		return 0;
-> +
-> +	if ((*ppos + len) > drvdata->ram_size)
-> +		len = (drvdata->ram_size - *ppos);
-
-If *ppos == drvdata->ram_size, the EOF check will miss that and len will
-be 0.
-
-> +
-> +	buf = kzalloc(len, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	memcpy_fromio(buf, drvdata->ram_base + *ppos, len);
-> +
-> +	if (copy_to_user(data, buf, len)) {
-> +		kfree(buf);
-> +		return -EFAULT;
-> +	}
-> +
-> +	*ppos += len;
-> +
-> +	kfree(buf);
-> +
-> +	return len;
-> +}
-> +
-
-Regards,
-Bjorn
+Are we on the same page about what is meant by "skb extensions"? See
+what is provided by CONFIG_SKB_EXTENSIONS, I did not mean it as in
+"extend struct sk_buff with new fields".=
