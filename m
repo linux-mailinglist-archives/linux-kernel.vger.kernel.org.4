@@ -2,95 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D88B5BBA30
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 21:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D8B5BBA3F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 22:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiIQT6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 15:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S229599AbiIQUSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 16:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIQT6O (ORCPT
+        with ESMTP id S229492AbiIQUSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 15:58:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B10F2C67F;
-        Sat, 17 Sep 2022 12:58:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2010B80CC9;
-        Sat, 17 Sep 2022 19:58:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4D5C433D6;
-        Sat, 17 Sep 2022 19:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663444690;
-        bh=3vm2XB41ub78dBlNNb37rRU70W7xPM2xBMBgKKbUlNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CfCkVFuQPXNGuaEbmLc5yUACzeeEu8F03wnO2jzUcQ6UWyex3xJhZKcWRceQvI2M5
-         rtRafpGR8GYTtlMeyAWQUiO0i+NpBNCQN52c8SEiBvlnSR6IEocJ9D5eS7ybJC0qQU
-         eubecWN2Xs2n6GjCgjvwJ194XGVcpAlTLVh7zEDdXTIzk12iupUvuM0QdrtZVs4526
-         XaVUovMzczDbVKho2G1+JXJgz5nELHVljKOuM8ySAE/h0l3DpVdqDNYVUxVm1OStyL
-         XiddZxPiWSKCpEEV+cW+T1g0xlABU865r0l/+V9ekvjdRxSR6QrLTr5JEDWigIP4cn
-         m0Fn2J31m1LvQ==
-Date:   Sat, 17 Sep 2022 21:58:07 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH rcu/next 3/3] rcu: Call trace_rcu_callback() also for
- bypass queuing (v2)
-Message-ID: <20220917195807.GA39579@lothringen>
-References: <20220917164200.511783-1-joel@joelfernandes.org>
- <20220917164200.511783-4-joel@joelfernandes.org>
+        Sat, 17 Sep 2022 16:18:08 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FAF2E9EE;
+        Sat, 17 Sep 2022 13:18:07 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h21so18285162qta.3;
+        Sat, 17 Sep 2022 13:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=EnLNkzzS7uvp8qzIOHofbmM/lr6EdUZwCfdgBKsBFIA=;
+        b=WnJNpsrV7HdjGnzo2nkpOIxfT2GxSQjATwHQe5v3dxoDnhipC0pkWqvbDRaaAkHUQl
+         BjuI5IHPTPKLxcBGbBky4ToOKprKzwbMjyJdETPc++bA6kflYiSa0oVI5YALYKtStEuX
+         s1AF/+zVhqgaqkyDkFWxaQAq6J2FxoK8ra3/X/7zVu9rmMsb+T//OX3VmA7rJq+gLfEe
+         gOxjRTSUCB8XAqhqASuiItzDRhGM19ybGOKOn2CR581W61gTdJ96XBxuQCX63STtniZn
+         E1DEGEdZCY7FTpS43bWkkxm1MTCoN7tiTtmtCzJmyvIzjeVwjJ6IEahZE+9GSiOCGeZT
+         m3uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=EnLNkzzS7uvp8qzIOHofbmM/lr6EdUZwCfdgBKsBFIA=;
+        b=lAekH1cEknlXhiFVU/lH+nJOLa1g0+I537s6mOYY6iYHJx9wO4S5E0dbWc2IF9uwjs
+         IeFFz2QscCkIAJ1Sq82+KowRaiwWBWtvH5dVr7/IoPtdG1W3+Q6gwPQ1TRZCO69Gsoap
+         pyIAs/On0jeGTYTnu1Xe0PhzDsQQKQiuJl6GSRT/Sl1t9ss7yRM3RCQiD5WbILHIBn6O
+         elg/gvgB5oreF5EI19+w1eKlRtNdZf5Hzoc2hHkJ0D/r0KKfDfRiAB2hkjRVEzdzZBHv
+         P/foMGW7/wAeYZnW2FAHd7hPulyxxHGRn0kTNXGlOuYfLGbjdgLyTtmLeBpAYFTNDHkg
+         PKCw==
+X-Gm-Message-State: ACrzQf0d2jrCjT+lV4szkjenHSaImLP1xLuxxRR8kslTJo/XZvuqChKx
+        wLT7OH2WXuHZUFO6bgWYI74=
+X-Google-Smtp-Source: AMsMyM7cM/HW3xBioBWezl3X+3QEZQyJkj85m12XBnHv7oTpjrxgZgVMCPyE7emse7IXOB0C/oO1Kg==
+X-Received: by 2002:ac8:57ca:0:b0:35b:b51f:94fc with SMTP id w10-20020ac857ca000000b0035bb51f94fcmr9524213qta.276.1663445886429;
+        Sat, 17 Sep 2022 13:18:06 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id l2-20020a37f902000000b006b9c355ed75sm8826647qkj.70.2022.09.17.13.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 13:18:06 -0700 (PDT)
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>, aroulin@nvidia.com,
+        sbrivio@redhat.com, roopa@nvidia.com,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Subject: [PATCH RFC net-next 0/5] net: vlan: fix bridge binding behavior and add selftests
+Date:   Sat, 17 Sep 2022 16:17:56 -0400
+Message-Id: <cover.1663445339.git.sevinj.aghayeva@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220917164200.511783-4-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 04:42:00PM +0000, Joel Fernandes (Google) wrote:
-> @@ -2809,17 +2825,15 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
->  	}
->  
->  	check_cb_ovld(rdp);
-> -	if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
-> +
-> +	if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags)) {
-> +		__trace_rcu_callback(head, rdp);
->  		return; // Enqueued onto ->nocb_bypass, so just leave.
-> +	}
+When bridge binding is enabled for a vlan interface, it is expected
+that the link state of the vlan interface will track the subset of the
+ports that are also members of the corresponding vlan, rather than
+that of all ports.
 
-I think the bypass enqueues should be treated differently. Either with extending
-the current trace_rcu_callback/trace_rcu_kvfree_callback (might break tools) or
-with creating a new trace_rcu_callback_bypass()/trace_rcu_kvfree_callback_bypass().
+Currently, this feature works as expected when a vlan interface is
+created with bridge binding enabled:
 
-Those could later be paired with a trace_rcu_bypass_flush().
+  ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+        bridge_binding on
 
-Thanks.
+However, the feature does not work when a vlan interface is created
+with bridge binding disabled, and then enabled later:
 
+  ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+        bridge_binding off
+  ip link set vlan10 type vlan bridge_binding on
 
-> +
->  	// If no-CBs CPU gets here, rcu_nocb_try_bypass() acquired ->nocb_lock.
->  	rcu_segcblist_enqueue(&rdp->cblist, head);
-> -	if (__is_kvfree_rcu_offset((unsigned long)func))
-> -		trace_rcu_kvfree_callback(rcu_state.name, head,
-> -					 (unsigned long)func,
-> -					 rcu_segcblist_n_cbs(&rdp->cblist));
-> -	else
-> -		trace_rcu_callback(rcu_state.name, head,
-> -				   rcu_segcblist_n_cbs(&rdp->cblist));
-> +	__trace_rcu_callback(head, rdp);
->  
->  	trace_rcu_segcb_stats(&rdp->cblist, TPS("SegCBQueued"));
->  
-> -- 
-> 2.37.3.968.ga6b4b080e4-goog
-> 
+After these two commands, the link state of the vlan interface
+continues to track that of all ports, which is inconsistent and
+confusing to users. This series fixes this bug and introduces two
+tests for the valid behavior.
+
+Sevinj Aghayeva (5):
+  net: core: export call_netdevice_notifiers_info
+  net: core: introduce a new notifier for link-type-specific changes
+  net: 8021q: notify bridge module of bridge-binding flag change
+  net: bridge: handle link-type-specific changes in the bridge module
+  selftests: net: tests for bridge binding behavior
+
+ include/linux/if_vlan.h                       |   4 +
+ include/linux/netdevice.h                     |   3 +
+ include/linux/notifier_info.h                 |  21 +++
+ net/8021q/vlan.h                              |   2 +-
+ net/8021q/vlan_dev.c                          |  20 ++-
+ net/bridge/br.c                               |   5 +
+ net/bridge/br_private.h                       |   7 +
+ net/bridge/br_vlan.c                          |  18 +++
+ net/core/dev.c                                |   7 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
+ 11 files changed, 223 insertions(+), 8 deletions(-)
+ create mode 100644 include/linux/notifier_info.h
+ create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+
+-- 
+2.34.1
+
