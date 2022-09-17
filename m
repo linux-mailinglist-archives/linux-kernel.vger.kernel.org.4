@@ -2,234 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE3A5BB893
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8785BB891
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiIQNy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 09:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
+        id S229618AbiIQNw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 09:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIQNyz (ORCPT
+        with ESMTP id S229462AbiIQNwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 09:54:55 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4806E165B5;
-        Sat, 17 Sep 2022 06:54:53 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id m3so15411230eda.12;
-        Sat, 17 Sep 2022 06:54:53 -0700 (PDT)
+        Sat, 17 Sep 2022 09:52:54 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28032ED56
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:52:51 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id d1so18747777qvs.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=S8ftARU60tpfYXAboRA44VH/3e+C8sah/bpLiKM70U8=;
-        b=ZgiLtA2E0Apsg51vOkHTElykpsyPfsNWzzNlENbY8oFVxW5m+wza3rul8ckxchebcZ
-         nixXk0Q6zK40zWdWyEQd8dggL4C0G8EyPGo9WpySczXFIXekgHmKBj+Sst8QdWd1GKA/
-         bWATgVIM/PYWQ5VrO/V+2reufQ8P2KdXRFudKwUfA7v5GHgLsDON7v+bZsfDcbvdtc1B
-         FfjEq3PkOnm8raNQ8da1pCJg23AEzwxeJ5KpBU7rj8oxsB9J6q16z7nB+nf2wjZn3zIq
-         eyX+iygw2cUltDkhtJQVjqj4MPNJ9yTgAq71iX+6VLwRTpt2p/yYy7xZHJ8UPU8sVyWG
-         9/kg==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=vJ4O/hkyjCrA6oI/bSVDyEwRWGxm+Xl7wHs+Z6en8zg=;
+        b=WoBbJckgowb1qrD/G16dHIjy39E8oRTV1ZHmRb/eLTe9b9sCxh0EB3mGAKnf6i1Im3
+         /MmHZ+mJZYevUli/EgwTbPZP3eTAhJPYSbg7uxCuB7pjjMhZOyfX55T9NrowdU/TR4H+
+         /3epKbMvjLMseQ2tLyx8jsOju3DPuI0vhr1D8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S8ftARU60tpfYXAboRA44VH/3e+C8sah/bpLiKM70U8=;
-        b=SEr+EEQ17i8KNWXW9GFI4fN0PyuI5BkGf4ivjKwrd9433V9wMjTQlt4YREIM0S7rvV
-         URiDgIIBmK/hcDlQlW28qVPkzNXKXHVV7hdHZK7SB9FSYIJk90TXNcIK1bCRwT+EDpbN
-         KRymJRaShu1JzMOYhmv5175oHKctg8ZLuJV8MbXTSvOpLppTHEmBIt3AXEof6J8BhiUE
-         ArUa+rBImLsO+ZXuaymHYrND9kl4r8o4tNNSs21LsiTz+7/KfTL35wb8Ou+TqiYX/fc7
-         m71KHf8chlS6KBrlTkfx83V5cMmDGz+6CG22jDDQrWcH1XcqmYoud0jCFyKj32h72K+2
-         ADSA==
-X-Gm-Message-State: ACrzQf0i1LphGGlVvb51c93BnliBIYFwKU4ZIiu+lp7jm96EuM6Ok1CT
-        1hzyQDgW3OOkNF9qBxt7Njc=
-X-Google-Smtp-Source: AMsMyM5ztim6e7zUfdUo/c57LvKbQ8EqsbvJKbEpy4l+xiSNfLs0WO6m4gGePnAwbG6WnskJI806yg==
-X-Received: by 2002:a05:6402:b45:b0:44e:a071:2b3b with SMTP id bx5-20020a0564020b4500b0044ea0712b3bmr8055690edb.95.1663422891326;
-        Sat, 17 Sep 2022 06:54:51 -0700 (PDT)
-Received: from lab.hqhome163.com ([194.183.10.152])
-        by smtp.gmail.com with ESMTPSA id b25-20020a17090630d900b007803083a36asm5624155ejb.115.2022.09.17.06.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 06:54:50 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 13:50:03 +0000
-From:   Alessandro Carminati <alessandro.carminati@gmail.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: k3566-quartz64-a: adds sata
- variant
-Message-ID: <YyXQi9wfudMvUkgU@lab.hqhome163.com>
-References: <YySdhiqZgXpl0q/g@lab.hqhome163.com>
- <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
- <14722513.tv2OnDr8pf@phil>
- <CAMdYzYp1SYVCxOKwHspvDXoqkAxUj1hTY6J7EeRabKxD5Nrj1w@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vJ4O/hkyjCrA6oI/bSVDyEwRWGxm+Xl7wHs+Z6en8zg=;
+        b=dxU8/fFmB4Zs/w2oOAxPLI9Vs3Yb7grXe22kSMjdDMtvn33WtgM39UM9XJ4KPPxTZ3
+         aSM+7lEiRlTb2YnmZv8GFAeEOSxAtKa6k6ZWYk1fTs4VufCiwtcYyMOo9atajr+QTLTg
+         Lw2kFfVpedPuxzvTP97fhZSoqCqrS6ivpcdegR69cgy4PgzOepL415tE35DfJGYjRWhC
+         F1k+xIW9Xwp2SUJDfLoDo1PNVuoaCABUugzO80il2+1JCSlJ6Zz6pUT8Fqdx2HaJmHhu
+         l2YEaQe7Ry3CX1guVaoJUdBkRaJATWXLi08sEyRMSN/VRN0e3RWNRxpB8yUPh8U/t5rP
+         Ibfw==
+X-Gm-Message-State: ACrzQf0VdzoiUvT7+qwq373FmxWshcfGrBtIY1m9IjNufO9/QnZ6y+zx
+        K2yCA6l304qaZ+sgaWM9ZsLqLg==
+X-Google-Smtp-Source: AMsMyM6l5RhWnd0SsHnkcN7yisFnYUECzoPY/SJ4OZBbcX7ZAmenY9cbQKEO8risZBREb6jBcYPMXw==
+X-Received: by 2002:a05:6214:5609:b0:4ac:aa5e:5425 with SMTP id mg9-20020a056214560900b004acaa5e5425mr8165924qvb.81.1663422770866;
+        Sat, 17 Sep 2022 06:52:50 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id v4-20020a05620a090400b006bbf85cad0fsm8147786qkv.20.2022.09.17.06.52.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 06:52:50 -0700 (PDT)
+Message-ID: <82a58d5c-73e7-6e78-e72e-3e46a1a3afbc@joelfernandes.org>
+Date:   Sat, 17 Sep 2022 09:52:49 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYp1SYVCxOKwHspvDXoqkAxUj1hTY6J7EeRabKxD5Nrj1w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: RCU vs NOHZ
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+ <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+ <CAEXW_YTN7mnQSN2eJCysLsZOq+8JEOV6pvgw3LDTT=0mnkC2SA@mail.gmail.com>
+ <YyXNJEH6xafOcp39@hirez.programming.kicks-ass.net>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <YyXNJEH6xafOcp39@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
-
-Thank you for the valuable details you added to this thread.
-
-If I understand correctly, the SATA controller has hardware-related 
-issues if some electrical conditions are met by devices connected to 
-the two SoC ports.
-
-Here an example of a faulty device layout would be helpful.
-
-But I guess this is not such common situation if you just connect a 
-SATA device to the board.
 
 
-
-On Sat, Sep 17, 2022 at 07:23:39AM -0400, Peter Geis wrote:
-> On Sat, Sep 17, 2022 at 2:42 AM Heiko Stuebner <heiko@sntech.de> wrote:
+On 9/17/2022 9:35 AM, Peter Zijlstra wrote:
+> On Fri, Sep 16, 2022 at 02:11:10PM -0400, Joel Fernandes wrote:
+>> Hi Peter,
+>>
+>> On Fri, Sep 16, 2022 at 5:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>> [...]
+>>>> It wasn't enabled for ChromeOS.
+>>>>
+>>>> When fully enabled, it gave them the energy-efficiency advantages Joel
+>>>> described.  And then Joel described some additional call_rcu_lazy()
+>>>> changes that provided even better energy efficiency.  Though I believe
+>>>> that the application should also be changed to avoid incessantly opening
+>>>> and closing that file while the device is idle, as this would remove
+>>>> -all- RCU work when nearly idle.  But some of the other call_rcu_lazy()
+>>>> use cases would likely remain.
+>>>
+>>> So I'm thinking the scheme I outlined gets you most if not all of what
+>>> lazy would get you without having to add the lazy thing. A CPU is never
+>>> refused deep idle when it passes off the callbacks.
+>>>
+>>> The NOHZ thing is a nice hook for 'this-cpu-wants-to-go-idle-long-term'
+>>> and do our utmost bestest to move work away from it. You *want* to break
+>>> affinity at this point.
+>>>
+>>> If you hate on the global, push it to a per rcu_node offload list until
+>>> the whole node is idle and then push it up the next rcu_node level until
+>>> you reach the top.
+>>>
+>>> Then when the top rcu_node is full idle; you can insta progress the QS
+>>> state and run the callbacks and go idle.
+>>
+>> In my opinion the speed brakes have to be applied before the GP and
+>> other threads are even awakened. The issue Android and ChromeOS
+>> observe is that even a single CB queued every few jiffies can cause
+>> work that can be otherwise delayed / batched, to be scheduled in. I am
+>> not sure if your suggestions above address that. Does it?
 > 
-> Good Morning Heiko,
+> Scheduled how? Is this callbacks doing queue_work() or something?
+
+Way before the callback is even ready to execute, you can rcuog, rcuop,
+rcu_preempt threads running to go through the grace period state machine.
+
+> Anyway; the thinking is that by passing off the callbacks on NOHZ, the
+> idle CPUs stay idle. By running the callbacks before going full idle,
+> all work is done and you can stay idle longer.
+
+But all CPUs idle does not mean grace period is over, you can have a task (at
+least on PREEMPT_RT) block in the middle of an RCU read-side critical section
+and then all CPUs go idle.
+
+Other than that, a typical flow could look like:
+
+1. CPU queues a callback.
+2. CPU then goes idle.
+3. Another CPU is running the RCU threads waking up otherwise idle CPUs.
+4. Grace period completes and an RCU thread runs a callback.
+
+>> Try this experiment on your ADL system (for fun). Boot to the login
+>> screen on any distro,
 > 
+> All my dev boxes are headless :-) I don't thinkt he ADL even has X or
+> wayland installed.
+
+Ah, ok. Maybe what you have (like daemons) are already requesting RCU for
+something. Android folks had some logger requesting RCU all the time.
+
+>> and before logging in, run turbostat over ssh
+>> and observe PC8 percent residencies. Now increase
+>> jiffies_till_first_fqs boot parameter value to 64 or so and try again.
+>> You may be surprised how much PC8 percent increases by delaying RCU
+>> and batching callbacks (via jiffies boot option) Admittedly this is
+>> more amplified on ADL because of package-C-states, firmware and what
+>> not, and isn’t as much a problem on Android; but still gives a nice
+>> power improvement there.
 > 
-> >
-> > Hi Peter,
-> >
-> > Am Samstag, 17. September 2022, 03:40:07 CEST schrieb Peter Geis:
-> > > On Fri, Sep 16, 2022 at 12:06 PM Alessandro Carminati
-> > > <alessandro.carminati@gmail.com> wrote:
-> > > >
-> > > > The Quartz64 board is built upon Rockchip RK3566.
-> > > > Rockchip RK3566 has two combo phys.
-> > > > The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-> > > > ctrl2.
-> > > > The second combo phy is hardwired to the PCIe slot, where for the first,
-> > > > the hardware on the board provides both the USB3 connector and the SATA
-> > > > connector.
-> > > > This DT allows the users to switch the combo phy to the SATA connector.
-> > >
-> > > Good Evening,
-> > >
-> > > NACK to this whole series. Neither works correctly in the hardware as
-> > > is,
-> >
-> > Just for my understanding for the future, sata not working is that a bug
-> > in the soc or the board?
-> 
-> This is a board level problem. Attempting to build a device that had
-> both ports electrically connected without a switch chip created a
-> device where neither worked correctly. The SATA controllers themselves
-> are amazing. I've used both nvme and sata m2 drives on the model b for
-> example.
-> 
-> >
-> > > and USB3 was decided to be left enabled as the SATA port will be
-> > > removed completely in the next revision.
-> >
-> > That is good to know. Thanks for the heads up :-)
-> 
-> In regards to this sort of stuff in the future, we're working on
-> fragment overlay support in U-Boot to work around the kernel's lack of
-> support. If I remember correctly EDK2 will be implementing the switch
-> in firmware as well. Devices that support both (at least ones I
-> maintain) will have both in the dts, with the less likely use case
-> left disabled. End users can simply switch which one is enabled if
-> they want.
+> I can try; but as of now turbostat doesn't seem to work on that thing at
+> all. I think localyesconfig might've stripped a required bit. I'll poke
+> at it later.
 
-Reading through your message, I have the impression that you are trying 
-to solve the problem on the firmware side.
-I want to express my admiration for this effort.
-I think that this is the right approach to solve this kind of problem, 
-and that the more appropriate place to be for device trees is on the 
-firmware and not in the kernel.
-Currently, the kernel includes a considerable amount of device trees, 
-and the Quarttz64-a device tree is already upstream.
+Cool! I believe Len Brown can help on that , or maybe there is another way you
+can read the counters to figure out the PC8% and RAPL power.
 
-As I understand, there's currently an effort to standardize the already 
-existing device trees and give direction to the newcomers.
-In a recent interaction with Krzysztof Kozlowski, I learned the already 
-existing device trees are likely not to respond to these regulations. 
+thanks,
 
-Sooner or later, each upstream device tree will need to be adjusted, 
-and the currently upstreamed quartz64-a DTS is one of these.
+ - Joel
 
-I understand you are working on the u-boot side, possibly the EDK2. 
-They alone are more than 80% of all the firmware running at this moment, 
-but there's still a non-neglectable number of boots that use something 
-else.
 
-All these words to say: 
-
-* Krzysztof confirmed the upstreamed device tree for the quartz64 needs 
-  to be adjusted to meet the device trees node name regulation.
-
-* The work needed to add the SATA support is minimal.
-
-* Having this SATA DTS is not completely useless since numerous SATA 
-  configurations work smoothly.
-
-I am willing to work on this patch to make it suitable to be upstreamed.
-
-Regards
-Alessandro
-
-> 
-> Very Respectfully,
-> Peter
-> 
-> >
-> > Heiko
-> >
-> >
-> > > > Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
-> > > > ---
-> > > >  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
-> > > >  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts | 9 +++++++++
-> > > >  2 files changed, 10 insertions(+)
-> > > >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> > > > index 8c843f6fc3cc..1d5dd91d1a34 100644
-> > > > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > > > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > > > @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-usb3.dts
-> > > > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-sata.dts
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
-> > > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > > > new file mode 100644
-> > > > index 000000000000..8620df7ec01e
-> > > > --- /dev/null
-> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > > > @@ -0,0 +1,9 @@
-> > > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > > > +
-> > > > +/dts-v1/;
-> > > > +
-> > > > +#include "rk3566-quartz64-a.dtsi"
-> > > > +
-> > > > +&sata1 {
-> > > > +       status = "okay";
-> > > > +};
-> > > > --
-> > > > 2.34.1
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > Linux-rockchip mailing list
-> > > > Linux-rockchip@lists.infradead.org
-> > > > http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> > >
-> >
-> >
-> >
-> >
