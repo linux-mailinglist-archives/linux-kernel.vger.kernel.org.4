@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1665BB774
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4965BB77B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIQJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 05:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S229564AbiIQJQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiIQJKr (ORCPT
+        with ESMTP id S229510AbiIQJQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:10:47 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C59399F0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:10:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VQ-LTNS_1663405829;
-Received: from 30.39.131.12(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VQ-LTNS_1663405829)
-          by smtp.aliyun-inc.com;
-          Sat, 17 Sep 2022 17:10:30 +0800
-Message-ID: <afe5b403-4e37-80fd-643d-79e0876a7047@linux.alibaba.com>
-Date:   Sat, 17 Sep 2022 17:10:29 +0800
+        Sat, 17 Sep 2022 05:16:39 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32B045F63;
+        Sat, 17 Sep 2022 02:16:36 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 09:16:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1663406192; x=1663665392;
+        bh=WtH1XiJMuAo2t7Ag08kalVAzbnlWzm46SLxhU7NTyU4=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=wrMZSanWm0KJNnm3ykOCdOL3myVpKchYhLarOh+NsiXJB3cNn0XiZL2PXDM6LtgBL
+         3apqAbQLnHqEh+eoVn63MLzOc906v+d+cUbfJ7xjwtZPIpLDp0VA5MAShrxzjReeR5
+         M7EvduAsjV/qy4vIacG6Y4U/isHOKKOzBg/bah+2GmOqPNKtrznVv1st9g2xOZEqkV
+         XUeyh6D0dktGbx7x+5AFx72NVxUZP4NlfAo2XDtrCaycemsJPpqV6rVhIEdjUd7wzp
+         0MAp+ypX4PO1Rlcbi6BYF02vair4YktlZi5QGPL6Pye/WVA25lTRB3xEw+Nwd0/b0a
+         sZMpKhkpZNHrw==
+To:     linux-kernel@vger.kernel.org
+From:   Orlando Chamberlain <redecorating@protonmail.com>
+Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        gargaditya08@live.com, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        stable@vger.kernel.org, Samuel Jiang <chyishian.jiang@gmail.com>
+Subject: [PATCHv2 1/1] efi: Correct Macmini DMI match in uefi cert quirk
+Message-ID: <20220917091532.3607-1-redecorating@protonmail.com>
+Feedback-ID: 28131841:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH] sbitmap: fix permanent io blocking caused by insufficient
- wakeup times
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org
-References: <20220917035831.735-1-hdanton@sina.com>
-From:   Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <20220917035831.735-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
+is inconsistent with other model line names.
 
-On 2022/9/17 11:58, Hillf Danton wrote:
-> On 17 Sep 2022 10:33:01 +0800 Liu Song <liusong@linux.alibaba.com> wrote:
->> @@ -632,10 +633,14 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
->>   		if (ret == wait_cnt) {
->>   			sbq_index_atomic_inc(&sbq->wake_index);
->>   			wake_up_nr(&ws->wait, wake_batch);
->> -			return false;
->> +			if (!nr || *nr <= 0)
->> +				return false;
->>   		}
->>   
->>   		return true;
->> +	} else if (nr && *nr) {
->> +		(*nr)--;
->> +		goto again;
->>   	}
->>   
->>   	return false;
-> Hi Song,
->
-> See if advancing wake_index can survive your tests.
+Correct the capitalisation of Macmini in the quirk for skipping loading
+platform certs on T2 Macs.
 
-Hi
+Currently users get:
 
-Thanks for your suggestion, this problem not only needs to switch a wait 
-queue, but also needs to consume "wait_cnt" correctly.
+------------[ cut here ]------------
+[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
+WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_grac=
+efully_on_page_fault+0x55/0xe0
+Modules linked in:
+CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3=
+fc40fd08edab32a509fbf4c9bc52d111e
+Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10=
+.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
+Workqueue: efi_rts_wq efi_call_rts
+...
+---[ end trace 0000000000000000 ]---
+efi: Froze efi_rts_wq and disabled EFI Runtime Services
+integrity: Couldn't get size: 0x8000000000000015
+integrity: MODSIGN: Couldn't get UEFI db list
+efi: EFI Runtime Services are disabled!
+integrity: Couldn't get size: 0x8000000000000015
+integrity: Couldn't get UEFI dbx list
+
+Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot=
+ for T2 Macs")
+Cc: stable@vger.kernel.org
+Cc: Aditya Garg <gargaditya08@live.com>
+Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
+Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
+---
+v1->v2: Clarified in commit message that this is for a dmi match string
+ security/integrity/platform_certs/load_uefi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
+rity/platform_certs/load_uefi.c
+index 093894a640dc..b78753d27d8e 100644
+--- a/security/integrity/platform_certs/load_uefi.c
++++ b/security/integrity/platform_certs/load_uefi.c
+@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_skip_cert[] =3D {
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
+-=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
++=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
+--=20
+2.37.1
 
 
-Thanks
-
-
->
-> Only for thoughts now.
->
-> Hillf
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -611,6 +611,7 @@ static bool __sbq_wake_up(struct sbitmap
->   	if (wait_cnt <= 0) {
->   		int ret;
->   
-> +		sbq_index_atomic_inc(&sbq->wake_index);
->   		wake_batch = READ_ONCE(sbq->wake_batch);
->   
->   		/*
-> @@ -627,7 +628,6 @@ static bool __sbq_wake_up(struct sbitmap
->   		 */
->   		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
->   		if (ret == wait_cnt) {
-> -			sbq_index_atomic_inc(&sbq->wake_index);
->   			wake_up_nr(&ws->wait, wake_batch);
->   			return false;
->   		}
