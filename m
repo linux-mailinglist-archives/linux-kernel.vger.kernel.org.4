@@ -2,129 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0C85BB4F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC515BB4F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiIQAUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S229457AbiIQAVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQAUh (ORCPT
+        with ESMTP id S229608AbiIQAU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:20:37 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2043.outbound.protection.outlook.com [40.107.21.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175194E62D;
-        Fri, 16 Sep 2022 17:20:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EbTpnQugHxJXWrz61vXbHmN8xZISifJoIao8NfWug1e2MCdmJS78Ka1WpX9V+DqIrM2kMLz3VoGUOHuvM8IhieU7XX3y1NtcTqXy708GNhHAIXW0XiKf3lnnIiavM/uEo/lUpGPNWQMUGez1hvT+2MpOl/ZnUFKUxGsCeEOowGb023pUDatnBTo/SGRcIaXb0mJQdtinDnQ000zZkVZXZK1BF8rT3xZdMTd6XGI8z5gONyQJRQ18cRRJEWQrcei3j6EYq+UwXbsdP73ZAP01yS0hpVZm0e+9ZZvIHlJm+lO9E4fk3CnBJdmij+vp+4MuFSQwAKaRsUm1Ek/ZAN82Xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eyWv4A2PrIe3ZxjMYNU8ijssZNaqRGo+PM9u2myjLGY=;
- b=khr3mOu+/NHfkpvcHXGEj5ZCQh+qVV/rAe+KqDYKd+PkOu+tnrDMTxrb+iI6A4PDN/W8PuPc+BKYpMrUSCqoaVG03dCHhe9POCXZlu5C1dJrvr5h0v8q87fF3BSPmLpKrBw9/T9HZP2TZP5xF3G782pHcFT7e6Iu2I2Ba82F2KVGp6LzCFpcTXFHWyRyPnO8dkUIaaZib6eYZkNIXn4yrNAf6wCMbdR70sp3V82r07Oz3M7+HI4miGfmlwrhLYBfa2avLcwVy+VUAXWouK4XcO1ehUWRFaqmeptCV4cwFOd7H08mvXsTguv4h67EmyghNdhIFAUCZO6/tiiCx772Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eyWv4A2PrIe3ZxjMYNU8ijssZNaqRGo+PM9u2myjLGY=;
- b=HLNDIw/OrxpKf0gIF0FoCb3eErTG6RE9D0oYX5seamxhUZH0I2B80EAbAGONyW5yObwkNgq2kWkksKpHlsVOj8Ye/dlbR4U850Wi/qruFZVI0vjxV59xM+3LT6/9HAypw3JoQbA4vttUICF01QTuLB815fzGR5CeQW2EaHgEUzM=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM9PR04MB8667.eurprd04.prod.outlook.com (2603:10a6:20b:43e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.17; Sat, 17 Sep
- 2022 00:20:32 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.016; Sat, 17 Sep 2022
- 00:20:31 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v4 0/5] net: ipqess: introduce Qualcomm IPQESS
- driver
-Thread-Topic: [PATCH net-next v4 0/5] net: ipqess: introduce Qualcomm IPQESS
- driver
-Thread-Index: AQHYxGBV/lOKpVb8gEC8qOCt/3pDRq3izdaA
-Date:   Sat, 17 Sep 2022 00:20:31 +0000
-Message-ID: <20220917002031.f7jddzi7ppciusie@skbuf>
-References: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
-In-Reply-To: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AM9PR04MB8667:EE_
-x-ms-office365-filtering-correlation-id: 421628ef-fc73-408e-73c1-08da98426eb7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qpLdZSNuQviD2QR6IvfusHFqKx2u8aFOn4hC0I2TsWHhICbO2ZdlDfbmkMEgkboKwJDeDM0T/C0X9sLQO8ew/z4AWMPk2Q2zmNwOI9o0gssB0htsnOtyhtFQ7PxQ4vUz0qkzFRcGPAsOaLNCKX8hFnUSOs2u/S0/d2UKzLOZpdP34w6GWmODU94t/le5X/Owgxj5bSFqlqQtJnEGNcCDdjqVXqb3ZBywD1dS5yxltBnfOPwrQLrV86ktYSeuXr31MOkC02sSjws9ult2O7PHNC/L6a0jtk4D9Q2u1hUtLBcWA1CNOLsKCCKkZXW6C+wvwRwvIDJhS3nETIFC5ZWWGFZpO/myTGNZyQ0/zEPqPeEGJRw2FgdjhDRtCxTEE5n90ZgrhJe2A1IjqGkI7qgBP7pMuMZEGHbutK6JmHl2sn9UFo3D9MCVEoAwpnJZbXu7pFl4wKMGnGK8oI/Wm7PGFL3tOdCY13/a3X93z4AJHW7qxBz3pOZ3D8tywq8/5Mxpwhn6YstfqpH6BQTTl8PThbuHi3FBlmc1+Q15VPVVdeJ1vjACeZi03dCpvohTSva9J6+DXw+AB/3rj0gwVCbwFljhp/fTcS/qe4GTMBSWJR0hhK6qtEvF3HMmr2mR+zJnGAeBf3K5gmCjRDIp1ekbuZvIHDrDWyMEygEYnYWTB7rudsHv18Xw888u2KtdcHfn9gkHw9DTcScG5aVE0qhDwov8MqyfZ5maXuziTYxBUpWYTwJYhlYvbjEKXwauIluINsTizVXa209bjtx7KIk5ZA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(8936002)(86362001)(2906002)(7416002)(5660300002)(66446008)(64756008)(8676002)(44832011)(66476007)(66556008)(4326008)(66946007)(76116006)(91956017)(4744005)(38070700005)(122000001)(54906003)(316002)(6916009)(38100700002)(6512007)(26005)(9686003)(6506007)(41300700001)(6486002)(33716001)(186003)(1076003)(478600001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V76I+Ii/L/MFo/mc9gBJQQcn4kLqiFSDMzPSY7PcOWEjxM7SmMrhNUgCQUne?=
- =?us-ascii?Q?CzQ8yONg1xrKHhSECROZxv3dW2QM6ybrcWv7z5BG5hay/5SFedBLRe63Imoq?=
- =?us-ascii?Q?wAz1uyNsOYy9copFTEL1dF1ofEw9H9GsoF+OYr1OnjUmF1zE+bTZGJGLdAdc?=
- =?us-ascii?Q?GsUSD1l2sEakWxQP9KfKfOhcHfitJzdNQlGc9tH44tArgx0dDyzwwtVq8rLJ?=
- =?us-ascii?Q?jpzitskSQAJG+YUknwNQExFAZMvaFQL6+8QNrtQzXkM/iDGliu0KcBiUPtou?=
- =?us-ascii?Q?6p1wqElpW7aaqPQeNiLI0o612z5WtNs9KVmA5+cc2xGheojx1OR8WdNyVLtk?=
- =?us-ascii?Q?gSwRiTSjead9zAPwMmKcDFFXw9Klyhd/BZrTVdV4aC7ByjM1aHgH/ZcW6tRR?=
- =?us-ascii?Q?ZApYK61BXMboX5tWzrsKbnkS+kcrCsvLYjIYuYvqiPB4U9uDENGm3xqNDli3?=
- =?us-ascii?Q?E4HkDVp/a0uVhjFdJuuutIGuAlHuaDYkHOylV1rObV1ZGjKxBXnDTSi5kHhR?=
- =?us-ascii?Q?dhDSaVpMsaHnoRwwldZ09owa6p7+8DdZIKEfi+Yzk8L0oHmma+/XEMoXEgV1?=
- =?us-ascii?Q?dOGAk582Fi3QQRWbkmPR2PQjoG5bBU4W/gaw3zwqG3NSjfyHDxL64rKimChi?=
- =?us-ascii?Q?A780ZVGYoBcwfctlWFiOti5fwYE+mqaHBkHNdoKRfeKV+AeaWFcBAZruaAxT?=
- =?us-ascii?Q?+P+z12LMSO/ZpA1IaMyRfrR0MLmaIHmctNlvwp0aKpVQx1BumZmOFAwC8MK4?=
- =?us-ascii?Q?5u29y7Drk0cdxBrymRF9hU0BERvRvU/ilW8RF6HIY/4uS/+i5JIsvNLORiPA?=
- =?us-ascii?Q?yP9ywB92NLVPMENbxrO2h1XE4N9geCKzucDrqlaxS4E26VYwW5RZjkm0wFDr?=
- =?us-ascii?Q?eHF7xaovQvtj0B1+vPa9ft14N6IiJD9PoRbo17hBw7gRNYK9ZgDJrdJ3Hc7T?=
- =?us-ascii?Q?rcb7jhDSFIVdeuhkeVcQS5vhjkN36uJZbg+DTtefI3s2O5QOBPOeoywLPf1u?=
- =?us-ascii?Q?KnGKEagGcRZrE2v7wV8bVcwDKJtB6D1SKW55hkJv4HYtXe9Yuflo5kfutqeQ?=
- =?us-ascii?Q?VTqGf3hdLOCXV9etdMq0w3AJ6ffSbpLhhGN3Mkl9kWp5keMTf9Gr8EuwxZvo?=
- =?us-ascii?Q?QNiZMOsDm3CZOiZSHBmEeM5Ck/nQWzui4cPq+41k3k8/5sVDc8pJg2Qifpjp?=
- =?us-ascii?Q?HB/eih3h54v2gv1efv5o2kxmYg+3IHqQUdjB6ynzDAodHb69jdSFjcuOTSMI?=
- =?us-ascii?Q?2UxujfJbTZ7UW56zoDh8E1qx6rY73ZXXIAah+A8Z16AJ6L6Ri1GIuIGaJGXc?=
- =?us-ascii?Q?CDI+hE9Eo5L5oIJFnz6QxgXfOf7tBh03xBPvv7xi9tREI5iJe0ynaNpFT+Gg?=
- =?us-ascii?Q?ywyf41F9UiYPck/8VE3Qp9BtzIwZ1BNBf/xeO8D/3cNnmXgV736lzXKoZeB8?=
- =?us-ascii?Q?Ndc6q4/8AHEMGx/xW3cyuFQdGXhbmZjUkvb+MZPn0utd0V6UQ9uP0sSjoPbj?=
- =?us-ascii?Q?WbrRQ6inxs6DLL5fEOfj56uXQjeFZNIBE83iyNwHXK3HHUrvVH8iWLzeN2hY?=
- =?us-ascii?Q?n3mwiY8oSsSJbDDfd3z+wEosYxfINzzxX0qxqNjLGVJ9T9fg4ctqTi11ccmE?=
- =?us-ascii?Q?Iw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <ECB66C3F6A36D24CA9C9BF182F94A5A3@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 16 Sep 2022 20:20:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320B15F233
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663374051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MEb8Ji/9KFiKVcDLJzMC0DUftq+9xtbvWBEmYmwdpAU=;
+        b=fLLADRkaeNf2kwDsx1eHHHJNrF0SA95OKdzSpyvbekvY1D9HjvYW3W5vlhdFmwl0oTnmQV
+        +BlgI9XxyNurPYQmCBB3+XvPUVNJeE7cCkeLRHkiLlf3Ch7fMuTsCFLD24LwSId72CYYAG
+        rytIVOxHxSE2vxItqvDyyB9xiTqWJeo=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-639-CqxAhyfcMsmD6eFJSq0Utw-1; Fri, 16 Sep 2022 20:20:50 -0400
+X-MC-Unique: CqxAhyfcMsmD6eFJSq0Utw-1
+Received: by mail-qv1-f72.google.com with SMTP id f9-20020ad442c9000000b004ac7f4fde18so15969386qvr.14
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:20:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MEb8Ji/9KFiKVcDLJzMC0DUftq+9xtbvWBEmYmwdpAU=;
+        b=h5v1WYglB3CHACsOkjirL7thJAzIOF3GvKr+oCVS5T4mFbdu2qVA0GSyQefaN0EDBC
+         THzx3YGZlmtHmspHzT7ZS+eplkz4dlkKERYj/fBJzrxp5h4KmWSmg0SHzCaRw60xO6ET
+         +83ugFQkQ3ymF7yn6WaSxpJb//0pX/1d8qcRMpz6nicMmVLTL4G+5YOPbHcdovwlWNn6
+         d25GLdliOgMSjvy9Lpb4bjNbJQ4ElzJdOnLTdXGsks9vNqdWm+FHLcK81n7QtRpoe7UA
+         6N4y+jGaLYXrgtxXlbMkiWdP0PIMxB/bBGtp/QFdTJQzYpN7FSO1JPP//Eq+JCL4/s9y
+         WDNA==
+X-Gm-Message-State: ACrzQf2w3C9TzYHK+/hU3iSScIgU8B21r1kteatqvvrheuipqGEA4Tb6
+        f1oHkWZH11ElkNAHT/+J7bEESg4nYrT83FszGwKmH1myOqFYXjYTnXaw41aMZ1gXSGRmv/EMfqJ
+        vwBZiwkCIQsX17e7Cfn15AoBZ
+X-Received: by 2002:a05:622a:30f:b0:344:b51a:cc64 with SMTP id q15-20020a05622a030f00b00344b51acc64mr6536433qtw.336.1663374049852;
+        Fri, 16 Sep 2022 17:20:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Duh4jt7m6TsImezWnknJ3dovH5bbkCwsX9dad263+d6wHNjA43YrFXBJ08iGCKsSJTj2BAA==
+X-Received: by 2002:a05:622a:30f:b0:344:b51a:cc64 with SMTP id q15-20020a05622a030f00b00344b51acc64mr6536418qtw.336.1663374049653;
+        Fri, 16 Sep 2022 17:20:49 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006ce30a5f892sm5077319qkp.102.2022.09.16.17.20.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 17:20:46 -0700 (PDT)
+Subject: Re: [PATCH v1 1/1] fpga: m10bmc-sec: Fix possible memory leak of
+ flash_buf
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     lgoncalv@redhat.com, marpagan@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org
+References: <20220916235205.106873-1-russell.h.weight@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <f1e92634-8f96-6a3b-52e9-e83fa879ca39@redhat.com>
+Date:   Fri, 16 Sep 2022 17:20:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 421628ef-fc73-408e-73c1-08da98426eb7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2022 00:20:31.8970
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HwPa4FrJ+9/1ICyggIqW6sh+LIh0FDlGWj3GHDi38O79OYIPZqS/LVCgIGC2WZkI9TF7jT95dvsuCDjNYm2U6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8667
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <20220916235205.106873-1-russell.h.weight@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,11 +88,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 05:24:49PM +0200, Maxime Chevallier wrote:
-> The DSA out-of-band tagging is still using the skb->headroom part, but
-> there doesn't seem to be any better way for now without adding fields to
-> struct sk_buff.
 
-Are we on the same page about what is meant by "skb extensions"? See
-what is provided by CONFIG_SKB_EXTENSIONS, I did not mean it as in
-"extend struct sk_buff with new fields".=
+On 9/16/22 4:52 PM, Russ Weight wrote:
+> There is an error check following the allocation of flash_buf that returns
+> without freeing flash_buf. It makes more sense to do the error check
+> before the allocation and the reordering eliminates the memory leak.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Fixes: 154afa5c31cd ("fpga: m10bmc-sec: expose max10 flash update count")
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+> Cc: <stable@vger.kernel.org>
+> ---
+>   drivers/fpga/intel-m10-bmc-sec-update.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 526c8cdd1474..79d48852825e 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -148,10 +148,6 @@ static ssize_t flash_count_show(struct device *dev,
+>   	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+>   	num_bits = FLASH_COUNT_SIZE * 8;
+>   
+> -	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
+> -	if (!flash_buf)
+> -		return -ENOMEM;
+> -
+>   	if (FLASH_COUNT_SIZE % stride) {
+>   		dev_err(sec->dev,
+>   			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
+> @@ -160,6 +156,10 @@ static ssize_t flash_count_show(struct device *dev,
+>   		return -EINVAL;
+>   	}
+>   
+> +	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
+> +	if (!flash_buf)
+> +		return -ENOMEM;
+> +
+>   	ret = regmap_bulk_read(sec->m10bmc->regmap, STAGING_FLASH_COUNT,
+>   			       flash_buf, FLASH_COUNT_SIZE / stride);
+>   	if (ret) {
+
