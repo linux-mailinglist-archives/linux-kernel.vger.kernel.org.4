@@ -2,141 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DB15BB972
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 18:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AF75BB970
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 18:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiIQQhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 12:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S229671AbiIQQgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 12:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiIQQg6 (ORCPT
+        with ESMTP id S229629AbiIQQgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 12:36:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A1A2DA96;
-        Sat, 17 Sep 2022 09:36:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FA160D58;
-        Sat, 17 Sep 2022 16:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FDEC4314B;
-        Sat, 17 Sep 2022 16:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663432612;
-        bh=i7R8+F7tYcsgLS7ZIj1yIcPrNdfwusF8ZYSygT5U8uk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rLQEvhX7hYeEuzt8+Z+E68Q2aoEApJMjljaxtp4izO6hK/wx7k2+zuRdc27XKI+NT
-         sRPO/acreNpT6Tu4QvZZKlPQDC9jXZVMQ2TLmsxsFmMsnHA+Q54CN9I49YEx6iU/Zn
-         SkWg4z3k1V8+E4bzaFT8x914UJxIsvLqCpn+hEas/3on1170/fk5hQkfFoR5Vb6byy
-         GcyRu+cNpNH/YYCgSKdxWb44F1zca9ELZw0/mwZbTAK8r/H+PhdwmZPNlXcsRznRRi
-         XYPAx3IyvWrfzyGT4IWJlbsRr7EHlFWPINabfQucKStTgdNUf7IIXIewsYtiutTO1X
-         6pIG+PVih/3dA==
-Received: by mail-lj1-f171.google.com with SMTP id bn9so29217986ljb.6;
-        Sat, 17 Sep 2022 09:36:52 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3qhIPP1Ji2WO6aiMtCg8iFI6pXPo7xLjz4c41SfmFCcMauzYM/
-        U0rDzYQ7/r+cZ+VMtpODHtUe+gQ385RmDqp03t4=
-X-Google-Smtp-Source: AMsMyM6xmONHQzT9Zn/W+1q0oHQQ1zeAhyg36WV4Nzj1xV+AkhvpRnEtlacVohtkJ86kEpJm0ltaH8Q5JqIsaNu+mMI=
-X-Received: by 2002:a2e:7314:0:b0:26a:ca18:60eb with SMTP id
- o20-20020a2e7314000000b0026aca1860ebmr2628614ljc.69.1663432610167; Sat, 17
- Sep 2022 09:36:50 -0700 (PDT)
+        Sat, 17 Sep 2022 12:36:44 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7253055F
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:36:42 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id c7so17864733ljm.12
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/ai+7SsL/h1KwbYitYUtAaE2JHJ2xYhMnUl9VlW5Wl4=;
+        b=R193AffSliQz0TPGQUzIlMu2Ccw6tPKAks6zPn4TVzP0+kakt8Qk+7zPB88k1e9RZc
+         nbLJ7FQQIp2fwTNsE1opqe+hFuBgJg4mD/5y/QERxiCde6bm2Emr6/7f8eOOXMUw4ux2
+         3dKRpUBrdPHyrY1MBDONbtUPZ8oRhGrZYBW2U0ITBxPSD+NCdRpAexinOLE+sEQ7JW/P
+         pqp1b7NCTZfa266w4G3qqdIv6ZVpuKsShLcZ0N5MTtjVcMlFh4ov+48E/eiowDgkVRsq
+         QHtelPKutVswypicGp/17+Cr9FgSuERju++cA8RglypF5isHsEEL0COuiPnqcgtEBdnv
+         VAYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/ai+7SsL/h1KwbYitYUtAaE2JHJ2xYhMnUl9VlW5Wl4=;
+        b=qNVUjqX/G/yBAbI80Zg7geqaZimV0U+cCkHC9HAPKAIGbQW2tat2gj2GSIN8tlmw83
+         uDAY8RqqixoignzxAVFDKCauRdrVJxsH7nvkwL3kWO6L3FT5KGexLQRjM5BuRZIbOUl8
+         9imwH7JIdqCxh2ZDUVfgzOPr3dX0zI+PBIMTenyiXdVYAn0jQUvATQmuOL79/1LfXOyN
+         mkXuE7YIk5boorwid/tz2C3vbpiJs+B12DE/v4Kdt3VXUPRujDjhr+A/LiHGR79746Az
+         x6MmK6KZ/jTvwdwsKkiZQ1Z+yCCxI0yWTxDtS2Ef8rX+4hzPns8li6+o7yRbD+AZ5PLJ
+         gREg==
+X-Gm-Message-State: ACrzQf0IDXLTFwF6G+vgTe3O825wSDvBqBvZqMmvAS1VmxYagqpfdWj3
+        onibRMjQUX3XnFHW0fRoKapyAA==
+X-Google-Smtp-Source: AMsMyM4O9nhkGk4g36ZJAGZfZMuqar3D6fO7Dhcld2L1JJ8BHSxHVSeiQOXk6iSG4KCkeq+7P+rppw==
+X-Received: by 2002:a2e:a385:0:b0:26b:e6b4:6d2d with SMTP id r5-20020a2ea385000000b0026be6b46d2dmr2800392lje.507.1663432600878;
+        Sat, 17 Sep 2022 09:36:40 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z28-20020a2eb53c000000b0025fe7f33bc4sm4212849ljm.49.2022.09.17.09.36.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 09:36:40 -0700 (PDT)
+Message-ID: <50c18f2e-53d2-21b3-b36e-7a2045b96c11@linaro.org>
+Date:   Sat, 17 Sep 2022 17:36:39 +0100
 MIME-Version: 1.0
-References: <20220910081152.2238369-1-ardb@kernel.org> <20220910081152.2238369-7-ardb@kernel.org>
-In-Reply-To: <20220910081152.2238369-7-ardb@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 17 Sep 2022 18:36:38 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHFsSUHjyuwj3aThoq=oZdEJca9XSCu=Fbkhk+qTj6khQ@mail.gmail.com>
-Message-ID: <CAMj1kXHFsSUHjyuwj3aThoq=oZdEJca9XSCu=Fbkhk+qTj6khQ@mail.gmail.com>
-Subject: Re: [PATCH v5 6/8] arm64: efi: enable generic EFI compressed boot
-To:     linux-efi@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Lennart Poettering <lennart@poettering.net>,
-        Jeremy Linton <jeremy.linton@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: sc8180x: Introduce Primus
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220916121204.3880182-1-vkoul@kernel.org>
+ <20220916121204.3880182-6-vkoul@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220916121204.3880182-6-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Sept 2022 at 10:12, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> Wire up the generic EFI zboot support for arm64.
->
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-
-I've queued up most of this now for 6.1 - Catalin, Will, any
-objections if I queue this one as well via the efi tree?
-
+On 16/09/2022 13:12, Vinod Koul wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Introduce support for the SC8180X reference device, aka Primus, with
+> debug UART, regulators, UFS and USB support.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  arch/arm64/Makefile        | 9 +++++++--
->  arch/arm64/boot/.gitignore | 1 +
->  arch/arm64/boot/Makefile   | 6 ++++++
->  3 files changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-> index 6d9d4a58b898..a82bb3599094 100644
-> --- a/arch/arm64/Makefile
-> +++ b/arch/arm64/Makefile
-> @@ -151,12 +151,17 @@ libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
->
->  # Default target when executing plain make
->  boot           := arch/arm64/boot
+
+(...)
+
+> +&wifi {
+> +	memory-region = <&wlan_mem>;
 > +
-> +ifeq ($(CONFIG_EFI_ZBOOT),)
->  KBUILD_IMAGE   := $(boot)/Image.gz
-> +else
-> +KBUILD_IMAGE   := $(boot)/vmlinuz.efi
-> +endif
->
-> -all:   Image.gz
-> +all:   $(notdir $(KBUILD_IMAGE))
->
->
-> -Image: vmlinux
-> +Image vmlinuz.efi: vmlinux
->         $(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
->
->  Image.%: Image
-> diff --git a/arch/arm64/boot/.gitignore b/arch/arm64/boot/.gitignore
-> index 9a7a9009d43a..af5dc61f8b43 100644
-> --- a/arch/arm64/boot/.gitignore
-> +++ b/arch/arm64/boot/.gitignore
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  Image
->  Image.gz
-> +vmlinuz*
-> diff --git a/arch/arm64/boot/Makefile b/arch/arm64/boot/Makefile
-> index a0e3dedd2883..c65aee088410 100644
-> --- a/arch/arm64/boot/Makefile
-> +++ b/arch/arm64/boot/Makefile
-> @@ -38,3 +38,9 @@ $(obj)/Image.lzo: $(obj)/Image FORCE
->
->  $(obj)/Image.zst: $(obj)/Image FORCE
->         $(call if_changed,zstd)
+> +	vdd-0.8-cx-mx-supply = <&vreg_l1e_0p75>;
+> +	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
+> +	vdd-1.3-rfa-supply = <&vreg_l9a_1p3>;
+> +	vdd-3.3-ch0-supply = <&vreg_l11c_3p3>;
+> +	vdd-3.3-ch1-supply = <&vreg_l10c_3p3>;
 > +
-> +EFI_ZBOOT_PAYLOAD      := Image
-> +EFI_ZBOOT_BFD_TARGET   := elf64-littleaarch64
-> +EFI_ZBOOT_MACH_TYPE    := ARM64
+> +	status = "okay";
+> +};
 > +
-> +include $(srctree)/drivers/firmware/efi/libstub/Makefile.zboot
-> --
-> 2.35.1
->
+> +&xo_board_clk {
+> +	clock-frequency = <38400000>;
+> +};
+> +
+> +/* PINCTRL */
+> +
+> +&pmc8180c_gpios {
+> +	bl_pwm_default_state: bl-pwm-default-state {
+> +		en {
+
+Suffix -pins
+
+> +			pins = "gpio8";
+> +			function = "normal";
+> +		};
+> +
+> +		pwm {
+
+Suffix -pins
+
+> +			pins = "gpio10";
+> +			function = "func1";
+> +		};
+> +	};
+> +};
+> +
+> +&tlmm {
+> +	gpio-reserved-ranges = <0 4>, <47 4>, <126 4>;
+> +
+> +	aux_i2c_active_state: aux-i2c-active-state {
+> +		pins = "gpio98", "gpio99";
+> +		function = "qup7";
+> +
+> +		bias-disable;
+> +		drive-strength = <16>;
+> +	};
+> +
+> +	edp_hpd_active: epd-hpd-active-state {
+> +		pins = "gpio10";
+> +		function = "edp_hot";
+> +	};
+> +
+> +	hall_int_active_state: hall-int-active-state {
+> +		pins = "gpio121";
+> +		function = "gpio";
+> +
+> +		input-enable;
+> +		bias-disable;
+> +	};
+> +
+> +	kb_int_active_state: kb-int-active-state {
+> +		int-n {
+
+Suffix -pins
+
+> +			pins = "gpio37";
+> +			function = "gpio";
+> +
+> +			bias-pull-up;
+> +			intput-enable;
+> +		};
+> +
+> +		kp-disable {
+
+Suffix -pins
+
+> +			pins = "gpio135";
+> +			function = "gpio";
+> +
+> +			output-high;
+> +		};
+> +	};
+> +
+> +	kb_tp_3v3_en_active_state: kb-tp-3v3-en-active-state {
+> +		pins = "gpio4";
+> +		function = "gpio";
+> +
+> +		bias-disable;
+> +	};
+> +
+> +	pcie2_default_state: pcie2-default-state {
+> +		clkreq {
+
+Suffix -pins
+
+> +			pins = "gpio176";
+> +			function = "pci_e2";
+> +			bias-pull-up;
+> +		};
+> +
+> +		reset-n {
+
+Suffix -pins
+
+> +			pins = "gpio175";
+> +			function = "gpio";
+> +
+> +			drive-strength = <2>;
+> +			output-low;
+> +			bias-pull-down;
+> +		};
+> +
+> +		wake-n {
+
+Suffix -pins
+
+> +			pins = "gpio177";
+> +			function = "gpio";
+> +
+> +			drive-strength = <2>;
+> +			bias-pull-up;
+> +		};
+> +	};
+> +
+> +	tp_int_active_state: tp-int-active-state {
+> +		tp-int {
+
+Suffix -pins
+
+> +			pins = "gpio24";
+> +			function = "gpio";
+> +
+> +			bias-disable;
+> +			input-enable;
+> +		};
+> +
+> +		tp-close-n {
+
+Suffix -pins
+
+> +			pins = "gpio116";
+> +			function = "gpio";
+> +
+> +			bias-disable;
+> +			input-enable;
+> +		};
+> +	};
+> +
+> +	ts_active_state: ts-active-state {
+> +		int-n {
+
+Suffix -pins
+
+> +			pins = "gpio122";
+> +			function = "gpio";
+> +
+> +			input-enable;
+> +			bias-disable;
+> +		};
+> +
+> +		reset-n {
+
+Suffix -pins
+
+> +			pins = "gpio54";
+> +			function = "gpio";
+> +
+> +			output-high;
+> +		};
+> +	};
+> +
+> +	ts_i2c_active_state: ts-i2c-active-state {
+> +		pins = "gpio114", "gpio115";
+> +		function = "qup1";
+> +
+> +		/* External pull up */
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	uart13_state: uart13-state {
+> +		cts {
+
+Suffix -pins
+
+> +			pins = "gpio43";
+> +			function = "qup13";
+> +			bias-pull-down;
+> +		};
+> +
+> +		rts-tx {
+
+Suffix -pins
+
+> +			pins = "gpio44", "gpio45";
+> +			function = "qup13";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +
+> +		rx {
+
+Suffix -pins
+
+> +			pins = "gpio46";
+> +			function = "qup13";
+> +			bias-pull-up;
+> +		};
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof
