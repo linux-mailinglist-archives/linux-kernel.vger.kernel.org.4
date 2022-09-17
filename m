@@ -2,110 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BECD5BB6BC
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EF95BB6B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiIQGmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 02:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S229509AbiIQGml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 02:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiIQGmm (ORCPT
+        with ESMTP id S229379AbiIQGmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 02:42:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DC82E6AC;
-        Fri, 16 Sep 2022 23:42:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B536660F7F;
-        Sat, 17 Sep 2022 06:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FA1C433D6;
-        Sat, 17 Sep 2022 06:42:37 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 2/2] Input: i8042: Add LoongArch support in i8042-acpipnpio.h
-Date:   Sat, 17 Sep 2022 14:40:20 +0800
-Message-Id: <20220917064020.1639709-2-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220917064020.1639709-1-chenhuacai@loongson.cn>
-References: <20220917064020.1639709-1-chenhuacai@loongson.cn>
+        Sat, 17 Sep 2022 02:42:39 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCD41D0E3;
+        Fri, 16 Sep 2022 23:42:36 -0700 (PDT)
+Received: from [167.98.135.4] (helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oZRWy-0007CE-Mc; Sat, 17 Sep 2022 08:42:24 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Alessandro Carminati <alessandro.carminati@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: k3566-quartz64-a: adds sata variant
+Date:   Sat, 17 Sep 2022 08:42:23 +0200
+Message-ID: <14722513.tv2OnDr8pf@phil>
+In-Reply-To: <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
+References: <YySdhiqZgXpl0q/g@lab.hqhome163.com> <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LoongArch uses ACPI and nearly the same as X86/IA64 for 8042. So modify
-i8042-acpipnpio.h slightly and enable it for LoongArch in i8042.h. Then
-i8042 driver can work well under the ACPI firmware with PNP typed key-
-board and mouse configured in DSDT.
+Hi Peter,
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/input/serio/i8042-acpipnpio.h | 8 ++++++--
- drivers/input/serio/i8042.h           | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Am Samstag, 17. September 2022, 03:40:07 CEST schrieb Peter Geis:
+> On Fri, Sep 16, 2022 at 12:06 PM Alessandro Carminati
+> <alessandro.carminati@gmail.com> wrote:
+> >
+> > The Quartz64 board is built upon Rockchip RK3566.
+> > Rockchip RK3566 has two combo phys.
+> > The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
+> > ctrl2.
+> > The second combo phy is hardwired to the PCIe slot, where for the first,
+> > the hardware on the board provides both the USB3 connector and the SATA
+> > connector.
+> > This DT allows the users to switch the combo phy to the SATA connector.
+> 
+> Good Evening,
+> 
+> NACK to this whole series. Neither works correctly in the hardware as
+> is,
 
-diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
-index d14b9fb59d6c..c22151f180bb 100644
---- a/drivers/input/serio/i8042-acpipnpio.h
-+++ b/drivers/input/serio/i8042-acpipnpio.h
-@@ -2,6 +2,7 @@
- #ifndef _I8042_ACPIPNPIO_H
- #define _I8042_ACPIPNPIO_H
- 
-+#include <linux/acpi.h>
- 
- #ifdef CONFIG_X86
- #include <asm/x86_init.h>
-@@ -1449,16 +1450,19 @@ static int __init i8042_pnp_init(void)
- 
- 	if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
- 		i8042_pnp_exit();
-+		pr_info("PNP: No PS/2 controller found.\n");
- #if defined(__ia64__)
- 		return -ENODEV;
-+#elif defined(__loongarch__)
-+		if (acpi_disabled == 0)
-+			return -ENODEV;
- #else
--		pr_info("PNP: No PS/2 controller found.\n");
- 		if (x86_platform.legacy.i8042 !=
- 				X86_LEGACY_I8042_EXPECTED_PRESENT)
- 			return -ENODEV;
-+#endif
- 		pr_info("Probing ports directly.\n");
- 		return 0;
--#endif
- 	}
- 
- 	if (i8042_pnp_kbd_devices)
-diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
-index bf2592fa9a78..adb5173372d3 100644
---- a/drivers/input/serio/i8042.h
-+++ b/drivers/input/serio/i8042.h
-@@ -19,7 +19,7 @@
- #include "i8042-snirm.h"
- #elif defined(CONFIG_SPARC)
- #include "i8042-sparcio.h"
--#elif defined(CONFIG_X86) || defined(CONFIG_IA64)
-+#elif defined(CONFIG_X86) || defined(CONFIG_IA64) || defined(CONFIG_LOONGARCH)
- #include "i8042-acpipnpio.h"
- #else
- #include "i8042-io.h"
--- 
-2.31.1
+Just for my understanding for the future, sata not working is that a bug
+in the soc or the board?
+
+> and USB3 was decided to be left enabled as the SATA port will be
+> removed completely in the next revision.
+
+That is good to know. Thanks for the heads up :-)
+
+Heiko
+
+
+> > Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
+> >  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts | 9 +++++++++
+> >  2 files changed, 10 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> > index 8c843f6fc3cc..1d5dd91d1a34 100644
+> > --- a/arch/arm64/boot/dts/rockchip/Makefile
+> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> > @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-usb3.dts
+> > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-sata.dts
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+> > new file mode 100644
+> > index 000000000000..8620df7ec01e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
+> > @@ -0,0 +1,9 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "rk3566-quartz64-a.dtsi"
+> > +
+> > +&sata1 {
+> > +       status = "okay";
+> > +};
+> > --
+> > 2.34.1
+> >
+> >
+> > _______________________________________________
+> > Linux-rockchip mailing list
+> > Linux-rockchip@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+> 
+
+
+
 
