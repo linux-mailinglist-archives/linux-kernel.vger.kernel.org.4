@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08B45BB764
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919F25BB768
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiIQJCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 05:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S229627AbiIQJID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiIQJCJ (ORCPT
+        with ESMTP id S229505AbiIQJH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:02:09 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53A53ED7F;
-        Sat, 17 Sep 2022 02:02:07 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 069F0E000C;
-        Sat, 17 Sep 2022 09:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663405326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J3n+5d6gN7wXx4G9cQ9iXiYL0yv1UNBqbWeZnd/o/68=;
-        b=RXzA6qIFzDsgsg5h2XBhvb1k+H7xEflBwJVZ45xk8mKLVkl4d0MnquXtROW6Ek34DjR87e
-        UovNg3uk1IHuVysoPnNV+mpIYm0oMskblt34T8WvqEVpa3mGd4gHAPP7zBvPdKn3AqSN/v
-        mlg5WbKcJVyv7JNz5GT3UnKElGa0lNHFKN6h19KOXLvhXVN/I+vUy5q5EcTfUjoKlZVg2c
-        Lr8fn6u2WKWcOr+SOF2ao+kD59noR7JjXmboeZ53626tXvXJBxLo41pLM6M5aew6B/bkEG
-        nLj44Kdx/HUESXy3u0NpFV3Ufuvt9wlWqIDwXskVnxww0e3zUcQiYdWLnBtWqA==
-Date:   Sat, 17 Sep 2022 11:02:02 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Sat, 17 Sep 2022 05:07:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C35E24967
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:07:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0569761309
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C47FCC433C1;
+        Sat, 17 Sep 2022 09:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663405677;
+        bh=mN6OrmlEWafTBrem5aKUHKgVApH1DNBbr9anI0Yk1Yg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PB0ZPMBZnAWZ1zw5KUQZnMcwSr7Qzh7VHP9dAIWTGoQHEXzPSYjwj4Z4NlRscuEtF
+         kFK+UTSiXstlLknXuNsRshkFqgjPVimy68V821BjwNr58X6rnNx0r6Mez0DljrOV6i
+         fv57VR41Ob3D3SpskrdHa5/Ivo4+y4N7/ZEG51M0=
+Date:   Sat, 17 Sep 2022 11:08:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zheng Hacker <hackerzheng666@gmail.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>,
+        "security@kernel.org" <security@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v4 0/5] net: ipqess: introduce Qualcomm IPQESS
- driver
-Message-ID: <20220917110202.1b8562bf@fedora>
-In-Reply-To: <20220917002031.f7jddzi7ppciusie@skbuf>
-References: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
-        <20220917002031.f7jddzi7ppciusie@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        xmzyshypnc <1002992920@qq.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
+Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
+Message-ID: <YyWOh+jGvmSdrHqz@kroah.com>
+References: <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com>
+ <YxWtfjfpNsoPUrgh@kroah.com>
+ <CAJedcCzMo51aiy=Dv7zn7VmL3gwkw7JgzwAPAB2Z27C9CnhoYA@mail.gmail.com>
+ <20220907030754.GU1089@zhen-hp.sh.intel.com>
+ <CAJedcCxO_Rq0qMeLiHtY5+FuN1A1pDGsZd3gMtvUpm1xbAK3aA@mail.gmail.com>
+ <Yxmzj2nCoTKurCY8@kroah.com>
+ <CAJedcCwVC6Rg+wF7h6GhFvL6BGkKV=DS9Mo9fOf-gfDAk9VqPg@mail.gmail.com>
+ <CAJedcCxRQ4h-ChNsD4OWpDMUJd3JNaQrvD=uVKxMpYONGFUgzA@mail.gmail.com>
+ <YyQzDlM5n7mOLh5Q@kroah.com>
+ <CAJedcCzt_1ZRV5egMLdoFVZ4hBDE+nDu9fLkBuGY0A=uYicvQA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJedcCzt_1ZRV5egMLdoFVZ4hBDE+nDu9fLkBuGY0A=uYicvQA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Sep 2022 00:20:31 +0000
-Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-
-> On Fri, Sep 09, 2022 at 05:24:49PM +0200, Maxime Chevallier wrote:
-> > The DSA out-of-band tagging is still using the skb->headroom part,
-> > but there doesn't seem to be any better way for now without adding
-> > fields to struct sk_buff.  
+On Fri, Sep 16, 2022 at 11:54:42PM +0800, Zheng Hacker wrote:
+> >From afe79848cb74cc8e45ab426d13fa2394c87e0422 Mon Sep 17 00:00:00 2001
+> From: xmzyshypnc <1002992920@qq.com>
+> Date: Fri, 16 Sep 2022 23:48:23 +0800
+> Subject: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry
 > 
-> Are we on the same page about what is meant by "skb extensions"? See
-> what is provided by CONFIG_SKB_EXTENSIONS, I did not mean it as in
-> "extend struct sk_buff with new fields".
+> There is a double-free security bug in split_2MB_gtt_entry.
+> 
+> Here is a calling chain :
+> ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
+> 
+> If intel_gvt_dma_map_guest_page failed, it will call
+> ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
+> kfree(spt). But the caller does not notice that, and it will call
+> ppgtt_free_spt again in error path.
+> 
+> Fix this by only freeing spt in ppgtt_invalidate_spt in good case.
+> 
+> Signed-off-by: Zheng Wang <hackerzheng666@gmail.com>
+> ---
+>  drivers/gpu/drm/i915/gvt/gtt.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+> index ce0eb03709c3..550519f0acca 100644
+> --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> @@ -959,7 +959,7 @@ static inline int ppgtt_put_spt(struct
+> intel_vgpu_ppgtt_spt *spt)
+>     return atomic_dec_return(&spt->refcount);
+>  }
+> 
+> -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
+> +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt, int
+> is_error);
+> 
+>  static int ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
+>         struct intel_gvt_gtt_entry *e)
+> @@ -995,7 +995,7 @@ static int
+> ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
 
-Yep, that was one of the other approaches I had in mind, and I've
-submitted a series adding fields to sk_buff in the past which was
-rejected (for good reasons). But indeed that comment on the cover-letter
-was misleading...
+Still line-wrapped and whitespace broken :(
 
-Thanks,
-
-Maxime
