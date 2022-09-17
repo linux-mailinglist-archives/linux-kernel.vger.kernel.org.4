@@ -2,164 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F15BB5A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FBD5BB5AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIQCv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 22:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S229669AbiIQCxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 22:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiIQCv4 (ORCPT
+        with ESMTP id S229662AbiIQCxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 22:51:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CE0BB699
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663383115; x=1694919115;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8bsMJuYcMiiRmBbzCultx6M+qoWX/K6RuDq8bj/JIf4=;
-  b=GqUlF/ZEQQEhynCE285OETqQjbRmtynj3JATbIg45Tniv9A78yMle7qk
-   usc8wIDmsWWvsB6hr2AikGRlQZa+glo/4sh4ILVS9oS2gB77CToTLx3sW
-   5vGUU54c+EMlMLtrKKNDkJcRcv1tCUZX1uXm0PebqeQ82D56KImNm5GRE
-   HeWr0fuhji/XVYWd7mJ6xNp/8f58moRuB7618GWJ7O3EV+xdqvXslW6iG
-   B343Ig1N/wJh9abZ9YlrCfENaABSJuYHdAsRAB3mtZWiSR0pbxiuw6wg4
-   z5ybgGt2oYiT+sN0TyP8+JSF4k5EMiXd/+j4QUX+TLyR7b4Jdem0ANmqU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="282143450"
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="282143450"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 19:51:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="760258151"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Sep 2022 19:51:52 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZNvs-0002PG-0R;
-        Sat, 17 Sep 2022 02:51:52 +0000
-Date:   Sat, 17 Sep 2022 10:51:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     kbuild-all@lists.01.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu: Optimise PCI SAC address trick
-Message-ID: <202209171032.XILNq94O-lkp@intel.com>
-References: <cd0a0f8ae2c8e05a9322cd180920f9d422f52034.1663354405.git.robin.murphy@arm.com>
+        Fri, 16 Sep 2022 22:53:35 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757CFBB699
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:53:34 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id r12-20020a92cd8c000000b002f32d0d9fceso15589287ilb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:53:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Yp2X7w1yEP4g/p40zM4jk+01H6za5StpOqokGZuT1Uc=;
+        b=WwvhdsewWUL9m2qQGlLZ4zDsJ5OsObUTcwnKZd45ol05Szw7wM+ba+DctwmCQXJ53d
+         WbpGncYjfqSvsMy1OGouHNQbQkssWTw1zVn5dV9ZrWPLjVQuG4nDPQgje23++Z8BvAeW
+         cstuHwhTVnCLzUgjhwsHqINaOSV2vyw13/+JpoQHU+y59PwsYlH+11TqPCtdwPzvAcKd
+         x5LLjA5JgtzNWbpEB32Zce8FGZIIl2Dh110opj5gKtJOD0Bv0C3Q5Xyv8+w/JYRsvhnP
+         81pWB0o8fC2XCvI2kkOsYz9BX3/6IgprfH+GCzlimKd3ugdl+MhVhILQ2w6grnFJmYlf
+         WQuA==
+X-Gm-Message-State: ACrzQf3/F7iVKZ7pg+jNy9bwFsUZfWwVInw7TXCYSlMcaJrnQIFSB1pK
+        dPPuPuRVOWzHeRVcvqkO+Nu51NY+VWDJlWxhnQH9wHkr6iWD
+X-Google-Smtp-Source: AMsMyM6UkJpZJt11/Nj2uenr/i+CwhOSLk+TTXL4Ce4o3k5QggrGcdjuM6wC/ebRekGPcHTNfulsA/f8uzgaVMMxNZY6Ni6pR42r
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd0a0f8ae2c8e05a9322cd180920f9d422f52034.1663354405.git.robin.murphy@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:bb0a:0:b0:35a:100f:74f3 with SMTP id
+ y10-20020a02bb0a000000b0035a100f74f3mr3821473jan.237.1663383213780; Fri, 16
+ Sep 2022 19:53:33 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 19:53:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000095339805e8d6958e@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in kernfs_put_active
+From:   syzbot <syzbot+258ad6d2cb6685e145bc@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+Hello,
 
-I love your patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc5 next-20220916]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17025144880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
+dashboard link: https://syzkaller.appspot.com/bug?extid=258ad6d2cb6685e145bc
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106b8164880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1040a75d080000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/iommu-Optimise-PCI-SAC-address-trick/20220917-025450
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6879c2d3b96039ff1668b4328a4d0dd3ea952cff
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220917/202209171032.XILNq94O-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1ca86b189e7b2485d270f516a4547306fa8dc941
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Robin-Murphy/iommu-Optimise-PCI-SAC-address-trick/20220917-025450
-        git checkout 1ca86b189e7b2485d270f516a4547306fa8dc941
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Downloadable assets:
+disk image: https://storage.googleapis.com/81b491dd5861/disk-a6b44374.raw.xz
+vmlinux: https://storage.googleapis.com/69c979cdc99a/vmlinux-a6b44374.xz
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+258ad6d2cb6685e145bc@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+Unable to handle kernel paging request at virtual address 004065676e6168fb
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[004065676e6168fb] address between user and kernel address ranges
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 2562 Comm: udevd Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : kernfs_lockdep fs/kernfs/dir.c:43 [inline]
+pc : kernfs_put_active+0x24/0x11c fs/kernfs/dir.c:449
+lr : kernfs_put_active+0x20/0x11c fs/kernfs/dir.c:443
+sp : ffff800015fcbc50
+x29: ffff800015fcbc50 x28: ffff0000c4810000 x27: 0001000000000000
+x26: 0000000000000152 x25: ffff0000c538f348 x24: ffff8000086fe770
+x23: ffff0000c92e5620 x22: 0000000000000007 x21: ffff0000cbc31500
+x20: ffff8000086fba20 x19: 2f4065676e616863 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80000db78658 x15: ffff0000c4810000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c4810000
+x11: ff808000086f6a0c x10: 0000000000000000 x9 : ffff8000086f6a0c
+x8 : ffff0000c4810000 x7 : ffff8000095d8f84 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : ffff0001fefd3740 x3 : 0000000000083500
+x2 : ffff0000c8aa3000 x1 : 0000000000000000 x0 : 2f4065676e616863
+Call trace:
+ kernfs_put_active+0x24/0x11c fs/kernfs/dir.c:446
+ kernfs_fop_write_iter+0x1fc/0x294 fs/kernfs/file.c:358
+ call_write_iter include/linux/fs.h:2187 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x2dc/0x46c fs/read_write.c:578
+ ksys_write+0xb4/0x160 fs/read_write.c:631
+ __do_sys_write fs/read_write.c:643 [inline]
+ __se_sys_write fs/read_write.c:640 [inline]
+ __arm64_sys_write+0x24/0x34 fs/read_write.c:640
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: aa1e03f4 aa0003f3 97eea9d1 b40004f3 (79413275) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	aa1e03f4 	mov	x20, x30
+   4:	aa0003f3 	mov	x19, x0
+   8:	97eea9d1 	bl	0xffffffffffbaa74c
+   c:	b40004f3 	cbz	x19, 0xa8
+* 10:	79413275 	ldrh	w21, [x19, #152] <-- trapping instruction
 
-   drivers/iommu/iommu.c: In function '__iommu_probe_device':
->> drivers/iommu/iommu.c:259:14: error: 'iommu_dma_forcedac' undeclared (first use in this function)
-     259 |         if (!iommu_dma_forcedac && dev_is_pci(dev))
-         |              ^~~~~~~~~~~~~~~~~~
-   drivers/iommu/iommu.c:259:14: note: each undeclared identifier is reported only once for each function it appears in
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +/iommu_dma_forcedac +259 drivers/iommu/iommu.c
-
-   220	
-   221	static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
-   222	{
-   223		const struct iommu_ops *ops = dev->bus->iommu_ops;
-   224		struct iommu_device *iommu_dev;
-   225		struct iommu_group *group;
-   226		int ret;
-   227	
-   228		if (!ops)
-   229			return -ENODEV;
-   230	
-   231		if (!dev_iommu_get(dev))
-   232			return -ENOMEM;
-   233	
-   234		if (!try_module_get(ops->owner)) {
-   235			ret = -EINVAL;
-   236			goto err_free;
-   237		}
-   238	
-   239		iommu_dev = ops->probe_device(dev);
-   240		if (IS_ERR(iommu_dev)) {
-   241			ret = PTR_ERR(iommu_dev);
-   242			goto out_module_put;
-   243		}
-   244	
-   245		dev->iommu->iommu_dev = iommu_dev;
-   246	
-   247		group = iommu_group_get_for_dev(dev);
-   248		if (IS_ERR(group)) {
-   249			ret = PTR_ERR(group);
-   250			goto out_release;
-   251		}
-   252		iommu_group_put(group);
-   253	
-   254		if (group_list && !group->default_domain && list_empty(&group->entry))
-   255			list_add_tail(&group->entry, group_list);
-   256	
-   257		iommu_device_link(iommu_dev, dev);
-   258	
- > 259		if (!iommu_dma_forcedac && dev_is_pci(dev))
-   260			dev->iommu->pci_workaround = true;
-   261	
-   262		return 0;
-   263	
-   264	out_release:
-   265		if (ops->release_device)
-   266			ops->release_device(dev);
-   267	
-   268	out_module_put:
-   269		module_put(ops->owner);
-   270	
-   271	err_free:
-   272		dev_iommu_free(dev);
-   273	
-   274		return ret;
-   275	}
-   276	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
