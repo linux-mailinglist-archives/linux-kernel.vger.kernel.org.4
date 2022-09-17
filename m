@@ -2,96 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E405BB603
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C0F5BB607
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiIQEOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S229572AbiIQEQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIQEOO (ORCPT
+        with ESMTP id S229454AbiIQEP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:14:14 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FFF83F1C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:14:12 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id c24so22064964pgg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=JKh4l7g3cNogco9tfr19tHwzRFzI37EJeVSPLVfsPzo=;
-        b=Y+9N168M7CC4r+JI9RYbfgmfYoBcDDbOwZSYXaGBIPDqTdw968QkzGHmS8OqbhnfZ3
-         52LuD93xeP8VBdm4Re9ic9y8AguMVBJ5WaMM5R6/YNqhG2dMyZZBnM8/CsPP0Aufk6op
-         bYG7AeTeuNkwpF1c0xMoqmukZkRXcqBaC2xldao4HPq86cVhKW7im7QpiLSpVbf7p0LJ
-         yUOGEOuigf95x6YxZcFeDsrevoPHuMTukaBYdueNkxKU34jTdkb642ODGdCM3FPVcRMg
-         UBr/rm1dq8u6p+VIyoip6VoMHqjImWh/daUIC0fIrX6qjk1kVg12/p3n6OaTMLRVs3a7
-         /Gdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JKh4l7g3cNogco9tfr19tHwzRFzI37EJeVSPLVfsPzo=;
-        b=vPsoA4L+5ttx9YDoWX9v7FdNuB6glZUNTC5JYC8NKtGIJmf2ntXb8IlqzNiiT6FUDk
-         xLavvhQCBLyVNEKriXxNNR0163MZkJ0Z11DCrx8DsYxasyTUeExL1937ybm/fduhldTg
-         5H0LXaPFoiQE7oGzmp7eYGzRFyV90uMlE/EaB2vsMDcTsAPw17jDtGSlY1FMlzHU1WkM
-         H9ccogO4ToOL5Uws+9Fy33OPk93JFjngbSSuY5amz+ZeBTAhwQ08o6w8Wy3AGJ+uaOLC
-         zxC6masbou7W985d+KWv1gAqW6GqUNmngU3R1McV73ifHl8H4JuHG3m8uRf2MzZdWyME
-         GLpg==
-X-Gm-Message-State: ACrzQf1vj9G4aziVtjPG64i5TfPXYQ3LBKFDKd6blpQiF1wFSNlFT5FU
-        8wZR+Kv5QsU/FAZmJGt+MoGK6Q==
-X-Google-Smtp-Source: AMsMyM59FBUL5qhFHKgAG5oO1oWNtzmWkrAFM+ABlkSvzVOgWahrdeVxtb83SGXncc2iPZo2YAmZZw==
-X-Received: by 2002:a63:4f08:0:b0:438:d81c:2d32 with SMTP id d8-20020a634f08000000b00438d81c2d32mr7275208pgb.411.1663388052432;
-        Fri, 16 Sep 2022 21:14:12 -0700 (PDT)
-Received: from ?IPV6:2601:1c0:4c81:c480:feaa:14ff:fe3a:b225? ([2601:1c0:4c81:c480:feaa:14ff:fe3a:b225])
-        by smtp.gmail.com with ESMTPSA id h24-20020a632118000000b00439103a6c3bsm3703050pgh.94.2022.09.16.21.14.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 21:14:11 -0700 (PDT)
-Message-ID: <69ddd90e-91fa-78d7-63e6-9d6a8036c6b5@linaro.org>
-Date:   Fri, 16 Sep 2022 21:14:11 -0700
+        Sat, 17 Sep 2022 00:15:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B359642CB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663388157; x=1694924157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dQDpK8w0a7wlRSYg04W1GIu8E15asfGUgzZTlQ9DWXc=;
+  b=OrPkYZKYyABNfCv1/oJRTWyQDoDb5wXe6Y9gENjWVbSjhhoX+vfEf5Q/
+   f6wrT5QGtm7bYlrOxYtCUhIKWhzd+3jOQeIGk1puW88R2hafu/3h2KrkO
+   M+Y/mDe7ikZl0RoFaKVdi396oqBjKt0W/Q46x6vAQUvQe7IhsBQOQuFny
+   f12HGyQZDakRMMZpVDVR7HqLAuSfTlW9zAS0/gJH9gGoX+qDThRFI5ShR
+   AOaXe7jI0v4ej7Tkkw98vcTr1MVRhhWRyJdNEURtYMTVgz1ipUBQX81ii
+   jg2Es5EndWIMMufyBy3pulEKIcOo2HaSK2ZdzvCYD8qNadeAjKOlNRHY1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="325401234"
+X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
+   d="scan'208";a="325401234"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 21:15:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
+   d="scan'208";a="648494343"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2022 21:15:55 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZPFC-0002TK-17;
+        Sat, 17 Sep 2022 04:15:54 +0000
+Date:   Sat, 17 Sep 2022 12:15:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        akpm@linux-foundation.org, Li Zhong <floridsleeves@gmail.com>
+Subject: Re: [PATCH v1] mm/vmscan: check the return value of migrate_pages()
+Message-ID: <202209171239.jS3610fm-lkp@intel.com>
+References: <20220917021257.3840548-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] usb: mon: make mmapped memory read only
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220917021257.3840548-1-floridsleeves@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/16/22 15:47, Tadeusz Struk wrote:
-> Syzbot found an issue in usbmon where it can corrupt monitor
-> internal memory causing the usbmon to crash with segfault,
-> UAF, etc. The reproducer mmaps the /dev/usbmon memory to userspace
-> and overwrites it with arbitrary data, which causes the issues.
-> To prevent that explicitly clear the VM_WRITE flag in mon_bin_mmap().
-> 
-> Cc:linux-usb@vger.kernel.org
-> Cc:linux-kernel@vger.kernel.org
-> Cc:stable@vger.kernel.org
-> Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
-> Link:https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
-> Signed-off-by: Tadeusz Struk<tadeusz.struk@linaro.org>
+Hi Li,
 
-I forgot to add:
-Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc5]
+[cannot apply to akpm-mm/mm-everything next-20220916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/mm-vmscan-check-the-return-value-of-migrate_pages/20220917-101433
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a335366bad1364a07f49df9da1fdfa6d411a5f39
+config: hexagon-randconfig-r041-20220916 (https://download.01.org/0day-ci/archive/20220917/202209171239.jS3610fm-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0ea516d584bd904c43954e312ac42fced822dcf7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Zhong/mm-vmscan-check-the-return-value-of-migrate_pages/20220917-101433
+        git checkout 0ea516d584bd904c43954e312ac42fced822dcf7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/vmscan.c:1564:26: error: use of undeclared identifier 'pagelist'; did you mean 'pageout'?
+                   putback_movable_pages(&pagelist);
+                                          ^~~~~~~~
+                                          pageout
+   mm/vmscan.c:1215:18: note: 'pageout' declared here
+   static pageout_t pageout(struct folio *folio, struct address_space *mapping,
+                    ^
+   1 error generated.
+
+
+vim +1564 mm/vmscan.c
+
+  1539	
+  1540	/*
+  1541	 * Take pages on @demote_list and attempt to demote them to
+  1542	 * another node.  Pages which are not demoted are left on
+  1543	 * @demote_pages.
+  1544	 */
+  1545	static unsigned int demote_page_list(struct list_head *demote_pages,
+  1546					     struct pglist_data *pgdat)
+  1547	{
+  1548		int target_nid = next_demotion_node(pgdat->node_id);
+  1549		unsigned int nr_succeeded;
+  1550		int ret;
+  1551	
+  1552		if (list_empty(demote_pages))
+  1553			return 0;
+  1554	
+  1555		if (target_nid == NUMA_NO_NODE)
+  1556			return 0;
+  1557	
+  1558		/* Demotion ignores all cpuset and mempolicy settings */
+  1559		ret = migrate_pages(demote_pages, alloc_demote_page, NULL,
+  1560				    target_nid, MIGRATE_ASYNC, MR_DEMOTION,
+  1561				    &nr_succeeded);
+  1562	
+  1563		if (ret)
+> 1564			putback_movable_pages(&pagelist);
+  1565	
+  1566		if (current_is_kswapd())
+  1567			__count_vm_events(PGDEMOTE_KSWAPD, nr_succeeded);
+  1568		else
+  1569			__count_vm_events(PGDEMOTE_DIRECT, nr_succeeded);
+  1570	
+  1571		return nr_succeeded;
+  1572	}
+  1573	
 
 -- 
-Thanks,
-Tadeusz
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
