@@ -1,68 +1,88 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2815D5BB7FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 13:24:02 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 59D5D5BB804
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 13:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiIQLX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 07:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S229471AbiIQLmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 07:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIQLXz (ORCPT
+        with ESMTP id S229447AbiIQLmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 07:23:55 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB58729C82;
-        Sat, 17 Sep 2022 04:23:51 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h8so32938435wrf.3;
-        Sat, 17 Sep 2022 04:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=BLaZsI5cHIlw7RVl5F8MBLXrX/g4UKCzX1CL0avGDbA=;
-        b=d0K6CztBq5gRQLYp4DDG2Mlix0A/5s/oWvW19VjAaWyceu4IANY1RW+rCcgOZYTvYr
-         XqeEwLTRjXYXediwKovvIMz4DltaXuzOxU148WbLacW8solEY56bdil+cBqnSssDgv4G
-         e3n0dokQ6pl0m2M4jVAFi0KrVQ6GdCYPWbyfnYbEuNW5PaW4Rklwg6psnfwmIxxQHAWf
-         QcvPaWrMxHlAL4tRgHmBmBymzna10Gcvc95Ny7qnpl3k5qwsWB0H5c39xgIKDtRik3HH
-         6/OR7AOgaG5xweuPbZSjPrvL/GX9dBoy4I0UWTjqhogXPJPzevKi2uEefiUgSHaG8/0s
-         Wq9Q==
+        Sat, 17 Sep 2022 07:42:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F002FFD0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 04:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663414937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SzetDHPEuYHOyKUUGQoVLG/7B0wMNg9j9zSS25jq5MM=;
+        b=QVD7UUx3fidUGkfM4Nwp/Apk9XMAKSX/pA6Fpp9UBzA32o9x9bp1NPC0EksTkt4jvXWTNr
+        o9UQDVo5tArIwgvSGhjjOuG7g7vdS3A8BYOvU2bLhjpHr8SxqflMtwRMqQsTRXRNbmD4jU
+        7KO/I8Gjj9nL88YUd4l7+r8AR9cL5JM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-L9zTdvCbMRiW9ZI0xOCrxA-1; Sat, 17 Sep 2022 07:42:16 -0400
+X-MC-Unique: L9zTdvCbMRiW9ZI0xOCrxA-1
+Received: by mail-ed1-f70.google.com with SMTP id b16-20020a056402279000b0044f1102e6e2so17234986ede.20
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 04:42:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BLaZsI5cHIlw7RVl5F8MBLXrX/g4UKCzX1CL0avGDbA=;
-        b=RMsO16x6I5Pe5ZnUzN0EjB5ng5n4fro951V/FfqFYNy0wez/PE7Rt1Cjy4efBayixz
-         aFNWzCYnHw4Gqryg2ZFjZpHJkaSfK2BJ7YKXUpAD/HTY1ycYrIyivJmPIdMy/TvMlsMW
-         4JS81pQsYfXuOtN6BMJygYXt2olIS2CUGHQt4j6IXijZMo9532/YhzlkoDQaNV2OX00N
-         /izKY8kB4rHzTLid+M8ylpALSUnzjeT60fUiyBZWvgvr89urZvANYEkgyNHmTEj02PYT
-         a7wVbDjj1c1nbmcGrqLeCVEmTmfyehZ98xg7MBVKoQIT7+o1SBMuX9foY8wjWKnODQYO
-         tADQ==
-X-Gm-Message-State: ACrzQf3ixrl2y7sqPaNZFI+rRVnZNdOm6jvxSgfi/FaBd5Z+GYV1L08q
-        REYNEZ3RiTTtquk8k2Alz/rBPO2QwzysCrk5B5+xfIc0KIg=
-X-Google-Smtp-Source: AMsMyM4G6Rwfjo82H5KT2z/QKbJZY4Yd5IU+QdU93M2HfI/3kfSMUgjqS6/NG3y7+nRyTw6QE0jw40pFqFl2ZxbazYg=
-X-Received: by 2002:adf:e806:0:b0:22a:f5c6:6954 with SMTP id
- o6-20020adfe806000000b0022af5c66954mr310007wrm.539.1663413830274; Sat, 17 Sep
- 2022 04:23:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=SzetDHPEuYHOyKUUGQoVLG/7B0wMNg9j9zSS25jq5MM=;
+        b=r5W6BsW8mJ2KKkSyy5jrn+Mm1BYQFzbubJFacmkkp9wPJIPPftohDaBmNYtlMtej8S
+         7+/u8kKXTRthbuXqi4DM4yU/QQbKM7vLxFb5PFNlpBKs0UQlbjfWbZ1drDGL5x5yX+n8
+         JQPjEj7HoaXWoVtiY1xQ2zhKMszQsIu8wgLLwVScCosf/F2id9j3SVzaFPFYgb8Ig38H
+         YvIqctAWzP00TseUWE3r8gx7EjeLFhlmmUA3t4DAnDmxORtGNQsB2nbI3ehEh4uQpPJw
+         Lv0vn4jjVZxfqqNkXmk9SvBvlaIHKGa6uqZXwo5tiJncrj9itXSHx2SRXeY5Wf7Wg82/
+         Wzaw==
+X-Gm-Message-State: ACrzQf1xRIJ6x4wT+7ypzzt1L0i3UU2Jk7ls7Va7Y6Hc+aSSG2TlKAGP
+        Mk8LEZ9K8i+lFIGDKCB0pPzdJyKH4qerkZK5LCqR307kBQ8bz68MwDPsyHwqAqwSIYqBTNrSD+V
+        P3Vv5pOck218jc40Jwqnb1oIC
+X-Received: by 2002:a17:907:2d9e:b0:775:3737:ac45 with SMTP id gt30-20020a1709072d9e00b007753737ac45mr6450400ejc.714.1663414935040;
+        Sat, 17 Sep 2022 04:42:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7oMErWER0UZu2Kpobfn3BHnBemLLcyN70BPZAUhIqgFsMLf6ExJ1mlCXDdXOp6xGiEBjxAdQ==
+X-Received: by 2002:a17:907:2d9e:b0:775:3737:ac45 with SMTP id gt30-20020a1709072d9e00b007753737ac45mr6450390ejc.714.1663414934818;
+        Sat, 17 Sep 2022 04:42:14 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b00730b61d8a5esm12095627eju.61.2022.09.17.04.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 04:42:14 -0700 (PDT)
+Message-ID: <5097a283-6111-bedc-13c6-61a581f8b72c@redhat.com>
+Date:   Sat, 17 Sep 2022 13:42:13 +0200
 MIME-Version: 1.0
-References: <YySdhiqZgXpl0q/g@lab.hqhome163.com> <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
- <14722513.tv2OnDr8pf@phil>
-In-Reply-To: <14722513.tv2OnDr8pf@phil>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sat, 17 Sep 2022 07:23:39 -0400
-Message-ID: <CAMdYzYp1SYVCxOKwHspvDXoqkAxUj1hTY6J7EeRabKxD5Nrj1w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: k3566-quartz64-a: adds sata variant
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Alessandro Carminati <alessandro.carminati@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 0/3] Check enumeration before MSR save/restore
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <20220913005053.vk7qmhr6tqqynags@desk>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220913005053.vk7qmhr6tqqynags@desk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,106 +90,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 2:42 AM Heiko Stuebner <heiko@sntech.de> wrote:
+Hi,
 
-Good Morning Heiko,
+On 9/13/22 02:50, Pawan Gupta wrote:
+> On Mon, Sep 12, 2022 at 04:38:44PM -0700, Pawan Gupta wrote:
+>> Hi,
+>>
+>> This patchset is to fix the "unchecked MSR access error" [1] during S3
+>> resume. Patch 1/3 adds a feature bit for MSR_IA32_TSX_CTRL.
+>>
+>> Patch 2/3 adds a feature bit for MSR_AMD64_LS_CFG.
+>>
+>> Patch 3/3 adds check for feature bit before adding any speculation
+>> control MSR to the list of MSRs to save/restore.
+>>
+>> [1] https://lore.kernel.org/lkml/20220906201743.436091-1-hdegoede@redhat.com/
+> 
+> Added the correct email-id of Hans de Goede <hdegoede@redhat.com>.
 
+I have tested this series and I can confirm that it fixes the exception
+which I was seeing on a Packard Bell Dot SC with an Atom N2600 CPU:
 
->
-> Hi Peter,
->
-> Am Samstag, 17. September 2022, 03:40:07 CEST schrieb Peter Geis:
-> > On Fri, Sep 16, 2022 at 12:06 PM Alessandro Carminati
-> > <alessandro.carminati@gmail.com> wrote:
-> > >
-> > > The Quartz64 board is built upon Rockchip RK3566.
-> > > Rockchip RK3566 has two combo phys.
-> > > The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-> > > ctrl2.
-> > > The second combo phy is hardwired to the PCIe slot, where for the first,
-> > > the hardware on the board provides both the USB3 connector and the SATA
-> > > connector.
-> > > This DT allows the users to switch the combo phy to the SATA connector.
-> >
-> > Good Evening,
-> >
-> > NACK to this whole series. Neither works correctly in the hardware as
-> > is,
->
-> Just for my understanding for the future, sata not working is that a bug
-> in the soc or the board?
+Tested-by: Hans de Goede <hdegoede@redhat.com>
 
-This is a board level problem. Attempting to build a device that had
-both ports electrically connected without a switch chip created a
-device where neither worked correctly. The SATA controllers themselves
-are amazing. I've used both nvme and sata m2 drives on the model b for
-example.
+Regards,
 
->
-> > and USB3 was decided to be left enabled as the SATA port will be
-> > removed completely in the next revision.
->
-> That is good to know. Thanks for the heads up :-)
+Hans
 
-In regards to this sort of stuff in the future, we're working on
-fragment overlay support in U-Boot to work around the kernel's lack of
-support. If I remember correctly EDK2 will be implementing the switch
-in firmware as well. Devices that support both (at least ones I
-maintain) will have both in the dts, with the less likely use case
-left disabled. End users can simply switch which one is enabled if
-they want.
-
-Very Respectfully,
-Peter
-
->
-> Heiko
->
->
-> > > Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
-> > > ---
-> > >  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
-> > >  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts | 9 +++++++++
-> > >  2 files changed, 10 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > >
-> > > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> > > index 8c843f6fc3cc..1d5dd91d1a34 100644
-> > > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > > @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-usb3.dts
-> > > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-sata.dts
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
-> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > > new file mode 100644
-> > > index 000000000000..8620df7ec01e
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > > @@ -0,0 +1,9 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > > +
-> > > +/dts-v1/;
-> > > +
-> > > +#include "rk3566-quartz64-a.dtsi"
-> > > +
-> > > +&sata1 {
-> > > +       status = "okay";
-> > > +};
-> > > --
-> > > 2.34.1
-> > >
-> > >
-> > > _______________________________________________
-> > > Linux-rockchip mailing list
-> > > Linux-rockchip@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> >
->
->
->
->
