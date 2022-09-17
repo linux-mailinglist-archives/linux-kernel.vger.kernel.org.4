@@ -2,60 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125FF5BB714
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BA75BB726
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiIQIJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S229772AbiIQIOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 04:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIQIJx (ORCPT
+        with ESMTP id S229591AbiIQIOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:09:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE951401F
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663402191; x=1694938191;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7W8jqt61giXCLdgAFKdnTy3mAba1l5HB3NWMC7GsU+M=;
-  b=gzYzr9IgWkqxBh12V/wjrmgSdI4LtNPP9+Mn93Nw9KOyF3qlCg6ZwaLb
-   92okf8ZF0c1PMLpYxsF0sFtXUg0hk6qrfwDD02i/a0SzZpihiBe1l6SXZ
-   OTSKIqFaUrIpxUFGu3ivGs6QMklDLqNWTkcjW+u/Xe7YpOEnn0mJzeACJ
-   Ylz/Tq6J7/rMOw+cRdJpovnQvilCCXabeSdxxkNAAQyKqxik3s4tkSYJv
-   h+6jS7q6vMo7YInGzB0747NsCxjE/XIwI3180gEa5bvFw3mqDvqGReob2
-   IMfxSZo2mWQ++MaP92y5xFR8dzNFXMYUQWmghdNlUy2KZoQe7Q8yaSztQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="297863792"
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="297863792"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 01:09:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="648527109"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2022 01:09:49 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZStZ-00008t-07;
-        Sat, 17 Sep 2022 08:09:49 +0000
-Date:   Sat, 17 Sep 2022 16:09:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr'
- is less aligned than 'union smc_llc_hdr::(anonymous at
- net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being
- packed, which can lead to unaligned accesses
-Message-ID: <202209171512.qcgXdSrG-lkp@intel.com>
+        Sat, 17 Sep 2022 04:14:17 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CC93E740;
+        Sat, 17 Sep 2022 01:14:15 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.156.240])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id DED98128726EB;
+        Sat, 17 Sep 2022 10:13:54 +0200 (CEST)
+Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Sat, 17 Sep
+ 2022 10:13:54 +0200
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <sven.schwermer@disruptive-technologies.com>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <johan+linaro@kernel.org>, <marijn.suijten@somainline.org>,
+        <bjorn.andersson@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sha@pengutronix.de>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Subject: [RESEND PATCH v3 0/4] Add a multicolor LED driver for groups of monochromatic LEDs
+Date:   Sat, 17 Sep 2022 10:13:35 +0200
+Message-ID: <20220917081339.3354075-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG1EX2.emp2.local (172.16.2.2) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 9350317254453311767
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvvddgtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejuefhkeelgffhlefhtefhgeektdevvdfgkeeltdehgeeujeeutdehkeeuhffftdenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshhhrgesphgvnhhguhhtrhhonhhigidruggvpdfovfetjfhoshhtpehmohehvdek
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,65 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karsten,
+Hi,
 
-FYI, the error/warning still remains.
+Resending this series with only a minor modification in the binding
+example after the comments from Sascha Hauer.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
-commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
-date:   11 months ago
-config: arm-buildonly-randconfig-r005-20220917 (https://download.01.org/0day-ci/archive/20220917/202209171512.qcgXdSrG-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/smc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr' is less aligned than 'union smc_llc_hdr::(anonymous at net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           union {
-           ^
-   1 warning generated.
+Thanks,
+JJ
 
 
-vim +26 net/smc/smc_llc.c
+Original v3 message:
 
-    23	
-    24	struct smc_llc_hdr {
-    25		struct smc_wr_rx_hdr common;
-  > 26		union {
-    27			struct {
-    28				u8 length;	/* 44 */
-    29		#if defined(__BIG_ENDIAN_BITFIELD)
-    30				u8 reserved:4,
-    31				   add_link_rej_rsn:4;
-    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
-    33				u8 add_link_rej_rsn:4,
-    34				   reserved:4;
-    35	#endif
-    36			};
-    37			u16 length_v2;	/* 44 - 8192*/
-    38		};
-    39		u8 flags;
-    40	} __packed;		/* format defined in
-    41				 * IBM Shared Memory Communications Version 2
-    42				 * (https://www.ibm.com/support/pages/node/6326337)
-    43				 */
-    44	
+Some HW design implement multicolor LEDs with several monochromatic LEDs.
+Grouping the monochromatic LEDs allows to configure them in sync and use
+the triggers.
+The PWM multicolor LED driver implements such grouping but only for
+PWM-based LEDs. As this feature is also desirable for the other types of
+LEDs, this series implements it for any kind of LED device.
+
+changes v2->v3, only minor changes:
+ - rephrased the Kconfig descritpion
+ - make the sysfs interface of underlying LEDs read-only only if the probe
+   is successful.
+ - sanitize the header files
+ - removed the useless call to dev_set_drvdata()
+ - use dev_fwnode() to get the fwnode to the device.
+
+changes v1->v2:
+ - Followed Rob Herrings's suggestion to make the dt binding much simpler.
+ - Added a patch to store the color property of a LED in its class
+   structure (struct led_classdev).
+
+Jean-Jacques Hiblot (4):
+  leds: class: simplify the implementation of devm_of_led_get()
+  leds: class: store the color index in struct led_classdev
+  dt-bindings: leds: Add binding for a multicolor group of LEDs
+  leds: Add a multicolor LED driver to group monochromatic LEDs
+
+ .../bindings/leds/leds-group-multicolor.yaml  |  64 ++++++++
+ drivers/leds/led-class.c                      |  27 ++--
+ drivers/leds/rgb/Kconfig                      |   6 +
+ drivers/leds/rgb/Makefile                     |   1 +
+ drivers/leds/rgb/leds-group-multicolor.c      | 153 ++++++++++++++++++
+ include/linux/leds.h                          |   1 +
+ 6 files changed, 238 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+ create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
