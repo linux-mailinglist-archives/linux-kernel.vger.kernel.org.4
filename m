@@ -1,139 +1,116 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E18F5BBAD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:21:23 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2145BBADF
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiIQWVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 18:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S229498AbiIQWbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 18:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQWVP (ORCPT
+        with ESMTP id S229379AbiIQWbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 18:21:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BC72B1B9;
-        Sat, 17 Sep 2022 15:21:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFCC0B80E23;
-        Sat, 17 Sep 2022 22:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BB5C433C1;
-        Sat, 17 Sep 2022 22:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663453271;
-        bh=QcxphjV+XpiadsnUCmiAF/lR0/3egacEFo2hy+/98aI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XV0BDaJ7/ze7SY1yMcUjQoxz4oB4xm/ZXGo0k0A2Au7nmJcl5XFZiIb4BEpIY3tfi
-         aJpWfegWuS6kx+L4JEQRxWE8uVdW5r8TX+2p1Cx6WGqPa8zDVkej8CL2ghfETFLu22
-         ec/0WjJoHFRf80d3wwMkSzjL3yR0yp148YPzaCg2gCIo0jbMa7g/p1xR17ULd+NJ/S
-         63fZtWdgsNNLIN1Smc2XuoNzJU3MidP4tfbXugVkHKv5ii65BzZfGlYjT0wLDwqG0z
-         IVoKfgCf93nDlhHEmAdUwJtfIOfphvZQPhnPh8fvoJxmGJilPwzHewmoNVr5l10WYu
-         w7gLQJRm7GnKw==
-Date:   Sun, 18 Sep 2022 00:21:08 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Subject: Re: [PATCH rcu/next 3/3] rcu: Call trace_rcu_callback() also for
- bypass queuing (v2)
-Message-ID: <20220917222108.GB40100@lothringen>
-References: <20220917164200.511783-1-joel@joelfernandes.org>
- <20220917164200.511783-4-joel@joelfernandes.org>
- <20220917195807.GA39579@lothringen>
- <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com>
+        Sat, 17 Sep 2022 18:31:39 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F24D220FC
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-3452214cec6so299977857b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=NrS1isCn7N5y43Qlk5+QPMcpimLruBhGMq4Qmq7NTUsiyQq4RI/T4BLbPt+XE+56Rl
+         oEWBPKFpgIUe27pBjgy2Qb3cqFeLSFWROtFzS5dlz3tYdtq2AOsbHjt/34lRoXVIw+Qa
+         ZVg1LZZj/GspG36kl0aZkYH3vVlT/MsH5Q3x32nJPxEXYx2I+t4uHTfcT7049udnloKA
+         IfyCfzrTxpyD77wPuIYUpcJ489vd6Lpw6LZDL9GPKLWMOPq6HtRjA81qmAh4axRE0VlJ
+         yHWJEGVx5O6jJZkGAofdcOt3YpT8T6dnqJDlKacgwGMd1nyAv0FJsF+1vJ+al933JQD2
+         dfuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
+        b=1lJOoRRe1RItmxleq99lar5MQmQB6t7w/mfi6Moc5IjSHjlDiUEHt9l5cit+eZbBWP
+         rKF/Hi4F8MDtABHeZXVzfd/KpXo/tm6zqFhjrXzL/bI0R+q9LkYhsQQd0L2T9YbeXMGf
+         5A37OWqvsdvsNibzzHr97QdGXTWvqlkgjOqc8xtDoeUsjvCDZPxwYFo4mCAUW2mWMwvX
+         nynDYM0a5QVjthh/xyohp311AOP93som1+YreDKcmDBixSGtECYEbrEwiaq0DHvAFfde
+         AHlLKEa4qijdccbXdyO7QYiTtyNvDkNOt+ATkHvFlHqYIgT/LzamBV0AzCZcdNKQBTm8
+         BPFg==
+X-Gm-Message-State: ACrzQf3atjQCJqmQuP/IAA8j2gP9NZ+t4AIvxVwehxqCFpQ6PP8wZ/m9
+        l2aLLtDNrpzjmLNuabQF+PXiEX340+gd9sIEDrg=
+X-Google-Smtp-Source: AMsMyM5QCLEC/Tnzr0uwflqBzAV4fXo9XP7U+VEMVzbAGbkdMzALAM2D+dnEEUp9eCPxGIFqCYhUFAFhrUpWtftSQoY=
+X-Received: by 2002:a81:6a54:0:b0:345:4292:4dfe with SMTP id
+ f81-20020a816a54000000b0034542924dfemr9364599ywc.62.1663453897802; Sat, 17
+ Sep 2022 15:31:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: joy.lisa.kones@gmail.com
+Received: by 2002:a05:6919:45c3:b0:dc:a12e:3a77 with HTTP; Sat, 17 Sep 2022
+ 15:31:35 -0700 (PDT)
+From:   Juliette Morgan <juliettemorgan21@gmail.com>
+Date:   Sun, 18 Sep 2022 00:31:35 +0200
+X-Google-Sender-Auth: ayL7IE1wieD5Wc96bFaNdS8-DhM
+Message-ID: <CAMFU_KmFRQVstWfiMNYhxrW-FKbvee=kezZFkkrTKgyvKEz7_A@mail.gmail.com>
+Subject: READ AND REPLY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_MONEY_PERCENT,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 05:43:06PM -0400, Joel Fernandes wrote:
-> On Sat, Sep 17, 2022 at 3:58 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> >
-> > On Sat, Sep 17, 2022 at 04:42:00PM +0000, Joel Fernandes (Google) wrote:
-> > > @@ -2809,17 +2825,15 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
-> > >       }
-> > >
-> > >       check_cb_ovld(rdp);
-> > > -     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
-> > > +
-> > > +     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags)) {
-> > > +             __trace_rcu_callback(head, rdp);
-> > >               return; // Enqueued onto ->nocb_bypass, so just leave.
-> > > +     }
-> >
-> > I think the bypass enqueues should be treated differently. Either with extending
-> > the current trace_rcu_callback/trace_rcu_kvfree_callback (might break tools)
-> >
-> > or
-> > with creating a new trace_rcu_callback_bypass()/trace_rcu_kvfree_callback_bypass().
-> >
-> > Those could later be paired with a trace_rcu_bypass_flush().
-> 
-> I am having a hard time seeing why it should be treated differently.
-> We already increment the length of the main segcblist even when
-> bypassing. Why not just call the trace point instead of omitting it?
+Hello Dear God,s Select Good Day,
 
-I'm not suggesting to omit it. I'm suggesting to improve its precision.
+I apologized, If this mail find's you disturbing, It might not be the
+best way to approach you as we have not met before, but due to the
+urgency of my present situation i decided  to communicate this way, so
+please pardon my manna, I am writing this mail to you with heavy tears
+In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
+Morgan, and I am contacting you from my country Norway, I want to tell
+you this because I don't have any other option than to tell you as I
+was touched to open up to you,
 
-> Otherwise it becomes a bit confusing IMO (say someone does not enable
-> your proposed new bypass tracepoint and only enables the existing one,
-> then they would see weird traces where call_rcu is called but their
-> traces are missing trace_rcu_callback).
+I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
+Faso for nine years before he died in the year 2020.We were married
+for eleven years without a child He died after a brief illness that
+lasted for only five days. Since his death I decided not to remarry,
+When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
+n
+Euro (Eight million, Five hundred thousand Euros) in a bank in
+Ouagadougou the capital city of Burkina Faso in west Africa Presently
+this money is still in bank. He made this money available for
+exportation of Gold from Burkina Faso mining.
 
-Well, if they decided to see only half of the information...
+Recently, My Doctor told me that I would not last for the period of
+seven months due to cancer problem. The one that disturbs me most is
+my stroke sickness.Having known my condition I decided to hand you
+over this money to take care of the less-privileged people, you will
+utilize this money the way I am going to instruct herein.
 
-> Not to mention - your
-> suggestion will also complicate writing tools that use the existing
-> rcu_callback tracepoint to monitor call_rcu().
+I want you to take 30 Percent of the total money for your personal use
+While 70% of the money will go to charity, people in the street and
+helping the orphanage. I grew up as an Orphan and I don't have any
+body as my family member, just to endeavour that the house of God is
+maintained. Am doing this so that God will forgive my sins and accept
+my soul because these sicknesses have suffered me so much.
 
-If we add another tracepoint, the prototype will be the same as the
-existing one, not many lines to add. If instead we extend the existing
-tracepoint, it's merely just a flag to check or ignore.
+As soon as I receive your reply I shall give you the contact of the
+bank in Burkina Faso and I will also instruct the Bank Manager to
+issue you an authority letter that will prove you the present
+beneficiary of the money in the bank that is if you assure me that you
+will act accordingly as I Stated herein.
 
-OTOH your suggestion doesn't provide any bypass related information.
+Always reply to my alternative for security purposes
 
-> 
-> Also if you see the definition of rcu_callback, "Tracepoint for the
-> registration of a single RCU callback function.".  That pretty much
-> fits the usage here.
-
-Doesn't tell if it's a bypass or not.
-
-> 
-> As for tracing of the flushing, I don’t care about tracing that at the
-> moment using tracepoints
-
-You will soon enough ;-)
-
-> but I don’t mind if it is added later.
-> Maybe let’s let Paul help resolve our disagreement on this one? :)
-
-FWIW, I would be personally interested in such tracepoints (or the extension
-of the existing ones, whichever way you guys prefer), they would be of great help
-for debugging.
-
-Also if rcu_top is ever released, I really hope the kernel will be ready in
-case we want the tool to display bypass related informations.
-
-Please be careful while designing tracepoints that may be consumed by userspace
-released tools. Such tracepoints eventually turn into ABI and there is no way
-back after that.
-
-Thanks.
+Hoping to receive your reply:
+From Mrs.Juliette Morgan,
