@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4074A5BB641
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9375BB642
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiIQEZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S229678AbiIQEZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiIQEZa (ORCPT
+        with ESMTP id S229623AbiIQEZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:25:30 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ACD7FF92
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:28 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a26so24778201ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:27 -0700 (PDT)
+        Sat, 17 Sep 2022 00:25:38 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C7C98A7C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:35 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y3so53558574ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date;
-        bh=Dzu/JwSGOZqPvNidvpwXW1mcinQ+25pDmoY3rOtbTQQ=;
-        b=T2ouHS9gsO64LtVG6VoaIXBgUWLaFN88qP3rbq8NiICS7UgKvgCQPWOmrAEIhn2Yri
-         SXf+NBSsCnuyZ/f6Ieu0UPW4aPLF8xuahcjAjkznp88CID5abkiZwOn35I8fwfVswL+Z
-         sJLO+3ArTW2ZidG48BV6Mf2DAzKKm/MHTh9PLAprQXrzAEWGPLmGKNixHbJNHEoF+s3n
-         7554eFe5l1HAJYkgbct/x2pKO8+Ukqc4S3L8HKVp/ZZRjZUdxLclxQd24WRjJcpnDrDp
-         z5s3eknA8gv7Og41UO+1OmWi7/bo+wKVa3oIg1LofKkEb6YERK9vHtYYf8cANhlcrgkw
-         fD0w==
+        bh=tMHw0bxiz6QFlmLnskahqo5U4mVjc6Q9TyqyNWew0Mg=;
+        b=dCD9xLVCdbXKPOjhYqGUKg+70zBzSibpHKEkfUhN1TYDxqvBZ2wFcatAM+PI4R2fFh
+         xID8fd1uU8lTEscFPor2mjB9PxAnsvTQo0Q7E/VTZXYJl9s58/XfkssdINvL+poE/CW7
+         G0ZAu5JHGhmE+y9nYMSFCfF5dQkYjqW05Jub5rNTgf/MsoSWOSI5ojkwdlQIu2jd8mem
+         SwrpooQE9mwjcnU8QW3bjQlUhHgTRyXt1RyOCLBs8Ejd9L0Jk6THKt77Sgd+9dbwug8B
+         MOorNPnYh7eIcawyJjifY1u1TiVQ/DTc2yfPudocq8klegAaRkYkT/iNsVa+c4fkDBVI
+         AjKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Dzu/JwSGOZqPvNidvpwXW1mcinQ+25pDmoY3rOtbTQQ=;
-        b=adK+5G+G0Bi4Kw5CF+kqk2HN2cvNNHY4YN6TgnYNg+kCqlTf71yOsWTP2WYNMrrs/5
-         w/pDXtWbNXqeVy8DkZDi7gwi33GwjIUxD0bEeIENqFNUfPy7K+wLC3OcwZq4oVrF8qTh
-         umQK25mVx8RZMKe2IL4lo1czCAUGLd36eBdAazOKx65nVLKDJkhT+4cCToZugAgq9pSk
-         qKCIebNzO1cynGqxtXht5aZzwj6SVijR50Y30yqXgZtSZCffSicim6k8Kg9k5q7qtwc8
-         FNIGNPFcOOpcsUQNLPZEH/aNsMsBtKCdA7VOFWpVHIuSyIIOiVDLu+2OceL5v6qhlEtD
-         p6jw==
-X-Gm-Message-State: ACrzQf0EDp3JYvGpnZa8uuxR3i4nT8M74hLElkSSeLnmrMlrFoz/xqIt
-        lNL+MuAwxD0oJ6+gAMztHYedRU570Gc=
-X-Google-Smtp-Source: AMsMyM61s94Da5wHrrq61H6S/L5IjQ6TnHxWK8IbkyATf0VdSn5Pqd8qhCGm8h8LAQun+3CF7ArsGA==
-X-Received: by 2002:a17:906:5a4d:b0:76f:bb35:48f4 with SMTP id my13-20020a1709065a4d00b0076fbb3548f4mr5329223ejc.686.1663388726214;
-        Fri, 16 Sep 2022 21:25:26 -0700 (PDT)
+        bh=tMHw0bxiz6QFlmLnskahqo5U4mVjc6Q9TyqyNWew0Mg=;
+        b=m4WtUyQozgsfAUAoi9m6uTs037XWTFhDE4hF5s4EScv3wQtJe6WFz0A8Q8/Wu92ktx
+         vQvOH+7q4sFZA0ErxGic9FNcYXDbPvaCv121RfhygnzOkzy2GY4vceltvBSJR/NzSwuw
+         XAyCvVa8r32OlrOt0PUqn/KyzOjtRm7dWckn+Ol7dYM4QSUCbgNd9mMyAm7ZrJgCGoYh
+         5o8GburIXRS/jZL7hDXcMpvkuZUs1hoCspoo2MVS+YNrpNsFbIQiYa80qevvfa8UvocY
+         6pgIQbqUDTJkn3h/uqBLwoJhyfDdPFwRccISHHq415r14HMASxNXOlbfm1sPw79h3XN8
+         PuMQ==
+X-Gm-Message-State: ACrzQf3osOoj4WsJ+bPdqRnmXBq//ifwaq7gJ7Q8izCWvU9IDQnxpNYo
+        hoXBZfP3/QaqK0uKskYj0Yg=
+X-Google-Smtp-Source: AMsMyM76j6vr4WNDtQX8CXQ+NE0dLFuhZwXntKScdlFNtiM29k4sWYt+d3u2trknGG2HM0n6VveiIg==
+X-Received: by 2002:a17:906:4787:b0:780:eca1:b5c3 with SMTP id cw7-20020a170906478700b00780eca1b5c3mr355017ejc.92.1663388734106;
+        Fri, 16 Sep 2022 21:25:34 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id s19-20020a1709062ed300b0073c10031dc9sm11301533eji.80.2022.09.16.21.25.25
+        by smtp.gmail.com with ESMTPSA id d12-20020a170906304c00b007807e4f6b30sm2605318ejd.103.2022.09.16.21.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 21:25:25 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 06:25:23 +0200
+        Fri, 16 Sep 2022 21:25:33 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 06:25:31 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] staging: rtl8192e: Remove ftrace-like logging in
- r8192E_dev.c
-Message-ID: <425e1b015c34ddb6df425bc516df64c40a70a58a.1663387785.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 3/6] staging: rtl8192e: Remove ftrace-like logging in
+ r8192E_phy.c
+Message-ID: <7315b22f54d62c5b56e8b9284426eca4cb641f77.1663387785.git.philipp.g.hortmann@gmail.com>
 References: <cover.1663387785.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -74,434 +74,384 @@ Remove "Unnecessary ftrace-like logging" as requested by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 161 +-----------------
- 1 file changed, 1 insertion(+), 160 deletions(-)
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 132 ------------------
+ 1 file changed, 132 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 4b9249195b5a..5832ccdb4e50 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -186,8 +186,6 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
- 				 AC_PARAM_ECW_MIN_OFFSET) |
- 				(((u32)u1bAIFS) << AC_PARAM_AIFS_OFFSET);
- 
--		RT_TRACE(COMP_DBG, "%s():HW_VAR_AC_PARAM eACI:%x:%x\n",
--			 __func__, eACI, u4bAcParam);
- 		switch (eACI) {
- 		case AC1_BK:
- 			rtl92e_writel(dev, EDCAPARA_BK, u4bAcParam);
-@@ -226,8 +224,6 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
- 		u8 acm = pAciAifsn->f.acm;
- 		u8 AcmCtrl = rtl92e_readb(dev, AcmHwCtrl);
- 
--		RT_TRACE(COMP_DBG, "===========>%s():HW_VAR_ACM_CTRL:%x\n",
--			 __func__, eACI);
- 		AcmCtrl = AcmCtrl | ((priv->AcmMethod == 2) ? 0x0 : 0x1);
- 
- 		if (acm) {
-@@ -243,12 +239,6 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
- 			case AC3_VO:
- 				AcmCtrl |= AcmHw_VoqEn;
- 				break;
--
--			default:
--				RT_TRACE(COMP_QOS,
--					 "SetHwReg8185(): [HW_VAR_ACM_CTRL] acm set failed: eACI is %d\n",
--					 eACI);
--				break;
- 			}
- 		} else {
- 			switch (eACI) {
-@@ -268,10 +258,6 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
- 				break;
- 			}
- 		}
--
--		RT_TRACE(COMP_QOS,
--			 "SetHwReg8190pci(): [HW_VAR_ACM_CTRL] Write 0x%X\n",
--			 AcmCtrl);
- 		rtl92e_writeb(dev, AcmHwCtrl, AcmCtrl);
- 		break;
- 	}
-@@ -304,8 +290,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 	u16 i, usValue, IC_Version;
- 	u16 EEPROMId;
- 
--	RT_TRACE(COMP_INIT, "====> %s\n", __func__);
--
- 	EEPROMId = rtl92e_eeprom_read(dev, 0);
- 	if (EEPROMId != RTL8190_EEPROM_ID) {
- 		netdev_err(dev, "%s(): Invalid EEPROM ID: %x\n", __func__,
-@@ -329,8 +313,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 
- 		ICVer8192 = IC_Version & 0xf;
- 		ICVer8256 = (IC_Version & 0xf0)>>4;
--		RT_TRACE(COMP_INIT, "\nICVer8192 = 0x%x\n", ICVer8192);
--		RT_TRACE(COMP_INIT, "\nICVer8256 = 0x%x\n", ICVer8256);
- 		if (ICVer8192 == 0x2) {
- 			if (ICVer8256 == 0x5)
- 				priv->card_8192_version = VERSION_8190_BE;
-@@ -343,22 +325,14 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 			priv->card_8192_version = VERSION_8190_BD;
- 			break;
- 		}
--		RT_TRACE(COMP_INIT, "\nIC Version = 0x%x\n",
--			  priv->card_8192_version);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index f92551094738..d1c4d44bfc87 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -117,8 +117,6 @@ static u32 _rtl92e_phy_rf_read(struct net_device *dev,
+ 		} else
+ 			NewOffset = Offset;
  	} else {
- 		priv->card_8192_version = VERSION_8190_BD;
- 		priv->eeprom_vid = 0;
- 		priv->eeprom_did = 0;
- 		priv->eeprom_CustomerID = 0;
- 		priv->eeprom_ChannelPlan = 0;
--		RT_TRACE(COMP_INIT, "\nIC Version = 0x%x\n", 0xff);
+-		RT_TRACE((COMP_PHY|COMP_ERR),
+-			 "check RF type here, need to be 8256\n");
+ 		NewOffset = Offset;
+ 	}
+ 	rtl92e_set_bb_reg(dev, pPhyReg->rfHSSIPara2, bLSSIReadAddress,
+@@ -173,8 +171,6 @@ static void _rtl92e_phy_rf_write(struct net_device *dev,
+ 		} else
+ 			NewOffset = Offset;
+ 	} else {
+-		RT_TRACE((COMP_PHY|COMP_ERR),
+-			 "check RF type here, need to be 8256\n");
+ 		NewOffset = Offset;
  	}
  
--	RT_TRACE(COMP_INIT, "EEPROM VID = 0x%4x\n", priv->eeprom_vid);
--	RT_TRACE(COMP_INIT, "EEPROM DID = 0x%4x\n", priv->eeprom_did);
--	RT_TRACE(COMP_INIT, "EEPROM Customer ID: 0x%2x\n",
--		 priv->eeprom_CustomerID);
--
- 	if (!priv->AutoloadFailFlag) {
- 		u8 addr[ETH_ALEN];
+@@ -207,7 +203,6 @@ void rtl92e_set_rf_reg(struct net_device *dev, enum rf90_radio_path eRFPath,
+ 	if (priv->rtllib->eRFPowerState != eRfOn && !priv->being_init_adapter)
+ 		return;
  
-@@ -372,9 +346,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		eth_hw_addr_set(dev, bMac_Tmp_Addr);
- 	}
- 
--	RT_TRACE(COMP_INIT, "Permanent Address = %pM\n",
--		 dev->dev_addr);
--
- 	if (priv->card_8192_version > VERSION_8190_BD)
- 		priv->bTXPowerDataReadFromEEPORM = true;
- 	else
-@@ -395,8 +366,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		} else {
- 			priv->EEPROMLegacyHTTxPowerDiff = 0x04;
- 		}
--		RT_TRACE(COMP_INIT, "EEPROMLegacyHTTxPowerDiff = %d\n",
--			priv->EEPROMLegacyHTTxPowerDiff);
- 
- 		if (!priv->AutoloadFailFlag)
- 			priv->EEPROMThermalMeter = ((rtl92e_eeprom_read(dev,
-@@ -404,8 +373,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 						   0xff00) >> 8;
- 		else
- 			priv->EEPROMThermalMeter = EEPROM_Default_ThermalMeter;
--		RT_TRACE(COMP_INIT, "ThermalMeter = %d\n",
--			 priv->EEPROMThermalMeter);
- 		priv->TSSI_13dBm = priv->EEPROMThermalMeter * 100;
- 
- 		if (priv->epromtype == EEPROM_93C46) {
-@@ -421,10 +388,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 				priv->EEPROMCrystalCap =
- 					 EEPROM_Default_TxPwDiff_CrystalCap;
- 			}
--			RT_TRACE(COMP_INIT, "EEPROMAntPwDiff = %d\n",
--				 priv->EEPROMAntPwDiff);
--			RT_TRACE(COMP_INIT, "EEPROMCrystalCap = %d\n",
--				 priv->EEPROMCrystalCap);
- 
- 			for (i = 0; i < 14; i += 2) {
- 				if (!priv->AutoloadFailFlag)
-@@ -434,12 +397,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 					usValue = EEPROM_Default_TxPower;
- 				*((u16 *)(&priv->EEPROMTxPowerLevelCCK[i])) =
- 								 usValue;
--				RT_TRACE(COMP_INIT,
--					 "CCK Tx Power Level, Index %d = 0x%02x\n",
--					 i, priv->EEPROMTxPowerLevelCCK[i]);
--				RT_TRACE(COMP_INIT,
--					 "CCK Tx Power Level, Index %d = 0x%02x\n",
--					 i+1, priv->EEPROMTxPowerLevelCCK[i+1]);
- 			}
- 			for (i = 0; i < 14; i += 2) {
- 				if (!priv->AutoloadFailFlag)
-@@ -449,13 +406,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 					usValue = EEPROM_Default_TxPower;
- 				*((u16 *)(&priv->EEPROMTxPowerLevelOFDM24G[i]))
- 							 = usValue;
--				RT_TRACE(COMP_INIT,
--					 "OFDM 2.4G Tx Power Level, Index %d = 0x%02x\n",
--					 i, priv->EEPROMTxPowerLevelOFDM24G[i]);
--				RT_TRACE(COMP_INIT,
--					 "OFDM 2.4G Tx Power Level, Index %d = 0x%02x\n",
--					 i + 1,
--					 priv->EEPROMTxPowerLevelOFDM24G[i+1]);
- 			}
- 		}
- 		if (priv->epromtype == EEPROM_93C46) {
-@@ -508,22 +458,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 				priv->TxPowerLevelOFDM24G_C[i] =
- 					 priv->EEPROMRfCOfdmChnlTxPwLevel[2];
- 			}
--			for (i = 0; i < 14; i++)
--				RT_TRACE(COMP_INIT,
--					 "priv->TxPowerLevelCCK_A[%d] = 0x%x\n",
--					 i, priv->TxPowerLevelCCK_A[i]);
--			for (i = 0; i < 14; i++)
--				RT_TRACE(COMP_INIT,
--					 "priv->TxPowerLevelOFDM24G_A[%d] = 0x%x\n",
--					 i, priv->TxPowerLevelOFDM24G_A[i]);
--			for (i = 0; i < 14; i++)
--				RT_TRACE(COMP_INIT,
--					 "priv->TxPowerLevelCCK_C[%d] = 0x%x\n",
--					 i, priv->TxPowerLevelCCK_C[i]);
--			for (i = 0; i < 14; i++)
--				RT_TRACE(COMP_INIT,
--					 "priv->TxPowerLevelOFDM24G_C[%d] = 0x%x\n",
--					 i, priv->TxPowerLevelOFDM24G_C[i]);
- 			priv->LegacyHTTxPowerDiff =
- 				 priv->EEPROMLegacyHTTxPowerDiff;
- 			priv->AntennaTxPwDiff[0] = 0;
-@@ -536,13 +470,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		}
- 	}
- 
--	if (priv->rf_type == RF_1T2R) {
--		/* no matter what checkpatch says, the braces are needed */
--		RT_TRACE(COMP_INIT, "\n1T2R config\n");
--	} else if (priv->rf_type == RF_2T4R) {
--		RT_TRACE(COMP_INIT, "\n2T4R config\n");
--	}
--
- 	rtl92e_init_adaptive_rate(dev);
- 
- 	priv->rf_chip = RF_8256;
-@@ -574,8 +501,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 			priv->ChannelPlan = priv->eeprom_ChannelPlan&0x7f;
- 		else
- 			priv->ChannelPlan = 0x0;
--		RT_TRACE(COMP_INIT, "Toshiba ChannelPlan = 0x%x\n",
--			priv->ChannelPlan);
- 		break;
- 	case EEPROM_CID_Nettronix:
- 		priv->ScanDelay = 100;
-@@ -602,10 +527,6 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 		priv->rtllib->bSupportRemoteWakeUp = true;
- 	else
- 		priv->rtllib->bSupportRemoteWakeUp = false;
--
--	RT_TRACE(COMP_INIT, "RegChannelPlan(%d)\n", priv->RegChannelPlan);
--	RT_TRACE(COMP_INIT, "ChannelPlan = %d\n", priv->ChannelPlan);
--	RT_TRACE(COMP_TRACE, "<==== ReadAdapterInfo\n");
- }
- 
- void rtl92e_get_eeprom_size(struct net_device *dev)
-@@ -613,14 +534,9 @@ void rtl92e_get_eeprom_size(struct net_device *dev)
- 	u16 curCR;
+-	RT_TRACE(COMP_PHY, "FW RF CTRL is not ready now\n");
+ 	if (priv->Rf_Mode == RF_OP_By_FW) {
+ 		if (BitMask != bMask12Bits) {
+ 			Original_Value = _rtl92e_phy_rf_fw_read(dev, eRFPath,
+@@ -312,19 +307,14 @@ void rtl92e_config_mac(struct net_device *dev)
  	struct r8192_priv *priv = rtllib_priv(dev);
  
--	RT_TRACE(COMP_INIT, "===========>%s()\n", __func__);
- 	curCR = rtl92e_readw(dev, EPROM_CMD);
--	RT_TRACE(COMP_INIT, "read from Reg Cmd9346CR(%x):%x\n", EPROM_CMD,
--		 curCR);
- 	priv->epromtype = (curCR & EPROM_CMD_9356SEL) ? EEPROM_93C56 :
- 			  EEPROM_93C46;
--	RT_TRACE(COMP_INIT, "<===========%s(), epromtype:%d\n", __func__,
--		 priv->epromtype);
- 	_rtl92e_read_eeprom_info(dev);
+ 	if (priv->bTXPowerDataReadFromEEPORM) {
+-		RT_TRACE(COMP_PHY, "Rtl819XMACPHY_Array_PG\n");
+ 		dwArrayLen = MACPHY_Array_PGLength;
+ 		pdwArray = Rtl819XMACPHY_Array_PG;
+ 
+ 	} else {
+-		RT_TRACE(COMP_PHY, "Read rtl819XMACPHY_Array\n");
+ 		dwArrayLen = MACPHY_ArrayLength;
+ 		pdwArray = Rtl819XMACPHY_Array;
+ 	}
+ 	for (i = 0; i < dwArrayLen; i += 3) {
+-		RT_TRACE(COMP_DBG,
+-			 "The Rtl8190MACPHY_Array[0] is %x Rtl8190MACPHY_Array[1] is %x Rtl8190MACPHY_Array[2] is %x\n",
+-			 pdwArray[i], pdwArray[i+1], pdwArray[i+2]);
+ 		if (pdwArray[i] == 0x318)
+ 			pdwArray[i+2] = 0x00000800;
+ 		rtl92e_set_bb_reg(dev, pdwArray[i], pdwArray[i+1],
+@@ -357,20 +347,12 @@ static void _rtl92e_phy_config_bb(struct net_device *dev, u8 ConfigType)
+ 			rtl92e_set_bb_reg(dev, Rtl819XPHY_REGArray_Table[i],
+ 					  bMaskDWord,
+ 					  Rtl819XPHY_REGArray_Table[i+1]);
+-			RT_TRACE(COMP_DBG,
+-				 "i: %x, The Rtl819xUsbPHY_REGArray[0] is %x Rtl819xUsbPHY_REGArray[1] is %x\n",
+-				 i, Rtl819XPHY_REGArray_Table[i],
+-				 Rtl819XPHY_REGArray_Table[i+1]);
+ 		}
+ 	} else if (ConfigType == BaseBand_Config_AGC_TAB) {
+ 		for (i = 0; i < AGCTAB_ArrayLen; i += 2) {
+ 			rtl92e_set_bb_reg(dev, Rtl819XAGCTAB_Array_Table[i],
+ 					  bMaskDWord,
+ 					  Rtl819XAGCTAB_Array_Table[i+1]);
+-			RT_TRACE(COMP_DBG,
+-				 "i:%x, The rtl819XAGCTAB_Array[0] is %x rtl819XAGCTAB_Array[1] is %x\n",
+-				 i, Rtl819XAGCTAB_Array_Table[i],
+-				 Rtl819XAGCTAB_Array_Table[i+1]);
+ 		}
+ 	}
  }
+@@ -478,8 +460,6 @@ bool rtl92e_check_bb_and_rf(struct net_device *dev, enum hw90_block CheckBlock,
+ 	WriteAddr[HW90_BLOCK_PHY0] = 0x900;
+ 	WriteAddr[HW90_BLOCK_PHY1] = 0x800;
+ 	WriteAddr[HW90_BLOCK_RF] = 0x3;
+-	RT_TRACE(COMP_PHY, "=======>%s(), CheckBlock:%d\n", __func__,
+-		 CheckBlock);
  
-@@ -697,7 +613,6 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 	int i = 0;
- 	u32 retry_times = 0;
- 
--	RT_TRACE(COMP_INIT, "====>%s()\n", __func__);
- 	priv->being_init_adapter = true;
- 
- start:
-@@ -732,13 +647,11 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 			rtl92e_writeb(dev, SWREGULATOR, 0xb8);
- 		}
- 	}
--	RT_TRACE(COMP_INIT, "BB Config Start!\n");
- 	rtStatus = rtl92e_config_bb(dev);
- 	if (!rtStatus) {
- 		netdev_warn(dev, "%s(): Failed to configure BB\n", __func__);
- 		return rtStatus;
- 	}
--	RT_TRACE(COMP_INIT, "BB Config Finished!\n");
- 
- 	priv->LoopbackMode = RTL819X_NO_LOOPBACK;
- 	if (priv->ResetProgress == RESET_TYPE_NORESET) {
-@@ -818,19 +731,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 
- 	tmpvalue = rtl92e_readb(dev, IC_VERRSION);
- 	priv->IC_Cut = tmpvalue;
--	RT_TRACE(COMP_INIT, "priv->IC_Cut= 0x%x\n", priv->IC_Cut);
--	if (priv->IC_Cut >= IC_VersionCut_D) {
--		if (priv->IC_Cut == IC_VersionCut_D) {
--			/* no matter what checkpatch says, braces are needed */
--			RT_TRACE(COMP_INIT, "D-cut\n");
--		} else if (priv->IC_Cut == IC_VersionCut_E) {
--			RT_TRACE(COMP_INIT, "E-cut\n");
--		}
--	} else {
--		RT_TRACE(COMP_INIT, "Before C-cut\n");
--	}
- 
--	RT_TRACE(COMP_INIT, "Load Firmware!\n");
- 	bfirmwareok = rtl92e_init_fw(dev);
- 	if (!bfirmwareok) {
- 		if (retry_times < 10) {
-@@ -841,15 +742,13 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 			goto end;
- 		}
- 	}
--	RT_TRACE(COMP_INIT, "Load Firmware finished!\n");
-+
- 	if (priv->ResetProgress == RESET_TYPE_NORESET) {
--		RT_TRACE(COMP_INIT, "RF Config Started!\n");
- 		rtStatus = rtl92e_config_phy(dev);
+ 	if (CheckBlock == HW90_BLOCK_MAC) {
+ 		netdev_warn(dev, "%s(): No checks available for MAC block.\n",
+@@ -543,9 +523,6 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+ 						   (enum hw90_block)eCheckItem,
+ 						   (enum rf90_radio_path)0);
  		if (!rtStatus) {
- 			netdev_info(dev, "RF Config failed\n");
+-			RT_TRACE((COMP_ERR | COMP_PHY),
+-				 "rtl92e_config_rf():Check PHY%d Fail!!\n",
+-				 eCheckItem-1);
  			return rtStatus;
  		}
--		RT_TRACE(COMP_INIT, "RF Config Finished!\n");
  	}
+@@ -602,15 +579,9 @@ void rtl92e_get_tx_power(struct net_device *dev)
+ 	priv->DefaultInitialGain[1] = rtl92e_readb(dev, rOFDM0_XBAGCCore1);
+ 	priv->DefaultInitialGain[2] = rtl92e_readb(dev, rOFDM0_XCAGCCore1);
+ 	priv->DefaultInitialGain[3] = rtl92e_readb(dev, rOFDM0_XDAGCCore1);
+-	RT_TRACE(COMP_INIT,
+-		 "Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x)\n",
+-		 priv->DefaultInitialGain[0], priv->DefaultInitialGain[1],
+-		 priv->DefaultInitialGain[2], priv->DefaultInitialGain[3]);
  
- 	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn, 0x1);
-@@ -858,23 +757,12 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 	rtl92e_writeb(dev, 0x87, 0x0);
+ 	priv->framesync = rtl92e_readb(dev, rOFDM0_RxDetector3);
+ 	priv->framesyncC34 = rtl92e_readl(dev, rOFDM0_RxDetector2);
+-	RT_TRACE(COMP_INIT, "Default framesync (0x%x) = 0x%x\n",
+-		rOFDM0_RxDetector3, priv->framesync);
+ 	priv->SifsTime = rtl92e_readw(dev, SIFS);
+ }
  
- 	if (priv->RegRfOff) {
--		RT_TRACE((COMP_INIT | COMP_RF | COMP_POWER),
--			  "%s(): Turn off RF for RegRfOff ----------\n",
--			  __func__);
- 		rtl92e_set_rf_state(dev, eRfOff, RF_CHANGE_BY_SW);
- 	} else if (priv->rtllib->RfOffReason > RF_CHANGE_BY_PS) {
--		RT_TRACE((COMP_INIT|COMP_RF|COMP_POWER),
--			 "%s(): Turn off RF for RfOffReason(%d) ----------\n",
--			 __func__, priv->rtllib->RfOffReason);
- 		rtl92e_set_rf_state(dev, eRfOff, priv->rtllib->RfOffReason);
- 	} else if (priv->rtllib->RfOffReason >= RF_CHANGE_BY_IPS) {
--		RT_TRACE((COMP_INIT|COMP_RF|COMP_POWER),
--			 "%s(): Turn off RF for RfOffReason(%d) ----------\n",
--			 __func__, priv->rtllib->RfOffReason);
- 		rtl92e_set_rf_state(dev, eRfOff, priv->rtllib->RfOffReason);
- 	} else {
--		RT_TRACE((COMP_INIT|COMP_RF|COMP_POWER), "%s(): RF-ON\n",
--			  __func__);
- 		priv->rtllib->eRFPowerState = eRfOn;
- 		priv->rtllib->RfOffReason = 0;
- 	}
-@@ -915,18 +803,6 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 			priv->CCKPresentAttentuation_difference = 0;
+@@ -813,9 +784,6 @@ static u8 _rtl92e_phy_switch_channel_step(struct net_device *dev, u8 channel,
+ 	struct sw_chnl_cmd *CurrentCmd = NULL;
+ 	u8		eRFPath;
+ 
+-	RT_TRACE(COMP_TRACE, "====>%s()====stage:%d, step:%d, channel:%d\n",
+-		  __func__, *stage, *step, channel);
+-
+ 	if (!rtllib_legal_channel(priv->rtllib, channel)) {
+ 		netdev_err(dev, "Invalid channel requested: %d\n", channel);
+ 		return true;
+@@ -976,21 +944,13 @@ static void _rtl92e_phy_switch_channel_work_item(struct net_device *dev)
+ 
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 
+-	RT_TRACE(COMP_TRACE, "==> SwChnlCallback819xUsbWorkItem()\n");
+-
+-	RT_TRACE(COMP_TRACE, "=====>--%s(), set chan:%d, priv:%p\n", __func__,
+-		 priv->chan, priv);
+-
+ 	_rtl92e_phy_switch_channel(dev, priv->chan);
+-
+-	RT_TRACE(COMP_TRACE, "<== SwChnlCallback819xUsbWorkItem()\n");
+ }
+ 
+ u8 rtl92e_set_channel(struct net_device *dev, u8 channel)
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 
+-	RT_TRACE(COMP_PHY, "=====>%s()\n", __func__);
+ 	if (!priv->up) {
+ 		netdev_err(dev, "%s(): Driver is not initialized\n", __func__);
+ 		return false;
+@@ -1060,10 +1020,6 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
+ 		if (priv->CCKPresentAttentuation < 0)
+ 			priv->CCKPresentAttentuation = 0;
+ 
+-		RT_TRACE(COMP_POWER_TRACKING,
+-			 "20M, priv->CCKPresentAttentuation = %d\n",
+-			 priv->CCKPresentAttentuation);
+-
+ 		if (priv->rtllib->current_network.channel == 14 &&
+ 		    !priv->bcck_in_ch14) {
+ 			priv->bcck_in_ch14 = true;
+@@ -1082,9 +1038,6 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
+ 			priv->CCKPresentAttentuation_40Mdefault +
+ 			priv->CCKPresentAttentuation_difference;
+ 
+-		RT_TRACE(COMP_POWER_TRACKING,
+-			 "40M, priv->CCKPresentAttentuation = %d\n",
+-			 priv->CCKPresentAttentuation);
+ 		if (priv->CCKPresentAttentuation >
+ 		    (CCKTxBBGainTableLength - 1))
  			priv->CCKPresentAttentuation =
- 				  priv->CCKPresentAttentuation_20Mdefault;
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->rfa_txpowertrackingindex_initial = %d\n",
--				 priv->rfa_txpowertrackingindex);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->rfa_txpowertrackingindex_real__initial = %d\n",
--				 priv->rfa_txpowertrackingindex_real);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->CCKPresentAttentuation_difference_initial = %d\n",
--				  priv->CCKPresentAttentuation_difference);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->CCKPresentAttentuation_initial = %d\n",
--				 priv->CCKPresentAttentuation);
- 			priv->btxpower_tracking = false;
- 		}
- 	}
-@@ -1237,7 +1113,6 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
- 		static u8 tmp;
+@@ -1123,16 +1076,10 @@ static void _rtl92e_cck_tx_power_track_bw_switch_thermal(struct net_device *dev)
+ 		if (priv->Record_CCK_20Mindex == 0)
+ 			priv->Record_CCK_20Mindex = 6;
+ 		priv->CCK_index = priv->Record_CCK_20Mindex;
+-		RT_TRACE(COMP_POWER_TRACKING,
+-			 "20MHz, %s,CCK_index = %d\n", __func__,
+-			 priv->CCK_index);
+ 	break;
  
- 		if (!tmp) {
--			RT_TRACE(COMP_DBG, "==>================hw sec\n");
- 			tmp = 1;
- 		}
- 		switch (priv->rtllib->pairwise_key_type) {
-@@ -1350,12 +1225,6 @@ static u8 _rtl92e_rate_hw_to_mgn(bool bIsHT, u8 rate)
- 		case DESC90_RATE54M:
- 			ret_rate = MGN_54M;
- 			break;
+ 	case HT_CHANNEL_WIDTH_20_40:
+ 		priv->CCK_index = priv->Record_CCK_40Mindex;
+-		RT_TRACE(COMP_POWER_TRACKING,
+-			 "40MHz, %s, CCK_index = %d\n", __func__,
+-			 priv->CCK_index);
+ 	break;
+ 	}
+ 	rtl92e_dm_cck_txpower_adjust(dev, priv->bcck_in_ch14);
+@@ -1154,12 +1101,6 @@ static void _rtl92e_set_bw_mode_work_item(struct net_device *dev)
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 	u8 regBwOpMode;
+ 
+-	RT_TRACE(COMP_SWBW,
+-		 "==>%s Switch to %s bandwidth\n", __func__,
+-		 priv->CurrentChannelBW == HT_CHANNEL_WIDTH_20 ?
+-			 "20MHz" : "40MHz");
 -
+-
+ 	if (priv->rf_chip == RF_PSEUDO_11N) {
+ 		priv->SetBWModeInProgress = false;
+ 		return;
+@@ -1251,8 +1192,6 @@ static void _rtl92e_set_bw_mode_work_item(struct net_device *dev)
+ 
+ 	atomic_dec(&(priv->rtllib->atm_swbw));
+ 	priv->SetBWModeInProgress = false;
+-
+-	RT_TRACE(COMP_SWBW, "<==SetBWMode819xUsb()");
+ }
+ 
+ void rtl92e_set_bw_mode(struct net_device *dev, enum ht_channel_width Bandwidth,
+@@ -1291,8 +1230,6 @@ void rtl92e_init_gain(struct net_device *dev, u8 Operation)
+ 	if (priv->up) {
+ 		switch (Operation) {
+ 		case IG_Backup:
+-			RT_TRACE(COMP_SCAN,
+-				 "IG_Backup, backup the initial gain.\n");
+ 			initial_gain = SCAN_RX_INITIAL_GAIN;
+ 			BitMask = bMaskByte0;
+ 			if (dm_digtable.dig_algorithm ==
+@@ -1314,35 +1251,13 @@ void rtl92e_init_gain(struct net_device *dev, u8 Operation)
+ 			priv->initgain_backup.cca = (u8)rtl92e_get_bb_reg(dev,
+ 						    rCCK0_CCA, BitMask);
+ 
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan InitialGainBackup 0xc50 is %x\n",
+-				 priv->initgain_backup.xaagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan InitialGainBackup 0xc58 is %x\n",
+-				 priv->initgain_backup.xbagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan InitialGainBackup 0xc60 is %x\n",
+-				 priv->initgain_backup.xcagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan InitialGainBackup 0xc68 is %x\n",
+-				 priv->initgain_backup.xdagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan InitialGainBackup 0xa0a is %x\n",
+-				 priv->initgain_backup.cca);
+-
+-			RT_TRACE(COMP_SCAN, "Write scan initial gain = 0x%x\n",
+-				 initial_gain);
+ 			rtl92e_writeb(dev, rOFDM0_XAAGCCore1, initial_gain);
+ 			rtl92e_writeb(dev, rOFDM0_XBAGCCore1, initial_gain);
+ 			rtl92e_writeb(dev, rOFDM0_XCAGCCore1, initial_gain);
+ 			rtl92e_writeb(dev, rOFDM0_XDAGCCore1, initial_gain);
+-			RT_TRACE(COMP_SCAN, "Write scan 0xa0a = 0x%x\n",
+-				 POWER_DETECTION_TH);
+ 			rtl92e_writeb(dev, 0xa0a, POWER_DETECTION_TH);
+ 			break;
+ 		case IG_Restore:
+-			RT_TRACE(COMP_SCAN,
+-				 "IG_Restore, restore the initial gain.\n");
+ 			BitMask = 0x7f;
+ 			if (dm_digtable.dig_algorithm ==
+ 			    DIG_ALGO_BY_FALSE_ALARM)
+@@ -1360,22 +1275,6 @@ void rtl92e_init_gain(struct net_device *dev, u8 Operation)
+ 			rtl92e_set_bb_reg(dev, rCCK0_CCA, BitMask,
+ 					 (u32)priv->initgain_backup.cca);
+ 
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan BBInitialGainRestore 0xc50 is %x\n",
+-				 priv->initgain_backup.xaagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan BBInitialGainRestore 0xc58 is %x\n",
+-				 priv->initgain_backup.xbagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan BBInitialGainRestore 0xc60 is %x\n",
+-				 priv->initgain_backup.xcagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan BBInitialGainRestore 0xc68 is %x\n",
+-				 priv->initgain_backup.xdagccore1);
+-			RT_TRACE(COMP_SCAN,
+-				 "Scan BBInitialGainRestore 0xa0a is %x\n",
+-				 priv->initgain_backup.cca);
+-
+ 			rtl92e_set_tx_power(dev,
+ 					 priv->rtllib->current_network.channel);
+ 
+@@ -1383,9 +1282,6 @@ void rtl92e_init_gain(struct net_device *dev, u8 Operation)
+ 			    DIG_ALGO_BY_FALSE_ALARM)
+ 				rtl92e_set_bb_reg(dev, UFWP, bMaskByte1, 0x1);
+ 			break;
 -		default:
--			RT_TRACE(COMP_RECV,
--				 "%s: Non supportedRate [%x], bIsHT = %d!!!\n",
--				 __func__, rate, bIsHT);
+-			RT_TRACE(COMP_SCAN, "Unknown IG Operation.\n");
 -			break;
  		}
- 
- 	} else {
-@@ -1411,12 +1280,6 @@ static u8 _rtl92e_rate_hw_to_mgn(bool bIsHT, u8 rate)
- 		case DESC90_RATEMCS32:
- 			ret_rate = 0x80 | 0x20;
- 			break;
--
--		default:
--			RT_TRACE(COMP_RECV,
--				 "%s: Non supported Rate [%x], bIsHT = %d!!!\n",
--				 __func__, rate, bIsHT);
--			break;
- 		}
  	}
+ }
+@@ -1416,14 +1312,12 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
  
-@@ -1721,9 +1584,6 @@ static void _rtl92e_process_phyinfo(struct r8192_priv *priv, u8 *buffer,
- 		for (rfpath = RF90_PATH_A; rfpath < RF90_PATH_C; rfpath++) {
- 			if (!rtl92e_is_legal_rf_path(priv->rtllib->dev, rfpath))
- 				continue;
--			RT_TRACE(COMP_DBG,
--				 "Jacken -> pPreviousstats->RxMIMOSignalStrength[rfpath]  = %d\n",
--				 prev_st->RxMIMOSignalStrength[rfpath]);
- 			if (priv->stats.rx_rssi_percentage[rfpath] == 0) {
- 				priv->stats.rx_rssi_percentage[rfpath] =
- 					 prev_st->RxMIMOSignalStrength[rfpath];
-@@ -1745,9 +1605,6 @@ static void _rtl92e_process_phyinfo(struct r8192_priv *priv, u8 *buffer,
- 				   (prev_st->RxMIMOSignalStrength[rfpath])) /
- 				   (RX_SMOOTH);
+ 	if (priv->SetRFPowerStateInProgress)
+ 		return false;
+-	RT_TRACE(COMP_PS, "===========> %s!\n", __func__);
+ 	priv->SetRFPowerStateInProgress = true;
+ 
+ 	switch (priv->rf_chip) {
+ 	case RF_8256:
+ 		switch (eRFPowerState) {
+ 		case eRfOn:
+-			RT_TRACE(COMP_PS, "%s eRfOn!\n", __func__);
+ 			if ((priv->rtllib->eRFPowerState == eRfOff) &&
+ 			     RT_IN_PS_LEVEL(pPSC, RT_RF_OFF_LEVL_HALT_NIC)) {
+ 				bool rtstatus;
+@@ -1481,16 +1375,11 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 					QueueID++;
+ 					continue;
+ 				} else {
+-					RT_TRACE((COMP_POWER|COMP_RF),
+-						 "eRf Off/Sleep: %d times TcbBusyQueue[%d] !=0 before doze!\n",
+-						 (i+1), QueueID);
+ 					udelay(10);
+ 					i++;
+ 				}
+ 
+ 				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+-					RT_TRACE(COMP_POWER, "\n\n\n TimeOut!! %s: eRfOff: %d times TcbBusyQueue[%d] != 0 !!!\n",
+-						 __func__, MAX_DOZE_WAITING_TIMES_9x, QueueID);
+ 					break;
+ 				}
  			}
--			RT_TRACE(COMP_DBG,
--				 "Jacken -> priv->RxStats.RxRSSIPercentage[rfPath]  = %d\n",
--				 priv->stats.rx_rssi_percentage[rfpath]);
+@@ -1498,8 +1387,6 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 			break;
+ 
+ 		case eRfOff:
+-			RT_TRACE(COMP_PS, "%s eRfOff/Sleep !\n", __func__);
+-
+ 			for (QueueID = 0, i = 0; QueueID < MAX_TX_QUEUE; ) {
+ 				ring = &priv->tx_ring[QueueID];
+ 
+@@ -1507,18 +1394,11 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 					QueueID++;
+ 					continue;
+ 				} else {
+-					RT_TRACE(COMP_POWER,
+-						 "eRf Off/Sleep: %d times TcbBusyQueue[%d] !=0 before doze!\n",
+-						 (i+1), QueueID);
+ 					udelay(10);
+ 					i++;
+ 				}
+ 
+ 				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+-					RT_TRACE(COMP_POWER,
+-						 "\n\n\n SetZebra: RFPowerState8185B(): eRfOff: %d times TcbBusyQueue[%d] != 0 !!!\n",
+-						 MAX_DOZE_WAITING_TIMES_9x,
+-						 QueueID);
+ 					break;
+ 				}
+ 			}
+@@ -1563,7 +1443,6 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 	}
+ 
+ 	priv->SetRFPowerStateInProgress = false;
+-	RT_TRACE(COMP_PS, "<=========== %s bResult = %d!\n", __func__, bResult);
+ 	return bResult;
+ }
+ 
+@@ -1574,19 +1453,12 @@ bool rtl92e_set_rf_power_state(struct net_device *dev,
+ 
+ 	bool bResult = false;
+ 
+-	RT_TRACE(COMP_PS,
+-		 "---------> %s: eRFPowerState(%d)\n", __func__, eRFPowerState);
+ 	if (eRFPowerState == priv->rtllib->eRFPowerState &&
+ 	    priv->bHwRfOffAction == 0) {
+-		RT_TRACE(COMP_PS, "<--------- %s: discard the request for eRFPowerState(%d) is the same.\n",
+-			 __func__, eRFPowerState);
+ 		return bResult;
+ 	}
+ 
+ 	bResult = _rtl92e_set_rf_power_state(dev, eRFPowerState);
+-
+-	RT_TRACE(COMP_PS, "<--------- %s: bResult(%d)\n", __func__, bResult);
+-
+ 	return bResult;
+ }
+ 
+@@ -1603,10 +1475,6 @@ void rtl92e_scan_op_backup(struct net_device *dev, u8 Operation)
+ 		case SCAN_OPT_RESTORE:
+ 			priv->rtllib->InitialGainHandler(dev, IG_Restore);
+ 			break;
+-
+-		default:
+-			RT_TRACE(COMP_SCAN, "Unknown Scan Backup Operation.\n");
+-			break;
  		}
  	}
- 
-@@ -1772,11 +1629,6 @@ static void _rtl92e_process_phyinfo(struct r8192_priv *priv, u8 *buffer,
- 		if (prev_st->RxPWDBAll >= 3)
- 			prev_st->RxPWDBAll -= 3;
- 	}
--
--	RT_TRACE(COMP_RXDESC, "Smooth %s PWDB = %d\n",
--				prev_st->bIsCCK ? "CCK" : "OFDM",
--				prev_st->RxPWDBAll);
--
- 	if (prev_st->bPacketToSelf || prev_st->bPacketBeacon ||
- 	    prev_st->bToSelfBA) {
- 		if (priv->undecorated_smoothed_pwdb < 0)
-@@ -2052,11 +1904,6 @@ bool rtl92e_get_rx_stats(struct net_device *dev, struct rtllib_rx_stats *stats,
- 	stats->RxIs40MHzPacket = pDrvInfo->BW;
- 
- 	_rtl92e_translate_rx_signal_stats(dev, skb, stats, pdesc, pDrvInfo);
--
--	if (pDrvInfo->FirstAGGR == 1 || pDrvInfo->PartAggr == 1)
--		RT_TRACE(COMP_RXDESC,
--			 "pDrvInfo->FirstAGGR = %d, pDrvInfo->PartAggr = %d\n",
--			 pDrvInfo->FirstAGGR, pDrvInfo->PartAggr);
- 	skb_trim(skb, skb->len - 4/*sCrcLng*/);
- 
- 
-@@ -2261,9 +2108,6 @@ bool rtl92e_is_rx_stuck(struct net_device *dev)
- 	u8		i;
- 	u8		SilentResetRxSoltNum = 4;
- 
--	RT_TRACE(COMP_RESET, "%s(): RegRxCounter is %d, RxCounter is %d\n",
--		 __func__, RegRxCounter, priv->RxCounter);
--
- 	rx_chk_cnt++;
- 	if (priv->undecorated_smoothed_pwdb >= (RateAdaptiveTH_High+5)) {
- 		rx_chk_cnt = 0;
-@@ -2321,9 +2165,6 @@ bool rtl92e_is_tx_stuck(struct net_device *dev)
- 	bool	bStuck = false;
- 	u16	RegTxCounter = rtl92e_readw(dev, 0x128);
- 
--	RT_TRACE(COMP_RESET, "%s():RegTxCounter is %d,TxCounter is %d\n",
--		 __func__, RegTxCounter, priv->TxCounter);
--
- 	if (priv->TxCounter == RegTxCounter)
- 		bStuck = true;
- 
+ }
 -- 
 2.37.3
 
