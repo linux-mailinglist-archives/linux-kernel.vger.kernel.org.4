@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8375BB513
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560AA5BB514
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIQAud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S229495AbiIQAuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIQAub (ORCPT
+        with ESMTP id S229682AbiIQAul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:50:31 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AD44507F;
-        Fri, 16 Sep 2022 17:50:29 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id E3CB35C00F8;
-        Fri, 16 Sep 2022 20:50:26 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 16 Sep 2022 20:50:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1663375826; x=
-        1663462226; bh=QpwiR/HPla4yRVWmvy9AanjoLTeQN+vOn52WdshHMig=; b=P
-        ixBUgCnAMwolyRVXKwBB4zbPbTrz/h3pbuZyyvhCeauiGAA66WbgQei4BM1Nr/wi
-        HT5qZHY380eEsCQe77lYj7jlHXuowctnbQzw0bSGaU+uEOClLP3PnBlnhkhLTBHd
-        D6UE1r5izj8MF3sPGYdeavaKhJnDxCULlDE7r29V7ysLizMj2vR+HIaDOHWupphq
-        Ggsb3559y0d0193XoaAWPkvr6Is+4qiFgYfmWI0V6ZmRFwKXgzGSFPAwOPCXd5x8
-        78YMGI5FxVdZ/rtUpFEWbC8GVt5bRAVFwaVYJGKX7bdwZ+e75vhMTknGBv/mVdoR
-        yytWftIcGn8o7Pkbb6kdw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663375826; x=1663462226; bh=QpwiR/HPla4yRVWmvy9AanjoLTeQ
-        N+vOn52WdshHMig=; b=gA5jJ+nGAE/Ks3+dLiIcEQ02hCcdYjnh1E1QjLTAHsX0
-        7JKR/vFf3wYcNOC8H1T2VEStMOzkxW09TFPg7tTshIdbQ9pu8V1XjiViCVUrnG5A
-        bM6/Xpg3hLy2Y46iNEe1mpVNFTjmtzl6qTD7EDhnWbjxyLzCzHQeY85jRj4KzazI
-        NN+urUrnA02TUTbppZducvQcLLXscs34Njpp5a0g4D6FEG0qTOw5dgv+WINNs/Px
-        73mxXeY3Y6MsC5iv5/UTJEX53hlXtdQW9FjEK//MzTWaiCfeaz3mtJFqqOY/k97y
-        9pHX32R/by+MbGk6UmZBhxQi+KHk2oPU0crstxDklA==
-X-ME-Sender: <xms:0hklY9STY7CaR4QF6pD6U_KNkC0v3nTezyVer8BHsTzrdWMvoe7yFQ>
-    <xme:0hklY2yFnPjH-FUKNC2w5wUrFz8VLJdWhufYM-dRdtzsnUh9UA6oSNsm59ZtQwlLX
-    xQCxplXE6-kwxBp-r0>
-X-ME-Received: <xmr:0hklYy0vdBneegCFwEspb7YUfW13-k3DqeZK-J8-XGEzaDr_Q86pefom1g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvuddgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhoshhh
-    ucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduieegheeijeeuvdetudefvedtjeefgeeufefghfekgfelfeet
-    teelvddtffetgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:0hklY1DwOQF6W-CLXTmMozV6b8bfBow5q1leLKYDxxSjVbEQvxz2cg>
-    <xmx:0hklY2j2lrnmlaSkhvw7c0PwGfn5-9Dm3-cH2Kxt6gAsO7wHkIYBDA>
-    <xmx:0hklY5r2bn8idP1SjGy_0Qh1VU8zVtnv4CVEUkkwWLRZSVQ85qqOZg>
-    <xmx:0hklY4Zwb1ogk9mN8kfThurHmSF4lSiy4elzfq775lDJ-7VZtfcn4w>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 16 Sep 2022 20:50:25 -0400 (EDT)
-Date:   Sat, 17 Sep 2022 01:50:24 +0100
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search
- before allocating mm
-Message-ID: <YyUZ0NHfFF+eVe24@localhost>
-References: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
- <202209160727.5FC78B735@keescook>
- <YyTY+OaClK+JHCOw@localhost>
- <202209161637.9EDAF6B18@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209161637.9EDAF6B18@keescook>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 20:50:41 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C5752DFD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:50:39 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a26so24223575ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date;
+        bh=ovQ47vZovF8kMU8XowExonRrfnvEzMQFtu6wQPjgTpY=;
+        b=S9pALlVHg0Hbx2iPGQFDjJWmaSsK3btrGX8KJi0u3C6QnzqRkZEzvdZltDg7IrSPDN
+         BOgFkO90fpfZE2pB3y31iJ5kM/Y80uv49Wl3r5aAUAlbg8tlqjcrWIG55Mukv+OlHTOc
+         q7ScK/6jbXuw+n7sfS+rmXdsglckcdAjsl1/MQdo8sTVMnkjI8eA6Y9YGnxUjDIj63Ep
+         zvbduK9JP/cLCyvWtpXqAAma+kgQOG6BJcsye9J09c0htADEJjXZtXpDJMdag9nz+tCu
+         fqZN2e4J/FkTHZhp1kIFYLPlipHyaxb6Op1QL5SDNo3KbOQDRMcIXFVwKJEgzZ8aVELI
+         dimA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ovQ47vZovF8kMU8XowExonRrfnvEzMQFtu6wQPjgTpY=;
+        b=zJ5mUG+meFD+nCjPi7h9A+euEsQ5K0Cba3lNTEifutCTbthsR7EdlEL9tBD99pQLjo
+         4WvqpE5G5Ue2CB+OKXkCciXpppj2jffdo78jfsOAGL5/aJNcr7fcRor0ox5yYeiLGCzC
+         mtK4TIzXEljDNrvuXu+0ZEFHDh+Y6upyA1TPBE2AhUS1AZQEXV+Z0C61sVw33sfiu8sR
+         Nc++mHHZkm54k8gKyZaHAC/V89MRXCbuiRdzu5hcM142YEWthF6cTr1SzCfel7axSaPc
+         hctCBCcFDsrC9wqP2bLYSMo0aOa9jCEryGgoRqsIfXV6+aiuHZXHwjCHRMypXzTBJKlc
+         bamw==
+X-Gm-Message-State: ACrzQf3lgLajC0Ty3E90vnLuE8wJ93VbTDNvVNhM8RTq27bBiylRO8mR
+        pXvm4q6D0uszXRz6wIhhpPG5/DHPWpZNxG7+Zjo=
+X-Google-Smtp-Source: AMsMyM7bnOhLQ0FRAoq5I5fvpfy+AFBYNZS0HnBpN3hS9RcMyrJUC2DJ/kYe2R4HJFOuutvI1Tda6w==
+X-Received: by 2002:a17:906:8a41:b0:780:a367:db50 with SMTP id gx1-20020a1709068a4100b00780a367db50mr3763706ejc.118.1663375837515;
+        Fri, 16 Sep 2022 17:50:37 -0700 (PDT)
+Received: from localhost ([185.176.138.242])
+        by smtp.gmail.com with ESMTPSA id c26-20020a056402101a00b0044792480994sm14310975edu.68.2022.09.16.17.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 17:50:37 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 17:50:37 -0700 (PDT)
+X-Google-Original-Date: Fri, 16 Sep 2022 17:50:25 PDT (-0700)
+Subject:     Re: [GIT PULL] RISC-V Fixes for 6.0-rc6
+In-Reply-To: <CAHk-=wihdDOSVVi1gBYo+rcJ7dG6tvN7mEU=XLir8WiEdR1kQQ@mail.gmail.com>
+CC:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-725db1f2-5b60-44d5-8ed1-71f3e7cdd8a7@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 05:11:18PM -0700, Kees Cook wrote:
-> I don't like the idea of penalizing the _succeeding_ case, though, which
-> happens if we do the path walk twice. So, I went and refactoring the setup
-> order, moving the do_open_execat() up into alloc_bprm() instead of where
-> it was in bprm_exec(). The result makes it so it is, as you observed,
-> before the mm creation and generally expensive argument copying. The
-> difference to your patch seems to only be the allocation of the file
-> table entry, but avoids the double lookup, so I'm hoping the result is
-> actually even faster.
+On Fri, 16 Sep 2022 13:09:21 PDT (-0700), Linus Torvalds wrote:
+> On Fri, Sep 16, 2022 at 8:31 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> I have one merge conflict as a result of a treewide fix, I'm getting some odd
+>> output from just showing the merge (it's showing some of the fix too), but I
+>> think the merge itself is OK.  My fix is to keep the write lock
+>>
+>> -       mmap_read_lock(mm);
+>> ++      mmap_write_lock(mm);
+>>  +      ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
+>>  +                                  &masks);
+>> -       mmap_read_unlock(mm);
+>> ++      mmap_write_unlock(mm);
+>
+> Yes, thatr's the proper merge resolution.
+>
+> HOWEVER.
+>
+> Looking at the *callers* of this new __set_memory_mm(), this is all
+> completely bogus and broken.
+>
+> In particular, fix_kernel_mem_early() does that call under rcu_read_lock().
+>
+> You can't do that. Not with the read-lock, and not with the
+> write-lock. You simply cannot (and must not) block while in a
+> read-side critical section, and trying to take any sleeping lock -
+> whether for reading or for writing - is just completely wrong.
+>
+> So I'm not doing this pull. The merge resolution is trivial, but the
+> code is simply wrong.
 
-Thanks for giving this a try; I'd wondered how feasible it would be to
-just do one lookup.
-
-However, on the same test system with the same test setup, with your
-refactor it seems to go slower:
-fork/execvpe: 38087ns
-fork/execve:  33758ns
-
-For comparison, the previous numbers (which I re-confirmed):
-
-Without fast-path:
-fork/execvpe: 49876ns
-fork/execve:  32773ns
-
-With my original separate-lookup fast-path:
-fork/execvpe: 36890ns
-fork/execve:  31551ns
-
-
-I tried several runs of each, and I seem to get reasonably consistent
-results.
-
-My test program just creates a pipe once, then loops on
-clock_gettime/fork/execvpe/read, with the spawned child process doing
-clock_gettime/write/exit (in asm to minimize overhead). The test PATH is
-PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:. with
-the test program in the current directory.
-
-- Josh Triplett
+Sorry about that, it's pretty brain-dead.  I'd love to blame this one on 
+the lack of sleep over the past week or two, but I'm a bit too tired to 
+commit to that.  Either way I'll go sort it out, but not for this week 
+-- I don't think anything else was super critical, so it shouldn't be 
+that big of a problem.
