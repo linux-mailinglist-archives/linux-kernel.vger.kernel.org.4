@@ -2,102 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE16C5BBA78
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 22:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C0F5BBA84
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 23:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiIQUwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 16:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S229505AbiIQVB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 17:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiIQUwv (ORCPT
+        with ESMTP id S229492AbiIQVB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 16:52:51 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7292BB09
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:52:50 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id h3so21274915lja.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 13:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=yHYbw2bx/nsQBLFF3gJlg+vRlUz37DtKoW4ftjnCRHI=;
-        b=F9Yl9Rb1sN2NoY043+dcFsES0wSGA8iInyx5uWXE8N51DOd8Swq6RiXoADjjN/Wdzb
-         0bPXitifZ381T4FCePqy6DtXjn4Fu653xP7gVVveg4AYS2o1Qiuqvr6iL6+wXjbm0UqF
-         OPHO5mohjgp6vbW+upREeDYszsC2Qsor/PGBVPXGmz1ZnPE0mPoVSuxUzGfZFFnW/05f
-         6neW1s6mDyCPojbIsQAUhGP7JwTkM8rHR8axyyTNwFcVd80WBB1U5bL2tKXzDaIEDve7
-         J4zVxHrP9hiFnrHD+bMqbZYZEnO8O6Trp+7tOQaaHX70Xb29NQC3g0qbIKpSJ6eW1S/C
-         U9jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yHYbw2bx/nsQBLFF3gJlg+vRlUz37DtKoW4ftjnCRHI=;
-        b=lVhtS8s3rmodPEABTBoWs09wWC6g8czQgTtfA96EvNueDEX7/HPe/lVbgKH8Kg1uYS
-         ynkQLS0MtEZtcpyYnZteXpBtgmLe7Bh3jcATgF6tfR80ytCkllAybYEJ++M3ypkLRqK2
-         PnT7/BCbztfALXyq7nDuqOMIXAITCNuk6eP6YZoiRBpTDslOeiPFkC8KI6PKBlQBBh5V
-         Ha6aj7UmT/IUwOJG3SIQI0g5BWZYspYqwS1QmOZ6BgJhK8WAn958qGmDFNdGOfCvRkSq
-         1N10QNfcGnBmDN8ZubIQeiUgmucSMKMYnKeIwaRgMkvnGYOqpE9EZF7dj1AdtAG7PUUz
-         WhVw==
-X-Gm-Message-State: ACrzQf36inAa/VsgWtm70nlM0x0szL9hzWIQRZJ0RcSUdx9BdBvGBapx
-        OOTdZcAn63+5lMRI6IrHyFDkcAylU513h+lk1KU=
-X-Google-Smtp-Source: AMsMyM620DHynBQKh1j5HEAnp8rqTiSOGMBB7FMNdJk+U2O9rBXELmmw6BEVwOGvkkfJ2ixbUg66TONId979x5XXtW0=
-X-Received: by 2002:a2e:944c:0:b0:263:fe39:4a91 with SMTP id
- o12-20020a2e944c000000b00263fe394a91mr3212216ljh.311.1663447968480; Sat, 17
- Sep 2022 13:52:48 -0700 (PDT)
+        Sat, 17 Sep 2022 17:01:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512872BB09;
+        Sat, 17 Sep 2022 14:01:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A92F3B80C8D;
+        Sat, 17 Sep 2022 21:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF1EC433C1;
+        Sat, 17 Sep 2022 21:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663448513;
+        bh=+hT/9Aw0x7veybJewSaiOwhfsAK/8w4ZxgaUJx8BNH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FhZtrlYrgPwFk4gSbt201/xr4bdWoG4F9/XQGihZqJ5la9y7bGoUhfJCS2bC93j7Y
+         0XlMhNNbyTeEmgYS4NqPS6uukNGg9MIn0qkCKRfadrbm74vj0Gjc6smRUIdgKFFHxQ
+         vUfwuPLF0zazynTEThxw37YWyqgiJk6aFx4btObKgROMpDH5Ckg24qSbpau5EZ1Xz2
+         rZeAyRNQToJpjIFHY8P9pztxrJTEpG13nUQWBQdSd9VZVh8Yipcu17HGTxG/pXwm1F
+         kFqPwROGPmKOGavAcRDCcke3HO2MsU6nf+DwTAtTics/D92KXmxRO1C5d1y7QztHEP
+         by5g2nKszMjsg==
+Date:   Sat, 17 Sep 2022 23:01:48 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, krzk@kernel.org,
+        jarkko.nikula@linux.intel.com, robh@kernel.org,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v4 i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Message-ID: <YyY1vESf5JalT6GR@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, krzk@kernel.org,
+        jarkko.nikula@linux.intel.com, robh@kernel.org,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+References: <20220907161143.897289-1-tharunkumar.pasumarthi@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:280e:0:0:0:0 with HTTP; Sat, 17 Sep 2022 13:52:47
- -0700 (PDT)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <tracymedicinemed04@gmail.com>
-Date:   Sat, 17 Sep 2022 20:52:47 +0000
-Message-ID: <CACpKaVQHxJDYdyToWNyXm4r=GdTn77goRFAGFo+CNpYds1-EOQ@mail.gmail.com>
-Subject: From Ava Smith From United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:236 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5026]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [tracymedicinemed04[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tracymedicinemed04[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [avamedicinemed3[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eFVKGzIn+ZlvcRG0"
+Content-Disposition: inline
+In-Reply-To: <20220907161143.897289-1-tharunkumar.pasumarthi@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today
-My name is Dr Ava Smith,Am English and French
-I will share pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+
+--eFVKGzIn+ZlvcRG0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Wed, Sep 07, 2022 at 09:41:43PM +0530, Tharun Kumar P wrote:
+> Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
+> Industrial and Automotive applications. This switch has multiple
+> downstream ports. In one of the Switch's Downstream port, there
+> is a multifunction endpoint for peripherals which includes an I2C
+> host controller. The I2C function in the endpoint operates at 100KHz,
+> 400KHz and 1 MHz and has buffer depth of 128 bytes.
+> This patch provides the I2C controller driver for the I2C function
+> of the switch.
+>=20
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+
+Thank you for the driver and thanks to Andy for reviewing it this far.
+He is right, some nits are there which can be fixed later. But a few
+things I need to comment on:
+
+> +static u32 pci1xxxx_i2c_get_funcs(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_PROTOCOL_MANGLING |
+> +		I2C_FUNC_SMBUS_BLOCK_PROC_CALL |
+> +		I2C_FUNC_SMBUS_READ_BYTE | I2C_FUNC_SMBUS_WRITE_BYTE |
+> +		I2C_FUNC_SMBUS_READ_BYTE_DATA |
+> +		I2C_FUNC_SMBUS_WRITE_BYTE_DATA |
+> +		I2C_FUNC_SMBUS_READ_WORD_DATA |
+> +		I2C_FUNC_SMBUS_WRITE_WORD_DATA |
+> +		I2C_FUNC_SMBUS_PROC_CALL | I2C_FUNC_SMBUS_READ_BLOCK_DATA |
+> +		I2C_FUNC_SMBUS_WRITE_BLOCK_DATA;
+> +}
+
+If you can't do I2C_FUNC_SMBUS_QUICK, then you need an i2c_adapter_quirk
+struct saying that your HW cannot do 0 byte length transfers.
+
+Also, a lot can be simplified here, e.g. I2C_FUNC_SMBUS_BYTE covers both
+cases, read and write.
+
+=2E..
+
+> +	/* Register the isr. We are not using any isr flags here. */
+
+Why not use then simply 0 instead of a define and a comment?
+
+> +	ret =3D devm_request_irq(dev, pci_irq_vector(pdev, 0), pci1xxxx_i2c_isr,
+> +			       PCI1XXXX_IRQ_FLAGS, pci_name(pdev), i2c);
+> +	if (ret)
+> +		return ret;
+> +
+> +	i2c->adap =3D pci1xxxx_i2c_ops;
+> +	i2c->adap.class =3D I2C_CLASS_SPD;
+
+I need to make sure: do you intentionally want autoprobing for SPD? I
+ask because it could be needed but it costs boottime when not needed.
+And changing the class once exposed is troublesome.
+
+Happy hacking,
+
+   Wolfram
+
+
+--eFVKGzIn+ZlvcRG0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMmNbgACgkQFA3kzBSg
+KbbCTRAAmBaQg9qrdV42WcrrillciI53u8lW6a8RKn8zH0lhN0GToeAy+VcQ9pr6
+8cXxYtqDt2FSsrgWdabCm7hMTOQxsKbRV0xmFBpeOuBKgNnQvHMnr4i424eDbdw4
+P/cf5a3SRTPvT1wA85ihPFbszfNtqsElgkPETnvLGP48qw0xgB+TrBqji8TMtQ5L
+eFD4AolHXEckEajcJapbHHaL4lCPejTEEMHTFWzy7welGuARBD9fdIKvsQMM/KF9
+2Q4ohinZjbbfdWi8JOirFfOtklfb2ywmtUUFdLQd4MCsAyKv4cyFkdbq4Q+UmMBe
+N/VuOZyOrqdCFRmedRMEqCdvCWelps432NbywplvdewTOpm9rVgcHCAmKAyckapC
+/QMMTNtEvMrmYJL6tuHZJVCG1peDwr7kfAOgD1rl7WN/csqePl2aiTDdmIn8B5xc
+cu+ogGlECoiV2PF1c9btduW6St37xRFgokZ5s7IS6CKjbFtYsFfBvq3JrJKTF8Be
+zW+7bE7t271ly2eGlH3mwvPcrfdc6Z9tKvaKlH41luE90FhUGEGgl3Mp1QjhR6ez
+i1Kl3FdHSA29G+N8HWg1DFomp2+d1kGNKosoRyibbTNzcjpJwNTdkyb3HqTB+tl+
+U6kUeXuqS3nO1kqFWJqoxCgawsIsJNYsDYP0O4Y3nnB5V4H29Eg=
+=e4fx
+-----END PGP SIGNATURE-----
+
+--eFVKGzIn+ZlvcRG0--
