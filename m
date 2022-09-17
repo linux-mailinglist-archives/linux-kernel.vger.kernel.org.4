@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6095BB9D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04B45BB9D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiIQSHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 14:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S229533AbiIQSMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 14:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIQSHs (ORCPT
+        with ESMTP id S229457AbiIQSMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 14:07:48 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77302CDEA
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=TrXdmARROpbIW6oroxImnZQlUftF
-        m/1MW+Ti4qNIvfA=; b=YNRuBxbgALMjnG77t/lY1rMIHlpnmDaYkS42FOaHUwJ1
-        Davnav4XpbTdLYrgcCbFa9sKvP5THkqumHoufTbFRbQEuZTo/Ut50PeZJU706s3v
-        G5uM6/sTY3iPnvFUsF9Lf1zoRlQ+2j8YPmYp/QVlTfEnZXC9V0rBXSXUS7GWfVU=
-Received: (qmail 3854405 invoked from network); 17 Sep 2022 20:07:38 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Sep 2022 20:07:38 +0200
-X-UD-Smtp-Session: l3s3148p1@3v2DWuPoDNW5aIoe
-Date:   Sat, 17 Sep 2022 20:07:37 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: [PATCH v3 1/9] i2c-mlxbf.c: Fix frequency calculation
-Message-ID: <YyYM6RoxDD+k1kVN@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
-References: <20220908173544.32615-1-asmaa@nvidia.com>
- <20220908173544.32615-2-asmaa@nvidia.com>
+        Sat, 17 Sep 2022 14:12:09 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3E22B242
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id u132so24246005pfc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=TUmHLR+GSgYu7dtcYzNGTZciju4TnnNcKZxPhqTgdFY=;
+        b=md7v8eBkL7OjZ0GnNG6vOgsqZFHpqcfwfU6u/r/GREXGiQZL/vdshx5bNycETrDFH3
+         CSUUidGIIi4kGjMbC5KCBa6xQNWNk61qTuTBqKkhhpsEULz/coO4dG8P0nkjuvw2rEGy
+         x3UnzKbzHGo5taV5n90cGqrNiH0Y4UBAvNfG1gWWWEGV68LQLnNidLevw0BtQ26rXaxs
+         WyMGpZ4Pl5kUPb22yeBzlxcCROnzFXmji0UDwFcVEDqSuoyFxCNN5dKiQGl5HstXoLPO
+         nsyDAGMt1sJip7Pc9hAQRzhGbGzgKS6v3iE+3J8XF9yufK708gqrAFXsryFI/rmFkwwa
+         2lEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=TUmHLR+GSgYu7dtcYzNGTZciju4TnnNcKZxPhqTgdFY=;
+        b=P0lwcRW/Y+9pyTfCpzp8kB3PWApaC82/rqe0KdAFsjmHsb+UWKnWeysQOLwA28oKKd
+         tp8KauXOKwvlNMdbEuXudpEfliNN5VUMVQ4u6Ep+3kLdcnNFYpOJQG0/xJQyhOJtMTFJ
+         Sio9Y8oRV5inmf3ve6XcPo/jR8n9hwWPLqhFRWR4xrLpeBI+/R5+4ZlRNu5tmnNM4mcT
+         l6rIB/tadqTcKHGCLJkQjkuUNPktQUuuKNlND5yQ/ybFdulTCuxyoqivg8v+4E76GRdD
+         0t3s1I1ckBPOEf9qJRq2LpWQ/+zxiQFKS/J3GfPHFlCYpZ6isovTG+QWsLmj8Otbo4N7
+         M4Zw==
+X-Gm-Message-State: ACrzQf1Grg77pGm+lEdx7JnZErL+4ru/AMQbRhXNbey7TsxWSM+fwi5Q
+        hq45Jbz87LBsuRxNgIJtgaI=
+X-Google-Smtp-Source: AMsMyM4ocTrC9bd47eOe59Y7u5uoUkYvEuMGz/z2Inc1IiIJcMIuSsP08orLRE86aAch7141q+kb0g==
+X-Received: by 2002:a63:5605:0:b0:438:ac3f:49cb with SMTP id k5-20020a635605000000b00438ac3f49cbmr9357799pgb.222.1663438327218;
+        Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id m8-20020a62a208000000b005386b58c8a3sm16632409pff.100.2022.09.17.11.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 11:12:06 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH 1/2] staging: rtl8723bs: Fix coding style issue in block comment
+Date:   Sun, 18 Sep 2022 03:11:30 +0900
+Message-Id: <20220917181130.3237159-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qSYiDqG8m2LPL1qT"
-Content-Disposition: inline
-In-Reply-To: <20220908173544.32615-2-asmaa@nvidia.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch removes the following warning generated by checkpatch.pl
 
---qSYiDqG8m2LPL1qT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  WARNING: Block comments use * on subsequent lines
+  #206: FILE: rtw_recv.c:206:
+  +/*
+  +signed int     rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
 
-On Thu, Sep 08, 2022 at 01:35:36PM -0400, Asmaa Mnebhi wrote:
-> The i2c-mlxbf.c driver is currently broken because there is a bug
-> in the calculation of the frequency. core_f, core_r and core_od
-> are components read from hardware registers and are used to
-> compute the frequency used to compute different timing parameters.
-> The shifting mechanism used to get core_f, core_r and core_od is
-> wrong. Use FIELD_GET to mask and shift the bitfields properly.
->=20
-> Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueFi=
-eld SoC)
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+  WARNING: Block comments use * on subsequent lines
+  #216: FILE: rtw_recv.c:216:
+  +/*
+  +caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
 
-Fails to build:
+Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+---
+ drivers/staging/rtl8723bs/core/rtw_recv.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-  CC      drivers/i2c/busses/i2c-mlxbf.o
-drivers/i2c/busses/i2c-mlxbf.c:2166:35: error: =E2=80=98mlxbf_calculate_fre=
-q_from_tyu=E2=80=99 undeclared here (not in a function); did you mean =E2=
-=80=98mlxbf_i2c_calculate_freq_from_tyu=E2=80=99?
- 2166 |                 .calculate_freq =3D mlxbf_calculate_freq_from_tyu
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                   mlxbf_i2c_calculate_freq_from_tyu
-drivers/i2c/busses/i2c-mlxbf.c:2173:35: error: =E2=80=98mlxbf_calculate_fre=
-q_from_yu=E2=80=99 undeclared here (not in a function); did you mean =E2=80=
-=98mlxbf_i2c_calculate_freq_from_yu=E2=80=99?
- 2173 |                 .calculate_freq =3D mlxbf_calculate_freq_from_yu
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                   mlxbf_i2c_calculate_freq_from_yu
-drivers/i2c/busses/i2c-mlxbf.c:1433:12: error: =E2=80=98mlxbf_i2c_calculate=
-_freq_from_yu=E2=80=99 defined but not used [-Werror=3Dunused-function]
- 1433 | static u64 mlxbf_i2c_calculate_freq_from_yu(struct mlxbf_i2c_resour=
-ce *corepll_res)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/i2c/busses/i2c-mlxbf.c:1403:12: error: =E2=80=98mlxbf_i2c_calculate=
-_freq_from_tyu=E2=80=99 defined but not used [-Werror=3Dunused-function]
- 1403 | static u64 mlxbf_i2c_calculate_freq_from_tyu(struct mlxbf_i2c_resou=
-rce *corepll_res)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
+index d8d394b67eeb..ad6fb6c3d1f0 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_recv.c
++++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
+@@ -203,22 +203,22 @@ signed int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *q
+ }
+ 
+ /*
+-signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+-{
+-	return rtw_free_recvframe(precvframe, queue);
+-}
+-*/
++ * signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
++ * {
++ * 	return rtw_free_recvframe(precvframe, queue);
++ * }
++ */
+ 
+ 
+ 
+ 
+ /*
+-caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+-pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
+-
+-using spinlock to protect
+-
+-*/
++ * caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
++ * pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
++ *
++ * using spinlock to protect
++ *
++ */
+ 
+ void rtw_free_recvframe_queue(struct __queue *pframequeue,  struct __queue *pfree_recv_queue)
+ {
+-- 
+2.34.1
 
-
---qSYiDqG8m2LPL1qT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMmDOQACgkQFA3kzBSg
-KbZmehAAoun+4b6d7KjYHR4r+R0Spq92JW/bTWIBGkNK8voMfz6RmJ+xIKqDMeHY
-k7uJOleqO3F0fsVvv8u0hhqq4GcNhrzabXYH3uZQu8rxGHsbbY+aWvO7WqTvYnsU
-2eSXc+v8AjTUNoIahKOEgyh82oWCj+RgL2TpR9wDd+IXykrEpvnXxJu75qFihmNT
-AnZXEv+xfeRMv4AL5JwSRlaLnWAADydXvYWvqlv8jhejOaaOXWdsVgeXtmMcmbBc
-8lbu5tu5gFvUhokMNW7I/rT5BfyzLiCO400DzMShMTVHQ2lG86nVyvB6m1DM7eqr
-fwnAjfFhO9eE+5vWaOzZZPOi+tV945vjdbf2YOn5VHhxpP3E4fsBvSslHdyLJy3h
-d8iMDnZYjMMTwzdnSgZq5hLFYZcHaM4B9ABFaajbisxFggPyJLVbz1vqs9zpr0Z+
-eFQDVxJHGtdcVVJPWcSLOFWvpGX7XFKAOgESbZUNHhKbtbLgZ3B7+21Mgx/FulJi
-SuZb3/+2bm/U5/nolaOAq4JOSUpX9SuqqoN/8Iwv1mwGoeg/6q2BRcv4KzrL5q5N
-EeJ3iVVcsq0upNcrA+duoLuz4gkoipIJNKKMWJkPTKh7w8bYyyrzwWH2452ehA/P
-1rOe6dtehNeoZ/ZMZfHNbzKwSisX2RyEDNwV5pFmASaaJmB5oME=
-=AYO3
------END PGP SIGNATURE-----
-
---qSYiDqG8m2LPL1qT--
