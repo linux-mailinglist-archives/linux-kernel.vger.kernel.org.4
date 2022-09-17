@@ -2,292 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536C85BBAE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E0A5BBAE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 01:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiIQW7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 18:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        id S229567AbiIQXGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 19:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIQW67 (ORCPT
+        with ESMTP id S229483AbiIQXGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 18:58:59 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF28D2C12C
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:58:57 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id k2so26348702vsk.8
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fQCRqwRwSbH5iwt/zl8RAPBM4K0Cy36tb7dQhI6/CV8=;
-        b=WbAKpcTH79LH4dLkR9XbQgQXap0ap2tJlFozCDO9hEbAOwmV5EgVXOIycau5GNpoq4
-         HA2iK8+1KOCdKN3TWWqJTfIa6p7KVDzdekyr0fEwVBGbNBZYl1brt0gnU3AODSt+dHzv
-         qRzPnb6Yw9icblmY7DQgzD0IUQCBeze5E/pqVgmxDVVfwNBCpt9kOcWsuYR4CLJthoFn
-         K08rY3TWdBnubw+4Lm5DmGFxA90LaSOzbwxgYAqD63YMGVysMtl0/0D+o8NyXZbLlw6R
-         +JNdVgDFnWto5flXF8FPgMSlnHZCM+J+cSebS2B0eJB0l6lBSZY7fVZkNOhwPXYegOQh
-         Ap9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fQCRqwRwSbH5iwt/zl8RAPBM4K0Cy36tb7dQhI6/CV8=;
-        b=M5jqoD4T/YXrACXfgNqBKcawdxw/ENLoOg85duvSAKpWwblqVbjd80qx8WxaLY0ARk
-         wThhc8JOwAuYr3JE92AIY4Bx505AAoB4QkZzA2srT7+oJKDJZY/uIurKqW/Q+m5UYgKB
-         Z57YywykI94v+DZFadqrqiXeRhw7amjADCP29zK5lr5tgNr/zX2QOTCiw3uWVXpLzsVE
-         aKoTw8lvFRmUH+96nHuuRXQdftrxM+rCzyIklBRIg94OvE00aRrLZ1CiICgF49IOJ4kC
-         QVg4c8vSZ8M9xFWFqVm95eNlpTDLWD2bpTZHJIAalkMJYQMj84WvPmqQvLGQFbpKlm7W
-         4orQ==
-X-Gm-Message-State: ACrzQf2E/2fmkkamK+c8Ll/N0IcShRRJXUEUZbxjgBL2reTaOoQB0aEA
-        1ndO6HaWAuIBtUD+o7HcjZgM717FWb0Cvn7M+FSQpg==
-X-Google-Smtp-Source: AMsMyM4wvjcKmFtu6ZSCW2m9MyjJq1q1Q0jMjMoMNCsK9rlv90y8TVMIoQv9crgEyph1x5NkbIxDT9LE149uF06dk+c=
-X-Received: by 2002:a05:6102:3d82:b0:398:b79e:dda6 with SMTP id
- h2-20020a0561023d8200b00398b79edda6mr4333493vsv.39.1663455536940; Sat, 17 Sep
- 2022 15:58:56 -0700 (PDT)
+        Sat, 17 Sep 2022 19:06:11 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60EB25588;
+        Sat, 17 Sep 2022 16:06:09 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60FA4415;
+        Sun, 18 Sep 2022 01:06:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663455966;
+        bh=RrQUrtNeS7OUE/zc5hdTRgV7WSdRcO52HUFIAEn7eP4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ub12U5Ta94VP3y1EllAetDZUdtW4djfxmlvohJTJdBbhYLYmIyrBIp+4RkvxlnpqE
+         S+MBdRX/B3Io61OWPrtTkXyf7Oq2xkYqlWpmBNF6LM5tmjpVxvRkZJ0gfit9kpa3tg
+         lzupI3/1wz+tkI+6TgcvFlT2qBOM4nXZOlz8+k0E=
+Date:   Sun, 18 Sep 2022 02:05:53 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2] media: dt-bindings: ov5645: Convert OV5645 binding to
+ a schema
+Message-ID: <YyZS0VeXNki3CDSv@pendragon.ideasonboard.com>
+References: <20220916122627.28461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20220915164411.2496380-1-kajetan.puchalski@arm.com> <20220915164411.2496380-2-kajetan.puchalski@arm.com>
-In-Reply-To: <20220915164411.2496380-2-kajetan.puchalski@arm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Sat, 17 Sep 2022 15:58:47 -0700
-Message-ID: <CAAYoRsV2_gmbd84GCfAZk2ueRDPXczNgVAaqX7QbLf2Ljp=fBg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] cpuidle: teo: Add optional util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220916122627.28461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 9:45 AM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> Modern interactive systems, such as recent Android phones, tend to have
-> power efficient shallow idle states. Selecting deeper idle states on a
-> device while a latency-sensitive workload is running can adversely impact
-> performance due to increased latency. Additionally, if the CPU wakes up
-> from a deeper sleep before its target residency as is often the case, it
-> results in a waste of energy on top of that.
->
-> This patch extends the TEO governor with an optional mechanism adding
-> util-awareness, effectively providing a way for the governor to switch
-> between only selecting the shallowest idle state when the cpu is being
-> utilized over a certain threshold and trying to select the deepest possible
-> state using TEO's metrics when the cpu is not being utilized. This is now
-> possible since the CPU utilization is exported from the scheduler with the
-> sched_cpu_util function and already used e.g. in the thermal governor IPA.
->
-> This can provide drastically decreased latency and performance benefits in
-> certain types of mobile workloads that are sensitive to latency,
-> such as Geekbench 5.
->
-> Signed-off-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+Hi Prabhakar,
+
+Thank you for the patch.
+
+On Fri, Sep 16, 2022 at 01:26:27PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Convert the simple OV5645 Device Tree binding to json-schema.
+> 
+> The previous binding marked the below properties as required which was a
+> driver requirement and not the device requirement so just drop them from
+> the required list during the conversion.
+> - clock-names
+
+Should we then drop clock-names completely, as there's a single clock
+and there will never be more ?
+
+> - clock-frequency
+> - vdda-supply
+> - vddd-supply
+> - vdddo-supply
+
+The power supplies should remain mandatory, the sensor can't operate
+without them.
+
+> - enable-gpios
+> - reset-gpios
+
+These can become optional indeed as they can be hardwired.
+
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  drivers/cpuidle/Kconfig         | 12 +++++
->  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
->  2 files changed, 98 insertions(+)
->
-> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> index ff71dd662880..6b66ee88a2b2 100644
-> --- a/drivers/cpuidle/Kconfig
-> +++ b/drivers/cpuidle/Kconfig
-> @@ -33,6 +33,18 @@ config CPU_IDLE_GOV_TEO
->           Some workloads benefit from using it and it generally should be safe
->           to use.  Say Y here if you are not happy with the alternatives.
->
-> +config CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +       bool "Util-awareness mechanism for TEO"
-> +       depends on CPU_IDLE_GOV_TEO
-> +       help
-> +         Util-awareness mechanism for the TEO governor. With this enabled,
-> +         the governor will choose the shallowest available state when the
-> +         CPU's average util is above a certain threshold and default to
-> +         using the metrics-based approach when it's not.
+> v1->v2
+> * Dropped ref to video-interface-devices.yaml#
+> * Dropped driver specific required items from the list
+> * Updated commit message
+> * Dropped clock-lanes and bus-type from the port and example node
+> * Marked data-lanes as required in port node
+> ---
+>  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 ---------
+>  .../bindings/media/i2c/ovti,ov5645.yaml       | 105 ++++++++++++++++++
+>  2 files changed, 105 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> deleted file mode 100644
+> index 72ad992f77be..000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> +++ /dev/null
+> @@ -1,54 +0,0 @@
+> -* Omnivision 1/4-Inch 5Mp CMOS Digital Image Sensor
+> -
+> -The Omnivision OV5645 is a 1/4-Inch CMOS active pixel digital image sensor with
+> -an active array size of 2592H x 1944V. It is programmable through a serial I2C
+> -interface.
+> -
+> -Required Properties:
+> -- compatible: Value should be "ovti,ov5645".
+> -- clocks: Reference to the xclk clock.
+> -- clock-names: Should be "xclk".
+> -- clock-frequency: Frequency of the xclk clock.
+> -- enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
+> -  to the hardware pin PWDNB which is physically active low.
+> -- reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
+> -  the hardware pin RESETB.
+> -- vdddo-supply: Chip digital IO regulator.
+> -- vdda-supply: Chip analog regulator.
+> -- vddd-supply: Chip digital core regulator.
+> -
+> -The device node must contain one 'port' child node for its digital output
+> -video port, in accordance with the video interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -
+> -Example:
+> -
+> -	&i2c1 {
+> -		...
+> -
+> -		ov5645: ov5645@3c {
+> -			compatible = "ovti,ov5645";
+> -			reg = <0x3c>;
+> -
+> -			enable-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+> -			reset-gpios = <&gpio5 20 GPIO_ACTIVE_LOW>;
+> -			pinctrl-names = "default";
+> -			pinctrl-0 = <&camera_rear_default>;
+> -
+> -			clocks = <&clks 200>;
+> -			clock-names = "xclk";
+> -			clock-frequency = <24000000>;
+> -
+> -			vdddo-supply = <&camera_dovdd_1v8>;
+> -			vdda-supply = <&camera_avdd_2v8>;
+> -			vddd-supply = <&camera_dvdd_1v2>;
+> -
+> -			port {
+> -				ov5645_ep: endpoint {
+> -					clock-lanes = <1>;
+> -					data-lanes = <0 2>;
+> -					remote-endpoint = <&csi0_ep>;
+> -				};
+> -			};
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> new file mode 100644
+> index 000000000000..22e685729bcf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5645.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +         Some latency-sensitive workloads on interactive devices can benefit
-> +         from using it.
+> +title: OmniVision OV5645 Image Sensor Device Tree Bindings
 > +
->  config CPU_IDLE_GOV_HALTPOLL
->         bool "Haltpoll governor (for virtualized systems)"
->         depends on KVM_GUEST
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index d9262db79cae..fd5b2eb750be 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -2,8 +2,13 @@
->  /*
->   * Timer events oriented CPU idle governor
->   *
-> + * TEO governor:
->   * Copyright (C) 2018 - 2021 Intel Corporation
->   * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> + *
-> + * Util-awareness mechanism:
-> + * Copyright (C) 2022 Arm Ltd.
-> + * Author: Kajetan Puchalski <kajetan.puchalski@arm.com>
->   */
->
->  /**
-> @@ -99,14 +104,48 @@
->   *      select the given idle state instead of the candidate one.
->   *
->   * 3. By default, select the candidate state.
-> + *
-> + * Util-awareness mechanism:
-> + *
-> + * The idea behind the util-awareness extension is that there are two distinct
-> + * scenarios for the CPU which should result in two different approaches to idle
-> + * state selection - utilized and not utilized.
-> + *
-> + * In this case, 'utilized' means that the average runqueue util of the CPU is
-> + * above a certain threshold.
-> + *
-> + * When the CPU is utilized while going into idle, more likely than not it will
-> + * be woken up to do more work soon and so the shallowest idle state should be
-> + * selected to minimise latency and maximise performance. When the CPU is not
-> + * being utilized, the usual metrics-based approach to selecting the deepest
-> + * available idle state should be preferred to take advantage of the power
-> + * saving.
-> + *
-> + * In order to achieve this, the governor uses a utilization threshold.
-> + * The threshold is computed per-cpu as a percentage of the CPU's capacity
-> + * by bit shifting the capacity value. Based on testing, the shift of 6 (~1.56%)
-> + * seems to be getting the best results.
-> + *
-> + * Before selecting the next idle state, the governor compares the current CPU
-> + * util to the precomputed util threhsold. If it's below, it defaults to the
-
-threshold
-
-> + * TEO metrics mechanism. If it's above, it simply selects the shallowest
-> + * enabled idle state.
->   */
->
->  #include <linux/cpuidle.h>
->  #include <linux/jiffies.h>
->  #include <linux/kernel.h>
-> +#include <linux/sched.h>
-
-I think it also needs this line:
-
-+#include <linux/sched/topology.h>
-
-At least for me, it didn't compile without it.
-
->  #include <linux/sched/clock.h>
->  #include <linux/tick.h>
->
-> +/*
-> + * The number of bits to shift the cpu's capacity by in order to determine
-> + * the utilized threshold
-> + */
-> +#define UTIL_THRESHOLD_SHIFT 6
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov5645
 > +
->  /*
->   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
->   * is used for decreasing metrics on a regular basis.
-> @@ -140,6 +179,8 @@ struct teo_bin {
->   * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: XCLK Input Clock
+> +
+> +  clock-names:
+> +    const: xclk
+> +
+> +  clock-frequency:
+> +    description: Frequency of the xclk clock in Hz.
+> +
+> +  vdda-supply:
+> +    description: Analog voltage supply, 2.8 volts
+> +
+> +  vddd-supply:
+> +    description: Digital core voltage supply, 1.5 volts
+> +
+> +  vdddo-supply:
+> +    description: Digital I/O voltage supply, 1.8 volts
+> +
+> +  enable-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the PWDNB pin, if any.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the RESETB pin, if any.
+> +
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          data-lanes:
+> +            minItems: 1
+> +            maxItems: 2
+> +            items:
+> +              enum: [1, 2]
+> +
+> +        required:
+> +          - data-lanes
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/gpio/gpio.h>
+> +
+> +      i2c {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          camera@3c {
+> +              compatible = "ovti,ov5645";
+> +              pinctrl-names = "default";
+> +              pinctrl-0 = <&pinctrl_ov5645>;
+> +              reg = <0x3c>;
+> +              clocks = <&clks 1>;
+> +              clock-names = "xclk";
+> +              clock-frequency = <24000000>;
+> +              vdddo-supply = <&ov5645_vdddo_1v8>; /* 1.8v */
+> +              vdda-supply = <&ov5645_vdda_2v8>;  /* 2.8v */
+> +              vddd-supply = <&ov5645_vddd_1v5>;  /* 1.5v */
 
-metrics
+I'd drop the comments as the voltages are listed in the label name. Up
+to you.
 
->   * @next_recent_idx: Index of the next @recent_idx entry to update.
->   * @recent_idx: Indices of bins corresponding to recent "intercepts".
-> + * @util_threshold: Threshold above which the CPU is considered utilized
-> + * @utilized: Whether the last sleep on the CPU happened while utilized
->   */
->  struct teo_cpu {
->         s64 time_span_ns;
-> @@ -148,10 +189,28 @@ struct teo_cpu {
->         unsigned int total;
->         int next_recent_idx;
->         int recent_idx[NR_RECENT];
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +       unsigned long util_threshold;
-> +       bool utilized;
-> +#endif
->  };
->
->  static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
->
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +/**
-> + * teo_get_util - Update the CPU utilized status
-> + * @dev: Target CPU
-> + * @cpu_data: Governor CPU data for the target CPU
-> + */
-> +static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-> +{
-> +       unsigned long util = sched_cpu_util(dev->cpu);
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +              enable-gpios = <&gpio1 19 GPIO_ACTIVE_HIGH>;
+> +              reset-gpios = <&gpio1 20 GPIO_ACTIVE_LOW>;
 > +
-> +       cpu_data->utilized = util > cpu_data->util_threshold;
-> +}
-> +#endif
-> +
->  /**
->   * teo_update - Update CPU metrics after wakeup.
->   * @drv: cpuidle driver containing state data.
-> @@ -301,7 +360,13 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         int i;
->
->         if (dev->last_state_idx >= 0) {
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +               /* don't update metrics if the cpu was utilized during the last sleep */
-> +               if (!cpu_data->utilized)
-> +                       teo_update(drv, dev);
-> +#else
->                 teo_update(drv, dev);
-> +#endif
->                 dev->last_state_idx = -1;
->         }
->
-> @@ -321,6 +386,21 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->                         goto end;
->         }
->
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +       teo_get_util(dev, cpu_data);
-> +       /* if the cpu is being utilized, choose the shallowest state and exit */
-> +       if (cpu_data->utilized) {
-> +               for (i = 0; i < drv->state_count; ++i) {
-> +                       if (dev->states_usage[i].disable)
-> +                               continue;
-> +                       break;
-> +               }
-> +
-> +               idx = i;
-> +               goto end;
-> +       }
-> +#endif
-> +
->         /*
->          * Find the deepest idle state whose target residency does not exceed
->          * the current sleep length and the deepest idle state not deeper than
-> @@ -508,9 +588,15 @@ static int teo_enable_device(struct cpuidle_driver *drv,
->                              struct cpuidle_device *dev)
->  {
->         struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +       unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-> +#endif
->         int i;
->
->         memset(cpu_data, 0, sizeof(*cpu_data));
-> +#ifdef CONFIG_CPU_IDLE_GOV_TEO_UTIL_AWARE
-> +       cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> +#endif
->
->         for (i = 0; i < NR_RECENT; i++)
->                 cpu_data->recent_idx[i] = -1;
-> --
-> 2.37.1
->
+> +              port {
+> +                  ov5645_ep: endpoint {
+> +                      remote-endpoint = <&csi0_ep>;
+> +                      data-lanes = <1 2>;
+> +                  };
+> +              };
+> +          };
+> +      };
+> +...
+
+-- 
+Regards,
+
+Laurent Pinchart
