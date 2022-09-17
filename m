@@ -2,182 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1835BB9A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 19:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AD05BB99F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 18:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIQRCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 13:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S229593AbiIQQ5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 12:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIQRCg (ORCPT
+        with ESMTP id S229552AbiIQQ5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 13:02:36 -0400
-X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Sep 2022 10:02:34 PDT
-Received: from ach1ajh125.fra1.oracleemaildelivery.com (ach1ajh125.fra1.oracleemaildelivery.com [138.1.108.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB232CDCD
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 10:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-fra1-20220101;
- d=augustwikerfors.se;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=7ObGGwvkwsbVdVjWBkq3Mel0hVpY0UzSeJwTyf1SSjI=;
- b=OagMmVSVqflvFzEKxeU7ynuwVVJFBl84OLfEsJtSxIp4SU8vPfT0u+ReiakmSOPyVhbfAWFLAl0a
-   kC1PJoCYd5kF/y4vvWS6zTzEbkMy0bwujV6ipHftMaArij1YSiMh0ZcVRuG75FquqB2gaiE+SDGv
-   j37n7zJcfYHD/h8HXTqpD8ns4p4s6JP1FdtgLPzPAt+QvWe3t8GC6AMpon4CQk4uYaKNAKL8rMKo
-   HeMQ13XkxWoR6btLC8vILUxQKsbEErCib+E9MOtb2RtrCREYHxdOsh9zS02l6us5b5LG4J7MOMv1
-   nwd2e4vamSPlU08B3b9POvUn3eMapvoPhBehfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-fra-20191115;
- d=fra1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=7ObGGwvkwsbVdVjWBkq3Mel0hVpY0UzSeJwTyf1SSjI=;
- b=MluGiM7iULl1rhbezZi4yTmYN+8DtCDhbMA39YTP1r4FQlt3xhWZUink9X9mu9V4YEbVk3Lqd1sc
-   9z/X/8CbACet5HxH7sHWHEvv8zON8g+oSZBkpL3iUKJ/POtrGPXfZ5xFyOHWkDxsYCWS+qSTdSgW
-   5CwE31B0aP/A9FkTolFq49GmElzXEeXL5TVdkSrSLDg7yRnm95QIHlx8V+8kUMeKb9d/WCY/T3xi
-   tRyBXRbGeTqcjMhTxVay/zUDNjOBZRRdV+5g5WmUiqHwppCzg7/8kHmOYw+tOsmsYBrGLH5dyV76
-   pDidXGpxRwXN4OD3ANiV3UpPjKaxwoihzpbdGw==
-Received: by omta-ad1-fd3-101-eu-frankfurt-1.omtaad1.vcndpfra.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20220826 64bit (built Aug 26
- 2022))
- with ESMTPS id <0RID00PX05RW4QB0@omta-ad1-fd3-101-eu-frankfurt-1.omtaad1.vcndpfra.oraclevcn.com>
- for linux-kernel@vger.kernel.org; Sat, 17 Sep 2022 16:57:32 +0000 (GMT)
-Message-id: <c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se>
-Date:   Sat, 17 Sep 2022 18:57:28 +0200
-MIME-version: 1.0
-From:   August Wikerfors <git@augustwikerfors.se>
-Subject: [REGRESSION] Graphical issues on Lenovo Yoga 7 14ARB7 laptop since
- v6.0-rc1 (bisected)
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-Content-language: en-US
-Content-type: text/plain; charset=UTF-8; format=flowed
-Content-transfer-encoding: 7bit
-Reporting-Meta: AAF2mgUR8cFnMjGh0lEzMZlmhqwUNFC3wJ4Q40oSCReejZnSNcQxRaC+2EfUW+cL
- Gf0CcJ1iAZGRcDf0h8T7Sv6JdreHdNALvuBlCJalIgI6Xy+CjBBaGwdfKNAuKxja
- 1gglgT+O+BnEuaN9rv4esPf211rsCY3CC9dl/QRWj6rgaOU7iZyijE2c8M8jlCRO
- eRVX+gVBzS4AyXqwyPmx7tzOtwbJlxgdsWxSRYEVVNCMcvTJOgAz0gmRGU6gkCAi
- WOzYvUIprxyuChgkvxYCDunvB5lI62Iu1hhhYFVw+2q2B/yXoRKwYJBtXoou4mbl
- 9fM8op9uNsb/aYSRzLWtUCooR0kRoPzVgeiadCgh1tgjyZJfZHOwahqWSt6bpC2E
- SjcD7npGynCGOk+SL+Htz1sy6NWA/9u3ZkQvk+UDgUpUqnSEb93Ge/ifroXaUmoF jjfWMoc=
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sat, 17 Sep 2022 12:57:40 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CF2E69F
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:57:38 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id x27so7114319lfu.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OW5cyFrIeNWs5Ezch0QGBm4fKKcV3jLO9wWt1aINiZI=;
+        b=No9Noj/xjJC54ku/mz2dTEi6t2bCFDreezHwFeM57qECzGH+xP48vI8EyPI39aK2nU
+         kb6/S+dOKWYFK5om5zoV2nDcVPntA7jHtj2XEx67JROVEg9gsrlmHdrCwYJtANHQyA7A
+         hCJBF+/+jhartmbN4u02MQXVDU/p9qTGn7gwTCrV1w1Wp7Oj7OX7MgLCvIiVFxDpWj7G
+         roJJiKtTjdxaCYV6Sio4Zn4ngdMh49AYZsWV/NkgWgGwwJ8Re4iCpYRs8bAbBS69LlN8
+         l+Oqzc8faSPdvhHgDiFXyKRlfwM9p/gkDpjjGkROeU1Cmf3BM6Ro2er3Qjh2MJoXwJGN
+         Okow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OW5cyFrIeNWs5Ezch0QGBm4fKKcV3jLO9wWt1aINiZI=;
+        b=Jwzhur/UuQZzMiqXeRlMa0kIoS0HIDcgWBMzw7aHFSErvvlbRbGmV+Qc0Enr4/Quh/
+         nkKKIBB91k/7nSisIcNL3UFYVakrMPqrjtg9tc6L2vRHQpbqQqU+LWwcyqWR+59KloFa
+         /OixL+pY2pfsxFkQRUSzcm9/az9zoDfpkZMtjYkI47ORBmlBGGwzv9W6CwZ4vWdrt2FL
+         ej+VzXUPOX48MkP+Fpk7dJkz0RWr64vqouqxziwye1c1MH1WjIp0fYTOIlOicMrs50jy
+         ZE2kXRvVUEo58NOIz+16BIn8Vgm9yowG3vqn8Ao8hfysS8eF6L5qZwbpd5xGKqhRn9VO
+         xZrg==
+X-Gm-Message-State: ACrzQf0hVEcn+HArHWrvcw94nw++dMY7eSOF+sx1aZzzKTE8FRhz9jT9
+        36xj+At4ibtv8JHVn3uO6Aa2lQ==
+X-Google-Smtp-Source: AMsMyM456mL8Y53OX0R0V4J7fMAnnvEEdQmt4r0M/qYd7+Q36rEPaq+GH9DZNeKlDAp5SDRJbkXlBA==
+X-Received: by 2002:a05:6512:3409:b0:49a:692:fd31 with SMTP id i9-20020a056512340900b0049a0692fd31mr3211320lfr.651.1663433856370;
+        Sat, 17 Sep 2022 09:57:36 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w9-20020ac254a9000000b00497b198987bsm4180174lfk.26.2022.09.17.09.57.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 09:57:35 -0700 (PDT)
+Message-ID: <10176630-3ff7-54f7-8836-779e5a2bf6d4@linaro.org>
+Date:   Sat, 17 Sep 2022 17:57:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
+Content-Language: en-US
+To:     Bonnie Lo <Bonnie_Lo@Wiwynn.com>, joel@jms.id.au
+Cc:     patrickw3@fb.com, garnermic@fb.com, Delphine_Chiu@Wiwynn.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+References: <20220915072304.1438-1-Bonnie_Lo@Wiwynn.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220915072304.1438-1-Bonnie_Lo@Wiwynn.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-with every kernel version since v6.0-rc1, including the latest git 
-master, there are constant graphical issues on this laptop, such as 
-heavy stuttering (this is especially noticeable while typing on the 
-keyboard), parts of the screen showing random noise, and the entire 
-desktop environment freezing.
+On 15/09/2022 08:23, Bonnie Lo wrote:
+> From: Bonnie Lo <Bonnie_Lo@wiwynn.com>
 
-I bisected the issue which showed that this is the first bad commit:
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-> commit 7cc191ee7621b7145c6cc9c18a4e1929bb5f136e
-> Author: Leo Li <sunpeng.li@amd.com>
-> Date:   Wed Mar 30 12:45:09 2022 -0400
 > 
->     drm/amd/display: Implement MPO PSR SU
->     
->     [WHY]
->     
->     For additional power savings, PSR SU (also referred to as PSR2) can be
->     enabled on eDP panels with PSR SU support.
->     
->     PSR2 saves more power compared to PSR1 by allowing more opportunities
->     for the display hardware to be shut down. In comparison to PSR1, Shut
->     down can now occur in-between frames, as well as in display regions
->     where there is no visible update. In otherwords, it allows for some
->     display hw components to be enabled only for a **selectively updated**
->     region of the visible display. Hence PSR SU.
->     
->     [HOW]
->     
->     To define the SU region, support from the OS is required. OS needs to
->     inform driver of damaged regions that need to be flushed to the eDP
->     panel. Today, such support is lacking in most compositors.
->     
->     Therefore, an in-between solution is to implement PSR SU for MPO and
->     cursor scenarios. The plane bounds can be used to define the damaged
->     region to be flushed to panel. This is achieved by:
->     
->     * Leveraging dm_crtc_state->mpo_requested flag to identify when MPO is
->       enabled.
->     * If MPO is enabled, only add updated plane bounds to dirty region.
->       Determine plane update by either:
->         * Existence of drm damaged clips attached to the plane (added by a
->           damage-aware compositor)
->         * Change in fb id (flip)
->         * Change in plane bounds (position and dimensions)
->     * If cursor is enabled, the old_pos and new_pos of cursor plus cursor
->       size is used as damaged regions(*).
->     
->     (*) Cursor updates follow a different code path through DC. PSR SU for
->     cursor is already implemented in DC, and the only thing required to
->     enable is to set DC_PSR_VERSION_SU_1 on the eDP link. See
->     dcn10_dmub_update_cursor_data().
->     
->     Signed-off-by: Leo Li <sunpeng.li@amd.com>
->     Acked-by: Leo Li <sunpeng.li@amd.com>
->     Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> Add linux device tree entry related to
+> greatlakes specific devices connected to BMC SoC.
 
-#regzbot introduced: 7cc191ee7621b7145c6cc9c18a4e1929bb5f136e
+Please wrap commit message according to Linux coding style / submission
+process:
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-Note that while bisecting I also needed to apply commit 
-9946e39fe8d0a5da9eb947d8e40a7ef204ba016e as the keyboard doesn't work 
-without it.
+> 
+> Signed-off-by: Bonnie Lo <Bonnie_Lo@wiwynn.com>
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 248 ++++++++++++++++++
 
-Laptop model: Lenovo Yoga 7 14ARB7
-CPU: AMD Ryzen 5 6600U
-Kernel config: 
-https://raw.githubusercontent.com/archlinux/svntogit-packages/aa564cf7088b1d834ef4cda9cb48ff0283fde5c5/trunk/config
-Distribution: Arch Linux
-Desktop environment: KDE Plasma 5.25.5
+Missing documentation of board compatible (bindings) as first patch.
 
-lspci:
-> $ lspci -nn
-> 00:00.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b5] (rev 01)
-> 00:00.2 IOMMU [0806]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b6]
-> 00:01.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b7] (rev 01)
-> 00:02.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b7] (rev 01)
-> 00:02.3 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14ba]
-> 00:02.4 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14ba]
-> 00:02.5 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14ba]
-> 00:03.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b7] (rev 01)
-> 00:03.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14cd]
-> 00:04.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b7] (rev 01)
-> 00:08.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b7] (rev 01)
-> 00:08.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b9] (rev 10)
-> 00:08.3 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Device [1022:14b9] (rev 10)
-> 00:14.0 SMBus [0c05]: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller [1022:790b] (rev 71)
-> 00:14.3 ISA bridge [0601]: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge [1022:790e] (rev 51)
-> 00:18.0 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:1679]
-> 00:18.1 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167a]
-> 00:18.2 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167b]
-> 00:18.3 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167c]
-> 00:18.4 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167d]
-> 00:18.5 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167e]
-> 00:18.6 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:167f]
-> 00:18.7 Host bridge [0600]: Advanced Micro Devices, Inc. [AMD] Device [1022:1680]
-> 01:00.0 Network controller [0280]: MEDIATEK Corp. MT7922 802.11ax PCI Express Wireless Network Adapter [14c3:0616]
-> 02:00.0 Non-Volatile memory controller [0108]: Samsung Electronics Co Ltd Device [144d:a80b] (rev 02)
-> 03:00.0 SD Host controller [0805]: O2 Micro, Inc. SD/MMC Card Reader Controller [1217:8621] (rev 01)
-> 33:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M] [1002:1681] (rev c2)
-> 33:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt Radeon High Definition Audio Controller [1002:1640]
-> 33:00.2 Encryption controller [1080]: Advanced Micro Devices, Inc. [AMD] VanGogh PSP/CCP [1022:1649]
-> 33:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:161d]
-> 33:00.4 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:161e]
-> 33:00.5 Multimedia controller [0480]: Advanced Micro Devices, Inc. [AMD] ACP/ACP3X/ACP6x Audio Coprocessor [1022:15e2] (rev 60)
-> 33:00.6 Audio device [0403]: Advanced Micro Devices, Inc. [AMD] Family 17h/19h HD Audio Controller [1022:15e3]
-> 34:00.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:161f]
-> 34:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:15d6]
-> 34:00.4 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:15d7]
-> 34:00.5 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Device [1022:162e]
+>  2 files changed, 249 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 05d8aef6e5d2..40fa906ab17f 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1580,6 +1580,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>         aspeed-bmc-asrock-e3c246d4i.dtb \
+>         aspeed-bmc-asrock-romed8hm3.dtb \
+>         aspeed-bmc-bytedance-g220a.dtb \
+> +       aspeed-bmc-facebook-greatlakes.dtb \
+
+Wrong order.
+
+>         aspeed-bmc-facebook-bletchley.dtb \
+>         aspeed-bmc-facebook-cloudripper.dtb \
+>         aspeed-bmc-facebook-cmm.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> new file mode 100644
+> index 000000000000..f011cc4d370f
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> @@ -0,0 +1,248 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +// Copyright 2022 Facebook Inc.
+> +
+> +/dts-v1/;
+> +#include "aspeed-g6.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/i2c/i2c.h>
+> +#include <dt-bindings/leds/leds-pca955x.h>
+> +
+> +/ {
+> +       model = "AST2600 EVB";
+
+Wrong name.
+
+> +       compatible = "aspeed,ast2600";
+
+Missing board compatible.
+
+> +
+> +       aliases {
+> +               serial4 = &uart5;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = &uart5;
+> +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
+
+Bootargs usually do not belong to mainline DTS.
+
+> +       };
+> +
+> +       memory@80000000 {
+> +               device_type = "memory";
+> +               reg = <0x80000000 0x80000000>;
+> +       };
+> +
+> +       iio-hwmon {
+> +               compatible = "iio-hwmon";
+> +               io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> +                               <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> +                               <&adc1 0>, <&adc1 2>, <&adc1 3>, <&adc1 4>,
+> +                               <&adc1 5>, <&adc1 6>;
+> +       };
+> +};
+> +
+> +&uart1 {
+> +       status = "okay";
+> +};
+> +
+> +&uart2 {
+> +       status = "okay";
+> +};
+> +
+> +&uart3 {
+> +       status = "okay";
+> +};
+> +
+> +&uart4 {
+> +       status = "okay";
+> +};
+> +
+> +&uart5 {
+> +       status = "okay";
+> +};
+> +
+> +&wdt1 {
+> +       status = "okay";
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_wdtrst1_default>;
+> +       aspeed,reset-type = "soc";
+> +       aspeed,external-signal;
+> +       aspeed,ext-push-pull;
+> +       aspeed,ext-active-high;
+> +       aspeed,ext-pulse-duration = <256>;
+> +};
+> +
+> +&mac3 {
+> +       status = "okay";
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_rmii4_default>;
+> +       no-hw-checksum;
+> +       use-ncsi;
+> +       mlx,multi-host;
+> +       ncsi-ctrl,start-redo-probe;
+> +       ncsi-ctrl,no-channel-monitor;
+> +       ncsi-package = <1>;
+> +       ncsi-channel = <1>;
+> +       ncsi-rexmit = <1>;
+> +       ncsi-timeout = <2>;
+> +};
+> +
+> +&rtc {
+> +       status = "okay";
+> +};
+> +
+> +&fmc {
+> +       status = "okay";
+> +       flash@0 {
+> +               status = "okay";
+> +               m25p,fast-read;
+> +               label = "bmc";
+> +               spi-rx-bus-width = <4>;
+> +               spi-max-frequency = <50000000>;
+> +#include "openbmc-flash-layout-64.dtsi"
+> +       };
+> +       flash@1 {
+> +               status = "okay";
+> +               m25p,fast-read;
+> +               label = "bmc2";
+> +               spi-rx-bus-width = <4>;
+> +               spi-max-frequency = <50000000>;
+> +       };
+> +};
+> +
+> +&i2c0 {
+> +       status = "okay";
+> +       multi-master;
+> +       ipmb0@10 {
+> +               compatible = "ipmb-dev";
+> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +               i2c-protocol;
+> +       };
+> +};
+> +
+> +&i2c1 {
+> +       status = "okay";
+> +       multi-master;
+> +       ipmb1@10 {
+> +               compatible = "ipmb-dev";
+> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +               i2c-protocol;
+> +       };
+> +};
+> +
+> +&i2c2 {
+> +       status = "okay";
+> +       multi-master;
+> +       ipmb2@10 {
+> +               compatible = "ipmb-dev";
+> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +               i2c-protocol;
+> +       };
+> +};
+> +
+> +&i2c3 {
+> +       status = "okay";
+> +       multi-master;
+> +       ipmb3@10 {
+> +               compatible = "ipmb-dev";
+> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +               i2c-protocol;
+> +       };
+> +};
+> +
+> +&i2c4 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c5 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c6 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c7 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c8 {
+> +       status = "okay";
+> +       tmp421@1f {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +               compatible = "ti,tmp421";
+> +               reg = <0x1f>;
+> +       };
+> +       // NIC EEPROM
+> +       eeprom@50 {
+> +               compatible = "st,24c32";
+> +               reg = <0x50>;
+> +       };
+> +};
+> +
+> +&i2c9 {
+> +       status = "okay";
+> +       multi-master;
+> +       ipmb9@10 {
+> +               compatible = "ipmb-dev";
+> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +               i2c-protocol;
+> +       };
+> +};
+> +
+> +&i2c10 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c11 {
+> +       status = "okay";
+> +       eeprom@51 {
+> +               compatible = "atmel,24c128";
+> +               reg = <0x51>;
+> +       };
+> +       eeprom@54 {
+> +               compatible = "atmel,24c128";
+> +               reg = <0x54>;
+> +       };
+> +};
+> +
+> +&i2c12 {
+> +       status = "okay";
+> +       lm75@4f {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +               compatible = "lm75";
+> +               reg = <0x4f>;
+> +       };
+> +};
+> +
+
+(...)
+
+> +
+> +&gpio0 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
+> +};
+> +
+> +
+> --
+> 2.17.1
+> 
+> WIWYNN PROPRIETARY This email (and any attachments) contains proprietary or confidential information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited. If you are not the intended recipient, please notify the sender and delete this email immediately.
+
+This means we cannot take this patch. Proprietary and/or confidential
+patches cannot be merged.
+
+Please license the patch as you wrote in SPDX header.
+
+Best regards,
+Krzysztof
