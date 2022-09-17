@@ -2,115 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2145BBADF
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554D55BBAE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiIQWbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 18:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S229540AbiIQWmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 18:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQWbj (ORCPT
+        with ESMTP id S229379AbiIQWmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 18:31:39 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F24D220FC
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-3452214cec6so299977857b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
+        Sat, 17 Sep 2022 18:42:42 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C132AC49
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:42:41 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id c4so20245816iof.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date;
-        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
-        b=NrS1isCn7N5y43Qlk5+QPMcpimLruBhGMq4Qmq7NTUsiyQq4RI/T4BLbPt+XE+56Rl
-         oEWBPKFpgIUe27pBjgy2Qb3cqFeLSFWROtFzS5dlz3tYdtq2AOsbHjt/34lRoXVIw+Qa
-         ZVg1LZZj/GspG36kl0aZkYH3vVlT/MsH5Q3x32nJPxEXYx2I+t4uHTfcT7049udnloKA
-         IfyCfzrTxpyD77wPuIYUpcJ489vd6Lpw6LZDL9GPKLWMOPq6HtRjA81qmAh4axRE0VlJ
-         yHWJEGVx5O6jJZkGAofdcOt3YpT8T6dnqJDlKacgwGMd1nyAv0FJsF+1vJ+al933JQD2
-         dfuQ==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=kahzIo799kyEdsYA+23YsXtPtnybsy8lc1MLAua0e7E=;
+        b=Rf3WH51PkjSqqIi93EzQibr1PLt7e/h+ghOoTUlaLFbW1ZMlcwydeSTtDZR7p84h3r
+         pDXF7HNP4GO5DdBNB5RBpxGGAwqO3Zv1Zw+/hNJyYbOjMtR1AeRuKsigfDgI065K5+P7
+         fXQ95DsvPYW1ASsWe0RFgAbCbsmPHOWk3wJnI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
-        b=1lJOoRRe1RItmxleq99lar5MQmQB6t7w/mfi6Moc5IjSHjlDiUEHt9l5cit+eZbBWP
-         rKF/Hi4F8MDtABHeZXVzfd/KpXo/tm6zqFhjrXzL/bI0R+q9LkYhsQQd0L2T9YbeXMGf
-         5A37OWqvsdvsNibzzHr97QdGXTWvqlkgjOqc8xtDoeUsjvCDZPxwYFo4mCAUW2mWMwvX
-         nynDYM0a5QVjthh/xyohp311AOP93som1+YreDKcmDBixSGtECYEbrEwiaq0DHvAFfde
-         AHlLKEa4qijdccbXdyO7QYiTtyNvDkNOt+ATkHvFlHqYIgT/LzamBV0AzCZcdNKQBTm8
-         BPFg==
-X-Gm-Message-State: ACrzQf3atjQCJqmQuP/IAA8j2gP9NZ+t4AIvxVwehxqCFpQ6PP8wZ/m9
-        l2aLLtDNrpzjmLNuabQF+PXiEX340+gd9sIEDrg=
-X-Google-Smtp-Source: AMsMyM5QCLEC/Tnzr0uwflqBzAV4fXo9XP7U+VEMVzbAGbkdMzALAM2D+dnEEUp9eCPxGIFqCYhUFAFhrUpWtftSQoY=
-X-Received: by 2002:a81:6a54:0:b0:345:4292:4dfe with SMTP id
- f81-20020a816a54000000b0034542924dfemr9364599ywc.62.1663453897802; Sat, 17
- Sep 2022 15:31:37 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kahzIo799kyEdsYA+23YsXtPtnybsy8lc1MLAua0e7E=;
+        b=2nyPsQOii4069/S4WXVl5yGdj0vkdSiNhQwTf0/OD5ab1fuBcuy8FSxVm/7OWbki9R
+         ZcRb5jhLQoCVuDeqXnYhAXlvamvYBa3a5MBgLRe2Qv6KD8+BvblWqwsszOUZrMKabvTe
+         ySHKTHgo+VX7faaFK/ZzcZL684WIVhTvseWF++fGAgRYZP9OhfHRmsEvFKiv1kA2qKKZ
+         qrKOzTCZ4Y37ZDGgX7MfTn7ncbi2tf6YxrbhsDJWlxEJvrz5BqcwaflAo/0KTLtaVp1k
+         GbKiGIOwgCJ+wcBJSKA5OAcN16wvWaflUF1bkSvcn0Df9wBrmQHQ1fHScIC0rkjbIrcu
+         2Ybg==
+X-Gm-Message-State: ACrzQf3ouDqc85GzwbNgIJsSuqvayGUbpv4J3utxScLoB/5ZFhdXPrgM
+        AlnwJFgZDAIciXWG7/oGZdqTSgdI9G3W020kOez8jQ==
+X-Google-Smtp-Source: AMsMyM4D6EMYXRIrbuXciSc9uyILe9hzR1LlpWVr7/Sre3HhKRI38byd9jGaieo0sA/pnbfV0wzBeKiQzcFyeiVLE5Y=
+X-Received: by 2002:a05:6638:19:b0:35a:52a2:dfbe with SMTP id
+ z25-20020a056638001900b0035a52a2dfbemr4871472jao.213.1663454560516; Sat, 17
+ Sep 2022 15:42:40 -0700 (PDT)
 MIME-Version: 1.0
-Sender: joy.lisa.kones@gmail.com
-Received: by 2002:a05:6919:45c3:b0:dc:a12e:3a77 with HTTP; Sat, 17 Sep 2022
- 15:31:35 -0700 (PDT)
-From:   Juliette Morgan <juliettemorgan21@gmail.com>
-Date:   Sun, 18 Sep 2022 00:31:35 +0200
-X-Google-Sender-Auth: ayL7IE1wieD5Wc96bFaNdS8-DhM
-Message-ID: <CAMFU_KmFRQVstWfiMNYhxrW-FKbvee=kezZFkkrTKgyvKEz7_A@mail.gmail.com>
-Subject: READ AND REPLY URGENT
-To:     undisclosed-recipients:;
+References: <20220917164200.511783-1-joel@joelfernandes.org>
+ <20220917164200.511783-4-joel@joelfernandes.org> <20220917195807.GA39579@lothringen>
+ <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com> <20220917222108.GB40100@lothringen>
+In-Reply-To: <20220917222108.GB40100@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sat, 17 Sep 2022 18:42:29 -0400
+Message-ID: <CAEXW_YSbwRUqz1f2i4LQpxmSyW5PWYWnifRj0UaTHP6pL7m9Lw@mail.gmail.com>
+Subject: Re: [PATCH rcu/next 3/3] rcu: Call trace_rcu_callback() also for
+ bypass queuing (v2)
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_MONEY_PERCENT,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear God,s Select Good Day,
+On Sat, Sep 17, 2022 at 6:21 PM Frederic Weisbecker <frederic@kernel.org> w=
+rote:
+>
+> On Sat, Sep 17, 2022 at 05:43:06PM -0400, Joel Fernandes wrote:
+> > On Sat, Sep 17, 2022 at 3:58 PM Frederic Weisbecker <frederic@kernel.or=
+g> wrote:
+> > >
+> > > On Sat, Sep 17, 2022 at 04:42:00PM +0000, Joel Fernandes (Google) wro=
+te:
+> > > > @@ -2809,17 +2825,15 @@ void call_rcu(struct rcu_head *head, rcu_ca=
+llback_t func)
+> > > >       }
+> > > >
+> > > >       check_cb_ovld(rdp);
+> > > > -     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
+> > > > +
+> > > > +     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags)) {
+> > > > +             __trace_rcu_callback(head, rdp);
+> > > >               return; // Enqueued onto ->nocb_bypass, so just leave=
+.
+> > > > +     }
+> > >
+> > > I think the bypass enqueues should be treated differently. Either wit=
+h extending
+> > > the current trace_rcu_callback/trace_rcu_kvfree_callback (might break=
+ tools)
+> > >
+> > > or
+> > > with creating a new trace_rcu_callback_bypass()/trace_rcu_kvfree_call=
+back_bypass().
+> > >
+> > > Those could later be paired with a trace_rcu_bypass_flush().
+> >
+> > I am having a hard time seeing why it should be treated differently.
+> > We already increment the length of the main segcblist even when
+> > bypassing. Why not just call the trace point instead of omitting it?
+>
+> I'm not suggesting to omit it. I'm suggesting to improve its precision.
 
-I apologized, If this mail find's you disturbing, It might not be the
-best way to approach you as we have not met before, but due to the
-urgency of my present situation i decided  to communicate this way, so
-please pardon my manna, I am writing this mail to you with heavy tears
-In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
-Morgan, and I am contacting you from my country Norway, I want to tell
-you this because I don't have any other option than to tell you as I
-was touched to open up to you,
+That's exactly what I'm doing :-). It is imprecise the way it is, by
+calling it where it needs to be (not omitting it), I am making it more
+precise.
 
-I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
-Faso for nine years before he died in the year 2020.We were married
-for eleven years without a child He died after a brief illness that
-lasted for only five days. Since his death I decided not to remarry,
-When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
-n
-Euro (Eight million, Five hundred thousand Euros) in a bank in
-Ouagadougou the capital city of Burkina Faso in west Africa Presently
-this money is still in bank. He made this money available for
-exportation of Gold from Burkina Faso mining.
+> > Otherwise it becomes a bit confusing IMO (say someone does not enable
+> > your proposed new bypass tracepoint and only enables the existing one,
+> > then they would see weird traces where call_rcu is called but their
+> > traces are missing trace_rcu_callback).
+>
+> Well, if they decided to see only half of the information...
 
-Recently, My Doctor told me that I would not last for the period of
-seven months due to cancer problem. The one that disturbs me most is
-my stroke sickness.Having known my condition I decided to hand you
-over this money to take care of the less-privileged people, you will
-utilize this money the way I am going to instruct herein.
+It is not that they decide, there are lots of RCU tracepoints and it
+is likely common to enable just a few of them.
 
-I want you to take 30 Percent of the total money for your personal use
-While 70% of the money will go to charity, people in the street and
-helping the orphanage. I grew up as an Orphan and I don't have any
-body as my family member, just to endeavour that the house of God is
-maintained. Am doing this so that God will forgive my sins and accept
-my soul because these sicknesses have suffered me so much.
+> > Not to mention - your
+> > suggestion will also complicate writing tools that use the existing
+> > rcu_callback tracepoint to monitor call_rcu().
+>
+> If we add another tracepoint, the prototype will be the same as the
+> existing one, not many lines to add. If instead we extend the existing
+> tracepoint, it's merely just a flag to check or ignore.
+>
+> OTOH your suggestion doesn't provide any bypass related information.
 
-As soon as I receive your reply I shall give you the contact of the
-bank in Burkina Faso and I will also instruct the Bank Manager to
-issue you an authority letter that will prove you the present
-beneficiary of the money in the bank that is if you assure me that you
-will act accordingly as I Stated herein.
+Bypass related information is not relevant to this patch. I am already
+using trace_rcu_callback() in my (yet to be released) rcutop, and I
+don't use it for any bypass information.
 
-Always reply to my alternative for security purposes
+> > Also if you see the definition of rcu_callback, "Tracepoint for the
+> > registration of a single RCU callback function.".  That pretty much
+> > fits the usage here.
+>
+> Doesn't tell if it's a bypass or not.
 
-Hoping to receive your reply:
-From Mrs.Juliette Morgan,
+It doesn't tell a lot of things, so what? Saying that it is bypass is
+not the point of this patch.
+
+> > As for tracing of the flushing, I don=E2=80=99t care about tracing that=
+ at the
+> > moment using tracepoints
+>
+> You will soon enough ;-)
+
+I respect your experience in the matter :-)
+
+> > but I don=E2=80=99t mind if it is added later.
+> > Maybe let=E2=80=99s let Paul help resolve our disagreement on this one?=
+ :)
+>
+> FWIW, I would be personally interested in such tracepoints (or the extens=
+ion
+
+Understood.
+
+> of the existing ones, whichever way you guys prefer), they would be of gr=
+eat help
+> for debugging.
+>
+> Also if rcu_top is ever released, I really hope the kernel will be ready =
+in
+> case we want the tool to display bypass related informations.
+
+I feel the main issue you have with my patch is that it does not add
+the information you want, however the information you mention is
+beyond the scope of the patch and can in future/different patches.
+This patch only fixes an *existing* broken tracepoint.
+
+I can certainly add a new bypass-related tracepoint in the future, but
+I don't see how that's relevant to my patch.
+
+> Please be careful while designing tracepoints that may be consumed by use=
+rspace
+> released tools. Such tracepoints eventually turn into ABI and there is no=
+ way
+> back after that.
+
+Sure thing, that's why I'm fixing the broken tracepoint. Some
+registered callbacks can be invisible to the user.
+
+ - Joel
