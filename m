@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04B45BB9D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8074A5BB9D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiIQSMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 14:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        id S229550AbiIQSMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 14:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQSMJ (ORCPT
+        with ESMTP id S229488AbiIQSMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 14:12:09 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3E22B242
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id u132so24246005pfc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=TUmHLR+GSgYu7dtcYzNGTZciju4TnnNcKZxPhqTgdFY=;
-        b=md7v8eBkL7OjZ0GnNG6vOgsqZFHpqcfwfU6u/r/GREXGiQZL/vdshx5bNycETrDFH3
-         CSUUidGIIi4kGjMbC5KCBa6xQNWNk61qTuTBqKkhhpsEULz/coO4dG8P0nkjuvw2rEGy
-         x3UnzKbzHGo5taV5n90cGqrNiH0Y4UBAvNfG1gWWWEGV68LQLnNidLevw0BtQ26rXaxs
-         WyMGpZ4Pl5kUPb22yeBzlxcCROnzFXmji0UDwFcVEDqSuoyFxCNN5dKiQGl5HstXoLPO
-         nsyDAGMt1sJip7Pc9hAQRzhGbGzgKS6v3iE+3J8XF9yufK708gqrAFXsryFI/rmFkwwa
-         2lEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=TUmHLR+GSgYu7dtcYzNGTZciju4TnnNcKZxPhqTgdFY=;
-        b=P0lwcRW/Y+9pyTfCpzp8kB3PWApaC82/rqe0KdAFsjmHsb+UWKnWeysQOLwA28oKKd
-         tp8KauXOKwvlNMdbEuXudpEfliNN5VUMVQ4u6Ep+3kLdcnNFYpOJQG0/xJQyhOJtMTFJ
-         Sio9Y8oRV5inmf3ve6XcPo/jR8n9hwWPLqhFRWR4xrLpeBI+/R5+4ZlRNu5tmnNM4mcT
-         l6rIB/tadqTcKHGCLJkQjkuUNPktQUuuKNlND5yQ/ybFdulTCuxyoqivg8v+4E76GRdD
-         0t3s1I1ckBPOEf9qJRq2LpWQ/+zxiQFKS/J3GfPHFlCYpZ6isovTG+QWsLmj8Otbo4N7
-         M4Zw==
-X-Gm-Message-State: ACrzQf1Grg77pGm+lEdx7JnZErL+4ru/AMQbRhXNbey7TsxWSM+fwi5Q
-        hq45Jbz87LBsuRxNgIJtgaI=
-X-Google-Smtp-Source: AMsMyM4ocTrC9bd47eOe59Y7u5uoUkYvEuMGz/z2Inc1IiIJcMIuSsP08orLRE86aAch7141q+kb0g==
-X-Received: by 2002:a63:5605:0:b0:438:ac3f:49cb with SMTP id k5-20020a635605000000b00438ac3f49cbmr9357799pgb.222.1663438327218;
-        Sat, 17 Sep 2022 11:12:07 -0700 (PDT)
-Received: from uftrace.. ([14.5.161.231])
-        by smtp.gmail.com with ESMTPSA id m8-20020a62a208000000b005386b58c8a3sm16632409pff.100.2022.09.17.11.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 11:12:06 -0700 (PDT)
-From:   Kang Minchul <tegongkang@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH 1/2] staging: rtl8723bs: Fix coding style issue in block comment
-Date:   Sun, 18 Sep 2022 03:11:30 +0900
-Message-Id: <20220917181130.3237159-1-tegongkang@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 17 Sep 2022 14:12:35 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D702BB0C
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ncGt1LTVtAiHuIA3Qj7pf2ExiiO2
+        c78wC2THV2C0NAM=; b=WBoN9EBEAwdzAXtnIz3AthJ6BhbozrnW8Kykym4hG55N
+        mtk1s5pYhutqb5Tn3//Yqa12hlS/YV1ck0zj9nwtQ8STOeMFzfgHmCqu/DP4ziAt
+        g3B2LVwpibXMF82CJIV9TPu8zDox7MR6S6fNFctUisG5Wf6yYdKumr5FjrlSLTo=
+Received: (qmail 3855586 invoked from network); 17 Sep 2022 20:12:33 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Sep 2022 20:12:33 +0200
+X-UD-Smtp-Session: l3s3148p1@ircabOPogqy5aIoe
+Date:   Sat, 17 Sep 2022 20:12:32 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khalil Blaiech <kblaiech@nvidia.com>
+Subject: Re: [PATCH v3 3/9] i2c-mlxbf.c: incorrect base address passed during
+ io write
+Message-ID: <YyYOEE/rDhEEMIhJ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
+References: <20220908173544.32615-1-asmaa@nvidia.com>
+ <20220908173544.32615-4-asmaa@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HvwZTOvVTqcFKdCt"
+Content-Disposition: inline
+In-Reply-To: <20220908173544.32615-4-asmaa@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes the following warning generated by checkpatch.pl
 
-  WARNING: Block comments use * on subsequent lines
-  #206: FILE: rtw_recv.c:206:
-  +/*
-  +signed int     rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+--HvwZTOvVTqcFKdCt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  WARNING: Block comments use * on subsequent lines
-  #216: FILE: rtw_recv.c:216:
-  +/*
-  +caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+On Thu, Sep 08, 2022 at 01:35:38PM -0400, Asmaa Mnebhi wrote:
+> Correct the base address used during io write.
+> This bug had no impact over the overall functionality of the read and wri=
+te
+> transactions. MLXBF_I2C_CAUSE_OR_CLEAR=3D0x18 so writing to (smbus->io + =
+0x18)
+> instead of (mst_cause->ioi + 0x18) actually writes to the sc_low_timeout
+> register which just sets the timeout value before a read/write aborts.
+>=20
+> Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueFi=
+eld SoC)
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
-Signed-off-by: Kang Minchul <tegongkang@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_recv.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Fixed the prefix in $subject and applied to for-current, thanks!
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
-index d8d394b67eeb..ad6fb6c3d1f0 100644
---- a/drivers/staging/rtl8723bs/core/rtw_recv.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
-@@ -203,22 +203,22 @@ signed int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *q
- }
- 
- /*
--signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
--{
--	return rtw_free_recvframe(precvframe, queue);
--}
--*/
-+ * signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
-+ * {
-+ * 	return rtw_free_recvframe(precvframe, queue);
-+ * }
-+ */
- 
- 
- 
- 
- /*
--caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
--pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
--
--using spinlock to protect
--
--*/
-+ * caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
-+ * pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
-+ *
-+ * using spinlock to protect
-+ *
-+ */
- 
- void rtw_free_recvframe_queue(struct __queue *pframequeue,  struct __queue *pfree_recv_queue)
- {
--- 
-2.34.1
 
+--HvwZTOvVTqcFKdCt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMmDhAACgkQFA3kzBSg
+KbamrA/7BQ/Q2XauJNIys5qP2IZKlKyCbc1MAgB3nQOaSkFi1E/gpZnPvyIfmLoY
+GhVy9Oicg50se+T09zAwqhr06X5ejBB5ZdP6LIy7Y4A1mbLdo9npILKltHDSHvi7
+k56ggS8FeZQ5NHvQhGNO2SOYJPd7zgl6h6GmQFjWwRSkcRMZ9FnCJnRwej/3F7g5
+Gl12AuIs40dRPvtg2CVZokQ4g8JXvYx5ofp8i+T6C8fPiR285OXonThpqC8vu5h2
+1CjnZWPW1r8ceN/rv1b6du/mtcN35FtzdYYAiDNu8VVYe2roLvWDFY/qhF1amsIx
+5709ddPFtqjog4lEdYQgxQeIXxR/AaoxZsRqR9FKj55uD9egTOc1flbgF3iymCKp
+u8wkwzxuz92ixOMXI64bRP2DDJeeI9zcLGMGdPh0JEHVAngf553qJ0CK6f+S/Xiy
+DE/bJ2fRK/SaGceeIasiduXLNRphME9gjJguNH52Q52eOGmo3iId0M3JmTSbu7Ew
+RK0enJM0I0ZNSREgFatYuu1pskKRUYRk04K2k3xPrBBXnM4ihabANU/lSSmcijcU
+M4KkvMUB6iP0qLRkQoDhvM2oUgnq2uPx0ecFhrEuGsckNiMUAwk8IgUvLg0q3msl
+dMcFA+Acj70z1Q4J+aQ+XeDm3Z3DELMiP1HimThFZbHE8tc1oeU=
+=oqK2
+-----END PGP SIGNATURE-----
+
+--HvwZTOvVTqcFKdCt--
