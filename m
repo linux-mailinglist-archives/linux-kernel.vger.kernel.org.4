@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820B85BB643
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAE05BB645
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIQE0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S229790AbiIQE0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiIQEZq (ORCPT
+        with ESMTP id S229681AbiIQEZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:25:46 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77BA74F5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id 13so24501047ejn.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:44 -0700 (PDT)
+        Sat, 17 Sep 2022 00:25:54 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E67F2A951
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:51 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a26so24779302ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date;
-        bh=VqhHMljAu1g+wJEyrHQ/EApSp/g9cqVTDobcVCKucEw=;
-        b=S/ITtk/kUcYt+Hzp/FghonA+/KCyWnSUDXtE7AAnoADj1wMRjkBPtXhqc9wFDH5SSC
-         w+nYfUWpqXMApvB7yyry2iQ6RUbQ3WEGu1+W4oUPdDa5oozGgATcDgoY3vp/hV1Q8tMV
-         OCye+qICUXvD4uuyJf5D3iyRM2U+ot5BcufK5eBfIQq4GyRUYqg057lu1tr2EAiRwmTJ
-         5V78f36ZoFRwuSlGZn1M1zMGzThp+DFFMtZM9m3MViBIpRiPTd2C8KZjjXBrFqsyb6d5
-         ESfqgPlwfXMlruN1wUmPuuTRHYnMVLyZVnGy5BRbfNZ98pL4RiC4nkA1AsjZcaLbZRpm
-         fN/g==
+        bh=P4IXbjpJGogB5bTg3j6LGjLbToM1KMQkj8lnneUfMDE=;
+        b=NX8Ya4tB87jnzHdWuHENplKakLqBCRAgfp8c1MduGfLX4qWI5aM+Zxa8rReQkVw4UH
+         6hlTaK/zi5A23JCAx7hrYYCuvKtFf2UGBAiV3xhGB3E1RI3uQTzySmM+nJezDdvLPkS1
+         s5CxJak70R28Jbv4z5kOrHPsQ5XmZ3wTVQGOCL1SiqsN9LNXfHTrfeeaGOompCIxZUX+
+         +VnaZw6Lbl7nSoBQeI/5w0dO7HHm9vYwJ6fj2kDpCJcwL1dxBVfj1JFw3mK9tEoP2naa
+         HGUZ5vT+5++Q8xxzvNhdK2wHrwK4ojhSA9ZGpCYjVkwlRciPrq3akt/6NjieAMrwVjcJ
+         rWzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VqhHMljAu1g+wJEyrHQ/EApSp/g9cqVTDobcVCKucEw=;
-        b=CEYCJnnOXnVw56E5bKIXGRLIQmkbzwNbOcOLhNvCFAgGjRURf+EAOiKSBEeti+Zlx6
-         yPqh5+CFDiqi+WaPPzsxulTQh5MLEQCZ0WDuUW5MxtwYqinw/JgbY812a8p2hGVXa+Q1
-         Zie5bNvdWGEqA4jwhLtbl1doR0oXghyaUvaO70A9zRKLm3cPhgxAnGzz7Xx46CNWrziB
-         O9bjZfP47l7qnemRe0p8srRCoCSu0+S/jJg7onWGUXIcP09WSXqKhibFtQYt0OK1L9Hh
-         lub0bXoSEwOS15OeoZYIM9HL0IltojwwIszYOlTTymq/k6YbBgesAYTF+zUPQe2S3ZeA
-         v+3w==
-X-Gm-Message-State: ACrzQf38BIz9S3Ww+EsOnT0qltYSDnmwT1ErcEimB/BgRfFBdVjQ16hg
-        xKPUA4nRcSNFRbJvH1EsCJ4=
-X-Google-Smtp-Source: AMsMyM4TxqqojMZbf0FRtgj3oivhttDIZRVpH0bA+lqrWm/hIb6G7hTNkYd5x/UY+OsVbKJKVm6TRg==
-X-Received: by 2002:a17:907:3f12:b0:77b:8d8:f353 with SMTP id hq18-20020a1709073f1200b0077b08d8f353mr5477575ejc.349.1663388742807;
-        Fri, 16 Sep 2022 21:25:42 -0700 (PDT)
+        bh=P4IXbjpJGogB5bTg3j6LGjLbToM1KMQkj8lnneUfMDE=;
+        b=ue6I+vTXiqejhKx221n6bnT+s16gpcefQO+f7n3qUuRu6DPjhf5l2UtEYtQ9schbDl
+         RgB1jziMLHCko74jVFgQcCYf1Lzfa5kAY44nxlkEC9ehNHseTot+ph/Z+/A5TGXbmwIT
+         YCSJxMto2gEeVggzjOttKLayNWffBaA4mKwuzfbTgycy4WDGbx85TnPHen1qpZ0bT8le
+         GO7QJgf5tOiPU/UyNmb+aChBPF7Qcz8YmAYNoOyB9Z5CdXHgs53Har5cLKQCIRT5Dc83
+         C5vL4AhL8Ns584k9jX1k7Va5IUQ5pDPfvaMmR/+GCO1FANJVsiaUgujSfGVIi1O34SCM
+         EZLQ==
+X-Gm-Message-State: ACrzQf06R/xjQb8W/5Eq4krZ4ian3buFFbL8rUOthwmxlxZ4EO8HkqXP
+        mz/eGiTjYRwPmCihtB+44sa6+C46KVc=
+X-Google-Smtp-Source: AMsMyM7TWi7Pyw+NtYWXDQ0hRdHci6YAuF7Y7j81PkLYtxj2QlRD2YJMS7Dg5ZtYsN2zlzc2AdZWUA==
+X-Received: by 2002:a17:907:6ea2:b0:779:8fc1:e5d8 with SMTP id sh34-20020a1709076ea200b007798fc1e5d8mr5467127ejc.731.1663388751168;
+        Fri, 16 Sep 2022 21:25:51 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056402128b00b0044e7adbe0c5sm14890745edv.87.2022.09.16.21.25.41
+        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b00777249e951bsm11544672ejh.51.2022.09.16.21.25.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 21:25:42 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 06:25:40 +0200
+        Fri, 16 Sep 2022 21:25:50 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 06:25:48 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] staging: rtl8192e: Remove ftrace-like logging in rtl_dm.c
-Message-ID: <bc0e2c9551ccf78fe388b27d18576b5bb195e2f7.1663387785.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 5/6] staging: rtl8192e: Remove ftrace-like logging in rtl_ps.c
+Message-ID: <6d942ba65f62643af2ff7104911f7947cca21790.1663387785.git.philipp.g.hortmann@gmail.com>
 References: <cover.1663387785.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,458 +73,131 @@ Remove "Unnecessary ftrace-like logging" as requested by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 165 ---------------------
- 1 file changed, 165 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c | 34 ----------------------
+ 1 file changed, 34 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 3ee52147960e..6d09b71d4993 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -268,8 +268,6 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
- 			 NULL};
- 
- 	if (priv->ResetProgress == RESET_TYPE_SILENT) {
--		RT_TRACE((COMP_INIT | COMP_POWER | COMP_RF),
--			 "GPIOChangeRFWorkItemCallBack(): Silent Reset!!!!!!!\n");
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+index 966debd99296..d752bbc310d1 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+@@ -23,13 +23,9 @@ static void _rtl92e_hw_sleep(struct net_device *dev)
+ 	spin_lock_irqsave(&priv->rf_ps_lock, flags);
+ 	if (priv->rf_change_in_progress) {
+ 		spin_unlock_irqrestore(&priv->rf_ps_lock, flags);
+-		RT_TRACE(COMP_DBG,
+-			 "%s(): RF Change in progress!\n", __func__);
  		return;
  	}
+ 	spin_unlock_irqrestore(&priv->rf_ps_lock, flags);
+-	RT_TRACE(COMP_DBG, "%s()============>come to sleep down\n", __func__);
+-
+ 	rtl92e_set_rf_state(dev, eRfSleep, RF_CHANGE_BY_PS);
+ }
  
-@@ -333,8 +331,6 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
- 	static u8 ping_rssi_state;
- 
- 	if (!priv->up) {
--		RT_TRACE(COMP_RATE,
--			 "<---- %s: driver is going to unload\n", __func__);
+@@ -50,14 +46,11 @@ void rtl92e_hw_wakeup(struct net_device *dev)
+ 	spin_lock_irqsave(&priv->rf_ps_lock, flags);
+ 	if (priv->rf_change_in_progress) {
+ 		spin_unlock_irqrestore(&priv->rf_ps_lock, flags);
+-		RT_TRACE(COMP_DBG,
+-			 "%s(): RF Change in progress!\n", __func__);
+ 		schedule_delayed_work(&priv->rtllib->hw_wakeup_wq,
+ 				      msecs_to_jiffies(10));
  		return;
  	}
- 
-@@ -423,9 +419,6 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
- 			u32 ratr_value;
- 
- 			ratr_value = targetRATR;
--			RT_TRACE(COMP_RATE,
--				 "currentRATR = %x, targetRATR = %x\n",
--				 currentRATR, targetRATR);
- 			if (priv->rf_type == RF_1T2R)
- 				ratr_value &= ~(RATE_ALL_OFDM_2SS);
- 			rtl92e_writel(dev, RATR0, ratr_value);
-@@ -628,7 +621,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 	u16	Avg_TSSI_Meas, TSSI_13dBm, Avg_TSSI_Meas_from_driver = 0;
- 	u32	delta = 0;
- 
--	RT_TRACE(COMP_POWER_TRACKING, "%s()\n", __func__);
- 	rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 	rtl92e_writeb(dev, FW_Busy_Flag, 0);
- 	priv->rtllib->bdynamic_txpower_enable = false;
-@@ -637,10 +629,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 	RF_Type = priv->rf_type;
- 	Value = (RF_Type<<8) | powerlevelOFDM24G;
- 
--	RT_TRACE(COMP_POWER_TRACKING, "powerlevelOFDM24G = %x\n",
--		 powerlevelOFDM24G);
--
--
- 	for (j = 0; j <= 30; j++) {
- 
- 		tx_cmd.Op		= TXCMD_SET_TX_PWR_TRACKING;
-@@ -656,15 +644,11 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 				mdelay(1);
- 
- 				if (priv->bResetInProgress) {
--					RT_TRACE(COMP_POWER_TRACKING,
--						 "we are in silent reset progress, so return\n");
- 					rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 					rtl92e_writeb(dev, FW_Busy_Flag, 0);
- 					return;
- 				}
- 				if (priv->rtllib->eRFPowerState != eRfOn) {
--					RT_TRACE(COMP_POWER_TRACKING,
--						 "we are in power save, so return\n");
- 					rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 					rtl92e_writeb(dev, FW_Busy_Flag, 0);
- 					return;
-@@ -689,10 +673,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 					tmp_report[k] = rtl92e_readb(dev,
- 							 Tssi_Report_Value2);
- 
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "TSSI_report_value = %d\n",
--					 tmp_report[k]);
--
- 				if (tmp_report[k] <= 20) {
- 					viviflag = true;
- 					break;
-@@ -702,8 +682,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 			if (viviflag) {
- 				rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 				viviflag = false;
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "we filted this data\n");
- 				for (k = 0; k < 5; k++)
- 					tmp_report[k] = 0;
- 				break;
-@@ -713,12 +691,7 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 				Avg_TSSI_Meas_from_driver += tmp_report[k];
- 
- 			Avg_TSSI_Meas_from_driver *= 100 / 5;
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "Avg_TSSI_Meas_from_driver = %d\n",
--				 Avg_TSSI_Meas_from_driver);
- 			TSSI_13dBm = priv->TSSI_13dBm;
--			RT_TRACE(COMP_POWER_TRACKING, "TSSI_13dBm = %d\n",
--				 TSSI_13dBm);
- 
- 			if (Avg_TSSI_Meas_from_driver > TSSI_13dBm)
- 				delta = Avg_TSSI_Meas_from_driver - TSSI_13dBm;
-@@ -729,20 +702,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 				priv->rtllib->bdynamic_txpower_enable = true;
- 				rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 				rtl92e_writeb(dev, FW_Busy_Flag, 0);
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "tx power track is done\n");
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "priv->rfa_txpowertrackingindex = %d\n",
--					 priv->rfa_txpowertrackingindex);
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "priv->rfa_txpowertrackingindex_real = %d\n",
--					 priv->rfa_txpowertrackingindex_real);
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "priv->CCKPresentAttentuation_difference = %d\n",
--					 priv->CCKPresentAttentuation_difference);
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "priv->CCKPresentAttentuation = %d\n",
--					 priv->CCKPresentAttentuation);
- 				return;
- 			}
- 			if (Avg_TSSI_Meas_from_driver < TSSI_13dBm - E_FOR_TX_POWER_TRACK)
-@@ -785,26 +744,12 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 				} else
- 					rtl92e_dm_cck_txpower_adjust(dev, priv->bcck_in_ch14);
- 			}
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->rfa_txpowertrackingindex = %d\n",
--				 priv->rfa_txpowertrackingindex);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->rfa_txpowertrackingindex_real = %d\n",
--				 priv->rfa_txpowertrackingindex_real);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->CCKPresentAttentuation_difference = %d\n",
--				 priv->CCKPresentAttentuation_difference);
--			RT_TRACE(COMP_POWER_TRACKING,
--				 "priv->CCKPresentAttentuation = %d\n",
--				 priv->CCKPresentAttentuation);
- 
- 			if (priv->CCKPresentAttentuation_difference <= -12 ||
- 			    priv->CCKPresentAttentuation_difference >= 24) {
- 				priv->rtllib->bdynamic_txpower_enable = true;
- 				rtl92e_writeb(dev, Pw_Track_Flag, 0);
- 				rtl92e_writeb(dev, FW_Busy_Flag, 0);
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "tx power track--->limited\n");
- 				return;
- 			}
- 
-@@ -834,10 +779,6 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 		for (i = 0; i < OFDM_Table_Length; i++) {
- 			if (tmpRegA == OFDMSwingTable[i]) {
- 				priv->OFDM_index[0] = i;
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "Initial reg0x%x = 0x%x, OFDM_index = 0x%x\n",
--					 rOFDM0_XATxIQImbalance, tmpRegA,
--					 priv->OFDM_index[0]);
- 			}
- 		}
- 
-@@ -845,10 +786,6 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 		for (i = 0; i < CCK_Table_length; i++) {
- 			if (TempCCk == (u32)CCKSwingTable_Ch1_Ch13[i][0]) {
- 				priv->CCK_index = i;
--				RT_TRACE(COMP_POWER_TRACKING,
--					 "Initial reg0x%x = 0x%x, CCK_index = 0x%x\n",
--					 rCCK0_TxFilter1, TempCCk,
--					 priv->CCK_index);
- 				break;
- 			}
- 		}
-@@ -857,12 +794,10 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 	}
- 
- 	tmpRegA = rtl92e_get_rf_reg(dev, RF90_PATH_A, 0x12, 0x078);
--	RT_TRACE(COMP_POWER_TRACKING, "Readback ThermalMeterA = %d\n", tmpRegA);
- 	if (tmpRegA < 3 || tmpRegA > 13)
- 		return;
- 	if (tmpRegA >= 12)
- 		tmpRegA = 12;
--	RT_TRACE(COMP_POWER_TRACKING, "Valid ThermalMeterA = %d\n", tmpRegA);
- 	priv->ThermalMeter[0] = ThermalMeterVal;
- 	priv->ThermalMeter[1] = ThermalMeterVal;
- 
-@@ -894,9 +829,6 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 
- 	priv->Record_CCK_20Mindex = tmpCCK20Mindex;
- 	priv->Record_CCK_40Mindex = tmpCCK40Mindex;
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Record_CCK_20Mindex / Record_CCK_40Mindex = %d / %d.\n",
--		 priv->Record_CCK_20Mindex, priv->Record_CCK_40Mindex);
- 
- 	if (priv->rtllib->current_network.channel == 14 &&
- 	    !priv->bcck_in_ch14) {
-@@ -919,9 +851,6 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 		priv->OFDM_index[0] = tmpOFDMindex;
- 		rtl92e_set_bb_reg(dev, rOFDM0_XATxIQImbalance, bMaskDWord,
- 				  OFDMSwingTable[priv->OFDM_index[0]]);
--		RT_TRACE(COMP_POWER_TRACKING, "Update OFDMSwing[%d] = 0x%x\n",
--			 priv->OFDM_index[0],
--			 OFDMSwingTable[priv->OFDM_index[0]]);
- 	}
- 	priv->txpower_count = 0;
- }
-@@ -960,8 +889,6 @@ static void _rtl92e_dm_init_tx_power_tracking_thermal(struct net_device *dev)
- 		priv->btxpower_tracking = false;
- 	priv->txpower_count       = 0;
- 	priv->btxpower_trackingInit = false;
--	RT_TRACE(COMP_POWER_TRACKING, "pMgntInfo->bTXPowerTracking = %d\n",
--		 priv->btxpower_tracking);
+ 	spin_unlock_irqrestore(&priv->rf_ps_lock, flags);
+-	RT_TRACE(COMP_PS, "%s()============>come to wake up\n", __func__);
+ 	rtl92e_set_rf_state(dev, eRfOn, RF_CHANGE_BY_PS);
  }
  
- void rtl92e_dm_init_txpower_tracking(struct net_device *dev)
-@@ -979,7 +906,6 @@ static void _rtl92e_dm_check_tx_power_tracking_tssi(struct net_device *dev)
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 	static u32 tx_power_track_counter;
+@@ -110,15 +103,10 @@ static void _rtl92e_ps_update_rf_state(struct net_device *dev)
+ 	struct rt_pwr_save_ctrl *pPSC = (struct rt_pwr_save_ctrl *)
+ 					&(priv->rtllib->PowerSaveControl);
  
--	RT_TRACE(COMP_POWER_TRACKING, "%s()\n", __func__);
- 	if (rtl92e_readb(dev, 0x11e) == 1)
- 		return;
- 	if (!priv->btxpower_tracking)
-@@ -1086,44 +1012,29 @@ static void _rtl92e_dm_cck_tx_power_adjust_thermal_meter(struct net_device *dev,
- 		TempVal = CCKSwingTable_Ch1_Ch13[priv->CCK_index][0] +
- 			  (CCKSwingTable_Ch1_Ch13[priv->CCK_index][1] << 8);
- 		rtl92e_set_bb_reg(dev, rCCK0_TxFilter1, bMaskHWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING,
--			 "CCK not chnl 14, reg 0x%x = 0x%x\n", rCCK0_TxFilter1,
--			 TempVal);
- 		TempVal = CCKSwingTable_Ch1_Ch13[priv->CCK_index][2] +
- 			  (CCKSwingTable_Ch1_Ch13[priv->CCK_index][3] << 8) +
- 			  (CCKSwingTable_Ch1_Ch13[priv->CCK_index][4] << 16)+
- 			  (CCKSwingTable_Ch1_Ch13[priv->CCK_index][5] << 24);
- 		rtl92e_set_bb_reg(dev, rCCK0_TxFilter2, bMaskDWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING,
--			 "CCK not chnl 14, reg 0x%x = 0x%x\n", rCCK0_TxFilter2,
--			 TempVal);
- 		TempVal = CCKSwingTable_Ch1_Ch13[priv->CCK_index][6] +
- 			  (CCKSwingTable_Ch1_Ch13[priv->CCK_index][7] << 8);
+-	RT_TRACE(COMP_PS, "%s() --------->\n", __func__);
+ 	pPSC->bSwRfProcessing = true;
+-
+-	RT_TRACE(COMP_PS, "%s(): Set RF to %s.\n", __func__,
+-		 pPSC->eInactivePowerState == eRfOff ? "OFF" : "ON");
+ 	rtl92e_set_rf_state(dev, pPSC->eInactivePowerState, RF_CHANGE_BY_IPS);
  
- 		rtl92e_set_bb_reg(dev, rCCK0_DebugPort, bMaskLWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING,
--			 "CCK not chnl 14, reg 0x%x = 0x%x\n", rCCK0_DebugPort,
--			 TempVal);
- 	} else {
- 		TempVal = CCKSwingTable_Ch14[priv->CCK_index][0] +
- 			  (CCKSwingTable_Ch14[priv->CCK_index][1] << 8);
- 
- 		rtl92e_set_bb_reg(dev, rCCK0_TxFilter1, bMaskHWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING, "CCK chnl 14, reg 0x%x = 0x%x\n",
--			rCCK0_TxFilter1, TempVal);
- 		TempVal = CCKSwingTable_Ch14[priv->CCK_index][2] +
- 			  (CCKSwingTable_Ch14[priv->CCK_index][3] << 8) +
- 			  (CCKSwingTable_Ch14[priv->CCK_index][4] << 16)+
- 			  (CCKSwingTable_Ch14[priv->CCK_index][5] << 24);
- 		rtl92e_set_bb_reg(dev, rCCK0_TxFilter2, bMaskDWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING, "CCK chnl 14, reg 0x%x = 0x%x\n",
--			rCCK0_TxFilter2, TempVal);
- 		TempVal = CCKSwingTable_Ch14[priv->CCK_index][6] +
- 			  (CCKSwingTable_Ch14[priv->CCK_index][7]<<8);
- 
- 		rtl92e_set_bb_reg(dev, rCCK0_DebugPort, bMaskLWord, TempVal);
--		RT_TRACE(COMP_POWER_TRACKING, "CCK chnl 14, reg 0x%x = 0x%x\n",
--			rCCK0_DebugPort, TempVal);
- 	}
+ 	pPSC->bSwRfProcessing = false;
+-	RT_TRACE(COMP_PS, "%s() <---------\n", __func__);
  }
  
-@@ -1141,32 +1052,12 @@ static void _rtl92e_dm_tx_power_reset_recovery(struct net_device *dev)
- {
- 	struct r8192_priv *priv = rtllib_priv(dev);
+ void rtl92e_ips_enter(struct net_device *dev)
+@@ -133,7 +121,6 @@ void rtl92e_ips_enter(struct net_device *dev)
+ 		if (rt_state == eRfOn && !pPSC->bSwRfProcessing &&
+ 			(priv->rtllib->state != RTLLIB_LINKED) &&
+ 			(priv->rtllib->iw_mode != IW_MODE_MASTER)) {
+-			RT_TRACE(COMP_PS, "%s(): Turn off RF.\n", __func__);
+ 			pPSC->eInactivePowerState = eRfOff;
+ 			priv->isRFOff = true;
+ 			priv->bInPowerSaveMode = true;
+@@ -153,7 +140,6 @@ void rtl92e_ips_leave(struct net_device *dev)
+ 		rt_state = priv->rtllib->eRFPowerState;
+ 		if (rt_state != eRfOn  && !pPSC->bSwRfProcessing &&
+ 		    priv->rtllib->RfOffReason <= RF_CHANGE_BY_IPS) {
+-			RT_TRACE(COMP_PS, "%s(): Turn on RF.\n", __func__);
+ 			pPSC->eInactivePowerState = eRfOn;
+ 			priv->bInPowerSaveMode = false;
+ 			_rtl92e_ps_update_rf_state(dev);
+@@ -210,7 +196,6 @@ static bool _rtl92e_ps_set_mode(struct net_device *dev, u8 rtPsMode)
+ 	if (priv->rtllib->iw_mode == IW_MODE_ADHOC)
+ 		return false;
  
--	RT_TRACE(COMP_POWER_TRACKING, "Start Reset Recovery ==>\n");
- 	rtl92e_set_bb_reg(dev, rOFDM0_XATxIQImbalance, bMaskDWord,
- 			  dm_tx_bb_gain[priv->rfa_txpowertrackingindex]);
--	RT_TRACE(COMP_POWER_TRACKING, "Reset Recovery: Fill in 0xc80 is %08x\n",
--		 dm_tx_bb_gain[priv->rfa_txpowertrackingindex]);
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Reset Recovery: Fill in RFA_txPowerTrackingIndex is %x\n",
--		 priv->rfa_txpowertrackingindex);
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Reset Recovery : RF A I/Q Amplify Gain is %d\n",
--		 dm_tx_bb_gain_idx_to_amplify(priv->rfa_txpowertrackingindex));
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Reset Recovery: CCK Attenuation is %d dB\n",
--		 priv->CCKPresentAttentuation);
- 	rtl92e_dm_cck_txpower_adjust(dev, priv->bcck_in_ch14);
+-	RT_TRACE(COMP_LPS, "%s(): set ieee->ps = %x\n", __func__, rtPsMode);
+ 	if (!priv->ps_force)
+ 		priv->rtllib->ps = rtPsMode;
+ 	if (priv->rtllib->sta_sleep != LPS_IS_WAKE &&
+@@ -221,8 +206,6 @@ static bool _rtl92e_ps_set_mode(struct net_device *dev, u8 rtPsMode)
+ 		priv->rtllib->sta_sleep = LPS_IS_WAKE;
  
- 	rtl92e_set_bb_reg(dev, rOFDM0_XCTxIQImbalance, bMaskDWord,
- 			  dm_tx_bb_gain[priv->rfc_txpowertrackingindex]);
--	RT_TRACE(COMP_POWER_TRACKING, "Reset Recovery: Fill in 0xc90 is %08x\n",
--		 dm_tx_bb_gain[priv->rfc_txpowertrackingindex]);
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Reset Recovery: Fill in RFC_txPowerTrackingIndex is %x\n",
--		 priv->rfc_txpowertrackingindex);
--	RT_TRACE(COMP_POWER_TRACKING,
--		 "Reset Recovery : RF C I/Q Amplify Gain is %d\n",
--		 dm_tx_bb_gain_idx_to_amplify(priv->rfc_txpowertrackingindex));
- }
- 
- void rtl92e_dm_restore_state(struct net_device *dev)
-@@ -1176,8 +1067,6 @@ void rtl92e_dm_restore_state(struct net_device *dev)
- 	u32 ratr_value;
- 
- 	if (!priv->up) {
--		RT_TRACE(COMP_RATE,
--			 "<---- %s: driver is going to unload\n", __func__);
- 		return;
+ 		spin_lock_irqsave(&(priv->rtllib->mgmt_tx_lock), flags);
+-		RT_TRACE(COMP_DBG,
+-			 "LPS leave: notify AP we are awaked ++++++++++ SendNullFunctionData\n");
+ 		rtllib_sta_ps_send_null_frame(priv->rtllib, 0);
+ 		spin_unlock_irqrestore(&(priv->rtllib->mgmt_tx_lock), flags);
  	}
+@@ -236,12 +219,6 @@ void rtl92e_leisure_ps_enter(struct net_device *dev)
+ 	struct rt_pwr_save_ctrl *pPSC = (struct rt_pwr_save_ctrl *)
+ 					&(priv->rtllib->PowerSaveControl);
  
-@@ -1218,17 +1107,6 @@ static void _rtl92e_dm_bb_initialgain_restore(struct net_device *dev)
- 	bit_mask  = bMaskByte2;
- 	rtl92e_set_bb_reg(dev, rCCK0_CCA, bit_mask,
- 			  (u32)priv->initgain_backup.cca);
+-	RT_TRACE(COMP_PS, "%s()...\n", __func__);
+-	RT_TRACE(COMP_PS,
+-		 "pPSC->bLeisurePs = %d, ieee->ps = %d,pPSC->LpsIdleCount is %d,RT_CHECK_FOR_HANG_PERIOD is %d\n",
+-		 pPSC->bLeisurePs, priv->rtllib->ps, pPSC->LpsIdleCount,
+-		 RT_CHECK_FOR_HANG_PERIOD);
 -
--	RT_TRACE(COMP_DIG, "dm_BBInitialGainRestore 0xc50 is %x\n",
--		 priv->initgain_backup.xaagccore1);
--	RT_TRACE(COMP_DIG, "dm_BBInitialGainRestore 0xc58 is %x\n",
--		 priv->initgain_backup.xbagccore1);
--	RT_TRACE(COMP_DIG, "dm_BBInitialGainRestore 0xc60 is %x\n",
--		 priv->initgain_backup.xcagccore1);
--	RT_TRACE(COMP_DIG, "dm_BBInitialGainRestore 0xc68 is %x\n",
--		 priv->initgain_backup.xdagccore1);
--	RT_TRACE(COMP_DIG, "dm_BBInitialGainRestore 0xa0a is %x\n",
--		 priv->initgain_backup.cca);
- 	rtl92e_set_bb_reg(dev, UFWP, bMaskByte1, 0x1);
+ 	if (!((priv->rtllib->iw_mode == IW_MODE_INFRA) &&
+ 	    (priv->rtllib->state == RTLLIB_LINKED))
+ 	    || (priv->rtllib->iw_mode == IW_MODE_ADHOC) ||
+@@ -252,10 +229,6 @@ void rtl92e_leisure_ps_enter(struct net_device *dev)
+ 		if (pPSC->LpsIdleCount >= RT_CHECK_FOR_HANG_PERIOD) {
  
- }
-@@ -1251,17 +1129,6 @@ void rtl92e_dm_backup_state(struct net_device *dev)
- 	priv->initgain_backup.xdagccore1 = rtl92e_get_bb_reg(dev, rOFDM0_XDAGCCore1, bit_mask);
- 	bit_mask  = bMaskByte2;
- 	priv->initgain_backup.cca = (u8)rtl92e_get_bb_reg(dev, rCCK0_CCA, bit_mask);
+ 			if (priv->rtllib->ps == RTLLIB_PS_DISABLED) {
 -
--	RT_TRACE(COMP_DIG, "BBInitialGainBackup 0xc50 is %x\n",
--		 priv->initgain_backup.xaagccore1);
--	RT_TRACE(COMP_DIG, "BBInitialGainBackup 0xc58 is %x\n",
--		 priv->initgain_backup.xbagccore1);
--	RT_TRACE(COMP_DIG, "BBInitialGainBackup 0xc60 is %x\n",
--		 priv->initgain_backup.xcagccore1);
--	RT_TRACE(COMP_DIG, "BBInitialGainBackup 0xc68 is %x\n",
--		 priv->initgain_backup.xdagccore1);
--	RT_TRACE(COMP_DIG, "BBInitialGainBackup 0xa0a is %x\n",
--		 priv->initgain_backup.cca);
- }
- 
- static void _rtl92e_dm_dig_init(struct net_device *dev)
-@@ -1820,12 +1687,10 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
- 	eRfPowerStateToSet = (tmp1byte&BIT1) ?  eRfOn : eRfOff;
- 
- 	if (priv->hw_radio_off && (eRfPowerStateToSet == eRfOn)) {
--		RT_TRACE(COMP_RF, "gpiochangeRF  - HW Radio ON\n");
- 		netdev_info(dev, "gpiochangeRF  - HW Radio ON\n");
- 		priv->hw_radio_off = false;
- 		bActuallySet = true;
- 	} else if (!priv->hw_radio_off && (eRfPowerStateToSet == eRfOff)) {
--		RT_TRACE(COMP_RF, "gpiochangeRF  - HW Radio OFF\n");
- 		netdev_info(dev, "gpiochangeRF  - HW Radio OFF\n");
- 		priv->hw_radio_off = true;
- 		bActuallySet = true;
-@@ -2173,10 +2038,6 @@ static void _rtl92e_dm_fsync_timer_callback(struct timer_list *t)
- 		}
- 		priv->rate_record = rate_count;
- 		priv->rateCountDiffRecord = rate_count_diff;
--		RT_TRACE(COMP_HALDM,
--			 "rateRecord %d rateCount %d, rateCountdiff %d bSwitchFsync %d\n",
--			 priv->rate_record, rate_count, rate_count_diff,
--			 priv->bswitch_fsync);
- 		if (priv->undecorated_smoothed_pwdb >
- 		    priv->rtllib->fsync_rssi_threshold &&
- 		    bSwitchFromCountDiff) {
-@@ -2220,11 +2081,6 @@ static void _rtl92e_dm_fsync_timer_callback(struct timer_list *t)
- 		priv->ContinueDiffCount = 0;
- 		rtl92e_writel(dev, rOFDM0_RxDetector2, 0x465c52cd);
- 	}
--	RT_TRACE(COMP_HALDM, "ContinueDiffCount %d\n", priv->ContinueDiffCount);
--	RT_TRACE(COMP_HALDM,
--		 "rateRecord %d rateCount %d, rateCountdiff %d bSwitchFsync %d\n",
--		 priv->rate_record, rate_count, rate_count_diff,
--		 priv->bswitch_fsync);
- }
- 
- static void _rtl92e_dm_start_hw_fsync(struct net_device *dev)
-@@ -2232,7 +2088,6 @@ static void _rtl92e_dm_start_hw_fsync(struct net_device *dev)
- 	u8 rf_timing = 0x77;
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 
--	RT_TRACE(COMP_HALDM, "%s\n", __func__);
- 	rtl92e_writel(dev, rOFDM0_RxDetector2, 0x465c12cf);
- 	priv->rtllib->SetHwRegHandler(dev, HW_VAR_RF_TIMING,
- 				      (u8 *)(&rf_timing));
-@@ -2244,7 +2099,6 @@ static void _rtl92e_dm_end_hw_fsync(struct net_device *dev)
- 	u8 rf_timing = 0xaa;
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 
--	RT_TRACE(COMP_HALDM, "%s\n", __func__);
- 	rtl92e_writel(dev, rOFDM0_RxDetector2, 0x465c52cd);
- 	priv->rtllib->SetHwRegHandler(dev, HW_VAR_RF_TIMING, (u8 *)
- 				     (&rf_timing));
-@@ -2255,7 +2109,6 @@ static void _rtl92e_dm_end_sw_fsync(struct net_device *dev)
- {
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 
--	RT_TRACE(COMP_HALDM, "%s\n", __func__);
- 	del_timer_sync(&(priv->fsync_timer));
- 
- 	if (priv->bswitch_fsync) {
-@@ -2276,7 +2129,6 @@ static void _rtl92e_dm_start_sw_fsync(struct net_device *dev)
- 	u32			rateIndex;
- 	u32			rateBitmap;
- 
--	RT_TRACE(COMP_HALDM, "%s\n", __func__);
- 	priv->rate_record = 0;
- 	priv->ContinueDiffCount = 0;
- 	priv->rateCountDiffRecord = 0;
-@@ -2315,17 +2167,6 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
- 	static u8 reg_c38_State = RegC38_Default;
- 	static u32 reset_cnt;
- 
--	RT_TRACE(COMP_HALDM,
--		 "RSSI %d TimeInterval %d MultipleTimeInterval %d\n",
--		 priv->rtllib->fsync_rssi_threshold,
--		 priv->rtllib->fsync_time_interval,
--		 priv->rtllib->fsync_multiple_timeinterval);
--	RT_TRACE(COMP_HALDM,
--		 "RateBitmap 0x%x FirstDiffRateThreshold %d SecondDiffRateThreshold %d\n",
--		 priv->rtllib->fsync_rate_bitmap,
--		 priv->rtllib->fsync_firstdiff_ratethreshold,
--		 priv->rtllib->fsync_seconddiff_ratethreshold);
+-				RT_TRACE(COMP_LPS,
+-					 "%s(): Enter 802.11 power save mode...\n", __func__);
 -
- 	if (priv->rtllib->state == RTLLIB_LINKED &&
- 	    priv->rtllib->pHTInfo->IOTPeer == HT_IOT_PEER_BROADCOM) {
- 		if (priv->rtllib->bfsync_enable == 0) {
-@@ -2461,9 +2302,6 @@ static void _rtl92e_dm_dynamic_tx_power(struct net_device *dev)
- 		txlowpower_threshold = TX_POWER_NEAR_FIELD_THRESH_LOW;
- 	}
+ 				if (!pPSC->bFwCtrlLPS) {
+ 					if (priv->rtllib->SetFwCmdHandler)
+ 						priv->rtllib->SetFwCmdHandler(
+@@ -275,15 +248,8 @@ void rtl92e_leisure_ps_leave(struct net_device *dev)
+ 	struct rt_pwr_save_ctrl *pPSC = (struct rt_pwr_save_ctrl *)
+ 					&(priv->rtllib->PowerSaveControl);
  
--	RT_TRACE(COMP_TXAGC, "priv->undecorated_smoothed_pwdb = %ld\n",
--		 priv->undecorated_smoothed_pwdb);
 -
- 	if (priv->rtllib->state == RTLLIB_LINKED) {
- 		if (priv->undecorated_smoothed_pwdb >= txhipower_threshold) {
- 			priv->bDynamicTxHighPower = true;
-@@ -2484,9 +2322,6 @@ static void _rtl92e_dm_dynamic_tx_power(struct net_device *dev)
+-	RT_TRACE(COMP_PS, "%s()...\n", __func__);
+-	RT_TRACE(COMP_PS, "pPSC->bLeisurePs = %d, ieee->ps = %d\n",
+-		pPSC->bLeisurePs, priv->rtllib->ps);
+-
+ 	if (pPSC->bLeisurePs) {
+ 		if (priv->rtllib->ps != RTLLIB_PS_DISABLED) {
+-			RT_TRACE(COMP_LPS,
+-				 "%s(): Busy Traffic , Leave 802.11 power save..\n", __func__);
+ 			_rtl92e_ps_set_mode(dev, RTLLIB_PS_DISABLED);
  
- 	if ((priv->bDynamicTxHighPower != priv->bLastDTPFlag_High) ||
- 	    (priv->bDynamicTxLowPower != priv->bLastDTPFlag_Low)) {
--		RT_TRACE(COMP_TXAGC, "SetTxPowerLevel8190()  channel = %d\n",
--			 priv->rtllib->current_network.channel);
--
- 		rtl92e_set_tx_power(dev, priv->rtllib->current_network.channel);
- 	}
- 	priv->bLastDTPFlag_High = priv->bDynamicTxHighPower;
+ 			if (!pPSC->bFwCtrlLPS) {
 -- 
 2.37.3
 
