@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D53C5BB9E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C485BB9E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiIQScV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 14:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S229613AbiIQScY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 14:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQScP (ORCPT
+        with ESMTP id S229570AbiIQScQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 14:32:15 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFF72C678
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:32:14 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id p69so30417506yba.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:32:14 -0700 (PDT)
+        Sat, 17 Sep 2022 14:32:16 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52462CCB3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:32:15 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3321c2a8d4cso296471727b3.5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=XuJnLWdoR6SviPcUc/49at2QbmUOJmkyf0qoFnjTlRM=;
-        b=jU9hKS7ygUDxtTFOXLH4RSn40IlDB7mfQJJahl+Z+Mf6mo0esTBhFpDLbs6+6r34ya
-         DmDsXBkD26yaoOtLj5uiKBgyMkkefygI8tw6p38pjmT6+bwa5DXXVxZUizSV3VQfsj0s
-         AkbXooeEDFa6T2D8Jt2sDWFsMRVId3YLzn8Ns=
+        bh=ddmg5bRCAtXyxOkY+3dyLtIUd+SwkxVDg5Z+QEuBU9w=;
+        b=lcwodcX5v2bqj7Qs6vsBtAbOPk+cjgDXQ4hiyf44oGWS8dLoCDVWheuZdnNGu7eg1u
+         nvizPsQUjW/BmgPIj7B9Jr0ScoMzbN2JnYV3ZuWsVuTwLSu4+BWKQymWM5SI4afLlbeU
+         YphL4O1TBH8aniK9Hz/cYYXW+cBIXLPUpHpLA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=XuJnLWdoR6SviPcUc/49at2QbmUOJmkyf0qoFnjTlRM=;
-        b=idnqx/f7/FfBlDhZAE/uJuIWjKHAvnYUxfVczVCsP6wLZfToWy5PI+0HbH630QrptV
-         iWDQZYRtVNp3zhg/RPxseig5hsMhSnl9llD2I1JeInpLAPud9+ECrfvDzDy3ucoLhUCl
-         LgplOXlbEbyHKl+qAIdlC11jnlL65oUXGrVVUsCBgmV+Q3BgTBeOlm5w1cyytBMg1nnd
-         gPaCjAFMHmvtsDasMcx1CzEnA6KRF5kCE5KZbrHe2iREpUPPY5148U+FYwReGz+5of4D
-         RclQc2X39xvq4/9lGBP+2E+29E9OMG+SpZmEBnSYAZsOjppPJzLQuPGnKR9gTzysSQTl
-         klpQ==
-X-Gm-Message-State: ACrzQf0G9AYn09cfXcp9gbjkv6bug8KDsLD61OlZeayiFowV+iGKdFkz
-        39yHa3mM5LLeTkEH7pe2cYjGe7RL9cMqYAVX7ZLaHg==
-X-Google-Smtp-Source: AMsMyM5mAYaGVuVzPinrO1XvntIhSdFbE5ZHoHgX8xEqSzyqRQN4/JaIXf/Kfak2q23rDcCc+sdTR5TexdKj9GReMeE=
-X-Received: by 2002:a05:6902:72f:b0:6b1:d9:79d2 with SMTP id
- l15-20020a056902072f00b006b100d979d2mr2026914ybt.201.1663439533294; Sat, 17
- Sep 2022 11:32:13 -0700 (PDT)
+        bh=ddmg5bRCAtXyxOkY+3dyLtIUd+SwkxVDg5Z+QEuBU9w=;
+        b=mJou69gAfp6zYRJ7aSHIU5SNJgCx3xRChz9M3m6ia0IG/4VQv5buC9HEGZYsIzSd5E
+         ZI/ifgICcJyXG4ZBCEoD0zxJxijVLQllfniUS8bCkIygk9UkgIF/aPyzr78TdZ9AgD48
+         ADmg28J6B+1Zv1BruPzfDSNwLsCWW7H+f8R+xpxtkvd7/oC99be0ESh4bU9pnSLPcICX
+         dXXI+uYF9/eGyzeO8GFBnwof8JJE83h6SmyNCkndAYri1a0frWpxtbLMg64IpSEcx9Vs
+         wsqxzzpBsh+yt5i2+Jb/JgfzVKoEUkhTsLvZjdyT7kB6Z0ppgNhM1UsnmdylHdp05Wq9
+         Ra+Q==
+X-Gm-Message-State: ACrzQf0IqznCr2YGxe30TZsxY4pvoB5PNfPuGfEwqml0/YTb/AR/Aybm
+        bXW4XFCqe87sx3OuLrQ4RZMGe1yy76JqfH0xgtjn9Q==
+X-Google-Smtp-Source: AMsMyM5hK1ssqE4TGQuqJXjL0whrUXobHN7ZUamDD3cTgvNnS50Wnk1qlCH7crY/WT6AesGcNm6+V+om8yX/lPv7LAs=
+X-Received: by 2002:a0d:e80b:0:b0:345:1c88:2885 with SMTP id
+ r11-20020a0de80b000000b003451c882885mr8675871ywe.322.1663439534933; Sat, 17
+ Sep 2022 11:32:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220916230853.49056-1-ivan@cloudflare.com> <20220916170115.35932cba34e2cc2d923b03b5@linux-foundation.org>
- <YyV0AZ9+Zz4aopq4@localhost.localdomain>
-In-Reply-To: <YyV0AZ9+Zz4aopq4@localhost.localdomain>
+References: <20220916230853.49056-1-ivan@cloudflare.com> <YyXoVxS5+FUA+vat@mit.edu>
+In-Reply-To: <YyXoVxS5+FUA+vat@mit.edu>
 From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Sat, 17 Sep 2022 11:32:02 -0700
-Message-ID: <CABWYdi1LX5n1DdL1B7s+=TVK=5JDMVyp91d3yRDA0_GW4Xy8wg@mail.gmail.com>
+Date:   Sat, 17 Sep 2022 11:32:04 -0700
+Message-ID: <CABWYdi0BF4TmwcNhwszUJ=aseOiPYVo3cR1oh9RK=6AXAxKYmQ@mail.gmail.com>
 Subject: Re: [RFC] proc: report open files as size in stat() for /proc/pid/fd
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org,
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     linux-fsdevel@vger.kernel.org,
         linux-kernel <linux-kernel@vger.kernel.org>,
         kernel-team <kernel-team@cloudflare.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kalesh Singh <kaleshsingh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -67,191 +65,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > * Make fd count acces O(1) and expose it in /proc/pid/status
+On Sat, Sep 17, 2022 at 8:31 AM Theodore Ts'o <tytso@mit.edu> wrote:
 >
-> This is doable, next to FDSize.
-
-It feels like a better solution, but maybe I'm missing some context
-here. Let me know whether this is preferred.
-
-That said, I've tried doing it, but failed. There's a noticeable
-mismatch in the numbers:
-
-* systemd:
-
-ivan@vm:~$ sudo ls -l /proc/1/fd | wc -l
-66
-ivan@vm:~$ cat /proc/1/status | fgrep FD
-FDSize: 256
-FDUsed: 71
-
-* journald:
-
-ivan@vm:~$ sudo ls -l /proc/803/fd | wc -l
-29
-ivan@vm:~$ cat /proc/803/status | fgrep FD
-FDSize: 128
-FDUsed: 37
-
-I'll see if I can make it work next week. I'm happy to receive tips as well.
-
-Below is my attempt (link in case gmail breaks patch formatting):
-
-* https://gist.githubusercontent.com/bobrik/acce40881d629d8cce2e55966b31a0a2/raw/716eb4724a8fe3afeeb76fd2a7a47ee13790a9e9/fdused.patch
-
-diff --git a/fs/file.c b/fs/file.c
-index 3bcc1ecc314a..8bc0741cabf1 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -85,6 +85,8 @@ static void copy_fdtable(struct fdtable *nfdt,
-struct fdtable *ofdt)
-  memset((char *)nfdt->fd + cpy, 0, set);
-
-  copy_fd_bitmaps(nfdt, ofdt, ofdt->max_fds);
-+
-+ atomic_set(&nfdt->count, atomic_read(&ofdt->count));
- }
-
- /*
-@@ -105,6 +107,7 @@ static void copy_fdtable(struct fdtable *nfdt,
-struct fdtable *ofdt)
- static struct fdtable * alloc_fdtable(unsigned int nr)
- {
-  struct fdtable *fdt;
-+ atomic_t count = ATOMIC_INIT(0);
-  void *data;
-
-  /*
-@@ -148,6 +151,7 @@ static struct fdtable * alloc_fdtable(unsigned int nr)
-  fdt->close_on_exec = data;
-  data += nr / BITS_PER_BYTE;
-  fdt->full_fds_bits = data;
-+ fdt->count = count;
-
-  return fdt;
-
-@@ -399,6 +403,8 @@ struct files_struct *dup_fd(struct files_struct
-*oldf, unsigned int max_fds, int
-  /* clear the remainder */
-  memset(new_fds, 0, (new_fdt->max_fds - open_files) * sizeof(struct file *));
-
-+ atomic_set(&new_fdt->count, atomic_read(&old_fdt->count));
-+
-  rcu_assign_pointer(newf->fdt, new_fdt);
-
-  return newf;
-@@ -474,6 +480,7 @@ struct files_struct init_files = {
-  .close_on_exec = init_files.close_on_exec_init,
-  .open_fds = init_files.open_fds_init,
-  .full_fds_bits = init_files.full_fds_bits_init,
-+ .count = ATOMIC_INIT(0),
-  },
-  .file_lock = __SPIN_LOCK_UNLOCKED(init_files.file_lock),
-  .resize_wait = __WAIT_QUEUE_HEAD_INITIALIZER(init_files.resize_wait),
-@@ -613,6 +620,7 @@ void fd_install(unsigned int fd, struct file *file)
-  BUG_ON(fdt->fd[fd] != NULL);
-  rcu_assign_pointer(fdt->fd[fd], file);
-  spin_unlock(&files->file_lock);
-+ atomic_inc(&fdt->count);
-  return;
-  }
-  /* coupled with smp_wmb() in expand_fdtable() */
-@@ -621,6 +629,7 @@ void fd_install(unsigned int fd, struct file *file)
-  BUG_ON(fdt->fd[fd] != NULL);
-  rcu_assign_pointer(fdt->fd[fd], file);
-  rcu_read_unlock_sched();
-+ atomic_inc(&fdt->count);
- }
-
- EXPORT_SYMBOL(fd_install);
-@@ -646,6 +655,7 @@ static struct file *pick_file(struct files_struct
-*files, unsigned fd)
-  if (file) {
-  rcu_assign_pointer(fdt->fd[fd], NULL);
-  __put_unused_fd(files, fd);
-+ atomic_dec(&fdt->count);
-  }
-  return file;
- }
-@@ -844,6 +854,7 @@ void do_close_on_exec(struct files_struct *files)
-  filp_close(file, files);
-  cond_resched();
-  spin_lock(&files->file_lock);
-+ atomic_dec(&fdt->count);
-  }
-
-  }
-@@ -1108,6 +1119,7 @@ __releases(&files->file_lock)
-  else
-  __clear_close_on_exec(fd, fdt);
-  spin_unlock(&files->file_lock);
-+ atomic_inc(&fdt->count);
-
-  if (tofree)
-  filp_close(tofree, files);
-diff --git a/fs/proc/array.c b/fs/proc/array.c
-index 99fcbfda8e25..5847f077bfc3 100644
---- a/fs/proc/array.c
-+++ b/fs/proc/array.c
-@@ -153,7 +153,8 @@ static inline void task_state(struct seq_file *m,
-struct pid_namespace *ns,
-  struct task_struct *tracer;
-  const struct cred *cred;
-  pid_t ppid, tpid = 0, tgid, ngid;
-- unsigned int max_fds = 0;
-+ struct fdtable *fdt;
-+ unsigned int max_fds = 0, open_fds = 0;
-
-  rcu_read_lock();
-  ppid = pid_alive(p) ?
-@@ -170,8 +171,11 @@ static inline void task_state(struct seq_file *m,
-struct pid_namespace *ns,
-  task_lock(p);
-  if (p->fs)
-  umask = p->fs->umask;
-- if (p->files)
-- max_fds = files_fdtable(p->files)->max_fds;
-+ if (p->files) {
-+ fdt = files_fdtable(p->files);
-+ max_fds = fdt->max_fds;
-+ open_fds = atomic_read(&fdt->count);
-+ }
-  task_unlock(p);
-  rcu_read_unlock();
-
-@@ -194,6 +198,7 @@ static inline void task_state(struct seq_file *m,
-struct pid_namespace *ns,
-  seq_put_decimal_ull(m, "\t", from_kgid_munged(user_ns, cred->sgid));
-  seq_put_decimal_ull(m, "\t", from_kgid_munged(user_ns, cred->fsgid));
-  seq_put_decimal_ull(m, "\nFDSize:\t", max_fds);
-+ seq_put_decimal_ull(m, "\nFDUsed:\t", open_fds);
-
-  seq_puts(m, "\nGroups:\t");
-  group_info = cred->group_info;
-diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
-index e066816f3519..59aceb1e4bc6 100644
---- a/include/linux/fdtable.h
-+++ b/include/linux/fdtable.h
-@@ -31,6 +31,7 @@ struct fdtable {
-  unsigned long *open_fds;
-  unsigned long *full_fds_bits;
-  struct rcu_head rcu;
-+ atomic_t count;
- };
-
- static inline bool close_on_exec(unsigned int fd, const struct fdtable *fdt)
-
-
-> > > +
-> > > +   generic_fillattr(&init_user_ns, inode, stat);
->                          ^^^^^^^^^^^^^
+> On Fri, Sep 16, 2022 at 04:08:52PM -0700, Ivan Babrou wrote:
+> > We considered putting the number of open files in /proc/pid/stat.
+> > Unfortunately, counting the number of fds involves iterating the fdtable,
+> > which means that it might slow down /proc/pid/stat for processes
+> > with many open files. Instead we opted to put this info in /proc/pid/fd
+> > as a size member of the stat syscall result. Previously the reported
+> > number was zero, so there's very little risk of breaking anything,
+> > while still providing a somewhat logical way to count the open files.
 >
-> Is this correct? I'm not userns guy at all.
+> Instead of using the st_size of /proc/<pid>/fd, why not return that
+> value in st_nlink?  /proc/<pid>/fd is a directory, so having st_nlinks
+> return number of fd's plus 2 (for . and ..) would be much more natural.
 
-I mostly copied from here:
-
-* https://elixir.bootlin.com/linux/v6.0-rc5/source/fs/proc/generic.c#L150
-
-Maybe it can be simplified even further to match this one:
-
-* https://elixir.bootlin.com/linux/v6.0-rc5/source/fs/proc/root.c#L317
+From what I see, st_nlinks is used for the number of subdirectories
+and it doesn't include files. In /proc/fd we only have files (well,
+symlinks really). I'm still happy to use that instead if that's
+preferred.
