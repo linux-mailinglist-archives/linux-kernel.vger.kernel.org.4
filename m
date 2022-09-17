@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69515BB713
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125FF5BB714
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiIQIHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S229683AbiIQIJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 04:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIQIHv (ORCPT
+        with ESMTP id S229669AbiIQIJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:07:51 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A1A4DB15
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:07:48 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r133-20020a1c448b000000b003b494ffc00bso665784wma.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:to:from:date:from:to:cc:subject:date;
-        bh=GFyHAzwXr730uhwdQiSNlgssWTGdDDZKeAK9yDoCuC0=;
-        b=CgM3eiZEevmVv1FT3J03eCBUkH5eK84YGk1Y+U88ZaRNMsJVkc3SDSHL9dGzuWFaBu
-         kz5jg3cFwOG31ztZ8Dhtr61KpperOlvXAvhbxIibi3X4A7iSnQvP6dWNm4ClgvcribDg
-         o47bMRN1xMMxM3pCO8RPSY4tycuu82AdGsR+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=GFyHAzwXr730uhwdQiSNlgssWTGdDDZKeAK9yDoCuC0=;
-        b=edwhC8uRgL46TpwfKU/5BSjmL4Eqh8Zn2vhOD8ZzqHHS5KKCWx86NerN7bm0btZmS2
-         ygregxEcDKOZ5OnpV0tNZwL+6kJS88YKY+dmExRbC7JIYrbsuAcMkVgU0jSdHIAzTeTC
-         grQxFGRGBZRYPwlE147TuZXiA845y3LffupDlc18PQxK1vBGq2UKPCXkfixfn3wAwTUK
-         m0Od1xKwk2G9NrLCt4ApsURcl2O1l8w6SLW9CYhCtwN+EheZ0pR0Ay3vWWMnNDMb12Or
-         g8/tkXLtGgU69LE6mpJ7hZeybqFONryG1wQfncoiRqhyl02CsoGO0e5mK0eQNoU8UeUi
-         9hzg==
-X-Gm-Message-State: ACgBeo1J93L9Gm9yVoPP26vWdk/0Gz5dvP2Wsgx+xxakZjGRAJKNQCq3
-        H8v05o86o05gM0IgBpcl/8d/uQ==
-X-Google-Smtp-Source: AA6agR62pl9C0D5FxdEANkkBx4K9fbVsk2ADSOwNLtlytmxLkb1EtZmKD1yK+H6CcGtDxTka7ZFg7A==
-X-Received: by 2002:a05:600c:a46:b0:3a6:9c49:b751 with SMTP id c6-20020a05600c0a4600b003a69c49b751mr12960881wmq.169.1663402066990;
-        Sat, 17 Sep 2022 01:07:46 -0700 (PDT)
-Received: from [127.0.0.1] ([82.141.251.26])
-        by smtp.gmail.com with ESMTPSA id k24-20020a05600c0b5800b003a502c23f2asm5081654wmr.16.2022.09.17.01.07.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 01:07:45 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 09:07:44 +0100
-From:   Kees Cook <keescook@chromium.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] kallsyms: Add self-test facility
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220909130016.727-9-thunder.leizhen@huawei.com>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com> <20220909130016.727-9-thunder.leizhen@huawei.com>
-Message-ID: <C889CF38-A80A-4DF6-9648-3B8947494CBC@chromium.org>
+        Sat, 17 Sep 2022 04:09:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE951401F
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663402191; x=1694938191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7W8jqt61giXCLdgAFKdnTy3mAba1l5HB3NWMC7GsU+M=;
+  b=gzYzr9IgWkqxBh12V/wjrmgSdI4LtNPP9+Mn93Nw9KOyF3qlCg6ZwaLb
+   92okf8ZF0c1PMLpYxsF0sFtXUg0hk6qrfwDD02i/a0SzZpihiBe1l6SXZ
+   OTSKIqFaUrIpxUFGu3ivGs6QMklDLqNWTkcjW+u/Xe7YpOEnn0mJzeACJ
+   Ylz/Tq6J7/rMOw+cRdJpovnQvilCCXabeSdxxkNAAQyKqxik3s4tkSYJv
+   h+6jS7q6vMo7YInGzB0747NsCxjE/XIwI3180gEa5bvFw3mqDvqGReob2
+   IMfxSZo2mWQ++MaP92y5xFR8dzNFXMYUQWmghdNlUy2KZoQe7Q8yaSztQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="297863792"
+X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
+   d="scan'208";a="297863792"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 01:09:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
+   d="scan'208";a="648527109"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2022 01:09:49 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZStZ-00008t-07;
+        Sat, 17 Sep 2022 08:09:49 +0000
+Date:   Sat, 17 Sep 2022 16:09:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Karsten Graul <kgraul@linux.ibm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr'
+ is less aligned than 'union smc_llc_hdr::(anonymous at
+ net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being
+ packed, which can lead to unaligned accesses
+Message-ID: <202209171512.qcgXdSrG-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Karsten,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
+commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
+date:   11 months ago
+config: arm-buildonly-randconfig-r005-20220917 (https://download.01.org/0day-ci/archive/20220917/202209171512.qcgXdSrG-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/smc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr' is less aligned than 'union smc_llc_hdr::(anonymous at net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   1 warning generated.
 
 
-On September 9, 2022 2:00:16 PM GMT+01:00, Zhen Lei <thunder=2Eleizhen@hua=
-wei=2Ecom> wrote:
->Add some test cases to test the function and performance of some kallsyms
->interfaces, such as kallsyms_lookup_name=2E It also calculates the
->compression rate of the kallsyms compression algorithm for the current
->symbol set=2E
->
->Start self-test automatically after system startup=2E
+vim +26 net/smc/smc_llc.c
 
-I wonder if this would be better implemented as a kunit test? Shouldn't be=
- too hard to convert=2E Take a look at things like lib/overflow_kunit=2Ec, =
-etc=2E
+    23	
+    24	struct smc_llc_hdr {
+    25		struct smc_wr_rx_hdr common;
+  > 26		union {
+    27			struct {
+    28				u8 length;	/* 44 */
+    29		#if defined(__BIG_ENDIAN_BITFIELD)
+    30				u8 reserved:4,
+    31				   add_link_rej_rsn:4;
+    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
+    33				u8 add_link_rej_rsn:4,
+    34				   reserved:4;
+    35	#endif
+    36			};
+    37			u16 length_v2;	/* 44 - 8192*/
+    38		};
+    39		u8 flags;
+    40	} __packed;		/* format defined in
+    41				 * IBM Shared Memory Communications Version 2
+    42				 * (https://www.ibm.com/support/pages/node/6326337)
+    43				 */
+    44	
 
--Kees
-
---=20
-Kees Cook
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
