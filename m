@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8CF5BB56A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219795BB57A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 04:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIQB7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 21:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S229688AbiIQCE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 22:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQB7J (ORCPT
+        with ESMTP id S229732AbiIQCEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 21:59:09 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F618E9A1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 18:59:08 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so2769173pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 18:59:08 -0700 (PDT)
+        Fri, 16 Sep 2022 22:04:21 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42C4BD118
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:04:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1480516pjk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 19:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=6iHNPWsxhSPJ60C2d/7Z7dQc4knYyK+JHQ1YhZpS8no=;
-        b=j9uZrmIx/znR1c29a4bp1PeXXWyPMjRRwFWtYIe6QPPnd9mHYE1ZoM9aQPuDxLoAvn
-         TGbPyRscWVtuMRM8TQzBSi6DI1+rDGF2TOrdlh8Pdf5PCRT7yauvctLAh+nkq/VUbmHn
-         6UtEkM3cM0NZ80VLFM2C2kA3kgdV/tZPx756L4ZUXg8yjyXRxkNUboFcotCnX2X6EaEH
-         aSHVyN/cPKAH6IxMLq4zvN0reEQ9IeFQLeAmn4HjeF1ijIJqnxeGf6/A0yG2XAd6URqz
-         0Lfy5+gXe2YqRTrCz3SLmjnQ1lmVBViLOYj2Jv8khPvsPi9yQk2fFd9PPeyOYI7PLE/W
-         9dBg==
+        bh=O+FIio6F6Ys8FBmVz4T0afCK9bRS+Qa/vDTw2yhOvu8=;
+        b=HvqeBkQZ12yau4o1p4emYOFo9Wtma4Gh0/I52ysNYy9+x1M+bIiH93n0rUzaJa7k97
+         Rcxjmwtg2JMY5nfB9GvR6LkWBvZeDf6v0spq+ka0rycytEVp/Tk8GJu1pTU00zlh6/W+
+         0oLM5W8odWAOWMnaVI6xq+6Lnpw0qZC3Um5kdCVLrZdj+uiioawhbCpJ0p+LvGYdrwDf
+         xxlPQFjKK7sMhwiso6M/Oly2AY+KhZKKd3yF6GEO6phegsrODuBiG1w0yNexRyThQvht
+         e9WASIqxxE6lkY0qlIhd11pL6Jn0pUU7B5hbv5aKnX1DQ5dp5mKQzAynxGXodrJ6RbZm
+         51Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=6iHNPWsxhSPJ60C2d/7Z7dQc4knYyK+JHQ1YhZpS8no=;
-        b=oHUDlwVmc1oiPNV42m4R6tlGhbVH0YZuv8mkaRfp8JbCezutjxGrwEixqbb5lyC3MO
-         jXKJxrHqblnl6andAYQCQn3Ck2lA47Xscr8zwa9ELfWocHVIGdWlPXv10Uu1k9WqLnBL
-         iis+co3ZAUDG1fWFk0aHIMkO71fbF/6JRsPuyqiT0V+Mze9rf+gqi3yzn5uwq1raw4uc
-         JLJIgYPLhVcXgqHz+TYaA8geR+VgtNHdbtwiXY/uX4tyjIyB/8qBaNVIdM8cyxDgqZ99
-         pSXgTyF0dRs+VsOt0doROChaeyoYuVP4mNWJ14s/xmCaebLloxss1D02LtTwXdNKb+69
-         gbCw==
-X-Gm-Message-State: ACrzQf0QPPlL1jdcfvuYbZ0Xq4wXo8gkFeLMEor3sL8fvkBeXNMtrrto
-        ZYSiLNb4SYW2G8CGK4EeQ6jC52yosG8j2A==
-X-Google-Smtp-Source: AMsMyM7IGZeGNJ6fYXjOchhkaYIeUNxJ8SO21oqmrU4ZMqU5ymFTTEod6WB6emXxPwzAr0vkayBIew==
-X-Received: by 2002:a17:902:ced2:b0:178:3ad0:2672 with SMTP id d18-20020a170902ced200b001783ad02672mr2547728plg.155.1663379948087;
-        Fri, 16 Sep 2022 18:59:08 -0700 (PDT)
+        bh=O+FIio6F6Ys8FBmVz4T0afCK9bRS+Qa/vDTw2yhOvu8=;
+        b=TgMUNK13dzxGjxDG6QHLdOlD8rpwp5TXT6+WY75AR18ifnr+sFa9MUSJAiZesY3Zil
+         HwQyC8SNhTOvYUMT8p6JMBeUylFTGlZB/GMfvC0zBLBvN2rZ4/DIZt+XsnBEmcVgdXEl
+         Fmc+5hJYf0VIWi2oxOn0hTnvqZpKaXPJaCTHgRwvph8qhfnTPBKTOnS3y4+dykbPJRC1
+         vqeprjcmMje9WbSJfH7/z2oQNhZxTwrTvFeXyVX1Pxf4Qf0vQGW+bTHydGqljB1azoRZ
+         110Riz42TS5kaq2U/v/Mq9jP+IFg7iG0Hv+Lu5tNKcgV2jn4XSxjmjhz2sZDLOU3fDq4
+         T5Sw==
+X-Gm-Message-State: ACrzQf1lLkKnbCsNFTz1veElme7REuYP4UwN9pirYrkvzgfnoWsKdfZf
+        0JzRN4i8WyOOKCrL1YE6+q1WVUUG88HpzA==
+X-Google-Smtp-Source: AMsMyM5M9UUbdU/XWMWjAm8z/fw7jvFZK2GacApIMM2guNdlt51nfjbT6DN5S+eWMulnGRCtxGayzA==
+X-Received: by 2002:a17:902:f548:b0:178:44b:4ea9 with SMTP id h8-20020a170902f54800b00178044b4ea9mr2616760plf.77.1663380255845;
+        Fri, 16 Sep 2022 19:04:15 -0700 (PDT)
 Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id mz16-20020a17090b379000b001fffbad35f6sm651409pjb.44.2022.09.16.18.59.06
+        by smtp.googlemail.com with ESMTPSA id z18-20020aa79912000000b005484d133127sm6213790pff.129.2022.09.16.19.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 18:59:07 -0700 (PDT)
+        Fri, 16 Sep 2022 19:04:15 -0700 (PDT)
 From:   Li Zhong <floridsleeves@gmail.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     tony.luck@intel.com, ccross@android.com, anton@enomsg.org,
-        keescook@chromium.org, john.ogness@linutronix.de,
-        rostedt@goodmis.org, senozhatsky@chromium.org, pmladek@suse.com,
+Cc:     mingo@redhat.com, rostedt@goodmis.org,
         Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] kernel/printk: check return value of console_trylock()
-Date:   Fri, 16 Sep 2022 18:58:52 -0700
-Message-Id: <20220917015852.3833820-1-floridsleeves@gmail.com>
+Subject: [PATCH v1] kernel/trace/trace: check the return value of tracing_update_buffers()
+Date:   Fri, 16 Sep 2022 19:03:53 -0700
+Message-Id: <20220917020353.3836285-1-floridsleeves@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,27 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the console_trylock() return value in case it fails.
+Check the return value of tracing_update_buffers() in case it fails.
 
 Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- kernel/printk/printk.c | 3 ++-
+ kernel/trace/trace.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index a1a81fd9889b..2c6a0484315b 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2937,7 +2937,8 @@ void console_flush_on_panic(enum con_flush_mode mode)
- 	 * context and we don't want to get preempted while flushing,
- 	 * ensure may_schedule is cleared.
- 	 */
--	console_trylock();
-+	if (!console_trylock())
-+		return;
- 	console_may_schedule = 0;
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index d3005279165d..0e367e326147 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3305,7 +3305,8 @@ void trace_printk_init_buffers(void)
+ 	pr_warn("**********************************************************\n");
  
- 	if (mode == CONSOLE_REPLAY_ALL) {
+ 	/* Expand the buffers to set size */
+-	tracing_update_buffers();
++	if (tracing_update_buffers() < 0)
++		return;
+ 
+ 	buffers_allocated = 1;
+ 
 -- 
 2.25.1
 
