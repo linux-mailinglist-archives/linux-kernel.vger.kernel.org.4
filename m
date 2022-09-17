@@ -2,122 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EF95BB6B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872FA5BB6C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiIQGml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 02:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S229618AbiIQGyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 02:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiIQGmj (ORCPT
+        with ESMTP id S229450AbiIQGyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 02:42:39 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCD41D0E3;
-        Fri, 16 Sep 2022 23:42:36 -0700 (PDT)
-Received: from [167.98.135.4] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oZRWy-0007CE-Mc; Sat, 17 Sep 2022 08:42:24 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Alessandro Carminati <alessandro.carminati@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] arm64: dts: rockchip: k3566-quartz64-a: adds sata variant
-Date:   Sat, 17 Sep 2022 08:42:23 +0200
-Message-ID: <14722513.tv2OnDr8pf@phil>
-In-Reply-To: <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
-References: <YySdhiqZgXpl0q/g@lab.hqhome163.com> <CAMdYzYovjSMZgpWd+ATWsv2piNc2ZtnKfB1cTBukvsnfG41g_w@mail.gmail.com>
+        Sat, 17 Sep 2022 02:54:05 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 841F3558EA
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 23:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xv1x0
+        2tQyisnebJpxSQgf/+7jhZQcpLjvEsag0vrxQ8=; b=co/Z4MNS25lHG9fhaF5Wf
+        3i9/qNISt2mCg7fV/xziApyB0VM+ot0qa6f0bpuwfZSi1lTpBlnba7LtrLB3L2rb
+        DT+vnqm6W9pZe6OEavMSGbAV/nwMUnSv5CBzR/aWd4dO2lCkFMt5YRVkgWS0vjCL
+        EMV951I0uZnAKnnzPfAGq4=
+Received: from DESKTOP-CE2KKHI.localdomain (unknown [124.160.210.227])
+        by smtp2 (Coremail) with SMTP id GtxpCgAHSfv8biVjfyE+eQ--.63538S2;
+        Sat, 17 Sep 2022 14:53:49 +0800 (CST)
+From:   williamsukatube@163.com
+To:     chenhuacai@kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@xen0n.name, William Dean <williamsukatube@163.com>
+Subject: [PATCH -next] LoongArch: simplify code in apply_r_larch_sop_push_dup
+Date:   Sat, 17 Sep 2022 14:53:45 +0800
+Message-Id: <20220917065345.2595-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgAHSfv8biVjfyE+eQ--.63538S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFWktFW7KF4DCF4kZr1UZFb_yoWDJFg_Zw
+        17AayrWr1DJa1UZw18Jw4rAw4xK3yvgFyFvF92qF47ZF1UGrs7uFs8W398Crn3tFW8Kr45
+        JrWvk34qkrsFqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRM3ktUUUUUU==
+X-Originating-IP: [124.160.210.227]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbB6A5-g2BHKJKnZgAAsG
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+From: William Dean <williamsukatube@163.com>
 
-Am Samstag, 17. September 2022, 03:40:07 CEST schrieb Peter Geis:
-> On Fri, Sep 16, 2022 at 12:06 PM Alessandro Carminati
-> <alessandro.carminati@gmail.com> wrote:
-> >
-> > The Quartz64 board is built upon Rockchip RK3566.
-> > Rockchip RK3566 has two combo phys.
-> > The first connects USB3 and SATA ctrl1, and the second PCIe lane and SATA
-> > ctrl2.
-> > The second combo phy is hardwired to the PCIe slot, where for the first,
-> > the hardware on the board provides both the USB3 connector and the SATA
-> > connector.
-> > This DT allows the users to switch the combo phy to the SATA connector.
-> 
-> Good Evening,
-> 
-> NACK to this whole series. Neither works correctly in the hardware as
-> is,
+It could directly return 'rela_stack_push' to simplify code.
 
-Just for my understanding for the future, sata not working is that a bug
-in the soc or the board?
+Signed-off-by: William Dean <williamsukatube@163.com>
+---
+ arch/loongarch/kernel/module.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> and USB3 was decided to be left enabled as the SATA port will be
-> removed completely in the next revision.
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 638427ff0d51..a8f90d51d9ae 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -99,13 +99,10 @@ static int apply_r_larch_sop_push_dup(struct module *mod, u32 *location, Elf_Add
+ 	if (err)
+ 		return err;
+ 	err = rela_stack_push(opr1, rela_stack, rela_stack_top);
+-	if (err)
+-		return err;
+-	err = rela_stack_push(opr1, rela_stack, rela_stack_top);
+ 	if (err)
+ 		return err;
 
-That is good to know. Thanks for the heads up :-)
+-	return 0;
++	return rela_stack_push(opr1, rela_stack, rela_stack_top);
+ }
 
-Heiko
-
-
-> > Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/Makefile                   | 1 +
-> >  arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts | 9 +++++++++
-> >  2 files changed, 10 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> > index 8c843f6fc3cc..1d5dd91d1a34 100644
-> > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > @@ -60,6 +60,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.1.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-usb3.dts
-> > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a-sata.dts
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-b.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-roc-pc.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > new file mode 100644
-> > index 000000000000..8620df7ec01e
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a-sata.dts
-> > @@ -0,0 +1,9 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include "rk3566-quartz64-a.dtsi"
-> > +
-> > +&sata1 {
-> > +       status = "okay";
-> > +};
-> > --
-> > 2.34.1
-> >
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> 
-
-
-
+ static int apply_r_larch_sop_push_plt_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+--
+2.25.1
 
