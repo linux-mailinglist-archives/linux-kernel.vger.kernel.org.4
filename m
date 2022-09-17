@@ -2,170 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B625BB6A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D745BB6A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 08:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiIQG3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 02:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S229558AbiIQG3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 02:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiIQG3W (ORCPT
+        with ESMTP id S229553AbiIQG3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 02:29:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1DC4AD7B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 23:29:21 -0700 (PDT)
+        Sat, 17 Sep 2022 02:29:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF26B13D24
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 23:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663396161; x=1694932161;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=GkpGK2+XPouWaPhpfvr3XDEnuL4zF+lvU4sVZzKija0=;
-  b=i30wAwwcmfdO1+2iwNAYjqbLolIprxfM1QZlq+vL9ZaYMywZT5+U9/hq
-   LwVuuRMXgvUmMrsnvzpcZasWippKg3lL9k3uqQJfKEuHax4DaRnIHH/HW
-   MsXD0s8AxA3+b4st7p+lscd8GCdz02yupBJybZmB1+rwAbW0JB/ZEu6BA
-   PZ5bI0ixBav4eQ1pFdLNUM6unYkEa2BzU9xY5LcNm+IKIO57ZB+kHQQG7
-   CNC8f+Lmm/aRnPofIOcug8QHh8T1LdBnWzd/uSgxeeOn9FDEUHYaTia7p
-   ag3DBIzxeentznDYvvmeiGwDcmI2qstq0RbpDaGxJW0xfbwK1MoMyWwep
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="300500005"
+  t=1663396189; x=1694932189;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PFmSYqA1sRRRmagozgpP7O81ayKFX6TIQr4XKJqeANg=;
+  b=HjH9I2zc48wVG/5hbkT5ACJ31OnVL7RXX6VWPMuw2G4p4Ct/tQQ0WIpf
+   mBadVTqsqGPacVCcpAsDJKZoX6vDd583FZjnukC3LOE8LyUAYUl+urUtY
+   pzv5qFA2IpmOKlAOR/kARUW3U837sk/IzomdgQJ1AoZKDqL8M4lJ/i/TA
+   2/+IAjgBYtEV/gDU0eR5wYvvQyP4yrZ1qsa73so1TRXOM7f9KppHsIoy0
+   ablrAyX8XHDwg64gZ5pthkRaD+YxIOvbskUt9ejPBDsf+Tvk7MXCEEnpu
+   3+TDLluMgzggWg50wIsYFA80Zce5c7YInpUeWRoU/tpFKSpW7tyWLvC5B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="299121917"
 X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="300500005"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 23:29:21 -0700
+   d="scan'208";a="299121917"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 23:29:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="793329890"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga005.jf.intel.com with ESMTP; 16 Sep 2022 23:29:20 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 23:29:20 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 16 Sep 2022 23:29:20 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 16 Sep 2022 23:29:20 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 16 Sep 2022 23:29:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhxn09Q/jz0MYLzVhg6adL9jg3kfYKY3NNNb+qChOeBy4mxR04VYQy+2fn+ekxFR/WSm4Ap3ms2BJVb9Y7UHlf66r8iHWO++ch45OtUkMYZt8zgdat74FIdAkvAzc8ziY5h/vST0KggAxADx1F0JruyYvABz1z4r6jB1QITJukv4GLfK6fnmxyLGik5WK/V3EK3gq1u/DIrznPn+7rYXl6cCfTYGJdnPVXGvkcTXteMAgxsMXHWDxET+LzlHVFFI69q1Uah/cAX6SqCqQYjWD4zlGGbo5HqcgHTNaFViL42eHFf8uaW88MT5u8/Tau/XgGteGuhzQE/Bnr1/Yt8HjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GkpGK2+XPouWaPhpfvr3XDEnuL4zF+lvU4sVZzKija0=;
- b=UawkzRqEX08oz2JuJAGLVkeeGmjTph6m3677E52vNG/kP5fnqiroX/QesnQ8R9OJvuNWGIp7lhqaDIfI5a7RSE4B4jFgG3NZzlHxRf2VPOUElaKqbXCdn0gvXHYakyrzbzQfMolXeYIh/xEu7hhQfO6Ms0ghI6UsMJBUG55d4jNOL7V21+Ds55kiyr+AiZJTHZ8cZm954tnj/8tUcRjpyS4U79LZ5RibgMVzMLzmLrFPpISl6UUmzK+zVh8IPHEyEM3eD01uapWjyQrKRHRFUy7dDX7C8cYKYwbAaK4OcPyPFNGZN1fu91iqiNtwco1QSfrEvxQnrJ4gLcWdHTQfQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5357.namprd11.prod.outlook.com (2603:10b6:5:394::11)
- by IA1PR11MB7387.namprd11.prod.outlook.com (2603:10b6:208:421::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16; Sat, 17 Sep
- 2022 06:29:17 +0000
-Received: from DM4PR11MB5357.namprd11.prod.outlook.com
- ([fe80::d539:80cb:2876:b6e8]) by DM4PR11MB5357.namprd11.prod.outlook.com
- ([fe80::d539:80cb:2876:b6e8%5]) with mapi id 15.20.5632.018; Sat, 17 Sep 2022
- 06:29:17 +0000
-From:   "Arava, Jairaj" <jairaj.arava@intel.com>
-To:     Takashi Iwai <tiwai@suse.de>
-CC:     Pshou <pshou@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Nujella, Sathyanarayana" <sathyanarayana.nujella@intel.com>,
-        "Prabhu, Swarna" <swarna.prabhu@intel.com>,
-        "Afzal, Naeem M" <naeem.m.afzal@intel.com>,
-        "Hsu, Shui-Wen" <swhsu4021@realtek.com>,
-        "Perati, RK" <rk.perati@intel.com>,
-        "Mandri, Padmashree" <padmashree.mandri@intel.com>,
-        Kailang <kailang@realtek.com>
-Subject: Re: Sarien/Dorset device: After system resumed from suspend, 3.5m
- jack is still shown as detected when unplugged during suspend 
-Thread-Topic: Sarien/Dorset device: After system resumed from suspend, 3.5m
- jack is still shown as detected when unplugged during suspend 
-Thread-Index: AdjI33vqg778sLHVSWSHqfAWugAyCQA1K1KAABNBNlAAFhW+AAABUq1O
-Date:   Sat, 17 Sep 2022 06:29:17 +0000
-Message-ID: <FB5B44CD-62B6-411F-9E50-289D371AA669@intel.com>
-References: <ee87941f7f654213924aa1bc79db32f7@realtek.com>
-        <874jx7vdhs.wl-tiwai@suse.de>
-        <DM4PR11MB53570968A455F76371004B689F489@DM4PR11MB5357.namprd11.prod.outlook.com>
- <87k062r1k3.wl-tiwai@suse.de>
-In-Reply-To: <87k062r1k3.wl-tiwai@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR11MB5357:EE_|IA1PR11MB7387:EE_
-x-ms-office365-filtering-correlation-id: 4ffc5992-38fd-469c-f8d1-08da9875f252
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: x8BhwMA3E6gMvJrDIDqFBJWT7bIvycHmXEaiMzW/+OwGbBqhaNFZgHGgY6D8j1EuEkV22Th5Jt0V2Bfe+/anMh0hxvwatbayrvt/OtWlxew12/JGFkqFRZbmZu1QapwEvjhbol9SqTk+w6za+Vb5/ZTyd4e1hguusfj6deaRdqFwGYLrn+G/aUQJIYNNNHgTWbyWBPDpyuYTQKrCEWk/MqiSD1ObD/nZWmHNItN7Gxv3JSXaJWWqOPkxE4W1/5OTf3DU/rSnYOwfZLClVcK/u6wniyYDlxxihnXo9vzWKPByOU1ij0rIIwHcFx/lbjDUU4u1K/apE/wiid03Z41nNrdp9sem0cIhVTrD2bttAaNaXUtEvQ/JW1/DNnP6LWhMkdZiXmVzORj+6U69wFoQtavWeu7Kr1rI6RZAYfpGLuy9McsF5LDQF4xtzz1mDTZiX4rwSulh41ie4FDTVAdNN9AqNnepKsQ/MR7O/3ZIoC622koJJEmj3CPYIlJ0FfvJld71OweAiOcX5hWz24KP4lMf1sZBdZkMoML88E07lc/HOOeLna9U76SObilmz7HImYgS6buwtm+9DF19W5aQx4NqDX049ZXylBQmK1DKEyDkzNkZGL2xjcIlgg0BE4RuvFEdMJUYDJfmtUNv0BK/6HNbjgviWl2svtgKL7t5DaPReJ20h+6uBTVWHq2bHPhfmgkwviUUTeLrYZKH0F6fJdhNJoG/VL1H6nQ3YCgHgBTn7+Gfv7rymYu4C3BxIquFz/HeWeG2BWKECz+SXVPik+Rany8Egl/4ChYoP4Xryd88if1GKfDFWE1WOSUcg8RoslFIcHBdVG6iAdiBwD1S0g5wluu8f50FuHcLadjLSY9QVgWwvwPmSqtHGd3S1Rpr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5357.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(396003)(346002)(366004)(136003)(84040400005)(451199015)(6506007)(53546011)(41300700001)(86362001)(186003)(6512007)(4743002)(2906002)(36756003)(2616005)(33656002)(966005)(478600001)(316002)(6916009)(15650500001)(5660300002)(71200400001)(122000001)(8936002)(83380400001)(54906003)(6486002)(82960400001)(38070700005)(76116006)(38100700002)(66946007)(4326008)(8676002)(64756008)(66446008)(66476007)(66556008)(91956017)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnNIS3NNV3hyMWN2Q2hLNXFBUVB0ZnZ0UnNlQ2p2TjVmNVVoMUJUQXNSdmdy?=
- =?utf-8?B?bTRkOW9FYmJoZzUvNWxydWdXNTRRbEp6MG5OdGFnc3N6K0g5QXVIenc5QlRF?=
- =?utf-8?B?WUxlQ0RGUFRBSlFSUGF6WlI4N3Fja2xyRjEzaWxwNzlka213aTQvTXV5Q3F0?=
- =?utf-8?B?S01DaHMwZEt3VGNnRS81cjlwVGV6a0syd1lMK0dVVXpadXRTdnBjNTNZTmVk?=
- =?utf-8?B?SUo5a0hzZWtiKzBBUkJZVjJ0U1JMejZQS3lzNm1wYmdBUWYwSEJybk4xaXg1?=
- =?utf-8?B?QUl5Q0x0akF0SFhXNVRoSVhnaERkKzRGdjVVeFNJRDk2YU1JZFZQTHJ2V1Jy?=
- =?utf-8?B?bUkrSndCM3VCbjY0N1BSRHQ1T0Yrc2FxNmNoaVR0QVE4M3pFVU56WmVqNlpF?=
- =?utf-8?B?N1J3b3NKOVR0V2JxRTNnM0RNdlJhREpjamRqcDcxcyszM1VUZzY1em5pb2ZD?=
- =?utf-8?B?WE1jSzZsWWJqZEpIU0p4dTZWUXZTdXgvbFVsZWliUWczVjVUWFRMU2R4RVlK?=
- =?utf-8?B?cEZjeG5vRWNPb3E1dGl1Mmh5SVRaMTBUckpOeDVtMUZzQ3ZaNDY1bnpEMi84?=
- =?utf-8?B?UUFKOCtpQnhRMU1XRGV5a2thMkFlTmFJYk0vbDBVbTEzOVEvR0dpYnAzYUlx?=
- =?utf-8?B?MDRmMHBibDZLZXNJQTFxNzZsbnViWmI1S013N3ZCM0x5dDlqU1hpalRwZXpa?=
- =?utf-8?B?OTRDdnN4bTBJV0g2REtpSXRZeUhBZHQvcmEyamlJTndubUZWSjM3WENQOGlh?=
- =?utf-8?B?WWxrRFBCYjRubk1heGcyL2szWmpwaFppam5uNi9wWDhEN1lsU3hYZjlQaEdZ?=
- =?utf-8?B?MTlwUkE3QUF4emRGTWZpNkI0ZDJIVlRSVjd2Mnc1NGhtUzI0NEpYdEhqcllC?=
- =?utf-8?B?VWprNm1zbmJ5ZXovYWZwelNtRGpySVUyRjRVVlRnamdNTXNOWlJ1T0tqUjhn?=
- =?utf-8?B?QTlHYlVnUDB2MVh2d3VvZm9ETUJ5bUVlQlJ6RGtXOHpncEo1ckZNUjRIVUhO?=
- =?utf-8?B?VjdtTUFiOWRYcEowaWhNVWZJMVk5Q1JNbDRpb09WOVVHM0VRaGJFbGNqbzBH?=
- =?utf-8?B?S0hZR0d2eGJyOEVQelRvR2xINjBkVXR6bVdrK0JBUm9NNWtiMUJuTWREKzRN?=
- =?utf-8?B?S0tJU2VBVUptV1cwTmVNb0dGUU1RbmNEblVBd0JNYVY1OFY5Skx5aW5JTlJQ?=
- =?utf-8?B?K1ZxRzAyTkZmRXdmSjdURDQwZlFudVZleGd1akFEdVV5R1gvR1JVR0Jnbk4x?=
- =?utf-8?B?dmgvckVsQjJ3WXpNbkdSaTFLdnJtOElpZ1ZWV1YvRGhGN0djdU05cjh3Y2lK?=
- =?utf-8?B?OVRsdFordjFteTVSejZ0QWZzbU42a2lUU3I0N0lhSUFnRUFITTQ0V3lSYkRv?=
- =?utf-8?B?UUxreCtRWXhISDNzbTFaRC9SNjRjM3VkRVREdHFLT282MDgzektkL1g2MXhz?=
- =?utf-8?B?Y0dJeW0vcGZXZ1JpNjlYdFFIWnhFL0N6dmsrSldzTlBCZUx6K0paNkhOY3cz?=
- =?utf-8?B?bmxBK2h1Ykk5Q0RhNU5Ud0MyVGc3MEEwdUpMbENocHF5c0dxTFl1KytKdjlQ?=
- =?utf-8?B?d2ZaU0d3RFAvSHdUdUd2Y3RmYzVmZ1k0QTJqOVkxckFwNkZNZ3o4Yk1QQ3px?=
- =?utf-8?B?eXVhRWdOVmpMa1lsOENvUTdDMnNQSXN1NEtWL0JoMmFrWTRQdmFqemxWUnNl?=
- =?utf-8?B?YW83TDZTQ2lIOWJwKzBmWGpXV3o5bFNkY01mRUxKdUVLdzM2ay9YV21wM0Y2?=
- =?utf-8?B?UlptWm11M0oyQS9uQVBFWDJyRDdVVkxFUjlZMWs1UEtZSy9VV21MV2NwbGVX?=
- =?utf-8?B?akc4SXZUOC9idTdPeElWVitMNjFtN1VGb0phWWk5Y216K3hkRDNkaDRaWUtE?=
- =?utf-8?B?SEZNeEF5Q1VaVnJSRWhmcGF5aVQrUHhGeUVERjVGeUxKd0xERXhrc3ppZVpi?=
- =?utf-8?B?d3pXU1pBbUNtbEVmZzVqZVJwNnBsLy9EUXhiSkdXRzh0RjVBV0ZzVmUzbEVm?=
- =?utf-8?B?c0h0WVpvRE1pbTJRanczWlNCWVJqOUVzZ3NIR3dPYTRSLzNLWlpZWHpVY3hQ?=
- =?utf-8?B?YzNpRm5MTWkycU1QandqaWFrU1p5MFJkcEwwbmcvSUpvSUpBL20vcC9IVm9u?=
- =?utf-8?B?d1NER1ZjUnhkdHZVd2J3eGV0RVZ3V2pCbDMxcUdYYlh3eUdqUkdvNWJ3b1VR?=
- =?utf-8?B?TVFQd3Fzb3ZwMWtHWkJUTm1OcWRvaU85SklTd1lRUTRheSt4aEZSOTJYS0tm?=
- =?utf-8?B?RlFwQXp4Q0QxME5ESTdWbkRJQzNnPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="686386089"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 23:29:46 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZRKk-00004B-0c;
+        Sat, 17 Sep 2022 06:29:46 +0000
+Date:   Sat, 17 Sep 2022 14:29:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/idle 19/39] vmlinux.o: warning: objtool:
+ fpu_idle_fpregs+0x41: call to __this_cpu_preempt_check() leaves
+ .noinstr.text section
+Message-ID: <202209171417.u0nFD51e-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5357.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ffc5992-38fd-469c-f8d1-08da9875f252
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2022 06:29:17.0310
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yTP2+uPYqxyok+X0g0leUMV/JopAG3FxvuHcj8DwEm3UXGXsb4Hgsx0/MCFlPNNhZBpq41J9VnGRh8EtuRom+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7387
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -173,80 +62,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVGFrYXNoaSwNCg0KQWZ0ZXIgcmVhZGluZyB0aGUgY29tbWVudCMxNywgd2Ugc3RhcnRlZCBs
-b29raW5nIGZyb20gY29kZWMgZW5kIGFuZCB3ZSBzZWUgdGhlIHVuc29sIGV2ZW50IGhhbmRsZXIg
-aXMgbm90IGludm9rZWQgdG8gaGFuZGxlIGl0ICYgdGhvdWdodCBpdCBpcyBtYW5kYXRlIGZvciB0
-aGUgY29kZWMuDQogSG93ZXZlciBhcyBzYWlkLCBieSB3aWxsIGxvb2sgZnVydGhlciBkZWVwIGlu
-dG8gaXQuDQoNCkBQc2hvdSwNCldhbnQgdG8gZ2V0IHVuZGVyc3JhbmQgZnJvbSB0aGUgY29kZWMg
-ZW5kIGZ1cnRoZXIuIEhvdyBjYW4gd2UgZXhwZWN0IHRoZSBjb2RlYyB0byBiZWhhdmUgZm9yIHN1
-Y2ggZXZlbnRzIGR1cmluZyBzdXNwZW5kICYgcmVzdW1lPw0KDQpUaGFua3MsDQpKYWkNCg0KPiBP
-biBTZXAgMTYsIDIwMjIsIGF0IDEwOjUxIFBNLCBUYWthc2hpIEl3YWkgPHRpd2FpQHN1c2UuZGU+
-IHdyb3RlOg0KPiANCj4g77u/T24gRnJpLCAxNiBTZXAgMjAyMiAyMTo1MDo1MSArMDIwMCwNCj4g
-QXJhdmEsIEphaXJhaiB3cm90ZToNCj4+IA0KPj4gSGkgVGFrYXNoaSwNCj4+IA0KPj4gVGhpcyBk
-aXNjdXNzaW9uIGlzIHJlZ2FyZGluZyB0aGUgYnVnIGh0dHBzOi8vYnVnemlsbGEua2VybmVsLm9y
-Zy9zaG93X2J1Zy5jZ2k/aWQ9MjE1Mjk3Lg0KPiANCj4gRGlkIHlvdSByZWFkIHRoZSBjb21tZW50
-IDE3PyAgWW91IGhhdmVuJ3QgYW5hbHl6ZWQgeWV0IHByb3Blcmx5IHdoYXQNCj4gd2FzIGdvaW5n
-IHdyb25nLg0KPiANCj4+IEFzIHdlIGtub3cgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxzYS1k
-ZXZlbC8yMDIxMDMxMDExMjgwOS45MjE1LTMtdGl3YWlAc3VzZS5kZS8gaXMgY2F1c2luZyB0aGUg
-My41bW0gaGVhZHNldCBqYWNrIGRldGVjdGlvbiBpc3N1ZSBkdXJpbmcgc3lzdGVtIHN1c3BlbmQg
-cmVzdW1lLiBTbyBhZnRlciByZXZlcnRpbmcgdGhpcyBwYXRjaCB0aGUgaXNzdWUgaXMgbm90IHNl
-ZW4gc2luY2UgdGhlIHVuc29sIGV2ZW50IGlzIGhhbmRsZWQgd2l0aG91dCB0aGlzIHBhdGNoLg0K
-Pj4gDQo+PiBTaW5jZSB3ZSAgc2VlIGluIGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4
-L2xhdGVzdC9zb3VyY2Uvc291bmQvcGNpL2hkYS9wYXRjaF9yZWFsdGVrLmMjTDk5MiB0aGUgY29k
-ZWMgZHJpdmVyIGhhcyAgc25kX2hkYV9qYWNrX3Vuc29sX2V2ZW50IGFzIHRoZSB1bnNvbCBldmVu
-dCBoYW5kbGVyLiBIZW5jZSBhZnRlciByZXZlcnRpbmcgeW91ciBwYXRjaCwgZnJvbSBodHRwczov
-L2VsaXhpci5ib290bGluLmNvbS9saW51eC9sYXRlc3Qvc291cmNlL3NvdW5kL3BjaS9oZGEvaGRh
-X2JpbmQuYyNMNTYgIHRoZSBkcml2ZXIgaXMgY2FsbGluZyBodHRwczovL2VsaXhpci5ib290bGlu
-LmNvbS9saW51eC9sYXRlc3Qvc291cmNlL3NvdW5kL3BjaS9oZGEvaGRhX2phY2suYyNMNzEzIHRv
-IGhhbmRsZSB0aGUgdW5zb2x2IGV2ZW50Lg0KPj4gDQo+PiBCYXNlZCBvbiBhYm92ZSBvYnNlcnZh
-bmNlLCBzZWVtcyBzbmRfaGRhX2phY2tfdW5zb2xfZXZlbnQgaXMgbWFuZGF0b3J5IGZvciB0aGUg
-aW50ZWwgcGxhdGZvcm0gUmVhbHRlayBjb2RlYyBkcml2ZXIgdG8gaGFuZGxlIHN1Y2ggdW5zb2x2
-IGVuZXRzLiAgSGVuY2UsIEBQc2hvdSBhZGRlZCB0aGUgUE0gZmxhZyBjaGVjayBhcyB0aGUgcGF0
-Y2ggd2FzIHRlc3RlZCBieSBOdmlkaWEuDQo+IA0KPiBJZiB0aGUgaGFyZHdhcmUgY2FuJ3QgZGV0
-ZWN0IHRoZSBqYWNrIGF0IHRoZSByZXN1bWUgYnkgc29tZSByZWFzb24sDQo+IHRoYXQgbXVzdCBi
-ZSB0aGUgY2F1c2UsIGFuZCBub3QgYmVjYXVzZSBpdCBkb2Vzbid0IGhhbmRsZSB0aGUgdW5zb2wN
-Cj4gZXZlbnQgZHVyaW5nIHRoZSBzdXNwZW5kLg0KPiANCj4gUGxlYXNlIHRyeSB0byBkZWJ1ZyBt
-b3JlIGRlZXBseSBhdCBmaXJzdC4NCj4gDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBUYWthc2hpDQo+
-IA0KPj4gDQo+PiBUaGFua3MsDQo+PiBKYWkgDQo+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
-LQ0KPj4gRnJvbTogVGFrYXNoaSBJd2FpIDx0aXdhaUBzdXNlLmRlPiANCj4+IFNlbnQ6IEZyaWRh
-eSwgU2VwdGVtYmVyIDE2LCAyMDIyIDM6MDggQU0NCj4+IFRvOiBQc2hvdSA8cHNob3VAcmVhbHRl
-ay5jb20+DQo+PiBDYzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgVGFrYXNoaSBJd2Fp
-IDx0aXdhaUBzdXNlLmRlPjsgQXJhdmEsIEphaXJhaiA8amFpcmFqLmFyYXZhQGludGVsLmNvbT47
-IE51amVsbGEsIFNhdGh5YW5hcmF5YW5hIDxzYXRoeWFuYXJheWFuYS5udWplbGxhQGludGVsLmNv
-bT47IFByYWJodSwgU3dhcm5hIDxzd2FybmEucHJhYmh1QGludGVsLmNvbT47IEFmemFsLCBOYWVl
-bSBNIDxuYWVlbS5tLmFmemFsQGludGVsLmNvbT47IEhzdSwgU2h1aS1XZW4gPHN3aHN1NDAyMUBy
-ZWFsdGVrLmNvbT47IFBlcmF0aSwgUksgPHJrLnBlcmF0aUBpbnRlbC5jb20+OyBNYW5kcmksIFBh
-ZG1hc2hyZWUgPHBhZG1hc2hyZWUubWFuZHJpQGludGVsLmNvbT47IEthaWxhbmcgPGthaWxhbmdA
-cmVhbHRlay5jb20+DQo+PiBTdWJqZWN0OiBSZTogU2FyaWVuL0RvcnNldCBkZXZpY2U6IEFmdGVy
-IHN5c3RlbSByZXN1bWVkIGZyb20gc3VzcGVuZCwgMy41bSBqYWNrIGlzIHN0aWxsIHNob3duIGFz
-IGRldGVjdGVkIHdoZW4gdW5wbHVnZ2VkIGR1cmluZyBzdXNwZW5kIA0KPj4gDQo+Pj4gT24gRnJp
-LCAxNiBTZXAgMjAyMiAwNzozNDozOCArMDIwMCwNCj4+PiBQc2hvdSB3cm90ZToNCj4+PiANCj4+
-PiANCj4+PiBIaSBUYWthc2hpIEl3YWk6DQo+Pj4gDQo+Pj4gQ2FuIHlvdSBoZWxwIG1lIHVwZGF0
-ZSB0aGlzIFBBVENIIGZpbGU/DQo+Pj4gDQo+Pj4gQ2hlY2sgaWYgaWdub3JlIHVuc29sIGV2ZW50
-cyBkdWluZyBzeXN0ZW0gc3VzcGVuZC9yZXN1bWUgYW5kIE5WSURJQSANCj4+PiBjaGlwIGluIGhk
-YV9jb2RlY191bnNvbF9ldmVudCgpLg0KPj4+IA0KPj4+IFNpZ25lZC1vZmYtYnk6UGVpU2VuIEhv
-dTxwc2hvdUByZWFsdGVrLmNvbT4NCj4+PiANCj4+PiBTaWduZWQtb2ZmLWJ5OiBKYWlyYWogQXJh
-dmEgPGphaXJhai5hcmF2YUBpbnRlbC5jb20+DQo+Pj4gDQo+Pj4gZGlmZiAtLWdpdCBhL3NvdW5k
-L3BjaS9oZGEvaGRhX2JpbmQuYyBiL3NvdW5kL3BjaS9oZGEvaGRhX2JpbmQuYw0KPj4+IA0KPj4+
-IGluZGV4IDFhODY4ZGQ5ZGM0Yi4uNzU1NjBmZjZlYjgzIDEwMDY0NA0KPj4+IA0KPj4+IC0tLSBh
-L3NvdW5kL3BjaS9oZGEvaGRhX2JpbmQuYw0KPj4+IA0KPj4+ICsrKyBiL3NvdW5kL3BjaS9oZGEv
-aGRhX2JpbmQuYw0KPj4+IA0KPj4+IEBAIC01MCw3ICs1MCw4IEBAIHN0YXRpYyB2b2lkIGhkYV9j
-b2RlY191bnNvbF9ldmVudChzdHJ1Y3QgaGRhY19kZXZpY2UgDQo+Pj4gKmRldiwgdW5zaWduZWQg
-aW50IGV2KQ0KPj4+IA0KPj4+ICAgICAgIC8qIGlnbm9yZSB1bnNvbCBldmVudHMgZHVyaW5nIHN5
-c3RlbSBzdXNwZW5kL3Jlc3VtZSAqLw0KPj4+IA0KPj4+ICAgICAgaWYgKGNvZGVjLT5jb3JlLmRl
-di5wb3dlci5wb3dlcl9zdGF0ZS5ldmVudCAhPSBQTV9FVkVOVF9PTikNCj4+PiANCj4+PiAtICAg
-ICAgICAgICAgICAgcmV0dXJuOw0KPj4+IA0KPj4+ICsgICAgICAgICAgICAgIGlmIChjb2RlYy0+
-Y29yZS52ZW5kb3JfaWQgPT0gUENJX1ZFTkRPUl9JRF9OVklESUEpDQo+Pj4gDQo+Pj4gKyAgICAg
-ICAgICAgICAgICAgICAgICByZXR1cm47DQo+Pj4gDQo+Pj4gICAgICAgaWYgKGNvZGVjLT5wYXRj
-aF9vcHMudW5zb2xfZXZlbnQpDQo+Pj4gDQo+Pj4gICAgICAgICAgICAgIGNvZGVjLT5wYXRjaF9v
-cHMudW5zb2xfZXZlbnQoY29kZWMsIGV2KTsNCj4+IA0KPj4gSG1tLCB0aGlzIGRvZXNuJ3QgbG9v
-ayBzYWZlLiAgV2UgYWxzbyB3YW50IHRvIGF2b2lkIHRoZSB1bnNvbCBldmVudCBoYW5kbGluZyBk
-dXJpbmcgdGhlIFBNIHN0YXRlIHRyYW5zaXRpb24sIHRvby4gIFNvLCBpZiBhbnksIHRoaXMgc2hv
-dWxkIGJlIGFsbG93ZWQgb25seSBhdCBQTV9FVkVOVF9TVVNQRU5EIG9yIFBNX0VWRU5UX0hJQkVS
-TkFURS4NCj4+IA0KPj4gQWxzbywgY2hlY2tpbmcgdGhlIGNvZGVjIHZlbmRvciBJRCBoZXJlIGlz
-IG5vIGdvb2Qgd2F5LiAgV2UgbWF5IGFkZCBhIG5ldyBmbGFnIGZvciB0aGUgc3BlY2lhbCBiZWhh
-dmlvciAoZWl0aGVyIGFsbG93aW5nIHRoZSB1bnNvbCBoYW5kbGluZyBvciBwcm9oaWJpdGluZyku
-DQo+PiANCj4+IEJ1dCwgZnJvbSB5b3VyIHBhdGNoLCBJIGRvbid0IHNlZSBhbnkgcmVhc29uICp3
-aHkqIHRoaXMgaGFzIHRvIGJlIGNoYW5nZWQgaW4gdGhhdCB3YXkuICBDb3VsZCB5b3UgZ2l2ZSBt
-b3JlIGJhY2tncm91bmRzPw0KPj4gDQo+PiANCj4+IHRoYW5rcywNCj4+IA0KPj4gVGFrYXNoaQ0K
-Pj4gDQo=
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   86ceee2551e6a63a16f2d0f9d19d2685d06ad31f
+commit: 78d81ae0773af0d4dc84c40a81c444a34c27231d [19/39] cpuidle,intel_idle: Fix CPUIDLE_FLAG_INIT_XSTATE
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220917/202209171417.u0nFD51e-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=78d81ae0773af0d4dc84c40a81c444a34c27231d
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout 78d81ae0773af0d4dc84c40a81c444a34c27231d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: default_do_nmi+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: fpu_idle_fpregs+0x41: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: lockdep_hardirqs_on+0xb0: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: lockdep_hardirqs_off+0xae: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x69: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x32: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mwait_idle+0x1: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_ibrs+0x26: call to spec_ctrl_current() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter+0x43: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x45: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_do_entry+0x4: call to perf_lopwr_cb() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_safe_halt+0x11: call to test_ti_thread_flag() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: io_idle+0x3: call to __inb() leaves .noinstr.text section
+
+
+objdump-func vmlinux.o fpu_idle_fpregs:
+0000 0000000000002a40 <fpu_idle_fpregs>:
+0000     2a40:	e9 00 00 00 00       	jmp    2a45 <fpu_idle_fpregs+0x5>	2a41: R_X86_64_PLT32	.altinstr_aux+0x554
+0005     2a45:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a4d <fpu_idle_fpregs+0xd>	2a48: R_X86_64_PC32	.bss+0x255bb
+000d     2a4d:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a55 <fpu_idle_fpregs+0x15>	2a50: R_X86_64_PC32	.bss+0x255c3
+0015     2a55:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a5d <fpu_idle_fpregs+0x1d>	2a58: R_X86_64_PC32	.bss+0x25d0b
+001d     2a5d:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a65 <fpu_idle_fpregs+0x25>	2a60: R_X86_64_PC32	.bss+0x2601b
+0025     2a65:	b9 01 00 00 00       	mov    $0x1,%ecx
+002a     2a6a:	0f 01 d0             	xgetbv
+002d     2a6d:	a9 00 00 06 00       	test   $0x60000,%eax
+0032     2a72:	74 1e                	je     2a92 <fpu_idle_fpregs+0x52>
+0034     2a74:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a7c <fpu_idle_fpregs+0x3c>	2a77: R_X86_64_PC32	.bss+0x25d13
+003c     2a7c:	c4 e2 78 49 c0       	tilerelease
+0041     2a81:	e8 00 00 00 00       	call   2a86 <fpu_idle_fpregs+0x46>	2a82: R_X86_64_PLT32	.text+0x8e47c
+0046     2a86:	65 48 c7 05 00 00 00 00 00 00 00 00 	movq   $0x0,%gs:0x0(%rip)        # 2a92 <fpu_idle_fpregs+0x52>	2a8a: R_X86_64_PC32	fpu_fpregs_owner_ctx-0x8
+0052     2a92:	c3                   	ret
+0053     2a93:	48 83 05 00 00 00 00 01 	addq   $0x1,0x0(%rip)        # 2a9b <fpu_idle_fpregs+0x5b>	2a96: R_X86_64_PC32	.bss+0x255cb
+005b     2a9b:	c3                   	ret
+005c     2a9c:	cc                   	int3
+005d     2a9d:	cc                   	int3
+005e     2a9e:	cc                   	int3
+005f     2a9f:	cc                   	int3
+0060     2aa0:	cc                   	int3
+0061     2aa1:	cc                   	int3
+0062     2aa2:	cc                   	int3
+0063     2aa3:	cc                   	int3
+0064     2aa4:	cc                   	int3
+0065     2aa5:	cc                   	int3
+0066     2aa6:	cc                   	int3
+0067     2aa7:	cc                   	int3
+0068     2aa8:	cc                   	int3
+0069     2aa9:	cc                   	int3
+006a     2aaa:	cc                   	int3
+006b     2aab:	cc                   	int3
+006c     2aac:	cc                   	int3
+006d     2aad:	cc                   	int3
+006e     2aae:	cc                   	int3
+006f     2aaf:	cc                   	int3
+0070     2ab0:	cc                   	int3
+0071     2ab1:	cc                   	int3
+0072     2ab2:	cc                   	int3
+0073     2ab3:	cc                   	int3
+0074     2ab4:	cc                   	int3
+0075     2ab5:	cc                   	int3
+0076     2ab6:	cc                   	int3
+0077     2ab7:	cc                   	int3
+0078     2ab8:	cc                   	int3
+0079     2ab9:	cc                   	int3
+007a     2aba:	cc                   	int3
+007b     2abb:	cc                   	int3
+007c     2abc:	cc                   	int3
+007d     2abd:	cc                   	int3
+007e     2abe:	cc                   	int3
+007f     2abf:	cc                   	int3
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
