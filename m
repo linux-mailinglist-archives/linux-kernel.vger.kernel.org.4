@@ -2,205 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA055BB6E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 09:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4F65BB6ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 09:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiIQHPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 03:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S229708AbiIQHYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 03:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiIQHPT (ORCPT
+        with ESMTP id S229515AbiIQHYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 03:15:19 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210622CDE6;
-        Sat, 17 Sep 2022 00:15:18 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id e17so34465692edc.5;
-        Sat, 17 Sep 2022 00:15:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GW3G9CPyZ/e6f+PeJ0YJUBKqoF26V+P69n21Mik8xTY=;
-        b=ooTxO4oKlg8NFE/ngWakqALuouhdnYGFQZFhWaW/lzvlcS1kdlo1Hw3/rmB64BmvyR
-         tp99iVmkA5nn+5hSqOFee7umZaDXNadWLvX6hi+gq3Oirb4shHh/y9OcL/gni0LlGSQh
-         1n7QbxTB4s5ebEGWTsoavbaz5K8nV0b5yZzoNLh8UyYJukn1wtiEbekwUJ32fsy7u+zW
-         jlypfRECQia4gR4sM8tA6HoxK3PCjK91kqiKQEcJ0sgmvybo/DYVNDl41l34CdY8/mdx
-         toZahZc0W7TYEDEKcV/XpsaUhMbsP3fXYgtzt06/fafZUe3szf+eM75T+Yugdu7PULC/
-         DABQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GW3G9CPyZ/e6f+PeJ0YJUBKqoF26V+P69n21Mik8xTY=;
-        b=nEuwPro9sAw6tvztkZ77FTb+yWAEGQ7R4FLNBBmz8GNK/I2RxbsWGNDRhxMcAKRtTZ
-         3iIrMxOP7RA3JSfnFVR5iE4wklncA84WLg5B351y0LUeJMMNJcdD5p4dwZFQKoi6v44S
-         cTOsMdg6oGwRUlM7MzDfUwBSAqmemRFLPHKoCtxOvjnXf+bufRdtXBHhZ1gJITcyblP0
-         sdYV6FTVE76RJopdX6lnBIx7GEfxYnsdmfqyXl7Km/jUgGl/lGElvTn/4TZa/J23X9AQ
-         BT1+o2Y9UTVt4Dj7wLFDe2HzwuvT52bhVBi5TWlRwcwxC4bBPo6el1931IJ4ql4Ll7sM
-         QLeQ==
-X-Gm-Message-State: ACrzQf3fLstPbUbQwg17iVWbSqyBBCH7z4Vha5+fNnLXl4Biax/rFII/
-        W2rSn41ufM9ub1vHezK6Fw==
-X-Google-Smtp-Source: AMsMyM6tBFmWeUJugtFTxJVYyiBhdoA6F5N5aw9uQArSzWaGvMJlmQXPGD+oNVY/CQxK2SV5u95a8Q==
-X-Received: by 2002:a05:6402:3988:b0:44e:6f08:ddfb with SMTP id fk8-20020a056402398800b0044e6f08ddfbmr6776249edb.89.1663398916501;
-        Sat, 17 Sep 2022 00:15:16 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.254.94])
-        by smtp.gmail.com with ESMTPSA id gu2-20020a170906f28200b00718e4e64b7bsm11527318ejb.79.2022.09.17.00.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 00:15:15 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 10:15:13 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ivan Babrou <ivan@cloudflare.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [RFC] proc: report open files as size in stat() for /proc/pid/fd
-Message-ID: <YyV0AZ9+Zz4aopq4@localhost.localdomain>
-References: <20220916230853.49056-1-ivan@cloudflare.com>
- <20220916170115.35932cba34e2cc2d923b03b5@linux-foundation.org>
+        Sat, 17 Sep 2022 03:24:10 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A836B45F7B
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 00:24:05 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220917072359epoutp0191f0f9c55b1451bf8e7ebb8d1607dd1d~VlPojJrgx2007820078epoutp01Y
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 07:23:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220917072359epoutp0191f0f9c55b1451bf8e7ebb8d1607dd1d~VlPojJrgx2007820078epoutp01Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663399439;
+        bh=h/4r2gEtnptD3nTlpYtosI79Zc0cl2MuMZT/t5g8j7c=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=a3JQfVXNDPB2lTf/XD4EHD3dsjbJXI66BvMIE4VA616AVWS32kGgCzTm+6urD0DCl
+         HdmfDXT7DewJ0jnsjeLkYraw+s8cJlpJA2pPERMi49n4O9etDVwPPiFId3IVA+WBVG
+         s/uJJ6QsxZEXqin05d+jZVMKjUInEjDnm4nwZVkQ=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220917072358epcas1p1321a2b30b98d399b138f1354bf507725~VlPn9n06a0249502495epcas1p1U;
+        Sat, 17 Sep 2022 07:23:58 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.232]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MV2Vj5fmkz4x9Px; Sat, 17 Sep
+        2022 07:23:57 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7B.71.51827.D0675236; Sat, 17 Sep 2022 16:23:57 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220917072357epcas1p3fea7d947782d9ce58d91249533e0c1f7~VlPmUAIq_0974609746epcas1p3Q;
+        Sat, 17 Sep 2022 07:23:57 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220917072357epsmtrp25cc98e975fa0587e14882dbf1a216ff7~VlPmSuZ0W1654916549epsmtrp2s;
+        Sat, 17 Sep 2022 07:23:57 +0000 (GMT)
+X-AuditID: b6c32a36-f25ff7000000ca73-27-6325760d68ee
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        63.F0.18644.C0675236; Sat, 17 Sep 2022 16:23:56 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.113.58]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220917072356epsmtip208adf45c36e874da31948459d2147ece~VlPmECPXb0131701317epsmtip2S;
+        Sat, 17 Sep 2022 07:23:56 +0000 (GMT)
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, ogabbay@kernel.org,
+        krzysztof.kozlowski@linaro.org, broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, yelini.jeong@samsung.com,
+        myungjoo.ham@samsung.com, jiho.chu@samsung.com
+Subject: [PATCH v2 00/13] Samsung Trinity NPU device driver-v2
+Date:   Sat, 17 Sep 2022 16:23:43 +0900
+Message-Id: <20220917072356.2255620-1-jiho.chu@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916170115.35932cba34e2cc2d923b03b5@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgk+LIzCtJLcpLzFFi42LZdlhTX5e3TDXZ4EarpsXfScfYLaY+fMJm
+        0bx4PZvF++7dzBZ7X29lt7i8aw6bxe3GFWwW+3o+Mlo8n3adxYHT4/evSYwem1Z1snncubaH
+        zWP/3DXsHn1bVjF6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQ
+        l5ibaqvk4hOg65aZA3SVkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAtECvODG3
+        uDQvXS8vtcTK0MDAyBSoMCE7Y97CdYwFPxQqFvT4NzA+lOxi5OCQEDCR6H3C2sXIxSEksINR
+        YsatGYwQzidGifu77jFBOJ8ZJZ5t/c/WxcgJ1tF86hJUyy5GiR+7LiNUzfm5nxWkik1AVWLm
+        jDXsILaIQLlE88YTYDazQI7EkztNzCC2sICdRMuTD2BTWYDqJ+2YxgJi8wpYS8xaOIEZwhaU
+        ODnzCQtEr7xE89bZzCDLJASusUvMew6yGeQkF4lT+5ZC2cISr45vYYewpSQ+v9sLdXa2xJSO
+        RSwQdoHEuedbmSEBYCxxcUUKiMksoCmxfpc+RIWixM7fcxkh1vJJvPvawwpRzSvR0SYEUaIk
+        seTPYahFEhJTZ3yDOsBDYv2tqWC2kECsxNSGfvYJjHKzkDwzC8kzsxAWL2BkXsUollpQnJue
+        WmxYYASPxuT83E2M4KSoZbaDcdLbD3qHGJk4GA8xSnAwK4nwqnqqJAvxpiRWVqUW5ccXleak
+        Fh9iNAUG6URmKdHkfGBaziuJNzSxNDAxMzI2sTA0M1QS59XTZkwWEkhPLEnNTk0tSC2C6WPi
+        4JRqYNJ/6n7uz6u9U76tr7aaO1Ex+owiv+ptt6YFlSdm3ioxsxKwbOgLm2dWkZrFmuN8t9XA
+        T7xeQTGjlnEqa0TPl5wKlay0R4E/ZP9qaW6y9t7sOy17VeRLjZmT+U5M21Xw7NbvuXWl3P78
+        Sm5rTJlVP10yf9yyxuPFjrva5ZxKuq9OZ+aYtjcu2etoePNUtVu/sMm+fxdiXl/1lzVOqV23
+        6N3tM290ftx6PKc6redW//HKh1mWn92PnIq59jlDvY0lqVy9o3ePV+clBT6WQ3oz96Z0Cz43
+        2BnAG8mxtVeq5OhRW5n1zoWnrVdrM4tzrbRyL33HzPIpeEO9YP49hbdNu/fLSfebz7rreVTU
+        smivEktxRqKhFnNRcSIARwYc6hMEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrALMWRmVeSWpSXmKPExsWy7bCSvC5PmWqywbOT5hZ/Jx1jt5j68Amb
+        RfPi9WwW77t3M1vsfb2V3eLyrjlsFrcbV7BZ7Ov5yGjxfNp1FgdOj9+/JjF6bFrVyeZx59oe
+        No/9c9ewe/RtWcXo8XmTXABbFJdNSmpOZllqkb5dAlfGvIXrGAt+KFQs6PFvYHwo2cXIySEh
+        YCLRfOoSaxcjF4eQwA5GiW/Pj7NAJCQkNt1bztzFyAFkC0scPlwMUfORUeJT+wVmkBo2AVWJ
+        mTPWsIPYIgK1EgePzgeLMwsUSMx+OhNsjrCAnUTLkw9sIDYLUP2kHdPA4rwC1hKzFk5ghrAF
+        JU7OfMIC0Ssv0bx1NvMERt5ZSFKzkKQWMDKtYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P
+        3cQIDlQtrR2Me1Z90DvEyMTBeIhRgoNZSYRX1VMlWYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv
+        ha6T8UIC6YklqdmpqQWpRTBZJg5OqQamkxeeLv94XFLyrgxbkan/lD0HFvy78eb0revcJ67a
+        66qkt/245cnSojlxvtTtUobHGz02hG31XMJ+7ZZJ2MwJIT8FW21lJrefknzEf/+QZHZczun7
+        G5TCPmZPmXAjfGq0bM3bW1NS2VNqrX5mS+0Uns8xPzP49aaNjV4/vXtnXuhwtOvwSb9SwLJ/
+        7cTe7TJPUjK0ndTjuiyXbeI2EznBvjFF5PyhtZVn5ILOzlj21kdmkd/DZ1wsukGT80+pHy5s
+        NP/SouiXV5ToOeHZxlcRpgwfq3XCjGYdMXw2b0nQr12nVOd3Gm5benKmBrO96ZLGGb8E8m4w
+        Lmj5I1Twznan1dQXn12jDN9wq3czLEg9rsRSnJFoqMVcVJwIACUIm/PDAgAA
+X-CMS-MailID: 20220917072357epcas1p3fea7d947782d9ce58d91249533e0c1f7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220917072357epcas1p3fea7d947782d9ce58d91249533e0c1f7
+References: <CGME20220917072357epcas1p3fea7d947782d9ce58d91249533e0c1f7@epcas1p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 05:01:15PM -0700, Andrew Morton wrote:
-> (cc's added)
-> 
-> On Fri, 16 Sep 2022 16:08:52 -0700 Ivan Babrou <ivan@cloudflare.com> wrote:
-> 
-> > Many monitoring tools include open file count as a metric. Currently
-> > the only way to get this number is to enumerate the files in /proc/pid/fd.
-> > 
-> > The problem with the current approach is that it does many things people
-> > generally don't care about when they need one number for a metric.
-> > In our tests for cadvisor, which reports open file counts per cgroup,
-> > we observed that reading the number of open files is slow. Out of 35.23%
-> > of CPU time spent in `proc_readfd_common`, we see 29.43% spent in
-> > `proc_fill_cache`, which is responsible for filling dentry info.
-> > Some of this extra time is spinlock contention, but it's a contention
-> > for the lock we don't want to take to begin with.
-> > 
-> > We considered putting the number of open files in /proc/pid/stat.
-> > Unfortunately, counting the number of fds involves iterating the fdtable,
-> > which means that it might slow down /proc/pid/stat for processes
-> > with many open files. Instead we opted to put this info in /proc/pid/fd
-> > as a size member of the stat syscall result. Previously the reported
-> > number was zero, so there's very little risk of breaking anything,
-> > while still providing a somewhat logical way to count the open files.
-> 
-> Documentation/filesystems/proc.rst would be an appropriate place to
-> document this ;)
-> 
-> > Previously:
-> > 
-> > ```
-> > $ sudo stat /proc/1/fd | head -n2
-> >   File: /proc/1/fd
-> >   Size: 0         	Blocks: 0          IO Block: 1024   directory
-> > ```
-> > 
-> > With this patch:
-> > 
-> > ```
-> > $ sudo stat /proc/1/fd | head -n2
-> >   File: /proc/1/fd
-> >   Size: 65        	Blocks: 0          IO Block: 1024   directory
+Hello,
 
-Yes. This is natural place.
+This patch set is v2 of Samsung Trinity NPU driver.
+As reviews of v1, unnecessary logs are removed, and essential documents
+including binding and ABI are presented.
 
-> > ```
-> > 
-> > Correctness check:
-> > 
-> > ```
-> > $ sudo ls /proc/1/fd | wc -l
-> > 65
-> > ```
-> > 
-> > There are two alternatives to this approach that I can see:
-> > 
-> > * Expose /proc/pid/fd_count with a count there
+There were some violations like user space access, abstraction and open
+count. They modified in right way as much as possible, but if there are any
+faults, please let me know.
 
-> > * Make fd count acces O(1) and expose it in /proc/pid/status
+Unnecessary functions are removed, and each patch is reduced
+in size for better reading.
 
-This is doable, next to FDSize.
+Thanks for reviews.
 
-Below is doable too.
+The main changes are:
 
-> > --- a/fs/proc/fd.c
-> > +++ b/fs/proc/fd.c
-> > @@ -279,6 +279,29 @@ static int proc_readfd_common(struct file *file, struct dir_context *ctx,
-> >  	return 0;
-> >  }
-> >  
-> > +static int proc_readfd_count(struct inode *inode)
-> > +{
-> > +	struct task_struct *p = get_proc_task(inode);
-> > +	unsigned int fd = 0, count = 0;
-> > +
-> > +	if (!p)
-> > +		return -ENOENT;
-> > +
-> > +	rcu_read_lock();
-> > +	while (task_lookup_next_fd_rcu(p, &fd)) {
-> > +		rcu_read_unlock();
-> > +
-> > +		count++;
-> > +		fd++;
-> > +
-> > +		cond_resched();
-> > +		rcu_read_lock();
-> > +	}
-> > +	rcu_read_unlock();
-> > +	put_task_struct(p);
-> > +	return count;
-> > +}
-> > +
-> >  static int proc_readfd(struct file *file, struct dir_context *ctx)
-> >  {
-> >  	return proc_readfd_common(file, ctx, proc_fd_instantiate);
-> > @@ -319,9 +342,33 @@ int proc_fd_permission(struct user_namespace *mnt_userns,
-> >  	return rv;
-> >  }
-> >  
-> > +int proc_fd_getattr(struct user_namespace *mnt_userns,
-> > +			const struct path *path, struct kstat *stat,
-> > +			u32 request_mask, unsigned int query_flags)
-> > +{
-> > +	struct inode *inode = d_inode(path->dentry);
-> > +	struct proc_dir_entry *de = PDE(inode);
-> > +
-> > +	if (de) {
-> > +		nlink_t nlink = READ_ONCE(de->nlink);
-> > +
-> > +		if (nlink > 0)
-> > +			set_nlink(inode, nlink);
-> > +	}
-> > +
-> > +	generic_fillattr(&init_user_ns, inode, stat);
-			 ^^^^^^^^^^^^^
+Since V2:
+- Remove all tracing info logs
+- Remove abstraction layer for scheduler
+- Remove access to user space file
+- USE IDA to generate id
+- Add ABI document for sysfs
+- Add dt-bindings document
+- Use default group for sysfs
 
-Is this correct? I'm not userns guy at all.
+Link to v1:
+https://lore.kernel.org/all/20220725065308.2457024-1-jiho.chu@samsung.com/
 
-> > +
-> > +	/* If it's a directory, put the number of open fds there */
-> > +	if (S_ISDIR(inode->i_mode))
-> > +		stat->size = proc_readfd_count(inode);
+I would highly appreciate your feedback.
+Reviews, questions or anythings.
 
-ENOENT can get there. In principle this is OK, userspace can live with it.
+Thanks,
+Jiho Chu
+ 
+Jiho Chu (13):
+  trinity: Add base driver
+  tirnity: Add memory module
+  trinity: Add IDU feature
+  trinity: Add schduler module
+  trinity: Add debugfs module
+  trinity: add statistics module
+  trinity: Add sysfs module
+  trinity: Add ioctl feature
+  trinity: Add request and pm feature
+  trinity: Add profile module
+  trinity: Add trace module
+  MAINTAINERS: add TRINITY driver
+  dt-bindings: arm: Add Samsung Trinity bindings
 
-> >  const struct inode_operations proc_fd_inode_operations = {
-> >  	.lookup		= proc_lookupfd,
-> >  	.permission	= proc_fd_permission,
-> > +	.getattr	= proc_fd_getattr,
-> >  	.setattr	= proc_setattr,
+ .../ABI/testing/sysfs-driver-trinity          |   55 +
+ .../bindings/arm/samsung,trinity.yaml         |  115 ++
+ MAINTAINERS                                   |    8 +
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/trinity/Kconfig                  |   25 +
+ drivers/misc/trinity/Makefile                 |   13 +
+ drivers/misc/trinity/trinity.c                | 1019 ++++++++++
+ drivers/misc/trinity/trinity_common.h         |  437 +++++
+ drivers/misc/trinity/trinity_debug.c          |  331 ++++
+ drivers/misc/trinity/trinity_dma.c            |   83 +
+ drivers/misc/trinity/trinity_dma.h            |   87 +
+ drivers/misc/trinity/trinity_hwmem.c          |  380 ++++
+ drivers/misc/trinity/trinity_hwmem.h          |   81 +
+ drivers/misc/trinity/trinity_sched.c          |  338 ++++
+ drivers/misc/trinity/trinity_sched.h          |   24 +
+ drivers/misc/trinity/trinity_stat.c           |  898 +++++++++
+ drivers/misc/trinity/trinity_stat.h           |   56 +
+ drivers/misc/trinity/trinity_sysfs.c          |  667 +++++++
+ drivers/misc/trinity/trinity_trace.c          |   15 +
+ drivers/misc/trinity/trinity_trace.h          |  329 ++++
+ drivers/misc/trinity/trinity_vision2_drv.c    | 1685 +++++++++++++++++
+ .../misc/trinity/trinity_vision2_profile.h    |  324 ++++
+ drivers/misc/trinity/trinity_vision2_regs.h   |  210 ++
+ include/uapi/misc/trinity.h                   |  476 +++++
+ 25 files changed, 7658 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-trinity
+ create mode 100644 Documentation/devicetree/bindings/arm/samsung,trinity.yaml
+ create mode 100644 drivers/misc/trinity/Kconfig
+ create mode 100644 drivers/misc/trinity/Makefile
+ create mode 100644 drivers/misc/trinity/trinity.c
+ create mode 100644 drivers/misc/trinity/trinity_common.h
+ create mode 100644 drivers/misc/trinity/trinity_debug.c
+ create mode 100644 drivers/misc/trinity/trinity_dma.c
+ create mode 100644 drivers/misc/trinity/trinity_dma.h
+ create mode 100644 drivers/misc/trinity/trinity_hwmem.c
+ create mode 100644 drivers/misc/trinity/trinity_hwmem.h
+ create mode 100644 drivers/misc/trinity/trinity_sched.c
+ create mode 100644 drivers/misc/trinity/trinity_sched.h
+ create mode 100644 drivers/misc/trinity/trinity_stat.c
+ create mode 100644 drivers/misc/trinity/trinity_stat.h
+ create mode 100644 drivers/misc/trinity/trinity_sysfs.c
+ create mode 100644 drivers/misc/trinity/trinity_trace.c
+ create mode 100644 drivers/misc/trinity/trinity_trace.h
+ create mode 100644 drivers/misc/trinity/trinity_vision2_drv.c
+ create mode 100644 drivers/misc/trinity/trinity_vision2_profile.h
+ create mode 100644 drivers/misc/trinity/trinity_vision2_regs.h
+ create mode 100644 include/uapi/misc/trinity.h
+
+-- 
+2.25.1
+
