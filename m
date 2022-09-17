@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3175BB5FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB385BB604
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiIQELL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229519AbiIQEPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIQELG (ORCPT
+        with ESMTP id S229454AbiIQEPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:11:06 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48C85A88A;
-        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 78so22042483pgb.13;
-        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
+        Sat, 17 Sep 2022 00:15:02 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D272530F7C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:14:59 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id v15so18086981qvi.11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Io+HUzbS9Ne8BTdacwB7WIsyFHjkHKLnRQCl7dgy8uU=;
-        b=qNti11DYvVDIXXP9FsQ3kUX2I85s0QJCofDngVPw72SJ97qA6PbtS2uuTJ7nkLji5B
-         j29Kv0XXEGSMA3JEQHR0u9MEhIQkJfaz3IyfLn8yLzVJsWebXmIDrmDnjWjRaDae99SI
-         xXE8PCEtWNUrQkiAzGhEYetVNYdJTbjF6KhG9fZUvkrESp37s20X1AgjG0vd7znwmjK2
-         WUtkVcPcM35/ELWJpuZu3wNMQhNKj4NslpqEML1/eZ/AGNiiOG0VGCH4tO9y+muvb5ZB
-         pjTRZTXNDycr6LGyEn+To69gEv5+mjnelejPWTUl/F0PvtLU8XzZ4NfhQIT4Oy33maP5
-         s94g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=ytCQaxIOlYtm/dKsLmATBZ59cx0tQDdf4JFFJe4Z8fg=;
+        b=mebDyI+PjI8xMukc3qC6r4xPbMiyVAY0UKPfWRlW4lbjLnmrB5auR5a8pDWq3X3fBG
+         AdRivziUkOaa1qxGMgQpEasioyApa6Xw+fnbSJt154O5qqL5VE9yHCkbrs1uBNKLYC4j
+         v7WYSB7iCixUjYpBEnLbrHhEu6Xaem+QigfJ1/vxHHO27vi6nQxtdVeg1+sj+qsawO/g
+         6oWczHkZLm052GfFXZVSEuPubuUkMR82MtSpZqfW2V0Knwj1BBMJD1cnjjt0E/qEnFOK
+         5Ad+bn600ERE3I38ni6BBVavhIKjW/UMKk9uufU3hz7aJ9RUNDyTawLqThmOXoEJfDjK
+         jxMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Io+HUzbS9Ne8BTdacwB7WIsyFHjkHKLnRQCl7dgy8uU=;
-        b=qPeMrPfmPfrOOn6a2Kafr6zTs+wodObhQSr6cxObbgS5TCe4fv66dhxrDqPFiyJfDY
-         1b10qj9HZIkreIru490AtUHq3uKYslIs1IY9Z0be3JBw2JE8HDI0DE5XviXZ6IdrMyGe
-         wGwmZjpvnyhI8vFPJcZ34ikiIihVPRc1PhbEDFGctcirJY0UHycoPlM4O/0/BlT5OqmC
-         vzlm0J8ZZav7B0oBxCEIc7Yqpi5vKhBH/2H7hsUsYkvAdYa66UiDB4yxCPCDfUB6ivDq
-         rK4PCaG+SC2T8mHFzG1ggMqc5R6DWQApmDI30bqBGh5nxJimH8NUua9RWR3TOmOK3dKx
-         wb6g==
-X-Gm-Message-State: ACrzQf0KazywSNkBpTIoBGEsrs91RKzZDxkyKKOCuHOE/LVvr+e+e2kI
-        lPmfPMsZkScICCyjMzr75SQ=
-X-Google-Smtp-Source: AMsMyM6+bbip3q7dETPIOMPTuzZSHdNv2yw9alFv2ZExwfcfMeQOMaL4bPGo+YQaFNwQQlhFNV4GGA==
-X-Received: by 2002:a05:6a00:d60:b0:53e:576e:bd8c with SMTP id n32-20020a056a000d6000b0053e576ebd8cmr8177740pfv.4.1663387865370;
-        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
-        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b0053e42167a33sm15298752pfq.53.2022.09.16.21.11.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ytCQaxIOlYtm/dKsLmATBZ59cx0tQDdf4JFFJe4Z8fg=;
+        b=d7l16w/L9eeBxbwfCdMjrg87ft4XYczi12yAfAimKZDbdSesLv+gp0BfIvkx0dIb/x
+         3/HF4pNfpm1o2H2ABDgKLWFuHILAsFpLozx8Hm3O5Lo+QrkePnAdD1k5hbHrSh7rxHhI
+         3zs8q7g+OdKxBEP4B2b+uudnK4xtaEtBO3/4oKrbn/UddpKhRAE6mIwehj5Vvg/5D8NG
+         QRvM0aVi19DSQBxSg569/SMifLP1rD0Cp/GlkouOpoOV9/0+mVGCyHwyMTmbIaA+Fnmq
+         5BfWGs6d75cUyZ5vvFh1s1Z7RYNmX4TUQFB2d9iZQSCZraPnSbVSiBc9TKMJtrEmqGaY
+         lGzQ==
+X-Gm-Message-State: ACrzQf1YeIDA1djBrJxVGuS9e2E3XwYfbLnPYQlKNXsHaJnOMAWU/3bT
+        BoweH1ijxF/RzRQBaQBAxdz4OptOew2Edg==
+X-Google-Smtp-Source: AMsMyM4ar7sfvHWOaWCd1ejCOTPtFmGdDCvJzta3Q3qG8TBX1ljQ28e1zpeoF26ryXv1I/eUPu5A2g==
+X-Received: by 2002:a05:6214:c4e:b0:4ac:7870:81b3 with SMTP id r14-20020a0562140c4e00b004ac787081b3mr6424157qvj.93.1663388099017;
+        Fri, 16 Sep 2022 21:14:59 -0700 (PDT)
+Received: from Dell-Inspiron-15.. (c-73-149-35-171.hsd1.ma.comcast.net. [73.149.35.171])
+        by smtp.gmail.com with ESMTPSA id do11-20020a05620a2b0b00b006bbb07ebd83sm7345206qkb.108.2022.09.16.21.14.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 21:11:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 60495102B77; Sat, 17 Sep 2022 11:11:01 +0700 (WIB)
-Date:   Sat, 17 Sep 2022 11:11:00 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/35] 5.15.69-rc1 review
-Message-ID: <YyVI1OdOjuEdVAjM@debian.me>
-References: <20220916100446.916515275@linuxfoundation.org>
+        Fri, 16 Sep 2022 21:14:58 -0700 (PDT)
+From:   Ben Wolsieffer <benwolsieffer@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Ben Wolsieffer <benwolsieffer@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/2] ARM: v7m: handle faults and enable debugging
+Date:   Sat, 17 Sep 2022 00:13:50 -0400
+Message-Id: <20220917041403.4191780-1-benwolsieffer@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:08:23PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.69 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+This series enables real exception handlers on no-MMU systems,
+increasing robustness in the face of buggy user- or kernel-space
+software. Previously, any fault would trigger the invalid exception
+handler, which would hang the system. With this series, faults only
+kill the offending process and allow the rest of the system to
+continue operating.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+The second patch in this series adds support for undefined instruction
+hooks, enabling software breakpoints through ptrace. Using this
+functionality currently requires a patch to gdb.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+This series has been tested on an STM32F746 (Cortex-M7).
+
+I would appreciate feedback in particular on the following questions:
+* Is the fault table formatting acceptable? Or should the lines be
+  wrapped/shortened?
+* Does my chosen mapping between faults and signals make sense?
+
+Ben Wolsieffer (2):
+  ARM: v7m: handle faults
+  ARM: v7m: support undefined instruction hooks
+
+ arch/arm/include/asm/traps.h |   2 +
+ arch/arm/include/asm/v7m.h   |  29 +++++++
+ arch/arm/kernel/Makefile     |   2 +-
+ arch/arm/kernel/entry-v7m.S  |  68 ++++++++++++++-
+ arch/arm/kernel/traps-v7m.c  | 162 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 258 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/kernel/traps-v7m.c
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.2
+
