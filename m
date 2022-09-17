@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5EE5BB756
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771575BB761
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiIQIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S229564AbiIQJBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIQItX (ORCPT
+        with ESMTP id S229657AbiIQJBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:49:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2605B32061;
-        Sat, 17 Sep 2022 01:49:21 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MV4L305VjzpSvX;
-        Sat, 17 Sep 2022 16:46:35 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 17 Sep 2022 16:49:19 +0800
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 17 Sep
- 2022 16:49:18 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yanan@huawei.com>, <wuchangye@huawei.com>,
-        <xiesongyang@huawei.com>, <zhudi2@huawei.com>,
-        <kongweibin2@huawei.com>, <liuxin350@huawei.com>
-Subject: [PATCH v2] libbpf: Fix NULL pointer exception in API btf_dump__dump_type_data
-Date:   Sat, 17 Sep 2022 16:48:09 +0800
-Message-ID: <20220917084809.30770-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 17 Sep 2022 05:01:42 -0400
+Received: from tulikuusama2.dnainternet.net (tulikuusama2.dnainternet.net [83.102.40.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461692BB2F;
+        Sat, 17 Sep 2022 02:01:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id ABA4F28904;
+        Sat, 17 Sep 2022 11:54:51 +0300 (EEST)
+X-Virus-Scanned: DNA Internet at dnainternet.net
+X-Spam-Score: 2.975
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
+Received: from tulikuusama2.dnainternet.net ([83.102.40.151])
+        by localhost (tulikuusama2.dnainternet.net [127.0.0.1]) (DNA Internet, port 10041)
+        with ESMTP id opv80w7qov8h; Sat, 17 Sep 2022 11:54:51 +0300 (EEST)
+Received: from kirsikkapuu2.dnainternet.net (kirsikkapuu2.dnainternet.net [83.102.40.52])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 846D220B65;
+        Sat, 17 Sep 2022 11:54:51 +0300 (EEST)
+Received: from localhost (87-95-96-237.bb.dnainternet.fi [87.95.96.237])
+        by kirsikkapuu2.dnainternet.net (Postfix) with ESMTP id 07FC67B;
+        Sat, 17 Sep 2022 11:54:44 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 17 Sep 2022 11:54:44 +0300
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org, p.zabel@pengutronix.de,
+        horatiu.vultur@microchip.com
+Subject: Re: [PATCH -next v2 1/2] pinctrl: ocelot: add missing
+ destroy_workqueue() in error path in ocelot_pinctrl_probe()
+Message-ID: <YyWLVF6OAyerJKvR@surfacebook>
+References: <20220917024634.1021861-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220917024634.1021861-1-yangyingliang@huawei.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found that function btf_dump__dump_type_data can be called by the
-user as an API, but in this function, the `opts` parameter may be used
-as a null pointer.This causes `opts->indent_str` to trigger a NULL
-pointer exception.
+Sat, Sep 17, 2022 at 10:46:33AM +0800, Yang Yingliang kirjoitti:
+> Add the missing destroy_workqueue() before return from ocelot_pinctrl_probe()
+> in error path.
+> 
+> Fixes: c297561bc98a ("pinctrl: ocelot: Fix interrupt controller")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+> v2:
+>   move alloc_ordered_workqueue() after ocelot_pinctrl_register().
 
-Fixes: 2ce8450ef5a3 ("libbpf: add bpf_object__open_{file, mem} w/ extensible opts")
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
-Signed-off-by: Weibin Kong <kongweibin2@huawei.com>
----
-v1 -> v2: Use OPTS_GET to fix NULL pointer exceptions
-v1: https://lore.kernel.org/bpf/20220914123423.24368-1-liuxin350@huawei.com/ 
+Why? What will happen if user space start using pins before workqueue is allocated?
 
- tools/lib/bpf/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you really want to have it correct, you need either drop all devm_ calls
+after allocating workqueue, or wrap destroying into devm.
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 627edb5bb6de..4221f73a74d0 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2385,7 +2385,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
- 	d->typed_dump->indent_lvl = OPTS_GET(opts, indent_level, 0);
- 
- 	/* default indent string is a tab */
--	if (!opts->indent_str)
-+	if (!OPTS_GET(opts, indent_str, NULL))
- 		d->typed_dump->indent_str[0] = '\t';
- 	else
- 		libbpf_strlcpy(d->typed_dump->indent_str, opts->indent_str,
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
 
