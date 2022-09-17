@@ -2,142 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365795BBACA
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E18F5BBAD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 00:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiIQWEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 18:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S229528AbiIQWVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 18:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIQWEc (ORCPT
+        with ESMTP id S229457AbiIQWVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 18:04:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29E5FC1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 15:04:31 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZfvK-0005o5-7Z; Sun, 18 Sep 2022 00:04:30 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZfvK-001LkU-OQ; Sun, 18 Sep 2022 00:04:29 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oZfvI-001ayT-Lh; Sun, 18 Sep 2022 00:04:28 +0200
-Date:   Sun, 18 Sep 2022 00:04:25 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>, g@pengutronix.de
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] pcmcia: sa1100: Make sa11x0_drv_pcmcia_legacy_remove()
- return void
-Message-ID: <20220917220425.yb2damz43q7fghz6@pengutronix.de>
-References: <20220714214534.63517-1-u.kleine-koenig@pengutronix.de>
+        Sat, 17 Sep 2022 18:21:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BC72B1B9;
+        Sat, 17 Sep 2022 15:21:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFCC0B80E23;
+        Sat, 17 Sep 2022 22:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BB5C433C1;
+        Sat, 17 Sep 2022 22:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663453271;
+        bh=QcxphjV+XpiadsnUCmiAF/lR0/3egacEFo2hy+/98aI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XV0BDaJ7/ze7SY1yMcUjQoxz4oB4xm/ZXGo0k0A2Au7nmJcl5XFZiIb4BEpIY3tfi
+         aJpWfegWuS6kx+L4JEQRxWE8uVdW5r8TX+2p1Cx6WGqPa8zDVkej8CL2ghfETFLu22
+         ec/0WjJoHFRf80d3wwMkSzjL3yR0yp148YPzaCg2gCIo0jbMa7g/p1xR17ULd+NJ/S
+         63fZtWdgsNNLIN1Smc2XuoNzJU3MidP4tfbXugVkHKv5ii65BzZfGlYjT0wLDwqG0z
+         IVoKfgCf93nDlhHEmAdUwJtfIOfphvZQPhnPh8fvoJxmGJilPwzHewmoNVr5l10WYu
+         w7gLQJRm7GnKw==
+Date:   Sun, 18 Sep 2022 00:21:08 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Subject: Re: [PATCH rcu/next 3/3] rcu: Call trace_rcu_callback() also for
+ bypass queuing (v2)
+Message-ID: <20220917222108.GB40100@lothringen>
+References: <20220917164200.511783-1-joel@joelfernandes.org>
+ <20220917164200.511783-4-joel@joelfernandes.org>
+ <20220917195807.GA39579@lothringen>
+ <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jakt3vbz2qf65knj"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220714214534.63517-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YQxwDF5jhS9gdLa0FsNeD+WoZL0PQydMbT4hsUtLm0hMA@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Sep 17, 2022 at 05:43:06PM -0400, Joel Fernandes wrote:
+> On Sat, Sep 17, 2022 at 3:58 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> >
+> > On Sat, Sep 17, 2022 at 04:42:00PM +0000, Joel Fernandes (Google) wrote:
+> > > @@ -2809,17 +2825,15 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> > >       }
+> > >
+> > >       check_cb_ovld(rdp);
+> > > -     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
+> > > +
+> > > +     if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags)) {
+> > > +             __trace_rcu_callback(head, rdp);
+> > >               return; // Enqueued onto ->nocb_bypass, so just leave.
+> > > +     }
+> >
+> > I think the bypass enqueues should be treated differently. Either with extending
+> > the current trace_rcu_callback/trace_rcu_kvfree_callback (might break tools)
+> >
+> > or
+> > with creating a new trace_rcu_callback_bypass()/trace_rcu_kvfree_callback_bypass().
+> >
+> > Those could later be paired with a trace_rcu_bypass_flush().
+> 
+> I am having a hard time seeing why it should be treated differently.
+> We already increment the length of the main segcblist even when
+> bypassing. Why not just call the trace point instead of omitting it?
 
---jakt3vbz2qf65knj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm not suggesting to omit it. I'm suggesting to improve its precision.
 
-Hello Dominik,
+> Otherwise it becomes a bit confusing IMO (say someone does not enable
+> your proposed new bypass tracepoint and only enables the existing one,
+> then they would see weird traces where call_rcu is called but their
+> traces are missing trace_rcu_callback).
 
-On Thu, Jul 14, 2022 at 11:45:34PM +0200, Uwe Kleine-K=F6nig wrote:
-> sa11x0_drv_pcmcia_legacy_remove() returns zero unconditionally. Letting it
-> return void instead makes it easier to see in the caller that there is no
-> error to handle.
->=20
-> This is a preparation for making platform remove callbacks return void.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Well, if they decided to see only half of the information...
 
-This patch still applies on top of v6.0-rc1. I didn't get any feedback
-about it yet. Is there someone else I should send this patch to?
+> Not to mention - your
+> suggestion will also complicate writing tools that use the existing
+> rcu_callback tracepoint to monitor call_rcu().
 
-Best regards
-Uwe
+If we add another tracepoint, the prototype will be the same as the
+existing one, not many lines to add. If instead we extend the existing
+tracepoint, it's merely just a flag to check or ignore.
 
-> ---
->  drivers/pcmcia/sa1100_generic.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/pcmcia/sa1100_generic.c b/drivers/pcmcia/sa1100_gene=
-ric.c
-> index 47b060c57418..c2b6e828c2c6 100644
-> --- a/drivers/pcmcia/sa1100_generic.c
-> +++ b/drivers/pcmcia/sa1100_generic.c
-> @@ -125,7 +125,7 @@ static int sa11x0_drv_pcmcia_legacy_probe(struct plat=
-form_device *dev)
->  	return ret;
->  }
-> =20
-> -static int sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
-> +static void sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
->  {
->  	struct skt_dev_info *sinfo =3D platform_get_drvdata(dev);
->  	int i;
-> @@ -134,8 +134,6 @@ static int sa11x0_drv_pcmcia_legacy_remove(struct pla=
-tform_device *dev)
-> =20
->  	for (i =3D 0; i < sinfo->nskt; i++)
->  		soc_pcmcia_remove_one(&sinfo->skt[i]);
-> -
-> -	return 0;
->  }
-> =20
->  static int sa11x0_drv_pcmcia_probe(struct platform_device *pdev)
-> @@ -167,8 +165,10 @@ static int sa11x0_drv_pcmcia_remove(struct platform_=
-device *dev)
->  {
->  	struct soc_pcmcia_socket *skt;
-> =20
-> -	if (dev->id =3D=3D -1)
-> -		return sa11x0_drv_pcmcia_legacy_remove(dev);
-> +	if (dev->id =3D=3D -1) {
-> +		sa11x0_drv_pcmcia_legacy_remove(dev);
-> +		return 0;
-> +	}
-> =20
->  	skt =3D platform_get_drvdata(dev);
-> =20
->=20
-> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+OTOH your suggestion doesn't provide any bypass related information.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> 
+> Also if you see the definition of rcu_callback, "Tracepoint for the
+> registration of a single RCU callback function.".  That pretty much
+> fits the usage here.
 
---jakt3vbz2qf65knj
-Content-Type: application/pgp-signature; name="signature.asc"
+Doesn't tell if it's a bypass or not.
 
------BEGIN PGP SIGNATURE-----
+> 
+> As for tracing of the flushing, I don’t care about tracing that at the
+> moment using tracepoints
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMmRGcACgkQwfwUeK3K
-7AlTWggAhFblRRwxmbE0w4eEpOd5atCR6Xd0/LR4JDOK1c6A8MIXyGsaYGAESO3T
-4Utehf5VqOg5bzs5B1T8XZ2X6IcaEihVvHaa60g1/IwHR+RtDu318EdjAUhSX2fw
-uawT7qPxFZqxjAqNAdf8NwapwDS04B+hhVmYRy+A8krTL4vEM3evL8Wbjk+IitJL
-otdAZCaAFHa4l/w9hxoXtS/DNi/JcsV82jU2DQOYx34UkxrnLonS1YEWxuCP7NY5
-WBZiXq3l2fL6oz+YkY7NAg1decEj/gsh3s3x5GhUpwfFOzS5p6U8tiWbhNNQK37w
-b69wkRx13h6pEM+JqTExiqhLwDDOHw==
-=hnfH
------END PGP SIGNATURE-----
+You will soon enough ;-)
 
---jakt3vbz2qf65knj--
+> but I don’t mind if it is added later.
+> Maybe let’s let Paul help resolve our disagreement on this one? :)
+
+FWIW, I would be personally interested in such tracepoints (or the extension
+of the existing ones, whichever way you guys prefer), they would be of great help
+for debugging.
+
+Also if rcu_top is ever released, I really hope the kernel will be ready in
+case we want the tool to display bypass related informations.
+
+Please be careful while designing tracepoints that may be consumed by userspace
+released tools. Such tracepoints eventually turn into ABI and there is no way
+back after that.
+
+Thanks.
