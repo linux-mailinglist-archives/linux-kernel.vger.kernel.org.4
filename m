@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B4F5BB889
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9095BB88A
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 15:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiIQNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 09:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S229550AbiIQNiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 09:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiIQNf7 (ORCPT
+        with ESMTP id S229483AbiIQNiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 09:35:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1F31EE6
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kSVGLwjHHpXADlmgu1J5mJ+LZ5I+HG7t0XI3xSThcYM=; b=q1hYmOby16d2al+llIDR8ZWK7F
-        znf4AQoG2fHEflkvkMpNXAWbSg3/T8yLMm6pPEo8btJQ66RHb0xtRK0p4Bi6xuqjk5xpV+HgFjbvZ
-        69m4TIW5aymgMw0w/SKp3+LVNtKuZ3DHBwjITVC6xPbsDf6qQ3VWkM80VIatm9pGJUJNv6o6ccJb6
-        rYQ91Q+aHed1IYQ1wmeGazhqheJIccKQ5F8+Vm3qTdFoInEq/s3gDlTeDhMAGUorlNEdQ5g0ORl3f
-        V6Wo4MZvaWEdKHT4IUdEBRjJrKysHVifOSzqcitRInczZ7MTWOJXoVYGVCr8JfhIoIJMgak4gGWKu
-        sdXxf6ww==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZXyv-003Ei1-2n; Sat, 17 Sep 2022 13:35:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5BAEE30013F;
-        Sat, 17 Sep 2022 15:35:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3A1FF207EC255; Sat, 17 Sep 2022 15:35:32 +0200 (CEST)
-Date:   Sat, 17 Sep 2022 15:35:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: RCU vs NOHZ
-Message-ID: <YyXNJEH6xafOcp39@hirez.programming.kicks-ass.net>
-References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
- <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
- <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
- <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
- <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <CAEXW_YTN7mnQSN2eJCysLsZOq+8JEOV6pvgw3LDTT=0mnkC2SA@mail.gmail.com>
+        Sat, 17 Sep 2022 09:38:02 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F331EE6
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 06:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663421882; x=1694957882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tIryiFgQl9COzjEcEkX38EUN2UYw3EZiOxUHcq8DolY=;
+  b=eWkP615OSorqAQcCg4SIGjdkSTVGHR2Lfi9xF4c5gUCVbavMUtLXHygd
+   q9o9AkmRj+8Aw1z2ByKpGgchnBR6HuTikunPx9sG4axOSxVpFRafExFrq
+   dusIf+rTLWoVd/Asz8Culh6VjtftCFD2NddovdEzeUgDhJ58Y+51JOaiG
+   k4zOnCY0bBbvBT3mlEilD8BS00FISnEPpCtZQ4v6b/PhIgHPSFRyNFVUy
+   te5JpIG1/rs/y8cws476Om/egZrCO0FQQGZJdZuYPIOhLWKNhlHWYt0rr
+   Vn3YumniOitnO5PfxpJk7p72SW1NMrlzw0FGc1xldKr3xnH9aUxBECDsB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="282179885"
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="282179885"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 06:38:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="760343021"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Sep 2022 06:37:58 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZY18-0000Ml-08;
+        Sat, 17 Sep 2022 13:37:58 +0000
+Date:   Sat, 17 Sep 2022 21:37:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
+        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+Subject: Re: [PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
+Message-ID: <202209172147.lNB8ZX1j-lkp@intel.com>
+References: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YTN7mnQSN2eJCysLsZOq+8JEOV6pvgw3LDTT=0mnkC2SA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,63 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:11:10PM -0400, Joel Fernandes wrote:
-> Hi Peter,
-> 
-> On Fri, Sep 16, 2022 at 5:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> [...]
-> > > It wasn't enabled for ChromeOS.
-> > >
-> > > When fully enabled, it gave them the energy-efficiency advantages Joel
-> > > described.  And then Joel described some additional call_rcu_lazy()
-> > > changes that provided even better energy efficiency.  Though I believe
-> > > that the application should also be changed to avoid incessantly opening
-> > > and closing that file while the device is idle, as this would remove
-> > > -all- RCU work when nearly idle.  But some of the other call_rcu_lazy()
-> > > use cases would likely remain.
-> >
-> > So I'm thinking the scheme I outlined gets you most if not all of what
-> > lazy would get you without having to add the lazy thing. A CPU is never
-> > refused deep idle when it passes off the callbacks.
-> >
-> > The NOHZ thing is a nice hook for 'this-cpu-wants-to-go-idle-long-term'
-> > and do our utmost bestest to move work away from it. You *want* to break
-> > affinity at this point.
-> >
-> > If you hate on the global, push it to a per rcu_node offload list until
-> > the whole node is idle and then push it up the next rcu_node level until
-> > you reach the top.
-> >
-> > Then when the top rcu_node is full idle; you can insta progress the QS
-> > state and run the callbacks and go idle.
-> 
-> In my opinion the speed brakes have to be applied before the GP and
-> other threads are even awakened. The issue Android and ChromeOS
-> observe is that even a single CB queued every few jiffies can cause
-> work that can be otherwise delayed / batched, to be scheduled in. I am
-> not sure if your suggestions above address that. Does it?
+Hi Yongqiang,
 
-Scheduled how? Is this callbacks doing queue_work() or something?
+Thank you for the patch! Yet something to improve:
 
-Anyway; the thinking is that by passing off the callbacks on NOHZ, the
-idle CPUs stay idle. By running the callbacks before going full idle,
-all work is done and you can stay idle longer.
+[auto build test ERROR on fujitsu-integration/mailbox-for-next]
+[also build test ERROR on soc/for-next linus/master v6.0-rc5 next-20220916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Try this experiment on your ADL system (for fun). Boot to the login
-> screen on any distro,
+url:    https://github.com/intel-lab-lkp/linux/commits/Yongqiang-Niu/mailbox-mtk-cmdq-fix-gce-timeout-issue/20220917-171148
+base:   https://git.linaro.org/landing-teams/working/fujitsu/integration.git mailbox-for-next
+config: arm-randconfig-r033-20220916 (https://download.01.org/0day-ci/archive/20220917/202209172147.lNB8ZX1j-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/044a12235901d40a3442fa5ab0c4b3233f370e22
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yongqiang-Niu/mailbox-mtk-cmdq-fix-gce-timeout-issue/20220917-171148
+        git checkout 044a12235901d40a3442fa5ab0c4b3233f370e22
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-All my dev boxes are headless :-) I don't thinkt he ADL even has X or
-wayland installed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> and before logging in, run turbostat over ssh
-> and observe PC8 percent residencies. Now increase
-> jiffies_till_first_fqs boot parameter value to 64 or so and try again.
-> You may be surprised how much PC8 percent increases by delaying RCU
-> and batching callbacks (via jiffies boot option) Admittedly this is
-> more amplified on ADL because of package-C-states, firmware and what
-> not, and isn’t as much a problem on Android; but still gives a nice
-> power improvement there.
+All errors (new ones prefixed by >>):
 
-I can try; but as of now turbostat doesn't seem to work on that thing at
-all. I think localyesconfig might've stripped a required bit. I'll poke
-at it later.
+>> drivers/mailbox/mtk-cmdq-mailbox.c:713:3: error: field designator 'sw_ddr_en' does not refer to any field in type 'const struct gce_plat'
+           .sw_ddr_en = true,
+            ^
+   1 error generated.
+
+
+vim +713 drivers/mailbox/mtk-cmdq-mailbox.c
+
+   708	
+   709	static const struct gce_plat gce_plat_v7 = {
+   710		.thread_nr = 24,
+   711		.shift = 3,
+   712		.control_by_sw = true,
+ > 713		.sw_ddr_en = true,
+   714		.gce_num = 1
+   715	};
+   716	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
