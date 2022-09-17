@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BC45BB623
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15AB5BB61D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIQEZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S229648AbiIQEZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiIQEZB (ORCPT
+        with ESMTP id S229511AbiIQEY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:25:01 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7834C637
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:24:57 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id 13so24499013ejn.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:24:57 -0700 (PDT)
+        Sat, 17 Sep 2022 00:24:58 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9404623C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:24:53 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id s10so27398585ljp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 21:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date;
-        bh=Ih6RViuFYSO4oFrRxwo7eSPDz1/vXHNTppdf5GB0xs4=;
-        b=It+WthWhOGrxYwoT6LTHzhnEm8pdt1q2Kxm+nJhCULw4pOXXJ9/lrtOcbmGTWZUB2a
-         rMrUDr/a+HqS6ohag1G5Eng4VF9YQs59wFG+QPG3JAkMVluj/GRw8WVBvVAWeEg/kI2p
-         dneWnrNZg2CjN5LP/0oGF1bQnF+wzDf4Q+K3qrm3f9oElWxYWNo8oUkBoAjxcLn5sZYb
-         GNHei1+VnJ6lEcnfWxLZHt9SoVdICa15E6O3YcWdgnxUAIhC4GEl9raM+A03u1fHREsH
-         /GfUGu7f+Q8Amf6ev00HOhZx9W4RsOV/Y+3AXUNJEl7g+ajJPSocGuDe/DbYc3BcetB0
-         KYFw==
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date;
+        bh=aV/tr1Tbe9aO+1NiuYMI6/qbsTacwaTMKUCbpc9zdIc=;
+        b=ewGi3q/3NS5CK4LP2Mj5k2NgE4V44hHHVKK4U+Y0dHUSMvM09cMU9rk65odH1tN1Pf
+         hGnd+J7tpeTC1aEeslzgjQskexFzULhRacqL3q4LHZnRR5Qw6tcGkMqcX7eh/V8wflRH
+         4y6La7dbYT9+BWeVXjoo2nEwwjjPuLXG6TCasVxzjI7W9WJVoa7dakanRpfqy3CVqXUS
+         qp0PJke7POmBJoQWaAAnntFG5ZFi5OD8gZC/mTJOhfqvtkISwP5+w/41enb2qWfv4hnV
+         dRtvOZZ4itP+4W600JIeVb+usNno7/BLgTjvbnk/J1mHjv36B7aOeK4NwP3lYwr1Tq8y
+         qNAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ih6RViuFYSO4oFrRxwo7eSPDz1/vXHNTppdf5GB0xs4=;
-        b=mQ1qB7Yd6klYN2I6Y7uZnXLm+D8z4Akz95gTal0ath23DI15v037O5ABcnndhTnuB8
-         MLY1+hTwRAC55CiJM3tD9EvJt5ZXWVbQU21JE48O0aEVZz1LDghodKYjSAeMFv4Hnptm
-         JdVIeWbt2i4bbmEa1SFkExDH190FlBq5IPbcSV+L1DlMj0UgsL78w9nl8gsc0wVs7KTa
-         iWz3sLrH4tqaDgioKnIRHDJnw4ySTAU6iirfrALx/O+JuGJB+S2tBETmhjTeMM4G+CqB
-         ZGmlxcA2lBNKMRyQ8OBSaFoEB4wUdjhCXNcG3YEtCpy/Gy5XfJ4LsU/Ny4Lzg7T6kPF3
-         Ei/Q==
-X-Gm-Message-State: ACrzQf1eLPC6EjnGWYXa5d7H7zS6WWrLKRQRG0gHWK0FwjFlGjXP+qYu
-        gBLsQOfUJ70rBjqILEuGWTc=
-X-Google-Smtp-Source: AMsMyM6/VQ5pkXMFQ3AsThkW5okJI3ndyKJvMjsKJy+hKE3X42BQ1VDKk0a515HqcP9vlCxRi3zagA==
-X-Received: by 2002:a17:906:505:b0:73d:b188:17d9 with SMTP id j5-20020a170906050500b0073db18817d9mr5293974eja.97.1663388696346;
-        Fri, 16 Sep 2022 21:24:56 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id y17-20020a50ce11000000b0044f2afbb1easm15141717edi.27.2022.09.16.21.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 21:24:55 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 06:24:53 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6] staging: rtl8192e: Remove ftrace-like logging RT_TRACE
-Message-ID: <cover.1663387785.git.philipp.g.hortmann@gmail.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=aV/tr1Tbe9aO+1NiuYMI6/qbsTacwaTMKUCbpc9zdIc=;
+        b=PybPGuD1tKQ4kXv+7SzFTa8ifYkUjHPpcYyBAaB6LsKsn4dnO/wN1TfsNsh4hlRCR/
+         jT3bchZ6SD5Wpc7eWobxWcFmC9ajbXlO1uGTg91fN3KUv5p06ziPtNaoveWGtEemxQiy
+         9usHc57ZOKcbzNuCw4TkNJzl0VozJzDVmFC5QwNMPGePTpD6GEaFhzWZSZRtO7w0rxbo
+         bJwcHNAQXmPHvlfT3cDgOh78/8U13NryjbRKZ6vZsYc/jcAb5Wdp//nGoFuDY056VwoS
+         iwupdymvF4d4wfovP6GlEn3+tBcicOkxzk/aGi4ELeSJ0vXEfXsJnXAvHlCp141d1iHe
+         tRQQ==
+X-Gm-Message-State: ACrzQf1EdreHalWPqiKUMvIa/JgS3GQtsUlAXYJNXAaLS2lRhWXhVnu9
+        uQfL8np0YCvskHxQNSMac70PLcUECnMuoxhvk4I=
+X-Google-Smtp-Source: AMsMyM4EOTZDV2htTTYe+WipYEz6kJbuN/mLAlFQXvIRXTRk4jsxNb6BFnswxWQOUSGcH4WFFNPzCEzVzQRjEO0iFDI=
+X-Received: by 2002:a05:651c:198e:b0:25e:6d28:3a0f with SMTP id
+ bx14-20020a05651c198e00b0025e6d283a0fmr2445774ljb.321.1663388691953; Fri, 16
+ Sep 2022 21:24:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Mrs Olivia Philip <mrsoliviaphilip208@gmail.com>
+Date:   Sat, 17 Sep 2022 05:24:58 +0100
+Message-ID: <CAO2rEeXtSuPp-jS4=4SKdri11E+F6ku4g0mbPUZVnOkmrkfr=w@mail.gmail.com>
+Subject: Mrs. Olivia Philip
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,MONEY_FRAUD_5,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove "Unnecessary ftrace-like logging" as requested by checkpatch. To
-keep the logging would make future patches for fixing CamelCase larger.
+Dear Trusting Friend in God,
+Please forgive me for stressing you with my predicaments as I know
+that this letter may come to you as big surprise. Actually, I came
+across your E-mail from my personal search and I decided to contact
+you with believe you will be honest to fulfill my final wish before I
+die.
+Meanwhile, I am Mrs. Olivia Philip, 73 years, from USA, I am childless
+and I am suffering from a pro-long cancer ill health and from all
+indication my condition is critical, my doctors have confirmed that I
+may not live beyond two months from now for the reason that tumor has
+reached a critical stage which has defiled all forms of medical
+treatment. Since my days are numbered, I=E2=80=99ve decided willingly to
+fulfill my long-time promise to donate the sum Five Million Five
+Hundred  And Twenty-Five Thousand United States
+Dollars US$5,525,000) remaining in my foreign bank account over 9
+years due to my health problem. This fund was obtained by me when I
+was dealing on Gold.
 
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
+My promise is to help the widows, handicapped, orphans and
+underprivileged to build technical school and hospital for their
+well-being. If you will be obedient to assist me fulfill my promise as
+I said here kindly email me back to enable me introduce you to my bank
+management as the foreign beneficiary & trustee to my deposit fund to
+enable them check whether it will be possible to transfer my fund to
+you for this Charity work of God. I have been trying to handle this
+project for the past 4 years by myself hoping I will get better, but I
+have seen that it won=E2=80=99t be possible anymore.
 
-Philipp Hortmann (6):
-  staging: rtl8192e: Remove ftrace-like logging in r8192E_firmware.c,
-    ...
-  staging: rtl8192e: Remove ftrace-like logging in r8192E_dev.c
-  staging: rtl8192e: Remove ftrace-like logging in r8192E_phy.c
-  staging: rtl8192e: Remove ftrace-like logging in rtl_dm.c
-  staging: rtl8192e: Remove ftrace-like logging in rtl_ps.c
-  staging: rtl8192e: Remove ftrace-like logging in rtl819x_BAProc.c, ...
-
- .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |   6 -
- .../staging/rtl8192e/rtl8192e/r8192E_cmdpkt.c |   2 -
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 161 +----------------
- .../rtl8192e/rtl8192e/r8192E_firmware.c       |   7 -
- .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 132 --------------
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c   |  16 --
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 165 ------------------
- drivers/staging/rtl8192e/rtl8192e/rtl_pci.c   |   2 -
- drivers/staging/rtl8192e/rtl8192e/rtl_pm.c    |   1 -
- drivers/staging/rtl8192e/rtl8192e/rtl_ps.c    |  34 ----
- drivers/staging/rtl8192e/rtl8192e/rtl_wx.c    |   8 -
- drivers/staging/rtl8192e/rtl819x_BAProc.c     |   5 -
- drivers/staging/rtl8192e/rtllib_debug.h       |   6 -
- drivers/staging/rtl8192e/rtllib_softmac.c     |   8 -
- drivers/staging/rtl8192e/rtllib_softmac_wx.c  |   6 -
- 15 files changed, 1 insertion(+), 558 deletions(-)
-
--- 
-2.37.3
-
+Please get back to me if you can handle the project for more details.
+God Bless you
+Mrs. Olivia Philip
