@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21565BB752
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5EE5BB756
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiIQIot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S229747AbiIQIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 04:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIQIol (ORCPT
+        with ESMTP id S229483AbiIQItX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:44:41 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B3FFAE47
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YHdx/
-        6gmPjB0lW9gk123clXM4PERhfOCRZN9axf3Nig=; b=EuHz1ZI0blFDWognHByBy
-        pNzFPhAtwzAhvlzO9veVVJbXBG2StWIbNTeDwlrMtdxKB/H1c9zZE9lUwcEhRWDG
-        qvffwoueLPdWwi7nPMR1LnNrMY30TzytKQapuCcE2wVipfbU0XzoOzQd7ukQobPe
-        E/JYjCNHAzx5yFZdVFT5dM=
-Received: from DESKTOP-CE2KKHI.localdomain (unknown [124.160.210.227])
-        by smtp2 (Coremail) with SMTP id GtxpCgDnoQvviCVjOqJTeQ--.56S2;
-        Sat, 17 Sep 2022 16:44:32 +0800 (CST)
-From:   williamsukatube@163.com
-To:     linux-kernel@vger.kernel.org
-Cc:     haren@us.ibm.com, William Dean <williamsukatube@163.com>
-Subject: [PATCH -next] crypto: simplify code in process_next
-Date:   Sat, 17 Sep 2022 16:44:30 +0800
-Message-Id: <20220917084430.4131-1-williamsukatube@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 17 Sep 2022 04:49:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2605B32061;
+        Sat, 17 Sep 2022 01:49:21 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MV4L305VjzpSvX;
+        Sat, 17 Sep 2022 16:46:35 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 17 Sep 2022 16:49:19 +0800
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 17 Sep
+ 2022 16:49:18 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yanan@huawei.com>, <wuchangye@huawei.com>,
+        <xiesongyang@huawei.com>, <zhudi2@huawei.com>,
+        <kongweibin2@huawei.com>, <liuxin350@huawei.com>
+Subject: [PATCH v2] libbpf: Fix NULL pointer exception in API btf_dump__dump_type_data
+Date:   Sat, 17 Sep 2022 16:48:09 +0800
+Message-ID: <20220917084809.30770-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgDnoQvviCVjOqJTeQ--.56S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GFWDuw4DZrWkWrWxWFWfKrg_yoWfJFXEk3
-        WIgaykGr4rZF47A34UGF4ktaya9rs7uF13uFsYqw43AFyxAa1ruryDWwsxGrZ3Zryvg347
-        Wws8Jrsakr9xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRBHDd3UUUUU==
-X-Originating-IP: [124.160.210.227]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbB6Ah-g2BHKJNCKAAAsq
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@163.com>
+We found that function btf_dump__dump_type_data can be called by the
+user as an API, but in this function, the `opts` parameter may be used
+as a null pointer.This causes `opts->indent_str` to trigger a NULL
+pointer exception.
 
-It could directly return 'add_template' to simplify code.
-
-Signed-off-by: William Dean <williamsukatube@163.com>
+Fixes: 2ce8450ef5a3 ("libbpf: add bpf_object__open_{file, mem} w/ extensible opts")
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+Signed-off-by: Weibin Kong <kongweibin2@huawei.com>
 ---
- lib/842/842_compress.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+v1 -> v2: Use OPTS_GET to fix NULL pointer exceptions
+v1: https://lore.kernel.org/bpf/20220914123423.24368-1-liuxin350@huawei.com/ 
 
-diff --git a/lib/842/842_compress.c b/lib/842/842_compress.c
-index c02baa4168e1..168950bd00af 100644
---- a/lib/842/842_compress.c
-+++ b/lib/842/842_compress.c
-@@ -441,7 +441,7 @@ static void update_hashtables(struct sw842_param *p)
-  */
- static int process_next(struct sw842_param *p)
- {
--	int ret, i;
-+	int i;
+ tools/lib/bpf/btf_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 	p->index8[0] = INDEX_NOT_CHECKED;
- 	p->index4[0] = INDEX_NOT_CHECKED;
-@@ -457,11 +457,7 @@ static int process_next(struct sw842_param *p)
- 			break;
- 	}
-
--	ret = add_template(p, i);
--	if (ret)
--		return ret;
--
--	return 0;
-+	return add_template(p, i);
- }
-
- /**
---
-2.25.1
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 627edb5bb6de..4221f73a74d0 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2385,7 +2385,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+ 	d->typed_dump->indent_lvl = OPTS_GET(opts, indent_level, 0);
+ 
+ 	/* default indent string is a tab */
+-	if (!opts->indent_str)
++	if (!OPTS_GET(opts, indent_str, NULL))
+ 		d->typed_dump->indent_str[0] = '\t';
+ 	else
+ 		libbpf_strlcpy(d->typed_dump->indent_str, opts->indent_str,
+-- 
+2.33.0
 
