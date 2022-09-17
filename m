@@ -2,82 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050315BB7E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 12:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3075BB7EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 12:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiIQKql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 06:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S229501AbiIQKzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 06:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQKqj (ORCPT
+        with ESMTP id S229454AbiIQKzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 06:46:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432323BC48;
-        Sat, 17 Sep 2022 03:46:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2D8F613EA;
-        Sat, 17 Sep 2022 10:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438E6C433B5;
-        Sat, 17 Sep 2022 10:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663411598;
-        bh=Mk9u72C3NZotIzny4010l2UK4Jk0C0zgSamSFp0eYLE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ovU/AECAhGCtUPHtyXf+cmG7XLMCzz1w34ApEph+MfD/hCEi/3BpaeuHZSav5gXKa
-         Slbh4uIjXsKGXmzv3MkxIiIo0FrrwtS0ADB5NRjWQZvx7E3W3awO/8rOLELKY/SqBx
-         mm0tzLYgY6QEGOl2WazmhbHW4LS/n55UyaaA4dZEzbJX7MgyEoQWTWddE6AbKaAd9E
-         fZy5d1aNSYIxNN/JAhYM9sBXDqNNIc1uLW7Jd/kCWHBqDTvwFgb3y6ZrKJN65FpDVG
-         e0Y9cBKdGop2XTUsJlQHXCAlpvdLeR0wJcm4zSypfgDre145IERsJxRkTKPlZkvs7e
-         Zy0JWdRhAW1Sg==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1278624b7c4so55623924fac.5;
-        Sat, 17 Sep 2022 03:46:38 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3as5QJba7/pcYV2FdurLFEuJolMlIhxx6xr0Rof8dPcWxYAc2i
-        ZGPztfx/4afkCyoeQgIlGRaDlw+L3ZyDEofUSGE=
-X-Google-Smtp-Source: AA6agR6AXCrq3aWOoC8Bi8am/l0Ye9haGWBI6uFBZEnP+yhZkWRjM0dJRVT8vekDCLKDIhxkiAeAFyP9pJsD5YP+nOU=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr10574980oao.112.1663411597397; Sat, 17
- Sep 2022 03:46:37 -0700 (PDT)
+        Sat, 17 Sep 2022 06:55:10 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC793F1DD
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 03:55:09 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bq9so39848475wrb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 03:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=qgeFEKmlCeElYtmQhO2NHIF7009WxIJXwGvauIaMgRY=;
+        b=jTwbtV+yyd/9MW4yeNhB8fqWF5IfLZXmGqFokfSHdqBzJOpR3tqFM/OzSvmTo85V0s
+         oCBbiWbFULuvLd3Hij1urxgaUx5L/BzoUcvud2cNV1gg0IeW62AdIanOsm/pSOaGr3m1
+         ZiQoj6MVGNibMNxlPoj3EZViF4QqbCgVXjG/v2oxzwBQ9R23+JcOBaLSaaGFSEbO6Ke5
+         KFD1B2PQ92gql3dyP/p43UVBHPDGATa2SaxRt5E+Aw7VVGX26DntFEJhvSL27j/eSAqq
+         rjGs4QnRboK5UugvL1SVRVoxcrijYvlgq335VmTBp5CUWOIOh8iZ9r4/+5QjtyM6CNFg
+         K70A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qgeFEKmlCeElYtmQhO2NHIF7009WxIJXwGvauIaMgRY=;
+        b=UnLEj/PlFoznwRwSeUXh8FbtOrmtt+QwU59V3RXDMbYiWIOD4XbmFnRN/lh3cl0gW2
+         BpM4/XloFGHRomhC98vqKIFcu1eLGmoZuRQKQszQu6YYHDnKw96s5iKAfE/woYZVxqYB
+         FTy1dcLQOGSj4xi+EUW2qGQyaxCd49EnixLUAjNeA+7sgm7rWvNZR1C8neIZCQxe/wCG
+         bAYfKazWS6xRgQZMM8bx8rq4AeuJogh2bu3hDzLqo0/aI9+PwBzPyo5xlBMnpSj3kGZn
+         pZsxj4C7P95DqcEiR69IiIgDENFc13WVWT8YtZWG/4VJosRSlDdnnMHGfSF0UdmEmnG/
+         BwZg==
+X-Gm-Message-State: ACrzQf1QNI/hokBbkxjtfb65xzK5c9QjIAo2+HghB0DI5zRw+ZS41GTv
+        xkTVGU4G+ogUKl8JwplNjKQ4X7rIPJw=
+X-Google-Smtp-Source: AMsMyM7hhfKCI4x+UY64D+f0D7/k+FZrG5LGnSK6gzywitR/qTjOUZeB+KzC9ZGxKfbbACcwikNkXA==
+X-Received: by 2002:adf:d4c9:0:b0:228:de3a:220f with SMTP id w9-20020adfd4c9000000b00228de3a220fmr5599938wrk.597.1663412107392;
+        Sat, 17 Sep 2022 03:55:07 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id f17-20020a05600c4e9100b003a5bd5ea215sm6026813wmq.37.2022.09.17.03.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 03:55:07 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 11:55:05 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: mainline build failure (new) for x86_64 allmodconfig with clang
+Message-ID: <YyWniVAqJclcbSqN@debian>
 MIME-Version: 1.0
-References: <20220916103817.9490-1-guoren@kernel.org> <20220916103817.9490-2-guoren@kernel.org>
- <CABgGipWdm+-pOrj-ROR8fsVO7JEr4m64z7+zNW1_NszW74e5SA@mail.gmail.com>
-In-Reply-To: <CABgGipWdm+-pOrj-ROR8fsVO7JEr4m64z7+zNW1_NszW74e5SA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 17 Sep 2022 18:46:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT-TOdoGuFdbR8Xwmfur-LNOCUq_sThr9ZpJeMKxudH1A@mail.gmail.com>
-Message-ID: <CAJF2gTT-TOdoGuFdbR8Xwmfur-LNOCUq_sThr9ZpJeMKxudH1A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: ftrace: Fixup panic by disabling preemption
-To:     Andy Chiu <andy.chiu@sifive.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, rostedt@goodmis.org,
-        greentime.hu@sifive.com, zong.li@sifive.com, jrtc27@jrtc27.com,
-        mingo@redhat.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks! I would add your Signed-off-by: Andy Chiu
-<andy.chiu@sifive.com> as the first author, next.
+Hi All,
 
-On Sat, Sep 17, 2022 at 9:32 AM Andy Chiu <andy.chiu@sifive.com> wrote:
->
-> Yes, by disabling preemption and ensuring all sub-functions called by
-> the busy waiting loop of stop_machine, which happens to be true on
-> non-preemptive kernels, solve the problem from the original
-> implementation.
->
-> Andy Chiu <andy.chiu@sifive.com>
+The latest mainline kernel branch fails to build for x86_64 allmodconfig
+with clang. The errors are:
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c:4020:6: error: stack frame size (2184) exceeds limit (2048) in 'dml314_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+     ^
+1 error generated.
 
 
+Note: This is a new error seen on top on a335366bad13 ("Merge tag 'gpio-fixes-for-v6.0-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux").
+Previous reported clang build error is now fixed, thanks to Nathan.
 
--- 
-Best Regards
- Guo Ren
+And, it appears Nathan has already sent a fix for this:
+https://github.com/intel-lab-lkp/linux/commit/4ecc45d7585ae2e05d622879ad97e13a7d8c595b
+https://github.com/intel-lab-lkp/linux/commit/819976a950b497d7f10cd9a198a94c26a9005b30
+
+
+--
+Regards
+Sudip
+
