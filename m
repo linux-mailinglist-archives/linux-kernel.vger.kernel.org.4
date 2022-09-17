@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719C55BB7E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 12:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050315BB7E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 12:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiIQKpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 06:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S229606AbiIQKql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 06:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIQKpK (ORCPT
+        with ESMTP id S229457AbiIQKqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 06:45:10 -0400
+        Sat, 17 Sep 2022 06:46:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B9E28E35;
-        Sat, 17 Sep 2022 03:45:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432323BC48;
+        Sat, 17 Sep 2022 03:46:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C777613E9;
-        Sat, 17 Sep 2022 10:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19650C433C1;
-        Sat, 17 Sep 2022 10:45:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2D8F613EA;
+        Sat, 17 Sep 2022 10:46:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438E6C433B5;
+        Sat, 17 Sep 2022 10:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663411507;
-        bh=fbo6apx3/5y9z8h4zv5NpW0vWKx/Ba2cv7UD5PP7tic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZ7EAXSIN3pXGIvEpuKusxkCKbCML12xjHmSfj6OFPqNcEHGz5BoVxgi8OTGcA7Lh
-         hjcoWkOTCslDK7Ygr0jolsgEeoREienl1bcXF8svjlAsz9592ICCWBuTgiIjwzEG7k
-         BuV4aizjkw+UaVHKjke73bsJKBUnvwbomaJ4c1xd72W1SI2RbO/91gCplGXBFgwOqE
-         psKK8nsGPDHtc0HzXmvt9WLMvwHsNhy/gMmU4jSg2roWP9alLM8OEfOHVAb5Z5Jq5N
-         E9/iqjM0SO0nh2ogdrQuV87gvCG6RGR8JNH9MXixQXt9yRE1DCqixl5SOcpESYj2F/
-         PjzyaYTcX886Q==
-Date:   Sat, 17 Sep 2022 12:44:58 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        willmcvicker@google.com
-Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Message-ID: <YyWlKs03F9EhyXxy@lpieralisi>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
- <YwzbARMkb/69+l2d@lpieralisi>
- <20220912000211.ct6asuhhmnatje5e@mobilestation>
+        s=k20201202; t=1663411598;
+        bh=Mk9u72C3NZotIzny4010l2UK4Jk0C0zgSamSFp0eYLE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ovU/AECAhGCtUPHtyXf+cmG7XLMCzz1w34ApEph+MfD/hCEi/3BpaeuHZSav5gXKa
+         Slbh4uIjXsKGXmzv3MkxIiIo0FrrwtS0ADB5NRjWQZvx7E3W3awO/8rOLELKY/SqBx
+         mm0tzLYgY6QEGOl2WazmhbHW4LS/n55UyaaA4dZEzbJX7MgyEoQWTWddE6AbKaAd9E
+         fZy5d1aNSYIxNN/JAhYM9sBXDqNNIc1uLW7Jd/kCWHBqDTvwFgb3y6ZrKJN65FpDVG
+         e0Y9cBKdGop2XTUsJlQHXCAlpvdLeR0wJcm4zSypfgDre145IERsJxRkTKPlZkvs7e
+         Zy0JWdRhAW1Sg==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1278624b7c4so55623924fac.5;
+        Sat, 17 Sep 2022 03:46:38 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3as5QJba7/pcYV2FdurLFEuJolMlIhxx6xr0Rof8dPcWxYAc2i
+        ZGPztfx/4afkCyoeQgIlGRaDlw+L3ZyDEofUSGE=
+X-Google-Smtp-Source: AA6agR6AXCrq3aWOoC8Bi8am/l0Ye9haGWBI6uFBZEnP+yhZkWRjM0dJRVT8vekDCLKDIhxkiAeAFyP9pJsD5YP+nOU=
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
+ x14-20020a056870a78e00b0012b542be5b2mr10574980oao.112.1663411597397; Sat, 17
+ Sep 2022 03:46:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912000211.ct6asuhhmnatje5e@mobilestation>
+References: <20220916103817.9490-1-guoren@kernel.org> <20220916103817.9490-2-guoren@kernel.org>
+ <CABgGipWdm+-pOrj-ROR8fsVO7JEr4m64z7+zNW1_NszW74e5SA@mail.gmail.com>
+In-Reply-To: <CABgGipWdm+-pOrj-ROR8fsVO7JEr4m64z7+zNW1_NszW74e5SA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 17 Sep 2022 18:46:24 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT-TOdoGuFdbR8Xwmfur-LNOCUq_sThr9ZpJeMKxudH1A@mail.gmail.com>
+Message-ID: <CAJF2gTT-TOdoGuFdbR8Xwmfur-LNOCUq_sThr9ZpJeMKxudH1A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: ftrace: Fixup panic by disabling preemption
+To:     Andy Chiu <andy.chiu@sifive.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, rostedt@goodmis.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, jrtc27@jrtc27.com,
+        mingo@redhat.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,60 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 03:02:11AM +0300, Serge Semin wrote:
+Thanks! I would add your Signed-off-by: Andy Chiu
+<andy.chiu@sifive.com> as the first author, next.
 
-[...]
+On Sat, Sep 17, 2022 at 9:32 AM Andy Chiu <andy.chiu@sifive.com> wrote:
+>
+> Yes, by disabling preemption and ensuring all sub-functions called by
+> the busy waiting loop of stop_machine, which happens to be true on
+> non-preemptive kernels, solve the problem from the original
+> implementation.
+>
+> Andy Chiu <andy.chiu@sifive.com>
 
-> I prefer splitting the probe method up into a set of small and
-> coherent methods. It IMO improves the code readability for just no
-> price since the compiler will embed the single-time used static
-> methods anyway.
 
-I will get back to this thread at -rc7 - we will decide a merge
-strategy then.
 
-Lorenzo
-
-> -Sergey
-> 
-> > 
-> > Thanks,
-> > Lorenzo
-> > 
-> > > +	if (IS_ERR(btpci))
-> > > +		return PTR_ERR(btpci);
-> > > +
-> > > +	return bt1_pcie_add_port(btpci);
-> > > +}
-> > > +
-> > > +static int bt1_pcie_remove(struct platform_device *pdev)
-> > > +{
-> > > +	struct bt1_pcie *btpci = platform_get_drvdata(pdev);
-> > > +
-> > > +	bt1_pcie_del_port(btpci);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static const struct of_device_id bt1_pcie_of_match[] = {
-> > > +	{ .compatible = "baikal,bt1-pcie" },
-> > > +	{},
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, bt1_pcie_of_match);
-> > > +
-> > > +static struct platform_driver bt1_pcie_driver = {
-> > > +	.probe = bt1_pcie_probe,
-> > > +	.remove = bt1_pcie_remove,
-> > > +	.driver = {
-> > > +		.name	= "bt1-pcie",
-> > > +		.of_match_table = bt1_pcie_of_match,
-> > > +	},
-> > > +};
-> > > +module_platform_driver(bt1_pcie_driver);
-> > > +
-> > > +MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-> > > +MODULE_DESCRIPTION("Baikal-T1 PCIe driver");
-> > > +MODULE_LICENSE("GPL");
-> > > -- 
-> > > 2.35.1
-> > > 
+-- 
+Best Regards
+ Guo Ren
