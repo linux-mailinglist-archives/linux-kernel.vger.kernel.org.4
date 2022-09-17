@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8648A5BB571
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7805BB574
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 03:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbiIQB7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 21:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S229877AbiIQB7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 21:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiIQB7c (ORCPT
+        with ESMTP id S229728AbiIQB7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 21:59:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86EE44;
-        Fri, 16 Sep 2022 18:59:30 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTvFw1Z8SzBsPD;
-        Sat, 17 Sep 2022 09:57:24 +0800 (CST)
+        Fri, 16 Sep 2022 21:59:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241FFE24;
+        Fri, 16 Sep 2022 18:59:31 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTvCh2PtNzlVkl;
+        Sat, 17 Sep 2022 09:55:28 +0800 (CST)
 Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Sat, 17 Sep 2022 09:59:29 +0800
 Received: from huawei.com (10.67.175.41) by dggpemm500016.china.huawei.com
  (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 17 Sep
- 2022 09:59:28 +0800
+ 2022 09:59:29 +0800
 From:   Yipeng Zou <zouyipeng@huawei.com>
 To:     <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
@@ -40,9 +40,9 @@ To:     <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <peterz@infradead.org>, <mark.rutland@arm.com>
 CC:     <liaochang1@huawei.com>, <chris.zjh@huawei.com>,
         <zouyipeng@huawei.com>
-Subject: [PATCH 1/2] kprobes: make arch_init_kprobes as weak
-Date:   Sat, 17 Sep 2022 09:55:21 +0800
-Message-ID: <20220917015522.44583-2-zouyipeng@huawei.com>
+Subject: [PATCH 2/2] uprobes: make arch_uprobe_exception_notify as weak
+Date:   Sat, 17 Sep 2022 09:55:22 +0800
+Message-ID: <20220917015522.44583-3-zouyipeng@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220917015522.44583-1-zouyipeng@huawei.com>
 References: <20220917015522.44583-1-zouyipeng@huawei.com>
@@ -65,87 +65,98 @@ We can mark it with weak attributes to improve.
 
 Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
 ---
- arch/csky/kernel/probes/kprobes.c  | 5 -----
- arch/riscv/kernel/probes/kprobes.c | 5 -----
- arch/s390/kernel/kprobes.c         | 5 -----
- arch/x86/kernel/kprobes/core.c     | 5 -----
- kernel/kprobes.c                   | 5 +++++
- 5 files changed, 5 insertions(+), 20 deletions(-)
+ arch/arm/probes/uprobes/core.c     | 6 ------
+ arch/arm64/kernel/probes/uprobes.c | 6 ------
+ arch/csky/kernel/probes/uprobes.c  | 6 ------
+ arch/riscv/kernel/probes/uprobes.c | 6 ------
+ kernel/events/uprobes.c            | 6 ++++++
+ 5 files changed, 6 insertions(+), 24 deletions(-)
 
-diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-index 3c6e5c725d81..d31b6ab5cea0 100644
---- a/arch/csky/kernel/probes/kprobes.c
-+++ b/arch/csky/kernel/probes/kprobes.c
-@@ -405,8 +405,3 @@ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
- {
- 	return 0;
- }
--
--int __init arch_init_kprobes(void)
--{
--	return 0;
--}
-diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-index e6e950b7cf32..d4577108e5c9 100644
---- a/arch/riscv/kernel/probes/kprobes.c
-+++ b/arch/riscv/kernel/probes/kprobes.c
-@@ -362,8 +362,3 @@ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
- {
- 	return 0;
- }
--
--int __init arch_init_kprobes(void)
--{
--	return 0;
--}
-diff --git a/arch/s390/kernel/kprobes.c b/arch/s390/kernel/kprobes.c
-index 0032bdbe8e3f..aaf9329a7cf4 100644
---- a/arch/s390/kernel/kprobes.c
-+++ b/arch/s390/kernel/kprobes.c
-@@ -544,11 +544,6 @@ int kprobe_exceptions_notify(struct notifier_block *self,
- }
- NOKPROBE_SYMBOL(kprobe_exceptions_notify);
- 
--int __init arch_init_kprobes(void)
--{
--	return 0;
--}
--
- int arch_trampoline_kprobe(struct kprobe *p)
- {
- 	return 0;
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 4c3c27b6aea3..e26b336f8b18 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -1055,11 +1055,6 @@ int __init arch_populate_kprobe_blacklist(void)
- 					 (unsigned long)__entry_text_end);
+diff --git a/arch/arm/probes/uprobes/core.c b/arch/arm/probes/uprobes/core.c
+index f5f790c6e5f8..535ea1b355ed 100644
+--- a/arch/arm/probes/uprobes/core.c
++++ b/arch/arm/probes/uprobes/core.c
+@@ -175,12 +175,6 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+ 	instruction_pointer_set(regs, utask->vaddr);
  }
  
--int __init arch_init_kprobes(void)
+-int arch_uprobe_exception_notify(struct notifier_block *self,
+-				 unsigned long val, void *data)
 -{
--	return 0;
+-	return NOTIFY_DONE;
 -}
 -
- int arch_trampoline_kprobe(struct kprobe *p)
+ static int uprobe_trap_handler(struct pt_regs *regs, unsigned int instr)
  {
- 	return 0;
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index ca9d834d0b84..23f6d329b53b 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -2684,6 +2684,11 @@ void kprobe_free_init_mem(void)
- 	mutex_unlock(&kprobe_mutex);
+ 	unsigned long flags;
+diff --git a/arch/arm64/kernel/probes/uprobes.c b/arch/arm64/kernel/probes/uprobes.c
+index d49aef2657cd..687ede3375a6 100644
+--- a/arch/arm64/kernel/probes/uprobes.c
++++ b/arch/arm64/kernel/probes/uprobes.c
+@@ -159,12 +159,6 @@ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
+ 	return orig_ret_vaddr;
  }
  
-+int __init __weak arch_init_kprobes(void)
+-int arch_uprobe_exception_notify(struct notifier_block *self,
+-				 unsigned long val, void *data)
+-{
+-	return NOTIFY_DONE;
+-}
+-
+ static int uprobe_breakpoint_handler(struct pt_regs *regs,
+ 				     unsigned long esr)
+ {
+diff --git a/arch/csky/kernel/probes/uprobes.c b/arch/csky/kernel/probes/uprobes.c
+index 2d31a12e46cf..67ff13d960e8 100644
+--- a/arch/csky/kernel/probes/uprobes.c
++++ b/arch/csky/kernel/probes/uprobes.c
+@@ -132,12 +132,6 @@ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
+ 	return ra;
+ }
+ 
+-int arch_uprobe_exception_notify(struct notifier_block *self,
+-				 unsigned long val, void *data)
+-{
+-	return NOTIFY_DONE;
+-}
+-
+ int uprobe_breakpoint_handler(struct pt_regs *regs)
+ {
+ 	if (uprobe_pre_sstep_notifier(regs))
+diff --git a/arch/riscv/kernel/probes/uprobes.c b/arch/riscv/kernel/probes/uprobes.c
+index c976a21cd4bd..770f16c6e00f 100644
+--- a/arch/riscv/kernel/probes/uprobes.c
++++ b/arch/riscv/kernel/probes/uprobes.c
+@@ -131,12 +131,6 @@ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
+ 	return ra;
+ }
+ 
+-int arch_uprobe_exception_notify(struct notifier_block *self,
+-				 unsigned long val, void *data)
+-{
+-	return NOTIFY_DONE;
+-}
+-
+ bool uprobe_breakpoint_handler(struct pt_regs *regs)
+ {
+ 	if (uprobe_pre_sstep_notifier(regs))
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index d9e357b7e17c..33e637f7a202 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -2343,6 +2343,12 @@ int uprobe_post_sstep_notifier(struct pt_regs *regs)
+ 	return 1;
+ }
+ 
++int __weak arch_uprobe_exception_notify(struct notifier_block *self,
++				 unsigned long val, void *data)
 +{
-+	return 0;
++	return NOTIFY_DONE;
 +}
 +
- static int __init init_kprobes(void)
- {
- 	int i, err = 0;
+ static struct notifier_block uprobe_exception_nb = {
+ 	.notifier_call		= arch_uprobe_exception_notify,
+ 	.priority		= INT_MAX-1,	/* notified after kprobes, kgdb */
 -- 
 2.17.1
 
