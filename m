@@ -2,314 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B953B5BB4E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B9E5BB4E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiIQALY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S229779AbiIQAP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIQALW (ORCPT
+        with ESMTP id S229647AbiIQAP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:11:22 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A87AF4B2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:11:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fs14so22494800pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=9Hg3WExcsAga0Qhwnt0s+/w+FgE+Fu4QOFI0odH5wLw=;
-        b=acmLYJB90z6yu5lwsEGqpEGUuyqXxuAyLieS/i0RxF4QVKRLADMm6JnV+XBMbU9EAA
-         elQkBbIz+sad/CGZx42A8rsnunF+Xok/Oqr7xqReyHCAX/3ws4pKA49/ldpiPL6yTaRg
-         pzUxrW7n2Qf4rg8ztazly0c1K+osu8H2CEbhg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=9Hg3WExcsAga0Qhwnt0s+/w+FgE+Fu4QOFI0odH5wLw=;
-        b=gVFx5v5UNkMGHp08Cbur9Xy6QHfDCr+qfVUzeumFZblVqRqslEcpJwqlKVsaT8KSso
-         KM5eCeAgU1eILNmqlOu33LGlfax96K6xUh/vOXgvh6eIXfd/4wM8LxDh75Opk2NZpNIc
-         eLvlvj06NhdzSba8ElQaX9QMrsNc3hGQcMX5ppC8nJXWsMIw19F2oNRaafIYsfu899cN
-         VedCV4adQGhZiyq0ZORtN9dlhi14f9G+8sAL9g7RRAQJo0Sw2gN35dFaYy7+hCeMVAl/
-         aG1eHQbDvhJrjxOzi7uZpN5tWwjEAC/adWWvaZx7gZ95nMHzCk9/pbqh4qQZJaFwwFUy
-         tWyg==
-X-Gm-Message-State: ACrzQf2micTPs/bnmaC8fcLYfWtD/69PJfZqFbYyjZMKfzfpoLZzH1Qk
-        FQgQ1aBZeCTFyLgL6Yv9g/Ln8g==
-X-Google-Smtp-Source: AMsMyM7yb8IkuA2CaVot0t/bvM6dtkqaItFJcFVr0dj47HvZl5Zkqje37Lxyoo/sQLSBjvgXpodG4Q==
-X-Received: by 2002:a17:902:e40c:b0:176:9543:883 with SMTP id m12-20020a170902e40c00b0017695430883mr2207448ple.169.1663373479992;
-        Fri, 16 Sep 2022 17:11:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u126-20020a626084000000b005385e2e86eesm15525980pfb.18.2022.09.16.17.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 17:11:19 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 17:11:18 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search
- before allocating mm
-Message-ID: <202209161637.9EDAF6B18@keescook>
-References: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
- <202209160727.5FC78B735@keescook>
- <YyTY+OaClK+JHCOw@localhost>
+        Fri, 16 Sep 2022 20:15:26 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2065.outbound.protection.outlook.com [40.107.22.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E402B9D642;
+        Fri, 16 Sep 2022 17:15:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hb2vfqmbkuUIFJb7dOorl9s6SDGRmkBEPQ0/V2fVjHogu502vxgWxURXIQGD1Or2azGdepTHPOTfpmVWNap5QRU5w1bJdtjM1wCzdTY6WZsa69h/YSccACo2RfBgKIwF1eTVBjPWwNPNAs2Snk4Mw7sRUDuqriocummRZQLRjlBOMDemST0VgPmbzkE7pdN4UTRG4mdGUZk9wr7MjEnjw/x4r2Ygw9+ceoxFD/deOH+8Wh7T6kFzFPPyHIBoDD+ShTFzOBJq/Rku+No1UWi66SIw33UJTcYtfKHFys7AQKV/JCzj7p0wdGYlZ3vZfQ0bSMwM3uHHiGag9CJ9bxZ4GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VnTG6Gh+kzn90FriUQiOeRbqsHN4OOipcIRLo54HDxA=;
+ b=cPVASXyfTi4XyQUyFKpWbF1G4Ie48Ak/aeAOpzSInmQQUaqkczweXOcZ8TwE84VDMO/UUofQSPf22JiFwP7iRckma1glLkURKM+XPiI13j3J1KBbT2Cc20g2vnjvI6ZKBA6Wn05POVFcdvQTejy3VcUtUR+yqp95m+TtrjwPZtNzS5eWaUU9nbFBoc2jHr4oJ1rxOlWRXiPMCWnNOL2iSc0GLe8VH5fs3gY1HbuetdrKwJG/xQEY102RAApS8Mwxdc0V2+gCJot94e3klpzgr4wtXyJdNcePEBWJ0OPgyYQgWvwGMzu6NLA8VqvI7nlZ1H/Cv0ZzdqBTr2VeIqc6qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VnTG6Gh+kzn90FriUQiOeRbqsHN4OOipcIRLo54HDxA=;
+ b=mG/dpSTK5YKhm7xMoy0UOHqXL8kVXDefS/kf7sWccXVBpWDpv35Jz7d/DnuV4qUTcoHZm/31V/toUXw6INst0PyIcEP0Scztv/YQwiyW967SvUwCbBbkHFvuky7SndCebRPcGWUnnYowCw7ijbcEECyy48Jony33gkZoiEXxoxY=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AS8PR04MB7815.eurprd04.prod.outlook.com (2603:10a6:20b:28a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.17; Sat, 17 Sep
+ 2022 00:15:23 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.016; Sat, 17 Sep 2022
+ 00:15:23 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 2/5] net: dsa: add out-of-band tagging
+ protocol
+Thread-Topic: [PATCH net-next v4 2/5] net: dsa: add out-of-band tagging
+ protocol
+Thread-Index: AQHYxGBYKUV8EatjeEynFu0Ch2i3Kq3izGWA
+Date:   Sat, 17 Sep 2022 00:15:22 +0000
+Message-ID: <20220917001521.wskocisy53vozska@skbuf>
+References: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
+ <20220909152454.7462-3-maxime.chevallier@bootlin.com>
+In-Reply-To: <20220909152454.7462-3-maxime.chevallier@bootlin.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|AS8PR04MB7815:EE_
+x-ms-office365-filtering-correlation-id: eecae46b-b5fb-4769-bb81-08da9841b68a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1oagfZTaN8p80cutx6JQkuD0ZzDWU3zN+YGsBLKaRWnqfEnmNkWggnAUpk0+2/Qg2BRZLtjDzpoFyCV9ihTuqZ2PNueTNcC8cFdslHLMAZOtZiPpB1BoA0mOOvhfpdYISaMyjZ9KzgA2rQiiSHbxoxlQKjIZ8avrC6jHDAIu1BCk0daMuZ0pt7t8cpyuoG2PWzvR+7t+UYpKprzBn6KfoqXTVPJuIOo+PXYLA+DTkOlLCpHR/otGsAIWG9/URjD5FMnmF3VTBr0RrzMnSqgLq5NWtFjtRAvp8xinPoQ/hLuVsojQOONJS0uQUTh5YrrEovHlVJ8BxrWk3tbz9qgVYf5XApaJYAHTVJoNYIGI3x54IAeS0xfZJVawTdIloMlDCxb4wxAI5Qp/rCvuLEnNWrxLJd3bhGdlOngZKZIP35uh/EgD6NyoFqGOfwMXuaHzEmE8pz47yc2g5QsM0o5cvArKjucw0OvocN65ObKdV4O6vmix2AjfyVmARI2aCLoA9DEm1IKWffWUBxmgxNtjLbgUyhC8X604Uh++Oku4vV561X6x2A12Xm4ryuRTPPG6W8fj/Ug9hZXzoCAs/9Z5iH/4ozlaa7CYhxk1NnYOiweItfYUgNX3k/MI2KkdORuhJt0s3D12znWMErxuS3uWFtivnl0gbgFKbU5szEYWuWWXYjKk1otoy0yCiHipPGUsjI+4r/Q3M1Pqfj+Mc1Af2/xpHPgpqfR8Iuv1Fw03w/3qrdwpAreG3OjPwgxUdeZh
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(396003)(39860400002)(376002)(346002)(366004)(451199015)(33716001)(38100700002)(6486002)(478600001)(6506007)(2906002)(122000001)(41300700001)(7416002)(54906003)(6916009)(5660300002)(8936002)(38070700005)(66556008)(66476007)(66446008)(8676002)(4326008)(66946007)(86362001)(44832011)(64756008)(71200400001)(316002)(76116006)(91956017)(83380400001)(66899012)(26005)(6512007)(9686003)(186003)(1076003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XgvaS/fagbDA1i7+t/5um5Jf/imWnGKgJtfN/NMTJQw+cZ1nh0eVAWgkarkF?=
+ =?us-ascii?Q?Kgk7W2uqhlc9G9hJvV7ftYSIHCzlZDYcnbYCvg/dWFBAmrUdrxQHBrJLtQod?=
+ =?us-ascii?Q?BjvfiW7MQVezsfMu8Q/dm7zJ3U+MUinyKhDTQArxfRze/Kjk8NHA1k1EySwS?=
+ =?us-ascii?Q?37+LYrMIE3RV3gttoMF2/ijO5XeKfEzTw1aQF3b0EL5ZO8WDuz9XbcQX3bmA?=
+ =?us-ascii?Q?hNe9OrUmX/fiiJXRdUaiIM6xxmqESUgAcXw9rqVbtSSSWSq6jY7RjfzJaH2D?=
+ =?us-ascii?Q?T8RmkSQwxHW/sjG9/GtBOjcu6jYU6tovnpmEGVg8rUS1PQudZ8ZGdws+NCBZ?=
+ =?us-ascii?Q?4eRX89QDDlMPGHQWUVj3WfJwReaJhZ7sUTXBuJRIt7cYswsFhb9FFy6VhRzK?=
+ =?us-ascii?Q?2QOqcPfeiAlB6wDJdb8xdwrXuwQ5FxB6A5vjeicCkzxezjbsmco3BRyVbz7+?=
+ =?us-ascii?Q?RoOyazHtLg8IMbKyibJn2kdMNlI/RTjRYJ6QZAoaPZfP8o2ydtJAMB7bgafY?=
+ =?us-ascii?Q?LdJryrXZl4+ykO9FunOF7itIEQAicv0FHXWEQvEik6c9ke2hqWNqnPhM3xSj?=
+ =?us-ascii?Q?dUMRs3m2svtUrbjeFQ4cgkJdp/pB2J318GcRV/5Qcf6SMX4117jcKrioXLM4?=
+ =?us-ascii?Q?CzpoIfDAaY0/oqxehb5qsAYVedekXsLd0SIR2dWls/jDB7tqWaFdXYmMk+C2?=
+ =?us-ascii?Q?RRzw7Hte/DDWe4afwXhOfaWyhYNQEzg0wWOEwT2299ftocEd2crprl3hLxoT?=
+ =?us-ascii?Q?LP9evNDo3wnAQLtvxV1tukRQq5+aJ1ssNZf4ujUWtyg70X3Rz9ggxQGlV8Ms?=
+ =?us-ascii?Q?nyhnSnq2+NQtahcmNacuMPBDDk3HN5/YQiVBxdj2SyXRhZJ7NnpX6SezhLDx?=
+ =?us-ascii?Q?PBhZRoNxxlWkeq+Xf4SggtqcYqERxiqlGWhn6ne0C+EG1rtho90nTQ+asI9J?=
+ =?us-ascii?Q?Yx6tKH602brlM9b2eux9tX5pdBfWdL3bFleay7LCpJMk/ZjSmwR6yOVSjhm9?=
+ =?us-ascii?Q?4TPHu1OK8A8gLTDINuQZ0Kr43kG8B082tPfCyQDLNtLhmGRyoYDGLJMVA33e?=
+ =?us-ascii?Q?aApobqePGZlEQHspvN8nK5wjcJwOY4JUj+yZexxGR4fEmhdMr1le0hkoUosb?=
+ =?us-ascii?Q?WO7pYD1XABm7ykAPn3JgJ1zO7i4mndxHwjQlrLiwb+QIi35cPnwsIoW2OWeU?=
+ =?us-ascii?Q?vKa2iiU/JdUMtYgEeNl5WP9WySqHZGzbbTlPMZz+6A3QjNkjWmurfeecZQFL?=
+ =?us-ascii?Q?MK8NKJrbG1u7oFwCl+9xUiEnFsuq7z84QA4A29KiMwbSwfEJs5k6l1cC6Z0l?=
+ =?us-ascii?Q?xekeSTfLl25mSEPskjpXlJazGECMKWx3vFIszcnER/Pj4MQNHFOb7EQAZhmG?=
+ =?us-ascii?Q?gosFHoEgFrgjNonqUHrg+YpUNIlE1VGE01vuApewm2K2IbdN2Nf7H1NU/bnO?=
+ =?us-ascii?Q?4BGKBzAHxuFamzXjlgKOb3tOOQAahxK+eF+ffwUNXpjraW4KZ+4eWtW++RnU?=
+ =?us-ascii?Q?7Lspby4Sh30OvhUyQ7KQcYY1IR547P85WtGGHvDVOXwWyZiRZtVQqZ8pocJo?=
+ =?us-ascii?Q?5TppjbQTrwKT/Co6CjnrUO9u7GU1xuavmJMcqpsZZJwTqxhuVAS+sNlj4wz7?=
+ =?us-ascii?Q?GQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <645D74E6B5A3C84480CB1A6114E4F10D@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyTY+OaClK+JHCOw@localhost>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eecae46b-b5fb-4769-bb81-08da9841b68a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2022 00:15:22.8563
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: j+XQ2JJnHpm7JFO4UEF4ATYVZvhAcsCVwOm7VqFSOb/ESE63hYc8hShGLoJ7fEJ8dSqnMIYjB/09n+kr2khw1w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7815
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Hi Peter, apologies for dumping you into the middle of this thread.
-I've got a question about sched_exec() below...]
+Hi Maxime,
 
-On Fri, Sep 16, 2022 at 09:13:44PM +0100, Josh Triplett wrote:
-> musl does the same thing, as do python and perl (likely via execvp or
-> posix_spawnp). As does gcc when it executes `as`. And I've seen more
-> than a few programs hand-implement a PATH search the same way. Seems
-> worth optimizing for.
+On Fri, Sep 09, 2022 at 05:24:51PM +0200, Maxime Chevallier wrote:
+> +int dsa_oob_tag_push(struct sk_buff *skb, struct dsa_oob_tag_info *ti)
+> +{
+> +	struct dsa_oob_tag_info *tag_info;
+> +
+> +	tag_info =3D (struct dsa_oob_tag_info *)skb->head;
+> +
+> +	tag_info->proto =3D ti->proto;
+> +	tag_info->dp =3D ti->dp;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(dsa_oob_tag_push);
+> +
+> +int dsa_oob_tag_pop(struct sk_buff *skb, struct dsa_oob_tag_info *ti)
+> +{
+> +	struct dsa_oob_tag_info *tag_info;
+> +
+> +	tag_info =3D (struct dsa_oob_tag_info *)skb->head;
+> +
+> +	if (tag_info->proto !=3D DSA_TAG_PROTO_OOB)
+> +		return -EINVAL;
+> +
+> +	ti->proto =3D tag_info->proto;
+> +	ti->dp =3D tag_info->dp;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(dsa_oob_tag_pop);
+> +
+> +static struct sk_buff *oob_tag_xmit(struct sk_buff *skb,
+> +				    struct net_device *dev)
+> +{
+> +	struct dsa_port *dp =3D dsa_slave_to_port(dev);
+> +	struct dsa_oob_tag_info tag_info;
+> +
+> +	tag_info.dp =3D dp->index;
+> +	tag_info.proto =3D DSA_TAG_PROTO_OOB;
+> +
+> +	if (dsa_oob_tag_push(skb, &tag_info))
+> +		return NULL;
+> +
+> +	return skb;
+> +}
 
-Yeah, it does seem like a simple way to eliminate needless work, though
-I'd really like to see some kind of perf count of "in a given kernel
-build, how many execve() system calls fail due to path search vs succeed",
-just to get a better sense of the scale of the problem.
+I don't have too many comments on this patch set, except for a very
+fundamental one. It is impossible to pass a DSA out of band header
+between the switch tagging protocol driver and the host Ethernet
+controller via the beginning of skb->head, and just putting some magic
+bytes there and hoping that no random junk in the buffer will have the
+same value (and that skb_push() calls will not eat into your tag_info
+structure which isn't accounted for in any way by skb->data).
 
-I don't like the idea of penalizing the _succeeding_ case, though, which
-happens if we do the path walk twice. So, I went and refactoring the setup
-order, moving the do_open_execat() up into alloc_bprm() instead of where
-it was in bprm_exec(). The result makes it so it is, as you observed,
-before the mm creation and generally expensive argument copying. The
-difference to your patch seems to only be the allocation of the file
-table entry, but avoids the double lookup, so I'm hoping the result is
-actually even faster.
-
-This cleanup is actually quite satisfying organizationally too -- the
-fd and filename were passed around rather oddly.
-
-The interaction with sched_exec() should be no worse (the file is opened
-before it in either case), but in reading that function, it talks about
-taking the opportunity to move the process to another CPU (IIUC) since,
-paraphrasing, "it is at its lowest memory/cache size." But I wonder if
-there is an existing accidental pessimistic result in that the process
-stack has already been allocated. I am only passingly familiar with how
-tasks get moved around under NUMA -- is the scheduler going to move
-this process onto a different NUMA node and now it will be forced to
-have the userspace process stack on one node and the program text and
-heap on another? Or is that totally lost in the noise?
-
-More specifically, I was wondering if processes would benefit from having
-sched_exec() moved before the mm creation?
-
-Regardless, here's a very lightly tested patch. Can you take this for a
-spin and check your benchmark? Thanks!
-
--Kees
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 9a5ca7b82bfc..5534301d67ca 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -898,6 +898,10 @@ EXPORT_SYMBOL(transfer_args_to_stack);
- 
- #endif /* CONFIG_MMU */
- 
-+/*
-+ * On success, callers must call do_close_execat() on the returned
-+ * struct file.
-+ */
- static struct file *do_open_execat(int fd, struct filename *name, int flags)
- {
- 	struct file *file;
-@@ -945,6 +949,16 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
- 	return ERR_PTR(err);
- }
- 
-+/**
-+ * open_exec - Open a path name for execution
-+ *
-+ * @name: path name to open with the intent of executing it.
-+ *
-+ * Returns ERR_PTR on failure or allocated struct file on success.
-+ *
-+ * As this is a wrapper for the internal do_open_execat(), callers
-+ * must call allow_write_access() before fput() on release.
-+ */
- struct file *open_exec(const char *name)
- {
- 	struct filename *filename = getname_kernel(name);
-@@ -1485,6 +1499,15 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
- 	return -ENOMEM;
- }
- 
-+/* Matches do_open_execat() */
-+static void do_close_execat(struct file *file)
-+{
-+	if (!file)
-+		return;
-+	allow_write_access(file);
-+	fput(file);
-+}
-+
- static void free_bprm(struct linux_binprm *bprm)
- {
- 	if (bprm->mm) {
-@@ -1496,10 +1519,7 @@ static void free_bprm(struct linux_binprm *bprm)
- 		mutex_unlock(&current->signal->cred_guard_mutex);
- 		abort_creds(bprm->cred);
- 	}
--	if (bprm->file) {
--		allow_write_access(bprm->file);
--		fput(bprm->file);
--	}
-+	do_close_execat(bprm->file);
- 	if (bprm->executable)
- 		fput(bprm->executable);
- 	/* If a binfmt changed the interp, free it. */
-@@ -1509,12 +1529,26 @@ static void free_bprm(struct linux_binprm *bprm)
- 	kfree(bprm);
- }
- 
--static struct linux_binprm *alloc_bprm(int fd, struct filename *filename)
-+static struct linux_binprm *alloc_bprm(int fd, struct filename *filename,
-+				       int flags)
- {
--	struct linux_binprm *bprm = kzalloc(sizeof(*bprm), GFP_KERNEL);
--	int retval = -ENOMEM;
--	if (!bprm)
-+	struct linux_binprm *bprm;
-+	struct file *file;
-+	int retval;
-+
-+	file = do_open_execat(fd, filename, flags);
-+	if (IS_ERR(file)) {
-+		retval = PTR_ERR(file);
- 		goto out;
-+	}
-+
-+	retval = -ENOMEM;
-+	bprm = kzalloc(sizeof(*bprm), GFP_KERNEL);
-+	if (!bprm) {
-+		do_close_execat(file);
-+		goto out;
-+	}
-+	bprm->file = file;
- 
- 	if (fd == AT_FDCWD || filename->name[0] == '/') {
- 		bprm->filename = filename->name;
-@@ -1531,6 +1565,18 @@ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename)
- 	}
- 	bprm->interp = bprm->filename;
- 
-+	/*
-+	 * Record that a name derived from an O_CLOEXEC fd will be
-+	 * inaccessible after exec.  This allows the code in exec to
-+	 * choose to fail when the executable is not mmaped into the
-+	 * interpreter and an open file descriptor is not passed to
-+	 * the interpreter.  This makes for a better user experience
-+	 * than having the interpreter start and then immediately fail
-+	 * when it finds the executable is inaccessible.
-+	 */
-+	if (bprm->fdpath && get_close_on_exec(fd))
-+		bprm->interp_flags |= BINPRM_FLAGS_PATH_INACCESSIBLE;
-+
- 	retval = bprm_mm_init(bprm);
- 	if (retval)
- 		goto out_free;
-@@ -1803,10 +1849,8 @@ static int exec_binprm(struct linux_binprm *bprm)
- /*
-  * sys_execve() executes a new program.
-  */
--static int bprm_execve(struct linux_binprm *bprm,
--		       int fd, struct filename *filename, int flags)
-+static int bprm_execve(struct linux_binprm *bprm)
- {
--	struct file *file;
- 	int retval;
- 
- 	retval = prepare_bprm_creds(bprm);
-@@ -1816,26 +1860,8 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	check_unsafe_exec(bprm);
- 	current->in_execve = 1;
- 
--	file = do_open_execat(fd, filename, flags);
--	retval = PTR_ERR(file);
--	if (IS_ERR(file))
--		goto out_unmark;
--
- 	sched_exec();
- 
--	bprm->file = file;
--	/*
--	 * Record that a name derived from an O_CLOEXEC fd will be
--	 * inaccessible after exec.  This allows the code in exec to
--	 * choose to fail when the executable is not mmaped into the
--	 * interpreter and an open file descriptor is not passed to
--	 * the interpreter.  This makes for a better user experience
--	 * than having the interpreter start and then immediately fail
--	 * when it finds the executable is inaccessible.
--	 */
--	if (bprm->fdpath && get_close_on_exec(fd))
--		bprm->interp_flags |= BINPRM_FLAGS_PATH_INACCESSIBLE;
--
- 	/* Set the unchanging part of bprm->cred */
- 	retval = security_bprm_creds_for_exec(bprm);
- 	if (retval)
-@@ -1863,7 +1889,6 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	if (bprm->point_of_no_return && !fatal_signal_pending(current))
- 		force_fatal_sig(SIGSEGV);
- 
--out_unmark:
- 	current->fs->in_exec = 0;
- 	current->in_execve = 0;
- 
-@@ -1897,7 +1922,7 @@ static int do_execveat_common(int fd, struct filename *filename,
- 	 * further execve() calls fail. */
- 	current->flags &= ~PF_NPROC_EXCEEDED;
- 
--	bprm = alloc_bprm(fd, filename);
-+	bprm = alloc_bprm(fd, filename, flags);
- 	if (IS_ERR(bprm)) {
- 		retval = PTR_ERR(bprm);
- 		goto out_ret;
-@@ -1946,7 +1971,7 @@ static int do_execveat_common(int fd, struct filename *filename,
- 		bprm->argc = 1;
- 	}
- 
--	retval = bprm_execve(bprm, fd, filename, flags);
-+	retval = bprm_execve(bprm);
- out_free:
- 	free_bprm(bprm);
- 
-@@ -1971,7 +1996,7 @@ int kernel_execve(const char *kernel_filename,
- 	if (IS_ERR(filename))
- 		return PTR_ERR(filename);
- 
--	bprm = alloc_bprm(fd, filename);
-+	bprm = alloc_bprm(fd, filename, 0);
- 	if (IS_ERR(bprm)) {
- 		retval = PTR_ERR(bprm);
- 		goto out_ret;
-@@ -2006,7 +2031,7 @@ int kernel_execve(const char *kernel_filename,
- 	if (retval < 0)
- 		goto out_free;
- 
--	retval = bprm_execve(bprm, fd, filename, 0);
-+	retval = bprm_execve(bprm);
- out_free:
- 	free_bprm(bprm);
- out_ret:
-
-
--- 
-Kees Cook
+Please create an skb extension for this, it is the only unambiguous way
+to deal with the given hardware, which will not give lots of headaches
+in the future.=
