@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF605BB4E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9683F5BB4E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiIQAKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        id S229685AbiIQAK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIQAK3 (ORCPT
+        with ESMTP id S229557AbiIQAK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:10:29 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8588540BCC;
-        Fri, 16 Sep 2022 17:10:28 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b23so22694420pfp.9;
-        Fri, 16 Sep 2022 17:10:28 -0700 (PDT)
+        Fri, 16 Sep 2022 20:10:56 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A6772FDF;
+        Fri, 16 Sep 2022 17:10:55 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y136so22727803pfb.3;
+        Fri, 16 Sep 2022 17:10:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=st4MEcOvTkhck1tSpFNsKlNFDJyyWZ5FpD/I8fpUQ68=;
-        b=fDr22VEMkyqvttZV9XtL7P/FGOpxQ6ELukAOb4IHJB4r7GaHQ+aA6gb512MY36f0sD
-         kZP6KSqsigBgdw3el8Ef4aZeiky/5aaI1RVz5Fj4PLqvLxpDor7k80L6g1DaWcVRwX4y
-         wIj3p4vg7PboiDcdzd2dgDErdPTDKSk8lwxTlj9AWYjX5oukgQDzARoCSyXneDhJK8UH
-         xpo+lDvUjvRxCcqKQIYJGUw8gox9LP8qovFmW0T51M+EBUqbXbimXSFYjm5jVTb1g//o
-         76YBHZcg0uOeb/MR0KGK73Mtsb6MqggrsOKjvhxT4VOwYNp3ho4dgIWaWeN3QIEB1JKh
-         SjQw==
+        bh=KFW8Lrz6qD+umd1mS93Z94RJAGOU/7BuklYES2+tlvc=;
+        b=S95XJ2h2Yh/uY9gQVigHf5hGkQGVe0J9Tj8MSR8adO647oBGzf/84YU+IAySuCQ5mp
+         wlHZ8JXl7AX8P4wcHea7TQgV86TSdMoYQe5NybR0gYEtM1vAQnzxL2gzzvszg+9xeATh
+         VggxVJeSI+WETjVLlqARja3Jh7reXGk7t8ZLZ82Q7aDxUrq8h6AgdVr21qKVc1rJzRzV
+         DsjO4th/qWFnTNy3hfd/OKBS6d3AYsZrCAmbUAup+fI+UAcs/PO6ea2bCk55NHVxGke3
+         7pJ8KPiCn8WMfn9sG0DN1eCaVlYO1kMMIY/XJO4nizzphuahDNoDbxDvtpmG95yd7cAC
+         Syrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=st4MEcOvTkhck1tSpFNsKlNFDJyyWZ5FpD/I8fpUQ68=;
-        b=31usD0c4A1Y1XBiTWX7QXjaUWhBKniM9KRxC80XkHQ+zWZJE1mLjdJLLslaLaiOqBM
-         suUjowGoBVL7kEKx1KUMlrZwG+E9wJPZ8xlMhVakjSKnxiKX2jZR/hRSnLUmfkN2K2PK
-         9wHVWKyAVqfg0Onns1hZiN139wZKVOZV5AKsIu1+yxv32Q8BJvNwx8h+Y82Mqctq8Sux
-         39bJIwKa1vrSxuir25Lt6u2lgLOywnmRgTdm1c1QpcN6xwI37AOJ/09uRF4oddbEVU+E
-         IhXaeMCuL7WKB0V59WoKCjVW9w3VIjNszSFoXA7OJ4HwMGvkGHu2qy3EtDu5lOUOxyCS
-         u7Vg==
-X-Gm-Message-State: ACrzQf2T680pIq9F3EhKR/M8vHEzsJHbHm4Utit5WqHNUkKyotzPkSjY
-        ESPVKoUuDOaV7s/NBhktu+mn0LTO57i8jg==
-X-Google-Smtp-Source: AMsMyM5up6yDvtq/TY27KYfyfyZvkyLzt6jP5CmmlJR+jFWa/bRhscdC/MY+c5rnvnQIZoVdEbUpWg==
-X-Received: by 2002:a65:6955:0:b0:439:a99b:bca5 with SMTP id w21-20020a656955000000b00439a99bbca5mr6640218pgq.80.1663373427909;
-        Fri, 16 Sep 2022 17:10:27 -0700 (PDT)
-Received: from localhost.localdomain (c-24-5-142-105.hsd1.ca.comcast.net. [24.5.142.105])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016dc6279ab7sm15524940plg.149.2022.09.16.17.10.26
+        bh=KFW8Lrz6qD+umd1mS93Z94RJAGOU/7BuklYES2+tlvc=;
+        b=m2RdIPdxdcwAFNcNsVyZfJFTjyTsXWXdMh7hDP2/HLo+KQMwEIyLx2HCyDzAaJmY8I
+         GwBil8i5hF2iaAWSKZgsBn3G3D6XJDSbCk3eG4AdJCxWdi1qKSEa0l+Bg8LkDB7UIiHO
+         UXYB3y3namM5knouUjbtXzRNAAI2/OAK5oANC9a5ZATOwRdytUai65kj3y9/8RtN0I+c
+         MIvztiV4Ct5qWRrCBBSt2NsSpwHjMAIhCEDtc0CYIcWeUC/Wdx0UbrT2I2eqmns1XbJP
+         /+b34aAxwugOjSq6bPWJarmYeOUKKnXtLAadCPguNV27USrN4+HQsPSPYP5JfGm4nWRJ
+         97GA==
+X-Gm-Message-State: ACrzQf3Zl5jytI6gH8sLVHopeHLLRLqBHphD2nHwYyEDJ3tWh/H2EXOp
+        G4gq+Xo72dcsvEB9Oo27NO2xhvnZ4f4sUg==
+X-Google-Smtp-Source: AMsMyM4OTX8idl0VD6igHHYK4x6jOOquNrCi3+1u78eYaUGk2HxEcyhIuyMjxNmPUDs9UsjzhTGDng==
+X-Received: by 2002:a05:6a02:309:b0:434:efcb:ccf4 with SMTP id bn9-20020a056a02030900b00434efcbccf4mr6615874pgb.304.1663373454281;
+        Fri, 16 Sep 2022 17:10:54 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id p67-20020a625b46000000b00540d03f3792sm15002041pfb.81.2022.09.16.17.10.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 17:10:27 -0700 (PDT)
-From:   Justinien Bouron <justinien.bouron@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Justinien Bouron <justinien.bouron@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Handle MXCSR in kvm_arch_vcpu_ioctl_{get,set}_fpu.
-Date:   Sat, 17 Sep 2022 00:09:28 +0000
-Message-Id: <20220917000928.118-1-justinien.bouron@gmail.com>
+        Fri, 16 Sep 2022 17:10:53 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, anthony.l.nguyen@intel.com,
+        jesse.brandeburg@intel.com, Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v2] drivers/net/ethernet/intel/e100: check the return value of e100_exec_cmd()
+Date:   Fri, 16 Sep 2022 17:10:27 -0700
+Message-Id: <20220917001027.3799634-1-floridsleeves@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,40 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_arch_vcpu_ioctl_get_fpu does not set the mxcsr in the kvm_fpu
-struct; conversely kvm_arch_vcpu_ioctl_set_fpu does not set the mxcsr
-value in the fxregs_state struct of the vcpu.
-This leads to the KVM_GET_FPU ioctl returning 0 as the mxcsr value,
-regardless of the actual value on the vcpu; while KVM_SET_FPU leaves the
-MXCSR on the vcpu untouched.
+Check the return value of e100_exec_cmd() which could return error code
+when execution fails.
 
-Fix kvm_arch_vcpu_ioctl_{get,set}_fpu to properly handle MXCSR.
-
-Signed-off-by: Justinien Bouron <justinien.bouron@gmail.com>
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- arch/x86/kvm/x86.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/e100.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 43a6a7efc6ec..c33a2599a497 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11462,6 +11462,7 @@ int kvm_arch_vcpu_ioctl_get_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
- 	fpu->last_ip = fxsave->rip;
- 	fpu->last_dp = fxsave->rdp;
- 	memcpy(fpu->xmm, fxsave->xmm_space, sizeof(fxsave->xmm_space));
-+	fpu->mxcsr = fxsave->mxcsr;
+diff --git a/drivers/net/ethernet/intel/e100.c b/drivers/net/ethernet/intel/e100.c
+index 11a884aa5082..0d133cd4d01b 100644
+--- a/drivers/net/ethernet/intel/e100.c
++++ b/drivers/net/ethernet/intel/e100.c
+@@ -1911,7 +1911,9 @@ static inline void e100_start_receiver(struct nic *nic, struct rx *rx)
  
- 	vcpu_put(vcpu);
- 	return 0;
-@@ -11486,6 +11487,7 @@ int kvm_arch_vcpu_ioctl_set_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
- 	fxsave->rip = fpu->last_ip;
- 	fxsave->rdp = fpu->last_dp;
- 	memcpy(fxsave->xmm_space, fpu->xmm, sizeof(fxsave->xmm_space));
-+	fxsave->mxcsr = fpu->mxcsr;
- 
- 	vcpu_put(vcpu);
- 	return 0;
+ 	/* (Re)start RU if suspended or idle and RFA is non-NULL */
+ 	if (rx->skb) {
+-		e100_exec_cmd(nic, ruc_start, rx->dma_addr);
++		if (e100_exec_cmd(nic, ruc_start, rx->dma_addr))
++			netif_printk(nic, tx_err, KERN_DEBUG, nic->netdev,
++			     "exec ruc_start failed\n");
+ 		nic->ru_running = RU_RUNNING;
+ 	}
+ }
 -- 
 2.25.1
 
