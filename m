@@ -2,261 +2,1066 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61655BB9F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B365BB9F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 20:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiIQSgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 14:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S229627AbiIQSik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 14:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIQSgc (ORCPT
+        with ESMTP id S229473AbiIQSif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 14:36:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42312CE06
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:36:30 -0700 (PDT)
+        Sat, 17 Sep 2022 14:38:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218D22CE06
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:38:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663439790;
+        s=mimecast20190719; t=1663439912;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+n8SJZe8uB4QaDOI1Ue/9OpslwzYJQJM56ST428MYiw=;
-        b=ZU3s1iND95R1xjk97asfXPezFBitz/dShMzWAsNazS62o3vkGssP7rSSbKToUFWqZJWaaa
-        anQD2kwroFOpLTVsxTa+lRdvf4xUr621yhuEwW+e/ucWZujImTq+NWFa0xlt7uo+6wHw8R
-        snQVMqTVnszqn81umJTf6iJWoCRY6X8=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=23tjVksrjYW5v0nLvXHifLUA17brLvbuQ40YLTG692k=;
+        b=gcLiHnw8RQpuDDUMDkRhNWn4r+c61gPO2Sa1Gkkh1JxfleJuRC2AeEvbZ7ox3DDc+71xMJ
+        qlbpe7iU2mxnJFw/XHFpCrx1HH4wz26mzfNfvfjAwtFAVfHpc95y6sEM36vNEuR0JKisbE
+        2agYi8V/rJr/zQ5fp2zUk4HSWKJNHZE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-55-onSOo9VdO-Kh-ou6UQuxZg-1; Sat, 17 Sep 2022 14:36:28 -0400
-X-MC-Unique: onSOo9VdO-Kh-ou6UQuxZg-1
-Received: by mail-qt1-f197.google.com with SMTP id e22-20020ac84b56000000b0035bb64ad562so13964656qts.17
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:36:28 -0700 (PDT)
+ us-mta-220-Z4N2TsHtOOKZdokFAIorHg-1; Sat, 17 Sep 2022 14:38:31 -0400
+X-MC-Unique: Z4N2TsHtOOKZdokFAIorHg-1
+Received: by mail-qk1-f199.google.com with SMTP id br14-20020a05620a460e00b006cec4af5a2fso3847337qkb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 11:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+n8SJZe8uB4QaDOI1Ue/9OpslwzYJQJM56ST428MYiw=;
-        b=Zzj4QQlWvJ6q+Pcx8yVWjX7vCosWngX/AxSDn8pV0BN0IEw1DClTJURE8gB+ccF8cL
-         BYVLxFU0J19gpR5ogsMmaXeWV0ieSIp3LIGcO8GuHXhJv3YsK+6FMJV4C0Cyy9Hwsavu
-         XGjb2wqlBcIfJ0ZuHdiMhzvTrz/pSN9LqN0JfOMQcLMge8LybWfWdh1Z9G7Cp0rqCnyg
-         Eg3MVVd4AC1v1l9uwDhQDK/BlPnqRtMK3mgFGxi3C9TpgA0Sw7cLUUeI7yeNV4QcSNGJ
-         u4iudx6+QZmOvzYKX2luZuaDvKIW7asGSySlfHLmZJ1BpmlJDgJmtsk9Us/K6rHGoXoH
-         OJFw==
-X-Gm-Message-State: ACrzQf2XgDhfzOpIUuYSFNPiHiKlB0tfKsGoswNWDXVoLuYY0z4Ghlny
-        x9a2hgQ5u2PQMCjQwYfQh/D3L5QV1bJs5UXaTmnjmt8N3wBVkDNG1DtebzYWHqQRjfmUUa6t3K7
-        w/cX9dj7XbRdAyF8IPwfR76BQ
-X-Received: by 2002:a05:622a:1356:b0:35b:b0d3:71e5 with SMTP id w22-20020a05622a135600b0035bb0d371e5mr9023378qtk.51.1663439788233;
-        Sat, 17 Sep 2022 11:36:28 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6iXCGJzCiIwsuXZvMA1Lf1v01gZfDeTBvykk0rQMaifG1jT6oD78p8z9ClJxPKtJNvN/h0Zg==
-X-Received: by 2002:a05:622a:1356:b0:35b:b0d3:71e5 with SMTP id w22-20020a05622a135600b0035bb0d371e5mr9023345qtk.51.1663439787935;
-        Sat, 17 Sep 2022 11:36:27 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bs14-20020a05620a470e00b006b58d8f6181sm8727073qkb.72.2022.09.17.11.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 11:36:27 -0700 (PDT)
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
-To:     Frank Rowand <frowand.list@gmail.com>,
-        Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org, helgaas@kernel.org
-Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
- <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
- <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
- <8bee1ddd-0a84-62cd-9beb-3bbb09d83de1@amd.com>
- <f042a8d7-fa2b-3e75-a2f2-6e6ba28a9b38@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=23tjVksrjYW5v0nLvXHifLUA17brLvbuQ40YLTG692k=;
+        b=W6HnRk0J1k4joiIjxX++X+uIcRSuyCS7PEQwjanczwSvnLL1ckSM7Vi+SipMijZ0f2
+         8oXRAXLYEuSIykH65X3icamZ5pmxS8Bw7NYgntvcRn0HuYwQ+R1dJ18fNGE3zghr/O+X
+         iisxAIImRQl4vcBSxx/GAXu9LjMT0tNZGX81bU+7ZdPMnhJTI5HbGhf2V+kTfEiGA7eF
+         JYCdtQubcNqUA+l0BTR+t8i+undq5887XJyuPIU9IASVaE7N760VEej3flO+MXUTi5ca
+         Uwr5rKaoV+z21nT0Nt/u1lsyY1JHGrANBTPSQLpekn03ZQsUdK1sjLbEJHPFFfxWbPAw
+         fU2w==
+X-Gm-Message-State: ACrzQf0lkADginl0xL38NhdXZzE4DvdJVwwOIcWgu5KYG+apGj58ZJxA
+        FxmDjBi3hK3O5BvdYrL6eONeoboNQ2rCJFuROukfqBxxqwxyLRAhlsGRpJ03KwBl6bU/szgnOGK
+        abozch6sg4XHNMjoxLNQQAZNT
+X-Received: by 2002:a0c:f5d2:0:b0:4ab:f974:1e55 with SMTP id q18-20020a0cf5d2000000b004abf9741e55mr9103884qvm.46.1663439910080;
+        Sat, 17 Sep 2022 11:38:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM76rKpD2zLs+CY19nwy7sBZzMyKF6kwM9Sz+8KweT1+sCYo+EBYa4geRltsS3vLrAh8aJcuCw==
+X-Received: by 2002:a0c:f5d2:0:b0:4ab:f974:1e55 with SMTP id q18-20020a0cf5d2000000b004abf9741e55mr9103848qvm.46.1663439909694;
+        Sat, 17 Sep 2022 11:38:29 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j12-20020a05620a288c00b006cbc40f4b36sm9306845qkp.39.2022.09.17.11.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 11:38:29 -0700 (PDT)
 From:   Tom Rix <trix@redhat.com>
-Message-ID: <7393f2f3-3af5-edf9-4afb-8acc0a8db1e7@redhat.com>
-Date:   Sat, 17 Sep 2022 11:36:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, aric.cyr@amd.com, Pavle.Kotarac@amd.com,
+        Nevenko.Stupar@amd.com, aurabindo.pillai@amd.com,
+        mairacanal@riseup.net, Bing.Guo@amd.com, nathan@kernel.org,
+        hamza.mahfooz@amd.com, nicholas.kazlauskas@amd.com,
+        agustin.gutierrez@amd.com, mdaenzer@redhat.com,
+        Charlene.Liu@amd.com, roman.li@amd.com, Wesley.Chalmers@amd.com,
+        alvin.lee2@amd.com, Jun.Lei@amd.com, yang.lee@linux.alibaba.com,
+        Syed.Hassan@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: refactor CalculateWriteBackDelay to use vba_vars_st ptr
+Date:   Sat, 17 Sep 2022 14:37:44 -0400
+Message-Id: <20220917183744.2526927-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <f042a8d7-fa2b-3e75-a2f2-6e6ba28a9b38@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frank,
+Mimimize the function signature by passing a pointer and an index instead
+of passing several elements of the pointer.
 
-On 9/16/22 7:23 PM, Frank Rowand wrote:
-> On 9/13/22 16:02, Lizhi Hou wrote:
->> On 9/13/22 10:41, Frank Rowand wrote:
->>> On 9/13/22 12:10, Lizhi Hou wrote:
->>>> On 9/13/22 00:00, Frank Rowand wrote:
->>>>> On 8/29/22 16:43, Lizhi Hou wrote:
->>>>>> This patch series introduces OF overlay support for PCI devices which
->>>>>> primarily addresses two use cases. First, it provides a data driven method
->>>>>> to describe hardware peripherals that are present in a PCI endpoint and
->>>>>> hence can be accessed by the PCI host. An example device is Xilinx/AMD
->>>>>> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
->>>>>> driver -- often used in SoC platforms -- in a PCI host based system. An
->>>>>> example device is Microchip LAN9662 Ethernet Controller.
->>>>>>
->>>>>> This patch series consolidates previous efforts to define such an
->>>>>> infrastructure:
->>>>>> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
->>>>>> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
->>>>>>
->>>>>> Normally, the PCI core discovers PCI devices and their BARs using the
->>>>>> PCI enumeration process. However, the process does not provide a way to
->>>>>> discover the hardware peripherals that are present in a PCI device, and
->>>>>> which can be accessed through the PCI BARs. Also, the enumeration process
->>>>>> does not provide a way to associate MSI-X vectors of a PCI device with the
->>>>>> hardware peripherals that are present in the device. PCI device drivers
->>>>>> often use header files to describe the hardware peripherals and their
->>>>>> resources as there is no standard data driven way to do so. This patch
->>>>>> series proposes to use flattened device tree blob to describe the
->>>>>> peripherals in a data driven way. Based on previous discussion, using
->>>>>> device tree overlay is the best way to unflatten the blob and populate
->>>>>> platform devices. To use device tree overlay, there are three obvious
->>>>>> problems that need to be resolved.
->>>>>>
->>>>>> First, we need to create a base tree for non-DT system such as x86_64. A
->>>>>> patch series has been submitted for this:
->>>>>> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
->>>>>> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
->>>>>>
->>>>>> Second, a device tree node corresponding to the PCI endpoint is required
->>>>>> for overlaying the flattened device tree blob for that PCI endpoint.
->>>>>> Because PCI is a self-discoverable bus, a device tree node is usually not
->>>>>> created for PCI devices. This series adds support to generate a device
->>>>>> tree node for a PCI device which advertises itself using PCI quirks
->>>>>> infrastructure.
->>>>>>
->>>>>> Third, we need to generate device tree nodes for PCI bridges since a child
->>>>>> PCI endpoint may choose to have a device tree node created.
->>>>>>
->>>>>> This patch series is made up of two patches.
->>>>>>
->>>>>> The first patch is adding OF interface to allocate an OF node. It is copied
->>>>>> from:
->>>>>> https://lore.kernel.org/lkml/20220620104123.341054-5-clement.leger@bootlin.com/
->>>>>>
->>>>>> The second patch introduces a kernel option, CONFIG_PCI_OF. When the option
->>>>>> is turned on, the kernel will generate device tree nodes for all PCI
->>>>>> bridges unconditionally. The patch also shows how to use the PCI quirks
->>>>>> infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device tree node for
->>>>>> a device. Specifically, the patch generates a device tree node for Xilinx
->>>>>> Alveo U50 PCIe accelerator device. The generated device tree nodes do not
->>>>>> have any property. Future patches will add the necessary properties.
->>>>>>
->>>>>> Clément Léger (1):
->>>>>>      of: dynamic: add of_node_alloc()
->>>>>>
->>>>>> Lizhi Hou (1):
->>>>>>      pci: create device tree node for selected devices
->>>>>>
->>>>>>     drivers/of/dynamic.c        |  50 +++++++++++++----
->>>>>>     drivers/pci/Kconfig         |  11 ++++
->>>>>>     drivers/pci/bus.c           |   2 +
->>>>>>     drivers/pci/msi/irqdomain.c |   6 +-
->>>>>>     drivers/pci/of.c            | 106 ++++++++++++++++++++++++++++++++++++
->>>>>>     drivers/pci/pci-driver.c    |   3 +-
->>>>>>     drivers/pci/pci.h           |  16 ++++++
->>>>>>     drivers/pci/quirks.c        |  11 ++++
->>>>>>     drivers/pci/remove.c        |   1 +
->>>>>>     include/linux/of.h          |   7 +++
->>>>>>     10 files changed, 200 insertions(+), 13 deletions(-)
->>>>>>
->>>>> The patch description leaves out the most important piece of information.
->>>>>
->>>>> The device located at the PCI endpoint is implemented via FPGA
->>>>>       - which is programmed after Linux boots (or somewhere late in the boot process)
->>>>>          - (A) and thus can not be described by static data available pre-boot because
->>>>>                it is dynamic (and the FPGA program will often change while the Linux
->>>>>                kernel is already booted
->>>>>          - (B) can be described by static data available pre-boot because the FPGA
->>>>>                program will always be the same for this device on this system
->>>>>
->>>>> I am not positive what part of what I wrote above is correct and would appreciate
->>>>> some confirmation of what is correct or incorrect.
->>>> There are 2 series devices rely on this patch:
->>>>
->>>>       1) Xilinx Alveo Accelerator cards (FPGA based device)
->>>>
->>>>       2) lan9662 PCIe card
->>>>
->>>>             please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
->>> Thanks.  Please include this information in future versions of the patch series.
->>>
->>> For device 2 I have strongly recommended using pre-boot apply of the overlay to the base
->>> device tree.  I realize that this suggestion is only a partial solution if one wants to
->>> use hotplug to change system configuration (as opposed to using hotplug only to replace
->>> an existing device (eg a broken device) with another instance of the same device).  I
->>> also realize that this increased the system administration overhead.  On the other hand
->>> an overlay based solution is likely to be fragile and possibly flaky.
->> Can you clarify the pre-boot apply approach? How will it work for PCI devices?
->>>> For Xilinx Alveo device, it is (A). The FPGA partitions can be programmed dynamically after boot.
->>> I looked at the Xilinx Alveo web page, and there are a variety of types of Alveo cards
->>> available.  So the answer to my next question may vary by type of card.
->>>
->>> Is it expected that the fpga program on a given card will change frequently (eg multiple
->>> times per day), where the changed program results in a new device that would require a
->>> different hardware description in the device tree?
->> Different images may be loaded to a FPGA partition several times a
->> day. The PCI topology (Device IDs, BARs, MSIx, etc) does not change.
->> New IPs may appear (and old IPs may disappear) on the BARs when a new
->> image is loaded. We would like to use flattened device tree to
->> describe the IPs on the BARs.
-> That was kind of a non-answer.  I know that images _may_ change at
-> some frequency.  I was trying to get a sense of whether the images
-> were _likely_ to be changing on a frequent basis for these types
-> of boards, or whether frequent image changes are likely to be a
-> rare edge use case.
->
-> If there is a good design for the 99.999% use case that does not
-> support the 0.001% use case then it may be better to not create
-> an inferior design that also supports the 0.001% use case.
->
-> I hope that gives a better idea of the reason why I was asking the
-> question and how the answer could impact design and implementation
-> decisions.
->
-> As a point of reference, some other fpga users have indicated a
-> desire to change images many times per second.  The current driver
-> and overlay architecture did not seem to me to be a good match to
-> that use case (depending on the definition of "many").
+The dml2x,dml3x families uses the same algorithm.  Remove the duplicates.
+Use dml20_ and dml30_ prefix to distinguish the two variants.
 
-I would rather we cover 99.999% now.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ .../dc/dml/dcn20/display_mode_vba_20.c        |  78 +++---------
+ .../dc/dml/dcn20/display_mode_vba_20v2.c      | 115 ++----------------
+ .../dc/dml/dcn21/display_mode_vba_21.c        | 114 +----------------
+ .../dc/dml/dcn30/display_mode_vba_30.c        |  74 +++--------
+ .../dc/dml/dcn31/display_mode_vba_31.c        |  76 +-----------
+ .../dc/dml/dcn314/display_mode_vba_314.c      |  76 +-----------
+ .../dc/dml/dcn32/display_mode_vba_32.c        |  42 +------
+ .../dc/dml/dcn32/display_mode_vba_util_32.c   |  30 -----
+ .../dc/dml/dcn32/display_mode_vba_util_32.h   |  10 +-
+ 9 files changed, 63 insertions(+), 552 deletions(-)
 
-My understanding is that the subdevices are flexible but fairly static 
-and the frequency Lizhi mentions would cover development uses.
-
-In production I would expect the image to change about once a year with 
-the same order of magnitude as firmware.
-
-Can you point me to a reference of a user case with high frequency 
-images changing that also depends on pci io device changing?
-
-Tom
-
-> -Frank
->
->> Thanks,
->>
->> Lizhi
->>
->>> Or is the fpga program expected to change on an infrequent basis (eg monthly, quarterly,
->>> annually), in the same way as device firmware and operating systems are updated on a regular
->>> basis for bug fixes and new functionality?
->>>
->>>
->>>> Thanks,
->>>>
->>>> Lzhi
->>>>
->>>>> -Frank
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+index d3b5b6fedf04..6e9d7e2b5243 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+@@ -217,16 +217,8 @@ static void CalculateFlipSchedule(
+ 		double *DestinationLinesToRequestRowInImmediateFlip,
+ 		double *final_flip_bw,
+ 		bool *ImmediateFlipSupportedForPipe);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth);
+ 
++double dlm20_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i);
+ static void dml20_DisplayPipeConfiguration(struct display_mode_lib *mode_lib);
+ static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
+ 		struct display_mode_lib *mode_lib);
+@@ -1085,6 +1077,7 @@ static unsigned int CalculateVMAndRowBytes(
+ static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
+ 		struct display_mode_lib *mode_lib)
+ {
++	struct vba_vars_st *v = &mode_lib->vba;
+ 	unsigned int j, k;
+ 
+ 	mode_lib->vba.WritebackDISPCLK = 0.0;
+@@ -1980,36 +1973,15 @@ static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPer
+ 		if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 			if (mode_lib->vba.WritebackEnable[k] == true) {
+ 				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] =
+-						mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k])
+-										/ mode_lib->vba.DISPCLK;
++					mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(v, k) / mode_lib->vba.DISPCLK;
+ 			} else
+ 				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
+ 			for (j = 0; j < mode_lib->vba.NumberOfActivePlanes; ++j) {
+ 				if (mode_lib->vba.BlendingAndTiming[j] == k
+ 						&& mode_lib->vba.WritebackEnable[j] == true) {
+ 					mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] =
+-							dml_max(
+-									mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k],
+-									mode_lib->vba.WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[j],
+-													mode_lib->vba.WritebackHRatio[j],
+-													mode_lib->vba.WritebackVRatio[j],
+-													mode_lib->vba.WritebackLumaHTaps[j],
+-													mode_lib->vba.WritebackLumaVTaps[j],
+-													mode_lib->vba.WritebackChromaHTaps[j],
+-													mode_lib->vba.WritebackChromaVTaps[j],
+-													mode_lib->vba.WritebackDestinationWidth[j])
+-													/ mode_lib->vba.DISPCLK);
++							dml_max(mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k],
++								mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(v, j) / mode_lib->vba.DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -2975,16 +2947,17 @@ static double CalculateRemoteSurfaceFlipDelay(
+ 	return result;
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth)
++double dlm20_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i)
+ {
++	const enum source_format_class WritebackPixelFormat = vba->WritebackPixelFormat[i];
++	const double WritebackHRatio = vba->WritebackHRatio[i];
++	const double WritebackVRatio = vba->WritebackVRatio[i];
++	const unsigned int WritebackLumaHTaps = vba->WritebackLumaHTaps[i];
++	const unsigned int WritebackLumaVTaps = vba->WritebackLumaVTaps[i];
++	const unsigned int WritebackChromaHTaps = vba->WritebackChromaHTaps[i];
++	const unsigned int WritebackChromaVTaps = vba->WritebackChromaVTaps[i];
++	const unsigned int WritebackDestinationWidth = vba->WritebackDestinationWidth[i];
++
+ 	double CalculateWriteBackDelay =
+ 			dml_max(
+ 					dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio,
+@@ -4619,15 +4592,7 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 				if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 					if (mode_lib->vba.WritebackEnable[k] == true) {
+ 						locals->WritebackDelay[i][k] = mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k]) / locals->RequiredDISPCLK[i][j];
++							+ dlm20_CalculateWriteBackDelay(locals, k) / locals->RequiredDISPCLK[i][j];
+ 					} else {
+ 						locals->WritebackDelay[i][k] = 0.0;
+ 					}
+@@ -4636,15 +4601,8 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 								&& mode_lib->vba.WritebackEnable[m]
+ 										== true) {
+ 							locals->WritebackDelay[i][k] = dml_max(locals->WritebackDelay[i][k],
+-											mode_lib->vba.WritebackLatency + CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[m],
+-													mode_lib->vba.WritebackHRatio[m],
+-													mode_lib->vba.WritebackVRatio[m],
+-													mode_lib->vba.WritebackLumaHTaps[m],
+-													mode_lib->vba.WritebackLumaVTaps[m],
+-													mode_lib->vba.WritebackChromaHTaps[m],
+-													mode_lib->vba.WritebackChromaVTaps[m],
+-													mode_lib->vba.WritebackDestinationWidth[m]) / locals->RequiredDISPCLK[i][j]);
++											       mode_lib->vba.WritebackLatency +
++											       dlm20_CalculateWriteBackDelay(locals, m) / locals->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+index edd098c7eb92..b02dda8ce70f 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+@@ -241,15 +241,7 @@ static void CalculateFlipSchedule(
+ 		double *DestinationLinesToRequestRowInImmediateFlip,
+ 		double *final_flip_bw,
+ 		bool *ImmediateFlipSupportedForPipe);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth);
++double dlm20_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i);
+ 
+ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib);
+ static void dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
+@@ -1145,6 +1137,7 @@ static unsigned int CalculateVMAndRowBytes(
+ static void dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
+ 		struct display_mode_lib *mode_lib)
+ {
++	struct vba_vars_st *v = &mode_lib->vba;
+ 	unsigned int j, k;
+ 
+ 	mode_lib->vba.WritebackDISPCLK = 0.0;
+@@ -2016,17 +2009,7 @@ static void dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndP
+ 		if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 			if (mode_lib->vba.WritebackEnable[k] == true) {
+ 				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] =
+-						mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k])
+-										/ mode_lib->vba.DISPCLK;
++					mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(v, k) / mode_lib->vba.DISPCLK;
+ 			} else
+ 				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
+ 			for (j = 0; j < mode_lib->vba.NumberOfActivePlanes; ++j) {
+@@ -2036,16 +2019,7 @@ static void dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndP
+ 							dml_max(
+ 									mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k],
+ 									mode_lib->vba.WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[j],
+-													mode_lib->vba.WritebackHRatio[j],
+-													mode_lib->vba.WritebackVRatio[j],
+-													mode_lib->vba.WritebackLumaHTaps[j],
+-													mode_lib->vba.WritebackLumaVTaps[j],
+-													mode_lib->vba.WritebackChromaHTaps[j],
+-													mode_lib->vba.WritebackChromaVTaps[j],
+-													mode_lib->vba.WritebackDestinationWidth[j])
+-													/ mode_lib->vba.DISPCLK);
++									+ dlm20_CalculateWriteBackDelay(v, j) / mode_lib->vba.DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -3048,66 +3022,6 @@ static double CalculateRemoteSurfaceFlipDelay(
+ 	return result;
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth)
+-{
+-	double CalculateWriteBackDelay =
+-			dml_max(
+-					dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio,
+-					WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1)
+-							* dml_ceil(
+-									WritebackDestinationWidth
+-											/ 4.0,
+-									1)
+-							+ dml_ceil(1.0 / WritebackVRatio, 1)
+-									* (dml_ceil(
+-											WritebackLumaVTaps
+-													/ 4.0,
+-											1) + 4));
+-
+-	if (WritebackPixelFormat != dm_444_32) {
+-		CalculateWriteBackDelay =
+-				dml_max(
+-						CalculateWriteBackDelay,
+-						dml_max(
+-								dml_ceil(
+-										WritebackChromaHTaps
+-												/ 2.0,
+-										1)
+-										/ (2
+-												* WritebackHRatio),
+-								WritebackChromaVTaps
+-										* dml_ceil(
+-												1
+-														/ (2
+-																* WritebackVRatio),
+-												1)
+-										* dml_ceil(
+-												WritebackDestinationWidth
+-														/ 2.0
+-														/ 2.0,
+-												1)
+-										+ dml_ceil(
+-												1
+-														/ (2
+-																* WritebackVRatio),
+-												1)
+-												* (dml_ceil(
+-														WritebackChromaVTaps
+-																/ 4.0,
+-														1)
+-														+ 4)));
+-	}
+-	return CalculateWriteBackDelay;
+-}
+-
+ static void CalculateActiveRowBandwidth(
+ 		bool GPUVMEnable,
+ 		enum source_format_class SourcePixelFormat,
+@@ -4745,15 +4659,7 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
+ 				if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 					if (mode_lib->vba.WritebackEnable[k] == true) {
+ 						locals->WritebackDelay[i][k] = mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k]) / locals->RequiredDISPCLK[i][j];
++							+ dlm20_CalculateWriteBackDelay(locals, k) / locals->RequiredDISPCLK[i][j];
+ 					} else {
+ 						locals->WritebackDelay[i][k] = 0.0;
+ 					}
+@@ -4762,15 +4668,8 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
+ 								&& mode_lib->vba.WritebackEnable[m]
+ 										== true) {
+ 							locals->WritebackDelay[i][k] = dml_max(locals->WritebackDelay[i][k],
+-											mode_lib->vba.WritebackLatency + CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[m],
+-													mode_lib->vba.WritebackHRatio[m],
+-													mode_lib->vba.WritebackVRatio[m],
+-													mode_lib->vba.WritebackLumaHTaps[m],
+-													mode_lib->vba.WritebackLumaVTaps[m],
+-													mode_lib->vba.WritebackChromaHTaps[m],
+-													mode_lib->vba.WritebackChromaVTaps[m],
+-													mode_lib->vba.WritebackDestinationWidth[m]) / locals->RequiredDISPCLK[i][j]);
++											       mode_lib->vba.WritebackLatency +
++											       dlm20_CalculateWriteBackDelay(locals, m) / locals->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+index d40d32e380f4..6be14f55c78d 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+@@ -273,15 +273,7 @@ static void CalculateFlipSchedule(
+ 		double *DestinationLinesToRequestRowInImmediateFlip,
+ 		double *final_flip_bw,
+ 		bool *ImmediateFlipSupportedForPipe);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth);
++double dlm20_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i);
+ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 		struct display_mode_lib *mode_lib,
+ 		unsigned int PrefetchMode,
+@@ -2042,17 +2034,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 			if (mode_lib->vba.WritebackEnable[k] == true) {
+ 				locals->WritebackDelay[mode_lib->vba.VoltageLevel][k] =
+-						mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k])
+-										/ mode_lib->vba.DISPCLK;
++					mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(locals, k) / mode_lib->vba.DISPCLK;
+ 			} else
+ 				locals->WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
+ 			for (j = 0; j < mode_lib->vba.NumberOfActivePlanes; ++j) {
+@@ -2062,16 +2044,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 							dml_max(
+ 									locals->WritebackDelay[mode_lib->vba.VoltageLevel][k],
+ 									mode_lib->vba.WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[j],
+-													mode_lib->vba.WritebackHRatio[j],
+-													mode_lib->vba.WritebackVRatio[j],
+-													mode_lib->vba.WritebackLumaHTaps[j],
+-													mode_lib->vba.WritebackLumaVTaps[j],
+-													mode_lib->vba.WritebackChromaHTaps[j],
+-													mode_lib->vba.WritebackChromaVTaps[j],
+-													mode_lib->vba.WritebackDestinationWidth[j])
+-													/ mode_lib->vba.DISPCLK);
++									+ dlm20_CalculateWriteBackDelay(locals, j) / mode_lib->vba.DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -3062,66 +3035,6 @@ static double CalculateRemoteSurfaceFlipDelay(
+ 	return result;
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackLumaHTaps,
+-		unsigned int WritebackLumaVTaps,
+-		unsigned int WritebackChromaHTaps,
+-		unsigned int WritebackChromaVTaps,
+-		unsigned int WritebackDestinationWidth)
+-{
+-	double CalculateWriteBackDelay =
+-			dml_max(
+-					dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio,
+-					WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1)
+-							* dml_ceil(
+-									WritebackDestinationWidth
+-											/ 4.0,
+-									1)
+-							+ dml_ceil(1.0 / WritebackVRatio, 1)
+-									* (dml_ceil(
+-											WritebackLumaVTaps
+-													/ 4.0,
+-											1) + 4));
+-
+-	if (WritebackPixelFormat != dm_444_32) {
+-		CalculateWriteBackDelay =
+-				dml_max(
+-						CalculateWriteBackDelay,
+-						dml_max(
+-								dml_ceil(
+-										WritebackChromaHTaps
+-												/ 2.0,
+-										1)
+-										/ (2
+-												* WritebackHRatio),
+-								WritebackChromaVTaps
+-										* dml_ceil(
+-												1
+-														/ (2
+-																* WritebackVRatio),
+-												1)
+-										* dml_ceil(
+-												WritebackDestinationWidth
+-														/ 2.0
+-														/ 2.0,
+-												1)
+-										+ dml_ceil(
+-												1
+-														/ (2
+-																* WritebackVRatio),
+-												1)
+-												* (dml_ceil(
+-														WritebackChromaVTaps
+-																/ 4.0,
+-														1)
+-														+ 4)));
+-	}
+-	return CalculateWriteBackDelay;
+-}
+-
+ static void CalculateActiveRowBandwidth(
+ 		bool GPUVMEnable,
+ 		enum source_format_class SourcePixelFormat,
+@@ -4744,15 +4657,7 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 				if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 					if (mode_lib->vba.WritebackEnable[k] == true) {
+ 						locals->WritebackDelay[i][k] = mode_lib->vba.WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										mode_lib->vba.WritebackPixelFormat[k],
+-										mode_lib->vba.WritebackHRatio[k],
+-										mode_lib->vba.WritebackVRatio[k],
+-										mode_lib->vba.WritebackLumaHTaps[k],
+-										mode_lib->vba.WritebackLumaVTaps[k],
+-										mode_lib->vba.WritebackChromaHTaps[k],
+-										mode_lib->vba.WritebackChromaVTaps[k],
+-										mode_lib->vba.WritebackDestinationWidth[k]) / locals->RequiredDISPCLK[i][j];
++							+ dlm20_CalculateWriteBackDelay(locals, k) / locals->RequiredDISPCLK[i][j];
+ 					} else {
+ 						locals->WritebackDelay[i][k] = 0.0;
+ 					}
+@@ -4761,15 +4666,8 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 								&& mode_lib->vba.WritebackEnable[m]
+ 										== true) {
+ 							locals->WritebackDelay[i][k] = dml_max(locals->WritebackDelay[i][k],
+-											mode_lib->vba.WritebackLatency + CalculateWriteBackDelay(
+-													mode_lib->vba.WritebackPixelFormat[m],
+-													mode_lib->vba.WritebackHRatio[m],
+-													mode_lib->vba.WritebackVRatio[m],
+-													mode_lib->vba.WritebackLumaHTaps[m],
+-													mode_lib->vba.WritebackLumaVTaps[m],
+-													mode_lib->vba.WritebackChromaHTaps[m],
+-													mode_lib->vba.WritebackChromaVTaps[m],
+-													mode_lib->vba.WritebackDestinationWidth[m]) / locals->RequiredDISPCLK[i][j]);
++											mode_lib->vba.WritebackLatency +
++											       dlm20_CalculateWriteBackDelay(locals, m) / locals->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+index 479e2c1a1301..229548733177 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+@@ -268,15 +268,7 @@ static void CalculateFlipSchedule(
+ 		double *DestinationLinesToRequestRowInImmediateFlip,
+ 		double *final_flip_bw,
+ 		bool *ImmediateFlipSupportedForPipe);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		long WritebackDestinationWidth,
+-		long WritebackDestinationHeight,
+-		long WritebackSourceHeight,
+-		unsigned int HTotal);
++double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal);
+ static void CalculateDynamicMetadataParameters(
+ 		int MaxInterDCNTileRepeaters,
+ 		double DPPCLK,
+@@ -2360,29 +2352,15 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (v->BlendingAndTiming[k] == k) {
+ 			if (v->WritebackEnable[k] == true) {
+ 				v->WritebackDelay[v->VoltageLevel][k] = v->WritebackLatency +
+-						CalculateWriteBackDelay(v->WritebackPixelFormat[k],
+-									v->WritebackHRatio[k],
+-									v->WritebackVRatio[k],
+-									v->WritebackVTaps[k],
+-									v->WritebackDestinationWidth[k],
+-									v->WritebackDestinationHeight[k],
+-									v->WritebackSourceHeight[k],
+-									v->HTotal[k]) / v->DISPCLK;
++					dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->DISPCLK;
+ 			} else
+ 				v->WritebackDelay[v->VoltageLevel][k] = 0;
+ 			for (j = 0; j < v->NumberOfActivePlanes; ++j) {
+ 				if (v->BlendingAndTiming[j] == k
+ 						&& v->WritebackEnable[j] == true) {
+ 					v->WritebackDelay[v->VoltageLevel][k] = dml_max(v->WritebackDelay[v->VoltageLevel][k],
+-							v->WritebackLatency + CalculateWriteBackDelay(
+-											v->WritebackPixelFormat[j],
+-											v->WritebackHRatio[j],
+-											v->WritebackVRatio[j],
+-											v->WritebackVTaps[j],
+-											v->WritebackDestinationWidth[j],
+-											v->WritebackDestinationHeight[j],
+-											v->WritebackSourceHeight[j],
+-											v->HTotal[k]) / v->DISPCLK);
++											v->WritebackLatency +
++											dml30_CalculateWriteBackDelay(v, j, v->HTotal[k]) / v->DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -3249,20 +3227,18 @@ double dml30_CalculateWriteBackDISPCLK(
+ 	return dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		long         WritebackDestinationWidth,
+-		long         WritebackDestinationHeight,
+-		long         WritebackSourceHeight,
+-		unsigned int HTotal)
++double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal)
+ {
+-	double CalculateWriteBackDelay = 0;
+-	double Line_length = 0;
+-	double Output_lines_last_notclamped = 0;
+-	double WritebackVInit = 0;
++	const double WritebackVRatio = vba->WritebackVRatio[i];
++	const unsigned int WritebackVTaps = vba->WritebackVTaps[i];
++	const long WritebackDestinationWidth = vba->WritebackDestinationWidth[i];
++	const long WritebackDestinationHeight = vba->WritebackDestinationHeight[i];
++	const long WritebackSourceHeight = vba->WritebackSourceHeight[i];
++
++	double CalculateWriteBackDelay;
++	double Line_length;
++	double Output_lines_last_notclamped;
++	double WritebackVInit;
+ 
+ 	WritebackVInit = (WritebackVRatio + WritebackVTaps + 1) / 2;
+ 	Line_length = dml_max((double) WritebackDestinationWidth, dml_ceil(WritebackDestinationWidth / 6.0, 1) * WritebackVTaps);
+@@ -4578,15 +4554,7 @@ void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 				if (v->BlendingAndTiming[k] == k) {
+ 					if (v->WritebackEnable[k] == true) {
+ 						v->WritebackDelayTime[k] = v->WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										v->WritebackPixelFormat[k],
+-										v->WritebackHRatio[k],
+-										v->WritebackVRatio[k],
+-										v->WritebackVTaps[k],
+-										v->WritebackDestinationWidth[k],
+-										v->WritebackDestinationHeight[k],
+-										v->WritebackSourceHeight[k],
+-										v->HTotal[k]) / v->RequiredDISPCLK[i][j];
++							+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->RequiredDISPCLK[i][j];
+ 					} else {
+ 						v->WritebackDelayTime[k] = 0.0;
+ 					}
+@@ -4595,15 +4563,7 @@ void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 							v->WritebackDelayTime[k] = dml_max(
+ 									v->WritebackDelayTime[k],
+ 									v->WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													v->WritebackPixelFormat[m],
+-													v->WritebackHRatio[m],
+-													v->WritebackVRatio[m],
+-													v->WritebackVTaps[m],
+-													v->WritebackDestinationWidth[m],
+-													v->WritebackDestinationHeight[m],
+-													v->WritebackSourceHeight[m],
+-													v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
++									+ dml30_CalculateWriteBackDelay(v, m, v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index 4e3356d12147..58dc4c046cf4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -258,15 +258,7 @@ static void CalculateFlipSchedule(
+ 		double PDEAndMetaPTEBytesPerFrame,
+ 		double MetaRowBytes,
+ 		double DPTEBytesPerRow);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		int WritebackDestinationWidth,
+-		int WritebackDestinationHeight,
+-		int WritebackSourceHeight,
+-		unsigned int HTotal);
++double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal);
+ 
+ static void CalculateVupdateAndDynamicMetadataParameters(
+ 		int MaxInterDCNTileRepeaters,
+@@ -2508,15 +2500,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (v->BlendingAndTiming[k] == k) {
+ 			if (v->WritebackEnable[k] == true) {
+ 				v->WritebackDelay[v->VoltageLevel][k] = v->WritebackLatency
+-						+ CalculateWriteBackDelay(
+-								v->WritebackPixelFormat[k],
+-								v->WritebackHRatio[k],
+-								v->WritebackVRatio[k],
+-								v->WritebackVTaps[k],
+-								v->WritebackDestinationWidth[k],
+-								v->WritebackDestinationHeight[k],
+-								v->WritebackSourceHeight[k],
+-								v->HTotal[k]) / v->DISPCLK;
++					+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->DISPCLK;
+ 			} else
+ 				v->WritebackDelay[v->VoltageLevel][k] = 0;
+ 			for (j = 0; j < v->NumberOfActivePlanes; ++j) {
+@@ -2524,15 +2508,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 					v->WritebackDelay[v->VoltageLevel][k] = dml_max(
+ 							v->WritebackDelay[v->VoltageLevel][k],
+ 							v->WritebackLatency
+-									+ CalculateWriteBackDelay(
+-											v->WritebackPixelFormat[j],
+-											v->WritebackHRatio[j],
+-											v->WritebackVRatio[j],
+-											v->WritebackVTaps[j],
+-											v->WritebackDestinationWidth[j],
+-											v->WritebackDestinationHeight[j],
+-											v->WritebackSourceHeight[j],
+-											v->HTotal[k]) / v->DISPCLK);
++							+ dml30_CalculateWriteBackDelay(v, j, v->HTotal[k]) / v->DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -3378,32 +3354,6 @@ double dml31_CalculateWriteBackDISPCLK(
+ 	return dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		int WritebackDestinationWidth,
+-		int WritebackDestinationHeight,
+-		int WritebackSourceHeight,
+-		unsigned int HTotal)
+-{
+-	double CalculateWriteBackDelay;
+-	double Line_length;
+-	double Output_lines_last_notclamped;
+-	double WritebackVInit;
+-
+-	WritebackVInit = (WritebackVRatio + WritebackVTaps + 1) / 2;
+-	Line_length = dml_max((double) WritebackDestinationWidth, dml_ceil(WritebackDestinationWidth / 6.0, 1) * WritebackVTaps);
+-	Output_lines_last_notclamped = WritebackDestinationHeight - 1 - dml_ceil((WritebackSourceHeight - WritebackVInit) / WritebackVRatio, 1);
+-	if (Output_lines_last_notclamped < 0) {
+-		CalculateWriteBackDelay = 0;
+-	} else {
+-		CalculateWriteBackDelay = Output_lines_last_notclamped * Line_length + (HTotal - WritebackDestinationWidth) + 80;
+-	}
+-	return CalculateWriteBackDelay;
+-}
+-
+ static void CalculateVupdateAndDynamicMetadataParameters(
+ 		int MaxInterDCNTileRepeaters,
+ 		double DPPCLK,
+@@ -4848,15 +4798,7 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 				if (v->BlendingAndTiming[k] == k) {
+ 					if (v->WritebackEnable[k] == true) {
+ 						v->WritebackDelayTime[k] = v->WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										v->WritebackPixelFormat[k],
+-										v->WritebackHRatio[k],
+-										v->WritebackVRatio[k],
+-										v->WritebackVTaps[k],
+-										v->WritebackDestinationWidth[k],
+-										v->WritebackDestinationHeight[k],
+-										v->WritebackSourceHeight[k],
+-										v->HTotal[k]) / v->RequiredDISPCLK[i][j];
++							+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->RequiredDISPCLK[i][j];
+ 					} else {
+ 						v->WritebackDelayTime[k] = 0.0;
+ 					}
+@@ -4865,15 +4807,7 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 							v->WritebackDelayTime[k] = dml_max(
+ 									v->WritebackDelayTime[k],
+ 									v->WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													v->WritebackPixelFormat[m],
+-													v->WritebackHRatio[m],
+-													v->WritebackVRatio[m],
+-													v->WritebackVTaps[m],
+-													v->WritebackDestinationWidth[m],
+-													v->WritebackDestinationHeight[m],
+-													v->WritebackSourceHeight[m],
+-													v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
++									+ dml30_CalculateWriteBackDelay(v, m, v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+index 2829f179f982..7024412fe441 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+@@ -292,15 +292,7 @@ static void CalculateFlipSchedule(
+ 		double *DestinationLinesToRequestRowInImmediateFlip,
+ 		double *final_flip_bw,
+ 		bool *ImmediateFlipSupportedForPipe);
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		int WritebackDestinationWidth,
+-		int WritebackDestinationHeight,
+-		int WritebackSourceHeight,
+-		unsigned int HTotal);
++double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal);
+ 
+ static void CalculateVupdateAndDynamicMetadataParameters(
+ 		int MaxInterDCNTileRepeaters,
+@@ -2588,15 +2580,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (v->BlendingAndTiming[k] == k) {
+ 			if (v->WritebackEnable[k] == true) {
+ 				v->WritebackDelay[v->VoltageLevel][k] = v->WritebackLatency
+-						+ CalculateWriteBackDelay(
+-								v->WritebackPixelFormat[k],
+-								v->WritebackHRatio[k],
+-								v->WritebackVRatio[k],
+-								v->WritebackVTaps[k],
+-								v->WritebackDestinationWidth[k],
+-								v->WritebackDestinationHeight[k],
+-								v->WritebackSourceHeight[k],
+-								v->HTotal[k]) / v->DISPCLK;
++					+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->DISPCLK;
+ 			} else
+ 				v->WritebackDelay[v->VoltageLevel][k] = 0;
+ 			for (j = 0; j < v->NumberOfActivePlanes; ++j) {
+@@ -2604,15 +2588,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 					v->WritebackDelay[v->VoltageLevel][k] = dml_max(
+ 							v->WritebackDelay[v->VoltageLevel][k],
+ 							v->WritebackLatency
+-									+ CalculateWriteBackDelay(
+-											v->WritebackPixelFormat[j],
+-											v->WritebackHRatio[j],
+-											v->WritebackVRatio[j],
+-											v->WritebackVTaps[j],
+-											v->WritebackDestinationWidth[j],
+-											v->WritebackDestinationHeight[j],
+-											v->WritebackSourceHeight[j],
+-											v->HTotal[k]) / v->DISPCLK);
++							+ dml30_CalculateWriteBackDelay(v, j, v->HTotal[k]) / v->DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -3602,32 +3578,6 @@ double dml314_CalculateWriteBackDISPCLK(
+ 	return dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
+ }
+ 
+-static double CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		int WritebackDestinationWidth,
+-		int WritebackDestinationHeight,
+-		int WritebackSourceHeight,
+-		unsigned int HTotal)
+-{
+-	double CalculateWriteBackDelay;
+-	double Line_length;
+-	double Output_lines_last_notclamped;
+-	double WritebackVInit;
+-
+-	WritebackVInit = (WritebackVRatio + WritebackVTaps + 1) / 2;
+-	Line_length = dml_max((double) WritebackDestinationWidth, dml_ceil(WritebackDestinationWidth / 6.0, 1) * WritebackVTaps);
+-	Output_lines_last_notclamped = WritebackDestinationHeight - 1 - dml_ceil((WritebackSourceHeight - WritebackVInit) / WritebackVRatio, 1);
+-	if (Output_lines_last_notclamped < 0) {
+-		CalculateWriteBackDelay = 0;
+-	} else {
+-		CalculateWriteBackDelay = Output_lines_last_notclamped * Line_length + (HTotal - WritebackDestinationWidth) + 80;
+-	}
+-	return CalculateWriteBackDelay;
+-}
+-
+ static void CalculateVupdateAndDynamicMetadataParameters(
+ 		int MaxInterDCNTileRepeaters,
+ 		double DPPCLK,
+@@ -5092,15 +5042,7 @@ void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_
+ 				if (v->BlendingAndTiming[k] == k) {
+ 					if (v->WritebackEnable[k] == true) {
+ 						v->WritebackDelayTime[k] = v->WritebackLatency
+-								+ CalculateWriteBackDelay(
+-										v->WritebackPixelFormat[k],
+-										v->WritebackHRatio[k],
+-										v->WritebackVRatio[k],
+-										v->WritebackVTaps[k],
+-										v->WritebackDestinationWidth[k],
+-										v->WritebackDestinationHeight[k],
+-										v->WritebackSourceHeight[k],
+-										v->HTotal[k]) / v->RequiredDISPCLK[i][j];
++							+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / v->RequiredDISPCLK[i][j];
+ 					} else {
+ 						v->WritebackDelayTime[k] = 0.0;
+ 					}
+@@ -5109,15 +5051,7 @@ void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_
+ 							v->WritebackDelayTime[k] = dml_max(
+ 									v->WritebackDelayTime[k],
+ 									v->WritebackLatency
+-											+ CalculateWriteBackDelay(
+-													v->WritebackPixelFormat[m],
+-													v->WritebackHRatio[m],
+-													v->WritebackVRatio[m],
+-													v->WritebackVTaps[m],
+-													v->WritebackDestinationWidth[m],
+-													v->WritebackDestinationHeight[m],
+-													v->WritebackSourceHeight[m],
+-													v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
++									+ dml30_CalculateWriteBackDelay(v, m, v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
+index ad100658132f..9778effba7a4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
+@@ -597,15 +597,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (mode_lib->vba.BlendingAndTiming[k] == k) {
+ 			if (mode_lib->vba.WritebackEnable[k] == true) {
+ 				v->WritebackDelay[mode_lib->vba.VoltageLevel][k] = mode_lib->vba.WritebackLatency
+-						+ dml32_CalculateWriteBackDelay(
+-								mode_lib->vba.WritebackPixelFormat[k],
+-								mode_lib->vba.WritebackHRatio[k],
+-								mode_lib->vba.WritebackVRatio[k],
+-								mode_lib->vba.WritebackVTaps[k],
+-								mode_lib->vba.WritebackDestinationWidth[k],
+-								mode_lib->vba.WritebackDestinationHeight[k],
+-								mode_lib->vba.WritebackSourceHeight[k],
+-								mode_lib->vba.HTotal[k]) / mode_lib->vba.DISPCLK;
++					+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / mode_lib->vba.DISPCLK;
+ 			} else
+ 				v->WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
+ 			for (j = 0; j < mode_lib->vba.NumberOfActiveSurfaces; ++j) {
+@@ -614,15 +606,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 					v->WritebackDelay[mode_lib->vba.VoltageLevel][k] =
+ 						dml_max(v->WritebackDelay[mode_lib->vba.VoltageLevel][k],
+ 						mode_lib->vba.WritebackLatency +
+-						dml32_CalculateWriteBackDelay(
+-								mode_lib->vba.WritebackPixelFormat[j],
+-								mode_lib->vba.WritebackHRatio[j],
+-								mode_lib->vba.WritebackVRatio[j],
+-								mode_lib->vba.WritebackVTaps[j],
+-								mode_lib->vba.WritebackDestinationWidth[j],
+-								mode_lib->vba.WritebackDestinationHeight[j],
+-								mode_lib->vba.WritebackSourceHeight[j],
+-								mode_lib->vba.HTotal[k]) / mode_lib->vba.DISPCLK);
++							dml30_CalculateWriteBackDelay(v, j, v->HTotal[k]) / mode_lib->vba.DISPCLK);
+ 				}
+ 			}
+ 		}
+@@ -2864,16 +2848,7 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 					if (mode_lib->vba.WritebackEnable[k] == true) {
+ 						mode_lib->vba.WritebackDelayTime[k] =
+ 							mode_lib->vba.WritebackLatency
+-						+ dml32_CalculateWriteBackDelay(
+-							mode_lib->vba.WritebackPixelFormat[k],
+-							mode_lib->vba.WritebackHRatio[k],
+-							mode_lib->vba.WritebackVRatio[k],
+-							mode_lib->vba.WritebackVTaps[k],
+-							mode_lib->vba.WritebackDestinationWidth[k],
+-							mode_lib->vba.WritebackDestinationHeight[k],
+-							mode_lib->vba.WritebackSourceHeight[k],
+-							mode_lib->vba.HTotal[k])
+-							/ mode_lib->vba.RequiredDISPCLK[i][j];
++							+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / mode_lib->vba.RequiredDISPCLK[i][j];
+ 					} else {
+ 						mode_lib->vba.WritebackDelayTime[k] = 0.0;
+ 					}
+@@ -2883,16 +2858,7 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 							mode_lib->vba.WritebackDelayTime[k] =
+ 								dml_max(mode_lib->vba.WritebackDelayTime[k],
+ 									mode_lib->vba.WritebackLatency
+-								+ dml32_CalculateWriteBackDelay(
+-									mode_lib->vba.WritebackPixelFormat[m],
+-									mode_lib->vba.WritebackHRatio[m],
+-									mode_lib->vba.WritebackVRatio[m],
+-									mode_lib->vba.WritebackVTaps[m],
+-									mode_lib->vba.WritebackDestinationWidth[m],
+-									mode_lib->vba.WritebackDestinationHeight[m],
+-									mode_lib->vba.WritebackSourceHeight[m],
+-									mode_lib->vba.HTotal[m]) /
+-									mode_lib->vba.RequiredDISPCLK[i][j]);
++									+ dml30_CalculateWriteBackDelay(v, m, v->HTotal[m]) / mode_lib->vba.RequiredDISPCLK[i][j]);
+ 						}
+ 					}
+ 				}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+index 5b5b94f1024d..a08de0dc080f 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+@@ -2856,36 +2856,6 @@ void dml32_CalculateDCFCLKDeepSleep(
+ #endif
+ } // CalculateDCFCLKDeepSleep
+ 
+-double dml32_CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		unsigned int         WritebackDestinationWidth,
+-		unsigned int         WritebackDestinationHeight,
+-		unsigned int         WritebackSourceHeight,
+-		unsigned int HTotal)
+-{
+-	double CalculateWriteBackDelay;
+-	double Line_length;
+-	double Output_lines_last_notclamped;
+-	double WritebackVInit;
+-
+-	WritebackVInit = (WritebackVRatio + WritebackVTaps + 1) / 2;
+-	Line_length = dml_max((double) WritebackDestinationWidth,
+-			dml_ceil((double)WritebackDestinationWidth / 6.0, 1.0) * WritebackVTaps);
+-	Output_lines_last_notclamped = WritebackDestinationHeight - 1 -
+-			dml_ceil(((double)WritebackSourceHeight -
+-					(double) WritebackVInit) / (double)WritebackVRatio, 1.0);
+-	if (Output_lines_last_notclamped < 0) {
+-		CalculateWriteBackDelay = 0;
+-	} else {
+-		CalculateWriteBackDelay = Output_lines_last_notclamped * Line_length +
+-				(HTotal - WritebackDestinationWidth) + 80;
+-	}
+-	return CalculateWriteBackDelay;
+-}
+-
+ void dml32_UseMinimumDCFCLK(
+ 		enum dm_use_mall_for_pstate_change_mode UseMALLForPStateChange[],
+ 		bool DRRDisplay[],
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
+index 3dbc9cf46aad..017acfe5af2f 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
+@@ -571,15 +571,7 @@ void dml32_CalculateDCFCLKDeepSleep(
+ 		/* Output */
+ 		double *DCFClkDeepSleep);
+ 
+-double dml32_CalculateWriteBackDelay(
+-		enum source_format_class WritebackPixelFormat,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackVTaps,
+-		unsigned int         WritebackDestinationWidth,
+-		unsigned int         WritebackDestinationHeight,
+-		unsigned int         WritebackSourceHeight,
+-		unsigned int HTotal);
++double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal);
+ 
+ void dml32_UseMinimumDCFCLK(
+ 		enum dm_use_mall_for_pstate_change_mode UseMALLForPStateChange[],
+-- 
+2.27.0
 
