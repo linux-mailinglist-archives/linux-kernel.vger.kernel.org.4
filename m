@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE265BB8B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 16:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FD85BB8B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 16:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiIQOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 10:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S229681AbiIQOMD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 17 Sep 2022 10:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiIQOJm (ORCPT
+        with ESMTP id S229655AbiIQOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 10:09:42 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF3EA447;
-        Sat, 17 Sep 2022 07:09:39 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id cc5so30464413wrb.6;
-        Sat, 17 Sep 2022 07:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=pYbqr2aNSQFCJHmzjmksLP49N3LtXcB9vNHYigKSSVs=;
-        b=HiqH78Kdk4LcaRNy0dm2QjIAS3gNnDqSywE3ziG0txsoTjDDkgQaLg1Wni2axMT0ue
-         0Pk92kVVcyKRzowlwHScfIi2rnVqdDNYzc+MNtMx8hprCkDhYPnq2SDK0K5x3NXmywwM
-         zVqWCOg3XmCtI6JjFouZhonYvmXa7lNwoANIkL06m61iEc+bAukmLHwM3wrJOxW+4zO0
-         yHk+Oy0zK0RPTlYVS3pe1LuM8s4bu92BMOZ69NpMcyrCzrdO/qAN55Ul1VCFbMXr8nFO
-         sbtzf/xFURLhj2v+Dl5ZhMrJM6Maxb1u/geLF/y3BbAaOa1lYiq1jWsoua2lMB30FtYh
-         frvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=pYbqr2aNSQFCJHmzjmksLP49N3LtXcB9vNHYigKSSVs=;
-        b=g+PM9iWCptMdUnljv9Xccq4ps27cgXYbguR+Usp89fx/lcKlk4V74tjNwuNL5DS3lN
-         iiuNVDQ+OHgpJk2WQNRQEQzZGAzI0MM5PjR3rn7Lkwlg4n2P5Urim0IYtcZZbaSv7rf8
-         nnqinldD/DHlfz9+O56n4b4P7m9ydisyslBtuEWW54pz7WrojwUnp+HbXeQuBvjCVtTA
-         zTsdrTClDeNQxb+WX9b0JiXX+hQio+TXSMr2JAY5YMNoQHHAPk5T4wkvdBH+rcMuOBmo
-         xIJFD+hdvxMfpe5O2kA6rAOImuterIw9va01UHZ2Eg68ifQLE0fEuuNXlMEVhKc9mJ9k
-         dMGA==
-X-Gm-Message-State: ACrzQf102nlHQOoeab12BzxB/x6aJ6sB52osBcpc2e4eQO2s0xIacD9X
-        nekU7dF1UqTjKWnLD4naH2w=
-X-Google-Smtp-Source: AMsMyM6C1cgsU+Wbq62GHr4yf2QxG2l5XT6+Y39IGB1UFy7mWTWEP8b4DnaeYvwv6FifXfaGbAPcbw==
-X-Received: by 2002:a5d:540d:0:b0:22a:4069:1e3e with SMTP id g13-20020a5d540d000000b0022a40691e3emr5771318wrv.239.1663423778267;
-        Sat, 17 Sep 2022 07:09:38 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id j15-20020a5d618f000000b0022af63bb6f2sm355570wru.113.2022.09.17.07.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 07:09:37 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 15:09:35 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/35] 5.15.69-rc1 review
-Message-ID: <YyXVH7+avo0rxXT5@debian>
-References: <20220916100446.916515275@linuxfoundation.org>
+        Sat, 17 Sep 2022 10:11:59 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B84C32BAF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 07:11:56 -0700 (PDT)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay03.hostedemail.com (Postfix) with ESMTP id 2CC67A098E;
+        Sat, 17 Sep 2022 14:11:55 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id CBF4520029;
+        Sat, 17 Sep 2022 14:11:52 +0000 (UTC)
+Message-ID: <d52110471b332b047777616c762b086ee662225e.camel@perches.com>
+Subject: Re: [PATCH] get_maintainer: Extend matched name characters in
+ maintainers_in_file()
+From:   Joe Perches <joe@perches.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     linux-kernel@vger.kernel.org
+Date:   Sat, 17 Sep 2022 07:11:52 -0700
+In-Reply-To: <20220916084712.84411-1-j@jannau.net>
+References: <20220916084712.84411-1-j@jannau.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: a3wde81h37fa11brnunp4cuarrmyiwtx
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: CBF4520029
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+qnfjlUuy4feuD6GX19kec/WEMt4lpGCs=
+X-HE-Tag: 1663423912-80121
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Fri, Sep 16, 2022 at 12:08:23PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.69 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, 2022-09-16 at 10:47 +0200, Janne Grunau wrote:
+> Extend the regexp matching name characters to cover Unicode blocks Latin
+> Extended-A and Extended-B.
+> Fixes 'scripts/get_maintainer.pl -f' for
+> 'Documentation/devicetree/bindings/clock/apple,nco.yaml'.
 > 
-> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> 
+> ---
+> This still excludes Greek and Cyrilic characters which should be
+> expected in names as well. I tried to use '\p{L}' to match all Unicode
+> letters but couldn't get it to work. Feel free understand this as bug
+> report with an incomplete fix.
 
-Build test (gcc version 12.2.1 20220819):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Maybe use \p{XPosixAlpha} ?
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+but I don't know what version of perl introduced this.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1845
-[2]. https://openqa.qa.codethink.co.uk/tests/1848
-[3]. https://openqa.qa.codethink.co.uk/tests/1850
+> diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+[]
+> @@ -442,7 +442,7 @@ sub maintainers_in_file {
+>  	my $text = do { local($/) ; <$f> };
+>  	close($f);
+>  
+> -	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> +	my @poss_addr = $text =~ m$[A-Za-zÀ-ɏ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+	my @poss_addr = $text =~ m$[\p{XPosixAlpha}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
 
---
-Regards
-Sudip
+?
+
+>  	push(@file_emails, clean_file_emails(@poss_addr));
+>      }
+>  }
+> @@ -2460,7 +2460,7 @@ sub clean_file_emails {
+>  	    $name = "";
+>  	}
+>  
+> -	my @nw = split(/[^A-Za-zÀ-ÿ\'\,\.\+-]/, $name);
+> +	my @nw = split(/[^A-Za-zÀ-ɏ\'\,\.\+-]/, $name);
+
+Maybe here too
+
+> +	my @nw = split(/[^\p{XPosixAlpha}\'\,\.\+-]/, $name);
+
+Dunno haven't tested.  Maybe you care to test?
+
