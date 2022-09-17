@@ -2,89 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D905BB75A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF7A5BB75D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIQI7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
+        id S229704AbiIQJAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIQI7j (ORCPT
+        with ESMTP id S229454AbiIQJAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:59:39 -0400
-X-Greylist: delayed 276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Sep 2022 01:59:35 PDT
-Received: from tulikuusama2.dnainternet.net (tulikuusama2.dnainternet.net [83.102.40.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13AABC1;
-        Sat, 17 Sep 2022 01:59:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 7C5D2286EB;
-        Sat, 17 Sep 2022 11:59:30 +0300 (EEST)
-X-Virus-Scanned: DNA Internet at dnainternet.net
-X-Spam-Score: 2.975
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
-Received: from tulikuusama2.dnainternet.net ([83.102.40.151])
-        by localhost (tulikuusama2.dnainternet.net [127.0.0.1]) (DNA Internet, port 10041)
-        with ESMTP id Auole-u3B_-5; Sat, 17 Sep 2022 11:59:30 +0300 (EEST)
-Received: from omenapuu2.dnainternet.net (omenapuu2.dnainternet.net [83.102.40.54])
-        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 5390E25E71;
-        Sat, 17 Sep 2022 11:59:30 +0300 (EEST)
-Received: from localhost (87-95-96-237.bb.dnainternet.fi [87.95.96.237])
-        by omenapuu2.dnainternet.net (Postfix) with ESMTP id 923AF1BF;
-        Sat, 17 Sep 2022 11:59:23 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Sat, 17 Sep 2022 11:59:22 +0300
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>, brgl@bgdev.pl,
-        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 1/3] gpio: idio-16: Introduce the ACCES IDIO-16 GPIO
- library module
-Message-ID: <YyWMai1UZPaBbsOx@surfacebook>
-References: <cover.1662927941.git.william.gray@linaro.org>
- <6b28fb497c35def57c1920362c82402bed4bd23f.1662927941.git.william.gray@linaro.org>
- <YyCs1/HgOG31MX1N@smile.fi.intel.com>
- <YyNIxWS0sneUKas0@fedora>
+        Sat, 17 Sep 2022 05:00:20 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F191D0C5;
+        Sat, 17 Sep 2022 02:00:18 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 673A340004;
+        Sat, 17 Sep 2022 09:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663405216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8VEyWt/RYAY3zpkgir+Y3PaZ3FmEx5dtQi+QxOJw0aA=;
+        b=MYG1Db67qpNBXmwj+s8DOP/MOl01Z07609no99A8mJAxaRtZcejq34G2SZrChj95Y+giJW
+        uk5EwjOv1ZTYoh7Ea9Yr4+QXn7Iss1lqY0FqsYwP5psD2dF+KrcgDTehqa8W3rAhG1akX1
+        NtBXkYiz0TzXu+YlWJHw7oOCjYQoNsC3+xeTUjOTdVjTYkCT7ClJaVnbmUdNtNy4KUJWTm
+        sdrOanqjcsFST0uHAEkqlmr1IDgYuA3KuQnT6LFhMhn0zrBoIcTI4IIsU5NJhuwF+AyteM
+        9JIMTHO/ajk07RpsxySEj2yUf7Srm0yh9KRtK8iYHr8iYBckUCHHDvb2y2xStw==
+Date:   Sat, 17 Sep 2022 11:00:13 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 2/5] net: dsa: add out-of-band tagging
+ protocol
+Message-ID: <20220917110013.78710782@fedora>
+In-Reply-To: <20220917001521.wskocisy53vozska@skbuf>
+References: <20220909152454.7462-1-maxime.chevallier@bootlin.com>
+        <20220909152454.7462-3-maxime.chevallier@bootlin.com>
+        <20220917001521.wskocisy53vozska@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyNIxWS0sneUKas0@fedora>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thu, Sep 15, 2022 at 11:46:13AM -0400, William Breathitt Gray kirjoitti:
-> On Tue, Sep 13, 2022 at 07:16:23PM +0300, Andy Shevchenko wrote:
-> > On Sun, Sep 11, 2022 at 04:34:38PM -0400, William Breathitt Gray wrote:
+Hello Vladimir,
 
-...
+Thanks for the comment :)
 
-> > > +	if (value)
-> > > +		set_bit(offset, state->out_state);
-> > > +	else
-> > > +		clear_bit(offset, state->out_state);
-> > 
-> > assign_bit()
-> > 
-> > But I'm wondering why do you need the atomic bitops under the lock?
+On Sat, 17 Sep 2022 00:15:22 +0000
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+
+> Hi Maxime,
 > 
-> I don't think atomic bitops are necessary in this case because of the
-> lock as you pointedly out, but I felt using these made the intention of
-> the code clearer. Is there a non-atomic version of assign_bit(), or do
-> you recommend I use bitwise operations directly here instead?
+> On Fri, Sep 09, 2022 at 05:24:51PM +0200, Maxime Chevallier wrote:
+> > +int dsa_oob_tag_push(struct sk_buff *skb, struct dsa_oob_tag_info
+> > *ti) +{
+> > +	struct dsa_oob_tag_info *tag_info;
+> > +
+> > +	tag_info = (struct dsa_oob_tag_info *)skb->head;
+> > +
+> > +	tag_info->proto = ti->proto;
+> > +	tag_info->dp = ti->dp;
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL(dsa_oob_tag_push);
+> > +
+> > +int dsa_oob_tag_pop(struct sk_buff *skb, struct dsa_oob_tag_info
+> > *ti) +{
+> > +	struct dsa_oob_tag_info *tag_info;
+> > +
+> > +	tag_info = (struct dsa_oob_tag_info *)skb->head;
+> > +
+> > +	if (tag_info->proto != DSA_TAG_PROTO_OOB)
+> > +		return -EINVAL;
+> > +
+> > +	ti->proto = tag_info->proto;
+> > +	ti->dp = tag_info->dp;
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL(dsa_oob_tag_pop);
+> > +
+> > +static struct sk_buff *oob_tag_xmit(struct sk_buff *skb,
+> > +				    struct net_device *dev)
+> > +{
+> > +	struct dsa_port *dp = dsa_slave_to_port(dev);
+> > +	struct dsa_oob_tag_info tag_info;
+> > +
+> > +	tag_info.dp = dp->index;
+> > +	tag_info.proto = DSA_TAG_PROTO_OOB;
+> > +
+> > +	if (dsa_oob_tag_push(skb, &tag_info))
+> > +		return NULL;
+> > +
+> > +	return skb;
+> > +}  
+> 
+> I don't have too many comments on this patch set, except for a very
+> fundamental one. It is impossible to pass a DSA out of band header
+> between the switch tagging protocol driver and the host Ethernet
+> controller via the beginning of skb->head, and just putting some magic
+> bytes there and hoping that no random junk in the buffer will have the
+> same value (and that skb_push() calls will not eat into your tag_info
+> structure which isn't accounted for in any way by skb->data).
+> 
+> Please create an skb extension for this, it is the only unambiguous
+> way to deal with the given hardware, which will not give lots of
+> headaches in the future.
 
-__assign_bit()
+I have no problem with the skb extension approach, my goal from the
+start was to find the correct way to approach this tagging process.
+I'll spin a new version with the skb extension approach then, unless
+someone else sees a problem with using skb extensions ?
 
-Hint: All __ prefixed bitops (for a single bit operation!) are considered
-non-atomic. There are exceptions when no __-variant of op is present, but
-it not the case here AFAICS. 
+Thanks,
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Maxime
