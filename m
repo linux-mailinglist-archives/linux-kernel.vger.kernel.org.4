@@ -2,107 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4965BB77B
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D385BB780
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiIQJQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 05:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S229606AbiIQJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIQJQj (ORCPT
+        with ESMTP id S229510AbiIQJR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:16:39 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32B045F63;
-        Sat, 17 Sep 2022 02:16:36 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 09:16:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1663406192; x=1663665392;
-        bh=WtH1XiJMuAo2t7Ag08kalVAzbnlWzm46SLxhU7NTyU4=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=wrMZSanWm0KJNnm3ykOCdOL3myVpKchYhLarOh+NsiXJB3cNn0XiZL2PXDM6LtgBL
-         3apqAbQLnHqEh+eoVn63MLzOc906v+d+cUbfJ7xjwtZPIpLDp0VA5MAShrxzjReeR5
-         M7EvduAsjV/qy4vIacG6Y4U/isHOKKOzBg/bah+2GmOqPNKtrznVv1st9g2xOZEqkV
-         XUeyh6D0dktGbx7x+5AFx72NVxUZP4NlfAo2XDtrCaycemsJPpqV6rVhIEdjUd7wzp
-         0MAp+ypX4PO1Rlcbi6BYF02vair4YktlZi5QGPL6Pye/WVA25lTRB3xEw+Nwd0/b0a
-         sZMpKhkpZNHrw==
-To:     linux-kernel@vger.kernel.org
-From:   Orlando Chamberlain <redecorating@protonmail.com>
-Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        gargaditya08@live.com, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        stable@vger.kernel.org, Samuel Jiang <chyishian.jiang@gmail.com>
-Subject: [PATCHv2 1/1] efi: Correct Macmini DMI match in uefi cert quirk
-Message-ID: <20220917091532.3607-1-redecorating@protonmail.com>
-Feedback-ID: 28131841:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 17 Sep 2022 05:17:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618F45980;
+        Sat, 17 Sep 2022 02:17:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FDD661325;
+        Sat, 17 Sep 2022 09:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D24C433D6;
+        Sat, 17 Sep 2022 09:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663406244;
+        bh=PmSUO1q26n8MEHPMpIYDhyZ/koyt1KmDorHa9IO2m/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HA5DdpxrG2ueLj2osB/uvUxmx4+XW5pRkJWkoiyoAXPNlifZ41iDMJ0rSlMVAlY+y
+         fDj++YypuEDBTFhddLNqYs5BPW734ykOeV6rQ7jNfWyJSu8a8YntqFB+gXNzwLdMRx
+         XiBGmw5oFRpNn0jpUAzSwj0dAV0rwEEkSrBsaZT1zL7tvgA3GYqKt2wWJ6Bz9AxLh9
+         VuPLckmtgNiuBPR/X1g97i7b/wmqq22dRr8L1nIKnAg1qbSuUKHqkvea7MWOAR9LrU
+         wrCv2491ajVxmY16LHkli/YpW7Mzs1s1nVwLvmpnEzpUO9UNxx0sMHksDQYvYLKonq
+         RVX7TpWvNAh/w==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oZTww-00AlgE-0k;
+        Sat, 17 Sep 2022 10:17:22 +0100
+Date:   Sat, 17 Sep 2022 10:17:19 +0100
+Message-ID: <87pmful5r4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     asahi@lists.linux.dev, Mark Kettenis <kettenis@openbsd.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin =?UTF-8?B?UG92acWhZXI=?= <povik+lin@cutebit.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 00/10] Apple M1 Pro/Max/Ultra device trees
+In-Reply-To: <20220916142550.269905-1-j@jannau.net>
+References: <20220916142550.269905-1-j@jannau.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: j@jannau.net, asahi@lists.linux.dev, kettenis@openbsd.org, alyssa@rosenzweig.io, marcan@marcan.st, krzysztof.kozlowski+dt@linaro.org, povik+lin@cutebit.org, robh+dt@kernel.org, sven@svenpeter.dev, tglx@linutronix.de, vkoul@kernel.org, devicetree@vger.kernel.org, dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
-is inconsistent with other model line names.
+On Fri, 16 Sep 2022 15:25:40 +0100,
+Janne Grunau <j@jannau.net> wrote:
+> 
+> Hej,
+> 
+> this series contains device trees for Apple's M1 Pro, Max and Ultra SoCs
+> and devices based on these SoCs.
+> 
+> Quoting from the main commit:
+> 
+> | These SoCs are found in Apple devices with M1 Pro (t6000), M1 Max
+> | (t6001) and M1 Ultra (t6002).
+> |
+> | t6000 is a cut-down version of t6001, so the former just includes the
+> | latter and disables the missing bits (This is currently just one PMGR
+> | node and all of its domains.
+> |
+> | t6002 is two connected t6001 dies. The implementation seems to use
+> | t6001 with blocks disabled (mostly on the second die). MMIO addresses on
+> | the second die have a constant offset. The interrupt controller is
+> | multi-die aware. This setup can be represented in the device tree with
+> | two top level "soc" nodes. The MMIO offset is applied via "ranges" and
+> | devices are included with preproceesor macros to make the node labels
+> | unique and to specify the die number for the interrupt definition.
+> |
+> | Device nodes are distributed over dtsi files based on whether they are
+> | present on both dies or just on the first die. The only execption is the
+> | NVMe controller which resides on the second die. Its nodes are in a
+> | separate file.
+> 
+> This series depends for full functionality on t600x dart support (latest
+> version at
+> https://lore.kernel.org/linux-iommu/20220916094152.87137-1-j@jannau.net/T/#t
+> expected to be picked up for 6.1). This is the usual device tree /
+> driver changes runtime dependency.
+> 
+> Even with the t6000-dart support t600x devices are not terribly useful
+> in upstream. There is no input device support. The laptop's keyboard
+> and touchpad are missing SPI and HID over SPI drivers. The dwc3
+> USB-C ports are not yet added since they require special handling
+> after disconnect. The PCIe based USB xhci controller in the Mac Studio
+> requires firmware downloaded in a similar way as USB_XHCI_PCI_RENESAS.
+> 
+> To simplify dependency handling this series carries mostly identical
+> device tree additions for M1 and M1 Pro/Max/Ultra as part of the in
+> development audio support.
+> 
+> The series passes dtbs_check with 3 additional dt bindings changes:
+> - "dt-bindings: apple,aic: Fix required item "apple,fiq-index" in
+>   affinity description" (merged as da3b1c294d47 in Linus' repo)
+> - "ASoC: Add Apple MCA I2S transceiver bindings" (6ed462d1c11675)
+>   in sound/for-next
+> - "dt-bindings: iommu: dart: add t6000 compatible"
+>   https://lore.kernel.org/linux-iommu/20220901012519.7167-2-j@jannau.net/
+> 
+> New bindings passes dt_binding_check.
 
-Correct the capitalisation of Macmini in the quirk for skipping loading
-platform certs on T2 Macs.
+For the whole series:
 
-Currently users get:
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-------------[ cut here ]------------
-[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
-WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_grac=
-efully_on_page_fault+0x55/0xe0
-Modules linked in:
-CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3=
-fc40fd08edab32a509fbf4c9bc52d111e
-Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10=
-.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
-Workqueue: efi_rts_wq efi_call_rts
-...
----[ end trace 0000000000000000 ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
+	M.
 
-Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot=
- for T2 Macs")
-Cc: stable@vger.kernel.org
-Cc: Aditya Garg <gargaditya08@live.com>
-Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
-Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
----
-v1->v2: Clarified in commit message that this is for a dmi match string
- security/integrity/platform_certs/load_uefi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
-rity/platform_certs/load_uefi.c
-index 093894a640dc..b78753d27d8e 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_skip_cert[] =3D {
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
--=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
---=20
-2.37.1
-
-
+-- 
+Without deviation from the norm, progress is not possible.
