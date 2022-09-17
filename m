@@ -2,117 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919F25BB768
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6FB5BB76E
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 11:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiIQJID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 05:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S229471AbiIQJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 05:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIQJH7 (ORCPT
+        with ESMTP id S229557AbiIQJKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:07:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C35E24967
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:07:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0569761309
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 09:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C47FCC433C1;
-        Sat, 17 Sep 2022 09:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663405677;
-        bh=mN6OrmlEWafTBrem5aKUHKgVApH1DNBbr9anI0Yk1Yg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PB0ZPMBZnAWZ1zw5KUQZnMcwSr7Qzh7VHP9dAIWTGoQHEXzPSYjwj4Z4NlRscuEtF
-         kFK+UTSiXstlLknXuNsRshkFqgjPVimy68V821BjwNr58X6rnNx0r6Mez0DljrOV6i
-         fv57VR41Ob3D3SpskrdHa5/Ivo4+y4N7/ZEG51M0=
-Date:   Sat, 17 Sep 2022 11:08:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>,
-        "security@kernel.org" <security@kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        xmzyshypnc <1002992920@qq.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
-Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
-Message-ID: <YyWOh+jGvmSdrHqz@kroah.com>
-References: <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com>
- <YxWtfjfpNsoPUrgh@kroah.com>
- <CAJedcCzMo51aiy=Dv7zn7VmL3gwkw7JgzwAPAB2Z27C9CnhoYA@mail.gmail.com>
- <20220907030754.GU1089@zhen-hp.sh.intel.com>
- <CAJedcCxO_Rq0qMeLiHtY5+FuN1A1pDGsZd3gMtvUpm1xbAK3aA@mail.gmail.com>
- <Yxmzj2nCoTKurCY8@kroah.com>
- <CAJedcCwVC6Rg+wF7h6GhFvL6BGkKV=DS9Mo9fOf-gfDAk9VqPg@mail.gmail.com>
- <CAJedcCxRQ4h-ChNsD4OWpDMUJd3JNaQrvD=uVKxMpYONGFUgzA@mail.gmail.com>
- <YyQzDlM5n7mOLh5Q@kroah.com>
- <CAJedcCzt_1ZRV5egMLdoFVZ4hBDE+nDu9fLkBuGY0A=uYicvQA@mail.gmail.com>
+        Sat, 17 Sep 2022 05:10:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC801120AF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 02:09:52 -0700 (PDT)
+X-UUID: ef08d10da28c497091475c20b575e2b0-20220917
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=PYYFMRcPQW3ZdJsCN7MYnL4roheIU49u8URy+7ml9HQ=;
+        b=QTJRd4NZi8xpxn1XN5v1f7q+KoYDtCA+JeIjcFbFLNYmrElCkcVDVhWYUy5OCKg1Z55Rm2Q86vIzFGgR++mG1+lZILKiQ+ZLUctGCY7gQ885257njkKCphKjnsGkxcgcGNPzr5uuVtvFpok5e81Hv23RLSrInACG2eEaUK1qrGE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:1162a7cc-4509-4c3e-9146-9b47670351d0,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.11,REQID:1162a7cc-4509-4c3e-9146-9b47670351d0,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:39a5ff1,CLOUDID:45d38b8a-35ad-4537-90e7-b56a69d5f8a4,B
+        ulkID:220917170947WRAO1WVQ,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: ef08d10da28c497091475c20b575e2b0-20220917
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2133475290; Sat, 17 Sep 2022 17:09:44 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 17 Sep 2022 17:09:42 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Sat, 17 Sep 2022 17:09:42 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
+        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+Subject: [PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
+Date:   Sat, 17 Sep 2022 17:09:40 +0800
+Message-ID: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJedcCzt_1ZRV5egMLdoFVZ4hBDE+nDu9fLkBuGY0A=uYicvQA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 11:54:42PM +0800, Zheng Hacker wrote:
-> >From afe79848cb74cc8e45ab426d13fa2394c87e0422 Mon Sep 17 00:00:00 2001
-> From: xmzyshypnc <1002992920@qq.com>
-> Date: Fri, 16 Sep 2022 23:48:23 +0800
-> Subject: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry
-> 
-> There is a double-free security bug in split_2MB_gtt_entry.
-> 
-> Here is a calling chain :
-> ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
-> 
-> If intel_gvt_dma_map_guest_page failed, it will call
-> ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
-> kfree(spt). But the caller does not notice that, and it will call
-> ppgtt_free_spt again in error path.
-> 
-> Fix this by only freeing spt in ppgtt_invalidate_spt in good case.
-> 
-> Signed-off-by: Zheng Wang <hackerzheng666@gmail.com>
-> ---
->  drivers/gpu/drm/i915/gvt/gtt.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-> index ce0eb03709c3..550519f0acca 100644
-> --- a/drivers/gpu/drm/i915/gvt/gtt.c
-> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-> @@ -959,7 +959,7 @@ static inline int ppgtt_put_spt(struct
-> intel_vgpu_ppgtt_spt *spt)
->     return atomic_dec_return(&spt->refcount);
->  }
-> 
-> -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
-> +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt, int
-> is_error);
-> 
->  static int ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
->         struct intel_gvt_gtt_entry *e)
-> @@ -995,7 +995,7 @@ static int
-> ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
+From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
 
-Still line-wrapped and whitespace broken :(
+1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
+and disable gce ddr enable when gce work job done
+2. split cmdq clk enable/disable api, and control gce ddr enable/disable
+in clk enable/disable function to make sure it could protect when cmdq
+is multiple used by display and mdp
+
+this is only for some SOC which has flag "control_by_sw".
+for this kind of gce, there is a handshake flow between gce and ddr
+hardware,
+if not set ddr enable flag of gce, ddr will fall into idle mode,
+then gce instructions will not process done.
+we need set this flag of gce to tell ddr when gce is idle or busy
+controlled by software flow.
+
+ddr problem is a special case.
+when test suspend/resume case, gce sometimes will pull ddr, and ddr can
+not go to suspend.
+if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
+as you have referred [1] and [2] (8192 and 8195)
+but for mt8186, the gce is more special, except setting of [1] and [2],
+we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
+when gce working to make sure gce could process all instructions ok.
+this case just need normal bootup, if we not set this, display cmdq
+task will timeout, and chrome homescreen will always black screen.
+
+and with this patch, we have done these test on mt8186:
+1.suspend/resume
+2.boot up to home screen
+3.playback video with youtube.
+
+suspend issue is special gce hardware issue, gce client  driver
+command already process done, but gce still pull ddr.
+
+Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
+Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 67 +++++++++++++++++++++++++++---
+ 1 file changed, 61 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 9465f9081515..adb6fce1c90f 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -80,7 +80,10 @@ struct cmdq {
+ 	bool			suspended;
+ 	u8			shift_pa;
+ 	bool			control_by_sw;
++	bool			sw_ddr_en;
+ 	u32			gce_num;
++	atomic_t		usage;
++	spinlock_t		lock;
+ };
+ 
+ struct gce_plat {
+@@ -90,6 +93,46 @@ struct gce_plat {
+ 	u32 gce_num;
+ };
+ 
++static s32 cmdq_clk_enable(struct cmdq *cmdq)
++{
++	s32 usage, ret;
++	unsigned long flags;
++
++	spin_lock_irqsave(&cmdq->lock, flags);
++
++	usage = atomic_inc_return(&cmdq->usage);
++
++	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
++	if (usage <=0 || ret < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
++			usage, ret, cmdq->suspended);
++	} else if (usage == 1) {
++		if (cmdq->sw_ddr_en)
++			writel((0x7 << 16) + 0x7, cmdq->base + GCE_GCTL_VALUE);
++	}
++
++	spin_unlock_irqrestore(&cmdq->lock, flags);
++
++	return ret;
++}
++
++static void cmdq_clk_disable(struct cmdq *cmdq)
++{
++	s32 usage;
++
++	usage = atomic_dec_return(&cmdq->usage);
++
++	if (usage < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
++			usage, cmdq->suspended);
++	} else if (usage == 0) {
++		if (cmdq->sw_ddr_en)
++			writel(0x7, cmdq->base + GCE_GCTL_VALUE);
++	}
++
++	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++}
++
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+@@ -266,7 +309,8 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+ 		cmdq_thread_disable(cmdq, thread);
+-		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++		cmdq_clk_disable(cmdq);
+ 	}
+ }
+ 
+@@ -355,8 +399,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 	task->pkt = pkt;
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+-		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
+-
++		WARN_ON(cmdq_clk_enable(cmdq) < 0);
+ 		/*
+ 		 * The thread reset will clear thread related register to 0,
+ 		 * including pc, end, priority, irq, suspend and enable. Thus
+@@ -428,7 +471,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
+ 	}
+ 
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	cmdq_clk_disable(cmdq);
+ 
+ done:
+ 	/*
+@@ -468,7 +511,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ 
+ 	cmdq_thread_resume(thread);
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++	cmdq_clk_disable(cmdq);
+ 
+ out:
+ 	spin_unlock_irqrestore(&thread->chan->lock, flags);
+@@ -479,7 +523,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ 	spin_unlock_irqrestore(&thread->chan->lock, flags);
+ 	if (readl_poll_timeout_atomic(thread->base + CMDQ_THR_ENABLE_TASK,
+ 				      enable, enable == 0, 1, timeout)) {
+-		dev_err(cmdq->mbox.dev, "Fail to wait GCE thread 0x%x done\n",
++		dev_err(cmdq->mbox.dev,
++			"Fail to wait GCE thread 0x%x done\n",
+ 			(u32)(thread->base - cmdq->base));
+ 
+ 		return -EFAULT;
+@@ -615,6 +660,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 
+ 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+ 
++	spin_lock_init(&cmdq->lock);
+ 	cmdq_init(cmdq);
+ 
+ 	return 0;
+@@ -660,9 +706,18 @@ static const struct gce_plat gce_plat_v6 = {
+ 	.gce_num = 2
+ };
+ 
++static const struct gce_plat gce_plat_v7 = {
++	.thread_nr = 24,
++	.shift = 3,
++	.control_by_sw = true,
++	.sw_ddr_en = true,
++	.gce_num = 1
++};
++
+ static const struct of_device_id cmdq_of_ids[] = {
+ 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
+ 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
++	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
+ 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
+ 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
+ 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
+-- 
+2.25.1
 
