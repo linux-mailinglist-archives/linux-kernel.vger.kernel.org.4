@@ -2,97 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9683F5BB4E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B953B5BB4E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 02:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiIQAK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Sep 2022 20:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        id S229686AbiIQALY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Sep 2022 20:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiIQAK4 (ORCPT
+        with ESMTP id S229557AbiIQALW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Sep 2022 20:10:56 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A6772FDF;
-        Fri, 16 Sep 2022 17:10:55 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y136so22727803pfb.3;
-        Fri, 16 Sep 2022 17:10:55 -0700 (PDT)
+        Fri, 16 Sep 2022 20:11:22 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A87AF4B2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:11:20 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fs14so22494800pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Sep 2022 17:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=KFW8Lrz6qD+umd1mS93Z94RJAGOU/7BuklYES2+tlvc=;
-        b=S95XJ2h2Yh/uY9gQVigHf5hGkQGVe0J9Tj8MSR8adO647oBGzf/84YU+IAySuCQ5mp
-         wlHZ8JXl7AX8P4wcHea7TQgV86TSdMoYQe5NybR0gYEtM1vAQnzxL2gzzvszg+9xeATh
-         VggxVJeSI+WETjVLlqARja3Jh7reXGk7t8ZLZ82Q7aDxUrq8h6AgdVr21qKVc1rJzRzV
-         DsjO4th/qWFnTNy3hfd/OKBS6d3AYsZrCAmbUAup+fI+UAcs/PO6ea2bCk55NHVxGke3
-         7pJ8KPiCn8WMfn9sG0DN1eCaVlYO1kMMIY/XJO4nizzphuahDNoDbxDvtpmG95yd7cAC
-         Syrw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=9Hg3WExcsAga0Qhwnt0s+/w+FgE+Fu4QOFI0odH5wLw=;
+        b=acmLYJB90z6yu5lwsEGqpEGUuyqXxuAyLieS/i0RxF4QVKRLADMm6JnV+XBMbU9EAA
+         elQkBbIz+sad/CGZx42A8rsnunF+Xok/Oqr7xqReyHCAX/3ws4pKA49/ldpiPL6yTaRg
+         pzUxrW7n2Qf4rg8ztazly0c1K+osu8H2CEbhg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=KFW8Lrz6qD+umd1mS93Z94RJAGOU/7BuklYES2+tlvc=;
-        b=m2RdIPdxdcwAFNcNsVyZfJFTjyTsXWXdMh7hDP2/HLo+KQMwEIyLx2HCyDzAaJmY8I
-         GwBil8i5hF2iaAWSKZgsBn3G3D6XJDSbCk3eG4AdJCxWdi1qKSEa0l+Bg8LkDB7UIiHO
-         UXYB3y3namM5knouUjbtXzRNAAI2/OAK5oANC9a5ZATOwRdytUai65kj3y9/8RtN0I+c
-         MIvztiV4Ct5qWRrCBBSt2NsSpwHjMAIhCEDtc0CYIcWeUC/Wdx0UbrT2I2eqmns1XbJP
-         /+b34aAxwugOjSq6bPWJarmYeOUKKnXtLAadCPguNV27USrN4+HQsPSPYP5JfGm4nWRJ
-         97GA==
-X-Gm-Message-State: ACrzQf3Zl5jytI6gH8sLVHopeHLLRLqBHphD2nHwYyEDJ3tWh/H2EXOp
-        G4gq+Xo72dcsvEB9Oo27NO2xhvnZ4f4sUg==
-X-Google-Smtp-Source: AMsMyM4OTX8idl0VD6igHHYK4x6jOOquNrCi3+1u78eYaUGk2HxEcyhIuyMjxNmPUDs9UsjzhTGDng==
-X-Received: by 2002:a05:6a02:309:b0:434:efcb:ccf4 with SMTP id bn9-20020a056a02030900b00434efcbccf4mr6615874pgb.304.1663373454281;
-        Fri, 16 Sep 2022 17:10:54 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id p67-20020a625b46000000b00540d03f3792sm15002041pfb.81.2022.09.16.17.10.52
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9Hg3WExcsAga0Qhwnt0s+/w+FgE+Fu4QOFI0odH5wLw=;
+        b=gVFx5v5UNkMGHp08Cbur9Xy6QHfDCr+qfVUzeumFZblVqRqslEcpJwqlKVsaT8KSso
+         KM5eCeAgU1eILNmqlOu33LGlfax96K6xUh/vOXgvh6eIXfd/4wM8LxDh75Opk2NZpNIc
+         eLvlvj06NhdzSba8ElQaX9QMrsNc3hGQcMX5ppC8nJXWsMIw19F2oNRaafIYsfu899cN
+         VedCV4adQGhZiyq0ZORtN9dlhi14f9G+8sAL9g7RRAQJo0Sw2gN35dFaYy7+hCeMVAl/
+         aG1eHQbDvhJrjxOzi7uZpN5tWwjEAC/adWWvaZx7gZ95nMHzCk9/pbqh4qQZJaFwwFUy
+         tWyg==
+X-Gm-Message-State: ACrzQf2micTPs/bnmaC8fcLYfWtD/69PJfZqFbYyjZMKfzfpoLZzH1Qk
+        FQgQ1aBZeCTFyLgL6Yv9g/Ln8g==
+X-Google-Smtp-Source: AMsMyM7yb8IkuA2CaVot0t/bvM6dtkqaItFJcFVr0dj47HvZl5Zkqje37Lxyoo/sQLSBjvgXpodG4Q==
+X-Received: by 2002:a17:902:e40c:b0:176:9543:883 with SMTP id m12-20020a170902e40c00b0017695430883mr2207448ple.169.1663373479992;
+        Fri, 16 Sep 2022 17:11:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u126-20020a626084000000b005385e2e86eesm15525980pfb.18.2022.09.16.17.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 17:10:53 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, anthony.l.nguyen@intel.com,
-        jesse.brandeburg@intel.com, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v2] drivers/net/ethernet/intel/e100: check the return value of e100_exec_cmd()
-Date:   Fri, 16 Sep 2022 17:10:27 -0700
-Message-Id: <20220917001027.3799634-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 16 Sep 2022 17:11:19 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 17:11:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/exec.c: Add fast path for ENOENT on PATH search
+ before allocating mm
+Message-ID: <202209161637.9EDAF6B18@keescook>
+References: <5c7333ea4bec2fad1b47a8fa2db7c31e4ffc4f14.1663334978.git.josh@joshtriplett.org>
+ <202209160727.5FC78B735@keescook>
+ <YyTY+OaClK+JHCOw@localhost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyTY+OaClK+JHCOw@localhost>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of e100_exec_cmd() which could return error code
-when execution fails.
+[Hi Peter, apologies for dumping you into the middle of this thread.
+I've got a question about sched_exec() below...]
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/net/ethernet/intel/e100.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Fri, Sep 16, 2022 at 09:13:44PM +0100, Josh Triplett wrote:
+> musl does the same thing, as do python and perl (likely via execvp or
+> posix_spawnp). As does gcc when it executes `as`. And I've seen more
+> than a few programs hand-implement a PATH search the same way. Seems
+> worth optimizing for.
 
-diff --git a/drivers/net/ethernet/intel/e100.c b/drivers/net/ethernet/intel/e100.c
-index 11a884aa5082..0d133cd4d01b 100644
---- a/drivers/net/ethernet/intel/e100.c
-+++ b/drivers/net/ethernet/intel/e100.c
-@@ -1911,7 +1911,9 @@ static inline void e100_start_receiver(struct nic *nic, struct rx *rx)
+Yeah, it does seem like a simple way to eliminate needless work, though
+I'd really like to see some kind of perf count of "in a given kernel
+build, how many execve() system calls fail due to path search vs succeed",
+just to get a better sense of the scale of the problem.
+
+I don't like the idea of penalizing the _succeeding_ case, though, which
+happens if we do the path walk twice. So, I went and refactoring the setup
+order, moving the do_open_execat() up into alloc_bprm() instead of where
+it was in bprm_exec(). The result makes it so it is, as you observed,
+before the mm creation and generally expensive argument copying. The
+difference to your patch seems to only be the allocation of the file
+table entry, but avoids the double lookup, so I'm hoping the result is
+actually even faster.
+
+This cleanup is actually quite satisfying organizationally too -- the
+fd and filename were passed around rather oddly.
+
+The interaction with sched_exec() should be no worse (the file is opened
+before it in either case), but in reading that function, it talks about
+taking the opportunity to move the process to another CPU (IIUC) since,
+paraphrasing, "it is at its lowest memory/cache size." But I wonder if
+there is an existing accidental pessimistic result in that the process
+stack has already been allocated. I am only passingly familiar with how
+tasks get moved around under NUMA -- is the scheduler going to move
+this process onto a different NUMA node and now it will be forced to
+have the userspace process stack on one node and the program text and
+heap on another? Or is that totally lost in the noise?
+
+More specifically, I was wondering if processes would benefit from having
+sched_exec() moved before the mm creation?
+
+Regardless, here's a very lightly tested patch. Can you take this for a
+spin and check your benchmark? Thanks!
+
+-Kees
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 9a5ca7b82bfc..5534301d67ca 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -898,6 +898,10 @@ EXPORT_SYMBOL(transfer_args_to_stack);
  
- 	/* (Re)start RU if suspended or idle and RFA is non-NULL */
- 	if (rx->skb) {
--		e100_exec_cmd(nic, ruc_start, rx->dma_addr);
-+		if (e100_exec_cmd(nic, ruc_start, rx->dma_addr))
-+			netif_printk(nic, tx_err, KERN_DEBUG, nic->netdev,
-+			     "exec ruc_start failed\n");
- 		nic->ru_running = RU_RUNNING;
- 	}
+ #endif /* CONFIG_MMU */
+ 
++/*
++ * On success, callers must call do_close_execat() on the returned
++ * struct file.
++ */
+ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ {
+ 	struct file *file;
+@@ -945,6 +949,16 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ 	return ERR_PTR(err);
  }
--- 
-2.25.1
+ 
++/**
++ * open_exec - Open a path name for execution
++ *
++ * @name: path name to open with the intent of executing it.
++ *
++ * Returns ERR_PTR on failure or allocated struct file on success.
++ *
++ * As this is a wrapper for the internal do_open_execat(), callers
++ * must call allow_write_access() before fput() on release.
++ */
+ struct file *open_exec(const char *name)
+ {
+ 	struct filename *filename = getname_kernel(name);
+@@ -1485,6 +1499,15 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
+ 	return -ENOMEM;
+ }
+ 
++/* Matches do_open_execat() */
++static void do_close_execat(struct file *file)
++{
++	if (!file)
++		return;
++	allow_write_access(file);
++	fput(file);
++}
++
+ static void free_bprm(struct linux_binprm *bprm)
+ {
+ 	if (bprm->mm) {
+@@ -1496,10 +1519,7 @@ static void free_bprm(struct linux_binprm *bprm)
+ 		mutex_unlock(&current->signal->cred_guard_mutex);
+ 		abort_creds(bprm->cred);
+ 	}
+-	if (bprm->file) {
+-		allow_write_access(bprm->file);
+-		fput(bprm->file);
+-	}
++	do_close_execat(bprm->file);
+ 	if (bprm->executable)
+ 		fput(bprm->executable);
+ 	/* If a binfmt changed the interp, free it. */
+@@ -1509,12 +1529,26 @@ static void free_bprm(struct linux_binprm *bprm)
+ 	kfree(bprm);
+ }
+ 
+-static struct linux_binprm *alloc_bprm(int fd, struct filename *filename)
++static struct linux_binprm *alloc_bprm(int fd, struct filename *filename,
++				       int flags)
+ {
+-	struct linux_binprm *bprm = kzalloc(sizeof(*bprm), GFP_KERNEL);
+-	int retval = -ENOMEM;
+-	if (!bprm)
++	struct linux_binprm *bprm;
++	struct file *file;
++	int retval;
++
++	file = do_open_execat(fd, filename, flags);
++	if (IS_ERR(file)) {
++		retval = PTR_ERR(file);
+ 		goto out;
++	}
++
++	retval = -ENOMEM;
++	bprm = kzalloc(sizeof(*bprm), GFP_KERNEL);
++	if (!bprm) {
++		do_close_execat(file);
++		goto out;
++	}
++	bprm->file = file;
+ 
+ 	if (fd == AT_FDCWD || filename->name[0] == '/') {
+ 		bprm->filename = filename->name;
+@@ -1531,6 +1565,18 @@ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename)
+ 	}
+ 	bprm->interp = bprm->filename;
+ 
++	/*
++	 * Record that a name derived from an O_CLOEXEC fd will be
++	 * inaccessible after exec.  This allows the code in exec to
++	 * choose to fail when the executable is not mmaped into the
++	 * interpreter and an open file descriptor is not passed to
++	 * the interpreter.  This makes for a better user experience
++	 * than having the interpreter start and then immediately fail
++	 * when it finds the executable is inaccessible.
++	 */
++	if (bprm->fdpath && get_close_on_exec(fd))
++		bprm->interp_flags |= BINPRM_FLAGS_PATH_INACCESSIBLE;
++
+ 	retval = bprm_mm_init(bprm);
+ 	if (retval)
+ 		goto out_free;
+@@ -1803,10 +1849,8 @@ static int exec_binprm(struct linux_binprm *bprm)
+ /*
+  * sys_execve() executes a new program.
+  */
+-static int bprm_execve(struct linux_binprm *bprm,
+-		       int fd, struct filename *filename, int flags)
++static int bprm_execve(struct linux_binprm *bprm)
+ {
+-	struct file *file;
+ 	int retval;
+ 
+ 	retval = prepare_bprm_creds(bprm);
+@@ -1816,26 +1860,8 @@ static int bprm_execve(struct linux_binprm *bprm,
+ 	check_unsafe_exec(bprm);
+ 	current->in_execve = 1;
+ 
+-	file = do_open_execat(fd, filename, flags);
+-	retval = PTR_ERR(file);
+-	if (IS_ERR(file))
+-		goto out_unmark;
+-
+ 	sched_exec();
+ 
+-	bprm->file = file;
+-	/*
+-	 * Record that a name derived from an O_CLOEXEC fd will be
+-	 * inaccessible after exec.  This allows the code in exec to
+-	 * choose to fail when the executable is not mmaped into the
+-	 * interpreter and an open file descriptor is not passed to
+-	 * the interpreter.  This makes for a better user experience
+-	 * than having the interpreter start and then immediately fail
+-	 * when it finds the executable is inaccessible.
+-	 */
+-	if (bprm->fdpath && get_close_on_exec(fd))
+-		bprm->interp_flags |= BINPRM_FLAGS_PATH_INACCESSIBLE;
+-
+ 	/* Set the unchanging part of bprm->cred */
+ 	retval = security_bprm_creds_for_exec(bprm);
+ 	if (retval)
+@@ -1863,7 +1889,6 @@ static int bprm_execve(struct linux_binprm *bprm,
+ 	if (bprm->point_of_no_return && !fatal_signal_pending(current))
+ 		force_fatal_sig(SIGSEGV);
+ 
+-out_unmark:
+ 	current->fs->in_exec = 0;
+ 	current->in_execve = 0;
+ 
+@@ -1897,7 +1922,7 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	 * further execve() calls fail. */
+ 	current->flags &= ~PF_NPROC_EXCEEDED;
+ 
+-	bprm = alloc_bprm(fd, filename);
++	bprm = alloc_bprm(fd, filename, flags);
+ 	if (IS_ERR(bprm)) {
+ 		retval = PTR_ERR(bprm);
+ 		goto out_ret;
+@@ -1946,7 +1971,7 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 		bprm->argc = 1;
+ 	}
+ 
+-	retval = bprm_execve(bprm, fd, filename, flags);
++	retval = bprm_execve(bprm);
+ out_free:
+ 	free_bprm(bprm);
+ 
+@@ -1971,7 +1996,7 @@ int kernel_execve(const char *kernel_filename,
+ 	if (IS_ERR(filename))
+ 		return PTR_ERR(filename);
+ 
+-	bprm = alloc_bprm(fd, filename);
++	bprm = alloc_bprm(fd, filename, 0);
+ 	if (IS_ERR(bprm)) {
+ 		retval = PTR_ERR(bprm);
+ 		goto out_ret;
+@@ -2006,7 +2031,7 @@ int kernel_execve(const char *kernel_filename,
+ 	if (retval < 0)
+ 		goto out_free;
+ 
+-	retval = bprm_execve(bprm, fd, filename, 0);
++	retval = bprm_execve(bprm);
+ out_free:
+ 	free_bprm(bprm);
+ out_ret:
 
+
+-- 
+Kees Cook
