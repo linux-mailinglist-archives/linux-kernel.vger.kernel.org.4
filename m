@@ -2,140 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D275BB5FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3175BB5FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 06:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiIQEGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 00:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S229612AbiIQELL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 00:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIQEF7 (ORCPT
+        with ESMTP id S229495AbiIQELG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 00:05:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216F165562;
-        Fri, 16 Sep 2022 21:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663387558; x=1694923558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8egC0iJIchIflEUw3SgvHUHfLLT8j/1o/nymXrl1Dz0=;
-  b=Y/T0koT0RalL/dLfFWb93lVnLTdiG0yNz8mdEQH083anTZzv1no26ttx
-   9u2ws4uSFaY74weCnGPZtg0torkqwVskYSz4UzUcPJZue+1nefKWojvvW
-   dEy/5lkdLhdWOIPAoScYsJtLB75rHppIm1T2kgzdyAuN13SAoQdUFOhaz
-   Fpt+mLHxVRMwnjnIgtfdFD4xNCzTPM5eeDYmY9Im+49Zn6pVjwkh9HhMm
-   phKcl/WlpSVNCPTuQdbVwPmX5tyEekCClOqKFH/nmuywDN8UEX6nbmLt0
-   lKitGXvJ6xkVunwGlEJtIWYIKIjsgHszbME98sEZvL66Eh2yarWUi0GEy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="286163637"
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="286163637"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 21:05:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,322,1654585200"; 
-   d="scan'208";a="686366464"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 21:05:54 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZP5V-0002Sg-2x;
-        Sat, 17 Sep 2022 04:05:53 +0000
-Date:   Sat, 17 Sep 2022 12:05:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v1 net-next 1/2] net: mscc: ocelot: utilize
- readx_poll_timeout() for chip reset
-Message-ID: <202209171105.95JOLHu6-lkp@intel.com>
-References: <20220916191349.1659269-2-colin.foster@in-advantage.com>
+        Sat, 17 Sep 2022 00:11:06 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48C85A88A;
+        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 78so22042483pgb.13;
+        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Io+HUzbS9Ne8BTdacwB7WIsyFHjkHKLnRQCl7dgy8uU=;
+        b=qNti11DYvVDIXXP9FsQ3kUX2I85s0QJCofDngVPw72SJ97qA6PbtS2uuTJ7nkLji5B
+         j29Kv0XXEGSMA3JEQHR0u9MEhIQkJfaz3IyfLn8yLzVJsWebXmIDrmDnjWjRaDae99SI
+         xXE8PCEtWNUrQkiAzGhEYetVNYdJTbjF6KhG9fZUvkrESp37s20X1AgjG0vd7znwmjK2
+         WUtkVcPcM35/ELWJpuZu3wNMQhNKj4NslpqEML1/eZ/AGNiiOG0VGCH4tO9y+muvb5ZB
+         pjTRZTXNDycr6LGyEn+To69gEv5+mjnelejPWTUl/F0PvtLU8XzZ4NfhQIT4Oy33maP5
+         s94g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Io+HUzbS9Ne8BTdacwB7WIsyFHjkHKLnRQCl7dgy8uU=;
+        b=qPeMrPfmPfrOOn6a2Kafr6zTs+wodObhQSr6cxObbgS5TCe4fv66dhxrDqPFiyJfDY
+         1b10qj9HZIkreIru490AtUHq3uKYslIs1IY9Z0be3JBw2JE8HDI0DE5XviXZ6IdrMyGe
+         wGwmZjpvnyhI8vFPJcZ34ikiIihVPRc1PhbEDFGctcirJY0UHycoPlM4O/0/BlT5OqmC
+         vzlm0J8ZZav7B0oBxCEIc7Yqpi5vKhBH/2H7hsUsYkvAdYa66UiDB4yxCPCDfUB6ivDq
+         rK4PCaG+SC2T8mHFzG1ggMqc5R6DWQApmDI30bqBGh5nxJimH8NUua9RWR3TOmOK3dKx
+         wb6g==
+X-Gm-Message-State: ACrzQf0KazywSNkBpTIoBGEsrs91RKzZDxkyKKOCuHOE/LVvr+e+e2kI
+        lPmfPMsZkScICCyjMzr75SQ=
+X-Google-Smtp-Source: AMsMyM6+bbip3q7dETPIOMPTuzZSHdNv2yw9alFv2ZExwfcfMeQOMaL4bPGo+YQaFNwQQlhFNV4GGA==
+X-Received: by 2002:a05:6a00:d60:b0:53e:576e:bd8c with SMTP id n32-20020a056a000d6000b0053e576ebd8cmr8177740pfv.4.1663387865370;
+        Fri, 16 Sep 2022 21:11:05 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b0053e42167a33sm15298752pfq.53.2022.09.16.21.11.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 21:11:04 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 60495102B77; Sat, 17 Sep 2022 11:11:01 +0700 (WIB)
+Date:   Sat, 17 Sep 2022 11:11:00 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/35] 5.15.69-rc1 review
+Message-ID: <YyVI1OdOjuEdVAjM@debian.me>
+References: <20220916100446.916515275@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220916191349.1659269-2-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+On Fri, Sep 16, 2022 at 12:08:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.69 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Foster/clean-up-ocelot_reset-routine/20220917-031554
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 862deb68c1bc19783ab7a98ba17a441aa76eba52
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220917/202209171105.95JOLHu6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11df0e8e7af298721b4bb1af286571272dd0d56e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Colin-Foster/clean-up-ocelot_reset-routine/20220917-031554
-        git checkout 11df0e8e7af298721b4bb1af286571272dd0d56e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/mscc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/mscc/ocelot_vsc7514.c:222:6: warning: cast to 'void *' from smaller integer type 'int' [-Wint-to-void-pointer-cast]
-           if (IS_ERR_VALUE(err))
-               ^~~~~~~~~~~~~~~~~
-   include/linux/err.h:22:49: note: expanded from macro 'IS_ERR_VALUE'
-   #define IS_ERR_VALUE(x) unlikely((unsigned long)(void *)(x) >= (unsigned long)-MAX_ERRNO)
-                           ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   1 warning generated.
-
-
-vim +222 drivers/net/ethernet/mscc/ocelot_vsc7514.c
-
-   208	
-   209	static int ocelot_reset(struct ocelot *ocelot)
-   210	{
-   211		int err;
-   212		u32 val;
-   213	
-   214		regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_INIT], 1);
-   215		regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-   216	
-   217		/* MEM_INIT is a self-clearing bit. Wait for it to be cleared (should be
-   218		 * 100us) before enabling the switch core.
-   219		 */
-   220		err = readx_poll_timeout(ocelot_mem_init_status, ocelot, val, !val,
-   221					 MEM_INIT_SLEEP_US, MEM_INIT_TIMEOUT_US);
- > 222		if (IS_ERR_VALUE(err))
-   223			return err;
-   224	
-   225		regmap_field_write(ocelot->regfields[SYS_RESET_CFG_MEM_ENA], 1);
-   226		regmap_field_write(ocelot->regfields[SYS_RESET_CFG_CORE_ENA], 1);
-   227	
-   228		return 0;
-   229	}
-   230	
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara
