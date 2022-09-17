@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620B45BBA1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 21:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324955BBA23
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 21:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiIQTWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 15:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S229473AbiIQTjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 15:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIQTWs (ORCPT
+        with ESMTP id S229462AbiIQTi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 15:22:48 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9E27DE7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 12:22:47 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j16so13632757lfg.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 12:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=4Ovbgm6nZe3/QpGYRlWJovhE/R7kO1q7d0zHL2Mifrc=;
-        b=qUYPBRBfPN8ba4coLRPbhK7ncTZyn7P5fR5x/Jw7xmQQplV7fbm9cTUF9rPQUbKRko
-         Pu1vZVNel79NuIeyr8DrhH8FAyh9MwRFveYIlMbUe0WWsGv4naKQFlDtKlbUY1ZIaqKI
-         I0j4EFJYoxholQe/ayH4v8sRStq9vK2uNwSTjU5XPsTmpsGz6woE7hJoJR4lnIepvySV
-         ALOd0cY13Y+4OPZ09NWPTs6sb4F7kFqDePpCTrsrYqpbqo9R3qrN7EBJkCzYS7fdiWMq
-         j7MP49emET+1ydNUqD7fKYhJKO6oturtCL+KJrtbsnulwssCJDjFCkklfZeAKmnECTba
-         rlRQ==
+        Sat, 17 Sep 2022 15:38:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC9D286CC
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 12:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663443533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LC4UOafPXERXQgNVhU6ZMx3kqWnd3sEpFwg5xWjV1vY=;
+        b=ObNF6/85KJkvqq3euVgMmcOLFf33263rIaGLLK+tUlNGLqVcE/cnl2rpqE03CnTodavWLo
+        ZnQrEVJb3LXtZxi33e/AdtFY6nrsodjgLMSih3KiZRHNxXkvjiqmtODs+zZ1n71AyP3faZ
+        UOrNnXrsSLYHBrNJJ6yDs3gccsjHTEU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-126-g7ECNYHcORmk4O6yN_pX5A-1; Sat, 17 Sep 2022 15:38:52 -0400
+X-MC-Unique: g7ECNYHcORmk4O6yN_pX5A-1
+Received: by mail-ed1-f71.google.com with SMTP id i17-20020a05640242d100b0044f18a5379aso17684629edc.21
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 12:38:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=4Ovbgm6nZe3/QpGYRlWJovhE/R7kO1q7d0zHL2Mifrc=;
-        b=tTyj2v6MOCh7btYh/hFpfTxgxYMvSGrJgkhSoyU5+gzLHr/GojtR2omjvta+b7F96x
-         pqfcrweAYRaX73Qob++DdxMQEVlND9pXlMp+hMO0lCzUEX3Al9q2cPopuCcXAVHSdO4Q
-         kpSa9R+2fiFOF3Uu+vooMltS06UOTgBoP6zVDJ5wCzN1yf4FwUlLaWpVPjDQDGss5I6t
-         PTM+5cCDK5oJoVP4uGgf56nuyvz6XeWgo/4QXlT1zNGPycRKaE9TyU9tpI5dqj55przb
-         CjSX6maFT36onD20ZomHH0JJA6v4iOOhVqKDTqm8ZrOhIwKFNgTLqVVkBWouRymj2rB3
-         F4Hg==
-X-Gm-Message-State: ACrzQf2w8WgHoGEcOj7vbSwxTaRQOpBYWFSFge5uMB7btsBBTYYMXu5v
-        NU9wsEEZVODru10ELjM+VgWRC4HzVfazJwv9EBg=
-X-Google-Smtp-Source: AMsMyM5yAf1p4dlhFzQKaQzWuD3rAawk4dyVy0LkQ3j+q4z6N3tGG6YeSA2+S70HwBnq5kMhtGIW0eLELR8KkKRwagU=
-X-Received: by 2002:ac2:5191:0:b0:497:ac0c:cf65 with SMTP id
- u17-20020ac25191000000b00497ac0ccf65mr3811944lfi.436.1663442565407; Sat, 17
- Sep 2022 12:22:45 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LC4UOafPXERXQgNVhU6ZMx3kqWnd3sEpFwg5xWjV1vY=;
+        b=jVfSWHYKC6KfEOXBAiOBuN0bVeJ51tenzi4vNqUULbREzEYd5o3ciGAnfXc6cZhPkC
+         ma54BjMiucXZ0YJereVHPr5m47bVzepqmjCYtB8NcIdAGu2nop/F9y7Ux6r5mDeHF0I2
+         pN9ktdWn2+FRdz0Fp6kw0Z1W78PmySQ+TbRyqW5XbpAxGnXnpRfyEq9skOSlh0DE7Vwd
+         ph/ac/5+cOvbTcM6UlN/9Fv9zLLMU68IaIu9nD9g1qp2tCfi84n2CXndoyRuXAY9PHlW
+         6cAiQedTBYO3ipph81UZallazRZXRCA0uAh1N2ZwlyUplWDnZbXz/jT5JStR5X6jKFK8
+         O92Q==
+X-Gm-Message-State: ACrzQf0/s3BtfJSNuD/Nl6o04nvwmGeM4CSJqxjlnBdmSAt/sShGpy/N
+        TxdtzLGBdUXFmZ5ccb98q3kZQGzebb7WYctcEo0lljxUpR5+lW9yZwVymlsqnGi751ebAaMpueC
+        XpzWD66/etS8Cc5T1cjEcnArl
+X-Received: by 2002:a17:907:1ca9:b0:77c:99cc:2d84 with SMTP id nb41-20020a1709071ca900b0077c99cc2d84mr7546482ejc.308.1663443530669;
+        Sat, 17 Sep 2022 12:38:50 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5YBU+dTJ7Q+EVaTQ+qfJhnJ2sT5x1uXDwMWbfgt7sGx5POujj8MyXXASYh898qmB+dDQuJfA==
+X-Received: by 2002:a17:907:1ca9:b0:77c:99cc:2d84 with SMTP id nb41-20020a1709071ca900b0077c99cc2d84mr7546473ejc.308.1663443530491;
+        Sat, 17 Sep 2022 12:38:50 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id tl1-20020a170907c30100b0077fde38993asm7591012ejc.152.2022.09.17.12.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 12:38:49 -0700 (PDT)
+Message-ID: <2ef10724-553b-6f90-22ce-0ce3606f69ad@redhat.com>
+Date:   Sat, 17 Sep 2022 21:38:49 +0200
 MIME-Version: 1.0
-References: <20220825191946.1678798-1-maccraft123mc@gmail.com> <b245787a-38fa-4202-cc7a-8fe18bc2308d@redhat.com>
-In-Reply-To: <b245787a-38fa-4202-cc7a-8fe18bc2308d@redhat.com>
-From:   Maya Matuszczyk <maccraft123mc@gmail.com>
-Date:   Sat, 17 Sep 2022 21:22:08 +0200
-Message-ID: <CAO_MupKvwvG8Sg98psArQMHoqpBVxmgwpOzMpw340DoeDkPSng@mail.gmail.com>
-Subject: Re: drm: panel-orientation-quirks: Add quirk for Aya Neo Air
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/2] staging: rtl8723bs: Fix coding style issue in block
+ comment
+Content-Language: en-US
+To:     Kang Minchul <tegongkang@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220917181130.3237159-1-tegongkang@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220917181130.3237159-1-tegongkang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,77 +84,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+Hi,
 
-sob., 17 wrz 2022 o 20:00 Hans de Goede <hdegoede@redhat.com> napisa=C5=82(=
-a):
->
-> Hi,
->
-> On 8/25/22 21:19, Maccraft123 wrote:
-> > From: Maya Matuszczyk <maccraft123mc@gmail.com>
-> >
-> > Yet another x86 gaming handheld.
-> >
-> > This one has many SKUs with quite a few of DMI strings,
-> > so let's just use a catchall, just as with Aya Neo Next.
-> >
-> > Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
->
-> Thanks, I have pushed this out to drm-misc-next now.
->
-> Note for future drm_panel_orientation_quirks.c patches please Cc me,
-> I am not subscribed to dri-devel.
-Yeah i forgot to Cc you on this patch, and had no idea how to bring it up.
-I'll do my best to remember in future.
-Thanks for picking this up!
+On 9/17/22 20:11, Kang Minchul wrote:
+> This patch removes the following warning generated by checkpatch.pl
+> 
+>   WARNING: Block comments use * on subsequent lines
+>   #206: FILE: rtw_recv.c:206:
+>   +/*
+>   +signed int     rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+> 
+>   WARNING: Block comments use * on subsequent lines
+>   #216: FILE: rtw_recv.c:216:
+>   +/*
+>   +caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+> 
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
 
-Best Regards,
-Maya Matuszczyk
+Thanks, patch looks good to me:
 
->
-> Regards,
->
-> Hans
->
->
-> > ---
-> >  drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/g=
-pu/drm/drm_panel_orientation_quirks.c
-> > index fc1728d46ac2..0b011b615495 100644
-> > --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> > +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> > @@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data=
- lcd800x1280_rightside_up =3D {
-> >       .orientation =3D DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
-> >  };
-> >
-> > +static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftsi=
-de_up =3D {
-> > +     .width =3D 1080,
-> > +     .height =3D 1920,
-> > +     .orientation =3D DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
-> > +};
-> > +
-> >  static const struct drm_dmi_panel_orientation_data lcd1200x1920_rights=
-ide_up =3D {
-> >       .width =3D 1200,
-> >       .height =3D 1920,
-> > @@ -152,6 +158,12 @@ static const struct dmi_system_id orientation_data=
-[] =3D {
-> >                 DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "AYA NEO 2021"),
-> >               },
-> >               .driver_data =3D (void *)&lcd800x1280_rightside_up,
-> > +     }, {    /* AYA NEO AIR */
-> > +             .matches =3D {
-> > +               DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
-> > +               DMI_MATCH(DMI_BOARD_NAME, "AIR"),
-> > +             },
-> > +             .driver_data =3D (void *)&lcd1080x1920_leftside_up,
-> >       }, {    /* AYA NEO NEXT */
-> >               .matches =3D {
-> >                 DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
->
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_recv.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
+> index d8d394b67eeb..ad6fb6c3d1f0 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_recv.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
+> @@ -203,22 +203,22 @@ signed int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *q
+>  }
+>  
+>  /*
+> -signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+> -{
+> -	return rtw_free_recvframe(precvframe, queue);
+> -}
+> -*/
+> + * signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+> + * {
+> + * 	return rtw_free_recvframe(precvframe, queue);
+> + * }
+> + */
+>  
+>  
+>  
+>  
+>  /*
+> -caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+> -pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
+> -
+> -using spinlock to protect
+> -
+> -*/
+> + * caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+> + * pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
+> + *
+> + * using spinlock to protect
+> + *
+> + */
+>  
+>  void rtw_free_recvframe_queue(struct __queue *pframequeue,  struct __queue *pfree_recv_queue)
+>  {
+
