@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D9E5BB738
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B095BB73B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Sep 2022 10:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIQIZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 04:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S229816AbiIQIZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 04:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiIQIZX (ORCPT
+        with ESMTP id S229877AbiIQIZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:25:23 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F0D2A27A
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:25:21 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id q26so19501138vsr.7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 01:25:21 -0700 (PDT)
+        Sat, 17 Sep 2022 04:25:42 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45443AE4F;
+        Sat, 17 Sep 2022 01:25:41 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id c11so17540427qtw.8;
+        Sat, 17 Sep 2022 01:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=OWnkPdXKu3Vra2dQWOvgwi58h1KBjnOZlFX9hnEdd7Q=;
-        b=JDr1TzcMbmAMAChokHfQnOl3YbvJYwLwo4eptnMbgpTg/AvbiP1G/E0uB0hL1E/PKB
-         j7z6kL3QPv7tJzN852LdOY3wvt42yG8KffAy5/xPRAr9YM/uEfaQRlhYtA0WEu2DbNiN
-         sEs1lgKpTB6hT9tb0LB3p0LAhSApEeicFFB28aTUzGMtSG8tmP12xmnrI7Ra+GS52/tL
-         Bh+u3T9SPc5zJRZyuKabce5hzwOcVSKCFR5lG5jGOS8KCJgt3hQOIDqiWFvUAI1MxKS7
-         ON5v0tC6kiOOuvIiijapd8QDhTtzVaiAU5e1H6lIT/Q00JIvz9SgaB/W6MIHNGvb8S90
-         Za0A==
+        bh=2s5Im8YH2uK7U63hireyouAIO+Pt2Pckui2xkKi8Z/g=;
+        b=fZCnFg5L8MRWwZp9wRVSN+BuEj1eR7Hy9B/D2j3lB6VFiEOLXITAQYWiunBt9jVxZX
+         LxA0qk2YnqLzAUxE7xxXchiknHxUdLZgRE42UoCiwKhYWANS9BhaAk6G/MH8Qc8YysnZ
+         MKNrU5NrxS95B7Qie4RDfYxvtggm92cDKe84YGVn8eQKxlj88mDMWEKWSpV0/yyPeLfD
+         92LL24ZJ6VDt/bSHhfAfz0HnqzcwAdpITWL0xIUN0iGxPya+QMk6WxLNyVgNoCtBBGhe
+         u6Dr9E61a6fwbUwWQpJcQ5RORivcoudZgaalzty+6o5OMrHUcCn0r9LGGTFUD2JKh2W6
+         hThQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=OWnkPdXKu3Vra2dQWOvgwi58h1KBjnOZlFX9hnEdd7Q=;
-        b=kO6gq2MQKoWTR8Nx/J5To68JJGX5kkTzg2ThH7spfKyoW+3Hh8WoGxtSWGwY+YMGaW
-         mKqMgwsP5vpY7C71egMpaxtlVl9RaL9rrK2DpZhOq9PcDIJaMLiCj0BciDykn2IUzB5L
-         MF3tganlB7bx7kvwQuqoOzN7ITPFfSriej/j/MftJp8JV/r4U85vrKXgKOVeMnZ8cxpQ
-         aCL1TXIOFJru/29GvkZR+UId2lLUP2IFiEDMHwsa6KOj9ObcHaCobnjFbhxVvChACEp9
-         lQS1eznHfD69O/qGOzMn8n29M13xsuUeW7TdAZgfKwwt+orPO6CyypZ/DJMeAeRwoaeL
-         lK2Q==
-X-Gm-Message-State: ACrzQf3PgWMRPjI5IcBkEG1XJMr3M1OZHFpyGyyOcnlKIn6DHlHwTTYq
-        /mNJcbz1kzTQQ00v+yrILaqwSj8buSSIR2KrDV1P3HiB3u50Hg==
-X-Google-Smtp-Source: AMsMyM5tw7tey7pw+h3W7lbyoEHyV4uKxGVlol1rnMiFY9PpvXjI3oFhOU2gjjg24sbixaCFvbqa0KVVN2Tnyf7401w=
-X-Received: by 2002:a05:6102:3309:b0:39a:e5eb:8508 with SMTP id
- v9-20020a056102330900b0039ae5eb8508mr123939vsc.65.1663403120873; Sat, 17 Sep
- 2022 01:25:20 -0700 (PDT)
+        bh=2s5Im8YH2uK7U63hireyouAIO+Pt2Pckui2xkKi8Z/g=;
+        b=1RtXN5sJPziutf658bPV+jdfKUJ5gyUyskcmBnoA7AMR8XnQwOrqCvQINq7oYoZcrr
+         ey2iBfiM17NVya2GsvLl0JLhzAbhh6qKtrTVfhqHeT755jGOra1fcbGfwMJIws4T7uzz
+         LZY7LcTjl7vFANwB9Q/Fzpggm1rV/pyxLsR8creVZQ2hvz4Pum96ykw4jX1I0uoIHGv+
+         n16rAixoDeV/dljWUXsC6h7YilRlLUI6HB0LrI90t7IvLXk5fSdnDuOKGy3kiZwDPCQ+
+         6+9pUTCO6W+KmVwGealB1LK6YpPciSAQ5Ctlr5CkOyQVH1khUXczZaIVDlQPMoZVYTNZ
+         nC6Q==
+X-Gm-Message-State: ACrzQf00xmlBrsWnXioxdE2Rp4ySCCL7GAeYgWLag5NjxVC6Zu6IjFEr
+        qkzo50K/zKKZiFHQy25Taa3ctgbdjH5XSI2M74o=
+X-Google-Smtp-Source: AMsMyM4IOOYQcGlpaTyFt1tkVZ4e1cDxij1c+XecvRaK9eAydYy5u1odf+ik5hk1qXlOR//gClwJmLAceEHelTDpy5M=
+X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
+ z18-20020ac87f92000000b003448cd859a1mr7703789qtj.384.1663403140990; Sat, 17
+ Sep 2022 01:25:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220906194824.2110408-1-Liam.Howlett@oracle.com>
- <20220911172051.ff5faed962c365e203790137@linux-foundation.org> <CAOUHufbeh=v6gFuxyOA5xOtahL1AGUQYgQZzB7edDaS3hoc-LQ@mail.gmail.com>
-In-Reply-To: <CAOUHufbeh=v6gFuxyOA5xOtahL1AGUQYgQZzB7edDaS3hoc-LQ@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sat, 17 Sep 2022 02:24:44 -0600
-Message-ID: <CAOUHufZabH85CeUN-MEMgL8gJGzJEWUrkiM58JkTbBhh-jew0Q@mail.gmail.com>
-Subject: Re: [PATCH v14 00/70] Introducing the Maple Tree
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <20220917081339.3354075-1-jjhiblot@traphandler.com>
+In-Reply-To: <20220917081339.3354075-1-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 17 Sep 2022 11:25:05 +0300
+Message-ID: <CAHp75VcpgVyAmzZ4hRXgUKN9vjbO-5yaJS0V28ZfSwJ7qwqxkg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 0/4] Add a multicolor LED driver for groups of
+ monochromatic LEDs
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        sven.schwermer@disruptive-technologies.com,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        marijn.suijten@somainline.org, bjorn.andersson@linaro.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sha@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +71,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 12:03 PM Yu Zhao <yuzhao@google.com> wrote:
+On Sat, Sep 17, 2022 at 11:14 AM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
 >
-> On Sun, Sep 11, 2022 at 6:20 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 6 Sep 2022 19:48:38 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
-> >
-> > > Patch series "Introducing the Maple Tree".
-> >
-> > I haven't seen any issues attributed to maple tree in 2+ weeks.  Unless
-> > there be weighty objections, I plan to move this series into mm-stable
-> > soon after mglru is added.  Perhaps a week from now.
+> Hi,
 >
-> Tested-by: Yu Zhao <yuzhao@google.com>
+> Resending this series with only a minor modification in the binding
+> example after the comments from Sascha Hauer.
+
+I would suggest to Cc a new version (if required a new version) to
+Lee. It was a discussion about advancing the LED subsystem patch queue
+with his help.
+
+> Original v3 message:
 >
-> stress/fuzzing: arm64, mips64, ppc64 and x86_64
-> performance: arm64 (nodejs), mips64 (memcached), ppc64 (specjbb2015)
-> and x86_64 (mmtests)
-> boot: riscv64
-> not covered: m68knommu and s390 (no hardware available)
+> Some HW design implement multicolor LEDs with several monochromatic LEDs.
+> Grouping the monochromatic LEDs allows to configure them in sync and use
+> the triggers.
+> The PWM multicolor LED driver implements such grouping but only for
+> PWM-based LEDs. As this feature is also desirable for the other types of
+> LEDs, this series implements it for any kind of LED device.
+>
+> changes v2->v3, only minor changes:
+>  - rephrased the Kconfig descritpion
+>  - make the sysfs interface of underlying LEDs read-only only if the probe
+>    is successful.
+>  - sanitize the header files
+>  - removed the useless call to dev_set_drvdata()
+>  - use dev_fwnode() to get the fwnode to the device.
+>
+> changes v1->v2:
+>  - Followed Rob Herrings's suggestion to make the dt binding much simpler.
+>  - Added a patch to store the color property of a LED in its class
+>    structure (struct led_classdev).
+>
+> Jean-Jacques Hiblot (4):
+>   leds: class: simplify the implementation of devm_of_led_get()
+>   leds: class: store the color index in struct led_classdev
+>   dt-bindings: leds: Add binding for a multicolor group of LEDs
+>   leds: Add a multicolor LED driver to group monochromatic LEDs
+>
+>  .../bindings/leds/leds-group-multicolor.yaml  |  64 ++++++++
+>  drivers/leds/led-class.c                      |  27 ++--
+>  drivers/leds/rgb/Kconfig                      |   6 +
+>  drivers/leds/rgb/Makefile                     |   1 +
+>  drivers/leds/rgb/leds-group-multicolor.c      | 153 ++++++++++++++++++
+>  include/linux/leds.h                          |   1 +
+>  6 files changed, 238 insertions(+), 14 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+>  create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
+>
+> --
+> 2.25.1
+>
 
-This should be easy to fix:
 
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.0.0-dbg-DEV #1 Tainted: G S         O
-  ------------------------------------------------------
-  stress-ng/21813 is trying to acquire lock:
-  ffffffff9b043388 (fs_reclaim){+.+.}-{0:0}, at:
-kmem_cache_alloc_bulk+0x3f/0x460
-
-  but task is already holding lock:
-  ffffa2a509f8d080 (&anon_vma->rwsem){++++}-{3:3}, at: do_brk_flags+0x19d/0x410
-
-  which lock already depends on the new lock.
-
-
-  the existing dependency chain (in reverse order) is:
-
-  -> #1 (&anon_vma->rwsem){++++}-{3:3}:
-         down_read+0x3c/0x50
-         folio_lock_anon_vma_read+0x147/0x180
-         rmap_walk_anon+0x55/0x230
-         try_to_unmap+0x65/0xa0
-         shrink_folio_list+0x8c5/0x1c70
-         evict_folios+0x6af/0xb50
-         lru_gen_shrink_lruvec+0x1b6/0x430
-         shrink_lruvec+0xa7/0x470
-         shrink_node_memcgs+0x116/0x1f0
-         shrink_node+0xb4/0x2e0
-         balance_pgdat+0x3b9/0x710
-         kswapd+0x2b1/0x320
-         kthread+0xe5/0x100
-         ret_from_fork+0x1f/0x30
-
-  -> #0 (fs_reclaim){+.+.}-{0:0}:
-         __lock_acquire+0x16f4/0x30c0
-         lock_acquire+0xb2/0x190
-         fs_reclaim_acquire+0x57/0xd0
-         kmem_cache_alloc_bulk+0x3f/0x460
-         mas_alloc_nodes+0x148/0x1e0
-         mas_nomem+0x45/0x90
-         mas_store_gfp+0xf3/0x160
-         do_brk_flags+0x1f2/0x410
-         __do_sys_brk+0x214/0x3b0
-         __x64_sys_brk+0x12/0x20
-         do_syscall_64+0x3d/0x80
-         entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-  other info that might help us debug this:
-
-   Possible unsafe locking scenario:
-
-         CPU0                    CPU1
-         ----                    ----
-    lock(&anon_vma->rwsem);
-                                 lock(fs_reclaim);
-                                 lock(&anon_vma->rwsem);
-    lock(fs_reclaim);
-
-   *** DEADLOCK ***
-
-  2 locks held by stress-ng/21813:
-   #0: ffffa285087f2a58 (&mm->mmap_lock#2){++++}-{3:3}, at:
-__do_sys_brk+0x98/0x3b0
-   #1: ffffa2a509f8d080 (&anon_vma->rwsem){++++}-{3:3}, at:
-do_brk_flags+0x19d/0x410
+-- 
+With Best Regards,
+Andy Shevchenko
