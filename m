@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8475BBD68
+	by mail.lfdr.de (Postfix) with ESMTP id B3A2C5BBD69
 	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiIRKYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 06:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S229685AbiIRKYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 06:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIRKYT (ORCPT
+        with ESMTP id S229770AbiIRKYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 06:24:19 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C0E167F4
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:24:16 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so17363246ilu.17
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:24:16 -0700 (PDT)
+        Sun, 18 Sep 2022 06:24:36 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160A72B0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:24:32 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id n4-20020a056e02100400b002f09be72a53so17540670ilj.18
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:24:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Zi/if1Z/uiBRAE46Fu4c7TXoJHQDRNoavB19umOUukg=;
-        b=Ha5ECWJdqveGovaZWIV4YdscsZM7EN7KZcdLXdsds06NAy6taAc/Ekr+GGqGROw5ML
-         1JdSmSjmCYTDdDlA1lXWOm/C+OAiYq0zdIx10EuoYObE8b9JbsJcojJU5v39USuF5Dik
-         JnxdPcYxP4sLgLkwq45EUbkmRFOwCl8chWZ8WekEZLa39Gpo/5nLc31sOIrE752lodA/
-         hotpdJ3TMPAJUYkGQ9UzqHPp3S7TzCzl+3fdSNK1J7sexy04ZZK8aEcW9fewGxTAgcDS
-         1+gSw6InPAzMzT3cqt7Ok7LvoMl1lKqX/lIrrQevWVwf0XHDQDVKBoF6DqIz7P41xpOJ
-         3/QQ==
-X-Gm-Message-State: ACrzQf2pzcGHLcmtrFdsCNtLrtQIcqjcO3A5i0w0KZi++aeL8/wwiNWB
-        JSYKzg+kmGVoWg+lcNyEBZCwbWvGwzbpxsNg0mZ6g0WJHWZi
-X-Google-Smtp-Source: AMsMyM5Q2Ses7UVsQsK3yO3bzv1MWjxURoEqO+rAbO/gwJFoBjZ4tqQk2TkcaLiDHJ872SfEhdz5GQ1w89UCK8cbj7xj89VuVatU
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=4JhMVIDDJ64BMYvLacf07McKKw+xI7f7f41PajS0mP0=;
+        b=Rpx92D9jvbMvPNihOQ9JAj1T7WpUyoG18RxBV1HskFReHeIYSXVvwA4n28GoNfHxN5
+         8DUNtijcdSxbg7oWT//urw6dAiO+slpIel+t0p61k4KNlbOTnbYm8dHXANdy111VlKtP
+         Fy/e9dOnR2ucPvHVCFYHOaGv66x48XbiOvMrRzwLLrewEhwCaH8lE/CG+sGPHVjand1E
+         cFY4mFCPmned7bdIXXtbA6+QYzHmxVpfLGGcVO3OBgwQA2eRafZRRxftT6vpwX7rHNFx
+         y81siPxR8ISNYR1n75aBbe9WyDXcruaH6tDDtKtoE4fKIyLykuIZVbQVzMij2bYlHY4t
+         5lFA==
+X-Gm-Message-State: ACrzQf0mllyUie+64rVu33LIx2J4J7ZveMutBLGiOEqM4EkIot2tLxie
+        bFL6x2Il9fPBrBnuSCST+P3hcbnoX0DG7BHrEMAUDWlqkrM/
+X-Google-Smtp-Source: AMsMyM6DIl2hw2Izv01tZioDPyfkdJiJEcC/mpuQjtXolvMtgqkhDLJLYrVMrfv41GHRW0LRxy1X0zBGj/DKskDLZ7mx4H/30RLR
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d80b:0:b0:6a0:d510:9d81 with SMTP id
- y11-20020a6bd80b000000b006a0d5109d81mr5142548iob.16.1663496656003; Sun, 18
- Sep 2022 03:24:16 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 03:24:15 -0700
-In-Reply-To: <20220918094405.890-1-hdanton@sina.com>
+X-Received: by 2002:a05:6e02:1a41:b0:2f1:cc2a:69d3 with SMTP id
+ u1-20020a056e021a4100b002f1cc2a69d3mr5243527ilv.46.1663496671433; Sun, 18 Sep
+ 2022 03:24:31 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 03:24:31 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004428d505e8f0ffe4@google.com>
-Subject: Re: [syzbot] BUG: soft lockup in tx
-From:   syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000002f9c9705e8f10055@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in mon_bin_flush
+From:   syzbot <syzbot+43438abe71dab88140c2@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -56,1045 +55,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in handle_tx
+syzbot found the following issue on:
 
-ieee802154 phy0 wpan0: encryption failed: -22
-ieee802154 phy1 wpan1: encryption failed: -22
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Not tainted 6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
+HEAD commit:    a335366bad13 Merge tag 'gpio-fixes-for-v6.0-rc6' of git://..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15212ca0880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=98a30118ec9215e9
+dashboard link: https://syzkaller.appspot.com/bug?extid=43438abe71dab88140c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11feb890880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a27480880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+43438abe71dab88140c2@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc00000001fc: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000fe0-0x0000000000000fe7]
+CPU: 1 PID: 3614 Comm: syz-executor111 Not tainted 6.0.0-rc5-syzkaller-00094-ga335366bad13 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc03
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc03
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43337
-hardirqs last  enabled at (43336): [<ffff80000bfc5e38>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
-hardirqs last  enabled at (43336): [<ffff80000bfc5e38>] exit_to_kernel_mode+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
-hardirqs last disabled at (43337): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+RIP: 0010:mon_bin_flush+0x131/0x290 drivers/usb/mon/mon_bin.c:885
+Code: 48 c1 e9 03 42 80 3c 29 00 0f 85 4f 01 00 00 44 89 f1 81 e1 ff 0f 00 00 48 03 48 08 48 8d 79 24 49 89 cf 48 89 f9 48 c1 e9 03 <42> 0f b6 34 29 48 89 f9 83 e1 07 83 c1 03 40 38 f1 7c 09 40 84 f6
+RSP: 0018:ffffc90003bbfd98 EFLAGS: 00010007
+RAX: ffff88801d023b60 RBX: ffff888078923000 RCX: 00000000000001fc
+RDX: 0000000000000000 RSI: ffffffff859cd539 RDI: 0000000000000fe4
+RBP: 00000000fcffee00 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000fcffee00 R11: 0000000000000000 R12: 0000000000000003
+R13: dffffc0000000000 R14: 0000000002fb6fc0 R15: 0000000000000fc0
+FS:  0000555555576300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff7d93dc736 CR3: 000000001db18000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mon_bin_ioctl+0x198/0xcc0 drivers/usb/mon/mon_bin.c:1091
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fac26b14639
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff3a8a4fb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fac26b14639
+RDX: 00000000200005c0 RSI: 00000000c0109207 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000470 R11: 0000000000000246 R12: 00007fac26ad35e0
+R13: 0000000000000000 R14: 00007fff3a8a4ff0 R15: 00007fff3a8a4fe0
+ </TASK>
+Modules linked in:
 ---[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc08
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc08
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43345
-hardirqs last  enabled at (43344): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43344): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43345): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc0e
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc0e
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43353
-hardirqs last  enabled at (43352): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43352): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43353): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc13
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc13
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43361
-hardirqs last  enabled at (43360): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43360): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43361): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc19
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc19
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43369
-hardirqs last  enabled at (43368): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43368): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43369): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc1e
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc1e
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43377
-hardirqs last  enabled at (43376): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43376): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43377): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc24
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc24
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43385
-hardirqs last  enabled at (43384): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43384): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43385): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc29
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc29
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43393
-hardirqs last  enabled at (43392): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43392): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43393): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc2f
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc2f
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43401
-hardirqs last  enabled at (43400): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43400): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43401): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc34
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc34
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43409
-hardirqs last  enabled at (43408): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43408): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43409): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc3a
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc3a
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43417
-hardirqs last  enabled at (43416): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43416): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43417): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc40
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc40
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43425
-hardirqs last  enabled at (43424): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43424): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43425): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc45
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc45
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43433
-hardirqs last  enabled at (43432): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43432): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43433): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc4a
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc4a
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43441
-hardirqs last  enabled at (43440): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43440): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43441): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc50
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc50
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43449
-hardirqs last  enabled at (43448): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43448): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43449): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc56
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc56
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43457
-hardirqs last  enabled at (43456): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43456): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43457): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc5b
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc5b
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43465
-hardirqs last  enabled at (43464): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43464): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43465): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc61
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc61
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43473
-hardirqs last  enabled at (43472): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43472): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43473): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc66
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc66
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43481
-hardirqs last  enabled at (43480): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43480): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43481): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc6c
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc6c
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43489
-hardirqs last  enabled at (43488): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43488): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43489): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc71
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc71
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43497
-hardirqs last  enabled at (43496): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43496): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43497): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc77
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc77
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43505
-hardirqs last  enabled at (43504): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43504): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43505): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc7c
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc7c
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43513
-hardirqs last  enabled at (43512): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43512): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43513): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc81
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc81
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43521
-hardirqs last  enabled at (43520): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43520): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43521): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc87
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc87
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43529
-hardirqs last  enabled at (43528): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43528): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43529): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
-x26: 0000000000000000 x25: 0000000000000fff x24: 00000000ffffbc8c
-x23: ffff0000cf09c200 x22: 00000000ffffbc02 x21: ffff0000cf296cb0
-x20: ffff0000cf23e800 x19: ffff0000cf296c80 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c6271a80
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c6271a80
-x11: ff80800009e7d314 x10: 0000000000000000 x9 : ffff800009e7d314
-x8 : ffff0000c6271a80 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 00000000ffffbc02 x0 : 00000000ffffbc8c
-Call trace:
- handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:285
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-irq event stamp: 43537
-hardirqs last  enabled at (43536): [<ffff80000bfd660c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (43536): [<ffff80000bfd660c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (43537): [<ffff80000bfc3cc4>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (1392): [<ffff80000b207b84>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1396): [<ffff80000b207b50>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1377 at drivers/net/caif/caif_serial.c:225 handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-Modules linked in:
-CPU: 0 PID: 1377 Comm: aoe_tx0 Tainted: G        W          6.0.0-rc4-syzkaller-00071-ga6b443748715-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-lr : handle_tx+0x1ec/0x380 drivers/net/caif/caif_serial.c:225
-sp : ffff80001477bc10
-x29: ffff80001477bc10 x28: ffff80000f103000 x27: ffff80000d2bb000
+RIP: 0010:mon_bin_flush+0x131/0x290 drivers/usb/mon/mon_bin.c:885
+Code: 48 c1 e9 03 42 80 3c 29 00 0f 85 4f 01 00 00 44 89 f1 81 e1 ff 0f 00 00 48 03 48 08 48 8d 79 24 49 89 cf 48 89 f9 48 c1 e9 03 <42> 0f b6 34 29 48 89 f9 83 e1 07 83 c1 03 40 38 f1 7c 09 40 84 f6
+RSP: 0018:ffffc90003bbfd98 EFLAGS: 00010007
+RAX: ffff88801d023b60 RBX: ffff888078923000 RCX: 00000000000001fc
+RDX: 0000000000000000 RSI: ffffffff859cd539 RDI: 0000000000000fe4
+RBP: 00000000fcffee00 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000fcffee00 R11: 0000000000000000 R12: 0000000000000003
+R13: dffffc0000000000 R14: 0000000002fb6fc0 R15: 0000000000000fc0
+FS:  0000555555576300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff7d93dc736 CR3: 000000001db18000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 c1 e9 03          	shr    $0x3,%rcx
+   4:	42 80 3c 29 00       	cmpb   $0x0,(%rcx,%r13,1)
+   9:	0f 85 4f 01 00 00    	jne    0x15e
+   f:	44 89 f1             	mov    %r14d,%ecx
+  12:	81 e1 ff 0f 00 00    	and    $0xfff,%ecx
+  18:	48 03 48 08          	add    0x8(%rax),%rcx
+  1c:	48 8d 79 24          	lea    0x24(%rcx),%rdi
+  20:	49 89 cf             	mov    %rcx,%r15
+  23:	48 89 f9             	mov    %rdi,%rcx
+  26:	48 c1 e9 03          	shr    $0x3,%rcx
+* 2a:	42 0f b6 34 29       	movzbl (%rcx,%r13,1),%esi <-- trapping instruction
+  2f:	48 89 f9             	mov    %rdi,%rcx
+  32:	83 e1 07             	and    $0x7,%ecx
+  35:	83 c1 03             	add    $0x3,%ecx
+  38:	40 38 f1             	cmp    %sil,%cl
+  3b:	7c 09                	jl     0x46
+  3d:	40 84 f6             	test   %sil,%sil
 
 
-Tested on:
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-commit:         a6b44374 Merge branch 'for-next/core', remote-tracking..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c2ce64880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14a541a0880000
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
