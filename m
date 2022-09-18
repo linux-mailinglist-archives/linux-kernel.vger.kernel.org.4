@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D255BBE8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 17:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38375BBE8D
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 17:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiIRPAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 11:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S229913AbiIRO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiIRO77 (ORCPT
+        with ESMTP id S229733AbiIRO74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:59:59 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E7A10FF6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:59:58 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id e18so37868595edj.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:59:58 -0700 (PDT)
+        Sun, 18 Sep 2022 10:59:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1416640B
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:59:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id y3so59226523ejc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:59:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=a7Psv9/SuPmGZBTyHTWK7DLwcV88pvhrenmZK8MN++E=;
-        b=FdbG1djpGXA6Q54OfB5wYSzJYI9AG/sPZ/8BaaH6dWrNIpUu7tdh6rCn8niYRsO07R
-         woOqEU5SKwup7ZV8liry7RtE8ZgMb/hkxJDxSanUhNaibVom31QZ+NCu1ZyFUxxpQ69D
-         X5k7Nnl9szPVRwTwzjQNlqdMnVZ9+Xkd0yRLV7SpsQyrcBrcfiBeTo/SLnDjjOTHeSMf
-         wJ3tvAGrfaSsp2k25PSJNqdHNNa96ZYU5KwOLweCCi1H9uWBmsVjU9oRzm2k5ZAd5N3P
-         8KL9WZ6oLBF9QiLhtBIHb9Fohm4YUV6biJlwSsPjM/JgUA8gEatSXatJZS7IbmSLCkrf
-         skLw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wghU3mvgI9A299vgW/vb1F2JNbCLJJLboYCMtsmtiHo=;
+        b=NS40DWp84BpkS+F4VFw1TgVC9rSCVjAo2xNR7CuoBz7u4+bXQErZLfVwbQm66jYySL
+         mifjjzOaoXNSioviJDP5aDJH8e2mKxGkyTWPhVG0ZyDXxxrbWM+ZtLdu0BchQQ4+QX3l
+         8f4LkpYTjhZxBN4LDVbINIeeoJAPMWv/thGjQPc3Gn1NmXlF5TB1AixU5EiuCxc5Ej6r
+         OoY+PLSe0erMM7Slal0CiASMO1y6mAN03oK6QZS83+mzQJBdA6j2w+9I+0xi0KypLwNr
+         9Yfv+EYbK80IwGF3zBOmKJA7/PvwV1ByavsCVa/dZyM0eVlepCoZoh8K+juW1gYQVx2C
+         H/eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=a7Psv9/SuPmGZBTyHTWK7DLwcV88pvhrenmZK8MN++E=;
-        b=sA6ZIQy20lTVOXX5/WgIheP5Vj80ELLaBfgE4Vxkq/szDgWNtIw/eAVew3lND8l0CC
-         h4Z/JdzjD5HtAFgH0Y4175yJIjWbby0C31iIEv3Hvawegjs0emmkQmZqf/jiFr76Rw9m
-         s1C/w5SHewCWpykkjbzGXP2I7d0HfLx7oo3Tzx7rB+aqKSmAXKFCQFS9lspnzH8phUwY
-         vQHrpFIX5RLffPVGYbAra73uMKc8KXZ32snkzUO+pbIb2+u7B0TqsPhP16e4WQQrRIW5
-         LWChR8n8VM7e5LDLxsv90VUgXV8wo6cK20lTWmEQiZSFnsc/1bhmhpMunTdtDJpCDj4a
-         pSBw==
-X-Gm-Message-State: ACrzQf0/Zk1cJsmeroaW2AtiZXfXJzMw9Pszy55bBBvDQ1j6Fu6QQYyx
-        /936JCUzvJRYYXkr0H2vbuRsN5xVw5ZFZwvpn90mdpxh+kE=
-X-Google-Smtp-Source: AMsMyM76pCHSYNIZ5I7NndFZgidF0N8qsxgwejoczQtSswzo2pDKyxyUodIjYJ+JouUJmcN5OXiaNTo+obR3dC0nQOw=
-X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
- w16-20020a056402269000b004523a858b28mr11514467edd.158.1663513196838; Sun, 18
- Sep 2022 07:59:56 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wghU3mvgI9A299vgW/vb1F2JNbCLJJLboYCMtsmtiHo=;
+        b=XNq5EdLALJbQb1kN8LUWehliAvTy9X14kxmIkSXd3j8+sg/Le0IPurDncSC8hAdKyL
+         lg9r9tk7mCJUnsrk1V3jlYzLRiiDsbjvG2Te6QOHhufW7LhS+xLfNuqyZvs66gMyATmh
+         T9750WfXxbUjX1Fy/Sqd27UUASGp7Fw70Er3PotrNWJzdwvAv7oSmyHe8Leh++DGY2BW
+         iiQM+q+P1J1liQ2Cdflxn69N05/ZVyVqy6PgedlOI7MXYHVmOLPdAEuXLAOoyrCChq9M
+         5vtyqblzHX0cvVK4MT8Dbfx83dm2597nsUYdVEhLjblei2LnVo9s3MeQ+Hic7l80nUHn
+         bOrw==
+X-Gm-Message-State: ACrzQf1OpR8e3XWlSIsyDi/TQm35o3oQLty8SxDWboA84OLlSsBm/yxp
+        N1PYXGVbcV8Q0OQXkPPwY4w=
+X-Google-Smtp-Source: AMsMyM5IusEaWMtQcAHZrMW326zxUzmmApsDfzrx4Lgh510Dr5Jqj8Dviq3l1XTDKdVqwryoRjGg6Q==
+X-Received: by 2002:a17:906:4ac1:b0:780:3448:ff06 with SMTP id u1-20020a1709064ac100b007803448ff06mr10026107ejt.403.1663513193507;
+        Sun, 18 Sep 2022 07:59:53 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id h15-20020a056402094f00b0044e7862ab3fsm18091851edz.7.2022.09.18.07.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 07:59:53 -0700 (PDT)
+Message-ID: <2239be8b-8dd1-0e82-7e1e-49b94b89b052@gmail.com>
+Date:   Sun, 18 Sep 2022 16:59:52 +0200
 MIME-Version: 1.0
-References: <20220917041403.4191780-1-benwolsieffer@gmail.com>
-In-Reply-To: <20220917041403.4191780-1-benwolsieffer@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 18 Sep 2022 16:59:45 +0200
-Message-ID: <CACRpkdac+qzpMhA3HtJ3w+dTk5Zp+OZyjpxH6QFhRmGk5h5_0w@mail.gmail.com>
-Subject: Re: [PATCH RESEND 0/2] ARM: v7m: handle faults and enable debugging
-To:     Ben Wolsieffer <benwolsieffer@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: rtl8192e: fix CamelCase variables
+Content-Language: en-US
+To:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220918113041.3805576-1-vvidic@valentin-vidic.from.hr>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220918113041.3805576-1-vvidic@valentin-vidic.from.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 6:14 AM Ben Wolsieffer <benwolsieffer@gmail.com> wrote:
+On 9/18/22 13:30, Valentin Vidic wrote:
+> Fix checkpatch warnings for variables: LinkCtrlReg, DeviceID,
+> RevisionID, IrqLine.
+> 
+> Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+> ---
+>   drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 26 ++++++++++-----------
+>   1 file changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
+> index 1d992d5c4e17..7a9a24935da9 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
+> @@ -16,11 +16,11 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
+>   	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+>   
+>   	u8 tmp;
+> -	u16 LinkCtrlReg;
+> +	u16 link_ctrl_reg;
+>   
+> -	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &LinkCtrlReg);
+> +	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &link_ctrl_reg);
+>   
+> -	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", LinkCtrlReg);
+> +	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", link_ctrl_reg);
+>   
+>   	pci_read_config_byte(pdev, 0x98, &tmp);
+>   	tmp |= BIT4;
+> @@ -33,28 +33,28 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
+>   bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
+>   {
+>   	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+> -	u16 DeviceID;
+> -	u8  RevisionID;
+> -	u16 IrqLine;
+> +	u16 device_id;
+> +	u8  revision_id;
+> +	u16 irq_line;
+>   
+> -	DeviceID = pdev->device;
+> -	RevisionID = pdev->revision;
+> -	pci_read_config_word(pdev, 0x3C, &IrqLine);
+> +	device_id = pdev->device;
+> +	revision_id = pdev->revision;
+> +	pci_read_config_word(pdev, 0x3C, &irq_line);
+>   
+>   	priv->card_8192 = priv->ops->nic_type;
+>   
+> -	if (DeviceID == 0x8192) {
+> -		switch (RevisionID) {
+> +	if (device_id == 0x8192) {
+> +		switch (revision_id) {
+>   		case HAL_HW_PCI_REVISION_ID_8192PCIE:
+>   			dev_info(&pdev->dev,
+>   				 "Adapter(8192 PCI-E) is found - DeviceID=%x\n",
+> -				 DeviceID);
+> +				 device_id);
+>   			priv->card_8192 = NIC_8192E;
+>   			break;
+>   		case HAL_HW_PCI_REVISION_ID_8192SE:
+>   			dev_info(&pdev->dev,
+>   				 "Adapter(8192SE) is found - DeviceID=%x\n",
+> -				 DeviceID);
+> +				 device_id);
+>   			priv->card_8192 = NIC_8192SE;
+>   			break;
+>   		default:
 
-> This series enables real exception handlers on no-MMU systems,
-> increasing robustness in the face of buggy user- or kernel-space
-> software. Previously, any fault would trigger the invalid exception
-> handler, which would hang the system. With this series, faults only
-> kill the offending process and allow the rest of the system to
-> continue operating.
->
-> The second patch in this series adds support for undefined instruction
-> hooks, enabling software breakpoints through ptrace. Using this
-> functionality currently requires a patch to gdb.
->
-> This series has been tested on an STM32F746 (Cortex-M7).
->
-> I would appreciate feedback in particular on the following questions:
-> * Is the fault table formatting acceptable? Or should the lines be
->   wrapped/shortened?
-> * Does my chosen mapping between faults and signals make sense?
+The only thing I do not like so much is that the comment with CamelCase 
+"DeviceID" is not changed.
 
-Very few people use NOMMU so I would seek review from the
-STM32 community.
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
 
-The kernel looks better after than before the patches so:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-but I do not fully understand this code, so my review is
-a bit superficial.
-
-Yours,
-Linus Walleij
