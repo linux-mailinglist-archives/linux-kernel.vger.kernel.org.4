@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA615BBD87
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B905BBD8B
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiIRLJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 07:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S229614AbiIRLLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 07:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIRLJa (ORCPT
+        with ESMTP id S229518AbiIRLLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 07:09:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D38B42
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663499369; x=1695035369;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ygGxjYkHrGpH4WtVBDYcobPxjep4uk4saeBvUbusJN8=;
-  b=QJ9vz8oxE7+oEk0Au8qZdBTnjBnc8ZS2A8gVZMbk9pMknXH6YZGEdsC8
-   7yS/D74OJkYI5u/oDg39n1OsvEECmRfeO/jTko7oH1WiQkVZ9di1nXH4V
-   MDiE2mWUKm8bDsxB68dPLzWvXwLC068MDTaKI1pent6lXe+RZDFP51xMx
-   H5DhgRQvhV3Hp46HGSZ6h1eoOTn567V7+z0T/fim4NPPkUAyi+EGDH2iH
-   U0Wt2goiFvJGxxI+AFuT5MKxVVf9PVXRwo6PPep5tVK4nc0qbdsDEvi2R
-   AorKdJYCg2h9NQaVryc1TVpRaV9lFX/z5aAZYM00NQFWlI/eQdaAa1lYK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="360963136"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="360963136"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 04:09:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="648801746"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Sep 2022 04:09:28 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZsAx-00018n-1H;
-        Sun, 18 Sep 2022 11:09:27 +0000
-Date:   Sun, 18 Sep 2022 19:08:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: ERROR: modpost: "vmf_insert_pfn_prot" [drivers/gpu/drm/ttm/ttm.ko]
- undefined!
-Message-ID: <202209181951.Wdmac1wt-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 18 Sep 2022 07:11:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5365327B35;
+        Sun, 18 Sep 2022 04:11:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E7E2C1FD69;
+        Sun, 18 Sep 2022 11:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663499460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WeoB6ZJ3kMZVb3Q8syRSrmyuPST462pBWmv5sZ1whj8=;
+        b=2QXZJhTdwlieE/bMpwOIv9NXJ3NZKBLlyECk9A27OGI1bsLerTWQ3R2k3/wJJLJp7NbHiJ
+        SRjJ9/l+1xOdcKnbLzeNzT/iD/HanXxB2Bt91if3Oy6U9Ro6d0XUcicx/I1ZAEMRodHXuX
+        2o74IyPXpsP8+4YobU+nnRCWWQWCLzc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663499460;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WeoB6ZJ3kMZVb3Q8syRSrmyuPST462pBWmv5sZ1whj8=;
+        b=yoqxah4gjJDBTJ1QwMkQIuz+Jlwe4ro55Bz+koXglgJd8hw4jU5d7SA7uIPB7h4M/x0R0u
+        R9ege05BAoXLTGAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C874F13A6B;
+        Sun, 18 Sep 2022 11:10:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vRBPI8P8JmO8YQAAMHmgww
+        (envelope-from <colyli@suse.de>); Sun, 18 Sep 2022 11:10:59 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] bcache: fix repeated words in comments
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20220918094549.17325-1-yuanjilin@cdjrlc.com>
+Date:   Sun, 18 Sep 2022 19:10:56 +0800
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8455FB06-B6C7-4CD7-A56A-39A3301534EC@suse.de>
+References: <20220918094549.17325-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
-commit: a0f25a6bb319aa05e04dcf51707c97c2881b4f47 drm/hisilicon/hibmc: Allow to be built if COMPILE_TEST is enabled
-date:   8 months ago
-config: m68k-randconfig-r016-20220918 (https://download.01.org/0day-ci/archive/20220918/202209181951.Wdmac1wt-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a0f25a6bb319aa05e04dcf51707c97c2881b4f47
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a0f25a6bb319aa05e04dcf51707c97c2881b4f47
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+> 2022=E5=B9=B49=E6=9C=8818=E6=97=A5 17:45=EF=BC=8CJilin Yuan =
+<yuanjilin@cdjrlc.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Delete the redundant word 'by'.
+>=20
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Added into my for-next queue.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks.
 
->> ERROR: modpost: "vmf_insert_pfn_prot" [drivers/gpu/drm/ttm/ttm.ko] undefined!
+Coly Li
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_TTM
-   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
-   Selected by [m]:
-   - DRM_TTM_HELPER [=m] && HAS_IOMEM [=y] && DRM [=m]
-   - DRM_HISI_HIBMC [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && (ARM64 || COMPILE_TEST [=y])
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+> drivers/md/bcache/bset.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/md/bcache/bset.c b/drivers/md/bcache/bset.c
+> index 94d38e8a59b3..6a24a327dce2 100644
+> --- a/drivers/md/bcache/bset.c
+> +++ b/drivers/md/bcache/bset.c
+> @@ -1264,7 +1264,7 @@ static void __btree_sort(struct btree_keys *b, =
+struct btree_iter *iter,
+> 		 *
+> 		 * Don't worry event 'out' is allocated from mempool, it =
+can
+> 		 * still be swapped here. Because state->pool is a page =
+mempool
+> -		 * creaated by by mempool_init_page_pool(), which =
+allocates
+> +		 * creaated by mempool_init_page_pool(), which allocates
+> 		 * pages by alloc_pages() indeed.
+> 		 */
+>=20
+> --=20
+> 2.36.1
+>=20
+
