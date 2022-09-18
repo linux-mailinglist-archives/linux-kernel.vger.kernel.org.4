@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4202B5BBBA2
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 06:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380B65BBBA5
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 06:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiIREfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 00:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S229647AbiIREfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 00:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIREfG (ORCPT
+        with ESMTP id S229586AbiIREfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 00:35:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C14F13F51
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:04 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fv3so24770208pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:04 -0700 (PDT)
+        Sun, 18 Sep 2022 00:35:08 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DA613D5E
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:06 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id h188so23914879pgc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=i1zDof6OtvGZP5SPndoQ1fuuVqZzAR4cxcPoesi3UZQ=;
-        b=LXQbGXSnCu1RB9u7uebnc9Z0LaBzCWIEB/4qpF887O03nW02QEWF/azLZaiU9xfarr
-         9deDlOP6adhCM/Y58+MSjvXnuN4LLdvpncUTRoyxPgwWyzey9uarYsrh+RjQtNo5Di3y
-         nyhWnSubU15bSHOrKdQRtjLObKZioWl7yL/PiueXpSk9E4p2bwNp8H+EQV3OvM+WwmVW
-         MTx3KaNpaWGtmCasoChP+CJi57On5fQlVyXp5KEgKIaQDRunYMe5iBqypbiqqosI7A6D
-         L7qqd+2LcmLRs+vz8DSlZ64bpppcmXyFbhQGreAZO75DNBqtlm9NqOa85jeTc3g4Xlq6
-         XFNQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=vnrn5Lz0Sq4BDA+kMPiBQA0vIKB2GCJKPoPvtdJGVII=;
+        b=eVaRVfx5a2MVEdsHGLTKj56DVEcrAKgua7VGnhGuCRo54sfJnqUIYr+XO+BbkdT1Zb
+         91p7t3DNLn1Y10DnRA1xNP7ubPYrptiSSv2pIPQF69SV6FIJgoaI8Edoz6Ve2lI6NGO9
+         I/3cXdD8eXFSUYB1836GY6jTk7pDfHZzDePuSyAF07ooCWihJS40cNU+8pY9OP1loa05
+         4xK1oEcStoUp7wLXga4FUZZoX4zPkuGym5UVGGI/0YGuwaLJXhOP1nwB7FvQdY5GFOCW
+         FdfyQ+JLR2Aj5TNnYdI3QtZcfxS/5ZRWv0lkwl/b1ZQKnvdGNU6XsZZ6dVIkwEPRJdUj
+         +Fdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=i1zDof6OtvGZP5SPndoQ1fuuVqZzAR4cxcPoesi3UZQ=;
-        b=6es1YOhHIPwgQ51tk8NpAwZoTGcg5Kfn375RaqPMr6hi26zWUDdgpigW2vw4ribRD6
-         2ufjJP+HyTqloihvfARxxhy0abAGhflUS2F6QZKowDkSxuKHC2kkuHYBD0vCabVsxFc6
-         6CHwN4rVNnTBBC+8sru34t16qtyegGRctB5LB7wIen4rIFvlcHrh2UVpTCAczKfHy0JW
-         qpEUkoiYAzGYowoFpTrGjT7lKilhozKJDXVWEM6roSID1NjLx3B67uHwvON3+eVF9YXO
-         Z549g6UZuiugmUE0Po4HJxyG91QTN4ymb8do5QtbhQywrNL/yxC+Au13kanrEplOICan
-         4Ubw==
-X-Gm-Message-State: ACrzQf0wJEr62mZ3I1IXNb2985wWAaAveheeRE4yGLcso8eNIpnUXGTo
-        BS9/Upx35/Iu9zTASb5sR8K6DQ==
-X-Google-Smtp-Source: AMsMyM57wriUwliO2AXNIEA0PUT6e6XYJXVTf8ub390eTWLi8xe1z7AMtFfvlz6UW/1FyXxKosxPRA==
-X-Received: by 2002:a17:90a:e60d:b0:201:6b28:5406 with SMTP id j13-20020a17090ae60d00b002016b285406mr23615945pjy.228.1663475703591;
-        Sat, 17 Sep 2022 21:35:03 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vnrn5Lz0Sq4BDA+kMPiBQA0vIKB2GCJKPoPvtdJGVII=;
+        b=yqimG6TnFhhhg9r/31A7fOlSxpGWhNWXwmEvzjkN6MJO6oOp7l+a5TQ+NRc1fBiOqf
+         j1VgCER6NTZvMimSXVZX8VfK16+8QLJasurOAwaiU5ISh1S2u94JQJsETOlbnAy78fW/
+         jCePGS1FewT5mZLslFs27L5Fvnh526Kc807KRILyvWVBlukPZ8e9Z+DuoBU2JGBpAxk+
+         1BqoMSidUM/bdc68LO8991P2ywGsLBBsvjxApAbvfsLU864O76wqoFLO1jEFsK2OjLqq
+         lna1cbTNCrZER3bAxw+r6ND8KaCglhFUji6Wfeq93rvGCPZKwwAsoDIKzyOlxuYSNDBU
+         m3wA==
+X-Gm-Message-State: ACrzQf1o/4zDYgER8+2feFr15oqvAM29V5zBcNxhycStjw+fmugDmBH4
+        l0KErFjWnav4IMzWOOzeaZTPzQ==
+X-Google-Smtp-Source: AMsMyM76iQB6B2cNhDHRqLO41Da7t2u4Ij4woRMn+qQFywM/+pG/hclaTdhS/4IoVJYsYMH7aOEmsw==
+X-Received: by 2002:a63:42c7:0:b0:438:e0dc:cc09 with SMTP id p190-20020a6342c7000000b00438e0dccc09mr10797694pga.128.1663475706078;
+        Sat, 17 Sep 2022 21:35:06 -0700 (PDT)
 Received: from localhost.localdomain ([111.201.134.95])
-        by smtp.gmail.com with ESMTPSA id l63-20020a622542000000b0054b5239f7fesm3955248pfl.210.2022.09.17.21.35.01
+        by smtp.gmail.com with ESMTPSA id l63-20020a622542000000b0054b5239f7fesm3955248pfl.210.2022.09.17.21.35.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 21:35:03 -0700 (PDT)
+        Sat, 17 Sep 2022 21:35:05 -0700 (PDT)
 From:   Jia Zhu <zhujia.zj@bytedance.com>
 To:     linux-erofs@lists.ozlabs.org
 Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
         Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V6 0/6] Introduce erofs shared domain
-Date:   Sun, 18 Sep 2022 12:34:50 +0800
-Message-Id: <20220918043456.147-1-zhujia.zj@bytedance.com>
+Subject: [PATCH V6 1/6] erofs: use kill_anon_super() to kill super in fscache mode
+Date:   Sun, 18 Sep 2022 12:34:51 +0800
+Message-Id: <20220918043456.147-2-zhujia.zj@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+In-Reply-To: <20220918043456.147-1-zhujia.zj@bytedance.com>
+References: <20220918043456.147-1-zhujia.zj@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,91 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Kernel Patchset]
-===============
-Git tree:
-	https://github.com/userzj/linux.git zhujia/shared-domain-v6
-Git web:
-	https://github.com/userzj/linux/tree/zhujia/shared-domain-v6
+Use kill_anon_super() instead of generic_shutdown_super() since the
+mount() in erofs fscache mode uses get_tree_nodev() and associated
+anon bdev needs to be freed.
 
-[User Daemon for Quick Test]
-============================
-Git web:
-	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
-More test cases will be added to:
-	https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests-fscache 
+Fixes: 9c0cc9c729657 ("erofs: add 'fsid' mount option")
+Suggested-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+ fs/erofs/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[E2E Container Demo for Quick Test]
-===================================
-[Issue]
-	https://github.com/containerd/nydus-snapshotter/issues/161
-[PR]
-	https://github.com/containerd/nydus-snapshotter/pull/162
-
-[Background]
-============
-In ondemand read mode, we use individual volume to present an erofs
-mountpoint, cookies to present bootstrap and data blobs.
-
-In which case, since cookies can't be shared between fscache volumes,
-even if the data blobs between different mountpoints are exactly same,
-they can't be shared.
-
-[Introduction]
-==============
-Here we introduce erofs shared domain to resolve above mentioned case.
-Several erofs filesystems can belong to one domain, and data blobs can
-be shared among these erofs filesystems of same domain.
-
-[Usage]
-Users could specify 'domain_id' mount option to create or join into a
-domain which reuses the same cookies(blobs).
-
-[Design]
-========
-1. Use pseudo mnt to manage domain's lifecycle.
-2. Use a linked list to maintain & traverse domains.
-3. Use pseudo sb to create anonymous inode for recording cookie's info
-   and manage cookies lifecycle.
-
-[Flow Path]
-===========
-1. User specify a new 'domain_id' in mount option.
-   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
-   1.2 Create a new domain(volume), add it to domain list.
-   1.3 Traverse pseudo sb's inode list, compare cookie name with
-       existing cookies.[Miss]
-   1.4 Alloc new anonymous inodes and cookies.
-
-2. User specify an existing 'domain_id' in mount option and the data
-   blob is existed in domain.
-   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
-   2.2 Reuse the domain and increase its refcnt.
-   2.3 Traverse pseudo sb's inode list, compare cookie name with
-   	   existing cookies.[Hit]
-   2.4 Reuse the cookie and increase its refcnt.
-
-RFC: https://lore.kernel.org/all/YxAlO%2FDHDrIAafR2@B-P7TQMD6M-0146.local/
-V1: https://lore.kernel.org/all/20220902034748.60868-1-zhujia.zj@bytedance.com/
-V2: https://lore.kernel.org/all/20220902105305.79687-1-zhujia.zj@bytedance.com/
-V3: https://lore.kernel.org/all/20220914105041.42970-1-zhujia.zj@bytedance.com/
-V4: https://lore.kernel.org/all/20220915124213.25767-1-zhujia.zj@bytedance.com/
-V5: https://lore.kernel.org/all/20220916085940.89392-1-zhujia.zj@bytedance.com/
-
-Jia Zhu (6):
-  erofs: use kill_anon_super() to kill super in fscache mode
-  erofs: code clean up for fscache
-  erofs: introduce fscache-based domain
-  erofs: introduce a pseudo mnt to manage shared cookies
-  erofs: Support sharing cookies in the same domain
-  erofs: introduce 'domain_id' mount option
-
- fs/erofs/fscache.c  | 263 ++++++++++++++++++++++++++++++++++++++------
- fs/erofs/internal.h |  32 ++++--
- fs/erofs/super.c    |  73 +++++++++---
- fs/erofs/sysfs.c    |  19 +++-
- 4 files changed, 324 insertions(+), 63 deletions(-)
-
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 3173debeaa5a..9716d355a63e 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -879,7 +879,7 @@ static void erofs_kill_sb(struct super_block *sb)
+ 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
+ 
+ 	if (erofs_is_fscache_mode(sb))
+-		generic_shutdown_super(sb);
++		kill_anon_super(sb);
+ 	else
+ 		kill_block_super(sb);
+ 
 -- 
 2.20.1
 
