@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38135BBFF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 22:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DA75BBFFC
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiIRU4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 16:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S229562AbiIRVLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 17:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIRU4k (ORCPT
+        with ESMTP id S229501AbiIRVLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 16:56:40 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB76C12763
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:56:38 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l9so5184887lji.4
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:56:38 -0700 (PDT)
+        Sun, 18 Sep 2022 17:11:13 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE6E036
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 14:11:12 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id g4so20611283qvo.3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 14:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date;
-        bh=R2sduhjjuAljUZpX2Hp+/jZ5v2asrMr6KJHy77qkcrk=;
-        b=ZMBAKPKRQHgoFaHdnIKn75xcfjbTpAGCAiwJw58GAUjsGlX5eMSHNpyVIdFUfpX1IB
-         BJuFveqaBOqL/QWzLuPpqeWESvdC1do9A/RZUbLMzPN+RAER5eEP2gtO4rf+cN83+xSh
-         YQ0ZP9a4817FFoE5QO1ePKy3n9k5nMyLHkoOo=
+        d=google.com; s=20210112;
+        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=UFsuxA6/C4rSRdMsXNxuwZ9ga1EMJaW1urs2eGrYQJA=;
+        b=OV1fvONaztx1a28mzQTfh14ez+xCms2Govf+yuKsKMB8IDqCsTV/bjHRVM0mhKwI4u
+         WWhxoqTA779MErMThIhFdmtW1/1TxPbV0CYCjmJyD0RZBG4Va4O/vrGJpTBjrIe5zsI8
+         Tj3UP1kd4z22YtLf6HW8lzBu0o6VTYTxDeeZTwvImQQF+ziupyV/nzsC9pRN7xXSGWK2
+         bUEkAsu/TWZvhznNk85UuWULXPchXUzZZps4ht+EsPcV7KowADHN742CTmdpSP2h4dt+
+         8pI56Im+bS7VLw0LDkUdbM6p3Qi8HZQB4QJ9YTUVQ+rS7GU9tLC1UG2mknz4BzCwhqfe
+         uRSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R2sduhjjuAljUZpX2Hp+/jZ5v2asrMr6KJHy77qkcrk=;
-        b=ekQp2FOBsAA3ZZ7Ft+3hwGVcBeLsH6zT273On3L/N8WVC8Z3lxQKc3MESSqgaxjSIj
-         HtbnFya4u1pHyMx8n72/CjYxhpixxAYXLIrOUq4jYuKsH9MJDjGicBZTwtmj5he/Klvi
-         mWWnVEEBrxQBgjdlKt7A8UYVAUwacz7JoHRGag14tEslwuObkviQliAycaViY1x/9CDO
-         ie/51HGoWXnx+7WwNTHUspcnXin9EdId9X6hYQWwDXkR27zDdJ1N9yOquONRh7JeJ2qU
-         bc/vry4tlC4DP4nCRJ4ulX1+TTLuzu3lu9TSyNyxlorPnqS+M1VLijxbVUEorYYlnTiD
-         3vBA==
-X-Gm-Message-State: ACrzQf3oLZhfnNzPbHvIvRMfyBlmnfjhDxEJuBljY6/4913zxZSFXQ/g
-        Pv9Can8kjhsHpDvTvshW4LmU5FEu1BsbgGbl
-X-Google-Smtp-Source: AMsMyM56UQTxRKzEsRNYTvq7BM69mIKR4c7VoGCQVPtDTRlqc287tuL2GN9Rg7iu7etYKAEhl2iqCA==
-X-Received: by 2002:a2e:a7ca:0:b0:26c:51d6:55ed with SMTP id x10-20020a2ea7ca000000b0026c51d655edmr160244ljp.426.1663534596299;
-        Sun, 18 Sep 2022 13:56:36 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id y26-20020a05651c221a00b0026ad1da0dc3sm4632270ljq.122.2022.09.18.13.56.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 13:56:35 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id a14so29610796ljj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:56:35 -0700 (PDT)
-X-Received: by 2002:a2e:7817:0:b0:26c:3e9c:3465 with SMTP id
- t23-20020a2e7817000000b0026c3e9c3465mr2931904ljc.145.1663534594676; Sun, 18
- Sep 2022 13:56:34 -0700 (PDT)
+        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=UFsuxA6/C4rSRdMsXNxuwZ9ga1EMJaW1urs2eGrYQJA=;
+        b=wE4nA52rFgPU9CUNdtR7AW8y0pU7yCow3Xkr3cBliLVi1WmQO5yfXNSjd0aYO11Rc6
+         nTgoPjKUJCfaOHyvbsh4MSQdrVXX39hoLOy1qI5HOVAubhg1Ri1HgochHU3BJ6h82gnc
+         rt01HsQhYTB77cQ55Opbjd9JIqZZ3CT/om6HQVyD0yXplHCSpP26et49a44HKLmuivvi
+         pGz8Dx1K4UaNUiOqhR4+64gzuZjnTuxg6ZcMKgrC4kMhMJVpf7507rFDugnAvfIomM9Q
+         V//Jsg9ObpP4Cih3KBSVVS69BB0xWbqE+XWtxFIuUxBXGB7NQURCrsF1qSqwUEN/CkO2
+         tlhg==
+X-Gm-Message-State: ACrzQf0YWg4jZ7ihTAKUOjUqnoQSpVu8ekbSzYaUPOlgzhuJE3ci726t
+        q6u7BLkSRxdw7vVnvDouRce+2w==
+X-Google-Smtp-Source: AMsMyM6jHQBpInd4lV3PaaiLpUIDzeted7VKGkRIgrsFZO6D6wwxbxqMtO/dA30jYiaG9UaGKjasnA==
+X-Received: by 2002:a05:6214:e69:b0:4ac:93e7:62f0 with SMTP id jz9-20020a0562140e6900b004ac93e762f0mr12350535qvb.40.1663535471096;
+        Sun, 18 Sep 2022 14:11:11 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05620a268800b006ce60296f97sm10907958qkp.68.2022.09.18.14.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 14:11:10 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 14:10:51 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jens Axboe <axboe@kernel.dk>
+cc:     Keith Busch <kbusch@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>,
+        Jan Kara <jack@suse.cz>, Liu Song <liusong@linux.alibaba.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH next] sbitmap: fix lockup while swapping
+Message-ID: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com>
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 18 Sep 2022 13:56:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi=gtuSO8Yz8LDubkMk7TiMsZxpypt9S10jeZRkyaBFnA@mail.gmail.com>
-Message-ID: <CAHk-=wi=gtuSO8Yz8LDubkMk7TiMsZxpypt9S10jeZRkyaBFnA@mail.gmail.com>
-Subject: Linux 6.0-rc6
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,256 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So this is an artificially small -rc release, because this past week
-we had the Maintainers' Summit in Dublin (along with OSS EU and LPC
-2022), so we've had a lot of maintainers traveling.
+Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+is a big improvement: without it, I had to revert to before commit
+040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
+to avoid the high system time and freezes which that had introduced.
 
-Or - putting my ridiculously optimistic hat on - maybe things are just
-so nice and stable that there just weren't all that many fixes?
+Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
+swapping (kernel builds in low memory) on another: soon locking up in
+sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
+around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
+showing the common pattern of outer sbitmap_queue_wake_up() interrupted
+before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
+are idle, in other cases they're spinning for a lock in dd_bio_merge()):
 
-Yeah, I know which scenario I'm betting on, but hope springs eternal.
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
+scsi_end_request < scsi_io_completion < scsi_finish_command <
+scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
+__irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
+_raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
+blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
+__submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
+submit_bio < __swap_writepage < swap_writepage < pageout <
+shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
+shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
+__alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
+do_anonymous_page < __handle_mm_fault < handle_mm_fault <
+do_user_addr_fault < exc_page_fault < asm_exc_page_fault
 
-Regardless, things look fine. I am expecting rc7 to be larger than
-usual due to pull requests having shifted one week later, and in the
-worst case that might mean that I might feel like we need an extra
-rc8, but for now I'm going to assume it's not going to be _that_
-noticeable and hope we'll just keep to the regular schedule.
+I have almost no grasp of all the possible sbitmap races, and their
+consequences: but using the same !waitqueue_active() check as used
+elsewhere, fixes the lockup and shows no adverse consequence for me.
 
-But it would be lovely if everybody gave this some extra tender loving
-care in the form of extra testing...
-
-             Linus
-
+Fixes: 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
 
-Al Viro (1):
-      nfsd_splice_actor(): handle compound pages
+ lib/sbitmap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Alex Deucher (4):
-      drm/amdgpu: add HDP remap functionality to nbio 7.7
-      drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
-      drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
-      drm/amdgpu: make sure to init common IP before gmc
-
-Alvin Lee (3):
-      drm/amd/display: Update MBLK calculation for SubVP
-      drm/amd/display: SW cursor fallback for SubVP
-      drm/amd/display: Refactor SubVP calculation to remove FPU
-
-Ankit Nautiyal (1):
-      drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
-
-Anna Schumaker (1):
-      NFSv4.2: Update mode bits after ALLOCATE and DEALLOCATE
-
-Aric Cyr (1):
-      drm/amd/display: Fix divide by zero in DML
-
-Ashutosh Dixit (1):
-      drm/i915/gt: Fix perf limit reasons bit positions
-
-Aurabindo Pillai (2):
-      drm/amd/display: Revert "Fallback to SW cursor if SubVP + cursor too =
-big"
-      drm/amd/display: add workaround for subvp cursor corruption for DCN32=
-/321
-
-Ben Hutchings (1):
-      tools/include/uapi: Fix <asm/errno.h> for parisc and xtensa
-
-Candice Li (2):
-      drm/amdgpu: Enable full reset when RAS is supported on gc v11_0_0
-      drm/amdgpu: Skip reset error status for psp v13_0_0
-
-Chen-Yu Tsai (1):
-      drm/panel-edp: Fix delays for Innolux N116BCA-EA1
-
-Christophe JAILLET (1):
-      drm/hyperv: Fix an error handling path in hyperv_vmbus_probe()
-
-Dan Aloni (1):
-      Revert "SUNRPC: Remove unreachable error condition"
-
-Duncan Ma (1):
-      drm/amd/display: Correct dram channel width for dcn314
-
-Guchun Chen (1):
-      drm/amd/pm: disable BACO entry/exit completely on several sienna
-cichlid cards
-
-Hamza Mahfooz (1):
-      drm/amdgpu: use dirty framebuffer helper
-
-Hans de Goede (3):
-      drm/gma500: Fix BUG: sleeping function called from invalid context er=
-rors
-      drm/gma500: Fix WARN_ON(lock->magic !=3D lock) error
-      drm/gma500: Fix (vblank) IRQs not working after suspend/resume
-
-Helge Deller (1):
-      parisc: Allow CONFIG_64BIT with ARCH=3Dparisc
-
-Horatiu Vultur (1):
-      pinctrl: ocelot: Fix interrupt controller
-
-Janne Grunau (1):
-      dt-bindings: apple,aic: Fix required item "apple,fiq-index" in
-affinity description
-
-Jason Wang (1):
-      tools: hv: Remove an extraneous "the"
-
-Jay Fang (1):
-      MAINTAINERS: Update HiSilicon GPIO Driver maintainer
-
-Jens Axboe (1):
-      io_uring/msg_ring: check file type before putting
-
-Jiangshan Yi (1):
-      Input: hp_sdc: fix spelling typo in comment
-
-Jo=C3=A3o H. Spies (1):
-      pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
-
-Krzysztof Kozlowski (3):
-      dt-bindings: interconnect: fsl,imx8m-noc: drop Leonard Crestez
-      dt-bindings: power: qcom,rpmpd: drop non-working codeaurora.org email=
-s
-      dt-bindings: pinctrl: qcom: drop non-working codeaurora.org emails
-
-Leo Chen (1):
-      drm/amd/display: Fixing DIG FIFO Error
-
-Lijo Lazar (1):
-      drm/amdgpu: Don't enable LTR if not supported
-
-Linus Torvalds (1):
-      Linux 6.0-rc6
-
-Linus Walleij (1):
-      gpio: ixp4xx: Make irqchip immutable
-
-Michael Wu (1):
-      pinctrl: sunxi: Fix name for A100 R_PIO
-
-Mikulas Patocka (1):
-      blk-lib: fix blkdev_issue_secure_erase
-
-Molly Sophia (2):
-      pinctrl: qcom: sc8180x: Fix gpio_wakeirq_map
-      pinctrl: qcom: sc8180x: Fix wrong pin numbers
-
-Nathan Chancellor (5):
-      drm/amd/display: Reduce number of arguments of
-dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()
-      drm/amd/display: Reduce number of arguments of
-dml32_CalculatePrefetchSchedule()
-      drm/amd/display: Reduce number of arguments of dml31's
-CalculateWatermarksAndDRAMSpeedChangeSupport()
-      drm/amd/display: Reduce number of arguments of dml31's
-CalculateFlipSchedule()
-      drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for
-stack usage
-
-Nathan Huckleberry (1):
-      drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
-
-Neil Armstrong (1):
-      MAINTAINERS: Update email of Neil Armstrong
-
-NeilBrown (1):
-      NFSD: fix regression with setting ACLs.
-
-Nicholas Kazlauskas (2):
-      drm/amd/display: Hook up DCN314 specific dml implementation
-      drm/amd/display: Relax swizzle checks for video non-RGB formats on DC=
-N314
-
-Nirmoy Das (1):
-      drm/i915: Set correct domains values at _i915_vma_move_to_active
-
-Pali Roh=C3=A1r (1):
-      gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85x=
-x
-
-Paulo Alcantara (1):
-      cifs: add missing spinlock around tcon refcount
-
-Pavel Begunkov (2):
-      io_uring/rw: fix error'ed retry return values
-      io_uring/net: fix zc fixed buf lifetime
-
-Rodrigo Siqueira (2):
-      drm/amd/display: Fix compilation errors on DCN314
-      drm/amd/display: Enable dlg and vba compilation for dcn314
-
-Rolf Eike Beer (1):
-      parisc: remove obsolete manual allocation aligning in iosapic
-
-Ronnie Sahlberg (1):
-      cifs: revalidate mapping when doing direct writes
-
-Sascha Hauer (1):
-      drm/rockchip: vop2: Fix eDP/HDMI sync polarities
-
-Sergey Shtylyov (1):
-      of: fdt: fix off-by-one error in unflatten_dt_nodes()
-
-Sergio Paracuellos (1):
-      gpio: mt7621: Make the irqchip immutable
-
-Shaomin Deng (1):
-      Drivers: hv: remove duplicate word in a comment
-
-Stefan Metzmacher (3):
-      cifs: don't send down the destination address to sendmsg for a SOCK_S=
-TREAM
-      cifs: always initialize struct msghdr smb_msg completely
-      io_uring/opdef: rename SENDZC_NOTIF to SEND_ZC
-
-Stefan Roesch (1):
-      block: blk_queue_enter() / __bio_queue_enter() must return
--EAGAIN for nowait
-
-Steve French (1):
-      cifs: update internal module number
-
-Stuart Menefy (2):
-      drm/meson: Correct OSD1 global alpha value
-      drm/meson: Fix OSD1 RGB to YCbCr coefficient
-
-Taimur Hassan (1):
-      drm/amd/display: Round cursor width up for MALL allocation
-
-Thierry Reding (1):
-      of/device: Fix up of_dma_configure_id() stub
-
-Trond Myklebust (2):
-      SUNRPC: Fix call completion races with call_decode()
-      NFSv4: Turn off open-by-filehandle and NFS re-export for NFSv4.0
-
-Umesh Nerlige Ramappa (1):
-      drm/i915/guc: Cancel GuC engine busyness worker synchronously
-
-Ville Syrj=C3=A4l=C3=A4 (1):
-      Revert "drm/i915/display: Re-add check for low voltage sku for
-max dp source rate"
-
-Vitaly Kuznetsov (3):
-      PCI: Move PCI_VENDOR_ID_MICROSOFT/PCI_DEVICE_ID_HYPERV_VIDEO
-definitions to pci_ids.h
-      Drivers: hv: Always reserve framebuffer region for Gen1 VMs
-      Drivers: hv: Never allocate anything besides framebuffer from
-framebuffer memory region
-
-Yang Wang (1):
-      drm/amdgpu: change the alignment size of TMR BO to 1M
-
-Yang Yingliang (1):
-      parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
-
-Yao Wang1 (1):
-      drm/amd/display: Limit user regamma to a valid value
-
-Zhou jie (1):
-      tools: hv: kvp: remove unnecessary (void*) conversions
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -620,7 +620,7 @@ static bool __sbq_wake_up(struct sbitmap
+ 		 * function again to wakeup a new batch on a different 'ws'.
+ 		 */
+ 		if (cur == 0)
+-			return true;
++			return !waitqueue_active(&ws->wait);
+ 		sub = min(*nr, cur);
+ 		wait_cnt = cur - sub;
+ 	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
