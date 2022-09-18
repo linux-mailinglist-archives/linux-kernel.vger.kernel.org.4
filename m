@@ -2,194 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1C85BBEF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 18:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12E65BBF0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 19:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiIRQc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 12:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S229529AbiIRRDX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Sep 2022 13:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIRQc5 (ORCPT
+        with ESMTP id S229458AbiIRRDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 12:32:57 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE47013CF0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 09:32:56 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 709674542E;
-        Sun, 18 Sep 2022 16:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:content-type:content-type:in-reply-to
-        :from:from:references:content-language:subject:subject
-        :user-agent:mime-version:date:date:message-id:received:received
-        :received:received; s=mta-01; t=1663518773; x=1665333174; bh=eVm
-        /YP5YcIOK5a/lGyaGRLqh2HbBbMrnW/KrWhg4RxI=; b=mqRIoLSW6yjFcXmVgKt
-        dB/SSITIb1KAD1Hbh6+PH3Q0OP74hPUkZzyzPL9lfFUJniWuGhz6mvwMqSCv6ZuG
-        tNTqjSWKYL8k+ZBhyJsUyTMGFGUovm2fZRm+EAjbFgLiwQ19IxHLMiolD4F58g4b
-        EqzI/XEF8hxjRB3pplsthjyE=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XmwiJ1OpAufL; Sun, 18 Sep 2022 19:32:53 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 0FEBD45431;
-        Sun, 18 Sep 2022 19:32:53 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Sun, 18 Sep 2022 19:32:53 +0300
-Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Sun, 18 Sep
- 2022 19:32:52 +0300
-Message-ID: <8a378429-ab75-0ebc-a852-24c9d3bb9298@yadro.com>
-Date:   Sun, 18 Sep 2022 19:32:51 +0300
+        Sun, 18 Sep 2022 13:03:22 -0400
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BFA193F3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 10:03:21 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 243F0C0FE5;
+        Sun, 18 Sep 2022 17:03:20 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 1E69619;
+        Sun, 18 Sep 2022 17:03:16 +0000 (UTC)
+Message-ID: <92afdf33e22e8a63f6baaaba94c004cf2ec5a7d7.camel@perches.com>
+Subject: Re: [PATCH] get_maintainer: Extend matched name characters in
+ maintainers_in_file()
+From:   Joe Perches <joe@perches.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Martin =?UTF-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Date:   Sun, 18 Sep 2022 10:03:17 -0700
+In-Reply-To: <d52110471b332b047777616c762b086ee662225e.camel@perches.com>
+References: <20220916084712.84411-1-j@jannau.net>
+         <d52110471b332b047777616c762b086ee662225e.camel@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] mailbox: Error out early if the mbox driver has
- failed to submit the message
-Content-Language: en-US
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, Ilya Kuznetsov <ilya@yadro.com>,
-        <linux@yadro.com>
-References: <20220915164730.515767-1-e.shatokhin@yadro.com>
- <20220915164730.515767-3-e.shatokhin@yadro.com>
- <CABb+yY2Yg1J4WZeB5MKmOONKNsS8468rJmeGkG1TS0Uw71bwYw@mail.gmail.com>
-From:   Evgeny Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <CABb+yY2Yg1J4WZeB5MKmOONKNsS8468rJmeGkG1TS0Uw71bwYw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.199.21.212]
-X-ClientProxiedBy: T-EXCH-02.corp.yadro.com (172.17.10.102) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: bgbfofmr8xqgmp8gqjkx4rym6k7e5s8k
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 1E69619
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/EyBIr8EKSI9ghnUkkURiAbkzvP6k+Iqc=
+X-HE-Tag: 1663520595-881005
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for a quick reply!
-
-On 16.09.2022 20:04, Jassi Brar wrote:
-> On Thu, Sep 15, 2022 at 11:50 AM Evgenii Shatokhin
-> <e.shatokhin@yadro.com> wrote:
->>
->> mbox_send_message() places the pointer to the message to the queue
->> (add_to_rbuf) then calls msg_submit(chan) to submit the first of the
->> queued messaged to the mailbox. Some of mailbox drivers can return
->> errors from their .send_data() callbacks, e.g., if the message is
->> invalid or there is something wrong with the mailbox device.
->>
-> The message can't be invalid because the client code is written for a
-> particular provider.
-
-As of mainline kernel v6.0-rc5, there are mailbox controller drivers 
-which check if the messages are valid in their .send_data() callbacks. 
-Example:
-
-drivers/mailbox/rockchip-mailbox.c, rockchip_mbox_send_data():
-	if (msg->rx_size > mb->buf_size) {
-		dev_err(mb->mbox.dev, "Transmit size over buf size(%d)\n",
-			mb->buf_size);
-		return -EINVAL;
-	}
-
-Other examples are zynqmp_ipi_send_data() from 
-drivers/mailbox/zynqmp-ipi-mailbox.c, ti_msgmgr_send_data() from 
-drivers/mailbox/ti-msgmgr.c, etc.
-
-If this is incorrect and the controller drivers should not do such 
-things, I'd suggest to clearly state it in the docs, because it is far 
-from obvious from Documentation/driver-api/mailbox.rst at the moment.
-
-That is, one could state that checking if the messages to be transmitted 
-are valid is a responsibility of the callers of mailbox API rather than 
-of the controller driver.
-
-I could prepare such patch for the docs. Objections?
-
+On Sat, 2022-09-17 at 07:11 -0700, Joe Perches wrote:
+> On Fri, 2022-09-16 at 10:47 +0200, Janne Grunau wrote:
+> > Extend the regexp matching name characters to cover Unicode blocks Latin
+> > Extended-A and Extended-B.
+> > Fixes 'scripts/get_maintainer.pl -f' for
+> > 'Documentation/devicetree/bindings/clock/apple,nco.yaml'.
+> > 
+> > Signed-off-by: Janne Grunau <j@jannau.net>
+> > 
+> > ---
+> > This still excludes Greek and Cyrilic characters which should be
+> > expected in names as well. I tried to use '\p{L}' to match all Unicode
+> > letters but couldn't get it to work. Feel free understand this as bug
+> > report with an incomplete fix.
 > 
-> Though it is possible for the mailbox controller to break down for
-> some reason. In that case, the blocking api will keep retrying until
-> successful. 
-
-As far as I can see from the code, the behaviour seems to be different.
-
-mbox_send_message() calls msg_submit() to send the message the first 
-time. If that fails, hrtimer is not armed, so there will be no attempts 
-to send the message again till tx_out ms pass:
-
-	err = chan->mbox->ops->send_data(chan, data);
-	if (!err) {
-		chan->active_req = data;
-		chan->msg_count--;
-	}
-exit:
-	spin_unlock_irqrestore(&chan->lock, flags);
-
-	if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
-		/* kick start the timer immediately to avoid delays */
-		spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
-		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
-		spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
-	}
-
-This is from msg_submit(). Thus, the hrtimer will not fire, tx_tick() 
-will not be called until tx_out ms have passed, and no attempts to send 
-the message again will be made here.
-
-In addition, complete(&chan->tx_complete) will not be called, so, 
-mbox_send_message() will have to needlessly wait whole tx_out ms.
-Only after that, it will call tx_tick(chan, -ETIME), which will, in 
-turn, call msg_submit() to try to send the message again. If the mbox 
-has not recovered, sending will fail again.
-
-Then, mbox_send_message() will exit with -ETIME. The pointer to the 
-message will remain in chan->msg_data[], but the framework will not 
-attempt to send it again until the client calls mbox_send_message() for 
-another, possibly unrelated message.
-
-In this case, to sum up, mbox_send_message():
-* needlessly waits for tx_out ms;
-* only tries to send the message twice rather than makes retries until 
-successful;
-* does not inform the client about the actual error happened, just 
-returns -ETIME;
-* keeps the pointer to the message in chan->msg_data[], which is too 
-easy to overlook on the client side. Too easy for the client to, say, 
-reuse the structure and cause trouble.
-
-What I suggest is to leave it to the client (or some other 
-provider-specific code using the client) what to do with the failures.
-
-If the error is reported by the controller driver, don't wait in 
-mbox_send_message(), just pass the error to the client and exit. If the 
-client decides to ignore the error - OK, its problem. Or - it may kick 
-the mbox device somehow in a provider-specific way to make it work, or - 
-reset the channel, or - do anything else to make things work again.
-
-The behaviour of mbox_send_message() would then become more consistent: 
-either it has sent the message successfully or it failed and returned an 
-error, without side-effects (like the pointer to that message kept in 
-the internal buffer).
-
-I do not think this change would break the existing controller drivers 
-and client drivers.
-
-What do you think?
-
->But ideally the client, upon getting -ETIME, should free()
-> and request() the channel reset it (because controller drivers usually
-> don't contain the logic to automatically reset upon some error).
+> Maybe use \p{XPosixAlpha} ?
 > 
-> thanks.
+> but I don't know what version of perl introduced this.
+> 
+> > diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+> []
+> > @@ -442,7 +442,7 @@ sub maintainers_in_file {
+> >  	my $text = do { local($/) ; <$f> };
+> >  	close($f);
+> >  
+> > -	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> > +	my @poss_addr = $text =~ m$[A-Za-zÀ-ɏ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> 
+> 	my @poss_addr = $text =~ m$[\p{XPosixAlpha}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
 
-Regards,
-Evgenii
+Using variations of \p{posix} doesn't seem to work for at least perl 5.34.
 
+\p{print} seems to work for Documentation/devicetree/bindings/clock/apple,nco.yaml,
+but I don't know how fragile it is.
+
+\p{print} might be too greedy...
+
+---
+ scripts/get_maintainer.pl | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+index ab123b498fd9..790112c3e1d7 100755
+--- a/scripts/get_maintainer.pl
++++ b/scripts/get_maintainer.pl
+@@ -442,7 +442,7 @@ sub maintainers_in_file {
+ 	my $text = do { local($/) ; <$f> };
+ 	close($f);
+ 
+-	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
++	my @poss_addr = $text =~ m$[\p{print}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+ 	push(@file_emails, clean_file_emails(@poss_addr));
+     }
+ }
+@@ -2456,11 +2456,12 @@ sub clean_file_emails {
+     foreach my $email (@file_emails) {
+ 	$email =~ s/[\(\<\{]{0,1}([A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+)[\)\>\}]{0,1}/\<$1\>/g;
+ 	my ($name, $address) = parse_email($email);
++	$name =~ s/^\p{space}*\p{punct}*\p{space}*//;
+ 	if ($name eq '"[,\.]"') {
+ 	    $name = "";
+ 	}
+ 
+-	my @nw = split(/[^A-Za-zÀ-ÿ\'\,\.\+-]/, $name);
++	my @nw = split(/[^\p{print}\'\,\.\+-]/, $name);
+ 	if (@nw > 2) {
+ 	    my $first = $nw[@nw - 3];
+ 	    my $middle = $nw[@nw - 2];
