@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF95F5BBE5A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6325BBE5B
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIROWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S229623AbiIROXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIROWW (ORCPT
+        with ESMTP id S229483AbiIROXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:22:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC241EAE3;
-        Sun, 18 Sep 2022 07:22:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8977360C55;
-        Sun, 18 Sep 2022 14:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BECC433C1;
-        Sun, 18 Sep 2022 14:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663510940;
-        bh=z4w4Jd6Yw1OP2BhleHWvgUNU4yfAz6x/VUTv668v3Kw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HUs5os1a2lRyrvWD3ybe8gDorfa+QU5tTeXFoRFHXT1MkeZTxKtLHsSYUBT67hipM
-         OhaQE6riClZjjG6Ohrtf6POn2RRUJRlu/LW3Vs+VbpqBK271GUhdl9ZV+kMRVUOzxu
-         x+2XupNxl1zxh6DKWveI1GRTbF+DuanMaRP1wkxuTQ9/7SGPFeeXv/RoLu9jt8b2b6
-         Qzne4wqiXhmY+nOhrskQ+ldWQhJ1YbuoNRgptxHnoPtrLPZm03nB1W2O4LhhqYGGCD
-         l/CQ8F5rrslGWdeDvV9rbYx595j7cp4Gch1Kz768l5YGtX9gUpild9AwOGl8tD1Dv7
-         dJG1aprR6sbvQ==
-Date:   Sun, 18 Sep 2022 15:22:24 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Denys Zagorui <dzagorui@cisco.com>, Meng.Li@windriver.com,
-        lars@metafoo.de, Michael.Hennerich@analog.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: ltc2497: Fix reading conversion results
-Message-ID: <20220918152224.14f874c1@jic23-huawei>
-In-Reply-To: <20220912104631.zysrv2qqxvsjfbxc@pengutronix.de>
-References: <20220815091647.1523532-1-dzagorui@cisco.com>
-        <20220820130648.5b9bc66f@jic23-huawei>
-        <20220912104631.zysrv2qqxvsjfbxc@pengutronix.de>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 18 Sep 2022 10:23:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB0C1EC4F
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:23:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a29so2096714pfk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=pCvLRXZeSS8Xv+P2yZLemIO5TfCptl+VP0tjVjXoGzk=;
+        b=hIP/czaoK3n/oe9GdrWrAxteKBysKQHjv9bn3oug3XwbloDqohDeHe6nZw5wAOEmFS
+         xHFw0bei3z2mVntO+xdSnIxrT0l/OOnt+j6hgv19f8Ue+Ydj61QQBL1tpMQvqbIPewvj
+         Yg3Q6VgHq/ih3fk55J412esBw1dgrn41zsv5JYEj8ycpsbZ1yxT/sPfodviVntFZQlLy
+         ZSEJWykE9WCn/u+PyDBDZsji16qBzFu6J6aFgYMrkOHzlYlN3vHMcoj87T3Yhe5/nfjX
+         hUIhYm+xOJ6SwnriJRXXoIY5FNSFmcwYwsOxRDSGt7F6U2ndBIF5TMvjlRLp0pDMKqfu
+         Cu1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=pCvLRXZeSS8Xv+P2yZLemIO5TfCptl+VP0tjVjXoGzk=;
+        b=GctBd5adeXehb0n8uAtABEaZ2wJcFE94mg/8bq7zAAhXoftGozALZsGsF4c1BBV2aF
+         fLkaPOar4u3q8Xlamyz9rHpKyfDAehJLqppFp/kNsaqMW2K9QJwlRJmeUZpS6zZmsGqU
+         Jxwxr9FThdZwIM15JpklFE0Os6Puhd/ni/qxdPiM2MPXkzQBe86sewDoZdoMxGEaOToS
+         jNmaTsaehbKHWxq9gXg8fRtICWfdYxx6Qsoh97E91lBXE2p9x+DQ1HcPASXzIzSO6tzT
+         7Ng9oboY4RNe1l4t+KDOLNJLJZ0b+j2nHHc0o1QYvndXC4vP7Qs/VQqXnm2K+TCUGy2v
+         Mkeg==
+X-Gm-Message-State: ACrzQf2L/6poWSSaSFkXWGQ6gdE8q0uynpDXSqwUplkjnBu+F2RFijNz
+        epF9aZ41zlTLN6ZPEX1T7Nc=
+X-Google-Smtp-Source: AMsMyM6ZNE36tmix1QHVskobn8R/nKoKZdw+Q6QOKboCQIvTA5IxJc5V3Gv7M/zYuwtsqqoYrZwKOQ==
+X-Received: by 2002:a63:9856:0:b0:439:e932:3957 with SMTP id l22-20020a639856000000b00439e9323957mr4497208pgo.385.1663511015998;
+        Sun, 18 Sep 2022 07:23:35 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b001782f94f8ebsm15606356plg.3.2022.09.18.07.23.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 07:23:35 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     Liam.Howlett@oracle.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] lib/test_maple_tree: fix comparing pointer to 0
+Date:   Sun, 18 Sep 2022 14:23:03 +0000
+Message-Id: <20220918142302.209905-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Sep 2022 12:46:31 +0200
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+From: Xu Panda <xu.panda@zte.com.cn>
 
-> On Sat, Aug 20, 2022 at 01:06:48PM +0100, Jonathan Cameron wrote:
-> > On Mon, 15 Aug 2022 09:16:47 +0000
-> > Denys Zagorui <dzagorui@cisco.com> wrote:
-> >  =20
-> > > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > >=20
-> > > After the result of the previous conversion is read the chip
-> > > automatically starts a new conversion and doesn't accept new i2c
-> > > transfers until this conversion is completed which makes the function
-> > > return failure. =20
-> >=20
-> > That's rather nasty.
-> >=20
-> > Could we add a cheeky sleep in the other path to ensure there is always
-> > time for the conversion to be done?  Not ideal, but might ensure
-> > there isn't a known problem path without introducing much complexity. =
-=20
->=20
-> FTR: While the patch was originally authored by me, I don't currently
-> have access to a machine with that chip. So currently there will be no
-> incentive on my side to address this feedback.
+Comparing pointer whith NULL instead of comparing pointer to 0.
 
-I'm not keen to keep changes to this driver queued up on improving this pat=
-ch.
-Hence applied to the togreg branch of iio.git and I'll push that out as tes=
-ting
-shortly for the autobuilders to poke at it.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ lib/test_maple_tree.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I have also marked it for stable.
+diff --git a/lib/test_maple_tree.c b/lib/test_maple_tree.c
+index 4f69e009a015..ef28aa8e79f1 100644
+--- a/lib/test_maple_tree.c
++++ b/lib/test_maple_tree.c
+@@ -34612,7 +34612,7 @@ STORE, 140501948112896, 140501948116991,
+        mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
+        check_erase2_testset(mt, set27, ARRAY_SIZE(set27));
+        rcu_barrier();
+-       MT_BUG_ON(mt, 0 != mtree_load(mt, 140415537422336));
++       MT_BUG_ON(mt, NULL != mtree_load(mt, 140415537422336));
+        mt_set_non_kernel(0);
+        mt_validate(mt);
+        mtree_destroy(mt);
+@@ -34736,7 +34736,7 @@ STORE, 140501948112896, 140501948116991,
+        mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
+        check_erase2_testset(mt, set37, ARRAY_SIZE(set37));
+        rcu_barrier();
+-       MT_BUG_ON(mt, 0 != mtree_load(mt, 94637033459712));
++       MT_BUG_ON(mt, NULL != mtree_load(mt, 94637033459712));
+        mt_validate(mt);
+        mtree_destroy(mt);
 
-Thanks,
+@@ -34744,7 +34744,7 @@ STORE, 140501948112896, 140501948116991,
+        mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
+        check_erase2_testset(mt, set38, ARRAY_SIZE(set38));
+        rcu_barrier();
+-       MT_BUG_ON(mt, 0 != mtree_load(mt, 94637033459712));
++       MT_BUG_ON(mt, NULL != mtree_load(mt, 94637033459712));
+        mt_validate(mt);
+        mtree_destroy(mt);
 
-Jonathan
-
->=20
-> Best regards
-> Uwe
->=20
+-- 
+2.15.2
 
