@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FF15BBB32
+	by mail.lfdr.de (Postfix) with ESMTP id 000805BBB33
 	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 05:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiIRDHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 23:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S229483AbiIRDHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 23:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIRDHX (ORCPT
+        with ESMTP id S229548AbiIRDHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 23:07:23 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103352982D
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:07:21 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id h28so18469807qka.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:07:21 -0700 (PDT)
+        Sat, 17 Sep 2022 23:07:24 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EF327159
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:07:22 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id s13so19545248qvq.10
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:07:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=28qxGuS3wBP5HWmbq1UhK0+iKUABPY0/24xMCB/mxU0=;
-        b=jkN6o2n7ceG76VrpNvl/UfZg0xFsLNNx8bitngnNrLejsyCFIAfL54F5Li4umMFyQl
-         jKe2CyNbf8y0iyAui0VPsF0gJuuzvuPVdG+YhE71ETGda8TagPQRWKqWuPAhX+Al4XTT
-         yfCmqmZSOdQVShOG5meIXXhVGlpbix8+yWwJQdB4gxYPSkIYg6Fsyu6ThnE+h94Ys7H8
-         Ww/UKngs81LGPtNPtbUdU49JDxRnDuktxCNiLvBW7GMorwGQu46QTEhyCSFAO9Jo2rt1
-         3AXWUC6UgPpPpkySQivL7/sdgWK97eoFMmfjBoSFKOb+rAFJYiT/JS0tHe31UCat+Jio
-         +lIQ==
+        bh=LgocecjigwU3Agdjb8TY62Q6ibOCi0iPSWcnW4GUNJI=;
+        b=BJeCZHOcdO6zOBUNdIxK5z8bIM1M8Gyv2hCjpc/o95fdn8kVtR4ype/fy3q/91YWDo
+         //M6Z2kV6swHFlHTa8GX+sAVHlI5Nu3HHvMfSP+qvXUCPhjAHo6v1DPa2Ogw+FYQxMy8
+         CQTuEj3VFXsSAUxYOfRElmOxbKIdctzLuGAKo/4fp6gIpmbCed8b3L5WEafJPUFwWldz
+         4xphSCxGiWE5FcalqxvWJCDT/hVJDD6tlLfNHhxhjkoIWD/u1vtObyTS5LaFLx8R11bJ
+         NxePgECU7eqqNDE3TYScGblkGBDP1QKM97RKaejDj20J1agJrnQbiGGx91HWW5dOX7Xy
+         lWhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=28qxGuS3wBP5HWmbq1UhK0+iKUABPY0/24xMCB/mxU0=;
-        b=WYYXJCoIv17dg/QAhGr3c/eL7HjVnWTW78hzt+1C7tKgiKgBFAKJRUtsTP8LYS0Hw6
-         oNolPoVVmuRhotRWwol6KrKZ/6u9ZyGwMVIa4uUHvhzyhJCc7AKA+aLTT5UwbITWsFp8
-         UU/1uFXs63Du2SVtTbjsl1S8zd7e5C9YNaijiXSMsX6XYhgWh45iX1C+ZsYCDeiiIRqL
-         mZvhFeVMXSaVtmeFFIjpr1EPsTmJ/OD49IVujJhV1TQjaeFfH81OS0VZbts+1PSMibWD
-         jWZpEeKHEdfKm60f75n1t/HYm9VtvXI+fXwuWyKBt5QeBvyG7/E4S5Nl6IAMCbuBxuph
-         Ts/Q==
-X-Gm-Message-State: ACrzQf2+vWBZggIb0cpx9D9rNGMMffi/jQfMEwv5P2j309QhsPn1mEr+
-        +ZrGRBRySo016v1aSjwxW5vK9W5yIj0=
-X-Google-Smtp-Source: AMsMyM4K7Fr1jwBbPPlQnUvqP0q7cqiBR73NcNsSpB9SV8rGTB2SR7kwbVIBn4ZjXP8dQ/p5sFkkJQ==
-X-Received: by 2002:a05:620a:1410:b0:6ce:9946:8469 with SMTP id d16-20020a05620a141000b006ce99468469mr9137829qkj.654.1663470440751;
-        Sat, 17 Sep 2022 20:07:20 -0700 (PDT)
+        bh=LgocecjigwU3Agdjb8TY62Q6ibOCi0iPSWcnW4GUNJI=;
+        b=cPJ/hgKXi9wPD0dFnFgFeoDSrvtYuV0w/+zz8gWh4v4udSWZW4cbtCCsTqr9AX9NeU
+         JQ5Wppz7r1CUgSUH3XpvfqwrrJ1qtK3ztGsh/d3VWzzNMWfyAl/XabejAVBQ7RirkaOM
+         UrSqDovl/2s1OqfIcqlPIVNXGsWmpgrruJC0gTh7FlY9UfrTEV+QVq2KnciUnGpSfLzg
+         OUB9m/63B0sn6fdgpKdcqDAI6LOBi3+fKTR8z2jLa9nyYOyFTJ5YRwUseuCmLP4u1ksc
+         8zJyHjyQATkNchn82jEiDou0AnNMNsnBPBfMEH8mSR0E4AFzgUeftUH7h13ynAQEVi5z
+         lXIQ==
+X-Gm-Message-State: ACrzQf3v6lgIm+z5vfz4E1908/P5SiN+uMiuInR2iQL4MDz5CSRCvM/o
+        amVoM4oIpKd8/dtztIkH+vBi451jhto=
+X-Google-Smtp-Source: AMsMyM6ZvR5uibZiHzw8/3Ayi1vOpODJ2r5OJE4qvSBCQn+Q7uunbB95pLT3hZyN5gmttiseOshRuQ==
+X-Received: by 2002:ad4:5961:0:b0:4ad:2406:e014 with SMTP id eq1-20020ad45961000000b004ad2406e014mr4097608qvb.119.1663470441720;
+        Sat, 17 Sep 2022 20:07:21 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:2270:a495:2224:867e:566a])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05620a28d400b006ce1bfbd603sm9941918qkp.124.2022.09.17.20.07.20
+        by smtp.gmail.com with ESMTPSA id v15-20020a05620a0f0f00b0069fe1dfbeffsm9739734qkl.92.2022.09.17.20.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 20:07:20 -0700 (PDT)
+        Sat, 17 Sep 2022 20:07:21 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -66,9 +66,9 @@ To:     linux-kernel@vger.kernel.org,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH v3 2/6] lib/bitmap: add bitmap_weight_and()
-Date:   Sat, 17 Sep 2022 20:07:12 -0700
-Message-Id: <20220918030716.1252285-3-yury.norov@gmail.com>
+Subject: [PATCH v3 3/6] lib: add find_nth{,_and,_andnot}_bit()
+Date:   Sat, 17 Sep 2022 20:07:13 -0700
+Message-Id: <20220918030716.1252285-4-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220918030716.1252285-1-yury.norov@gmail.com>
 References: <20220918030716.1252285-1-yury.norov@gmail.com>
@@ -84,131 +84,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function calculates Hamming weight of (bitmap1 & bitmap2). Now we
-have to do like this:
-	tmp = bitmap_alloc(nbits);
-	bitmap_and(tmp, map1, map2, nbits);
-	weight = bitmap_weight(tmp, nbits);
-	bitmap_free(tmp);
+Kernel lacks for a function that searches for Nth bit in a bitmap.
+Usually people do it like this:
+	for_each_set_bit(bit, mask, size)
+		if (n-- == 0)
+			return bit;
 
-This requires additional memory, adds pressure on alloc subsystem, and
-way less cache-friendly than just:
-	weight = bitmap_weight_and(map1, map2, nbits);
+We can do it more efficiently, if we:
+1. find a word containing Nth bit, using hweight(); and
+2. find the bit, using a helper fns(), that works similarly to
+   __ffs() and ffz().
 
-The following patches apply it for cpumask functions.
+fns() is implemented as a simple loop. For x86_64, there's PDEP instruction
+to do that: ret = clz(pdep(1 << idx, num)). However, for large bitmaps the
+most of improvement comes from using hweight(), so I kept fns() simple.
+
+New find_nth_bit() is ~70 times faster on x86_64/kvm in find_bit benchmark:
+find_nth_bit:                  7154190 ns,  16411 iterations
+for_each_bit:                505493126 ns,  16315 iterations
+
+With all that, a family of 3 new functions is added, and used where
+appropriate in the following patches.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/bitmap.h  | 12 ++++++++++++
- include/linux/cpumask.h | 11 +++++++++++
- lib/bitmap.c            | 30 +++++++++++++++++++++---------
- 3 files changed, 44 insertions(+), 9 deletions(-)
+Comparing to v2, it adds a path that allows quit earlier if the
+condition can't be met:
+	for (idx = 0; (idx + 1) * BITS_PER_LONG <= sz; idx++) {	
+ +		if (idx * BITS_PER_LONG + nr >= sz)
+ +			goto out;
+ 	...
 
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index f65410a49fda..b2aef45af0db 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -51,6 +51,7 @@ struct device;
-  *  bitmap_empty(src, nbits)                    Are all bits zero in *src?
-  *  bitmap_full(src, nbits)                     Are all bits set in *src?
-  *  bitmap_weight(src, nbits)                   Hamming Weight: number set bits
-+ *  bitmap_weight_and(src1, src2, nbits)        Hamming Weight of and'ed bitmap
-  *  bitmap_set(dst, pos, nbits)                 Set specified bit area
-  *  bitmap_clear(dst, pos, nbits)               Clear specified bit area
-  *  bitmap_find_next_zero_area(buf, len, pos, n, mask)  Find bit free area
-@@ -164,6 +165,8 @@ bool __bitmap_intersects(const unsigned long *bitmap1,
- bool __bitmap_subset(const unsigned long *bitmap1,
- 		     const unsigned long *bitmap2, unsigned int nbits);
- unsigned int __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
-+unsigned int __bitmap_weight_and(const unsigned long *bitmap1,
-+				 const unsigned long *bitmap2, unsigned int nbits);
- void __bitmap_set(unsigned long *map, unsigned int start, int len);
- void __bitmap_clear(unsigned long *map, unsigned int start, int len);
- 
-@@ -439,6 +442,15 @@ unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
- 	return __bitmap_weight(src, nbits);
- }
- 
-+static __always_inline
-+unsigned long bitmap_weight_and(const unsigned long *src1,
-+				const unsigned long *src2, unsigned int nbits)
-+{
-+	if (small_const_nbits(nbits))
-+		return hweight_long(*src1 & *src2 & BITMAP_LAST_WORD_MASK(nbits));
-+	return __bitmap_weight_and(src1, src2, nbits);
-+}
-+
- static __always_inline void bitmap_set(unsigned long *map, unsigned int start,
- 		unsigned int nbits)
- {
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index e8ad12b5b9d2..31bf08c786e3 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -586,6 +586,17 @@ static inline unsigned int cpumask_weight(const struct cpumask *srcp)
- 	return bitmap_weight(cpumask_bits(srcp), nr_cpumask_bits);
+ include/linux/bitops.h | 19 ++++++++++
+ include/linux/find.h   | 86 ++++++++++++++++++++++++++++++++++++++++++
+ lib/find_bit.c         | 44 +++++++++++++++++++++
+ 3 files changed, 149 insertions(+)
+
+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+index 3b89c64bcfd8..d7dd83fafeba 100644
+--- a/include/linux/bitops.h
++++ b/include/linux/bitops.h
+@@ -247,6 +247,25 @@ static inline unsigned long __ffs64(u64 word)
+ 	return __ffs((unsigned long)word);
  }
  
 +/**
-+ * cpumask_weight_and - Count of bits in (*srcp1 & *srcp2)
-+ * @srcp1: the cpumask to count bits (< nr_cpu_ids) in.
-+ * @srcp2: the cpumask to count bits (< nr_cpu_ids) in.
++ * fns - find N'th set bit in a word
++ * @word: The word to search
++ * @n: Bit to find
 + */
-+static inline unsigned int cpumask_weight_and(const struct cpumask *srcp1,
-+						const struct cpumask *srcp2)
++static inline unsigned long fns(unsigned long word, unsigned int n)
 +{
-+	return bitmap_weight_and(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
++	unsigned int bit;
++
++	while (word) {
++		bit = __ffs(word);
++		if (n-- == 0)
++			return bit;
++		__clear_bit(bit, &word);
++	}
++
++	return BITS_PER_LONG;
 +}
 +
  /**
-  * cpumask_shift_right - *dstp = *srcp >> n
-  * @dstp: the cpumask result
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index d56e275db73e..3fc2e338ec30 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -333,20 +333,32 @@ bool __bitmap_subset(const unsigned long *bitmap1,
+  * assign_bit - Assign value to a bit in memory
+  * @nr: the bit to set
+diff --git a/include/linux/find.h b/include/linux/find.h
+index dead6f53a97b..b100944daba0 100644
+--- a/include/linux/find.h
++++ b/include/linux/find.h
+@@ -15,6 +15,11 @@ unsigned long _find_next_and_bit(const unsigned long *addr1, const unsigned long
+ unsigned long _find_next_zero_bit(const unsigned long *addr, unsigned long nbits,
+ 					 unsigned long start);
+ extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
++unsigned long __find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n);
++unsigned long __find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n);
++unsigned long __find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
++					unsigned long size, unsigned long n);
+ extern unsigned long _find_first_and_bit(const unsigned long *addr1,
+ 					 const unsigned long *addr2, unsigned long size);
+ extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
+@@ -136,6 +141,87 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
  }
- EXPORT_SYMBOL(__bitmap_subset);
+ #endif
  
-+#define BITMAP_WEIGHT(FETCH, bits)	\
++/**
++ * find_nth_bit - find N'th set bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed, counting from 0
++ *
++ * The following is semantically equivalent:
++ *	 idx = find_nth_bit(addr, size, 0);
++ *	 idx = find_first_bit(addr, size);
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n)
++{
++	if (n >= size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return __find_nth_bit(addr, size, n);
++}
++
++/**
++ * find_nth_and_bit - find N'th set bit in 2 memory regions
++ * @addr1: The 1st address to start the search at
++ * @addr2: The 2nd address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed, counting from 0
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n)
++{
++	if (n >= size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr1 & *addr2 & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return __find_nth_and_bit(addr1, addr2, size, n);
++}
++
++/**
++ * find_nth_andnot_bit - find N'th set bit in 2 memory regions,
++ *			 flipping bits in 2nd region
++ * @addr1: The 1st address to start the search at
++ * @addr2: The 2nd address to start the search at
++ * @size: The maximum number of bits to search
++ * @n: The number of set bit, which position is needed, counting from 0
++ *
++ * Returns the bit number of the N'th set bit.
++ * If no such, returns @size.
++ */
++static inline
++unsigned long find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
++				unsigned long size, unsigned long n)
++{
++	if (n >= size)
++		return size;
++
++	if (small_const_nbits(size)) {
++		unsigned long val =  *addr1 & (~*addr2) & GENMASK(size - 1, 0);
++
++		return val ? fns(val, n) : size;
++	}
++
++	return __find_nth_andnot_bit(addr1, addr2, size, n);
++}
++
+ #ifndef find_first_and_bit
+ /**
+  * find_first_and_bit - find the first set bit in both memory regions
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 8707b4ef3e5e..ae2a59b59bfe 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -68,6 +68,30 @@ out:										\
+ 	sz;									\
+ })
+ 
++#define FIND_NTH_BIT(FETCH, size, num)						\
 +({										\
-+	unsigned int __bits = (bits), idx, w = 0;				\
++	unsigned long sz = (size), nr = (num), idx, w, tmp;			\
 +										\
-+	for (idx = 0; idx < __bits / BITS_PER_LONG; idx++)			\
-+		w += hweight_long(FETCH);					\
++	for (idx = 0; (idx + 1) * BITS_PER_LONG <= sz; idx++) {			\
++		if (idx * BITS_PER_LONG + nr >= sz)				\
++			goto out;						\
 +										\
-+	if (__bits % BITS_PER_LONG)						\
-+		w += hweight_long((FETCH) & BITMAP_LAST_WORD_MASK(__bits));	\
++		tmp = (FETCH);							\
++		w = hweight_long(tmp);						\
++		if (w > nr)							\
++			goto found;						\
 +										\
-+	w;									\
++		nr -= w;							\
++	}									\
++										\
++	if (sz % BITS_PER_LONG)							\
++		tmp = (FETCH) & BITMAP_LAST_WORD_MASK(sz);			\
++found:										\
++	sz = min(idx * BITS_PER_LONG + fns(tmp, nr), sz);			\
++out:										\
++	sz;									\
 +})
 +
- unsigned int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
- {
--	unsigned int k, lim = bits/BITS_PER_LONG, w = 0;
--
--	for (k = 0; k < lim; k++)
--		w += hweight_long(bitmap[k]);
--
--	if (bits % BITS_PER_LONG)
--		w += hweight_long(bitmap[k] & BITMAP_LAST_WORD_MASK(bits));
--
--	return w;
-+	return BITMAP_WEIGHT(bitmap[idx], bits);
- }
- EXPORT_SYMBOL(__bitmap_weight);
+ #ifndef find_first_bit
+ /*
+  * Find the first set bit in a memory region.
+@@ -111,6 +135,26 @@ unsigned long _find_next_bit(const unsigned long *addr, unsigned long nbits, uns
+ EXPORT_SYMBOL(_find_next_bit);
+ #endif
  
-+unsigned int __bitmap_weight_and(const unsigned long *bitmap1,
-+				const unsigned long *bitmap2, unsigned int bits)
++unsigned long __find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n)
 +{
-+	return BITMAP_WEIGHT(bitmap1[idx] & bitmap2[idx], bits);
++	return FIND_NTH_BIT(addr[idx], size, n);
 +}
-+EXPORT_SYMBOL(__bitmap_weight_and);
++EXPORT_SYMBOL(__find_nth_bit);
 +
- void __bitmap_set(unsigned long *map, unsigned int start, int len)
- {
- 	unsigned long *p = map + BIT_WORD(start);
++unsigned long __find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
++				 unsigned long size, unsigned long n)
++{
++	return FIND_NTH_BIT(addr1[idx] & addr2[idx], size, n);
++}
++EXPORT_SYMBOL(__find_nth_and_bit);
++
++unsigned long __find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
++				 unsigned long size, unsigned long n)
++{
++	return FIND_NTH_BIT(addr1[idx] & ~addr2[idx], size, n);
++}
++EXPORT_SYMBOL(__find_nth_andnot_bit);
++
+ #ifndef find_next_and_bit
+ unsigned long _find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
+ 					unsigned long nbits, unsigned long start)
 -- 
 2.34.1
 
