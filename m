@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCE35BBE69
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2855BBE6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiIROdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S229698AbiIROdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIROd3 (ORCPT
+        with ESMTP id S229550AbiIROdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:33:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F401F602;
-        Sun, 18 Sep 2022 07:33:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A0B84CE08CB;
-        Sun, 18 Sep 2022 14:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5447C433D6;
-        Sun, 18 Sep 2022 14:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663511600;
-        bh=XEQaAbKO4JRklsuepue2nJS2tct/eD81nhfKowWer48=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ThbV+GEMWA4Ad8gJP1Oec6m/KJ1ip9vFgxxkC0LElKhZqveB8OTOvYiLQKyJEz93Q
-         HJNYRa+JyPsSfjv3Xsra7aYnZoRpf2zY4Z8c3HEDzbgHubPL6PcBzBnY9+9UswYrQk
-         oFmIpURLsK+0js1LJwXpeCTed+bsCZ62bdP6schcoSd533WeJ4Y534scHRwkzka2kv
-         A2O0CrNv0PAJx70KZqzaCTIKQMvsg9qC5avjYoFKWJLpW+9cTB8knfriqps9Cq8GlL
-         F93p4tiz0z7oVcPm8zYBgmtEnExp5ZotLDU1IQRlJxaBWKSy2FtSEpfNZLjUblNVDS
-         n8grGziPVX91Q==
-Date:   Sun, 18 Sep 2022 15:33:25 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
-Cc:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/5] Add support for LTC2499 ADC
-Message-ID: <20220918153325.2c8d0d6c@jic23-huawei>
-In-Reply-To: <20220916140922.2506248-1-ciprian.regus@analog.com>
-References: <20220916140922.2506248-1-ciprian.regus@analog.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 18 Sep 2022 10:33:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7586E1FCC3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:33:46 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u9so59168376ejy.5
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=YdfdEKjpvf/n0/5C+OJTZ4gPftWh1t3E7BZU/XgU5qI=;
+        b=DV3lmQEbtVxYC64nZl6YwDfxGmol8kxKwEV4JgyPGVslvMM0vZd6NcJyxRI8K++ou8
+         bKB0cGNqRf4qoWUfDdAXp/gJE7lJdLDC2teU4INKNGUCvsnwoDRgzG/Yc1yPG3iSl/p8
+         KIAQKym2j/Vb/LJNcbYLy6idXOzS7EosM4w/0nmiqdIQNdLz7MNquw1THfOYA0ohjAwy
+         dXMYlSPbE8tMzvEqpYqel6fQ88iQJWoFYzi6fBbwgSARrJcws40WKoI89aS2wxBq+2ih
+         micPwtjabhoYXouGfiBU4RlyIFERpDNBbtJHaB0SqJbjPdozY2Lp0Bwu+bNTZdbfGfOM
+         1ZPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=YdfdEKjpvf/n0/5C+OJTZ4gPftWh1t3E7BZU/XgU5qI=;
+        b=4YY6aYqdgPcDP1AoU9jNv2G/QGESp227EV8Y0V55FbZlh7xGmV1uRlen59WqV4l0ZR
+         vaZbmnWb9l4lUtCS9+XdWfyUZu9NuNf93faodZgnWjhZcJstDHSP+/vbgTMMfERK/7Pq
+         hLZQWecwTiQHdcTi8vrxBgWVp/Mul0EkQ4hvf7DIpM0mQtChBd8TDJdyK0TWgOnO5a/S
+         e4/IdzcKfL4iTQE6QupUKJUCfmmTPVoHL8yRV2sk0laP0EAStezwSDCuTFfCw5WtF2IR
+         9RmNqEgfJ7c1Hl7eyLoj+DmcDXn/ju0yJRcyi6xrTEQ6sxpyO72tOS/bABFS1gUjXEPX
+         zVMQ==
+X-Gm-Message-State: ACrzQf1ZheWsB5u3GAEAcutTi8FnqjHxz/NiDrgeRJNiLGuBkfernI/G
+        CKZ4pbOh9y/+B07owvm/0ebCxoy5M5B/SOQzhZ+d9ojPWZXMHg==
+X-Google-Smtp-Source: AMsMyM5hyowI3kuMOb7eoIT5Ld+NVGfFijI7wklVVj+nEnMlh4wrBMxNl0eHyDQ4IlRMMRnpP+w19OuuJ5ZOtPJj4fY=
+X-Received: by 2002:a17:907:e9e:b0:77f:9688:2714 with SMTP id
+ ho30-20020a1709070e9e00b0077f96882714mr10055429ejc.208.1663511624980; Sun, 18
+ Sep 2022 07:33:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <202209170232.grVMomkJ-lkp@intel.com>
+In-Reply-To: <202209170232.grVMomkJ-lkp@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 18 Sep 2022 16:33:33 +0200
+Message-ID: <CACRpkdYGMToSn1XR0Zrvv3yKeOX7_tw0=y0NKhOXN7O8KL-Ntg@mail.gmail.com>
+Subject: Re: [linux-stable-rc:linux-5.4.y 5364/5387] drivers/infiniband/sw/siw/siw_qp_tx.c:32:37:
+ warning: cast to pointer from integer of different size
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,51 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 17:09:17 +0300
-Ciprian Regus <ciprian.regus@analog.com> wrote:
+On Fri, Sep 16, 2022 at 8:19 PM kernel test robot <lkp@intel.com> wrote:
 
-> The LTC2499 is a 16-channel (eight differential), 24-bit,
-> ADC with Easy Drive technology and a 2-wire, I2C interface.
-> 
-> This adds support for the LTC2499 ADC by extending the LTC2497
-> driver.
-> 
-> There is also a removal of a MAINTAINERS entry duplicate.
-> 
-> Note: This fix is required to be applied first:
-> https://patchwork.kernel.org/project/linux-iio/patch/20220815091647.1523532-1-dzagorui@cisco.com
+> commit: e7f78835d551bb2deb5aa3346d84c8f03ade313d [5364/5387] RDMA/siw: Pass a pointer to virt_to_page()
+> config: riscv-randconfig-r013-20220916 (https://download.01.org/0day-ci/archive/20220917/202209170232.grVMomkJ-lkp@intel.com/config)
+> compiler: riscv32-linux-gcc (GCC) 12.1.0
 
-Hi Ciprian,
+So if RISCV32 ...
 
-This lost it's version number which may confuse some scripts etc.
-Anyhow, I think b4 found the right versions.
+>     31          if (paddr)
+>   > 32                  return virt_to_page((void *)paddr);
 
-Applied to the togreg branch of iio.git and pushed out as testing for 0-day
-to take a look.
+Think that passing a (void *) to virt_to_page() is a problem:
 
-Note I plan to rebase that tree sometime this week so don't use it
-as a stable base.
+> warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>       32 |                 return virt_to_page((void *)paddr);
 
-I tweaked a few patch descriptions to make it clearer what driver was involved
-and wrapped long lines whilst applying.
+I would think this is a problem with RISCV32.
 
-Thanks,
+What has this arch done?
 
-Jonathan
-> 
-> Ciprian Regus (5):
->   Remove duplicate matching entry
->   dt-bindings: iio: adc: Add docs for LTC2499
->   Add MAINTAINERS entries for LTC2497 and LTC2496
->   drivers: iio: adc: LTC2499 support
->   drivers: iio: adc: Rename the LTC2499 iio device
-> 
->  .../bindings/iio/adc/lltc,ltc2497.yaml        |  8 ++-
->  MAINTAINERS                                   |  3 +-
->  drivers/iio/adc/ltc2496.c                     |  9 ++-
->  drivers/iio/adc/ltc2497-core.c                | 12 +++-
->  drivers/iio/adc/ltc2497.c                     | 63 +++++++++++++++++--
->  drivers/iio/adc/ltc2497.h                     |  6 ++
->  6 files changed, 90 insertions(+), 11 deletions(-)
-> 
+This is a few lines up:
 
+> dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
+
+dma_addr_t is a different size than (void *)?
+
+Given that the patch raising this problem looked like this:
+
+-               return virt_to_page(paddr);
++               return virt_to_page((void *)paddr);
+
+I doubt that it has created a bug that wasn't there before. Passing
+a dma_addr_t to virt_to_page() might be wrong, but that is what the
+driver has been doing all the time.
+
+siw_pbl_get_buffer() claims to
+"Gets physical address backed by PBL element."
+Why is that even passed to virt_to_page() if it's no virtual address
+but a dma_addr_t to begin with?
+
+I certainly don't understand SIW, but this bug, if it is a bug (or a type and
+documentation bug) is clearly not new.
+
+Yours,
+Linus Walleij
