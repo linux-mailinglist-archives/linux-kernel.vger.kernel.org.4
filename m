@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DD65BBB23
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 03:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECA15BBB25
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 04:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiIRBzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 21:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S229519AbiIRCPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 22:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIRBzM (ORCPT
+        with ESMTP id S229436AbiIRCPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 21:55:12 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E09C12D1E;
-        Sat, 17 Sep 2022 18:55:10 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso4021465pjq.1;
-        Sat, 17 Sep 2022 18:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=XHN5cGZNT0Mc1WiNTDqhbkIEYyJhwQWVW34NwsuZveY=;
-        b=QSHtYYigKVwfSJQ6DP+KGjpL4OiZ2hVDs+Thh526SpBdUCfX9jsai2WEVnd8ivoKN3
-         omMjWX7f7T43/5MJSCPjWIkTWxFoUBSjqAFTh8cHcCmJ6+q7SKLAbfCLp50Vea1DogTh
-         uhv3C1XuA6vxHj5VG0KoM5abkuAG6ahPHNZQfE7yyy/3D+Rirxv+XT1KfOn0tiSW00F6
-         YCwbT4Twrm6wQO7rWH0TxphB0Ml/iR0pDE/sysien149lGUWoyYgN9r5+hWwHw/SmbBl
-         O7fHN0nwU7kZpQ6+jQREMJg1IApp99onmrG1jDWIyieRfwYiIjL9dYGiir6KzLACXaGZ
-         eI0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=XHN5cGZNT0Mc1WiNTDqhbkIEYyJhwQWVW34NwsuZveY=;
-        b=g16suYRzOdQHYvFC+05jAxOpuPhKghX0Q+AN9cduxlEN2JHThAUL7D1kX0t5CtN0gu
-         Kfi9wuM16uzEsR+hNz+tKqAd4Tyw+Hd39lamU+LAmdFQAFQI/99/aUAx/6iIgtbQmHTC
-         1sUXS5zGhhW41fHUz7afG956Ddxo7nWO8uQ4UW1ZUvgYyS5IqYsiORHqpFXV0/I8bthz
-         09yADeN7b+toPFa0KNN0ibMxH3ndouZ5Q6TRDCtT6xybfcwTzr/c8ixwG2U/4LW2dLPb
-         R7uCFLq5+BqCFCxh8CIl/cseEuj+dmMoj4Jilr1sEbNIXNgeusggrIvwD01fa25k9CEZ
-         UGTg==
-X-Gm-Message-State: ACrzQf1fCPQxcSL9qiQaU8KoTQr8iIS7v9ZxPq4TdS75JyKeMWjmhSgB
-        6nQEwv1Peyw5vg0Kmory2DzPg3gQtYp/sQ==
-X-Google-Smtp-Source: AMsMyM5fLpjvfiQRmrZ4zSxLSq7pD/FPlm3Y4ERjZknzwa5KZbNRVo/IvOYCBZou/EsdL10HUKddMg==
-X-Received: by 2002:a17:903:2346:b0:178:4c17:eef7 with SMTP id c6-20020a170903234600b001784c17eef7mr6738088plh.30.1663466109246;
-        Sat, 17 Sep 2022 18:55:09 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a170902f38100b001789b724712sm182178ple.232.2022.09.17.18.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 18:55:08 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] net/ethtool/tunnels: Check return value of nla_nest_start()
-Date:   Sat, 17 Sep 2022 18:54:54 -0700
-Message-Id: <20220918015454.672485-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 17 Sep 2022 22:15:07 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E47F513E89
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 19:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KKOLo
+        e6jV7OhaYjuOkL4ZW2LfigbDK6OZGAttUk20qc=; b=Iku22FjUN8loVd424B6MY
+        WhBkPyVqMOY5duTuruDoGrSBohOQXRmV8fxDK2xKmOTMbkB8i3yd0rBSdOtMIf2L
+        Mn1kggtF8UXiMXSrwSZVM1OiaBeu4gGLMPFCVcki/2Bk1Aql2hebiVrCE2l68Fgc
+        vQzHuiZY1TpxZiRMD+rVZw=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp8 (Coremail) with SMTP id DMCowAB3v6f3fiZjpmgXbg--.42780S4;
+        Sun, 18 Sep 2022 10:14:38 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     sudeep.holla@arm.com, cristian.marussi@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] firmware: arm_scmi: remove unnecessary 'NULL' values from pointer
+Date:   Sun, 18 Sep 2022 10:14:10 +0800
+Message-Id: <20220918021410.17369-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMCowAB3v6f3fiZjpmgXbg--.42780S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrur4fKF1xJF13tF48GFWkCrg_yoW3ArcE9F
+        yrXw4UKw1IkrWqqr13Ga43Arnaya18W3WfXrn2va13tr17Aw4Du3WkCwn7XwnrXrsFyFn7
+        urZ0gFs5Zr4vkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sREoUD5UUUUU==
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbCoA+AF1zmWP61HwAAsO
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return value of nla_nest_start() could be null on error. We need to
-check it before we pass entry to nla_nest_end().
+There is no need to initialize the assignment.
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
 ---
- net/ethtool/tunnels.c | 2 +-
+ drivers/firmware/arm_scmi/perf.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ethtool/tunnels.c b/net/ethtool/tunnels.c
-index efde33536687..2d6b03a35dd9 100644
---- a/net/ethtool/tunnels.c
-+++ b/net/ethtool/tunnels.c
-@@ -140,7 +140,7 @@ ethnl_tunnel_info_fill_reply(const struct ethnl_req_info *req_base,
- 		if (nla_put_be16(skb, ETHTOOL_A_TUNNEL_UDP_ENTRY_PORT,
- 				 htons(IANA_VXLAN_UDP_PORT)) ||
- 		    nla_put_u32(skb, ETHTOOL_A_TUNNEL_UDP_ENTRY_TYPE,
--				ilog2(UDP_TUNNEL_TYPE_VXLAN)))
-+				ilog2(UDP_TUNNEL_TYPE_VXLAN)) || !entry)
- 			goto err_cancel_entry;
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index ecf5c4de851b..a8654d3d5ff9 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -723,7 +723,7 @@ static void *scmi_perf_fill_custom_report(const struct scmi_protocol_handle *ph,
+ 					  const void *payld, size_t payld_sz,
+ 					  void *report, u32 *src_id)
+ {
+-	void *rep = NULL;
++	void *rep;
  
- 		nla_nest_end(skb, entry);
+ 	switch (evt_id) {
+ 	case SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED:
+
+base-commit: d5538ab91d3a9a237805be6f8c6c272af2987995
 -- 
-2.25.1
+2.34.1
 
