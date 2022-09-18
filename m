@@ -2,143 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154955BBFCC
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 22:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB9C5BBFD6
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 22:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiIRU2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 16:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S229567AbiIRUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 16:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiIRU2V (ORCPT
+        with ESMTP id S229552AbiIRUcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 16:28:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFEA14036
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:28:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E6962208D;
-        Sun, 18 Sep 2022 20:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663532898; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/2t+HKm0CCQpQdWq0S5v4Xe3KPe9TbIIsu+iie7Hyac=;
-        b=yHDprDyFNMv9RmpwHiprkKWLYEadE8ctWPKgmzPKTwIxBBKrVitTQMWZ1+bZL7fJGIsUBa
-        z2WCHHiMjGNSZikHFoO1TIUMa9/c3OHZPnT0M6+tpkuFg9P9PmnxKmqaOGfsobf2lzw5bj
-        mFkVj17lhamffJJEcynr3lYlW1ZXx2c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663532898;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/2t+HKm0CCQpQdWq0S5v4Xe3KPe9TbIIsu+iie7Hyac=;
-        b=3UDYifvJcGjaUlWQGPAQIyuilzigZIBmOxElHgpdzUploixS5mn4cfWJN5kjqy2FUc6lej
-        75wXi3zdIFLg6DAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58FB21346B;
-        Sun, 18 Sep 2022 20:28:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rx5/FGJ/J2OzeAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Sun, 18 Sep 2022 20:28:18 +0000
-Message-ID: <70136115-5e77-c00a-9c29-b06cb8fcef0d@suse.cz>
-Date:   Sun, 18 Sep 2022 22:26:39 +0200
+        Sun, 18 Sep 2022 16:32:20 -0400
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54901140C8
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:32:19 -0700 (PDT)
+Received: by soltyk.jannau.net (Postfix, from userid 1000)
+        id 673E926F08A; Sun, 18 Sep 2022 22:32:17 +0200 (CEST)
+Date:   Sun, 18 Sep 2022 22:32:17 +0200
+From:   Janne Grunau <j@jannau.net>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Subject: Re: [PATCH] get_maintainer: Extend matched name characters in
+ maintainers_in_file()
+Message-ID: <20220918203217.GG4024@jannau.net>
+References: <20220916084712.84411-1-j@jannau.net>
+ <d52110471b332b047777616c762b086ee662225e.camel@perches.com>
+ <92afdf33e22e8a63f6baaaba94c004cf2ec5a7d7.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Tab-elections] Results from the 2022 LF TAB election
-Content-Language: en-US
-To:     Chris Mason <clm@fb.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, ksummit@lists.linux.dev
-Cc:     tech-board@lists.linuxfoundation.org,
-        tab-elections@lists.linuxfoundation.org
-References: <87h71984jy.fsf@meer.lwn.net>
- <9755284e-6b57-8340-dbf5-1bb50f036da3@fb.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <9755284e-6b57-8340-dbf5-1bb50f036da3@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <92afdf33e22e8a63f6baaaba94c004cf2ec5a7d7.camel@perches.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/15/22 10:09, Chris Mason wrote:
-> On 9/15/22 8:44 AM, Jonathan Corbet wrote:
->> There were 960 eligible voters for the 2022 Linux Foundation Technical
->> Advisory Board election, of whom 267 cast ballots.  The results were:
->>
->> 1. Kees Cook
->> 2. Christian Brauner
->> 3. Jakub Kicinski
->> 4. Dan Williams
->> 5. Dave Hansen
->> ---
->> 6. Chris Mason
->> 7. KP Singh
->>
->> The top five candidates will serve two-year terms on the TAB.  Thanks to
->> all who participated in this years election; please reach out to
->> tab-elections@lists.linuxfoundation.org if you have any questions.
+On 2022-09-18 10:03:17 -0700, Joe Perches wrote:
+> On Sat, 2022-09-17 at 07:11 -0700, Joe Perches wrote:
+> > On Fri, 2022-09-16 at 10:47 +0200, Janne Grunau wrote:
+> > > Extend the regexp matching name characters to cover Unicode blocks Latin
+> > > Extended-A and Extended-B.
+> > > Fixes 'scripts/get_maintainer.pl -f' for
+> > > 'Documentation/devicetree/bindings/clock/apple,nco.yaml'.
+> > > 
+> > > Signed-off-by: Janne Grunau <j@jannau.net>
+> > > 
+> > > ---
+> > > This still excludes Greek and Cyrilic characters which should be
+> > > expected in names as well. I tried to use '\p{L}' to match all Unicode
+> > > letters but couldn't get it to work. Feel free understand this as bug
+> > > report with an incomplete fix.
+> > 
+> > Maybe use \p{XPosixAlpha} ?
+> > 
+> > but I don't know what version of perl introduced this.
+> > 
+> > > diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+> > []
+> > > @@ -442,7 +442,7 @@ sub maintainers_in_file {
+> > >  	my $text = do { local($/) ; <$f> };
+> > >  	close($f);
+> > >  
+> > > -	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> > > +	my @poss_addr = $text =~ m$[A-Za-zÀ-ɏ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> > 
+> > 	my @poss_addr = $text =~ m$[\p{XPosixAlpha}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
 > 
-> Thanks for running the elections this year, and also thanks to Laura 
-> Abbott for working through our transition to the fully online elections.
+> Using variations of \p{posix} doesn't seem to work for at least perl 5.34.
 > 
-> Congratulations to all the winners, I think the online process worked 
-> really well, and I don't miss carrying around the ballot scanner in my 
-> luggage at all.
-
-Hi,
-
-I was wondering, as the voting is fully online now, does it have to
-still overlap LPC exactly? For example I happened to miss the most
-important e-mail from CIVS in my inbox during the conference, and while
-I tried to login there by the activation code, I could only see there I
-was invited to 2021 poll but didn't see the 2022 one (nor I can see it
-there now; I assume the link from the CIVS mail would have worked, but
-too late now).
-
-Also, since it seems many of the nominations were last-minute [1] I only
-saw two of them by Friday. So even if I didn't miss the CIVS e-mail, I
-would have to read through the manifestos and rank the candidates
-quickly during LPC, which wouldn't have been ideal.
-
-So maybe the vote could be scheduler for the week before LPC? And then
-both the new and old TAB members that happen to travel there could meet
-there knowing the results already.
-
-But maybe there are still other benefits to voting during LPC that I'm
-not aware of, so this is just my suggestion. Thanks.
-
-[1]
-https://lists.linuxfoundation.org/pipermail/tech-board-discuss/2022-September/thread.html
-
->>
->> jon
->>
->> P.S. On a personal note: a special "thank you" to Chris Mason, who has
->>       led the TAB well for many years.
+> \p{print} seems to work for Documentation/devicetree/bindings/clock/apple,nco.yaml,
+> but I don't know how fragile it is.
 > 
-> Oh, it's my turn to thank this year's TAB for taking over the reins, and 
-> also everyone that has put up with me over the years.  I've learned a 
-> great deal from my time on the TAB, and I'm looking forward seeing you 
-> all on the lists and at future conferences.
+> \p{print} might be too greedy...
+
+It is, it produces following diff (checking all files in 
+Documentation/devicetree/bindings):
+-Lubomir Rintel <lkundrak@v3.sk> (in file)
++"Copyright 2019,2020 Lubomir Rintel" <lkundrak@v3.sk> (in file)
+
+There are multiple hits of this form. The main issue is that \p{print} 
+includes space. That however fixes many names with 3 parts.
+
+It still fails for "Rafał Miłecki <rafal@milecki.pl>" which my change 
+handles correctly.
+
+I'm testing with perl 5.36
+
+> ---
+>  scripts/get_maintainer.pl | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> -chris
-> 
-> 
-> 
+> diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+> index ab123b498fd9..790112c3e1d7 100755
+> --- a/scripts/get_maintainer.pl
+> +++ b/scripts/get_maintainer.pl
+> @@ -442,7 +442,7 @@ sub maintainers_in_file {
+>  	my $text = do { local($/) ; <$f> };
+>  	close($f);
+>  
+> -	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+> +	my @poss_addr = $text =~ m$[\p{print}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
+>  	push(@file_emails, clean_file_emails(@poss_addr));
+>      }
+>  }
+> @@ -2456,11 +2456,12 @@ sub clean_file_emails {
+>      foreach my $email (@file_emails) {
+>  	$email =~ s/[\(\<\{]{0,1}([A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+)[\)\>\}]{0,1}/\<$1\>/g;
+>  	my ($name, $address) = parse_email($email);
+> +	$name =~ s/^\p{space}*\p{punct}*\p{space}*//;
+
+This change is useful independently of the name regexp as it rejects
+'- <email@addr.ess>' (yaml list items) as valid name, email combination.
+
+Janne
 
