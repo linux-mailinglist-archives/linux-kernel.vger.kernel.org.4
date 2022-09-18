@@ -2,192 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2582E5BBD99
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D335BBDAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiIRL3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 07:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S229747AbiIRLlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 07:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiIRL3d (ORCPT
+        with ESMTP id S229719AbiIRLlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 07:29:33 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1634BF3A;
-        Sun, 18 Sep 2022 04:29:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663500538; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ZH7AKVMOwTy5jgBEvz7C3Kikf6uqzifTon+tLb0MxZ1Bh4l1grbzh/fDYOtZRpT6WLW2uxNeAc4ZBQmRSs9OnVytgibE/Lfuw78bA6QU0jA+JUWezJtN0fTMvxXUdene6fsP0DKiIBx02P6PnePnU2eMynSRpge72njjPqDYUA8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663500538; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=04ijFyWpNqjr0mVAOzrs4qWtbJFIYTunE57Md0QH6jc=; 
-        b=GDHTfDz40RfWjuq1bTxO5t3NcQewILiyk4XH4qRKUP7jgpIOEI4vu2vdhsB4RmA/ZOuI2lFnupswcm6pR7fqUvufEbx2phgZvFx+C1LE/WUtz7gNPVzvpmuQnlw0RC8pFmJLSGPk0a//NJImIBZwIIKPZjyxZJsDXteIgZDjY/s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663500538;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=04ijFyWpNqjr0mVAOzrs4qWtbJFIYTunE57Md0QH6jc=;
-        b=RHVPFeYv1mkXd2h3PfKWfNC6B6r6Y7JA7LZ1jNOfBNIkvzX9H+YQ2J9O8wikP1aO
-        14HHjb9/fXn8wwtX/8gZNqIF3OLor+/vOkM6Hl/lgm+AkjMtQPvXm700edpJgYezO8N
-        i8l2SpzUUE2xKLYyh6m4G5ZB/jNNvMaXS+N84hK8=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1663500536617106.7364888322121; Sun, 18 Sep 2022 04:28:56 -0700 (PDT)
-Message-ID: <4a291389-105a-6288-1347-4f02171b0dd0@arinc9.com>
-Date:   Sun, 18 Sep 2022 14:28:50 +0300
+        Sun, 18 Sep 2022 07:41:09 -0400
+X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Sep 2022 04:41:06 PDT
+Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F01A048
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:41:06 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id 3409B2902D; Sun, 18 Sep 2022 13:30:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=valentin-vidic.from.hr; s=2020; t=1663500659;
+        bh=gHJfx8wSWMuiP6oI38sMXPRksdK6pMWB/LxgIBgJZKc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WGyM9dpHvPOpyrir7J8omQczPSEez0B9XrR1mUtlhghMx39bb9ZhohQJVYkKLS08Q
+         Csa4xtfeIear5GiEOJygeVKGISlF2xKPx8H5984CVvEhoPZlNXsePn20uIkvOofXU6
+         yCzxdq3kjZ9991VhaHGr7zOkKnSR+pWfL/TL4YJZjmwISCdrYBNRipU2q4KjoJH4ei
+         E3dkRGZv9PVRfppcWkB/ZzBv8GvU4kQBOP8qCIRbM1IxdieNFVnU/I8oDOAzDKB6y2
+         lsdTNLuu/TahlmfgaATvy+Jy9KsBr4lL5OFW2loOkjefey3D46pRJ/+25aIydI8iNN
+         +ZGAaGhpVtMnin5zAW6yUyQvVlrC9OKaB+8NOj8t8YuKKThqjIyQphWd4FO3I22YQM
+         u4QIKfulk8CUGZTYiEFXWIe39bPhX3u5ZsSzMcEcAYroNWCWXpO+qZkryoWzr4hcCg
+         VAEGoKAhYq4TVGO/SVwLHd2FEsUcVmXyRBptoEjDQ0ATBCFBFqolK+WSg+5bhgd5ee
+         GCufOWi0+upxLScgt87UkF0AhkFEfaemLqjsdktfYuh/UUegNC4GAfc+/gV9SyoBbW
+         Fd7YmO0lpKNnuUoZAu8hyqyATRplO5+1zJKxsP8dn1TmTfbNBkgPmafCfTvhg8wfTP
+         4/3v+ni5rU6qX41wj8Hi2xX8=
+From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Subject: [PATCH] staging: rtl8192e: fix CamelCase variables
+Date:   Sun, 18 Sep 2022 13:30:41 +0200
+Message-Id: <20220918113041.3805576-1-vvidic@valentin-vidic.from.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Move MT7530 phy muxing from DSA to PHY driver
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thibaut <hacks@slashdirt.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-References: <0e3ca573-2190-57b0-0e98-7f5b890d328e@arinc9.com>
- <YyKQKRIYDIVeczl1@lunn.ch> <dad09430-4f33-7f1d-76c7-4dbd0710e950@arinc9.com>
- <YyXiswbZfDh8aZHN@lunn.ch>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <YyXiswbZfDh8aZHN@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.09.2022 18:07, Andrew Lunn wrote:
->>> Where in the address range is the mux register? Officially, PHY
->>> drivers only have access to PHY registers, via MDIO. If the mux
->>> register is in the switch address space, it would be better if the
->>> switch did the mux configuration. An alternative might be to represent
->>> the mux in DT somewhere, and have a mux driver.
->>
->> I don't know this part very well but it's in the register for hw trap
->> modification which, I think, is in the switch address space.
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/drivers/net/dsa/mt7530.c?id=1f9a6abecf538cc73635f6082677a2f4dc9c89a4#n941
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/drivers/net/dsa/mt7530.h?id=1f9a6abecf538cc73635f6082677a2f4dc9c89a4#n500
->>
->> Like you said, I don't think we can move away from the DSA driver, and would
->> rather keep the driver do the mux configuration.
->>
->> We could change the check for phy muxing to define the phy muxing bindings
->> in the DSA node instead. If I understand correctly, the mdio address for
->> PHYs is fake, it's for the sole purpose of making the driver check if
->> there's request for phy muxing and which phy to mux. I'm saying this because
->> the MT7530 switch works fine at address 0 while also using phy0 as a slave
->> interface.
->>
->> A property could be introduced on the DSA node for the MT7530 DSA driver:
->>
->>      mdio {
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>
->>          switch@0 {
->>              compatible = "mediatek,mt7530";
->>              reg = <0>;
->>
->>              reset-gpios = <&pio 33 0>;
->>
->>              core-supply = <&mt6323_vpa_reg>;
->>              io-supply = <&mt6323_vemc3v3_reg>;
->>
->>              mt7530,mux-phy = <&sw0_p0>;
->>
->>              ethernet-ports {
->>                  #address-cells = <1>;
->>                  #size-cells = <0>;
->>
->>                  sw0_p0: port@0 {
->>                      reg = <0>;
->>                  };
->>              };
->>          };
->>      };
->>
->> This would also allow using the phy muxing feature with any ethernet mac.
->> Currently, phy muxing check wants the ethernet mac to be gmac1 of a MediaTek
->> SoC. However, on a standalone MT7530, the switch can be wired to any SoC's
->> ethernet mac.
->>
->> For the port which is set for PHY muxing, do not bring it as a slave
->> interface, just do the phy muxing operation.
->>
->> Do not fail because there's no CPU port (ethernet property) defined when
->> there's only one port defined and it's set for PHY muxing.
->>
->> I don't know if the ethernet mac needs phy-handle defined in this case.
-> 
->  From mediatek,mt7530.yaml:
-> 
->    Port 5 modes/configurations:
->    1. Port 5 is disabled and isolated: An external phy can interface to the 2nd
->       GMAC of the SOC.
->       In the case of a build-in MT7530 switch, port 5 shares the RGMII bus with 2nd
->       GMAC and an optional external phy. Mind the GPIO/pinctl settings of the SOC!
->    2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd GMAC.
->       It is a simple MAC to PHY interface, port 5 needs to be setup for xMII mode
->       and RGMII delay.
->    3. Port 5 is muxed to GMAC5 and can interface to an external phy.
->       Port 5 becomes an extra switch port.
->       Only works on platform where external phy TX<->RX lines are swapped.
->       Like in the Ubiquiti ER-X-SFP.
->    4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd CPU port.
->       Currently a 2nd CPU port is not supported by DSA code.
-> 
-> So this mux has a scope bigger than the switch, it also affects one of
-> the SoCs MACs.
-> 
-> The phy-handle should have all the information you need, but it is
-> scattered over multiple locations. It could be in switch port 5, or it
-> could be in the SoC GMAC node.
-> 
-> Although the mux is in the switches address range, could you have a
-> tiny driver using that address range. Have this tiny driver export a
-> function to set the mux. Both the GMAC and the DSA driver make use of
-> the function, which should be enough to force the tiny driver to load
-> first. The GMAC and the DSA driver can then look at there phy-handle,
-> and determine how the mux should be set. The GMAC should probably do
-> that before register_netdev. The DSA driver before it registers the
-> switch with the DSA core.
-> 
-> Does that solve all your ordering issues?
+Fix checkpatch warnings for variables: LinkCtrlReg, DeviceID,
+RevisionID, IrqLine.
 
-I believe it does.
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 26 ++++++++++-----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-> 
-> By using the phy-handle, you don't need any additional properties, so
-> backwards compatibility should not be a problem. You can change driver
-> code as much as you want, but ABI like DT is fixed.
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
+index 1d992d5c4e17..7a9a24935da9 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
+@@ -16,11 +16,11 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
+ 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+ 
+ 	u8 tmp;
+-	u16 LinkCtrlReg;
++	u16 link_ctrl_reg;
+ 
+-	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &LinkCtrlReg);
++	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &link_ctrl_reg);
+ 
+-	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", LinkCtrlReg);
++	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", link_ctrl_reg);
+ 
+ 	pci_read_config_byte(pdev, 0x98, &tmp);
+ 	tmp |= BIT4;
+@@ -33,28 +33,28 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
+ bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+-	u16 DeviceID;
+-	u8  RevisionID;
+-	u16 IrqLine;
++	u16 device_id;
++	u8  revision_id;
++	u16 irq_line;
+ 
+-	DeviceID = pdev->device;
+-	RevisionID = pdev->revision;
+-	pci_read_config_word(pdev, 0x3C, &IrqLine);
++	device_id = pdev->device;
++	revision_id = pdev->revision;
++	pci_read_config_word(pdev, 0x3C, &irq_line);
+ 
+ 	priv->card_8192 = priv->ops->nic_type;
+ 
+-	if (DeviceID == 0x8192) {
+-		switch (RevisionID) {
++	if (device_id == 0x8192) {
++		switch (revision_id) {
+ 		case HAL_HW_PCI_REVISION_ID_8192PCIE:
+ 			dev_info(&pdev->dev,
+ 				 "Adapter(8192 PCI-E) is found - DeviceID=%x\n",
+-				 DeviceID);
++				 device_id);
+ 			priv->card_8192 = NIC_8192E;
+ 			break;
+ 		case HAL_HW_PCI_REVISION_ID_8192SE:
+ 			dev_info(&pdev->dev,
+ 				 "Adapter(8192SE) is found - DeviceID=%x\n",
+-				 DeviceID);
++				 device_id);
+ 			priv->card_8192 = NIC_8192SE;
+ 			break;
+ 		default:
+-- 
+2.30.2
 
-Understood, thanks Andrew!
-
-Arınç
