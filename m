@@ -2,109 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AC65BBE31
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 15:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFA75BBE35
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiIRNvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 09:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S229728AbiIROAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIRNvA (ORCPT
+        with ESMTP id S229533AbiIROAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 09:51:00 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FBE1CB38;
-        Sun, 18 Sep 2022 06:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1663509059; x=1695045059;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JOe7XaRamQ8Iu/OfFoMs5vEKw30I5MFDyJr1Ff7z628=;
-  b=AAxgl1c0kKr1aVJamhSY4sqMKje9yNDl6N+Wof+LJ56omNgxg3AzBW3H
-   cXtGDlnTAYWrHDLUtWFYiNBJyjPnl3Wmi+s28mOJ52JjCXHulqMG1V5fP
-   keXv2Je+nYlvpNfmD8pwc9XDG3PIPIqaxnIco8e4ZUByqE8M7PQGg2zjb
-   g=;
-X-IronPort-AV: E=Sophos;i="5.93,325,1654560000"; 
-   d="scan'208";a="131249096"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-f20e0c8b.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 13:50:44 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-f20e0c8b.us-east-1.amazon.com (Postfix) with ESMTPS id 7A7D69FD2A;
-        Sun, 18 Sep 2022 13:50:42 +0000 (UTC)
-Received: from EX19D013UWB001.ant.amazon.com (10.13.138.52) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Sun, 18 Sep 2022 13:50:37 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D013UWB001.ant.amazon.com (10.13.138.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Sun, 18 Sep 2022 13:50:37 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Sun, 18 Sep 2022 13:50:36
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 927094D0F; Sun, 18 Sep 2022 13:50:36 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <viro@zeniv.linux.org.uk>, <akpm@linux-foundation.org>,
-        <yangyicong@hisilicon.com>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <andriy.shevchenko@intel.com>, <farbere@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>
-Subject: [PATCH] libfs: fix negative value support in simple_attr_write()
-Date:   Sun, 18 Sep 2022 13:50:36 +0000
-Message-ID: <20220918135036.33595-1-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
+        Sun, 18 Sep 2022 10:00:15 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97515A12;
+        Sun, 18 Sep 2022 07:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KeyHnDwtz03NUIbQKH0mlcSz0RqoE8e8mbmPZs7mkVU=; b=GyOYQyWwt07jEidfRgym5hfyeF
+        Z4VYyLbUDS88clnJfP6wT0v8u9Gms5C6knDRu2rd8MMCgTFaB4VWuaWyaIp2gbnvvbH9zpXzZ8+uD
+        xmj4oh/KWun0X4Nq1P3vat9RDKcGAXckDahHA1MaAmjhznR4AjwuNzJdLVWv6+5ZTb/S8iINUA/Ml
+        oX+h7kLt+O5SEPLkMCwAGYqSAMbNdJQOTikSXqr3LZSL+1lYRtQAvRtuSwl9ZpbxIZyPLm419tv7n
+        w9swsXuoBv0tfQG23yq1NaMCcKnfM8mPLX74wNC5L3jNPbiqyiU6lMUxLiYd6lcF7MRVq/n58xRDE
+        AOb6wX9Q==;
+Received: from 201-27-35-168.dsl.telesp.net.br ([201.27.35.168] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oZup8-0080cc-ON; Sun, 18 Sep 2022 15:59:06 +0200
+Message-ID: <a25cb242-7c85-867c-8a61-f3119458dcdb@igalia.com>
+Date:   Sun, 18 Sep 2022 10:58:34 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3 01/11] ARM: Disable FIQs (but not IRQs) on CPUs
+ shutdown paths
+Content-Language: en-US
+To:     Russell King <linux@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, will@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>, arnd@arndb.de,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kexec@lists.infradead.org, pmladek@suse.com, bhe@redhat.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        bp@alien8.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        xuqiang36@huawei.com
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-2-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220819221731.480795-2-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 488dac0c9237 ("libfs: fix error cast of negative value in
-simple_attr_write()"), a user trying set a negative value will get a
-'-EINVAL' error, because simple_attr_write() was modified to use
-kstrtoull() which can handle only unsigned values, instead of
-simple_strtoll().
+On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> Currently the regular CPU shutdown path for ARM disables IRQs/FIQs
+> in the secondary CPUs - smp_send_stop() calls ipi_cpu_stop(), which
+> is responsible for that. IRQs are architecturally masked when we
+> take an interrupt, but FIQs are high priority than IRQs, hence they
+> aren't masked. With that said, it makes sense to disable FIQs here,
+> but there's no need for (re-)disabling IRQs.
+> 
+> More than that: there is an alternative path for disabling CPUs,
+> in the form of function crash_smp_send_stop(), which is used for
+> kexec/panic path. This function relies on a SMP call that also
+> triggers a busy-wait loop [at machine_crash_nonpanic_core()], but
+> without disabling FIQs. This might lead to odd scenarios, like
+> early interrupts in the boot of kexec'd kernel or even interrupts
+> in secondary "disabled" CPUs while the main one still works in the
+> panic path and assumes all secondary CPUs are (really!) off.
+> 
+> So, let's disable FIQs in both paths and *not* disable IRQs a second
+> time, since they are already masked in both paths by the architecture.
+> This way, we keep both CPU quiesce paths consistent and safe.
+> 
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Michael Kelley <mikelley@microsoft.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V3:
+> - No changes.
+> 
+> V2:
+> - Small wording improvement (thanks Michael Kelley);
+> - Only disable FIQs, since IRQs are masked by architecture
+> definition when we take an interrupt. Thanks a lot Russell
+> and Marc for the discussion [0].
+> 
+> Should we add a Fixes tag here? If so, maybe the proper target is:
+> b23065313297 ("ARM: 6522/1: kexec: Add call to non-crashing cores through IPI")
+> 
+> [0] https://lore.kernel.org/lkml/Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk/
+> 
+> 
+>  arch/arm/kernel/machine_kexec.c | 2 ++
+>  arch/arm/kernel/smp.c           | 5 ++---
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
+> index f567032a09c0..0b482bcb97f7 100644
+> --- a/arch/arm/kernel/machine_kexec.c
+> +++ b/arch/arm/kernel/machine_kexec.c
+> @@ -77,6 +77,8 @@ void machine_crash_nonpanic_core(void *unused)
+>  {
+>  	struct pt_regs regs;
+>  
+> +	local_fiq_disable();
+> +
+>  	crash_setup_regs(&regs, get_irq_regs());
+>  	printk(KERN_DEBUG "CPU %u will stop doing anything useful since another CPU has crashed\n",
+>  	       smp_processor_id());
+> diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+> index 978db2d96b44..36e6efad89f3 100644
+> --- a/arch/arm/kernel/smp.c
+> +++ b/arch/arm/kernel/smp.c
+> @@ -600,6 +600,8 @@ static DEFINE_RAW_SPINLOCK(stop_lock);
+>   */
+>  static void ipi_cpu_stop(unsigned int cpu)
+>  {
+> +	local_fiq_disable();
+> +
+>  	if (system_state <= SYSTEM_RUNNING) {
+>  		raw_spin_lock(&stop_lock);
+>  		pr_crit("CPU%u: stopping\n", cpu);
+> @@ -609,9 +611,6 @@ static void ipi_cpu_stop(unsigned int cpu)
+>  
+>  	set_cpu_online(cpu, false);
+>  
+> -	local_fiq_disable();
+> -	local_irq_disable();
+> -
+>  	while (1) {
+>  		cpu_relax();
+>  		wfe();
 
-This breaks all the places using DEFINE_DEBUGFS_ATTRIBUTE() with format
-of a signed integer.
+[+CC all ARM folks I could find]
 
-The u64 value which attr->set() receives is not an issue for negative
-numbers.
-The %lld and %llu in any case are for 64-bit value. Representing it as
-unsigned simplifies the generic code, but it doesn't mean we can't keep
-their signed value if we know that.
+Hi folks, sorry for the ping. Any reviews are greatly appreciated in
+this one - this is the V3 of the series but I never got any specific
+review for this patch.
 
-This change basically reverts the mentioned commit, but uses kstrtoll()
-instead of simple_strtoll() which is obsolete.
+Based on a previous discussion with Russell and Marc [0], seems this one
+makes sense and fixes an inconsistency related to kdump/panic.
 
-Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- fs/libfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Really appreciate reviews or at least some indication on which path I
+should take to get this potentially merged.
 
-diff --git a/fs/libfs.c b/fs/libfs.c
-index 31b0ddf01c31..3bccd75815db 100644
---- a/fs/libfs.c
-+++ b/fs/libfs.c
-@@ -1016,7 +1016,7 @@ ssize_t simple_attr_write(struct file *file, const char __user *buf,
- 		goto out;
- 
- 	attr->set_buf[size] = '\0';
--	ret = kstrtoull(attr->set_buf, 0, &val);
-+	ret = kstrtoll(attr->set_buf, 0, &val);
- 	if (ret)
- 		goto out;
- 	ret = attr->set(attr->data, val);
--- 
-2.37.1
+Cheers,
 
+
+Guilherme
+
+
+[0] https://lore.kernel.org/lkml/Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk/
