@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784535BBD9A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB0F5BBD9C
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiIRLd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 07:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S229686AbiIRLgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 07:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiIRLdY (ORCPT
+        with ESMTP id S229519AbiIRLgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 07:33:24 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98642314C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:33:22 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id d7-20020a056e02214700b002f3cbbcc8cbso13745968ilv.7
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:33:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tOAcwprBKvdlnMP02YBeJwpkhPA2fnxvRa3dgTcqouk=;
-        b=sLdvk9qX16E8KXWPQl+WhLQb5T/4JGTQ+fzvv+s16ScfNyMyQlaeIlnhtTB3sNw4jM
-         IlP3O50/8eyz2uxxcCTHdU2UvzwrfbS3+dcLKCiOGWFRYZOvcYWeh3hIcKIi2wmwmUOJ
-         HF44czYJHjKw6efBax0KNN8QORumfpCi+JJynu3S1sP87esNsEwqJo6Mlf4I4/qF8Tn6
-         w8HF7MK5y5lAvLKM50CWGDZwCXOKkv94NYPdSYCRuKEAh+rZO87NzxNInrbZlP+MQKdQ
-         /MoOc6dM73YH5hATCMVnfRjJQ2m3n45SZETzyHjCrlZ7x6SNuBor4xRr8Lp1LAW0wLRc
-         VgcQ==
-X-Gm-Message-State: ACrzQf19EWyhr7itpXr3k3CuL6umCtEaMVTX7G3VKsuOCLZG8/UPg1fe
-        FJpnHOO8SAj9ZEcoln/TSLG5PouuCpclK1WD0h2HOR3wMC2e
-X-Google-Smtp-Source: AMsMyM6qgLPj+BjGRT2qRNlZp0LSSEOqy3B5DTDkckbYFcxXvsQuyEjHqQ93lyvFZMrADSpI7fHQXCjGNfDGIERsOj3lvJapMSkL
+        Sun, 18 Sep 2022 07:36:38 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976F8EE1D;
+        Sun, 18 Sep 2022 04:36:37 -0700 (PDT)
+Subject: Re: [PATCH v3 5/5] md/raid10: convert resync_lock to use seqlock
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663500995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G1+OGv4dFkBOVxp4OCIgge5yTXIRZosYR+jSx6W73rc=;
+        b=G5FN5C8jAtDshvH1MV2Mrx/CW3u8FueyfS4Ure/+AfV2vocdKjXUmQEpPO4gz5CN4f9XSZ
+        qxPQ1YFb3QjsTm4G1vTjrI3h0lkAyYyXU1GgjenX9xxUDvrQfNVF/UfBwCogqsIDw8yBcK
+        ho1s6e21EsPpB3+fYL6h8v+vq7w9+ws=
+To:     Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
+        logang@deltatee.com, pmenzel@molgen.mpg.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+References: <20220916113428.774061-1-yukuai1@huaweicloud.com>
+ <20220916113428.774061-6-yukuai1@huaweicloud.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Message-ID: <e73dc8e8-09a3-ecc8-3199-ac87e8b9ee55@linux.dev>
+Date:   Sun, 18 Sep 2022 19:36:26 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d54:b0:35a:995f:502b with SMTP id
- d20-20020a0566380d5400b0035a995f502bmr4584673jak.278.1663500800774; Sun, 18
- Sep 2022 04:33:20 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 04:33:20 -0700
-In-Reply-To: <20220918110253.947-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000505e9c05e8f1f62b@google.com>
-Subject: Re: [syzbot] BUG: soft lockup in tx
-From:   syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220916113428.774061-6-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com
+On 9/16/22 7:34 PM, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
+> and io can't be dispatched until 'barrier' is dropped.
+>
+> Since holding the 'barrier' is not common, convert 'resync_lock' to use
+> seqlock so that holding lock can be avoided in fast path.
+>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   drivers/md/raid10.c | 87 ++++++++++++++++++++++++++++++---------------
+>   drivers/md/raid10.h |  2 +-
+>   2 files changed, 59 insertions(+), 30 deletions(-)
+>
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 9a28abd19709..2daa7d57034c 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -79,6 +79,21 @@ static void end_reshape(struct r10conf *conf);
+>   
+>   #include "raid1-10.c"
+>   
+> +#define NULL_CMD
+> +#define cmd_before(conf, cmd) \
+> +	do { \
+> +		write_sequnlock_irq(&(conf)->resync_lock); \
+> +		cmd; \
+> +	} while (0)
+> +#define cmd_after(conf) write_seqlock_irq(&(conf)->resync_lock)
 
-Tested on:
+The two is not paired well given only cmd_before needs the 'cmd'.
 
-commit:         a6b44374 Merge branch 'for-next/core', remote-tracking..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=146dded8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13804ed5080000
+> +
+> +#define wait_event_barrier_cmd(conf, cond, cmd) \
+> +	wait_event_cmd((conf)->wait_barrier, cond, cmd_before(conf, cmd), \
+> +		       cmd_after(conf))
+> +
+> +#define wait_event_barrier(conf, cond) \
+> +	wait_event_barrier_cmd(conf, cond, NULL_CMD)
 
-Note: testing is done by a robot and is best-effort only.
+What is the issue without define NULL_CMD?
+
+Thanks,
+Guoqing
