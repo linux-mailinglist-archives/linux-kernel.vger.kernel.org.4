@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB865BC033
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AD55BC038
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiIRVzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 17:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S229529AbiIRV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 17:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIRVzj (ORCPT
+        with ESMTP id S229497AbiIRV5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 17:55:39 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC84C13D67;
-        Sun, 18 Sep 2022 14:55:38 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id c6so20662636qvn.6;
-        Sun, 18 Sep 2022 14:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=z0B/eW5XdmdQCHytKnRy9T9V8L1fTqHGR2VXSGfuq4I=;
-        b=ltK6KC15zGQUC9Lw70LjnFqZjNPrfIX+TMuW8tMBmsHN7UPzHasBO5dW87D7S893S3
-         LlsUUANfPgJVqKjn4vzrR2JILxzqawVFobYr7CB9LWDiT+2Dg7Hv9e8PctQ5/ZsXQwmt
-         Li53kzoT/jeRa5eO9FrILsRSHLT7l/zNiQa7AFKG+lRsJXoJY+MsTLSpGKF3fhy7RKdA
-         vh8fYiKPWq9zddTHUfx8Dh9K/I9H0yJMC1vxxED3U0/ub8D+DF5LsJSYaD4T3kzplrJV
-         Bb542dZOZj8a/1THY+orbiASDoVbDbhDrJWoXcugsoiOtsTCIgYMJtq9azU3dUGfY2S+
-         yxOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=z0B/eW5XdmdQCHytKnRy9T9V8L1fTqHGR2VXSGfuq4I=;
-        b=qbf1RsHjmFxnrQB/HVpTLW52G+9Xzb66G3FS4rfI+b4HgAYZeuRwtKFxq9Lxqis2XJ
-         aeh16+j6ua7MqEg8P9gM9saidtMkra7EZMrK0Pk2W4FoBQQYkQEWuds6C7chu1nin1QV
-         WygZXcqujDrGMMRH9VC0gNI4QnPYQlQzkwMhfKjc2hmvMQNv14LTPcwD0l262UAgccH8
-         p1bdDVbNoSgpL9Nzagj2HduF75nM28ThkBwr1274Xlpg+Re4oB1ggoarOY6z7DTE+fqn
-         IWD7j/jZefvEOwtEItb4E3caknPsptozfKf9FA1oKkwsOz8uP1xAdGuVQJW33CTXLAkZ
-         Kdwg==
-X-Gm-Message-State: ACrzQf1W+kgl0xaOxcyeIZI6e7tjIIczcniPHPyEJBwcvZmD6ER7Wdra
-        ruZkuvNKJwiQZuAs0/aToAN8uwm4FmUJOw==
-X-Google-Smtp-Source: AMsMyM57YmEW/05lyG/l5PA9erb2kucmW8I4oaTxFKfSvMsUHJUPv3Rtt+rAVdXLWC5/oRvStPNaug==
-X-Received: by 2002:a05:6214:519e:b0:4ad:25c4:cb21 with SMTP id kl30-20020a056214519e00b004ad25c4cb21mr6175544qvb.41.1663538137919;
-        Sun, 18 Sep 2022 14:55:37 -0700 (PDT)
-Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with UTF8SMTPSA id j15-20020a05620a410f00b006b5df4d2c81sm12100134qko.94.2022.09.18.14.55.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 14:55:37 -0700 (PDT)
-From:   Sean Anderson <seanga2@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        linux-kernel@vger.kernel.org (open list),
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        Nick Bowler <nbowler@draconx.ca>,
-        Sean Anderson <seanga2@gmail.com>
-Subject: [PATCH] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
-Date:   Sun, 18 Sep 2022 17:55:34 -0400
-Message-Id: <20220918215534.1529108-1-seanga2@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Sun, 18 Sep 2022 17:57:36 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9708713E9C;
+        Sun, 18 Sep 2022 14:57:35 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:46946)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oa2I7-00H6nJ-LN; Sun, 18 Sep 2022 15:57:31 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:37784 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oa2I6-000NTr-Dr; Sun, 18 Sep 2022 15:57:31 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     cgel.zte@gmail.com
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, akpm@linux-foundation.org,
+        zhengqi.arch@bytedance.com, hannes@cmpxchg.org,
+        catalin.marinas@arm.com, peterx@redhat.com,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+References: <20220918152912.210112-1-xu.panda@zte.com.cn>
+Date:   Sun, 18 Sep 2022 16:57:23 -0500
+In-Reply-To: <20220918152912.210112-1-xu.panda@zte.com.cn> (cgel zte's message
+        of "Sun, 18 Sep 2022 15:29:12 +0000")
+Message-ID: <87o7vc73cs.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oa2I6-000NTr-Dr;;;mid=<87o7vc73cs.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/VZT8JqQYpxHjHa1CUgrbhpMzcpaRkL8g=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;cgel.zte@gmail.com
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 677 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 16 (2.4%), b_tie_ro: 13 (2.0%), parse: 1.60
+        (0.2%), extract_message_metadata: 15 (2.3%), get_uri_detail_list: 1.56
+        (0.2%), tests_pri_-1000: 5 (0.8%), tests_pri_-950: 1.39 (0.2%),
+        tests_pri_-900: 1.32 (0.2%), tests_pri_-90: 106 (15.6%), check_bayes:
+        102 (15.1%), b_tokenize: 10 (1.4%), b_tok_get_all: 8 (1.2%),
+        b_comp_prob: 1.95 (0.3%), b_tok_touch_all: 77 (11.4%), b_finish: 1.36
+        (0.2%), tests_pri_0: 288 (42.6%), check_dkim_signature: 0.48 (0.1%),
+        check_dkim_adsp: 3.6 (0.5%), poll_dns_idle: 200 (29.6%), tests_pri_10:
+        3.7 (0.5%), tests_pri_500: 234 (34.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH linu-next V2] mm/fault: fix comparing pointer to 0
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a separate receive path for small packets (under 256 bytes).
-Instead of allocating a new dma-capable skb to be used for the next packet,
-this path allocates a skb and copies the data into it (reusing the existing
-sbk for the next packet). There are two bytes of junk data at the beginning
-of every packet. I believe these are inserted in order to allow aligned
-DMA and IP headers. We skip over them using skb_reserve. Before copying
-over the data, we must use a barrier to ensure we see the whole packet. The
-current code only synchronizes len bytes, starting from the beginning of
-the packet, including the junk bytes. However, this leaves off the final
-two bytes in the packet. Synchronize the whole packet.
+cgel.zte@gmail.com writes:
 
-To reproduce this problem, ping a HME with a payload size between 17 and 214
+> From: Xu Panda <xu.panda@zte.com.cn>
+>
+> Do not use assignment in if condition,
+> and comparing pointer whith NULL instead of comparing pointer to 0.
 
-	$ ping -s 17 <hme_address>
+Then sensible thing to do if fixup is a pointer value is to just say:
 
-which will complain rather loudly about the data mismatch. Small packets
-(below 60 bytes on the wire) do not have this issue. I suspect this is
-related to the padding added to increase the minimum packet size.
+"if (fixup) {"
 
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
-Patch-prefix: net
----
+That will be clearer and not match the pattern you are trying to avoid.
 
- drivers/net/ethernet/sun/sunhme.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Eric
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index 8594ee839628..88aa0d310aee 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2020,9 +2020,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
- 
- 			skb_reserve(copy_skb, 2);
- 			skb_put(copy_skb, len);
--			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			skb_copy_from_linear_data(skb, copy_skb->data, len);
--			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			/* Reuse original ring buffer. */
- 			hme_write_rxd(hp, this,
- 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
--- 
-2.37.1
-
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> ---
+>  arch/alpha/mm/fault.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/alpha/mm/fault.c b/arch/alpha/mm/fault.c
+> index ef427a6bdd1a..bb3fe2949313 100644
+> --- a/arch/alpha/mm/fault.c
+> +++ b/arch/alpha/mm/fault.c
+> @@ -194,7 +194,8 @@ do_page_fault(unsigned long address, unsigned long
+> mmcsr,
+>
+>   no_context:
+>         /* Are we prepared to handle this fault as an exception?  */
+> -       if ((fixup = search_exception_tables(regs->pc)) != 0) {
+> +       fixup = search_exception_tables(regs->pc);
+> +       if (fixup != NULL) {
+>                 unsigned long newpc;
+>                 newpc = fixup_exception(dpf_reg, fixup, regs->pc);
+>                 regs->pc = newpc;
