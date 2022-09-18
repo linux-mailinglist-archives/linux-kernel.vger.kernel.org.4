@@ -2,181 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7BA5BBBA0
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 06:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4202B5BBBA2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 06:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiIREdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 00:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S229606AbiIREfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 00:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIREdV (ORCPT
+        with ESMTP id S229552AbiIREfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 00:33:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC41275C7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663475599; x=1695011599;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YFsGHYQm8fWHF/Mh2opqm57tS+b/OEtqHzuBxfwojsw=;
-  b=dYGquILZbGVJMxGc8pBHUV9nRs1N0VBXXTPJDSTbXMvYwccfuZ1IXWHs
-   atExdBjxkjh53y5LuArLJQQbd2ZcKgHbPSnBA9tr1GDWjSgtuFs1S5I8b
-   16EXfDfNeeqnyL3qTIb/qLBuyANRMJnp0TqSUt6OEocLkCwO5dwcOMKzj
-   VMmvNLj3ZTWNQ5sWg0cmPsL5wm4L2CBLn1XyPGcRNjFUKFgviHCH4bgXW
-   0TuJjqsJUjA/dL1BR4iW5Kx2uPYp2PBCSFNKgmCwOSf5F1FgU+14ckEfa
-   mTSJA+j3A44N3ts17Pt0IMbIwQeoe99zIaEcqiYIYcCX64HIFchwBenfQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="286245060"
-X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="286245060"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 21:33:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="569261809"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Sep 2022 21:33:17 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZlzY-0000sX-2I;
-        Sun, 18 Sep 2022 04:33:16 +0000
-Date:   Sun, 18 Sep 2022 12:32:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jingyu Wang <jingyuwang_vip@163.com>, sudeep.holla@arm.com,
-        cristian.marussi@arm.com, linux-arm-kernel@lists.infradead.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
-Subject: Re: [PATCH] firmware: arm_scmi: remove unnecessary 'NULL' values
- from pointer
-Message-ID: <202209181214.kSFKDUG9-lkp@intel.com>
-References: <20220918021410.17369-1-jingyuwang_vip@163.com>
+        Sun, 18 Sep 2022 00:35:06 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C14F13F51
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:04 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fv3so24770208pjb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 21:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=i1zDof6OtvGZP5SPndoQ1fuuVqZzAR4cxcPoesi3UZQ=;
+        b=LXQbGXSnCu1RB9u7uebnc9Z0LaBzCWIEB/4qpF887O03nW02QEWF/azLZaiU9xfarr
+         9deDlOP6adhCM/Y58+MSjvXnuN4LLdvpncUTRoyxPgwWyzey9uarYsrh+RjQtNo5Di3y
+         nyhWnSubU15bSHOrKdQRtjLObKZioWl7yL/PiueXpSk9E4p2bwNp8H+EQV3OvM+WwmVW
+         MTx3KaNpaWGtmCasoChP+CJi57On5fQlVyXp5KEgKIaQDRunYMe5iBqypbiqqosI7A6D
+         L7qqd+2LcmLRs+vz8DSlZ64bpppcmXyFbhQGreAZO75DNBqtlm9NqOa85jeTc3g4Xlq6
+         XFNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=i1zDof6OtvGZP5SPndoQ1fuuVqZzAR4cxcPoesi3UZQ=;
+        b=6es1YOhHIPwgQ51tk8NpAwZoTGcg5Kfn375RaqPMr6hi26zWUDdgpigW2vw4ribRD6
+         2ufjJP+HyTqloihvfARxxhy0abAGhflUS2F6QZKowDkSxuKHC2kkuHYBD0vCabVsxFc6
+         6CHwN4rVNnTBBC+8sru34t16qtyegGRctB5LB7wIen4rIFvlcHrh2UVpTCAczKfHy0JW
+         qpEUkoiYAzGYowoFpTrGjT7lKilhozKJDXVWEM6roSID1NjLx3B67uHwvON3+eVF9YXO
+         Z549g6UZuiugmUE0Po4HJxyG91QTN4ymb8do5QtbhQywrNL/yxC+Au13kanrEplOICan
+         4Ubw==
+X-Gm-Message-State: ACrzQf0wJEr62mZ3I1IXNb2985wWAaAveheeRE4yGLcso8eNIpnUXGTo
+        BS9/Upx35/Iu9zTASb5sR8K6DQ==
+X-Google-Smtp-Source: AMsMyM57wriUwliO2AXNIEA0PUT6e6XYJXVTf8ub390eTWLi8xe1z7AMtFfvlz6UW/1FyXxKosxPRA==
+X-Received: by 2002:a17:90a:e60d:b0:201:6b28:5406 with SMTP id j13-20020a17090ae60d00b002016b285406mr23615945pjy.228.1663475703591;
+        Sat, 17 Sep 2022 21:35:03 -0700 (PDT)
+Received: from localhost.localdomain ([111.201.134.95])
+        by smtp.gmail.com with ESMTPSA id l63-20020a622542000000b0054b5239f7fesm3955248pfl.210.2022.09.17.21.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 21:35:03 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V6 0/6] Introduce erofs shared domain
+Date:   Sun, 18 Sep 2022 12:34:50 +0800
+Message-Id: <20220918043456.147-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220918021410.17369-1-jingyuwang_vip@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingyu,
+[Kernel Patchset]
+===============
+Git tree:
+	https://github.com/userzj/linux.git zhujia/shared-domain-v6
+Git web:
+	https://github.com/userzj/linux/tree/zhujia/shared-domain-v6
 
-Thank you for the patch! Perhaps something to improve:
+[User Daemon for Quick Test]
+============================
+Git web:
+	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
+More test cases will be added to:
+	https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests-fscache 
 
-[auto build test WARNING on d5538ab91d3a9a237805be6f8c6c272af2987995]
+[E2E Container Demo for Quick Test]
+===================================
+[Issue]
+	https://github.com/containerd/nydus-snapshotter/issues/161
+[PR]
+	https://github.com/containerd/nydus-snapshotter/pull/162
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingyu-Wang/firmware-arm_scmi-remove-unnecessary-NULL-values-from-pointer/20220918-101734
-base:   d5538ab91d3a9a237805be6f8c6c272af2987995
-config: riscv-randconfig-r042-20220918 (https://download.01.org/0day-ci/archive/20220918/202209181214.kSFKDUG9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7fd368bb28e43ed330ef1e678986e3ef1fbc4295
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jingyu-Wang/firmware-arm_scmi-remove-unnecessary-NULL-values-from-pointer/20220918-101734
-        git checkout 7fd368bb28e43ed330ef1e678986e3ef1fbc4295
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/arm_scmi/
+[Background]
+============
+In ondemand read mode, we use individual volume to present an erofs
+mountpoint, cookies to present bootstrap and data blobs.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+In which case, since cookies can't be shared between fscache volumes,
+even if the data blobs between different mountpoints are exactly same,
+they can't be shared.
 
-All warnings (new ones prefixed by >>):
+[Introduction]
+==============
+Here we introduce erofs shared domain to resolve above mentioned case.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
 
->> drivers/firmware/arm_scmi/perf.c:762:2: warning: variable 'rep' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-           default:
-           ^~~~~~~
-   drivers/firmware/arm_scmi/perf.c:766:9: note: uninitialized use occurs here
-           return rep;
-                  ^~~
->> drivers/firmware/arm_scmi/perf.c:751:7: warning: variable 'rep' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (sizeof(*p) != payld_sz)
-                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/arm_scmi/perf.c:766:9: note: uninitialized use occurs here
-           return rep;
-                  ^~~
-   drivers/firmware/arm_scmi/perf.c:751:3: note: remove the 'if' if its condition is always false
-                   if (sizeof(*p) != payld_sz)
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/arm_scmi/perf.c:734:7: warning: variable 'rep' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (sizeof(*p) != payld_sz)
-                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/arm_scmi/perf.c:766:9: note: uninitialized use occurs here
-           return rep;
-                  ^~~
-   drivers/firmware/arm_scmi/perf.c:734:3: note: remove the 'if' if its condition is always false
-                   if (sizeof(*p) != payld_sz)
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/arm_scmi/perf.c:726:11: note: initialize the variable 'rep' to silence this warning
-           void *rep;
-                    ^
-                     = NULL
-   3 warnings generated.
+[Usage]
+Users could specify 'domain_id' mount option to create or join into a
+domain which reuses the same cookies(blobs).
 
+[Design]
+========
+1. Use pseudo mnt to manage domain's lifecycle.
+2. Use a linked list to maintain & traverse domains.
+3. Use pseudo sb to create anonymous inode for recording cookie's info
+   and manage cookies lifecycle.
 
-vim +/rep +762 drivers/firmware/arm_scmi/perf.c
+[Flow Path]
+===========
+1. User specify a new 'domain_id' in mount option.
+   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
+   1.2 Create a new domain(volume), add it to domain list.
+   1.3 Traverse pseudo sb's inode list, compare cookie name with
+       existing cookies.[Miss]
+   1.4 Alloc new anonymous inodes and cookies.
 
-fb5086dc474618 Cristian Marussi 2020-07-01  720  
-3cb8c95f4b3055 Cristian Marussi 2021-03-16  721  static void *scmi_perf_fill_custom_report(const struct scmi_protocol_handle *ph,
-72a5eb9d9c319c Cristian Marussi 2020-07-10  722  					  u8 evt_id, ktime_t timestamp,
-fb5086dc474618 Cristian Marussi 2020-07-01  723  					  const void *payld, size_t payld_sz,
-fb5086dc474618 Cristian Marussi 2020-07-01  724  					  void *report, u32 *src_id)
-fb5086dc474618 Cristian Marussi 2020-07-01  725  {
-7fd368bb28e43e Jingyu Wang      2022-09-18  726  	void *rep;
-fb5086dc474618 Cristian Marussi 2020-07-01  727  
-fb5086dc474618 Cristian Marussi 2020-07-01  728  	switch (evt_id) {
-fb5086dc474618 Cristian Marussi 2020-07-01  729  	case SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED:
-fb5086dc474618 Cristian Marussi 2020-07-01  730  	{
-fb5086dc474618 Cristian Marussi 2020-07-01  731  		const struct scmi_perf_limits_notify_payld *p = payld;
-fb5086dc474618 Cristian Marussi 2020-07-01  732  		struct scmi_perf_limits_report *r = report;
-fb5086dc474618 Cristian Marussi 2020-07-01  733  
-fb5086dc474618 Cristian Marussi 2020-07-01  734  		if (sizeof(*p) != payld_sz)
-fb5086dc474618 Cristian Marussi 2020-07-01  735  			break;
-fb5086dc474618 Cristian Marussi 2020-07-01  736  
-fb5086dc474618 Cristian Marussi 2020-07-01  737  		r->timestamp = timestamp;
-fb5086dc474618 Cristian Marussi 2020-07-01  738  		r->agent_id = le32_to_cpu(p->agent_id);
-fb5086dc474618 Cristian Marussi 2020-07-01  739  		r->domain_id = le32_to_cpu(p->domain_id);
-fb5086dc474618 Cristian Marussi 2020-07-01  740  		r->range_max = le32_to_cpu(p->range_max);
-fb5086dc474618 Cristian Marussi 2020-07-01  741  		r->range_min = le32_to_cpu(p->range_min);
-fb5086dc474618 Cristian Marussi 2020-07-01  742  		*src_id = r->domain_id;
-fb5086dc474618 Cristian Marussi 2020-07-01  743  		rep = r;
-fb5086dc474618 Cristian Marussi 2020-07-01  744  		break;
-fb5086dc474618 Cristian Marussi 2020-07-01  745  	}
-fb5086dc474618 Cristian Marussi 2020-07-01  746  	case SCMI_EVENT_PERFORMANCE_LEVEL_CHANGED:
-fb5086dc474618 Cristian Marussi 2020-07-01  747  	{
-fb5086dc474618 Cristian Marussi 2020-07-01  748  		const struct scmi_perf_level_notify_payld *p = payld;
-fb5086dc474618 Cristian Marussi 2020-07-01  749  		struct scmi_perf_level_report *r = report;
-fb5086dc474618 Cristian Marussi 2020-07-01  750  
-fb5086dc474618 Cristian Marussi 2020-07-01 @751  		if (sizeof(*p) != payld_sz)
-fb5086dc474618 Cristian Marussi 2020-07-01  752  			break;
-fb5086dc474618 Cristian Marussi 2020-07-01  753  
-fb5086dc474618 Cristian Marussi 2020-07-01  754  		r->timestamp = timestamp;
-fb5086dc474618 Cristian Marussi 2020-07-01  755  		r->agent_id = le32_to_cpu(p->agent_id);
-fb5086dc474618 Cristian Marussi 2020-07-01  756  		r->domain_id = le32_to_cpu(p->domain_id);
-fb5086dc474618 Cristian Marussi 2020-07-01  757  		r->performance_level = le32_to_cpu(p->performance_level);
-fb5086dc474618 Cristian Marussi 2020-07-01  758  		*src_id = r->domain_id;
-fb5086dc474618 Cristian Marussi 2020-07-01  759  		rep = r;
-fb5086dc474618 Cristian Marussi 2020-07-01  760  		break;
-fb5086dc474618 Cristian Marussi 2020-07-01  761  	}
-fb5086dc474618 Cristian Marussi 2020-07-01 @762  	default:
-fb5086dc474618 Cristian Marussi 2020-07-01  763  		break;
-fb5086dc474618 Cristian Marussi 2020-07-01  764  	}
-fb5086dc474618 Cristian Marussi 2020-07-01  765  
-fb5086dc474618 Cristian Marussi 2020-07-01  766  	return rep;
-fb5086dc474618 Cristian Marussi 2020-07-01  767  }
-fb5086dc474618 Cristian Marussi 2020-07-01  768  
+2. User specify an existing 'domain_id' in mount option and the data
+   blob is existed in domain.
+   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
+   2.2 Reuse the domain and increase its refcnt.
+   2.3 Traverse pseudo sb's inode list, compare cookie name with
+   	   existing cookies.[Hit]
+   2.4 Reuse the cookie and increase its refcnt.
+
+RFC: https://lore.kernel.org/all/YxAlO%2FDHDrIAafR2@B-P7TQMD6M-0146.local/
+V1: https://lore.kernel.org/all/20220902034748.60868-1-zhujia.zj@bytedance.com/
+V2: https://lore.kernel.org/all/20220902105305.79687-1-zhujia.zj@bytedance.com/
+V3: https://lore.kernel.org/all/20220914105041.42970-1-zhujia.zj@bytedance.com/
+V4: https://lore.kernel.org/all/20220915124213.25767-1-zhujia.zj@bytedance.com/
+V5: https://lore.kernel.org/all/20220916085940.89392-1-zhujia.zj@bytedance.com/
+
+Jia Zhu (6):
+  erofs: use kill_anon_super() to kill super in fscache mode
+  erofs: code clean up for fscache
+  erofs: introduce fscache-based domain
+  erofs: introduce a pseudo mnt to manage shared cookies
+  erofs: Support sharing cookies in the same domain
+  erofs: introduce 'domain_id' mount option
+
+ fs/erofs/fscache.c  | 263 ++++++++++++++++++++++++++++++++++++++------
+ fs/erofs/internal.h |  32 ++++--
+ fs/erofs/super.c    |  73 +++++++++---
+ fs/erofs/sysfs.c    |  19 +++-
+ 4 files changed, 324 insertions(+), 63 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+
