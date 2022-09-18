@@ -2,108 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BACE5BC0A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 01:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958625BC0AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 01:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiIRXic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 19:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229639AbiIRXr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 19:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiIRXi3 (ORCPT
+        with ESMTP id S229519AbiIRXr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 19:38:29 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C270211C3A;
-        Sun, 18 Sep 2022 16:38:27 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id g12so19261424qts.1;
-        Sun, 18 Sep 2022 16:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date;
-        bh=f8TbH5nAzf/k0D+q+pU5RrVHjrgJSjIw5I1XX6GpPPY=;
-        b=I+ytj9zX12PpGmfXDPBvFIHUrhn1OohzcZf4FiHYkW0ygsvcNGiUUnH61373L/ECpH
-         m84MzCjMd2V+v9JccG3tsYpU1aTT+C5uKcpMAMLTI2/Mkrm3lHe4ZJjMMlNOzWHPyZf/
-         ft/wYy6s1jQdgVtGMjJB3D7FZxgC9GB5VMw0z86MQYmNzgcDK4DWm7V9AvhVS6SUUpCR
-         +X/V9wLN3nDHg2/+pUcD5JJP39C3v9hm2dV1YNJCr3ti7XkFSO2GiU+FHZaylCTTpiJh
-         yjhaLi1RNPw1jrI4Bw+vEGgvCil2CAbS77wUAQgd+Xnj8hNP/uZOxsw+VS96qbAtW0Tb
-         hcAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=f8TbH5nAzf/k0D+q+pU5RrVHjrgJSjIw5I1XX6GpPPY=;
-        b=8DWxJgCgM2sMkXtebeGg2ctIHSMbKh9IVYPN+fljyKdKnCXM2jluztUml6Tl7DFYnO
-         qQixG/+tIN5f/t7NBSE3BjvmkQrXHV0itkKb1cDlBOZalMVKT9dmRJZR1e4Y9S/KWp5l
-         9ROshbf+aMWhKRMhkI+AfCE1M4o6+ZLd5y8m5Iw8rIIEixYrxRYshpbJno0QQZRtkLnP
-         32zEd1Q81rKcfz29hhTQKUTNNUEjjfRKY30a/RECdb9IuCQJ8xgWDZt4qp3IhyUEFk4K
-         u7qkX//5y1N1qXzVTCeh/nuiHF/7pe+h406yFWc8QaUXnLHUuZaZw9RKQ6wVtkDB0Gpw
-         VJfA==
-X-Gm-Message-State: ACrzQf0IxJaDY3aslcBJ9sKDHxWaBUvJY0uUG/IooPG8u8CeB4zKjoV7
-        S4sEL0GWNKpj4KzrU7U8/oE=
-X-Google-Smtp-Source: AMsMyM7kLXk91PS6eQBEEXj5dvmotopmzAzLi/qCgCe/AlsZCtCLmgVatL9uuzeNBgvRO7Lq62eIwQ==
-X-Received: by 2002:a05:622a:15c1:b0:35c:db1e:cdef with SMTP id d1-20020a05622a15c100b0035cdb1ecdefmr7388503qty.104.1663544306872;
-        Sun, 18 Sep 2022 16:38:26 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g13-20020ac8774d000000b00339163a06fcsm9234567qtu.6.2022.09.18.16.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 16:38:26 -0700 (PDT)
-Message-ID: <e9606787-00ed-2e3d-e36d-f9158c72cbd7@gmail.com>
-Date:   Sun, 18 Sep 2022 16:38:23 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.10 00/24] 5.10.144-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220916100445.354452396@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220916100445.354452396@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 18 Sep 2022 19:47:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680EC13D20;
+        Sun, 18 Sep 2022 16:47:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E928AB8159B;
+        Sun, 18 Sep 2022 23:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F72FC433D6;
+        Sun, 18 Sep 2022 23:47:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663544873;
+        bh=4fwR9rPjWfkV5OrkpZKeGBol8VbyfO8AaecqrymPg84=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CryioqGUr67tZVMXmPinT0VyfA+BiW9GFUPBq5vhkJmwwfSD4hXi8RBFUY0XHTkr8
+         GH0Cpzirbegi9k5DJjUu8WGDFAn5VQyo89jqWDwDdg6oPXJczvBxpPCQvqOPY0gZNo
+         F1v42ZUI8ew0rTfnsqbpVGSdGtwun+to0k5Q9Ho8=
+Date:   Sun, 18 Sep 2022 16:47:51 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>
+Subject: Re: [PATCH v14 00/14] Multi-Gen LRU Framework
+Message-Id: <20220918164751.376ec0c07bb619e5eb12ab49@linux-foundation.org>
+In-Reply-To: <CAOUHufZzDCezgeeAj6M3WqOQKJYxQ_4jNCD8itU0+J6JE_fV4g@mail.gmail.com>
+References: <20220815071332.627393-1-yuzhao@google.com>
+        <20220911170814.f6a32b40e64397a61b1f8daf@linux-foundation.org>
+        <CAOUHufZk-u0S+FyDEdxw1nehBKz_G_GG_3_LAzqyssx21Wd4Jw@mail.gmail.com>
+        <CAOUHufZzDCezgeeAj6M3WqOQKJYxQ_4jNCD8itU0+J6JE_fV4g@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 18 Sep 2022 14:40:01 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
+> Let me also post the incremental patches after this email, in case you
+> strongly prefer to add them on top of v14.
 
-On 9/16/2022 3:08 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.144 release.
-> There are 24 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.144-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Thanks, helpful.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+I have one question regarding 03/11.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+The final two updates look pretty substantial.  I guess I'll do a
+series replacement and let this and mapletree sit another week.
