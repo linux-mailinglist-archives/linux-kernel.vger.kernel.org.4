@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647AD5BBE4C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF95F5BBE5A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIROOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S229566AbiIROWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIROOK (ORCPT
+        with ESMTP id S229483AbiIROWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:14:10 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7E923BF5;
-        Sun, 18 Sep 2022 07:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aDVyle5G3wtqIccxn/cBaHSZXXYVPnL6YNcpcqqbsXA=; b=I91NEcebw/ZpGroEZ11QU1CmBe
-        qxInUn7rIoCX3CLVXGhhGfuz+ZmBv0nnIWJh9TyhqERtkoI6T0q2tisSnIhmcbyHxJNdNYDBf6A1N
-        gTXmzClAfzBC6LtN7rIjPVIzVgYFHk9nHdF582Rl4jILjOuN6k+loxnoLdkCmi5LdumVTOSZpDK+q
-        Y9ZtTZSPLNeG5QmwQkdpsdADSwd10DInYUGS44hH9YkaF7zoTcmDEKMFJKQSo+EaCUbjvmfZRaOT+
-        Fslvq1PhA/2XIP1FVDJ6gsObNe9jSJWV0qymX9tQ4eqaV/F9OhxifebTXFFT52vNbBeWX0rN5rjcI
-        bBzgCpTg==;
-Received: from 201-27-35-168.dsl.telesp.net.br ([201.27.35.168] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oZv3a-0081yC-2g; Sun, 18 Sep 2022 16:14:02 +0200
-Message-ID: <09016e20-5b38-3650-24bf-5fd649ee9b93@igalia.com>
-Date:   Sun, 18 Sep 2022 11:13:28 -0300
+        Sun, 18 Sep 2022 10:22:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC241EAE3;
+        Sun, 18 Sep 2022 07:22:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8977360C55;
+        Sun, 18 Sep 2022 14:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BECC433C1;
+        Sun, 18 Sep 2022 14:22:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663510940;
+        bh=z4w4Jd6Yw1OP2BhleHWvgUNU4yfAz6x/VUTv668v3Kw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HUs5os1a2lRyrvWD3ybe8gDorfa+QU5tTeXFoRFHXT1MkeZTxKtLHsSYUBT67hipM
+         OhaQE6riClZjjG6Ohrtf6POn2RRUJRlu/LW3Vs+VbpqBK271GUhdl9ZV+kMRVUOzxu
+         x+2XupNxl1zxh6DKWveI1GRTbF+DuanMaRP1wkxuTQ9/7SGPFeeXv/RoLu9jt8b2b6
+         Qzne4wqiXhmY+nOhrskQ+ldWQhJ1YbuoNRgptxHnoPtrLPZm03nB1W2O4LhhqYGGCD
+         l/CQ8F5rrslGWdeDvV9rbYx595j7cp4Gch1Kz768l5YGtX9gUpild9AwOGl8tD1Dv7
+         dJG1aprR6sbvQ==
+Date:   Sun, 18 Sep 2022 15:22:24 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Denys Zagorui <dzagorui@cisco.com>, Meng.Li@windriver.com,
+        lars@metafoo.de, Michael.Hennerich@analog.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: ltc2497: Fix reading conversion results
+Message-ID: <20220918152224.14f874c1@jic23-huawei>
+In-Reply-To: <20220912104631.zysrv2qqxvsjfbxc@pengutronix.de>
+References: <20220815091647.1523532-1-dzagorui@cisco.com>
+        <20220820130648.5b9bc66f@jic23-huawei>
+        <20220912104631.zysrv2qqxvsjfbxc@pengutronix.de>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V3 11/11] panic: Fixes the panic_print NMI backtrace
- setting
-Content-Language: en-US
-To:     akpm@linux-foundation.org, kexec@lists.infradead.org
-Cc:     bhe@redhat.com, pmladek@suse.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, xuqiang36@huawei.com
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-12-gpiccoli@igalia.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220819221731.480795-12-gpiccoli@igalia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
-> Commit 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-> introduced a setting for the "panic_print" kernel parameter to allow
-> users to request a NMI backtrace on panic. Problem is that the panic_print
-> handling happens after the secondary CPUs are already disabled, hence
-> this option ended-up being kind of a no-op - kernel skips the NMI trace
-> in idling CPUs, which is the case of offline CPUs.
-> 
-> Fix it by checking the NMI backtrace bit in the panic_print prior to
-> the CPU disabling function.
-> 
-> Fixes: 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> V3:
-> - No changes.
-> 
-> V2:
-> - new patch, there was no V1 of this one.
-> 
-> Hi folks, thanks upfront for reviews. This is a new patch, fixing an issue
-> I found in my tests, so I shoved it into this fixes series.
-> 
-> Notice that while at it, I got rid of the "crash_kexec_post_notifiers"
-> local copy in panic(). This was introduced by commit b26e27ddfd2a
-> ("kexec: use core_param for crash_kexec_post_notifiers boot option"),
-> but it is not clear from comments or commit message why this local copy
-> is required.
-> 
-> My understanding is that it's a mechanism to prevent some concurrency,
-> in case some other CPU modify this variable while panic() is running.
-> I find it very unlikely, hence I removed it - but if people consider
-> this copy needed, I can respin this patch and keep it, even providing a
-> comment about that, in order to be explict about its need.
-> 
-> Let me know your thoughts! Cheers,
-> 
-> Guilherme
-> 
-> 
->  kernel/panic.c | 47 +++++++++++++++++++++++++++--------------------
->  1 file changed, 27 insertions(+), 20 deletions(-)
-> [...]
+On Mon, 12 Sep 2022 12:46:31 +0200
+Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
 
-Hi Andrew, sorry for the ping.
+> On Sat, Aug 20, 2022 at 01:06:48PM +0100, Jonathan Cameron wrote:
+> > On Mon, 15 Aug 2022 09:16:47 +0000
+> > Denys Zagorui <dzagorui@cisco.com> wrote:
+> >  =20
+> > > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> > >=20
+> > > After the result of the previous conversion is read the chip
+> > > automatically starts a new conversion and doesn't accept new i2c
+> > > transfers until this conversion is completed which makes the function
+> > > return failure. =20
+> >=20
+> > That's rather nasty.
+> >=20
+> > Could we add a cheeky sleep in the other path to ensure there is always
+> > time for the conversion to be done?  Not ideal, but might ensure
+> > there isn't a known problem path without introducing much complexity. =
+=20
+>=20
+> FTR: While the patch was originally authored by me, I don't currently
+> have access to a machine with that chip. So currently there will be no
+> incentive on my side to address this feedback.
 
-Does the patch makes sense for you? Any comments are much appreciated!
-Tnx in advance,
+I'm not keen to keep changes to this driver queued up on improving this pat=
+ch.
+Hence applied to the togreg branch of iio.git and I'll push that out as tes=
+ting
+shortly for the autobuilders to poke at it.
 
+I have also marked it for stable.
 
-Guilherme
+Thanks,
+
+Jonathan
+
+>=20
+> Best regards
+> Uwe
+>=20
+
