@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5235BBB45
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 05:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360F75BBB47
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 05:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiIRDSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 23:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S229496AbiIRD25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 23:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIRDRz (ORCPT
+        with ESMTP id S229471AbiIRD2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 23:17:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E258286F5
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:17:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC20B80E4B
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CECDC43140
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663471070;
-        bh=qb00ImaXysZJpvsHrO2c88a7Ds3dOjpngNqFrczjjDQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hr03nYXFeceAHqZ7u2VGyT81QKhjeSwZRNCObxkGdX9jD3isSngUsiQl5UcFBS8gN
-         y8RF4zWKYuZYJnmjgoTSzSyW3xw8p8M9VqadfqWChJcOY2TzS9u8vXsYJo+yM4wrAd
-         CjawLOZ/BPCd5PV5zRmR6iRSQrN+lWn21I43pM1IEymhBZw5EVBFX0hdCxlCkg3aUw
-         CON7xaXVf89B/jgtrahFQyCxY1zAfiGvx2S62fjVGwb6VY43rM6aOgqFCoynME0qI+
-         MK7SOCETpDcBVQ/qxoqGEvrCOzbWR/osrWOQMWT+2Y/zYMwZEYnMYJW4EIMnGDvSly
-         c2jim1coxXuaQ==
-Received: by mail-ot1-f42.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so12224929otu.7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:17:50 -0700 (PDT)
-X-Gm-Message-State: ACrzQf19+k/CznWw28THb6zZdDuA7WBEIKNPLyWjttMzNKUVrSbRuxat
-        upyAe7fNsv6/K518wwb4qblCeuq7g9YIkSRUmA==
-X-Google-Smtp-Source: AMsMyM58ezG8msguUMeAH2Le2boc4pMXZ12Yr7cvpd704aw17iSXBXWn9Gr0znIRuo886rusNYTI49u//14DleuHyj8=
-X-Received: by 2002:a05:6830:6999:b0:61d:26f8:94c1 with SMTP id
- cy25-20020a056830699900b0061d26f894c1mr5435523otb.278.1663471069381; Sat, 17
- Sep 2022 20:17:49 -0700 (PDT)
+        Sat, 17 Sep 2022 23:28:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B41E28726
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:28:50 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id c198so24938602pfc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=TO1lgjEBuoqSH/1skNlkmUo8mpA3J4adLJy7sHWwA2o=;
+        b=rKZF6xhdNr3PJxqpQpbc/Ae97AzUZQwTi6Nf/2ESmMf9CywgFPxaKM17UmPnjFTclU
+         wA5xFNIcHWSUw902PRTt3TTiPbKAuU4hfLSuj9fdwaACpgXZnvQBqakmZH+tnPDzWOQ5
+         oOuYLjZM/Aiuz83r8UWWNEHi5nmlfOtIeyX5ku5FXBXqJ2lowwNTcJR6fUc+tusLGt2e
+         Ofoekhj3IdbObjXJashnXNJLYjxo72qdjn1Yr7wLG9uP2hBwSJxIq6/hka+QlWOmT4qc
+         Vsj1kY692We2O8c/nOpL3LCDUM2JL7ATaRqbCtwbrmDlPWRk/31rqxQhO4PPfjQo04YS
+         Vh5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=TO1lgjEBuoqSH/1skNlkmUo8mpA3J4adLJy7sHWwA2o=;
+        b=LLGp80tOtcxxnLQCpRXDA0TiNi8PYH1qf0jqyRfgAp0u1E7IyY1x1fGkW3WIWkKqbd
+         jfFaye1Vu1PjBbfJrkHx7F4fmuiGRt15Zzmh9S1STMT603DZsHNZHU3q6hXhufu2MTYO
+         s/J5PGmHxY3lJq90gHUVzOZJQVTe1oZsZ2k7cDrPzQKpBWmBiYpfTrP0AkCMknGp9LR5
+         lDgPrskuivCbaVC5IdQSWTLSDNfN1UMzkrcRzf3ZheyGG1MkjCC06ZezMt4bXLxnJNTh
+         AT1cdi/k0uLJztDI5rEkJh1PwsziOc8XvNZkvZuZ1z5ya40dC3k+aoFxRZT+OQvhzP6Z
+         z6MQ==
+X-Gm-Message-State: ACrzQf3IzIx0c1p/2O3eVlS3F/vwri4RTZzKnSrn3ilF1W8HXAQJVp2T
+        98h6f3NPnihXSJGWLfNF0S6KwA==
+X-Google-Smtp-Source: AMsMyM6nbZPZvj09ZSNhXJDObtdCCywFh8IDURznRTcNZJxGognZEJvWXDiqkX9cNoTTbYUQ1BX77Q==
+X-Received: by 2002:a65:6955:0:b0:439:a99b:bca5 with SMTP id w21-20020a656955000000b00439a99bbca5mr10642998pgq.80.1663471729271;
+        Sat, 17 Sep 2022 20:28:49 -0700 (PDT)
+Received: from leoy-yangtze.lan (45.78.11.189.16clouds.com. [45.78.11.189])
+        by smtp.gmail.com with ESMTPSA id 68-20020a620647000000b00545832dd969sm12255075pfg.145.2022.09.17.20.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 20:28:48 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH RESEND v2] perf test: Introduce script for data symbol testing
+Date:   Sun, 18 Sep 2022 11:28:43 +0800
+Message-Id: <20220918032843.27285-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
-In-Reply-To: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sun, 18 Sep 2022 11:17:36 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__g=s_ACd+zTJZT1HBbrLo-JpHbrwLsy1zKjxbM5c21uA@mail.gmail.com>
-Message-ID: <CAAOTY__g=s_ACd+zTJZT1HBbrLo-JpHbrwLsy1zKjxbM5c21uA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Refactor MediaTek DP drivers
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        CK Hu <ck.hu@mediatek.com>, liangxu.xu@mediatek.com,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +73,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Dmitry:
+This commit introduces a shell script for data symbol testing.
 
-My tree has no mtk-dp driver yet. Would you like to pick this series?
+The testing is designed a data structure with 64-byte alignment, it has
+two fields "data1" and "data2", and other fields are reserved.
 
-Regards,
-Chun-Kuang.
+Using "perf mem" command, we can record and report memory samples for a
+self-contained workload with 1 second duration.  If have no any memory
+sample for the data structure "buf1", it reports failure;  and by
+checking the offset in structure "buf1", if any memory accessing is not
+for "data1" and "data2" fields, it means wrong data symbol parsing and
+returns failure.
 
-Bo-Chen Chen <rex-bc.chen@mediatek.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=8816=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E6=99=9A=E4=B8=8A9:38=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> For this series, we do some clean-up and fix a build warning.
-> This series is based on linux-next-20220915.
->
-> Changes for v2:
-> 1. Update commit message in "drm/mediatek: dp: Reduce indentation in mtk_=
-dp_bdg_detect()".
-> 2. Add fix tag for "drm/mediatek: dp: Fix warning in mtk_dp_video_mute()"=
-.
->
-> Bo-Chen Chen (3):
->   drm/mediatek: dp: Reduce indentation in mtk_dp_bdg_detect()
->   drm/mediatek: dp: Remove unused register definitions
->   drm/mediatek: dp: Fix warning in mtk_dp_video_mute()
->
->  drivers/gpu/drm/mediatek/mtk_dp.c     | 70 ++++++++++++++-------------
->  drivers/gpu/drm/mediatek/mtk_dp_reg.h |  6 ---
->  2 files changed, 36 insertions(+), 40 deletions(-)
->
-> --
-> 2.18.0
->
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+
+Changes from v1:
+- Removed "killall" since the test has no child process (Ian);
+- Used "char" instead of "long" in the buf structure.
+
+ tools/perf/tests/shell/test_data_symbol.sh | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
+
+diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
+new file mode 100755
+index 000000000000..d007513ecfbe
+--- /dev/null
++++ b/tools/perf/tests/shell/test_data_symbol.sh
+@@ -0,0 +1,92 @@
++#!/bin/bash
++# Test data symbol
++
++# SPDX-License-Identifier: GPL-2.0
++# Leo Yan <leo.yan@linaro.org>, 2022
++
++skip_if_no_mem_event() {
++	perf mem record -e list 2>&1 | egrep -q 'available' && return 0
++	return 2
++}
++
++skip_if_no_mem_event || exit 2
++
++# skip if there's no compiler
++if ! [ -x "$(command -v cc)" ]; then
++	echo "skip: no compiler, install gcc"
++	exit 2
++fi
++
++TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
++TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
++PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++
++check_result() {
++	# The memory report format is as below:
++	#    99.92%  ...  [.] buf1+0x38  ...
++	result=$(perf mem report -i ${PERF_DATA} --stdio 2>&1 | egrep "buf1" | \
++		awk '{ for (i = 1; i <= NF; i++) { if ($i ~ /^buf1/) { print $i; break; } } }')
++
++	# Testing is failed if has no any sample for "buf1"
++	[ -z "$result" ] && return 1
++
++	while IFS= read -r line; do
++		# The "data1" and "data2" fields in structure "buf1" have
++		# offset "0x0" and "0x38", returns failure if detect any
++		# other offset value.
++		if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
++			return 1
++		fi
++	done <<< "$result"
++
++	return 0
++}
++
++cleanup_files()
++{
++	echo "Cleaning up files..."
++	rm -f ${PERF_DATA}
++	rm -f ${TEST_PROGRAM_SOURCE}
++	rm -f ${TEST_PROGRAM}
++}
++
++trap cleanup_files exit term int
++
++# compile test program
++cat << EOF > $TEST_PROGRAM_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++typedef struct _buf {
++	char data1;
++	char reserved[55];
++	char data2;
++} buf __attribute__((aligned(64)));
++
++static buf buf1;
++
++int main() {
++	int i;
++	for (;;) {
++		buf1.data1++;
++		buf1.data2 += buf1.data1;
++	}
++	return 0;
++}
++EOF
++
++echo "Compiling test program..."
++cc $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
++
++echo "Recording workload..."
++perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
++PERFPID=$!
++
++sleep 1
++
++kill $PERFPID
++wait $PERFPID
++
++check_result
++exit $?
+-- 
+2.34.1
+
