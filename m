@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0973D5BBF21
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 19:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5C15BBF26
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 19:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIRR1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 13:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S229604AbiIRRav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 13:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIRR1b (ORCPT
+        with ESMTP id S229479AbiIRRas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 13:27:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0308186C8;
-        Sun, 18 Sep 2022 10:27:30 -0700 (PDT)
+        Sun, 18 Sep 2022 13:30:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA013EBF;
+        Sun, 18 Sep 2022 10:30:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83191B81167;
-        Sun, 18 Sep 2022 17:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B894C433C1;
-        Sun, 18 Sep 2022 17:27:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BB9F6160E;
+        Sun, 18 Sep 2022 17:30:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E9FC433D6;
+        Sun, 18 Sep 2022 17:30:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663522048;
-        bh=mvFFQURIQTXvo9x/EMwDroyhj4af3+KhJCyIs5JP4Ro=;
+        s=k20201202; t=1663522246;
+        bh=9bN4Sb6zWpLjEIEJ93UIyNQBpe7ibahRuy5/W0f0PMo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oSxsGSh6S7VSsJ3M1h1OA+vixJgsMBDUPFA2kHP4AgDWeL2cwz80xwYrL0wEu37gY
-         tcGRtQ2bcxLsqGw63PtyOE2ZPsQVV53pJ0zX1XeW6AMW4JUzTqvgG8sm/DPKmN5I+1
-         hUPZ/BGnxFEEgOiZdLJnUJE6gL42cO2Hw7xmTZxnXuw0FvXNkKLcP75nEv2EKPWwU7
-         p6UEuk6VK/50LgihyOyCZIjI8gj7H6l0YGNyF3v++3n9W00YLGICY6ZzsT1uqBBwo5
-         cbSEk3G3fM9qDRG/6fm28MphLyxipKv805HnDzjzezn7UlCRTo1t9GokGlfYpgeKYW
-         23x7KOrCLLtQw==
-Date:   Sun, 18 Sep 2022 18:27:31 +0100
+        b=tUt7AsytnOHNhH6ka+yWLnmFH6/X035Qlo6kPaJJSEu1PDkzkPASZ3B9QVjHP4eUo
+         Dlp3rW7rqmTIEIma43BW+yaX0AC3rCtONmMY+DsijX+p497Le8x7sN+7PBZ7ygstFe
+         QSmym++KMrCTZwSB2Vlw3DOEYcFrTKHCpCL/1QAXBMCyL5flvcbj87mrOR0PncydJK
+         9jWN64vthnqHyX5CW0O/3LoV+oJoitqHQhG0pV0weoHrrWA0cab2C1XNXQ4DRt61OQ
+         pCe5BRVWqbx5KwoE3TtXSIEg8YBOrHkA6G+9i0eWhvpV7sqywqA+E2U18KQL35EUy4
+         qFtI3qna63+/A==
+Date:   Sun, 18 Sep 2022 18:30:48 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     <andrea.merello@iit.it>
-Cc:     <mchehab+huawei@kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <lars@metafoo.de>, <robh+dt@kernel.org>,
-        <andy.shevchenko@gmail.com>, <matt.ranostay@konsulko.com>,
-        <ardeleanalex@gmail.com>, <jacopo@jmondi.org>,
-        <andrea.merello@gmail.com>, <bagasdotme@gmail.com>
-Subject: Re: [v7 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
-Message-ID: <20220918182731.26de1a02@jic23-huawei>
-In-Reply-To: <20220907132205.28021-9-andrea.merello@iit.it>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andrea Merello <andrea.merello@iit.it>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [v7 00/14] Add support for Bosch BNO055 IMU
+Message-ID: <20220918183048.3eb64f40@jic23-huawei>
+In-Reply-To: <CAHp75Vd6wGPd6MJjEqB=dyrFj36CJi-QRFzy7WsvYgHZDNgG=Q@mail.gmail.com>
 References: <20220907132205.28021-1-andrea.merello@iit.it>
-        <20220907132205.28021-9-andrea.merello@iit.it>
+        <CAHp75Vd6wGPd6MJjEqB=dyrFj36CJi-QRFzy7WsvYgHZDNgG=Q@mail.gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,73 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 15:21:59 +0200
-<andrea.merello@iit.it> wrote:
+On Wed, 7 Sep 2022 17:12:09 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-> From: Andrea Merello <andrea.merello@iit.it>
+> On Wed, Sep 7, 2022 at 4:22 PM <andrea.merello@iit.it> wrote:
+> >
+> > From: Andrea Merello <andrea.merello@iit.it>
+> >
+> > This series (tries to) add support for Bosch BNO055 IMU to Linux IIO
+> > subsystem. It is made up several patches:  
 > 
-> Add the core driver for the BNO055 IMU from Bosch. This IMU can be
-> connected via both serial and I2C busses; separate patches will add support
-> for them.
 > 
-> The driver supports "AMG" (Accelerometer, Magnetometer, Gyroscope) mode,
-> that provides raw data from the said internal sensors, and a couple of
-> "fusion" modes (i.e. the IMU also does calculations in order to provide
-> euler angles, quaternions, linear acceleration and gravity measurements).
+> These
 > 
-> In fusion modes the AMG data is still available (with some calibration
-> refinements done by the IMU), but certain settings such as low pass filters
-> cut-off frequency and sensors' ranges are fixed, while in AMG mode they can
-> be customized; this is why AMG mode can still be interesting.
+> >   iio: imu: add Bosch Sensortec BNO055 core driver  
 > 
-> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
+> >   iio: imu: add BNO055 serdev driver  
+> 
+> are huge and I will look at them later on.
+> 
 
-Hi Andrea,
+I've taken another look at those and think that anything that comes
+up should be minor enough we should fix / tidy up as follow on patches.
 
-I think this is looking to be in a good state now.
-There is some devm handling for clks now available that should avoid
-the need to open code that here.
+I'd like to get this some build coverage as it's big and complex. Hence I've
+applied it to the togreg branch of iio.git / pushed out as testing.
 
-I've made that change whilst applying. Please take a look to make sure
-I didn't mess it up!
+More comments still welcome! Andy, if you get time to look at those two
+large patches, that would still be great + thanks for all your work reviewing
+this series and in general - it's a great help to me in keeping up with things.
+
+Note I'll be rebasing that tree in the near future to get some dependencies
+for other sets.
+
+Andrea, nice work getting support in place for this complex / buggy / messy
+device :)
 
 Jonathan
 
-> +
-> +static void bno055_clk_disable(void *arg)
-> +{
-> +	clk_disable_unprepare(arg);
-> +}
-> +
-> +int bno055_probe(struct device *dev, struct regmap *regmap,
-> +		 int xfer_burst_break_thr, bool sw_reset)
-> +{
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-...
-
-> +	priv->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(priv->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(priv->reset_gpio), "Failed to get reset GPIO\n");
-> +
-> +	priv->clk = devm_clk_get_optional(dev, "clk");
-> +	if (IS_ERR(priv->clk))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get CLK\n");
-> +
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_add_action_or_reset(dev, bno055_clk_disable, priv->clk);
-> +	if (ret)
-> +		return ret;#
-
-devm_clk_get_optional_enabled() is now available and should work here I think?
-
-> +
-> +	if (priv->reset_gpio) {
-> +		usleep_range(5000, 10000);
-> +		gpiod_set_value_cansleep(priv->reset_gpio, 1);
-> +		usleep_range(650000, 750000);
-> +	} else if (!sw_reset) {
-> +		dev_warn(dev, "No usable reset method; IMU may be unreliable\n");
-> +	}
