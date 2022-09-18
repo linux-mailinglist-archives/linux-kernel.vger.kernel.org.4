@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74A25BBB41
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 05:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5235BBB45
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 05:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiIRDPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Sep 2022 23:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S229583AbiIRDSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Sep 2022 23:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiIRDPj (ORCPT
+        with ESMTP id S229507AbiIRDRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Sep 2022 23:15:39 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9668B27FEC
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:15:37 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id j12so24909174pfi.11
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/tDGwzAC/IwmP8HRle5sxobILjM+kn0MjdGIbElVqmc=;
-        b=vBM4YlSUyA2cOuccMVcA5pzbosx7UpZ1THfDYtswOaOPlk93Ad3eWDAvc/kEm9aErw
-         B7hTk79kCIwXQA5E9fAwZQkeeQ4zWB9AOganKNyrvpFP3WM+YDMW2Hej9f/2zyVURltL
-         biVSH65GTPcyxMALXnOS8MXWeHVfiQr8siAo8pDO4D1e2RbMNWAKYk4zP3CcPgwFdtAl
-         tPUWbZEE8/Z/iV7ZSb2k2CeFnFEb+bBpTXiB60BIOcFes+DdkfoxMzg2WtVVwBI1IIZs
-         fHi2D0evwWGelMccqLnpRKGvVRt6UUMq7SsPn99/1wY7B5jy7qtsIGgeZXmscY0A8Feq
-         BUqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/tDGwzAC/IwmP8HRle5sxobILjM+kn0MjdGIbElVqmc=;
-        b=qDhV1tASGPeAXMIHNTNM6mfJi2ZgxhQKPimrfTYBmdJ+IKu9AUOWAeELPkFy91HQBO
-         bQhVNcs8Ozgi2yrXdXNtW2It+jU2xZ9EYpOq9ZhJ4XIuxMpkCWKJi42ghfNkXQjh25tj
-         LpK4gOX8H+oFeP7YKj1poaCU+Etmp12XeDEjfR725+R4/J6C4nACCoEIFlQdqZnnQ4zu
-         ruKmDOBghSyXEqo58YhFkkO69EsrnAtTLjnazAc+NOrSUWfJKFSXLoCY2zBzs8M4OXT7
-         XJKmDeJigy/PEAIuayPJl8SJdfFgUWWGKd+C6zehbrXiHyvFqjhzUY/JTRzwRfOQ50HZ
-         U2cg==
-X-Gm-Message-State: ACrzQf3mCJNgLJm5LviFtTbG2uvmDvxqPiUjrx1PXOGeENcC5ISJu89m
-        spaVsqhML2FKM9QLZii96hlXxw==
-X-Google-Smtp-Source: AMsMyM6Cfk0nFXuMVmKDmCkPtqp+n750u2jSmTe7Qqmj8zHJ1GEyjXffIY2N/4HQ9Aug6obakPnQdg==
-X-Received: by 2002:a63:c3:0:b0:439:72d7:7e1f with SMTP id 186-20020a6300c3000000b0043972d77e1fmr10466498pga.524.1663470935526;
-        Sat, 17 Sep 2022 20:15:35 -0700 (PDT)
-Received: from leoy-yangtze.lan (45.78.11.189.16clouds.com. [45.78.11.189])
-        by smtp.gmail.com with ESMTPSA id e13-20020a17090301cd00b00177f4ef7970sm17822647plh.11.2022.09.17.20.15.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 20:15:35 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
-Subject: [PATCH v2 2/2] perf test: Introduce script for java symbol testing
-Date:   Sun, 18 Sep 2022 11:15:24 +0800
-Message-Id: <20220918031524.26719-3-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220918031524.26719-1-leo.yan@linaro.org>
-References: <20220918031524.26719-1-leo.yan@linaro.org>
+        Sat, 17 Sep 2022 23:17:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E258286F5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC20B80E4B
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CECDC43140
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663471070;
+        bh=qb00ImaXysZJpvsHrO2c88a7Ds3dOjpngNqFrczjjDQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hr03nYXFeceAHqZ7u2VGyT81QKhjeSwZRNCObxkGdX9jD3isSngUsiQl5UcFBS8gN
+         y8RF4zWKYuZYJnmjgoTSzSyW3xw8p8M9VqadfqWChJcOY2TzS9u8vXsYJo+yM4wrAd
+         CjawLOZ/BPCd5PV5zRmR6iRSQrN+lWn21I43pM1IEymhBZw5EVBFX0hdCxlCkg3aUw
+         CON7xaXVf89B/jgtrahFQyCxY1zAfiGvx2S62fjVGwb6VY43rM6aOgqFCoynME0qI+
+         MK7SOCETpDcBVQ/qxoqGEvrCOzbWR/osrWOQMWT+2Y/zYMwZEYnMYJW4EIMnGDvSly
+         c2jim1coxXuaQ==
+Received: by mail-ot1-f42.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so12224929otu.7
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 20:17:50 -0700 (PDT)
+X-Gm-Message-State: ACrzQf19+k/CznWw28THb6zZdDuA7WBEIKNPLyWjttMzNKUVrSbRuxat
+        upyAe7fNsv6/K518wwb4qblCeuq7g9YIkSRUmA==
+X-Google-Smtp-Source: AMsMyM58ezG8msguUMeAH2Le2boc4pMXZ12Yr7cvpd704aw17iSXBXWn9Gr0znIRuo886rusNYTI49u//14DleuHyj8=
+X-Received: by 2002:a05:6830:6999:b0:61d:26f8:94c1 with SMTP id
+ cy25-20020a056830699900b0061d26f894c1mr5435523otb.278.1663471069381; Sat, 17
+ Sep 2022 20:17:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Sun, 18 Sep 2022 11:17:36 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__g=s_ACd+zTJZT1HBbrLo-JpHbrwLsy1zKjxbM5c21uA@mail.gmail.com>
+Message-ID: <CAAOTY__g=s_ACd+zTJZT1HBbrLo-JpHbrwLsy1zKjxbM5c21uA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Refactor MediaTek DP drivers
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>, liangxu.xu@mediatek.com,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,94 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces a script for testing java symbols.
+Hi, Dmitry:
 
-The test records java program, inject samples with JIT samples, check
-specific JIT symbols in the report, the test will pass only when these
-two symbols are detected.
+My tree has no mtk-dp driver yet. Would you like to pick this series?
 
-Suggested-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/tests/shell/test_java_symbol.sh | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_java_symbol.sh
+Regards,
+Chun-Kuang.
 
-diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
-new file mode 100755
-index 000000000000..d96fea405ea9
---- /dev/null
-+++ b/tools/perf/tests/shell/test_java_symbol.sh
-@@ -0,0 +1,69 @@
-+#!/bin/bash
-+# Test java symbol
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Leo Yan <leo.yan@linaro.org>, 2022
-+
-+PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-+PERF_INJ_DATA=$(mktemp /tmp/__perf_test.perf.data.inj.XXXXX)
-+
-+cleanup_files()
-+{
-+	echo "Cleaning up files..."
-+	rm -f ${PERF_DATA}
-+	rm -f ${PERF_INJ_DATA}
-+}
-+
-+trap cleanup_files exit term int
-+
-+if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
-+elif [ -e "$PWD/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PWD/libperf-jvmti.so
-+elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
-+elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
-+if [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
-+	LIBJVMTI=/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
-+else
-+	echo "Fail to find libperf-jvmti.so"
-+	# JVMTI is a build option, skip the test if fail to find lib
-+	exit 2
-+fi
-+
-+cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
-+int fib(int x) {
-+	return x > 1 ? fib(x - 2) + fib(x - 1) : 1;
-+}
-+
-+int q = 0;
-+
-+for (int i = 0; i < 10; i++)
-+	q += fib(i);
-+
-+System.out.println(q);
-+EOF
-+
-+if [ $? -ne 0 ]; then
-+	echo "Fail to record for java program"
-+	exit 1
-+fi
-+
-+if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
-+	echo "Fail to inject samples"
-+	exit 1
-+fi
-+
-+# Below is an example of the instruction samples reporting:
-+#   8.18%  jshell           jitted-50116-29.so    [.] Interpreter
-+#   0.75%  Thread-1         jitted-83602-1670.so  [.] jdk.internal.jimage.BasicImageReader.getString(int)
-+perf report --stdio -i ${PERF_INJ_DATA} 2>&1 | \
-+	egrep " +[0-9]+\.[0-9]+% .* (Interpreter|jdk\.internal).*" > /dev/null 2>&1
-+
-+if [ $? -ne 0 ]; then
-+	echo "Fail to find java symbols"
-+	exit 1
-+fi
-+
-+exit 0
--- 
-2.34.1
-
+Bo-Chen Chen <rex-bc.chen@mediatek.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=8816=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E6=99=9A=E4=B8=8A9:38=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> For this series, we do some clean-up and fix a build warning.
+> This series is based on linux-next-20220915.
+>
+> Changes for v2:
+> 1. Update commit message in "drm/mediatek: dp: Reduce indentation in mtk_=
+dp_bdg_detect()".
+> 2. Add fix tag for "drm/mediatek: dp: Fix warning in mtk_dp_video_mute()"=
+.
+>
+> Bo-Chen Chen (3):
+>   drm/mediatek: dp: Reduce indentation in mtk_dp_bdg_detect()
+>   drm/mediatek: dp: Remove unused register definitions
+>   drm/mediatek: dp: Fix warning in mtk_dp_video_mute()
+>
+>  drivers/gpu/drm/mediatek/mtk_dp.c     | 70 ++++++++++++++-------------
+>  drivers/gpu/drm/mediatek/mtk_dp_reg.h |  6 ---
+>  2 files changed, 36 insertions(+), 40 deletions(-)
+>
+> --
+> 2.18.0
+>
