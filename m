@@ -2,207 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EC05BBC2D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 08:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F1F5BBC2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 08:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIRG2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 02:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S229527AbiIRGhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 02:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRG1u (ORCPT
+        with ESMTP id S229447AbiIRGhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 02:27:50 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB5D2611F
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:27:47 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id ZnmJo9OZsAOp2ZnmJoqqJY; Sun, 18 Sep 2022 08:27:45 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 18 Sep 2022 08:27:45 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH 3/3] misc: microchip: pci1xxxx: Fix the error handling paths of gp_aux_bus_probe()
-Date:   Sun, 18 Sep 2022 08:27:42 +0200
-Message-Id: <1b41531de02ee029628d9b0ec2cf1ee7f180fe10.1663482259.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1663482259.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1663482259.git.christophe.jaillet@wanadoo.fr>
+        Sun, 18 Sep 2022 02:37:52 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35D823BD5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:37:51 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id e81so18954852ybb.13
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=WtWJsU6NZYJIgqgJJirhPk1ESg8pzmFDlf9rSDuSpIOVaz9eqn45jtXSITSrsyUH+b
+         RcnhDkn3o58G5w78oVO17mQkBnH6vOU4NcFhFRfBfwTgS2cXRwVroWoUQVCFLofx3H/o
+         v3ZuLhxzFuorm/uuRm/xoIHvkDcjD2zWI63o9xOpQg3yh6y5HMNUByP/RYVO6ZUEdzJl
+         KkLGb5x9/gmNp/jHMaTffcBzRQdogmXTOpwZECADKuY7bbacxaUwI4Qdocgx7djCuulM
+         OBMuEIpV2RYZAOdH8E1FcUvZ3deJ5lji5RD1K9vv1BTMBckpAzBJHMTuadMZTlFLk4xo
+         /pqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=zCQTZ+BT0yBZ146MefZz813Bky1+vKaC136uKF2KzxChCYmOE6+3X7WL6/TUZVsl/X
+         krlSFL2l0kIeQsYWWczyIqnFlkJyDyzHpLOjH0Z7gMHoMsmOk16tbraQ7aKevRglkEgE
+         ro00UEp2dRmJ233/BDCa6hCzVMaP2ydmwSoENy30r3OVmKgmakBe4kMQ//ZRunG136Rd
+         S5Oe8v7MZQsBtV88CnpqQvjWzSWrr7S47ckOygWAWFs2YgPbvm3KFUDnVE3WNc4HrMX8
+         a+l+ZANTeLKiPEYBoKwMConwHQXOKzjBQqEeMRdAQW4YA2Gd4E/NOv+Ky6qvOt1uXsC2
+         K4hw==
+X-Gm-Message-State: ACrzQf1uvqinsj287Ivi5wv0p0UjH/SgbSWT83XFQkE6vpR61nHlgEqC
+        AxvLY5HEbkDevq0+a5Q3koSWqOaEjLhfwMpFee8=
+X-Google-Smtp-Source: AMsMyM62bAadOY4NL8KCh4MdrCMDqayG2kX86h0/K/23latRnAYHbMaox4oy/IksDQthdYJDU88KjjJAXyFqeFglWdE=
+X-Received: by 2002:a25:2342:0:b0:6ae:b056:17fd with SMTP id
+ j63-20020a252342000000b006aeb05617fdmr9335874ybj.582.1663483071285; Sat, 17
+ Sep 2022 23:37:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7108:9092:0:0:0:0 with HTTP; Sat, 17 Sep 2022 23:37:50
+ -0700 (PDT)
+Reply-To: maryalbertt00045@gmail.com
+From:   Mary Albert <mawussikoff@gmail.com>
+Date:   Sun, 18 Sep 2022 07:37:50 +0100
+Message-ID: <CAHVeZEdWDYOxy5f91RBMTuD-C0wb4qbrKDfFyH0AUOQWhpLtwg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mawussikoff[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [maryalbertt00045[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are several issues related to the error handling paths of
-gp_aux_bus_probe():
-   - some resources may be released twice. Once explicitly in the error
-     handling path, and once via the release() function
-   - auxiliary_device_delete() should be called after the first successful
-     auxiliary_device_add()
-
-To fix them, reorder the code:
-   - move the place where we get the irq for the 2nd wrapper.
-   - call kfree() and ida_free() after error checks, rather then in the
-     error handling path.
-   - have the error handling path look like the remove function
-
-Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is speculative and untested, review with care.
-
-Other solutions are possible.
-For example, we could use devm_kzalloc() to simplify the error handling
-path and the release function.
----
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c | 74 ++++++++++---------
- 1 file changed, 39 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-index 32af2b14ff34..d3253e98f2ec 100644
---- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-@@ -32,7 +32,7 @@ static void gp_auxiliary_device_release(struct device *dev)
- static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	struct aux_bus_device *aux_bus;
--	int retval;
-+	int irq, retval;
- 
- 	retval = pcim_enable_device(pdev);
- 	if (retval)
-@@ -48,8 +48,10 @@ static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id
- 		return -ENOMEM;
- 
- 	retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
--	if (retval < 0)
--		goto err_ida_alloc_0;
-+	if (retval < 0) {
-+		kfree(aux_bus->aux_device_wrapper[0]);
-+		return retval;
-+	}
- 
- 	aux_bus->aux_device_wrapper[0]->aux_dev.name = aux_dev_otp_e2p_name;
- 	aux_bus->aux_device_wrapper[0]->aux_dev.dev.parent = &pdev->dev;
-@@ -60,21 +62,38 @@ static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id
- 	aux_bus->aux_device_wrapper[0]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
- 
- 	retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[0]->aux_dev);
--	if (retval < 0)
--		goto err_aux_dev_init_0;
-+	if (retval < 0) {
-+		ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[0]->aux_dev.id);
-+		kfree(aux_bus->aux_device_wrapper[0]);
-+		goto err_aux_dev_uninit_0;
-+	}
- 
- 	retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[0]->aux_dev);
- 	if (retval)
--		goto err_aux_dev_add_0;
-+		goto err_aux_dev_uninit_0;
-+
-+
-+	retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	if (retval < 0)
-+		goto err_aux_dev_del_0;
-+
-+	retval = pci_irq_vector(pdev, 0);
-+	if (retval < 0)
-+		goto err_aux_dev_del_0;
-+	irq = retval;
- 
- 	aux_bus->aux_device_wrapper[1] = kzalloc(sizeof(*aux_bus->aux_device_wrapper[1]),
- 						 GFP_KERNEL);
--	if (!aux_bus->aux_device_wrapper[1])
--		return -ENOMEM;
-+	if (!aux_bus->aux_device_wrapper[1]) {
-+		retval = -ENOMEM;
-+		goto err_aux_dev_del_0;
-+	}
- 
- 	retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
--	if (retval < 0)
--		goto err_ida_alloc_1;
-+	if (retval < 0) {
-+		kfree(aux_bus->aux_device_wrapper[1]);
-+		goto err_aux_dev_del_0;
-+	}
- 
- 	aux_bus->aux_device_wrapper[1]->aux_dev.name = aux_dev_gpio_name;
- 	aux_bus->aux_device_wrapper[1]->aux_dev.dev.parent = &pdev->dev;
-@@ -84,49 +103,34 @@ static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id
- 	aux_bus->aux_device_wrapper[1]->gp_aux_data.region_start = pci_resource_start(pdev, 0);
- 	aux_bus->aux_device_wrapper[1]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
- 
--	retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
--
--	if (retval < 0)
--		goto err_aux_dev_init_1;
--
--	retval = pci_irq_vector(pdev, 0);
--	if (retval < 0)
--		goto err_aux_dev_init_1;
--
- 	pdev->irq = retval;
- 	aux_bus->aux_device_wrapper[1]->gp_aux_data.irq_num = pdev->irq;
- 
- 	retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[1]->aux_dev);
--	if (retval < 0)
--		goto err_aux_dev_init_1;
-+	if (retval < 0) {
-+		ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[1]->aux_dev.id);
-+		kfree(aux_bus->aux_device_wrapper[1]);
-+		goto err_aux_dev_del_0;
-+	}
- 
- 	retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[1]->aux_dev);
- 	if (retval)
--		goto err_aux_dev_add_1;
-+		goto err_aux_dev_uninit_1;
- 
- 	pci_set_drvdata(pdev, aux_bus);
- 	pci_set_master(pdev);
- 
- 	return 0;
- 
--err_aux_dev_add_1:
-+err_aux_dev_uninit_1:
- 	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[1]->aux_dev);
- 
--err_aux_dev_init_1:
--	ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[1]->aux_dev.id);
--
--err_ida_alloc_1:
--	kfree(aux_bus->aux_device_wrapper[1]);
-+err_aux_dev_del_0:
-+	auxiliary_device_delete(&aux_bus->aux_device_wrapper[0]->aux_dev);
- 
--err_aux_dev_add_0:
-+err_aux_dev_uninit_0:
- 	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[0]->aux_dev);
- 
--err_aux_dev_init_0:
--	ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[0]->aux_dev.id);
--
--err_ida_alloc_0:
--	kfree(aux_bus->aux_device_wrapper[0]);
--
- 	return retval;
- }
- 
 -- 
-2.34.1
-
+Hello,
+how are you?
