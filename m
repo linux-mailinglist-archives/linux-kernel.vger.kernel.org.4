@@ -2,261 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EF85BBE60
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29F45BBE63
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiIRO3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S229731AbiIROaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiIRO3q (ORCPT
+        with ESMTP id S229682AbiIROaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:29:46 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3BA65C9;
-        Sun, 18 Sep 2022 07:29:44 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y17so54036431ejo.6;
-        Sun, 18 Sep 2022 07:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=FveU6nkoo+81cQCfrUzlLL5Yuhu16gBocdqQxDEMQCg=;
-        b=BjP83lXkZjyctfT4Np2yzmqYCVKRXxOheLYomYNmMgc8IhvR9Xi8NRF02psi6zyRd5
-         SVQ/RB60dZ5K5qRIE5XrEDuvSRBmOUAYJfJWLMvg4DYoxas+31zMn0MpBOyKne2V2hSv
-         EHiXc1PkJcwGqGbwbyn+PEyRxqluJDlxdcfFuHoWrGljanCkrW4Fu37J566t2uFD4o4G
-         KxEO1VjyJ0OM0kt+hsl1tSIDJtX0WjSMad0gkVWHfvmImMfOTv3mzkCfF6NR9mSA8a49
-         Y+LAdYbFJGUR82P5RnkO5TA6Q3FXy22t7PjowGD86kVIlsqIKGh94UuGx2ov72170M57
-         YCtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=FveU6nkoo+81cQCfrUzlLL5Yuhu16gBocdqQxDEMQCg=;
-        b=57mmMi6mnX4mjKoAw6ZcygYmnkdo4J8TEcoNT3zeYwgJ1vc1MaR4ZXY/SVqem5Lyz3
-         x3MGN82GwvCKBmGQ0n4L521LBDvGxof7csvMUByX64V4DOlq94YULnpJa1XUtwf9oY/i
-         ej25FMs2EnjuRKPOMkMzRr9sP2mGAoXTuc5xi9A6nFj47gF74T/HvFZmeq+Zof44G6+Z
-         9PntOZEUE35TAUfu6iFBNPOfXYgfWu7cKsbcV229oAjL2/D2y2uxfDkRIdpjfeoN38PD
-         4gxQJ1yRxy0p3NImZs/dYfxFC+/FKiCq4sB7F5bPTx+MlndnUJasm41PpqDkCeGVkyH9
-         BxIg==
-X-Gm-Message-State: ACrzQf2/unm9DXvQPadV+fSOlgR3Cb2FpBIFzJiTq+nSVWXy2BT6rzuH
-        96k5qUbuCLoxj1panmOxxb4=
-X-Google-Smtp-Source: AMsMyM7QTZ+2BOwNQu7fsiBYvlATBN/hD+pJTQiXqKGORiTZFqY5hh9qjZPO+ns5wlWpD7gRqFySWA==
-X-Received: by 2002:a17:907:2d0d:b0:77c:d528:70b8 with SMTP id gs13-20020a1709072d0d00b0077cd52870b8mr9559188ejc.681.1663511383259;
-        Sun, 18 Sep 2022 07:29:43 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id h19-20020a1709063b5300b0074134543f82sm13961670ejf.90.2022.09.18.07.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 07:29:42 -0700 (PDT)
-Message-ID: <4e69a06d-7b53-ab48-1e50-2b29ff3a54e6@gmail.com>
-Date:   Sun, 18 Sep 2022 16:29:41 +0200
+        Sun, 18 Sep 2022 10:30:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6BFFD0C;
+        Sun, 18 Sep 2022 07:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6414AB81022;
+        Sun, 18 Sep 2022 14:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34ABC433C1;
+        Sun, 18 Sep 2022 14:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663511417;
+        bh=XRuarmPYFtugEr38caK7dyUbAPLqBhROnmK/NnYB3sk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jrKl0gzv06ZFQ6unzCAtEcP/WVFcXeJ7HKEaDQvQsyKOm+O/gqcXLJQQfLxznTqOM
+         AbyhSF2/3rdDySbKNBcxzHgKqV7+LY3FlT5VDqidTX4aOsDALVjKy8hG5cPROHYgx5
+         J44g+U/JH8mg9OrIjH9aqDrZuNsDG5Rz1IvSEW1vgDIGjE401R7hRCzUtnEaiyyupg
+         jitCpHxj1pQYijKc8iQp1LhluREFkD/SbSGF5sG044kQ8UfaDqf+cuDcarckQfuYdH
+         dq37oVhoTIyR2b60d8JcGsQok+OPjBlTZIJkR2r9xztFfy0odmV69gSgnpAPF/WxOw
+         wV+RkFkiRZ6jA==
+Date:   Sun, 18 Sep 2022 15:30:21 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Ciprian Regus <ciprian.regus@analog.com>
+Cc:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] drivers: iio: adc: LTC2499 support
+Message-ID: <20220918153021.791166a2@jic23-huawei>
+In-Reply-To: <20220916140922.2506248-5-ciprian.regus@analog.com>
+References: <20220916140922.2506248-1-ciprian.regus@analog.com>
+        <20220916140922.2506248-5-ciprian.regus@analog.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v3] dt-bindings: clock: convert rockchip,rk3128-cru.txt to
- YAML
-To:     heiko@sntech.de
-Cc:     zhangqing@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip,rk3128-cru.txt to YAML.
+On Fri, 16 Sep 2022 17:09:21 +0300
+Ciprian Regus <ciprian.regus@analog.com> wrote:
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+> The LTC2499 is a 16-channel (eight differential), 24-bit,
+> ADC with Easy Drive technology and a 2-wire, I2C interface.
+> 
+> Implement support for the LTC2499 ADC by extending the LTC2497
+> driver. A new chip_info struct is added to differentiate between
+> chip types and resolutions when reading data from the device.
+> 
+> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf
+> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
+I'm not certain why (as I have the prerequisit on the tree) but this
+didn't apply cleanly.  Please give the result of my manual intervention a
+quick sanity check.
 
-Changed V3:
-  Fix xin24m clock-names position
+Thanks,
 
-Changed V2:
-  Use SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-  Add more clocks
+Jonathan
 
----
-
-Rockchip recently replied on other clock-patches to dual-license the
-binding.
-
-https://lore.kernel.org/all/510d1180-bc8e-7820-c772-ed7f35447087@rock-chips.com/
-From Finley with an  @rock-chips.com address, so this should be ok.
-
-Document history:
-
-git log Documentation/devicetree/bindings/clock/*rk312*.txt
-
-Author: Elaine Zhang <zhangqing@rock-chips.com>
-    dt-bindings: add documentation for rk3126 clock
-Author: Elaine Zhang <zhangqing@rock-chips.com>
-    dt-bindings: add bindings for rk3128 clock controller
----
- .../bindings/clock/rockchip,rk3128-cru.txt    | 58 --------------
- .../bindings/clock/rockchip,rk3128-cru.yaml   | 76 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 58 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-deleted file mode 100644
-index 6f8744fd301b..000000000000
---- a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.txt
-+++ /dev/null
-@@ -1,58 +0,0 @@
--* Rockchip RK3126/RK3128 Clock and Reset Unit
--
--The RK3126/RK3128 clock controller generates and supplies clock to various
--controllers within the SoC and also implements a reset controller for SoC
--peripherals.
--
--Required Properties:
--
--- compatible: should be "rockchip,rk3126-cru" or "rockchip,rk3128-cru"
--  "rockchip,rk3126-cru" - controller compatible with RK3126 SoC.
--  "rockchip,rk3128-cru" - controller compatible with RK3128 SoC.
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- #clock-cells: should be 1.
--- #reset-cells: should be 1.
--
--Optional Properties:
--
--- rockchip,grf: phandle to the syscon managing the "general register files"
--  If missing pll rates are not changeable, due to the missing pll lock status.
--
--Each clock is assigned an identifier and client nodes can use this identifier
--to specify the clock which they consume. All available clocks are defined as
--preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
--used in device tree sources. Similar macros exist for the reset sources in
--these files.
--
--External clocks:
--
--There are several clocks that are generated outside the SoC. It is expected
--that they are defined using standard clock bindings with following
--clock-output-names:
-- - "xin24m" - crystal input - required,
-- - "ext_i2s" - external I2S clock - optional,
-- - "gmac_clkin" - external GMAC clock - optional
--
--Example: Clock controller node:
--
--	cru: cru@20000000 {
--		compatible = "rockchip,rk3128-cru";
--		reg = <0x20000000 0x1000>;
--		rockchip,grf = <&grf>;
--
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--Example: UART controller node that consumes the clock generated by the clock
--  controller:
--
--	uart2: serial@20068000 {
--		compatible = "rockchip,serial";
--		reg = <0x20068000 0x100>;
--		interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
--		clock-frequency = <24000000>;
--		clocks = <&cru SCLK_UART2>, <&cru PCLK_UART2>;
--		clock-names = "sclk_uart", "pclk_uart";
--	};
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-new file mode 100644
-index 000000000000..b3d9c8eca989
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,rk3128-cru.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/rockchip,rk3128-cru.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip RK3126/RK3128 Clock and Reset Unit (CRU)
-+
-+maintainers:
-+  - Elaine Zhang <zhangqing@rock-chips.com>
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+description: |
-+  The RK3126/RK3128 clock controller generates and supplies clock to various
-+  controllers within the SoC and also implements a reset controller for SoC
-+  peripherals.
-+  Each clock is assigned an identifier and client nodes can use this identifier
-+  to specify the clock which they consume. All available clocks are defined as
-+  preprocessor macros in the dt-bindings/clock/rk3128-cru.h headers and can be
-+  used in device tree sources. Similar macros exist for the reset sources in
-+  these files.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk3126-cru
-+      - rockchip,rk3128-cru
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  "#reset-cells":
-+    const: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 3
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: xin24m
-+      - enum:
-+          - ext_i2s
-+          - gmac_clkin
-+      - enum:
-+          - ext_i2s
-+          - gmac_clkin
-+
-+  rockchip,grf:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to the syscon managing the "general register files" (GRF),
-+      if missing pll rates are not changeable, due to the missing pll
-+      lock status.
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - "#reset-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    cru: clock-controller@20000000 {
-+      compatible = "rockchip,rk3128-cru";
-+      reg = <0x20000000 0x1000>;
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
--- 
-2.20.1
+> ---
+>  changes in v3:
+>   - set the correct chip info indexes for i2c_device_id entries.
+>   - added the asm/unaligned.h header.
+>   - removed TYPE_LTC2496.
+>   - moved the ltc2497_chip_type enum to ltc2497.c file.
+>   - removed the name setting.
+>  drivers/iio/adc/ltc2496.c      |  8 ++++-
+>  drivers/iio/adc/ltc2497-core.c |  2 +-
+>  drivers/iio/adc/ltc2497.c      | 61 +++++++++++++++++++++++++++++++---
+>  drivers/iio/adc/ltc2497.h      |  5 +++
+>  4 files changed, 69 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ltc2496.c b/drivers/iio/adc/ltc2496.c
+> index dfb3bb5997e5..bf89d5ae19af 100644
+> --- a/drivers/iio/adc/ltc2496.c
+> +++ b/drivers/iio/adc/ltc2496.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/iio/driver.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/property.h>
+>  
+>  #include "ltc2497.h"
+>  
+> @@ -74,6 +75,7 @@ static int ltc2496_probe(struct spi_device *spi)
+>  	spi_set_drvdata(spi, indio_dev);
+>  	st->spi = spi;
+>  	st->common_ddata.result_and_measure = ltc2496_result_and_measure;
+> +	st->common_ddata.chip_info = device_get_match_data(dev);
+>  
+>  	return ltc2497core_probe(dev, indio_dev);
+>  }
+> @@ -85,8 +87,12 @@ static void ltc2496_remove(struct spi_device *spi)
+>  	ltc2497core_remove(indio_dev);
+>  }
+>  
+> +static const struct ltc2497_chip_info ltc2496_info = {
+> +	.resolution = 16,
+> +};
+> +
+>  static const struct of_device_id ltc2496_of_match[] = {
+> -	{ .compatible = "lltc,ltc2496", },
+> +	{ .compatible = "lltc,ltc2496", .data = &ltc2496_info, },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, ltc2496_of_match);
+> diff --git a/drivers/iio/adc/ltc2497-core.c b/drivers/iio/adc/ltc2497-core.c
+> index 2a485c8a1940..b2752399402c 100644
+> --- a/drivers/iio/adc/ltc2497-core.c
+> +++ b/drivers/iio/adc/ltc2497-core.c
+> @@ -95,7 +95,7 @@ static int ltc2497core_read_raw(struct iio_dev *indio_dev,
+>  			return ret;
+>  
+>  		*val = ret / 1000;
+> -		*val2 = 17;
+> +		*val2 = ddata->chip_info->resolution + 1;
+>  
+>  		return IIO_VAL_FRACTIONAL_LOG2;
+>  
+> diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+> index f7c786f37ceb..36248423a7a6 100644
+> --- a/drivers/iio/adc/ltc2497.c
+> +++ b/drivers/iio/adc/ltc2497.c
+> @@ -12,18 +12,31 @@
+>  #include <linux/iio/driver.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/property.h>
+> +
+> +#include <asm/unaligned.h>
+>  
+>  #include "ltc2497.h"
+>  
+> +enum ltc2497_chip_type {
+> +	TYPE_LTC2497,
+> +	TYPE_LTC2499,
+> +};
+> +
+>  struct ltc2497_driverdata {
+>  	/* this must be the first member */
+>  	struct ltc2497core_driverdata common_ddata;
+>  	struct i2c_client *client;
+> +	u32 recv_size;
+> +	u32 sub_lsb;
+>  	/*
+>  	 * DMA (thus cache coherency maintenance) may require the
+>  	 * transfer buffers to live in their own cache lines.
+>  	 */
+> -	__be32 buf __aligned(IIO_DMA_MINALIGN);
+> +	union {
+> +		__be32 d32;
+> +		u8 d8[3];
+> +	} data __aligned(IIO_DMA_MINALIGN);
+>  };
+>  
+>  static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+> @@ -34,13 +47,29 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+>  	int ret;
+>  
+>  	if (val) {
+> -		ret = i2c_master_recv(st->client, (char *)&st->buf, 3);
+> +		if (st->recv_size == 3)
+> +			ret = i2c_master_recv(st->client, (char *)&st->data.d8, st->recv_size);
+> +		else
+> +			ret = i2c_master_recv(st->client, (char *)&st->data.d32, st->recv_size);
+> +
+>  		if (ret < 0) {
+>  			dev_err(&st->client->dev, "i2c_master_recv failed\n");
+>  			return ret;
+>  		}
+>  
+> -		*val = (be32_to_cpu(st->buf) >> 14) - (1 << 17);
+> +		/*
+> +		 * The data format is 16/24 bit 2s complement, but with an upper sign bit on the
+> +		 * resolution + 1 position, which is set for positive values only. Given this
+> +		 * bit's value, subtracting BIT(resolution + 1) from the ADC's result is
+> +		 * equivalent to a sign extension.
+> +		 */
+> +		if (st->recv_size == 3) {
+> +			*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+> +				- BIT(ddata->chip_info->resolution + 1);
+> +		} else {
+> +			*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
+> +				- BIT(ddata->chip_info->resolution + 1);
+> +		}
+>  	}
+>  
+>  	ret = i2c_smbus_write_byte(st->client,
+> @@ -54,9 +83,11 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+>  static int ltc2497_probe(struct i2c_client *client,
+>  			 const struct i2c_device_id *id)
+>  {
+> +	const struct ltc2497_chip_info *chip_info;
+>  	struct iio_dev *indio_dev;
+>  	struct ltc2497_driverdata *st;
+>  	struct device *dev = &client->dev;
+> +	u32 resolution;
+>  
+>  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C |
+>  				     I2C_FUNC_SMBUS_WRITE_BYTE))
+> @@ -71,6 +102,15 @@ static int ltc2497_probe(struct i2c_client *client,
+>  	st->client = client;
+>  	st->common_ddata.result_and_measure = ltc2497_result_and_measure;
+>  
+> +	chip_info = device_get_match_data(dev);
+> +	if (!chip_info)
+> +		chip_info = (const struct ltc2497_chip_info *)id->driver_data;
+> +	st->common_ddata.chip_info = chip_info;
+> +
+> +	resolution = chip_info->resolution;
+> +	st->sub_lsb = 31 - (resolution + 1);
+> +	st->recv_size = BITS_TO_BYTES(resolution) + 1;
+> +
+>  	return ltc2497core_probe(dev, indio_dev);
+>  }
+>  
+> @@ -83,14 +123,25 @@ static int ltc2497_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> +static const struct ltc2497_chip_info ltc2497_info[] = {
+> +	[TYPE_LTC2497] = {
+> +		.resolution = 16,
+> +	},
+> +	[TYPE_LTC2499] = {
+> +		.resolution = 24,
+> +	},
+> +};
+> +
+>  static const struct i2c_device_id ltc2497_id[] = {
+> -	{ "ltc2497", 0 },
+> +	{ "ltc2497", (kernel_ulong_t)&ltc2497_info[TYPE_LTC2497] },
+> +	{ "ltc2499", (kernel_ulong_t)&ltc2497_info[TYPE_LTC2499] },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, ltc2497_id);
+>  
+>  static const struct of_device_id ltc2497_of_match[] = {
+> -	{ .compatible = "lltc,ltc2497", },
+> +	{ .compatible = "lltc,ltc2497", .data = &ltc2497_info[TYPE_LTC2497] },
+> +	{ .compatible = "lltc,ltc2499", .data = &ltc2497_info[TYPE_LTC2499] },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, ltc2497_of_match);
+> diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
+> index d0b42dd6b8ad..71957fc7e1ba 100644
+> --- a/drivers/iio/adc/ltc2497.h
+> +++ b/drivers/iio/adc/ltc2497.h
+> @@ -4,9 +4,14 @@
+>  #define LTC2497_CONFIG_DEFAULT		LTC2497_ENABLE
+>  #define LTC2497_CONVERSION_TIME_MS	150ULL
+>  
+> +struct ltc2497_chip_info {
+> +	u32 resolution;
+> +};
+> +
+>  struct ltc2497core_driverdata {
+>  	struct regulator *ref;
+>  	ktime_t	time_prev;
+> +	const struct ltc2497_chip_info	*chip_info;
+>  	u8 addr_prev;
+>  	int (*result_and_measure)(struct ltc2497core_driverdata *ddata,
+>  				  u8 address, int *val);
 
