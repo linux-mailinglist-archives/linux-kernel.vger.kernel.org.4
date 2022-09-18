@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B595BC035
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB865BC033
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiIRVz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 17:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S229612AbiIRVzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 17:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiIRVzw (ORCPT
+        with ESMTP id S229518AbiIRVzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 17:55:52 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848C317A94
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 14:55:51 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:43960)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oa2GQ-008ozR-Sj; Sun, 18 Sep 2022 15:55:46 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:47224 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oa2GP-006HsH-VI; Sun, 18 Sep 2022 15:55:46 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>, Oleg Nesterov <oleg@redhat.com>
-References: <1661842523-26716-1-git-send-email-zhaoyang.huang@unisoc.com>
-        <CAGWkznE5LhYq6dWB0zFkF2XdD-gd3MBcQ9fnUJmW59YL1GisMQ@mail.gmail.com>
-        <YyaFrarLHYW3HSnu@ZenIV>
-Date:   Sun, 18 Sep 2022 16:55:17 -0500
-In-Reply-To: <YyaFrarLHYW3HSnu@ZenIV> (Al Viro's message of "Sun, 18 Sep 2022
-        03:42:53 +0100")
-Message-ID: <87wna073ga.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 18 Sep 2022 17:55:39 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC84C13D67;
+        Sun, 18 Sep 2022 14:55:38 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id c6so20662636qvn.6;
+        Sun, 18 Sep 2022 14:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=z0B/eW5XdmdQCHytKnRy9T9V8L1fTqHGR2VXSGfuq4I=;
+        b=ltK6KC15zGQUC9Lw70LjnFqZjNPrfIX+TMuW8tMBmsHN7UPzHasBO5dW87D7S893S3
+         LlsUUANfPgJVqKjn4vzrR2JILxzqawVFobYr7CB9LWDiT+2Dg7Hv9e8PctQ5/ZsXQwmt
+         Li53kzoT/jeRa5eO9FrILsRSHLT7l/zNiQa7AFKG+lRsJXoJY+MsTLSpGKF3fhy7RKdA
+         vh8fYiKPWq9zddTHUfx8Dh9K/I9H0yJMC1vxxED3U0/ub8D+DF5LsJSYaD4T3kzplrJV
+         Bb542dZOZj8a/1THY+orbiASDoVbDbhDrJWoXcugsoiOtsTCIgYMJtq9azU3dUGfY2S+
+         yxOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=z0B/eW5XdmdQCHytKnRy9T9V8L1fTqHGR2VXSGfuq4I=;
+        b=qbf1RsHjmFxnrQB/HVpTLW52G+9Xzb66G3FS4rfI+b4HgAYZeuRwtKFxq9Lxqis2XJ
+         aeh16+j6ua7MqEg8P9gM9saidtMkra7EZMrK0Pk2W4FoBQQYkQEWuds6C7chu1nin1QV
+         WygZXcqujDrGMMRH9VC0gNI4QnPYQlQzkwMhfKjc2hmvMQNv14LTPcwD0l262UAgccH8
+         p1bdDVbNoSgpL9Nzagj2HduF75nM28ThkBwr1274Xlpg+Re4oB1ggoarOY6z7DTE+fqn
+         IWD7j/jZefvEOwtEItb4E3caknPsptozfKf9FA1oKkwsOz8uP1xAdGuVQJW33CTXLAkZ
+         Kdwg==
+X-Gm-Message-State: ACrzQf1W+kgl0xaOxcyeIZI6e7tjIIczcniPHPyEJBwcvZmD6ER7Wdra
+        ruZkuvNKJwiQZuAs0/aToAN8uwm4FmUJOw==
+X-Google-Smtp-Source: AMsMyM57YmEW/05lyG/l5PA9erb2kucmW8I4oaTxFKfSvMsUHJUPv3Rtt+rAVdXLWC5/oRvStPNaug==
+X-Received: by 2002:a05:6214:519e:b0:4ad:25c4:cb21 with SMTP id kl30-20020a056214519e00b004ad25c4cb21mr6175544qvb.41.1663538137919;
+        Sun, 18 Sep 2022 14:55:37 -0700 (PDT)
+Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with UTF8SMTPSA id j15-20020a05620a410f00b006b5df4d2c81sm12100134qko.94.2022.09.18.14.55.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 14:55:37 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        linux-kernel@vger.kernel.org (open list),
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Nick Bowler <nbowler@draconx.ca>,
+        Sean Anderson <seanga2@gmail.com>
+Subject: [PATCH] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
+Date:   Sun, 18 Sep 2022 17:55:34 -0400
+Message-Id: <20220918215534.1529108-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oa2GP-006HsH-VI;;;mid=<87wna073ga.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/AkfaHDfpn6fLN77ooydSFsheLGKPGEa8=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Al Viro <viro@zeniv.linux.org.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 387 ms - load_scoreonly_sql: 0.20 (0.1%),
-        signal_user_changed: 20 (5.1%), b_tie_ro: 17 (4.5%), parse: 1.10
-        (0.3%), extract_message_metadata: 17 (4.3%), get_uri_detail_list: 1.35
-        (0.3%), tests_pri_-1000: 34 (8.7%), tests_pri_-950: 1.52 (0.4%),
-        tests_pri_-900: 1.09 (0.3%), tests_pri_-90: 80 (20.6%), check_bayes:
-        78 (20.1%), b_tokenize: 6 (1.5%), b_tok_get_all: 7 (1.9%),
-        b_comp_prob: 2.5 (0.6%), b_tok_touch_all: 58 (15.1%), b_finish: 1.10
-        (0.3%), tests_pri_0: 212 (54.8%), check_dkim_signature: 0.61 (0.2%),
-        check_dkim_adsp: 2.7 (0.7%), poll_dns_idle: 0.84 (0.2%), tests_pri_10:
-        2.9 (0.8%), tests_pri_500: 14 (3.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] fs: use kvmalloc for big coredump file
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a separate receive path for small packets (under 256 bytes).
+Instead of allocating a new dma-capable skb to be used for the next packet,
+this path allocates a skb and copies the data into it (reusing the existing
+sbk for the next packet). There are two bytes of junk data at the beginning
+of every packet. I believe these are inserted in order to allow aligned
+DMA and IP headers. We skip over them using skb_reserve. Before copying
+over the data, we must use a barrier to ensure we see the whole packet. The
+current code only synchronizes len bytes, starting from the beginning of
+the packet, including the junk bytes. However, this leaves off the final
+two bytes in the packet. Synchronize the whole packet.
 
-Adding Oleg as well.
+To reproduce this problem, ping a HME with a payload size between 17 and 214
 
-Al Viro <viro@zeniv.linux.org.uk> writes:
+	$ ping -s 17 <hme_address>
 
-> On Sun, Sep 18, 2022 at 10:29:10AM +0800, Zhaoyang Huang wrote:
->> loop Eric W
->> 
->> On Tue, Aug 30, 2022 at 2:56 PM zhaoyang.huang
->> <zhaoyang.huang@unisoc.com> wrote:
->> >
->> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->> >
->> > High order page allocation observed which even introduce kernel panic when generating
->> > coredump file, use kvmalloc_array instead of kmalloc_array
->
-> Frankly, I would rather cap argc here - if you are trying to feed that many arguments
-> to your userland helper, your core_pattern is probably bogus.
+which will complain rather loudly about the data mismatch. Small packets
+(below 60 bytes on the wire) do not have this issue. I suspect this is
+related to the padding added to increase the minimum packet size.
 
-Yes.  More than 512 arguments seems ridiculous.  I only count
-16 different values that can be place in corename so frankly a cap
-of about 20 seems sensible.
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Patch-prefix: net
+---
 
-I would suggest counting the number of spaces in core pattern and not
-allowing it to be set if the result would be more than
-"PAGE_SIZE/sizeof(void *)" arguments.
+ drivers/net/ethernet/sun/sunhme.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I would reduce that by one more argument so that helper_argv is
-completely unnecessary.  Unless I am misreading something the
-only reason for helper_argv is to add a NULL at the end of
-the argv array.  It should be no problem to have format_corename
-do that work as well.
-
-
-If you have a real world case where that is a problem please post
-the useful corepattern so that we can stare in disbelief and finally
-come around to figuring out how to support such a core pattern.
-
-Thank you,
-Eric
-
-
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index 8594ee839628..88aa0d310aee 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2020,9 +2020,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
+ 
+ 			skb_reserve(copy_skb, 2);
+ 			skb_put(copy_skb, len);
+-			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			skb_copy_from_linear_data(skb, copy_skb->data, len);
+-			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			/* Reuse original ring buffer. */
+ 			hme_write_rxd(hp, this,
+ 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
+-- 
+2.37.1
 
