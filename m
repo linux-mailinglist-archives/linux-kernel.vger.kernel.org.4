@@ -2,84 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6094A5BBD4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0465BBD56
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiIRKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229950AbiIRKBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 06:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiIRJ7n (ORCPT
+        with ESMTP id S229938AbiIRKAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 05:59:43 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FF195B9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:59:41 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id p5so30612293ljc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=3ca7URV85yKrxkToGpu5yTV2JozZM+SddjYQgSu2cPE=;
-        b=NOcdK9y/IjxvLB4AlRNbhchnxrCLfR6JPe46yDdIinRSWhtPe2DIGR+jViOuIdF9JM
-         7Y82F9iTQixXrvZE1Gb8a3LYZMV2kSA76NMRrQRrdgR9CtYdHDv09+Z9FHoekSHSshHl
-         V+0hh/FwUDRiuV/pCrfPWXWrxOxScvQj4+ACgX4p1+VmJCtM3Pf7QdVcC9uDf196BYld
-         SvW9UxigPwEKACj833dwq8FgRAPr8ieQKqnL3dteFivX4taQIGE8vTNniNKK5pWKUd/0
-         Z30zxc6cPQCdAgsZKNL+6X4ZQB1ko9AxFL4CbZ6pn2KQNRmvpNOPqmTZlK2eDTPQBcTz
-         Zk6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=3ca7URV85yKrxkToGpu5yTV2JozZM+SddjYQgSu2cPE=;
-        b=ShMbufgdkdNx8TF8G/955h6YvL+owp61EA0lNXnkfw3sLTYILabZ69w9U2Dao2Mam0
-         EbPB4uYspMxQmiiORPPWvmTy2B31TBGk9wCiwjEsK3hTi9fm2HN4Vh86jZbDSByWLmc9
-         UzJU/5qFtLQDAEBJc2GZrNqGpNVibAgx0xZQCbyR+hiDYeWGDTZ7Sd8JkdO2wnzxIbLx
-         ao+cQvwDu7MGcAkRDu3uc9YE3ULkJupT7RAOP3hkQdMojdDsiuuWOZVWHEAGOX9J5CsE
-         EzqRsaSCO2cbXHGE3WnJN6HXCNPmnkffeE+Or2D7z7wkMy7MGvHQl/57P0XctKca+P1H
-         3ZhQ==
-X-Gm-Message-State: ACrzQf0Bys9RNCx+x9YN6TPMuLXvcXVHcyE2hYhELvcV3KfPBAPgRRXC
-        CxiJaK1viynHvo155t1CVGSJ9Q==
-X-Google-Smtp-Source: AMsMyM6wA7xiTfhm8VgutQ4QQLmSyc5iFV5KfVuxKLS87itQMc+B2x5hO48lsJyXLMZ9mMrxMnGLAQ==
-X-Received: by 2002:a2e:bf23:0:b0:26c:83e:b4d3 with SMTP id c35-20020a2ebf23000000b0026c083eb4d3mr3666235ljr.282.1663495179307;
-        Sun, 18 Sep 2022 02:59:39 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id du7-20020a056512298700b00498f67cbfa9sm4580438lfb.22.2022.09.18.02.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 02:59:38 -0700 (PDT)
-Message-ID: <e88739bc-b799-bb5f-cd5d-73e9e689cbba@linaro.org>
-Date:   Sun, 18 Sep 2022 10:59:36 +0100
+        Sun, 18 Sep 2022 06:00:55 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827842529C;
+        Sun, 18 Sep 2022 03:00:09 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1663495204tknkmrsd
+Received: from localhost.localdomain ( [125.70.163.64])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 18 Sep 2022 18:00:03 +0800 (CST)
+X-QQ-SSF: 01000000002000E0G000B00A0000000
+X-QQ-FEAT: bYR630AeiPjRoP1hgEiHj7mYjHPFw9zFR4tiSe2uD19ilrfqeM/aJvD52qVSu
+        DS83hFmyrTT2s9a1IWs8hHuVscu9AJcEHtL2I5wp7DiaHEtUFbZon1uVlTlWyeGG+X1VkMo
+        lsRk64jWgCY45Ap1SRPw9up4u28xJ8MaVESdhR455j91tfjzRaIh14Awpv/XhqJX7T4Q35G
+        roA7oWjmFcXUNnNESiZQI00rU6ze65CSwB58DEN4nH6aJYKe11hHkoCtwy7kNc0Q88DHx+E
+        J2UkKGAUgztYYpiLv6gblRDvecuOzfuz+XBQA+zARbwnY6mbQsiIgrVR+7VpAY844Vbn22e
+        09ifxqPDVLcKzk/EpgI3j/pUxxOcPFhfcItrxxK5menv4R3b8X1vglfshzOlQ==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     robh+dt@kernel.org, frowand.list@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] of: base: fix repeated words in comments
+Date:   Sun, 18 Sep 2022 17:59:57 +0800
+Message-Id: <20220918095957.24537-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND v3 2/9] dt-bindings: mediatek: Add gamma compatible
- for mt8195
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "zheng-yan.chen" <zheng-yan.chen@mediatek.com>
-References: <20220912013006.27541-1-jason-jh.lin@mediatek.com>
- <20220912013006.27541-3-jason-jh.lin@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220912013006.27541-3-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,26 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/2022 02:29, Jason-JH.Lin wrote:
-> From: "zheng-yan.chen" <zheng-yan.chen@mediatek.com>
-> 
-> mt8195 uses 10bit-to-12bit gamma-LUT, which is not compatible with
-> current 9bit-to-10bit gamma-LUT.
-> 
-> This patch thus add constant compatible for mt8195, which means that
-> mt8195 should only use specified mt8195 gamma driver data.
-> 
-> Also, delete related compatible from enum, to ensure that
-> mt8195 will not accidentally get others' gamma driver data and thus
-> cause fatal error.
-> 
-> Signed-off-by: zheng-yan.chen <zheng-yan.chen@mediatek.com>
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Delete the redundant word 'of'.
 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/of/base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index 8e96862d312e..9b8507fe6f9b 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -1150,7 +1150,7 @@ const struct of_device_id *__of_match_node(const struct of_device_id *matches,
+ 
+ /**
+  * of_match_node - Tell if a device_node has a matching of_match structure
+- * @matches:	array of of device match structures to search in
++ * @matches:	array of device match structures to search in
+  * @node:	the of device structure to match against
+  *
+  * Low level utility function used by device matching.
+@@ -1175,7 +1175,7 @@ EXPORT_SYMBOL(of_match_node);
+  *		you pass will not be searched, only the next one
+  *		will; typically, you pass what the previous call
+  *		returned. of_node_put() will be called on it
+- * @matches:	array of of device match structures to search in
++ * @matches:	array of device match structures to search in
+  * @match:	Updated to point at the matches entry which matched
+  *
+  * Return: A node pointer with refcount incremented, use
+-- 
+2.36.1
 
-
-Best regards,
-Krzysztof
