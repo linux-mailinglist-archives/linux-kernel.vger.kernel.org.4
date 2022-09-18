@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F1F5BBC2F
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 08:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86A05BBC3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 08:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIRGhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 02:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S229532AbiIRG44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 02:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRGhw (ORCPT
+        with ESMTP id S229511AbiIRG4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 02:37:52 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35D823BD5
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:37:51 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id e81so18954852ybb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=WtWJsU6NZYJIgqgJJirhPk1ESg8pzmFDlf9rSDuSpIOVaz9eqn45jtXSITSrsyUH+b
-         RcnhDkn3o58G5w78oVO17mQkBnH6vOU4NcFhFRfBfwTgS2cXRwVroWoUQVCFLofx3H/o
-         v3ZuLhxzFuorm/uuRm/xoIHvkDcjD2zWI63o9xOpQg3yh6y5HMNUByP/RYVO6ZUEdzJl
-         KkLGb5x9/gmNp/jHMaTffcBzRQdogmXTOpwZECADKuY7bbacxaUwI4Qdocgx7djCuulM
-         OBMuEIpV2RYZAOdH8E1FcUvZ3deJ5lji5RD1K9vv1BTMBckpAzBJHMTuadMZTlFLk4xo
-         /pqA==
+        Sun, 18 Sep 2022 02:56:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7E27CFF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663484209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sG9TyI7RoPnjwpaWhat0D0T3kJaBGLVdSTh5KbAUUcc=;
+        b=gVMvHDdRwceicYYF4WIdffpUzy3ffXzLyCmznZ9BveJ5wt3nrPF/hB9QZxB15lmh8fa4Za
+        u0CQ5z2XSff9mt+8s5f7ISxTIKO3BrtiWs8ZZTLeo/KUNQLVYI5mv/yt4Z2c2YPSjJyCEB
+        uAD2K3wicc5OyChB6mGBmDclRQd4H0M=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-Dh_YDflEPFaDdQnDxXASFQ-1; Sun, 18 Sep 2022 02:56:48 -0400
+X-MC-Unique: Dh_YDflEPFaDdQnDxXASFQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 185-20020a1c02c2000000b003b4be28d7e3so1990669wmc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 23:56:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=zCQTZ+BT0yBZ146MefZz813Bky1+vKaC136uKF2KzxChCYmOE6+3X7WL6/TUZVsl/X
-         krlSFL2l0kIeQsYWWczyIqnFlkJyDyzHpLOjH0Z7gMHoMsmOk16tbraQ7aKevRglkEgE
-         ro00UEp2dRmJ233/BDCa6hCzVMaP2ydmwSoENy30r3OVmKgmakBe4kMQ//ZRunG136Rd
-         S5Oe8v7MZQsBtV88CnpqQvjWzSWrr7S47ckOygWAWFs2YgPbvm3KFUDnVE3WNc4HrMX8
-         a+l+ZANTeLKiPEYBoKwMConwHQXOKzjBQqEeMRdAQW4YA2Gd4E/NOv+Ky6qvOt1uXsC2
-         K4hw==
-X-Gm-Message-State: ACrzQf1uvqinsj287Ivi5wv0p0UjH/SgbSWT83XFQkE6vpR61nHlgEqC
-        AxvLY5HEbkDevq0+a5Q3koSWqOaEjLhfwMpFee8=
-X-Google-Smtp-Source: AMsMyM62bAadOY4NL8KCh4MdrCMDqayG2kX86h0/K/23latRnAYHbMaox4oy/IksDQthdYJDU88KjjJAXyFqeFglWdE=
-X-Received: by 2002:a25:2342:0:b0:6ae:b056:17fd with SMTP id
- j63-20020a252342000000b006aeb05617fdmr9335874ybj.582.1663483071285; Sat, 17
- Sep 2022 23:37:51 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sG9TyI7RoPnjwpaWhat0D0T3kJaBGLVdSTh5KbAUUcc=;
+        b=e/40TCcCLJRxdEg2bTAPNsP4XcRuqpOXkM61hGeRS2ZhnnY7uP5K4uYFOLr+dtlpwS
+         Xscvefv0wuQC3IVdQMJmXpGOOlcXagYni0IyaPbqFkDMgnyY/HJhE5B9x1Iu0tFaE1+E
+         TLLW9YYbjGmCi1+WPQw8C0ZJQJ2iefYcAAdkiLOHKmCitOpLwLGXPOPU8zYN+VYFB+nw
+         xpJbYYS4woo6bHuHoEuB5N33oF7eo1RuuBef5U41Lnsb9K5BFJzNtbINkQadOeQimbBS
+         C/PsBiA7lAVIzs7i4E3yFGR+LJiyRBt7DLSAOWeSk3SjpNnf4cI9p1NWKa4mseuaFw6A
+         a6/g==
+X-Gm-Message-State: ACrzQf3xGU5tf+uuPXusL7LnfkUKmbbx0TLAVO7XLIlBN84aWEROR2D7
+        mSq6I96QLfroz2oNhFcEaZsi3N/uko71pqmmhYPdlO3KtqrjKiE9UYK5gMte6FppXAXzE2SJgPV
+        iP+r8em9WIYoubg6hlJaA66aU
+X-Received: by 2002:a05:600c:3d0e:b0:3b4:9bd1:10be with SMTP id bh14-20020a05600c3d0e00b003b49bd110bemr8322598wmb.101.1663484207095;
+        Sat, 17 Sep 2022 23:56:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5iIUW7rsfRxmxgbyvogqw0ojEaNVttP8YBNjx7GPrB3E7FfRzWRD1uIBXkiE/5kZG+Pd1Ykw==
+X-Received: by 2002:a05:600c:3d0e:b0:3b4:9bd1:10be with SMTP id bh14-20020a05600c3d0e00b003b49bd110bemr8322576wmb.101.1663484206815;
+        Sat, 17 Sep 2022 23:56:46 -0700 (PDT)
+Received: from redhat.com ([2.52.4.6])
+        by smtp.gmail.com with ESMTPSA id t12-20020a05600c128c00b003b4931eb435sm8312339wmd.26.2022.09.17.23.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 23:56:46 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 02:56:41 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     junbo4242@gmail.com
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] Do not name control queue for virtio-net
+Message-ID: <20220918025033-mutt-send-email-mst@kernel.org>
+References: <20220917092857.3752357-1-junbo4242@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:9092:0:0:0:0 with HTTP; Sat, 17 Sep 2022 23:37:50
- -0700 (PDT)
-Reply-To: maryalbertt00045@gmail.com
-From:   Mary Albert <mawussikoff@gmail.com>
-Date:   Sun, 18 Sep 2022 07:37:50 +0100
-Message-ID: <CAHVeZEdWDYOxy5f91RBMTuD-C0wb4qbrKDfFyH0AUOQWhpLtwg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b2b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mawussikoff[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [maryalbertt00045[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220917092857.3752357-1-junbo4242@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On Sat, Sep 17, 2022 at 09:28:57AM +0000, junbo4242@gmail.com wrote:
+> From: Junbo <junbo4242@gmail.com>
+> 
+> In virtio drivers, the control queue always named <virtioX>-config.
+> 
+> Signed-off-by: Junbo <junbo4242@gmail.com>
+
+I don't think that's right. config is the config interrupt.
+
+
+
+> ---
+>  drivers/net/virtio_net.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 9cce7dec7366..0b3e74cfe201 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3469,7 +3469,8 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+>  	/* Parameters for control virtqueue, if any */
+>  	if (vi->has_cvq) {
+>  		callbacks[total_vqs - 1] = NULL;
+> -		names[total_vqs - 1] = "control";
+> +		/* control virtqueue always named <virtioX>-config */
+> +		names[total_vqs - 1] = "";
+>  	}
+>  
+>  	/* Allocate/initialize parameters for send/receive virtqueues */
+> -- 
+> 2.31.1
+
