@@ -2,238 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93155BBC97
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 10:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7FE5BBC9F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiIRI5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 04:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S229591AbiIRJAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 05:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRI53 (ORCPT
+        with ESMTP id S229495AbiIRJAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 04:57:29 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4181022BFB
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 01:57:27 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a2so18174103lfb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 01:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=46be7+fgoPh3F2vUA+v6CaFGB18NuU1007HMexTsdZc=;
-        b=d/+Iwp31+uK4FmbJRJOghfhKJAdpgGxKWO3MtL8c399NhLzYdlLUpt/h1KqTMD2XXO
-         nx0xd0tHd8Q1Svefzogb1vtuOYbM52sT7AB76G7hs/PMHkSk8hYVhVlq+/WkOlBUfcf+
-         Ur2EsK/4tmnL12/R+gJ7sPOWe7wALzeIn/WcNYLC+0fEF0JSowjLVE6j7k6nL7M1f5XQ
-         2b1/a5ZZjTnXJpqTvOQHfye61LANBfto7eFzLXNpEVrxTdhCMwiBjj9k+8y/frXOrIHB
-         Bip2sGGO31piszPjYzFDGJbRMPb4XgF7TzAKOTsX+i9P2Aku+MdxWJPyQcncE5hrlje7
-         pA1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=46be7+fgoPh3F2vUA+v6CaFGB18NuU1007HMexTsdZc=;
-        b=TopCyUpIuF18ovMxvKbYELgRMrOIsq5MQ9ksgHHsuao6EvyNMlRFXyk3DOx9wuLmOv
-         DOT9tZxxeQtBf7t26wSM71NiKGmLMiF0ccMk+vG1bNrLxp6Z/07SFWioGq0K7gxW764T
-         r5EukSn+MIfWvDOqQWukCG6WXEn9l1bjKL3TVyGEr6HyOO3HVG2NOHITL1oJVYYAYEYd
-         l//Jv3ImeVUaPU3c59TmzUylO8qM3JxE/zZCOSk0I1HaNUy6NzQK7hi6dbjnHeT/4roH
-         2WVgUz6wgWm7rc8qRZYr58SfnFYwyrrHTuI0mshDmVAqAUawRQVU/m69UnLv35P7nE/2
-         BE/A==
-X-Gm-Message-State: ACrzQf2hp9tL3cqR859q0q2v7eOR9q2cX62CngyUJNZJ4AHaYNxzMTPH
-        m7goCDybhDJ0Ql1y6epSZ3G5Uw==
-X-Google-Smtp-Source: AMsMyM7uxpivTqiWMZ3ywvCFvxTHYSEcnXcqpXgkMFAzjLkrdR/hx3NYZjF4hK2SpZ/F39DwFAKqhQ==
-X-Received: by 2002:a05:6512:304d:b0:498:9d7b:43f with SMTP id b13-20020a056512304d00b004989d7b043fmr4073203lfb.48.1663491445524;
-        Sun, 18 Sep 2022 01:57:25 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q16-20020a194310000000b004946aef1814sm4570117lfa.137.2022.09.18.01.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 01:57:24 -0700 (PDT)
-Message-ID: <83144092-42bf-c6f7-e5d0-3153388ad143@linaro.org>
-Date:   Sun, 18 Sep 2022 09:57:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: pinctrl: qcom: add sdm670 pinctrl
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220917210915.194840-1-mailingradian@gmail.com>
- <20220917210915.194840-2-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220917210915.194840-2-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 18 Sep 2022 05:00:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0F9165A0;
+        Sun, 18 Sep 2022 02:00:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 249B2612CD;
+        Sun, 18 Sep 2022 09:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7290FC433D6;
+        Sun, 18 Sep 2022 09:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663491627;
+        bh=2B1WDY5MwSCkTnY6CG0jmqILeM/7+0Zk+GBKB+Flch0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aK6o2OsusHqQ1de5M1c2CTP3HXuq2U3lIxs1wUIpDaUhxltNxsQ4ZJStYD3z3qEOY
+         gxUy5Zz0eOU8CjN4piXskxvUtEWpRngVd4tLYQg20suPxqOz+RKBbOWIxyDztjPpQH
+         WfpqtFDVJxFms+cgTEAnSxkP/07w3VmsjppCnGrmK/O07Q1MKV/Qbwe6Tjc6/el7YU
+         FnfakjdYd7B4IRK/6R8tnJKh68XS9zKgW5GaUkjW7LaVrEpC3uFHSBnDK3zLwZ242z
+         nt1Xoaf06wB6iJtBlvJB/y9TZ3wtezyi7Q6nUEKJ2XRDFLAAl6dYyRmrIMJN/MtUVr
+         D1LnDt+oedelA==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oZqA4-00As5P-5h;
+        Sun, 18 Sep 2022 10:00:24 +0100
+Date:   Sun, 18 Sep 2022 10:00:21 +0100
+Message-ID: <87illlkqfu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        catalin.marinas@arm.com, linux-kselftest@vger.kernel.org,
+        bgardon@google.com, shuah@kernel.org, corbet@lwn.net,
+        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
+        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
+In-Reply-To: <YyS78BqsQxKkLOiW@xz-m1.local>
+References: <20220916045135.154505-1-gshan@redhat.com>
+        <20220916045135.154505-2-gshan@redhat.com>
+        <YyS78BqsQxKkLOiW@xz-m1.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-doc@vger.kernel.org, catalin.marinas@arm.com, linux-kselftest@vger.kernel.org, bgardon@google.com, shuah@kernel.org, corbet@lwn.net, drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com, dmatlack@google.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, pbonzini@redhat.com, oliver.upton@linux.dev, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/09/2022 22:09, Richard Acayan wrote:
-> There is a new driver for the Snapdragon 670 TLMM (Top-Level Mode
-> Multiplexer). Document it.
+On Fri, 16 Sep 2022 19:09:52 +0100,
+Peter Xu <peterx@redhat.com> wrote:
 > 
-> Adapted from qcom,sm6350-pinctrl.yaml in the same directory at
-> commit c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml").
+> On Fri, Sep 16, 2022 at 12:51:31PM +0800, Gavin Shan wrote:
+> > This adds KVM_REQ_RING_SOFT_FULL, which is raised when the dirty
+> > ring of the specific VCPU becomes softly full in kvm_dirty_ring_push().
+> > The VCPU is enforced to exit when the request is raised and its
+> > dirty ring is softly full on its entrance.
+> > 
+> > Suggested-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Gavin Shan <gshan@redhat.com>
+> > ---
+> >  arch/x86/kvm/x86.c       | 5 +++--
+> >  include/linux/kvm_host.h | 1 +
+> >  virt/kvm/dirty_ring.c    | 4 ++++
+> >  3 files changed, 8 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 43a6a7efc6ec..7f368f59f033 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -10265,8 +10265,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+> >  	bool req_immediate_exit = false;
+> >  
+> >  	/* Forbid vmenter if vcpu dirty ring is soft-full */
+> > -	if (unlikely(vcpu->kvm->dirty_ring_size &&
+> > -		     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
+> > +	if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
+> > +	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
+> > +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+> >  		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> >  		trace_kvm_dirty_ring_exit(vcpu);
+> >  		r = 0;
+> 
+> As commented previously - can we use kvm_test_request() instead? because we
+> don't want to unconditionally clear the bit.  Instead of making the request
+> again, we can clear request only if !full.
 
-Thank you for your patch. There is something to discuss/improve.
+I have the feeling that this is a micro-optimisation that won't lead
+to much benefit in practice. You already have the cache line, just not
+in exclusive mode, and given that this is per-vcpu, you'd only see the
+cost if someone else is setting a request to this vcpu while
+evaluating the local requests.
+
+And now you need extra barriers...
+
+Also, can we please refrain from changing things without data showing
+that this actually is worse than what we had before? The point below
+makes me think that this is actually beneficial as is.
+
+> We can also safely move this into the block of below kvm_request_pending()
+> as Marc used to suggest.
+
+This, on the other hand, makes sure that we share the cost across all
+requests. Requests should be extremely rare anyway (and if they
+aren't, you have a whole lot of performance issues on your hands
+anyway).
 
 > 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    | 135 ++++++++++++++++++
->  1 file changed, 135 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+> To explicitly use kvm_clear_request(), we may need to be careful on the
+> memory barriers.  I'm wondering whether we should have moved
+> smp_mb__after_atomic() into kvm_clear_request() because kvm_clear_request()
+> is used outside kvm_check_request() and IIUC all the call sites should
+> better have that barrier too to be safe.
+>
+> Side note: when I read the code around I also see some mis-use of clear
+> request where it can be omitted, e.g.:
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> new file mode 100644
-> index 000000000000..3b6c381a2148
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> @@ -0,0 +1,135 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,sdm670-tlmm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. SDM670 TLMM block
-> +
-> +maintainers:
-> +  - Richard Acayan <mailingradian@gmail.com>
-> +
-> +description: |
-> +  This binding describes the Top Level Mode Multiplexer (TLMM) block found
-> +  in the SDM670 platform.
-> +
-> +allOf:
-> +  - $ref: "pinctrl.yaml#"
+> 		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
+> 			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+> 			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
+> 		}
+> 
+> Maybe it's a sign of bad naming, so we should renamed kvm_check_request()
+> to kvm_test_clear_request() too to show that clearing after that is not
+> needed?
 
-Drop quotes/
+Yeah, this kvm_clear_request() is superfluous. But this is rather well
+documented, for once, and I don't think we should repaint it based on
+a sample of one.
 
-> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sdm670-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  '#interrupt-cells': true
-> +  gpio-controller: true
-> +  gpio-reserved-ranges: true
+Thanks,
 
-Add constraints (minItems: 1, maxItems: half of GPIOs rounded up, so 75
-I guess)
+	M.
 
-> +  '#gpio-cells': true
-> +  gpio-ranges: true
-> +  wakeup-parent: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  '-state$':
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-sdm670-tlmm-state"
-> +      - patternProperties:
-> +          "-pins$":
-> +            $ref: "#/$defs/qcom-sdm670-tlmm-state"
-> +        additionalProperties: false
-> +
-> +$defs:
-> +  qcom-sdm670-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
-> +            - enum: [ ufs_reset, sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data,
-> +                      sdc2_clk, sdc2_cmd, sdc2_data ]
-> +        minItems: 1
-> +        maxItems: 36
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins.
-> +
-> +        enum: [ adsp_ext, agera_pll, atest_char, atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
-> +                atest_usb11, atest_usb12, atest_usb13, atest_usb2, atest_usb20, atest_usb21,
-> +                atest_usb22, atest_usb23, cam_mclk, cci_async, cci_i2c, cci_timer0, cci_timer1,
-> +                cci_timer2, cci_timer3, cci_timer4, copy_gp, copy_phase, dbg_out, ddr_bist,
-> +                ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, edp_hot, edp_lcd, gcc_gp1, gcc_gp2, gcc_gp3,
-> +                gp_pdm0, gp_pdm1, gp_pdm2, gpio, gps_tx, jitter_bist, ldo_en, ldo_update,
-> +                lpass_slimbus, m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3,
-> +                mss_lte, nav_pps, pa_indicator, pci_e0, pci_e1, phase_flag, pll_bist, pll_bypassnl,
-> +                pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc, qdss_cti, qdss, qlink_enable,
-> +                qlink_request, qua_mi2s, qup0, qup1, qup10, qup11, qup12, qup13, qup14, qup15, qup2,
-> +                qup3, qup4, qup5, qup6, qup7, qup8, qup9, qup_l4, qup_l5, qup_l6, sdc4_clk,
-> +                sdc4_cmd, sdc4_data, sd_write, sec_mi2s, ter_mi2s, tgu_ch0, tgu_ch1, tgu_ch2,
-> +                tgu_ch3, tsif1_clk, tsif1_data, tsif1_en, tsif1_error, tsif1_sync, tsif2_clk,
-> +                tsif2_data, tsif2_en, tsif2_error, tsif2_sync, uim1_clk, uim1_data, uim1_present,
-> +                uim1_reset, uim2_clk, uim2_data, uim2_present, uim2_reset, uim_batt, usb_phy, vfr_1,
-> +                vsense_trigger, wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1, wsa_clk, wsa_data, ]
-> +
-> +
-> +      bias-disable: true
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +      drive-strength: true
-> +      input-enable: true
-> +      output-high: true
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +
-> +    allOf:
-> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-> +      - if:
-> +          properties:
-> +            pins:
-> +              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
-> +        then:
-> +          required:
-> +            - function
-> +
-> +    additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +        pinctrl@3400000 {
-
-Use 4 spaces for example indentation.
-
-
-Best regards,
-Krzysztof
+-- 
+Without deviation from the norm, progress is not possible.
