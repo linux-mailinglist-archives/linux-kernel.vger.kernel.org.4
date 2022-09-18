@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30725BC02A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3225BC02E
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiIRVkr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Sep 2022 17:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S229458AbiIRVpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 17:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRVkp (ORCPT
+        with ESMTP id S229447AbiIRVpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 17:40:45 -0400
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281181400E
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 14:40:44 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 2DF291A02D0;
-        Sun, 18 Sep 2022 21:40:43 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 909BB6000A;
-        Sun, 18 Sep 2022 21:40:41 +0000 (UTC)
-Message-ID: <b683a340c820e7b55f7da047bfe3dd327db8ea5c.camel@perches.com>
-Subject: Re: [PATCH] get_maintainer: Extend matched name characters in
- maintainers_in_file()
-From:   Joe Perches <joe@perches.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Martin =?UTF-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Date:   Sun, 18 Sep 2022 14:40:40 -0700
-In-Reply-To: <20220918203217.GG4024@jannau.net>
-References: <20220916084712.84411-1-j@jannau.net>
-         <d52110471b332b047777616c762b086ee662225e.camel@perches.com>
-         <92afdf33e22e8a63f6baaaba94c004cf2ec5a7d7.camel@perches.com>
-         <20220918203217.GG4024@jannau.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Sun, 18 Sep 2022 17:45:47 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1825E15A0B;
+        Sun, 18 Sep 2022 14:45:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW1ZT2Bvjz4xG5;
+        Mon, 19 Sep 2022 07:45:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663537538;
+        bh=INa/VRswvV4M2ivCXxN4oJ39VeA0e0SE45vPUfM7wEk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QpcfC0bAN1kFZHeZl+JiCMdAALMUj0zNk0LH995TZxXSv6R/KMJkyfjx8LHtsAlr4
+         APvpo8hhT5wR02tGz1KvjE4s0gImG1FPETFSzrsh1MSjQ3ir3iONMsfi0zKsXw3ct7
+         /+phFnYe4iGAyvVa8DO9iYIarW6UDiFyz5ivQC7QDlFRx5WvYqKU2mzi/U+uxT1QAO
+         ALXmb1q9iU78DmxYbIJurGb0ErnA0ycrh5qQXxe7Cy5NxesEVqlT9xEOjSvxPhm1sy
+         m6pPEMgJFJgAUNp1AFx3JJqbjztFXc6yX6DYUEnT8uGYpahohAiMMSI65IZ+5O293O
+         SxNSm+www5TLw==
+Date:   Mon, 19 Sep 2022 07:45:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Robert Elliott <elliott@hpe.com>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: [PATCH -next 2/2] crypto: x86: kmsan: disable accelerated
+ configs in KMSAN builds
+Message-ID: <20220919074521.5c2b22c0@canb.auug.org.au>
+In-Reply-To: <CAG_fn=UT24yoY=amdXF5gXQjM9jw8bMamjC-mqJndiXNtNhvLA@mail.gmail.com>
+References: <20220909095811.2166073-1-glider@google.com>
+        <20220909095811.2166073-2-glider@google.com>
+        <CAG_fn=UT24yoY=amdXF5gXQjM9jw8bMamjC-mqJndiXNtNhvLA@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 6z1rk8c3ycxnrsniu9jwrqigkbkzm53c
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 909BB6000A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/6wJYtHBuU7X9rGAyUzLuPE6KDlX4ddN8=
-X-HE-Tag: 1663537241-402956
+Content-Type: multipart/signed; boundary="Sig_/0xIHfXrGImSDJjA9O9sMX+M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-09-18 at 22:32 +0200, Janne Grunau wrote:
-> On 2022-09-18 10:03:17 -0700, Joe Perches wrote:
-> > On Sat, 2022-09-17 at 07:11 -0700, Joe Perches wrote:
-> > > On Fri, 2022-09-16 at 10:47 +0200, Janne Grunau wrote:
-> > > > Extend the regexp matching name characters to cover Unicode blocks Latin
-> > > > Extended-A and Extended-B.
-> > > > Fixes 'scripts/get_maintainer.pl -f' for
-> > > > 'Documentation/devicetree/bindings/clock/apple,nco.yaml'.
-[]
-> > > > diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-> > > []
-> > > > @@ -442,7 +442,7 @@ sub maintainers_in_file {
-> > > >  	my $text = do { local($/) ; <$f> };
-> > > >  	close($f);
-> > > >  
-> > > > -	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
-> > > > +	my @poss_addr = $text =~ m$[A-Za-zÀ-ɏ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
-> > > 
-> > > 	my @poss_addr = $text =~ m$[\p{XPosixAlpha}\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
-> > 
-> > Using variations of \p{posix} doesn't seem to work for at least perl 5.34.
-> > 
-> > \p{print} seems to work for Documentation/devicetree/bindings/clock/apple,nco.yaml,
-> > but I don't know how fragile it is.
-> > 
-> > \p{print} might be too greedy...
-> 
-> It is, it produces following diff (checking all files in 
-> Documentation/devicetree/bindings):
-> -Lubomir Rintel <lkundrak@v3.sk> (in file)
-> +"Copyright 2019,2020 Lubomir Rintel" <lkundrak@v3.sk> (in file)
-> 
-> There are multiple hits of this form. The main issue is that \p{print} 
-> includes space. That however fixes many names with 3 parts.
+--Sig_/0xIHfXrGImSDJjA9O9sMX+M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-right
+Hi Alexander,
 
-> > diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-[]
-> > @@ -2456,11 +2456,12 @@ sub clean_file_emails {
-> >      foreach my $email (@file_emails) {
-> >  	$email =~ s/[\(\<\{]{0,1}([A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+)[\)\>\}]{0,1}/\<$1\>/g;
-> >  	my ($name, $address) = parse_email($email);
-> > +	$name =~ s/^\p{space}*\p{punct}*\p{space}*//;
-> 
-> This change is useful independently of the name regexp as it rejects
-> '- <email@addr.ess>' (yaml list items) as valid name, email combination.
+On Fri, 16 Sep 2022 11:23:47 +0200 Alexander Potapenko <glider@google.com> =
+wrote:
+>
+> Please use this patch to replace "crypto: x86: kmsan: disable
+> accelerated configs in KMSAN builds" when merging linux-mm into
+> linux-next (assuming arch/x86/crypto/Kconfig is still in -next).
 
-Good.  The below might be a bit better too:
+OK, will do from today.
 
-	$name =~ s/(?:\p{space}|\p{punct})*//;
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/0xIHfXrGImSDJjA9O9sMX+M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMnkXIACgkQAVBC80lX
+0GxFHggApKBwwoi7fp/rXwJeUEHgOnEh9+zx7yZ57E36g8KXCG/eAxb6tJ3T+1HB
+vw2/I+IxngE9Ze5FYpyWB5rsEjmxoECLTRg1Q9K/ftX7QTmrV7GVkga2m+32/GEy
+czrBhbhfFz7/f8Fz/lvBXEzg0vaA+2/sN69PqgAKvosBeriJPzjPPp606oY5T7rh
+dLjgzrxxoGGPZ0ovDs4EEzgu3DSJQlxKU8QNawcpLxUCZPI7H2cxPfIUfnww58xt
+aIWYXaSghtUj4AEvB17JSJp4Hv/COTqeoqkoevVdGqS0i1CrfYUFpKFrEGngIQKN
+EIStVCqn3KKryDPmmkips4cqiJfO/A==
+=tBet
+-----END PGP SIGNATURE-----
+
+--Sig_/0xIHfXrGImSDJjA9O9sMX+M--
