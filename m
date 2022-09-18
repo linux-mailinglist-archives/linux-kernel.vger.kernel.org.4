@@ -2,124 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D335BBDAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784535BBD9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiIRLlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 07:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S229680AbiIRLd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 07:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiIRLlJ (ORCPT
+        with ESMTP id S229657AbiIRLdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 07:41:09 -0400
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Sep 2022 04:41:06 PDT
-Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F01A048
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:41:06 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
-Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
-        id 3409B2902D; Sun, 18 Sep 2022 13:30:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=valentin-vidic.from.hr; s=2020; t=1663500659;
-        bh=gHJfx8wSWMuiP6oI38sMXPRksdK6pMWB/LxgIBgJZKc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WGyM9dpHvPOpyrir7J8omQczPSEez0B9XrR1mUtlhghMx39bb9ZhohQJVYkKLS08Q
-         Csa4xtfeIear5GiEOJygeVKGISlF2xKPx8H5984CVvEhoPZlNXsePn20uIkvOofXU6
-         yCzxdq3kjZ9991VhaHGr7zOkKnSR+pWfL/TL4YJZjmwISCdrYBNRipU2q4KjoJH4ei
-         E3dkRGZv9PVRfppcWkB/ZzBv8GvU4kQBOP8qCIRbM1IxdieNFVnU/I8oDOAzDKB6y2
-         lsdTNLuu/TahlmfgaATvy+Jy9KsBr4lL5OFW2loOkjefey3D46pRJ/+25aIydI8iNN
-         +ZGAaGhpVtMnin5zAW6yUyQvVlrC9OKaB+8NOj8t8YuKKThqjIyQphWd4FO3I22YQM
-         u4QIKfulk8CUGZTYiEFXWIe39bPhX3u5ZsSzMcEcAYroNWCWXpO+qZkryoWzr4hcCg
-         VAEGoKAhYq4TVGO/SVwLHd2FEsUcVmXyRBptoEjDQ0ATBCFBFqolK+WSg+5bhgd5ee
-         GCufOWi0+upxLScgt87UkF0AhkFEfaemLqjsdktfYuh/UUegNC4GAfc+/gV9SyoBbW
-         Fd7YmO0lpKNnuUoZAu8hyqyATRplO5+1zJKxsP8dn1TmTfbNBkgPmafCfTvhg8wfTP
-         4/3v+ni5rU6qX41wj8Hi2xX8=
-From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Valentin Vidic <vvidic@valentin-vidic.from.hr>
-Subject: [PATCH] staging: rtl8192e: fix CamelCase variables
-Date:   Sun, 18 Sep 2022 13:30:41 +0200
-Message-Id: <20220918113041.3805576-1-vvidic@valentin-vidic.from.hr>
-X-Mailer: git-send-email 2.30.2
+        Sun, 18 Sep 2022 07:33:24 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98642314C
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:33:22 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d7-20020a056e02214700b002f3cbbcc8cbso13745968ilv.7
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:33:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=tOAcwprBKvdlnMP02YBeJwpkhPA2fnxvRa3dgTcqouk=;
+        b=sLdvk9qX16E8KXWPQl+WhLQb5T/4JGTQ+fzvv+s16ScfNyMyQlaeIlnhtTB3sNw4jM
+         IlP3O50/8eyz2uxxcCTHdU2UvzwrfbS3+dcLKCiOGWFRYZOvcYWeh3hIcKIi2wmwmUOJ
+         HF44czYJHjKw6efBax0KNN8QORumfpCi+JJynu3S1sP87esNsEwqJo6Mlf4I4/qF8Tn6
+         w8HF7MK5y5lAvLKM50CWGDZwCXOKkv94NYPdSYCRuKEAh+rZO87NzxNInrbZlP+MQKdQ
+         /MoOc6dM73YH5hATCMVnfRjJQ2m3n45SZETzyHjCrlZ7x6SNuBor4xRr8Lp1LAW0wLRc
+         VgcQ==
+X-Gm-Message-State: ACrzQf19EWyhr7itpXr3k3CuL6umCtEaMVTX7G3VKsuOCLZG8/UPg1fe
+        FJpnHOO8SAj9ZEcoln/TSLG5PouuCpclK1WD0h2HOR3wMC2e
+X-Google-Smtp-Source: AMsMyM6qgLPj+BjGRT2qRNlZp0LSSEOqy3B5DTDkckbYFcxXvsQuyEjHqQ93lyvFZMrADSpI7fHQXCjGNfDGIERsOj3lvJapMSkL
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:d54:b0:35a:995f:502b with SMTP id
+ d20-20020a0566380d5400b0035a995f502bmr4584673jak.278.1663500800774; Sun, 18
+ Sep 2022 04:33:20 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 04:33:20 -0700
+In-Reply-To: <20220918110253.947-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000505e9c05e8f1f62b@google.com>
+Subject: Re: [syzbot] BUG: soft lockup in tx
+From:   syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch warnings for variables: LinkCtrlReg, DeviceID,
-RevisionID, IrqLine.
+Hello,
 
-Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 26 ++++++++++-----------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-index 1d992d5c4e17..7a9a24935da9 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-@@ -16,11 +16,11 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
- 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
- 
- 	u8 tmp;
--	u16 LinkCtrlReg;
-+	u16 link_ctrl_reg;
- 
--	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &LinkCtrlReg);
-+	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &link_ctrl_reg);
- 
--	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", LinkCtrlReg);
-+	RT_TRACE(COMP_INIT, "Link Control Register =%x\n", link_ctrl_reg);
- 
- 	pci_read_config_byte(pdev, 0x98, &tmp);
- 	tmp |= BIT4;
-@@ -33,28 +33,28 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
- bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
- {
- 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
--	u16 DeviceID;
--	u8  RevisionID;
--	u16 IrqLine;
-+	u16 device_id;
-+	u8  revision_id;
-+	u16 irq_line;
- 
--	DeviceID = pdev->device;
--	RevisionID = pdev->revision;
--	pci_read_config_word(pdev, 0x3C, &IrqLine);
-+	device_id = pdev->device;
-+	revision_id = pdev->revision;
-+	pci_read_config_word(pdev, 0x3C, &irq_line);
- 
- 	priv->card_8192 = priv->ops->nic_type;
- 
--	if (DeviceID == 0x8192) {
--		switch (RevisionID) {
-+	if (device_id == 0x8192) {
-+		switch (revision_id) {
- 		case HAL_HW_PCI_REVISION_ID_8192PCIE:
- 			dev_info(&pdev->dev,
- 				 "Adapter(8192 PCI-E) is found - DeviceID=%x\n",
--				 DeviceID);
-+				 device_id);
- 			priv->card_8192 = NIC_8192E;
- 			break;
- 		case HAL_HW_PCI_REVISION_ID_8192SE:
- 			dev_info(&pdev->dev,
- 				 "Adapter(8192SE) is found - DeviceID=%x\n",
--				 DeviceID);
-+				 device_id);
- 			priv->card_8192 = NIC_8192SE;
- 			break;
- 		default:
--- 
-2.30.2
+Reported-and-tested-by: syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         a6b44374 Merge branch 'for-next/core', remote-tracking..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=146dded8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
+dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13804ed5080000
+
+Note: testing is done by a robot and is best-effort only.
