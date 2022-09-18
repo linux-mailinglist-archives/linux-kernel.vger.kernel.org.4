@@ -2,134 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D29A5BBC03
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243805BBC04
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiIRFXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 01:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S229510AbiIRF3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 01:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRFXG (ORCPT
+        with ESMTP id S229454AbiIRF3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 01:23:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FEE26AD6
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/Qrqp7Eji+AkjYIHNgU8Zze5zEOlGLr1ZnBDGkv0viU=; b=Gs8ANkN6kMow2W4+jktI5Xcsh3
-        irOskPOmPJBDjpCJTQlA2PqeZeIXksNCXdVoHRVCHutAjvCWv18DzYb1zwbLCBc9Kb/JojNbUEFgK
-        kXC8z3PKK2jdTVtkX4UBN+hyOLL+XPPwJJDE+TKbT+T+D1pKPj7twOXuxjREtepCEErm9jC86ivBj
-        DhdJ0GnpNmqviT58FoS6/6DIRC+kmpDBWxShbwCWWZ0ktI5lYiv13MCNE8t2PoPGzjx3mlC37wLka
-        Y+UBHlZv9Ch/c8EDqXKkwqw8lb64Vcfj4Y3jIIg0aBvth8X8V2Za9ZLmOAk8wUtYG05aG5FLIid3/
-        7lmG/3Nw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZmla-00CYlE-Fr; Sun, 18 Sep 2022 05:22:54 +0000
-Message-ID: <ea5feb59-59b2-a0ad-e878-9b431d810291@infradead.org>
-Date:   Sat, 17 Sep 2022 22:22:53 -0700
+        Sun, 18 Sep 2022 01:29:35 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F3A44D
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:29:33 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h5-20020a056e021d8500b002eb09a4f7e6so17376509ila.14
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:29:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=g48QcT/wkVC8ZD22fn8yiiIVvlcs3D7jSABH91P7O1k=;
+        b=am3e5NCPa2R5p+l9LdYEl91b8Fgy5l1x3DKWc5VA5EX03e8UebJqZMrcdxWvLhu5++
+         iXsv+NICWokgf59hif1RZgpEJpTYVVaTnS2eeVboZlPhymG6lGKwYT7YexLd2sDo7tJU
+         /3dcsbsSafSRixUpL+jtFW+fGSHfeehaOYH7c7kvwoEcQU9Hg0mwp5cd3q6G/f9SmehN
+         LDP2ZpfgTTTrN1ZTqvuIhmXujeJb/V0GqkLUxpiK22b2lzgFV2Z/PTGuZywCIhdfTPY+
+         1vSkQCeGVgv2puzvvzReuI6IB6mlvY5VCA7cLbb8FMFgXdlh2MZh1Afx6NxUPVGrZU6T
+         EBLg==
+X-Gm-Message-State: ACrzQf2litwobdtg3LejFaU5EShvVj3Ai0rWNcbeIoOSTz9bv2u6ykXK
+        lVhGu3xXtkq8HsWd5Ezl4cdLgNbmloe/HmGXAT/QoARrJbHk
+X-Google-Smtp-Source: AMsMyM7IWLv9OqGwX7pIDCTBHiyQJf79YJDcincdyojx1AGAd1XSkthYNfFkx4TNJpdnKbHBUbCIaHnSmhZqvsNGxwNV2Os8zXGR
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: sunplus-uart.c:undefined reference to `uart_suspend_port'
-To:     kernel test robot <lkp@intel.com>, Qin Jian <qinjian@cqplus1.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-References: <202209180926.OaCX9uMr-lkp@intel.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202209180926.OaCX9uMr-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:2145:b0:2f4:8c94:dcbc with SMTP id
+ d5-20020a056e02214500b002f48c94dcbcmr5216605ilv.161.1663478972821; Sat, 17
+ Sep 2022 22:29:32 -0700 (PDT)
+Date:   Sat, 17 Sep 2022 22:29:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000443a7205e8ece1d9@google.com>
+Subject: [syzbot] BUG: soft lockup in tx
+From:   syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd, Qin Jian,
+Hello,
 
-Fix is here:
-https://lore.kernel.org/lkml/20220901000821.15376-1-rdunlap@infradead.org/
+syzbot found the following issue on:
+
+HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=176b1680880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
+dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b22b10880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fce87f080000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/81b491dd5861/disk-a6b44374.raw.xz
+vmlinux: https://storage.googleapis.com/69c979cdc99a/vmlinux-a6b44374.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com
+
+watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [aoe_tx0:1378]
+Modules linked in:
+irq event stamp: 34814405
+hardirqs last  enabled at (34814404): [<ffff80000bfd85d4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (34814404): [<ffff80000bfd85d4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+hardirqs last disabled at (34814405): [<ffff80000bfc5d58>] __el1_irq arch/arm64/kernel/entry-common.c:455 [inline]
+hardirqs last disabled at (34814405): [<ffff80000bfc5d58>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:473
+softirqs last  enabled at (8188): [<ffff80000b20ab54>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (8192): [<ffff80000b20ab20>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+CPU: 0 PID: 1378 Comm: aoe_tx0 Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+pc : _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
+lr : __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+lr : _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+sp : ffff800014a53b80
+x29: ffff800014a53b80 x28: ffff0000c4ea0c30 x27: 0000000000000000
+x26: ffff80000f0ed9b8 x25: 0000000000000002 x24: 0000000000000001
+x23: ffff0000c8bf38b0 x22: 0000000000000020 x21: 0000000000000001
+x20: ffff80000f0ed9b8 x19: 0000000000000000 x18: 00000000000000c0
+x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c42b0000
+x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c42b0000
+x11: ff808000095d7628 x10: 0000000000000000 x9 : 0000000000000080
+x8 : 00000000000000c0 x7 : ffff8000098f58f0 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000002 x1 : ffff80000ce5df15 x0 : ffff8001f1d2f000
+Call trace:
+ arch_local_irq_restore arch/arm64/include/asm/irqflags.h:122 [inline]
+ __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+ _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
+ spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
+ uart_write+0x204/0x458 drivers/tty/serial/serial_core.c:589
+ handle_tx+0x10c/0x34c drivers/net/caif/caif_serial.c:236
+ caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:282
+ __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4833 [inline]
+ xmit_one net/core/dev.c:3590 [inline]
+ dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
+ __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
+ dev_queue_xmit include/linux/netdevice.h:3008 [inline]
+ tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
+ kthread+0x90/0x154 kernel/kthread.c:357
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
 
 
-On 9/17/22 18:38, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
-> commit: 0aa94eea8d955c82014e5368a843da93f1dc58f8 ARM: sunplus: Add initial support for Sunplus SP7021 SoC
-> date:   2 months ago
-> config: arm-buildonly-randconfig-r002-20220918
-> compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0aa94eea8d955c82014e5368a843da93f1dc58f8
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 0aa94eea8d955c82014e5368a843da93f1dc58f8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_suspend':
->>> sunplus-uart.c:(.text+0x2a4): undefined reference to `uart_suspend_port'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_resume':
->>> sunplus-uart.c:(.text+0x2f8): undefined reference to `uart_resume_port'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_remove':
->>> sunplus-uart.c:(.text+0x34c): undefined reference to `uart_remove_one_port'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_set_termios':
->>> sunplus-uart.c:(.text+0x83c): undefined reference to `uart_get_baud_rate'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x948): undefined reference to `uart_update_timeout'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `receive_chars':
->>> sunplus-uart.c:(.text+0xfa8): undefined reference to `uart_insert_char'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x1030): undefined reference to `tty_flip_buffer_push'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x1174): undefined reference to `uart_try_toggle_sysrq'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x132c): undefined reference to `do_SAK'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_console_write':
->>> sunplus-uart.c:(.text+0x1518): undefined reference to `uart_console_write'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x1604): undefined reference to `uart_console_write'
->    arm-linux-gnueabi-ld: sunplus-uart.c:(.text+0x172c): undefined reference to `uart_console_write'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_probe':
->>> sunplus-uart.c:(.text+0x2290): undefined reference to `uart_add_one_port'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_irq':
->>> sunplus-uart.c:(.text+0x28ec): undefined reference to `uart_write_wakeup'
->>> arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o:(.data+0x118): undefined reference to `uart_console_device'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_init':
->>> sunplus-uart.c:(.init.text+0x24): undefined reference to `uart_register_driver'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.init.text+0x6c): undefined reference to `uart_unregister_driver'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_console_setup':
->>> sunplus-uart.c:(.init.text+0x25c): undefined reference to `uart_parse_options'
->>> arm-linux-gnueabi-ld: sunplus-uart.c:(.init.text+0x28c): undefined reference to `uart_set_options'
->    arm-linux-gnueabi-ld: drivers/tty/serial/sunplus-uart.o: in function `sunplus_uart_exit':
->>> sunplus-uart.c:(.exit.text+0x1c): undefined reference to `uart_unregister_driver'
-> 
-> Kconfig warnings: (for reference only)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Root cause!
-
->    WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
->    Depends on [n]: DMADEVICES [=n] && (ARCH_TEGRA [=y] || COMPILE_TEST [=y])
->    Selected by [y]:
->    - SOC_TEGRA_FUSE [=y] && ARCH_TEGRA [=y] && ARCH_TEGRA_2x_SOC [=y]
->    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
->    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=y])
->    Selected by [y]:
->    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
->    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
->    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
->    Selected by [y]:
->    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
-> 
-
--- 
-~Randy
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
