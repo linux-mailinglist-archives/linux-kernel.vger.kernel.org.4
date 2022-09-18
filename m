@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D50C5BBE77
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD4D5BBE74
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIROhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S229910AbiIROhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiIROgp (ORCPT
+        with ESMTP id S229806AbiIROgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:36:45 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C70220EE
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id d15so18943638qka.9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
+        Sun, 18 Sep 2022 10:36:46 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F19D13D1A
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:45 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id g12so18695926qts.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=aFLFcX0Ge1NaS+vS/PtWRb3M+OHkdYHPDl97KJAqEJg=;
-        b=WmQiztou3FCfn/Hz1KGe1HZ1abdjEdJxRWsNN54qdxJ+aCYDS2Gvb+rvhEUYqiZdev
-         eO1vpCS8B2Sbfv3IaxaKVs3r3PSoRAguCWllD/u1EuSWT5alec7ec4DWcaanJcdoKyd1
-         Bw4/OGAtQtcx9YmAMgCj8Vs+K2kxu10QKvW0w87NhAXcB/U+yqayovcMF3IkZik+oYPb
-         CaR6qD2CfcqbmLcl/CdW1wVQSLTLJwwv2/rD1uSfUGclvVu7Eg1jMzEoVLwG375QIEGF
-         p7EerXK1ut/AthOy5fwLn1WKvnAdBe99mh59x3tY8WKnswLN5s8+y2PtOJaghwL9Ur85
-         x+XA==
+        bh=WopcYcPly2clGQMko18Z5Oo2qU5OZoDnJ7KQZMk3xww=;
+        b=tI4tD8RPl2oob7yS7B2rTMvy9BfpBPxt26bpNWOxmk+Jxjv5UZ5hKkeNKeA1JlCBmS
+         RaWvy44lCyTBVEd4mqV0UPYBPkvY93OXsfhRtnJbrrRnWK3XXUPQjdWNELgZoLj4MNSY
+         /U7qo6P3YmsZZM1upYOGWKrdVK4aNPsveS0vq6qocF/DN98h1Y/09NwK5fYr7I1kzLTC
+         kb0LfPNejxd/oWertlmtVAVO54vSGSDgj9W89MhienXl9HJ54FGWA/LQ1obCBVAuuSyS
+         dxbMCIQOtWxltwgc1CuHSy3irsOpWWMVVGtPoraVi8q777s5Z4oLo9JEKOIGrxjWMJn/
+         idiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=aFLFcX0Ge1NaS+vS/PtWRb3M+OHkdYHPDl97KJAqEJg=;
-        b=tYIrJmBy8Xfe3ChIKZu/TisrZqK42zfC9mHFjlC9AwGPAWpkeCwfLDL4oHl3TnkU8b
-         EJtjk/SHM6cwUqppUiIZpHwy91DlcC3KXFD5a/5mEbekq96gFc6c09uhhba0ikwwMv2+
-         NemCiUtX4GWrIa3CtOrlyggA5ryBZax2tN234dzT1Jq3XqVk2HZJDwAqXfhAj21U6a5N
-         6H/7mhiC/Jp3bn1YiBDlSofyK6RqUNqWrv0TpzMxIacP+kwCmUDK5AIBrOfyAJS57gP7
-         DX+50Xz0Pk0EkJaQCSRRweYyUq3Dw4AGvKEmkxffo4qyXLG56A6yWl4oS2/4JZiq4Jcw
-         Kg7Q==
-X-Gm-Message-State: ACrzQf0Rm4SwcA9ezgi04A1v9gCVP+mGXzlXKP2j7wSUfl3bx8ZN2bND
-        rVmLARalJDuArF061fVHuQk/gYcc57CBRw==
-X-Google-Smtp-Source: AMsMyM64Fbn0DNezINL7uBn/WUKg37RK5a4t1KOiMSSRJhl3qjD+05cUsHM3QMSmlODukfBEHyxmdw==
-X-Received: by 2002:a05:620a:280b:b0:6b6:5a6c:9acf with SMTP id f11-20020a05620a280b00b006b65a6c9acfmr10086348qkp.749.1663511803455;
-        Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
+        bh=WopcYcPly2clGQMko18Z5Oo2qU5OZoDnJ7KQZMk3xww=;
+        b=jzBlJbieESqVaoDLnVZO8l5ipm6RTDf7rt8iVbTkH5FZZSVYKPbs4rK49dmrfi+Fmv
+         f6uvTP8OUDkDgaBH4ODDFYflHmlLFFvSlBwnTv/V/T+mHMplv8lx4O2+7YJIyIJnS6YD
+         ZqjLQLM1dmHHo9q1O3bXJoHIWJrzuYW0pW9jFvOBh3EVUI2RrTILUONACp0O7ZgE3K+F
+         eo7AgUCkNUlB7fCyY10pdNhR2XlTorfpv/5YxlOZ4w/pdSpFU0hQmc7e3TAHep99np8M
+         0RPWsQ8hHSzzd6TKlVrVIRFlswS8NHhZd8xpN0eboWwzBUwN5ZnCTkDfSXmnax7onoJH
+         d6fQ==
+X-Gm-Message-State: ACrzQf3UZ9H9JWzySLCxsDp9gt8bjOnPaxvBBD2t1RYuvQUn3zBWkphc
+        Dsn0i478aNpoPj8XIwds2Axnqg==
+X-Google-Smtp-Source: AMsMyM5MBRfQkd6UUPXXffWdULTSWQ473xld1ESHt0BdfxXuh39fdB8/vqoCgjcWZN0WiAc1Vy/PeA==
+X-Received: by 2002:ac8:7d0a:0:b0:35c:be89:fd65 with SMTP id g10-20020ac87d0a000000b0035cbe89fd65mr11847663qtb.99.1663511804373;
+        Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id q31-20020a05620a2a5f00b006bb0e5ca4bbsm11456215qkp.85.2022.09.18.07.36.42
+        by smtp.gmail.com with ESMTPSA id q31-20020a05620a2a5f00b006bb0e5ca4bbsm11456215qkp.85.2022.09.18.07.36.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
+        Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linux-iio@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
@@ -56,9 +56,9 @@ Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
         groeck@chromium.org, jic23@kernel.org, david@lechnology.com,
         robertcnelson@gmail.com,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v3 1/4] counter: Introduce the Signal polarity component
-Date:   Sun, 18 Sep 2022 10:36:31 -0400
-Message-Id: <dbf9d9cfb9ba3b46b177e0a2c24520e8e2def1bb.1663511054.git.william.gray@linaro.org>
+Subject: [PATCH v3 2/4] counter: 104-quad-8: Add Signal polarity component
+Date:   Sun, 18 Sep 2022 10:36:32 -0400
+Message-Id: <574b16ebbf993abbe9bcf1833e2cf74098486258.1663511054.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1663511054.git.william.gray@linaro.org>
 References: <cover.1663511054.git.william.gray@linaro.org>
@@ -73,122 +73,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Signal polarity component represents the active level of a
-respective Signal. There are two possible states: positive (rising edge)
-and negative (falling edge); enum counter_signal_polarity represents
-these states. A convenience macro COUNTER_COMP_POLARITY() is provided
-for driver authors to declare a Signal polarity component.
+The 104-quad-8 driver provides support for Index signal polarity modes
+via the "index_polarity" Signal component. This patch exposes the same
+functionality through the more standard "polarity" Signal component.
 
-Cc: Julien Panis <jpanis@baylibre.com>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- Documentation/ABI/testing/sysfs-bus-counter | 13 +++++++++++++
- drivers/counter/counter-sysfs.c             | 11 +++++++++++
- include/linux/counter.h                     | 10 ++++++++++
- include/uapi/linux/counter.h                |  6 ++++++
- 4 files changed, 40 insertions(+)
+ drivers/counter/104-quad-8.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/ABI/testing/sysfs-bus-counter
-index 06c2b3e27e0b..a234022f9add 100644
---- a/Documentation/ABI/testing/sysfs-bus-counter
-+++ b/Documentation/ABI/testing/sysfs-bus-counter
-@@ -303,6 +303,19 @@ Description:
- 		Discrete set of available values for the respective Signal Y
- 		configuration are listed in this file.
+diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+index 1323edfbe40c..2a9d8259ed4b 100644
+--- a/drivers/counter/104-quad-8.c
++++ b/drivers/counter/104-quad-8.c
+@@ -549,6 +549,32 @@ static int quad8_index_polarity_set(struct counter_device *counter,
+ 	return 0;
+ }
  
-+What:		/sys/bus/counter/devices/counterX/signalY/polarity
-+KernelVersion:	6.1
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Active level of Signal Y. The following polarity values are
-+		available:
++static int quad8_polarity_read(struct counter_device *counter,
++			       struct counter_signal *signal,
++			       enum counter_signal_polarity *polarity)
++{
++	int err;
++	u32 index_polarity;
 +
-+		positive:
-+			Signal high state considered active level (rising edge).
++	err = quad8_index_polarity_get(counter, signal, &index_polarity);
++	if (err)
++		return err;
 +
-+		negative:
-+			Signal low state considered active level (falling edge).
++	*polarity = (index_polarity) ? COUNTER_SIGNAL_POLARITY_POSITIVE :
++		COUNTER_SIGNAL_POLARITY_NEGATIVE;
 +
- What:		/sys/bus/counter/devices/counterX/signalY/name
- KernelVersion:	5.2
- Contact:	linux-iio@vger.kernel.org
-diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
-index 04eac41dad33..92d3d4f549cb 100644
---- a/drivers/counter/counter-sysfs.c
-+++ b/drivers/counter/counter-sysfs.c
-@@ -91,6 +91,11 @@ static const char *const counter_count_mode_str[] = {
- 	[COUNTER_COUNT_MODE_MODULO_N] = "modulo-n"
- };
- 
-+static const char *const counter_signal_polarity_str[] = {
-+	[COUNTER_SIGNAL_POLARITY_POSITIVE] = "positive",
-+	[COUNTER_SIGNAL_POLARITY_NEGATIVE] = "negative"
-+};
-+
- static ssize_t counter_comp_u8_show(struct device *dev,
- 				    struct device_attribute *attr, char *buf)
- {
-@@ -201,6 +206,8 @@ static ssize_t counter_comp_u32_show(struct device *dev,
- 		return sysfs_emit(buf, "%s\n", counter_count_direction_str[data]);
- 	case COUNTER_COMP_COUNT_MODE:
- 		return sysfs_emit(buf, "%s\n", counter_count_mode_str[data]);
-+	case COUNTER_COMP_SIGNAL_POLARITY:
-+		return sysfs_emit(buf, "%s\n", counter_signal_polarity_str[data]);
- 	default:
- 		return sysfs_emit(buf, "%u\n", (unsigned int)data);
- 	}
-@@ -252,6 +259,10 @@ static ssize_t counter_comp_u32_store(struct device *dev,
- 		err = counter_find_enum(&data, avail->enums, avail->num_items,
- 					buf, counter_count_mode_str);
- 		break;
-+	case COUNTER_COMP_SIGNAL_POLARITY:
-+		err = counter_find_enum(&data, avail->enums, avail->num_items,
-+					buf, counter_signal_polarity_str);
-+		break;
- 	default:
- 		err = kstrtou32(buf, 0, &data);
- 		break;
-diff --git a/include/linux/counter.h b/include/linux/counter.h
-index 1fe17f5adb09..d508b260aaca 100644
---- a/include/linux/counter.h
-+++ b/include/linux/counter.h
-@@ -31,6 +31,7 @@ enum counter_comp_type {
- 	COUNTER_COMP_ENUM,
- 	COUNTER_COMP_COUNT_DIRECTION,
- 	COUNTER_COMP_COUNT_MODE,
-+	COUNTER_COMP_SIGNAL_POLARITY,
- };
- 
- /**
-@@ -483,4 +484,13 @@ struct counter_available {
- #define COUNTER_COMP_PRESET_ENABLE(_read, _write) \
- 	COUNTER_COMP_COUNT_BOOL("preset_enable", _read, _write)
- 
-+#define COUNTER_COMP_POLARITY(_read, _write, _available) \
-+{ \
-+	.type = COUNTER_COMP_SIGNAL_POLARITY, \
-+	.name = "polarity", \
-+	.signal_u32_read = (_read), \
-+	.signal_u32_write = (_write), \
-+	.priv = &(_available), \
++	return 0;
 +}
 +
- #endif /* _COUNTER_H_ */
-diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
-index 96c5ffd368ad..e9610e1944dc 100644
---- a/include/uapi/linux/counter.h
-+++ b/include/uapi/linux/counter.h
-@@ -153,4 +153,10 @@ enum counter_synapse_action {
- 	COUNTER_SYNAPSE_ACTION_BOTH_EDGES,
++static int quad8_polarity_write(struct counter_device *counter,
++				struct counter_signal *signal,
++				enum counter_signal_polarity polarity)
++{
++	const u32 pol = (polarity == COUNTER_SIGNAL_POLARITY_POSITIVE) ? 1 : 0;
++
++	return quad8_index_polarity_set(counter, signal, pol);
++}
++
+ static const char *const quad8_synchronous_modes[] = {
+ 	"non-synchronous",
+ 	"synchronous"
+@@ -977,6 +1003,13 @@ static struct counter_comp quad8_signal_ext[] = {
+ 			       quad8_signal_fck_prescaler_write)
  };
  
-+/* Signal polarity values */
-+enum counter_signal_polarity {
++static const enum counter_signal_polarity quad8_polarities[] = {
 +	COUNTER_SIGNAL_POLARITY_POSITIVE,
 +	COUNTER_SIGNAL_POLARITY_NEGATIVE,
 +};
 +
- #endif /* _UAPI_COUNTER_H_ */
++static DEFINE_COUNTER_AVAILABLE(quad8_polarity_available, quad8_polarities);
++
+ static DEFINE_COUNTER_ENUM(quad8_index_pol_enum, quad8_index_polarity_modes);
+ static DEFINE_COUNTER_ENUM(quad8_synch_mode_enum, quad8_synchronous_modes);
+ 
+@@ -984,6 +1017,8 @@ static struct counter_comp quad8_index_ext[] = {
+ 	COUNTER_COMP_SIGNAL_ENUM("index_polarity", quad8_index_polarity_get,
+ 				 quad8_index_polarity_set,
+ 				 quad8_index_pol_enum),
++	COUNTER_COMP_POLARITY(quad8_polarity_read, quad8_polarity_write,
++			      quad8_polarity_available),
+ 	COUNTER_COMP_SIGNAL_ENUM("synchronous_mode", quad8_synchronous_mode_get,
+ 				 quad8_synchronous_mode_set,
+ 				 quad8_synch_mode_enum),
 -- 
 2.37.3
 
