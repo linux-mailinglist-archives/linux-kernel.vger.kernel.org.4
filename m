@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EA45BBDFB
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 15:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143895BBE0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 15:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiIRNWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 09:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S229679AbiIRNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 09:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiIRNWp (ORCPT
+        with ESMTP id S229501AbiIRNmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 09:22:45 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8392018A
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 06:22:44 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t14so43165364wrx.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 06:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=qe70WmdNsVt7D6f6WRbeUCANYSNWq1ba7xme+qOpCj8=;
-        b=qDtOVc8u19Cde231bxT92BzaZi14aziR6OA52P1kHGWTLQTHX92mwYFuK0BSAg9G1k
-         NuLRGMpvXm1yWW9/DZmr6ylAKR8WXyQCmqQGx3As8W+70r4LBZ8zFoJS+sYwtwjMI57v
-         v7cadDoCQpaxyZMv8DbVM+RKv3nOd7jiTT9b9NnnDgJ8BTVEasVrGKPqE8hldOgK0gIH
-         QF3XGnjryS2ty32by7Mu6fBypTOXJZnbpGrgW3nv/p1iqgsp1Xj0fXF8IT01wdz0jAXu
-         OG+gybzC3crOL5+6qmUicIlF4yG8ygXFA4C0FS4wggQyGrvHSC2saOXLESgjvWSGikQ3
-         G0kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qe70WmdNsVt7D6f6WRbeUCANYSNWq1ba7xme+qOpCj8=;
-        b=gqc/IPtIZgRqmnj491lN/sHY0Ow8Wo+SqSqL7U3Fsw66zVqS/G7dfILV8kb3YPJY32
-         5ngU/l1DRTPflgx1o4Tz3oEw4LCSqKyr4+sQy++ndQTGloGTRDwkBsO3XqD7VQlScZds
-         7UVO0hpbqkOMSh/Gh0rA7rAy4vVZGzTT8nTrBlNUwpWaDBrJSZJ9a0gAoMXusA4QyWAY
-         J/FuzN9mcLf9PDL/0T+Z/MiuIHEBnQ56EuTyxZJYdZDWoqA/a9ZHMZvWS1tibFugfhkj
-         KrxKvKh0i8MtDQFav8RcJmHiOS3x+fy8erLFEx6G4JucLpBCz5MaP7C6N9B0y0792Ht5
-         yqxQ==
-X-Gm-Message-State: ACrzQf2rCPdhYNhsKjlvRT2DeLoe16py1hP/0N5FqXAIOfy+uixpJooP
-        2b23lsGrDVjGnZmrGL6ZUcI=
-X-Google-Smtp-Source: AMsMyM4KPaQoCCsfqvY5cDcSXaYx7GlY+PhVoFFA2zC7ZRVdOMv+TM5LWHHDdR0gr+YTGYjXUQ1ptQ==
-X-Received: by 2002:a5d:6f0d:0:b0:229:a479:989e with SMTP id ay13-20020a5d6f0d000000b00229a479989emr7762430wrb.158.1663507363013;
-        Sun, 18 Sep 2022 06:22:43 -0700 (PDT)
-Received: from elementary ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id p6-20020a5d48c6000000b0022ae401e9e0sm6148033wrs.78.2022.09.18.06.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 06:22:42 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 15:22:40 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        mripard@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
-        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, geert@linux-m68k.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] KUnit tests for RGB888, XRGB2101010 and grayscale
-Message-ID: <20220918132240.GA7818@elementary>
-References: <20220828164517.185092-1-jose.exposito89@gmail.com>
+        Sun, 18 Sep 2022 09:42:09 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77041A06D;
+        Sun, 18 Sep 2022 06:42:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663508490; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=GVKSPJUcaA9oLt++jl9IhOWXwwLFdMOS4TeMOgfbhHpfpfUQW7AdY1xnV3j9SuGmaMdNWDBJQQzRi8n9S8RrHxh2olkORapD4pUqA5z4u5cTloSmu5NKIkQrw3nfhZQ2TNub6euU+Yc949Mvltsa9Mf4wZ/CSh6/kDPAm9TGsnQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663508490; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=+eb7e0aJeyPR0BKrEk9LBgDrr9YKbj4RLnuWgu/XeKs=; 
+        b=nAZ9yMpzz6Bf+fYqs7ZzNjP9323hsdfqNKcslstERLDINCIAoheKr9LUtAtB6EOtAAk+1TZd0mTOJ/nUc5273ZxI92KbE1FaMqW2Nc3ADi3kGNUdqi4pHZl6CyoTt0MlUq+RiqEf/MSXKDo6C3l99VcziJepxrheL10hbKlqv30=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663508490;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=+eb7e0aJeyPR0BKrEk9LBgDrr9YKbj4RLnuWgu/XeKs=;
+        b=KKG7c+AkpmM8xCJ8TuXkdUC1OVT0TkFMeeekpsisUYKLPyZA9FuwoVp5MWElAYsW
+        ZQC2f6KyEF/ZncRC3XV3zCZEHpXKpxCebhgp5ARBENkK9B43EpRMu5lHbFa3E69u1PG
+        gcmTe2gQiksVYfQtGjC6WyL+ECn25c3y4mZlKN+w=
+Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1663508488779135.16534528844454; Sun, 18 Sep 2022 06:41:28 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH v3 net-next 00/10] dt-bindings and mt7621 devicetree changes
+Date:   Sun, 18 Sep 2022 16:41:08 +0300
+Message-Id: <20220918134118.554813-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220828164517.185092-1-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hello there!
 
-On Sun, Aug 28, 2022 at 06:45:14PM +0200, José Expósito wrote:
-> Hello everyone,
-> 
-> This series is a follow up on my work adding KUnit test to the XRGB8888
-> conversion functions. This time RGB888, XRGB2101010 and gray8 are added.
-> 
-> Best wishes,
-> Jose
-> 
-> v1 -> v2:
-> 
->     Tested-by: Maíra Canal <mairacanal@riseup.net>
->     Reviewed-by: David Gow <davidgow@google.com>
-> 
-> v2 -> v3:
-> 
->     Export symbol drm_fb_xrgb8888_to_xrgb2101010()
+This patch series removes old MediaTek bindings, improves mediatek,mt7530
+and mt7621 memory controller bindings and improves mt7621 DTs.
 
-This patchset is being in the mailing list for a while. Unless someone
-has a reason to not merge it, I'd like to push it next week.
+v3:
+- Explain the mt7621 memory controller binding change in more details.
+- Remove explaining the remaining DTC warnings from the patch log as there
+are new schemas submitted for them.
 
-Thanks,
-Jose
- 
-> José Expósito (3):
->   drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb888()
->   drm/format-helper: Add KUnit tests for
->     drm_fb_xrgb8888_to_xrgb2101010()
->   drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
-> 
->  drivers/gpu/drm/drm_format_helper.c           |   1 +
->  .../gpu/drm/tests/drm_format_helper_test.c    | 190 ++++++++++++++++++
->  2 files changed, 191 insertions(+)
-> 
-> 
-> base-commit: 61a9fa154d217c13eea90aa5bc635bc4b1fcb66e
-> -- 
-> 2.25.1
-> 
+v2:
+- Change memory controller node name to syscon on the schema example.
+- Keep cpu compatible string and syscon on the memory controller node.
+- Add Rob and Sergio's tags.
+
+ArÄ±nÃ§ ÃœNAL (10):
+  dt-bindings: net: drop old mediatek bindings
+  dt-bindings: net: dsa: mediatek,mt7530: change mt7530 switch address
+  dt-bindings: net: dsa: mediatek,mt7530: expand gpio-controller
+    description
+  dt-bindings: memory: mt7621: add syscon as compatible string
+  mips: dts: ralink: mt7621: fix some dtc warnings
+  mips: dts: ralink: mt7621: remove interrupt-parent from switch node
+  mips: dts: ralink: mt7621: change phy-mode of gmac1 to rgmii
+  mips: dts: ralink: mt7621: change mt7530 switch address
+  mips: dts: ralink: mt7621: fix external phy on GB-PC2
+  mips: dts: ralink: mt7621: add GB-PC2 LEDs
+
+ .../mediatek,mt7621-memc.yaml                   |  8 ++-
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 34 ++++++-----
+ .../bindings/net/mediatek,mt7620-gsw.txt        | 24 --------
+ .../bindings/net/ralink,rt2880-net.txt          | 59 --------------------
+ .../bindings/net/ralink,rt3050-esw.txt          | 30 ----------
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts    |  8 +--
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts    | 50 +++++++++++++----
+ arch/mips/boot/dts/ralink/mt7621.dtsi           | 33 +++++------
+ 8 files changed, 80 insertions(+), 166 deletions(-)
+
+
