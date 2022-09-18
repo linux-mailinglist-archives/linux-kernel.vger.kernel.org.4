@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2855BBE6A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B3A5BBE70
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiIROdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229744AbiIROgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiIROdr (ORCPT
+        with ESMTP id S229675AbiIROg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:33:47 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7586E1FCC3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:33:46 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u9so59168376ejy.5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:33:46 -0700 (PDT)
+        Sun, 18 Sep 2022 10:36:27 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E912220ED;
+        Sun, 18 Sep 2022 07:36:27 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t65so24622841pgt.2;
+        Sun, 18 Sep 2022 07:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YdfdEKjpvf/n0/5C+OJTZ4gPftWh1t3E7BZU/XgU5qI=;
-        b=DV3lmQEbtVxYC64nZl6YwDfxGmol8kxKwEV4JgyPGVslvMM0vZd6NcJyxRI8K++ou8
-         bKB0cGNqRf4qoWUfDdAXp/gJE7lJdLDC2teU4INKNGUCvsnwoDRgzG/Yc1yPG3iSl/p8
-         KIAQKym2j/Vb/LJNcbYLy6idXOzS7EosM4w/0nmiqdIQNdLz7MNquw1THfOYA0ohjAwy
-         dXMYlSPbE8tMzvEqpYqel6fQ88iQJWoFYzi6fBbwgSARrJcws40WKoI89aS2wxBq+2ih
-         micPwtjabhoYXouGfiBU4RlyIFERpDNBbtJHaB0SqJbjPdozY2Lp0Bwu+bNTZdbfGfOM
-         1ZPg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=XMOsXthWhrmjLtejUJ/4n1w+SFC2fUyvrhVzdIwCMn4=;
+        b=P96W9eY9xHRrhDWOkhcV5ZyhlFagu7vWgx1mVAuu1WXvSoaNv9S+uC0Y9Ri3gau7j9
+         CTbbhHcB4ih9tEMc8X/RUsZLCRx7Cy3IZ/CoiuDNCToJHgPqtNXG/p+ol+U+WIPaIo+f
+         M7NiyPUbPBi4ZZszvV2uAWbhMk9O8d8J4T52rqzkQ+tSjwHJgbNJXPVZiILFWuKj0qx3
+         +C3t8E/yFQF+ZsYRjGP5+GfWe5I2IQ/O2Wsh6a0KCZWyMVoDJ6RncbVi8rVuTTuRflXP
+         wt8aDv3jmczjdpDvDETGpSPce2h1GxY6F63/FinzIKBKy65Ii0vaeoNsT5QkBh7LGLyj
+         MCsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YdfdEKjpvf/n0/5C+OJTZ4gPftWh1t3E7BZU/XgU5qI=;
-        b=4YY6aYqdgPcDP1AoU9jNv2G/QGESp227EV8Y0V55FbZlh7xGmV1uRlen59WqV4l0ZR
-         vaZbmnWb9l4lUtCS9+XdWfyUZu9NuNf93faodZgnWjhZcJstDHSP+/vbgTMMfERK/7Pq
-         hLZQWecwTiQHdcTi8vrxBgWVp/Mul0EkQ4hvf7DIpM0mQtChBd8TDJdyK0TWgOnO5a/S
-         e4/IdzcKfL4iTQE6QupUKJUCfmmTPVoHL8yRV2sk0laP0EAStezwSDCuTFfCw5WtF2IR
-         9RmNqEgfJ7c1Hl7eyLoj+DmcDXn/ju0yJRcyi6xrTEQ6sxpyO72tOS/bABFS1gUjXEPX
-         zVMQ==
-X-Gm-Message-State: ACrzQf1ZheWsB5u3GAEAcutTi8FnqjHxz/NiDrgeRJNiLGuBkfernI/G
-        CKZ4pbOh9y/+B07owvm/0ebCxoy5M5B/SOQzhZ+d9ojPWZXMHg==
-X-Google-Smtp-Source: AMsMyM5hyowI3kuMOb7eoIT5Ld+NVGfFijI7wklVVj+nEnMlh4wrBMxNl0eHyDQ4IlRMMRnpP+w19OuuJ5ZOtPJj4fY=
-X-Received: by 2002:a17:907:e9e:b0:77f:9688:2714 with SMTP id
- ho30-20020a1709070e9e00b0077f96882714mr10055429ejc.208.1663511624980; Sun, 18
- Sep 2022 07:33:44 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=XMOsXthWhrmjLtejUJ/4n1w+SFC2fUyvrhVzdIwCMn4=;
+        b=oB9ux5zh9VHL7mmDIiXtO2huwfdNHKpQn4QwHdX/ietPnliOkK8MJQavvHePgABdQi
+         QtGMeRWO/0EncSj4pY7IjYDcMo/dAZwq5lSXdVpUHZ4DltZpgK0f9GGFdp/r39SipElS
+         7FrCapUoAfDUxAqVg8ntcVVg9GaW2Q8TOeytkQqI7JoN6npd05xeGqOQ0eaYJOosGXrN
+         OVEIi0Bvq+07deMcEfgfe4mNYS9ebrg2JVl0ZPKcAqyt9p/iiEP1HT5Uu2ck/75tW5U+
+         oqjymFN7jfba81Jur/H7CcuwCFzdmM/bjcr305fbaunBoLcppuwsobhRg5YgQoX6Ulbf
+         MV9A==
+X-Gm-Message-State: ACrzQf1rVVJpQcRvo/cCrMKn6+pJAgRsQ4GkV75H1wn++bd59mYyD/ZV
+        rfWPwVTDwaTj6LROZYc6g315SbIX1dQ=
+X-Google-Smtp-Source: AMsMyM51IzYJWpLhR8hIiPoEHk2FErqom4TQnm8VzJ/+KxHioh5NTs8x4jcgjo0SBPbRnIcbon9drA==
+X-Received: by 2002:a05:6a00:1f13:b0:546:7b39:83da with SMTP id be19-20020a056a001f1300b005467b3983damr14907333pfb.0.1663511786874;
+        Sun, 18 Sep 2022 07:36:26 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b0054a15345162sm6512820pfc.207.2022.09.18.07.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 07:36:26 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     mjrosato@linux.ibm.com
+Cc:     farman@linux.ibm.com, borntraeger@linux.ibm.com,
+        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] KVM: s390: pci: fix comparing pointer to 0
+Date:   Sun, 18 Sep 2022 14:36:04 +0000
+Message-Id: <20220918143603.209974-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <202209170232.grVMomkJ-lkp@intel.com>
-In-Reply-To: <202209170232.grVMomkJ-lkp@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 18 Sep 2022 16:33:33 +0200
-Message-ID: <CACRpkdYGMToSn1XR0Zrvv3yKeOX7_tw0=y0NKhOXN7O8KL-Ntg@mail.gmail.com>
-Subject: Re: [linux-stable-rc:linux-5.4.y 5364/5387] drivers/infiniband/sw/siw/siw_qp_tx.c:32:37:
- warning: cast to pointer from integer of different size
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 8:19 PM kernel test robot <lkp@intel.com> wrote:
+From: Xu Panda <xu.panda@zte.com.cn>
 
-> commit: e7f78835d551bb2deb5aa3346d84c8f03ade313d [5364/5387] RDMA/siw: Pass a pointer to virt_to_page()
-> config: riscv-randconfig-r013-20220916 (https://download.01.org/0day-ci/archive/20220917/202209170232.grVMomkJ-lkp@intel.com/config)
-> compiler: riscv32-linux-gcc (GCC) 12.1.0
+Comparing pointer whith NULL instead of comparing pointer to 0.
 
-So if RISCV32 ...
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ arch/s390/kvm/pci.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->     31          if (paddr)
->   > 32                  return virt_to_page((void *)paddr);
+diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
+index 3a3606c3a0fe..aadafa2e03d1 100644
+--- a/arch/s390/kvm/pci.h
++++ b/arch/s390/kvm/pci.h
+@@ -46,8 +46,8 @@ extern struct zpci_aift *aift;
+ static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
+                                                 unsigned long si)
+ {
+-       if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == 0 ||
+-           aift->kzdev[si] == 0)
++       if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == NULL ||
++           aift->kzdev[si] == NULL)
+                return 0;
+        return aift->kzdev[si]->kvm;
+ };
+-- 
+2.15.2
 
-Think that passing a (void *) to virt_to_page() is a problem:
-
-> warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->       32 |                 return virt_to_page((void *)paddr);
-
-I would think this is a problem with RISCV32.
-
-What has this arch done?
-
-This is a few lines up:
-
-> dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
-
-dma_addr_t is a different size than (void *)?
-
-Given that the patch raising this problem looked like this:
-
--               return virt_to_page(paddr);
-+               return virt_to_page((void *)paddr);
-
-I doubt that it has created a bug that wasn't there before. Passing
-a dma_addr_t to virt_to_page() might be wrong, but that is what the
-driver has been doing all the time.
-
-siw_pbl_get_buffer() claims to
-"Gets physical address backed by PBL element."
-Why is that even passed to virt_to_page() if it's no virtual address
-but a dma_addr_t to begin with?
-
-I certainly don't understand SIW, but this bug, if it is a bug (or a type and
-documentation bug) is clearly not new.
-
-Yours,
-Linus Walleij
