@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3225BC02E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28E05BC030
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 23:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiIRVpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 17:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S229566AbiIRVtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 17:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIRVpr (ORCPT
+        with ESMTP id S229518AbiIRVtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 17:45:47 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1825E15A0B;
-        Sun, 18 Sep 2022 14:45:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW1ZT2Bvjz4xG5;
-        Mon, 19 Sep 2022 07:45:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663537538;
-        bh=INa/VRswvV4M2ivCXxN4oJ39VeA0e0SE45vPUfM7wEk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QpcfC0bAN1kFZHeZl+JiCMdAALMUj0zNk0LH995TZxXSv6R/KMJkyfjx8LHtsAlr4
-         APvpo8hhT5wR02tGz1KvjE4s0gImG1FPETFSzrsh1MSjQ3ir3iONMsfi0zKsXw3ct7
-         /+phFnYe4iGAyvVa8DO9iYIarW6UDiFyz5ivQC7QDlFRx5WvYqKU2mzi/U+uxT1QAO
-         ALXmb1q9iU78DmxYbIJurGb0ErnA0ycrh5qQXxe7Cy5NxesEVqlT9xEOjSvxPhm1sy
-         m6pPEMgJFJgAUNp1AFx3JJqbjztFXc6yX6DYUEnT8uGYpahohAiMMSI65IZ+5O293O
-         SxNSm+www5TLw==
-Date:   Mon, 19 Sep 2022 07:45:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Robert Elliott <elliott@hpe.com>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: [PATCH -next 2/2] crypto: x86: kmsan: disable accelerated
- configs in KMSAN builds
-Message-ID: <20220919074521.5c2b22c0@canb.auug.org.au>
-In-Reply-To: <CAG_fn=UT24yoY=amdXF5gXQjM9jw8bMamjC-mqJndiXNtNhvLA@mail.gmail.com>
-References: <20220909095811.2166073-1-glider@google.com>
-        <20220909095811.2166073-2-glider@google.com>
-        <CAG_fn=UT24yoY=amdXF5gXQjM9jw8bMamjC-mqJndiXNtNhvLA@mail.gmail.com>
+        Sun, 18 Sep 2022 17:49:12 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7126015A33;
+        Sun, 18 Sep 2022 14:49:11 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z2so2741437edi.1;
+        Sun, 18 Sep 2022 14:49:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=P6S6LshpwgqP4u2Qp5J9LrUP6dyOR3py1H73QdQkr+8=;
+        b=byODDZqjDOXISKuvoOVjruzPjk2kL7kmzaGbWtyraZbtsGSG7biN3VHswXta14pOLZ
+         Udyqh8biLK88qhky8WnIH0GKSkXBtEJS6Lj9DNaFBU11bGAaetdVLDgkoi8A5vhNGpNv
+         84RoaHCHMUuk7brlOVWGIs3z21L0hR0BAONOIlLvsAgcbZY0qXtr+NWYTnR8sIqAI1iP
+         IkvX1jMSVO/Ck8l/DJ/jNUARqYQCqt5lva8EY0lXL0HWKx5qSdXN+tmtiO4xmyfGnchH
+         D+0CgEllmaMhDoaV2d4T6rMkzHDRkyofV1jOirpAKEndR4+LHWi7Bml7IxogTR9CZy5R
+         3Dew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=P6S6LshpwgqP4u2Qp5J9LrUP6dyOR3py1H73QdQkr+8=;
+        b=uJTBuNdcTT89lg7x/ZZFQ0uLTUrTS/VgtLapUCdLndxxbWXs6o7I+x3FbBNLRmUORJ
+         yBG/igCmFg9wFqE9foi0/kr+sarI3aCozuUtP8lTCWxKVmeHBrYO74gT6dgUrm6E9m/6
+         UwmJLT3lCGzlm/xGiRK+Gr8lsb/ztpE2cp85YGUxvpHjuNo+1qWLhpf3m3vbgM3K+DX5
+         dRAtCRQeVccRKyU+riP7OHM69/W5IAFXFBHvng8n3xdHz4bhEzDcEStHJnidfueLCu6/
+         /j7Is3dOKJTndl7tseFe5fOClhJZSIvDu8lR5ueM0KAym5hw4ydp+iecZJT9ZWS9NdtO
+         3kew==
+X-Gm-Message-State: ACrzQf0Y/H2SjUZzwBMEOb2mcUScb8bGoeviW24y4op2h1KngA/U5ODY
+        XhykCxf7LhSQ9vaVNwOvgQ4=
+X-Google-Smtp-Source: AMsMyM5YXccGcZWDHWBdl4JZk8RyuLxu8RKUcRZ3cq8XLcuqqH+3wkG1CfuhJK93RAZs67GYfD6Kqw==
+X-Received: by 2002:aa7:da4f:0:b0:44e:864b:7a3e with SMTP id w15-20020aa7da4f000000b0044e864b7a3emr13311882eds.378.1663537749929;
+        Sun, 18 Sep 2022 14:49:09 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa7c90d000000b0044eda621b08sm19047074edt.54.2022.09.18.14.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 14:49:09 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 00/10] soc: sunxi: sram: Fixes and D1 support
+Date:   Sun, 18 Sep 2022 23:49:08 +0200
+Message-ID: <2646007.mvXUDI8C0e@kista>
+In-Reply-To: <20220815041248.53268-1-samuel@sholland.org>
+References: <20220815041248.53268-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0xIHfXrGImSDJjA9O9sMX+M";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0xIHfXrGImSDJjA9O9sMX+M
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Dne ponedeljek, 15. avgust 2022 ob 06:12:37 CEST je Samuel Holland napisal(a):
+> This series cleans up a few issues in the system controller driver, and
+> then expands the exported regmap to support one of the pairs of LDOs
+> built in to the D1 SoC.
+> 
+> Eventually, we will need to update the SRAM region claiming API so
+> ownership can be swapped back and forth by consumer drivers. This will
+> be necessary for uploading firmware to the R329/D1 DSPs, but it is not
+> needed for initial bringup.
+> 
+> Changes in v2:
+>  - New patch to first clean up the binding
+> 
+> Samuel Holland (10):
+>   dt-bindings: sram: sunxi-sram: Clean up the compatible lists
+>   dt-bindings: sram: sunxi-sram: Add D1 compatible string
+>   soc: sunxi: sram: Actually claim SRAM regions
+>   soc: sunxi: sram: Prevent the driver from being unbound
+>   soc: sunxi: sram: Fix probe function ordering issues
+>   soc: sunxi: sram: Fix debugfs info for A64 SRAM C
+>   soc: sunxi: sram: Return void from the release function
+>   soc: sunxi: sram: Save a pointer to the OF match data
+>   soc: sunxi: sram: Export the LDO control register
+>   soc: sunxi: sram: Add support for the D1 system control
 
-Hi Alexander,
+Applied all, thanks!
 
-On Fri, 16 Sep 2022 11:23:47 +0200 Alexander Potapenko <glider@google.com> =
-wrote:
->
-> Please use this patch to replace "crypto: x86: kmsan: disable
-> accelerated configs in KMSAN builds" when merging linux-mm into
-> linux-next (assuming arch/x86/crypto/Kconfig is still in -next).
+Best regards,
+Jernej
 
-OK, will do from today.
+> 
+>  .../allwinner,sun4i-a10-system-control.yaml   | 82 ++++++++-----------
+>  drivers/soc/sunxi/sunxi_sram.c                | 74 +++++++++--------
+>  include/linux/soc/sunxi/sunxi_sram.h          |  2 +-
+>  3 files changed, 73 insertions(+), 85 deletions(-)
+> 
+> --
+> 2.35.1
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/0xIHfXrGImSDJjA9O9sMX+M
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMnkXIACgkQAVBC80lX
-0GxFHggApKBwwoi7fp/rXwJeUEHgOnEh9+zx7yZ57E36g8KXCG/eAxb6tJ3T+1HB
-vw2/I+IxngE9Ze5FYpyWB5rsEjmxoECLTRg1Q9K/ftX7QTmrV7GVkga2m+32/GEy
-czrBhbhfFz7/f8Fz/lvBXEzg0vaA+2/sN69PqgAKvosBeriJPzjPPp606oY5T7rh
-dLjgzrxxoGGPZ0ovDs4EEzgu3DSJQlxKU8QNawcpLxUCZPI7H2cxPfIUfnww58xt
-aIWYXaSghtUj4AEvB17JSJp4Hv/COTqeoqkoevVdGqS0i1CrfYUFpKFrEGngIQKN
-EIStVCqn3KKryDPmmkips4cqiJfO/A==
-=tBet
------END PGP SIGNATURE-----
-
---Sig_/0xIHfXrGImSDJjA9O9sMX+M--
