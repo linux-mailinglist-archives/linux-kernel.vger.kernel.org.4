@@ -2,59 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC25A5BBC0C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC845BBC0F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiIRFoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 01:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S229541AbiIRFsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 01:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIRFov (ORCPT
+        with ESMTP id S229462AbiIRFse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 01:44:51 -0400
-Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38DFCAE75
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:44:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=L6ozd
-        f2KEmZz6UdpG0ZFUAYyo1y/S2z5zIIgU4sBd3U=; b=RdipC916B6Vq0ycKjdLVm
-        coQgs0f83PShXFwrAU1OWVxhXjs5NzejcCqEF3i7sQPsg83nTs0T4mo3jsQxhyu4
-        KWA9cj5AF87zyyKw+lL4iGvhz3XDAjehTLCCZUEx4lP9i5a+9ysWmhtGh74dayTD
-        Ad8ZW/mFntYEJkKEIGGKlw=
-Received: from whoami-VirtualBox.. (unknown [223.72.42.150])
-        by smtp14 (Coremail) with SMTP id EsCowAC3iQ8CsCZjC0f0AQ--.46422S2;
-        Sun, 18 Sep 2022 13:43:31 +0800 (CST)
-From:   Jinyu Tang <tjytimi@163.com>
-To:     ajones@ventanamicro.com
-Cc:     akpm@linux-foundation.org, alexandre.ghiti@canonical.com,
-        anup@brainfault.org, aou@eecs.berkeley.edu,
-        conor.dooley@microchip.com, falcon@tinylab.org, guoren@kernel.org,
-        heiko@sntech.de, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, sunnanyong@huawei.com, tjytimi@163.com,
-        tongtiangen@huawei.com
-Subject: Re:Re: [PATCH v1] riscv : support update_mmu_tlb() for riscv
-Date:   Sun, 18 Sep 2022 13:43:29 +0800
-Message-Id: <20220918054329.23783-1-tjytimi@163.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220906144126.3enx6y2mhevrc4ur@kamzik>
-References: <20220906144126.3enx6y2mhevrc4ur@kamzik>
+        Sun, 18 Sep 2022 01:48:34 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD65286E5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:48:32 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id iw17so25183459plb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=XOndsD3PjUa8LyFYJzyKjY1yNsjpkmqRmuhKkebimFY=;
+        b=PZWPG4B1GccIM2IbGrvfFQfE2XOCCYd7u3OA+lgQf6erK2FV4v882WBOFwyNuuDguc
+         oLiN/AafXRx1AIz7D6P/OBhMcUp1tuZyFrzOw4pp4qu3VYiMFMEQYAsON/R/FF2lVOqG
+         JfbUp7x8nlwpjhGoWDSWv3+E1nuVVtNhorVeY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=XOndsD3PjUa8LyFYJzyKjY1yNsjpkmqRmuhKkebimFY=;
+        b=InA/tuynRM5gJZEEAvoqfL11sYDBk24hLkJzhF27v8hFBiH/ZnKCpI1FmrAggNWvWz
+         a5rtYGppusfEr1wcQEeRY2brM4gSNhC3Fn9AOeZ3ldrMIUPGVd8HAtFC6yH5r/8O5vPl
+         Bgtjva+CgePw91CRWrmMYBmKuqysSB6RlfKgjX+K+mImbctsOcrdD18rDZ3xY6DWzrWN
+         9p3fpAVkyYEqkqNbJRontpFgrxlmHedhtzvr3og3B7b+EU7yQQQWXjyiAwpIBUTIq42R
+         U5aM1yKFkMa7lAEBGQv4VhZ6vLrQpIaEmoX6OXn1sDF6XXRz1M5uVPBwuLUR8WImLrac
+         ix4w==
+X-Gm-Message-State: ACrzQf0zzqrzS1a/KhBQN+tZxAzaWnUTJJ7u6/+snVNidsZML/MD6+n9
+        G1h2gj2n8FuiMwHDtI2dWKxRFA==
+X-Google-Smtp-Source: AMsMyM7Or294lI/U4UnyF1S77l+pUsEJrrenHM3B0ZR5BwEbYQNN64WKvvyJBh60bMk8I+qnHYm0zQ==
+X-Received: by 2002:a17:90b:1e45:b0:202:fbc9:3df1 with SMTP id pi5-20020a17090b1e4500b00202fbc93df1mr25068654pjb.72.1663480112265;
+        Sat, 17 Sep 2022 22:48:32 -0700 (PDT)
+Received: from oceanus.lab.kspace.sh (c-98-207-191-243.hsd1.ca.comcast.net. [98.207.191.243])
+        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090b2c0b00b001fb3522d53asm4100105pjb.34.2022.09.17.22.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Sep 2022 22:48:31 -0700 (PDT)
+From:   Mohamed Khalfella <mkhalfella@purestorage.com>
+To:     mkhalfella@purestorage.com
+Cc:     stable@vger.kernel.org, Eric Badger <ebadger@purestorage.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Tao Chiu <taochiu@synology.com>,
+        Leon Chien <leonchien@synology.com>,
+        Cody Wong <codywong@synology.com>,
+        linux-nvme@lists.infradead.org (open list:NVM EXPRESS DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] nvme-pci: Make sure to ring doorbell when last request is short-circuited
+Date:   Sun, 18 Sep 2022 05:48:16 +0000
+Message-Id: <20220918054816.936669-1-mkhalfella@purestorage.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowAC3iQ8CsCZjC0f0AQ--.46422S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjfU7F4EDUUUU
-X-Originating-IP: [223.72.42.150]
-X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbipQOAeFUMmfRvCgAAsP
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jinyu 
+When processing a batch of requests, it is possible that nvme_queue_rq()
+misses to ring nvme queue doorbell if the last request fails because the
+controller is not ready. As a result of that, previously queued requests
+will timeout because the device had not chance to know about the commands
+existence. This failure can cause nvme controller reset to timeout if
+there was another App using adminq while nvme reset was taking place.
+
+Consider this case:
+- App is hammering adminq with NVME_ADMIN_IDENTIFY commands
+- Controller reset triggered by "echo 1 > /sys/.../nvme0/reset_controller"
+
+nvme_reset_ctrl() will change controller state to NVME_CTRL_RESETTING.
+From that point on all requests from App will be forced to fail because
+the controller is no longer ready. More importantly these requests will
+not make it to adminq and will be short-circuited in nvme_queue_rq().
+Unlike App requests, requests issued by reset code path will be allowed
+to go through adminq in order to carry out the reset process. The problem
+happens when blk-mq decides to mix requests from reset code path and App
+in one batch, in particular when the last request in such batch happens
+to be from App.
+
+In this case the last request will have bd->last set to true telling the
+driver to ring doorbell after queuing this request. However, since the
+controller is not ready, this App request will be completed without going
+through adminq, and nvme_queue_rq() will miss the opportunity to ring
+adminq doorbell leaving earlier queued requests unknown to the device.
+
+Fixes: d4060d2be1132 ("nvme-pci: fix controller reset hang when racing with nvme_timeout")
+Cc: stable@vger.kernel.org
+Reported-by: Eric Badger <ebadger@purestorage.com>
+Signed-off-by: Mohamed Khalfella <mkhalfella@purestorage.com>
+Reviewed-by: Eric Badger <ebadger@purestorage.com>
+---
+ drivers/nvme/host/pci.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 98864b853eef..f6b1ae593e8e 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -946,8 +946,12 @@ static blk_status_t nvme_queue_rq(struct blk_mq_hw_ctx *hctx,
+ 	if (unlikely(!test_bit(NVMEQ_ENABLED, &nvmeq->flags)))
+ 		return BLK_STS_IOERR;
+ 
+-	if (unlikely(!nvme_check_ready(&dev->ctrl, req, true)))
+-		return nvme_fail_nonready_command(&dev->ctrl, req);
++	if (unlikely(!nvme_check_ready(&dev->ctrl, req, true))) {
++		ret = nvme_fail_nonready_command(&dev->ctrl, req);
++		if (ret == BLK_STS_OK && bd->last)
++			nvme_commit_rqs(hctx);
++		return ret;
++	}
+ 
+ 	ret = nvme_prep_rq(dev, req);
+ 	if (unlikely(ret))
+@@ -1724,6 +1728,7 @@ static int nvme_create_queue(struct nvme_queue *nvmeq, int qid, bool polled)
+ static const struct blk_mq_ops nvme_mq_admin_ops = {
+ 	.queue_rq	= nvme_queue_rq,
+ 	.complete	= nvme_pci_complete_rq,
++	.commit_rqs	= nvme_commit_rqs,
+ 	.init_hctx	= nvme_admin_init_hctx,
+ 	.init_request	= nvme_pci_init_request,
+ 	.timeout	= nvme_timeout,
+-- 
+2.25.1
 
