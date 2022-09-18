@@ -2,94 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B365BBCD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8285BBCDD
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiIRJdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 05:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S229675AbiIRJi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 05:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIRJdO (ORCPT
+        with ESMTP id S229515AbiIRJiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 05:33:14 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69720BD1;
-        Sun, 18 Sep 2022 02:33:13 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id l14so11443223qvq.8;
-        Sun, 18 Sep 2022 02:33:13 -0700 (PDT)
+        Sun, 18 Sep 2022 05:38:55 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E2237E6
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:38:54 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s10so29963584ljp.5
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HEB1dZFh6VkoKbzfje7Er0GM6QVtyW+eiZmJagi107g=;
+        b=CzWhBYgYvdFJIunEEBf+SPmuuK9hsQ016YhNMThGUC1fP7UuRwT0WUerzIK+bGwtWn
+         rx0EoU3vzqdAk0F6dwu/7wFhmkiL/r/lq5wLOqqhJ+WFgHCrECPjZsZJsQ5DlcWCEsoE
+         Mgk4G8KiJVXrrnpDPXSwsa56ydIVmtscGEZrh8cIZS/Aw38jOc8rPyuBZWF7/5nRKMM2
+         hfhJTEzy+H2u03ypmvbKay5BzZ8ps3mal6V2TCzMe0up67YNraNZGxMl0j5fW45nEZac
+         ESt5v/NVCbSgMmy7UEkfI8BkyWlvPvEFp3iacwh1U8pMzuuzCLZkyNGRWqQldaRSjFfs
+         URKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LPGiBWWb45s9RkifR19ArZuPJdzE5P+5xfpQvE6SSME=;
-        b=udKigqX5Tr5KCdXdqlOHzJ/PwZHZKeEwqV6WmUmoUpYScoiTwRE92OM6jCC1glpM19
-         4xNEaZKVIe/1l9TB9orgPxKbA1oVBog+0ocPl7551mP8FV95u7v566+nM91I1yytetzy
-         CpxYGOJPmqfO1k2mbwkekCVr5LHMtT4NH8hEMxrsMmQo+5G9z8SBfg5OgjL2/lMgE6T3
-         gnVzlnrWbCS55ZioRSKcourqFlA72LTrnGrL1UPgK9r7WMjFynp5GrbXaQNk7VG+9nPh
-         YZWhTItmv7qN7+Met9W7Af5nKPt85aDRhjqCsK0ltw2/qisoKHex/zd3eYtk4c/dVVsO
-         X5PA==
-X-Gm-Message-State: ACrzQf1pd0JTLyZUkWs8+R+so+SDwHL5MvJ2aSlLDJM8ECcs7Xy0AE++
-        NL7Pj6K6gKfDliRZO9a63oqepEeKMB0zvQ==
-X-Google-Smtp-Source: AMsMyM5xa59FaayAj4F5An4xBi43ZSQE80bDA8S2qYcPiCjKfg+1hOVqW8NzVZj0BZmTsyplGHrfFg==
-X-Received: by 2002:a0c:f349:0:b0:4aa:b3a6:9774 with SMTP id e9-20020a0cf349000000b004aab3a69774mr10743230qvm.112.1663493592081;
-        Sun, 18 Sep 2022 02:33:12 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id p13-20020ac8740d000000b0034454067d24sm8158537qtq.64.2022.09.18.02.33.11
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HEB1dZFh6VkoKbzfje7Er0GM6QVtyW+eiZmJagi107g=;
+        b=HeMdCvpXSlgmwSc7IcRghTEFXABkuweetk76OgC2SQwwlP6JOqSQV9djdWFGExM5LZ
+         OoLqzrTFOHD9//O0MpQtwIR14YTcOu+ufN0JJczuc9iXhwNZ/VPw7UmKmpHcfEs2CI/4
+         6FqSEW0nsaF4TYJMqS5mF2pg5j1b5crivvt6vzlhpCd/2ZAagXP2HrEEBk9AkAUDPGm2
+         UMIKnkntmTN1JWIT+A5/p//4qID+SICOlQqK6hTq3AV12F+BtTwb7EHz8Ju7klFt59eX
+         RDFb2U2z+dMaGiEDckriii1ltJTUp3qD90uUD3GNUzkulnbHp60Nw9NNMy/1qNiup40B
+         LT7Q==
+X-Gm-Message-State: ACrzQf0koZU75/f00CW9kOF5tHjeWJypGKuUHoAz2a2FZgI8vl0JKQMO
+        CMdhrFQcCkfwjKdmxEWYk0qcXg==
+X-Google-Smtp-Source: AMsMyM59+gIAACAOz0Pj09IsVP4jC7D3hEx4CoPctx8Y09MgJhm0bBnlHW0nHkX1c/5BtZ5lHJLm3Q==
+X-Received: by 2002:a2e:a4b1:0:b0:26c:521:76b5 with SMTP id g17-20020a2ea4b1000000b0026c052176b5mr3629219ljm.258.1663493932400;
+        Sun, 18 Sep 2022 02:38:52 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p14-20020a2e93ce000000b0026c446918acsm537430ljh.134.2022.09.18.02.38.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 02:33:11 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-324ec5a9e97so308306677b3.7;
-        Sun, 18 Sep 2022 02:33:11 -0700 (PDT)
-X-Received: by 2002:a81:758a:0:b0:345:450b:6668 with SMTP id
- q132-20020a81758a000000b00345450b6668mr10243365ywc.316.1663493591294; Sun, 18
- Sep 2022 02:33:11 -0700 (PDT)
+        Sun, 18 Sep 2022 02:38:51 -0700 (PDT)
+Message-ID: <78a0e713-2691-677b-e749-fde609944a7e@linaro.org>
+Date:   Sun, 18 Sep 2022 10:38:50 +0100
 MIME-Version: 1.0
-References: <20220915233640.415305-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220915233640.415305-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 18 Sep 2022 11:33:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUEsqNsGqPbS_T0Z+DM01xCWpPNpOzXZda6DQAriNe=gQ@mail.gmail.com>
-Message-ID: <CAMuHMdUEsqNsGqPbS_T0Z+DM01xCWpPNpOzXZda6DQAriNe=gQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Kconfig.platforms: renesas: Drop selecting SOC_BUS
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>
+References: <20220914124552.16964-1-johnson.wang@mediatek.com>
+ <20220914124552.16964-3-johnson.wang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220914124552.16964-3-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 1:37 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Don't automatically select the SOC_BUS config option as we already have
-> automatically selected it as part of the SOC_RENESAS config option [0]
-> as renesas-soc.c [1] uses the APIs provided by SOC_BUS config option.
->
-> [0] drivers/soc/renesas/Kconfig
-> [1] drivers/soc/renesas/renesas-soc.c
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 14/09/2022 13:45, Johnson Wang wrote:
+> Add the new binding documentation for MediaTek frequency hopping
+> and spread spectrum clocking control.
+> 
+> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> ---
+>  .../bindings/arm/mediatek/mediatek,fhctl.yaml | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+> new file mode 100644
+> index 000000000000..7b0fd0889bb6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.1.
+Name of file matching compatible.
 
-Gr{oetje,eeting}s,
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek frequency hopping and spread spectrum clocking control
+> +
+> +maintainers:
+> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
+> +
+> +description: |
+> +  Frequency hopping control (FHCTL) is a piece of hardware that control
+> +  some PLLs to adopt "hopping" mechanism to adjust their frequency.
+> +  Spread spectrum clocking (SSC) is another function provided by this hardware.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8186-fhctl
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: Phandles of the PLL with FHCTL hardware capability.
 
-                        Geert
+You need constraints here.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +
+> +  mediatek,hopping-ssc-percents:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+That's not the correct unit suffix name.
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+
+
+> +    description: The percentage of spread spectrum clocking for one PLL.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Best regards,
+Krzysztof
