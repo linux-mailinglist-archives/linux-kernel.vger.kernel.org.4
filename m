@@ -2,142 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C7F5BBE3C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C085BBE3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiIRODy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S229808AbiIROFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiIRODv (ORCPT
+        with ESMTP id S229781AbiIROFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 10:03:51 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADB923BEF;
-        Sun, 18 Sep 2022 07:03:51 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id c24so24548966pgg.11;
-        Sun, 18 Sep 2022 07:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NRTsRoZq68Mxvcc0uJgWyB8RLpcLxxtOeb25FXO5W8w=;
-        b=GMcReAOx9b7ZPOdRgBNpKaRoeKWDGu7XyqHIC8z9tIit3E9TGN8dCfPG7UbYZ4TPIS
-         VEVbcRKB/siCz1OmxdGa710+xs/Hra9JoSKxsIy0tWfqRzpQbbp+82MplF69GmKGQ5kC
-         YIP7QQJcD3x8hMbH8TO6hJmxiXktsZXD5q4YKwqQ5AK745jfPBY14xDowthTW05ZkOzw
-         56clZxN13oYVRbqMQ4QUae3bkm6jlBntYUSjDeDkMNhmanIVi9R3MOhq/NihYS0/buO5
-         X1r0sB7kxblfUT6jtjkdMLdU7rS/CnHXFxL3HfNO8mkCc6c++/vmk9j92IDqqM6M48e0
-         1c+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NRTsRoZq68Mxvcc0uJgWyB8RLpcLxxtOeb25FXO5W8w=;
-        b=HVe7CSKgmRabV/x9tqpU87+soYLZjMZz/gO0dD5FlLP0Q/fIo45eOpzk19OO8OaTfO
-         V8RGyd8M4s4E3W34ANMX3sfgEdpdhxAmLKH7cd3fJY8DtTNWs4zJevNmnZgyOs54AE9P
-         vHm6oDF3ymF9b6hjIHoq+3YtsC1Z9E2W5koo7A1pt0gCOnX/qRUDMWFn9muyhBhQXJrZ
-         RsAr5ndCUxHCI2uPksMJruHf5tDVanZ8jg4WcUPVGgNSVL57hNgDIiC+GYT/kYIMHb21
-         2NctVwpjsJh065z5HBDeclZ1RAGTxPl/s8AYWox7Sh9YzRH03AfpRa7qCBZJcr2aUGI8
-         HAGA==
-X-Gm-Message-State: ACrzQf3al0xfv8vQEgV9vSZ6qcorRAtGAzWA/Ap2ZFkugsp/rnajT3VH
-        g+SbaLwWkIGxtU8LwwX2ax0=
-X-Google-Smtp-Source: AMsMyM7qgSJdqhKgz1PblDV6bKrAm9ziTxsEmmGfkaWkNBt7muaFASEzLIO9ts5AW4HZKq8vSuu8yw==
-X-Received: by 2002:a05:6a00:4206:b0:545:68f2:292e with SMTP id cd6-20020a056a00420600b0054568f2292emr13697451pfb.76.1663509830518;
-        Sun, 18 Sep 2022 07:03:50 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-51.three.co.id. [116.206.28.51])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902ea8400b0016f975be2e7sm18573030plb.139.2022.09.18.07.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 07:03:50 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4230F103B70; Sun, 18 Sep 2022 21:03:46 +0700 (WIB)
-Date:   Sun, 18 Sep 2022 21:03:46 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     robh+dt@kernel.org, frowand.list@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] of: base: fix repeated words in comments
-Message-ID: <YyclQlws9d7vheDk@debian.me>
-References: <20220918095957.24537-1-yuanjilin@cdjrlc.com>
+        Sun, 18 Sep 2022 10:05:34 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD3175B0;
+        Sun, 18 Sep 2022 07:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oqYUV0dWvcAo5VH7CFm/kLo2npwHY9kSddzY1OFsLfY=; b=UCgpbY6iwSSbEjm0uugXupccuO
+        /lpQvNeWhP9/TfyCqoizhm6858ZNRSEeaQJYMCSVwsj/4UlJBP8nyESONeNp1HUuwStFD50uCGR1T
+        08kEXe2PM2g73CwCScXcvthVd+D0nna9bnbHMvSD92cxC08Xt/3gNgPbORYTdAmU9BabBtZ43d5eA
+        cABINOw87ofdrfB5BwdVaGEn4lJADJ927HqqT0D4CUh4xhQgnHJbgeJDDuMb3kpCgeXNCJ2on8cVb
+        VGuvsSm/K+mUtlpn6zhKBSxfSHCBHYgent29etDa1GxW8ot9ijBmlOYteMYuMxI63Vcpfo8xiwx2x
+        FuPaZ43g==;
+Received: from 201-27-35-168.dsl.telesp.net.br ([201.27.35.168] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oZuvC-0081LD-2V; Sun, 18 Sep 2022 16:05:21 +0200
+Message-ID: <afe16869-d5de-2072-52ba-cde61181fc11@igalia.com>
+Date:   Sun, 18 Sep 2022 11:04:49 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7yCBxU7llMplZvup"
-Content-Disposition: inline
-In-Reply-To: <20220918095957.24537-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3 06/11] tracing: Improve panic/die notifiers
+Content-Language: en-US
+To:     rostedt@goodmis.org, stern@rowland.harvard.edu
+Cc:     kexec@lists.infradead.org, pmladek@suse.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com, bhe@redhat.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, xuqiang36@huawei.com,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-7-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220819221731.480795-7-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> Currently the tracing dump_on_oops feature is implemented through
+> separate notifiers, one for die/oops and the other for panic;
+> given they have the same functionality, let's unify them.
+> 
+> Also improve the function comment and change the priority of the
+> notifier to make it execute earlier, avoiding showing useless trace
+> data (like the callback names for the other notifiers); finally,
+> we also removed an unnecessary header inclusion.
+> 
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V3:
+> - Removed goto usage, as per Steven suggestion (thanks!).
+> 
+> V2:
+> - Different approach; instead of using IDs to distinguish die and
+> panic events, rely on address comparison like other notifiers do
+> and as per Petr's suggestion;
+> 
+> - Removed ACK from Steven since the code changed.
+> 
+> [...]
 
---7yCBxU7llMplZvup
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Steve, Alan - sorry for the ping (and I'm aware you're OOO Steve, saw
+your auto-response email heh).
 
-On Sun, Sep 18, 2022 at 05:59:57PM +0800, Jilin Yuan wrote:
->  /**
->   * of_match_node - Tell if a device_node has a matching of_match structu=
-re
-> - * @matches:	array of of device match structures to search in
-> + * @matches:	array of device match structures to search in
->   * @node:	the of device structure to match against
->   *
->   * Low level utility function used by device matching.
-> @@ -1175,7 +1175,7 @@ EXPORT_SYMBOL(of_match_node);
->   *		you pass will not be searched, only the next one
->   *		will; typically, you pass what the previous call
->   *		returned. of_node_put() will be called on it
-> - * @matches:	array of of device match structures to search in
-> + * @matches:	array of device match structures to search in
->   * @match:	Updated to point at the matches entry which matched
+So, is this version good enough? Appreciate the reviews and in case it's
+good, let me know your preference for picking it in your tree - I could
+resend the patch alone if you prefer (not in the series), for example.
 
-That second "of" is the device, so the fix doesn't make sense.
+Thanks,
 
-Also, PLEASE stop sending these mindless redundant word-stripping patches
-as byproduct of whatever automated tool you use.
 
-As Edward Cree said to one of your colleague [1]:
-
-> #ifdef RANT
-> NGL, getting kinda sick of these bogus comment text 'fixes' from people
->  who clearly don't have enough mastery of English to copyedit it.
-> (Previous one from this author was actually wrong too but I didn't catch
->  it at the time.)
-> English is a tricksy language, why would someone with a limited
->  understanding of it think that grammar fixes are the best use of their
->  time and energy?
-> I can't help suspecting that this is a box-ticking exercise, where a
->  certain corporate culture has a standard requirement that engineers
->  must get X number of Linux / opensource commits in order to get
->  promoted, and this kind of mindless patch is the easiest way for them
->  to achieve that.
-> #endif
-
-If you really want to do real cleanup, consider joining kernel-janitors lis=
-t.
-
-Learn from above, thanks.
-
-[1]: https://lore.kernel.org/netdev/30f2488d-9af3-fe8d-6e6f-713a7d38800b@gm=
-ail.com/
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---7yCBxU7llMplZvup
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYyclOgAKCRD2uYlJVVFO
-o4ueAP9rOkS3/cc61IFsELqltLUWs+gQLDZrhG3lOmPXT1DkJwEAtQKtChFrPySL
-n/Op1oMwsl+TgNxGjw/TNhQ1U/+tFwk=
-=NZ1v
------END PGP SIGNATURE-----
-
---7yCBxU7llMplZvup--
+Guilherme
