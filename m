@@ -2,165 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6D5BBD7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47F95BBD82
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 13:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiIRKzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 06:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S229616AbiIRLCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 07:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIRKzS (ORCPT
+        with ESMTP id S229533AbiIRLCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 06:55:18 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AD211805
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:55:13 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so12600496otu.7
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 03:55:13 -0700 (PDT)
+        Sun, 18 Sep 2022 07:02:13 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304325E9F
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:02:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso3544304pjm.5
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 04:02:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=zvJhJH9Co1bqN2sVQ/HT2u/qwCtRPdd649kof67q2cE=;
-        b=AGH6MWt+Kc42BiCUTvBplaSzqQgQhot8B1wpbVKAcGGJFk656fIfG4JuFT2iVszT71
-         4qjyHNpUzYrh76fXJfr4WRjnBOFOrmmVRm6WOPd+AUmn0jjlLc6zg5m1TidykLOPv9um
-         lRts63fhnnSj3KNsEX+WGCvw3YqyUUrz31qLl7YzW57voKdW9b4Dqdl+Lhz4DdqAWsE9
-         9ySsHKscqGzM4v6kiSb4LMuwj2cZ+b5Awo0wE5af/d7UZa8+GuW1DGRjJe5OGaAGtS3U
-         dcTUk1gZxeJYhOAIbWXu4svLRb2clqLmX8pA8UIB5n8jQiAtzGmd6iMPYtX0NX/kEWW7
-         BSiQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=UweWG+KAoxByUvXZiE3w8yEZnszL9VIJ0HppK6iQww0=;
+        b=ag00KFBqWU+JiczYO3n8Rf0xhiOUKF+o4e/4tBQimFDUVD4YOWwQ4u/pujKCNMYHGV
+         XibmFxEpwZq2PkHRvgPb1Zr7z0tzhs8QPlLwE8p/rTJ2XqkM9CF9aAyz4D4KQMKdhMrj
+         r4lfpNJRHtUfy5/WsKw8HFNGTU36ENxR7n+PKcy7pEhhsplHe7yAbJU80uoTLGk99OeL
+         LYiuMQTASydOdUSCqB+0O9wki2H79uMKuFEyxXxhq+yzD8snAUVbRjTN8H16BtXeGYMS
+         9b18VKQL9VKpHTqorE7aUrT7RngbLlqZi2cjD6G+hmRnURv2i0OWb/+XsXxG1f0ieUls
+         S0+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=zvJhJH9Co1bqN2sVQ/HT2u/qwCtRPdd649kof67q2cE=;
-        b=IeP14Apo/T6RShe01xfAQ1pfVcZ192U6RyoXdC3gjQTpSt0Hj+5QN2Wb1nMpy6Aj59
-         85wh6z1JeAJofB2s56ehtvOcX2aiJnSPFiptZcj9bJh2YchqFs7b2Xsiq3bILq+sgORw
-         lSSr1g9/dWfKGtIOnNRHThlMhhqEPVTOHdpcYMBGbIC3K8djIwz/LPDMD7fyK5azFwus
-         wljNfUt4nzr+JSfyw7mq+q0TkpeZtAp03AQttMQNqQZIvG7GRdJeFWCa2U+sdHT9YFVx
-         05HcJW4aPNJH91vjc4rvPuv+YwL2hRoB4G37XhRWCh9D6nRBijRFx7+DZWn9zfpaZckf
-         zg1w==
-X-Gm-Message-State: ACrzQf2JA6/7/oftXWJBV6mg/DysHUHE3pExokn7tpg/YhN4z1TSjlYr
-        uVjDC5QmFN/mJkUispDlOxnhriwwcEU=
-X-Google-Smtp-Source: AMsMyM7dptGj49aIUEnF1IcALv6EsxiSITA6gmf5KPhKc4OTdrGyCfeY7cQ8WsvNg6QNUz0F86eEKA==
-X-Received: by 2002:a05:6830:1f3a:b0:658:bcc:99e with SMTP id e26-20020a0568301f3a00b006580bcc099emr5854151oth.215.1663498513062;
-        Sun, 18 Sep 2022 03:55:13 -0700 (PDT)
-Received: from haolee.io ([2600:3c00::f03c:91ff:fe02:b162])
-        by smtp.gmail.com with ESMTPSA id q43-20020a056871082b00b00127616039e7sm6085785oap.29.2022.09.18.03.55.12
+        bh=UweWG+KAoxByUvXZiE3w8yEZnszL9VIJ0HppK6iQww0=;
+        b=r914WVavNfc6HxOYskzUYHza2LMZYt5yWD9TfzW8M6oLxhHBp4dbcRNvfapYrncMpQ
+         A4F360BbMKCl5epxAbhzPaswLgOCrIZcvSTpUL4Zo96T3Qmeh0LzImRYz9YzjyffS6Ql
+         4H7Pv81mtB8gvKt+1pLibJT3tUd5OerZUsCTNz9u/q0cJGujAi3mP4MGvY/rgEhypxy8
+         mz7WpnApDCVYaB7Ym8eNvk5xh6rWNNg6XpwL+zoErtwj6mkxU/gBW8SN7VO8/v2k3dN8
+         bx3f5xdOAEjyfhiBzrPzJnhBBMObKQ/0DTrSCW13JXY+88FbHhFMR/TX3zzBBANPpmIK
+         8OaQ==
+X-Gm-Message-State: ACrzQf2u//AIIjHaXGz8h/XwTdtyxx9btxkacBWkDrfILmyreYLwFcUX
+        hjiQvzkvfzRo5ZrRbyB7mWzFHG2sGKYbrA==
+X-Google-Smtp-Source: AMsMyM75FwxtKty+GHBdCRVMz8gsVEXtrZ7edfDeBRIsRRTIVYHdoogNtGfyq/2bgUh6fGWBUAyrzg==
+X-Received: by 2002:a17:90a:e552:b0:203:627b:6c6e with SMTP id ei18-20020a17090ae55200b00203627b6c6emr9060897pjb.59.1663498931920;
+        Sun, 18 Sep 2022 04:02:11 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.226])
+        by smtp.gmail.com with ESMTPSA id b6-20020a1709027e0600b00176dee43e0dsm18161704plm.285.2022.09.18.04.02.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 03:55:12 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 10:55:10 +0000
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] psi: fix possible missing or delayed pending event
-Message-ID: <20220918105510.GA22671@haolee.io>
-References: <20220914092959.GA20640@haolee.io>
- <CAJuCfpFVK3ceHy+ipSbLb0jAgE6tJAsu5=kbJEB9X4OWPnsVxA@mail.gmail.com>
- <20220917073124.GA3483@haolee.io>
- <CAJuCfpH6QVuKd-Y1qr1Rzh+hCG-HVgmWfXk9r0tsFhDijZ_ABg@mail.gmail.com>
+        Sun, 18 Sep 2022 04:02:11 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V6 5/6] erofs: Support sharing cookies in the same domain
+Date:   Sun, 18 Sep 2022 19:01:50 +0800
+Message-Id: <20220918110150.6338-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+In-Reply-To: <20220918043456.147-6-zhujia.zj@bytedance.com>
+References: <20220918043456.147-6-zhujia.zj@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpH6QVuKd-Y1qr1Rzh+hCG-HVgmWfXk9r0tsFhDijZ_ABg@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 09:44:12PM -0700, Suren Baghdasaryan wrote:
-> On Sat, Sep 17, 2022 at 12:31 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
-> >
-> > On Fri, Sep 16, 2022 at 11:08:34PM -0700, Suren Baghdasaryan wrote:
-> > > On Wed, Sep 14, 2022 at 2:30 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
-> > > >
-> > > > When a pending event exists and growth is less than the threshold, the
-> > > > current logic is to skip this trigger without generating event. However,
-> > > > from e6df4ead85d9 ("psi: fix possible trigger missing in the window"),
-> > > > our purpose is to generate event as long as pending event exists and the
-> > > > rate meets the limit. This patch fixes the possible pending-event
-> > > > missing or delay.
-> > > >
-> > > > Fixes: e6df4ead85d9 ("psi: fix possible trigger missing in the window")
-> > > > Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
-> > > > ---
-> > > >  kernel/sched/psi.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > > index 9711827e3..0bae4ee2b 100644
-> > > > --- a/kernel/sched/psi.c
-> > > > +++ b/kernel/sched/psi.c
-> > > > @@ -539,7 +539,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> > > >
-> > > >                         /* Calculate growth since last update */
-> > > >                         growth = window_update(&t->win, now, total[t->state]);
-> > > > -                       if (growth < t->threshold)
-> > > > +                       if (growth < t->threshold && !t->pending_event)
-> > >
-> > > I'm not sure how this additional condition changes things. Current
-> > > logic is to set t->pending_event=true whenever growth exceeds the
-> > > t->threshold. This patch will change this logic into setting
-> > > t->pending_event=true also when t->pending_event=true.
-> >
-> > This is right.
-> >
-> > > But why would
-> > > you want to set t->pending_event=true if it's already true? What am I
-> > > missing?
-> >
-> > If I expand this if-else branch and the pending_event statement
-> > to a more detailed snippet, it will be like this:
-> >
-> > if (growth < t->threshold && !t->pending_event) // under threshold && no pending event. Skip.
-> >         continue;
-> > else if (growth >= t->threshold) // above threshold. Try to generate event.
-> >         t->pending_event = true;
-> > else // under threshold && have pending events. Try to generate event.
-> >         ; // pending_event is already true. do nothing
-> >
-> >
-> > The original code didn't handle the `else` condition properly.
-> 
-> The `else` condition in your code does nothing, and that's why the
-> original code does not implement a handler for that case.
-> 
-> > It will
-> > skip the trigger when its growth is under the threshold, even though it
-> > has a pending event. This patch handles this condition correctly.
-> >
-> > But I think assigning true to pending_event when it's already true doesn't
-> > have other side effects, so I eliminate the `else if` branch. Maybe we'd
-> > better make it explicit, like the above snippet? Thanks.
-> 
-> The new code you posted is functionally the same as the original one
-> while being more verbose and IMO less readable. Unless you can explain
-> the problem with the original code, I don't see any reason to change
-> it.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
 
-Hi, for the original code, let's assume t->pending_event is true:
-    * if new_stall is false, we will try to check event ratelimit and
-      generate an event for this psi_trigger. This case is right.
-    * but if new_stall is true, we will skip this psi_trigger if growth
-      growth < t->threshold. I think we shouldn't skip this psi_trigger
-      in this case because it has a pending event.
+Users could specify domain_id mount option to create or join into a
+domain.
 
-> 
-> >
-> > >
-> > > >                                 continue;
-> > > >
-> > > >                         t->pending_event = true;
-> > > > --
-> > > > 2.21.0
-> > > >
+Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+ fs/erofs/fscache.c  | 99 ++++++++++++++++++++++++++++++++++++++++++---
+ fs/erofs/internal.h |  3 ++
+ 2 files changed, 96 insertions(+), 6 deletions(-)
+
+diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+index 4a7346b9fa73..ce9301a890f9 100644
+--- a/fs/erofs/fscache.c
++++ b/fs/erofs/fscache.c
+@@ -7,6 +7,7 @@
+ #include "internal.h"
+ 
+ static DEFINE_MUTEX(erofs_domain_list_lock);
++static DEFINE_MUTEX(erofs_domain_cookies_lock);
+ static LIST_HEAD(erofs_domain_list);
+ static struct vfsmount *erofs_pseudo_mnt;
+ 
+@@ -527,8 +528,9 @@ static int erofs_fscache_register_domain(struct super_block *sb)
+ 	return err;
+ }
+ 
+-struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+-						     char *name, bool need_inode)
++static
++struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
++						    char *name, bool need_inode)
+ {
+ 	struct fscache_volume *volume = EROFS_SB(sb)->volume;
+ 	struct erofs_fscache *ctx;
+@@ -577,17 +579,102 @@ struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+ 	return ERR_PTR(ret);
+ }
+ 
+-void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
++static void erofs_fscache_relinquish_cookie(struct erofs_fscache *ctx)
+ {
+-	if (!ctx)
+-		return;
+-
+ 	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
+ 	fscache_relinquish_cookie(ctx->cookie, false);
+ 	iput(ctx->inode);
++	kfree(ctx->name);
+ 	kfree(ctx);
+ }
+ 
++static
++struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
++							char *name, bool need_inode)
++{
++	int err;
++	struct inode *inode;
++	struct erofs_fscache *ctx;
++	struct erofs_domain *domain = EROFS_SB(sb)->domain;
++
++	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
++	if (IS_ERR(ctx))
++		return ctx;
++
++	ctx->name = kstrdup(name, GFP_KERNEL);
++	if (!ctx->name) {
++		err = -ENOMEM;
++		goto out;
++	}
++
++	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
++	if (!inode) {
++		err = -ENOMEM;
++		goto out;
++	}
++
++	ctx->domain = domain;
++	ctx->anon_inode = inode;
++	inode->i_private = ctx;
++	refcount_inc(&domain->ref);
++	return ctx;
++out:
++	erofs_fscache_relinquish_cookie(ctx);
++	return ERR_PTR(err);
++}
++
++static
++struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
++						    char *name, bool need_inode)
++{
++	struct inode *inode;
++	struct erofs_fscache *ctx;
++	struct erofs_domain *domain = EROFS_SB(sb)->domain;
++	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
++
++	mutex_lock(&erofs_domain_cookies_lock);
++	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
++		ctx = inode->i_private;
++		if (!ctx || ctx->domain != domain || strcmp(ctx->name, name))
++			continue;
++		igrab(inode);
++		mutex_unlock(&erofs_domain_cookies_lock);
++		return ctx;
++	}
++	ctx = erofs_fscache_domain_init_cookie(sb, name, need_inode);
++	mutex_unlock(&erofs_domain_cookies_lock);
++	return ctx;
++}
++
++struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
++						     char *name, bool need_inode)
++{
++	if (EROFS_SB(sb)->opt.domain_id)
++		return erofs_domain_register_cookie(sb, name, need_inode);
++	return erofs_fscache_acquire_cookie(sb, name, need_inode);
++}
++
++void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
++{
++	bool drop;
++	struct erofs_domain *domain;
++
++	if (!ctx)
++		return;
++	domain = ctx->domain;
++	if (domain) {
++		mutex_lock(&erofs_domain_cookies_lock);
++		drop = atomic_read(&ctx->anon_inode->i_count) == 1;
++		iput(ctx->anon_inode);
++		mutex_unlock(&erofs_domain_cookies_lock);
++		if (!drop)
++			return;
++	}
++
++	erofs_fscache_relinquish_cookie(ctx);
++	erofs_fscache_domain_put(domain);
++}
++
+ int erofs_fscache_register_fs(struct super_block *sb)
+ {
+ 	int ret;
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 273fb35170e2..0f63830c9056 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -109,6 +109,9 @@ struct erofs_domain {
+ struct erofs_fscache {
+ 	struct fscache_cookie *cookie;
+ 	struct inode *inode;
++	struct inode *anon_inode;
++	struct erofs_domain *domain;
++	char *name;
+ };
+ 
+ struct erofs_sb_info {
+-- 
+2.20.1
+
