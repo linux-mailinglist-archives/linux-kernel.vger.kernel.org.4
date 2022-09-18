@@ -2,272 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F625BBCC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A8D5BBCC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiIRJXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 05:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S229599AbiIRJZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 05:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiIRJXL (ORCPT
+        with ESMTP id S229557AbiIRJZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 05:23:11 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36A72714F
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:23:09 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u18so42236477lfo.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=byqt1b1ojiY3sXCMGLeTpHoX4I7WfR2tBMiZpGWSOKs=;
-        b=eud2Wzh4uwEu2eImoEGsi77nKrWpsfZryv2A+9Vn4ZT9jiNwP73gISAkMHv9eLaGqv
-         OQkZ5V8If/MY39uMwCMVFrg1zQpoOYWdtP4jzelPt5gPwkQ7ZNliAuy3PMRgPgjKfoAy
-         yo1YUblUPk9CZ3yNAnmb6Bq29E+dL0ldfNFUwDiGWAZHn0XFwZ3D1Wfle/JN3Rs/3KOD
-         eoQbvb3vWAKQyu04Kk5rSaI2Fef82n6A77xiPb/+jLGkf9LVQoqF430KXdhMdERCIosW
-         va8+2PFjj52EQp/j8krCo5DuuXcY1pT/KO9ctCirItODfatbN0clZC1AhUjZyvXeHrod
-         Dcmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=byqt1b1ojiY3sXCMGLeTpHoX4I7WfR2tBMiZpGWSOKs=;
-        b=ndQgAq0B2pWypAQM/YyGVxjBptidDGwmh7xLMKusuks3qj0F99ES+Sn/Oe/JEH2cDv
-         BaS6GSDnnjqxpWD6Q7KZ0oCkKbPlce60YIv3uAWw7pcCSU2RnWV9otOxbB1dKAg84D0e
-         Cla2poQi86z2qRw0dOsXX4aDxPmgkgQVy6ILPIF+giZgi7QXrGFrLOb4gxRtr8bvbyjK
-         ngJUkjlvCeCcTBJvg40QKbYI+bf2pEYEGctukUc0bf7kl+gu2LFfpQpd2CGCYqojsHh7
-         K6rV0+BcrnRbqq3YE4eLtLUUYop3SZX4oGKI40XCHgfMCKKAZwfdLJHitiNB/j5/oI9T
-         +psw==
-X-Gm-Message-State: ACrzQf33MIlOCNA/aUGG+aVqat5Fb4OqPdWDNjdPURVoqV6jP0PJIdLv
-        4aVr/o0FAp8Sj1SjsGPPgbXYUph2e5DY7Q==
-X-Google-Smtp-Source: AMsMyM7o4L8ezkzMdonVp1vOb4DHjo0u/q5ypFyX4mVeYy5qPB5tEXZ716h35oPCEzXTfdvhKmrqcw==
-X-Received: by 2002:ac2:4f03:0:b0:496:d15:e70c with SMTP id k3-20020ac24f03000000b004960d15e70cmr4032879lfr.102.1663492988175;
-        Sun, 18 Sep 2022 02:23:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be30-20020a056512251e00b00492a0f02758sm4570105lfb.28.2022.09.18.02.23.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 02:23:07 -0700 (PDT)
-Message-ID: <6f692ece-b3ac-4115-370a-3c5e255dd0f8@linaro.org>
-Date:   Sun, 18 Sep 2022 10:23:06 +0100
+        Sun, 18 Sep 2022 05:25:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB3B205D6
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:25:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D39861370
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 09:25:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6B3C433D6;
+        Sun, 18 Sep 2022 09:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663493139;
+        bh=xsYQXX+3z6ZOqy0rzAyXKTUg2RN7nDHsbt0z33Xuv3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=izsiYwUCrvppPE1pNtbTqMcY44nP5bfW26j4n5aUG4xo7g3hjhFFePfk7EKLX7uVy
+         tgZvrJKS3ML7ibaYgipcLASDPvGe+p/7p51wajaYH+hcBnkgDyTo1PuYMhkuMZNxpI
+         Ng98WMbsDrBYWQ6PAMXMn+9MuzwCU1oSSGu1BwIunIuVv184EF5NAQhU9H/QxlMoB7
+         0SC6SY8MQeGXC10Ndm12eDmPBrnfxZRFk4mF9+moyolUIsLSMkix+tm9rjv4JfSw08
+         ZY80IPlas/v9/5wQP6vinTkuIpFRdLn3UspWYkQrKjnL7QbR03P84uhGymrnSq9IsN
+         MbX3RETOgsCPg==
+Date:   Sun, 18 Sep 2022 12:25:25 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     shaoqin.huang@intel.com
+Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] memblock test: Add test to memblock_add() 129th
+ region
+Message-ID: <YybkBdrHgo07uxj7@kernel.org>
+References: <20220913064138.407601-1-shaoqin.huang@intel.com>
+ <20220913064138.407601-2-shaoqin.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: virtio: Convert virtio,pci-iommu to DT
- schema
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220916132229.1908841-1-jean-philippe@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220916132229.1908841-1-jean-philippe@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913064138.407601-2-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/2022 14:22, Jean-Philippe Brucker wrote:
-> Convert the binding that describes the virtio-pci based IOMMU to DT
-> schema. Change the compatible string to "pci<vendor>,<device>", which is
-> defined by the PCI Bus Binding, but keep "virtio,pci-iommu" as an option
-> for backward compatibility.
+On Tue, Sep 13, 2022 at 02:41:30PM +0800, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Add 129th region into the memblock, and this will trigger the
+> memblock_double_array() function, this needs valid memory regions. So
+> using dummy_physical_memory_init() to allocate a large enough memory
+> region, and split it into a large enough memory which can be choosed by
+> memblock_double_array(), and the left memory will be split into small
+> memory region, and add them into the memblock. It make sure the
+> memblock_double_array() will always choose the valid memory region that
+> is allocated by the dummy_physical_memory_init().
+> So memblock_double_array() must success.
+> 
+> Another thing should be done is to restore the memory.regions after
+> memblock_double_array(), due to now the memory.regions is pointing to a
+> memory region allocated by dummy_physical_memory_init(). And it will
+> affect the subsequent tests if we don't restore the memory region. So
+> simply record the origin region, and restore it after the test.
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
 > ---
->  .../devicetree/bindings/virtio/iommu.txt      | 66 --------------
->  .../devicetree/bindings/virtio/iommu.yaml     | 86 +++++++++++++++++++
->  2 files changed, 86 insertions(+), 66 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/virtio/iommu.txt
->  create mode 100644 Documentation/devicetree/bindings/virtio/iommu.yaml
+>  tools/testing/memblock/tests/basic_api.c | 96 ++++++++++++++++++++++++
+>  tools/testing/memblock/tests/common.c    |  7 +-
+>  tools/testing/memblock/tests/common.h    |  3 +
+>  3 files changed, 104 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/virtio/iommu.txt b/Documentation/devicetree/bindings/virtio/iommu.txt
-> deleted file mode 100644
-> index 2407fea0651c..000000000000
-> --- a/Documentation/devicetree/bindings/virtio/iommu.txt
-> +++ /dev/null
-> @@ -1,66 +0,0 @@
-> -* virtio IOMMU PCI device
-> -
-> -When virtio-iommu uses the PCI transport, its programming interface is
-> -discovered dynamically by the PCI probing infrastructure. However the
-> -device tree statically describes the relation between IOMMU and DMA
-> -masters. Therefore, the PCI root complex that hosts the virtio-iommu
-> -contains a child node representing the IOMMU device explicitly.
-> -
-> -Required properties:
-> -
-> -- compatible:	Should be "virtio,pci-iommu"
-> -- reg:		PCI address of the IOMMU. As defined in the PCI Bus
-> -		Binding reference [1], the reg property is a five-cell
-> -		address encoded as (phys.hi phys.mid phys.lo size.hi
-> -		size.lo). phys.hi should contain the device's BDF as
-> -		0b00000000 bbbbbbbb dddddfff 00000000. The other cells
-> -		should be zero.
-> -- #iommu-cells:	Each platform DMA master managed by the IOMMU is assigned
-> -		an endpoint ID, described by the "iommus" property [2].
-> -		For virtio-iommu, #iommu-cells must be 1.
-> -
-> -Notes:
-> -
-> -- DMA from the IOMMU device isn't managed by another IOMMU. Therefore the
-> -  virtio-iommu node doesn't have an "iommus" property, and is omitted from
-> -  the iommu-map property of the root complex.
-> -
-> -Example:
-> -
-> -pcie@10000000 {
-> -	compatible = "pci-host-ecam-generic";
-> -	...
-> -
-> -	/* The IOMMU programming interface uses slot 00:01.0 */
-> -	iommu0: iommu@0008 {
-> -		compatible = "virtio,pci-iommu";
-> -		reg = <0x00000800 0 0 0 0>;
-> -		#iommu-cells = <1>;
-> -	};
-> -
-> -	/*
-> -	 * The IOMMU manages all functions in this PCI domain except
-> -	 * itself. Omit BDF 00:01.0.
-> -	 */
-> -	iommu-map = <0x0 &iommu0 0x0 0x8>
-> -		    <0x9 &iommu0 0x9 0xfff7>;
-> -};
-> -
-> -pcie@20000000 {
-> -	compatible = "pci-host-ecam-generic";
-> -	...
-> -	/*
-> -	 * The IOMMU also manages all functions from this domain,
-> -	 * with endpoint IDs 0x10000 - 0x1ffff
-> -	 */
-> -	iommu-map = <0x0 &iommu0 0x10000 0x10000>;
-> -};
-> -
-> -ethernet@fe001000 {
-> -	...
-> -	/* The IOMMU manages this platform device with endpoint ID 0x20000 */
-> -	iommus = <&iommu0 0x20000>;
-> -};
-> -
-> -[1] Documentation/devicetree/bindings/pci/pci.txt
-> -[2] Documentation/devicetree/bindings/iommu/iommu.txt
-> diff --git a/Documentation/devicetree/bindings/virtio/iommu.yaml b/Documentation/devicetree/bindings/virtio/iommu.yaml
-> new file mode 100644
-> index 000000000000..d5bbb8ab9603
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/virtio/iommu.yaml
-> @@ -0,0 +1,86 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/virtio/iommu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
+> index a13a57ba0815..7120fd8e47b1 100644
+> --- a/tools/testing/memblock/tests/basic_api.c
+> +++ b/tools/testing/memblock/tests/basic_api.c
+> @@ -423,6 +423,101 @@ static int memblock_add_near_max_check(void)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * A test that trying to add the 129th memory block.
+> + * Expect to trigger memblock_double_array() to double the
+> + * memblock.memory.max, find a new valid memory as
+> + * memory.regions.
+> + */
+> +static int memblock_add_many_check(void)
+> +{
+> +	int i;
+> +	void *orig_region;
+> +	struct region r = {
+> +		.base = SZ_16K,
+> +		.size = MEM_SIZE,
+> +	};
+> +	phys_addr_t new_memory_regions_size;
+> +	phys_addr_t base, size, block_size;
 > +
-> +title: virtio-iommu device using the virtio-pci transport
+> +	PREFIX_PUSH();
 > +
-> +maintainers:
-> +  - Jean-Philippe Brucker <jean-philippe@linaro.org>
+> +	reset_memblock_regions();
+> +	memblock_allow_resize();
 > +
-> +description: |
-> +  When virtio-iommu uses the PCI transport, its programming interface is
-> +  discovered dynamically by the PCI probing infrastructure. However the
-> +  device tree statically describes the relation between IOMMU and DMA
-> +  masters. Therefore, the PCI root complex that hosts the virtio-iommu
-> +  contains a child node representing the IOMMU device explicitly.
-> +
-> +  DMA from the IOMMU device isn't managed by another IOMMU. Therefore the
-> +  virtio-iommu node doesn't have an "iommus" property, and is omitted from
-> +  the iommu-map property of the root complex.
-> +
-> +properties:
-> +  # If compatible is present, it should contain the vendor and device ID
-> +  # according to the PCI Bus Binding specification. Since PCI provides
-> +  # built-in identification methods, compatible is not actually required.
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: virtio,pci-iommu
-> +          - const: pci1af4,1057
-> +      - items:
-> +          - const: pci1af4,1057
-> +
-> +  reg:
-> +    description: |
-> +      PCI address of the IOMMU. As defined in the PCI Bus Binding
-> +      reference, the reg property is a five-cell address encoded as (phys.hi
-> +      phys.mid phys.lo size.hi size.lo). phys.hi should contain the device's
-> +      BDF as 0b00000000 bbbbbbbb dddddfff 00000000. The other cells should be
-> +      zero. See Documentation/devicetree/bindings/pci/pci.txt
-> +
-> +  '#iommu-cells':
-> +    const: 1
-> +
-> +required:
+> +	dummy_physical_memory_init();
+> +	/*
+> +	 * We allocated enough memory by using dummy_physical_memory_init(), and
+> +	 * split it into small block. First we split a large enough memory block
+> +	 * as the memory region which will be choosed by memblock_double_array().
+> +	 */
+> +	base = PAGE_ALIGN(dummy_physical_memory_base());
+> +	new_memory_regions_size = PAGE_ALIGN(INIT_MEMBLOCK_REGIONS * 2 *
+> +					     sizeof(struct memblock_region));
+> +	memblock_add(base, new_memory_regions_size);
 
-Also: compatible
+Why don't you simply increase MEM_SIZE, to say 1M?
+This will make all the calculations here way simpler.
 
-> +  - reg
-> +  - '#iommu-cells'
 > +
-> +additionalProperties: false
+> +	/*
+> +	 * For the left memory, we split them into small block and add them into
+> +	 * memblock later.
+> +	 */
+> +	base += new_memory_regions_size;
+> +	size = MEM_SIZE - new_memory_regions_size;
+> +	block_size = size / (INIT_MEMBLOCK_REGIONS * 2);
 > +
-> +examples:
-> +  - |
-> +    pcie0 {
-
-Node name: pcie
-
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
+> +	orig_region = memblock.memory.regions;
 > +
-
-device_type and then you will see a bunch of warnings.
-
-> +        /*
-> +         * The IOMMU manages all functions in this PCI domain except
-> +         * itself. Omit BDF 00:01.0.
-> +         */
-> +        iommu-map = <0x0 &iommu0 0x0 0x8
-> +                     0x9 &iommu0 0x9 0xfff7>;
+> +	for (i = 0; i < INIT_MEMBLOCK_REGIONS; i++) {
+> +		/*
+> +		 * Add these small block to fulfill the memblock. We keep an
+> +		 * interval between the nearby memory to avoid being merged.
+> +		 */
+> +		memblock_add(base + block_size * (2 * i + 1), block_size);
 > +
-> +        /* The IOMMU programming interface uses slot 00:01.0 */
-> +        iommu0: iommu@1,0 {
-> +            compatible = "pci1af4,1057";
-> +            reg = <0x800 0 0 0 0>;
-> +            #iommu-cells = <1>;
-> +        };
-> +    };
+> +		ASSERT_EQ(memblock.memory.cnt, i + 2);
+> +		ASSERT_EQ(memblock.memory.total_size, new_memory_regions_size +
+> +						      (i + 1) * block_size);
+> +	}
 > +
-> +    pcie1 {
-
-Node name: pcie (so probably you will need unit address and reg)
-
-> +        /*
-> +         * The IOMMU also manages all functions from this domain,
-> +         * with endpoint IDs 0x10000 - 0x1ffff
-> +         */
-> +        iommu-map = <0x0 &iommu0 0x10000 0x10000>;
-> +    };
+> +	/*
+> +	 * At there, memblock_double_array() has been succeed, check if it
+> +	 * update the memory.max.
+> +	 */
+> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
 > +
-> +    ethernet {
-> +        /* The IOMMU manages this platform device with endpoint ID 0x20000 */
-> +        iommus = <&iommu0 0x20000>;
-> +    };
+> +	/* memblock_double_array() will reserve the memory it used. Check it. */
+> +	ASSERT_EQ(memblock.reserved.cnt, 1);
+> +	ASSERT_EQ(memblock.reserved.total_size, new_memory_regions_size);
 > +
-> +...
+> +	/*
+> +	 * Now memblock_double_array() works fine. Let's check after the
+> +	 * double_array(), the memblock_add() still works as normal.
+> +	 */
+> +	memblock_add(r.base, r.size);
+> +	ASSERT_EQ(memblock.memory.regions[0].base, r.base);
+> +	ASSERT_EQ(memblock.memory.regions[0].size, r.size);
+> +
+> +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 2);
+> +	ASSERT_EQ(memblock.memory.total_size, INIT_MEMBLOCK_REGIONS * block_size +
+> +					      new_memory_regions_size +
+> +					      MEM_SIZE);
+> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
+> +
+> +	dummy_physical_memory_cleanup();
+> +
+> +	/*
+> +	 * The current memory.regions is occupying a range of memory that
+> +	 * allocated from dummy_physical_memory_init(). After free the memory,
+> +	 * we must not use it. So restore the origin memory region to make sure
+> +	 * the tests can run as normal and not affected by the double array.
+> +	 */
+> +	memblock.memory.regions = orig_region;
+> +	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
+> +
+> +	test_pass_pop();
+> +
+> +	return 0;
+> +}
+> +
+>  static int memblock_add_checks(void)
+>  {
+>  	prefix_reset();
+> @@ -438,6 +533,7 @@ static int memblock_add_checks(void)
+>  	memblock_add_twice_check();
+>  	memblock_add_between_check();
+>  	memblock_add_near_max_check();
+> +	memblock_add_many_check();
+>  
+>  	prefix_pop();
+>  
+> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+> index eec6901081af..2de6a2b6efd2 100644
+> --- a/tools/testing/memblock/tests/common.c
+> +++ b/tools/testing/memblock/tests/common.c
+> @@ -5,8 +5,6 @@
+>  #include <linux/memory_hotplug.h>
+>  #include <linux/build_bug.h>
+>  
+> -#define INIT_MEMBLOCK_REGIONS			128
+> -#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  #define PREFIXES_MAX				15
+>  #define DELIM					": "
+>  
+> @@ -84,6 +82,11 @@ void dummy_physical_memory_cleanup(void)
+>  	free(memory_block.base);
+>  }
+>  
+> +phys_addr_t dummy_physical_memory_base(void)
+> +{
+> +	return (phys_addr_t)memory_block.base;
+> +}
+> +
+>  static void usage(const char *prog)
+>  {
+>  	BUILD_BUG_ON(ARRAY_SIZE(help_opts) != ARRAY_SIZE(long_opts) - 1);
+> diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+> index 78128e109a95..ba14dc989ae9 100644
+> --- a/tools/testing/memblock/tests/common.h
+> +++ b/tools/testing/memblock/tests/common.h
+> @@ -11,6 +11,8 @@
+>  #include <../selftests/kselftest.h>
+>  
+>  #define MEM_SIZE SZ_16K
+> +#define INIT_MEMBLOCK_REGIONS			128
+> +#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  
+>  enum test_flags {
+>  	/* No special request. */
+> @@ -104,6 +106,7 @@ void reset_memblock_attributes(void);
+>  void setup_memblock(void);
+>  void dummy_physical_memory_init(void);
+>  void dummy_physical_memory_cleanup(void);
+> +phys_addr_t dummy_physical_memory_base(void);
+>  void parse_args(int argc, char **argv);
+>  
+>  void test_fail(void);
+> -- 
+> 2.34.1
+> 
+> 
 
-
-Best regards,
-Krzysztof
+-- 
+Sincerely yours,
+Mike.
