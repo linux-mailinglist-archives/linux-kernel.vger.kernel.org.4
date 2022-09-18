@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243805BBC04
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276385BBC07
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 07:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIRF3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 01:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S229511AbiIRFfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 01:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIRF3f (ORCPT
+        with ESMTP id S229447AbiIRFfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 01:29:35 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F3A44D
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:29:33 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h5-20020a056e021d8500b002eb09a4f7e6so17376509ila.14
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=g48QcT/wkVC8ZD22fn8yiiIVvlcs3D7jSABH91P7O1k=;
-        b=am3e5NCPa2R5p+l9LdYEl91b8Fgy5l1x3DKWc5VA5EX03e8UebJqZMrcdxWvLhu5++
-         iXsv+NICWokgf59hif1RZgpEJpTYVVaTnS2eeVboZlPhymG6lGKwYT7YexLd2sDo7tJU
-         /3dcsbsSafSRixUpL+jtFW+fGSHfeehaOYH7c7kvwoEcQU9Hg0mwp5cd3q6G/f9SmehN
-         LDP2ZpfgTTTrN1ZTqvuIhmXujeJb/V0GqkLUxpiK22b2lzgFV2Z/PTGuZywCIhdfTPY+
-         1vSkQCeGVgv2puzvvzReuI6IB6mlvY5VCA7cLbb8FMFgXdlh2MZh1Afx6NxUPVGrZU6T
-         EBLg==
-X-Gm-Message-State: ACrzQf2litwobdtg3LejFaU5EShvVj3Ai0rWNcbeIoOSTz9bv2u6ykXK
-        lVhGu3xXtkq8HsWd5Ezl4cdLgNbmloe/HmGXAT/QoARrJbHk
-X-Google-Smtp-Source: AMsMyM7IWLv9OqGwX7pIDCTBHiyQJf79YJDcincdyojx1AGAd1XSkthYNfFkx4TNJpdnKbHBUbCIaHnSmhZqvsNGxwNV2Os8zXGR
+        Sun, 18 Sep 2022 01:35:16 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EF4F1F601
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Sep 2022 22:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=9jmLn
+        AQGQj431zPZBKBz9FpincMQ/bzVP8lGuYEZmNI=; b=i+WF53MgRJC4iYrIirrS+
+        8W9O6M4TxEPnx6nFDx6MliHc1blymL8PLzhAHs33kEEHCKRDizjMsyJVHPXIkPMo
+        u5hGNMJpf+zk5JiK5tRFvwX81xSNh4u9n7AsZCCmsmFj1QyhYW39YO1dJWa8rvZU
+        kAQbp/YykFKArfB0XCWXsk=
+Received: from whoami-VirtualBox.. (unknown [223.72.42.150])
+        by smtp9 (Coremail) with SMTP id DcCowAA3TcLIrSZjjTfifA--.59008S2;
+        Sun, 18 Sep 2022 13:34:00 +0800 (CST)
+From:   Jinyu Tang <tjytimi@163.com>
+To:     geomatsi@gmail.com
+Cc:     akpm@linux-foundation.org, alexandre.ghiti@canonical.com,
+        anshuman.khandual@arm.com, anup@brainfault.org,
+        aou@eecs.berkeley.edu, atishp@rivosinc.com, falcon@tinylab.org,
+        guoren@kernel.org, heiko@sntech.de, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        panqinglin2020@iscas.ac.cn, paul.walmsley@sifive.com,
+        sunnanyong@huawei.com, tjytimi@163.com, tongtiangen@huawei.com
+Subject: Re:Re: [PATCH v2] riscv: make update_mmu_cache to support asid
+Date:   Sun, 18 Sep 2022 13:33:32 +0800
+Message-Id: <20220918053332.22189-1-tjytimi@163.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Yx7fCL3rMgT4Uh96@curiosity>
+References: <Yx7fCL3rMgT4Uh96@curiosity>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2145:b0:2f4:8c94:dcbc with SMTP id
- d5-20020a056e02214500b002f48c94dcbcmr5216605ilv.161.1663478972821; Sat, 17
- Sep 2022 22:29:32 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 22:29:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000443a7205e8ece1d9@google.com>
-Subject: [syzbot] BUG: soft lockup in tx
-From:   syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowAA3TcLIrSZjjTfifA--.59008S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1UtF45AF4rZF4rAw1rCrg_yoW8XrWfpF
+        Z2krs5KrykGw13CFy7Xw4vgr4rJw4vgr1avw1fCr9rJ39xZrnFk393tr18ZryDGF9akF4x
+        urWj93Z8ua4kA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUnXowUUUUU=
+X-Originating-IP: [223.72.42.150]
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiVgiAeFqzt7laWwAAsA
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+At 2022-09-12 15:26:00, "Sergey Matyukevich" <geomatsi@gmail.com> wrote:
+>Hi Jinyu,
+>
+>> The `update_mmu_cache` function in riscv flush tlb cache without asid
+>> information now, which will flush tlbs in other tasks' address space
+>> even if processor supports asid. So add a new function
+>> `flush_tlb_local_one_page` to flush local one page whether processor
+>> supports asid or not,for cases that need to flush local one page like
+>> function `update_mmu_cache`.
+>> 
+>> Signed-off-by: Jinyu Tang <tjytimi@163.com>
+>> ---
+>> RFC V1 -> V2 : 
+>> 1.Rebased on PATCH9 of IPI imporvement series as Anup Patel
+>> suggestion. 
+>> 2.Make commit log more clear.
+>> 
+>>  arch/riscv/include/asm/pgtable.h  |  2 +-
+>>  arch/riscv/include/asm/tlbflush.h |  2 ++
+>>  arch/riscv/mm/tlbflush.c          | 11 +++++++++++
+>>  3 files changed, 14 insertions(+), 1 deletion(-)
+>
+>Just FYI: I have been looking into the same function w.r.t. to its
+>ASID/SMP handling. In addition to what your patch is doing with ASID,
+>I posted experimental change following flush_icache_mm approach. That
+>patch takes into account other concurrently running harts as well as
+>possible migration to other harts later on, see:
+>
+>https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gmail.com/
+>
+>Regards,
+>Sergey
+Maybe local flush is enough for this function,because others may not use the pte forever.
+And if another hart use this pte later, it may trap in pagefault to survive.
 
-syzbot found the following issue on:
+Yours,
 
-HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=176b1680880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b22b10880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fce87f080000
+Jinyu
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/81b491dd5861/disk-a6b44374.raw.xz
-vmlinux: https://storage.googleapis.com/69c979cdc99a/vmlinux-a6b44374.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com
-
-watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [aoe_tx0:1378]
-Modules linked in:
-irq event stamp: 34814405
-hardirqs last  enabled at (34814404): [<ffff80000bfd85d4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (34814404): [<ffff80000bfd85d4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (34814405): [<ffff80000bfc5d58>] __el1_irq arch/arm64/kernel/entry-common.c:455 [inline]
-hardirqs last disabled at (34814405): [<ffff80000bfc5d58>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:473
-softirqs last  enabled at (8188): [<ffff80000b20ab54>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (8192): [<ffff80000b20ab20>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
-CPU: 0 PID: 1378 Comm: aoe_tx0 Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
-pc : _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
-lr : __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-lr : _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-sp : ffff800014a53b80
-x29: ffff800014a53b80 x28: ffff0000c4ea0c30 x27: 0000000000000000
-x26: ffff80000f0ed9b8 x25: 0000000000000002 x24: 0000000000000001
-x23: ffff0000c8bf38b0 x22: 0000000000000020 x21: 0000000000000001
-x20: ffff80000f0ed9b8 x19: 0000000000000000 x18: 00000000000000c0
-x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c42b0000
-x14: 0000000000000028 x13: 00000000ffffffff x12: ffff0000c42b0000
-x11: ff808000095d7628 x10: 0000000000000000 x9 : 0000000000000080
-x8 : 00000000000000c0 x7 : ffff8000098f58f0 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : ffff80000ce5df15 x0 : ffff8001f1d2f000
-Call trace:
- arch_local_irq_restore arch/arm64/include/asm/irqflags.h:122 [inline]
- __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
- _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
- spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
- uart_write+0x204/0x458 drivers/tty/serial/serial_core.c:589
- handle_tx+0x10c/0x34c drivers/net/caif/caif_serial.c:236
- caif_xmit+0xa4/0xe0 drivers/net/caif/caif_serial.c:282
- __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
- netdev_start_xmit include/linux/netdevice.h:4833 [inline]
- xmit_one net/core/dev.c:3590 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3606
- __dev_queue_xmit+0x78c/0xc88 net/core/dev.c:4256
- dev_queue_xmit include/linux/netdevice.h:3008 [inline]
- tx+0x74/0x118 drivers/block/aoe/aoenet.c:63
- kthread+0x90/0x154 kernel/kthread.c:357
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
