@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00D25BC0BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 01:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB6E5BC0BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 01:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIRX6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 19:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S229783AbiIRX6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 19:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIRX6c (ORCPT
+        with ESMTP id S229561AbiIRX6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 19:58:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3796D13F40
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 16:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663545510;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ud14KPmofNeyFdYS8YyOBxzic/NSH3aF62bCDlpoP+Q=;
-        b=LKYOwjVOpE+B7UYJ/V7JtNuQNFpkX+Og9ZeaVSl+7K1xiVdWp1PzrK+eT+1rcaH9r6nnxl
-        yaLZ0oPomTkjgczoJ2ET8QqlqIpNuWVaMHfqSkaSyPY40h7wUHn+qx01pO23Hx4NkcUaMm
-        m0cu5bBJQr1wodHrvsWNAvyuXSwSLj0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455--_Ff72U0OI2N8p1iuC-k6A-1; Sun, 18 Sep 2022 19:58:24 -0400
-X-MC-Unique: -_Ff72U0OI2N8p1iuC-k6A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCEFA380673A;
-        Sun, 18 Sep 2022 23:58:23 +0000 (UTC)
-Received: from [10.64.54.126] (vpn2-54-126.bne.redhat.com [10.64.54.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 90F7C40C6EC3;
-        Sun, 18 Sep 2022 23:58:14 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
-To:     Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
-        linux-kselftest@vger.kernel.org, bgardon@google.com,
-        shuah@kernel.org, corbet@lwn.net, drjones@redhat.com,
-        will@kernel.org, zhenyzha@redhat.com, dmatlack@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, oliver.upton@linux.dev, shan.gavin@gmail.com
-References: <20220916045135.154505-1-gshan@redhat.com>
- <20220916045135.154505-2-gshan@redhat.com> <YyS78BqsQxKkLOiW@xz-m1.local>
- <87illlkqfu.wl-maz@kernel.org>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <a2e0b9bc-2c67-8683-d722-7298bd65058c@redhat.com>
-Date:   Mon, 19 Sep 2022 09:58:10 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sun, 18 Sep 2022 19:58:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D50013F46;
+        Sun, 18 Sep 2022 16:58:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so4557780pjo.2;
+        Sun, 18 Sep 2022 16:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=nx+a1DvWCBo5ERwaVpW/CuMoX39dd2IN65mPeOU18nk=;
+        b=Htjm9zpZ8qet43rd+8hciEkngTT3Mf9gh89SN468HcXRk3ucOGAT1qqtAaMZEhnQ+5
+         HKO+dyYDDMbhTRmR9hOlUZiBKcCB5G0vFFFNhO2usZIIwCq/GpbIZ1mREUUbG/kdm4XB
+         UxUE5tOK0KIq7xMEdNi6auBBrWyHMhS4LBqq3mCSeeqyLbVhnpEd0YQo4v6MFY894bHM
+         VWFH8AE2DMrvKVROiH7xLpQBS9euYX87lvN5EMyugwHztkvEzA/j9PahLolBMAjWypAu
+         NI6xV55ezEdKYSo+kMyCRrRs3o7PeEUCSt4OF7VYnS4cLQbwWcHem9cjtg2IwW4K9/NS
+         O5Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nx+a1DvWCBo5ERwaVpW/CuMoX39dd2IN65mPeOU18nk=;
+        b=WD5P5wmLbWIAwF/ob8uD7y3pEJIMLmA5+34GUqMtxpaYjAI/dZej1070Mg5ms4R97W
+         HWwVZ9WqsSfEx8vSK+w0ijMntKg0KmUQV63QCdw1WmVUp1DagEvChOznN4USrG4S5Qqt
+         7qKUG4zHBdrhLrO/wE3jjBYSn+WpH6/L3+6LQ0PtOn6IkVbHJR7Qtaqm3w3uXj6YOI+6
+         2/lu0HGp9Uh0iO/TstpsIRVsgAKwE1r8bb2akrMQ3LUrfWQCrhLi9eY9j18A+nu1d2uk
+         kxWTs00jsV5b9CQ1A6dyYisxx+yqZK62jg9+iP/g0oT0w7nvilBAa3VNRJtWYM3rKbLi
+         ABoQ==
+X-Gm-Message-State: ACrzQf1A52j9P2uISoFkEm9JeQ3XH+e2I5H7FHaGdNz6ZAuMTp+BVGP/
+        thWdEcK3dZgSlePQrbNFXBM=
+X-Google-Smtp-Source: AMsMyM5JrmjGJS75CgJbj2qzE8nX2qZTU6YGWXhtv3RzUnrmmUM4+ok+8STh+zELYZx4q+Rhpj5X6Q==
+X-Received: by 2002:a17:90b:1e0d:b0:202:91ec:e167 with SMTP id pg13-20020a17090b1e0d00b0020291ece167mr16593865pjb.174.1663545525697;
+        Sun, 18 Sep 2022 16:58:45 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id 75-20020a62164e000000b005499599ed30sm8113030pfw.10.2022.09.18.16.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 16:58:45 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 07:58:38 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+Message-ID: <Yyewrm+/viScefKC@sol>
+References: <20220906214114.vj3v32dzwxz6uqik@pali>
+ <YxfBKkqce/IQQLk9@google.com>
+ <20220906220901.p2c44we7i4c35uvx@pali>
+ <YxfMkzW+5W3Hm1dU@google.com>
+ <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
+ <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
+ <YyKMsyI961Mo1EQE@sol>
+ <CACRpkdYB6dZf4TBhfXB2Z5E2PJ46ctAM_QKLiW-fykbCopcVGQ@mail.gmail.com>
+ <YyLwsOBXv9jRw/+n@sol>
+ <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <87illlkqfu.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,107 +87,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/18/22 7:00 PM, Marc Zyngier wrote:
-> On Fri, 16 Sep 2022 19:09:52 +0100,
-> Peter Xu <peterx@redhat.com> wrote:
->>
->> On Fri, Sep 16, 2022 at 12:51:31PM +0800, Gavin Shan wrote:
->>> This adds KVM_REQ_RING_SOFT_FULL, which is raised when the dirty
->>> ring of the specific VCPU becomes softly full in kvm_dirty_ring_push().
->>> The VCPU is enforced to exit when the request is raised and its
->>> dirty ring is softly full on its entrance.
->>>
->>> Suggested-by: Marc Zyngier <maz@kernel.org>
->>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>> ---
->>>   arch/x86/kvm/x86.c       | 5 +++--
->>>   include/linux/kvm_host.h | 1 +
->>>   virt/kvm/dirty_ring.c    | 4 ++++
->>>   3 files changed, 8 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->>> index 43a6a7efc6ec..7f368f59f033 100644
->>> --- a/arch/x86/kvm/x86.c
->>> +++ b/arch/x86/kvm/x86.c
->>> @@ -10265,8 +10265,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->>>   	bool req_immediate_exit = false;
->>>   
->>>   	/* Forbid vmenter if vcpu dirty ring is soft-full */
->>> -	if (unlikely(vcpu->kvm->dirty_ring_size &&
->>> -		     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
->>> +	if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
->>> +	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
->>> +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
->>>   		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->>>   		trace_kvm_dirty_ring_exit(vcpu);
->>>   		r = 0;
->>
->> As commented previously - can we use kvm_test_request() instead? because we
->> don't want to unconditionally clear the bit.  Instead of making the request
->> again, we can clear request only if !full.
+On Fri, Sep 16, 2022 at 09:22:59AM +0200, Bartosz Golaszewski wrote:
+> On Thu, Sep 15, 2022 at 11:30 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> > Enums work for me - especially if the goal is to differentiate
+> > logical from physical - there should be a distinct enum for each.
+> >
 > 
-> I have the feeling that this is a micro-optimisation that won't lead
-> to much benefit in practice. You already have the cache line, just not
-> in exclusive mode, and given that this is per-vcpu, you'd only see the
-> cost if someone else is setting a request to this vcpu while
-> evaluating the local requests.
-> 
-> And now you need extra barriers...
-> 
-> Also, can we please refrain from changing things without data showing
-> that this actually is worse than what we had before? The point below
-> makes me think that this is actually beneficial as is.
+> We won't even have to change the function signatures if we go with
+> enums - they already take an int and I'm in general against putting
+> enum types into function signatures in C as they give you a false
+> sense of a strong type.
 > 
 
-I think Marc's explanation makes sense. It won't make difference in terms
-of performance. We need to explicitly handle barrier when kvm_test_request()
-is used. So I prefer to keep the code if Peter agrees.
+IMO it is far easier to remember that C doesn't range check enums than it
+is to remember what specific values are appropriate for a function
+accepting an enum as int.  A specified type is a strong hint, and unlike
+documentation is one that an IDE can parse and provide valid options for.
 
->> We can also safely move this into the block of below kvm_request_pending()
->> as Marc used to suggest.
-> 
-> This, on the other hand, makes sure that we share the cost across all
-> requests. Requests should be extremely rare anyway (and if they
-> aren't, you have a whole lot of performance issues on your hands
-> anyway).
-> 
+Passing enums as int is the norm in the kernel, so fair enough to keep
+it that way, but that does contribute to the confusion that we are trying
+to address here.
 
-Yeah, We shouldn't have too much requests. I missed the comment from Marc
-to move this chunk to kvm_request_pending(). I will fix it in v3.
-
->>
->> To explicitly use kvm_clear_request(), we may need to be careful on the
->> memory barriers.  I'm wondering whether we should have moved
->> smp_mb__after_atomic() into kvm_clear_request() because kvm_clear_request()
->> is used outside kvm_check_request() and IIUC all the call sites should
->> better have that barrier too to be safe.
->>
->> Side note: when I read the code around I also see some mis-use of clear
->> request where it can be omitted, e.g.:
->>
->> 		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
->> 			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
->> 			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
->> 		}
->>
->> Maybe it's a sign of bad naming, so we should renamed kvm_check_request()
->> to kvm_test_clear_request() too to show that clearing after that is not
->> needed?
-> 
-> Yeah, this kvm_clear_request() is superfluous. But this is rather well
-> documented, for once, and I don't think we should repaint it based on
-> a sample of one.
-> 
-
-Yeah, I think Peter is correct that smp_mb__after_atomic() would be
-part of kvm_clear_request(). Otherwise, the following two cases aren't
-in same order:
-
-       // kvm_check_request()             // test and clear
-       kvm_test_request()                 kvm_test_request()
-       kvm_clear_request()                kvm_clear_request()
-       smp_mb__after_atomic()
-
-Thanks,
-Gavin
+Cheers,
+Kent.
 
