@@ -2,146 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E865BBCA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA655BBCAB
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 11:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIRJHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 05:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S229570AbiIRJJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 05:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIRJH3 (ORCPT
+        with ESMTP id S229458AbiIRJJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 05:07:29 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C312558C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:07:27 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id a3so30202573lfk.9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=bGZfcJ7/xyTSyo+e1DkgIAHCGdwCcIgSpxyOQDXxlU8=;
-        b=DqMh+ai5U1mHXrGdZr1lVbsRIf/WhSIqeXDUxusNTb9K0lM9g+KJQFz+C4oNRckfkK
-         mstpTYW4FxXis55JLsdZfe24u131EjbSl4PbkMP4NKiJ+MJVlXkcv1VQmvvm5fIoE0yt
-         R39ilKcM+bQjp2NJyNlmSluLIGeIu9YGf0yNrA6aE+YMo33d7J5b0JPyn97JIcVo1qDi
-         MDcuPR1V04VkC3cRmzHwHQzoAYLuRDOwlF+Qq96g7Ca2X7PAHAkUNTMIOZANmwoOUDJ1
-         qIi4dFIlayh8WvDvbdt7ooTdIqMbsVNKddGRNWY3Yerv12CImPdbwAiAuovReC1hbsEN
-         TY8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=bGZfcJ7/xyTSyo+e1DkgIAHCGdwCcIgSpxyOQDXxlU8=;
-        b=LGlZ+dauwmtEaBgwqS77z5xph1B8H+aEmQWDPV9bfWZiH9hCtqHSJz5gYjiWMuUeDk
-         Whs+NRDma598SQlxDITRiHldg7R4C43WpAn+aJ7uJuWiTogtB1OtMDO7ylC5wcI318bJ
-         RbzKLxnfJXIZCE9QKDMOIvpTdUeN+34s2jE2ZYsYFjf/Xo1J9blYSG79bGrEDzoEXwsY
-         l5+rlr+oU4OZTz4rHddBOpbRRFsNvcGn++XgzBGMWsM+4yaKenNzElpyjRUTPgWASM0I
-         b/KatwIPn8Qr2Rw7cfl7sdly3MR/fR6wWMk8094MPxEIrpTYkijjdxFyeNcgY8qIKfbC
-         A6sQ==
-X-Gm-Message-State: ACrzQf3dtgofIAzKXAHAu7kcNqJiWGJfz8Tu+70JJwMoJx6lgj9vGm9f
-        laPOi0gzDNfv2uDwvgnAPcS5lw==
-X-Google-Smtp-Source: AMsMyM6Wxk7qCai/ULKOcTxWryxS0Gymnh6yFDaLDSLZoFTg/jaFiGPP8/tb5UnRLI0ZpdtahlYkSQ==
-X-Received: by 2002:a05:6512:22d2:b0:498:f68b:6cab with SMTP id g18-20020a05651222d200b00498f68b6cabmr4197755lfu.548.1663492045954;
-        Sun, 18 Sep 2022 02:07:25 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k14-20020a2e6f0e000000b002637c04b472sm4457662ljc.83.2022.09.18.02.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 02:07:25 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 10:07:18 +0100
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, devicetree@vger.kernel.org,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH] media: dt-bindings: i2c: ovti,ov5640: Drop ref to
- video-interface-devices.yaml
-Message-ID: <20220918090718.isp3ktb3v2isiwkn@krzk-bin>
-References: <20220916133521.73183-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916133521.73183-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 18 Sep 2022 05:09:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B67525592;
+        Sun, 18 Sep 2022 02:09:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9ADBAB80E84;
+        Sun, 18 Sep 2022 09:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDECC433D6;
+        Sun, 18 Sep 2022 09:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663492148;
+        bh=B7fP5yqOD5w51+NcW1DLKEZMR0ScOvN08QLqwn27G28=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DXDujb66dU2W00XcxCBGfpuKOJNMHAbuaKIC2XcGEoiPhC351/tf5LJmFiC6rhOI6
+         4na9sbhafjDnez3rVWTHBxWWRWlRGca3RtU06uQksboqAjTg+z2+dLdiO6RaGLuZLR
+         FipgWOHDhEv7IiCwtQUUqSaEOeaE6Cbwoq+znM8SmIaxEAhBf8yNjVZHcVdfiQ0QnM
+         IlTKIxSLE0I0mfd2hxapIw1PqRUJBE0OT6DrIdWtWXl+vOlYag8NMowmWJUHG3Ri9F
+         du1fIxe9eN2u0Sjw4a1jiTg/AQgMqdVMukgRQCL4k6duUvC7D+k6StsTc2d/z/tsMa
+         JhyWPB4pKEsdw==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oZqIT-00AsAu-TB;
+        Sun, 18 Sep 2022 10:09:06 +0100
+Date:   Sun, 18 Sep 2022 10:09:05 +0100
+Message-ID: <87h715kq1a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: timer: Add QEMU compatible strings
+In-Reply-To: <e89478b5-8495-a846-61ff-917bc4e08490@linaro.org>
+References: <20220916132959.1910374-1-jean-philippe@linaro.org>
+        <0acc2a21-27c2-ec85-0335-263d70c24469@linaro.org>
+        <87mtaxltwm.wl-maz@kernel.org>
+        <e89478b5-8495-a846-61ff-917bc4e08490@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: krzysztof.kozlowski@linaro.org, jean-philippe@linaro.org, mark.rutland@arm.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 14:35:21 +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Sun, 18 Sep 2022 09:50:58 +0100,
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> video-interface-devices.yaml isn't used so just drop it from the
-> DT binding doc.
+> On 17/09/2022 19:47, Marc Zyngier wrote:
+> > On Sat, 17 Sep 2022 17:51:20 +0100,
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 16/09/2022 14:30, Jean-Philippe Brucker wrote:
+> >>> QEMU uses both "arm,armv8-timer" and "arm,armv7-timer" as compatible
+> >>> string. Although it is unlikely that any guest relies on this, we can't
+> >>> be certain of that. Therefore, add these to the schema. Clean up the
+> >>> compatible list a little while at it.
+> >>>
+> >>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >>
+> >> I guess you wanted to say QEMU uses "arm,armv8-timer" followed by
+> >> "arm,armv7-timer", because otherwise I would understand it that either
+> >> that or that. Anyway, is it a valid (virtualized) hardware? Is ARMv8
+> >> timer really, really compatible with ARMv7 one?
+> > 
+> > Yes. There isn't a shred of difference between the two in the earlier
+> > revisions of the ARMv8 architecture, and none of the differences
+> > introduced in later revisions are exposed to DT anyway.
+> > 
+> >> I don't think we should document invalid setups out-of-tree, just
+> >> because they are there, and something like this was also expressed by Rob:
+> >> https://lore.kernel.org/all/20220518163255.GE3302100-robh@kernel.org/
+> > 
+> > This is, on the contrary, something that is perfectly valid. For
+> > example, a system running a 32bit OS on a 64bit system is perfectly
+> > entitled to expose both (v8 because that's what the HW is, v7 because
+> > that's what the OS is the most likely to understand).
+> > 
+> > You may find it odd, but that:
+> > 
+> > - expresses something that is actually required
+> > 
+> > - is what I, as the original author of this binding, have always
+> >   considered valid
+> > 
+> > - has been valid for a long time (10+ years) before you decided it
+> >   suddenly wasn't
+> > 
+> > I understand that the "DT police" has high standards, but this has
+> > been around for much longer, and it isn't because the conversion to
+> > schema is imperfect that you can rewrite history.
+> > 
+> > As for the patch, I'd remove the QEMU reference and the deprecation.
+> > This format is perfectly allowed, and is in use in most VMMs out
+> > there. Yes, DT is an ABI.
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml | 3 ---
->  1 file changed, 3 deletions(-)
-> 
+> Thanks for the explanation, actually enough was to say that it is
+> perfectly valid combination describing hardware. :)
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Assuming that the original posting was wrong without understanding the
+context is what triggered it. It is absolutely fine not to know these
+things, but in this case *do ask questions* rather than dismiss the
+patch off the bat based of third hand conclusions.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Now at least you have the full picture.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+	M.
 
-
-camera@3c: 'AVDD-supply' is a required property
-	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
-	arch/arm/boot/dts/stm32mp157c-ev1.dtb
-	arch/arm/boot/dts/stm32mp157c-ev1-scmi.dtb
-
-camera@3c: 'DOVDD-supply' is a required property
-	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
-	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
-
-camera@3c: 'DVDD-supply' is a required property
-	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
-	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
-	arch/arm/boot/dts/stm32mp157c-ev1.dtb
-	arch/arm/boot/dts/stm32mp157c-ev1-scmi.dtb
-
-camera_rear@3b: 'clock-frequency', 'enable-gpios', 'vdda-supply', 'vddd-supply', 'vdddo-supply' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
-	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
-
-camera_rear@3b: port:endpoint:data-lanes:0:0: 0 is not one of [1, 2]
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
-	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
-
-ov5640@3c: 'AVDD-supply' is a required property
-	arch/arm/boot/dts/dra71-evm.dtb
-	arch/arm/boot/dts/dra72-evm.dtb
-	arch/arm/boot/dts/dra72-evm-revc.dtb
-
-ov5640@3c: 'DOVDD-supply' is a required property
-	arch/arm/boot/dts/dra71-evm.dtb
-	arch/arm/boot/dts/dra72-evm.dtb
-	arch/arm/boot/dts/dra72-evm-revc.dtb
-
-ov5640@3c: 'DVDD-supply' is a required property
-	arch/arm/boot/dts/dra71-evm.dtb
-	arch/arm/boot/dts/dra72-evm.dtb
-	arch/arm/boot/dts/dra72-evm-revc.dtb
+-- 
+Without deviation from the norm, progress is not possible.
