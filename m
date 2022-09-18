@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762165BBD55
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42675BBD4E
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 12:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIRJ7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 05:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S230000AbiIRKAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiIRJ7X (ORCPT
+        with ESMTP id S230215AbiIRJ7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 05:59:23 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19229F4F;
-        Sun, 18 Sep 2022 02:59:19 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1663495158; bh=LrJPTCNgJnKyYQZq+jzf17tmj1SfmkEssly/2yyWLXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=VQt1bFhxVZIgI0lk3VKPibjdw92XIuzyJf5Jh1JYuWIUcFaOQY88E6ksD5tsdb/L2
-         BmCIssV4FXl+DOq6rKXgZOoPSLQlYA7go+QjyqoDyACc6+9/ya1FQ5kc07+kKd88fW
-         EcJCpUC3bu8jkmmPw005ZxDPT0SckNd2qaABSlHc=
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Vinod Koul <vkoul@kernel.org>,
+        Sun, 18 Sep 2022 05:59:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489C8102F
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:59:22 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id a3so30299474lfk.9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 02:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4ehZ01ierpa8aV+DwFDA/QfU8AbJ3Sxz0urqCktyHto=;
+        b=zfbTfZTBGGrOtwcCfbQ2TIWBCBfcERkyEFmwGP882yp4QL4Z/LjPDolpNmRdxMRnel
+         h4GH1vknLx8OIN8GhLFfqFHXImzyArBiAv4Mli6zjuGUIUlIqAyo0M5K0NOxw473WvfL
+         LiQ9QfKnxkSCT6xBgttVDJUVs/0Zi3HPkqIelat3l7o6wPh1dspA5pn09CRFUgOQACa/
+         8nl67ooK8btEibjOfIQvC7F9poEzItq0uT5PXnsA1JobO3CQHMYCGIexjrgElBsxOSJA
+         zSrFbdS0VEAuHfHMLZwlmy4hlgM4fz0Tfw7GGro98L27HrwIl2VAJI5JtbEwDjWKoQR+
+         Tn+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4ehZ01ierpa8aV+DwFDA/QfU8AbJ3Sxz0urqCktyHto=;
+        b=lgCC8vJKYoyd4G9RXq+kio+CPM3hjHF85JUgy2ro9LT1YRuUBw5y4b6T0shR0OM/KA
+         x6YJzLJb+sYO8dv0I9rgeF9fm9oH+VxJxPA4V8+5xuQUG5+3ouiR2AeUMuVg5cQGbiu9
+         kPKYCaFqlo/otXk7LSQwt5YOqzxuHMKZFZmcCKinOQ6YtyV+PV0Yk6ZxH5c4DfJsIhvB
+         T0WhagyAHcTzmBTHLJKECU8qyJqlwyhqlA7+WyGBguXPOMazWCdb3GFCT/LQdao43Lzf
+         zU5DWyCA0IzEQ3M5qkVzyxo9uo290c8PIh3A+Rc5zUV0VNE8z9LACuZXlLwIU2ppdfYE
+         NwmA==
+X-Gm-Message-State: ACrzQf2JHQGOKRsmODagyaqTTBUQYwmMkHZD1A5lAPnLL8zhpbEaXzjg
+        qof9HyQ1QHJbLvV/uoAg2LiWhPt60N1Guw==
+X-Google-Smtp-Source: AMsMyM48ImG4+1wZ8Ib7kLBNZkQzNRMtywTwNKeQsq6baW5JUi3+2dCgzBh1fbWoli1bPXgJu/9mXg==
+X-Received: by 2002:ac2:52b1:0:b0:499:f7ac:14da with SMTP id r17-20020ac252b1000000b00499f7ac14damr4742858lfm.597.1663495161116;
+        Sun, 18 Sep 2022 02:59:21 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f24-20020ac25cd8000000b0049468f9e697sm4574959lfq.236.2022.09.18.02.59.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 02:59:20 -0700 (PDT)
+Message-ID: <286f4aee-0774-2206-3a96-5ae27dcfbc9b@linaro.org>
+Date:   Sun, 18 Sep 2022 10:59:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND v3 1/9] dt-bindings: mediatek: modify item
+ formatting for gamma
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [PATCH 4/4] dmaengine: apple-admac: Trigger shared reset
-Date:   Sun, 18 Sep 2022 11:58:45 +0200
-Message-Id: <20220918095845.68860-5-povik+lin@cutebit.org>
-In-Reply-To: <20220918095845.68860-1-povik+lin@cutebit.org>
-References: <20220918095845.68860-1-povik+lin@cutebit.org>
-MIME-Version: 1.0
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "zheng-yan.chen" <zheng-yan.chen@mediatek.com>
+References: <20220912013006.27541-1-jason-jh.lin@mediatek.com>
+ <20220912013006.27541-2-jason-jh.lin@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220912013006.27541-2-jason-jh.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a reset domain is attached to the device, obtain a shared reference
-to it and trigger it. Typically on a chip the ADMAC controller will
-share a reset domain with the MCA peripheral.
+On 12/09/2022 02:29, Jason-JH.Lin wrote:
+> From: "zheng-yan.chen" <zheng-yan.chen@mediatek.com>
+> 
+> Since the items with only one const should be dedicated as enum,
+> merge all such items into one enum item.
+> 
+> Fixes: 4ed545e7d100 ("dt-bindings: display: mediatek: disp: split each block to individual yaml")
+> Signed-off-by: zheng-yan.chen <zheng-yan.chen@mediatek.com>
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
- drivers/dma/apple-admac.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/dma/apple-admac.c b/drivers/dma/apple-admac.c
-index 7d1b76678032..317ca76ccafd 100644
---- a/drivers/dma/apple-admac.c
-+++ b/drivers/dma/apple-admac.c
-@@ -12,8 +12,9 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of_dma.h>
--#include <linux/interrupt.h>
-+#include <linux/reset.h>
- #include <linux/spinlock.h>
-+#include <linux/interrupt.h>
- 
- #include "dmaengine.h"
- 
-@@ -95,6 +96,7 @@ struct admac_data {
- 	struct dma_device dma;
- 	struct device *dev;
- 	__iomem void *base;
-+	struct reset_control *rstc;
- 
- 	int irq;
- 	int irq_index;
-@@ -732,6 +734,10 @@ static int admac_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(ad->base),
- 				     "unable to obtain MMIO resource\n");
- 
-+	ad->rstc = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
-+	if (IS_ERR(ad->rstc))
-+		return PTR_ERR(ad->rstc);
-+
- 	dma = &ad->dma;
- 
- 	dma_cap_set(DMA_PRIVATE, dma->cap_mask);
-@@ -770,10 +776,17 @@ static int admac_probe(struct platform_device *pdev)
- 		tasklet_setup(&adchan->tasklet, admac_chan_tasklet);
- 	}
- 
--	err = request_irq(irq, admac_interrupt, 0, dev_name(&pdev->dev), ad);
-+	err = reset_control_reset(ad->rstc);
- 	if (err)
- 		return dev_err_probe(&pdev->dev, err,
--				     "unable to register interrupt\n");
-+				     "unable to trigger reset\n");
-+
-+	err = request_irq(irq, admac_interrupt, 0, dev_name(&pdev->dev), ad);
-+	if (err) {
-+		dev_err_probe(&pdev->dev, err,
-+				"unable to register interrupt\n");
-+		goto free_reset;
-+	}
- 
- 	err = dma_async_device_register(&ad->dma);
- 	if (err) {
-@@ -792,6 +805,8 @@ static int admac_probe(struct platform_device *pdev)
- 
- free_irq:
- 	free_irq(ad->irq, ad);
-+free_reset:
-+	reset_control_rearm(ad->rstc);
- 	return err;
- }
- 
-@@ -802,6 +817,7 @@ static int admac_remove(struct platform_device *pdev)
- 	of_dma_controller_free(pdev->dev.of_node);
- 	dma_async_device_unregister(&ad->dma);
- 	free_irq(ad->irq, ad);
-+	reset_control_rearm(ad->rstc);
- 
- 	return 0;
- }
--- 
-2.33.0
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
