@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F49E5BBE8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 17:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B28B5BBE92
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 17:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiIRPCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 11:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S229924AbiIRPGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 11:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIRPCC (ORCPT
+        with ESMTP id S229912AbiIRPGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 11:02:02 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD49DE91
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 08:02:00 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28IF1XbV083496;
-        Mon, 19 Sep 2022 00:01:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Mon, 19 Sep 2022 00:01:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28IF1Wur083489
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 19 Sep 2022 00:01:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <55111c45-0f8f-c6f9-640c-6919939b77dd@I-love.SAKURA.ne.jp>
-Date:   Mon, 19 Sep 2022 00:01:30 +0900
+        Sun, 18 Sep 2022 11:06:24 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EE20BC9;
+        Sun, 18 Sep 2022 08:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=OP4My9HrBwrgFfmGL1p0+PbHONYIVGlnegSVTH0ck0c=; b=2I3/gSUjFS7cGzzQNtNFcknRvh
+        KtuuhWFGr89MM+W1qami7qMcamegaCnxb/2JxA8TmjTH56SWiDtnfKcVB98EajPWYqsMbrcfDG/tN
+        QYYvEEuDx/DBxJ+JpxQTAuDWW6n/8QLzHX9nEGb3JMrD84ONYUvNW7jcsPmW66AE+kT2c2xDO93NJ
+        svR4BxGH0TfiAbqnmr7asm3b1egW35PP32DYDgvOTHjF/5fR0E1rQAeRs8EVmMoHFUiaiqflo+w4+
+        ESJ68ZtcSq5+5ZliJe79yya3rQHckXhhF4Yh+osFadlN1CcBLGND0JPva6QOnx8b6nytdw00/hpY3
+        j7qUHymw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oZvsD-00HPIR-Cm; Sun, 18 Sep 2022 15:06:21 +0000
+Message-ID: <d240fbc9-fcc7-2951-98b0-b8131174ffea@infradead.org>
+Date:   Sun, 18 Sep 2022 08:06:15 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
+Subject: Re: [PATCH] i2c: viperboard: fix repeated words in comments
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH] lockdep: report name and key when look_up_lock_class() got
- confused
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220918094735.18466-1-yuanjilin@cdjrlc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220918094735.18466-1-yuanjilin@cdjrlc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Printing this information will be helpful.
 
-  ------------[ cut here ]------------
-  class->name=slock-AF_INET6 lock->name=l2tp_sock lock->key=l2tp_socket_class
-  WARNING: CPU: 2 PID: 9237 at kernel/locking/lockdep.c:940 look_up_lock_class+0xcc/0x140
-  Modules linked in:
-  CPU: 2 PID: 9237 Comm: a.out Not tainted 6.0.0-rc5-00094-ga335366bad13-dirty #860
-  Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-  RIP: 0010:look_up_lock_class+0xcc/0x140
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- kernel/locking/lockdep.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 9/18/22 02:47, Jilin Yuan wrote:
+> Delete the redundant word 'to'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/i2c/busses/i2c-viperboard.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
+> index 8b5322c3bce0..8f87394abbcf 100644
+> --- a/drivers/i2c/busses/i2c-viperboard.c
+> +++ b/drivers/i2c/busses/i2c-viperboard.c
+> @@ -318,7 +318,7 @@ static int vprbrd_i2c_xfer(struct i2c_adapter *i2c, struct i2c_msg *msgs,
+>  			amsg->addr = pmsg->addr;
+>  			amsg->unknown1 = 0x00;
+>  			amsg->len = cpu_to_le16(pmsg->len);
+> -			/* send the addr, the data goes to to board */
+> +			/* send the addr, the data goes to board */
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 64a13eb56078..a22469dbeeee 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -934,8 +934,10 @@ look_up_lock_class(const struct lockdep_map *lock, unsigned int subclass)
- 			 * Huh! same key, different name? Did someone trample
- 			 * on some memory? We're most confused.
- 			 */
--			WARN_ON_ONCE(class->name != lock->name &&
--				     lock->key != &__lockdep_no_validate__);
-+			WARN_ONCE(class->name != lock->name &&
-+				  lock->key != &__lockdep_no_validate__,
-+				  "class->name=%s lock->name=%s lock->key=%ps\n",
-+				  class->name, lock->name, lock->key);
- 			return class;
- 		}
- 	}
+preferably:		                           goes to the board */
+
+>  			ret = vprbrd_i2c_addr(vb->usb_dev, amsg);
+>  			if (ret < 0)
+>  				error = ret;
+
 -- 
-2.34.1
-
+~Randy
