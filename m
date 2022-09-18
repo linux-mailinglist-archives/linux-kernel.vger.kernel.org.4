@@ -2,76 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD825BBE2C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 15:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FBB5BBE2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 15:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiIRNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 09:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S229735AbiIRNte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 09:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiIRNnj (ORCPT
+        with ESMTP id S229613AbiIRNta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 09:43:39 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B0323BDD;
-        Sun, 18 Sep 2022 06:43:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663508548; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=K2xzEwjPfm9McdYoT6CtcnjWipbsqLDzZV7Clksk95RPQUoWLMzO1XVc2P29ZNdIcA4HVuBpgU/mSBrFyeOMc9HXATMAxTP9gO5bmsId3YjT47ddyPD7A4x1vZTukKkXu9Uuqvr+VIJoR85c2h/IPlWYpJZKrKDVEzRzk9LUAa0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663508548; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=8AjFH1BLUb+TXyGp2qTPrkMzOdVeStVDjagqGC2aBMo=; 
-        b=k5ro0PdUWeD7ifL7y9wqMH53863XjWpCuR67enTfGR76JmfnDXjnsS+9C9GKavijbpoGxVS2GoAryNdumIAgxXzdHilrIjq7lbXhmgN2/OOOqD1Bv800FklRApE/tQXk/bReBhZ/+8MZVQf6Gbxa2x0ufZ93ZqQPmUxMy+K30mc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663508548;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=8AjFH1BLUb+TXyGp2qTPrkMzOdVeStVDjagqGC2aBMo=;
-        b=bOAsHtRVRRMFx5lmw2zizSLb0EJFkxp9q3/5gucFn4LWmwIP7ArDbvCamLii+03d
-        w0s2JuMpvZx4/kBteyPawPN6Uton2ZmgSxi6swTj4xenz/RHOeT5sQDYzghX1fa1gOl
-        zJqeFpA5yLcbibvIzTcCmDKFMLmL9OZhgxZ3HI8E=
-Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 16635085485581009.1193879532758; Sun, 18 Sep 2022 06:42:28 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Petr Louda <petr.louda@outlook.cz>
-Subject: [PATCH v3 net-next 10/10] mips: dts: ralink: mt7621: add GB-PC2 LEDs
-Date:   Sun, 18 Sep 2022 16:41:18 +0300
-Message-Id: <20220918134118.554813-11-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220918134118.554813-1-arinc.unal@arinc9.com>
-References: <20220918134118.554813-1-arinc.unal@arinc9.com>
+        Sun, 18 Sep 2022 09:49:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4F3C17
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 06:49:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9DEAB80FF0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 13:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE916C433D6;
+        Sun, 18 Sep 2022 13:49:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663508965;
+        bh=b9e71F3nMW7cIsiR4wi0l6hkI8dVVqpIwHBb+/eFsLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pCAlmFkDeRC+AmLbAAxtBpNPbWcnPkGwNCgwE8VlNrYfBSjlifMtSYS97q+/NKFkb
+         B2LCGod2DxM7N4zUvoUX9FqCY3JMRKAbRPwqaS/rg0m3OnaT3r9L9CLNZZf/+xdG1k
+         j/QPEamLZ4APABsLJ38uaHFQEdRbJnT8numeEEfk=
+Date:   Sun, 18 Sep 2022 15:49:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192e: fix CamelCase struct member
+Message-ID: <YyciAPSyyusp1eCR@kroah.com>
+References: <20220918114926.3809060-1-vvidic@valentin-vidic.from.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220918114926.3809060-1-vvidic@valentin-vidic.from.hr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,99 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing LEDs for GB-PC2. The ethblack-green, ethblue-green, power
-and system LEDs weren't added previously, because they don't exist on the
-device schematics. Tests on a GB-PC2 by me and Petr proved otherwise.
+On Sun, Sep 18, 2022 at 01:49:26PM +0200, Valentin Vidic wrote:
+> Fix checkpatch warnings for struct member pFirmware.
+> 
+> Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+> ---
+>  drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c      | 8 ++++----
+>  drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c | 4 ++--
+>  drivers/staging/rtl8192e/rtl8192e/rtl_core.c        | 8 ++++----
+>  drivers/staging/rtl8192e/rtl8192e/rtl_core.h        | 2 +-
+>  4 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> index 4b9249195b5a..6308a25e064c 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> @@ -707,19 +707,19 @@ bool rtl92e_start_adapter(struct net_device *dev)
+>  		rtl92e_writeb(dev, ANAPAR, 0x37);
+>  		mdelay(500);
+>  	}
+> -	priv->pFirmware->status = FW_STATUS_0_INIT;
+> +	priv->pfirmware->status = FW_STATUS_0_INIT;
 
-The i2c bus cannot be used on GB-PC2 as its pins are wired to LEDs instead,
-and GB-PC1 does not use it. Therefore, do not enable it on both devices.
+What does "pfirmware" mean here?
 
-Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC2_V1.1_schematic.pdf
-Tested-by: Petr Louda <petr.louda@outlook.cz>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  6 ---
- .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  | 42 ++++++++++++++++---
- 2 files changed, 36 insertions(+), 12 deletions(-)
+If you fix up camelcase warnings, please do so in a way that is the
+proper Linux kernel style, not just making everything lowercase.
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 6ecb8165efe8..0128bd8fa7ed 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -20,12 +20,6 @@ chosen {
- 		bootargs = "console=ttyS0,57600";
- 	};
- 
--	palmbus: palmbus@1e000000 {
--		i2c@900 {
--			status = "okay";
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index 5f52193a4c37..7515555388ae 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -20,12 +20,6 @@ chosen {
- 		bootargs = "console=ttyS0,57600";
- 	};
- 
--	palmbus: palmbus@1e000000 {
--		i2c@900 {
--			status = "okay";
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-@@ -35,6 +29,42 @@ key-reset {
- 			linux,code = <KEY_RESTART>;
- 		};
- 	};
-+
-+	gpio-leds {
-+		compatible = "gpio-leds";
-+
-+		ethblack-green {
-+			label = "green:ethblack";
-+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethblue-green {
-+			label = "green:ethblue";
-+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethyellow-green {
-+			label = "green:ethyellow";
-+			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethyellow-orange {
-+			label = "orange:ethyellow";
-+			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		power {
-+			label = "green:power";
-+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "default-on";
-+		};
-+
-+		system {
-+			label = "green:system";
-+			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "disk-activity";
-+		};
-+	};
- };
- 
- &mmc {
--- 
-2.34.1
+Look up Hungarian notation and why the original was named this way and
+why this isn't needed in Linux at all (i.e. we have modern compilers.)
 
+thanks,
+
+greg k-h
