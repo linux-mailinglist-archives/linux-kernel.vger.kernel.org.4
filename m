@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985245BBE75
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D50C5BBE77
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Sep 2022 16:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiIROg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 10:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S229786AbiIROhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 10:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiIROgp (ORCPT
+        with ESMTP id S229813AbiIROgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 18 Sep 2022 10:36:45 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F96220C0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id k12so18944399qkj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C70220EE
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d15so18943638qka.9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 07:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=13QwewIwzroQU6uQsOD5mJo714A427B3glcmrYb0jfs=;
-        b=Qr7qp0URoDQJLonqKRKVXmRkpDxoBoVE6IGqFVWHgJrtH5v8QvK1akfUJxqfcU4oJJ
-         LFbY+dp0gj2opdgVdyYIoAVRS06DL0SKU0KlCX3KHAjiY+nRjjwxQpcafzHQ6azdYisF
-         gxSqoUI2Vnlb/+crK0xnNpQlXv8ywVJcAPiPrZTVz2Ne7EuVcdBqZFF7l5hcL4kibo5e
-         mP/q/r/ynCUM5zvZcSrpyd0cBesxdawKHtzgo0uK+MQVgIjUdudnFLbkqY7rxPkrwv5r
-         NdEdQ9EXGzncahSKREs9O4jgIsCHretjToBoXQn+u/0NQyWgrPY44mkQk8/xkVt6C/+r
-         6+LA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=aFLFcX0Ge1NaS+vS/PtWRb3M+OHkdYHPDl97KJAqEJg=;
+        b=WmQiztou3FCfn/Hz1KGe1HZ1abdjEdJxRWsNN54qdxJ+aCYDS2Gvb+rvhEUYqiZdev
+         eO1vpCS8B2Sbfv3IaxaKVs3r3PSoRAguCWllD/u1EuSWT5alec7ec4DWcaanJcdoKyd1
+         Bw4/OGAtQtcx9YmAMgCj8Vs+K2kxu10QKvW0w87NhAXcB/U+yqayovcMF3IkZik+oYPb
+         CaR6qD2CfcqbmLcl/CdW1wVQSLTLJwwv2/rD1uSfUGclvVu7Eg1jMzEoVLwG375QIEGF
+         p7EerXK1ut/AthOy5fwLn1WKvnAdBe99mh59x3tY8WKnswLN5s8+y2PtOJaghwL9Ur85
+         x+XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=13QwewIwzroQU6uQsOD5mJo714A427B3glcmrYb0jfs=;
-        b=ylWnfcVYp4DKi8k9jeiN5WN2y/XtUnTz58aDox7A8Nhs384cqMT+zO+0lg71nArpr1
-         X67yV66KVg5g8Ima7opF+S20Dhh6QKiOoj+2o767kf7yNZcX6jsMflcvGGAq8lKEzBWb
-         jQYMWaMC+FZ0CgL8orcsuQF9rjm2Vcy0RytDCtajKDknUuV/BBCY1VER0oTKZIFfD6gd
-         UWz29/5SZ1lIiiKTrGcECNuWGJ8g71/nDEVcHNOLI6A+frdeROlykMc3jb3Gm1O/4/OI
-         feCCgtExQZlav6Gldk3lgoquINUjOLF54DmSFn8lAHFHFMXi402kiOQlDaPcAC/tn06I
-         C2ww==
-X-Gm-Message-State: ACrzQf30oMk9Horip48t+MudSHp5L93jliCku6/tFuGinLLSF2ct+ytK
-        dxktSzqyZDTBZNGchmAhsVfAQQ==
-X-Google-Smtp-Source: AMsMyM7pfQasD7jkJqYSKPTlg6d4Na6JLJVvUKrDnX/Rzru0o7Iaie995kOt0dsa5d39xUGMoOUn7A==
-X-Received: by 2002:a05:620a:29c5:b0:6ce:b8f3:fd5b with SMTP id s5-20020a05620a29c500b006ceb8f3fd5bmr10344295qkp.107.1663511802512;
-        Sun, 18 Sep 2022 07:36:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=aFLFcX0Ge1NaS+vS/PtWRb3M+OHkdYHPDl97KJAqEJg=;
+        b=tYIrJmBy8Xfe3ChIKZu/TisrZqK42zfC9mHFjlC9AwGPAWpkeCwfLDL4oHl3TnkU8b
+         EJtjk/SHM6cwUqppUiIZpHwy91DlcC3KXFD5a/5mEbekq96gFc6c09uhhba0ikwwMv2+
+         NemCiUtX4GWrIa3CtOrlyggA5ryBZax2tN234dzT1Jq3XqVk2HZJDwAqXfhAj21U6a5N
+         6H/7mhiC/Jp3bn1YiBDlSofyK6RqUNqWrv0TpzMxIacP+kwCmUDK5AIBrOfyAJS57gP7
+         DX+50Xz0Pk0EkJaQCSRRweYyUq3Dw4AGvKEmkxffo4qyXLG56A6yWl4oS2/4JZiq4Jcw
+         Kg7Q==
+X-Gm-Message-State: ACrzQf0Rm4SwcA9ezgi04A1v9gCVP+mGXzlXKP2j7wSUfl3bx8ZN2bND
+        rVmLARalJDuArF061fVHuQk/gYcc57CBRw==
+X-Google-Smtp-Source: AMsMyM64Fbn0DNezINL7uBn/WUKg37RK5a4t1KOiMSSRJhl3qjD+05cUsHM3QMSmlODukfBEHyxmdw==
+X-Received: by 2002:a05:620a:280b:b0:6b6:5a6c:9acf with SMTP id f11-20020a05620a280b00b006b65a6c9acfmr10086348qkp.749.1663511803455;
+        Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id q31-20020a05620a2a5f00b006bb0e5ca4bbsm11456215qkp.85.2022.09.18.07.36.41
+        by smtp.gmail.com with ESMTPSA id q31-20020a05620a2a5f00b006bb0e5ca4bbsm11456215qkp.85.2022.09.18.07.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 07:36:42 -0700 (PDT)
+        Sun, 18 Sep 2022 07:36:43 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linux-iio@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
@@ -55,10 +56,12 @@ Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
         groeck@chromium.org, jic23@kernel.org, david@lechnology.com,
         robertcnelson@gmail.com,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v3 0/4] Implement support for Counter array components
-Date:   Sun, 18 Sep 2022 10:36:30 -0400
-Message-Id: <cover.1663511054.git.william.gray@linaro.org>
+Subject: [PATCH v3 1/4] counter: Introduce the Signal polarity component
+Date:   Sun, 18 Sep 2022 10:36:31 -0400
+Message-Id: <dbf9d9cfb9ba3b46b177e0a2c24520e8e2def1bb.1663511054.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1663511054.git.william.gray@linaro.org>
+References: <cover.1663511054.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,71 +73,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v3:
- - Fix array length overwrite by allocating space for each array element
- - Add support for counter array component reads from Counter chrdev
+The Signal polarity component represents the active level of a
+respective Signal. There are two possible states: positive (rising edge)
+and negative (falling edge); enum counter_signal_polarity represents
+these states. A convenience macro COUNTER_COMP_POLARITY() is provided
+for driver authors to declare a Signal polarity component.
 
-The COUNTER_COMP_ARRAY Counter component type is introduced to enable
-support for Counter array components. With Counter array components,
-exposure for buffers on counter devices can be defined via new Counter
-array component macros. This should simplify code for driver authors who
-would otherwise need to define individual Counter components for each
-array element.
+Cc: Julien Panis <jpanis@baylibre.com>
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ Documentation/ABI/testing/sysfs-bus-counter | 13 +++++++++++++
+ drivers/counter/counter-sysfs.c             | 11 +++++++++++
+ include/linux/counter.h                     | 10 ++++++++++
+ include/uapi/linux/counter.h                |  6 ++++++
+ 4 files changed, 40 insertions(+)
 
-Driver authors can handle reads/writes for an array component by
-receiving an element index via the `idx` parameter and processing the
-respective value via the `val` parameter.
-
-For example, suppose a driver wants to expose a Count's read-only
-capture buffer of four elements using a callback
-`foobar_capture_read()`::
-
-        DEFINE_COUNTER_ARRAY(foobar_capture_array, COUNTER_COMP_U64,
-                             NULL, 4)
-        COUNTER_COMP_COUNT_ARRAY_U64("capture", foobar_capture_read,
-                                     NULL, foobar_capture_array)
-
-Respective sysfs attributes for each array element would appear for the
-respective Count:
-
-* /sys/bus/counter/devices/counterX/countY/capture0
-* /sys/bus/counter/devices/counterX/countY/capture1
-* /sys/bus/counter/devices/counterX/countY/capture2
-* /sys/bus/counter/devices/counterX/countY/capture3
-
-If a user tries to read _capture2_ for example, `idx` will be `2` when
-passed to the `foobar_capture_read()` callback, and thus the driver
-knows which array element to handle.
-
-In addition, this patchset introduces the Signal polarity component,
-which represents the active level of a respective Signal. There are two
-possible states: positive (rising edge) and negative (falling edge). The
-104-quad-8 driver is updated to expose its index_polarity functionality
-via this new polarity component.
-
-A macro COUNTER_COMP_ARRAY_POLARITY() is provided for driver authors to
-support Counter arrays of Signal polarity component type;
-DEFINE_COUNTER_AVAILABLE may be used to define the polarity modes that
-are passed to DEFINE_COUNTER_ARRAY. The only component types supported
-for Counter arrays currently are COUNTER_COMP_U64 and
-COUNTER_COMP_SIGNAL_POLARITY.
-
-William Breathitt Gray (4):
-  counter: Introduce the Signal polarity component
-  counter: 104-quad-8: Add Signal polarity component
-  counter: Consolidate Counter extension sysfs attribute creation
-  counter: Introduce the COUNTER_COMP_ARRAY component type
-
- Documentation/ABI/testing/sysfs-bus-counter |  13 +
- drivers/counter/104-quad-8.c                |  35 +++
- drivers/counter/counter-chrdev.c            |  47 ++-
- drivers/counter/counter-sysfs.c             | 303 ++++++++++++++++----
- include/linux/counter.h                     | 131 +++++++++
- include/uapi/linux/counter.h                |   6 +
- 6 files changed, 483 insertions(+), 52 deletions(-)
-
-
-base-commit: a12224997bec72d231a8dd642876e6364decdc45
+diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/ABI/testing/sysfs-bus-counter
+index 06c2b3e27e0b..a234022f9add 100644
+--- a/Documentation/ABI/testing/sysfs-bus-counter
++++ b/Documentation/ABI/testing/sysfs-bus-counter
+@@ -303,6 +303,19 @@ Description:
+ 		Discrete set of available values for the respective Signal Y
+ 		configuration are listed in this file.
+ 
++What:		/sys/bus/counter/devices/counterX/signalY/polarity
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Active level of Signal Y. The following polarity values are
++		available:
++
++		positive:
++			Signal high state considered active level (rising edge).
++
++		negative:
++			Signal low state considered active level (falling edge).
++
+ What:		/sys/bus/counter/devices/counterX/signalY/name
+ KernelVersion:	5.2
+ Contact:	linux-iio@vger.kernel.org
+diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
+index 04eac41dad33..92d3d4f549cb 100644
+--- a/drivers/counter/counter-sysfs.c
++++ b/drivers/counter/counter-sysfs.c
+@@ -91,6 +91,11 @@ static const char *const counter_count_mode_str[] = {
+ 	[COUNTER_COUNT_MODE_MODULO_N] = "modulo-n"
+ };
+ 
++static const char *const counter_signal_polarity_str[] = {
++	[COUNTER_SIGNAL_POLARITY_POSITIVE] = "positive",
++	[COUNTER_SIGNAL_POLARITY_NEGATIVE] = "negative"
++};
++
+ static ssize_t counter_comp_u8_show(struct device *dev,
+ 				    struct device_attribute *attr, char *buf)
+ {
+@@ -201,6 +206,8 @@ static ssize_t counter_comp_u32_show(struct device *dev,
+ 		return sysfs_emit(buf, "%s\n", counter_count_direction_str[data]);
+ 	case COUNTER_COMP_COUNT_MODE:
+ 		return sysfs_emit(buf, "%s\n", counter_count_mode_str[data]);
++	case COUNTER_COMP_SIGNAL_POLARITY:
++		return sysfs_emit(buf, "%s\n", counter_signal_polarity_str[data]);
+ 	default:
+ 		return sysfs_emit(buf, "%u\n", (unsigned int)data);
+ 	}
+@@ -252,6 +259,10 @@ static ssize_t counter_comp_u32_store(struct device *dev,
+ 		err = counter_find_enum(&data, avail->enums, avail->num_items,
+ 					buf, counter_count_mode_str);
+ 		break;
++	case COUNTER_COMP_SIGNAL_POLARITY:
++		err = counter_find_enum(&data, avail->enums, avail->num_items,
++					buf, counter_signal_polarity_str);
++		break;
+ 	default:
+ 		err = kstrtou32(buf, 0, &data);
+ 		break;
+diff --git a/include/linux/counter.h b/include/linux/counter.h
+index 1fe17f5adb09..d508b260aaca 100644
+--- a/include/linux/counter.h
++++ b/include/linux/counter.h
+@@ -31,6 +31,7 @@ enum counter_comp_type {
+ 	COUNTER_COMP_ENUM,
+ 	COUNTER_COMP_COUNT_DIRECTION,
+ 	COUNTER_COMP_COUNT_MODE,
++	COUNTER_COMP_SIGNAL_POLARITY,
+ };
+ 
+ /**
+@@ -483,4 +484,13 @@ struct counter_available {
+ #define COUNTER_COMP_PRESET_ENABLE(_read, _write) \
+ 	COUNTER_COMP_COUNT_BOOL("preset_enable", _read, _write)
+ 
++#define COUNTER_COMP_POLARITY(_read, _write, _available) \
++{ \
++	.type = COUNTER_COMP_SIGNAL_POLARITY, \
++	.name = "polarity", \
++	.signal_u32_read = (_read), \
++	.signal_u32_write = (_write), \
++	.priv = &(_available), \
++}
++
+ #endif /* _COUNTER_H_ */
+diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
+index 96c5ffd368ad..e9610e1944dc 100644
+--- a/include/uapi/linux/counter.h
++++ b/include/uapi/linux/counter.h
+@@ -153,4 +153,10 @@ enum counter_synapse_action {
+ 	COUNTER_SYNAPSE_ACTION_BOTH_EDGES,
+ };
+ 
++/* Signal polarity values */
++enum counter_signal_polarity {
++	COUNTER_SIGNAL_POLARITY_POSITIVE,
++	COUNTER_SIGNAL_POLARITY_NEGATIVE,
++};
++
+ #endif /* _UAPI_COUNTER_H_ */
 -- 
 2.37.3
 
