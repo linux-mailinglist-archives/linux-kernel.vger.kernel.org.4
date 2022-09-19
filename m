@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60545BC4E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E908F5BC4FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiISJBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S229792AbiISJGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiISJBm (ORCPT
+        with ESMTP id S229762AbiISJGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:01:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813D41C135;
-        Mon, 19 Sep 2022 02:01:40 -0700 (PDT)
-Received: from canpemm100006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWJT64862zMn2F;
-        Mon, 19 Sep 2022 16:56:58 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm100006.china.huawei.com (7.192.104.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 17:01:38 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Mon, 19 Sep 2022 17:01:38 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Akinobu Mita <akinobu.mita@gmail.com>
-CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH -next v2 1/5] docs: notifier-error-inject: fix non-working
- usage of negative values
-Thread-Topic: [PATCH -next v2 1/5] docs: notifier-error-inject: fix
- non-working usage of negative values
-Thread-Index: AdjMBWnu287D6MO2SCOsmHrOPTOinw==
-Date:   Mon, 19 Sep 2022 09:01:38 +0000
-Message-ID: <076b1f2a38ab4ca4a61e6a79c765bcba@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 19 Sep 2022 05:06:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312337679;
+        Mon, 19 Sep 2022 02:06:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E201AB80B17;
+        Mon, 19 Sep 2022 09:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80776C433C1;
+        Mon, 19 Sep 2022 09:06:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663578394;
+        bh=dTBQ7T1QioQLJ8cwIP5KWmbjaen9neD2VS2nvDARryw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qXXZoYJcoNLSIxyFydSIf4PXN9j8G46Eg4wvruqpVOjsvxFW60YcyiCiTX1zpGNiN
+         GU0FrXt4rB3ykDU3/oahFgG/KojGqNFEABHfscNst7lsyZFsXGHMMzj65KAcWcdzXD
+         DDh+glhfp6wiZjbDEyZ9mxRgo2D+OQnJo2uD5QZQTsuhxpCf+DWfKeFK1lZ96AlBFs
+         rKQ3mRE0Mo+YFA76CAWJsGQheFEiuL3PR8RIGvrbyWGy8JtKXauKfUaPDmMmTmUiSu
+         L+usZiXLhQZU511Qr8HOEJ7bLp8PRK0ku3/ZlWfR8lxS4mUMT1fshSxrtQzF7S0db0
+         lQMmR2sXUj9aA==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oaChb-00B1Vp-Nh;
+        Mon, 19 Sep 2022 10:06:32 +0100
+Date:   Mon, 19 Sep 2022 10:04:30 +0100
+Message-ID: <87fsgnlopt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+In-Reply-To: <20220919140531.3741d146@canb.auug.org.au>
+References: <20220919140531.3741d146@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, broonie@kernel.org, oliver.upton@linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,20 +70,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkhDQoNCj4gDQo+IE9uIDE3LjA5LjIyIDA3OjM5LCBBa2lub2J1IE1pdGEgd3JvdGU6DQo+ID4g
-MjAyMuW5tDnmnIgxNeaXpSjmnKgpIDE4OjAxIFpoYW8gR29uZ3lpIDx6aGFvZ29uZ3lpQGh1YXdl
-aS5jb20+Og0KPiA+Pg0KPiA+PiBGYXVsdCBpbmplY3Rpb24gdXNlcyBkZWJ1Z2ZzIGluIGEgd2F5
-IHRoYXQgdGhlIHByb3ZpZGVkIHZhbHVlcyB2aWENCj4gPj4gc3lzZnMgYXJlIGludGVycHJldGVk
-IGFzIHU2NC4gUHJvdmlkaW5nIG5lZ2F0aXZlIG51bWJlcnMgcmVzdWx0cyBpbg0KPiA+PiBhbiBl
-cnJvcjoNCj4gPj4NCj4gPj4gICAgIyBjZCBzeXMva2VybmVsL2RlYnVnL25vdGlmaWVyLWVycm9y
-LWluamVjdC9tZW1vcnkNCj4gPj4gICAgIyAgZWNobyAtMTIgPiBhY3Rpb25zL01FTV9HT0lOR19P
-TkxJTkUvZXJyb3INCj4gPj4gICAgLWJhc2g6IGVjaG86IHdyaXRlIGVycm9yOiBJbnZhbGlkIGFy
-Z3VtZW50DQo+ID4+DQo+ID4+IFVwZGF0ZSB0aGUgZG9jcyBhbmQgZXhhbXBsZXMgdG8gdXNlICJw
-cmludGYgJSN4IDx2YWw+IiBpbiB0aGVzZSBjYXNlcy4NCj4gPg0KPiA+IEknZCByYXRoZXIgZml4
-IHRoZSBub3RpZmllci1lcnJvci1pbmplY3QgbW9kdWxlIHRoYW4gY2hhbmdlIHRoZSB1c2VyDQo+
-IGludGVyZmFjZS4NCj4gPiBJJ2xsIHNlbmQgYSBwYXRjaCwgc28gY291bGQgeW91IGNoZWNrIGlm
-IHRoYXQgc29sdmVzIHRoZSBwcm9ibGVtLg0KPiA+DQo+IA0KPiBUaGF0IHdpbGwgYWxzbyBtYWtl
-IHBhdGNoICMyIHVubmVjZXNzYXJ5LCBjb3JyZWN0Pw0KDQpZZXMuIEJ1dCB0aGVyZSBpcyBhbm90
-aGVyIGNvbW1pdCAwMDU3NDc1MjZkNGYzYzJlYzk5NTg5MWU5NWNiNzYyNTE2MTAyMmY5IHRoYXQg
-aGFzIHRoZSBzYW1lIHByb2JsZW0uDQoNClRoYW5rcyENCg0KPiANCj4gLS0NCj4gVGhhbmtzLA0K
-PiANCj4gRGF2aWQgLyBkaGlsZGVuYg0KDQo=
+Hi Stephen,
+
+Thanks for the heads up.
+
+On Mon, 19 Sep 2022 05:05:31 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+> 
+>   arch/arm64/kvm/sys_regs.c
+> 
+> between commit:
+> 
+>   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
+> 
+> from the arm64 tree and commit:
+> 
+>   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/arm64/kvm/sys_regs.c
+> index 2ef1121ab844,9569772cf09a..000000000000
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@@ -1208,9 -1210,9 +1210,9 @@@ static int set_id_aa64pfr0_el1(struct k
+>   		return -EINVAL;
+>   
+>   	/* We can only differ with CSV[23], and anything else is an error */
+> - 	val ^= read_id_reg(vcpu, rd, false);
+> + 	val ^= read_id_reg(vcpu, rd);
+>  -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+>  -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
+>  +	val &= ~((0xFUL << ID_AA64PFR0_EL1_CSV2_SHIFT) |
+>  +		 (0xFUL << ID_AA64PFR0_EL1_CSV3_SHIFT));
+>   	if (val)
+>   		return -EINVAL;
+
+Catalin, Will: in order to avoid further conflicts, I've taken the
+liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
+Let me know if that's a problem.
+
+Also, I've resolved the conflict in a slightly different way. Not that
+the above was wrong in any way, but we might as well fix it in a more
+idiomatic way:
+
+ 	/* We can only differ with CSV[23], and anything else is an error */
+ 	val ^= read_id_reg(vcpu, rd);
+-	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+-		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
++	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
++		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
+ 	if (val)
+ 		return -EINVAL;
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
