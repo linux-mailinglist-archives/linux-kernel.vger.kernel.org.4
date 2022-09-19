@@ -2,150 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECF65BC50A
+	by mail.lfdr.de (Postfix) with ESMTP id 62A745BC509
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiISJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
+        id S230249AbiISJKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiISJKd (ORCPT
+        with ESMTP id S230213AbiISJKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:10:33 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFD71F2F2;
-        Mon, 19 Sep 2022 02:10:32 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id a29so3828877pfk.5;
-        Mon, 19 Sep 2022 02:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=//7IDK9hf5emBmfzIVVyuap+G2fwMaQFUeXvJHIdsMs=;
-        b=gF5002VElAisVYUpDNvebYbP7hRiPqpUrVS8yOWP5RaA8boHKoX63kiitR3yNDFx+r
-         l2v0MXOluBRwaC4pTstSjE2bHoQ+C/Up/ZySPHNf1uKMReU9yfMMsVSSyD6je3TlxqH/
-         eaOFC9VY90mqyYa0AOMGdNEItWRTGu8ix5pQH1x3Q8GdnSQOf9To0LS9WVppt2ittUAC
-         dCr3n89qrKXaYbLv4aOS3Rgt0FFTejY51+oqixEcb8G0Ub05ibf/W4hQDBridCiT2qvz
-         COTN3q4qQpYjN/EspBa9n7SQJgKl3wLa2FQrUJEybTDB012TtfOWx33V8dvAsOnn/K6n
-         gZFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=//7IDK9hf5emBmfzIVVyuap+G2fwMaQFUeXvJHIdsMs=;
-        b=S+H/sYyohkYh4TIHy3cowcbpEjLu4wsLeEev9xBd/gxrsqf1UDnE+63O3QHvk+Yj/7
-         jbsjtjKd7XMmycP88iN48QBK9K+OiKKrIbI5R/SAwTZZtmgHGEKIwgHULXdbaUgbVZtE
-         g3oI1XJBGY69dnW4YwfVj2EbV3KrU4FklwLQBWWF+tYzRacbdi/k6f3fleADLwhc5qgD
-         +YWRvsjw99a3BiqXNJtsaFJEB1MgZ+pGj3r8HokxHeQWxdHl3mrLIsu7GsJTdn1Yo4E8
-         s2hyqr2SHAC5f1BRn4lqayMeDuKcfXK2mJLn88MNNVO1Mjvi6zDSa6c6Pp03iAaN7a4/
-         82hA==
-X-Gm-Message-State: ACrzQf1KDKnuf9INX48Wf8L5Q/cyzFyXvGJX0+kwfNmsnNnX3eZ9spSD
-        i2VDpBR6/8Yl/hz6jdLaq8w=
-X-Google-Smtp-Source: AMsMyM6dOaX5R7fVEL9/iJ18oLaiiMNomtLOusIPD++0/0BRut63i2bRM8jGFSpC4bl0XKRvjuQMOA==
-X-Received: by 2002:aa7:9717:0:b0:53e:84e4:dceb with SMTP id a23-20020aa79717000000b0053e84e4dcebmr17453406pfg.48.1663578631586;
-        Mon, 19 Sep 2022 02:10:31 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id r15-20020a63a54f000000b0043395af24f6sm18185684pgu.25.2022.09.19.02.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 02:10:31 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] KVM: x86/pmu: Limit the maximum number of supported AMD GP counters
-Date:   Mon, 19 Sep 2022 17:10:08 +0800
-Message-Id: <20220919091008.60695-3-likexu@tencent.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220919091008.60695-1-likexu@tencent.com>
-References: <20220919091008.60695-1-likexu@tencent.com>
+        Mon, 19 Sep 2022 05:10:37 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AEE1F621
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:10:33 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oaCnO-0003pY-UI; Mon, 19 Sep 2022 11:10:30 +0200
+Message-ID: <342fadc8-d902-3ada-fd61-67312d0da352@leemhuis.info>
+Date:   Mon, 19 Sep 2022 11:10:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: [regression] Bug 216475 - fbcon crashes during single gpu passthough
+ reattachment to host
+To:     Daniel Vetter <daniel.vetter@intel.com>
+Cc:     "Sergey V." <truesmb@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1663578634;87477a39;
+X-HE-SMSGID: 1oaCnO-0003pY-UI
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi, this is your Linux kernel regression tracker speaking.
 
-The AMD PerfMonV2 specification allows for a maximum of 16 GP counters,
-which is clearly not supported with zero code effort in the current KVM.
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216475 :
 
-A local macro (named like INTEL_PMC_MAX_GENERIC) is introduced to
-take back control of this virt capability, which also makes it easier to
-statically partition all available counters between hosts and guests.
+> Created attachment 301792 [details]
+> My dmesg right after VM shutdown
+> 
+> Hello, after 5.19 kernel many VFIO users have problems with reattaching GPU from guest to host. It works well previously (5.18.16 for me).
+> 
+> More complains about the issue:
+> https://www.reddit.com/r/VFIO/comments/wp85ve/linux_519_kernel_single_gpu_passthough_black/
+> 
+> My PC Spec:
+>   CPU: Ryzen 5950X
+>   RAM: 128GB
+>   GPU: NVIDIA RTX 3080
+>   OS: Arch Linux
+> 
+> How to reproduce:
+>   1. You have to have properly configured VM with working GPU passthough (too complicated to explain it here)
+>   2. When VM starts it detaches GPU from host by 'start.sh' (see below)
+>   3. VM starts properly, Windows loads properly
+>   4. Shutdown VM regularly and GPU should be reattached by 'revert.sh' (see below)
+> Actual results (5.19.*):
+>   5. Windows shutdowns, and GPU is not reattaching to host only black screen present and monitors shutdown (no signal)
+>   5.1 dmesg contains error message - dmesg.txt in attachments
+>     WARNING: CPU: 30 PID: 12528 at drivers/video/fbdev/core/fbcon.c:999 fbcon_init+0x5ce/0x670
+>     ...
+>     BUG: kernel NULL pointer dereference, address: 0000000000000330
+> Expected Result (5.18.* and previous):
+>   5. Windows shutdowns, and GPU successfully reattached to host
+> 
+> I have tried to bisect git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git v5.18.16 as good and v5.19.2 as bad
+> (I've done it for the first time, maybe I've done something wrong)
+> 
+> During bisect after some point my Linux doesn't boot, and it trying to mark those commits as bad.
+> Commit below might be not real problem causer
+> 
+> Commit which I found by bisect:
+> 
+> commit 3647d6d3dbdafc55f8c4ca8225966963252abe7b (refs/bisect/bad)
+> Author: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Date:   Tue Apr 5 23:03:33 2022 +0200
+> 
+>     fbcon: Move more code into fbcon_release
+> 
+>     con2fb_release_oldinfo() has a bunch more kfree() calls than
+>     fbcon_exit(), but since kfree() on NULL is harmless doing that in both
+>     places should be ok. This is also a bit more symmetric now again with
+>     fbcon_open also allocating the fbcon_ops structure.
+> 
+>     Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>     Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+>     Cc: Daniel Vetter <daniel@ffwll.ch>
+>     Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>     Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Cc: Du Cheng <ducheng2@gmail.com>
+>     Cc: Claudio Suarez <cssk@net-c.es>
+>     Link: https://patchwork.freedesktop.org/patch/msgid/20220405210335.3434130-16-daniel.vetter@ffwll.ch
+> 
+> 
+> start.sh
+> ========
+> #!/bin/bash
+> set -x
+> 
+> systemctl stop display-manager.service
+> while systemctl is-active --quiet "display-manager.service" ; do
+>     sleep 1
+> done
+> 
+> killall gdm-x-session
+> killall -u bormor
+> 
+> echo 0 > /sys/class/vtconsole/vtcon0/bind
+> echo 0 > /sys/class/vtconsole/vtcon1/bind
+> 
+> # Unbind EFI-Framebuffer
+> echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/unbind
+> 
+> # Avoid a Race condition by waiting 2 seconds. This can be calibrated to be shorter or longer if required for your system
+> sleep 2
+> 
+> # Unload all Nvidia drivers
+> modprobe -r nvidia_drm
+> modprobe -r nvidia_modeset
+> modprobe -r nvidia_uvm
+> modprobe -r nvidia
+> modprobe -r nouveau
+> 
+> # Unbind the GPU from display driver
+> virsh nodedev-detach pci_0000_09_00_0
+> virsh nodedev-detach pci_0000_09_00_1
+> 
+> # Load VFIO Kernel Module  
+> modprobe vfio-pci
+> 
+> 
+> revert.sh
+> ========
+> #!/bin/bash
+> set -x
+> 
+> # Unload VFIO-PCI Kernel Driver
+> modprobe -r vfio-pci
+> modprobe -r vfio_iommu_type1
+> modprobe -r vfio
+> 
+> virsh nodedev-reattach pci_0000_09_00_1
+> virsh nodedev-reattach pci_0000_09_00_0
+> 
+> echo 1 > /sys/class/vtconsole/vtcon0/bind
+> echo 1 > /sys/class/vtconsole/vtcon1/bind
+> 
+> nvidia-xconfig --query-gpu-info > /dev/null 2>&1
+> echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/bind
+> 
+> modprobe nvidia_drm
+> modprobe nvidia_modeset
+> modprobe nvidia_uvm
+> modprobe nvidia
+> modprobe nouveau
+> 
+> 
+> systemctl start display-manager.service
 
-Signed-off-by: Like Xu <likexu@tencent.com>
-Reviewed-by: Jim Mattson <jmattson@google.com>
----
- arch/x86/include/asm/kvm_host.h | 1 +
- arch/x86/kvm/svm/pmu.c          | 7 ++++---
- arch/x86/kvm/x86.c              | 3 +++
- 3 files changed, 8 insertions(+), 3 deletions(-)
+See the ticket for more details.
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 17abcf5c496a..1b3094616d87 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -506,6 +506,7 @@ struct kvm_pmc {
- #define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
- #define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
- #define KVM_PMC_MAX_FIXED	3
-+#define KVM_AMD_PMC_MAX_GENERIC	AMD64_NUM_COUNTERS_CORE
- struct kvm_pmu {
- 	unsigned nr_arch_gp_counters;
- 	unsigned nr_arch_fixed_counters;
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index f24613a108c5..e696979ee395 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -271,9 +271,10 @@ static void amd_pmu_init(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 	int i;
- 
--	BUILD_BUG_ON(AMD64_NUM_COUNTERS_CORE > INTEL_PMC_MAX_GENERIC);
-+	BUILD_BUG_ON(AMD64_NUM_COUNTERS_CORE > KVM_AMD_PMC_MAX_GENERIC);
-+	BUILD_BUG_ON(KVM_AMD_PMC_MAX_GENERIC > INTEL_PMC_MAX_GENERIC);
- 
--	for (i = 0; i < AMD64_NUM_COUNTERS_CORE ; i++) {
-+	for (i = 0; i < KVM_AMD_PMC_MAX_GENERIC ; i++) {
- 		pmu->gp_counters[i].type = KVM_PMC_GP;
- 		pmu->gp_counters[i].vcpu = vcpu;
- 		pmu->gp_counters[i].idx = i;
-@@ -286,7 +287,7 @@ static void amd_pmu_reset(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 	int i;
- 
--	for (i = 0; i < AMD64_NUM_COUNTERS_CORE; i++) {
-+	for (i = 0; i < KVM_AMD_PMC_MAX_GENERIC; i++) {
- 		struct kvm_pmc *pmc = &pmu->gp_counters[i];
- 
- 		pmc_stop_counter(pmc);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index bf7eafcbe5ec..368af134f913 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1438,10 +1438,13 @@ static const u32 msrs_to_save_all[] = {
- 
- 	MSR_K7_EVNTSEL0, MSR_K7_EVNTSEL1, MSR_K7_EVNTSEL2, MSR_K7_EVNTSEL3,
- 	MSR_K7_PERFCTR0, MSR_K7_PERFCTR1, MSR_K7_PERFCTR2, MSR_K7_PERFCTR3,
-+
-+	/* This part of MSRs should match KVM_AMD_PMC_MAX_GENERIC. */
- 	MSR_F15H_PERF_CTL0, MSR_F15H_PERF_CTL1, MSR_F15H_PERF_CTL2,
- 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
- 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
- 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
-+
- 	MSR_IA32_XFD, MSR_IA32_XFD_ERR,
- };
- 
--- 
-2.37.3
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
 
+#regzbot introduced: 3647d6d3dbdafc55f8c4ca8225966963252abe7b
+https://bugzilla.kernel.org/show_bug.cgi?id=216475
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
