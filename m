@@ -2,151 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDF65BD0E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0355BD0E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiISP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S230160AbiISP2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiISP2C (ORCPT
+        with ESMTP id S229919AbiISP2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:28:02 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F4F30C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:28:01 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:57352)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oaIgi-009wR6-LX; Mon, 19 Sep 2022 09:28:00 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:51232 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oaIgh-001xfh-Ow; Mon, 19 Sep 2022 09:28:00 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Manfred Spraul <manfred@colorfullife.com>
-References: <87wnc1i2wo.fsf@email.froward.int.ebiederm.org>
-        <cover.1660664258.git.legion@kernel.org>
-        <0e095acd72553868925b116d778357eb019796a2.1660664258.git.legion@kernel.org>
-Date:   Mon, 19 Sep 2022 10:27:53 -0500
-In-Reply-To: <0e095acd72553868925b116d778357eb019796a2.1660664258.git.legion@kernel.org>
-        (Alexey Gladkov's message of "Tue, 16 Aug 2022 17:42:44 +0200")
-Message-ID: <87h7132xl2.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 19 Sep 2022 11:28:07 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E3DBF53;
+        Mon, 19 Sep 2022 08:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663601286; x=1695137286;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=u4l9l32AEn0lwr5hQNu6et9ZUSUu5/s1P/GSY7BqxV8=;
+  b=RBr9dMYEkscYPNxREFPPOpEd1OQIgaltUJ5sZqgQyN/3GtHOWun5Ut56
+   uA2izqgn1r3iC20tNj73q2z2AqxibrgmMUMrG4QscgjAx39J8qf26ZNkx
+   d5A8KmXst8eblGNMk6zrOgWtVI2cIo0ElGM+2XW5cHMZqX4VRIJDhfIfi
+   XN2mal5tbthxVoTECC/Pczs8Cvgd17fvS7c0MMvGNkMYqvmeNSe8ft0VO
+   C08zJ6Q8njb8UeymO94K4FkCYUJk6NI84Upbluzz08sIY+zViL4+weSR8
+   pDT3IlqJC+5OwIezm+gv6TxNjhl11wpZQytApV/2WNv/X1gUz8z3EZS0o
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361168317"
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="361168317"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:28:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="569693701"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.95.27]) ([10.212.95.27])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:28:05 -0700
+Message-ID: <ca0bb678-1ffd-42e1-4056-30c3a5b74f10@intel.com>
+Date:   Mon, 19 Sep 2022 08:28:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oaIgh-001xfh-Ow;;;mid=<87h7132xl2.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+6kbp/GAjBNzN409XC+yQuuXQX0PMBISc=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH] dmaengine: idxd: Set workqueue state to disabled before
+ trying to re-enable
+Content-Language: en-US
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Fengqian Gao <fengqian.gao@intel.com>,
+        "Shen, Xiaochen" <xiaochen.shen@intel.com>
+References: <20220824192913.2425634-1-jsnitsel@redhat.com>
+ <1417f4ce-2573-5c88-6c92-fda5c57ebceb@intel.com>
+ <20220824211625.mfcyefi5yvasdt4r@cantor>
+ <d0dbdd27-a890-1eea-63b5-ab6aaa27583e@intel.com>
+ <f59ea139533f37991e786cd8cf4a0d591133d92c.camel@redhat.com>
+ <36ecf274-7be1-f50e-8ac0-9e99bc9ef556@intel.com>
+ <20220917170524.23wxvkhieroyrofd@cantor>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220917170524.23wxvkhieroyrofd@cantor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Alexey Gladkov <legion@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 347 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (3.1%), b_tie_ro: 9 (2.7%), parse: 0.86 (0.2%),
-         extract_message_metadata: 3.3 (0.9%), get_uri_detail_list: 1.47
-        (0.4%), tests_pri_-1000: 3.5 (1.0%), tests_pri_-950: 1.25 (0.4%),
-        tests_pri_-900: 0.98 (0.3%), tests_pri_-90: 57 (16.4%), check_bayes:
-        56 (16.1%), b_tokenize: 7 (2.1%), b_tok_get_all: 6 (1.6%),
-        b_comp_prob: 1.94 (0.6%), b_tok_touch_all: 38 (10.9%), b_finish: 0.82
-        (0.2%), tests_pri_0: 250 (72.2%), check_dkim_signature: 0.55 (0.2%),
-        check_dkim_adsp: 2.6 (0.8%), poll_dns_idle: 0.68 (0.2%), tests_pri_10:
-        2.3 (0.7%), tests_pri_500: 8 (2.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v1 2/3] sysctl: Allow to change limits for posix
- messages queues
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexey Gladkov <legion@kernel.org> writes:
 
-> All parameters of posix messages queues (queues_max/msg_max/msgsize_max)
-> end up being limited by RLIMIT_MSGQUEUE. The code in mqueue_get_inode is
-> where that limiting happens.
+On 9/17/2022 10:05 AM, Jerry Snitselaar wrote:
+> On Wed, Aug 24, 2022 at 03:19:51PM -0700, Dave Jiang wrote:
+>> On 8/24/2022 3:07 PM, Jerry Snitselaar wrote:
+>>> On Wed, 2022-08-24 at 14:59 -0700, Dave Jiang wrote:
+>>>> On 8/24/2022 2:16 PM, Jerry Snitselaar wrote:
+>>>>> On Wed, Aug 24, 2022 at 01:29:03PM -0700, Dave Jiang wrote:
+>>>>>> On 8/24/2022 12:29 PM, Jerry Snitselaar wrote:
+>>>>>>> For a software reset idxd_device_reinit() is called, which will
+>>>>>>> walk
+>>>>>>> the device workqueues to see which ones were enabled, and try
+>>>>>>> to
+>>>>>>> re-enable them. It keys off wq->state being iDXD_WQ_ENABLED,
+>>>>>>> but the
+>>>>>>> first thing idxd_enable_wq() will do is see that the state of
+>>>>>>> the
+>>>>>>> workqueue is enabled, and return 0 instead of attempting to
+>>>>>>> issue
+>>>>>>> a command to enable the workqueue.
+>>>>>>>
+>>>>>>> So once a workqueue is found that needs to be re-enabled,
+>>>>>>> set the state to disabled prior to calling idxd_enable_wq().
+>>>>>>> This would accurately reflect the state if the enable fails
+>>>>>>> as well.
+>>>>>>>
+>>>>>>> Cc: Fenghua Yu <fenghua.yu@intel.com>
+>>>>>>> Cc: Dave Jiang <dave.jiang@intel.com>
+>>>>>>> Cc: Vinod Koul <vkoul@kernel.org>
+>>>>>>> Cc: dmaengine@vger.kernel.org
+>>>>>>> Fixes: bfe1d56091c1 ("dmaengine: idxd: Init and probe for Intel
+>>>>>>> data accelerators")
+>>>>>>> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>>>>>>> ---
+>>>>>>>      drivers/dma/idxd/irq.c | 1 +
+>>>>>>>      1 file changed, 1 insertion(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
+>>>>>>> index 743ead5ebc57..723eeb5328d6 100644
+>>>>>>> --- a/drivers/dma/idxd/irq.c
+>>>>>>> +++ b/drivers/dma/idxd/irq.c
+>>>>>>> @@ -52,6 +52,7 @@ static void idxd_device_reinit(struct
+>>>>>>> work_struct *work)
+>>>>>>>                   struct idxd_wq *wq = idxd->wqs[i];
+>>>>>>>                   if (wq->state == IDXD_WQ_ENABLED) {
+>>>>>>> +                       wq->state = IDXD_WQ_DISABLED;
+>>>>>> Might be better off to insert this line in
+>>>>>> idxd_wq_disable_cleanup(). I
+>>>>>> think that should put it in sane state.
+>>>>> I don't think that is called in the code path that I was lookng at.
+>>>>> I've been
+>>>>> looking at this bit of process_misc_interrupts():
+>>>>>
+>>>>> halt:
+>>>>>           gensts.bits = ioread32(idxd->reg_base +
+>>>>> IDXD_GENSTATS_OFFSET);
+>>>>>           if (gensts.state == IDXD_DEVICE_STATE_HALT) {
+>>>>>                   idxd->state = IDXD_DEV_HALTED;
+>>>>>                   if (gensts.reset_type ==
+>>>>> IDXD_DEVICE_RESET_SOFTWARE) {
+>>>>>                           /*
+>>>>>                            * If we need a software reset, we will
+>>>>> throw the work
+>>>>>                            * on a system workqueue in order to allow
+>>>>> interrupts
+>>>>>                            * for the device command completions.
+>>>>>                            */
+>>>>>                           INIT_WORK(&idxd->work, idxd_device_reinit);
+>>>>>                           queue_work(idxd->wq, &idxd->work);
+>>>>>                   } else {
+>>>>>                           idxd->state = IDXD_DEV_HALTED;
+>>>>>                           idxd_wqs_quiesce(idxd);
+>>>>>                           idxd_wqs_unmap_portal(idxd);
+>>>>>                           spin_lock(&idxd->dev_lock);
+>>>>>                           idxd_device_clear_state(idxd);
+>>>>>                           dev_err(&idxd->pdev->dev,
+>>>>>                                   "idxd halted, need %s.\n",
+>>>>>                                   gensts.reset_type ==
+>>>>> IDXD_DEVICE_RESET_FLR ?
+>>>>>                                   "FLR" : "system reset");
+>>>>>                           spin_unlock(&idxd->dev_lock);
+>>>>>                           return -ENXIO;
+>>>>>                   }
+>>>>>           }
+>>>>>
+>>>>>           return 0;
+>>>>> }
+>>>>>
+>>>>> So it sees that the device is halted, and sticks
+>>>>> idxd_device_reinint() on that
+>>>>> workqueue. The idxd_device_reinit() has this loop to re-enable the
+>>>>> idxd wqs:
+>>>> idxd_device_reinit() should called idxd_device_reset() first. And
+>>>> that
+>>>> should at some point call idxd_wq_disable_cleanup() and clean up the
+>>>> states.
+>>>>
+>>>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/dma/idxd/irq.c#L42
+>>>>
+>>>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/dma/idxd/device.c#L725
+>>>>
+>>>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/dma/idxd/device.c#L711
+>>>>
+>>>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/dma/idxd/device.c#L376
+>>>>
+>>>> So if we stick the wq state reset in there, it should show up as
+>>>> "disabled" by the time we try to enable the WQs again. Does that look
+>>>> reasonable?
+>>>>
+>>> Ah, yeah I see that now. So, if it does set the state to disabled in
+>>> idxd_wq_disable_cleanup(), does it have another means to track which
+>>> wqs need to be re-enabled for that loop that happens after the
+>>> idxd_device_reset() call?
+>> Oh I see what you mean... So we can either do what you did or create a mask
+>> and mark the WQ that are "enabled" before reset. Maybe that's cleaner rather
+>> than relying on the side effect of the WQ state isn't cleared? Thoughts?
+>>
+> Circling back to this. Since max_wqs could theoretically go up to 2^8, I guess
+> this would need to be done with the bitmap_* functions?
+
+Hi Jerry,
+
+I wouldn't say never but I doubt any time soon for 2^8. DSA 1.0 has 8 
+WQs, and 2.0 (spec just went public) has 16. But yes we can use bitmap 
+to be future proof. Are you currently working on a fix for this? Just 
+don't want to duplicate effort if you already have something going. 
+Thank you!
+
+
 >
-> The RLIMIT_MSGQUEUE is bound to the user namespace and is counted
-> hierarchically.
+> Regards,
+> Jerry
 >
-> We can allow root in the user namespace to modify the posix messages
-> queues parameters.
-
-This looks good from 10,000 feet.  But the same nits with setting
-mode in mq_permissions as in ipc_set_permissions in your other patch.
-
-Eric
-
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> ---
->  ipc/mq_sysctl.c | 36 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/ipc/mq_sysctl.c b/ipc/mq_sysctl.c
-> index fbf6a8b93a26..39dcf086b7c2 100644
-> --- a/ipc/mq_sysctl.c
-> +++ b/ipc/mq_sysctl.c
-> @@ -12,6 +12,7 @@
->  #include <linux/stat.h>
->  #include <linux/capability.h>
->  #include <linux/slab.h>
-> +#include <linux/cred.h>
->  
->  static int msg_max_limit_min = MIN_MSGMAX;
->  static int msg_max_limit_max = HARD_MSGMAX;
-> @@ -76,8 +77,43 @@ static int set_is_seen(struct ctl_table_set *set)
->  	return &current->nsproxy->ipc_ns->mq_set == set;
->  }
->  
-> +static int mq_permissions(struct ctl_table_header *head, struct ctl_table *table)
-> +{
-> +	struct ipc_namespace *ns =
-> +		container_of(head->set, struct ipc_namespace, mq_set);
-> +
-> +	if (ns->user_ns != &init_user_ns) {
-> +		kuid_t ns_root_uid = make_kuid(ns->user_ns, 0);
-> +		kgid_t ns_root_gid = make_kgid(ns->user_ns, 0);
-> +
-> +		if (uid_valid(ns_root_uid) && uid_eq(current_euid(), ns_root_uid))
-> +			return  table->mode >> 6;
-> +
-> +		if (gid_valid(ns_root_gid) && in_egroup_p(ns_root_gid))
-> +			return table->mode >> 3;
-> +	}
-> +
-> +	return table->mode;
-> +}
-> +
-> +static void mq_set_ownership(struct ctl_table_header *head,
-> +			     struct ctl_table *table,
-> +			     kuid_t *uid, kgid_t *gid)
-> +{
-> +	struct ipc_namespace *ns =
-> +		container_of(head->set, struct ipc_namespace, mq_set);
-> +
-> +	kuid_t ns_root_uid = make_kuid(ns->user_ns, 0);
-> +	kgid_t ns_root_gid = make_kgid(ns->user_ns, 0);
-> +
-> +	*uid = uid_valid(ns_root_uid) ? ns_root_uid : GLOBAL_ROOT_UID;
-> +	*gid = gid_valid(ns_root_gid) ? ns_root_gid : GLOBAL_ROOT_GID;
-> +}
-> +
->  static struct ctl_table_root set_root = {
->  	.lookup = set_lookup,
-> +	.permissions = mq_permissions,
-> +	.set_ownership = mq_set_ownership,
->  };
->  
->  bool setup_mq_sysctls(struct ipc_namespace *ns)
+>>>>>           for (i = 0; i < idxd->max_wqs; i++) {
+>>>>>                   struct idxd_wq *wq = idxd->wqs[i];
+>>>>>
+>>>>>                   if (wq->state == IDXD_WQ_ENABLED) {
+>>>>>                           wq->state = IDXD_WQ_DISABLED;
+>>>>>                           rc = idxd_wq_enable(wq);
+>>>>>                           if (rc < 0) {
+>>>>>                                   dev_warn(dev, "Unable to re-enable
+>>>>> wq %s\n",
+>>>>>                                            dev_name(wq_confdev(wq)));
+>>>>>                           }
+>>>>>                   }
+>>>>>           }
+>>>>>
+>>>>> Once you go into idxd_wq_enable() though you get this check at the
+>>>>> beginning:
+>>>>>
+>>>>>           if (wq->state == IDXD_WQ_ENABLED) {
+>>>>>                   dev_dbg(dev, "WQ %d already enabled\n", wq->id);
+>>>>>                   return 0;
+>>>>>           }
+>>>>>
+>>>>> So IIUC it sees the device is halted, goes to reset it, figures out
+>>>>> a wq
+>>>>> should be re-enabled, calls idxd_wq_enable() which hits the check,
+>>>>> returns
+>>>>> 0 and the wq is never really re-enabled, though it will still have
+>>>>> wq state
+>>>>> set to IDXD_WQ_ENABLED.
+>>>>>
+>>>>> Or am I missing something?
+>>>>>
+>>>>> Regards,
+>>>>> Jerry
+>>>>>
+>>>>>>>                           rc = idxd_wq_enable(wq);
+>>>>>>>                           if (rc < 0) {
+>>>>>>>                                   dev_warn(dev, "Unable to re-
+>>>>>>> enable wq %s\n",
