@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587045BC171
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4965BC173
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiISCkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S229601AbiISCkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiISCkU (ORCPT
+        with ESMTP id S229519AbiISCkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:40:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F37632E
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:40:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 18 Sep 2022 22:40:41 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0211813F9F;
+        Sun, 18 Sep 2022 19:40:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B2319CE0F2C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B8CDBC433D7;
-        Mon, 19 Sep 2022 02:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663555215;
-        bh=DI+gmo1jt0HOvuhR33uKwSgIEq8MtRFNhlVeQTS2NS4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PHruGXGGWFPVm0b/69nO3RBy7dvAEUMURI7i2qNrM5KxQXJbELu58yvsAS1K2FJpL
-         gP6uNM9AJQzSyBExNlcxZSmMA3z4QFRM3PSNx2e6J4VTxdU5OQaXmINazVmwgyVQF3
-         42wqwTyk1t/FaQvJuu/bCRwhzsPAlz9h64efyJWa1cYlQry2UTiv45gjaPZkjVQ7gr
-         XLimLp2zrj3GgBZ9f0fxNBI/5XtbPCQ+S6NONPg64lRimk+0eWIiK3YNB0DFFQMZll
-         ek1Xl1dbCs/P0dupkZBHdy7nnLpLnY2jlMmMBI8uhma0bv8RnQ1wg7Mnu8GPrTuj6O
-         KU1wLufuwpNFA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C95CE21ED2;
-        Mon, 19 Sep 2022 02:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW86s0jknz4xGd;
+        Mon, 19 Sep 2022 12:40:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663555237;
+        bh=oqM1Iop0qBiZRTpt1ctCYhp660GpfeXccHUIESChuoE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FQ3/bH7CwxN3PLA3MXf/4MLsB36uLCjqTVLd0scjzYfSGG/ANIhj/gsk3mqqBwRNK
+         LKmyWwvm6Z//c0ozoBK4MEArlkfkFgHZKpfzE92qDh+3HHwTmcNO3sZu14SfADbDlk
+         joKGcQhYzgYaE7nenBrv6XF8AzN7EY7Iwp1NS0Qyg6GVMErb/F0cXMJF7RW4D0mjD5
+         EddsZOlZKtaWCuC2IYsKDqQYETQGNF78kGr37A0gYYy5jQ/pToXssUgQjUa43ApKeM
+         6G+vDpgcgEDJnWtOxdK2kEqx0zENSND5nFsYQNIqt/oEnKemalW5ygrvWLLZ5YqrDk
+         gfw1bK8eTtKFg==
+Date:   Mon, 19 Sep 2022 12:40:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the libata tree
+Message-ID: <20220919124034.58670a27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4] platform/chrome: cros_ec: Notify the PM of wake events
- during resume
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166355521563.20486.14302736310439629923.git-patchwork-notify@kernel.org>
-Date:   Mon, 19 Sep 2022 02:40:15 +0000
-References: <20220913204954.2931042-1-jthies@google.com>
-In-Reply-To: <20220913204954.2931042-1-jthies@google.com>
-To:     Jameson Thies <jthies@google.com>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
-        tzungbi@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ovRtO6db6pokbcv97..JAN8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/ovRtO6db6pokbcv97..JAN8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+Hi all,
 
-On Tue, 13 Sep 2022 20:49:54 +0000 you wrote:
-> cros_ec_handle_event in the cros_ec driver can notify the PM of wake
-> events. When a device is suspended, cros_ec_handle_event will not check
-> MKBP events. Instead, received MKBP events are checked during resume by
-> cros_ec_report_events_during_suspend. But
-> cros_ec_report_events_during_suspend cannot notify the PM if received
-> events are wake events, causing wake events to not be reported if
-> received while the device is suspended.
-> 
-> [...]
+After merging the libata tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-Here is the summary with links:
-  - [v4] platform/chrome: cros_ec: Notify the PM of wake events during resume
-    https://git.kernel.org/chrome-platform/c/8edd2752b0aa
+drivers/ata/ahci_st.c: In function 'st_ahci_probe':
+drivers/ata/ahci_st.c:147:24: warning: unused variable 'dev' [-Wunused-vari=
+able]
+  147 |         struct device *dev =3D &pdev->dev;
+      |                        ^~~
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Introduced by commit
 
+  3f74cd046fbe ("ata: libahci_platform: Parse ports-implemented property in=
+ resources getter")
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ovRtO6db6pokbcv97..JAN8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMn1qIACgkQAVBC80lX
+0Gxeugf+Mx2Ru8slkdT+s2hOUcKeCHXOGYfpnkVv18IT7fAxOnlWLE8HLRHGzaHf
+9xvXEQqHkO27WedYGVvv/CN2YUNqKwl/C1KMQkD5HmTqFJm9oH070d4fTJxTlJhD
+bvjYXETN7oDJGlbvijkt0JCc8sHy4r9AuyGRmSaemae6WxxvFkqvq/UJSgLd9t2o
+xpb3V8vOy2azTGdOVoFML5P1uPXmt/wsnyZ/8rl2jwTFliXyEVNc3yLNg9d+JUO9
+D5z6S2mPHeCr1BnurWzpthDEBT6nhkTSkPRwC+0fzQFUDA8c4snGjcT2r0Umzj8b
+/7hWvhDqJlQkhqbXhU8TZxWxlwsLeQ==
+=mIR1
+-----END PGP SIGNATURE-----
+
+--Sig_/ovRtO6db6pokbcv97..JAN8--
