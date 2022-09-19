@@ -2,443 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8E55BCBD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C5C5BCBDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiISMdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S229895AbiISMeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiISMda (ORCPT
+        with ESMTP id S229913AbiISMdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:33:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39972DA92;
-        Mon, 19 Sep 2022 05:33:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8120821ECF;
-        Mon, 19 Sep 2022 12:33:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663590805; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 19 Sep 2022 08:33:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA86E2DABC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663590830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ZOGEQqqvGgBv9t9U3dwRcTFr510bvL3XRcIHTHYCDOQ=;
-        b=FPa2jvC/zTpC1InKSRSdUPLahKGa4yUcao9elGgmgqqxR1BxbGAjEWbvSgtbyY22T24ZxM
-        vPRc/pC7bK8TmoaVn9xbyvXR+YxcJ4vEEUomDK5blP8jTUP+wcgqyQ6FcxWLuPkpVPmDIP
-        Lh67eq/VGtjabIhYhlwjL7OPOPJ/dkc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Z1BUi6Zq90RpHqDF/XNvlXbXJalSrQUfR4/O2e4291s=;
+        b=IpbbrGki+4QwfylQIzlCw56UhHBuNTokak3ec8VMMAtVaosCbuRF9F8aJZHp/8WyYiqVrR
+        PGwfKHIho5LzF/QBUUoQB1jOujDR4S38TYMnua1yzBHuEXdDLHBulHgn2WVKmb+t6kDeA2
+        eSbMBzyZaKK+nU6C3WAD3j4c9aWyBVs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-a3wcJUJdP62QpjQnEmWPyQ-1; Mon, 19 Sep 2022 08:33:45 -0400
+X-MC-Unique: a3wcJUJdP62QpjQnEmWPyQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DF3513A96;
-        Mon, 19 Sep 2022 12:33:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6EQDFpVhKGN4LAAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Mon, 19 Sep 2022 12:33:25 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     mcgrof@kernel.org
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH v2 2/2] module: Merge same-name module load requests
-Date:   Mon, 19 Sep 2022 14:32:33 +0200
-Message-Id: <20220919123233.8538-3-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220919123233.8538-1-petr.pavlu@suse.com>
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 767D43C14852;
+        Mon, 19 Sep 2022 12:33:44 +0000 (UTC)
+Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2DE19208BDC0;
+        Mon, 19 Sep 2022 12:33:38 +0000 (UTC)
+Date:   Mon, 19 Sep 2022 20:33:33 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
+Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
+ mechanism
+Message-ID: <YyhhnbrHTJpW4Xcm@T590>
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+ <Yyg3KLfQaxbS1miq@T590>
+ <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a system boot, it can happen that the kernel receives a burst of
-requests to insert the same module but loading it eventually fails
-during its init call. For instance, udev can make a request to insert
-a frequency module for each individual CPU when another frequency module
-is already loaded which causes the init function of the new module to
-return an error.
+On Mon, Sep 19, 2022 at 05:55:05PM +0800, Ziyang Zhang wrote:
+> On 2022/9/19 17:32, Ming Lei wrote:
+> > On Tue, Sep 13, 2022 at 12:17:05PM +0800, ZiyangZhang wrote:
+> >> With USER_RECOVERY feature enabled, the monitor_work schedules
+> >> quiesce_work after finding a dying ubq_daemon. The quiesce_work's job
+> >> is to:
+> >> (1) quiesce request queue.
+> >> (2) check if there is any INFLIGHT rq with UBLK_IO_FLAG_ACTIVE unset.
+> >>     If so, we retry until all these rqs are requeued by ublk_queue_rq()
+> >>     and task_work and become IDLE.
+> > 
+> > These requests should be being handled by task work or the io_uring
+> > fallback wq, and suggest to add the words here.
+> 
+> Will do so.
+> 
+> > 
+> >> (3) requeue/abort inflight rqs issued to the crash ubq_daemon before. If
+> >>     UBLK_F_USER_RECOVERY_REISSUE is set, rq is requeued; or it is
+> >>     aborted.
+> >> (4) complete all ioucmds by calling io_uring_cmd_done(). We are safe to
+> >>     do so because no ioucmd can be referenced now.
+> >> (5) set ub's state to UBLK_S_DEV_QUIESCED, which means we are ready for
+> >>     recovery. This state is exposed to userspace by GET_DEV_INFO.
+> >>
+> >> The driver can always handle STOP_DEV and cleanup everything no matter
+> >> ub's state is LIVE or QUIESCED. After ub's state is UBLK_S_DEV_QUIESCED,
+> >> user can recover with new process by sending START_USER_RECOVERY.
+> >>
+> >> Note: we do not change the default behavior with reocvery feature
+> >> disabled. monitor_work still schedules stop_work and abort inflight
+> >> rqs. Finally ublk_device is released.
+> > 
+> > This version looks much better than before.
+> 
+> Thanks :)
+> 
+> > 
+> >>
+> >> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+> >> ---
+> >>  drivers/block/ublk_drv.c | 168 +++++++++++++++++++++++++++++++++++++--
+> >>  1 file changed, 161 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+> >> index b067f33a1913..4409a130d0b6 100644
+> >> --- a/drivers/block/ublk_drv.c
+> >> +++ b/drivers/block/ublk_drv.c
+> >> @@ -121,7 +121,7 @@ struct ublk_queue {
+> >>  
+> >>  	unsigned long io_addr;	/* mapped vm address */
+> >>  	unsigned int max_io_sz;
+> >> -	bool abort_work_pending;
+> >> +	bool force_abort;
+> >>  	unsigned short nr_io_ready;	/* how many ios setup */
+> >>  	struct ublk_device *dev;
+> >>  	struct ublk_io ios[0];
+> >> @@ -163,6 +163,7 @@ struct ublk_device {
+> >>  	 * monitor each queue's daemon periodically
+> >>  	 */
+> >>  	struct delayed_work	monitor_work;
+> >> +	struct work_struct	quiesce_work;
+> >>  	struct work_struct	stop_work;
+> >>  };
+> >>  
+> >> @@ -660,6 +661,11 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
+> >>  	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
+> >>  
+> >>  	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
+> >> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
+> >> +				__func__,
+> >> +				((struct ublk_queue *)req->mq_hctx->driver_data)->q_id,
+> > 
+> > req->mq_hctx->queue_num is cleaner.
+> 
+> Ok.
+> 
+> > 
+> >> +				req->tag,
+> >> +				io->flags);
+> >>  		io->flags |= UBLK_IO_FLAG_ABORTED;
+> >>  		blk_mq_end_request(req, BLK_STS_IOERR);
+> >>  	}
+> >> @@ -820,6 +826,21 @@ static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
+> >>  	res = ublk_setup_iod(ubq, rq);
+> >>  	if (unlikely(res != BLK_STS_OK))
+> >>  		return BLK_STS_IOERR;
+> >> +    /* With recovery feature enabled, force_abort is set in
+> >> +     * ublk_stop_dev() before calling del_gendisk() if ub's state
+> >> +     * is QUIESCED. We have to abort all requeued and new rqs here
+> >> +     * to let del_gendisk() move on. Besides, we do not call
+> >> +     * io_uring_cmd_complete_in_task() to avoid UAF on io_uring ctx.
+> >> +     *
+> >> +     * Note: force_abort is guaranteed to be seen because it is set
+> >> +     * before request queue is unqiuesced.
+> >> +     */
+> >> +	if (unlikely(ubq->force_abort)) {
+> >> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
+> >> +				__func__, ubq->q_id, rq->tag,
+> >> +				ubq->ios[rq->tag].flags);
+> >> +		return BLK_STS_IOERR;
+> >> +	}
+> >>  
+> >>  	blk_mq_start_request(bd->rq);
+> >>  
+> >> @@ -1003,6 +1024,101 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
+> >>  	ublk_put_device(ub);
+> >>  }
+> >>  
+> >> +static bool ublk_check_inflight_rq(struct request *rq, void *data)
+> >> +{
+> >> +	struct ublk_queue *ubq = rq->mq_hctx->driver_data;
+> >> +	struct ublk_io *io = &ubq->ios[rq->tag];
+> >> +	bool *busy = data;
+> >> +
+> >> +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {
+> >> +		*busy = true;
+> >> +		return false;
+> >> +	}
+> >> +	return true;
+> >> +}
+> >> +
+> >> +static void ublk_wait_tagset_rqs_idle(struct ublk_device *ub)
+> >> +{
+> >> +	bool busy = false;
+> >> +
+> >> +	WARN_ON_ONCE(!blk_queue_quiesced(ub->ub_disk->queue));
+> >> +	while (true) {
+> >> +		blk_mq_tagset_busy_iter(&ub->tag_set,
+> >> +				ublk_check_inflight_rq, &busy);
+> >> +		if (busy)
+> >> +			msleep(UBLK_REQUEUE_DELAY_MS);
+> >> +		else
+> >> +			break;
+> >> +	}
+> >> +}
+> >> +
+> >> +static void ublk_quiesce_queue(struct ublk_device *ub,
+> >> +		struct ublk_queue *ubq)
+> >> +{
+> >> +	int i;
+> >> +
+> >> +	for (i = 0; i < ubq->q_depth; i++) {
+> >> +		struct ublk_io *io = &ubq->ios[i];
+> >> +
+> >> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
+> >> +			struct request *rq = blk_mq_tag_to_rq(
+> >> +					ub->tag_set.tags[ubq->q_id], i);
+> >> +
+> >> +			WARN_ON_ONCE(!rq);
+> >> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
+> >> +					ublk_queue_can_use_recovery_reissue(ubq) ?
+> >> +					"requeue" : "abort",
+> >> +					ubq->q_id, i, io->flags);
+> >> +			if (ublk_queue_can_use_recovery_reissue(ubq))
+> >> +				blk_mq_requeue_request(rq, false);
+> > 
+> > This way is too violent.
+> > 
+> > There may be just one queue dying, but you requeue all requests
+> > from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
+> > such as, just requeuing requests in dying queue.
+> 
+> If we want to start a new process after a crash for USER_RECOVERY, all old ubq_daemons
+> must exit and rqs of all queues have to be requeued/aborted. We cannot let live
+> ubq_daemons run any more because they do not belong to the new process.
 
-The module loader currently serializes all such requests, with the
-barrier in add_unformed_module(). This creates a lot of unnecessary work
-and delays the boot.
+IMO, the old process really can exist, and recently even I got such
+requirement for switching queue from one thread to another.
 
-This patch improves the behavior as follows:
-* A check whether a module load matches an already loaded module is
-  moved right after a module name is determined. -EEXIST continues to be
-  returned if the module exists and is live, -EBUSY is returned if
-  a same-name module is going.
-* A new reference-counted shared_load_info structure is introduced to
-  keep track of duplicate load requests. Two loads are considered
-  equivalent if their module name matches. In case a load duplicates
-  another running insert, the code waits for its completion and then
-  returns -EEXIST or -EBUSY depending on whether it succeeded.
+What we should do is to get all inflight requests done, and cancel all io
+commands, no matter if the ubq pthread is dead or live.
 
-Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
-for modules that have finished loading"), the kernel already did merge
-some of same load requests but it was more by accident and relied on
-specific timing. The patch brings this behavior back in a more explicit
-form.
+> 
+> BTW, I really wonder why there could be just one queue dying? All queues must be dying
+> shortly after any ubq_daemon is dying since they are all pthreads in the same process.
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- kernel/module/main.c | 214 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 150 insertions(+), 64 deletions(-)
+You can't assume it is always so. Maybe one pthread is dead first, and
+others are dying later, maybe just one is dead.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 06cb41c3d2a1..fb97d7a0cae9 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -61,14 +61,29 @@
+If one queue's pthread is live, you may get trouble by simply requeuing
+the request, that is why I suggest to re-use the logic of
+ublk_daemon_monitor_work/ublk_abort_queue().
+
+For stopping device, request queue is frozen in del_gendisk() and all
+in-flight requests are drained, and monitor work provides such
+guarantee.
+
+For user recovery, monitor work should help you too by aborting one
+queue if it is dying until all requests are drained.
+
+> 
+> > 
+> > That said you still can re-use the logic in ublk_abort_queue()/ublk_daemon_monitor_work()
+> > for making progress, just changing aborting request with requeue in
+> > ublk_abort_queue().
+> 
+> I get your point, but it may be hard to reuse the logic in ublk_daemon_monitor_work()
+> because:
+> (1) we have to quiesce request queue in ublk_quiesce_dev(). This has to be done with
+>     ub_mutex.
+> (2) ublk_quiesce_dev() cannot be run after rqs are requeued/aborted.
+
+I don't get your point, the request queue needs to be quiesced once, then
+either inflight requests are requeued if the queue is dying, or completed by
+the queue's pthread if it is live. As you mentioned, in reality, most times,
+all pthreads will be killed, but timing can be different, and I think
+you can not requeue one request if the ubq pthread isn't dying.
+
  
- /*
-  * Mutex protects:
-- * 1) List of modules (also safely readable with preempt_disable),
-+ * 1) list of modules (also safely readable with preempt_disable, delete and add
-+ *    uses RCU list operations).
-  * 2) module_use links,
-- * 3) mod_tree.addr_min/mod_tree.addr_max.
-- * (delete and add uses RCU list operations).
-+ * 3) mod_tree.addr_min/mod_tree.addr_max,
-+ * 4) list of unloaded_tainted_modules.
-+ * 5) list of running_loads.
-  */
- DEFINE_MUTEX(module_mutex);
- LIST_HEAD(modules);
- 
-+/* Shared information to track duplicate module loads. */
-+struct shared_load_info {
-+	char name[MODULE_NAME_LEN];
-+	refcount_t refcnt;
-+	struct list_head list;
-+	struct completion done;
-+	int err;
-+};
-+static LIST_HEAD(running_loads);
-+
-+/* Waiting for a module to finish loading? */
-+static DECLARE_WAIT_QUEUE_HEAD(module_wq);
-+
- /* Work queue for freeing init sections in success case */
- static void do_free_init(struct work_struct *w);
- static DECLARE_WORK(init_free_wq, do_free_init);
-@@ -122,9 +137,6 @@ static void mod_update_bounds(struct module *mod)
- int modules_disabled;
- core_param(nomodule, modules_disabled, bint, 0);
- 
--/* Waiting for a module to finish initializing? */
--static DECLARE_WAIT_QUEUE_HEAD(module_wq);
--
- static BLOCKING_NOTIFIER_HEAD(module_notify_list);
- 
- int register_module_notifier(struct notifier_block *nb)
-@@ -762,8 +774,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
- 
- 	free_module(mod);
--	/* someone could wait for the module in add_unformed_module() */
--	wake_up_interruptible(&module_wq);
- 	return 0;
- out:
- 	mutex_unlock(&module_mutex);
-@@ -2374,26 +2384,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	return module_finalize(info->hdr, info->sechdrs, mod);
- }
- 
--/* Is this module of this name done loading?  No locks held. */
--static bool finished_loading(const char *name)
--{
--	struct module *mod;
--	bool ret;
--
--	/*
--	 * The module_mutex should not be a heavily contended lock;
--	 * if we get the occasional sleep here, we'll go an extra iteration
--	 * in the wait_event_interruptible(), which is harmless.
--	 */
--	sched_annotate_sleep();
--	mutex_lock(&module_mutex);
--	mod = find_module_all(name, strlen(name), true);
--	ret = !mod || mod->state == MODULE_STATE_LIVE;
--	mutex_unlock(&module_mutex);
--
--	return ret;
--}
--
- /* Call module constructors. */
- static void do_mod_ctors(struct module *mod)
- {
-@@ -2524,7 +2514,6 @@ static noinline int do_init_module(struct module *mod)
- 		schedule_work(&init_free_wq);
- 
- 	mutex_unlock(&module_mutex);
--	wake_up_interruptible(&module_wq);
- 
- 	return 0;
- 
-@@ -2540,7 +2529,6 @@ static noinline int do_init_module(struct module *mod)
- 	klp_module_going(mod);
- 	ftrace_release_mod(mod);
- 	free_module(mod);
--	wake_up_interruptible(&module_wq);
- 	return ret;
- }
- 
-@@ -2552,43 +2540,133 @@ static int may_init_module(void)
- 	return 0;
- }
- 
-+static struct shared_load_info *
-+shared_load_info_alloc(const struct load_info *info)
-+{
-+	struct shared_load_info *shared_info =
-+		kzalloc(sizeof(*shared_info), GFP_KERNEL);
-+	if (shared_info == NULL)
-+		return ERR_PTR(-ENOMEM);
-+
-+	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
-+	refcount_set(&shared_info->refcnt, 1);
-+	INIT_LIST_HEAD(&shared_info->list);
-+	init_completion(&shared_info->done);
-+	return shared_info;
-+}
-+
-+static void shared_load_info_get(struct shared_load_info *shared_info)
-+{
-+	refcount_inc(&shared_info->refcnt);
-+}
-+
-+static void shared_load_info_put(struct shared_load_info *shared_info)
-+{
-+	if (refcount_dec_and_test(&shared_info->refcnt))
-+		kfree(shared_info);
-+}
-+
- /*
-- * We try to place it in the list now to make sure it's unique before
-- * we dedicate too many resources.  In particular, temporary percpu
-+ * Check that a module load is unique and make it visible to others. The code
-+ * looks for parallel running inserts and already loaded modules. Two inserts
-+ * are considered equivalent if their module name matches. In case this load
-+ * duplicates another running insert, the code waits for its completion and
-+ * then returns -EEXIST or -EBUSY depending on whether it succeeded.
-+ *
-+ * Detecting early that a load is unique avoids dedicating too many cycles and
-+ * resources to bring up the module. In particular, it prevents temporary percpu
-  * memory exhaustion.
-+ *
-+ * Merging same load requests then primarily helps during the boot process. It
-+ * can happen that the kernel receives a burst of requests to load the same
-+ * module (for example, a same module for each individual CPU) and loading it
-+ * eventually fails during its init call. Merging the requests allows that only
-+ * one full attempt to load the module is made.
-+ *
-+ * On a non-error return, it is guaranteed that this load is unique.
-  */
--static int add_unformed_module(struct module *mod)
-+static struct shared_load_info *add_running_load(const struct load_info *info)
- {
--	int err;
- 	struct module *old;
-+	struct shared_load_info *shared_info;
- 
--	mod->state = MODULE_STATE_UNFORMED;
--
--again:
- 	mutex_lock(&module_mutex);
--	old = find_module_all(mod->name, strlen(mod->name), true);
--	if (old != NULL) {
--		if (old->state != MODULE_STATE_LIVE) {
--			/* Wait in case it fails to load. */
-+
-+	/* Search if there is a running load of a module with the same name. */
-+	list_for_each_entry(shared_info, &running_loads, list)
-+		if (strcmp(shared_info->name, info->name) == 0) {
-+			int err;
-+
-+			shared_load_info_get(shared_info);
- 			mutex_unlock(&module_mutex);
--			err = wait_event_interruptible(module_wq,
--					       finished_loading(mod->name));
--			if (err)
--				goto out_unlocked;
--			goto again;
-+
-+			err = wait_for_completion_interruptible(
-+				&shared_info->done);
-+			if (!err)
-+				err = shared_info->err ? -EBUSY : -EEXIST;
-+			shared_load_info_put(shared_info);
-+			shared_info = ERR_PTR(err);
-+			goto out_unlocked;
- 		}
--		err = -EEXIST;
-+
-+	/* Search if there is a live module with the given name already. */
-+	old = find_module_all(info->name, strlen(info->name), true);
-+	if (old != NULL) {
-+		if (old->state == MODULE_STATE_LIVE) {
-+			shared_info = ERR_PTR(-EEXIST);
-+			goto out;
-+		}
-+
-+		/*
-+		 * Any active load always has its record in running_loads and so
-+		 * would be found above. This applies independent whether such
-+		 * a module is currently in MODULE_STATE_UNFORMED,
-+		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
-+		 * initialization failed. It therefore means this must be an
-+		 * older going module and the caller should try later once it is
-+		 * gone.
-+		 */
-+		WARN_ON(old->state != MODULE_STATE_GOING);
-+		shared_info = ERR_PTR(-EBUSY);
- 		goto out;
- 	}
--	mod_update_bounds(mod);
--	list_add_rcu(&mod->list, &modules);
--	mod_tree_insert(mod);
--	err = 0;
-+
-+	/* The load is unique, make it visible to others. */
-+	shared_info = shared_load_info_alloc(info);
-+	if (IS_ERR(shared_info))
-+		goto out;
-+	list_add(&shared_info->list, &running_loads);
- 
- out:
- 	mutex_unlock(&module_mutex);
- out_unlocked:
--	return err;
-+	return shared_info;
-+}
-+
-+static void finalize_running_load(struct shared_load_info *shared_info, int err)
-+{
-+	/* Inform other duplicate inserts that the load finished. */
-+	mutex_lock(&module_mutex);
-+	list_del(&shared_info->list);
-+	shared_info->err = err;
-+	mutex_unlock(&module_mutex);
-+
-+	complete_all(&shared_info->done);
-+	shared_load_info_put(shared_info);
-+
-+	/* Tell other modules waiting on this one that it completed loading. */
-+	wake_up_interruptible(&module_wq);
-+}
-+
-+static void add_unformed_module(struct module *mod)
-+{
-+	mod->state = MODULE_STATE_UNFORMED;
-+
-+	mutex_lock(&module_mutex);
-+	mod_update_bounds(mod);
-+	list_add_rcu(&mod->list, &modules);
-+	mod_tree_insert(mod);
-+	mutex_unlock(&module_mutex);
- }
- 
- static int complete_formation(struct module *mod, struct load_info *info)
-@@ -2674,6 +2752,7 @@ static void cfi_init(struct module *mod);
- static int load_module(struct load_info *info, const char __user *uargs,
- 		       int flags)
- {
-+	struct shared_load_info *shared_info;
- 	struct module *mod;
- 	long err = 0;
- 	char *after_dashes;
-@@ -2711,38 +2790,43 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 		goto free_copy;
- 
- 	/*
--	 * Now that we know we have the correct module name, check
--	 * if it's blacklisted.
-+	 * Now that we know we have the correct module name, check if there is
-+	 * another load of the same name in progress.
- 	 */
-+	shared_info = add_running_load(info);
-+	if (IS_ERR(shared_info)) {
-+		err = PTR_ERR(shared_info);
-+		goto free_copy;
-+	}
-+
-+	/* Check if the module is blacklisted. */
- 	if (blacklisted(info->name)) {
- 		err = -EPERM;
- 		pr_err("Module %s is blacklisted\n", info->name);
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	err = rewrite_section_headers(info, flags);
- 	if (err)
--		goto free_copy;
-+		goto free_shared;
- 
- 	/* Check module struct version now, before we try to use module. */
- 	if (!check_modstruct_version(info, info->mod)) {
- 		err = -ENOEXEC;
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	/* Figure out module layout, and allocate all the memory. */
- 	mod = layout_and_allocate(info, flags);
- 	if (IS_ERR(mod)) {
- 		err = PTR_ERR(mod);
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	audit_log_kern_module(mod->name);
- 
- 	/* Reserve our place in the list. */
--	err = add_unformed_module(mod);
--	if (err)
--		goto free_module;
-+	add_unformed_module(mod);
- 
- #ifdef CONFIG_MODULE_SIG
- 	mod->sig_ok = info->sig_ok;
-@@ -2852,7 +2936,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	/* Done! */
- 	trace_module_load(mod);
- 
--	return do_init_module(mod);
-+	err = do_init_module(mod);
-+	finalize_running_load(shared_info, err);
-+	return err;
- 
-  sysfs_cleanup:
- 	mod_sysfs_teardown(mod);
-@@ -2886,15 +2972,15 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	/* Unlink carefully: kallsyms could be walking list. */
- 	list_del_rcu(&mod->list);
- 	mod_tree_remove(mod);
--	wake_up_interruptible(&module_wq);
- 	/* Wait for RCU-sched synchronizing before releasing mod->list. */
- 	synchronize_rcu();
- 	mutex_unlock(&module_mutex);
-- free_module:
- 	/* Free lock-classes; relies on the preceding sync_rcu() */
- 	lockdep_free_key_range(mod->data_layout.base, mod->data_layout.size);
- 
- 	module_deallocate(mod, info);
-+ free_shared:
-+	finalize_running_load(shared_info, err);
-  free_copy:
- 	free_copy(info, flags);
- 	return err;
--- 
-2.35.3
+
+Thanks, 
+Ming
 
