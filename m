@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6A25BCF5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E3C5BCF6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiISOnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S230212AbiISOnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiISOnI (ORCPT
+        with ESMTP id S230161AbiISOnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:43:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50739F1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:43:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 19 Sep 2022 10:43:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283011144F;
+        Mon, 19 Sep 2022 07:43:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B104221F82;
-        Mon, 19 Sep 2022 14:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663598584; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MmGdRLJbXKoDHbtEsvS6wAys9F3jM3Uxx+Jt2KN/6yI=;
-        b=bXiQD6KCrnLA+lwffE4pfxYaL//UVqTOB+6Q5NAWsdHWR+F1oNCfopQ19YqfTi1PF+egOL
-        bcApiIW8isBRqOyywK3m6AW2d9Vp6Jf0ZWw+PG1TDaZotAayVAzS4eDPsFoyXLX5Cu/26v
-        UdE8veyK286pLW2t79LP5GQtS9YWLk0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9373813ABD;
-        Mon, 19 Sep 2022 14:43:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PvmvIfh/KGPGZgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 19 Sep 2022 14:43:04 +0000
-Date:   Mon, 19 Sep 2022 16:43:04 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Pratyush Brahma <quic_pbrahma@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, quic_charante@quicinc.com,
-        quic_pkondeti@quicinc.com
-Subject: Re: [PATCH v2] mm: oom_kill: add trace logs in process_mrelease()
- system call
-Message-ID: <Yyh/+HqwIXAnTARc@dhcp22.suse.cz>
-References: <20220816060017.17996-1-pbrahma@qti.qualcomm.com>
- <20220816173556.cb493d6a85edd65e1fa52911@linux-foundation.org>
- <1326361c-44c3-d2e0-c7a9-1e4b3e84ab6e@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A57E76181B;
+        Mon, 19 Sep 2022 14:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DF7C433C1;
+        Mon, 19 Sep 2022 14:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663598608;
+        bh=D+NoVno96UrWEE2gn7tpItGkEKOt+jvRjziVTjece0Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f2RIwdWtaC1gU/c1iv3f/GeLucEzNWn7ccmc4GkJFGI8QfQfyUHofdECc2rWD4nFT
+         0GaftLgfVcd1PQZdiEvRWN1bWq4LSfCyq8T7EO2jtq161kguk1vIObBbG692peFow3
+         xVyXo7iCyJmHMqd+S086gL1tfeYNp+V+xCIDAmfixXqTqubgg5nU77xLOKigezj3PM
+         DaLeuiIZfTliZOGY4J1mUhwhazJJvjrhlr1eHMdV/EpxzQpUfj4SYRIitJ/3QvhoFT
+         kXsev9FMLepyLeGkyRUFuM4yf7vwnZr8XA/FTgCZNB/ut+W0bJKqkVzf3mVq0/5WFi
+         97mYIEcc35h6A==
+Date:   Mon, 19 Sep 2022 16:43:24 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 09/44] cpuidle,omap3: Push RCU-idle into driver
+Message-ID: <20220919144324.GA62117@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.936337959@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1326361c-44c3-d2e0-c7a9-1e4b3e84ab6e@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919101520.936337959@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 17-08-22 12:17:22, Pratyush Brahma wrote:
+On Mon, Sep 19, 2022 at 11:59:48AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then teporarily enable it
+> again before going idle is daft.
 > 
-> On 17-08-2022 06:05, Andrew Morton wrote:
-> > On Tue, 16 Aug 2022 11:30:17 +0530 Pratyush Brahma <pbrahma@qti.qualcomm.com> wrote:
-> > 
-> > > The process_mrelease() system call[1] is used to release the memory of
-> > > a dying process from the context of the caller, which is similar to and
-> > > uses the functions of the oom reaper logic. There exists trace logs for
-> > > a process when reaped by the oom reaper. Just extend the same to when
-> > > done by the process_mrelease() system call.
-> > Why?  Please describe in full detail the end-user value of this change.
-> 
-> This patch provides information on how much memory is freed from a process
-> which is being reaped. Adding trace events in the process_mrelease() path when
-> process is being reaped would enable more holistic debug as it happens in
-> oom_reap_task_mm() currently.
-> 
-> This extends the debug functionality for the events as described in [1] to
-> the process_mrelease() system call. Now the coverage of trace events is complete.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
 
-Yes this is all nice but why it is needed to extend process_mrelease to
-be in par with the oom path? OOM path happens out of direct control of
-while this is under direct control of the caller. So why do we need more
-debugging data from the kernel? The information dumped by the tracing
-can be queried already by other means and much more extensibly.
- 
-> [1]
-> https://lore.kernel.org/all/20170530185231.GA13412@castle/T/#u
+Ok now with the cpu_pm_*() informations that makes sense:
 
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
