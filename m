@@ -1,217 +1,100 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BD15BC157
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:22:48 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 660355BC17B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiISCWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S229773AbiISCpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISCWg (ORCPT
+        with ESMTP id S229750AbiISCpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:22:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234F813F1A;
-        Sun, 18 Sep 2022 19:22:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C065613D5;
-        Sun, 18 Sep 2022 19:22:39 -0700 (PDT)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0F33F73B;
-        Sun, 18 Sep 2022 19:22:32 -0700 (PDT)
-Message-ID: <a7bb4b9f-61bf-c951-19a6-5b099c399524@arm.com>
-Date:   Sun, 18 Sep 2022 21:22:22 -0500
+        Sun, 18 Sep 2022 22:45:17 -0400
+X-Greylist: delayed 727 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Sep 2022 19:45:12 PDT
+Received: from mailserver.astranet.ru (mailserver.astranet.ru [62.183.109.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74ECA11168;
+        Sun, 18 Sep 2022 19:45:12 -0700 (PDT)
+Received: by mailserver.astranet.ru (Postfix, from userid 33)
+        id 70457901A69; Mon, 19 Sep 2022 06:31:18 +0400 (+04)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=astranet.ru; s=mail;
+        t=1663554678; bh=8U4kVQ9MaDdmTFvWLQWQOeffea76A7LfBrqduaHb4h8=;
+        h=To:Subject:Date:From:Reply-To:From;
+        b=VRRFNEvtoCxi1x6B5sPGDdRwSFibOU+RM2SGzlwoTKhI9hPQYkrDEvGdwdAbJqxgy
+         PymIWcu4LNYftOuA5QJBPSZOKCMwvOMccHtXxCkIMubq6esRlG1O+tG4L8WY/lWfsT
+         G+MRnmKWPnKaxztDH7ghvtnmAnn1Ff5Skgmk9CK0=
+To:     undisclosed-recipients:;
+Subject: AW: Darlehensangebot 1,5 %.
+X-PHP-Originating-Script: 0:rcube.php
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 0/8] efi: implement generic compressed boot support
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Lennart Poettering <lennart@poettering.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20220910081152.2238369-1-ardb@kernel.org>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <20220910081152.2238369-1-ardb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 19 Sep 2022 03:31:18 +0100
+From:   PREMIER SOLUTION <instrument@astranet.ru>
+Organization: PREMIER SOLUTION
+Reply-To: premiersolutions.inc@hotmail.com
+Mail-Reply-To: premiersolutions.inc@hotmail.com
+Message-ID: <ede3a115bdf6b0a8013a17453b6d44ac@astranet.ru>
+X-Sender: instrument@astranet.ru
+User-Agent: Roundcube Webmail/1.2-beta
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        ODD_FREEM_REPTO,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6346]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.3 ODD_FREEM_REPTO Has unusual reply-to header
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-With the BSS "fix" in grub for fedora/rhel, this is now working fine for 
-both systemd-boot and normal grub2, as well as booting directly from the 
-UEFI shell. Given both the magic number and the bss fix were merged at 
-the same time I don't think anyone should ever see the bad bss message, 
-at least not on the above distro's.
-
-I've largely been testing this on the PFTF/RPi4, and in a libvirt 
-qemu/kvm env with/without ksan/etc on a mostly fedora configured kernel. 
-Hooking this up to kinstall makes sense and works, although i'm not a 
-big fan.
-
-So, its looking good. All thumbs up here :)
-
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
 
 
-On 9/10/22 03:11, Ard Biesheuvel wrote:
-> Relatively modern architectures such as arm64 or RISC-V don't implement
-> a self-decompressing kernel, and leave it up to the bootloader to
-> decompress the compressed image before executing it. For bare metal
-> boot, this policy makes sense, as a self-decompressing image essentially
-> duplicates a lot of fiddly preparation work to create a 1:1 mapping and
-> set up the C runtime, and to discover or infer where DRAM lives from
-> device trees or other firmware tables.
-> 
-> For EFI boot, the situation is a bit different: the EFI entrypoint is
-> called with a 1:1 cached mapping covering all of DRAM already active,
-> and with a stack, a heap, a memory map and boot services to load and
-> start images. This means it is rather trivial to implement a
-> self-decompressing wrapper for EFI boot in a generic manner, and reuse
-> it across architectures that implement EFI boot.
-> 
-> The only slight downside is that when UEFI secure boot is enabled, the
-> generic LoadImage/StartImage only allow signed images to be loaded and
-> started, and we would prefer to avoid the need to sign both the inner
-> and outer PE/COFF images.
-> 
-> However, the only truly generic and portable way to achieve this is to
-> rely on LoadImage/StartImage as the EFI spec defines them, and avoid
-> making assumptions about how things might work under the hood, and how
-> we might circumvent that. This includes just loading the image into
-> memory and jumping to the PE entry point: in the context of secure boot,
-> measured boot and other hardening measures the firmware may take (such
-> as disallowing mappings that are both writable and executable), using
-> the firmware's image loading API is the only maintainable choice.
-> 
-> For this reason, this version of the series includes support for signing
-> the images using sbsign, if the signing key and cert are specified in
-> Kconfig.
-> 
-> The code is wired up for arm64, LoongArch and RISC-V. The latter was
-> build tested only.
-> 
-> Changes since v4:
-> - make CONFIG_EFI_ZBOOT user selectable again, and turn it on by default
->    only for LoongArch
-> - set KBUILD_IMAGE to vmlinuz.efi if CONFIG_EFI_ZBOOT=y, so that make
->    targets such as zinstall and bindeb-pkg do the right thing
-> - throw an error is BSS was not cleared by the loader - this is needed
->    to detect broken distro implementations of LoadImage in shim and grub
-> - add vmlinuz.* to .gitignore on the various architectures
-> - switch back to defining uncompressed_size as 'extern __aligned(1)' so
->    that the compiler will perform the unaligned access as appropriate on
->    the architecture in question - this requires the latest binutils on
->    LoongArch [0]
-> 
-> Changes since v3:
-> - add support for XZ and ZSTD compression
-> - deal with exit data returned by StartImage()
-> - use LoadFile2 based image loading instead of passing the raw buffer -
->    this way, the provenance of the data is more visible, allowing us,
->    for instance, to deal with initrd= on arm64 transparently (this means
->    that systemd-boot on arm64 will work unmodified provided that the
->    [deprecated] command line initrd loader is enabled in the kernel
->    build)
-> - include LoongArch support
-> - rename compressed image to vmlinuz.efi on all architectures
-> 
-> Changes since v2:
-> - drop some of the refactoring work to make efi_printk() available in
->    the decompressor, and just use fixed strings instead;
-> - provide memcpy/memmove/memset based on the UEFI boot services, instead
->    of having to specify for each architecture how to wire these up;
-> - drop PI/DXE based signature check circumvention, and just sign the
->    inner image instead, if needed;
-> - add a header to the zimage binary that identifies it as a EFI zboot
->    image, and describes the compression algorithm and where the payload
->    lives in the image - this might be used by non-EFI loaders to locate
->    and decompress the bare metal image, given that the EFI zboot one is
->    not a hybrid like the one it encapsulates.
-> 
-> [0] https://sourceware.org/pipermail/binutils/2022-September/122713.html
-> 
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-> Cc: Peter Jones <pjones@redhat.com>
-> Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Atish Patra <atishp@atishpatra.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Huacai Chen <chenhuacai@loongson.cn>
-> Cc: Xi Ruoyao <xry111@xry111.site>
-> Cc: Lennart Poettering <lennart@poettering.net>
-> Cc: Jeremy Linton <jeremy.linton@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> 
-> Ard Biesheuvel (8):
->    efi: name the ARCH-stub.c files uniformly
->    efi/libstub: add some missing EFI prototypes
->    efi/libstub: use EFI provided memcpy/memset routines
->    efi/libstub: move efi_system_table global var into separate object
->    efi/libstub: implement generic EFI zboot
->    arm64: efi: enable generic EFI compressed boot
->    riscv: efi: enable generic EFI compressed boot
->    loongarch: efi: enable generic EFI compressed boot
-> 
->   arch/arm64/Makefile                                       |   9 +-
->   arch/arm64/boot/.gitignore                                |   1 +
->   arch/arm64/boot/Makefile                                  |   6 +
->   arch/arm64/kernel/image-vars.h                            |  13 -
->   arch/loongarch/Kconfig                                    |   1 +
->   arch/loongarch/Makefile                                   |   4 +-
->   arch/loongarch/boot/.gitignore                            |   1 +
->   arch/loongarch/boot/Makefile                              |   6 +
->   arch/loongarch/kernel/image-vars.h                        |   3 -
->   arch/riscv/Makefile                                       |   6 +-
->   arch/riscv/boot/.gitignore                                |   1 +
->   arch/riscv/boot/Makefile                                  |   6 +
->   arch/riscv/kernel/image-vars.h                            |   9 -
->   drivers/firmware/efi/Kconfig                              |  38 +++
->   drivers/firmware/efi/libstub/Makefile                     |  21 +-
->   drivers/firmware/efi/libstub/Makefile.zboot               |  70 +++++
->   drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} |   0
->   drivers/firmware/efi/libstub/efi-stub.c                   |   2 -
->   drivers/firmware/efi/libstub/efistub.h                    |  35 ++-
->   drivers/firmware/efi/libstub/file.c                       |  17 ++
->   drivers/firmware/efi/libstub/intrinsics.c                 |  30 ++
->   drivers/firmware/efi/libstub/systable.c                   |   8 +
->   drivers/firmware/efi/libstub/zboot-header.S               | 143 ++++++++++
->   drivers/firmware/efi/libstub/zboot.c                      | 296 ++++++++++++++++++++
->   drivers/firmware/efi/libstub/zboot.lds                    |  43 +++
->   include/linux/efi.h                                       |  13 +
->   26 files changed, 732 insertions(+), 50 deletions(-)
->   create mode 100644 drivers/firmware/efi/libstub/Makefile.zboot
->   rename drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} (100%)
->   create mode 100644 drivers/firmware/efi/libstub/intrinsics.c
->   create mode 100644 drivers/firmware/efi/libstub/systable.c
->   create mode 100644 drivers/firmware/efi/libstub/zboot-header.S
->   create mode 100644 drivers/firmware/efi/libstub/zboot.c
->   create mode 100644 drivers/firmware/efi/libstub/zboot.lds
-> 
+-- 
+Grüße,
 
+Brauchen Sie einen Kredit?
+
+Machen Sie sich finanziell stabil, indem Sie einen Kredit bei PREMIER 
+aufnehmen
+SOLUTION ist das zuverlässigste Kreditunternehmen.
+Das Unternehmen PREMIER SOLUTION gewährt Darlehen zu einem niedrigen 
+Zinssatz von 1,5 %
+Wir bieten verschiedene Arten von Darlehen für Unternehmen und 
+Einzelpersonen an, einschließlich Projektdarlehen (kurz- und 
+langfristige Darlehen, Privatdarlehen, Investitionsdarlehen und 
+Geschäftsdarlehen usw.)
+
+Wenn Sie an weiteren Details interessiert sind, füllen Sie bitte die 
+folgenden Details aus
+
+Bitte füllen Sie folgende Angaben aus:
+
+Vollständiger Name :
+Darlehensbetrag:
+Mietzeitraum :
+Darlehen Zweck :
+Telefon :
+
+Hinweis: Wir bieten Kredite in verschiedenen Währungen EUR, CHF, DOLLAR 
+an
+und Pfund usw.
+
+Wir erwarten Ihre dringende Antwort, um fortzufahren
+
+Grüße
