@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769AD5BCEC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281C65BCF4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiISO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S229766AbiISOlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiISO3f (ORCPT
+        with ESMTP id S230237AbiISOlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:29:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA8C2AD6;
-        Mon, 19 Sep 2022 07:29:33 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWRm71WpZzlW0r;
-        Mon, 19 Sep 2022 22:25:27 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
- 2022 22:29:31 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next 2/2] ext4: fix potential memory leak in ext4_fc_record_modified_inode()
-Date:   Mon, 19 Sep 2022 22:40:21 +0800
-Message-ID: <20220919144021.2162295-3-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220919144021.2162295-1-yebin10@huawei.com>
-References: <20220919144021.2162295-1-yebin10@huawei.com>
+        Mon, 19 Sep 2022 10:41:01 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB7DB1F5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:40:47 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9133924000A;
+        Mon, 19 Sep 2022 14:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663598446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Di3uybgKz4AkAsKWCSByYItw3ITbnFZ5I4YGZNU/5Q=;
+        b=j/gZkF6FRjmjqrpTsEzUMRQQNmClzex9cNd314SFIzaepJRg19B9fos5Z4ILzwTqT9PgHS
+        EiSCB8tKHYHPoWxeC6vif80K6MxBwcyn3PSsxuTDxaTYOLRloCumDh2xdGewqlmkziKHlr
+        UGWwyAs/o71i2H4//Y2zhL0Q+7iOkTv14w33Tl/D25Z/xdSCbXzy2gbh2cu6i4rj1ryJI/
+        a1PPoZotBVaT6VIv9ZuT29v+R4DZphbmFqmpjhtj1ef76Q3+FAgBxoEYGP/lSlSd+SXpWO
+        VmbzSnwcy+2sarvNYx5EetZWStOppuvKJm68bsVNNiYGbtlpDH5VhtACAOqgkg==
+Date:   Mon, 19 Sep 2022 16:40:41 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Colin Ian King <colin.king@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        William Zhang <william.zhang@broadcom.com>
+Subject: Re: [PATCH 0/2] mtd: rawnand: brcmnand: Glue driver Kconfig entries
+Message-ID: <20220919164041.682775b3@xps-13>
+In-Reply-To: <6008ef46-ccdb-ea01-f9fb-4f8fceed2d29@gmail.com>
+References: <20220711222323.4048197-1-f.fainelli@gmail.com>
+        <6008ef46-ccdb-ea01-f9fb-4f8fceed2d29@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As krealloc may return NULL, in this case 'state->fc_modified_inodes'
-may not be freed by krealloc, but 'state->fc_modified_inodes' already
-set NULL. Then will lead to 'state->fc_modified_inodes' memory leak.
+Hi Florian,
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/fast_commit.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+f.fainelli@gmail.com wrote on Thu, 4 Aug 2022 10:55:21 -0700:
 
-diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-index cc8c8db075ba..5ab58cb4ce8d 100644
---- a/fs/ext4/fast_commit.c
-+++ b/fs/ext4/fast_commit.c
-@@ -1486,13 +1486,15 @@ static int ext4_fc_record_modified_inode(struct super_block *sb, int ino)
- 		if (state->fc_modified_inodes[i] == ino)
- 			return 0;
- 	if (state->fc_modified_inodes_used == state->fc_modified_inodes_size) {
--		state->fc_modified_inodes = krealloc(
--				state->fc_modified_inodes,
-+		int *fc_modified_inodes;
-+
-+		fc_modified_inodes = krealloc(state->fc_modified_inodes,
- 				sizeof(int) * (state->fc_modified_inodes_size +
- 				EXT4_FC_REPLAY_REALLOC_INCREMENT),
- 				GFP_KERNEL);
--		if (!state->fc_modified_inodes)
-+		if (!fc_modified_inodes)
- 			return -ENOMEM;
-+		state->fc_modified_inodes = fc_modified_inodes;
- 		state->fc_modified_inodes_size +=
- 			EXT4_FC_REPLAY_REALLOC_INCREMENT;
- 	}
--- 
-2.31.1
+> On 7/11/22 15:23, Florian Fainelli wrote:
+> > Hi all,
+> >=20
+> > This patch series allows for a finer control over the BRCMNAND driver
+> > glue driver selection such that it defaults to the various platforms
+> > enabled in the configuration file. =20
+>=20
+> Miquel are you able to review and apply those patches if satisfactory? Th=
+anks!
 
+Sorry for the huge delay, I'm now trying to catch up on all my work
+left since end of June, the series looks ok at a first glance and
+received no comments so I'll apply it soon.
+
+Thanks,
+Miqu=C3=A8l
