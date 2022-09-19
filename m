@@ -2,63 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AF85BD522
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927425BD525
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiISTTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 15:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S229626AbiISTUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 15:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiISTTd (ORCPT
+        with ESMTP id S229605AbiISTUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 15:19:33 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A17D92
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:19:31 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id y82so220661yby.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=FXLyqGxgl949dQXd9+Y93zHcrMCOz6aSMQMInAwIeao=;
-        b=Y1sysjOv33mISn1q70tz/ornMY+WsYjj8pwwOMNYoeEDrjz+CcDRAJILfFHrNzc1bo
-         OkXD8KfGtJfYX+50rR+zUndJrqlLUHSBxc0Ij1HQ9PgWqZasdCMZTY5Ek86VBNsAupth
-         /tPka1tNtGB4U2wibDQ7JqF2Bkj6lFVNNf7M2U+/Tzn7dg0ZB/SB12D6hLC6C6LQ1IfV
-         CgflZeDxFIY2EE93V75DfNcueAvSnLNCOpu6Rtc6eBKqxLyFwMFU/hgrMJjoyC2vf7x0
-         nmk41hm6TyRgk+c7Cqe73DJUU11K9zoP7mJfH5tZHo0YrNLlmN5EqerDHdEE9krQcnkL
-         VDJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FXLyqGxgl949dQXd9+Y93zHcrMCOz6aSMQMInAwIeao=;
-        b=yGEuClFvPdl9FQ7QzucvUcdKsiUwf2OAAl7rk8tldrM+nJI3VzH3tZJ0Fkbzjbqfou
-         D9kEdHN9o7asVMp1/Iu+sjMPx1BWWFpRzHbJpFmRKhTnOJ343yuJs7QSjl1NfmxtzMq9
-         Osvzr+NSnzsXoYHtpAIstfuLyLHw+qhIE82qQpaaXsOv6uwCw2rsUHCFBh0Cs75+hUBA
-         tkEEVQ4YwsXOMuNrgSn9zgs57uga0ne1D1E51jc4gL94BtUkVaRQihPobWd6MSj1WxrL
-         DnLIiYWeYVNj63fWuy2ulAqhv4/0JLg1MksH3v0yCCDty/zEdRh92eXi3dKIpxF+2/j/
-         9QHg==
-X-Gm-Message-State: ACrzQf3AtkjmLpcAmF17yIN+Ut2Bn+WwRcey/9UqcbSlqyBLRcMlQMXn
-        zCBAdvKBuQstysKzKhKLa0zdvwyFXgOB07ajJ6GxhSTo6zRQcw==
-X-Google-Smtp-Source: AMsMyM6cxcp910uQasBXZ2uu/YUuglapy5eHTqQW940vXB6HdiRB9HtxI0nM9Ze56dVuw/x6p5SifH40jDS62HqtpD8=
-X-Received: by 2002:a25:389:0:b0:6a9:20da:fe68 with SMTP id
- 131-20020a250389000000b006a920dafe68mr15145597ybd.49.1663615170238; Mon, 19
- Sep 2022 12:19:30 -0700 (PDT)
+        Mon, 19 Sep 2022 15:20:04 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD5232B86
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:20:01 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B0DA61F5FA;
+        Mon, 19 Sep 2022 21:19:59 +0200 (CEST)
+Message-ID: <df6b1f7a-3dd4-496b-bb6d-572aa8e08257@somainline.org>
+Date:   Mon, 19 Sep 2022 21:19:58 +0200
 MIME-Version: 1.0
-References: <20220919135812.8307-1-aruna.hewapathirane@gmail.com> <590b49c9-5940-c7e6-0a23-9a82cd06fe62@gmail.com>
-In-Reply-To: <590b49c9-5940-c7e6-0a23-9a82cd06fe62@gmail.com>
-From:   Aruna Hewapathirane <aruna.hewapathirane@gmail.com>
-Date:   Mon, 19 Sep 2022 15:19:19 -0400
-Message-ID: <CAFSeFg-awEMyZjePcvO_Mo3k_pFX-Kq85Uvbub6bmA7XkQ7zZA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] staging: rtl8192e: removes blank line
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, f3sch.git@outlook.com,
-        guozihua@huawei.com, linux-staging@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] arm64: dts: qcom: correct white-space before {
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220919163333.129989-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220919163333.129989-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,81 +49,293 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 2:41 PM Philipp Hortmann
-<philipp.g.hortmann@gmail.com> wrote:
->
-> On 9/19/22 15:58, Aruna Hewapathirane wrote:
-> > This patch fixes a checkpatch CHECK issue
-> > CHECK: Please don't use multiple blank lines
-> >
-> > Signed-off-by: Aruna Hewapathirane <aruna.hewapathirane@gmail.com>
-> > ---
-> >   drivers/staging/rtl8192e/rtllib_tx.c | 1 -
-> >   1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-> > index d5275319a486..f651947f6b44 100644
-> > --- a/drivers/staging/rtl8192e/rtllib_tx.c
-> > +++ b/drivers/staging/rtl8192e/rtllib_tx.c
-> > @@ -920,7 +920,6 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
-> >                                       tcb_desc->bTxDisableRateFallBack = 1;
-> >                               }
-> >
-> > -
-> >                               tcb_desc->RATRIndex = 7;
-> >                               tcb_desc->bTxUseDriverAssingedRate = 1;
-> >                               tcb_desc->bdhcp = 1;
->
-> Please avoid the 2/2 in the subject. This is only for patch series.
-
-I will do so in future I did not know this. My apologies.
-
-> Create a version 2 of this patch with change history.
-
-I have no idea how to create a version2 with a change history but I am
-going to Google and see what I can find.
-
-> Removing blank lines is OK but do this for the entire document.
-
-Ah.. of course makes  sense. Once again my apologies.
-
-> Add the file name to the subject to make it more unique.
-
-I will do so. Thank you Philipp.
-
->
->
-> Bye Philipp
 
 
-On Mon, Sep 19, 2022 at 2:41 PM Philipp Hortmann
-<philipp.g.hortmann@gmail.com> wrote:
->
-> On 9/19/22 15:58, Aruna Hewapathirane wrote:
-> > This patch fixes a checkpatch CHECK issue
-> > CHECK: Please don't use multiple blank lines
-> >
-> > Signed-off-by: Aruna Hewapathirane <aruna.hewapathirane@gmail.com>
-> > ---
-> >   drivers/staging/rtl8192e/rtllib_tx.c | 1 -
-> >   1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-> > index d5275319a486..f651947f6b44 100644
-> > --- a/drivers/staging/rtl8192e/rtllib_tx.c
-> > +++ b/drivers/staging/rtl8192e/rtllib_tx.c
-> > @@ -920,7 +920,6 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
-> >                                       tcb_desc->bTxDisableRateFallBack = 1;
-> >                               }
-> >
-> > -
-> >                               tcb_desc->RATRIndex = 7;
-> >                               tcb_desc->bTxUseDriverAssingedRate = 1;
-> >                               tcb_desc->bdhcp = 1;
->
-> Please avoid the 2/2 in the subject. This is only for patch series.
-> Create a version 2 of this patch with change history.
-> Removing blank lines is OK but do this for the entire document.
-> Add the file name to the subject to make it more unique.
->
-> Bye Philipp
+On 19.09.2022 18:33, Krzysztof Kozlowski wrote:
+> Add missing space or remove redundant one before opening {.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Very nice!
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Konrad
+
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi                 | 2 +-
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi                 | 8 ++++----
+>  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts              | 4 ++--
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi          | 8 ++++----
+>  arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi            | 6 +++---
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts            | 8 ++++----
+>  arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts  | 4 ++--
+>  arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts      | 6 +++---
+>  10 files changed, 25 insertions(+), 25 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index 1e6b70582866..6a0420c079f5 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -1498,7 +1498,7 @@ blsp2_i2c3_sleep: blsp2-i2c3-sleep {
+>  				bias-disable;
+>  			};
+>  
+> -			wcd_intr_default: wcd-intr-default{
+> +			wcd_intr_default: wcd-intr-default {
+>  				pins = "gpio54";
+>  				function = "gpio";
+>  				drive-strength = <2>;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index d463a66715ea..7e2a8b168d91 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -1903,7 +1903,7 @@ etm5: etm@7c40000 {
+>  
+>  			cpu = <&CPU4>;
+>  
+> -			port{
+> +			port {
+>  				etm4_out: endpoint {
+>  					remote-endpoint = <&apss_funnel_in4>;
+>  				};
+> @@ -1920,7 +1920,7 @@ etm6: etm@7d40000 {
+>  
+>  			cpu = <&CPU5>;
+>  
+> -			port{
+> +			port {
+>  				etm5_out: endpoint {
+>  					remote-endpoint = <&apss_funnel_in5>;
+>  				};
+> @@ -1937,7 +1937,7 @@ etm7: etm@7e40000 {
+>  
+>  			cpu = <&CPU6>;
+>  
+> -			port{
+> +			port {
+>  				etm6_out: endpoint {
+>  					remote-endpoint = <&apss_funnel_in6>;
+>  				};
+> @@ -1954,7 +1954,7 @@ etm8: etm@7f40000 {
+>  
+>  			cpu = <&CPU7>;
+>  
+> -			port{
+> +			port {
+>  				etm7_out: endpoint {
+>  					remote-endpoint = <&apss_funnel_in7>;
+>  				};
+> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> index bf8077a1cf9a..3d1bd8e3fc73 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> @@ -1007,7 +1007,7 @@ can@0 {
+>  };
+>  
+>  &swr0 {
+> -	left_spkr: wsa8810-left{
+> +	left_spkr: wsa8810-left {
+>  		compatible = "sdw10217211000";
+>  		reg = <0 3>;
+>  		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
+> @@ -1016,7 +1016,7 @@ left_spkr: wsa8810-left{
+>  		#sound-dai-cells = <0>;
+>  	};
+>  
+> -	right_spkr: wsa8810-right{
+> +	right_spkr: wsa8810-right {
+>  		compatible = "sdw10217211000";
+>  		reg = <0 4>;
+>  		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> index 7ee407f7b6bb..1ce73187a562 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> @@ -181,7 +181,7 @@ &sound_multimedia0_codec {
+>  /* PINCTRL - modifications to sc7180-trogdor.dtsi */
+>  
+>  &en_pp3300_dx_edp {
+> -	pinmux  {
+> +	pinmux {
+>  		pins = "gpio67";
+>  	};
+>  
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> index 1bd6c7dcd9e9..7fcff4eddd3a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> @@ -189,7 +189,7 @@ pinconf {
+>  	};
+>  };
+>  
+> -&sec_mi2s_active{
+> +&sec_mi2s_active {
+>  	pinmux {
+>  		pins = "gpio49", "gpio50", "gpio51", "gpio52";
+>  		function = "mi2s_1";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> index b5f534db135a..6ea62ce138ce 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> @@ -1220,7 +1220,7 @@ pinconf {
+>  	};
+>  
+>  	ap_suspend_l_neuter: ap-suspend-l-neuter {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio27";
+>  			function = "gpio";
+>  		};
+> @@ -1365,7 +1365,7 @@ pinconf {
+>  	};
+>  
+>  	pen_rst_odl: pen-rst-odl {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio18";
+>  			function = "gpio";
+>  		};
+> @@ -1489,7 +1489,7 @@ pinconf {
+>  	};
+>  
+>  	ts_int_l: ts-int-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio9";
+>  			function = "gpio";
+>  		};
+> @@ -1501,7 +1501,7 @@ pinconf {
+>  	};
+>  
+>  	ts_reset_l: ts-reset-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio8";
+>  			function = "gpio";
+>  		};
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
+> index b5eb8f7eca1d..d46a6d2a7912 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
+> @@ -1341,7 +1341,7 @@ pinconf {
+>  	};
+>  
+>  	pen_rst_l: pen-rst-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio23";
+>  			function = "gpio";
+>  		};
+> @@ -1408,7 +1408,7 @@ pinconf {
+>  	};
+>  
+>  	ts_int_l: ts-int-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio125";
+>  			function = "gpio";
+>  		};
+> @@ -1420,7 +1420,7 @@ pinconf {
+>  	};
+>  
+>  	ts_reset_l: ts-reset-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio118";
+>  			function = "gpio";
+>  		};
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> index 132417e2d11e..feb1396fadb6 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> @@ -1076,7 +1076,7 @@ &venus {
+>  	status = "okay";
+>  };
+>  
+> -&wcd9340{
+> +&wcd9340 {
+>  	pinctrl-0 = <&wcd_intr_default>;
+>  	pinctrl-names = "default";
+>  	clock-names = "extclk";
+> @@ -1089,7 +1089,7 @@ &wcd9340{
+>  	vdd-io-supply = <&vreg_s4a_1p8>;
+>  
+>  	swm: swm@c85 {
+> -		left_spkr: wsa8810-left{
+> +		left_spkr: wsa8810-left {
+>  			compatible = "sdw10217201000";
+>  			reg = <0 1>;
+>  			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
+> @@ -1098,7 +1098,7 @@ left_spkr: wsa8810-left{
+>  			#sound-dai-cells = <0>;
+>  		};
+>  
+> -		right_spkr: wsa8810-right{
+> +		right_spkr: wsa8810-right {
+>  			compatible = "sdw10217201000";
+>  			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
+>  			reg = <0 2>;
+> @@ -1126,7 +1126,7 @@ &qup_spi2_default {
+>  	drive-strength = <16>;
+>  };
+>  
+> -&qup_uart3_default{
+> +&qup_uart3_default {
+>  	pinmux {
+>  		pins = "gpio41", "gpio42", "gpio43", "gpio44";
+>  		function = "qup3";
+> diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> index be59a8ba9c1f..761927535778 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+> @@ -783,7 +783,7 @@ &wcd9340{
+>  	qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+>  
+>  	swm: swm@c85 {
+> -		left_spkr: wsa8810-left{
+> +		left_spkr: wsa8810-left {
+>  			compatible = "sdw10217211000";
+>  			reg = <0 3>;
+>  			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
+> @@ -792,7 +792,7 @@ left_spkr: wsa8810-left{
+>  			#sound-dai-cells = <0>;
+>  		};
+>  
+> -		right_spkr: wsa8810-right{
+> +		right_spkr: wsa8810-right {
+>  			compatible = "sdw10217211000";
+>  			powerdown-gpios = <&wcdgpio 2 GPIO_ACTIVE_HIGH>;
+>  			reg = <0 4>;
+> diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> index f954fe5cb61a..7e92438034e8 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
+> @@ -574,7 +574,7 @@ pinconf {
+>  	};
+>  
+>  	pen_rst_l: pen-rst-l {
+> -		pinmux  {
+> +		pinmux {
+>  			pins = "gpio21";
+>  			function = "gpio";
+>  		};
+> @@ -715,7 +715,7 @@ &wcd9340{
+>  	qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+>  
+>  	swm: swm@c85 {
+> -		left_spkr: wsa8810-left{
+> +		left_spkr: wsa8810-left {
+>  			compatible = "sdw10217211000";
+>  			reg = <0 3>;
+>  			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
+> @@ -724,7 +724,7 @@ left_spkr: wsa8810-left{
+>  			#sound-dai-cells = <0>;
+>  		};
+>  
+> -		right_spkr: wsa8810-right{
+> +		right_spkr: wsa8810-right {
+>  			compatible = "sdw10217211000";
+>  			powerdown-gpios = <&wcdgpio 2 GPIO_ACTIVE_HIGH>;
+>  			reg = <0 4>;
