@@ -2,267 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E0E5BD0B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850315BD0C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiISPWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S229814AbiISPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiISPVp (ORCPT
+        with ESMTP id S229861AbiISPWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:21:45 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C869138680
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:20:48 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id m16so1617243iln.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YLOApTarCsOqUAlgmIHrRc/X2zACHEMKuKTBUNKzFw4=;
-        b=fAUA2XlM5yhDxFmaaD7YX83jPOwHgHi9hjjWMHaCofYsDkqiSjsHLy4jwa+8hjRjTY
-         eKsYK95pUXwJFcy2Z6VLyBfHo1q9zlFdklB+FYaWC/eP+qJRlFt42I/+KYt/EzwWayat
-         5aNWkeprK/CqunbtcA+LBEAz26gHmYdfGGNls=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YLOApTarCsOqUAlgmIHrRc/X2zACHEMKuKTBUNKzFw4=;
-        b=HfpJ+Fi0aBPscfCKq3hyobKgfB5jNoomdMxTniaiuM8J3eOZ1a7DyG7BNDvIevKBa2
-         FYXEOXtedhZUGoUGLLA4uE+PHA6hEubyzMHxDMhpRHdcJkbeU2ULEuP08siC87PONOfc
-         gilCBYC3nvgDmC8ISo3B7Ma3idnXHnmqh5Lf+WwjkSxfIBCp39h2ErZxzobktWeERzqN
-         QNGOxOceXeRpFtLuFsB5bui/8YA6sQqJPaRbIY696pn0boo+uvyNcTVKYNtFJWTw3Hns
-         9XohaeL/tBk9mx1szQkhncIaofXoSXQUgbKZ/Hq/EqyZ1qwQt/5feUbe06U2bSWLXW5M
-         /T4A==
-X-Gm-Message-State: ACrzQf29i2Ih+tWjrExHo3/qWLTW4DbCpj9DFWey9pJkMDjveyy3pVdN
-        wscU8JY0xVWnhlDMiiouxVRD0pXPKEFT0g==
-X-Google-Smtp-Source: AMsMyM4OSwQzVl7xTI3eClfbYP6IKVEExzpbBSiYoc9b1cXU64FHBqIJNKC8ozScLiOBQsGv3WgkBA==
-X-Received: by 2002:a05:6e02:18c7:b0:2f1:4e65:4b76 with SMTP id s7-20020a056e0218c700b002f14e654b76mr7726693ilu.260.1663600848018;
-        Mon, 19 Sep 2022 08:20:48 -0700 (PDT)
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com. [209.85.166.44])
-        by smtp.gmail.com with ESMTPSA id w22-20020a02b0d6000000b003583ae37f40sm5513411jah.153.2022.09.19.08.20.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 08:20:47 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id v128so23115632ioe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:20:46 -0700 (PDT)
-X-Received: by 2002:a05:6602:2d44:b0:6a1:b558:272d with SMTP id
- d4-20020a0566022d4400b006a1b558272dmr7433211iow.7.1663600846333; Mon, 19 Sep
- 2022 08:20:46 -0700 (PDT)
+        Mon, 19 Sep 2022 11:22:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403C2601;
+        Mon, 19 Sep 2022 08:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663600907; x=1695136907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kNwt2uWdXdRdyeI/mYyCWyWe8TGe7zKp/jgzp6dU+WE=;
+  b=R9x6p/0jSdFBti7lQd3p4EbT15K/C6SK3IXurKmYE13r5QuQmKBj5X4g
+   fbTATmso9a31DHcLRNYiA8kE5PCdR61ilN44xhzWnZaqbeLhvwD87x27o
+   GNh73RRoiugtaS2jXT9kT8zczssrCQn7TV4YKMNF4UBeqMYFbWenOHYxg
+   SEtg977DZmI90yH1HVIN2XVmDzJpGIuU78wE7ujWJj6TxDXO4O7iNEFpr
+   6e7IokDEu8z8W5TKnkYBjxS7UT7Ky30K53iGeJZCYk7d9KHiHTbPjClyw
+   evXimCY8w5rdYBsghyoRyIm7p4xe3rzzBNBTUvjT6KrcRcbIsF6F++EO1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300803312"
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="300803312"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:21:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="760908006"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Sep 2022 08:21:43 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaIad-00023N-0K;
+        Mon, 19 Sep 2022 15:21:43 +0000
+Date:   Mon, 19 Sep 2022 23:20:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jgg@ziepe.ca,
+        william.xuanziyang@huawei.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: Re: [PATCH v1] net/8021q/vlan: check the return value of
+ vlan_vid_add()
+Message-ID: <202209192322.WqMpsD4X-lkp@intel.com>
+References: <20220919074600.1576168-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-References: <20220914235801.1731478-1-rrangel@chromium.org>
- <20220914155914.v3.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid> <Yyg8RU2k6ZCRuqri@smile.fi.intel.com>
-In-Reply-To: <Yyg8RU2k6ZCRuqri@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 19 Sep 2022 09:20:33 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30BcM2n+bvv8CTRYpC4xhzJGr9k9=o0bJk-adDnpxsqABg@mail.gmail.com>
-Message-ID: <CAHQZ30BcM2n+bvv8CTRYpC4xhzJGr9k9=o0bJk-adDnpxsqABg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/13] gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tim Van Patten <timvp@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919074600.1576168-1-floridsleeves@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 3:54 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Sep 14, 2022 at 05:57:53PM -0600, Raul E Rangel wrote:
-> > The ACPI spec defines the SharedAndWake and ExclusiveAndWake share type
-> > keywords. This is an indication that the GPIO IRQ can also be used as a
-> > wake source. This change exposes the wake_capable bit so drivers can
-> > correctly enable wake functionality instead of making an assumption.
->
-> With two nit-picks below
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
-> >   unrelated drivers.
-> > - Converted wake_capable parameter to bool.
-> >
-> > Changes in v2:
-> > - Fixed call site in mlxbf_gige_probe
-> >
-> >  drivers/gpio/gpiolib-acpi.c | 17 ++++++++++++++---
-> >  drivers/gpio/gpiolib-acpi.h |  2 ++
-> >  include/linux/acpi.h        | 22 ++++++++++++++++++----
-> >  3 files changed, 34 insertions(+), 7 deletions(-)
-> >
+Hi Li,
 
-> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> > index 9be1376f9a627f..c703f095993a2c 100644
-> > --- a/drivers/gpio/gpiolib-acpi.c
-> > +++ b/drivers/gpio/gpiolib-acpi.c
-> > @@ -741,6 +741,8 @@ static int acpi_populate_gpio_lookup(struct acpi_resource *ares, void *data)
-> >               lookup->info.pin_config = agpio->pin_config;
-> >               lookup->info.debounce = agpio->debounce_timeout;
-> >               lookup->info.gpioint = gpioint;
-> > +             lookup->info.wake_capable = agpio->wake_capable ==
-> > +                                         ACPI_WAKE_CAPABLE;
->
-> Can be still on one line.
->
+Thank you for the patch! Perhaps something to improve:
 
-I used clang-format to format the code. Apparently that still uses the
-80 char limit. I've gone ahead and manually changed it.
+[auto build test WARNING on net/master]
+[also build test WARNING on net-next/master linus/master v6.0-rc6 next-20220919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> >               /*
-> >                * Polarity and triggering are only specified for GpioInt
-> > @@ -987,10 +989,12 @@ struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
-> >  }
-> >
-> >  /**
-> > - * acpi_dev_gpio_irq_get_by() - Find GpioInt and translate it to Linux IRQ number
-> > + * acpi_dev_gpio_irq_wake_get_by() - Find GpioInt and translate it to Linux IRQ
-> > + *                                   number
-> >   * @adev: pointer to a ACPI device to get IRQ from
-> >   * @name: optional name of GpioInt resource
-> >   * @index: index of GpioInt resource (starting from %0)
-> > + * @wake_capable: Set to true if the IRQ is wake capable
-> >   *
-> >   * If the device has one or more GpioInt resources, this function can be
-> >   * used to translate from the GPIO offset in the resource to the Linux IRQ
-> > @@ -1002,9 +1006,13 @@ struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
-> >   * The function takes optional @name parameter. If the resource has a property
-> >   * name, then only those will be taken into account.
-> >   *
-> > + * The GPIO is considered wake capable if the GpioInt resource specifies
-> > + * SharedAndWake or ExclusiveAndWake.
-> > + *
-> >   * Return: Linux IRQ number (> %0) on success, negative errno on failure.
-> >   */
-> > -int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int index)
-> > +int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name,
-> > +                               int index, bool *wake_capable)
-> >  {
-> >       int idx, i;
-> >       unsigned int irq_flags;
-> > @@ -1061,13 +1069,16 @@ int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int ind
-> >                               dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
-> >                       }
-> >
-> > +                     if (wake_capable)
-> > +                             *wake_capable = info.wake_capable;
-> > +
-> >                       return irq;
-> >               }
-> >
-> >       }
-> >       return -ENOENT;
-> >  }
-> > -EXPORT_SYMBOL_GPL(acpi_dev_gpio_irq_get_by);
-> > +EXPORT_SYMBOL_GPL(acpi_dev_gpio_irq_wake_get_by);
-> >
-> >  static acpi_status
-> >  acpi_gpio_adr_space_handler(u32 function, acpi_physical_address address,
-> > diff --git a/drivers/gpio/gpiolib-acpi.h b/drivers/gpio/gpiolib-acpi.h
-> > index e476558d947136..1ac6816839dbce 100644
-> > --- a/drivers/gpio/gpiolib-acpi.h
-> > +++ b/drivers/gpio/gpiolib-acpi.h
-> > @@ -18,6 +18,7 @@ struct acpi_device;
-> >   * @pin_config: pin bias as provided by ACPI
-> >   * @polarity: interrupt polarity as provided by ACPI
-> >   * @triggering: triggering type as provided by ACPI
-> > + * @wake_capable: wake capability as provided by ACPI
-> >   * @debounce: debounce timeout as provided by ACPI
-> >   * @quirks: Linux specific quirks as provided by struct acpi_gpio_mapping
-> >   */
-> > @@ -28,6 +29,7 @@ struct acpi_gpio_info {
-> >       int pin_config;
-> >       int polarity;
-> >       int triggering;
-> > +     bool wake_capable;
-> >       unsigned int debounce;
-> >       unsigned int quirks;
-> >  };
-> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> > index 6f64b2f3dc5479..d3121cef6cc3bc 100644
-> > --- a/include/linux/acpi.h
-> > +++ b/include/linux/acpi.h
-> > @@ -1202,7 +1202,8 @@ bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
-> >                               struct acpi_resource_gpio **agpio);
-> >  bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
-> >                              struct acpi_resource_gpio **agpio);
-> > -int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int index);
-> > +int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name,
-> > +                               int index, bool *wake_capable);
-> >  #else
-> >  static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
-> >                                             struct acpi_resource_gpio **agpio)
-> > @@ -1214,16 +1215,29 @@ static inline bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
-> >  {
-> >       return false;
-> >  }
-> > -static inline int acpi_dev_gpio_irq_get_by(struct acpi_device *adev,
-> > -                                        const char *name, int index)
-> > +static inline int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev,
-> > +                                             const char *name, int index,
-> > +                                             bool *wake_capable)
-> >  {
-> >       return -ENXIO;
-> >  }
-> >  #endif
-> >
-> > +static inline int acpi_dev_gpio_irq_get_by(struct acpi_device *adev,
-> > +                                        const char *name, int index)
-> > +{
-> > +     return acpi_dev_gpio_irq_wake_get_by(adev, name, index, NULL);
-> > +}
-> > +
-> >  static inline int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index)
-> >  {
-> > -     return acpi_dev_gpio_irq_get_by(adev, NULL, index);
-> > +     return acpi_dev_gpio_irq_wake_get_by(adev, NULL, index, NULL);
-> > +}
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/net-8021q-vlan-check-the-return-value-of-vlan_vid_add/20220919-154737
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 96628951869c0dedf0377adca01c8675172d8639
+config: x86_64-randconfig-a005-20220919 (https://download.01.org/0day-ci/archive/20220919/202209192322.WqMpsD4X-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c44a44ed52c467523d28a7764ee01e23d3928945
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Zhong/net-8021q-vlan-check-the-return-value-of-vlan_vid_add/20220919-154737
+        git checkout c44a44ed52c467523d28a7764ee01e23d3928945
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/8021q/
 
-> > +static inline int acpi_dev_gpio_irq_wake_get(struct acpi_device *adev,
-> > +                                          int index, bool *wake_capable)
-> > +{
-> > +     return acpi_dev_gpio_irq_wake_get_by(adev, NULL, index, wake_capable);
-> >  }
->
-> I would put this first in the group of these three helpers, so irq_get_by and
-> irq_get will be the last (from more parameters to less parameters).
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Done
+All warnings (new ones prefixed by >>):
 
-> >  /* Device properties */
-> > --
-> > 2.37.3.968.ga6b4b080e4-goog
-> >
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+>> net/8021q/vlan.c:385:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                   int err = vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
+                       ^
+   1 warning generated.
 
-Thanks for the review!
+
+vim +385 net/8021q/vlan.c
+
+   359	
+   360	static int vlan_device_event(struct notifier_block *unused, unsigned long event,
+   361				     void *ptr)
+   362	{
+   363		struct netlink_ext_ack *extack = netdev_notifier_info_to_extack(ptr);
+   364		struct net_device *dev = netdev_notifier_info_to_dev(ptr);
+   365		struct vlan_group *grp;
+   366		struct vlan_info *vlan_info;
+   367		int i, flgs;
+   368		struct net_device *vlandev;
+   369		struct vlan_dev_priv *vlan;
+   370		bool last = false;
+   371		LIST_HEAD(list);
+   372		int err;
+   373	
+   374		if (is_vlan_dev(dev)) {
+   375			int err = __vlan_device_event(dev, event);
+   376	
+   377			if (err)
+   378				return notifier_from_errno(err);
+   379		}
+   380	
+   381		if ((event == NETDEV_UP) &&
+   382		    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER)) {
+   383			pr_info("adding VLAN 0 to HW filter on device %s\n",
+   384				dev->name);
+ > 385			int err = vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
+   386	
+   387			if (err)
+   388				return notifier_from_errno(err);
+   389		}
+   390		if (event == NETDEV_DOWN &&
+   391		    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER))
+   392			vlan_vid_del(dev, htons(ETH_P_8021Q), 0);
+   393	
+   394		vlan_info = rtnl_dereference(dev->vlan_info);
+   395		if (!vlan_info)
+   396			goto out;
+   397		grp = &vlan_info->grp;
+   398	
+   399		/* It is OK that we do not hold the group lock right now,
+   400		 * as we run under the RTNL lock.
+   401		 */
+   402	
+   403		switch (event) {
+   404		case NETDEV_CHANGE:
+   405			/* Propagate real device state to vlan devices */
+   406			vlan_group_for_each_dev(grp, i, vlandev)
+   407				vlan_stacked_transfer_operstate(dev, vlandev,
+   408								vlan_dev_priv(vlandev));
+   409			break;
+   410	
+   411		case NETDEV_CHANGEADDR:
+   412			/* Adjust unicast filters on underlying device */
+   413			vlan_group_for_each_dev(grp, i, vlandev) {
+   414				flgs = vlandev->flags;
+   415				if (!(flgs & IFF_UP))
+   416					continue;
+   417	
+   418				vlan_sync_address(dev, vlandev);
+   419			}
+   420			break;
+   421	
+   422		case NETDEV_CHANGEMTU:
+   423			vlan_group_for_each_dev(grp, i, vlandev) {
+   424				if (vlandev->mtu <= dev->mtu)
+   425					continue;
+   426	
+   427				dev_set_mtu(vlandev, dev->mtu);
+   428			}
+   429			break;
+   430	
+   431		case NETDEV_FEAT_CHANGE:
+   432			/* Propagate device features to underlying device */
+   433			vlan_group_for_each_dev(grp, i, vlandev)
+   434				vlan_transfer_features(dev, vlandev);
+   435			break;
+   436	
+   437		case NETDEV_DOWN: {
+   438			struct net_device *tmp;
+   439			LIST_HEAD(close_list);
+   440	
+   441			/* Put all VLANs for this dev in the down state too.  */
+   442			vlan_group_for_each_dev(grp, i, vlandev) {
+   443				flgs = vlandev->flags;
+   444				if (!(flgs & IFF_UP))
+   445					continue;
+   446	
+   447				vlan = vlan_dev_priv(vlandev);
+   448				if (!(vlan->flags & VLAN_FLAG_LOOSE_BINDING))
+   449					list_add(&vlandev->close_list, &close_list);
+   450			}
+   451	
+   452			dev_close_many(&close_list, false);
+   453	
+   454			list_for_each_entry_safe(vlandev, tmp, &close_list, close_list) {
+   455				vlan_stacked_transfer_operstate(dev, vlandev,
+   456								vlan_dev_priv(vlandev));
+   457				list_del_init(&vlandev->close_list);
+   458			}
+   459			list_del(&close_list);
+   460			break;
+   461		}
+   462		case NETDEV_UP:
+   463			/* Put all VLANs for this dev in the up state too.  */
+   464			vlan_group_for_each_dev(grp, i, vlandev) {
+   465				flgs = dev_get_flags(vlandev);
+   466				if (flgs & IFF_UP)
+   467					continue;
+   468	
+   469				vlan = vlan_dev_priv(vlandev);
+   470				if (!(vlan->flags & VLAN_FLAG_LOOSE_BINDING))
+   471					dev_change_flags(vlandev, flgs | IFF_UP,
+   472							 extack);
+   473				vlan_stacked_transfer_operstate(dev, vlandev, vlan);
+   474			}
+   475			break;
+   476	
+   477		case NETDEV_UNREGISTER:
+   478			/* twiddle thumbs on netns device moves */
+   479			if (dev->reg_state != NETREG_UNREGISTERING)
+   480				break;
+   481	
+   482			vlan_group_for_each_dev(grp, i, vlandev) {
+   483				/* removal of last vid destroys vlan_info, abort
+   484				 * afterwards */
+   485				if (vlan_info->nr_vids == 1)
+   486					last = true;
+   487	
+   488				unregister_vlan_dev(vlandev, &list);
+   489				if (last)
+   490					break;
+   491			}
+   492			unregister_netdevice_many(&list);
+   493			break;
+   494	
+   495		case NETDEV_PRE_TYPE_CHANGE:
+   496			/* Forbid underlaying device to change its type. */
+   497			if (vlan_uses_dev(dev))
+   498				return NOTIFY_BAD;
+   499			break;
+   500	
+   501		case NETDEV_NOTIFY_PEERS:
+   502		case NETDEV_BONDING_FAILOVER:
+   503		case NETDEV_RESEND_IGMP:
+   504			/* Propagate to vlan devices */
+   505			vlan_group_for_each_dev(grp, i, vlandev)
+   506				call_netdevice_notifiers(event, vlandev);
+   507			break;
+   508	
+   509		case NETDEV_CVLAN_FILTER_PUSH_INFO:
+   510			err = vlan_filter_push_vids(vlan_info, htons(ETH_P_8021Q));
+   511			if (err)
+   512				return notifier_from_errno(err);
+   513			break;
+   514	
+   515		case NETDEV_CVLAN_FILTER_DROP_INFO:
+   516			vlan_filter_drop_vids(vlan_info, htons(ETH_P_8021Q));
+   517			break;
+   518	
+   519		case NETDEV_SVLAN_FILTER_PUSH_INFO:
+   520			err = vlan_filter_push_vids(vlan_info, htons(ETH_P_8021AD));
+   521			if (err)
+   522				return notifier_from_errno(err);
+   523			break;
+   524	
+   525		case NETDEV_SVLAN_FILTER_DROP_INFO:
+   526			vlan_filter_drop_vids(vlan_info, htons(ETH_P_8021AD));
+   527			break;
+   528		}
+   529	
+   530	out:
+   531		return NOTIFY_DONE;
+   532	}
+   533	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
