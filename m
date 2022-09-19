@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CD95BD19E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBD05BD1A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiISP7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S229825AbiISP77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiISP71 (ORCPT
+        with ESMTP id S230365AbiISP71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Sep 2022 11:59:27 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715C82C138
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:23 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id l6so15020437ilk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:23 -0700 (PDT)
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2331365
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:24 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id n81so22802474iod.6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uLFsVomnZ3NOv94HIF7hfztjoJa5WoPp5LmQm5BO1Bo=;
-        b=adhgguZ3/jkoq54Ux4JQdP94x9fs+qUO+1yVoIOE8+jcSOfv7mJJAyhMb/fPqVbrj7
-         oy3X9S8/qa9d2IhQitudZq3ja1RgmMIFG6U7eWF6IK/0eJdsDwI1tYpjACd6fODEBnbn
-         MYRjib6QiExCxohjxbSw647pAlE7Lq3QbYuoU=
+        bh=bZ+qtxPfho04MrKrUszJh9/TiBJm28a0YpVnjrNGpL8=;
+        b=ZngUizq7VcFRE2gCSa3EOt3saOcvQwlmUZCyGh1KdqK5/zqA0RnBzsAbsEwNbNR3rX
+         1pcZv5svW4JXFERWv6dBG7idg/ofdNr4FGr1sQkiVEjxfgf+S5Cn+sKNROVhwYqD/joh
+         sme+ZnMaqEJqX7Qg4cLMZnGCNFCbAIWjtCv/w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=uLFsVomnZ3NOv94HIF7hfztjoJa5WoPp5LmQm5BO1Bo=;
-        b=eTUEXqkJcTb/0N+SP0enPvmO+j4kn1XinKpYr1SjeuiWTIF28O+W3INtSduW/yq0T/
-         qxGiwx+QbOfTnZ7Mrfexu4Q2+bp/l7JdNrAB6OS7/zqGucQHJv44tLrg30tdfmIGxg7T
-         89VqgWjYQtuKu57L/E2Jskjl2y8wx6P1W83211EhaT+/3kMmnR3sTzgocyrd44U1zug4
-         iybu02pouTs1SuiOnpyNz6TrQT9y5Z6HRfGgRLdUEXnY1lPIBfEI3WkCWUTEOkj4Wws7
-         Nm1PBZIDaUps4DLSnH6iYaaCO5GopmT9GE3pno2aphYX8e1zkLdKhHkEXxFni6aO7+wX
-         JxUw==
-X-Gm-Message-State: ACrzQf1GIxEkyQhBGyQ3z/+R35d3EtLV7OpSYbvh14Ec+10T5gWg7oCn
-        j7T17wAX4eJfCDC7tqeZhu2GJQ==
-X-Google-Smtp-Source: AMsMyM46Xy66tHQPUvK53ZwmhKXupAzGSOvhBQpX8Ceb0GWMcSl0Qg8peCV1ERPwHymAU1ifjBDuKQ==
-X-Received: by 2002:a05:6e02:b2a:b0:2f1:73e7:9e0c with SMTP id e10-20020a056e020b2a00b002f173e79e0cmr7880913ilu.298.1663603162669;
-        Mon, 19 Sep 2022 08:59:22 -0700 (PDT)
+        bh=bZ+qtxPfho04MrKrUszJh9/TiBJm28a0YpVnjrNGpL8=;
+        b=wylhh1u3h3jWm7+zmsbuSBKlsTAQ8Qn2WaOH3qRLxKEKhs48Yjg51jrlE4dW9gCDaj
+         ByOFuMbf8fOcyCLlDKa6W62iEZW6EyLY1Y4O91UfEaX6kkGRtSbbNT0MbrDdQx05vLN1
+         7ATLWHEoFz7RSk9NrkCOhgvH+oaRPb/ivcai3Uud8hAwgDax7/gVaLos8hSdcwpC0CsG
+         dXRkXffmXKkqe/OZrCLIn8AUfKymrYdajJs89E+Ks5n31B3LUmpwUNE0Pt9Zytnmz2HE
+         mwYUQMMGTACql8UI4TenlqgfVoANNsV7kSu/vuvTuKBmCfCw+W+39ZHX/Psj1JA5MtLm
+         0Z6Q==
+X-Gm-Message-State: ACrzQf05CC+4l/TrWypDx1UBkte1MQ2HrQSva95ysdxFaBlTykaGZWB5
+        bOSdVht0muONXbUdnUDZo6yaWA==
+X-Google-Smtp-Source: AMsMyM5AXRUUhA8MNcZP3YK8Ns1JNtpt92ZScgBH8ZtdCkKrjk0TgtxLbORZBAyGo+iM4LIkMtQBrQ==
+X-Received: by 2002:a02:c6c6:0:b0:359:b2d9:8838 with SMTP id r6-20020a02c6c6000000b00359b2d98838mr9042501jan.298.1663603163505;
+        Mon, 19 Sep 2022 08:59:23 -0700 (PDT)
 Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id t70-20020a025449000000b00349fb9b1abesm5634154jaa.106.2022.09.19.08.59.21
+        by smtp.gmail.com with ESMTPSA id t70-20020a025449000000b00349fb9b1abesm5634154jaa.106.2022.09.19.08.59.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 08:59:21 -0700 (PDT)
+        Mon, 19 Sep 2022 08:59:23 -0700 (PDT)
 From:   Raul E Rangel <rrangel@chromium.org>
 To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
 Cc:     timvp@google.com, hdegoede@redhat.com,
@@ -54,12 +54,10 @@ Cc:     timvp@google.com, hdegoede@redhat.com,
         mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
         linus.walleij@linaro.org, Raul E Rangel <rrangel@chromium.org>,
         Cai Huoqing <cai.huoqing@linux.dev>,
-        Douglas Anderson <dianders@chromium.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 03/13] Input: elants_i2c - Use PM subsystem to manage wake irq
-Date:   Mon, 19 Sep 2022 09:59:05 -0600
-Message-Id: <20220919095504.v4.3.I5862429ee3e4de0f9ad5ba01ce07ad99eec10cf0@changeid>
+Subject: [PATCH v4 04/13] Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+Date:   Mon, 19 Sep 2022 09:59:06 -0600
+Message-Id: <20220919095504.v4.4.I06b417b274bbecb31775a73993a7a3c1bc80de7b@changeid>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 In-Reply-To: <20220919155916.1044219-1-rrangel@chromium.org>
 References: <20220919155916.1044219-1-rrangel@chromium.org>
@@ -67,17 +65,18 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Elan I2C touchscreen driver is currently manually managing the wake
-IRQ. This change removes the explicit enable_irq_wake/disable_irq_wake
-and instead relies on the PM subsystem. This is done by calling
-dev_pm_set_wake_irq.
+The raydium I2C touchscreen driver is currently manually managing the
+wake IRQ. This change removes the explicit enable_irq_wake /
+disable_irq_wake and instead relies on the PM subsystem. This is done by
+calling dev_pm_set_wake_irq.
 
 i2c_device_probe already calls dev_pm_set_wake_irq when using device
 tree, and i2c_device_remove also already calls dev_pm_clear_wake_irq.
@@ -91,34 +90,35 @@ Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 (no changes since v2)
 
 Changes in v2:
-- Added elants_i2c to series
+- Added raydium_ts_i2c to series
 
- drivers/input/touchscreen/elants_i2c.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/input/touchscreen/raydium_i2c_ts.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/input/touchscreen/elants_i2c.c b/drivers/input/touchscreen/elants_i2c.c
-index a56f042adf9d82..80e16b533c452a 100644
---- a/drivers/input/touchscreen/elants_i2c.c
-+++ b/drivers/input/touchscreen/elants_i2c.c
-@@ -36,6 +36,7 @@
- #include <linux/input/touchscreen.h>
- #include <linux/acpi.h>
+diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
+index 3a4952935366f9..66c5b577b791d4 100644
+--- a/drivers/input/touchscreen/raydium_i2c_ts.c
++++ b/drivers/input/touchscreen/raydium_i2c_ts.c
+@@ -21,6 +21,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
  #include <linux/of.h>
 +#include <linux/pm_wakeirq.h>
- #include <linux/gpio/consumer.h>
  #include <linux/regulator/consumer.h>
- #include <linux/uuid.h>
-@@ -180,7 +181,6 @@ struct elants_data {
- 	u8 cmd_resp[HEADER_SIZE];
- 	struct completion cmd_done;
+ #include <linux/slab.h>
+ #include <asm/unaligned.h>
+@@ -134,8 +135,6 @@ struct raydium_data {
+ 	u8 pkg_size;
  
+ 	enum raydium_boot_mode boot_mode;
+-
 -	bool wake_irq_enabled;
- 	bool keep_power_in_suspend;
+ };
  
- 	/* Must be last to be used for DMA operations */
-@@ -1582,6 +1582,15 @@ static int elants_i2c_probe(struct i2c_client *client)
- 	if (!client->dev.of_node)
- 		device_init_wakeup(&client->dev, true);
+ /*
+@@ -1186,6 +1185,15 @@ static int raydium_i2c_probe(struct i2c_client *client,
+ 		return error;
+ 	}
  
 +	/*
 +	 * The wake IRQ should be declared via device tree instead of assuming
@@ -129,27 +129,27 @@ index a56f042adf9d82..80e16b533c452a 100644
 +	if (!client->dev.power.wakeirq)
 +		dev_pm_set_wake_irq(&client->dev, client->irq);
 +
- 	error = devm_device_add_group(&client->dev, &elants_attribute_group);
+ 	error = devm_device_add_group(&client->dev,
+ 				   &raydium_i2c_attribute_group);
  	if (error) {
- 		dev_err(&client->dev, "failed to create sysfs attributes: %d\n",
-@@ -1626,7 +1635,7 @@ static int __maybe_unused elants_i2c_suspend(struct device *dev)
- 		 * The device will automatically enter idle mode
- 		 * that has reduced power consumption.
- 		 */
+@@ -1222,8 +1230,6 @@ static int __maybe_unused raydium_i2c_suspend(struct device *dev)
+ 
+ 	if (device_may_wakeup(dev)) {
+ 		raydium_enter_sleep(client);
+-
 -		ts->wake_irq_enabled = (enable_irq_wake(client->irq) == 0);
-+		return 0;
- 	} else if (ts->keep_power_in_suspend) {
- 		for (retry_cnt = 0; retry_cnt < MAX_RETRIES; retry_cnt++) {
- 			error = elants_i2c_send(client, set_sleep_cmd,
-@@ -1655,8 +1664,6 @@ static int __maybe_unused elants_i2c_resume(struct device *dev)
- 	int error;
+ 	} else {
+ 		raydium_i2c_power_off(ts);
+ 	}
+@@ -1237,8 +1243,6 @@ static int __maybe_unused raydium_i2c_resume(struct device *dev)
+ 	struct raydium_data *ts = i2c_get_clientdata(client);
  
  	if (device_may_wakeup(dev)) {
 -		if (ts->wake_irq_enabled)
 -			disable_irq_wake(client->irq);
- 		elants_i2c_sw_reset(client);
- 	} else if (ts->keep_power_in_suspend) {
- 		for (retry_cnt = 0; retry_cnt < MAX_RETRIES; retry_cnt++) {
+ 		raydium_i2c_sw_reset(client);
+ 	} else {
+ 		raydium_i2c_power_on(ts);
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
