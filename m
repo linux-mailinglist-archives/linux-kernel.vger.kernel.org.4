@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901C05BC2BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0EA5BC2D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiISGPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 02:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S229733AbiISGbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 02:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiISGO6 (ORCPT
+        with ESMTP id S229714AbiISGbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 02:14:58 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C395710FF6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 23:14:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQ6gxd6_1663568091;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VQ6gxd6_1663568091)
-          by smtp.aliyun-inc.com;
-          Mon, 19 Sep 2022 14:14:54 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     dan.j.williams@intel.com
-Cc:     vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] nvdimm/region: Fix kernel-doc
-Date:   Mon, 19 Sep 2022 14:14:28 +0800
-Message-Id: <20220919061428.102883-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 19 Sep 2022 02:31:23 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6321017A88
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 23:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663569082; x=1695105082;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dVdgBkbGUl4BGMdHCf+Lq0avz2hGOi0xJ/PV314U0jA=;
+  b=JF/3rt/JtpSaeNGeTravto9P6ub73nIezKqCJPa45Zi6qBwk/QACcnQK
+   lFBGG1GHxXY+G/tRNuEbT8htOVbz7eLkxJWkddKvSc5vywMFJtKfaz5V0
+   6Rv486PQu6CZwwmBc+yUmyOo/WCwXSEqHwbQhL9lVG91JKnIMnmQHqdlq
+   VfzkVty3ma7GSmH5IF1/tK9l2EXAibTdQs5IyD8GuyxWTSp7+sSeZozJv
+   GyBBvgPCRPvZANfuRtqIuMBUeiDUQbzu0qLt6isx8d8rJaNAZkppiUaWn
+   fuBPHi0nQBNBmRvqnggIxHE/v+n2YBWHe3x7EkK3qafXQZdTczmRUqWZ5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="279699700"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="279699700"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:31:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="680715154"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Sep 2022 23:31:20 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     iommu@lists.linux.dev
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 0/2] iommu/vt-d: Add ESRTPS & ESIRTPS check
+Date:   Mon, 19 Sep 2022 14:25:21 +0800
+Message-Id: <20220919062523.3438951-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/nvdimm/region_devs.c:1103: warning: expecting prototype for nvdimm_flush(). Prototype was for generic_nvdimm_flush() instead.
+Hi folks,
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2209
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/nvdimm/region_devs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Some VT-d hardware implementations invalidates all DMA remapping
+or interrupt remapping hardware translation caches as part of SRTP or
+SIRTPS flow. The VT-d spec introduced two capability bits for these
+hardware behaviors. This series fine tuned the VT-d driver to avoid
+unnecessary global cache validations.
 
-diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-index 473a71bbd9c9..70f1a23cbe31 100644
---- a/drivers/nvdimm/region_devs.c
-+++ b/drivers/nvdimm/region_devs.c
-@@ -1096,7 +1096,7 @@ int nvdimm_flush(struct nd_region *nd_region, struct bio *bio)
- 	return rc;
- }
- /**
-- * nvdimm_flush - flush any posted write queues between the cpu and pmem media
-+ * generic_nvdimm_flush() - flush any posted write queues between the cpu and pmem media
-  * @nd_region: interleaved pmem region
-  */
- int generic_nvdimm_flush(struct nd_region *nd_region)
+Best regards,
+baolu
+
+Lu Baolu (2):
+  iommu/vt-d: Avoid unnecessary global IRTE cache invalidation
+  iommu/vt-d: Avoid unnecessary global DMA cache invalidation
+
+ drivers/iommu/intel/iommu.h         | 2 ++
+ drivers/iommu/intel/iommu.c         | 7 +++++++
+ drivers/iommu/intel/irq_remapping.c | 3 ++-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
 -- 
-2.20.1.7.g153144c
+2.34.1
 
