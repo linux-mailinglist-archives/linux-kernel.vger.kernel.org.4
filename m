@@ -2,231 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB785BCECD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E905BCEE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiISOb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S229960AbiISObx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiISOb0 (ORCPT
+        with ESMTP id S229940AbiISObp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:31:26 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF6958D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:31:23 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220919143119euoutp028ab5df73dbe44271c8d6f7b804dcf43f~WSXUWjx100409504095euoutp02W
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:31:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220919143119euoutp028ab5df73dbe44271c8d6f7b804dcf43f~WSXUWjx100409504095euoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663597879;
-        bh=fZdCIzgG41UdH6uSZoCggfFQize6TCzFRhqHY0cCi/g=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=o2+s2e3BH+ZnHFa3C6ZW3d5KnQ3FaG18FYmISgMZMNw6HEzX5msN4mOTyrzcp9Wyi
-         FJaTlltxln5JmOqdTosOnxvfFRU5NZLdfce38kwV+CWK7ufFs4vQSpORopF+frrQjm
-         6xpSIfaXFFcNZlMu7nADwaLgBS/r1BlbkBgQpVXQ=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220919143119eucas1p13a7388723ed19d15afd7f57304f7d71c~WSXUEw6XB2095820958eucas1p1g;
-        Mon, 19 Sep 2022 14:31:19 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id DF.2F.07817.73D78236; Mon, 19
-        Sep 2022 15:31:19 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220919143118eucas1p2392c27fa14e8b20292a6df5ffd2edb9d~WSXTtEv430096800968eucas1p2D;
-        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220919143118eusmtrp205ba37a59b63e4dd8a05a8847f4e6e03~WSXTsPLmy1469814698eusmtrp2z;
-        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
-X-AuditID: cbfec7f4-893ff70000011e89-06-63287d37c581
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2F.7B.10862.63D78236; Mon, 19
-        Sep 2022 15:31:18 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220919143118eusmtip28440eeefea75d51d22be340086dfe286~WSXTKsRqp1420314203eusmtip2h;
-        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
-Message-ID: <4e60f9aa-b2ab-65bc-2c93-cd0324fccb3a@samsung.com>
-Date:   Mon, 19 Sep 2022 16:31:18 +0200
+        Mon, 19 Sep 2022 10:31:45 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BAC101F8;
+        Mon, 19 Sep 2022 07:31:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lggiuye/Q5dVKLD1V5hgxuA4c6PR01CWv+n1VQah3CIJ9uIQC48YNKvgM6ihK5gS8nChimIJDw3cc3bnyJ9CwE5lqA45+PqiBckWdbtkfv1c5YsaksuOqV4elgtTVnoy8y27kOGjb1Vp6yMhCqrp8GiGeFvuYp83xybwp0Puk0JwdhJgq5LXD59iSEZLlF9/mD6BuYbpQydGTnSFrzlDpoWsyrogWWCYJu9+o+eu0cE1hr6D+o+ypl3WZ25d0eRGrFavgIzbX1jGMO4P/jSKf1M9U4yhkCfR7+M4RHLZM7k/BEUznFDFg9iK9y8z+HrueITuDovAYPzqKRUXGBcEsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HgXiiXMjgYRxp1LMpSx9JFVvARiFQtlphvSqXrsauW8=;
+ b=eZDdrHv0pG59Mw5hadKI+WNgsN6OPtmQzbVuhb6ntzRuF9jNt5Px9HXwcjoTTUxNrIO6aFT0bc6XdhriNXCcwdCbo7WYAsXL9o5ry3aN87tKeyTXhYvTFTbbSDvfqjuCCQSU/CQpn5ZxeUA5MqtEXrxmnUjg6eL3U6GfwIPRrW16E4g5lYTtx5psFSLntrxdBBbHIRRd79iCn8x0ew7t5ZI9EEwR33BtXmMbSyZePFGcTzi3SXOBrQdc/vjsCw8ytIA+BJpuCxNT0sJERcWK85v3OshX7NW6bqdmHyzQn1KTRPgS7/vqIlpEbYBhhdS8eupJIsisLmZzad89CvIurQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HgXiiXMjgYRxp1LMpSx9JFVvARiFQtlphvSqXrsauW8=;
+ b=RQWYYBgz2C1yqKmPRusqfAUDeCxJlsRZKK8y9YOMXBD+3UES4GLTHTvw9KBcIZSMBfsWB//WUelozWG6QJJ1kVmUh5ZpE9po/FZyezYHkD8Bq8W8b6pWInTI1G41JuIBp6GGPpi7Kf55wP0P6cU7BNMtVi7nSAsabvK8KS6uFj+mBLfc+xi1EQ2Ks6iRdBTIUfcC51jMHzqraGyEJzms1WtjUua+qHdi2bwoqxTvWpes05vLSgnyrpsafYTnqjXX/uu7iM7EiF6UhEWgC8uf19shAYmiNdUEbB5ZbV6YBy3cqwI30cOCkM4Xhl3gfuaKFZDDQHDjcB4472CUbIbZOQ==
+Received: from MW4PR03CA0006.namprd03.prod.outlook.com (2603:10b6:303:8f::11)
+ by IA0PR12MB7626.namprd12.prod.outlook.com (2603:10b6:208:438::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
+ 2022 14:31:43 +0000
+Received: from CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8f:cafe::4f) by MW4PR03CA0006.outlook.office365.com
+ (2603:10b6:303:8f::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21 via Frontend
+ Transport; Mon, 19 Sep 2022 14:31:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT008.mail.protection.outlook.com (10.13.175.191) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.12 via Frontend Transport; Mon, 19 Sep 2022 14:31:42 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 19 Sep
+ 2022 07:31:29 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 19 Sep
+ 2022 07:31:29 -0700
+Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 19 Sep 2022 07:31:26 -0700
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
+        <sagar.tv@gmail.com>
+Subject: [PATCH V1] PCI: dwc: Fixes N_FTS setup
+Date:   Mon, 19 Sep 2022 20:01:23 +0530
+Message-ID: <20220919143123.28250-1-vidyas@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 2/2] media: i2c: s5k6a3: switch to using gpiod API
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220913164104.203957-2-dmitry.torokhov@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMKsWRmVeSWpSXmKPExsWy7djP87rmtRrJBpNf8lg8mLeNzWL+kXOs
-        FocXvWC06HvxkNliyp/lTBabHl9jtbi8aw6bRc+GrawWM87vY7JYtukPkwOXx85Zd9k9Nq3q
-        ZPO4c20Pm8fmJfUefVtWMXp83iQXwBbFZZOSmpNZllqkb5fAlXH04DamghvSFf2/LrA3MC4S
-        62Lk5JAQMJFonf6VuYuRi0NIYAWjxPIN89kgnC+MEvvmrWOHcD4DZVZ8Y4Rp6Z77GqplOaNE
-        z6unUFUfGSXmv97JAlLFK2An0fG9D8jm4GARUJXovOELERaUODnzCViJqECyxKxjx8CGCgu4
-        SXSfnsoKYjMLiEvcejKfCWSmiMBrRomLl/vBHGaBZUBnnLnDDlLFJmAo0fW2iw3E5hRwkOi8
-        tYoNolteYvvbOWDnSQj855A4s38R1N0uEm/mXIOyhSVeHd/CDmHLSPzfCbFOQqCdUWLB7/tQ
-        zgRGiYbnt6A6rCXunPvFBvIPs4CmxPpd+hBhR4kX336DhSUE+CRuvBWEOIJPYtK26cwQYV6J
-        jjYhiGo1iVnH18GtPXjhEvMERqVZSAEzCykAZiF5ZxbC3gWMLKsYxVNLi3PTU4uN8lLL9YoT
-        c4tL89L1kvNzNzEC09Xpf8e/7GBc/uqj3iFGJg7GQ4wSHMxKIrxvEzWShXhTEiurUovy44tK
-        c1KLDzFKc7AoifMmZ25IFBJITyxJzU5NLUgtgskycXBKNTA1/9JMOfzzcTVDxazssNdLJ+xr
-        33HeXzPDv0BfgSO75EyJjHO2VfvfoxF/LuWFvT/a2TVl37H8gCCWsB/xMfpr39zuTLHzd71i
-        buEwK3GSwo6HX5o0s+Sqw7wTJvXOz93HFfnir6zN6qjaM8W/cm/5e+hNO34r6IHywgvpbQ6v
-        Z2eqTOdUm3Rgi9UNxqQ9yjJv01bO/saUc8OPRyEosEqlquOiQ4xZhlni2aOSNhU1uVY33/ht
-        m2KhP1uR2VS1z7Da8enNssZ5XXe+VBpH8WlXhEqd0eE1vbH78cozu6oWLmlilNd84q+Q2Hgy
-        c41t5feXf5fNUrdMjzxSXKgv6Wm/fftr/UcfNCerhIRKKLEUZyQaajEXFScCACUVb0LGAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsVy+t/xe7pmtRrJBje6DC0ezNvGZjH/yDlW
-        i8OLXjBa9L14yGwx5c9yJotNj6+xWlzeNYfNomfDVlaLGef3MVks2/SHyYHLY+esu+wem1Z1
-        snncubaHzWPzknqPvi2rGD0+b5ILYIvSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaP
-        tTIyVdK3s0lJzcksSy3St0vQyzh6cBtTwQ3piv5fF9gbGBeJdTFyckgImEh0z33N3MXIxSEk
-        sJRR4u2ih8wQCRmJk9MaWCFsYYk/17rYIIreM0o8aW9mA0nwCthJdHzvY+li5OBgEVCV6Lzh
-        CxEWlDg58wkLiC0qkCyxpOE+2BxhATeJ7tNTwWxmAXGJW0/mM4HYIgJvGSXu7VIFmc8ssIxR
-        Yt27DywQy04ySlw7PAWsg03AUKLrbRfYYk4BB4nOW6vYICaZSXRt7WKEsOUltr+dwzyBUWgW
-        kkNmIVk4C0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgRG57ZjP7fsYFz56qPe
-        IUYmDsZDjBIczEoivG8TNZKFeFMSK6tSi/Lji0pzUosPMZoCA2Mis5Rocj4wPeSVxBuaGZga
-        mphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTCxGAifmRTZynhdOlR/1gujE/qC
-        82xrG3qUBU/mXry+N2eljnKT47cQDsmiQ73TXgd0986TuPjv5dEddbqGgZslDt/elxdjkHhh
-        Y9iMqxJZjGZcp7MVjlff3dS5xm+mgo9uVX0R79bASexCLiZLp2+XFNp7KeWuyu9zUp+Z8p5W
-        BGU0+i6rLNjck/dxltNZtzofe9clj2V/Sq/XnPZ+kuGbS/83fv2UaFdmntK78b1fxTaj388f
-        H7oT9KzwgH0Lr7+E7s27cUJLy94Fv38R2PqkZd1vdtP46bP9WoJfzzPtalzTZh9odn7qa+UX
-        kXkrq49sXpIWt6dnw5e8o1H2++c6vF6zRfz+fibW/CdxT+qVWIozEg21mIuKEwHZXp/BVwMA
-        AA==
-X-CMS-MailID: 20220919143118eucas1p2392c27fa14e8b20292a6df5ffd2edb9d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5
-References: <20220913164104.203957-1-dmitry.torokhov@gmail.com>
-        <CGME20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5@eucas1p1.samsung.com>
-        <20220913164104.203957-2-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT008:EE_|IA0PR12MB7626:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80ba127a-596b-4493-c947-08da9a4bac15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rmb1D6NyNqWU9A7XsjeqKKG7dGv3e51qHE0kwq0VDIdYGUILeYWZmFpvm2AkxEjGiqnGb+DJ8pVqDTn5hLPpRMpGK3re/VHfTvqUuqRhTeQqgsVePC/mMuGc8fb+ZU/Kc1FsriQ4vhS76xlBvfKOuRqGqBPibHXRHBnjnx88nQxERMimnHgg5VtK11wZs4asbKVKZaXJxSQ+Tr6rOuKkUMVfke/WN9h2kp1a9ahSSEoPDuECpLJt61Mv9nJG+Kc7Yt8GIHUq4kjVppiaFqzAkE7gFE699Tku5qg3u55IwF8C9UUdYyx9rApPK4hxvujG3eKBNyRetuWP7+CES43kMbE5KQh3JtZz5k4+SKiDdCPUrqcrFMlI3lyymTH9789hD1LHTg8eEbfy9JqmWLKlnzDf/EKUsSTOZ/oBtw2j6BjY7r9PqZzWL9BcUZomjT5nzroeb/7L3K1v3wymHWWPAEPQCh6UeUwZgKejj2pUjZrn9nzjqliMjSNxGhsXxptgYEQSUQaRVw2lzrADN1JHnCwSOLbQ8og/1l5XS0/B4AQmjoU5VdEJN8Nd9qSQfuVDWjBtyp7C5ktUlE1t+cTKR2O0T+73DiKP7P6OFkgMF+WfbXCGZrToIw2dn25sl3tqJYCUVUqtatLh3pfiwcCzZOkrN1DtThyjWDgsLCLCU4OBgWhaRfIyDzEicdabzU6gV58r7Dmv6RRQVbvq/703rqr37l6y+l4pNUvxbucupV0ogAEZ8lnTz4hpnYViTHbKTrw1pdKf3YSdoPfx3bEG7Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(2906002)(8936002)(5660300002)(8676002)(70206006)(70586007)(4326008)(336012)(36860700001)(82740400003)(86362001)(83380400001)(54906003)(110136005)(40460700003)(316002)(82310400005)(356005)(47076005)(426003)(478600001)(1076003)(186003)(36756003)(7636003)(26005)(41300700001)(7696005)(2616005)(40480700001)(6666004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 14:31:42.5742
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80ba127a-596b-4493-c947-08da9a4bac15
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7626
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
+unnecessarily uses pci->link_gen in deriving the index to the
+n_fts[] array also introducing the issue of accessing beyond the
+boundaries of array for greater than Gen-2 speeds. This change fixes
+that issue.
 
-On 13.09.2022 18:41, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes one of the last uses of of_get_gpio_flags().
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: aeaa0bfe8965 ("PCI: dwc: Move N_FTS setup to common setup")
+Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+---
+ drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-Thanks!
-
-> ---
->   drivers/media/i2c/s5k6a3.c | 30 +++++++++++-------------------
->   1 file changed, 11 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
-> index a4efd6d10b43..ef6673b10580 100644
-> --- a/drivers/media/i2c/s5k6a3.c
-> +++ b/drivers/media/i2c/s5k6a3.c
-> @@ -9,12 +9,12 @@
->   #include <linux/clk.h>
->   #include <linux/delay.h>
->   #include <linux/device.h>
-> +#include <linux/err.h>
->   #include <linux/errno.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->   #include <linux/i2c.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> -#include <linux/of_gpio.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/regulator/consumer.h>
->   #include <linux/slab.h>
-> @@ -59,7 +59,7 @@ struct s5k6a3 {
->   	struct v4l2_subdev subdev;
->   	struct media_pad pad;
->   	struct regulator_bulk_data supplies[S5K6A3_NUM_SUPPLIES];
-> -	int gpio_reset;
-> +	struct gpio_desc *gpio_reset;
->   	struct mutex lock;
->   	struct v4l2_mbus_framefmt format;
->   	struct clk *clock;
-> @@ -216,11 +216,11 @@ static int __s5k6a3_power_on(struct s5k6a3 *sensor)
->   			goto error_clk;
->   	}
->   
-> -	gpio_set_value(sensor->gpio_reset, 1);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
->   	usleep_range(600, 800);
-> -	gpio_set_value(sensor->gpio_reset, 0);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
->   	usleep_range(600, 800);
-> -	gpio_set_value(sensor->gpio_reset, 1);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
->   
->   	/* Delay needed for the sensor initialization */
->   	msleep(20);
-> @@ -240,7 +240,7 @@ static int __s5k6a3_power_off(struct s5k6a3 *sensor)
->   {
->   	int i;
->   
-> -	gpio_set_value(sensor->gpio_reset, 0);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
->   
->   	for (i = S5K6A3_NUM_SUPPLIES - 1; i >= 0; i--)
->   		regulator_disable(sensor->supplies[i].consumer);
-> @@ -285,32 +285,24 @@ static int s5k6a3_probe(struct i2c_client *client)
->   	struct device *dev = &client->dev;
->   	struct s5k6a3 *sensor;
->   	struct v4l2_subdev *sd;
-> -	int gpio, i, ret;
-> +	int i, ret;
->   
->   	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
->   	if (!sensor)
->   		return -ENOMEM;
->   
->   	mutex_init(&sensor->lock);
-> -	sensor->gpio_reset = -EINVAL;
-> -	sensor->clock = ERR_PTR(-EINVAL);
->   	sensor->dev = dev;
->   
->   	sensor->clock = devm_clk_get(sensor->dev, S5K6A3_CLK_NAME);
->   	if (IS_ERR(sensor->clock))
->   		return PTR_ERR(sensor->clock);
->   
-> -	gpio = of_get_gpio_flags(dev->of_node, 0, NULL);
-> -	if (!gpio_is_valid(gpio))
-> -		return gpio;
-> -
-> -	ret = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_LOW,
-> -						S5K6A3_DRV_NAME);
-> -	if (ret < 0)
-> +	sensor->gpio_reset = devm_gpiod_get(dev, NULL, GPIOD_OUT_HIGH);
-> +	ret = PTR_ERR_OR_ZERO(sensor->gpio_reset);
-> +	if (ret)
->   		return ret;
->   
-> -	sensor->gpio_reset = gpio;
-> -
->   	if (of_property_read_u32(dev->of_node, "clock-frequency",
->   				 &sensor->clock_frequency)) {
->   		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
-
-Best regards
+diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+index c6725c519a47..9e4d96e5a3f5 100644
+--- a/drivers/pci/controller/dwc/pcie-designware.c
++++ b/drivers/pci/controller/dwc/pcie-designware.c
+@@ -641,7 +641,7 @@ void dw_pcie_setup(struct dw_pcie *pci)
+ 	if (pci->n_fts[1]) {
+ 		val = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+ 		val &= ~PORT_LOGIC_N_FTS_MASK;
+-		val |= pci->n_fts[pci->link_gen - 1];
++		val |= pci->n_fts[1];
+ 		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
+ 	}
+ 
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.17.1
 
