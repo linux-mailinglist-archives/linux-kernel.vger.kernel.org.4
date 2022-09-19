@@ -2,183 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98D75BD3A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D1F5BD3A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiISRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S230034AbiISR1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiISRZM (ORCPT
+        with ESMTP id S231365AbiISR0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:25:12 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E56237EB
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:25:04 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-127d10b4f19so364886fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:25:04 -0700 (PDT)
+        Mon, 19 Sep 2022 13:26:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576C827140
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:26:19 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d24so5362440pls.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vctj5HCSzGwdLm3ihJHxXlvukok6qduDHO/C6dYfeBk=;
-        b=vznTHUMSyxTCsdjO2JXlrufcZeNc+w8lNaKjidvChQ3HXhbZepYOHhytvKeBkM1iA5
-         hKEq0oVjGmC8RGZ4cclAiyV/NG298ZlVqioNuUm7F1hJJwwDDNvvLhaLiYiGYv9IUFxv
-         Q1RWg1cetwNWf9D7VAa5fB6Rq/JriMq50KD2rvNVbxIR3HTEMVV9bkJJwLrhtRx/nliM
-         mgoxinJcLrW1/RctounS3IXs9VAwWOzByvY5eK0vnBLSmXvehL9eSyu7N5AqwPvmJOkj
-         3sKfMG2SbdXFvulCqvyD7JyPOilT2Q4whtWpW/fA3BBTqYouEgRNp9+XiUwtWDtGFrwC
-         LgOA==
+        d=osandov-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=RQOtnF4gIAT5J5bZ40nIVekW+hFItpXA03njWhxPCkg=;
+        b=OrFOjWmhbVU41C8KsRwP51cPaIp+R1Bpyjc/zwH1VMf0UdtuxBa9L6X5QY1Y1oqaC/
+         ts8luvNT4hW6BrfXMpLbb3Neq13r7EaHa7gKJOKCYr/ERpiJGyP86mrn8z7x7lDqA/+9
+         qHPzsTjHeBcCZ/aA9O4hovubehLTQq50GOuk47+lc1tDYOPYFatocrXQMs1ofSjETbkE
+         xlSlarh4uMLAw9qmZ2TSh6IgOT3IfXtmxhHAyzyMEGbgvR4utb+Pw0toTzGeqtUrVFOE
+         u4v0KdmwacMfImM4dbklbUkohrPHCIec25W/W+poubt+LMDWvYIq8OigFROgOgZw0uNZ
+         T5sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vctj5HCSzGwdLm3ihJHxXlvukok6qduDHO/C6dYfeBk=;
-        b=PSQiG361RqK7jy7ZdWi3oAp9wJB79WiDOCmyr2rsEtwI4fRccQDD27BiYUkGaKraZY
-         Gp1jX7VKcqChZv55t3I9DRz3DVIYEMJ0zZ0aZ7t9P3/Otfl2RR/omvEMrGKv5tBCDVib
-         VVv4d/RuROBnC6sEgo6PEFAxYwI/bg8CmO/jA+ALZmdUXNfUwlF8H0eENS6NicOT/jul
-         6dwczT5JaNRa5BSmlvM7XmWk2mRGD1cXpqZRI/prhR9AP37nZbJg7ULqXYqT+P8+2iTO
-         FGZgDqU9tRcqEfuW5fG6jMTXQ/GdyLBBt1r9vmu6jwabrTH/oIYAtkM/YBujY2PkMRYE
-         ji7Q==
-X-Gm-Message-State: ACgBeo2EB/VnOH3g/QiMEej29fWjVzbiYix+5YVre7A3PdrbNPBzlfGb
-        hY8lpmtoTxhpOb2S74KKICbah8duMrb25+dU1maqtA==
-X-Google-Smtp-Source: AA6agR6PIExzbO7BZyGMk5OG1ePbcXS7CYu022otcLvbs4mq2DgJebDFBZx/pL35hUMVSBccEr1PZrv8YzqjfYboeAI=
-X-Received: by 2002:a05:6870:b511:b0:12b:5871:2129 with SMTP id
- v17-20020a056870b51100b0012b58712129mr17182964oap.80.1663608303236; Mon, 19
- Sep 2022 10:25:03 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=RQOtnF4gIAT5J5bZ40nIVekW+hFItpXA03njWhxPCkg=;
+        b=Dy+jUuB9W92LqWujDsZTKvZvAz16UEd8GpAFf2EQhDXRnVs3ShW4TzMds7Xd4FWKsT
+         XtLvqKDZR4hGXNYB4493OufrTcgZgadzOQI8j783AatqIBa35FwpD1Jjq9xK+B0VEB2G
+         1/mIht5FuowwWrCouDQ7QeXiqS5xJSs2oQoz8YhdkgcDVSn32Xmcr5f2deew3G6o1qbs
+         O+sDTP5cYGQxFBV3/v8wGm64WG0It6i3QdaW9JR2NB+BJkaUsjwEDPZbMUvdu0iNqt8R
+         zHpyWN+s+A/ATX1u/MgYFANAtaAJGhxSTfe9fcIHV54u68l6WFxa0eH3GClEMwvBMbs6
+         itbw==
+X-Gm-Message-State: ACrzQf1H0uyJwszaY4sPD9kR4CwghFdxOBXI1U+PhemJDKpUzExs6cKP
+        +lSRYJj4o6HbffeppUcJw//XAg==
+X-Google-Smtp-Source: AMsMyM6G+tbSHGJR45aDE750Rf2Jljx5e/kiJXpECOAdkTJX3k7Dykh59BTcyBs+oHM4tJDcNKvE7A==
+X-Received: by 2002:a17:90b:3e87:b0:203:b9c:f9b7 with SMTP id rj7-20020a17090b3e8700b002030b9cf9b7mr20713044pjb.93.1663608378677;
+        Mon, 19 Sep 2022 10:26:18 -0700 (PDT)
+Received: from relinquished.localdomain ([2601:602:a300:cc0::1ac9])
+        by smtp.gmail.com with ESMTPSA id c128-20020a624e86000000b0054094544ae7sm20668966pfb.60.2022.09.19.10.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 10:26:18 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 10:26:17 -0700
+From:   Omar Sandoval <osandov@osandov.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Brown <broonie@kernel.org>
+Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
+Message-ID: <YyimOW229By98Dn7@relinquished.localdomain>
+References: <20200428132105.170886-1-hjl.tools@gmail.com>
+ <20200428132105.170886-2-hjl.tools@gmail.com>
+ <YyTRM3/9Mm+b+M8N@relinquished.localdomain>
+ <e15de60c-8133-3d93-eb1c-c6b1b5389887@csgroup.eu>
 MIME-Version: 1.0
-References: <20200527165718.129307-1-briannorris@chromium.org>
- <YmPadTu8CfEARfWs@xps> <CA+ASDXPeJ6fD9hvc0Nq_RY05YRdSP77U_96vUZcTYgkQKY9Bvg@mail.gmail.com>
- <CAG2Q2vXce2V3Y6MnPhV6obcNWyQzyusMTL=5oCQLRNh2_ffNYA@mail.gmail.com>
- <CAG2Q2vXFcSVwF4CbU5o3VP1MWwrdqrZjTHgfBj_Q0t3nNipJRw@mail.gmail.com> <CA+ASDXNx30A3=BA9b-tiAQzYHP=nV_eLw1QFpJij=F=JgWZ5sg@mail.gmail.com>
-In-Reply-To: <CA+ASDXNx30A3=BA9b-tiAQzYHP=nV_eLw1QFpJij=F=JgWZ5sg@mail.gmail.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 19 Sep 2022 10:24:51 -0700
-Message-ID: <CAJ+vNU38WyC=FFZVgqyKunEnjXid6vXqkorv8a8+ywjJBk_0NA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Cale Collins <ccollins@gateworks.com>, kvalo@kernel.org,
-        Patrick Steinhardt <ps@pks.im>,
-        ath10k <ath10k@lists.infradead.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Stephen McCarthy <stephen.mccarthy@pctel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e15de60c-8133-3d93-eb1c-c6b1b5389887@csgroup.eu>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 2:57 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> Hi Cale,
->
-> I meant to respond a while back, but didn't get around to it, sorry.
-> In case it's still helpful:
->
-> On Wed, May 11, 2022 at 3:52 PM Cale Collins <ccollins@gateworks.com> wrote:
-> > On Mon, May 9, 2022 at 11:16 AM Cale Collins <ccollins@gateworks.com> wrote:
-> > > I'm experiencing an issue very similar to this.  The regulatory domain
-> > > settings wouldn't allow me to create an AP on 5ghz bands on kernels
-> > > newer than 5.10 when using a WLE900VX (QCA9984) radio.  I bisected the
-> > > kernel and ultimately landed on the regression that Brian patched.
->
-> If the revert broke you, then you were also broken before v5.6. This
-> patch only landed in v5.6-rc1:
->
-> 2dc016599cfa ath: add support for special 0x0 regulatory domain
->
-> I'm not really an expert on the wide variety of ath-related hardware
-> production, but given the many people complaining about the existence
-> of the non-reverted patch, it seemed like a revert was the best way
-> forward -- don't break those that weren't already broken pre-5.6.
->
-> > > root@focal-ventana:~# iw reg get
-> > > global
-> > > country 00: DFS-UNSET
-> > >     (2402 - 2472 @ 40), (N/A, 20), (N/A)
-> > >     (2457 - 2482 @ 20), (N/A, 20), (N/A), AUTO-BW, NO-IR
-> > >     (2474 - 2494 @ 20), (N/A, 20), (N/A), NO-OFDM, NO-IR
-> > >     (5170 - 5250 @ 80), (N/A, 20), (N/A), AUTO-BW, NO-IR
-> > >     (5250 - 5330 @ 80), (N/A, 20), (0 ms), DFS, AUTO-BW, NO-IR
-> > >     (5490 - 5730 @ 160), (N/A, 20), (0 ms), DFS, NO-IR
-> > >     (5735 - 5835 @ 80), (N/A, 20), (N/A), NO-IR
-> > >     (57240 - 63720 @ 2160), (N/A, 0), (N/A)
-> > >
-> > > phy#0
-> > > country 99: DFS-UNSET
-> > >     (2402 - 2472 @ 40), (N/A, 20), (N/A)
-> > >     (5140 - 5360 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
-> > >     (5715 - 5860 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
->
-> Unless there's some other bug hidden in here in how we're reading
-> EEPROM settings, it sounds like you have a badly-provisioned PCI
-> module, with no EEPROM country code. Thus, the driver has to
-> conservatively treat you as a very-limited "world roaming" regulatory
-> class, which mostly disables 5GHz, or at least doesn't let you
-> initiate much radiation on your own (which basically eliminates AP
-> mode).
->
-> The "fix" there would be to get a different, correctly-provisioned
-> (for your regulatory domain) module.
->
-> Also, I didn't notice until today: technically, you also could be
-> retrieving your incorrect country code info from ACPI; but if you're
-> using a typical ARM board like claimed, it's unlikely you're using
-> ACPI.
->
-> Somewhat of a sidetrack: The existence of ACPI override support does
-> suggest that perhaps there's some room for a Device Tree property, so
-> one can set their regulatory domain on a per-board basis. I've
-> definitely known some downstream product makers use that sort of
-> approach -- and that very "solution" is potentially why some devices
-> don't get a valid EEPROM (if the manufacturer could hack the drivers,
-> why bother getting the EEPROM right?), and therefore don't work
-> correctly with upstream kernels... Unfortunately, that kind of
-> solution is hard to deploy 100% correctly for upstream Linux, because
-> the Device Tree would need to change depending on which country the
-> affected system is shipped to. It's easier to get those things right
-> in a pre-flashed firmware or an EEPROM; it's harder to get those in a
-> software DTS file shipped to everyone in the mainline kernel sources.
->
-> > > #dmesg |grep ath output
->
-> In the slim chance there's something else going on in the driver, you
-> might try to capture logs with ATH10K_DBG_BOOT and
-> ATH10K_DBG_REGULATORY logging enabled. That could look something like:
->
-> echo 0x820 > /sys/module/ath10k_core/parameters/debug_mask
-> rmmod ath10k_pci
-> modprobe ath10k_pci
-> dmesg | grep ath
->
+On Sat, Sep 17, 2022 at 06:31:20AM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 16/09/2022 à 21:40, Omar Sandoval a écrit :
+> > [Vous ne recevez pas souvent de courriers de osandov@osandov.com. D?couvrez pourquoi ceci est important ? https://aka.ms/LearnAboutSenderIdentification ]
+> > 
+> > On Tue, Apr 28, 2020 at 06:21:05AM -0700, H.J. Lu wrote:
+> >> With the command-line option, -mx86-used-note=yes, the x86 assembler
+> >> in binutils 2.32 and above generates a program property note in a note
+> >> section, .note.gnu.property, to encode used x86 ISAs and features.  But
+> >> kernel linker script only contains a single NOTE segment:
+> >>
+> >> PHDRS {
+> >>   text PT_LOAD FLAGS(5);
+> >>   data PT_LOAD FLAGS(6);
+> >>   percpu PT_LOAD FLAGS(6);
+> >>   init PT_LOAD FLAGS(7);
+> >>   note PT_NOTE FLAGS(0);
+> >> }
+> >> SECTIONS
+> >> {
+> >> ...
+> >>   .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
+> >> e.*)) __stop_notes = .; } :text :note
+> >> ...
+> >> }
+> >>
+> >> The NOTE segment generated by kernel linker script is aligned to 4 bytes.
+> >> But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
+> >> we get
+> >>
+> >> [hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+> >>
+> >> Displaying notes found in: .notes
+> >>    Owner                Data size Description
+> >>    Xen                  0x00000006 Unknown note type: (0x00000006)
+> >>     description data: 6c 69 6e 75 78 00
+> >>    Xen                  0x00000004 Unknown note type: (0x00000007)
+> >>     description data: 32 2e 36 00
+> >>    xen-3.0              0x00000005 Unknown note type: (0x006e6558)
+> >>     description data: 08 00 00 00 03
+> >> readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
+> >> readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
+> >> 0x80000000, alignment: 8
+> >> [hjl@gnu-skx-1 linux]$
+> >>
+> >> Since note.gnu.property section in kernel image is never used, this patch
+> >> discards .note.gnu.property sections in kernel linker script by adding
+> >>
+> >> /DISCARD/ : {
+> >>    *(.note.gnu.property)
+> >> }
+> >>
+> >> before kernel NOTE segment in generic NOTES.
+> >>
+> >> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+> >> Reviewed-by: Kees Cook <keescook@chromium.org>
+> >> ---
+> >>   include/asm-generic/vmlinux.lds.h | 7 +++++++
+> >>   1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> >> index 71e387a5fe90..95cd678428f4 100644
+> >> --- a/include/asm-generic/vmlinux.lds.h
+> >> +++ b/include/asm-generic/vmlinux.lds.h
+> >> @@ -833,7 +833,14 @@
+> >>   #define TRACEDATA
+> >>   #endif
+> >>
+> >> +/*
+> >> + * Discard .note.gnu.property sections which are unused and have
+> >> + * different alignment requirement from kernel note sections.
+> >> + */
+> >>   #define NOTES                                                                \
+> >> +     /DISCARD/ : {                                                   \
+> >> +             *(.note.gnu.property)                                   \
+> >> +     }                                                               \
+> >>        .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
+> >>                __start_notes = .;                                      \
+> >>                KEEP(*(.note.*))                                        \
+> >> --
+> >> 2.25.4
+> >>
+> > 
+> > Hi, H.J.,
+> > 
+> > I recently ran into this same .notes corruption when building kernels on
+> > Arch Linux.
+> > 
+> > What ended up happening to this patch? It doesn't appear to have been
+> > merged, and I couldn't find any further discussion about it. I'm happy
+> > to resend it for you if you need a hand.
+> 
+> As far as I can see, ARM64 is doing something with that section, see 
+> arch/arm64/include/asm/assembler.h
+> 
+> Instead of discarding that section, would it be enough to force 
+> alignment of .notes to 8 bytes ?
+> 
+> Thanks
+> Christophe
 
-Brian,
+Unfortunately, "alignment requirement" here isn't just the starting
+alignment of the .notes section; it also refers to internal padding in
+the note metadata to keep things aligned. Changing this would break
+anyone who parses /sys/kernel/notes (e.g., perf).
 
-Thanks for the follow-up. Indeed the situation Cale had here was with
-Compex WLE900VX which apparently does have what we now understand to
-be an unprogrammed EEPROM. I suspect this was some choice from Compex
-that somehow must have benefited them at the time and I'm not clear if
-there are many other cards that have this same issue. Maybe something
-should be added to the ath drivers wiki pages
-(https://wireless.wiki.kernel.org/en/users/drivers/ath9k)
+Here is a little more context around this mess:
 
-Reverting commit 2dc016599cfa ("ath: add support for special 0x0
-regulatory domain") does indeed resolve the issue on the older kernels
-but somehow the issue creeps back in with later kernels (definitely
-appears in 5.15) perhaps due to other changes. Perhaps you can confirm
-my findings if you have a card like this.
+The System V gABI [1] says that the note header and descriptor should be
+aligned to 4 bytes for 32-bit files and 8 bytes for 64-bit files.
+However, Linux never followed this, and 4-byte alignment is used for
+both 32-bit and 64-bit files; see elf(5) [2].
 
-For 5.15 and newer I've elected to add a hack from OpenWrt for the
-kernel's used to support my companies boards which adds a kernel
-config to not enforce EEPROM reg restrictions for the kernels that our
-users use:
-https://github.com/Gateworks/linux-venice/commit/39ef369cbca269fa32e8f85d31ae813b97d84aec
+The only exception as of 2022 is
+.note.gnu.property/NT_GNU_PROPERTY_TYPE_0, which is defined to follow
+the gABI alignment. There was a long thread discussing this back in 2018
+with the subject "PT_NOTE alignment, NT_GNU_PROPERTY_TYPE_0, glibc and
+gold" [3].
 
-Best Regards,
+According to the gABI Linux Extensions [4], consumers are now supposed
+to use the p_align of the PT_NOTE segment instead of assuming an
+alignment.
 
-Tim
+There are a few issues with this for the kernel:
+
+* The vmlinux linker script squishes together all of the notes sections
+  with different alignments without adjusting their internal padding,
+  but sets p_align to the maximum required alignment. This is what
+  confuses readelf and co: they expect 8-byte alignment, but most of the
+  note entries are only padded for 4-byte alignment.
+* The vmlinux .notes section is exported as /sys/kernel/notes. This is
+  stable ABI and has always had 4-byte alignment; all existing parsers
+  assume this.
+* /sys/kernel/notes doesn't currently have a way to specify an alternate
+  alignment anyways.
+
+My suggestion would be to keep .note.gnu.property in its own section in
+vmlinux, or create a new .notes8 section with 8-byte alignment, and
+leave .notes and /sys/kernel/notes alone.
+
+I'm not sure what exactly arch/arm64/include/asm/assembler.h is doing
+with this file. Perhaps the author, Mark Brown, can clarify?
+
+1: http://www.sco.com/developers/gabi/latest/ch5.pheader.html#note_section
+2: https://man7.org/linux/man-pages/man5/elf.5.html#:~:text=Notes%20(Nhdr)
+3: https://public-inbox.org/libc-alpha/13a92cb0-a993-f684-9a96-e02e4afb1bef@redhat.com/
+4: https://gitlab.com/x86-psABIs/Linux-ABI
