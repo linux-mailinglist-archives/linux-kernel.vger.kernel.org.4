@@ -2,285 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850315BD0C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEF95BD0C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiISPWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S230238AbiISPWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiISPWR (ORCPT
+        with ESMTP id S230125AbiISPWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:22:17 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403C2601;
-        Mon, 19 Sep 2022 08:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663600907; x=1695136907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kNwt2uWdXdRdyeI/mYyCWyWe8TGe7zKp/jgzp6dU+WE=;
-  b=R9x6p/0jSdFBti7lQd3p4EbT15K/C6SK3IXurKmYE13r5QuQmKBj5X4g
-   fbTATmso9a31DHcLRNYiA8kE5PCdR61ilN44xhzWnZaqbeLhvwD87x27o
-   GNh73RRoiugtaS2jXT9kT8zczssrCQn7TV4YKMNF4UBeqMYFbWenOHYxg
-   SEtg977DZmI90yH1HVIN2XVmDzJpGIuU78wE7ujWJj6TxDXO4O7iNEFpr
-   6e7IokDEu8z8W5TKnkYBjxS7UT7Ky30K53iGeJZCYk7d9KHiHTbPjClyw
-   evXimCY8w5rdYBsghyoRyIm7p4xe3rzzBNBTUvjT6KrcRcbIsF6F++EO1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300803312"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="300803312"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:21:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="760908006"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Sep 2022 08:21:43 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaIad-00023N-0K;
-        Mon, 19 Sep 2022 15:21:43 +0000
-Date:   Mon, 19 Sep 2022 23:20:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li Zhong <floridsleeves@gmail.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jgg@ziepe.ca,
-        william.xuanziyang@huawei.com, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: Re: [PATCH v1] net/8021q/vlan: check the return value of
- vlan_vid_add()
-Message-ID: <202209192322.WqMpsD4X-lkp@intel.com>
-References: <20220919074600.1576168-1-floridsleeves@gmail.com>
+        Mon, 19 Sep 2022 11:22:10 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C880C25;
+        Mon, 19 Sep 2022 08:21:27 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id q11so17656501qkc.12;
+        Mon, 19 Sep 2022 08:21:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zwk8/QhMZpatQGQHcLa6CxC1A70tMAO9HDHY25D5feE=;
+        b=seiQiH7oSb1o4bKfTfhPNtyABHn9SIpDT+BCJEyKS2ufotknqwNpdADiJT3lR5JHyk
+         PcrkFUhV0mxkxTw2QEPHLmVjny2b5wb95WE4wrC8jXYEvRHYHQgY7nXJsXp1VjNErWDW
+         qwAiYgZGtb1n9RZucbvLX/RRQ/bs1KiA1m7dJ78BzMsqbvlBF0xbn5cHOM0HghJr89Gl
+         BkCAdJtV+jWvdu2+DUE0EcrhiMl1WuIAVkIVQXeullRcJli7p0/iat2prsfWoeK7GjTH
+         SFzQxnNVAEPFWuXOW8g1VEpndUEAZNTKjevjzoX9uJy3+ZTnx0DTdsm7wyh834tzRzMO
+         xQZQ==
+X-Gm-Message-State: ACrzQf0efWM6jvkl7l16vaJXUlbSH/d4jS+7jyVOzUx4T9p3OGuYR/Eb
+        4PnPlbdy6XiP2txJ2sOg7rYSEQGZR/aqvbawP9E=
+X-Google-Smtp-Source: AMsMyM5cgrHdHMwYAR2D2ZjqABuHY9UEfVqKvTwIhmR6+N901HRJWzEi9ZfhaQwzx+J2b350jxNOS+DoidFDWdYllGY=
+X-Received: by 2002:a05:620a:46ac:b0:6ce:3e55:fc21 with SMTP id
+ bq44-20020a05620a46ac00b006ce3e55fc21mr12973834qkb.285.1663600885830; Mon, 19
+ Sep 2022 08:21:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919074600.1576168-1-floridsleeves@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919095939.761690562@infradead.org>
+In-Reply-To: <20220919095939.761690562@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 19 Sep 2022 17:21:12 +0200
+Message-ID: <CAJZ5v0h3y-MRzHmbzrr6B4vBxkkw07LOdCVmBqSS4JDhtGSKXg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/44] cpuidle,rcu: Clean up the mess
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, vgupta@kernel.org,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        ulli.kroll@googlemail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        bcain@quicinc.com, Huacai Chen <chenhuacai@kernel.org>,
+        kernel@xen0n.name, Geert Uytterhoeven <geert@linux-m68k.org>,
+        sammy@sammy.net, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi,
+        Stafford Horne <shorne@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, acme@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        jolsa@kernel.org, namhyung@kernel.org,
+        Juergen Gross <jgross@suse.com>, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Anup Patel <anup@brainfault.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>, senozhatsky@chromium.org,
+        John Ogness <john.ogness@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        vschneid@redhat.com, Frederic Weisbecker <fweisbec@gmail.com>,
+        ryabinin.a.a@gmail.com, Alexander Potapenko <glider@google.com>,
+        andreyknvl@gmail.com, Dmitry Vyukov <dvyukov@google.com>,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-alpha@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-snps-arc@lists.infradead.org,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        openrisc@lists.librecores.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+On Mon, Sep 19, 2022 at 12:17 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Hi All!
+>
+> At long last, a respin of the cpuidle vs rcu cleanup patches.
+>
+> v1: https://lkml.kernel.org/r/20220608142723.103523089@infradead.org
+>
+> These here patches clean up the mess that is cpuidle vs rcuidle.
+>
+> At the end of the ride there's only on RCU_NONIDLE user left:
+>
+>   arch/arm64/kernel/suspend.c:            RCU_NONIDLE(__cpu_suspend_exit());
+>
+> and 'one' trace_*_rcuidle() user:
+>
+>   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
+>   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
+>   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, caller_addr);
+>   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
+>   kernel/trace/trace_preemptirq.c:                trace_preempt_enable_rcuidle(a0, a1);
+>   kernel/trace/trace_preemptirq.c:                trace_preempt_disable_rcuidle(a0, a1);
+>
+> However this last is all in deprecated code that should be unused for GENERIC_ENTRY.
+>
+> I've touched a lot of code that I can't test and I might've broken something by
+> accident. In particular the whole ARM cpuidle stuff was quite involved.
+>
+> Please all; have a look where you haven't already.
+>
+>
+> New since v1:
+>
+>  - rebase on top of Frederic's rcu-context-tracking rename fest
+>  - more omap goodness as per the last discusion (thanks Tony!)
+>  - removed one more RCU_NONIDLE() from arm64/risc-v perf code
+>  - ubsan/kasan fixes
+>  - intel_idle module-param for testing
+>  - a bunch of extra __always_inline, because compilers are silly.
 
-Thank you for the patch! Perhaps something to improve:
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[auto build test WARNING on net/master]
-[also build test WARNING on net-next/master linus/master v6.0-rc6 next-20220919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+for the whole set and let me know if you want me to merge any of these
+through cpuidle.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhong/net-8021q-vlan-check-the-return-value-of-vlan_vid_add/20220919-154737
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 96628951869c0dedf0377adca01c8675172d8639
-config: x86_64-randconfig-a005-20220919 (https://download.01.org/0day-ci/archive/20220919/202209192322.WqMpsD4X-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c44a44ed52c467523d28a7764ee01e23d3928945
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Li-Zhong/net-8021q-vlan-check-the-return-value-of-vlan_vid_add/20220919-154737
-        git checkout c44a44ed52c467523d28a7764ee01e23d3928945
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/8021q/
+Thanks!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/8021q/vlan.c:385:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   int err = vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
-                       ^
-   1 warning generated.
-
-
-vim +385 net/8021q/vlan.c
-
-   359	
-   360	static int vlan_device_event(struct notifier_block *unused, unsigned long event,
-   361				     void *ptr)
-   362	{
-   363		struct netlink_ext_ack *extack = netdev_notifier_info_to_extack(ptr);
-   364		struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-   365		struct vlan_group *grp;
-   366		struct vlan_info *vlan_info;
-   367		int i, flgs;
-   368		struct net_device *vlandev;
-   369		struct vlan_dev_priv *vlan;
-   370		bool last = false;
-   371		LIST_HEAD(list);
-   372		int err;
-   373	
-   374		if (is_vlan_dev(dev)) {
-   375			int err = __vlan_device_event(dev, event);
-   376	
-   377			if (err)
-   378				return notifier_from_errno(err);
-   379		}
-   380	
-   381		if ((event == NETDEV_UP) &&
-   382		    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER)) {
-   383			pr_info("adding VLAN 0 to HW filter on device %s\n",
-   384				dev->name);
- > 385			int err = vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
-   386	
-   387			if (err)
-   388				return notifier_from_errno(err);
-   389		}
-   390		if (event == NETDEV_DOWN &&
-   391		    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER))
-   392			vlan_vid_del(dev, htons(ETH_P_8021Q), 0);
-   393	
-   394		vlan_info = rtnl_dereference(dev->vlan_info);
-   395		if (!vlan_info)
-   396			goto out;
-   397		grp = &vlan_info->grp;
-   398	
-   399		/* It is OK that we do not hold the group lock right now,
-   400		 * as we run under the RTNL lock.
-   401		 */
-   402	
-   403		switch (event) {
-   404		case NETDEV_CHANGE:
-   405			/* Propagate real device state to vlan devices */
-   406			vlan_group_for_each_dev(grp, i, vlandev)
-   407				vlan_stacked_transfer_operstate(dev, vlandev,
-   408								vlan_dev_priv(vlandev));
-   409			break;
-   410	
-   411		case NETDEV_CHANGEADDR:
-   412			/* Adjust unicast filters on underlying device */
-   413			vlan_group_for_each_dev(grp, i, vlandev) {
-   414				flgs = vlandev->flags;
-   415				if (!(flgs & IFF_UP))
-   416					continue;
-   417	
-   418				vlan_sync_address(dev, vlandev);
-   419			}
-   420			break;
-   421	
-   422		case NETDEV_CHANGEMTU:
-   423			vlan_group_for_each_dev(grp, i, vlandev) {
-   424				if (vlandev->mtu <= dev->mtu)
-   425					continue;
-   426	
-   427				dev_set_mtu(vlandev, dev->mtu);
-   428			}
-   429			break;
-   430	
-   431		case NETDEV_FEAT_CHANGE:
-   432			/* Propagate device features to underlying device */
-   433			vlan_group_for_each_dev(grp, i, vlandev)
-   434				vlan_transfer_features(dev, vlandev);
-   435			break;
-   436	
-   437		case NETDEV_DOWN: {
-   438			struct net_device *tmp;
-   439			LIST_HEAD(close_list);
-   440	
-   441			/* Put all VLANs for this dev in the down state too.  */
-   442			vlan_group_for_each_dev(grp, i, vlandev) {
-   443				flgs = vlandev->flags;
-   444				if (!(flgs & IFF_UP))
-   445					continue;
-   446	
-   447				vlan = vlan_dev_priv(vlandev);
-   448				if (!(vlan->flags & VLAN_FLAG_LOOSE_BINDING))
-   449					list_add(&vlandev->close_list, &close_list);
-   450			}
-   451	
-   452			dev_close_many(&close_list, false);
-   453	
-   454			list_for_each_entry_safe(vlandev, tmp, &close_list, close_list) {
-   455				vlan_stacked_transfer_operstate(dev, vlandev,
-   456								vlan_dev_priv(vlandev));
-   457				list_del_init(&vlandev->close_list);
-   458			}
-   459			list_del(&close_list);
-   460			break;
-   461		}
-   462		case NETDEV_UP:
-   463			/* Put all VLANs for this dev in the up state too.  */
-   464			vlan_group_for_each_dev(grp, i, vlandev) {
-   465				flgs = dev_get_flags(vlandev);
-   466				if (flgs & IFF_UP)
-   467					continue;
-   468	
-   469				vlan = vlan_dev_priv(vlandev);
-   470				if (!(vlan->flags & VLAN_FLAG_LOOSE_BINDING))
-   471					dev_change_flags(vlandev, flgs | IFF_UP,
-   472							 extack);
-   473				vlan_stacked_transfer_operstate(dev, vlandev, vlan);
-   474			}
-   475			break;
-   476	
-   477		case NETDEV_UNREGISTER:
-   478			/* twiddle thumbs on netns device moves */
-   479			if (dev->reg_state != NETREG_UNREGISTERING)
-   480				break;
-   481	
-   482			vlan_group_for_each_dev(grp, i, vlandev) {
-   483				/* removal of last vid destroys vlan_info, abort
-   484				 * afterwards */
-   485				if (vlan_info->nr_vids == 1)
-   486					last = true;
-   487	
-   488				unregister_vlan_dev(vlandev, &list);
-   489				if (last)
-   490					break;
-   491			}
-   492			unregister_netdevice_many(&list);
-   493			break;
-   494	
-   495		case NETDEV_PRE_TYPE_CHANGE:
-   496			/* Forbid underlaying device to change its type. */
-   497			if (vlan_uses_dev(dev))
-   498				return NOTIFY_BAD;
-   499			break;
-   500	
-   501		case NETDEV_NOTIFY_PEERS:
-   502		case NETDEV_BONDING_FAILOVER:
-   503		case NETDEV_RESEND_IGMP:
-   504			/* Propagate to vlan devices */
-   505			vlan_group_for_each_dev(grp, i, vlandev)
-   506				call_netdevice_notifiers(event, vlandev);
-   507			break;
-   508	
-   509		case NETDEV_CVLAN_FILTER_PUSH_INFO:
-   510			err = vlan_filter_push_vids(vlan_info, htons(ETH_P_8021Q));
-   511			if (err)
-   512				return notifier_from_errno(err);
-   513			break;
-   514	
-   515		case NETDEV_CVLAN_FILTER_DROP_INFO:
-   516			vlan_filter_drop_vids(vlan_info, htons(ETH_P_8021Q));
-   517			break;
-   518	
-   519		case NETDEV_SVLAN_FILTER_PUSH_INFO:
-   520			err = vlan_filter_push_vids(vlan_info, htons(ETH_P_8021AD));
-   521			if (err)
-   522				return notifier_from_errno(err);
-   523			break;
-   524	
-   525		case NETDEV_SVLAN_FILTER_DROP_INFO:
-   526			vlan_filter_drop_vids(vlan_info, htons(ETH_P_8021AD));
-   527			break;
-   528		}
-   529	
-   530	out:
-   531		return NOTIFY_DONE;
-   532	}
-   533	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> ---
+>  arch/alpha/kernel/process.c               |  1 -
+>  arch/alpha/kernel/vmlinux.lds.S           |  1 -
+>  arch/arc/kernel/process.c                 |  3 ++
+>  arch/arc/kernel/vmlinux.lds.S             |  1 -
+>  arch/arm/include/asm/vmlinux.lds.h        |  1 -
+>  arch/arm/kernel/process.c                 |  1 -
+>  arch/arm/kernel/smp.c                     |  6 +--
+>  arch/arm/mach-gemini/board-dt.c           |  3 +-
+>  arch/arm/mach-imx/cpuidle-imx6q.c         |  4 +-
+>  arch/arm/mach-imx/cpuidle-imx6sx.c        |  5 ++-
+>  arch/arm/mach-omap2/common.h              |  6 ++-
+>  arch/arm/mach-omap2/cpuidle34xx.c         | 16 +++++++-
+>  arch/arm/mach-omap2/cpuidle44xx.c         | 29 +++++++-------
+>  arch/arm/mach-omap2/omap-mpuss-lowpower.c | 12 +++++-
+>  arch/arm/mach-omap2/pm.h                  |  2 +-
+>  arch/arm/mach-omap2/pm24xx.c              | 51 +-----------------------
+>  arch/arm/mach-omap2/pm34xx.c              | 14 +++++--
+>  arch/arm/mach-omap2/pm44xx.c              |  2 +-
+>  arch/arm/mach-omap2/powerdomain.c         | 10 ++---
+>  arch/arm64/kernel/idle.c                  |  1 -
+>  arch/arm64/kernel/smp.c                   |  4 +-
+>  arch/arm64/kernel/vmlinux.lds.S           |  1 -
+>  arch/csky/kernel/process.c                |  1 -
+>  arch/csky/kernel/smp.c                    |  2 +-
+>  arch/csky/kernel/vmlinux.lds.S            |  1 -
+>  arch/hexagon/kernel/process.c             |  1 -
+>  arch/hexagon/kernel/vmlinux.lds.S         |  1 -
+>  arch/ia64/kernel/process.c                |  1 +
+>  arch/ia64/kernel/vmlinux.lds.S            |  1 -
+>  arch/loongarch/kernel/idle.c              |  1 +
+>  arch/loongarch/kernel/vmlinux.lds.S       |  1 -
+>  arch/m68k/kernel/vmlinux-nommu.lds        |  1 -
+>  arch/m68k/kernel/vmlinux-std.lds          |  1 -
+>  arch/m68k/kernel/vmlinux-sun3.lds         |  1 -
+>  arch/microblaze/kernel/process.c          |  1 -
+>  arch/microblaze/kernel/vmlinux.lds.S      |  1 -
+>  arch/mips/kernel/idle.c                   |  8 ++--
+>  arch/mips/kernel/vmlinux.lds.S            |  1 -
+>  arch/nios2/kernel/process.c               |  1 -
+>  arch/nios2/kernel/vmlinux.lds.S           |  1 -
+>  arch/openrisc/kernel/process.c            |  1 +
+>  arch/openrisc/kernel/vmlinux.lds.S        |  1 -
+>  arch/parisc/kernel/process.c              |  2 -
+>  arch/parisc/kernel/vmlinux.lds.S          |  1 -
+>  arch/powerpc/kernel/idle.c                |  5 +--
+>  arch/powerpc/kernel/vmlinux.lds.S         |  1 -
+>  arch/riscv/kernel/process.c               |  1 -
+>  arch/riscv/kernel/vmlinux-xip.lds.S       |  1 -
+>  arch/riscv/kernel/vmlinux.lds.S           |  1 -
+>  arch/s390/kernel/idle.c                   |  1 -
+>  arch/s390/kernel/vmlinux.lds.S            |  1 -
+>  arch/sh/kernel/idle.c                     |  1 +
+>  arch/sh/kernel/vmlinux.lds.S              |  1 -
+>  arch/sparc/kernel/leon_pmc.c              |  4 ++
+>  arch/sparc/kernel/process_32.c            |  1 -
+>  arch/sparc/kernel/process_64.c            |  3 +-
+>  arch/sparc/kernel/vmlinux.lds.S           |  1 -
+>  arch/um/kernel/dyn.lds.S                  |  1 -
+>  arch/um/kernel/process.c                  |  1 -
+>  arch/um/kernel/uml.lds.S                  |  1 -
+>  arch/x86/boot/compressed/vmlinux.lds.S    |  1 +
+>  arch/x86/coco/tdx/tdcall.S                | 15 +------
+>  arch/x86/coco/tdx/tdx.c                   | 25 ++++--------
+>  arch/x86/events/amd/brs.c                 | 13 +++----
+>  arch/x86/include/asm/fpu/xcr.h            |  4 +-
+>  arch/x86/include/asm/irqflags.h           | 11 ++----
+>  arch/x86/include/asm/mwait.h              | 14 +++----
+>  arch/x86/include/asm/nospec-branch.h      |  2 +-
+>  arch/x86/include/asm/paravirt.h           |  6 ++-
+>  arch/x86/include/asm/perf_event.h         |  2 +-
+>  arch/x86/include/asm/shared/io.h          |  4 +-
+>  arch/x86/include/asm/shared/tdx.h         |  1 -
+>  arch/x86/include/asm/special_insns.h      |  8 ++--
+>  arch/x86/include/asm/xen/hypercall.h      |  2 +-
+>  arch/x86/kernel/cpu/bugs.c                |  2 +-
+>  arch/x86/kernel/fpu/core.c                |  4 +-
+>  arch/x86/kernel/paravirt.c                | 14 ++++++-
+>  arch/x86/kernel/process.c                 | 65 +++++++++++++++----------------
+>  arch/x86/kernel/vmlinux.lds.S             |  1 -
+>  arch/x86/lib/memcpy_64.S                  |  5 +--
+>  arch/x86/lib/memmove_64.S                 |  4 +-
+>  arch/x86/lib/memset_64.S                  |  4 +-
+>  arch/x86/xen/enlighten_pv.c               |  2 +-
+>  arch/x86/xen/irq.c                        |  2 +-
+>  arch/xtensa/kernel/process.c              |  1 +
+>  arch/xtensa/kernel/vmlinux.lds.S          |  1 -
+>  drivers/acpi/processor_idle.c             | 36 ++++++++++-------
+>  drivers/base/power/runtime.c              | 24 ++++++------
+>  drivers/clk/clk.c                         |  8 ++--
+>  drivers/cpuidle/cpuidle-arm.c             |  1 +
+>  drivers/cpuidle/cpuidle-big_little.c      |  8 +++-
+>  drivers/cpuidle/cpuidle-mvebu-v7.c        |  7 ++++
+>  drivers/cpuidle/cpuidle-psci.c            | 10 +++--
+>  drivers/cpuidle/cpuidle-qcom-spm.c        |  1 +
+>  drivers/cpuidle/cpuidle-riscv-sbi.c       | 10 +++--
+>  drivers/cpuidle/cpuidle-tegra.c           | 21 +++++++---
+>  drivers/cpuidle/cpuidle.c                 | 21 +++++-----
+>  drivers/cpuidle/dt_idle_states.c          |  2 +-
+>  drivers/cpuidle/poll_state.c              | 10 ++++-
+>  drivers/idle/intel_idle.c                 | 19 +++++----
+>  drivers/perf/arm_pmu.c                    | 11 +-----
+>  drivers/perf/riscv_pmu_sbi.c              |  8 +---
+>  include/asm-generic/vmlinux.lds.h         |  9 ++---
+>  include/linux/compiler_types.h            |  8 +++-
+>  include/linux/cpu.h                       |  3 --
+>  include/linux/cpuidle.h                   | 34 ++++++++++++++++
+>  include/linux/cpumask.h                   |  4 +-
+>  include/linux/percpu-defs.h               |  2 +-
+>  include/linux/sched/idle.h                | 40 ++++++++++++++-----
+>  include/linux/thread_info.h               | 18 ++++++++-
+>  include/linux/tracepoint.h                | 13 ++++++-
+>  kernel/cpu_pm.c                           |  9 -----
+>  kernel/printk/printk.c                    |  2 +-
+>  kernel/sched/idle.c                       | 47 +++++++---------------
+>  kernel/time/tick-broadcast-hrtimer.c      | 29 ++++++--------
+>  kernel/time/tick-broadcast.c              |  6 ++-
+>  kernel/trace/trace.c                      |  3 ++
+>  lib/ubsan.c                               |  5 ++-
+>  mm/kasan/kasan.h                          |  4 ++
+>  mm/kasan/shadow.c                         | 38 ++++++++++++++++++
+>  tools/objtool/check.c                     | 17 ++++++++
+>  121 files changed, 511 insertions(+), 420 deletions(-)
+>
