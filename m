@@ -2,200 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EC15BD875
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B785BD87F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiISXus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S229691AbiISXzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiISXun (ORCPT
+        with ESMTP id S229562AbiISXze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:50:43 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEE83D5AA;
-        Mon, 19 Sep 2022 16:50:42 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id 129so1274325vsi.10;
-        Mon, 19 Sep 2022 16:50:42 -0700 (PDT)
+        Mon, 19 Sep 2022 19:55:34 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B2C4E600
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:32 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dv25so2244180ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=ObiI1LOvSQ4K2EeOpgqHdRP+Ejyw75lzaoql9+78EQw=;
-        b=o1e8CwLVOAi5voveJYTXKQBivySosunePQf6lLcfMAKrUL+kkkMM4llV+JLgrqI8hO
-         YY0qZJet1SROegPN+MIUIYRwOUff4zcGx/lHeZ14UW2GqvRonKt9OSIijW1m4slo95eV
-         HuWSZfk0L1Da9W3AqZZxuN2YIt3UvVuVz00QLn3DonOKsZQLZ2XCf0PGF0XMPOu/Hw1W
-         KBAcgmUjtdwcK7t8mGz1Wp4J0RTLZeSxRbLXBZpNYAJ0LQbiNemhNzGEwytSlf3oyI3q
-         Coa3v4pETrcKRg3cDg3PNZhmXdbf1uyq+TCw5GP70LOHTIvN1N3XWZzJPfp7ks25N2Mq
-         e+7A==
+        bh=yfATfabNUJHTE7KoWz5tianqb2se6NNt8ssnLCiM3vM=;
+        b=HV77nvu/6m5fXE76OY/pv1J5LagXGgFIHxHVja+vZD5GGHJUZUVtbSeyHyOzP3BI1k
+         q8KZbVHHluXEvWGmq5aB60t1fzHiWETXVO+ymCXT+XNgpK6+dyax8t3CtXb979Vu6wk9
+         rebhZrc/2rOf9d5Q0uY9dSRlcwxvDNuVdAaK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ObiI1LOvSQ4K2EeOpgqHdRP+Ejyw75lzaoql9+78EQw=;
-        b=hAE27Ep5Gc7XJ2URMK3NPUmx6TfRt5rZ1nS6RN0perTCqJmmjr66Lx5SzHZplTuKBz
-         aJ/M52ShDPggrhS2TT0x2I6aDJTqFzoFahcFH+qDWvGdFJKmKKHGWy/ez2X70IUWS9kE
-         OO7nRiuWEJ5C9PLVNuz9seY9480nfpCXPs+T5WO6bxGp/+geHWAsi8JoNcHRxcJ65nWm
-         lZSKY0mxpUs3ymqbmP+nU7zSR6B6xp3iKoxYwyfTMHo/SkPveLQ9jhpiidip3xgTTgl1
-         HV2zC58zXx2N9YQVFmWKu53W5beOB45BAe4D8vFwINdYVNHROWBryfJzatjlGj0IJyji
-         Hlzw==
-X-Gm-Message-State: ACrzQf2hSlWH/gC5pv+mY3SobkuX8eVL3rhNXRjuJ2r798HDzgrzniTX
-        U2j4iJTpFAMpo0sN9NzExdyld+BdmBip+5HXPmU=
-X-Google-Smtp-Source: AMsMyM5zBGpRWRRHjTEoNolL3My3hxRKT0jP2qArok4XQ9uH1DWogS6Ia6l6+6eb6Gzq6R+TDYGOhVjHliPybwGdbio=
-X-Received: by 2002:a67:ac45:0:b0:388:a1ff:7e89 with SMTP id
- n5-20020a67ac45000000b00388a1ff7e89mr7771043vsh.42.1663631441184; Mon, 19 Sep
- 2022 16:50:41 -0700 (PDT)
+        bh=yfATfabNUJHTE7KoWz5tianqb2se6NNt8ssnLCiM3vM=;
+        b=U5KfGI0e7htDwE5MpG3Gp6Jjc+Rli8En9SRCEKoUeBV2LYIQp+OrWVqd0NWwtMlAHd
+         Ie48TW1cWF7z9aTIceHYcFJqDlbQ8EYAXlHlZwMwsjrDrpQSDtrsLAoYf5WYfUifJ2XO
+         QKwKTitV4kYKBpuzbpXuYcUP7OCEHGGhqTH419nNT7bvxSXFxfza1Ki4WypvYF0oMkhN
+         QuDkLSX4vyBfgtigeW40X0e7MrP+rn0hxIyR4givWcXT9lSzjTmGL19nBVVzxwLJcezF
+         LNBxfP6YAFg7+WNKn4UETcnfxir+eNST6M0RBBzar9SQNBO0h687DRpsA2990Ea4sdE1
+         JkdQ==
+X-Gm-Message-State: ACrzQf2byngsc38Mx/HT4pho2B8+PaQXETWqWKAowd8zYX/vGF8SB8PX
+        xNsZPErj4DkR0F3BbZhhY4/FgO0taGSA7D7S
+X-Google-Smtp-Source: AMsMyM4U3kpTUix9y9ecww6Br6Asfb3pJBp87PrXfUW7rj/6XHoMxe8DTDVxLkDGi7++oK7tFAtjTQ==
+X-Received: by 2002:a17:907:a044:b0:770:da0d:171d with SMTP id gz4-20020a170907a04400b00770da0d171dmr14257352ejc.742.1663631730285;
+        Mon, 19 Sep 2022 16:55:30 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id f9-20020a17090631c900b0078197a9421csm857940ejf.85.2022.09.19.16.55.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 16:55:28 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id z6so1649528wrq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:27 -0700 (PDT)
+X-Received: by 2002:a5d:6c62:0:b0:22a:2f59:cb7d with SMTP id
+ r2-20020a5d6c62000000b0022a2f59cb7dmr12106298wrz.405.1663631727515; Mon, 19
+ Sep 2022 16:55:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220805154231.31257-13-ojeda@kernel.org> <Yu5Bex9zU6KJpcEm@yadro.com>
- <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
- <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
- <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
- <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
- <YyivY6WIl/ahZQqy@wedsonaf-dev> <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
- <Yyjut3MHooCwzHRc@wedsonaf-dev> <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
-In-Reply-To: <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
-From:   Alex Gaynor <alex.gaynor@gmail.com>
-Date:   Mon, 19 Sep 2022 19:50:29 -0400
-Message-ID: <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
-        bonifaido@gmail.com, boqun.feng@gmail.com, davidgow@google.com,
-        dev@niklasmohrin.de, dsosnowski@dsosnowski.pl, foxhlchen@gmail.com,
-        gary@garyguo.net, geofft@ldpreload.com, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, john.m.baublitz@gmail.com,
-        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
-        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, viktor@v-gar.de,
-        Andreas Hindborg <andreas.hindborg@wdc.com>
+References: <1662754496-31143-1-git-send-email-quic_sibis@quicinc.com>
+In-Reply-To: <1662754496-31143-1-git-send-email-quic_sibis@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 19 Sep 2022 16:55:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XMC28U5eZhqUyr6gcNiFKmHfNLjmVAb0Asx4u0mLXZtw@mail.gmail.com>
+Message-ID: <CAD=FV=XMC28U5eZhqUyr6gcNiFKmHfNLjmVAb0Asx4u0mLXZtw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: Add Google Herobrine WIFI SKU dts fragment
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think there is some amount of talking past each other here.
+Hi,
 
-Rust's rules are that a function that's safe must not exhibit UB, no
-matter what arguments they're called with. This can be done with
-static checking or dynamic checking, with obvious trade offs between
-the two.
+On Fri, Sep 9, 2022 at 1:15 PM Sibi Sankar <quic_sibis@quicinc.com> wrote:
+>
+> The Google Herobrine WIFI SKU can save 256M by not having modem/mba/rmtfs
+> memory regions defined. Add the dts fragment and mark all the board files
+> appropriately.
+>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>
+> Depends on:
+> Add LTE SKUs for Villager: https://patchwork.kernel.org/project/linux-arm-msm/cover/20220830182923.3720287-1-dianders@chromium.org/
+>
+> Instead of just having remoteproc_mpss node disabled, we go ahead and
+> delete it on wifi only SKUs. This is done to avoid the dtbs_check
+> failures that we would end of getting if we delete the memory-region
+> property present in the node (since it's a required property). I'll
+> send a follow up patch with IPA node enabled only on LTE SKUs as soon
+> as I verify that it doesn't have any affects on suspend/resume.
 
-We've had pretty good success, thus far, modeling various kernel
-subsystems with APIs that follow this rule. But when there's not a
-good way, consistent with the kernel's idioms, to expose a kernel API
-in Rust that's safe, that doesn't mean it's impossible! In those cases
-we expose an `unsafe fn` in Rust. This means that the caller (e.g.,
-driver code) needs to ensure it meets the required pre-conditions for
-calling that function.
-
-This is how we square the circle of: How do we prioritize the kernel's
-goals, while also staying consistent with Rust's notion of safety?
-
-Wedson's point is that, when possible, finding ways to expose safe
-functions is better, since it puts less of a burden on driver authors.
-But, sadly, we all know we won't be able to find them in all
-circumstances -- we just want to have it as a goal to find them
-whenever possible.
-
-Regards,
-Alex
-
-On Mon, Sep 19, 2022 at 7:40 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Sep 19, 2022 at 3:35 PM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
-> >
-> > No one is talking about absolute safety guarantees. I am talking about
-> > specific ones that Rust makes: these are well-documented and formally
-> > defined.
->
-> If you cannot get over the fact that the kernel may have other
-> requirements that trump any language standards, we really can't work
-> together.
->
-> Those Rust rules may make sense in other environments. But the kernel
-> really does have hard requirements that you continue to limp along
-> even if some fundamental rule has been violated. Exactly because
-> there's often no separate environment outside the kernel that can deal
-> with it.
->
-> End result: a compiler - or language infrastructure - that says "my
-> rules are so ingrained that I cannot do that" is not one that is valid
-> for kernel work.
->
-> This is not really any different from the whole notion of "allocation
-> failures cannot panic" that Rust people seemed to readily understand
-> is a major kernel requirement, and that the kernel needed a graceful
-> failure return instead of a hard panic.
->
-> Also note that the kernel is perfectly willing to say "I will use
-> compiler flags that disable certain guarantees". We do it all the
-> time.
->
-> For example, the C standard has a lot of "the compiler is allowed to
-> make this assumption". And then we disagree with those, and so "kernel
-> C" is different.
->
-> For example, the standard says that dereferencing a NULL pointer is
-> undefined behavior, so a C compiler can see a dereference of a pointer
-> to be a guarantee that said pointer isn't NULL, and remove any
-> subsequent NULL pointer tests.
->
-> That turns out to be one of those "obviously true in a perfect world,
-> but problematic in a real world with bugs", and we tell the compiler
-> to not do that by passing it the '-fno-delete-null-pointer-checks'
-> flag, because the compiler _depending_ on undefined behavior and
-> changing code generation in the build ends up being a really bad idea
-> from a security standpoint.
->
-> Now, in C, most of these kinds of things come from the C standard
-> being very lax, and having much too many "this is undefined behavior"
-> rules. So in almost all cases we end up saying "we want the
-> well-defined implementation, not the 'strictly speaking, the language
-> specs allows the compiler to do Xyz".
->
-> Rust comes from a different direction than C, and it may well be that
-> we very much need some of the rules to be relaxed.
->
-> And hey, Rust people do know about "sometimes the rules have to be
-> relaxed". When it comes to integer overflows etc, there's a
-> "overflow-checks" flag, typically used for debug vs release builds.
->
-> The kernel has similar issues where sometimes you might want the
-> strict checking (lockdep etc), and sometimes you may end up being less
-> strict and miss a few rules (eg "we don't maintain a preempt count for
-> this config, so we can't check RCU mode violations").
->
-> > But I won't give up on Rust guarantees just yet, I'll try to find
-> > ergonomic ways to enforce them at compile time.
->
-> I think that compile-time static checking is wonderful, and as much as
-> possible should be done 100% statically so that people cannot write
-> incorrect programs.
->
-> But we all know that static checking is limited, and then the amount
-> of dynamic checking for violations is often something that will have
-> to depend on environment flags, because it may come with an exorbitant
-> price in the checking.
->
-> Exactly like integer overflow checking.
->
->                  Linus
+s/affects/effects
 
 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> index 344338ad8a01..480cb88f2154 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> @@ -9,6 +9,7 @@
+>
+>  #include "sc7280-idp.dtsi"
+>  #include "sc7280-idp-ec-h1.dtsi"
+> +#include "sc7280-herobrine-lte-sku.dtsi"
 
--- 
-All that is necessary for evil to succeed is for good people to do nothing.
+This is unrelated to the WiFi only separation, isn't it? This looks
+like it's fixing a bug in commit d42fae738f3a ("arm64: dts: qcom: Add
+LTE SKUs for sc7280-villager family") which removed a fragment from
+"sc7280-chrome-common.dtsi" but then didn't add it back to all the
+previous users. Not sure how I missed that. In any case, feels like
+this should be a separate commit with a Fixes.
+
+...also: instead of adding this include to crd-r3 and idp2, though,
+why not just add it to "idp.dtsi"? Right now all things that include
+"idp.dtsi" are LTE SKUs, right?
+
+
+>  / {
+>         model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev3 - 4)";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
+> index ccbe50b6249a..6a2ffaac33bc 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
+> @@ -8,6 +8,7 @@
+>  /dts-v1/;
+>
+>  #include "sc7280-herobrine.dtsi"
+> +#include "sc7280-herobrine-wifi-sku.dtsi"
+
+I think this is wrong and evoker is a LTE SKU. I'll send out a patch shortly.
+
+
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+> index f1017809e5da..ee3bca264f67 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+> @@ -5,7 +5,10 @@
+>   * Copyright 2022 Google LLC.
+>   */
+>
+> -#include "sc7280-herobrine-villager-r1.dts"
+> +/dts-v1/;
+> +
+> +#include "sc7280-herobrine-villager.dtsi"
+> +#include "sc7280-herobrine-audio-wcd9385.dtsi"
+
+I don't think this is enough. villager-r1.dts also has some other
+things that you'll end up missing. I think you need to move the
+existing "villager-r1.dts" to be a dtsi file and then include it from
+both the new "villager-r1.dts" and "villager-r1-lte.dts"
