@@ -2,158 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FA95BD454
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAFB5BD45A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbiISSD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S231153AbiISSFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiISSDX (ORCPT
+        with ESMTP id S229971AbiISSFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:03:23 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A864599C;
-        Mon, 19 Sep 2022 11:03:21 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id EF2C25C03D7;
-        Mon, 19 Sep 2022 14:03:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 19 Sep 2022 14:03:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663610598; x=1663696998; bh=987LUrc4zQ
-        PtHVau80T7pZjc6IgipyocTtu77bLG6/g=; b=k34h2mW1ChpGJS7VPbcoR55SmX
-        lI9JlZPaFyet4658/jWi7lDmrqxDoM/LYsDisT2Uk+9dVSjQ3J39nuXAr1rGzkw5
-        6vk/CvInT0MgoSm644jRZDGKF79IbutEcgBcfAd5ROcDQGhL+FJ1A/5Y+lY/l+Hm
-        BDLT6FT8wv2ZDq5+FSyoTfT7UMyPSwpWfsBvyEtDU2YCCliqGhFGr1lorvu9NlJ1
-        uq6+XCyAwbNOvzXUAEZ+ykw3L9jL3NtEth9yfmVNONaAl0gRMfv7PkM/KLd359nM
-        sFM64XXDuNo15oS3EO0kfXz0Nqb8SlQvZ1VJUecDMKSPxU5Fa33Mi+7OWcEg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663610598; x=1663696998; bh=987LUrc4zQPtHVau80T7pZjc6Igi
-        pyocTtu77bLG6/g=; b=1Gm41UVhoHKB9WKRlHghT1PulnDbf30g7hBJeRpHiAZw
-        C+XzNMuVP5y6vnClJitGNl4eMEazhtALy3mIanSznSSIR5yh/ms6IrqMnmeqx0m6
-        Mra6zmIih+qGFvNz5fnRIZ7kGB9XQkQwcSVsTXODaNFf70LD1IlDSwHcs4R08sP+
-        D3pCUaOnu795mRpBa/wH0QocFBABr5BEsSxR4x5pjDZHZFA0rghvVboigzS/NZlE
-        dV1BvBRXREG2MvDSq+/p7XCgaeH93Zv9jX3iMdqRqGT+sSadtHj44syWrCopEUDM
-        DtRe4GjD1VJ7YjbNgcnncuUo7+NmLdQBS0SoSVaMkA==
-X-ME-Sender: <xms:5q4oYyMutQN941BrJrJphmyOgghX5lVoudCeMf4Fb70yBco05AV3pQ>
-    <xme:5q4oYw8z0oVr7lF71EMn2FZcEuqnm4nNhSpcL0l-PCoNz2EIyTfxD3GNhJ1PXPCLa
-    sCOFs7k3jIfdcxklw>
-X-ME-Received: <xmr:5q4oY5SPk98Rqyc88ITJD3t7v1_XuTZH_S7YztEuuqzsn3I1yRUmEV8DbujwXxjPe2M_bbqrYR-c7kb3FWkZ3MWk3sSCKX4-BsL9tpQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvjedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredt
-    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeei
-    leeuieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:5q4oYyuGJr5SkZGVcR8SkvFGqtBKeqRPCdF2iFnbcbqoZhZX3kmm5A>
-    <xmx:5q4oY6eG2chxcEDPzFyLWvpj68KSmK9xK0rxEnSSrSDnFRqpFqpjsg>
-    <xmx:5q4oY237cmjc8qBF4GTZTlfiIARDHjZPaFMeqjpYDg1qLe5IF4IHmA>
-    <xmx:5q4oY7UQW-axktvP_TiZ-Og7oFmoSV2hqV4vq8gIHedwQyldO3dStw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Sep 2022 14:03:17 -0400 (EDT)
-Date:   Mon, 19 Sep 2022 12:03:15 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>, pablo@netfilter.org,
-        fw@strlen.de, toke@kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Move nf_conn extern declarations to
- filter.h
-Message-ID: <20220919180315.n565ugbvzlxqgezq@kashmir.localdomain>
-References: <c4cb11c8ffe732b91c175a0fc80d43b2547ca17e.1662920329.git.dxu@dxuuu.xyz>
- <ada17021-83c9-3dad-5992-4885e824ecac@linux.dev>
- <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
+        Mon, 19 Sep 2022 14:05:30 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062D8E0D3;
+        Mon, 19 Sep 2022 11:05:29 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id y5so401909wrh.3;
+        Mon, 19 Sep 2022 11:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vb/BXICUNW5+h3UQtwzUqhGAHWrBZN2A+UXNfCT8Pqc=;
+        b=Ns9exaZ9YtultAtWZhCFpGg1KR2dHcqO6XVgDCwr+eBGnRvIT8NEw/A/jkKbMICRJN
+         vyk9IGJ2CvNUhq1AooQQQabinD7v2+YVXYuUueA0LikjHOLgB0FCY/YztXTwzkwb6sio
+         ddGcL7vDyMmCiRLvD+CX99sYNptj+i7rzzHoJS2gt+R3uMGbTs26GZNlSP95RJoH1l8B
+         Ga4gG1adKUtjr8QwtnFsh1H8wC2KLkLD4xYZrIzizvvo0cILv6a3Gojc4WYS2ntF2p3t
+         lqMIkKZ6g4mr1NDoZ+jTX0r/wt9v9WbnUYFSJyGR++cOu5S4otfkRSklsQv1oljWKyud
+         OpLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vb/BXICUNW5+h3UQtwzUqhGAHWrBZN2A+UXNfCT8Pqc=;
+        b=TGr6fCjgrSKenxMW8Onm9spn+UOcEKs+1h2EK59hF7Lbqi/9l6LJFABn60NidLwoco
+         kDoWt0iyxJ06EgaphxG92B3HqjAYmlKGo7pQ77LU9qf1oIQJC1fbj1Z+YnPcctjUtLAU
+         n5kOqrOlMoEV8qyFcgaVj3/jFBG/rLUXh1+aHU5xjIns33Z1GSstUPvbqe7KI7ir8R8r
+         C8CcF4MqhGoGYn0K3G+y/RoC8i8FcajtQq0ZgWIHDaU5EBjyw4H/sxZgPJ7bg0/4V++h
+         NaBh6ug3HhsRYAiLMTK4srLJFanwLkme9zyq+cwenHEKP4hgsx4xU9+pSeAMKn6zXWe3
+         1MfA==
+X-Gm-Message-State: ACrzQf3jRZAPeUtqgaBn0W2ivXinySmdImr8tYsHRp4InnBtFf/Y4dCk
+        j1e9ukkvjXU+Qb0yWUvsIjY=
+X-Google-Smtp-Source: AMsMyM5H7HXR/4Iir7gke5r6YX2qJZWSIMlDJoDP74sxpyTqChBYtElhHroI7JGUDABxT9OErvuQow==
+X-Received: by 2002:a05:6000:14c:b0:22a:c14a:29f8 with SMTP id r12-20020a056000014c00b0022ac14a29f8mr11434021wrx.588.1663610727419;
+        Mon, 19 Sep 2022 11:05:27 -0700 (PDT)
+Received: from wedsonaf-dev ([81.2.152.129])
+        by smtp.gmail.com with ESMTPSA id s10-20020a5d510a000000b002252884cc91sm14494873wrt.43.2022.09.19.11.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 11:05:26 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 19:05:23 +0100
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
+        alex.gaynor@gmail.com, ark.email@gmail.com,
+        bjorn3_gh@protonmail.com, bobo1239@web.de, bonifaido@gmail.com,
+        boqun.feng@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
+        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com, gary@garyguo.net,
+        geofft@ldpreload.com, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, john.m.baublitz@gmail.com,
+        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
+        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        thesven73@gmail.com, viktor@v-gar.de,
+        Andreas Hindborg <andreas.hindborg@wdc.com>
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+Message-ID: <YyivY6WIl/ahZQqy@wedsonaf-dev>
+References: <20220805154231.31257-13-ojeda@kernel.org>
+ <Yu5Bex9zU6KJpcEm@yadro.com>
+ <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
+ <Yu6BXwtPZwYPIDT6@casper.infradead.org>
+ <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
+ <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
+ <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP01T74=btUEPDrz0EVm9wNuMmbbqc2wRvtpJ-Qq45OtasMBZQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 10:35:03PM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Fri, 16 Sept 2022 at 22:20, Martin KaFai Lau <martin.lau@linux.dev> wrote:
+On Mon, Sep 19, 2022 at 10:20:52AM -0700, Linus Torvalds wrote:
+> On Mon, Sep 19, 2022 at 9:09 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > On 9/11/22 11:19 AM, Daniel Xu wrote:
-> > > We're seeing the following new warnings on netdev/build_32bit and
-> > > netdev/build_allmodconfig_warn CI jobs:
-> > >
-> > >      ../net/core/filter.c:8608:1: warning: symbol
-> > >      'nf_conn_btf_access_lock' was not declared. Should it be static?
-> > >      ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
-> > >      declared. Should it be static?
-> > >
-> > > Fix by ensuring extern declaration is present while compiling filter.o.
-> > >
-> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > ---
-> > >   include/linux/filter.h                   | 6 ++++++
-> > >   include/net/netfilter/nf_conntrack_bpf.h | 7 +------
-> > >   2 files changed, 7 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/include/linux/filter.h b/include/linux/filter.h
-> > > index 527ae1d64e27..96de256b2c8d 100644
-> > > --- a/include/linux/filter.h
-> > > +++ b/include/linux/filter.h
-> > > @@ -567,6 +567,12 @@ struct sk_filter {
-> > >
-> > >   DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
-> > >
-> > > +extern struct mutex nf_conn_btf_access_lock;
-> > > +extern int (*nfct_bsa)(struct bpf_verifier_log *log, const struct btf *btf,
-> > > +                    const struct btf_type *t, int off, int size,
-> > > +                    enum bpf_access_type atype, u32 *next_btf_id,
-> > > +                    enum bpf_type_flag *flag);
-> >
-> > Can it avoid leaking the nfct specific details like
-> > 'nf_conn_btf_access_lock' and the null checking on 'nfct_bsa' to
-> > filter.c?  In particular, this code snippet in filter.c:
-> >
-> >          mutex_lock(&nf_conn_btf_access_lock);
-> >          if (nfct_bsa)
-> >                  ret = nfct_bsa(log, btf, ....);
-> >         mutex_unlock(&nf_conn_btf_access_lock);
-> >
-> >
-> > Can the lock and null check be done as one function (eg.
-> > nfct_btf_struct_access()) in nf_conntrack_bpf.c and use it in filter.c
-> > instead?
+> > The whole "really know what context this code is running within" is
+> > really important. You may want to write very explicit comments about
+> > it.
 > 
-> Don't think so, no. Because we want nf_conntrack to work as a module as well.
-> I was the one who suggested nf_conn specific names for now. There is
-> no other user of such module supplied
-> btf_struct_access callbacks yet, when one appears, we should instead
-> make registration of such callbacks properly generic (i.e. also
-> enforce it is only for module BTF ID etc.).
-> But that would be a lot of code without any users right now.
-> 
-> >
-> > btw, 'bsa' stands for btf_struct_access? It is a bit too short to guess ;)
-> >
-> > Also, please add a Fixes tag.
-> >
-> 
-> Agreed. Daniel, can you address the remaining two points from Martin and respin?
+> Side note: a corollary of this is that people should avoid "dynamic
+> context" things like the plague, because it makes for such pain when
+> the context isn't statically obvious.
 
-Yes, will do.
+As you know, we're trying to guarantee the absence of undefined
+behaviour for code written in Rust. And the context is _really_
+important, so important that leaving it up to comments isn't enough.
 
-Thanks,
-Daniel
+I don't care as much about allocation flags as I do about sleeping in an
+rcu read-side critical region. When CONFIG_PREEMPT=n, if some CPU makes
+the mistake of sleeping between rcu_read_lock()/rcu_read_unlock(), RCU
+will take that as a quiescent state, which may cause unsuspecting code
+waiting for a grace period to wake up too early and potentially free
+memory that is still in use, which is obviously undefined behaviour.
+
+We generally have two routes to avoid undefined behaviour: detect at
+compile time (and fail compilation) or at runtime (and stop things
+before they go too far). The former, while feasible, would require some
+static analysi or passing tokens as arguments to guarantee that we're in
+sleepable context when sleeping (all ellided at compile time, so
+zero-cost in terms of run-time performance), but likely painful to
+program use.
+
+Always having preempt_count would allow us to detect such issues in RCU
+at runtime (for both C and Rust) and prevent user-after-frees.
+
+Do you have an opinion on the above?
+
+Cheers,
+-Wedson
