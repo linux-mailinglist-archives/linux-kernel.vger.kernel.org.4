@@ -2,125 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99E15BD06F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A48C5BD083
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiISPRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S230102AbiISPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiISPQ5 (ORCPT
+        with ESMTP id S230144AbiISPSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:16:57 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6988AC11;
-        Mon, 19 Sep 2022 08:16:55 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 19 Sep 2022 23:16:27
- +0800 (GMT+08:00)
-X-Originating-IP: [10.162.98.155]
-Date:   Mon, 19 Sep 2022 23:16:27 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Peter Zijlstra" <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        Mon, 19 Sep 2022 11:18:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A24371BD;
+        Mon, 19 Sep 2022 08:17:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C525B81D70;
+        Mon, 19 Sep 2022 15:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47AEC433D6;
+        Mon, 19 Sep 2022 15:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663600657;
+        bh=SGRWSsWxhYnFNcVdXVanCp7r8VhObbFain7vrJ2pf9o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxVxz+v2ZKRYGR2RcB+jwqcdhOAyWFuA63mrtcEpyRTpMkbyS6WHs4N4WpL6wD55y
+         MEw4vseCOHKlzHluXBoBp/tNbhBozucjByJQwggqB8cSL766iSR/fB5p7HP2XX3V5a
+         W432aviHiF1CtVbY9+02lVZyqI6r7f0Y+oEmkgLbQeCLJ6mZ8QHUtL9Cb1Rt7pnsGN
+         oU9BgJeognmYR5a7tpyKmtArG/qTrOVW6g6oNhiIq3bF6GOaiMj1jdkgNeNp7u/R+2
+         PWnZiOvApDwvdE77MAQCyvfpVSOU+ZSH1CmsYL840fIy4Yva2osOuqdAr10RKbdLw3
+         uLMmSqj+LM5sA==
+Date:   Mon, 19 Sep 2022 17:17:34 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
         alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH] perf/x86/rapl: fix deadlock in rapl_pmu_event_stop
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YyhWYt9iSAay+QL9@hirez.programming.kicks-ass.net>
-References: <20220917144729.118500-1-duoming@zju.edu.cn>
- <YyhWYt9iSAay+QL9@hirez.programming.kicks-ass.net>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
+Message-ID: <20220919151734.GB62211@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.869531945@infradead.org>
+ <20220919144941.GA62211@lothringen>
+ <YyiEqDSJVOZrQYg8@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <6b1fca4e.de114.18356527287.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgBXXP3Lhyhjl+JRBg--.10144W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQSAVZdtbiTxAACsG
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyiEqDSJVOZrQYg8@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDE5IFNlcCAyMDIyIDEzOjQ1OjM4ICswMjAwIFBldGVyIFppamxzdHJh
-IHdyb3RlOgoKPiBPbiBTYXQsIFNlcCAxNywgMjAyMiBhdCAxMDo0NzoyOVBNICswODAwLCBEdW9t
-aW5nIFpob3Ugd3JvdGU6Cj4gPiBUaGVyZSBpcyBhIGRlYWRsb2NrIGluIHJhcGxfcG11X2V2ZW50
-X3N0b3AoKSwgdGhlIHByb2Nlc3MgaXMKPiA+IHNob3duIGJlbG93Ogo+ID4gCj4gPiAgICAgKHRo
-cmVhZCAxKSAgICAgICAgICAgICAgICAgfCAgICAgICAgKHRocmVhZCAyKQo+ID4gcmFwbF9wbXVf
-ZXZlbnRfc3RvcCgpICAgICAgICAgIHwgcmFwbF9ocnRpbWVyX2hhbmRsZSgpCj4gPiAgLi4uICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgaWYgKCFwbXUtPm5fYWN0aXZlKQo+ID4gIHJhd19z
-cGluX2xvY2tfaXJxc2F2ZSgpIC8vKDEpIHwgIC4uLgo+ID4gICAuLi4gICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwKPiA+ICAgaHJ0aW1lcl9jYW5jZWwoKSAgICAgICAgICAgICB8ICByYXdfc3Bp
-bl9sb2NrX2lycXNhdmUoKSAvLygyKQo+ID4gICAoYmxvY2sgZm9yZXZlcikKPiA+IAo+ID4gV2Ug
-aG9sZCBwbXUtPmxvY2sgaW4gcG9zaXRpb24gKDEpIGFuZCB1c2UgaHJ0aW1lcl9jYW5jZWwoKSB0
-byB3YWl0Cj4gPiByYXBsX2hydGltZXJfaGFuZGxlKCkgdG8gc3RvcCwgYnV0IHJhcGxfaHJ0aW1l
-cl9oYW5kbGUoKSBhbHNvIG5lZWQKPiA+IHBtdS0+bG9jayBpbiBwb3NpdGlvbiAoMikuIEFzIGEg
-cmVzdWx0LCB0aGUgcmFwbF9wbXVfZXZlbnRfc3RvcCgpCj4gPiB3aWxsIGJlIGJsb2NrZWQgZm9y
-ZXZlci4KPiA+IAo+ID4gVGhpcyBwYXRjaCBleHRyYWN0cyBocnRpbWVyX2NhbmNlbCgpIGZyb20g
-dGhlIHByb3RlY3Rpb24gb2YKPiA+IHJhd19zcGluX2xvY2tfaXJxc2F2ZSgpLiBBcyBhIHJlc3Vs
-dCwgdGhlIHJhcGxfaHJ0aW1lcl9oYW5kbGUoKSBjb3VsZAo+ID4gb2J0YWluIHRoZSBwbXUtPmxv
-Y2suIEluIG9yZGVyIHRvIHByZXZlbnQgcmFjZSBjb25kaXRpb25zLCB3ZSBwdXQKPiA+ICJpZiAo
-IXBtdS0+bl9hY3RpdmUpIiBpbiByYXBsX2hydGltZXJfaGFuZGxlKCkgdW5kZXIgdGhlIHByb3Rl
-Y3Rpb24KPiA+IG9mIHJhd19zcGluX2xvY2tfaXJxc2F2ZSgpLgo+ID4gCj4gPiBGaXhlczogNjU2
-NjFmOTZkM2IzICgicGVyZi94ODY6IEFkZCBSQVBMIGhydGltZXIgc3VwcG9ydCIpCj4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0tLQo+ID4g
-IGFyY2gveDg2L2V2ZW50cy9yYXBsLmMgfCA5ICsrKysrKy0tLQo+ID4gIDEgZmlsZSBjaGFuZ2Vk
-LCA2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9h
-cmNoL3g4Ni9ldmVudHMvcmFwbC5jIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwo+ID4gaW5kZXgg
-NzdlM2E0N2FmNWEuLjk3YzcxNTM4ZDAxIDEwMDY0NAo+ID4gLS0tIGEvYXJjaC94ODYvZXZlbnRz
-L3JhcGwuYwo+ID4gKysrIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwo+ID4gQEAgLTIxOSwxMSAr
-MjE5LDExIEBAIHN0YXRpYyBlbnVtIGhydGltZXJfcmVzdGFydCByYXBsX2hydGltZXJfaGFuZGxl
-KHN0cnVjdCBocnRpbWVyICpocnRpbWVyKQo+ID4gIAlzdHJ1Y3QgcGVyZl9ldmVudCAqZXZlbnQ7
-Cj4gPiAgCXVuc2lnbmVkIGxvbmcgZmxhZ3M7Cj4gPiAgCj4gPiArCXJhd19zcGluX2xvY2tfaXJx
-c2F2ZSgmcG11LT5sb2NrLCBmbGFncyk7Cj4gPiArCj4gPiAgCWlmICghcG11LT5uX2FjdGl2ZSkK
-PiA+ICAJCXJldHVybiBIUlRJTUVSX05PUkVTVEFSVDsKPiAKPiBFeGNlcHQgbm93IHlvdSByZXR1
-cm4gd2l0aCB0aGUgbG9jayBoZWxkLi4uCj4gCj4gPiAgCj4gPiAtCXJhd19zcGluX2xvY2tfaXJx
-c2F2ZSgmcG11LT5sb2NrLCBmbGFncyk7Cj4gPiAtCj4gPiAgCWxpc3RfZm9yX2VhY2hfZW50cnko
-ZXZlbnQsICZwbXUtPmFjdGl2ZV9saXN0LCBhY3RpdmVfZW50cnkpCj4gPiAgCQlyYXBsX2V2ZW50
-X3VwZGF0ZShldmVudCk7Cj4gPiAgCj4gPiBAQCAtMjgxLDggKzI4MSwxMSBAQCBzdGF0aWMgdm9p
-ZCByYXBsX3BtdV9ldmVudF9zdG9wKHN0cnVjdCBwZXJmX2V2ZW50ICpldmVudCwgaW50IG1vZGUp
-Cj4gPiAgCWlmICghKGh3Yy0+c3RhdGUgJiBQRVJGX0hFU19TVE9QUEVEKSkgewo+ID4gIAkJV0FS
-Tl9PTl9PTkNFKHBtdS0+bl9hY3RpdmUgPD0gMCk7Cj4gPiAgCQlwbXUtPm5fYWN0aXZlLS07Cj4g
-PiAtCQlpZiAocG11LT5uX2FjdGl2ZSA9PSAwKQo+ID4gKwkJaWYgKCFwbXUtPm5fYWN0aXZlKSB7
-Cj4gPiArCQkJcmF3X3NwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnBtdS0+bG9jaywgZmxhZ3MpOwo+
-ID4gIAkJCWhydGltZXJfY2FuY2VsKCZwbXUtPmhydGltZXIpOwo+ID4gKwkJCXJhd19zcGluX2xv
-Y2tfaXJxc2F2ZSgmcG11LT5sb2NrLCBmbGFncyk7Cj4gCj4gRG9pbmcgYSBsb2NrLWJyZWFrIG1h
-a2VzIHRoZSBucl9hY3RpdmUgYW5kIGxpc3RfZGVsIHRoaW5nIG5vbi1hdG9taWMsCj4gYnJlYWtp
-bmcgdGhlIHdob2xlIHB1cnBvc2Ugb2YgdGhlIGxvY2suCgpUaGFuayB5b3UgZm9yIHlvdXIgdGlt
-ZSBhbmQgc3VnZ2VzdGlvbnMhIEkgY29tZSB1cCB3aXRoIGFub3RoZXIgc29sdXRpb24gdGhhdAp3
-aWxsIG5vdCBicmVhayB0aGUgYXRvbWljaXR5LCB0aGUgZGV0YWlsIGlzIHNob3duIGJlbG93OiAK
-CmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9ldmVudHMvcmFwbC5jIGIvYXJjaC94ODYvZXZlbnRzL3Jh
-cGwuYwppbmRleCA3N2UzYTQ3YWY1YS4uN2MxMTAwOTJjODMgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2
-L2V2ZW50cy9yYXBsLmMKKysrIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwpAQCAtMjgxLDggKzI4
-MSw2IEBAIHN0YXRpYyB2b2lkIHJhcGxfcG11X2V2ZW50X3N0b3Aoc3RydWN0IHBlcmZfZXZlbnQg
-KmV2ZW50LCBpbnQgbW9kZSkKICAgICAgICBpZiAoIShod2MtPnN0YXRlICYgUEVSRl9IRVNfU1RP
-UFBFRCkpIHsKICAgICAgICAgICAgICAgIFdBUk5fT05fT05DRShwbXUtPm5fYWN0aXZlIDw9IDAp
-OwogICAgICAgICAgICAgICAgcG11LT5uX2FjdGl2ZS0tOwotICAgICAgICAgICAgICAgaWYgKHBt
-dS0+bl9hY3RpdmUgPT0gMCkKLSAgICAgICAgICAgICAgICAgICAgICAgaHJ0aW1lcl9jYW5jZWwo
-JnBtdS0+aHJ0aW1lcik7CiAKICAgICAgICAgICAgICAgIGxpc3RfZGVsKCZldmVudC0+YWN0aXZl
-X2VudHJ5KTsKIApAQCAtMzAwLDYgKzI5OCwxMSBAQCBzdGF0aWMgdm9pZCByYXBsX3BtdV9ldmVu
-dF9zdG9wKHN0cnVjdCBwZXJmX2V2ZW50ICpldmVudCwgaW50IG1vZGUpCiAgICAgICAgICAgICAg
-ICBod2MtPnN0YXRlIHw9IFBFUkZfSEVTX1VQVE9EQVRFOwogICAgICAgIH0KIAorICAgICAgIGlm
-ICghcG11LT5uX2FjdGl2ZSkgeworICAgICAgICAgICAgICAgcmF3X3NwaW5fdW5sb2NrX2lycXJl
-c3RvcmUoJnBtdS0+bG9jaywgZmxhZ3MpOworICAgICAgICAgICAgICAgaHJ0aW1lcl9jYW5jZWwo
-JnBtdS0+aHJ0aW1lcik7CisgICAgICAgICAgICAgICByZXR1cm47CisgICAgICAgfQogICAgICAg
-IHJhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKCZwbXUtPmxvY2ssIGZsYWdzKTsKIH0KCkkgbW92
-ZSB0aGUgaHJ0aW1lcl9jYW5jZWwoKSB0byB0aGUgZW5kIG9mIHRoZSByYXBsX3BtdV9ldmVudF9z
-dG9wKCkgZnVuY3Rpb24uCkFzIGEgcmVzdWx0LCB0aGUgYXRvbWljaXR5IHdpbGwgbm90IGJyZWFr
-IGFuZCB0aGUgZGVhZGxvY2sgYnVnIGNvdWxkIGJlIG1pdGlnYXRlZC4KCj4gPiArCQl9Cj4gPiAg
-Cj4gPiAgCQlsaXN0X2RlbCgmZXZlbnQtPmFjdGl2ZV9lbnRyeSk7Cj4gCj4gCj4gTm93OyBkaWQg
-eW91IGFjdHVhbGx5IG9ic2VydmUgdGhpcyBkZWFkbG9jayBvciBpcyB0aGlzIGEgY29kZS1yZWFk
-aW5nCj4gZXhlcmNpc2U/IElmIHlvdSBzYXcgYW4gYWN0dWFsIGRlYWRsb2NrLCB3YXMgY3B1LWhv
-dHBsdWcgaW52b2x2ZWQ/CgpJIGZvdW5kIHRoaXMgYnVnIHRocm91Z2ggYSBzdGF0aWMgYW5hbHlz
-aXMgdG9vbCB3cml0dGVuIGJ5IG15c2VsZi4KClRoYW5rcyB5b3UhCgpCZXN0IHJlZ2FyZHMsCkR1
-b21pbmcgWmhvdQo=
+On Mon, Sep 19, 2022 at 05:03:04PM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 19, 2022 at 04:49:41PM +0200, Frederic Weisbecker wrote:
+> > On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
+> > > Doing RCU-idle outside the driver, only to then temporarily enable it
+> > > again, at least twice, before going idle is daft.
+> > > 
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > 
+> > > --- a/arch/arm/mach-imx/cpuidle-imx6sx.c
+> > > +++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
+> > > @@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
+> > >  		cpu_pm_enter();
+> > >  		cpu_cluster_pm_enter();
+> > >  
+> > > +		ct_idle_enter();
+> > >  		cpu_suspend(0, imx6sx_idle_finish);
+> > > +		ct_idle_exit();
+> > >  
+> > >  		cpu_cluster_pm_exit();
+> > >  		cpu_pm_exit();
+> > > @@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
+> > >  			 */
+> > >  			.exit_latency = 300,
+> > >  			.target_residency = 500,
+> > > -			.flags = CPUIDLE_FLAG_TIMER_STOP,
+> > > +			.flags = CPUIDLE_FLAG_TIMER_STOP |
+> > > +				 CPUIDLE_FLAG_RCU_IDLE,
+> > >  			.enter = imx6sx_enter_wait,
+> > 
+> > There is a second one below that also uses imx6sx_enter_wait.
+> 
+> Oh, above you mean; but only @index==2 gets us into the whole PM crud.
+> @index==1 is fine afaict.
+
+Ah ok, got it, hence why you didn't touch cpu_do_idle()...
+May need to comment that somewhere...
+
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+
+Thanks!
