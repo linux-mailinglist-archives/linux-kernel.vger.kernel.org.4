@@ -2,93 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10C55BC9C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984BC5BC9C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiISKre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 06:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S229612AbiISKr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 06:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiISKqs (ORCPT
+        with ESMTP id S229885AbiISKqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:46:48 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FF28E01;
-        Mon, 19 Sep 2022 03:33:28 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 68CC81C0005; Mon, 19 Sep 2022 12:33:26 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 12:33:25 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: 5.10.144 got more patches? was Re: [PATCH 5.10 00/24] 5.10.144-rc1
- review
-Message-ID: <20220919103325.GA10942@duo.ucw.cz>
-References: <20220916100445.354452396@linuxfoundation.org>
- <20220916135942.GA29693@duo.ucw.cz>
+        Mon, 19 Sep 2022 06:46:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF82DF1;
+        Mon, 19 Sep 2022 03:33:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EF22D9BA;
+        Mon, 19 Sep 2022 12:33:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663583625;
+        bh=SuwW1EyzgQFtHXnkLYtahgvyBMXNK3cFjQnbN2kJ/jA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N4/O/wcAZ+qraUEiBbOU/rymCJTkkfQ4cAj+iNBfH/hk0vtd/vp3c0CHepb84lLYv
+         MkQGfJEqwQvg0rPtCLTmmq56WhZwXqnJoe4rNZ/DZ/bc5YScDJo+ghsBW4XGBAasPk
+         +IiPU0AgyHrjBGQXvCYb3GgRgMFnj7Bz3zO36TmA=
+Date:   Mon, 19 Sep 2022 13:33:31 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: dt-bindings: i2c: ovti,ov5640: Drop ref to
+ video-interface-devices.yaml
+Message-ID: <YyhFe+FW2C+R7nQg@pendragon.ideasonboard.com>
+References: <20220916133521.73183-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <YyZS38Wo7rDsNRm2@pendragon.ideasonboard.com>
+ <CA+V-a8vvNHFt818wryyuhWxPtay4czjWXiH=AWEKiJ1AzB46mA@mail.gmail.com>
+ <fc1c075d-e20d-9395-d168-8cfe530f77ad@linaro.org>
+ <CA+V-a8uMyU89rufmqWiGFqpVjFPvHBeVeSd1Wt07eWZo1X+Bgw@mail.gmail.com>
+ <Yyg4SU7D5mClOvP/@pendragon.ideasonboard.com>
+ <CA+V-a8uM=33jw_BE7S1G3DsvbUdvxUhkBty6VCWdAprQ288haw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="+QahgC5+KEYLbs62"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220916135942.GA29693@duo.ucw.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CA+V-a8uM=33jw_BE7S1G3DsvbUdvxUhkBty6VCWdAprQ288haw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 19, 2022 at 10:41:00AM +0100, Lad, Prabhakar wrote:
+> On Mon, Sep 19, 2022 at 10:37 AM Laurent Pinchart wrote:
+> > On Mon, Sep 19, 2022 at 10:35:21AM +0100, Lad, Prabhakar wrote:
+> > > On Mon, Sep 19, 2022 at 9:19 AM Krzysztof Kozlowski wrote:
+> > > > On 19/09/2022 10:08, Lad, Prabhakar wrote:
+> > > > > On Sun, Sep 18, 2022 at 12:06 AM Laurent Pinchart wrote:
+> > > > >> On Fri, Sep 16, 2022 at 02:35:21PM +0100, Prabhakar wrote:
+> > > > >>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >>>
+> > > > >>> video-interface-devices.yaml isn't used so just drop it from the
+> > > > >>> DT binding doc.
+> > > > >>>
+> > > > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >>> ---
+> > > > >>>  Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml | 3 ---
+> > > > >>>  1 file changed, 3 deletions(-)
+> > > > >>>
+> > > > >>> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> index 540fd69ac39f..ce99aada75ad 100644
+> > > > >>> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> @@ -9,9 +9,6 @@ title: OmniVision OV5640 Image Sensor Device Tree Bindings
+> > > > >>>  maintainers:
+> > > > >>>    - Steve Longerbeam <slongerbeam@gmail.com>
+> > > > >>>
+> > > > >>> -allOf:
+> > > > >>> -  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > > >>> -
+> > > > >>
+> > > > >> The rotation property listed in this binding uses the definition from
+> > > > >> video-interface-devices.yaml. I don't think just dropping this is the
+> > > > >> right solution. Changing additionaProperties to unevaluatedProperties
+> > > > >> seems a better option.
+> > > > >
+> > > > > Agreed, I missed rotation was used from video-interface-devices.yaml.
+> > > > > Agreed the changing additionaProperties to unevaluatedProperties seems
+> > > > > a better option.
+> > > >
+> > > > The meaning of unevaluatedProperties:false would be here - accept other
+> > > > properties (not mentioned here explicitly) from referenced schema. If
+> > > > this is your actual intention for this binding, it makes sense. But if
+> > > > the intention in this binding was to disallow these other properties,
+> > > > then it would be wrong to change to unevaluatedProperties.
+> > > >
+> > > Thank you for the clarification. The intention is to disallow the property.
+> >
+> > Why should they be disallowed ?
+> 
+> my bad! "rotation" property is supposed to be allowed so the earlier
+> comment to change to unevaluatedProperties holds good.
 
---+QahgC5+KEYLbs62
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's not just the rotation. The other properties are allowed too. For
+the rotation property you need to list it explicitly in ovti,ov5640.yaml
+if you want to restrict the values it can take, but other properties
+from video-interface-devices.yaml for which no additional constraints
+are needed don't need to be listed in ovti,ov5640.yaml.
 
-Hi!
+additionalProperties and unevaluatedProperties are often misunderstood.
+DT bindings are a set of rules, and validation will pass *only* if *all*
+rules are valid. Let's consider the following:
 
-> > This is the start of the stable review cycle for the 5.10.144 release.
-> > There are 24 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
->=20
-> CIP testing did not find any problems here:
->=20
-> https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linu=
-x-5.10.y
->=20
-> Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+allOf:
+  - $ref: /schemas/media/video-interface-devices.yaml#
 
-And now I'm confused.
+The allOf is valid if all of the elements in the list are valid. The
+$ref will essentially work as if the contents of
+video-interface-devices.yaml were copied in ovti,ov5640.yaml, under the
+corresponding allOf list entry (with a small but important difference,
+noted below). The file contains
 
-5.10.144-rc1 was announced / tested, but now there's buch more patches
-in the queue, starting with
+  rotation:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    enum: [ 0, 90, 180, 270 ]
 
- |9843b839a 174974 .: 5.10| drm/msm/rd: Fix FIFO-full deadlock
- |518b67da4 174974 .: 4.19| drm/msm/rd: Fix FIFO-full deadlock
- |88eba3686 174974 .: 4.9| drm/msm/rd: Fix FIFO-full deadlock
+so any "rotation" property in the device tree will be validated against
+this. ovti,ov5640.yaml also has
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+properties:
+  rotation:
+    enum:
+      - 0
+      - 180
 
---+QahgC5+KEYLbs62
-Content-Type: application/pgp-signature; name="signature.asc"
+which is a separate rule from the previous one. Both must be valid for
+validation to succeed, so this second rule essentially restricts the
+possible rotation values.
 
------BEGIN PGP SIGNATURE-----
+The additionalProperties and unevaluatedProperties affect how properties
+that have no validation rule will be treated.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYyhFdQAKCRAw5/Bqldv6
-8nPzAKCdsq6LX2UySzT7yM/BuekqwsER8gCgmiIVz/2jCT+0H1wTcxL5zvHQQ3A=
-=chmi
------END PGP SIGNATURE-----
+With additionalProperties set to false, a property that has no
+validation rule in *this* schema will be considered invalid, even if it
+has a validation rule in another schema (either selected automatically
+through a "select" property in the other schema, or imported through an
+explicit $ref). So, in this particular example, even though
+video-interface-devices.yaml has, for instance, a rule for the
+lens-focus property, a DT that contains lens-focus will be considered as
+invalid as lens-focus is not validated by this schema. One way to allow
+the property would be to add
 
---+QahgC5+KEYLbs62--
+properties:
+  lens-focus: true
+
+in this schema. The contents of lens-focus would be validated by the
+rule in video-interface-devices.yaml, and the rule in this schema would
+always be valid ("true" is always valid).
+
+Another way to allow the property would be to replace
+additionalProperties with unevaluatedProperties. When set to false,
+unevaluatedProperties makes validation fail if any property has not been
+evaluated by *any* rule in this schema or any other schema. As
+lens-focus would be evaluated by video-interface-devices.yaml, that
+would be enough to consider it valid. This also means that *all*
+properties listed in video-interface-devices.yaml would then be valid.
+If you wanted that behaviour, but also wanted to reject specific
+properties, you could add
+
+properties:
+  lens-focus: false
+
+in this schema. A lens-focus property in a DT would be valid when
+evaluated with the corresponding rule in video-interface-devices.yaml,
+but would be invalidated by the rule in this schema as "false" is always
+invalid.
+
+To conclude, setting additionalProperties to false creates a white
+listing mechanism that requires you to explicitly list in this schema
+all the properties you consider as valid with "foo: true", while setting
+unevaluatedProperties to false creates a black listing mechanism that
+requires you to explicitly list in this schema all the properties you
+consider as invalid with "foo: false". If multiple schemas that apply to
+the same device tree include rules for the same property, all those
+rules need to be valid for validation to pass, regardless of the value
+of additionalProperties and unevaluatedProperties.
+
+-- 
+Regards,
+
+Laurent Pinchart
