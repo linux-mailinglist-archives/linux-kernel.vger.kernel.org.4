@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF35BC4D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB4D5BC4D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiISI6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S230119AbiISI64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiISI6i (ORCPT
+        with ESMTP id S230105AbiISI6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:58:38 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDF410FFA;
-        Mon, 19 Sep 2022 01:58:37 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 78so26134070pgb.13;
-        Mon, 19 Sep 2022 01:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=fuEwROaEw4Wa/2VVF6v2tFbai0+IqYEOCWSQjYQQS5I=;
-        b=mFA1STGhJXXTpHGktWvSsLGX4bvLplsDsJFp89QmBuFJ6WePnIUtpe1DUBjnDHHYqt
-         RqLzG6hQssRUv4yd3hkPB2gv5GXEt1HRoO9vo/ThA5ZvbFrDz1iMJtr97vF8o5khSLeQ
-         65AchASEQJZRhfkAc0hAePdI15xYXbES9df1kYRpWLIcd+edNmXfdoG0iy8uuJMXw48P
-         RTLG9zYsAJCdHOeBWW7lMAcaw4v+9kNK7wT/s3WTQNALr9axuuVMh7pp5qCG+HLxjZVL
-         G/Tm3b0IOVvAT3TF+pgFP7JH+DL3rLTn5LB+/MILW07oDSfcwtirtFXkmoPZauXwGkL9
-         qU0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fuEwROaEw4Wa/2VVF6v2tFbai0+IqYEOCWSQjYQQS5I=;
-        b=0gbcdprqP4wtws2Evfe3zmgUg4HKhTvAnKbRgM8a98tdgJD6gbM/O9ftzv4BywXjut
-         TYdVCFjQ1mbmaomIM2Egpf5eBwj7Z/9umnyl1ri3wmg8tWuaNKVP8BGdMRmHfpuCoLKA
-         SG5rvV7sARQ5xXzqeQFQ4ORwgtlzHFwaGHwWwXcrcius4OWWzlWn7OaQUyWcyTyzAP5Z
-         8Cs4MVB47eoSQq0yaBvp/va8AfdxP548Kef2RRWTQW6mPPlM7H73Si4Wp3ywxVLLNfIU
-         pvYbat+B/oVFE0ErNWLV12YGN/q+zesXYnO+kgfOxxtSgxPbPwydWnqaCCF8iX1UwLYD
-         6EhQ==
-X-Gm-Message-State: ACrzQf3EgX2X2/Ae7c27hgDfsOBhNY1BCjoFHoyzBEkZmav8lC9uuh4N
-        qvrWiiMKOBmM7+L0kTP9W3s=
-X-Google-Smtp-Source: AMsMyM7NQ4hhRdGEETRw8mEgESetlpdE7m6yP0PNoPVQ6qhJ0gyGKolmYaDIDw/TsHBbPOL6MZ8ITg==
-X-Received: by 2002:a05:6a00:228c:b0:542:e65c:98 with SMTP id f12-20020a056a00228c00b00542e65c0098mr17017068pfe.79.1663577917255;
-        Mon, 19 Sep 2022 01:58:37 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090341c100b00176ba091cd3sm16574278ple.196.2022.09.19.01.58.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 01:58:36 -0700 (PDT)
-Message-ID: <7b870e3a-e19a-0b05-68f7-db9eb852f061@gmail.com>
-Date:   Mon, 19 Sep 2022 16:58:30 +0800
+        Mon, 19 Sep 2022 04:58:48 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52094DF38;
+        Mon, 19 Sep 2022 01:58:46 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28J8wbH1117539;
+        Mon, 19 Sep 2022 03:58:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663577917;
+        bh=IXLMHWUkQ1/UfxnozwqM7KTDO5eoiFJuWB4vsAMnciQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=yEst9XgETXDujKhnQSzOEbVTK3I5pQrSNY5mZkwMY321CbwpaCVUh1LtCTalLEGtt
+         VdhD7i1+Km5tnAZOdiPOboyV2U9pzupy075wKGmcUKFjkr1noD5fcOuJRxbG/t5pVM
+         C3sEX2zh+OhiTuVAfeY6soK65+jLj4r9LMsa+u7k=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28J8wbpu099242
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 19 Sep 2022 03:58:37 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 19
+ Sep 2022 03:58:37 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 19 Sep 2022 03:58:37 -0500
+Received: from [172.24.147.145] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28J8wYMh125164;
+        Mon, 19 Sep 2022 03:58:34 -0500
+Message-ID: <04506b2a-dbcb-0bb5-496e-35ccfc9cc18b@ti.com>
+Date:   Mon, 19 Sep 2022 14:28:33 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH v3 0/7] x86/pmu: Corner cases fixes and optimization
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/3] PCI: endpoint: Use link_up() callback in place of
+ LINK_UP notifier
 Content-Language: en-US
-From:   Like Xu <like.xu.linux@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>
-References: <20220831085328.45489-1-likexu@tencent.com>
- <4a74d218-6266-cf6c-3ebb-4cbb49327440@gmail.com>
-In-Reply-To: <4a74d218-6266-cf6c-3ebb-4cbb49327440@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <lpieralisi@kernel.org>, <bhelgaas@google.com>
+CC:     <kw@linux.com>, <robh@kernel.org>, <vidyas@nvidia.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220910090508.61157-1-manivannan.sadhasivam@linaro.org>
+ <20220910090508.61157-4-manivannan.sadhasivam@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+In-Reply-To: <20220910090508.61157-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,48 +69,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Jim for more comments if any.
+Hi Mani,
 
-On 7/9/2022 5:52 pm, Like Xu wrote:
-> A review reminder for shepherds. Thanks!
+On 10/09/22 14:35, Manivannan Sadhasivam wrote:
+> As a part of the transition towards callback mechanism for signalling the
+> events from EPC to EPF, let's use the link_up() callback in the place of
+> the LINK_UP notifier. This also removes the notifier support completely
+> from the PCI endpoint framework.
 > 
-> On 31/8/2022 4:53 pm, Like Xu wrote:
->> Good well-designed tests can help us find more bugs, especially when
->> the test steps differ from the Linux kernel behaviour in terms of the
->> timing of access to virtualized hw resources.
->>
->> Please feel free to run tests, add more or share comments.
->>
->> Previous:
->> https://lore.kernel.org/kvm/20220823093221.38075-1-likexu@tencent.com/
->>
->> V2 RESEND -> V3 Changelog:
->> - Post perf change as a separate patch to the perf folks; (Sean)
->> - Rewrite the deferred logic using imperative mood; (Sean)
->> - Drop some useless comment; (Sean)
->> - Rename __reprogram_counter() to kvm_pmu_request_counter_reprogam(); (Sean)
->> - Replace a play-by-play of the code changes with a high level description; 
->> (); (Sean)
->> - Rename pmc->stale_counter to pmc->prev_counter; (Sean)
->> - Drop an unnecessary check about pmc->prev_counter; (Sean)
->> - Simply the code about "CTLn is even, CTRn is odd"; (Sean)
->> - Refine commit message to avoid pronouns; (Sean)
->>
->> Like Xu (7):
->>    KVM: x86/pmu: Avoid setting BIT_ULL(-1) to pmu->host_cross_mapped_mask
->>    KVM: x86/pmu: Don't generate PEBS records for emulated instructions
->>    KVM: x86/pmu: Avoid using PEBS perf_events for normal counters
->>    KVM: x86/pmu: Defer reprogram_counter() to kvm_pmu_handle_event()
->>    KVM: x86/pmu: Defer counter emulated overflow via pmc->prev_counter
->>    KVM: x86/svm/pmu: Direct access pmu->gp_counter[] to implement
->>      amd_*_to_pmc()
->>    KVM: x86/svm/pmu: Rewrite get_gp_pmc_amd() for more counters
->>      scalability
->>
->>   arch/x86/include/asm/kvm_host.h |   6 +-
->>   arch/x86/kvm/pmu.c              |  44 +++++++-----
->>   arch/x86/kvm/pmu.h              |   6 +-
->>   arch/x86/kvm/svm/pmu.c          | 121 ++++++--------------------------
->>   arch/x86/kvm/vmx/pmu_intel.c    |  36 +++++-----
->>   5 files changed, 75 insertions(+), 138 deletions(-)
->>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
+>  drivers/pci/endpoint/pci-epc-core.c           | 12 +++++--
+>  include/linux/pci-epc.h                       |  8 -----
+>  include/linux/pci-epf.h                       |  8 ++---
+>  4 files changed, 22 insertions(+), 39 deletions(-)
+> 
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> index 868de17e1ad2..f75045f2dee3 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> @@ -826,30 +826,21 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+>  	return 0;
+>  }
+>  
+> -static const struct pci_epc_event_ops pci_epf_test_event_ops = {
+> -	.core_init = pci_epf_test_core_init,
+> -};
+> -
+> -static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
+> -				 void *data)
+> +int pci_epf_test_link_up(struct pci_epf *epf)
+>  {
+> -	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
+>  	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+>  
+> -	switch (val) {
+> -	case LINK_UP:
+> -		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
+> -				   msecs_to_jiffies(1));
+> -		break;
+> -
+> -	default:
+> -		dev_err(&epf->dev, "Invalid EPF test notifier event\n");
+> -		return NOTIFY_BAD;
+> -	}
+> +	queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
+> +			   msecs_to_jiffies(1));
+>  
+> -	return NOTIFY_OK;
+> +	return 0;
+>  }
+>  
+> +static const struct pci_epc_event_ops pci_epf_test_event_ops = {
+> +	.core_init = pci_epf_test_core_init,
+> +	.link_up = pci_epf_test_link_up,
+> +};
+> +
+>  static int pci_epf_test_alloc_space(struct pci_epf *epf)
+>  {
+>  	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+> @@ -976,12 +967,8 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+>  	if (ret)
+>  		epf_test->dma_supported = false;
+>  
+> -	if (linkup_notifier || core_init_notifier) {
+> -		epf->nb.notifier_call = pci_epf_test_notifier;
+> -		pci_epc_register_notifier(epc, &epf->nb);
+> -	} else {
+> +	if (!linkup_notifier && !core_init_notifier)
+>  		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
+> -	}
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> index ba54f17ae06f..5dac1496cf16 100644
+> --- a/drivers/pci/endpoint/pci-epc-core.c
+> +++ b/drivers/pci/endpoint/pci-epc-core.c
+> @@ -690,10 +690,19 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
+>   */
+>  void pci_epc_linkup(struct pci_epc *epc)
+>  {
+> +	struct pci_epf *epf;
+> +
+>  	if (!epc || IS_ERR(epc))
+>  		return;
+>  
+> -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+> +	mutex_lock(&epc->list_lock);
+
+This will break pci-dra7xx which invokes pci_epc_linkup() in interrupt
+context.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pci-dra7xx.c#n332
+
+dra7xx_pcie_irq_handler()
+	|
+	|
+	dw_pcie_ep_linkup()
+		|
+		|
+		pci_epc_linkup()
+			|
+			|
+			mutex_lock()
+
+Thanks,
+Kishon
