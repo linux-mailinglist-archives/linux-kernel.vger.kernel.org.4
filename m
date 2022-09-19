@@ -2,115 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00ECF5BC0F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4335BC0F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiISBRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 21:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S229613AbiISBSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 21:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiISBRh (ORCPT
+        with ESMTP id S229652AbiISBSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:17:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBCC14D39;
-        Sun, 18 Sep 2022 18:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3slYwVTJ7xIHyNfZL8OGsEwhN5Ode0KIAXbLHwiqGfE=; b=haZzIR8yi4CY9GXU8XGFXAN+iV
-        zgGJlH+7MFBuhGTi9CKwKNQ7d7n5U8nbdAiYTAXb7UKhpwBBfyv39cM5kXB+7Y6aiYuqDVmFJ8543
-        fmNNX844Doqak63dOBBsERG3q9KiQC+FyJb+OPQ+ydErj3Uj65iW3H3Yucpo5XDGrAvdhkdHFIHfw
-        VgCVJqnZucvZ5eWU42maUU23+LPDhzfepBqTXK3FlKceu14L9G3ZAvBXeGfxBLwhLw8wDd4zUW0my
-        1Ynm3fWtNXNge6Ke1BiFOB7ncbNcubIC7Tuze+xiNj5xJPIvQJeGOFmKPuvi4IZjEi59U6SbavQTH
-        YDWZ0ksw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oa5PV-005LfD-Qj; Mon, 19 Sep 2022 01:17:22 +0000
-Message-ID: <e7fa7741-94d8-b5d4-e3df-fa111d873e0a@infradead.org>
-Date:   Sun, 18 Sep 2022 18:17:19 -0700
+        Sun, 18 Sep 2022 21:18:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70C31571A
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 18:18:01 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MW6Br3NsBz14QZv;
+        Mon, 19 Sep 2022 09:13:56 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 09:18:00 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 09:17:59 +0800
+Subject: Re: [PATCH -next v2] habanalabs/gaudi2: fix free irq in error path in
+ gaudi2_enable_msix()
+To:     Oded Gabbay <ogabbay@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20220913030714.974259-1-yangyingliang@huawei.com>
+ <CAFCwf12hQqWjVr==31hM4MjhVd35KwjQdRYY_qnzBNcV1PbQjA@mail.gmail.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <a54586a1-7928-4296-8b33-155a7ca032c0@huawei.com>
+Date:   Mon, 19 Sep 2022 09:17:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3] liquidio: CN23XX: delete repeated words, add missing
- words and fix typo in comment
-Content-Language: en-US
-To:     Ruffalo Lavoisier <ruffalolavoisier@gmail.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Satanand Burla <sburla@marvell.com>,
-        Felix Manlunas <fmanlunas@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220919010410.6081-1-RuffaloLavoisier@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220919010410.6081-1-RuffaloLavoisier@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAFCwf12hQqWjVr==31hM4MjhVd35KwjQdRYY_qnzBNcV1PbQjA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 9/18/22 18:04, Ruffalo Lavoisier wrote:
-> - Delete the repeated word 'to' in the comment.
-> 
-> - Add the missing 'use' word within the sentence.
-> 
-> - Correct spelling on 'malformation'.
-> 
-> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-> ---
-> Please check if it has been corrected properly!
+On 2022/9/18 18:28, Oded Gabbay wrote:
+> On Tue, Sep 13, 2022 at 6:00 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+>> Add two variables to store completion irq and event queue irq. And add
+>> a new lable to free event queue irq in error path in gaudi2_enable_msix().
+> I'm sorry, I already pushed a fix to the bug (I didn't get any reply
+> from you for more than a week so I didn't know if you are going to fix
+> it).
+> Oded
+It's OK.
 
-Once again there is a needed change that is missing. Please see below.
+Thanks,
+Yang
 
-> 
->  drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
->  drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> index 3f1c189646f4..244e27ea079c 100644
-> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-> @@ -88,7 +88,7 @@
->  #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
->  /* The input jabber is used to determine the TSO max size.
->   * Due to H/W limitation, this need to be reduced to 60000
-
-                             this needs
-
-> - * in order to to H/W TSO and avoid the WQE malfarmation
-> + * in order to use H/W TSO and avoid the WQE malformation
->   * PKO_BUG_24989_WQE_LEN
->   */
->  #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
-> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> index d33dd8f4226f..e85449249670 100644
-> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-> @@ -37,7 +37,7 @@
->  
->  /* The input jabber is used to determine the TSO max size.
->   * Due to H/W limitation, this need to be reduced to 60000
-
-                             this needs
-
-> - * in order to to H/W TSO and avoid the WQE malfarmation
-> + * in order to use H/W TSO and avoid the WQE malformation
->   * PKO_BUG_24989_WQE_LEN
->   */
->  #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
-
--- 
-~Randy
