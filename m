@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEE75BCCEB
+	by mail.lfdr.de (Postfix) with ESMTP id B91535BCCEC
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiISNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S230161AbiISNVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiISNUp (ORCPT
+        with ESMTP id S230292AbiISNVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:20:45 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE37B489;
-        Mon, 19 Sep 2022 06:20:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id w13so12241611plp.1;
-        Mon, 19 Sep 2022 06:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=3FSqfCwAOSoWCQSKtKdEJhh1ehyDg7LpqHHsFJkm4eE=;
-        b=of4u4F3Ccg3YA7uF09B3X4EyFwqs+Ae2qPV0i6a4iP9b4/L5pTYbNyESLVGK3/liYY
-         6HA1wAg9rCZx9si0ge7RRdNG4qARus6eInLtilQCbid5RNSracGnGXjcyjDy2GR5xFgs
-         dxBxvNnNUdyI4MVx/7D0WF9rI3nGyNrop6BnHm4Z+Dwb4rhupkEFk0dqqolW3I/zoZFA
-         n3vVodJ4KVyzz3e3NhxcdmBoj3vciK50NTKm9mbpelPFZQHMfuuMhRzGsYcQ3pIU7TQS
-         tu6KUumWRWfOW7KUG3rgfHOdcqRf+MHhubM+/0Ultfc0lbIpDdPibQFgiHIFPeHTWQil
-         n6UQ==
+        Mon, 19 Sep 2022 09:21:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA542B252
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663593657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pJzkF9UKJ0JT/guvrtnnYyhgP8leVpTS5h5H8IUyZjs=;
+        b=gj1H4nqkDcxH1Hyfkxo2LOMjrmTbm7k8Vd67pteVttXR0i1KXORXlABMqK5SgI6b2qg+nq
+        NIy7Ag3m5Gjyelk35paKG6mNu7mF0Xuvtn9Zxiw6LJXqum50eS++L/EVFtuCuQsPMNEnvj
+        tyon3OrXkXA+HQOjj5x6/0ENEiBO68k=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-596-ZOBmw6LLPquKX74i-c-JSQ-1; Mon, 19 Sep 2022 09:20:56 -0400
+X-MC-Unique: ZOBmw6LLPquKX74i-c-JSQ-1
+Received: by mail-ed1-f70.google.com with SMTP id z13-20020a05640240cd00b0045276a79364so12661311edb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:20:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=3FSqfCwAOSoWCQSKtKdEJhh1ehyDg7LpqHHsFJkm4eE=;
-        b=sCce8pLWU+0sTyjhXhOVAB7tyuVLXziYgwtAdrVHzoBQG1tekkY2Yeb8p4jupSRJBJ
-         sAYOYQv/ya/tQ6cRG8eXKUHMBp5JAaC1OawGwiDLZnJS12vynvrO4oflQPw5w7aaqa0J
-         INI2wVfHjLAV6Owoc8ru3P0whuY6dtLqZ8PnkUh4TkYQkKlpjjYAi/tCzmZsKjSOPc1Y
-         E6IA9Fi4YD7TEIDMCRtvw+FwKLgpPrJb0mULWSlvvg1lgK+fDxN+icC3Js0nYy1p61th
-         68XIYbgXlxFHaZYttHDKqn6Fm0jbMUGAFxNBCP6JVs/lv0j40XfpfKRmFMPokbaxoilp
-         Ohxw==
-X-Gm-Message-State: ACrzQf3q9u+gLs8kAuV8cH3hdPTi9vzi83Kql/jc0aZXQLaOwvTgGIb6
-        o1mbFbbsAq9qoRKZVFakDW8=
-X-Google-Smtp-Source: AMsMyM4aIx3x4J5YFAkGKW1sKYKJPPXq4ys0NZfXZTOfIbgWKOJxNQ+fLE7PGxvUwwQMs90eyLEHQA==
-X-Received: by 2002:a17:902:ab14:b0:176:9fd4:d61d with SMTP id ik20-20020a170902ab1400b001769fd4d61dmr12938632plb.76.1663593643357;
-        Mon, 19 Sep 2022 06:20:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b77-20020a621b50000000b00545b91e78d3sm14524120pfb.89.2022.09.19.06.20.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:20:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:20:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v5 18/21] dt-bindings: hwmon: (mr75203) add coefficient
- properties for the thermal equation
-Message-ID: <20220919132041.GA3547266@roeck-us.net>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-19-farbere@amazon.com>
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=pJzkF9UKJ0JT/guvrtnnYyhgP8leVpTS5h5H8IUyZjs=;
+        b=CMcb7gYRhysr6MWzH/gOSRvaerRu1yjMEklP/nPp9IThmh+1WGYNS8M+Gw6UZhLQBs
+         q7CurLLf7ZBTY4qucRZ9lqhe/MxV47u1YfwsXNls76RRpUW/rXesl+zwKP9beal9LxDv
+         dku+7Ul7cxy8t1h8epTk2LJWurPk+QgEMGMSK69FE68tSA6NgkwAL9G7WSi7WxhMcftt
+         YSqm7gZlARxkwnE+Zleb4nNrIOQLzOOIQZ2/oWZ5/uL172k7lu0msbNfHt/M28XofPlq
+         vblSPxb8JzuKbwsAF8W1IJJCXK3u3qXGV5nlyUytaff1jg56+zLnfWmJl+8EBRXSHl1X
+         oClw==
+X-Gm-Message-State: ACrzQf1bVUDcdmfECgqrdSjVfUOLCKIJRBL8yMdPiqQbW+ljsgPP0+IR
+        wZrsA3VKLGydsXK9oem+seOxOoWrX+BeKWO2VOt4AqTDIeJTJYHYohOtEDIlC6H8YRt34MaQx4M
+        zEfLftYfcYmDwC2UCyp3bI+32
+X-Received: by 2002:a05:6402:379:b0:450:dc5c:f536 with SMTP id s25-20020a056402037900b00450dc5cf536mr15713179edw.298.1663593655493;
+        Mon, 19 Sep 2022 06:20:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM769VhH9Ku3KP+FHMxt8AEvuX3TK5FYd3+2H7UhJ2/p7rIGwNNqM0Ah27nVjjauTwJTTEotvQ==
+X-Received: by 2002:a05:6402:379:b0:450:dc5c:f536 with SMTP id s25-20020a056402037900b00450dc5cf536mr15713162edw.298.1663593655264;
+        Mon, 19 Sep 2022 06:20:55 -0700 (PDT)
+Received: from [10.39.192.161] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id s25-20020aa7cb19000000b004531b137e4bsm9551948edt.67.2022.09.19.06.20.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Sep 2022 06:20:54 -0700 (PDT)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] openvswitch: Change the return type for vport_ops.send
+ function hook to int
+Date:   Mon, 19 Sep 2022 15:20:53 +0200
+X-Mailer: MailMate (1.14r5915)
+Message-ID: <1A1ECEC1-5CCE-4D86-A116-D291C88743C0@redhat.com>
+In-Reply-To: <20220913230739.228313-1-nhuck@google.com>
+References: <20220913230739.228313-1-nhuck@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-19-farbere@amazon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:46PM +0000, Eliav Farber wrote:
-> Add optional temperature coefficient properties:
->  *) moortec,ts-coeff-g
->  *) moortec,ts-coeff-h
->  *) moortec,ts-coeff-cal5
->  *) moortec,ts-coeff-j
-> If defined they shall be used instead of defaults.
-> 
-> The coefficients were added to device tree on top of the series property
-> (which can be used to select between series 5 and series 6), because
-> coefficients can vary between product and product, and code defaults might
-> not be accurate enough.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied to hwmon-next.
 
-Thanks,
-Guenter
+On 14 Sep 2022, at 1:07, Nathan Huckleberry wrote:
+
+> All usages of the vport_ops struct have the .send field set to
+> dev_queue_xmit or internal_dev_recv.  Since most usages are set to
+> dev_queue_xmit, the function hook should match the signature of
+> dev_queue_xmit.
+>
+> The only call to vport_ops->send() is in net/openvswitch/vport.c and it
+> throws away the return value.
+>
+> This mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+
+The changes look good to me.
+
+Acked-by: Eelco Chaudron <echaudro@redhat.com>
+
