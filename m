@@ -2,105 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23EC5BC4C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22135BC48F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiISIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
+        id S229806AbiISIoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiISIwp (ORCPT
+        with ESMTP id S229632AbiISIom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:52:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C54318F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663577546; x=1695113546;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Qm1u/FNMmy6waA/y8h4KJo7zAZIlEM/L7gSWwpBW5Yo=;
-  b=WTQKATPIufZtSaHpBvJbBR6FZcxYojk8YpKuUjcEhAEYu63VjQWb9P4j
-   jvyXpFTCOSY9nUEa9AS/y1Z5U2/ML7xQhLAL4CSNdaAmMEDsO2sQu6kU+
-   k3LlquBYKIJlaedtDQ9pk4MxqzIj9rVzOViDfaz9vnOx1QZTDr9rlccBz
-   Y1DJC8cDOn/BK//1eNRIeApmNbLZld0MkgqzOU5+uAjAsYVRJ/YAdTxmz
-   S+6Gg1d9SKN5bgoXHnfQLGnDVIxgTcLnShclBKHWGSsDffpxHnrGrg0A8
-   mA+oUzk3rx313AlQPpRGVnAQePNSSTqVYzs20ZxZBG2VRph+qXeqjD/uh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="299336631"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="299336631"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:10 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="707485736"
-Received: from ilick-mobl1.ger.corp.intel.com (HELO [10.252.59.91]) ([10.252.59.91])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:08 -0700
-Message-ID: <9edb1178-7454-eb3f-60a5-d3f73d01c9d6@linux.intel.com>
-Date:   Mon, 19 Sep 2022 10:44:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] soundwire: bus: Fix wrong port number in
- sdw_handle_slave_alerts()
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220917140256.689678-1-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220917140256.689678-1-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 04:44:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDB17654;
+        Mon, 19 Sep 2022 01:44:39 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id z6so13873788wrq.1;
+        Mon, 19 Sep 2022 01:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=sJ05nwhQyH1wMzlPk+xM6G6uKn99zlu7sIdHkCfF+5Q=;
+        b=ZKhCoRgmn8LuQoTolRKqrVMnp/EPBALX9sXITXMxrJ0YkLZ1Ep/JbSpVNuLmJ7zRlH
+         /Rq7CsikEIRctWLajFAbXvmxIhg9elZpJAjV+nJTRK5GWxNEBZw9onIgjjXnI2Lrad00
+         sgf29V/foxkRQyAz6hAGdc8Lo7gHwZ6rEsuDmbbq4AmoIPrsIs9c3crhmq7JfEoWleft
+         +A1NnpNdScTN1k8Vrwew3e9tXhBYRrZH8O7n+1EYJhTkS+1JjRQCO9Ut68sGePVB29U7
+         b1NPRiT+gH/zoNxdNXtddZNCpiQGk3N6MSd/Xc9lO60BOUo3EHQoqqAHeksNy8QkBqbx
+         TmkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=sJ05nwhQyH1wMzlPk+xM6G6uKn99zlu7sIdHkCfF+5Q=;
+        b=8PHIVA792/YaPWPV/OW3Kijmx4liLRPGH8LRsinpaors6JQCD/jm7Lr/gD9E0ETlrG
+         KuzwEd7bk6GJDWBFKC2ldkFo4yvam7QoB3Togaj5hWBDIObfsmKw8UJeoQasRl8EWDM4
+         yl1+rc7KAUC4Ad8cM5W5gsAmg/DES0O9hoYokWt2VZ3bSqCu0Ne4a5W1EeJcUSg5+425
+         KgUsKDolqxdD6RfSO+BXDW/UhiyytTfgF77gIpyq2ZOc6I0kOg9Z5WBcUW96gUcm/0mI
+         x2u69z9QkbG83d1lPy5Qt3tiOSIjuBZ0pE4fHtpmaQm57JYMb2dqkmDgH8vGsxF8KlaH
+         sguw==
+X-Gm-Message-State: ACrzQf2WaOv/RZ49eix879Msuxa9aBBl4OS98PrPiTKeGJuCV0CGrzag
+        eMmBA/q1+yJvvkrYH7QVgJA=
+X-Google-Smtp-Source: AMsMyM6exrwDfCfPms+cYpiKC3RUDiyPB8NFzSNHudM+h8ms8Fp4eWcDOTYIZp4OshTomZhFlZTJLA==
+X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id r16-20020a5d52d0000000b0021e4923fa09mr10302271wrv.244.1663577077539;
+        Mon, 19 Sep 2022 01:44:37 -0700 (PDT)
+Received: from felia.fritz.box (200116b826812b0018444688cfe72784.dip.versatel-1u1.de. [2001:16b8:2681:2b00:1844:4688:cfe7:2784])
+        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b00228cd9f6349sm12892254wrp.106.2022.09.19.01.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 01:44:37 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] MAINTAINERS: refurbish SWIOTLB SUBSYSTEM sections after refactoring
+Date:   Mon, 19 Sep 2022 10:44:25 +0200
+Message-Id: <20220919084425.32746-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 78013eaadf69 ("x86: remove the IOMMU table infrastructure")
+refactored the generic swiotlb/swiotlb-xen setup into pci-dma.c, but
+misses to adjust MAINTAINERS.
 
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
+broken references.
 
-On 9/17/22 16:02, Richard Fitzgerald wrote:
-> for_each_set_bit() gives the bit-number counting from 0 (LSbit==0).
-> When processing INTSTAT2, bit 0 is DP4 so the port number is (bit + 4).
-> Likewise for INTSTAT3 bit 0 is DP11 so port number is (bit + 11).
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Update the SWIOTLB SUBSYSTEM to contain the architecture-independent
+pieces for swiotlb, but leave the small architecture-dependent pieces to
+the architecture maintainers.
 
-Another thing that never worked, but no one has used port interrupts so
-far. I only used it for PRBS tests in early enabling some 3 years ago,
-and it was for port 2 IIRC.
+Further, update the XEN SWIOTLB SUBSYSTEM to include all swiotlb-xen
+headers and replace the pattern in drivers with the specific one file that
+matches this pattern.
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Acked-by: Juergen Gross <jgross@suse.com>
+---
+v1: https://lore.kernel.org/lkml/20220601075613.28245-1-lukas.bulwahn@gmail.com/
+v1 -> v2:
+  addressed Christoph's comment, removed arch/*/kernel/pci-swiotlb.c
+  added Juergen's ack
 
-> ---
->  drivers/soundwire/bus.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-> index 8eded1a55227..df0ae869ee51 100644
-> --- a/drivers/soundwire/bus.c
-> +++ b/drivers/soundwire/bus.c
-> @@ -1622,7 +1622,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->  			port = buf2[0] & SDW_SCP_INTSTAT2_PORT4_10;
->  			for_each_set_bit(bit, &port, 8) {
->  				/* scp2 ports start from 4 */
-> -				port_num = bit + 3;
-> +				port_num = bit + 4;
->  				sdw_handle_port_interrupt(slave,
->  						port_num,
->  						&port_status[port_num]);
-> @@ -1634,7 +1634,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->  			port = buf2[1] & SDW_SCP_INTSTAT3_PORT11_14;
->  			for_each_set_bit(bit, &port, 8) {
->  				/* scp3 ports start from 11 */
-> -				port_num = bit + 10;
-> +				port_num = bit + 11;
->  				sdw_handle_port_interrupt(slave,
->  						port_num,
->  						&port_status[port_num]);
+Christoph, please pick this minor non-urgent clean-up patch for swiotlb.
+
+ MAINTAINERS | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index babb441f7474..69d58c43bd6a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19699,7 +19699,6 @@ L:	iommu@lists.linux.dev
+ S:	Supported
+ W:	http://git.infradead.org/users/hch/dma-mapping.git
+ T:	git git://git.infradead.org/users/hch/dma-mapping.git
+-F:	arch/*/kernel/pci-swiotlb.c
+ F:	include/linux/swiotlb.h
+ F:	kernel/dma/swiotlb.c
+ 
+@@ -22403,8 +22402,10 @@ M:	Stefano Stabellini <sstabellini@kernel.org>
+ L:	xen-devel@lists.xenproject.org (moderated for non-subscribers)
+ L:	iommu@lists.linux.dev
+ S:	Supported
+-F:	arch/x86/xen/*swiotlb*
+-F:	drivers/xen/*swiotlb*
++F:	arch/*/include/asm/xen/swiotlb-xen.h
++F:	drivers/xen/swiotlb-xen.c
++F:	include/xen/arm/swiotlb-xen.h
++F:	include/xen/swiotlb-xen.h
+ 
+ XFS FILESYSTEM
+ C:	irc://irc.oftc.net/xfs
+-- 
+2.17.1
+
