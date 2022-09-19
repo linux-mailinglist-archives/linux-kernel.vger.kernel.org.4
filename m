@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09925BC0EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1F25BC0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 02:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiISBIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 21:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S229566AbiISAGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 20:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiISBIH (ORCPT
+        with ESMTP id S229519AbiISAGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:08:07 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C583C13EB6
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 18:08:05 -0700 (PDT)
-Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220919010802epoutp0354c5b2878db7b297b683583a21361f2e~WHZ9jqHob2019020190epoutp03k
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:08:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220919010802epoutp0354c5b2878db7b297b683583a21361f2e~WHZ9jqHob2019020190epoutp03k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663549682;
-        bh=NDoR4FS/YkfgMXQLIMHDdM8BwQ3egJu9CTsYYwFrncY=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=OzXxhOaI8KJmnkWtEKSiQgEnE/w8a0RN9Fb5nNM5GW7fMuYHceuPoVD8mj6jG7G7t
-         dzZ+rAI8X3tMZjcbtLSXGDVPdKvEcOZNmMWoM5L5qigbfBxrpqBlX3vH98R36csfTU
-         02bdttU0liBJFuOBX/P2wx+pliHUUX9STdAjXPu0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
-        20220919010802epcas3p23d5f62a37afdd1bb50890bc1ec1b207c~WHZ9NbLrb1183311833epcas3p2k;
-        Mon, 19 Sep 2022 01:08:02 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
-        (Postfix) with ESMTP id 4MW6422WDSz4x9QL; Mon, 19 Sep 2022 01:08:02 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: RE: [PATCH v4] page_alloc: consider highatomic reserve in watermark
- fast
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, yong w <yongw.pur@gmail.com>
-CC:     Jaewon Kim <jaewon31.kim@samsung.com>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "wang.yong12@zte.com.cn" <wang.yong12@zte.com.cn>,
-        YongTaek Lee <ytk.lee@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YyREk5hHs2F0eWiE@kroah.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01663549682346.JavaMail.epsvc@epcpadp4>
-Date:   Sun, 18 Sep 2022 10:41:40 +0900
-X-CMS-MailID: 20220918014140epcms1p43196006395c81ea4b5ff727cde997cdc
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220916094017epcas1p1deed4041f897d2bf0e0486554d79b3af
-References: <YyREk5hHs2F0eWiE@kroah.com>
-        <ab879545-d4b2-0cd8-3ae2-65f9f2baf2fe@gmail.com>
-        <YyCLm0ws8qsiEcaJ@kroah.com>
-        <CAOH5QeAUGBshLQdRCWLg9-Q3JvrqROLYW6uWr8a4TBKxwAOPaw@mail.gmail.com>
-        <CGME20220916094017epcas1p1deed4041f897d2bf0e0486554d79b3af@epcms1p4>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 18 Sep 2022 20:06:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191331570C
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 17:06:14 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28IKnp3q005379;
+        Mon, 19 Sep 2022 00:06:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=kFcIlrdEX+zNRtD5J5TZQ161xOSIpnmIETOLyo49t1s=;
+ b=fL59jwURaPcUCpDWb6fwmK8GYOJ1RNKI7s1VOTR3gn2XYTHIhPZG0DhKULdM0ElFT/d9
+ cGsgBy1lYp57pdDBLDaew5KTCep6XGvhYTzMF4Bk5ucCjD2k28IRS5CyYnzEt41hT2eC
+ LoM74ShtUFECAnNL0vDwF2Dntr4IASapQz5Z95YNQRTCEDhGHNXQ9zG/z/rDfCi/Mghd
+ /Y7j531YPcb8fkB2el85mYJ1lecbcAca00Itzjbp0xBzEig8oAP2eccgfBEiawn/9qCh
+ seLjJ7FLdQHC6n7nJH8vvcVM+EMjXvbrNaWK59iM0mIuZ4T7mibv9ta0ZmWpHSVgVqf1 rg== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jpaqb2t9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 00:05:59 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28J05b6b011663;
+        Mon, 19 Sep 2022 00:05:58 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3jn5ghh85a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 00:05:57 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28J05tmV46661938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 00:05:55 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9021CAE04D;
+        Mon, 19 Sep 2022 00:05:55 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3AAA8AE045;
+        Mon, 19 Sep 2022 00:05:55 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Sep 2022 00:05:55 +0000 (GMT)
+Received: from [9.43.174.23] (unknown [9.43.174.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 7F0CE602EA;
+        Mon, 19 Sep 2022 10:05:47 +1000 (AEST)
+Message-ID: <3622c8a3a55a5c4193a7bd4fe9e5d6bfa781aa5d.camel@linux.ibm.com>
+Subject: Re: [PATCH] cxl: fix repeated words in comments
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>, fbarrat@linux.ibm.com,
+        arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Date:   Mon, 19 Sep 2022 10:05:42 +1000
+In-Reply-To: <20220918100312.26836-1-yuanjilin@cdjrlc.com>
+References: <20220918100312.26836-1-yuanjilin@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TdFa_OcEWbQ676_SbJFcYUkPJj59yXv1
+X-Proofpoint-GUID: TdFa_OcEWbQ676_SbJFcYUkPJj59yXv1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-18_10,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209180184
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Wed, Sep 14, 2022 at 08:46:15AM +0800, yong w wrote:
->> Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=8813=
-=E6=97=A5=E5=91=A8=E4=BA=8C 21:54?=E9=81=93=EF=BC=9A
->>=20
->> >
->> > On Tue, Sep 13, 2022 at 09:09:47PM +0800, yong wrote:
->> > > Hello,
->> > > This patch is required to be patched in linux-5.4.y and linux-4.19.y=
-.
->> >
->> > What is "this patch"?  There is no context here :(
->> >
->> Sorry, I forgot to quote the original patch. the patch is as follows
->>=20
->>     f27ce0e page_alloc: consider highatomic reserve in watermark fast
->>=20
->> > > In addition to that, the following two patches are somewhat related:
->> > >
->> > >       3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_idx
->> > >       9282012 page_alloc: fix invalid watermark check on a negative =
-value
->> >
->> > In what way?  What should be done here by us?
->> >
->>=20
->> I think these two patches should also be merged.
->>=20
->>     The classzone_idx  parameter is used in the zone_watermark_fast
->> functionzone, and 3334a45 use ac->high_zoneidx for classzone_idx.
->>     "9282012 page_alloc: fix invalid watermark check on a negative
->> value"  fix f27ce0e introduced issues
->
->Ok, I need an ack by all the developers involved in those commits, as
->well as the subsystem maintainer so that I know it's ok to take them.
->
->Can you provide a series of backported and tested patches so that they
->are easy to review?
->
->thanks,
->
->greg k-h
+On Sun, 2022-09-18 at 18:03 +0800, Jilin Yuan wrote:
+> Delete the redundant word 'dont'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com
 
-Hello I didn't know my Act is needed to merge it.
 
-Acked-by: Jaewon Kim <jaewon31.kim@samsung.com>
+Thanks for the catch. While you're there, perhaps fix the spelling to
+"don't".
 
-I don't understand well why the commit f27ce0e has dependency on 3334a45, t=
-hough.
+> ---
+>  drivers/misc/cxl/native.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
+> index 50b0c44bb8d7..6957946a6463 100644
+> --- a/drivers/misc/cxl/native.c
+> +++ b/drivers/misc/cxl/native.c
+> @@ -920,7 +920,7 @@ int cxl_attach_dedicated_process_psl9(struct
+> cxl_context *ctx, u64 wed, u64 amr)
+>          * Ideally we should do a wmb() here to make sure the changes
+> to the
+>          * PE are visible to the card before we call afu_enable.
+>          * On ppc64 though all mmios are preceded by a 'sync'
+> instruction hence
+> -        * we dont dont need one here.
+> +        * we dont need one here.
+>          */
+>  
+>         result = cxl_ops->afu_reset(afu);
 
-Thank you
-Jaewon Kim
+-- 
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
+
