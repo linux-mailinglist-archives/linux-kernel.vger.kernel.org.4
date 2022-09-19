@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7D45BCD94
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ACF5BCD90
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiISNrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S230438AbiISNrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiISNrP (ORCPT
+        with ESMTP id S229610AbiISNrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:47:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6A330543;
-        Mon, 19 Sep 2022 06:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663595211; x=1695131211;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YKEKcFYIu6qm0K8+4BMwEimDqvC6SyGiwhDXIYY2JLQ=;
-  b=Gdbi9dFNYCD5ubNxQbLpXkhBQ4pyXQla1RDOaZZRPubxtTkiwIK7j/uY
-   r38sa9Lbyq587Af9GSMzxdUmWzkTz8O4DAmnHz2lTu7WHfdRgTvhvlH5k
-   XsTrnSkCC/CSsxaFfLdoaxE8wMqJW4sCEy2p6kM+LAufO9SLEmULkQqFQ
-   UXwxoeH7SbhvT/AcwT2DslMvvcNqFNejycbnTQyW2TYiUEzGDFy+AM9kj
-   /B6wIyS1Z95jnpv8d2fyj9PSdaAlsf+2/1bNiIDJCcZI7IhrcGVF6Le6K
-   Si8dzqGewEE4qS9HVCE+VC3xn5RugU/Xr0cT/BKHiCrUXvyjyVPRSpqTF
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="286446956"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="286446956"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:46:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="569657380"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Sep 2022 06:46:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oaH6b-004ZdE-0u;
-        Mon, 19 Sep 2022 16:46:37 +0300
-Date:   Mon, 19 Sep 2022 16:46:37 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-Message-ID: <YyhyvazTBBmMSnXk@smile.fi.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org>
- <YyGoZLTFhYQvlf+P@smile.fi.intel.com>
- <YyG2tDdq9PWTlaBQ@wantstofly.org>
- <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
- <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
- <YyRiPMa26qDptj3L@wantstofly.org>
+        Mon, 19 Sep 2022 09:47:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ACB2FFD8;
+        Mon, 19 Sep 2022 06:46:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A72E61B2A;
+        Mon, 19 Sep 2022 13:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD1BC433D7;
+        Mon, 19 Sep 2022 13:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663595201;
+        bh=AeMivRW0JQnrwZYyjaQlcAH3jO881DUdn8V4CSVqYy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BBg87/yLwMZ9eT1BeUjhxJ+7dwNsR/5RpM+ZBJJa8SG/75nIEU7j6PxxCQGGA+MCG
+         fEz6jjqm0upeEknbVQVTbNNOFA3P4Fz3oLukyiPJGTLq/oF5z7C2TJlNYZklHW2vy+
+         M3wAK3fuWQUEX8ycFR/BZYXlfQeGgJukXEeTXFbI1GqGvEKgiCuX1qAcCp4cb88BCr
+         u9/v3lrFiAErKNSv5GYp2jo2o6Fdkh0P1QUkG7ezjC4Hr3U+qtfmMTwtOYDCqHlf3R
+         IZQA8vPm0m9Bt2whXm4+0BzRLxGYNJM9CdDVmuPwVXVOXcmwjMR2yTHw4WE1qWnn2N
+         OShXczUrpfuYg==
+Date:   Mon, 19 Sep 2022 15:46:38 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 05/44] cpuidle,riscv: Push RCU-idle into driver
+Message-ID: <20220919134638.GB58444@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.669962810@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YyRiPMa26qDptj3L@wantstofly.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919101520.669962810@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:47:08PM +0300, Lennert Buytenhek wrote:
-> On Thu, Sep 15, 2022 at 07:27:45PM +0300, Ilpo Järvinen wrote:
-
-...
-
-> Thanks for the fix!
+On Mon, Sep 19, 2022 at 11:59:44AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, at least twice, before going idle is daft.
 > 
-> > [...] I'm far from sure if it's the 
-> > best fix though as I don't fully understand what causes the faults during 
-> > the THRE tests because the port->irq is disabled by the THRE test block.
-> 
-> If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-> address/data registers.  Disabling the IRQ at the interrupt controller
-> won't stop the UART from performing a DMA write to the address programmed
-> in its MSI address register (zero) when it wants to signal an interrupt.
-> 
-> (These UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-> capability, so there is no way to mask the interrupt at the source PCI
-> function level, except disabling the MSI capability entirely, but that
-> would cause it to fall back to INTx# assertion, and the PCI specification
-> prohibits disabling the MSI capability as a way to mask a function's
-> interrupt service request.)
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-This sounds to me like a good part to be injected into commit message of
-the proposed fix.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
