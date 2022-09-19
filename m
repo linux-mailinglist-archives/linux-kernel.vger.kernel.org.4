@@ -2,142 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA65BCB2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82525BCB41
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiISLzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S229606AbiISL4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiISLzR (ORCPT
+        with ESMTP id S229694AbiISLzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:55:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9202DA88
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663588448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hxH7XjLCdlYQTKyCIzL976yQ4mhPMOVNZUR3p/LmDx8=;
-        b=HIfpBzIpTmDdJ8fR5z32qQJCqZA/u+k3Td+Z6jt2BEHvnRngcOHqNZvcP6jJ/CVbM3+saA
-        aoCKqrE25iZQ81hAyVSh3r48RAdmo3c8cA+T/CwpHGEoeaFUvnTqSF4nAyqPzqxEXNYwm1
-        n8pnMACJnQ6jSIyHIjLSq/uyFds4f/Y=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-84-O-rwSVsEPtyHydH7L4CSAA-1; Mon, 19 Sep 2022 07:54:07 -0400
-X-MC-Unique: O-rwSVsEPtyHydH7L4CSAA-1
-Received: by mail-wm1-f70.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso4556551wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:54:07 -0700 (PDT)
+        Mon, 19 Sep 2022 07:55:50 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3248360F0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:54:33 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id a9so14673555ilh.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=gUsv6szv6dsUeM9asVJnwaGmSGG17UchvxqwxLA3h8g=;
+        b=6l84clV/ev4Ho0Nth4fVfA2YCUlnkvOSgxbqusFUXjXpfQuFFf0cscM9H6JstjQMUy
+         xw7M8POcVaD8G3v3xGng54KrmjSgvwQL7sqhL179TVnFSdqvL9DEfhAXmZU08DpaVB+z
+         zSiunmo3VbmTof1vxAp/v47yQ2WgOGXeXG6GB3Gf7pE1ScGjC0bqV7TAtd/m+fpfq3CI
+         YOLPMuA/GgjNIfHOrOGhD0cM6H3P5LBBOn3aCDWtNVZfJPWoGE1cWKKtEz9Dpfs/6i2d
+         YxcNqnYUQtbiNuONYqqIai1SFElgvUv464Vcz0iTXK3yncl0+rss3soTmcg3IhW6Gf/K
+         H/3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=hxH7XjLCdlYQTKyCIzL976yQ4mhPMOVNZUR3p/LmDx8=;
-        b=RU7XL1UUZXoAkllWFy9zhBlPvruEQs/hlKXMZ0uNxeb0iN1Iu6BhP3hwXASs3Zpp9l
-         RI3bxFGIMC7ebiBQ0SidPFNra/dkukxjF7MPFF1loeXcI5brSy05brpP/vX2RmEbd2uy
-         9mb9tRpGOJn8FAbg4L98MFqD22tZdMxKOIyhqxRz4E/0U9bK7rk6nUSygmsz9Yb5HQfn
-         8O2Z22Riqr/Bkksi2CRhQJ4rUlCi/m7baMJXZxc6dMMcRemEQe84dPoQWmhmcTP744G6
-         ZsLYEynG+JF+yJhSN44gvJRj8nJHDv7nkhrT5lPPUd3MTGD6dzrqR5YyE3k2q44xY2A+
-         RD7w==
-X-Gm-Message-State: ACrzQf1X32mZNgq8fKgSjPXk1ToTrUvH3fud3zgqPyQuwP6gixO6P1f5
-        lXPYmyMUsrMku/O5xp3WxjJFR9b8Ng14ZFch+OD3YAbLPoRbQuByzcK2Xlqjgh0zp12x2UbftNm
-        fhz+em9Ot0948e71elOruh1m1
-X-Received: by 2002:a05:6000:10ca:b0:22a:3318:861f with SMTP id b10-20020a05600010ca00b0022a3318861fmr9934757wrx.284.1663588446326;
-        Mon, 19 Sep 2022 04:54:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6HbiOSrTrk9TAE5NnDOP0QYF+RHfacKHcGcpTYDBiBVoe5noLLX571BUd1lbeary1JNbNsLg==
-X-Received: by 2002:a05:6000:10ca:b0:22a:3318:861f with SMTP id b10-20020a05600010ca00b0022a3318861fmr9934743wrx.284.1663588446069;
-        Mon, 19 Sep 2022 04:54:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:c100:c136:f914:345f:f5f3? (p200300cbc703c100c136f914345ff5f3.dip0.t-ipconnect.de. [2003:cb:c703:c100:c136:f914:345f:f5f3])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05600c0a1400b003b4727d199asm13853417wmp.15.2022.09.19.04.54.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 04:54:05 -0700 (PDT)
-Message-ID: <9b0cd14c-2a7d-b3f6-7588-90bc5859d102@redhat.com>
-Date:   Mon, 19 Sep 2022 13:54:04 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=gUsv6szv6dsUeM9asVJnwaGmSGG17UchvxqwxLA3h8g=;
+        b=fx9X7AlgHHgVUKhHFJnAkGR1iXHQ1vM/lEQze9QATl/3ETTb4Bfe6VwQmtaCbL82b3
+         bBBpwRNtGwhBQIllHw91bzx0Mn8HcOggFiLjDhlrQ/TgfQADAgOD3ZgAIJ5DfkZ3XdJQ
+         rPe1nP9UJIrqcy4pJ4vpaAB8+r0ttOgfmix74GKawoSaLlGmXVaftPSTFAiAaCzmhJk4
+         5WPezzonY3K/C6DTWGj/FvYuh5KwVA2KvlVBuaQc6T72BQnPKu9ohY8u1Q6HBtxsxKbg
+         Co2zZsXf6ts7K6YmNY7PV2lkvDEAEPR42qLSOdBOEZLXsN5xL96fKkyotYLlDfaDANzG
+         JllA==
+X-Gm-Message-State: ACrzQf0Wny4i+Da/O6/AJzKET+YDMAVCZuWIkxfrPTsImh27mjnqCul7
+        lxklRpYsl5ATPzNQMp7VqrO4l92EW18DbzsqFedhzg==
+X-Google-Smtp-Source: AMsMyM5SaQPoV1xlIMZRfmPqKRzR7kAhfhGoUGwZ5KM3JobcN8dh6yNRCyMvHHbKVsfAJAruxygcE1W13IXNCB18i9o=
+X-Received: by 2002:a92:c04d:0:b0:2f5:1175:c7a3 with SMTP id
+ o13-20020a92c04d000000b002f51175c7a3mr5681407ilf.165.1663588472670; Mon, 19
+ Sep 2022 04:54:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, osalvador@suse.de,
-        shuah@kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <20220917071427.28499-1-akinobu.mita@gmail.com>
- <93c044ca-7d2f-e23f-8eb4-72c133737a15@redhat.com>
- <CAC5umyhhnoJvoGT5NQX8VNn4QT_3qA1nY5tnZre59pL7vbMpzg@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH -v2] lib/notifier-error-inject: fix error when writing
- errno to debugfs file
-In-Reply-To: <CAC5umyhhnoJvoGT5NQX8VNn4QT_3qA1nY5tnZre59pL7vbMpzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220919095939.761690562@infradead.org> <20220919101520.669962810@infradead.org>
+In-Reply-To: <20220919101520.669962810@infradead.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 19 Sep 2022 17:24:19 +0530
+Message-ID: <CAAhSdy004HaNUNYRD8tcn24LZWdTmOVkF1QN14uLmSw1UXuXqA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/44] cpuidle,riscv: Push RCU-idle into driver
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, fweisbec@gmail.com, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.09.22 13:40, Akinobu Mita wrote:
-> 2022年9月19日(月) 18:20 David Hildenbrand <david@redhat.com>:
->>
->> On 17.09.22 09:14, Akinobu Mita wrote:
->>> The simple attribute files do not accept a negative value since the
->>> commit 488dac0c9237 ("libfs: fix error cast of negative value in
->>> simple_attr_write()"), so we can no longer use DEFINE_SIMPLE_ATTRIBUTE() to
->>> define a file operations for errno value.
->>>
->>> Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
->>> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
->>> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
->>
->> But shouldn't we fix simple_attr_write() instead?
->>
->> I mean, simple_attr_read() might use attr->fmt to print a signed value,
->> but simple_attr_write() fails on signed values now?
->>
->> I might be wrong, but there is a disconnect. I feel like
->> simple_attr_write() should similarly make decisions based on attr->fmt.
-> 
-> I agree there is a disconnect, but I have no idea how to fix
-> simple_attr_write().
-> (strcmp(attr->fmt, "%%lld\n") is ugly)
-> If no one seems to come up with a good idea, I'll fix the similar problems
-> in fault-injection the same way I did here.
-> 
+On Mon, Sep 19, 2022 at 3:47 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, at least twice, before going idle is daft.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Maybe we simply want another interface for the handful of %lld users. Or 
-another way to allow DEFINE_SIMPLE_ATTRIBUTE users to specify it.
+Looks good to me.
 
-Might be good enough to specify instead of/in addition to "%llu" an enum 
-that expresses what we want.
+For RISC-V cpuidle:
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-$ git grep -C2 DEFINE_SIMPLE  | grep "\%"
+Regards,
+Anup
 
-tells me that we have
 
-a) %llu
-b) %llx
-c) %lld
-d) 0x%llx
-e) 0x%08llx
-
-Maybe we can adjust the debugfs cases to be more similar, to eventually 
-get only a, b and c.
-
--- 
-Thanks,
-
-David / dhildenb
-
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c |    9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -116,12 +116,12 @@ static int __sbi_enter_domain_idle_state
+>                 return -1;
+>
+>         /* Do runtime PM to manage a hierarchical CPU toplogy. */
+> -       ct_irq_enter_irqson();
+>         if (s2idle)
+>                 dev_pm_genpd_suspend(pd_dev);
+>         else
+>                 pm_runtime_put_sync_suspend(pd_dev);
+> -       ct_irq_exit_irqson();
+> +
+> +       ct_idle_enter();
+>
+>         if (sbi_is_domain_state_available())
+>                 state = sbi_get_domain_state();
+> @@ -130,12 +130,12 @@ static int __sbi_enter_domain_idle_state
+>
+>         ret = sbi_suspend(state) ? -1 : idx;
+>
+> -       ct_irq_enter_irqson();
+> +       ct_idle_exit();
+> +
+>         if (s2idle)
+>                 dev_pm_genpd_resume(pd_dev);
+>         else
+>                 pm_runtime_get_sync(pd_dev);
+> -       ct_irq_exit_irqson();
+>
+>         cpu_pm_exit();
+>
+> @@ -246,6 +246,7 @@ static int sbi_dt_cpu_init_topology(stru
+>          * of a shared state for the domain, assumes the domain states are all
+>          * deeper states.
+>          */
+> +       drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
+>         drv->states[state_count - 1].enter = sbi_enter_domain_idle_state;
+>         drv->states[state_count - 1].enter_s2idle =
+>                                         sbi_enter_s2idle_domain_idle_state;
+>
+>
