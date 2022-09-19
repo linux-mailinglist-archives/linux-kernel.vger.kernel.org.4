@@ -2,153 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A627B5BD3B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDEB5BD3B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiISRag convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Sep 2022 13:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S229732AbiISRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiISRab (ORCPT
+        with ESMTP id S230261AbiISRaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:30:31 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC4622B16
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:30:29 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JHMRwq018435
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:30:29 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jpmfxkxmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:30:29 -0700
-Received: from twshared2273.16.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 10:30:27 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 849C4D1E5FFA; Mon, 19 Sep 2022 10:30:15 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <kernel-team@fb.com>,
-        Song Liu <song@kernel.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: [PATCH] ftrace: fix recursive locking direct_mutex in ftrace_modify_direct_caller
-Date:   Mon, 19 Sep 2022 10:29:55 -0700
-Message-ID: <20220919172955.1196326-1-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 19 Sep 2022 13:30:02 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E482E13EA5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:29:59 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id k10so48088781lfm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=qpgJIJElhOXjn7LOSKznlt5pJlFxXPnXLSPfz4rMEuo=;
+        b=oyzK8EBRU+2zWPdRgH9erpf+j2aLOw0qG78VeQjhQixmYyZrgL9XLnMfYfH5DjWDRa
+         h0bcJHbmayn19VCCHCj544ZxnUazLr/dfGyPhslIsm0T01CYuE2ETRSNYLHGIE9Y6BgC
+         oB3NDG1ZDaewjoflU9W/gVDkShoNRU/IsbDN6sJbj1mPRiK7cQTH2IAa55ialwbvWIiS
+         BRmZs2UK8ZpWEhd/xR0PetTbFLHHAiWq4ZRrpAEuduQrf74+tTuTG5NuCIeMGVydfvSB
+         TIl2n594BENEfVBUVzg48xBJoknMvDkPBL3CZINSPSJUUYE13t4JibccLK0LNovbr8Ic
+         xrYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qpgJIJElhOXjn7LOSKznlt5pJlFxXPnXLSPfz4rMEuo=;
+        b=0fxIKHn8WF03DnmrGhVW4rZg5N0fSVKhtrwQFJQwN6L4AF///uiMJ9nupjRJ8Bu5qO
+         zg1a8ouNeKkR4N5vbILhCZXifSMVVtJdd7G/xxiPBDCZ6dwNepSDisGVMnwxxTyA0F71
+         clzD0f86XJZY6ixJuZnkCR97rmTYU860VVdkusQlpyAfDsbOd/4asRuNwWZ2cH7OcnA7
+         uHW3AtKypyJ4i02Dtur+A9NCkKhL6N5J8GOjaamxdn6Pz09iAZM2dJJMD9Ygt24JUaIi
+         GzgeNUb4RTCnSeXZSRByGuwt9gKKQ861kGeg2kTfXnTkgnYYQvT7+aCnNmFaI9z4lS8O
+         JrlQ==
+X-Gm-Message-State: ACrzQf1msZc1T3FRmMV4S38vp8kihyJcyl103NiUT3vmefj+WRU9Hnfa
+        THP7zVGzmawTw+/BLwoV1XrUsQ==
+X-Google-Smtp-Source: AMsMyM6buy4eNEC6Rgb65J/xMPsi3p+v09EQ6PWBzxA5uOW9Po2LnjNRrdWX5MTNGfAFkdQFpP/vbg==
+X-Received: by 2002:a19:435c:0:b0:49f:5861:59a3 with SMTP id m28-20020a19435c000000b0049f586159a3mr5538223lfj.295.1663608597790;
+        Mon, 19 Sep 2022 10:29:57 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a17-20020a2eb551000000b00261a8e56fe4sm4994215ljn.55.2022.09.19.10.29.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 10:29:57 -0700 (PDT)
+Message-ID: <bd6fc826-94b9-f539-a37e-820ab49b9d14@linaro.org>
+Date:   Mon, 19 Sep 2022 20:29:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: y90Y-duKizbMf3ZeuAywrDpFYmkOCUcn
-X-Proofpoint-ORIG-GUID: y90Y-duKizbMf3ZeuAywrDpFYmkOCUcn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 3/5] phy: core: Add support for phy power down & power
+ up
+Content-Language: en-GB
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+References: <1662713084-8106-1-git-send-email-quic_krichai@quicinc.com>
+ <1662713084-8106-4-git-send-email-quic_krichai@quicinc.com>
+ <CAA8EJppgaAuEDU44ePOt+ZWK0_rNsXHnE3WOEc9F-n=VE=3aVQ@mail.gmail.com>
+ <87138bc9-2fc0-39fb-89c1-d3826e28594e@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <87138bc9-2fc0-39fb-89c1-d3826e28594e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Naveen reported recursive locking of direct_mutex with sample
-ftrace-direct-modify.ko:
+On 14/09/2022 17:50, Krishna Chaitanya Chundru wrote:
+> 
+> On 9/9/2022 2:34 PM, Dmitry Baryshkov wrote:
+>> On Fri, 9 Sept 2022 at 11:45, Krishna chaitanya chundru
+>> <quic_krichai@quicinc.com> wrote:
+>>> Introducing phy power down/up callbacks for allowing to park the
+>>> link-state in L1ss without holding any PCIe resources during
+>>> system suspend.
+>>>
+>>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>>> ---
+>>>   drivers/phy/phy-core.c  | 30 ++++++++++++++++++++++++++++++
+>>>   include/linux/phy/phy.h | 20 ++++++++++++++++++++
+>>>   2 files changed, 50 insertions(+)
+>>>
+>>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+>>> index d93ddf1..1b0b757 100644
+>>> --- a/drivers/phy/phy-core.c
+>>> +++ b/drivers/phy/phy-core.c
+>>> @@ -441,6 +441,36 @@ int phy_set_speed(struct phy *phy, int speed)
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(phy_set_speed);
+>>>
+>>> +int phy_power_down(struct phy *phy)
+>>> +{
+>>> +       int ret;
+>>> +
+>>> +       if (!phy || !phy->ops->power_down)
+>>> +               return 0;
+>>> +
+>>> +       mutex_lock(&phy->mutex);
+>>> +       ret = phy->ops->power_down(phy);
+>>> +       mutex_unlock(&phy->mutex);
+>>> +
+>>> +       return ret;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(phy_power_down);
+>>> +
+>>> +int phy_power_up(struct phy *phy)
+>>> +{
+>>> +       int ret;
+>>> +
+>>> +       if (!phy || !phy->ops->power_up)
+>>> +               return 0;
+>>> +
+>>> +       mutex_lock(&phy->mutex);
+>>> +       ret = phy->ops->power_up(phy);
+>>> +       mutex_unlock(&phy->mutex);
+>>> +
+>>> +       return ret;
+>>> +}
+>> As it can be seen from the phy_power_off(), the PHY can be a shared
+>> resource, with the power_count counting the number of users that
+>> requested the PHY to be powered up. By introducing suc calls you break
+>> directly into this by allowing a single user to power down the PHY, no
+>> matter how many other users have requested the PHY to stay alive.
+> 
+> can we use same power_count in this function also here and restrict the 
+> single user to
+> 
+> power down the PHY same like phy_power_off?.
 
-[   74.762406] WARNING: possible recursive locking detected
-[   74.762887] 6.0.0-rc6+ #33 Not tainted
-[   74.763216] --------------------------------------------
-[   74.763672] event-sample-fn/1084 is trying to acquire lock:
-[   74.764152] ffffffff86c9d6b0 (direct_mutex){+.+.}-{3:3}, at: \
-    register_ftrace_function+0x1f/0x180
-[   74.764922]
-[   74.764922] but task is already holding lock:
-[   74.765421] ffffffff86c9d6b0 (direct_mutex){+.+.}-{3:3}, at: \
-    modify_ftrace_direct+0x34/0x1f0
-[   74.766142]
-[   74.766142] other info that might help us debug this:
-[   74.766701]  Possible unsafe locking scenario:
-[   74.766701]
-[   74.767216]        CPU0
-[   74.767437]        ----
-[   74.767656]   lock(direct_mutex);
-[   74.767952]   lock(direct_mutex);
-[   74.768245]
-[   74.768245]  *** DEADLOCK ***
-[   74.768245]
-[   74.768750]  May be due to missing lock nesting notation
-[   74.768750]
-[   74.769332] 1 lock held by event-sample-fn/1084:
-[   74.769731]  #0: ffffffff86c9d6b0 (direct_mutex){+.+.}-{3:3}, at: \
-    modify_ftrace_direct+0x34/0x1f0
-[   74.770496]
-[   74.770496] stack backtrace:
-[   74.770884] CPU: 4 PID: 1084 Comm: event-sample-fn Not tainted ...
-[   74.771498] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), ...
-[   74.772474] Call Trace:
-[   74.772696]  <TASK>
-[   74.772896]  dump_stack_lvl+0x44/0x5b
-[   74.773223]  __lock_acquire.cold.74+0xac/0x2b7
-[   74.773616]  lock_acquire+0xd2/0x310
-[   74.773936]  ? register_ftrace_function+0x1f/0x180
-[   74.774357]  ? lock_is_held_type+0xd8/0x130
-[   74.774744]  ? my_tramp2+0x11/0x11 [ftrace_direct_modify]
-[   74.775213]  __mutex_lock+0x99/0x1010
-[   74.775536]  ? register_ftrace_function+0x1f/0x180
-[   74.775954]  ? slab_free_freelist_hook.isra.43+0x115/0x160
-[   74.776424]  ? ftrace_set_hash+0x195/0x220
-[   74.776779]  ? register_ftrace_function+0x1f/0x180
-[   74.777194]  ? kfree+0x3e1/0x440
-[   74.777482]  ? my_tramp2+0x11/0x11 [ftrace_direct_modify]
-[   74.777941]  ? __schedule+0xb40/0xb40
-[   74.778258]  ? register_ftrace_function+0x1f/0x180
-[   74.778672]  ? my_tramp1+0xf/0xf [ftrace_direct_modify]
-[   74.779128]  register_ftrace_function+0x1f/0x180
-[   74.779527]  ? ftrace_set_filter_ip+0x33/0x70
-[   74.779910]  ? __schedule+0xb40/0xb40
-[   74.780231]  ? my_tramp1+0xf/0xf [ftrace_direct_modify]
-[   74.780678]  ? my_tramp2+0x11/0x11 [ftrace_direct_modify]
-[   74.781147]  ftrace_modify_direct_caller+0x5b/0x90
-[   74.781563]  ? 0xffffffffa0201000
-[   74.781859]  ? my_tramp1+0xf/0xf [ftrace_direct_modify]
-[   74.782309]  modify_ftrace_direct+0x1b2/0x1f0
-[   74.782690]  ? __schedule+0xb40/0xb40
-[   74.783014]  ? simple_thread+0x2a/0xb0 [ftrace_direct_modify]
-[   74.783508]  ? __schedule+0xb40/0xb40
-[   74.783832]  ? my_tramp2+0x11/0x11 [ftrace_direct_modify]
-[   74.784294]  simple_thread+0x76/0xb0 [ftrace_direct_modify]
-[   74.784766]  kthread+0xf5/0x120
-[   74.785052]  ? kthread_complete_and_exit+0x20/0x20
-[   74.785464]  ret_from_fork+0x22/0x30
-[   74.785781]  </TASK>
+What is the difference between power_off() and power_down()?
 
-Fix this by using register_ftrace_function_nolock in
-ftrace_modify_direct_caller.
 
-Fixes: 53cd885bc5c3 ("ftrace: Allow IPMODIFY and DIRECT ops on the same function")
-Reported-and-tested-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/trace/ftrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 439e2ab6905e..d308d0674805 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5461,7 +5461,7 @@ int __weak ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
- 	if (ret)
- 		goto out_lock;
- 
--	ret = register_ftrace_function(&stub_ops);
-+	ret = register_ftrace_function_nolock(&stub_ops);
- 	if (ret) {
- 		ftrace_set_filter_ip(&stub_ops, ip, 1, 0);
- 		goto out_lock;
 -- 
-2.30.2
+With best wishes
+Dmitry
 
