@@ -2,302 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001F75BD642
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F245BD63E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiISVUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S229698AbiISVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 17:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiISVUU (ORCPT
+        with ESMTP id S229733AbiISVUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:20:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BFA3D58B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:20:19 -0700 (PDT)
+        Mon, 19 Sep 2022 17:20:09 -0400
+Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECE920F60
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:20:05 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id DB8802906A; Mon, 19 Sep 2022 23:19:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663622419; x=1695158419;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MbBH5QzULO+SVU7Lq5WeBggu3m7tEjg2IgYp0Qogenk=;
-  b=NCSAMTWdW4Ct9mEY+kwwql9Pi0qvzKNBcz1/DxOvqlLbhSy8PkIL7ypN
-   ya2B/FfLRXzvL9u64xKhPXySRCbF6seyvK9X9L/fw71yCfM54gkCSe3KQ
-   iWHP+ufPOiP1i8++l2XZxvuhsQ9/kYLviuY/lx2vS36RBzMxFP/LSFZpl
-   OAMyCNZ3yr3CirQDnKssSGcHKxmyU7tf6Uu2gT9cwedfwdrECTQBXKORf
-   wozkGOK4aZvZW5DSSwnZN40JBeyYglV38rBQgfnxPMQ287aQZHeodEDsX
-   nS8t33Y40OD0Zus1LhuNPq+oJm5BDKCXORznnPMBe6zBwQjv+i+c3IrPH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363484233"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="363484233"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 14:20:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="569810930"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Sep 2022 14:20:14 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaOBZ-0002EH-1U;
-        Mon, 19 Sep 2022 21:20:13 +0000
-Date:   Tue, 20 Sep 2022 05:19:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
- within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
- union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
- 'struct dw_edma_v0_ch_regs' being packed, wh...
-Message-ID: <202209200522.1lOqXue9-lkp@intel.com>
+        d=valentin-vidic.from.hr; s=2020; t=1663622397;
+        bh=iTFgAY9DAhoLaKSk5hDeoJKe1vNf6/Wy76telunIX+4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LcGovu9IuU5081gPATuRKI2ONMwhKMcCIInwJabjSGbuqNcRYe04Dw6Wm/AgNwcB8
+         WeraaGYersyplJlYPUA5jmNsXVRPy9mNoVGwbpqPu4RBpWCC5dEaZHA2SuWknDy/Iq
+         UssrJhNBREG0QeeFgWxjOu9jFHGaFGNCJt9kq/MgWEMJh2Pn1E+y6Fvbn6NgTbOaji
+         ZxNqcd98lmzNYBeF2a6u6Qy4pVYK9z7kf0symqsA9Q8Y7+36pf2GFSt0Pl37XVYM41
+         W77pts5HAQKbdWDipewXXhOU9UTBqfqJOKGpfWmxFNUZm1Wf3Ve1We5JrMSyHlvKT0
+         2A2kyYpVDkHs7dV+LTjCcwYs/uGIEaxxUE2BzPFxOxIy9dv/4oVwrmZm8GzjlzTicT
+         L02G48LD8L6X7am4XWmo/4VCZuAfke9N+zOnOup0IDqWVWmutjhnIL9SbClnB7G768
+         7kebEXVSeBYEhMFacwQcF0yu2Dd0KShIclp+nfM0Jwe4SUtsiCmcgrW9JQyaSirUTg
+         LpntMU3m+DzIEUfVmqbbqLEwNpzIhYv93f14CJ/LvzM+rWujY1CHBIPsH3edKzgWeA
+         yVrb35dFv5dT1KMl+PBp2gvWznsooUkb6FEvuyTJhoS/829TZ33rXBLeC1b6S0b1Lb
+         iMvbPa8Lk1TUEFuasM1w8QxA=
+From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Subject: [PATCH v2] staging: rtl8192e: fix CamelCase struct member
+Date:   Mon, 19 Sep 2022 23:19:48 +0200
+Message-Id: <20220919211948.136659-1-vvidic@valentin-vidic.from.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gustavo,
+Fix checkpatch warnings for struct member pFirmware.
 
-FYI, the error/warning still remains.
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+---
+v2: drop the 'p' prefix from the struct member and always
+    use priv->firmware for access.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   521a547ced6477c54b4b0cc206000406c221b4d6
-commit: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-date:   1 year, 6 months ago
-config: arm-buildonly-randconfig-r006-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200522.1lOqXue9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04e0a39fc10f82a71b84af73351333b184cee578
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 04e0a39fc10f82a71b84af73351333b184cee578
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  8 +++---
+ .../rtl8192e/rtl8192e/r8192E_firmware.c       | 25 ++++++++-----------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  8 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  2 +-
+ 4 files changed, 20 insertions(+), 23 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/dma/dw-edma/dw-edma-v0-core.c:13:
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } sar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } dar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } llp;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_err_status;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_done_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_abort_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } wr_engine_hshake_cnt;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_engine_hshake_cnt;
-             ^
-   8 warnings generated.
-
-
-vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
-
-    26	
-    27	struct dw_edma_v0_ch_regs {
-    28		u32 ch_control1;				/* 0x000 */
-    29		u32 ch_control2;				/* 0x004 */
-    30		u32 transfer_size;				/* 0x008 */
-    31		union {
-    32			u64 reg;				/* 0x00c..0x010 */
-    33			struct {
-    34				u32 lsb;			/* 0x00c */
-    35				u32 msb;			/* 0x010 */
-    36			};
-  > 37		} sar;
-    38		union {
-    39			u64 reg;				/* 0x014..0x018 */
-    40			struct {
-    41				u32 lsb;			/* 0x014 */
-    42				u32 msb;			/* 0x018 */
-    43			};
-  > 44		} dar;
-    45		union {
-    46			u64 reg;				/* 0x01c..0x020 */
-    47			struct {
-    48				u32 lsb;			/* 0x01c */
-    49				u32 msb;			/* 0x020 */
-    50			};
-  > 51		} llp;
-    52	} __packed;
-    53	
-    54	struct dw_edma_v0_ch {
-    55		struct dw_edma_v0_ch_regs wr;			/* 0x200 */
-    56		u32 padding_1[55];				/* [0x224..0x2fc] */
-    57		struct dw_edma_v0_ch_regs rd;			/* 0x300 */
-    58		u32 padding_2[55];				/* [0x324..0x3fc] */
-    59	} __packed;
-    60	
-    61	struct dw_edma_v0_unroll {
-    62		u32 padding_1;					/* 0x0f8 */
-    63		u32 wr_engine_chgroup;				/* 0x100 */
-    64		u32 rd_engine_chgroup;				/* 0x104 */
-    65		union {
-    66			u64 reg;				/* 0x108..0x10c */
-    67			struct {
-    68				u32 lsb;			/* 0x108 */
-    69				u32 msb;			/* 0x10c */
-    70			};
-  > 71		} wr_engine_hshake_cnt;
-    72		u32 padding_2[2];				/* [0x110..0x114] */
-    73		union {
-    74			u64 reg;				/* 0x120..0x124 */
-    75			struct {
-    76				u32 lsb;			/* 0x120 */
-    77				u32 msb;			/* 0x124 */
-    78			};
-  > 79		} rd_engine_hshake_cnt;
-    80		u32 padding_3[2];				/* [0x120..0x124] */
-    81		u32 wr_ch0_pwr_en;				/* 0x128 */
-    82		u32 wr_ch1_pwr_en;				/* 0x12c */
-    83		u32 wr_ch2_pwr_en;				/* 0x130 */
-    84		u32 wr_ch3_pwr_en;				/* 0x134 */
-    85		u32 wr_ch4_pwr_en;				/* 0x138 */
-    86		u32 wr_ch5_pwr_en;				/* 0x13c */
-    87		u32 wr_ch6_pwr_en;				/* 0x140 */
-    88		u32 wr_ch7_pwr_en;				/* 0x144 */
-    89		u32 padding_4[8];				/* [0x148..0x164] */
-    90		u32 rd_ch0_pwr_en;				/* 0x168 */
-    91		u32 rd_ch1_pwr_en;				/* 0x16c */
-    92		u32 rd_ch2_pwr_en;				/* 0x170 */
-    93		u32 rd_ch3_pwr_en;				/* 0x174 */
-    94		u32 rd_ch4_pwr_en;				/* 0x178 */
-    95		u32 rd_ch5_pwr_en;				/* 0x18c */
-    96		u32 rd_ch6_pwr_en;				/* 0x180 */
-    97		u32 rd_ch7_pwr_en;				/* 0x184 */
-    98		u32 padding_5[30];				/* [0x188..0x1fc] */
-    99		struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* [0x200..0x1120] */
-   100	} __packed;
-   101	
-   102	struct dw_edma_v0_legacy {
-   103		u32 viewport_sel;				/* 0x0f8 */
-   104		struct dw_edma_v0_ch_regs ch;			/* [0x100..0x120] */
-   105	} __packed;
-   106	
-   107	struct dw_edma_v0_regs {
-   108		/* eDMA global registers */
-   109		u32 ctrl_data_arb_prior;			/* 0x000 */
-   110		u32 padding_1;					/* 0x004 */
-   111		u32 ctrl;					/* 0x008 */
-   112		u32 wr_engine_en;				/* 0x00c */
-   113		u32 wr_doorbell;				/* 0x010 */
-   114		u32 padding_2;					/* 0x014 */
-   115		union {
-   116			u64 reg;				/* 0x018..0x01c */
-   117			struct {
-   118				u32 lsb;			/* 0x018 */
-   119				u32 msb;			/* 0x01c */
-   120			};
-   121		} wr_ch_arb_weight;
-   122		u32 padding_3[3];				/* [0x020..0x028] */
-   123		u32 rd_engine_en;				/* 0x02c */
-   124		u32 rd_doorbell;				/* 0x030 */
-   125		u32 padding_4;					/* 0x034 */
-   126		union {
-   127			u64 reg;				/* 0x038..0x03c */
-   128			struct {
-   129				u32 lsb;			/* 0x038 */
-   130				u32 msb;			/* 0x03c */
-   131			};
-   132		} rd_ch_arb_weight;
-   133		u32 padding_5[3];				/* [0x040..0x048] */
-   134		/* eDMA interrupts registers */
-   135		u32 wr_int_status;				/* 0x04c */
-   136		u32 padding_6;					/* 0x050 */
-   137		u32 wr_int_mask;				/* 0x054 */
-   138		u32 wr_int_clear;				/* 0x058 */
-   139		u32 wr_err_status;				/* 0x05c */
-   140		union {
-   141			u64 reg;				/* 0x060..0x064 */
-   142			struct {
-   143				u32 lsb;			/* 0x060 */
-   144				u32 msb;			/* 0x064 */
-   145			};
-   146		} wr_done_imwr;
-   147		union {
-   148			u64 reg;				/* 0x068..0x06c */
-   149			struct {
-   150				u32 lsb;			/* 0x068 */
-   151				u32 msb;			/* 0x06c */
-   152			};
-   153		} wr_abort_imwr;
-   154		u32 wr_ch01_imwr_data;				/* 0x070 */
-   155		u32 wr_ch23_imwr_data;				/* 0x074 */
-   156		u32 wr_ch45_imwr_data;				/* 0x078 */
-   157		u32 wr_ch67_imwr_data;				/* 0x07c */
-   158		u32 padding_7[4];				/* [0x080..0x08c] */
-   159		u32 wr_linked_list_err_en;			/* 0x090 */
-   160		u32 padding_8[3];				/* [0x094..0x09c] */
-   161		u32 rd_int_status;				/* 0x0a0 */
-   162		u32 padding_9;					/* 0x0a4 */
-   163		u32 rd_int_mask;				/* 0x0a8 */
-   164		u32 rd_int_clear;				/* 0x0ac */
-   165		u32 padding_10;					/* 0x0b0 */
-   166		union {
-   167			u64 reg;				/* 0x0b4..0x0b8 */
-   168			struct {
-   169				u32 lsb;			/* 0x0b4 */
-   170				u32 msb;			/* 0x0b8 */
-   171			};
- > 172		} rd_err_status;
-   173		u32 padding_11[2];				/* [0x0bc..0x0c0] */
-   174		u32 rd_linked_list_err_en;			/* 0x0c4 */
-   175		u32 padding_12;					/* 0x0c8 */
-   176		union {
-   177			u64 reg;				/* 0x0cc..0x0d0 */
-   178			struct {
-   179				u32 lsb;			/* 0x0cc */
-   180				u32 msb;			/* 0x0d0 */
-   181			};
- > 182		} rd_done_imwr;
-   183		union {
-   184			u64 reg;				/* 0x0d4..0x0d8 */
-   185			struct {
-   186				u32 lsb;			/* 0x0d4 */
-   187				u32 msb;			/* 0x0d8 */
-   188			};
- > 189		} rd_abort_imwr;
-   190		u32 rd_ch01_imwr_data;				/* 0x0dc */
-   191		u32 rd_ch23_imwr_data;				/* 0x0e0 */
-   192		u32 rd_ch45_imwr_data;				/* 0x0e4 */
-   193		u32 rd_ch67_imwr_data;				/* 0x0e8 */
-   194		u32 padding_13[4];				/* [0x0ec..0x0f8] */
-   195		/* eDMA channel context grouping */
-   196		union dw_edma_v0_type {
-   197			struct dw_edma_v0_legacy legacy;	/* [0x0f8..0x120] */
-   198			struct dw_edma_v0_unroll unroll;	/* [0x0f8..0x1120] */
-   199		} type;
-   200	} __packed;
-   201	
-
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index 4b9249195b5a..8f7395d20c6d 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -707,19 +707,19 @@ bool rtl92e_start_adapter(struct net_device *dev)
+ 		rtl92e_writeb(dev, ANAPAR, 0x37);
+ 		mdelay(500);
+ 	}
+-	priv->pFirmware->status = FW_STATUS_0_INIT;
++	priv->firmware->status = FW_STATUS_0_INIT;
+ 
+ 	if (priv->RegRfOff)
+ 		priv->rtllib->eRFPowerState = eRfOff;
+ 
+ 	ulRegRead = rtl92e_readl(dev, CPU_GEN);
+-	if (priv->pFirmware->status == FW_STATUS_0_INIT)
++	if (priv->firmware->status == FW_STATUS_0_INIT)
+ 		ulRegRead |= CPU_GEN_SYSTEM_RESET;
+-	else if (priv->pFirmware->status == FW_STATUS_5_READY)
++	else if (priv->firmware->status == FW_STATUS_5_READY)
+ 		ulRegRead |= CPU_GEN_FIRMWARE_RESET;
+ 	else
+ 		netdev_err(dev, "%s(): undefined firmware state: %d.\n",
+-			   __func__, priv->pFirmware->status);
++			   __func__, priv->firmware->status);
+ 
+ 	rtl92e_writel(dev, CPU_GEN, ulRegRead);
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
+index 38110fa4f36d..3bbd9bb86ad5 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
+@@ -51,32 +51,31 @@ static bool _rtl92e_fw_check_ready(struct net_device *dev,
+ 				   u8 load_fw_status)
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+-	struct rt_firmware *pfirmware = priv->pFirmware;
+ 	bool rt_status  = true;
+ 
+ 	switch (load_fw_status) {
+ 	case FW_INIT_STEP0_BOOT:
+-		pfirmware->status = FW_STATUS_1_MOVE_BOOT_CODE;
++		priv->firmware->status = FW_STATUS_1_MOVE_BOOT_CODE;
+ 		break;
+ 
+ 	case FW_INIT_STEP1_MAIN:
+-		pfirmware->status = FW_STATUS_2_MOVE_MAIN_CODE;
++		priv->firmware->status = FW_STATUS_2_MOVE_MAIN_CODE;
+ 
+ 		rt_status = _rtl92e_fw_boot_cpu(dev);
+ 		if (rt_status)
+-			pfirmware->status = FW_STATUS_3_TURNON_CPU;
++			priv->firmware->status = FW_STATUS_3_TURNON_CPU;
+ 		else
+ 			netdev_dbg(dev, "_rtl92e_fw_boot_cpu fail!\n");
+ 
+ 		break;
+ 
+ 	case FW_INIT_STEP2_DATA:
+-		pfirmware->status = FW_STATUS_4_MOVE_DATA_CODE;
++		priv->firmware->status = FW_STATUS_4_MOVE_DATA_CODE;
+ 		mdelay(1);
+ 
+ 		rt_status = _rtl92e_wait_for_fw(dev, CPU_GEN_FIRM_RDY, 20);
+ 		if (rt_status)
+-			pfirmware->status = FW_STATUS_5_READY;
++			priv->firmware->status = FW_STATUS_5_READY;
+ 		else
+ 			RT_TRACE(COMP_FIRMWARE,
+ 				 "_rtl92e_is_fw_ready fail(%d)!\n",
+@@ -138,15 +137,13 @@ bool rtl92e_init_fw(struct net_device *dev)
+ 	enum opt_rst_type rst_opt = OPT_SYSTEM_RESET;
+ 	enum firmware_init_step starting_state = FW_INIT_STEP0_BOOT;
+ 
+-	struct rt_firmware *pfirmware = priv->pFirmware;
+-
+ 	netdev_dbg(dev, " PlatformInitFirmware()==>\n");
+ 
+-	if (pfirmware->status == FW_STATUS_0_INIT) {
++	if (priv->firmware->status == FW_STATUS_0_INIT) {
+ 		rst_opt = OPT_SYSTEM_RESET;
+ 		starting_state = FW_INIT_STEP0_BOOT;
+ 
+-	} else if (pfirmware->status == FW_STATUS_5_READY) {
++	} else if (priv->firmware->status == FW_STATUS_5_READY) {
+ 		rst_opt = OPT_FIRMWARE_RESET;
+ 		starting_state = FW_INIT_STEP2_DATA;
+ 	} else {
+@@ -156,7 +153,7 @@ bool rtl92e_init_fw(struct net_device *dev)
+ 
+ 	for (i = starting_state; i <= FW_INIT_STEP2_DATA; i++) {
+ 		if (rst_opt == OPT_SYSTEM_RESET) {
+-			if (pfirmware->blobs[i].size == 0) {
++			if (priv->firmware->blobs[i].size == 0) {
+ 				const char *fw_name[3] = {
+ 					RTL8192E_BOOT_IMG_FW,
+ 					RTL8192E_MAIN_IMG_FW,
+@@ -168,15 +165,15 @@ bool rtl92e_init_fw(struct net_device *dev)
+ 					pad = 128;
+ 
+ 				if (!_rtl92e_fw_prepare(dev,
+-							&pfirmware->blobs[i],
++							&priv->firmware->blobs[i],
+ 							fw_name[i],
+ 							pad))
+ 					goto download_firmware_fail;
+ 			}
+ 		}
+ 
+-		mapped_file = pfirmware->blobs[i].data;
+-		file_length = pfirmware->blobs[i].size;
++		mapped_file = priv->firmware->blobs[i].data;
++		file_length = priv->firmware->blobs[i].size;
+ 
+ 		rt_status = rtl92e_send_cmd_pkt(dev, DESC_PACKET_TYPE_INIT,
+ 						mapped_file, file_length);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 671fe547639b..94e8f0706ed4 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -907,8 +907,8 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+ 
+ 	priv->card_type = PCI;
+ 
+-	priv->pFirmware = vzalloc(sizeof(struct rt_firmware));
+-	if (!priv->pFirmware)
++	priv->firmware = vzalloc(sizeof(*priv->firmware));
++	if (!priv->firmware)
+ 		netdev_err(dev,
+ 			   "rtl8192e: Unable to allocate space for firmware\n");
+ 
+@@ -2409,8 +2409,8 @@ static void _rtl92e_pci_disconnect(struct pci_dev *pdev)
+ 		priv->polling_timer_on = 0;
+ 		_rtl92e_down(dev, true);
+ 		rtl92e_dm_deinit(dev);
+-		vfree(priv->pFirmware);
+-		priv->pFirmware = NULL;
++		vfree(priv->firmware);
++		priv->firmware = NULL;
+ 		_rtl92e_free_rx_ring(dev);
+ 		for (i = 0; i < MAX_TX_QUEUE_COUNT; i++)
+ 			_rtl92e_free_tx_ring(dev, i);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 093887bcd463..dba789f0c9e6 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -343,7 +343,7 @@ struct r8192_priv {
+ 
+ 	enum acm_method AcmMethod;
+ 
+-	struct rt_firmware			*pFirmware;
++	struct rt_firmware			*firmware;
+ 	enum rtl819x_loopback LoopbackMode;
+ 
+ 	struct timer_list			watch_dog_timer;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+
