@@ -2,140 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FE55BD601
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF245BD603
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiISVAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S229917AbiISVAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 17:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiISVAK (ORCPT
+        with ESMTP id S229866AbiISVAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:00:10 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EB63AB09;
-        Mon, 19 Sep 2022 14:00:08 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id c6so660113qvn.6;
-        Mon, 19 Sep 2022 14:00:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=9mdmrFgEg5jnYr/4Ig+o/fAymm12WeUIHo2kO/DiSd0=;
-        b=yrHWwfy3RNaJNYUH7X8T1l3Z+6cFgbhz8SZZ9VNwc/9d3SUCAECdpRcMjmkj0RajvP
-         QtpDTAJFcoCqeFwr5W7lKiahqM+Kb6RHGh2A0d7pI4ZLzR66drCwae59UNA1LfnMoAPT
-         JYx/dMduzxt+zj4O5D+Si7s6GwVsu/5Yt//uQ6k+EV2uuMUoxJm19nzfNrcxjgVsIaWC
-         HqpplZb2ggWOSUOuXmaiTV107+3PnHwkWT9blj1d78Z73ST1yFjD0wUY/K9oiW+aPFbe
-         uhxX9BSCwL1KAyeH8B1qbdg5ZG8y8JRwNMNe9pOZPNd3Qz+uzFOjJTxysQjy66UCtkBk
-         EpyA==
-X-Gm-Message-State: ACrzQf0AX9D/TJQ9DyJ/PwRix/o7ETLVM/yXzV8yTz3faPs1cRI613+D
-        EWW6siAdEtQ3vYQt0l4AOyA=
-X-Google-Smtp-Source: AMsMyM7DGMx5PnIoDTJ28SK1r5efErX/SDEwEhDCz0aR7TT2M/c59tQLI+pDt0hF/4zN2zoJSSdcyA==
-X-Received: by 2002:a05:6214:400c:b0:4ac:8066:991d with SMTP id kd12-20020a056214400c00b004ac8066991dmr16039924qvb.112.1663621207446;
-        Mon, 19 Sep 2022 14:00:07 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::148f])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05620a44cf00b006bc56c063fcsm14344790qkp.62.2022.09.19.14.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 14:00:07 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 16:00:05 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, bpf@vger.kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v5 3/4] bpf: Add libbpf logic for user-space ring buffer
-Message-ID: <YyjYVUetY0OL/9sX@maniforge.dhcp.thefacebook.com>
-References: <20220902234317.2518808-1-void@manifault.com>
- <20220902234317.2518808-4-void@manifault.com>
- <CAEf4Bzbz_7eVSOY0iGp0YkADx80TgZw8cV6NvSm6V1EF=xKo4A@mail.gmail.com>
- <YyjPcSoBWYtjYIVj@maniforge.dhcp.thefacebook.com>
+        Mon, 19 Sep 2022 17:00:18 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3757B4BA5D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:00:12 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A2A5C3F5CC;
+        Mon, 19 Sep 2022 23:00:10 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 23:00:08 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] Add Qcom PM6125 PMIC, and use in Sony Xperia
+ Seine PDX201
+Message-ID: <20220919210008.5i5e74bl5gxxfbnh@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220919204826.215845-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyjPcSoBWYtjYIVj@maniforge.dhcp.thefacebook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220919204826.215845-1-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:22:09PM -0500, David Vernet wrote:
-
-[...]
-
-> > > +       timeout_ns = timeout_ms * ns_per_ms;
-> > > +       do {
-> > > +               __u64 ns_remaining = timeout_ns - ns_elapsed;
-> > > +               int cnt, ms_remaining;
-> > > +               void *sample;
-> > > +               struct timespec curr;
-> > > +
-> > > +               sample = user_ring_buffer__reserve(rb, size);
-> > > +               if (sample)
-> > > +                       return sample;
-> > > +               else if (errno != ENOSPC)
-> > > +                       return NULL;
-> > > +
-> > > +               ms_remaining = timeout_ms == -1 ? -1 : ns_remaining / ns_per_ms;
-> > 
-> > ok, so you've special-cased timeout_ms == -1 but still didn't do
-> > max(0, ns_remaining). Can you prove that ns_elapsed will never be
-> > bigger than timeout_ns due to various delays in waking up this thread?
-> > If not, let's please have max(0) otherwise we can accidentally
-> > epoll_wait(-1).
+On 2022-09-19 22:48:21, Marijn Suijten wrote:
+> This series adds initial support for the PM6125 PMIC, and its power key
+> handling and thermal monitoring capabilities are configured for Sony's
+> PDX201 (Xperia 10II).
 > 
-> Yes you're right, this was an oversight. Thanks for catching this!
+> One patch for pm660 is included to fix a node address mismatch with its
+> reg field.
+> 
+> Changes since v2:
+> - Rebased on v6.0-rc6 to drop dependent DT patches;
+> - Dropped iio patch which has already been picked into Jonathan's tree;
+> - Added qcom,pm6125 compatible in new yaml-ified SPMI-PMIC dt-bindings.
 
-Wait, actually, this can't happen because of the while check at the end of
-the loop:
+And
 
-while (ns_elapsed <= timeout_ns)
+    - Renamed `pm6125_gpio: gpios@c000` node to `gpio`;
 
-So I don't think the max is necessary to prevent underflowing, but I do
-think we need to have one more attempt to invoke
-user_ring_buffer__reserve() at the end of the function to account for
-wakeup delays after epoll_wait() returns. Otherwise, we might think we've
-timed out when there's actually a sample left in the buffer. I also still
-think your suggestion below for cleaning up makes sense, so I'll still add
-it in v6, but I think I can leave off the max() call.
+of course, as requested by Krzysztof.
+
+- Marijn
 
 > 
-> > > +               /* The kernel guarantees at least one event notification
-> > > +                * delivery whenever at least one sample is drained from the
-> > > +                * ring buffer in an invocation to bpf_ringbuf_drain(). Other
-> > > +                * additional events may be delivered at any time, but only one
-> > > +                * event is guaranteed per bpf_ringbuf_drain() invocation,
-> > > +                * provided that a sample is drained, and the BPF program did
-> > > +                * not pass BPF_RB_NO_WAKEUP to bpf_ringbuf_drain().
-> > > +                */
-> > > +               cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, ms_remaining);
-> > > +               if (cnt < 0)
-> > > +                       return NULL;
-> > > +
-> > > +               if (timeout_ms == -1)
-> > > +                       continue;
-> > > +
-> > > +               err = clock_gettime(CLOCK_MONOTONIC, &curr);
-> > > +               if (err)
-> > > +                       return NULL;
-> > > +
-> > > +               ns_elapsed = ns_elapsed_timespec(&start, &curr);
-> > 
-> > nit: if you move re-calculation of ms_remaining and ns_remaining to
-> > here, I think overall loop logic will be even more straightforwad. You
-> > can initialize ms_remaining to -1 if timeout_ms < 0 and never
-> > recalculate it, right? Note that you can also do ns_elapsed conversion
-> > to ms right here and then keep everything else in ms (so no need for
-> > timeout_ns, ns_remaining, etc).
+> v2: https://lore.kernel.org/linux-arm-msm/20220805135729.1037079-1-marijn.suijten@somainline.org/T/#u
 > 
-> Sounds good, let me give this a shot in v6.
+> Changes since v1:
+> - Dropped both pinctrl patches that have already been applied;
+> - Add -us suffix to qcom,hw-settle-time properties on ADC TM5 nodes
+>   (this suffix is not present on regular ADC5/VADC nodes);
+> - Add -state suffix to pm6125_gpio pinctrl nodes;
+> - Use PMIC_GPIO_FUNC_NORMAL instead of the string-literal "normal";
+> - Removed #address-cells and #size-cells from empty pmic@1 node;
+> - Removed ADC5_AMUX_THM3 / ADC5_GPIO2_100K_PU channels from the ADC5
+>   patch, these are unused on my board and hence untested.
 > 
-> Thanks for another detailed review!
+> v1: https://lore.kernel.org/phone-devel/20220511220613.1015472-1-marijn.suijten@somainline.org/T/#u
+> 
+> Marijn Suijten (5):
+>   dt-bindings: mfd: qcom-spmi-pmic: Add pm6125 compatible
+>   arm64: dts: qcom: pm660: Use unique ADC5_VCOIN address in node name
+>   arm64: dts: qcom: Add PM6125 PMIC
+>   arm64: dts: qcom: sm6125-seine: Include PM6125 and configure PON
+>   arm64: dts: qcom: sm6125-seine: Configure additional trinket
+>     thermistors
+> 
+>  .../bindings/mfd/qcom,spmi-pmic.yaml          |   1 +
+>  arch/arm64/boot/dts/qcom/pm6125.dtsi          | 154 +++++++++++++++++
+>  arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+>  .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 162 +++++++++++++++++-
+>  4 files changed, 317 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/pm6125.dtsi
+> 
+> --
+> 2.37.3
+> 
