@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CDE5BCE5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE595BCE62
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiISOTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S229737AbiISOUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiISOTm (ORCPT
+        with ESMTP id S229645AbiISOUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:19:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD632BD8;
-        Mon, 19 Sep 2022 07:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663597181; x=1695133181;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=+1jJkKo3oDnZITK1ZKuYSzyR0/mdILKfueu7BEmDvLI=;
-  b=bLTCKVOqxIa7bgTn+erQiB2zVwQq0Q/5liC7Z7YFJAAvw+QdVz2RzxPB
-   /TnOlCaWDEJzZXiby8+N0lR2SLR6wNcYsNZk60YDXoWNyQSWXv71WE4yR
-   Db8K+LUiENhMcOAmm6tZrQKVUkNl7TznUdgfCorhiBCdGbUd5oqPgLO7A
-   9I2JTkK4/wpLaeZF5woxgLSt2JPU62WbnNYYHYeCW+rXDW0RDxT/N7wsq
-   Io4vbISQevzwxK5H6KZ0SKJSiyYgVhpEbtCa8wU4VAAFixU0pKkdPnI/p
-   CMRsJxwOzHs3Lp+jc2U2xO4hcWpCGtmpW42WvgA0UB2eAbGYQwq23WjIS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300230010"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="300230010"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 07:19:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="707582398"
-Received: from iswiersz-mobl1.ger.corp.intel.com ([10.252.33.172])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 07:19:37 -0700
-Date:   Mon, 19 Sep 2022 17:19:35 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Lennert Buytenhek <buytenh@wantstofly.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-In-Reply-To: <YyhyvazTBBmMSnXk@smile.fi.intel.com>
-Message-ID: <d5bc5b97-25db-d70-17dc-aab49f8fbc77@linux.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org> <YyGoZLTFhYQvlf+P@smile.fi.intel.com> <YyG2tDdq9PWTlaBQ@wantstofly.org> <YyHR4o5bOnODZzZ9@smile.fi.intel.com> <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com> <YyRiPMa26qDptj3L@wantstofly.org>
- <YyhyvazTBBmMSnXk@smile.fi.intel.com>
+        Mon, 19 Sep 2022 10:20:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6F213FB0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:20:37 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6965766019EE;
+        Mon, 19 Sep 2022 15:20:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663597236;
+        bh=zJDw7len3NGEkOF3/FseuWbZ3frYleqkiO3IoRDifyI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fkN0UoM4m/diw/YQMalwhdGPC0zU5COVJTISdis76ZDSdEFrMnqY937cKHUKckZ8T
+         7EH5laJCWNf7FA76lpKUnrIoQMTO/La94Vht3RCih9lLqJo2yJYQ+qYv9xEqtx5mD8
+         hHnl930qhtMPiYnjOVWvjcUbjUJKDdD5baUP0dCheeggCa+00XmsPIS+YmkOWigHl/
+         wkHpbe4m2MA/W+laINZB0ULUPH7UuFESTTFBIbA83ITgE48wBW8iG1lzsqaKOQOWQe
+         bkcWU3gGwipbFZ1MMuV1EZ+UBvell74zBsQInFNayr8bsVzGTb4o5fdDSB7o8CTiSL
+         TOMbaAZhS32bw==
+Message-ID: <b412f7dd-8e12-3eb9-6e0d-5db230bd3de1@collabora.com>
+Date:   Mon, 19 Sep 2022 16:20:32 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1542528522-1663597179=:1603"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 2/6] iommu/mediatek: Use component_match_add
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com, anan.sun@mediatek.com,
+        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220919092405.8256-1-yong.wu@mediatek.com>
+ <20220919092405.8256-3-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919092405.8256-3-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1542528522-1663597179=:1603
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 19 Sep 2022, Andy Shevchenko wrote:
-
-> On Fri, Sep 16, 2022 at 02:47:08PM +0300, Lennert Buytenhek wrote:
-> > On Thu, Sep 15, 2022 at 07:27:45PM +0300, Ilpo Järvinen wrote:
+Il 19/09/22 11:24, Yong Wu ha scritto:
+> In order to simplify the error patch(avoid call of_node_put), Use
+> component_match_add instead component_match_add_release since we are only
+> interested in the "device" here. Then we could always call of_node_put in
+> normal path.
 > 
-> ...
+> Strictly this is not a fixes patch, but it is a prepare for adding the
+> error path, thus I add a Fixes tag too.
 > 
-> > Thanks for the fix!
-> > 
-> > > [...] I'm far from sure if it's the 
-> > > best fix though as I don't fully understand what causes the faults during 
-> > > the THRE tests because the port->irq is disabled by the THRE test block.
-> > 
-> > If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-> > address/data registers.  Disabling the IRQ at the interrupt controller
-> > won't stop the UART from performing a DMA write to the address programmed
-> > in its MSI address register (zero) when it wants to signal an interrupt.
-> > 
-> > (These UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-> > capability, so there is no way to mask the interrupt at the source PCI
-> > function level, except disabling the MSI capability entirely, but that
-> > would cause it to fall back to INTx# assertion, and the PCI specification
-> > prohibits disabling the MSI capability as a way to mask a function's
-> > interrupt service request.)
-> 
-> This sounds to me like a good part to be injected into commit message of
-> the proposed fix.
-
-I added my own wording already but I could adds of Lennert's far superior 
-descriptions verbatim if he is OK with that?
+> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
+> Suggested-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
 
--- 
- i.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
---8323329-1542528522-1663597179=:1603--
+
