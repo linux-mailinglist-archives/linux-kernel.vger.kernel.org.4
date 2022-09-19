@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3553A5BD7F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F335BD806
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiISXM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S229725AbiISXRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiISXMk (ORCPT
+        with ESMTP id S229577AbiISXRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:12:40 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2254B48B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:12:20 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MWgS30pcdz9sxL;
-        Mon, 19 Sep 2022 23:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1663629139; bh=DkQmle7xAKgqaESS7YDG2RtCoM4nsxWLLzIMz/A+uxY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EZolbE5VRNlZbaerDP24iNRkHSP4jyVQn5PQNLlgSFBB6KypAch1berozoV2/14bM
-         oiQ7TQj9a8ELXbMs4cxY2fVvv+xojPZ+xeQWm7FA3kAuzH1WUCQto4zaR/uvplDFrp
-         wP3ZRzyRAXxgKd0wCwC3nbZBrnlBJ0pChwyy1peU=
-X-Riseup-User-ID: 606E763E2668B4D71697192CEAF374585F765B2ECD3DCA0E71DB8D89095DAB43
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4MWgRy2wXnz1yPb;
-        Mon, 19 Sep 2022 23:12:14 +0000 (UTC)
-Message-ID: <cd90693c-7324-5a74-9a5b-794032b9717f@riseup.net>
-Date:   Mon, 19 Sep 2022 20:12:12 -0300
+        Mon, 19 Sep 2022 19:17:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B7E4B0F6;
+        Mon, 19 Sep 2022 16:17:31 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JNG8u0030755;
+        Mon, 19 Sep 2022 23:17:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=2JVuoeWw7OcLm2lHCaO6GKBrEbtYGJOJcDuzFLNOHOI=;
+ b=JEq9OzQybJYVo8WsUDh4f5LJRy68liFQUwO4O/bodsVJYqf+HGnj8Oi8tukT4q+N9RJ7
+ 7XY2pz3X4htvVagQV801v3J9gyZrH8DwWZGOiH2ksXveAUZa5qLqggNNaR1FmrFGlfB/
+ vxTQHRE/BGqZH7Mtn8WSzxu0bRrurhgo7TzCGynh/TcJPRXy2SR4GqszNpHJOJfj0lIH
+ kEzVNbEU6/LKet26m59daaINh2bTWHXZRDknSUOFmWeksIM4c/VOBDFsqHNevgNQwEWf
+ Y+a+n65KxCjaDAvEnHfutO5XNYP8jmVo2fE4PMLd23jnMkj1VTTKhzgw1tVK7bfzg42K uw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jpx508gm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 23:17:27 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JNCQvp031338
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 23:12:26 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 19 Sep 2022 16:12:26 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Do not clear ep delayed stop flag during ep disable
+Date:   Mon, 19 Sep 2022 16:12:13 -0700
+Message-ID: <20220919231213.21364-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/amd/display: remove redundant
- CalculateRemoteSurfaceFlipDelay's
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Nevenko.Stupar@amd.com, Pavle.Kotarac@amd.com, aric.cyr@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220919172720.3496405-1-trix@redhat.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220919172720.3496405-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TKZyqinj0kr9_UuYx6MTSuAk9_7OJHub
+X-Proofpoint-GUID: TKZyqinj0kr9_UuYx6MTSuAk9_7OJHub
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 mlxlogscore=889 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190155
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,167 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom
+DWC3_EP_DELAYED_STOP is utilized to defer issuing the end transfer command
+until the subsequent SETUP stage, in order to avoid end transfer timeouts.
+During cable disconnect scenarios, __dwc3_gadget_ep_disable() is
+responsible for ensuring endpoints have no active transfers pending.  Since
+dwc3_remove_request() can now exit early if the EP delayed stop is set,
+avoid clearing all DEP flags, otherwise the transition back into the SETUP
+stage won't issue an endxfer command.
 
-On 9/19/22 14:27, Tom Rix wrote:
-> There are several copies of CalculateRemoteSurfaceFlipDelay.
-> Reduce to one instance.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Fixes: 2b2da6574e77 ("usb: dwc3: Avoid unmapping USB requests if endxfer is not complete")
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
-
-Just a minor comment below.
-
-> ---
->  .../dc/dml/dcn20/display_mode_vba_20.c        |  4 +-
->  .../dc/dml/dcn20/display_mode_vba_20v2.c      | 40 +------------------
->  .../dc/dml/dcn21/display_mode_vba_21.c        | 40 +------------------
->  3 files changed, 4 insertions(+), 80 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> index 4ca080950924..8e5d58336bc5 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> @@ -158,7 +158,7 @@ double CalculateTWait(
->  		double DRAMClockChangeLatency,
->  		double UrgentLatency,
->  		double SREnterPlusExitTime);
-> -static double CalculateRemoteSurfaceFlipDelay(
-> +double CalculateRemoteSurfaceFlipDelay(
->  		struct display_mode_lib *mode_lib,
->  		double VRatio,
->  		double SwathWidth,
-> @@ -2909,7 +2909,7 @@ double CalculateTWait(
->  	}
->  }
->  
-> -static double CalculateRemoteSurfaceFlipDelay(
-> +double CalculateRemoteSurfaceFlipDelay(
-
-I guess it would be more clear if this function was placed on the
-display_mode_vba20.h and named dml20_CalculateRemoteSurfaceFlipDelay.
-Then, it would be clearer that this function is shared over the DCN20s.
-
-Best Regards,
-- Maíra Canal
-
->  		struct display_mode_lib *mode_lib,
->  		double VRatio,
->  		double SwathWidth,
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> index 2b4dcae4e432..e9ebc81adc71 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> @@ -182,7 +182,7 @@ double CalculateTWait(
->  		double DRAMClockChangeLatency,
->  		double UrgentLatency,
->  		double SREnterPlusExitTime);
-> -static double CalculateRemoteSurfaceFlipDelay(
-> +double CalculateRemoteSurfaceFlipDelay(
->  		struct display_mode_lib *mode_lib,
->  		double VRatio,
->  		double SwathWidth,
-> @@ -2967,44 +2967,6 @@ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
->  	}
->  }
->  
-> -static double CalculateRemoteSurfaceFlipDelay(
-> -		struct display_mode_lib *mode_lib,
-> -		double VRatio,
-> -		double SwathWidth,
-> -		double Bpp,
-> -		double LineTime,
-> -		double XFCTSlvVupdateOffset,
-> -		double XFCTSlvVupdateWidth,
-> -		double XFCTSlvVreadyOffset,
-> -		double XFCXBUFLatencyTolerance,
-> -		double XFCFillBWOverhead,
-> -		double XFCSlvChunkSize,
-> -		double XFCBusTransportTime,
-> -		double TCalc,
-> -		double TWait,
-> -		double *SrcActiveDrainRate,
-> -		double *TInitXFill,
-> -		double *TslvChk)
-> -{
-> -	double TSlvSetup, AvgfillRate, result;
-> -
-> -	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
-> -	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
-> -	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
-> -	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
-> -	*TslvChk = XFCSlvChunkSize / AvgfillRate;
-> -	dml_print(
-> -			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
-> -			*SrcActiveDrainRate);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
-> -	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
-> -	return result;
-> -}
-> -
->  static void CalculateActiveRowBandwidth(
->  		bool GPUVMEnable,
->  		enum source_format_class SourcePixelFormat,
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> index a3ef3638d979..d94aaf899f9b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> @@ -210,7 +210,7 @@ double CalculateTWait(
->  		double DRAMClockChangeLatency,
->  		double UrgentLatency,
->  		double SREnterPlusExitTime);
-> -static double CalculateRemoteSurfaceFlipDelay(
-> +double CalculateRemoteSurfaceFlipDelay(
->  		struct display_mode_lib *mode_lib,
->  		double VRatio,
->  		double SwathWidth,
-> @@ -2980,44 +2980,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
->  	}
->  }
->  
-> -static double CalculateRemoteSurfaceFlipDelay(
-> -		struct display_mode_lib *mode_lib,
-> -		double VRatio,
-> -		double SwathWidth,
-> -		double Bpp,
-> -		double LineTime,
-> -		double XFCTSlvVupdateOffset,
-> -		double XFCTSlvVupdateWidth,
-> -		double XFCTSlvVreadyOffset,
-> -		double XFCXBUFLatencyTolerance,
-> -		double XFCFillBWOverhead,
-> -		double XFCSlvChunkSize,
-> -		double XFCBusTransportTime,
-> -		double TCalc,
-> -		double TWait,
-> -		double *SrcActiveDrainRate,
-> -		double *TInitXFill,
-> -		double *TslvChk)
-> -{
-> -	double TSlvSetup, AvgfillRate, result;
-> -
-> -	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
-> -	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
-> -	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
-> -	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
-> -	*TslvChk = XFCSlvChunkSize / AvgfillRate;
-> -	dml_print(
-> -			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
-> -			*SrcActiveDrainRate);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
-> -	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
-> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
-> -	return result;
-> -}
-> -
->  static void CalculateActiveRowBandwidth(
->  		bool GPUVMEnable,
->  		enum source_format_class SourcePixelFormat,
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index b75e1b8b3f05..3e2baf22824b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1011,6 +1011,7 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+ 	u32			reg;
++	u32			mask;
+ 
+ 	trace_dwc3_gadget_ep_disable(dep);
+ 
+@@ -1032,7 +1033,15 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 
+ 	dep->stream_capable = false;
+ 	dep->type = 0;
+-	dep->flags &= DWC3_EP_TXFIFO_RESIZED;
++	mask = DWC3_EP_TXFIFO_RESIZED;
++	/*
++	 * dwc3_remove_requests() can exit early if DWC3 EP delayed stop is
++	 * set.  Do not clear DEP flags, so that the end transfer command will
++	 * be reattempted during the next SETUP stage.
++	 */
++	if (dep->flags & DWC3_EP_DELAY_STOP)
++		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
++	dep->flags &= mask;
+ 
+ 	return 0;
+ }
