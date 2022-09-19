@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267FB5BD4F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A565BD4F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiISSwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S229617AbiISSyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiISSwv (ORCPT
+        with ESMTP id S229509AbiISSyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:52:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D89474F9;
-        Mon, 19 Sep 2022 11:52:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C97DB81C77;
-        Mon, 19 Sep 2022 18:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA087C433C1;
-        Mon, 19 Sep 2022 18:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663613567;
-        bh=JOyL5K3R0pkuI91FVBSM3RBsiKf6umeMWzuCrM4BNNE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YpsOZXp3+O2C6CRnrV2Dr6ouNYoswa+XWf5iRj5pfMcFNNAJ9Y0mYvxEjoR6nDsS4
-         xCO5PzECHQbDpzHupaxYldMVW7xoFFAVAflWg/4dBFnGsbwFGf3q3hZoJYWqeC8PKt
-         ekyxTC3XeRSmCt+xzq7CcraaKHRrg80YfIkF3MA1ytx9dd5nSzUkFzVGokmrCkn0BR
-         JLWluZ75bKidKHn2Fy1mith1Tq6iWRojI163rVC3wC3/p0Pq2Jza/sulWM83CjTB5Q
-         poJy9DVu5ItFNFddqDwxjtC+eX355hc3Eq1fQzabwhAUpuab8pnTzol6YKdjIX/jJ+
-         KV303wAhh3itQ==
-Received: by mail-ed1-f47.google.com with SMTP id z2so598184edi.1;
-        Mon, 19 Sep 2022 11:52:47 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2gx0EVdxOYCI8wTB/dJgmiLeeYUrDW8jopksDWu7nlLkX9npCc
-        F8e6jAb/rBmOCAcf/oWgucykKNsSPWMJK2/IwwA=
-X-Google-Smtp-Source: AMsMyM7PYN7AvN4VHg32FZ8g+Moe6Pj9E4dz1bfXEAP85QXTPLOkgA/KWb9H5frB2qNwmM0eewtV68wH7atpbvZoPkg=
-X-Received: by 2002:a05:6402:11d4:b0:452:a97c:cd36 with SMTP id
- j20-20020a05640211d400b00452a97ccd36mr17078119edw.53.1663613566067; Mon, 19
- Sep 2022 11:52:46 -0700 (PDT)
+        Mon, 19 Sep 2022 14:54:31 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A03C1A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:54:28 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1278624b7c4so743103fac.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=w33pPDCD1aAOGDcHMeuqpnuOb/6wJdl4+wJdfUS6lPU=;
+        b=dl5JCIDnAH0WNZPP7AXJKzEkpEjFNrQtVc0zpeo6JqFuO3PcCHm70ZEw4d1E64xR/O
+         EbXrtumHFnU4aIhPLcHp1Uni08OQ8Een8oSNZdK55hwa0eZ3J0mqwZIsLok8EO2N0S86
+         Cu68DbMNIy0sQKkV3uaBK4QLwyHUfamBySiSFHKLaOWsWjUSG1DrMlcgPAouXOJ0nAHZ
+         8pTyICqox+ml2WU/ECUTnwWWawtro9N9Mh4WeEdVCXLsjr6a0bkBsy6QF1xei5T2NfCk
+         ivrjIipNfpWdq6LT6f/b+xCMmL/0JIVjH0XYQaqPfWCofN06rCh7N1oV+o38xsudiwkL
+         F1/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=w33pPDCD1aAOGDcHMeuqpnuOb/6wJdl4+wJdfUS6lPU=;
+        b=jevB4XohiazoCfBSPDmctiPnGBqZDolv1A29WgdgebCqNE7Jl49APUGPBydcqjyhKE
+         YI0nvfu09Jqqs7RkhAzmXZsI+LGNLIc64brwVMoBHpN9bF56q3I3x64cGIlZy0sAXQ7A
+         1ScpW9JQ9SDUAChYl1HMkiSgSDynxhTMnyyydxNq+p69oxwulB2S8m9ca9+i2uKuLpAZ
+         mpKbLGqZc6RhV/mu2cSMaMmrJ7bLavmFqE6ZoMsfBf1AKduQhvqUw2Gt4NMrrDgIKduB
+         QNpiBRh6yNv6CEChg308FdkN5qq9ihIddxFRhGod+QnX4vm7N0VgApBqAXU/JxTdIYJJ
+         FPsA==
+X-Gm-Message-State: ACgBeo0LReo25cfu3dP0tlQaSobMdt4EX+3EFYCwx1fHV0dSUwIzQViE
+        fChox3a9Wbtz2TQpjIBAoZ/VnCz2uzDTp/nxVQM=
+X-Google-Smtp-Source: AA6agR7RKrsWP0o80KqRPTxHM43wTN2OPHeWqW/uQRVcW/daJkFUt4Prn2gsm2qVzCxMFTDI1l3srE64RLAChO7YH/8=
+X-Received: by 2002:a05:6870:96a9:b0:126:dbc4:76db with SMTP id
+ o41-20020a05687096a900b00126dbc476dbmr16103967oaq.174.1663613667523; Mon, 19
+ Sep 2022 11:54:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220831032915.87297-1-zhounan@nfschina.com>
-In-Reply-To: <20220831032915.87297-1-zhounan@nfschina.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 19 Sep 2022 11:52:34 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW64vLfGUGOPjnQx-D7=qh7yFL=yvfWUTPn7teCegLeZaQ@mail.gmail.com>
-Message-ID: <CAPhsuW64vLfGUGOPjnQx-D7=qh7yFL=yvfWUTPn7teCegLeZaQ@mail.gmail.com>
-Subject: Re: [PATCH] dm: Fix spelling mistake in comments
-To:     zhoun <zhounan@nfschina.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:6808:209d:0:0:0:0 with HTTP; Mon, 19 Sep 2022 11:54:27
+ -0700 (PDT)
+Reply-To: pastordavidagentdhl311@gmail.com
+From:   David Ekenna <janevivian878@gmail.com>
+Date:   Mon, 19 Sep 2022 18:54:27 +0000
+Message-ID: <CAGd23ZoEJAsq+QTgvFFn9D_5psy1-a_VRBPmsS71bV8hCb4vkQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [janevivian878[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [pastordavidagentdhl311[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [janevivian878[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 8:30 PM zhoun <zhounan@nfschina.com> wrote:
->
-> From: zhounan <zhounan@nfschina.com>
->
-> Fix spelling of dones't in comments.
->
-> Signed-off-by: zhounan <zhounan@nfschina.com>
+Hello Friend , your funds are here , reply now for more details.
 
-Please use your full name in the commit log. Also, please update the commit
-message with more specific information, like:
-
-md: Fix spelling mistake in comments of r5l_log
-
-Fix spelling of "dones't" in comments.
-
-Thanks,
-Song
-
-> ---
->  drivers/md/raid5-cache.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-> index f4e1cc1ece43..683fd4adde17 100644
-> --- a/drivers/md/raid5-cache.c
-> +++ b/drivers/md/raid5-cache.c
-> @@ -125,7 +125,7 @@ struct r5l_log {
->                                          * reclaimed.  if it's 0, reclaim spaces
->                                          * used by io_units which are in
->                                          * IO_UNIT_STRIPE_END state (eg, reclaim
-> -                                        * dones't wait for specific io_unit
-> +                                        * doesn't wait for specific io_unit
->                                          * switching to IO_UNIT_STRIPE_END
->                                          * state) */
->         wait_queue_head_t iounit_wait;
-> --
-> 2.27.0
->
+Thanks.
