@@ -2,147 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4985BD7C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35C35BD7C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiISXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S229945AbiISXCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiISXCB (ORCPT
+        with ESMTP id S229772AbiISXCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:02:01 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996CE43E50
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:01:59 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id c11so609716qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date;
-        bh=xixo44lTcERHPiUV64xTDRqasHw9DlQyVVg8mpJU9es=;
-        b=AgcVBHh0Hw9LMN3EKAyNefT6Y8I8kX0c8Hih+eW5gYpAM+bvvfQMe4A3kV5CH89Fzq
-         0gQQDRzPET7tFaAMhsDE9ZzQA5NhHbKpj7bed/yRGTBX0hETdK9Gf9pHdAZknnFA9yRj
-         SHnp0B0Us1AUQUod4cBI4+D316FWpO/dKexSTqaQPCZiiEpYhLekHLbITzKvDzNJl4Bx
-         lo1nvff+zjopDK3RHPeWBq/xC+Q/nZIt05shBR2esadkg7leu8eUMq695diDosIWpat5
-         jHEP4W3/hXbE0dfpXOGP/EYHzY8r18TZS+El7G3hVR3IxIxIjOC8B0XkVV9Qvt/Gwyy0
-         52DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xixo44lTcERHPiUV64xTDRqasHw9DlQyVVg8mpJU9es=;
-        b=DAkHhUpIS8nmGLRk0hlg21ARVUCQUaDP1nht4QUiKyA01//pneh42lf6JfCPZ9bcOd
-         qMu7fF2EhMnOpqfcGHSvNUOKSw3wE7TV6YkOF6k9ipprOuC74ae7k36Z/FnY8r/mc5ov
-         bP8LcvoY3ptTLUTkI8mBjPn18DF8RtuoMZpcrQEQGfL6qj3rTB12wcjzKslJ/HWa4+ch
-         IgnF/ItWnWBicAqKW3n5YW5kn7Ml/igJfU9XvYtofRuq4m6L07cdq+oOovWy6EnYtCk1
-         WtoXt73g2ytGk7pF7ugGwBLi7a4j9uOSClX3Qr7q1wZK6EipsSJSE9c6LvJCiUTKmTmI
-         yv9A==
-X-Gm-Message-State: ACrzQf3yU0RX2xfbz3KXNrXY7VFIzWGSHc0G1sOfcqaR6cGK4XQ8hF8d
-        /T8xWY9UJSRgxsuLSR6BjIBX2g==
-X-Google-Smtp-Source: AMsMyM4ouUmlUEH1L7eYlmBEN7b4vAmMYcNn5lPDnA9AHYvbCCciVxwIStA540FoBADTcmr54usBmg==
-X-Received: by 2002:a05:622a:1015:b0:35c:e915:3b61 with SMTP id d21-20020a05622a101500b0035ce9153b61mr6086559qte.572.1663628518654;
-        Mon, 19 Sep 2022 16:01:58 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id cc19-20020a05622a411300b0031e9ab4e4cesm8099175qtb.26.2022.09.19.16.01.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 16:01:57 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 16:01:39 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Keith Busch <kbusch@kernel.org>
-cc:     Hugh Dickins <hughd@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
-        Liu Song <liusong@linux.alibaba.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
-In-Reply-To: <YyjdiKC0YYUkI+AI@kbusch-mbp>
-Message-ID: <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com>
-References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com> <YyjdiKC0YYUkI+AI@kbusch-mbp>
+        Mon, 19 Sep 2022 19:02:30 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0684D817
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:02:28 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MWgDg5B7ZzDqyC;
+        Mon, 19 Sep 2022 23:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1663628548; bh=Ng+B7Gs072RWl3tC9QXLgNF+qBt0++YpuTftF9HTbYI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F6tvqREWSqmt2Z8/1FXzRNugc3GRzfs2/HRxrNARq0mKmfmzbhqTkCO3umkQth10L
+         RMyVx5/p1pdcSp9YpaAD0MLGWF7kXWTwYRQA5d+gz0/3uixZVYSI0KRyJxr6phliqz
+         lxvNaRNJHG/eGoiU1DKgq6rFuuBCfOP+y8964T7c=
+X-Riseup-User-ID: 6B0B42472D53A10BC3B362BD7EDEAD4DA729B8CA4F727E7E52A2328E8F50C1E3
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MWgDX55xCz1y9N;
+        Mon, 19 Sep 2022 23:02:20 +0000 (UTC)
+Message-ID: <e2d2c79a-42f0-f445-f206-100568c236cf@riseup.net>
+Date:   Mon, 19 Sep 2022 20:02:18 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drm/amd/display: remove redundant CalculateTWait's
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        aric.cyr@amd.com, Nevenko.Stupar@amd.com, Pavle.Kotarac@amd.com,
+        aurabindo.pillai@amd.com, Bing.Guo@amd.com, hamza.mahfooz@amd.com,
+        nicholas.kazlauskas@amd.com, agustin.gutierrez@amd.com,
+        nathan@kernel.org, mdaenzer@redhat.com, Charlene.Liu@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220919023709.3447570-1-trix@redhat.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220919023709.3447570-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022, Keith Busch wrote:
-> On Sun, Sep 18, 2022 at 02:10:51PM -0700, Hugh Dickins wrote:
-> > I have almost no grasp of all the possible sbitmap races, and their
-> > consequences: but using the same !waitqueue_active() check as used
-> > elsewhere, fixes the lockup and shows no adverse consequence for me.
+Hi Tom,
+
+On 9/18/22 23:37, Tom Rix wrote:
+> There are several copies of CalculateTwait.
+> Reduce to one instance and change local variable name to match common usage.
 > 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+
+Although, it would be nice to put this function on the
+display_mode_vba.h file, as all DCNs use this function.
+
+Best Regards,
+- Maíra Canal
+
+> ---
+>  .../dc/dml/dcn20/display_mode_vba_20.c        | 16 +++++++-------
+>  .../dc/dml/dcn20/display_mode_vba_20v2.c      | 21 ++-----------------
+>  .../dc/dml/dcn21/display_mode_vba_21.c        | 19 +----------------
+>  .../dc/dml/dcn30/display_mode_vba_30.c        | 18 +---------------
+>  .../dc/dml/dcn31/display_mode_vba_31.c        | 13 +-----------
+>  .../dc/dml/dcn314/display_mode_vba_314.c      | 13 +-----------
+>  6 files changed, 14 insertions(+), 86 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> index 6e9d7e2b5243..4ca080950924 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> @@ -153,10 +153,10 @@ static unsigned int CalculateVMAndRowBytes(
+>  		bool *PTEBufferSizeNotExceeded,
+>  		unsigned int *dpte_row_height,
+>  		unsigned int *meta_row_height);
+> -static double CalculateTWait(
+> +double CalculateTWait(
+>  		unsigned int PrefetchMode,
+>  		double DRAMClockChangeLatency,
+> -		double UrgentLatencyPixelDataOnly,
+> +		double UrgentLatency,
+>  		double SREnterPlusExitTime);
+>  static double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+> @@ -2892,20 +2892,20 @@ static void dml20_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  	}
+>  }
 >  
-> > Fixes: 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
-> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > ---
-> > 
-> >  lib/sbitmap.c |    2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > --- a/lib/sbitmap.c
-> > +++ b/lib/sbitmap.c
-> > @@ -620,7 +620,7 @@ static bool __sbq_wake_up(struct sbitmap
-> >  		 * function again to wakeup a new batch on a different 'ws'.
-> >  		 */
-> >  		if (cur == 0)
-> > -			return true;
-> > +			return !waitqueue_active(&ws->wait);
-> 
-> If it's 0, that is supposed to mean another thread is about to make it not zero
-> as well as increment the wakestate index. That should be happening after patch
-> 48c033314f37 was included, at least.
-
-I believe that the thread about to make wait_cnt not zero (and increment the
-wakestate index) is precisely this interrupted thread: the backtrace shows
-that it had just done its wakeups, so has not yet reached making wait_cnt
-not zero; and I suppose that either its wakeups did not empty the waitqueue
-completely, or another waiter got added as soon as it dropped the spinlock.
-
-> 
-> Prior to 4acb83417cad, the code would also return 'true' if the count was
-> already zero, and this batched code wasn't supposed to behave any different in
-> that condition.
-
-In principle yes, but in practice no.  Prior to 4acb83417cad, the swapping
-load would run okayish for a few minutes, before freezing up mysteriously
-(presumably due to missed wakeups).  The "ish" in "okayish" because the
-system time was abnormally high, and occasionally there was an odd message
-from systemd about killing its journal or something - 4acb83417cad saved
-me from having to investigate that further.
-
-Prior to 4acb83417cad, it never locked up looping on wait_cnt < 0;
-after 4acb83417cad, it would lock up on wait_cnt 0 in a few seconds.
-
-But in writing that, and remembering the abnormal systime, I begin to
-suspect that it might have often been in a tight loop on wait_cnt < 0,
-but the batch accounting sufficiently wrong that it always got rescued
-by an unrelated wakeup (shifting wakestate index), before any lockup
-ever got observed and reported.  Or something like that.
-
-(And I'm trying to avoid making a fool of myself with the arithmetic:
-how quickly would wait_cnt 0 have got decremented to positive before?)
-
-I won't mind Jens deleting that "Fixes: 4acb83417cad" if it's unfair.
-
-> 
-> Anyway, I don't think the waitqueue_active criteria of the current waitstate is
-> correct either. The next waitstate may have waiters too, so we still may need
-> to account for this batch's count in order to wake them.
-
-I cannot usefully comment on that, it's all rather too subtle for me.
-
-But I did wonder if each of those !waitqueue_active()s would be better
-replaced just by "false"s: we only get that far into __sbq_wake_up() if
-waitqueue_active(), so the !waitqueue_active() case reflects a race:
-a possible race, yes, but a race that wants precise accounting at a
-few imprecise locations?
-
-Hugh
+> -static double CalculateTWait(
+> +double CalculateTWait(
+>  		unsigned int PrefetchMode,
+>  		double DRAMClockChangeLatency,
+> -		double UrgentLatencyPixelDataOnly,
+> +		double UrgentLatency,
+>  		double SREnterPlusExitTime)
+>  {
+>  	if (PrefetchMode == 0) {
+>  		return dml_max(
+> -				DRAMClockChangeLatency + UrgentLatencyPixelDataOnly,
+> -				dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly));
+> +				DRAMClockChangeLatency + UrgentLatency,
+> +				dml_max(SREnterPlusExitTime, UrgentLatency));
+>  	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly);
+> +		return dml_max(SREnterPlusExitTime, UrgentLatency);
+>  	} else {
+> -		return UrgentLatencyPixelDataOnly;
+> +		return UrgentLatency;
+>  	}
+>  }
+>  
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> index b02dda8ce70f..2b4dcae4e432 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> @@ -177,10 +177,10 @@ static unsigned int CalculateVMAndRowBytes(
+>  		bool *PTEBufferSizeNotExceeded,
+>  		unsigned int *dpte_row_height,
+>  		unsigned int *meta_row_height);
+> -static double CalculateTWait(
+> +double CalculateTWait(
+>  		unsigned int PrefetchMode,
+>  		double DRAMClockChangeLatency,
+> -		double UrgentLatencyPixelDataOnly,
+> +		double UrgentLatency,
+>  		double SREnterPlusExitTime);
+>  static double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+> @@ -2967,23 +2967,6 @@ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  	}
+>  }
+>  
+> -static double CalculateTWait(
+> -		unsigned int PrefetchMode,
+> -		double DRAMClockChangeLatency,
+> -		double UrgentLatencyPixelDataOnly,
+> -		double SREnterPlusExitTime)
+> -{
+> -	if (PrefetchMode == 0) {
+> -		return dml_max(
+> -				DRAMClockChangeLatency + UrgentLatencyPixelDataOnly,
+> -				dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly));
+> -	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly);
+> -	} else {
+> -		return UrgentLatencyPixelDataOnly;
+> -	}
+> -}
+> -
+>  static double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> index 6be14f55c78d..a3ef3638d979 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> @@ -205,7 +205,7 @@ static unsigned int CalculateVMAndRowBytes(
+>  		unsigned int *DPDE0BytesFrame,
+>  		unsigned int *MetaPTEBytesFrame);
+>  
+> -static double CalculateTWait(
+> +double CalculateTWait(
+>  		unsigned int PrefetchMode,
+>  		double DRAMClockChangeLatency,
+>  		double UrgentLatency,
+> @@ -2980,23 +2980,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  	}
+>  }
+>  
+> -static double CalculateTWait(
+> -		unsigned int PrefetchMode,
+> -		double DRAMClockChangeLatency,
+> -		double UrgentLatency,
+> -		double SREnterPlusExitTime)
+> -{
+> -	if (PrefetchMode == 0) {
+> -		return dml_max(
+> -				DRAMClockChangeLatency + UrgentLatency,
+> -				dml_max(SREnterPlusExitTime, UrgentLatency));
+> -	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatency);
+> -	} else {
+> -		return UrgentLatency;
+> -	}
+> -}
+> -
+>  static double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> index 229548733177..74f5d9742f59 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> @@ -216,7 +216,7 @@ static unsigned int CalculateVMAndRowBytes(
+>  		unsigned int *PTERequestSize,
+>  		unsigned int *DPDE0BytesFrame,
+>  		unsigned int *MetaPTEBytesFrame);
+> -static double CalculateTWait(
+> +double CalculateTWait(
+>  		unsigned int PrefetchMode,
+>  		double DRAMClockChangeLatency,
+>  		double UrgentLatency,
+> @@ -3191,22 +3191,6 @@ void dml30_CalculateBytePerPixelAnd256BBlockSizes(
+>  	}
+>  }
+>  
+> -static double CalculateTWait(
+> -		unsigned int PrefetchMode,
+> -		double DRAMClockChangeLatency,
+> -		double UrgentLatency,
+> -		double SREnterPlusExitTime)
+> -{
+> -	if (PrefetchMode == 0) {
+> -		return dml_max(DRAMClockChangeLatency + UrgentLatency,
+> -				dml_max(SREnterPlusExitTime, UrgentLatency));
+> -	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatency);
+> -	} else {
+> -		return UrgentLatency;
+> -	}
+> -}
+> -
+>  double dml30_CalculateWriteBackDISPCLK(
+>  		enum source_format_class WritebackPixelFormat,
+>  		double PixelClock,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+> index 58dc4c046cf4..4563342275f1 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+> @@ -230,7 +230,7 @@ static unsigned int CalculateVMAndRowBytes(
+>  		unsigned int *PTERequestSize,
+>  		int *DPDE0BytesFrame,
+>  		int *MetaPTEBytesFrame);
+> -static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+> +double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+>  static void CalculateRowBandwidth(
+>  		bool GPUVMEnable,
+>  		enum source_format_class SourcePixelFormat,
+> @@ -3323,17 +3323,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  			&dummysinglestring);
+>  }
+>  
+> -static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime)
+> -{
+> -	if (PrefetchMode == 0) {
+> -		return dml_max(DRAMClockChangeLatency + UrgentLatency, dml_max(SREnterPlusExitTime, UrgentLatency));
+> -	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatency);
+> -	} else {
+> -		return UrgentLatency;
+> -	}
+> -}
+> -
+>  double dml31_CalculateWriteBackDISPCLK(
+>  		enum source_format_class WritebackPixelFormat,
+>  		double PixelClock,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> index 7024412fe441..89a80eef42f4 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> @@ -244,7 +244,7 @@ static unsigned int CalculateVMAndRowBytes(
+>  		unsigned int *PTERequestSize,
+>  		int *DPDE0BytesFrame,
+>  		int *MetaPTEBytesFrame);
+> -static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+> +double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+>  static void CalculateRowBandwidth(
+>  		bool GPUVMEnable,
+>  		enum source_format_class SourcePixelFormat,
+> @@ -3547,17 +3547,6 @@ static bool CalculateBytePerPixelAnd256BBlockSizes(
+>  	return true;
+>  }
+>  
+> -static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime)
+> -{
+> -	if (PrefetchMode == 0) {
+> -		return dml_max(DRAMClockChangeLatency + UrgentLatency, dml_max(SREnterPlusExitTime, UrgentLatency));
+> -	} else if (PrefetchMode == 1) {
+> -		return dml_max(SREnterPlusExitTime, UrgentLatency);
+> -	} else {
+> -		return UrgentLatency;
+> -	}
+> -}
+> -
+>  double dml314_CalculateWriteBackDISPCLK(
+>  		enum source_format_class WritebackPixelFormat,
+>  		double PixelClock,
