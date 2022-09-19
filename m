@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7855BC29A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 07:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2255BC29C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 07:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiISFtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 01:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S229674AbiISFw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 01:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiISFtU (ORCPT
+        with ESMTP id S229458AbiISFwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 01:49:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B25213F19;
-        Sun, 18 Sep 2022 22:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663566560; x=1695102560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=herPt7lk9DdYodBrqmCQsFedxWRK6VJIeEv7qQ3JqNY=;
-  b=PpTJUjr1S+wUYk5SMKwfz2KjNclHWutsucMkAIj1DbsUE0Y0DjJ6u7Ok
-   qRq4VGTU1RMVjtoNzS7Y7w1SQXYTPzMWSEx0WiHooXAMffMl3MEvl+IUT
-   CWcX+RfXpihO2/Qd3TxkkaKUPo9YUsTuxRoUouXfkCw6x67Sxlh/c/9KF
-   suXfE/LqFZsDH+07kd7BFxipuNuLQ59I+2AJ6/lpdMH5mF1eSc085tuXc
-   pn61VtgittObAu8FnUT/OpCVCTb/6vtunKH7CVYU8Wgqib3bLAZXUvniV
-   zQVET/Yk0c9FeIDvSRiHlB1lXPIqHPDklsIduMxmo+h3nWG280hm8xmV9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="363268278"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="363268278"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 22:49:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="595944988"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Sep 2022 22:49:16 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oa9ee-0001mX-0w;
-        Mon, 19 Sep 2022 05:49:16 +0000
-Date:   Mon, 19 Sep 2022 13:49:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: Re: [PATCH -next 1/3] wbt: don't show valid wbt_lat_usec in sysfs
- while wbt is disabled
-Message-ID: <202209191345.OaqfJF8y-lkp@intel.com>
-References: <20220919014939.175497-2-yukuai1@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919014939.175497-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 01:52:24 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460A913F19
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 22:52:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2BECB580109;
+        Mon, 19 Sep 2022 01:52:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 19 Sep 2022 01:52:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663566739; x=1663570339; bh=lh4UlmlwDy
+        FH09vWCOuLpCQb6N9GcsA+rPlgsVFYYok=; b=a/dN70qFxpEtFlFRN0lX6Pv89X
+        oaVrpfIkSZAD6bOr9PL/2dDm++GXBESbiGv3cx5JYYhfPdWvlla7QRSO7Uw6jOgl
+        udGoqqSs2HY3r7mR0fV+pT46m8rl7qc9xSe+RwHdDsjQZtgh9foDJsslUQUwSnyE
+        VThmqUruREeCKtHdmc3THso1BZNh/wttdCszWhYAQ86sLqAYemrkE+AU9r/13t8n
+        lKaRqsnp9flZ3TSVHPz3b/YFCxwNl9MMx/pVS3U9jjVZIkgKqKgZltzTqQs0VyvF
+        oXNSVpkpdbkxeEd5t6ZtuaoYLV/WPsyf+hhrC5LYg/Q9seBheHO6BRHrgJow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663566739; x=1663570339; bh=lh4UlmlwDyFH09vWCOuLpCQb6N9G
+        csA+rPlgsVFYYok=; b=vmHHkWkCFL/SXvQAw0jlJZXOj3DY15eYb8k4Zz87BJvD
+        gE6lWPMhCUNnbcXn0s7W/Li35ajTadiTgRS9EI0RsF9RmMn7QGhM2SKKkgbr4Jda
+        Uuq6An+/nUH/7Cap6y+zcljEJpUWPEyPtODbTrnp1SQGGQFJuviK45hQka5pWqfh
+        ya+fYjjHic4LhN0szEh7We3SowOZjGm5wqJIUTUYx5f64LGPmqpiSFujGU/teSbV
+        LduK+U4ZbsdIhq4IbyxS8BQ50zm33LYAG+PWoaUXUP9Ymq2+FHD+390zqexlwpBp
+        qHwpb6VtH1hsNPcVHL70awvU0tUi13v2tSCK605gKw==
+X-ME-Sender: <xms:kgMoY6BbvhrqkPjO5V2p0EOiiSU1PMR4iRGaQTsggq3N34IyIIkQVg>
+    <xme:kgMoY0jf1OhhVoYbXaHo2gJMgzVCjpKcyn4AbxHqYdIwahMbo5vJe_KAefXOZVWiD
+    qRc6WPmPf0MKTwaax8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedviedguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:kgMoY9kZ_qB5JQg9RYk019pyduaUBx5xcXQzZedtQ1xsHmQLKDj1ug>
+    <xmx:kgMoY4xjWR7szNAcXWsLXs-V1wEQJl31e38Q53b0XNKVZh6B3jFFVw>
+    <xmx:kgMoY_Tu0qQSWluWIyUlguWPu47dZYfzQhvbW0xF3EV8i3vPOLHkgw>
+    <xmx:kwMoY5fITRTFaKqqp15dYZhF5GvQtLSM_LKo-Pp5K6Y68sMd4zN7qw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5CDD1B60086; Mon, 19 Sep 2022 01:52:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <95e9c01a-1523-4187-9d1c-3c84eb875af1@www.fastmail.com>
+In-Reply-To: <20220919040251.GA302541@ubuntu>
+References: <20220919040251.GA302541@ubuntu>
+Date:   Mon, 19 Sep 2022 07:51:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hyunwoo Kim" <imv4bel@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Paul Fulghum" <paulkf@microgate.com>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v5] char: pcmcia: synclink_cs: Fix use-after-free in mgslpc_ops
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yu,
+On Mon, Sep 19, 2022, at 6:02 AM, Hyunwoo Kim wrote:
+> A race condition may occur if the user physically removes
+> the pcmcia device while calling ioctl() for this tty device node.
+>
+> This is a race condition between the mgslpc_ioctl() function and
+> the mgslpc_detach() function, which may eventually result in UAF.
+>
+> So, add a refcount check to mgslpc_detach() to free the structure
+> after the tty device node is close()d.
+>
+> Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20220916]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
-base:    d5538ab91d3a9a237805be6f8c6c272af2987995
-config: x86_64-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220919/202209191345.OaqfJF8y-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dd5a7be692b8fc9794f29648d0805a2d65b9c4de
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
-        git checkout dd5a7be692b8fc9794f29648d0805a2d65b9c4de
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> block/blk-sysfs.c:475:8: error: implicit declaration of function 'wbt_disabled' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
-                 ^
-   block/blk-sysfs.c:500:6: error: implicit declaration of function 'wbt_disabled' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (wbt_disabled(q))
-               ^
-   2 errors generated.
-
-
-vim +/wbt_disabled +475 block/blk-sysfs.c
-
-   467	
-   468	static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
-   469	{
-   470		u64 lat;
-   471	
-   472		if (!wbt_rq_qos(q))
-   473			return -EINVAL;
-   474	
- > 475		lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
-   476	
-   477		return sprintf(page, "%llu\n", lat);
-   478	}
-   479	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
