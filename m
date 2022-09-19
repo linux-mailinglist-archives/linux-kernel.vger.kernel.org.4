@@ -2,88 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018795BCCD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A3A5BCCCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiISNT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S230425AbiISNTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiISNTQ (ORCPT
+        with ESMTP id S230380AbiISNTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:19:16 -0400
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD1C2B258;
-        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id h3so25419732lja.1;
-        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CIXTFCzxjkeVwrqu3MxeoXf6dgZFRbn9vUeaJo1l6Us=;
-        b=vfj7qDNHUBa7qO7sFx93dLQ/q0h2IRmAOn9WStbzCTV4hGzOhKb9HkNBu6mMZwfmQw
-         t0FlRzaU4hEtFKvRkrhTum2lxVlg4e3GGCrTHNIIPYQXJj2kkFgCiNWFOQ/vuOQ0anjW
-         027w/MRzKsdHmPsVCYolpXd+Kg4sRMdq99ELFGUur937ZoGgLWhG314ABNozmB5NdsZ5
-         u1Ooy1LZvZXAC3oFm9IcS14Y36svtJHsevOJ044u4qltZDq6dp8eb5q5qZshIjH4HPbw
-         b5OcA3k7wDWyz3mBAaf9lYFJOKCRjUvgFr/WZaPotp47ZVwGB1xBz4ALa4qLixJzFTaq
-         XwEQ==
-X-Gm-Message-State: ACrzQf3LsW3BaQM1JW9N/9Fud9AhBjkniKX4/IWDNDWRUXQBXQUXsV3p
-        b+OP2g8rHuZO1VeLutSjfLiWUIiJcyfO2A==
-X-Google-Smtp-Source: AMsMyM7cAAGQsl8uVRWFFu3aaDbh6kXayYRKRyhHiNXGMM8GOJ4ojzPhB7p6Z0LPioupUgDlFDwMFg==
-X-Received: by 2002:a2e:bf11:0:b0:261:9343:fb2 with SMTP id c17-20020a2ebf11000000b0026193430fb2mr5424827ljr.47.1663593551557;
-        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id 15-20020ac2568f000000b0048b0696d0b1sm5198273lfr.90.2022.09.19.06.19.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id u18so46878528lfo.8;
-        Mon, 19 Sep 2022 06:19:10 -0700 (PDT)
-X-Received: by 2002:a05:6512:3b8a:b0:499:ac9a:425b with SMTP id
- g10-20020a0565123b8a00b00499ac9a425bmr5883584lfv.301.1663593550016; Mon, 19
- Sep 2022 06:19:10 -0700 (PDT)
+        Mon, 19 Sep 2022 09:19:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CA827FF4;
+        Mon, 19 Sep 2022 06:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663593544; x=1695129544;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DZvHfGOxcYz6x4E6FinWKgAgs6KZfo4V8zT+OOteJ0Y=;
+  b=EGICckaeGgPU4S+kQ0uaVP+iFM+PtCJMvCw3LakJ34ZISidrZwjVXTkO
+   IixoMhSfvqmSwcjS8uHA+G2dbfTP4M92lnmw3R3DWJ96e+hzQ6861Molh
+   CEN2jREK2v517O9BtJAIQKCrgVsKbg3sDJaOVATmiAwJjJR28fWwVlROu
+   FPHKJKiR+iVv5UJEqSVuCz7uZMElEnx/BgXvI4EMOmF+CRyd2TShjVyd7
+   8PCJY09m0mpvYuVSjdSrkQV0zcP1OQBRzY0U3wB5ezibAc3fU71DGBaty
+   3oql/6ugVehj5+fniLJIYFy4WtDVvErVEWH0bLF3HcHnSLn3Q8Hb4kUOs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282422317"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="282422317"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:19:04 -0700
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="744112139"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:19:02 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id E19C3202D2;
+        Mon, 19 Sep 2022 16:18:59 +0300 (EEST)
+Date:   Mon, 19 Sep 2022 13:18:59 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
+        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
+Message-ID: <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
+References: <20220916135713.143890-1-m.felsch@pengutronix.de>
+ <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
+ <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
 MIME-Version: 1.0
-References: <20220918140829.443722-1-git@vladimir.panteleev.md>
- <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net> <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
- <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
-In-Reply-To: <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
-From:   Vladimir Panteleev <git@vladimir.panteleev.md>
-Date:   Mon, 19 Sep 2022 13:18:53 +0000
-X-Gmail-Original-Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
-Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Hi Marco,
 
-On Mon, 19 Sept 2022 at 12:29, Guenter Roeck <linux@roeck-us.net> wrote:
-> I am not getting into define name editing wars. The define is named as
-> it is. There is never a good reason to rename it. If I'd accept your
-> change, someone else might come tomorrow and want it renamed to
-> "SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
-> the system to power off.
+On Mon, Sep 19, 2022 at 03:08:29PM +0200, Marco Felsch wrote:
+> Hi Sakari,
+> 
+> On 22-09-19, Sakari Ailus wrote:
+> > Hi Marco,
+> > 
+> > On Fri, Sep 16, 2022 at 03:57:11PM +0200, Marco Felsch wrote:
+> > > Add support to report the link frequency.
+> > > 
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > ---
+> > > The v1 of this small series can be found here:
+> > > https://lore.kernel.org/all/20220818144712.997477-1-m.felsch@pengutronix.de/
+> > > 
+> > > Thanks a lot to Jacopo for the review feedback on my v1.
+> > > 
+> > > Changelog:
+> > > 
+> > > v2:
+> > > - use V4L2_CID_LINK_FREQ instead of V4L2_CID_PIXEL_RATE
+> > > ---
+> > >  drivers/media/i2c/mt9m111.c | 21 ++++++++++++++++++++-
+> > >  1 file changed, 20 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > > index afc86efa9e3e..52be1c310455 100644
+> > > --- a/drivers/media/i2c/mt9m111.c
+> > > +++ b/drivers/media/i2c/mt9m111.c
+> > > @@ -1249,6 +1249,8 @@ static int mt9m111_probe(struct i2c_client *client)
+> > >  {
+> > >  	struct mt9m111 *mt9m111;
+> > >  	struct i2c_adapter *adapter = client->adapter;
+> > > +	static s64 extclk_rate;
+> > > +	struct v4l2_ctrl *ctrl;
+> > >  	int ret;
+> > >  
+> > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
+> > > @@ -1271,6 +1273,13 @@ static int mt9m111_probe(struct i2c_client *client)
+> > >  	if (IS_ERR(mt9m111->clk))
+> > >  		return PTR_ERR(mt9m111->clk);
+> > >  
+> > > +	ret = clk_prepare_enable(mt9m111->clk);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	extclk_rate = clk_get_rate(mt9m111->clk);
+> > > +	clk_disable_unprepare(mt9m111->clk);
+> > 
+> > I don't think you'll need to enable a clock to just get its frequency.
+> 
+> The official API states that you need to turn on the clk before
+> requesting it and it makes sense. Also there is a new helper
+> devm_clk_get_enabled() which addresses simple clk usage since most of
+> drivers don't enable it before requesting the rate.
 
-Ah, sorry - this is one of my first attempts at contributing to the
-kernel, and as such I of course fully defer to you. In case I was
-misunderstood, I was just trying to explain my line of reasoning at
-the time, which is what I thought you asked for in your previous
-message. Thank you for the explanation, I was not aware of the high
-cost of renaming defines.
+I guess the rate could change in the meantime, unless exclusive access is
+requested. The clock framework currently doesn't offer a way to set the
+assigned rate and prevent changing it. But above, couldn't the clock
+frequency be changed again once the clock has been disabled?
 
-I will send a V2 if this is all?
-
-Thank you for your time :)
-Best regards,
-- Vladimir
+-- 
+Sakari Ailus
