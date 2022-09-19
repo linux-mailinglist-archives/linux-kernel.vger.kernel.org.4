@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6282B5BC2AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FB15BC2B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiISGD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 02:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S229581AbiISGLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 02:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiISGDz (ORCPT
+        with ESMTP id S229505AbiISGLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 02:03:55 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B671A3B2;
-        Sun, 18 Sep 2022 23:03:54 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z2so3712708edi.1;
-        Sun, 18 Sep 2022 23:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=hNkWjE/9Kwd5ORgfArcfRMKxkmzooXQeBJ1ffgMnYrI=;
-        b=ONSPNefHyAbPuD0lt0We4tBQj5e0H1KXH7cf8n6tNI7HVbmeCZpjuVw6CSegwcHzLh
-         8RFHC7yjGrsBthhRORjBz5pJ1YpiA0L2X+r+i6uuwoxX6HuucZ88n7PVU3sXRoLhsP15
-         FH2HZdrsWreeQfe+XAKn0AZCtqlx0e1utY6Gs3dJB4WRGcmQ4zpZ6lY+hBWEJ/Az2oSn
-         IS3lliUBaTEyOCVX4Q8YvbH1EucjcBBd6IQK2vH3Qu6ufwG/s3NBJz+48mJVZdibrSr+
-         6WVAVZF/andqDFI09HQZNN4PJSjPJYkDfhN831Iu6av/Q1qcNlTjnO4VCTd60RtagdSQ
-         p1Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hNkWjE/9Kwd5ORgfArcfRMKxkmzooXQeBJ1ffgMnYrI=;
-        b=N2RUDptZ9Ux+qjcdxWP6ZIzj0B6MPG6wWCgyEN82pvpWodfwgTDy2bD4iYw7ZwNuC5
-         +N17+lvznt9nKMLNELgNHpl0QlUXTmbcbDuUNqB/dy1mMluiuqkL3BBlADlMBCtiTAS3
-         9tSlmVEWxMlc73G8zT7m0h9mDEroavIc851Z8w/I2a/2JwivNBvBARZV+Wm5tH/RSO0t
-         hzfyS0j7m/UfC1zLDbttv7xiPbA+QHD1J1g3v1FiiQF2EWDlczKQOIfVCZL/k2VpghGO
-         zkZpry9sZPFWr51f+paeG/iqIDngGIZTFRC7VjGgXlOJKBicZV5zuPBjox96w8FCTr+u
-         YCjg==
-X-Gm-Message-State: ACrzQf1fgSCLHLwh5mFDP+ybkQehayiYLA1btoFrDFhnQ7xhfI+3IL8X
-        TokEDLD3M4Ybv7t2aNwGf3M=
-X-Google-Smtp-Source: AMsMyM7LNV2tIc76VxxWIejr7nctP8TLuA3LfJ87Rjz8csTkkDMHaoqsEi6/ROZnZk1S5Rho1xoqrA==
-X-Received: by 2002:a05:6402:440d:b0:450:de54:3fcf with SMTP id y13-20020a056402440d00b00450de543fcfmr14018826eda.312.1663567433443;
-        Sun, 18 Sep 2022 23:03:53 -0700 (PDT)
-Received: from felia.fritz.box (200116b826812b0018444688cfe72784.dip.versatel-1u1.de. [2001:16b8:2681:2b00:1844:4688:cfe7:2784])
-        by smtp.gmail.com with ESMTPSA id k22-20020a17090632d600b00780982d77d1sm5639168ejk.154.2022.09.18.23.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 23:03:53 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] crypto: add rsize config to .config only if lib_poly1305 is set
-Date:   Mon, 19 Sep 2022 08:03:42 +0200
-Message-Id: <20220919060342.26400-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 02:11:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B111AF29
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 23:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663567880; x=1695103880;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ko2YrHCPrcB3KCrHs/GrxlNqDvbo19BSPi7v8JhAhdk=;
+  b=S9RoYkgymm1K7/EElQIIEgvtlaRt59PWBxGW9SJAG4F28sxYdlZvFGO+
+   EMVaZyZERTnsJhGyjcRYKxy/OIxxR63bvM9m4pgWQrX4LmsGYkJ23qQrT
+   U9tI6MpLbzXTPMvFvt7SlwaJiuud5qlmqu4E/GfgBcKa0uZ1qn6oKKATV
+   A9A9m/C5P8oB3YbcOeR7jhufh9YXHoNoWhIcF+1Rj/mmxoWU5QBp15Wno
+   YSdHCfeB3TvwVCnldpSqMuXRpMfOh4l4WObDMMkYECsDZPR2nW6O6v7wx
+   20y9GQv5oVEBKRYvz7EOxKnvhvMAgaHy9c6YxmSiFJ1mcOGtIg1Fs2Jgx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="363272196"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="363272196"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:11:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="569515584"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Sep 2022 23:11:17 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oa9zx-0001nn-0Q;
+        Mon, 19 Sep 2022 06:11:17 +0000
+Date:   Mon, 19 Sep 2022 14:11:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        Steven Price <steven.price@arm.com>
+Subject: fs/proc/task_mmu.c:743:33: warning: 'smaps_shmem_walk_ops' defined
+ but not used
+Message-ID: <202209191403.ovOXBsxR-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The config CRYPTO_LIB_POLY1305_RSIZE should only be part of a kernel
-build configuration (.config file) when config CRYPTO_LIB_POLY1305 is set.
+Hi Christoph,
 
-Add a suitable dependency for CONFIG_CRYPTO_LIB_POLY1305_RSIZE.
+FYI, the error/warning still remains.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- lib/crypto/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   521a547ced6477c54b4b0cc206000406c221b4d6
+commit: 7b86ac3371b70c3fd8fd95501719beb1faab719f pagewalk: separate function pointers from iterator data
+date:   3 years ago
+config: i386-buildonly-randconfig-r005-20220919 (https://download.01.org/0day-ci/archive/20220919/202209191403.ovOXBsxR-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b86ac3371b70c3fd8fd95501719beb1faab719f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7b86ac3371b70c3fd8fd95501719beb1faab719f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/proc/
 
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 7e9683e9f5c6..71b90952e496 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -84,6 +84,7 @@ config CRYPTO_LIB_DES
- 
- config CRYPTO_LIB_POLY1305_RSIZE
- 	int
-+	depends on CRYPTO_LIB_POLY1305
- 	default 2 if MIPS
- 	default 11 if X86_64
- 	default 9 if ARM || ARM64
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/proc/task_mmu.c: In function 'pagemap_pmd_range':
+   fs/proc/task_mmu.c:1367:22: warning: variable 'orig_pte' set but not used [-Wunused-but-set-variable]
+    1367 |         pte_t *pte, *orig_pte;
+         |                      ^~~~~~~~
+   At top level:
+>> fs/proc/task_mmu.c:743:33: warning: 'smaps_shmem_walk_ops' defined but not used [-Wunused-const-variable=]
+     743 | static const struct mm_walk_ops smaps_shmem_walk_ops = {
+         |                                 ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/smaps_shmem_walk_ops +743 fs/proc/task_mmu.c
+
+   742	
+ > 743	static const struct mm_walk_ops smaps_shmem_walk_ops = {
+   744		.pmd_entry		= smaps_pte_range,
+   745		.hugetlb_entry		= smaps_hugetlb_range,
+   746		.pte_hole		= smaps_pte_hole,
+   747	};
+   748	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
