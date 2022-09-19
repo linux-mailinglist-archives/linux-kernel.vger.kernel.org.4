@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7255BCDC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BDD5BCDB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiISN67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S230493AbiISN4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiISN6o (ORCPT
+        with ESMTP id S230364AbiISN4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:58:44 -0400
-Received: from mail.base45.de (mail.base45.de [80.241.60.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075352A70A;
-        Mon, 19 Sep 2022 06:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
-        s=20190804; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=y2eZFXkRGCADI8G4ZiLU6FZ1217+LNWKnbyMSfFCMqI=; b=PUEX4Jv/i8vf9eVrlZywyq7r2w
-        v8LyfhzVohWEZO/2zG+eaIOicaQP+CCg//8Fb94L+jEIEhJ12jwKfMUppiOycjx8yTp6I4xpwpMnH
-        d1KxHVjLEk6UXxOXbQnYFTZEX50gkc0xs2YiPEhEWazgQ76NnQZys81tqUnwW8enHzr2eTRML7Fnd
-        3c+Ypffp8Dl/RduZn5Iqc9rJ4KL8YcxnACcfVfUWS+5VaR8KVMAmDhB/MBoGDciXMa6JYYzgu3fp7
-        dgnoXFE7PIhE4EdtipcheQM/wy9SLTMalG41KwAAwBzcF6pgze96CsVjCsIKyb3PyrGMbHIs9HG7+
-        HELNZOeA==;
-Received: from [92.206.252.27] (helo=javelin)
-        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lynxis@fe80.eu>)
-        id 1oaHFn-0018kh-Hc; Mon, 19 Sep 2022 13:56:07 +0000
-Date:   Mon, 19 Sep 2022 15:56:06 +0200
-From:   Alexander 'lynxis' Couzens <lynxis@fe80.eu>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] net: mediatek: sgmii: refactor power
- cycling into mtk_pcs_config()
-Message-ID: <20220919155606.3270478d@javelin>
-In-Reply-To: <YyhRTV7mh9emXl4v@shell.armlinux.org.uk>
-References: <20220919083713.730512-1-lynxis@fe80.eu>
-        <20220919083713.730512-6-lynxis@fe80.eu>
-        <YyhRTV7mh9emXl4v@shell.armlinux.org.uk>
+        Mon, 19 Sep 2022 09:56:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA942A72E;
+        Mon, 19 Sep 2022 06:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663595779; x=1695131779;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=E5STyERfxj0TBuka255qoUOiDV525ZkzMTuV18YJ7zc=;
+  b=aSgD5imNQPaWvPIBXYgM/If77AnE94J7TEKsmOdzTX3Lg7lC/7diU9pp
+   dWBoP6rGpUlS/v7xgHaa86GooZr9ydcdTVhWTCkDncn7i42oxPmXoy09x
+   FbZxKCbNpr6eGIVFXIN6E7xpqdklVi63mxNnmKw0U1JyG0MFgNCrXiyEg
+   CPILqO5Stz4p6cXQulBwRMRfX+EMcY+IssHG7yOV37xo+nMq+iWze+8ak
+   g8LgMN/G/kFmhc/szglH8wCFVTglgsKqhOrj5aM/hn09tNHRj7Vnnaz9N
+   Dv4hA3OmugBLv/lEk7kycyo+JWtHIU5TtB4BY9Q5SjswhAa0Ep2kzFJo3
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279786173"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="279786173"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:56:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="744123230"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 19 Sep 2022 06:56:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oaHFu-004ZyF-05;
+        Mon, 19 Sep 2022 16:56:14 +0300
+Date:   Mon, 19 Sep 2022 16:56:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Lennert Buytenhek <buytenh@wantstofly.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Aristeu Sergio Rozanski Filho <aris@cathedrallabs.org>,
+        Alex Williamson <alex.williamson@hp.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lennert Buytenhek <buytenh@arista.com>
+Subject: Re: [PATCH v2 1/1] serial: 8250: Turn IER bits on only after irq has
+ been set up
+Message-ID: <YySZ8M5OQqAaaT1b@smile.fi.intel.com>
+References: <20220916133804.15196-1-ilpo.jarvinen@linux.intel.com>
+ <YySX8E3PjAvRr/ld@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YySX8E3PjAvRr/ld@smile.fi.intel.com>
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+ (envelope-from <andriy.shevchenko@linux.intel.com>) id 1oZDWL-003IJw-18;
+ Fri, 16 Sep 2022 18:44:49 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MSGID_FROM_MTA_HEADER,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > -	/* PHYA power down */
-> > -	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
-> > SGMII_PHYA_PWD); -
-> >  	/* Set SGMII phy speed */
-> >  	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-> >  	val &= ~RG_PHY_SPEED_MASK;
-> > @@ -72,9 +57,6 @@ static int mtk_pcs_setup_mode_force(struct
-> > mtk_pcs *mpcs, {
-> >  	unsigned int val;
-> >  
-> > -	/* PHYA power down */
-> > -	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
-> > SGMII_PHYA_PWD); -
-> >  	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-> >  	val &= ~RG_PHY_SPEED_MASK;
-> >  	if (interface == PHY_INTERFACE_MODE_2500BASEX)  
-> 
-> After powering the PHY down, the next thing that is done is to
-> configure the speed. Even with my comments on patch 4, this can still
-> be consolidated.
+On Fri, Sep 16, 2022 at 06:36:16PM +0300, Andy Shevchenko wrote:
+> On Fri, Sep 16, 2022 at 04:38:04PM +0300, Ilpo Järvinen wrote:
 
-I'll move more code out of the functions.
+Side note:
 
-> 
-> > @@ -115,12 +85,27 @@ static int mtk_pcs_config(struct phylink_pcs
-> > *pcs, unsigned int mode, struct mtk_pcs *mpcs =
-> > pcs_to_mtk_pcs(pcs);  
-> 
-> 	unsigned int val;
-> 
-> >  	int err = 0;
-> >  
-> > +	/* PHYA power down */
-> > +	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
-> > SGMII_PHYA_PWD);
-> > +  
-> 
-> 	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-> 	val &= ~RG_PHY_SPEED_MASK;
-> 	if (interface == PHY_INTERFACE_MODE_2500BASEX)
-> 		val |= RG_PHY_SPEED_3_125G;
-> 	regmap_write(mpcs->regmap, mpcs->ana_rgc3, val);
-> 
-> which would make logical sense to do here, so we always configure the
-> speed for the PCS correctly.
-> 
-> That then leaves the configuration of SGMSYS_PCS_CONTROL_1 and
-> SGMSYS_SGMII_MODE, which I think could also be consolidated, but I'll
-> leave that to those with the hardware to make that decision.
-> 
-> Reading between the lines of the code in this driver, it looks to me
-> like this hardware supports only SGMII, but doesn't actually support
-> 1000base-X and 2500base-X with negotiation. Is that correct? If so,
-> it would be good to add a mtk_pcs_validate() function that clears
-> ETHTOOL_LINK_MODE_Autoneg_BIT for these modes.
+$ git grep -n -w setup_irq -- drivers/tty/
+drivers/tty/serial/8250/8250_core.c:382:        .setup_irq      = univ8250_setup_irq,
+drivers/tty/serial/8250/8250_port.c:2341:       retval = up->ops->setup_irq(up);
 
-I don't know. I don't have hardware to debug
-the serdes interface further. I only have a test board with mt7622 soc
-connect via SGMII/2500basex to a realtek phy (rtl8221).
+which rises a question of whether we need the setup_irq member in the
+respective structure.
 
-Maybe the maintainers from mediatek could share some knowledge if the
-SGMII block supports 1000/2500basex autoneg?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-At least with the public available datasheets (mt7531, mt7622) doesn't
-explain it further.
-I could also imagine we need to modify the page register
-(PCS_SPEED_ABILITY) and link timer to get autoneg for
-1000basex/2500basex working.
 
-Best,
-lynxis
