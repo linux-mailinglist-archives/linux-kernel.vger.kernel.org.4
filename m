@@ -2,340 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289D55BD127
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1A05BD112
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiISPgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S230302AbiISPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiISPgw (ORCPT
+        with ESMTP id S230286AbiISPbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:36:52 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CFB25C56
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:36:50 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id m16so1643882iln.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TJtbFKRoGiqIeIUx0M4B9tZ4pfPeod5mEoLdwUysHys=;
-        b=BiwYyDqhE0F49clj/AW/ikyBuNMX6gxBY/CFZUt//iTCGt3exdRQT1Ti9iiBoR6F5j
-         Jc4qylZx+Rd7Dpdy0TTaQ3n5h9JmOwwQ+svZmMhhg5mePMSv3fc8+mKFTe6kpZJ4o/eg
-         /por1H5C9hfLDxwNQkX6Xc1/KEzOprlv4yV1E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TJtbFKRoGiqIeIUx0M4B9tZ4pfPeod5mEoLdwUysHys=;
-        b=NJoHWpLJvY8+K7YLZh/hciCdCd6+LvwfCWjNQQKNzOLcF5pZ+/pGTkK4zWOWYjYie1
-         A5SifN3xYYXsymbzzc1IRdifhTad5y7ieUMa8RyDfkpOGo/0cVXEEKGuRc4t4vz7usLX
-         XUK8YNXwjykiSgpEDps6RCRYSdezhTI3Mb6xB6RoG9C1PK7hzCF91P4KUzuzBVh8UvcM
-         z1ITBugD42BrsXJvPlLcn/HwbGFz3HVRCw1YgOcDhE17/5bd/i+ezfJgW/FND23vTbr2
-         BgX2HInL/GA0WSulOYgkN42r0CtsvBbBSPucoZixzRwdrmh2PQ9wq8255NoF8/uqB/m1
-         o5Cw==
-X-Gm-Message-State: ACrzQf0g7TNn8664WHu3oYG437aDqrAzu/ZIapHDIsjSwy5Bbp1aC5B3
-        OJRVTIc/y14E4y/EUoR9YVmQ4aPNDl7vdw==
-X-Google-Smtp-Source: AMsMyM5wj6itY6xEiM9M0qhg0Y3+wLKaYWz7xrXZVr1+tbBzQSuxqw2Zj41K81sWuLHW8JQEWwGZVQ==
-X-Received: by 2002:a05:6e02:1489:b0:2f1:a985:853 with SMTP id n9-20020a056e02148900b002f1a9850853mr7602614ilk.68.1663601810149;
-        Mon, 19 Sep 2022 08:36:50 -0700 (PDT)
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com. [209.85.166.177])
-        by smtp.gmail.com with ESMTPSA id e8-20020a056602044800b006849ee78e1bsm14950412iov.34.2022.09.19.08.36.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 08:36:49 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id m16so1643859iln.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:36:49 -0700 (PDT)
-X-Received: by 2002:a05:6e02:2189:b0:2f1:92d4:6b22 with SMTP id
- j9-20020a056e02218900b002f192d46b22mr6968781ila.210.1663601464513; Mon, 19
- Sep 2022 08:31:04 -0700 (PDT)
+        Mon, 19 Sep 2022 11:31:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C9439BBD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663601507; x=1695137507;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gi+NOEY838Xp8H/ea9C/6X1+pNOsIXiCaKGf9WsJupg=;
+  b=c7jXwWOM5ZOOARi/4kkcosYIB24yFeSRsl13LOVU0zmiL/uHhh8LwXZU
+   wbgyosZ4vKarfVoUOO4WokJBjelSu5X/kWbNYEtO/zhda4ntndL+wJGVr
+   tP2p/PX3xyZ9FdqIn7r0htTK8dfXoOqL7eAXwSpEVxVYOUoAGaamy5XJY
+   U01drGDPWeWRNkRo6TDGYOX+MRoILJAT127Rwcn9ZBA9eFVRzJygzJh8B
+   2KzpTas7cY00gVGoy27qUQaf7/BdnxegpVYoyooKUDAf2TE3mbj8CMlKc
+   q+sUHip9t9+GYjz4wCE12qx+demo+3tlfgfDR42qduBhgSAuwd3pHnJdv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279812885"
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="279812885"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:31:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="569694966"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Sep 2022 08:31:44 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaIkJ-00023a-1G;
+        Mon, 19 Sep 2022 15:31:43 +0000
+Date:   Mon, 19 Sep 2022 23:31:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: arch/x86/kvm/mmu/paging_tmpl.h:106:24: sparse: sparse: cast
+ truncates bits from constant value (ffffffffff000 becomes fffff000)
+Message-ID: <202209192330.x51kM4LB-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220914235801.1731478-1-rrangel@chromium.org>
- <20220914155914.v3.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid> <Yyg8UGRItbO4Abvb@smile.fi.intel.com>
-In-Reply-To: <Yyg8UGRItbO4Abvb@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 19 Sep 2022 09:30:53 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30Axy2epgvB4oHAEmEiU14mQn5Q9FUa1NBiEVvMe4ZSwMw@mail.gmail.com>
-Message-ID: <CAHQZ30Axy2epgvB4oHAEmEiU14mQn5Q9FUa1NBiEVvMe4ZSwMw@mail.gmail.com>
-Subject: Re: [PATCH v3 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tim Van Patten <timvp@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 3:54 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Sep 14, 2022 at 05:57:54PM -0600, Raul E Rangel wrote:
-> > ACPI IRQ/Interrupt resources contain a bit that describes if the
-> > interrupt should wake the system. This change exposes that bit via
-> > a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
-> > before arming an IRQ to wake the system.
->
+Hi Sean,
 
-> From code perspective it's straightforward, so
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> (take a look into nit-picks, though)
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-I went ahead and re-ran clang-format with a 96 char limit, then I
-manually applied the rest of the nits.
-Thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   521a547ced6477c54b4b0cc206000406c221b4d6
+commit: 70e41c31bc7776b262cd9f524df3dfc2b5869a0a KVM: x86/mmu: Use common logic for computing the 32/64-bit base PA mask
+date:   3 months ago
+config: x86_64-randconfig-s022-20220919 (https://download.01.org/0day-ci/archive/20220919/202209192330.x51kM4LB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70e41c31bc7776b262cd9f524df3dfc2b5869a0a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 70e41c31bc7776b262cd9f524df3dfc2b5869a0a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
->
-> From the functional perspective AFAIU it's appreciated, but I'm not
-> a guru in this domain to tell.
->
-> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - Fixed bad indent
-> >
-> > Changes in v2:
-> > - Added ability to extract wake bit from Interrupt/IRQ resources
-> >
-> >  drivers/acpi/irq.c             | 11 ++++++++---
-> >  drivers/acpi/resource.c        | 24 +++++++++++++++++-------
-> >  drivers/pnp/pnpacpi/rsparser.c |  9 ++++++---
-> >  include/linux/acpi.h           |  3 ++-
-> >  include/linux/ioport.h         |  3 ++-
-> >  5 files changed, 35 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-> > index dabe45eba055d1..5483cf9a28e3a0 100644
-> > --- a/drivers/acpi/irq.c
-> > +++ b/drivers/acpi/irq.c
-> > @@ -147,6 +147,7 @@ struct acpi_irq_parse_one_ctx {
-> >   * @polarity: polarity attributes of hwirq
-> >   * @polarity: polarity attributes of hwirq
-> >   * @shareable: shareable attributes of hwirq
-> > + * @wake_capable: wake capable attribute of hwirq
-> >   * @ctx: acpi_irq_parse_one_ctx updated by this function
-> >   *
-> >   * Description:
-> > @@ -156,12 +157,14 @@ struct acpi_irq_parse_one_ctx {
-> >  static inline void acpi_irq_parse_one_match(struct fwnode_handle *fwnode,
-> >                                           u32 hwirq, u8 triggering,
-> >                                           u8 polarity, u8 shareable,
-> > +                                         u8 wake_capable,
-> >                                           struct acpi_irq_parse_one_ctx *ctx)
-> >  {
-> >       if (!fwnode)
-> >               return;
-> >       ctx->rc = 0;
-> > -     *ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-> > +     *ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable,
-> > +                                          wake_capable);
->
-> Can be on one line.
->
-> >       ctx->fwspec->fwnode = fwnode;
-> >       ctx->fwspec->param[0] = hwirq;
-> >       ctx->fwspec->param[1] = acpi_dev_get_irq_type(triggering, polarity);
-> > @@ -204,7 +207,8 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
-> >               fwnode = acpi_get_gsi_domain_id(irq->interrupts[ctx->index]);
-> >               acpi_irq_parse_one_match(fwnode, irq->interrupts[ctx->index],
-> >                                        irq->triggering, irq->polarity,
-> > -                                      irq->shareable, ctx);
-> > +                                      irq->shareable, irq->wake_capable,
-> > +                                      ctx);
->
-> Ditto.
->
-> >               return AE_CTRL_TERMINATE;
-> >       case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-> >               eirq = &ares->data.extended_irq;
-> > @@ -218,7 +222,8 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
-> >                                                     eirq->interrupts[ctx->index]);
-> >               acpi_irq_parse_one_match(fwnode, eirq->interrupts[ctx->index],
-> >                                        eirq->triggering, eirq->polarity,
-> > -                                      eirq->shareable, ctx);
-> > +                                      eirq->shareable, eirq->wake_capable,
-> > +                                      ctx);
->
-> Ditto.
->
-> >               return AE_CTRL_TERMINATE;
-> >       }
-> >
-> > diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> > index 510cdec375c4d8..6a1c008a348902 100644
-> > --- a/drivers/acpi/resource.c
-> > +++ b/drivers/acpi/resource.c
-> > @@ -336,8 +336,10 @@ EXPORT_SYMBOL_GPL(acpi_dev_resource_ext_address_space);
-> >   * @triggering: Triggering type as provided by ACPI.
-> >   * @polarity: Interrupt polarity as provided by ACPI.
-> >   * @shareable: Whether or not the interrupt is shareable.
-> > + * @wake_capable: Wake capability as provided by ACPI.
-> >   */
-> > -unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
-> > +unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable,
-> > +                              u8 wake_capable)
->
-> Ditto.
->
-> >  {
-> >       unsigned long flags;
-> >
-> > @@ -351,6 +353,9 @@ unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
-> >       if (shareable == ACPI_SHARED)
-> >               flags |= IORESOURCE_IRQ_SHAREABLE;
-> >
-> > +     if (wake_capable == ACPI_WAKE_CAPABLE)
-> > +             flags |= IORESOURCE_IRQ_WAKECAPABLE;
-> > +
-> >       return flags | IORESOURCE_IRQ;
-> >  }
-> >  EXPORT_SYMBOL_GPL(acpi_dev_irq_flags);
-> > @@ -442,7 +447,7 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
-> >
-> >  static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
-> >                                    u8 triggering, u8 polarity, u8 shareable,
-> > -                                  bool check_override)
-> > +                                  u8 wake_capable, bool check_override)
-> >  {
-> >       int irq, p, t;
-> >
-> > @@ -475,7 +480,8 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
-> >               }
-> >       }
-> >
-> > -     res->flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-> > +     res->flags = acpi_dev_irq_flags(triggering, polarity, shareable,
-> > +                                     wake_capable);
->
-> Ditto.
->
-> >       irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
-> >       if (irq >= 0) {
-> >               res->start = irq;
-> > @@ -523,7 +529,8 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
-> >               }
-> >               acpi_dev_get_irqresource(res, irq->interrupts[index],
-> >                                        irq->triggering, irq->polarity,
-> > -                                      irq->shareable, true);
-> > +                                      irq->shareable, irq->wake_capable,
-> > +                                      true);
-> >               break;
-> >       case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-> >               ext_irq = &ares->data.extended_irq;
-> > @@ -532,9 +539,12 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
-> >                       return false;
-> >               }
-> >               if (is_gsi(ext_irq))
-> > -                     acpi_dev_get_irqresource(res, ext_irq->interrupts[index],
-> > -                                      ext_irq->triggering, ext_irq->polarity,
-> > -                                      ext_irq->shareable, false);
-> > +                     acpi_dev_get_irqresource(res,
-> > +                                              ext_irq->interrupts[index],
-> > +                                              ext_irq->triggering,
-> > +                                              ext_irq->polarity,
-> > +                                              ext_irq->shareable,
-> > +                                              ext_irq->wake_capable, false);
->
-> Maybe false on the next line to split FW parameters from pure software ones?
->
-> >               else
-> >                       irqresource_disabled(res, 0);
-> >               break;
-> > diff --git a/drivers/pnp/pnpacpi/rsparser.c b/drivers/pnp/pnpacpi/rsparser.c
-> > index da78dc77aed32e..55b28fc0a94042 100644
-> > --- a/drivers/pnp/pnpacpi/rsparser.c
-> > +++ b/drivers/pnp/pnpacpi/rsparser.c
-> > @@ -206,7 +206,8 @@ static acpi_status pnpacpi_allocated_resource(struct acpi_resource *res,
-> >               if (i >= 0) {
-> >                       flags = acpi_dev_irq_flags(gpio->triggering,
-> >                                                  gpio->polarity,
-> > -                                                gpio->shareable);
-> > +                                                gpio->shareable,
-> > +                                                gpio->wake_capable);
-> >               } else {
-> >                       flags = IORESOURCE_DISABLED;
-> >               }
-> > @@ -315,7 +316,8 @@ static __init void pnpacpi_parse_irq_option(struct pnp_dev *dev,
-> >               if (p->interrupts[i])
-> >                       __set_bit(p->interrupts[i], map.bits);
-> >
-> > -     flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-> > +     flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable,
-> > +                                p->wake_capable);
-> >       pnp_register_irq_resource(dev, option_flags, &map, flags);
-> >  }
-> >
-> > @@ -339,7 +341,8 @@ static __init void pnpacpi_parse_ext_irq_option(struct pnp_dev *dev,
-> >               }
-> >       }
-> >
-> > -     flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-> > +     flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable,
-> > +                                p->wake_capable);
->
-> One line?
->
-> >       pnp_register_irq_resource(dev, option_flags, &map, flags);
-> >  }
-> >
-> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> > index d3121cef6cc3bc..9f7947ee1b006f 100644
-> > --- a/include/linux/acpi.h
-> > +++ b/include/linux/acpi.h
-> > @@ -495,7 +495,8 @@ bool acpi_dev_resource_address_space(struct acpi_resource *ares,
-> >                                    struct resource_win *win);
-> >  bool acpi_dev_resource_ext_address_space(struct acpi_resource *ares,
-> >                                        struct resource_win *win);
-> > -unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable);
-> > +unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable,
-> > +                              u8 wake_capable);
->
-> One line?
->
-> >  unsigned int acpi_dev_get_irq_type(int triggering, int polarity);
-> >  bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
-> >                                struct resource *res);
-> > diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> > index 616b683563a970..3baeea4d903bfd 100644
-> > --- a/include/linux/ioport.h
-> > +++ b/include/linux/ioport.h
-> > @@ -79,7 +79,8 @@ struct resource {
-> >  #define IORESOURCE_IRQ_HIGHLEVEL     (1<<2)
-> >  #define IORESOURCE_IRQ_LOWLEVEL              (1<<3)
-> >  #define IORESOURCE_IRQ_SHAREABLE     (1<<4)
-> > -#define IORESOURCE_IRQ_OPTIONAL      (1<<5)
-> > +#define IORESOURCE_IRQ_OPTIONAL              (1<<5)
-> > +#define IORESOURCE_IRQ_WAKECAPABLE   (1<<6)
-> >
-> >  /* PnP DMA specific bits (IORESOURCE_BITS) */
-> >  #define IORESOURCE_DMA_TYPE_MASK     (3<<0)
-> > --
-> > 2.37.3.968.ga6b4b080e4-goog
-> >
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   arch/x86/kvm/mmu/mmu.c:610:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_begin' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, arch/x86/kvm/irq.h):
+   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_end' - unexpected unlock
+   arch/x86/kvm/mmu/mmu.c:2550:9: sparse: sparse: context imbalance in 'mmu_try_to_unsync_pages' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file:
+>> arch/x86/kvm/mmu/paging_tmpl.h:106:24: sparse: sparse: cast truncates bits from constant value (ffffffffff000 becomes fffff000)
+   arch/x86/kvm/mmu/paging_tmpl.h:426:24: sparse: sparse: cast truncates bits from constant value (ffffffffff000 becomes fffff000)
+   arch/x86/kvm/mmu/mmu.c:4618:57: sparse: sparse: cast truncates bits from constant value (ffffff33 becomes 33)
+   arch/x86/kvm/mmu/mmu.c:4620:56: sparse: sparse: cast truncates bits from constant value (ffffff0f becomes f)
+   arch/x86/kvm/mmu/mmu.c:4622:57: sparse: sparse: cast truncates bits from constant value (ffffff55 becomes 55)
+
+vim +106 arch/x86/kvm/mmu/paging_tmpl.h
+
+b3fcdb04a98035 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-06-14  103  
+e04da980c35d75 arch/x86/kvm/paging_tmpl.h     Joerg Roedel        2009-07-27  104  static gfn_t gpte_to_gfn_lvl(pt_element_t gpte, int lvl)
+5fb07ddb183eb4 drivers/kvm/paging_tmpl.h      Avi Kivity          2007-11-21  105  {
+e04da980c35d75 arch/x86/kvm/paging_tmpl.h     Joerg Roedel        2009-07-27 @106  	return (gpte & PT_LVL_ADDR_MASK(lvl)) >> PAGE_SHIFT;
+5fb07ddb183eb4 drivers/kvm/paging_tmpl.h      Avi Kivity          2007-11-21  107  }
+5fb07ddb183eb4 drivers/kvm/paging_tmpl.h      Avi Kivity          2007-11-21  108  
+
+:::::: The code at line 106 was first introduced by commit
+:::::: e04da980c35d75fa050ba4009ad99025432d8d7d KVM: MMU: make page walker aware of mapping levels
+
+:::::: TO: Joerg Roedel <joerg.roedel@amd.com>
+:::::: CC: Avi Kivity <avi@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
