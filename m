@@ -2,147 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0F65BCCCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018795BCCD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiISNS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S230463AbiISNT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiISNSt (ORCPT
+        with ESMTP id S230441AbiISNTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:18:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E9627FF4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:18:47 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u9so64465735ejy.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=gzjER0yDfgC7AM3XY5AmZTUcIYvTw+ZPBU8Ab6kCF1A=;
-        b=oCvGpuKao+NdPHOlaIZDp2egAgLgEPw3IteIyQ/QvfEJdQUKlHPnCEr7GlPg6HpfMP
-         dVIYPSycLDoCGucAf+dgMukqSqMyU3sljxWQZ1C5O5yfErbYxOR/x/hLQhMP1mEdw4ZP
-         cjQShEMYMP250cAvjyqZ3M7U0yaSNoDJxB29kW3qQNCnN9wZ6HHS9CpdNaD1iAy1Amm6
-         gVn2aO/yPFwPoa6zCOyAX5D7hY17WUsONgau+7fxInzn7dXZ/1MMZnIFhfYkr+cyrua5
-         /goX39eWj/ydD63FYnlELFczwPrC7UW1fTB8T8fcSpjbmA2N/YhqWfH3jlgQhzHeyDdn
-         kgyg==
+        Mon, 19 Sep 2022 09:19:16 -0400
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD1C2B258;
+        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id h3so25419732lja.1;
+        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gzjER0yDfgC7AM3XY5AmZTUcIYvTw+ZPBU8Ab6kCF1A=;
-        b=IIyXV5rXYj5Af90kLcbI8BkyPBid/7LHTg9ZM458y+RZZPQTdokdgY6D//iSQ6io6M
-         F0FUeSKw88WNyRqytD3NUD70Y8EYD0SxGvcUuQ6NemMrUd5OdtvEzi7rGMMa1323r/et
-         UQecEoQ/Ls+SlGsETCqwbvUVdMleH7/F7ezLUYvad+WrPzsKlCJuHtgOJHGX8j2RxB4Y
-         EuW0QYoKV8FXLffVzKUbtUhWaHXLc/MiwM5JmVfsQc56V3t+zqzGl//CfAA47TOi78H5
-         s8X4SMlOJi+x2BvJYVccAsARjW2pZmQTJvwNuwcbnfFkgayKVh1kQ+t0SJb7x4/+I/hT
-         aiow==
-X-Gm-Message-State: ACrzQf1OuGBdz1nTlgwT9zQgCdrtJVGP3mKRZxr1Smmfz9LcvfG+9Y7l
-        HfNJyNEvLcxFTyEj7C3Vpuvq8626gN++yNmmOiOTDA==
-X-Google-Smtp-Source: AMsMyM44eZwNFcm9nbCPeKjoB6bDjAqdr1WQR9kY74b4PjDUbuCLEI1O22R9NLQqBpz/Q33j8Sm+v+qscaBv2lxtl/o=
-X-Received: by 2002:a17:906:9beb:b0:773:db0f:d53a with SMTP id
- de43-20020a1709069beb00b00773db0fd53amr13173696ejc.580.1663593525988; Mon, 19
- Sep 2022 06:18:45 -0700 (PDT)
+        bh=CIXTFCzxjkeVwrqu3MxeoXf6dgZFRbn9vUeaJo1l6Us=;
+        b=vfj7qDNHUBa7qO7sFx93dLQ/q0h2IRmAOn9WStbzCTV4hGzOhKb9HkNBu6mMZwfmQw
+         t0FlRzaU4hEtFKvRkrhTum2lxVlg4e3GGCrTHNIIPYQXJj2kkFgCiNWFOQ/vuOQ0anjW
+         027w/MRzKsdHmPsVCYolpXd+Kg4sRMdq99ELFGUur937ZoGgLWhG314ABNozmB5NdsZ5
+         u1Ooy1LZvZXAC3oFm9IcS14Y36svtJHsevOJ044u4qltZDq6dp8eb5q5qZshIjH4HPbw
+         b5OcA3k7wDWyz3mBAaf9lYFJOKCRjUvgFr/WZaPotp47ZVwGB1xBz4ALa4qLixJzFTaq
+         XwEQ==
+X-Gm-Message-State: ACrzQf3LsW3BaQM1JW9N/9Fud9AhBjkniKX4/IWDNDWRUXQBXQUXsV3p
+        b+OP2g8rHuZO1VeLutSjfLiWUIiJcyfO2A==
+X-Google-Smtp-Source: AMsMyM7cAAGQsl8uVRWFFu3aaDbh6kXayYRKRyhHiNXGMM8GOJ4ojzPhB7p6Z0LPioupUgDlFDwMFg==
+X-Received: by 2002:a2e:bf11:0:b0:261:9343:fb2 with SMTP id c17-20020a2ebf11000000b0026193430fb2mr5424827ljr.47.1663593551557;
+        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id 15-20020ac2568f000000b0048b0696d0b1sm5198273lfr.90.2022.09.19.06.19.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id u18so46878528lfo.8;
+        Mon, 19 Sep 2022 06:19:10 -0700 (PDT)
+X-Received: by 2002:a05:6512:3b8a:b0:499:ac9a:425b with SMTP id
+ g10-20020a0565123b8a00b00499ac9a425bmr5883584lfv.301.1663593550016; Mon, 19
+ Sep 2022 06:19:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220919102009.150503-1-robert.foss@linaro.org>
- <20220919102009.150503-3-robert.foss@linaro.org> <YyhI0/aG97cCB8DB@pendragon.ideasonboard.com>
-In-Reply-To: <YyhI0/aG97cCB8DB@pendragon.ideasonboard.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 19 Sep 2022 15:18:35 +0200
-Message-ID: <CAG3jFysr3VCgU_sjR-Dd0pn_VK0HpDb2=pQuH+Did9giCYGZLw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "drm/bridge: chrontel-ch7033: Add byteswap
- order setting"
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        dianders@chromium.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Chris Morgan <macromorgan@hotmail.com>,
-        devicetree@vger.kernel.org
+References: <20220918140829.443722-1-git@vladimir.panteleev.md>
+ <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net> <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
+ <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
+In-Reply-To: <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
+From:   Vladimir Panteleev <git@vladimir.panteleev.md>
+Date:   Mon, 19 Sep 2022 13:18:53 +0000
+X-Gmail-Original-Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sept 2022 at 12:48, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Rob,
->
-> Thank you for the patch.
->
-> On Mon, Sep 19, 2022 at 12:20:09PM +0200, Robert Foss wrote:
-> > Revert this patch since it depends on devicetree functionality that
-> > previously has been reverted in the below commit.
-> >
-> > commit e798ba3374a1 ("Revert "dt-bindings: Add byteswap order to chrontel ch7033"")
-> >
-> > This reverts commit ce9564cfc9aea65e68eb343c599317633bc2321a.
-> >
-> > Fixes: 8c9c40ec8344 ("Revert "drm/bridge: ti-sn65dsi86: Implement bridge connector operations for DP"")
->
-> I'm not sure this Fixes tag is meaningful here. Apart from that,
+Hi Guenter,
 
-Ack.
+On Mon, 19 Sept 2022 at 12:29, Guenter Roeck <linux@roeck-us.net> wrote:
+> I am not getting into define name editing wars. The define is named as
+> it is. There is never a good reason to rename it. If I'd accept your
+> change, someone else might come tomorrow and want it renamed to
+> "SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
+> the system to power off.
 
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > ---
-> >  drivers/gpu/drm/bridge/chrontel-ch7033.c | 15 ++-------------
-> >  1 file changed, 2 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/chrontel-ch7033.c b/drivers/gpu/drm/bridge/chrontel-ch7033.c
-> > index c5719908ce2d..ba060277c3fd 100644
-> > --- a/drivers/gpu/drm/bridge/chrontel-ch7033.c
-> > +++ b/drivers/gpu/drm/bridge/chrontel-ch7033.c
-> > @@ -68,7 +68,6 @@ enum {
-> >       BYTE_SWAP_GBR   = 3,
-> >       BYTE_SWAP_BRG   = 4,
-> >       BYTE_SWAP_BGR   = 5,
-> > -     BYTE_SWAP_MAX   = 6,
-> >  };
-> >
-> >  /* Page 0, Register 0x19 */
-> > @@ -356,8 +355,6 @@ static void ch7033_bridge_mode_set(struct drm_bridge *bridge,
-> >       int hsynclen = mode->hsync_end - mode->hsync_start;
-> >       int vbporch = mode->vsync_start - mode->vdisplay;
-> >       int vsynclen = mode->vsync_end - mode->vsync_start;
-> > -     u8 byte_swap;
-> > -     int ret;
-> >
-> >       /*
-> >        * Page 4
-> > @@ -401,16 +398,8 @@ static void ch7033_bridge_mode_set(struct drm_bridge *bridge,
-> >       regmap_write(priv->regmap, 0x15, vbporch);
-> >       regmap_write(priv->regmap, 0x16, vsynclen);
-> >
-> > -     /* Input color swap. Byte order is optional and will default to
-> > -      * BYTE_SWAP_BGR to preserve backwards compatibility with existing
-> > -      * driver.
-> > -      */
-> > -     ret = of_property_read_u8(priv->bridge.of_node, "chrontel,byteswap",
-> > -                               &byte_swap);
-> > -     if (!ret && byte_swap < BYTE_SWAP_MAX)
-> > -             regmap_update_bits(priv->regmap, 0x18, SWAP, byte_swap);
-> > -     else
-> > -             regmap_update_bits(priv->regmap, 0x18, SWAP, BYTE_SWAP_BGR);
-> > +     /* Input color swap. */
-> > +     regmap_update_bits(priv->regmap, 0x18, SWAP, BYTE_SWAP_BGR);
-> >
-> >       /* Input clock and sync polarity. */
-> >       regmap_update_bits(priv->regmap, 0x19, 0x1, mode->clock >> 16);
->
-> --
-> Regards,
->
-> Laurent Pinchart
+Ah, sorry - this is one of my first attempts at contributing to the
+kernel, and as such I of course fully defer to you. In case I was
+misunderstood, I was just trying to explain my line of reasoning at
+the time, which is what I thought you asked for in your previous
+message. Thank you for the explanation, I was not aware of the high
+cost of renaming defines.
+
+I will send a V2 if this is all?
+
+Thank you for your time :)
+Best regards,
+- Vladimir
