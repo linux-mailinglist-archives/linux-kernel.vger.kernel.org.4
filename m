@@ -2,190 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F855BD7D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EFB5BD7D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiISXJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S230003AbiISXJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiISXJH (ORCPT
+        with ESMTP id S229693AbiISXJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:09:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAE44DF16
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663628944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8XtIN7tYHuR/gYIs8LpFfK7Y/fF2eBAeB7zp3qSwwc0=;
-        b=EF0NylvYuMCCuLq36lXDqx853Ovq4cz722eOcnlM+GABDhEdYQlYOrQkeXBL5EJpkrp1ld
-        Szjc2bzcu14imPDba9TPlUTAGM6ROBq/kOMRP/SOAwZSHYmhpKcRF/3K12Ta1BrOW7MZVW
-        GLjn7XJK+nLT2dd+LaJDwszEEwNdl4M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-AWcPVcKfMOCOhqVtIW1cEw-1; Mon, 19 Sep 2022 19:08:59 -0400
-X-MC-Unique: AWcPVcKfMOCOhqVtIW1cEw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 19 Sep 2022 19:09:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F51101E4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:09:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3A41185A78F;
-        Mon, 19 Sep 2022 23:08:58 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.8.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 608E2140EBF3;
-        Mon, 19 Sep 2022 23:08:58 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>
-Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] bonding: fix NULL deref in bond_rr_gen_slave_id
-Date:   Mon, 19 Sep 2022 19:08:46 -0400
-Message-Id: <3cd65bdf26ba7b64c8ade801820562c426b90109.1663628505.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1663628505.git.jtoppins@redhat.com>
-References: <cover.1663628505.git.jtoppins@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDCE861F3B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC22C433D7;
+        Mon, 19 Sep 2022 23:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663628989;
+        bh=MROo2XMbqbwo7kp5pNKP6bB1k6dqwbTItS+Uef+RX34=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dNoQMJ3Ma4URZbgEyxLCMEJNEKIz3YVainvQfvITGuhLcGWk0cmNdA4cDZyjGHck3
+         t3u27rk2Hq8dJiJvyqccq2G++3HvhRzu0PpGrgZIkQhkJgcb64hXEVWhx58fbRi49h
+         pEJbXxXYn4ytkeiT16ljacG6ATNc7ppbK+QOnP0gGUz6ncnzdtk8xIx5dejd9yN077
+         zhkvvaHadxYtSNP2fnqGRoM7RMdVSZMsqBuduZtTxlNrN+wE8sJ5WmzmyNcdGZcjg6
+         IgE+adqHBl4y7yhUiOG+nUYtzixTu/YEIT2Y0CDScCyJ+jo7KHDZm0EWgBFgixQlP9
+         PJKM1VR9ANGRg==
+From:   Mark Brown <broonie@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     ye xingchen <ye.xingchen@zte.com.cn>, Vsujithkumar.Reddy@amd.com,
+        linux-kernel@vger.kernel.org, tiwai@suse.com,
+        AjitKumar.Pandey@amd.com, venkataprasad.potturu@amd.com,
+        perex@perex.cz, Zeal Robot <zealci@zte.com.cn>,
+        lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        Vijendar.Mukunda@amd.com, yangyingliang@huawei.com
+In-Reply-To: <20220916061906.152434-1-ye.xingchen@zte.com.cn>
+References: <20220916061906.152434-1-ye.xingchen@zte.com.cn>
+Subject: Re: [PATCH linux-next] ASoC: amd: acp: use devm_kcalloc() instead of devm_kzalloc()
+Message-Id: <166362898554.3419825.13173032039628568145.b4-ty@kernel.org>
+Date:   Tue, 20 Sep 2022 00:09:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.11.0-dev-8af31
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a NULL dereference of the struct bonding.rr_tx_counter member because
-if a bond is initially created with an initial mode != zero (Round Robin)
-the memory required for the counter is never created and when the mode is
-changed there is never any attempt to verify the memory is allocated upon
-switching modes.
+On Fri, 16 Sep 2022 06:19:06 +0000, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Use 2-factor multiplication argument form devm_kcalloc() instead
+> of devm_kzalloc().
+> 
+> 
 
-This causes the following Oops on an aarch64 machine:
-    [  334.686773] Unable to handle kernel paging request at virtual address ffff2c91ac905000
-    [  334.694703] Mem abort info:
-    [  334.697486]   ESR = 0x0000000096000004
-    [  334.701234]   EC = 0x25: DABT (current EL), IL = 32 bits
-    [  334.706536]   SET = 0, FnV = 0
-    [  334.709579]   EA = 0, S1PTW = 0
-    [  334.712719]   FSC = 0x04: level 0 translation fault
-    [  334.717586] Data abort info:
-    [  334.720454]   ISV = 0, ISS = 0x00000004
-    [  334.724288]   CM = 0, WnR = 0
-    [  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000008044d662000
-    [  334.733944] [ffff2c91ac905000] pgd=0000000000000000, p4d=0000000000000000
-    [  334.740734] Internal error: Oops: 96000004 [#1] SMP
-    [  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xgene_hwmon
-    [  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g64ae13ed4784 #4
-    [  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v (SCP: 1.08.20211002) 12/01/2021
-    [  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-    [  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
-    [  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
-    [  334.807962] sp : ffff8000221733e0
-    [  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002217357c
-    [  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff980fa000
-    [  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff981029c0
-    [  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 0000000000000014
-    [  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaabe2f5a62
-    [  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 0000000000000000
-    [  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac857178ec
-    [  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007c2b3742
-    [  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9f554400
-    [  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff981029c0
-    [  334.882532] Call trace:
-    [  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
-    [  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
-    [  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
-    [  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
-    [  334.905622]  dev_hard_start_xmit+0xb4/0x220
-    [  334.909798]  __dev_queue_xmit+0x1a0/0x720
-    [  334.913799]  arp_xmit+0x3c/0xbc
-    [  334.916932]  arp_send_dst+0x98/0xd0
-    [  334.920410]  arp_solicit+0xe8/0x230
-    [  334.923888]  neigh_probe+0x60/0xb0
-    [  334.927279]  __neigh_event_send+0x3b0/0x470
-    [  334.931453]  neigh_resolve_output+0x70/0x90
-    [  334.935626]  ip_finish_output2+0x158/0x514
-    [  334.939714]  __ip_finish_output+0xac/0x1a4
-    [  334.943800]  ip_finish_output+0x40/0xfc
-    [  334.947626]  ip_output+0xf8/0x1a4
-    [  334.950931]  ip_send_skb+0x5c/0x100
-    [  334.954410]  ip_push_pending_frames+0x3c/0x60
-    [  334.958758]  raw_sendmsg+0x458/0x6d0
-    [  334.962325]  inet_sendmsg+0x50/0x80
-    [  334.965805]  sock_sendmsg+0x60/0x6c
-    [  334.969286]  __sys_sendto+0xc8/0x134
-    [  334.972853]  __arm64_sys_sendto+0x34/0x4c
-    [  334.976854]  invoke_syscall+0x78/0x100
-    [  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
-    [  334.985287]  do_el0_svc+0x38/0x4c
-    [  334.988591]  el0_svc+0x34/0x10c
-    [  334.991724]  el0t_64_sync_handler+0x11c/0x150
-    [  334.996072]  el0t_64_sync+0x190/0x194
-    [  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
-    [  335.005810] ---[ end trace 0000000000000000 ]---
-    [  335.010416] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-    [  335.017279] SMP: stopping secondary CPUs
-    [  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
-    [  335.027456] PHYS_OFFSET: 0x80000000
-    [  335.030932] CPU features: 0x0000,0085c029,19805c82
-    [  335.035713] Memory Limit: none
-    [  335.038756] Rebooting in 180 seconds..
+Applied to
 
-The is to allocate the memory in bond_open() which is guaranteed to be
-called before any packets are processed.
+   broonie/sound.git for-next
 
-Fixes: 848ca9182a7d ("net: bonding: Use per-cpu rr_tx_counter")
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
- drivers/net/bonding/bond_main.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+Thanks!
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index bc6d8b0aa6fb..86d42306aa5e 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4182,6 +4182,12 @@ static int bond_open(struct net_device *bond_dev)
- 	struct list_head *iter;
- 	struct slave *slave;
- 
-+	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
-+		bond->rr_tx_counter = alloc_percpu(u32);
-+		if (!bond->rr_tx_counter)
-+			return -ENOMEM;
-+	}
-+
- 	/* reset slave->backup and slave->inactive */
- 	if (bond_has_slaves(bond)) {
- 		bond_for_each_slave(bond, slave, iter) {
-@@ -6243,15 +6249,6 @@ static int bond_init(struct net_device *bond_dev)
- 	if (!bond->wq)
- 		return -ENOMEM;
- 
--	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN) {
--		bond->rr_tx_counter = alloc_percpu(u32);
--		if (!bond->rr_tx_counter) {
--			destroy_workqueue(bond->wq);
--			bond->wq = NULL;
--			return -ENOMEM;
--		}
--	}
--
- 	spin_lock_init(&bond->stats_lock);
- 	netdev_lockdep_set_classes(bond_dev);
- 
--- 
-2.31.1
+[1/1] ASoC: amd: acp: use devm_kcalloc() instead of devm_kzalloc()
+      commit: 8e34d743f97f151824a2dc0803695752de80bf7d
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
