@@ -2,305 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4865BC5DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6925BC5DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiISJzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S230017AbiISJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiISJz3 (ORCPT
+        with ESMTP id S230242AbiISJzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:55:29 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C0FE026;
-        Mon, 19 Sep 2022 02:55:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQAvv2x_1663581307;
-Received: from 30.97.56.99(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQAvv2x_1663581307)
-          by smtp.aliyun-inc.com;
-          Mon, 19 Sep 2022 17:55:08 +0800
-Message-ID: <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
-Date:   Mon, 19 Sep 2022 17:55:05 +0800
+        Mon, 19 Sep 2022 05:55:54 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F8B25E9B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:55:48 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b35so40510415edf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=vnJl0L26F6/cF4LoX36tFsaUdJl5yJVNsgmOYHfsRBo=;
+        b=Vb58P5FPswub/ju264ON0G6rNOIDPCQ3GPgtbDnL9G5e9OBp6YY93sVXlx6LwidIDc
+         Fo0wgvT7f3ra1kG8Qxo0C/PW+CW/jHl8oUXedW/ZeTrOMcu59U4vz6luprsm8n4rKs0o
+         LL8/pP7VsWejZczbgFWn7bDQVLHvRSUsimYgLZaiusojf3ZnzqrJPYOddQNashyMTT3D
+         6nbCCvedQcphnp7D/OpFqSZUvY9MMrkYFVDiovOKRP/e8NgwVnfH+d5GpLRl3vRmyevv
+         YgjtVqSmTVsn4Pz7me5Mk+4fIBQRDlkSzXyxcoti6H2JR9XCFcnRo3xQKyVT50kpQm5+
+         kpzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vnJl0L26F6/cF4LoX36tFsaUdJl5yJVNsgmOYHfsRBo=;
+        b=8CTfexWnisOf6AqtuTNmrv2PveE/EOE68BnzULMZQbQ7kKcKbH8qNsZl7ktkfb7RfG
+         mBnPM1lUBfRyK/+nHVCD+Ihhh8xz9JMNPsGtzHhj9R3ZvJVZarubB9k42lp9v6P4lBC3
+         U+Kphj/15nqIkDuAmRZt2BQm2RdzY7C0c14T0/xAx1/dyjfEYgV/M1wibVP+cXf5u5A9
+         uAif8job4nR3M/oTZyduldDXpTXiiUkOiNC1XUVbhsCqdwTT2i5xbRQ/ty3ftYUPv40d
+         YKgiwlNnkRNPyoXzUu8PtF1/WKfp3eZGT4gwiCYP/g1cceICIez+1taDArgNa3udV4NV
+         NF2Q==
+X-Gm-Message-State: ACrzQf1v8KPpZxSnhs7IlM9qt6TWsbhMPefZUjiFx2R2JhP5T/fEOh/o
+        6TlcT7o9/XpPtXnmXMcTXLCy79QqwQq8irORAMI=
+X-Google-Smtp-Source: AMsMyM42HTbF/UFDvgdJ38PdEt0hijqa/khgCG00F9Fw/uY27h2or8B5g7sF95ObpJXZFD0OXeAG8T7xvZxPYQltuX0=
+X-Received: by 2002:a05:6402:2b8f:b0:453:2e59:364d with SMTP id
+ fj15-20020a0564022b8f00b004532e59364dmr14954390edb.254.1663581346809; Mon, 19
+ Sep 2022 02:55:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
- mechanism
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com
-References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
- <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
- <Yyg3KLfQaxbS1miq@T590>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <Yyg3KLfQaxbS1miq@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <tencent_ED24158E83CB9885E8BDD173EB5896B51906@qq.com> <87pmfrpv7q.fsf@intel.com>
+In-Reply-To: <87pmfrpv7q.fsf@intel.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 19 Sep 2022 17:55:35 +0800
+Message-ID: <CAJedcCxWAjsB-zcGn_epE=1d=LTeX-ndNunLqQJ842+ptjy=Bw@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Zheng Wang <1002992920@qq.com>, gregkh@linuxfoundation.org,
+        alex000young@gmail.com, security@kernel.org,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/19 17:32, Ming Lei wrote:
-> On Tue, Sep 13, 2022 at 12:17:05PM +0800, ZiyangZhang wrote:
->> With USER_RECOVERY feature enabled, the monitor_work schedules
->> quiesce_work after finding a dying ubq_daemon. The quiesce_work's job
->> is to:
->> (1) quiesce request queue.
->> (2) check if there is any INFLIGHT rq with UBLK_IO_FLAG_ACTIVE unset.
->>     If so, we retry until all these rqs are requeued by ublk_queue_rq()
->>     and task_work and become IDLE.
-> 
-> These requests should be being handled by task work or the io_uring
-> fallback wq, and suggest to add the words here.
+Got it. I'll try again later.
 
-Will do so.
+Best Regards,
+Zheng Wang
 
-> 
->> (3) requeue/abort inflight rqs issued to the crash ubq_daemon before. If
->>     UBLK_F_USER_RECOVERY_REISSUE is set, rq is requeued; or it is
->>     aborted.
->> (4) complete all ioucmds by calling io_uring_cmd_done(). We are safe to
->>     do so because no ioucmd can be referenced now.
->> (5) set ub's state to UBLK_S_DEV_QUIESCED, which means we are ready for
->>     recovery. This state is exposed to userspace by GET_DEV_INFO.
->>
->> The driver can always handle STOP_DEV and cleanup everything no matter
->> ub's state is LIVE or QUIESCED. After ub's state is UBLK_S_DEV_QUIESCED,
->> user can recover with new process by sending START_USER_RECOVERY.
->>
->> Note: we do not change the default behavior with reocvery feature
->> disabled. monitor_work still schedules stop_work and abort inflight
->> rqs. Finally ublk_device is released.
-> 
-> This version looks much better than before.
-
-Thanks :)
-
-> 
->>
->> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
->> ---
->>  drivers/block/ublk_drv.c | 168 +++++++++++++++++++++++++++++++++++++--
->>  1 file changed, 161 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
->> index b067f33a1913..4409a130d0b6 100644
->> --- a/drivers/block/ublk_drv.c
->> +++ b/drivers/block/ublk_drv.c
->> @@ -121,7 +121,7 @@ struct ublk_queue {
->>  
->>  	unsigned long io_addr;	/* mapped vm address */
->>  	unsigned int max_io_sz;
->> -	bool abort_work_pending;
->> +	bool force_abort;
->>  	unsigned short nr_io_ready;	/* how many ios setup */
->>  	struct ublk_device *dev;
->>  	struct ublk_io ios[0];
->> @@ -163,6 +163,7 @@ struct ublk_device {
->>  	 * monitor each queue's daemon periodically
->>  	 */
->>  	struct delayed_work	monitor_work;
->> +	struct work_struct	quiesce_work;
->>  	struct work_struct	stop_work;
->>  };
->>  
->> @@ -660,6 +661,11 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
->>  	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
->>  
->>  	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
->> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
->> +				__func__,
->> +				((struct ublk_queue *)req->mq_hctx->driver_data)->q_id,
-> 
-> req->mq_hctx->queue_num is cleaner.
-
-Ok.
-
-> 
->> +				req->tag,
->> +				io->flags);
->>  		io->flags |= UBLK_IO_FLAG_ABORTED;
->>  		blk_mq_end_request(req, BLK_STS_IOERR);
->>  	}
->> @@ -820,6 +826,21 @@ static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
->>  	res = ublk_setup_iod(ubq, rq);
->>  	if (unlikely(res != BLK_STS_OK))
->>  		return BLK_STS_IOERR;
->> +    /* With recovery feature enabled, force_abort is set in
->> +     * ublk_stop_dev() before calling del_gendisk() if ub's state
->> +     * is QUIESCED. We have to abort all requeued and new rqs here
->> +     * to let del_gendisk() move on. Besides, we do not call
->> +     * io_uring_cmd_complete_in_task() to avoid UAF on io_uring ctx.
->> +     *
->> +     * Note: force_abort is guaranteed to be seen because it is set
->> +     * before request queue is unqiuesced.
->> +     */
->> +	if (unlikely(ubq->force_abort)) {
->> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
->> +				__func__, ubq->q_id, rq->tag,
->> +				ubq->ios[rq->tag].flags);
->> +		return BLK_STS_IOERR;
->> +	}
->>  
->>  	blk_mq_start_request(bd->rq);
->>  
->> @@ -1003,6 +1024,101 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
->>  	ublk_put_device(ub);
->>  }
->>  
->> +static bool ublk_check_inflight_rq(struct request *rq, void *data)
->> +{
->> +	struct ublk_queue *ubq = rq->mq_hctx->driver_data;
->> +	struct ublk_io *io = &ubq->ios[rq->tag];
->> +	bool *busy = data;
->> +
->> +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {
->> +		*busy = true;
->> +		return false;
->> +	}
->> +	return true;
->> +}
->> +
->> +static void ublk_wait_tagset_rqs_idle(struct ublk_device *ub)
->> +{
->> +	bool busy = false;
->> +
->> +	WARN_ON_ONCE(!blk_queue_quiesced(ub->ub_disk->queue));
->> +	while (true) {
->> +		blk_mq_tagset_busy_iter(&ub->tag_set,
->> +				ublk_check_inflight_rq, &busy);
->> +		if (busy)
->> +			msleep(UBLK_REQUEUE_DELAY_MS);
->> +		else
->> +			break;
->> +	}
->> +}
->> +
->> +static void ublk_quiesce_queue(struct ublk_device *ub,
->> +		struct ublk_queue *ubq)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < ubq->q_depth; i++) {
->> +		struct ublk_io *io = &ubq->ios[i];
->> +
->> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
->> +			struct request *rq = blk_mq_tag_to_rq(
->> +					ub->tag_set.tags[ubq->q_id], i);
->> +
->> +			WARN_ON_ONCE(!rq);
->> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
->> +					ublk_queue_can_use_recovery_reissue(ubq) ?
->> +					"requeue" : "abort",
->> +					ubq->q_id, i, io->flags);
->> +			if (ublk_queue_can_use_recovery_reissue(ubq))
->> +				blk_mq_requeue_request(rq, false);
-> 
-> This way is too violent.
-> 
-> There may be just one queue dying, but you requeue all requests
-> from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
-> such as, just requeuing requests in dying queue.
-
-If we want to start a new process after a crash for USER_RECOVERY, all old ubq_daemons
-must exit and rqs of all queues have to be requeued/aborted. We cannot let live
-ubq_daemons run any more because they do not belong to the new process.
-
-BTW, I really wonder why there could be just one queue dying? All queues must be dying
-shortly after any ubq_daemon is dying since they are all pthreads in the same process.
-
-> 
-> That said you still can re-use the logic in ublk_abort_queue()/ublk_daemon_monitor_work()
-> for making progress, just changing aborting request with requeue in
-> ublk_abort_queue().
-
-I get your point, but it may be hard to reuse the logic in ublk_daemon_monitor_work()
-because:
-(1) we have to quiesce request queue in ublk_quiesce_dev(). This has to be done with
-    ub_mutex.
-(2) ublk_quiesce_dev() cannot be run after rqs are requeued/aborted.
-
-> 
->> +			else
->> +				__ublk_fail_req(io, rq);
->> +		} else {
->> +			pr_devel("%s: done old cmd: qid %d tag %d\n",
->> +					__func__, ubq->q_id, i);
->> +			io_uring_cmd_done(io->cmd, UBLK_IO_RES_ABORT, 0);
->> +			io->flags &= ~UBLK_IO_FLAG_ACTIVE;
->> +		}
->> +		ubq->nr_io_ready--;
->> +	}
->> +	WARN_ON_ONCE(ubq->nr_io_ready);
->> +}
->> +
->> +static void ublk_quiesce_dev(struct ublk_device *ub)
->> +{
->> +	int i;
->> +
->> +	mutex_lock(&ub->mutex);
->> +	if (ub->dev_info.state != UBLK_S_DEV_LIVE)
->> +		goto unlock;
->> +
->> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
->> +		struct ublk_queue *ubq = ublk_get_queue(ub, i);
->> +
->> +		if (!ubq_daemon_is_dying(ubq))
->> +			goto unlock;
->> +	}
->> +	blk_mq_quiesce_queue(ub->ub_disk->queue);
->> +	ublk_wait_tagset_rqs_idle(ub);
->> +	pr_devel("%s: quiesce ub: dev_id %d\n",
->> +			__func__, ub->dev_info.dev_id);
->> +
->> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
->> +		ublk_quiesce_queue(ub, ublk_get_queue(ub, i));
->> +
->> +	ub->dev_info.state = UBLK_S_DEV_QUIESCED;
->> + unlock:
->> +	mutex_unlock(&ub->mutex);
->> +}
->> +
->> +static void ublk_quiesce_work_fn(struct work_struct *work)
->> +{
->> +	struct ublk_device *ub =
->> +		container_of(work, struct ublk_device, quiesce_work);
->> +
->> +	ublk_quiesce_dev(ub);
->> +}
->> +
->>  static void ublk_daemon_monitor_work(struct work_struct *work)
->>  {
->>  	struct ublk_device *ub =
->> @@ -1013,10 +1129,14 @@ static void ublk_daemon_monitor_work(struct work_struct *work)
->>  		struct ublk_queue *ubq = ublk_get_queue(ub, i);
->>  
->>  		if (ubq_daemon_is_dying(ubq)) {
->> -			schedule_work(&ub->stop_work);
->> -
->> -			/* abort queue is for making forward progress */
->> -			ublk_abort_queue(ub, ubq);
->> +			if (ublk_queue_can_use_recovery(ubq)) {
->> +				schedule_work(&ub->quiesce_work);
->> +			} else {
->> +				schedule_work(&ub->stop_work);
->> +
->> +				/* abort queue is for making forward progress */
->> +				ublk_abort_queue(ub, ubq);
->> +			}
-> 
-> If quiesce work are always scheduled exclusively with stop work,
-> the two can be defined as union, but not one big deal.
-
-OK.
-
-Regards,
-Zhang
+Jani Nikula <jani.nikula@linux.intel.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=881=
+9=E6=97=A5=E5=91=A8=E4=B8=80 17:30=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, 19 Sep 2022, Zheng Wang <1002992920@qq.com> wrote:
+> >  From afe79848cb74cc8e45ab426d13fa2394c87e0422 Mon Sep 17 00:00:00 2001
+> > From: xmzyshypnc <1002992920@qq.com>
+> > Date: Fri, 16 Sep 2022 23:48:23 +0800
+> > Subject: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_ent=
+ry
+> >
+> > There is a double-free security bug in split_2MB_gtt_entry.
+> >
+> > Here is a calling chain :
+> > ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
+> >
+> > If intel_gvt_dma_map_guest_page failed, it will call
+> > ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
+> > kfree(spt). But the caller does not notice that, and it will call
+> > ppgtt_free_spt again in error path.
+> >
+> > Fix this by only freeing spt in ppgtt_invalidate_spt in good case.
+> >
+> > Signed-off-by: xmzyshypnc <1002992920@qq.com>
+>
+> Please use git send-email. The patch is whitespace broken and line
+> wrapped, making it unusable.
+>
+> BR,
+> Jani.
+>
+>
+> > ---
+> >   drivers/gpu/drm/i915/gvt/gtt.c | 16 +++++++++-------
+> >   1 file changed, 9 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/=
+gtt.c
+> > index ce0eb03709c3..550519f0acca 100644
+> > --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> > +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> > @@ -959,7 +959,7 @@ static inline int ppgtt_put_spt(struct
+> > intel_vgpu_ppgtt_spt *spt)
+> >       return atomic_dec_return(&spt->refcount);
+> >   }
+> >
+> > -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
+> > +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt, int
+> > is_error);
+> >
+> >   static int ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vg=
+pu,
+> >           struct intel_gvt_gtt_entry *e)
+> > @@ -995,7 +995,7 @@ static int
+> > ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
+> >                   ops->get_pfn(e));
+> >           return -ENXIO;
+> >       }
+> > -    return ppgtt_invalidate_spt(s);
+> > +    return ppgtt_invalidate_spt(s, 0);
+> >   }
+> >
+> >   static inline void ppgtt_invalidate_pte(struct intel_vgpu_ppgtt_spt *=
+spt,
+> > @@ -1016,7 +1016,7 @@ static inline void ppgtt_invalidate_pte(struct
+> > intel_vgpu_ppgtt_spt *spt,
+> >       intel_gvt_dma_unmap_guest_page(vgpu, pfn << PAGE_SHIFT);
+> >   }
+> >
+> > -static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt)
+> > +static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt, int
+> > is_error)
+> >   {
+> >       struct intel_vgpu *vgpu =3D spt->vgpu;
+> >       struct intel_gvt_gtt_entry e;
+> > @@ -1059,9 +1059,11 @@ static int ppgtt_invalidate_spt(struct
+> > intel_vgpu_ppgtt_spt *spt)
+> >           }
+> >       }
+> >
+> > -    trace_spt_change(spt->vgpu->id, "release", spt,
+> > +    if (!is_error) {
+> > +        trace_spt_change(spt->vgpu->id, "release", spt,
+> >                spt->guest_page.gfn, spt->shadow_page.type);
+> > -    ppgtt_free_spt(spt);
+> > +        ppgtt_free_spt(spt);
+> > +    }
+> >       return 0;
+> >   fail:
+> >       gvt_vgpu_err("fail: shadow page %p shadow entry 0x%llx type %d\n"=
+,
+> > @@ -1215,7 +1217,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu
+> > *vgpu,
+> >           ret =3D intel_gvt_dma_map_guest_page(vgpu, start_gfn + sub_in=
+dex,
+> >                              PAGE_SIZE, &dma_addr);
+> >           if (ret) {
+> > -            ppgtt_invalidate_spt(spt);
+> > +            ppgtt_invalidate_spt(spt, 1);
+> >               return ret;
+> >           }
+> >           sub_se.val64 =3D se->val64;
+> > @@ -1393,7 +1395,7 @@ static int ppgtt_handle_guest_entry_removal(struc=
+t
+> > intel_vgpu_ppgtt_spt *spt,
+> >               ret =3D -ENXIO;
+> >               goto fail;
+> >           }
+> > -        ret =3D ppgtt_invalidate_spt(s);
+> > +        ret =3D ppgtt_invalidate_spt(s, 0);
+> >           if (ret)
+> >               goto fail;
+> >       } else {
+>
+> --
+> Jani Nikula, Intel Open Source Graphics Center
