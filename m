@@ -2,187 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA2B5BD246
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6C95BD24C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiISQeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S229805AbiISQhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiISQeL (ORCPT
+        with ESMTP id S229528AbiISQg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:34:11 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18F03C8DA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:34:06 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id u6-20020a056830118600b006595e8f9f3fso7982475otq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZLiOCNNF7wdWCABGAiGK8/oWijAvCIwWJHaJzbioRxM=;
-        b=nY+pSkSNHqCwgtOKWBI3vQ+7D3KMosqNkG9NQy+uhbnu5FMJZkFy8tjyyEXUhOBDv+
-         nYPaJDkq+xFcrYLY0JkhfgmUY+NcDQQpL0Im6CoXPfPRUE8ZYzmm/q2rVBZAEldwA5wY
-         JD4qMfqJrkDkjjXkUm7bQqhDzMraaOF45/LpssN8HoilzMlg10z2/G1F9aGRVva3fwSi
-         2hYDZ3ECKF18w+c1Vlumuks5PYGholLxd6uMqdKLLxWQX2IVeBKvFgdIwWBOr9QvrZ+M
-         +mm6RcrmwWSq/ApAM0DtxDlSd0tEtWOGUDZPHVHxq39ofhSbwjC30rR1zeVEK0Y69xUL
-         nMCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZLiOCNNF7wdWCABGAiGK8/oWijAvCIwWJHaJzbioRxM=;
-        b=2I1eoRDCj+YMfUrIT+E30ygOfeD9BuC0qrXUUBpf8wZSZCRIXv6Mx9guLgte6/UnMc
-         jlNJmKLuIC5ba0JyTOYVogLNb4OaJzX3b3GD9RYiv69+eQ4jWWKzoqi9YiQ2BhS0X4cW
-         2pStqdi8vg1+CRsyrFxY/FY5X34V3KH2KMlaF+aYmqjvHwEVIOItaoZzsMJfDLT54Otk
-         PziIDsloj90Vhwjqbe0xFekgP3g+XPzfBwaoEpovEUnN8AMpbHNGurGM2IMRFRkeMPZE
-         LP34xwIXEAJr6+CJm7STz5ZtoJMfmrP3rRXNVAM0O22iguv/XdjvbE/c5SqqyY0XID7F
-         m1+Q==
-X-Gm-Message-State: ACrzQf10j0vo/wSd1TAaBBmd+rnNNGIQ2S2o+PKDJNBKRjS3L7hoIjar
-        ItrEipW/kYqkJL2wrtpl/ZfdIRKF0OFpXYN2sic=
-X-Google-Smtp-Source: AMsMyM4sipQbglJKguzhieKBP2oCrd47THdmXYiXWCu3NuliJqL9QXCYcig3ahqFxzgD4GZoMeUgxmjQRxKFfln6t1Y=
-X-Received: by 2002:a9d:376:0:b0:655:b4bc:fd6e with SMTP id
- 109-20020a9d0376000000b00655b4bcfd6emr8479616otv.233.1663605245951; Mon, 19
- Sep 2022 09:34:05 -0700 (PDT)
+        Mon, 19 Sep 2022 12:36:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1C9356E0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663605416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mchxf99lMev1aFGv2K+bOlvQAf7i2XmiTm89Tkqpih0=;
+        b=gBgreRG3trOG0Zhk+CB54bvBYdi/IJwHypUPa6xFYglXsDqTpYZGkbIA6OmaI9SA4abJ67
+        IM5mB+7bsSkcS7G+SWchUiC+rYtjT3oX3PiqyWkKC8X0m42kpGx5pmbG8QFcb++SdfB+lR
+        nHbH1kH8ODe3n/Gmjw3hcVoc+C4slpI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-168-e-vBbojmMZqRGk6nJlTDWA-1; Mon, 19 Sep 2022 12:36:52 -0400
+X-MC-Unique: e-vBbojmMZqRGk6nJlTDWA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2DC3B811E67;
+        Mon, 19 Sep 2022 16:36:52 +0000 (UTC)
+Received: from localhost (unknown [10.39.192.144])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3F74207B34A;
+        Mon, 19 Sep 2022 16:36:50 +0000 (UTC)
+Date:   Mon, 19 Sep 2022 12:36:48 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Gwendal Grignou <gwendal@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Evan Green <evgreen@google.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [dm-devel] [PATCH RFC 0/8] Introduce provisioning primitives for
+ thinly provisioned storage
+Message-ID: <YyiaoHcueK9g5KVy@fedora>
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <YyU5CyQfS+64xmnm@magnolia>
+ <CAG9=OMNPnsjaUw2EUG0XFjV94-V1eD63V+1anoGM=EWKyzXEfg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CADnq5_O0W-ipCCy3hsub5GwirjDTM76Xn3kAxgyZT5V+vDguSA@mail.gmail.com>
- <20220918120926.10322-1-user@am64>
-In-Reply-To: <20220918120926.10322-1-user@am64>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 19 Sep 2022 12:33:54 -0400
-Message-ID: <CADnq5_Py+dgAxa5Y1tzbWx6xRt1g2LQ1JsiJD6ewYYTzjjaPcw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: use dirty framebuffer helper
-To:     root <arthur.marsh@internode.on.net>
-Cc:     Xinhui.Pan@amd.com, airlied@linux.ie, alexander.deucher@amd.com,
-        amd-gfx@lists.freedesktop.org, aurabindo.pillai@amd.com,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        greenfoo@u92.eu, guchun.chen@amd.com, hamza.mahfooz@amd.com,
-        linux-kernel@vger.kernel.org, seanpaul@chromium.org
-Content-Type: multipart/mixed; boundary="000000000000bb74c905e90a4789"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FvyRLtY8FNQa7tFK"
+Content-Disposition: inline
+In-Reply-To: <CAG9=OMNPnsjaUw2EUG0XFjV94-V1eD63V+1anoGM=EWKyzXEfg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000bb74c905e90a4789
-Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Sep 18, 2022 at 8:09 AM root <arthur.marsh@internode.on.net> wrote:
->
-> Hi, I recently experienced lock-ups that only responded to magic sysreq
-> reboots when the amdgpu module was loading on my pc (Athlon II X4 640 CPU,
-> with Radeon R7 250 - Cape Verde).
->
-> .config has:
->
-> CONFIG_DRM_AMDGPU=m
-> CONFIG_DRM_AMDGPU_SI=y
-> # CONFIG_DRM_AMDGPU_CIK is not set
-> # CONFIG_DRM_AMDGPU_USERPTR is not set
->
-> kernel command line has:
->
-> amdgpu.audio=1 amdgpu.si_support=1 radeon.si_support=0 page_owner=on \
-> amdgpu.gpu_recovery=1
->
-> Bisecting lead to:
->
-> commit 66f99628eb24409cb8feb5061f78283c8b65f820
-> Author: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> Date:   Tue Sep 6 15:01:49 2022 -0400
->
->     drm/amdgpu: use dirty framebuffer helper
->
->     Currently, we aren't handling DRM_IOCTL_MODE_DIRTYFB. So, use
->     drm_atomic_helper_dirtyfb() as the dirty callback in the amdgpu_fb_funcs
->     struct.
->
->     Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->     Acked-by: Alex Deucher <alexander.deucher@amd.com>
->     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> index c20922a5af9f..5b09c8f4fe95 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> @@ -38,6 +38,7 @@
->  #include <linux/pci.h>
->  #include <linux/pm_runtime.h>
->  #include <drm/drm_crtc_helper.h>
-> +#include <drm/drm_damage_helper.h>
->  #include <drm/drm_edid.h>
->  #include <drm/drm_gem_framebuffer_helper.h>
->  #include <drm/drm_fb_helper.h>
-> @@ -496,6 +497,7 @@ bool amdgpu_display_ddc_probe(struct amdgpu_connector *amdgpu_connector,
->  static const struct drm_framebuffer_funcs amdgpu_fb_funcs = {
->         .destroy = drm_gem_fb_destroy,
->         .create_handle = drm_gem_fb_create_handle,
-> +       .dirty = drm_atomic_helper_dirtyfb,
->  };
->
->  uint32_t amdgpu_display_supported_domains(struct amdgpu_device *adev,
->
-> After doing a git bisect reset, git pull and reverting the patch above, I
-> rebuilt the kernel and am successfully running with the amdgpu module loaded
-> and using the Radeon R7 250 GPU.
->
-> I am happy to supply any further configuration details.
+--FvyRLtY8FNQa7tFK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Does the attached patch help?
+On Sat, Sep 17, 2022 at 12:46:33PM -0700, Sarthak Kukreti wrote:
+> On Fri, Sep 16, 2022 at 8:03 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> >
+> > On Thu, Sep 15, 2022 at 09:48:18AM -0700, Sarthak Kukreti wrote:
+> > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > >
+> > > Hi,
+> > >
+> > > This patch series is an RFC of a mechanism to pass through provision
+> > > requests on stacked thinly provisioned storage devices/filesystems.
+> >
+> > [Reflowed text]
+> >
+> > > The linux kernel provides several mechanisms to set up thinly
+> > > provisioned block storage abstractions (eg. dm-thin, loop devices over
+> > > sparse files), either directly as block devices or backing storage for
+> > > filesystems. Currently, short of writing data to either the device or
+> > > filesystem, there is no way for users to pre-allocate space for use in
+> > > such storage setups. Consider the following use-cases:
+> > >
+> > > 1) Suspend-to-disk and resume from a dm-thin device: In order to
+> > > ensure that the underlying thinpool metadata is not modified during
+> > > the suspend mechanism, the dm-thin device needs to be fully
+> > > provisioned.
+> > > 2) If a filesystem uses a loop device over a sparse file, fallocate()
+> > > on the filesystem will allocate blocks for files but the underlying
+> > > sparse file will remain intact.
+> > > 3) Another example is virtual machine using a sparse file/dm-thin as a
+> > > storage device; by default, allocations within the VM boundaries will
+> > > not affect the host.
+> > > 4) Several storage standards support mechanisms for thin provisioning
+> > > on real hardware devices. For example:
+> > >   a. The NVMe spec 1.0b section 2.1.1 loosely talks about thin
+> > >   provisioning: "When the THINP bit in the NSFEAT field of the
+> > >   Identify Namespace data structure is set to =E2=80=981=E2=80=99, th=
+e controller ...
+> > >   shall track the number of allocated blocks in the Namespace
+> > >   Utilization field"
+> > >   b. The SCSi Block Commands reference - 4 section references "Thin
+> > >   provisioned logical units",
+> > >   c. UFS 3.0 spec section 13.3.3 references "Thin provisioning".
+> > >
+> > > In all of the above situations, currently the only way for
+> > > pre-allocating space is to issue writes (or use
+> > > WRITE_ZEROES/WRITE_SAME). However, that does not scale well with
+> > > larger pre-allocation sizes.
+> > >
+> > > This patchset introduces primitives to support block-level
+> > > provisioning (note: the term 'provisioning' is used to prevent
+> > > overloading the term 'allocations/pre-allocations') requests across
+> > > filesystems and block devices. This allows fallocate() and file
+> > > creation requests to reserve space across stacked layers of block
+> > > devices and filesystems. Currently, the patchset covers a prototype on
+> > > the device-mapper targets, loop device and ext4, but the same
+> > > mechanism can be extended to other filesystems/block devices as well
+> > > as extended for use with devices in 4 a-c.
+> >
+> > If you call REQ_OP_PROVISION on an unmapped LBA range of a block device
+> > and then try to read the provisioned blocks, what do you get?  Zeroes?
+> > Random stale disk contents?
+> >
+> > I think I saw elsewhere in the thread that any mapped LBAs within the
+> > provisioning range are left alone (i.e. not zeroed) so I'll proceed on
+> > that basis.
+> >
+> For block devices, I'd say it's definitely possible to get stale data, de=
+pending
+> on the implementation of the allocation layer; for example, with dm-thinp=
+ool,
+> the default setting via using LVM2 tools is to zero out blocks on allocat=
+ion.
+> But that's configurable and can be turned off to improve performance.
+>=20
+> Similarly, for actual devices that end up supporting thin provisioning, u=
+nless
+> the specification absolutely mandates that an LBA contains zeroes post
+> allocation, some implementations will definitely miss out on that (probab=
+ly
+> similar to the semantics of discard_zeroes_data today). I'm operating und=
+er
+> the assumption that it's possible to get stale data from LBAs allocated u=
+sing
+> provision requests at the block layer and trying to see if we can create a
+> safe default operating model from that.
 
-Alex
+Please explain the semantics of REQ_OP_PROVISION in the
+code/documentation in the next revision.
 
+Thanks,
+Stefan
 
->
-> Arthur Marsh.
+--FvyRLtY8FNQa7tFK
+Content-Type: application/pgp-signature; name="signature.asc"
 
---000000000000bb74c905e90a4789
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-drm-amdgpu-don-t-register-a-dirty-callback-for-non-a.patch"
-Content-Disposition: attachment; 
-	filename="0001-drm-amdgpu-don-t-register-a-dirty-callback-for-non-a.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l88zlnu70>
-X-Attachment-Id: f_l88zlnu70
+-----BEGIN PGP SIGNATURE-----
 
-RnJvbSA1ZTQ5YzY4YzFhYzFmYmI5OGIxYzg0NDA3NDg1YWJmYjdkMzA5NzgzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbGV4IERldWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFtZC5j
-b20+CkRhdGU6IE1vbiwgMTkgU2VwIDIwMjIgMTI6MjY6MjAgLTA0MDAKU3ViamVjdDogW1BBVENI
-XSBkcm0vYW1kZ3B1OiBkb24ndCByZWdpc3RlciBhIGRpcnR5IGNhbGxiYWNrIGZvciBub24tYXRv
-bWljCgpTb21lIGFzaWNzIHN0aWxsIHN1cHBvcnQgbm9uLWF0b21pYyBjb2RlIHBhdGhzLgoKRml4
-ZXM6IDY2Zjk5NjI4ZWIyNDQwICgiZHJtL2FtZGdwdTogdXNlIGRpcnR5IGZyYW1lYnVmZmVyIGhl
-bHBlciIpClJlcG9ydGVkLWJ5OiBBcnRodXIgTWFyc2ggPGFydGh1ci5tYXJzaEBpbnRlcm5vZGUu
-b24ubmV0PgpTaWduZWQtb2ZmLWJ5OiBBbGV4IERldWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFt
-ZC5jb20+Ci0tLQogZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rpc3BsYXkuYyB8
-IDExICsrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
-dGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9k
-aXNwbGF5LmMgYi9kcml2ZXJzL2dwdS9kcm0vYW1kL2FtZGdwdS9hbWRncHVfZGlzcGxheS5jCmlu
-ZGV4IDViMDljOGY0ZmU5NS4uMjM5OThmNzI3YzdmIDEwMDY0NAotLS0gYS9kcml2ZXJzL2dwdS9k
-cm0vYW1kL2FtZGdwdS9hbWRncHVfZGlzcGxheS5jCisrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQv
-YW1kZ3B1L2FtZGdwdV9kaXNwbGF5LmMKQEAgLTM5LDYgKzM5LDcgQEAKICNpbmNsdWRlIDxsaW51
-eC9wbV9ydW50aW1lLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9jcnRjX2hlbHBlci5oPgogI2luY2x1
-ZGUgPGRybS9kcm1fZGFtYWdlX2hlbHBlci5oPgorI2luY2x1ZGUgPGRybS9kcm1fZHJ2Lmg+CiAj
-aW5jbHVkZSA8ZHJtL2RybV9lZGlkLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9nZW1fZnJhbWVidWZm
-ZXJfaGVscGVyLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9mYl9oZWxwZXIuaD4KQEAgLTQ5Nyw2ICs0
-OTgsMTEgQEAgYm9vbCBhbWRncHVfZGlzcGxheV9kZGNfcHJvYmUoc3RydWN0IGFtZGdwdV9jb25u
-ZWN0b3IgKmFtZGdwdV9jb25uZWN0b3IsCiBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9mcmFtZWJ1
-ZmZlcl9mdW5jcyBhbWRncHVfZmJfZnVuY3MgPSB7CiAJLmRlc3Ryb3kgPSBkcm1fZ2VtX2ZiX2Rl
-c3Ryb3ksCiAJLmNyZWF0ZV9oYW5kbGUgPSBkcm1fZ2VtX2ZiX2NyZWF0ZV9oYW5kbGUsCit9Owor
-CitzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9mcmFtZWJ1ZmZlcl9mdW5jcyBhbWRncHVfZmJfZnVu
-Y3NfYXRvbWljID0geworCS5kZXN0cm95ID0gZHJtX2dlbV9mYl9kZXN0cm95LAorCS5jcmVhdGVf
-aGFuZGxlID0gZHJtX2dlbV9mYl9jcmVhdGVfaGFuZGxlLAogCS5kaXJ0eSA9IGRybV9hdG9taWNf
-aGVscGVyX2RpcnR5ZmIsCiB9OwogCkBAIC0xMTAyLDcgKzExMDgsMTAgQEAgc3RhdGljIGludCBh
-bWRncHVfZGlzcGxheV9nZW1fZmJfdmVyaWZ5X2FuZF9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpk
-ZXYsCiAJaWYgKHJldCkKIAkJZ290byBlcnI7CiAKLQlyZXQgPSBkcm1fZnJhbWVidWZmZXJfaW5p
-dChkZXYsICZyZmItPmJhc2UsICZhbWRncHVfZmJfZnVuY3MpOworCWlmIChkcm1fZHJ2X3VzZXNf
-YXRvbWljX21vZGVzZXQoZGV2KSkKKwkJcmV0ID0gZHJtX2ZyYW1lYnVmZmVyX2luaXQoZGV2LCAm
-cmZiLT5iYXNlLCAmYW1kZ3B1X2ZiX2Z1bmNzX2F0b21pYyk7CisJZWxzZQorCQlyZXQgPSBkcm1f
-ZnJhbWVidWZmZXJfaW5pdChkZXYsICZyZmItPmJhc2UsICZhbWRncHVfZmJfZnVuY3MpOwogCWlm
-IChyZXQpCiAJCWdvdG8gZXJyOwogCi0tIAoyLjM3LjMKCg==
---000000000000bb74c905e90a4789--
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmMomqAACgkQnKSrs4Gr
+c8g4vQf/TYZDC6JT8LCVfsDWkwegZYqhX4pz86cryayWYFUYe3u9UmLPrY/TuE1y
+XQwzM9jsI+LdCcQtLZtvre/JsJB6esC/LGv+FTGOSju2n0FLXTS7v80LujcoHnKE
+7RZ0eliz4XGK/X1Q6rLVgNFhFUcQIM4yYNKsAklXpSApXwgQ5W8mKI7GVqi+rhds
+UynMkkK2XKPIeBVRJg7gNCx4vTnwas+AQ5QCuAoGpRxvTcPmKlP9krCi0owiGZKR
+08ORDLnl4g8uxmkJQoYR6Ep6bnJY4mq9XSeNMYwOEWAd63h3aYO27kxvClgMo0mV
+wb0jbsC1V0Qd8XvrdufP80ym3TVKCg==
+=HyVg
+-----END PGP SIGNATURE-----
+
+--FvyRLtY8FNQa7tFK--
+
