@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5415BCD74
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F142F5BCDC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiISNnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S229926AbiISN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiISNnN (ORCPT
+        with ESMTP id S229750AbiISN5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:43:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2779211C3A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663594991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XAQ4C8p526IwfywWHvDt2bP3t+cfJKiAuugWFxjBeBk=;
-        b=gwRjpjdGGMup1LqTCmy7arKUEnAyP8tXYtROAYw/5qQJ+U05AhUYa+eMrMyfSHt6wqLaSv
-        wN7q2zQXzWaTh9BEIXHskIVn0ZLhhM/BzKwMOT+wpfCKhNEbJDNjxaAAMtMYoooGi7zAYR
-        6Do1XutO9yaNFd9IqDoT1bc2HCIq+X0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-m7uMEVL3PEO3rwyjHKygLg-1; Mon, 19 Sep 2022 09:43:10 -0400
-X-MC-Unique: m7uMEVL3PEO3rwyjHKygLg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB7301C0BC6D;
-        Mon, 19 Sep 2022 13:43:08 +0000 (UTC)
-Received: from starship (unknown [10.40.192.163])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 681AD1121314;
-        Mon, 19 Sep 2022 13:43:02 +0000 (UTC)
-Message-ID: <ec4b176036d33ad99fceb43b104cf9be8aca105a.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] x86: cpuid: improve support for broken CPUID
- configurations
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
+        Mon, 19 Sep 2022 09:57:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C92A70A;
+        Mon, 19 Sep 2022 06:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663595874; x=1695131874;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rVLwnepZShLYi0CxrPl67f1ZjluOas+qgi/tbAoa+DM=;
+  b=QsODZRDhEmbnPLDuHuYJO8Z7MCPXj2O2fPHdotIMhQPQ+OkMwi+OB0kr
+   UbQq857x09Cq2uHWgNF7RLYPpTfUKNzPsCz5oezoQAiFqfD5+GuqPK51t
+   dNGQOjq1DvjWnbNOkYHqQU5mDdditILdhixFai/D6Wde8GJcFdMc36kRt
+   FzJ/kJkda8asXk8rbqGU0Dwn9FYtO6+W3RCTUQfsI8RfAL4f5BFlilZJK
+   Hex3IyrvG6p3PsSpyC32gkc3eENocfOLYb9oxWYleQ8dTvqm9tDLjmP3z
+   Ci2YrXYqNMJ17Oxt7E9mcPviqJyHxOMoi1pKmRDW3T+Wb+AF7esbwt5NV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279786502"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="279786502"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:57:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="722306733"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Sep 2022 06:57:46 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 28JDvi5X023980;
+        Mon, 19 Sep 2022 14:57:44 +0100
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
-Date:   Mon, 19 Sep 2022 16:43:00 +0300
-In-Reply-To: <4a327f06f6e5da6f3badb5ccf80d22a5c9e18b97.camel@redhat.com>
-References: <20220718141123.136106-1-mlevitsk@redhat.com>
-         <fad05f161cc6425d8c36fb6322de2bbaa683dcb3.camel@redhat.com>
-         <4a327f06f6e5da6f3badb5ccf80d22a5c9e18b97.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: [PATCH net] ice: Fix ice_xdp_xmit() when XDP TX queue number is not sufficient
+Date:   Mon, 19 Sep 2022 15:43:46 +0200
+Message-Id: <20220919134346.25030-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,61 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-01 at 19:05 +0300, Maxim Levitsky wrote:
-> On Thu, 2022-07-28 at 10:30 +0300, Maxim Levitsky wrote:
-> > On Mon, 2022-07-18 at 17:11 +0300, Maxim Levitsky wrote:
-> > > This patch series aims to harden the cpuid code against the case when
-> > > the hypervisor exposes a broken CPUID configuration to the guest,
-> > > in the form of having a feature disabled but not features that depend on it.
-> > > 
-> > > This is the more generic way to fix kernel panic in aes-ni kernel driver,
-> > > which was triggered by CPUID configuration in which AVX is disabled but
-> > > not AVX2.
-> > > 
-> > > https://lore.kernel.org/all/20211103145231.GA4485@gondor.apana.org.au/T/
-> > > 
-> > > This was tested by booting a guest with AVX disabled and not AVX2,
-> > > and observing that both a warning is now printed in dmesg, and
-> > > that avx2 is gone from /proc/cpuinfo.
-> > > 
-> > > V2:
-> > > 
-> > > I hopefully addressed all the (very good) review feedback.
-> > > 
-> > > Best regards,
-> > > 	Maxim Levitsky
-> > > 
-> > > Maxim Levitsky (5):
-> > >   perf/x86/intel/lbr: use setup_clear_cpu_cap instead of clear_cpu_cap
-> > >   x86/cpuid: refactor setup_clear_cpu_cap()/clear_cpu_cap()
-> > >   x86/cpuid: move filter_cpuid_features to cpuid-deps.c
-> > >   x86/cpuid: remove 'warn' parameter from filter_cpuid_features
-> > >   x86/cpuid: check for dependencies violations in CPUID and attempt to
-> > >     fix them
-> > > 
-> > >  arch/x86/events/intel/lbr.c       |  2 +-
-> > >  arch/x86/include/asm/cpufeature.h |  1 +
-> > >  arch/x86/kernel/cpu/common.c      | 51 +-------------------
-> > >  arch/x86/kernel/cpu/cpuid-deps.c  | 80 +++++++++++++++++++++++++++----
-> > >  4 files changed, 74 insertions(+), 60 deletions(-)
-> > > 
-> > > -- 
-> > > 2.34.3
-> > > 
-> > > 
-> > A very kind ping on these patches.
-> 
-> Another kind ping on these patches.
+The original patch added the static branch to handle the situation,
+when assigning an XDP TX queue to every CPU is not possible,
+so they have to be shared.
 
-Another very gentle ping on these patches.
+However, in the XDP transmit handler ice_xdp_xmit(), an error was
+returned in such cases even before static condition was checked,
+thus making queue sharing still impossible.
 
-Best regards,
-	Maxim Levitsky
-> 
-> 
-> Best regards,
-> 	Maxim Levitsky
-> > Best regards,
-> > 	Maxim Levitsky
+Fixes: 22bf877e528f ("ice: introduce XDP_TX fallback path")
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index 42b42f4b21ef..a5a0c9706b5a 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -610,7 +610,7 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+ 	if (test_bit(ICE_VSI_DOWN, vsi->state))
+ 		return -ENETDOWN;
+ 
+-	if (!ice_is_xdp_ena_vsi(vsi) || queue_index >= vsi->num_xdp_txq)
++	if (!ice_is_xdp_ena_vsi(vsi))
+ 		return -ENXIO;
+ 
+ 	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
+@@ -621,6 +621,9 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+ 		xdp_ring = vsi->xdp_rings[queue_index];
+ 		spin_lock(&xdp_ring->tx_lock);
+ 	} else {
++		/* Generally, should not happen */
++		if (unlikely(queue_index >= vsi->num_xdp_txq))
++			return -ENXIO;
+ 		xdp_ring = vsi->xdp_rings[queue_index];
+ 	}
+ 
+-- 
+2.35.3
 
