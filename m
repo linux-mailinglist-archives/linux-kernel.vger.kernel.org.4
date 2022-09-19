@@ -2,212 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9895BC453
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074FD5BC454
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiISIaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S229978AbiISIai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiISI3t (ORCPT
+        with ESMTP id S229964AbiISIag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:29:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB065EF;
-        Mon, 19 Sep 2022 01:29:47 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sb3so33080313ejb.9;
-        Mon, 19 Sep 2022 01:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=xoymz8faVzT0wsOgDh8GpMXHhgQOtJ4iGMWiJ5WcE5M=;
-        b=Lm7BO126imBfW2p86+6dSuKs+lWUTMbm5eMgm9pFu/j9M/kqYbL3JPu1nJiCf2uXr4
-         I7IjQVG8rbtLB0O7vzXFYE+FtBv2dj5kEBIvcsHegeo10YjZOcoRy1WxnAtjcEC/iNDW
-         LcZ876QNCiVqfZB64ohts2NklO+0MWD4dVJ/IzGNrK5jBfbQMOHyIOKpjO4KZqmvbhZZ
-         wUdEFhlwl+rhhZZ3tSlF8mb5iHWsovbVUpVkoOGA/EKZVYlXfCdv2ngNkltl17K4xVE6
-         tXMXyO/wJ7y8GipOINg2yZTi0v86atZT9vywEtsJ82Dsk6Aw4RVBVqeYs5+x1cRDgJyy
-         0rEg==
+        Mon, 19 Sep 2022 04:30:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059DC17A9C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663576233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h70RRnLGDocRCdId1Q3AvZ9oOdszso8M7BsFXb0vm98=;
+        b=DxaS0WL/qt5z377z5qHdAEhAvKl4VvluoEGAYK7QaoYI7v/xVHB1gh8cZbeE1KIpbOqCiy
+        p5OOlW85XIovdk2EQxQdf0+qcQojLj8Eisfc9j8ogIFAtedFxTzK/yRIFRDyjTMYvqjqSq
+        C389BWC5PnYGXqMM4quF6SOCI3hprMs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-190-UEbfJa1kMKOuKx_dm_I84g-1; Mon, 19 Sep 2022 04:30:32 -0400
+X-MC-Unique: UEbfJa1kMKOuKx_dm_I84g-1
+Received: by mail-qk1-f200.google.com with SMTP id az15-20020a05620a170f00b006cece4cd0beso6243154qkb.22
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:30:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=xoymz8faVzT0wsOgDh8GpMXHhgQOtJ4iGMWiJ5WcE5M=;
-        b=4pCH6dZyol4FmHtqoeQaDQckaCfIEYpfi49CKaIR/iRlJhj2Y/uQ5NXXe7OCMYqZ9b
-         1qbicvvbQ2wlr6E/fdV4zOQ+J2hniYt5qAE63XjVvtD8koyP4PTUjEEsgNRVlNpySeNV
-         xNv8/Vl9GYi1HRfWX7Vyu5W0NuCK/4J+RCx/2g0NY9bz6kV6JxnCbJdN0Yy2zGw7amHt
-         szjuNCG+tjxGDMIKMXwT23WOcRReOAYJn95bvrE41PZ6RnAvDCpvx/kj3XidGJDGJBTY
-         IRY+aHVX4S0/eSaPrrtzXBB1XFDk62fD5ee5SMV2bmtlTwpwLjAiu7bEAPdsKAt8bz1u
-         Hi2g==
-X-Gm-Message-State: ACrzQf30Mw+B7khMu7rjtnDOPePYufZnwD+c4mDyoYmJCZ4ygxl7ARba
-        SA8rS/gZLXsQiNmi9kOr2jU=
-X-Google-Smtp-Source: AMsMyM7YDpMsT8S/fBs/dBZJOSrjXi9Pb8U6bCYB3DP/597jg0tInZfxP8MG7aCnJ70pWKg7ildXhA==
-X-Received: by 2002:a17:906:ee86:b0:741:89bc:27a1 with SMTP id wt6-20020a170906ee8600b0074189bc27a1mr12414411ejb.725.1663576185705;
-        Mon, 19 Sep 2022 01:29:45 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id s15-20020a1709067b8f00b00775f6081a87sm2271881ejo.121.2022.09.19.01.29.44
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=h70RRnLGDocRCdId1Q3AvZ9oOdszso8M7BsFXb0vm98=;
+        b=uj0Eet0k4UUV4dEQCNq7m9649gCp82AtduMsqo7PM5/EOxb09CDk0K057JF14pSJ3v
+         6JMS3vnvIxpKO1mBkBXjszw1dsLrjxhIwU2rNyT1ecxoCqFKq9DzFPU30Fv6yZ1V+tEk
+         dXE0N/+Dm2SX8S/LfRt7f8gpbdQuiIr/Ot4weuQS8/iN5oZhYU8ZW/C9PC/gY/MMkV0E
+         CBa/d31cn0jLAJPDx9VpaQtsNvHMuxEc2OnrK9dz7GZa+zY/UQl3gKhHrTv5MQ3RnA2R
+         jQUlZ91wvuHaD4XXwkpHE/brubUZ/HbXYRsvRVwuhAOoV80n2HCo3ICw2OlrNFWrCw5y
+         QhIQ==
+X-Gm-Message-State: ACrzQf2E3AYzauIMUvWUOnm950Pk6/zAIAZNjF5RvFNXmoHCil/CBcyE
+        j3hOLvb0R8KKVUcectiiQlimYq5lqrMw1F9aTawfav6ZEdALKqgIo3+b7/2DO+I4XDb072sTIpb
+        X9SrwIy7Pfp1D4fMaWcPn3req
+X-Received: by 2002:a0c:9d46:0:b0:476:ff07:3fe7 with SMTP id n6-20020a0c9d46000000b00476ff073fe7mr13987401qvf.15.1663576231852;
+        Mon, 19 Sep 2022 01:30:31 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4XbGFJVZrlxcnOG4Tqc8u7gYjO9AunLzgZXMoLWaP7MnGq098SrMu+vtT5BdoTxvmAzpO8Og==
+X-Received: by 2002:a0c:9d46:0:b0:476:ff07:3fe7 with SMTP id n6-20020a0c9d46000000b00476ff073fe7mr13987387qvf.15.1663576231669;
+        Mon, 19 Sep 2022 01:30:31 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id c4-20020a05620a268400b006b633dc839esm12587073qkp.66.2022.09.19.01.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 01:29:45 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 19 Sep 2022 10:29:43 +0200
-To:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <Yygod+YBwzbMPmgA@pc636>
-References: <20220916135953.1320601-1-keescook@chromium.org>
- <20220916135953.1320601-4-keescook@chromium.org>
- <YySML2HfqaE/wXBU@casper.infradead.org>
- <202209160805.CA47B2D673@keescook>
- <YyTLTBM4OC6/RnjG@casper.infradead.org>
+        Mon, 19 Sep 2022 01:30:31 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 01:30:29 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] iommu/vt-d: Avoid unnecessary global DMA cache
+ invalidation
+Message-ID: <20220919083029.vwwxkm5kuyylgbew@cantor>
+References: <20220919062523.3438951-1-baolu.lu@linux.intel.com>
+ <20220919062523.3438951-3-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyTLTBM4OC6/RnjG@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220919062523.3438951-3-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 08:15:24PM +0100, Matthew Wilcox wrote:
-> On Fri, Sep 16, 2022 at 08:09:16AM -0700, Kees Cook wrote:
-> > On Fri, Sep 16, 2022 at 03:46:07PM +0100, Matthew Wilcox wrote:
-> > > On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> > > > The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> > > > more defensive against running from interrupt context. Use a best-effort
-> > > > check for VMAP areas when running in interrupt context
-> > > 
-> > > I had something more like this in mind:
-> > 
-> > Yeah, I like -EAGAIN. I'd like to keep the interrupt test to choose lock
-> > vs trylock, otherwise it's trivial to bypass the hardening test by having
-> > all the other CPUs beating on the spinlock.
+On Mon, Sep 19, 2022 at 02:25:23PM +0800, Lu Baolu wrote:
+> Some VT-d hardware implementations invalidate all DMA remapping hardware
+> translation caches as part of SRTP flow. The VT-d spec adds a ESRTPS
+> (Enhanced Set Root Table Pointer Support, section 11.4.2 in VT-d spec)
+> capability bit to indicate this. With this bit set, software has no need
+> to issue the global invalidation request.
 > 
-> I was thinking about this:
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com
+
+> ---
+>  drivers/iommu/intel/iommu.h | 1 +
+>  drivers/iommu/intel/iommu.c | 7 +++++++
+>  2 files changed, 8 insertions(+)
 > 
-> +++ b/mm/vmalloc.c
-> @@ -1844,12 +1844,19 @@
->  {
->  	struct vmap_area *va;
-> 
-> -	if (!spin_lock(&vmap_area_lock))
-> -		return ERR_PTR(-EAGAIN);
+> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> index 5407d82df4d1..251a609fdce3 100644
+> --- a/drivers/iommu/intel/iommu.h
+> +++ b/drivers/iommu/intel/iommu.h
+> @@ -146,6 +146,7 @@
+>  /*
+>   * Decoding Capability Register
+>   */
+> +#define cap_esrtps(c)		(((c) >> 63) & 1)
+>  #define cap_esirtps(c)		(((c) >> 62) & 1)
+>  #define cap_fl5lp_support(c)	(((c) >> 60) & 1)
+>  #define cap_pi_support(c)	(((c) >> 59) & 1)
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 8e5d99197d39..c20f3e060bac 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1239,6 +1239,13 @@ static void iommu_set_root_entry(struct intel_iommu *iommu)
+>  
+>  	raw_spin_unlock_irqrestore(&iommu->register_lock, flag);
+>  
 > +	/*
-> +	 * It's safe to walk the rbtree under the RCU lock, but we may
-> +	 * incorrectly find no vmap_area if the tree is being modified.
+> +	 * Hardware invalidates all DMA remapping hardware translation
+> +	 * caches as part of SRTP flow.
 > +	 */
-> +	rcu_read_lock();
->  	va = __find_vmap_area(addr, &vmap_area_root);
-> -	spin_unlock(&vmap_area_lock);
-> +	if (!va && in_interrupt())
-> +		va = ERR_PTR(-EAGAIN);
-> +	rcu_read_unlock();
+> +	if (cap_esrtps(iommu->cap))
+> +		return;
+> +
+>  	iommu->flush.flush_context(iommu, 0, 0, 0, DMA_CCMD_GLOBAL_INVL);
+>  	if (sm_supported(iommu))
+>  		qi_flush_pasid_cache(iommu, 0, QI_PC_GLOBAL, 0);
+> -- 
+> 2.34.1
 > 
-> -	return va;
-> +	if (va)
-> +		return va;
-> +	return find_vmap_area(addr);
->  }
-> 
->  /*** Per cpu kva allocator ***/
-> 
-> ... but I don't think that works since vmap_areas aren't freed by RCU,
-> and I think they're reused without going through an RCU cycle.
->
-Right you are. It should be freed via RCU-core. So wrapping by rcu_* is
-useless here.
 
-> 
-> So here's attempt #4, which actually compiles, and is, I think, what you
-> had in mind.
-> 
-> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> index 096d48aa3437..2b7c52e76856 100644
-> --- a/include/linux/vmalloc.h
-> +++ b/include/linux/vmalloc.h
-> @@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
->  void free_vm_area(struct vm_struct *area);
->  extern struct vm_struct *remove_vm_area(const void *addr);
->  extern struct vm_struct *find_vm_area(const void *addr);
-> -struct vmap_area *find_vmap_area(unsigned long addr);
-> +struct vmap_area *find_vmap_area_try(unsigned long addr);
->  
->  static inline bool is_vm_area_hugepages(const void *addr)
->  {
-> diff --git a/mm/usercopy.c b/mm/usercopy.c
-> index c1ee15a98633..e0fb605c1b38 100644
-> --- a/mm/usercopy.c
-> +++ b/mm/usercopy.c
-> @@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
->  	}
->  
->  	if (is_vmalloc_addr(ptr)) {
-> -		struct vmap_area *area = find_vmap_area(addr);
-> +		struct vmap_area *area = find_vmap_area_try(addr);
-> +
-> +		/* We may be in NMI context */
-> +		if (area == ERR_PTR(-EAGAIN))
-> +			return;
->  
->  		if (!area)
->  			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index dd6cdb201195..c47b3b5d1c2d 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
->  	free_vmap_area_noflush(va);
->  }
->  
-> -struct vmap_area *find_vmap_area(unsigned long addr)
-> +static struct vmap_area *find_vmap_area(unsigned long addr)
->  {
->  	struct vmap_area *va;
->  
-> @@ -1840,6 +1840,26 @@ struct vmap_area *find_vmap_area(unsigned long addr)
->  	return va;
->  }
->  
-> +/*
-> + * The vmap_area_lock is not interrupt-safe, and we can end up here from
-> + * NMI context, so it's not worth even trying to make it IRQ-safe.
-> + */
-> +struct vmap_area *find_vmap_area_try(unsigned long addr)
-> +{
-> +	struct vmap_area *va;
-> +
-> +	if (in_interrupt()) {
-> +		if (!spin_trylock(&vmap_area_lock))
-> +			return ERR_PTR(-EAGAIN);
-> +	} else {
-> +		spin_lock(&vmap_area_lock);
-> +	}
-> +	va = __find_vmap_area(addr, &vmap_area_root);
-> +	spin_unlock(&vmap_area_lock);
-> +
-> +	return va;
-> +}
-> +
->
-If we look at it other way around. There is a user that tries to access
-the tree from IRQ context. Can we just extend the find_vmap_area() with?
-
-   - in_interrupt();
-   - use trylock if so.
-
---
-Uladzislau Rezki
