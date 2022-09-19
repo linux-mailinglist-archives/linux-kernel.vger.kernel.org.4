@@ -2,96 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1945BC188
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB235BC182
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiISCtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S229746AbiISCs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiISCtU (ORCPT
+        with ESMTP id S229479AbiISCsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:49:20 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D902193F7
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663555759; x=1695091759;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=daaV3WZWukjbgGvbQ73mOCe8nI4eaN3LDyARuyKPkhs=;
-  b=mB/daAxY5PJPkBPvV6qri2d5ug70t10Gta0naPxd7pYTqqvEXGR9bJtc
-   q2v3um/XYuN7JibueRM/Ekt+TNyWN6pcWhd+ojpXgbqZ/vwAhO3lFZ9ks
-   umbZ2bcyL8iyr2SUpknVe8R0wFu3c9NRK874wF7HhjmwdkI2a9jJbXeJo
-   DxcZvRrC91i18VtqDkeR9iGi5TqaSV3Bv1b8xvC58sn4kzB4ZWY4x7xhT
-   nrVZ8ZakaysKZNcopFCYrJuCCsYS5vjt1cPOTzSfcvOFQZk3WBi4zkNTx
-   5lSncPjW4KW4dOpnisYFRZlD+746RQjS0Nkb4TYjDhRYoxsWItclMRoke
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="298019471"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="298019471"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 19:49:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="947035197"
-Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Sep 2022 19:49:18 -0700
-From:   shaoqin.huang@intel.com
-To:     rppt@kernel.org
-Cc:     Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] memblock test: Update TODO list
-Date:   Mon, 19 Sep 2022 10:47:39 +0800
-Message-Id: <20220919024745.153395-4-shaoqin.huang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919024745.153395-1-shaoqin.huang@intel.com>
-References: <20220919024745.153395-1-shaoqin.huang@intel.com>
+        Sun, 18 Sep 2022 22:48:54 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B191193CE
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:48:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQ4WAzp_1663555727;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VQ4WAzp_1663555727)
+          by smtp.aliyun-inc.com;
+          Mon, 19 Sep 2022 10:48:50 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH 1/2] regulator: of: Fix kernel-doc
+Date:   Mon, 19 Sep 2022 10:48:29 +0800
+Message-Id: <20220919024830.111874-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
+drivers/regulator/of_regulator.c:689: warning: expecting prototype for of_parse_coupled regulator(). Prototype was for of_parse_coupled_regulator() instead.
 
-Remove the completed items from TODO list.
-
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2205#c0
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- tools/testing/memblock/TODO | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/regulator/of_regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/memblock/TODO b/tools/testing/memblock/TODO
-index 33044c634ea7..503cc96fcdc3 100644
---- a/tools/testing/memblock/TODO
-+++ b/tools/testing/memblock/TODO
-@@ -1,17 +1,10 @@
- TODO
- =====
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index e12b681c72e5..0aff1c2886b5 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -676,7 +676,7 @@ bool of_check_coupling_data(struct regulator_dev *rdev)
+ }
  
--1. Add tests trying to memblock_add() or memblock_reserve() 129th region.
--   This will trigger memblock_double_array(), make sure it succeeds.
--   *Important:* These tests require valid memory ranges, use dummy physical
--                memory block from common.c to implement them. It is also very
--                likely that the current MEM_SIZE won't be enough for these
--                test cases. Use realloc to adjust the size accordingly.
--
--2. Add test cases using this functions (implement them for both directions):
-+1. Add test cases using this functions (implement them for both directions):
-    + memblock_alloc_raw()
-    + memblock_alloc_exact_nid_raw()
-    + memblock_alloc_try_nid_raw()
- 
--3. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
-+2. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
-    for the new region
+ /**
+- * of_parse_coupled regulator - Get regulator_dev pointer from rdev's property
++ * of_parse_coupled_regulator() - Get regulator_dev pointer from rdev's property
+  * @rdev: Pointer to regulator_dev, whose DTS is used as a source to parse
+  *	  "regulator-coupled-with" property
+  * @index: Index in phandles array
 -- 
-2.34.1
+2.20.1.7.g153144c
 
