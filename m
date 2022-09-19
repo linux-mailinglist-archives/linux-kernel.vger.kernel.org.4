@@ -2,136 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604795BD1D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA015BD1D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiISQGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S229675AbiISQG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiISQGl (ORCPT
+        with ESMTP id S229555AbiISQG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:06:41 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8892DA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:06:40 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id f14so46752919lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:06:40 -0700 (PDT)
+        Mon, 19 Sep 2022 12:06:56 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4264EF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:06:54 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id w2so101716pfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:06:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=iE9nxQEFInaL7XSikMpoXTZbHYoCnjZKoSz4CSYOZnA=;
-        b=UAOja/FfrymFuV0xvicbL7PMXuUl4mPyof1Okb0o4luFMO529ZM+SZDfwGKYf+HTMf
-         a/WaNIKZH+CCwzmVfwGBHNgDh6tyEE/4RCYW3s7Xy7CUDsPExVi8yVgN77oSpkFy1wP0
-         EZDoTz0wXXRlHxsk4U6dtvkL2742ktOiuNpmr9RmscpZCU5Du2ez6apYChpa26SOBuxd
-         8D5LRWj2h5/EJlkgEmYbAKihkayVc39iPARINK4Y7nQn0Yf6r8U/fwVO+POZ4Tm3kQed
-         Czy0pCZbVQwwyLBIv33YaafZbPlkHahN7hk1BWUO99D62XnnMEsRLm6WG1yXMAoUug8l
-         tELg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=NxcT9yfl2abMJw9DM1eH/T20vzORpzIvlZXJurx26RE=;
+        b=maDiqhBNsV6lo52BJPHJwLGbeFXravruIwnLi0mQzVSFG+68m+Id46itDw9QAqD1+8
+         6qFH+13UP/oC45Q0fN7+IOeMntZoHjhZLe87aVx8d0n3fUNDZT5zik0Y/N5jp9jEZUD6
+         OeMnHlgNLnxVqh8pCCfZBdVV4fJtuHyR6zwEGAtESPrgj9aM6m02oPZWSlxlqk8pCOhA
+         X2nh4kVmO8kdR7ov9CWiezdOasRAcRx5k1mXOlSJ5aSZhkdBMbp9oFXDLPUSkvF/kmR6
+         6BTRZTk5QzXPI3IIYXoEVil1LKqHB3ECjTayZ43piN1F5sSw8+t0EhBIkAdHlmTjqLOR
+         TsmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=iE9nxQEFInaL7XSikMpoXTZbHYoCnjZKoSz4CSYOZnA=;
-        b=ysip/PO4ZR0U8fAoz2WWmer4/fFqO16/PXn2scAVbsY+zvDyfm7BVYR1cdYPk80TsA
-         yzNjgwzhVQWNCGazfBTrw3jMc6zp4H7O6UsJqf3L6GS3GlPY5l2xFWIaLNtlAXs0qJyQ
-         PD5K/ArmgQqaemWACJ3gfojONdIsaqhcbWPfwZ7CbGVHNB4PZOT0dg80qwQ8l4QoMpBk
-         1TChWyHPJimDCiXcA05OUs3JyLIU+S8dd3U3J1hUPTbs5B3yOJ3Au4zH/6qyTZQL4vF+
-         ydhFnpcwjTyNCyooR2Dz2tCesMs4kJtfDoZvEAKQ3foI2xFPlzyk94JDil3n9JNkBkCL
-         dh1g==
-X-Gm-Message-State: ACrzQf3EHkS+RToCn1f3Fq0Zp+d7IMeJNsymWd11sFjDyISLviAAgst2
-        LVEMSQu2zvpiNpNcFTn6Q7Gkew==
-X-Google-Smtp-Source: AMsMyM65h0pq/i+FvwWdh8cUN9HdV6WWDFVY+wFWguOob0zVZcboRCwsVykWpVj97GAsCtp0S9YpTw==
-X-Received: by 2002:ac2:4bc7:0:b0:49a:dbf7:73e9 with SMTP id o7-20020ac24bc7000000b0049adbf773e9mr5964150lfq.529.1663603598864;
-        Mon, 19 Sep 2022 09:06:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id t22-20020a2e5356000000b00268b85321eesm3787302ljd.113.2022.09.19.09.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 09:06:38 -0700 (PDT)
-Message-ID: <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org>
-Date:   Mon, 19 Sep 2022 18:06:37 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=NxcT9yfl2abMJw9DM1eH/T20vzORpzIvlZXJurx26RE=;
+        b=G7GHfpUVJUFRNuk79axNMmGSHF/abRf8q9iesFO1nqKm9Jwvn7XRRVQP5GCjZA4P5e
+         mUWyiIu3HPykBPG47q5Cc6ofuLhSh18jNg2VPTjVqjCkfXyT31UugKNZ1RefantKxaDe
+         cwU7yMeWmsTGlarqz0roH5cCLys5LU/Ok8wWnm7yK+REtCox5MSlX+/CZiGWJ+R3gtuy
+         ZofGnI1iwWdX2n/lbqKOcxHmKPASRkzS8CeHnbMmA0mkUvTInfoArY1v6I5wgp03pzwI
+         tNK1V5w2ur+sHrtHJsrFt829fnS7bzj5ZNBaqACz/gcX3+TjsZ/HT5NlS0FogPA9HtwC
+         2Dew==
+X-Gm-Message-State: ACrzQf1OrO7BaCXl82kI4yliPgVvSZ3JRVLCmKlY1uYpA18w7OPnXrLT
+        /MM5p19tNlUsx7Z0MGCLBOfflgplv70=
+X-Google-Smtp-Source: AMsMyM42kmO3rvMQqqjf9P0ZvKNgtirXERlHkmJwT0j4PZw1RoK4yUTQOYDloWj4IDQ5gKQiNpvM/g==
+X-Received: by 2002:a63:5d52:0:b0:439:36bb:c07c with SMTP id o18-20020a635d52000000b0043936bbc07cmr16602300pgm.272.1663603614068;
+        Mon, 19 Sep 2022 09:06:54 -0700 (PDT)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:8958:94cc:1777:6efd])
+        by smtp.gmail.com with ESMTPSA id 4-20020a631944000000b00419b66846fcsm18667682pgz.91.2022.09.19.09.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 09:06:53 -0700 (PDT)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH 1/2] f2fs: correct i_size change for atomic writes
+Date:   Mon, 19 Sep 2022 09:06:43 -0700
+Message-Id: <20220919160644.2219088-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO
- documentation
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220714122322.63663-1-tmaimon77@gmail.com>
- <20220714122322.63663-2-tmaimon77@gmail.com>
- <20220718211046.GA3547663-robh@kernel.org>
- <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
- <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org>
- <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 16:31, Tomer Maimon wrote:
->>>>> +examples:
->>>>> +  - |
->>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>> +    #include <dt-bindings/gpio/gpio.h>
->>>>> +
->>>>> +    soc {
->>>>> +      #address-cells = <2>;
->>>>> +      #size-cells = <2>;
->>>>> +
->>>>> +      pinctrl: pinctrl@f0800000 {
->>>>> +        compatible = "nuvoton,npcm845-pinctrl";
->>>>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
->>>>> +        #address-cells = <1>;
->>>>> +        #size-cells = <1>;
->>>>> +        nuvoton,sysgcr = <&gcr>;
->>>>> +
->>>>> +        gpio0: gpio@f0010000 {
->>>>
->>>> gpio@0
->>>>
->>>> Is this really a child block of the pinctrl? Doesn't really look like it
->>>> based on addressess. Where are the pinctrl registers? In the sysgcr? If
->>>> so, then pinctrl should be a child of it. But that doesn't really work
->>>> too well with gpio child nodes...
->>> the pin controller mux is handled by sysgcr this is why the sysgcr in
->>> the mother node,
->>> and the pin configuration are handled by the GPIO registers.  each
->>> GPIO bank (child) contains 32 GPIO.
->>> this is why the GPIO is the child node.
->>
->> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
-> The pin controller using the sysgcr to handle the pinmux, this is why
-> the sysgcr is in the mother node, is it problematic?
+From: Daeho Jeong <daehojeong@google.com>
 
-You said pin-controller mux registers are in sysgcr, so it should not be
-used via syscon.
+We need to make sure i_size doesn't change until atomic write commit is
+successful and restore it when commit is failed.
 
-Please provide address map description to convince us that this is
-correct HW representation.
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+ fs/f2fs/f2fs.h    |  1 +
+ fs/f2fs/file.c    | 16 +++++++++-------
+ fs/f2fs/inode.c   |  3 +++
+ fs/f2fs/segment.c |  4 +++-
+ 4 files changed, 16 insertions(+), 8 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index dee7b67a17a6..539da7f12cfc 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -821,6 +821,7 @@ struct f2fs_inode_info {
+ 	unsigned int i_cluster_size;		/* cluster size */
+ 
+ 	unsigned int atomic_write_cnt;
++	loff_t original_i_size;		/* original i_size before atomic write */
+ };
+ 
+ static inline void get_extent_info(struct extent_info *ext,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 5efe0e4a725a..4f9b80c41b1e 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1989,6 +1989,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 	struct f2fs_inode_info *fi = F2FS_I(inode);
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct inode *pinode;
++	loff_t isize;
+ 	int ret;
+ 
+ 	if (!inode_owner_or_capable(mnt_userns, inode))
+@@ -2047,7 +2048,10 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+ 		goto out;
+ 	}
+-	f2fs_i_size_write(fi->cow_inode, i_size_read(inode));
++
++	isize = i_size_read(inode);
++	fi->original_i_size = isize;
++	f2fs_i_size_write(fi->cow_inode, isize);
+ 
+ 	spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
+ 	sbi->atomic_files++;
+@@ -2087,16 +2091,14 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
+ 
+ 	if (f2fs_is_atomic_file(inode)) {
+ 		ret = f2fs_commit_atomic_write(inode);
+-		if (ret)
+-			goto unlock_out;
+-
+-		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
+ 		if (!ret)
+-			f2fs_abort_atomic_write(inode, false);
++			ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
++
++		f2fs_abort_atomic_write(inode, ret);
+ 	} else {
+ 		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 1, false);
+ 	}
+-unlock_out:
++
+ 	inode_unlock(inode);
+ 	mnt_drop_write_file(filp);
+ 	return ret;
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index cde0a3dc80c3..64d7772b4cd9 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -30,6 +30,9 @@ void f2fs_mark_inode_dirty_sync(struct inode *inode, bool sync)
+ 	if (f2fs_inode_dirtied(inode, sync))
+ 		return;
+ 
++	if (f2fs_is_atomic_file(inode))
++		return;
++
+ 	mark_inode_dirty_sync(inode);
+ }
+ 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 460048f3c850..143b7ea0fb8e 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -193,8 +193,10 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+ 	if (!f2fs_is_atomic_file(inode))
+ 		return;
+ 
+-	if (clean)
++	if (clean) {
+ 		truncate_inode_pages_final(inode->i_mapping);
++		f2fs_i_size_write(inode, fi->original_i_size);
++	}
+ 	clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+ 	iput(fi->cow_inode);
+ 	fi->cow_inode = NULL;
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
