@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEBB5BC44F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430655BC451
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiISI3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
+        id S229915AbiISI33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiISI3U (ORCPT
+        with ESMTP id S229892AbiISI3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:29:20 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D307221265
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:29:19 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id n10so15718734wrw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=WXCToHfQiSix6PvjVjohUsg//yZJDPaLAeIA+KqtiOI=;
-        b=KgMKYhel6t7u9jg288YAF26uIfAPwmvcCFYE/z+gjfGW/VZNzC+t8kfsQghe9c4w5w
-         83JfkeFfvj7CDaugxJB5ZSC3Cyc+6ZNts95DNOWYaP//NcwGOHZT62OKTtzwgczBMoiM
-         HuccyFu7LAPE2m5cLKiW8YSTGSaZGDbn+XSM0unQQWYySxwP7ej24OCXtK2Ub6isH+Jc
-         xiRqxiI3n1b6N98tAzh1FS3ZxzdNgRdewCS8Wg7XwuyrtE/Z/WeyjVy5eRMA7+1Y9bJl
-         5O/WcoQ4CUwo1Y2bysXz33XgObnsLL8YOXOY/7sGY4TdwWpsa3aqIjd9UUVdMHyod9Nv
-         szYQ==
+        Mon, 19 Sep 2022 04:29:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6171420F64
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663576163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F3xg0oZZ6d2RRIQotHdVIz60qRrzyRMeJDEgCiAZ0Mw=;
+        b=Bt5mFHt6EBQywdcNK+Mj37sj5xwC9y+LJl0HRlYzQA9661VmuWlOUi5m6Wwiu/7e71ARqU
+        1rs/AC3YMxGeAGDsPhu5O/qsLrtNyXgoqsv1RlMcR0EmL75o2NPQRLoUl4BGDekp4/3Hnn
+        CXfO5g6e/TZJJfG0fBAD50bVdikR6Ks=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-601-LorgHIu2P9Os9jSbz6c6Jg-1; Mon, 19 Sep 2022 04:29:22 -0400
+X-MC-Unique: LorgHIu2P9Os9jSbz6c6Jg-1
+Received: by mail-qt1-f197.google.com with SMTP id j25-20020ac84c99000000b0035bb13ed4ffso17058176qtv.23
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:29:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WXCToHfQiSix6PvjVjohUsg//yZJDPaLAeIA+KqtiOI=;
-        b=o836gjCLJjz0g4atmYxvYe9xEgIhOll+9xQGMz/J5Z4EwbJrgAzT+K/0iaTWNV5TEB
-         BQQhetT+LwntiTSM9NtcWN0Gkh0yqGgDaj1n8ulOrx6iirnEw+qneyR2j+rDrWR+RGQC
-         Z3CqnSvSqt/aKECzJMuwDnP65SIBBi7TcmDDzOxUAywH6/EP6uKqJjOR/B4TZ/aOQuag
-         7llK+qojaWvtMMAvLZRbklp7olfQAYZsdze/cAREnrxM9F0wMWqDd5rrcnUpTmR3tCQs
-         qLFZazrXAPBcKRhTUl+MBmvDocvGt9/qZQzJvLyInQdzflb9lH4UI3IkSqR0VAEpm6ax
-         rtzA==
-X-Gm-Message-State: ACrzQf1xgOzK5k+ld48GlYVrIXdMLHlK2DqteihoMBT0zZgA7HyaxdbX
-        e9XmN6CKuckgEPuJxDtYktE=
-X-Google-Smtp-Source: AMsMyM7BJlzxPe+aIM0WiE73TyvATgkKl5lyzhtImNW8NVwkL5+RaNi2UmRGdLoqFJS/UqVwlu3KTw==
-X-Received: by 2002:a05:6000:184e:b0:228:bb9d:f98a with SMTP id c14-20020a056000184e00b00228bb9df98amr9535880wri.479.1663576158316;
-        Mon, 19 Sep 2022 01:29:18 -0700 (PDT)
-Received: from elementary ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05600c0a1400b003b4727d199asm13141011wmp.15.2022.09.19.01.29.16
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=F3xg0oZZ6d2RRIQotHdVIz60qRrzyRMeJDEgCiAZ0Mw=;
+        b=mIdgvbiZf1q1i8lMxomXWEVdw+jJ0Q4/K9wGZT0tHe3RsfXCD8P+IPtzniaqKVZHu2
+         7aEb945u+xQcTSnEfxvYkJPda0hWNw+MpqqTU1eOOMGC0Vo5Jijg+VSGyMDOwqkgtckN
+         rRatXWhZfek1VZ8f3NVUZT6XKdX/X9cJ8BNWpRQO/edAt/ekrRDJ5NxV3oTqlA8GnQOM
+         7jxieFAW/ZhELdGSJf9ZCtO9ATViWC+DQdaIx0C6Y0i+xTueWL8Yc8itKUiPGoCEUST4
+         UuJyt0pvFgFaQ2/OiBosHnXPjNOlSs/Dy2jWqs8lSsg4LaSQ/xgA0jrYA0whHucvdJHA
+         YFHw==
+X-Gm-Message-State: ACrzQf0sSsLmT9M+cVNyDsWuoy7ys2pO/P2DbZakg5IlNZ1Ckgngw6vC
+        WnpTbcT0/l99r4I2N1HGrK2bbxXhQqvRp8wzbdlj7G3VRfHl/L+AohcJOOS8LlMlDSJBLqiKIUY
+        iOF0dTddgU7jXsMqFY8yMJm9X
+X-Received: by 2002:a05:6214:e6f:b0:4ad:d5a:f09b with SMTP id jz15-20020a0562140e6f00b004ad0d5af09bmr12869554qvb.34.1663576161982;
+        Mon, 19 Sep 2022 01:29:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7VS5dzoLRy04YcELRQ5ZPTfY+JNNMRe/H4swC5sEjj6xjJyMhB4a94m3imvsO8Jdb3Xu7zug==
+X-Received: by 2002:a05:6214:e6f:b0:4ad:d5a:f09b with SMTP id jz15-20020a0562140e6f00b004ad0d5af09bmr12869543qvb.34.1663576161746;
+        Mon, 19 Sep 2022 01:29:21 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac84cce000000b0034355a352d1sm9779291qtv.92.2022.09.19.01.29.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 01:29:17 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 10:29:14 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     javierm@redhat.com, davidgow@google.com, dlatypov@google.com,
-        tzimmermann@suse.de, daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
-        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, geert@linux-m68k.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
-Subject: Re: [PATCH v4 3/3] drm/format-helper: Add KUnit tests for
- drm_fb_xrgb8888_to_gray8()
-Message-ID: <20220919082914.GA290343@elementary>
-References: <20220919071531.105124-1-jose.exposito89@gmail.com>
- <20220919071531.105124-4-jose.exposito89@gmail.com>
- <20220919073645.uf64enluhiwd2b2i@houat>
- <20220919081801.GA144802@elementary>
- <20220919082519.s5d7llmynot76xsx@houat>
+        Mon, 19 Sep 2022 01:29:20 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 01:29:19 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iommu/vt-d: Avoid unnecessary global IRTE cache
+ invalidation
+Message-ID: <20220919082919.ekv6p47y2nnmpswk@cantor>
+References: <20220919062523.3438951-1-baolu.lu@linux.intel.com>
+ <20220919062523.3438951-2-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220919082519.s5d7llmynot76xsx@houat>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220919062523.3438951-2-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 10:25:19AM +0200, Maxime Ripard wrote:
-> On Mon, Sep 19, 2022 at 10:18:01AM +0200, José Expósito wrote:
-> > Hi Maxime,
-> > 
-> > Thanks for looking into the patches.
-> > 
-> > On Mon, Sep 19, 2022 at 09:36:45AM +0200, Maxime Ripard wrote:
-> > > Hi,
-> > > 
-> > > On Mon, Sep 19, 2022 at 09:15:31AM +0200, José Expósito wrote:
-> > > > Extend the existing test cases to test the conversion from XRGB8888 to
-> > > > grayscale.
-> > > > 
-> > > > Tested-by: Maíra Canal <mairacanal@riseup.net>
-> > > > Reviewed-by: David Gow <davidgow@google.com>
-> > > > Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> > > > ---
-> > > >  .../gpu/drm/tests/drm_format_helper_test.c    | 62 +++++++++++++++++++
-> > > >  1 file changed, 62 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> > > > index 09d358b54da0..71722e828abe 100644
-> > > > --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-> > > > +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> > > > @@ -37,6 +37,11 @@ struct convert_to_xrgb2101010_result {
-> > > >  	const u32 expected[TEST_BUF_SIZE];
-> > > >  };
-> > > >  
-> > > > +struct convert_to_gray8_result {
-> > > > +	unsigned int dst_pitch;
-> > > > +	const u8 expected[TEST_BUF_SIZE];
-> > > > +};
-> > > > +
-> > > >
-> > > > [...]
-> > > >
-> > > >  static struct kunit_case drm_format_helper_test_cases[] = {
-> > > >  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb332, convert_xrgb8888_gen_params),
-> > > >  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb565, convert_xrgb8888_gen_params),
-> > > >  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb888_test, convert_xrgb8888_gen_params),
-> > > >  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_xrgb2101010_test, convert_xrgb8888_gen_params),
-> > > > +	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_gray8_test, convert_xrgb8888_gen_params),
-> > > 
-> > > The trailing test feels redundant,
-> > 
-> > Why do you feel like it is redundant? Under the hood, most conversion
-> > functions reuse the same code, but the *_line() function is unique and
-> > I think that it is worth testing it.
+On Mon, Sep 19, 2022 at 02:25:22PM +0800, Lu Baolu wrote:
+> Some VT-d hardware implementations invalidate all interrupt remapping
+> hardware translation caches as part of SIRTP flow. The VT-d spec adds
+> a ESIRTPS (Enhanced Set Interrupt Remap Table Pointer Support, section
+> 11.4.2 in VT-d spec) capability bit to indicate this. With this bit set,
+> software has no need to issue the global invalidation request.
 > 
-> Sure, I wasn't commenting on the code itself, but the trailing "test" in
-> the test name: drm_test_fb_xrgb8888_to_gray8_test
->                                              ^
-> 
-> Which is redundant since we already have "test" in the prefix.
-> 
-> Maxime
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-Ah! OK, I misunderstood your first sentence. Indeed, the _test sufix
-should be removed, added to my TODO list.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com
 
-Thanks!!
+> ---
+>  drivers/iommu/intel/iommu.h         | 1 +
+>  drivers/iommu/intel/irq_remapping.c | 3 ++-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> index eef1a166b855..5407d82df4d1 100644
+> --- a/drivers/iommu/intel/iommu.h
+> +++ b/drivers/iommu/intel/iommu.h
+> @@ -146,6 +146,7 @@
+>  /*
+>   * Decoding Capability Register
+>   */
+> +#define cap_esirtps(c)		(((c) >> 62) & 1)
+>  #define cap_fl5lp_support(c)	(((c) >> 60) & 1)
+>  #define cap_pi_support(c)	(((c) >> 59) & 1)
+>  #define cap_fl1gp_support(c)	(((c) >> 56) & 1)
+> diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+> index 2e9683e970f8..b4a91fbd1c2f 100644
+> --- a/drivers/iommu/intel/irq_remapping.c
+> +++ b/drivers/iommu/intel/irq_remapping.c
+> @@ -494,7 +494,8 @@ static void iommu_set_irq_remapping(struct intel_iommu *iommu, int mode)
+>  	 * Global invalidation of interrupt entry cache to make sure the
+>  	 * hardware uses the new irq remapping table.
+>  	 */
+> -	qi_global_iec(iommu);
+> +	if (!cap_esirtps(iommu->cap))
+> +		qi_global_iec(iommu);
+>  }
+>  
+>  static void iommu_enable_irq_remapping(struct intel_iommu *iommu)
+> -- 
+> 2.34.1
+> 
+
