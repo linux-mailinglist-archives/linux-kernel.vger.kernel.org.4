@@ -2,123 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AD65BCF7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5565BCF7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiISOsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S230094AbiISOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiISOr5 (ORCPT
+        with ESMTP id S230151AbiISOsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:47:57 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD182CCA4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:47:56 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so2005601pjo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=cq1FhOS5h+5LNfxhpGiYVbkgxRPdMbmbJNEctNfAl44=;
-        b=hsEYJ2tlBfGXJKHFqm8EdND9zicJvQm1Z5le662zVf8vXhbxpIjsZqZmUFL+mJlLXW
-         P5w4foWiYlf24yzVzoyuU+CEm8Q75m8Wu8DvBXUJ9ePX3Dz4XUNyNhBJUJMGfUaFnduv
-         67VEa8tvL+78g2Rrm7pZI2RR+cIODkilCDqp3U6+rIj8uFONjii89U6xIwJwzT1jFoTs
-         gWx58+g5XHUi29mGi7FmY6+52WfLbE1WTuuRqluCZX1QCQxEd8Oib5ZV0uVD7e1SunSB
-         W/G3Zlr56epOF293jfc6SFND0vdrq7AnE2rgtLwn/3kzuAndAbp37dTgE6UMqqdkXmqd
-         9H9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cq1FhOS5h+5LNfxhpGiYVbkgxRPdMbmbJNEctNfAl44=;
-        b=P578w2iXvNheK5psQQmePs1pd9BY4hfIUW49sZhpTycOPx7C70EXeQ60OTlXdT1Tqq
-         weKDcob0tpDGgVu2YjRXDm1N0gLUP5WdTXn0HckitPXpszZuQYvdWXUHBPi3V0zbzCJV
-         o/XSAMgFWIPafY9P14BZepiEAbkKuiFvyzgB/S1u3WHrWsadraAKNKB9hYzWDXNu2i2K
-         5Bm3FVVKF4IiXOmOvIc1fNJhcont67JD+FaJMEKgGnLN9PQrg84wTaDi2aMsn76yHkcd
-         M9LjgvLrpP1lZ8k9tnRJmQvBmv0dbem8Mvj8bM9z9McqIM9x9dAAFmNZXr+PZtnuVaRP
-         JTXQ==
-X-Gm-Message-State: ACrzQf2XcwSvmWn0y+p6yyWZShmlkeoaxxtg2Q9bFQ1MGqgIXuCvjoMq
-        W7W6fZakFxysrmtJE/7QCGYycHs3fiFiNyks
-X-Google-Smtp-Source: AMsMyM7n4E/rgHTnjgJDLn2+GeTohli5iHjjMG6BtljYGR0/3QJLSSh1TFioXq4IwCtXb0DqDOck+Q==
-X-Received: by 2002:a17:902:8549:b0:178:6399:3e0f with SMTP id d9-20020a170902854900b0017863993e0fmr98362plo.35.1663598876223;
-        Mon, 19 Sep 2022 07:47:56 -0700 (PDT)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id j11-20020a17090a840b00b001fbbbe38387sm6813232pjn.10.2022.09.19.07.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 07:47:55 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 07:47:51 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the mm tree
-Message-ID: <YyiBF5V6I7SYHqJy@google.com>
-References: <20220919082105.73c0e270@canb.auug.org.au>
+        Mon, 19 Sep 2022 10:48:08 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9B032BA5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:48:06 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:ed67:3be8:ebe5:696d])
+        by xavier.telenet-ops.be with bizsmtp
+        id Mqo32800T0GZoLL01qo3Bn; Mon, 19 Sep 2022 16:48:05 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oaI43-005dK9-0L; Mon, 19 Sep 2022 16:48:03 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oaI42-00GeIZ-Ch; Mon, 19 Sep 2022 16:48:02 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] net: ravb: Fix PHY state warning splat during system resume
+Date:   Mon, 19 Sep 2022 16:48:00 +0200
+Message-Id: <8ec796f47620980fdd0403e21bd8b7200b4fa1d4.1663598796.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919082105.73c0e270@canb.auug.org.au>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sep 19 08:21, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   3a41f36f7083 ("selftests/vm: fix "add thp collapse file and tmpfs testing" for tmpfs")
-> 
-> Fixes tag
-> 
->   Fixes: 64b9fb1fa904 ("selftests/vm: add thp collapse file and tmpfs testing")
-> 
-> has these problem(s):
-> 
->   - Subject does not match target commit subject
->     Just use
-> 	git log -1 --format='Fixes: %h ("%s")'
-> 
-> So
-> 
-> Fixes: 64b9fb1fa904 ("selftests/vm: add thp collapse shmem testing")
-> 
-> or maybe
-> 
-> Fixes: 465c955b7343 ("selftests/vm: add thp collapse file and tmpfs testing")
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Since commit 744d23c71af39c7d ("net: phy: Warn about incorrect
+mdio_bus_phy_resume() state"), a warning splat is printed during system
+resume with Wake-on-LAN disabled:
 
-Hey Stephen,
+        WARNING: CPU: 0 PID: 1197 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xc8
 
-Apologies here.  Yes, the correct Fixes tag should be, based off latest
-mm-unstable,
+As the Renesas Ethernet AVB driver already calls phy_{stop,start}() in
+its suspend/resume callbacks, it is sufficient to just mark the MAC
+responsible for managing the power state of the PHY.
 
-Fixes: 8d88fef0b3d8 ("selftests/vm: add thp collapse file and tmpfs testing")
+Fixes: fba863b816049b03 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/net/ethernet/renesas/ravb_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Now, I'm quite confused as to has this happened as I've been generating
-citations using something similar to the --format string you reference, but
-perhaps this time I chose to do it manually and messed it up.  Anyways, will
-write something to catch these mistakes in the future.
-
-Andrew, there are a few changes incoming to the "mm: add file/shmem support to
-MADV_COLLAPSE" series based off recent reviews (including another patch with
-a commit description change).  Perhaps it's easier for me to send a new (v4)
-series to mm-unstable to address these?  Otherwise, I'm not sure how to
-request these metadata changes.
-
-Best,
-Zach
+diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
+index d013cc1c8a0ad007..abe6f570fe102636 100644
+--- a/drivers/net/ethernet/renesas/ravb_main.c
++++ b/drivers/net/ethernet/renesas/ravb_main.c
+@@ -1449,6 +1449,8 @@ static int ravb_phy_init(struct net_device *ndev)
+ 		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
+ 	}
+ 
++	/* Indicate that the MAC is responsible for managing PHY PM */
++	phydev->mac_managed_pm = true;
+ 	phy_attached_info(phydev);
+ 
+ 	return 0;
+-- 
+2.25.1
 
