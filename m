@@ -2,119 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BBD5BC11E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2FB5BC113
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiISBsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 21:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S229708AbiISBi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 21:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiISBsa (ORCPT
+        with ESMTP id S229587AbiISBiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:48:30 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6326110FDE;
-        Sun, 18 Sep 2022 18:48:29 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so5473154pjm.1;
-        Sun, 18 Sep 2022 18:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=wluvAQ2a1k5ujO/8y240pONv4SHYrKXDskmK8CL0ghc=;
-        b=WOcOP0Q9y6oH2fWhyJ55+GhxFy1xEhQqDKXZMQgj1QjfLw1jZtNL+Takagkb/LNIk+
-         O/gzjCb0ZZ1zQmL6stvsFJUB+Ph2wNjSOB+G8HkhOFa4aTWfegXZIPgfQirXc3CdlwgI
-         yJTsoTJaikvxijdFH4yA3dHFF5aD8Kz7fnhIbYHQ/1o8lo6MBZ7XevRtdHU3sk0jbEmJ
-         AJ2k+Hje7agd20En+ooTXLNahfJH1fgTOU99M8sWhyS0PWsC0Z5x/sFrKpNcFZBw+U8C
-         /D7sic2yPFFfQne7yprdNCtynuirQMheUgA0PCzUtmOD6fE+IFeOjmgoPe0AFLzoRRrb
-         zvbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=wluvAQ2a1k5ujO/8y240pONv4SHYrKXDskmK8CL0ghc=;
-        b=dlRceJ3LYHqb3PRrxmT1LD/i5H20jZN6DzaTIFmV12sFXe6jTp8gX6R7kXdzhINcBh
-         XS9bv2p9cYb/HKKCzZTtjmXkh3RsXWOEfP6pB5hBtKqgobALOJ01CAjvddhsWDiH8fqB
-         ycC8TWOMiDaMkGPjeUT6WQ+ke50JCd/Uxe+34RXFeB/5nPH9ufx8dPaJhVeUjZZLacTq
-         g/XznrnGLqQdvLamedadSOYLC/jdbbumCB/RFAQNzJgYygRI5nrZ7eemMXdiZwcwJsnh
-         P+9LUSILl7gY6motv1UYm69Y+vjsjK2Q/l5oCSC1d9esHJ6pJ7H0jUtgsOdKw81XTxpM
-         i5gg==
-X-Gm-Message-State: ACrzQf0FDGT3VNgPHJplfqPHGs2gVQxl4abP0ICt39OrfXCTKXYeBLck
-        FqzkuYgIZM+4XOWMtZ+YVes=
-X-Google-Smtp-Source: AMsMyM51tMsVrtNtgp3tW3K0QLm5qL4zxoUOjw19WI97ZxdpYQvElGt6gRD4Hk7hFYRJdWf+fZN2jQ==
-X-Received: by 2002:a17:90a:d14a:b0:203:7b4b:6010 with SMTP id t10-20020a17090ad14a00b002037b4b6010mr7709525pjw.237.1663552108700;
-        Sun, 18 Sep 2022 18:48:28 -0700 (PDT)
-Received: from rfl-device.localdomain ([110.11.251.111])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa796ab000000b0053bf1f90188sm19340831pfk.176.2022.09.18.18.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 18:48:28 -0700 (PDT)
-From:   Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
-X-Google-Original-From: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-To:     Derek Chickles <dchickles@marvell.com>,
-        Satanand Burla <sburla@marvell.com>,
-        Felix Manlunas <fmanlunas@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] liquidio: CN23XX: delete repeated words, add missing words and fix typo in comment
-Date:   Mon, 19 Sep 2022 10:48:13 +0900
-Message-Id: <20220919014813.32709-1-RuffaloLavoisier@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 18 Sep 2022 21:38:52 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F1A186CC;
+        Sun, 18 Sep 2022 18:38:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MW6jH4NqJz6S2p8;
+        Mon, 19 Sep 2022 09:36:51 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgA3inMmyCdjeiM6BA--.44102S4;
+        Mon, 19 Sep 2022 09:38:47 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH -next 0/3] blk-wbt: simple improvment to enable wbt correctly
+Date:   Mon, 19 Sep 2022 09:49:36 +0800
+Message-Id: <20220919014939.175497-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgA3inMmyCdjeiM6BA--.44102S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5i7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
+        U==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Delete the repeated word 'to' in the comment.
+From: Yu Kuai <yukuai3@huawei.com>
 
-- Add the missing 'use' word within the sentence.
+Yu Kuai (3):
+  wbt: don't show valid wbt lat in sysfs while wbt is disabled
+  block: add a helper to check elevator name
+  blk-wbt: don't enable throttling if default elevator is bfq
 
-- Correct spelling on 'malformation'.
+ block/bfq-iosched.c |  2 +-
+ block/blk-sysfs.c   | 11 +++++++++--
+ block/blk-wbt.c     | 14 +++++++++++++-
+ block/blk-wbt.h     |  6 ++++--
+ block/elevator.h    |  5 +++++
+ 5 files changed, 32 insertions(+), 6 deletions(-)
 
-Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
----
-I'm sorry, can you explain exactly which part and how to fix it? I didn't quite understand. <this need> How can I fix this part?
-
- drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
- drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-index 3f1c189646f4..244e27ea079c 100644
---- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-+++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-@@ -88,7 +88,7 @@
- #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
- /* The input jabber is used to determine the TSO max size.
-  * Due to H/W limitation, this need to be reduced to 60000
-- * in order to to H/W TSO and avoid the WQE malfarmation
-+ * in order to use H/W TSO and avoid the WQE malformation
-  * PKO_BUG_24989_WQE_LEN
-  */
- #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
-diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-index d33dd8f4226f..e85449249670 100644
---- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-+++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-@@ -37,7 +37,7 @@
- 
- /* The input jabber is used to determine the TSO max size.
-  * Due to H/W limitation, this need to be reduced to 60000
-- * in order to to H/W TSO and avoid the WQE malfarmation
-+ * in order to use H/W TSO and avoid the WQE malformation
-  * PKO_BUG_24989_WQE_LEN
-  */
- #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
 -- 
-2.25.1
+2.31.1
 
