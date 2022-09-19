@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30C05BCAA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65DB5BCA42
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiISL0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S229921AbiISLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiISLZ6 (ORCPT
+        with ESMTP id S229722AbiISLIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:25:58 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935321C923;
-        Mon, 19 Sep 2022 04:25:56 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 797081236BD;
-        Mon, 19 Sep 2022 11:25:55 +0000 (UTC)
-Received: from pdx1-sub0-mail-a263 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B568E123220;
-        Mon, 19 Sep 2022 11:25:54 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663586754; a=rsa-sha256;
-        cv=none;
-        b=8HQK08uw8EUbz+K+TnRg9fP57KzbZtyCMGDt9BLYASen1sOJVGhJEONE8vNFISF+zCvoxb
-        XaUbDFMGpDf683K0sEQ9wW6lMaqEa9bb0ScrnJM5YyayTKMP27AJ5NHpfPztjc3+13vvsC
-        zSTGDokLCgpSnoENp6/7ewSBsaCX2kDvAzFV3VXIptO7y7j7azGouFHdLkY0+Ro4+hwMiZ
-        yobUsk0hEwAIzUj9rc5FwZb9umVWeEHM8v8+4VOEkG+eoAajLvmJCUqAiiaFj0EgArJMvS
-        DWEB670Z5CLH9Ttl2Lur49c+j5LZRMvShOH9xt2hrNWf4v3HPR8amZb37JA8eA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1663586754;
+        Mon, 19 Sep 2022 07:08:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E7B95A3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663585703;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=gg9aOCDP6c4mrsDjdaPERES3849dYDvvYWHpCqCjES0=;
-        b=ssphTPaw4Q4pzWGkcGmJwmWl9Vyx9WmWiV1F3U9lf+FCp6INXQ0CXKGS7GCWdz0Ih+JbkT
-        i98DvAh+lA5Y7It36FTXRCDLSU8f+mW/cVnkGobNk39D+g0m69tPapKIeW1l1JOtsuG3T6
-        k2ki3gqibd4OqCmONe1+pnusIdl0OJBw9S7EJtpVJaqiT5Rb21kCs29tn3jxas8NuY/Z5u
-        vMtD8OR1BEm6L4yqhu4pCwEhh4SIyRanOfAmumnP8bHNCB0PJTJDxQq1arCzWPFqKVrl9Q
-        ubiz7eihKqARF6FSAAHytrqzR97tPRNT2yEn8vWczvNJ6Uq3hLrU9A2b0K7PFg==
-ARC-Authentication-Results: i=1;
-        rspamd-686945db84-m9jbc;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Abaft-Zesty: 2ba7123e103cbe5c_1663586755151_102532906
-X-MC-Loop-Signature: 1663586755151:944648257
-X-MC-Ingress-Time: 1663586755151
-Received: from pdx1-sub0-mail-a263 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.115.125.73 (trex/6.7.1);
-        Mon, 19 Sep 2022 11:25:55 +0000
-Received: from localhost.localdomain (unknown [83.137.2.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a263 (Postfix) with ESMTPSA id 4MWMmq67xlzMS;
-        Mon, 19 Sep 2022 04:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1663586754;
-        bh=gg9aOCDP6c4mrsDjdaPERES3849dYDvvYWHpCqCjES0=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=hnRfKmySTj74GdxiGVQdWOiPxRqhue/Yhi+h/mXCk8dE56pmUR+snmuyX6Hpwy58i
-         ExunNJKntrce6xIxMsjU3wyCd9x+IJUwq5wsge3MFrhn67i2/ik98X2NSooJpYWnxA
-         pjAfhZ2eCDN+VFelLRZf2m6qGyd0HLVhaG2t7OkDV61SmixzJQYXe3RxaCL2zZtMSf
-         Uqqu0AilQMj3/1wfxLLrzHVGCkji0GVinLmic+ETFWQutD+d+fbwtfotUebKcRGSal
-         fOoMgofdgyYTaldCKfiGPV60yl3qZn4n5nta+u7Z0il0I3sJymIsMmaPehYsDx9XaL
-         d8zvri4QGnE5g==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     dan.j.williams@intel.com
-Cc:     peterz@infradead.org, bp@alien8.de, akpm@linux-foundation.org,
-        hch@lst.de, dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com,
-        a.manzanares@samsung.com, x86@kernel.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dave@stgolabs.net
-Subject: [PATCH v3 -next] memregion: Add cpu_cache_invalidate_memregion() interface
-Date:   Mon, 19 Sep 2022 04:06:05 -0700
-Message-Id: <20220919110605.3696-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.37.0
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jwyU2KnuE+2XvBMTG3lUyXjwxhJE1NI7m29fH5pw0Co=;
+        b=Xu4FjHf+EGa1nqrcxa4YFmI1yWNgftTNQ/ig2mvlJQk91LdQQq+/d4EjlXpIxsWug9mvlS
+        LORrzx3QagnEQByBd0G5C/AVV4T9aT8bGnZyFJT0v3XnyjN9LAhv6251AdaFBNtFbSIAXb
+        dgvxoi2eL2v6d5by3Nry+1ygoD8r0cQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-637-Zf_rtn8dPtuV88zv75g_XQ-1; Mon, 19 Sep 2022 07:08:22 -0400
+X-MC-Unique: Zf_rtn8dPtuV88zv75g_XQ-1
+Received: by mail-ed1-f71.google.com with SMTP id w17-20020a056402269100b0045249bc17a9so13438420edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:08:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=jwyU2KnuE+2XvBMTG3lUyXjwxhJE1NI7m29fH5pw0Co=;
+        b=LzvrBaz0byvYwHEBCMZcpC09VjSJQWxDTLRf7JdZzn0OlNzMOpgcNpTaw898crR83C
+         Dt+NG4Ore1+jye3jUr2/IpiaNBhvRPjv6u66PMlMy4rycjEMtGz6SpHuk/7VVUhl6lR3
+         7h3iQGKm4MmSkEdvjawiiCFdl3/gZ0l2eMj3j2XPtShXPYue+J4DihJBQbsxmVPt5ebu
+         B7Akw3mFDZW5dWZDTWB6B6bJPJ/oahy2GxNVSPapPSEFq+jlpqW9O3TMeJFUE5Qx72/Q
+         imQ9EJ1i7g29GAPGQ9x0pDdtSv9QABJpJR806GFXcuyz80VUoVXqkNv6se/O54TDu3vB
+         wBjg==
+X-Gm-Message-State: ACrzQf30OeUHHVCFSUhNMp5LCXW8EtLHcXxZ99uZyRjiGmth3uDkujbS
+        TIzbGfRHZVdH6+reRDt+pdGNV7sXjwvuwBOZNb5zNCRWOp6R0773Cyf8eYmRgpYUuTtVNvZqOFC
+        AxuJ4XlgO0x3XwUDTrquagPOQ
+X-Received: by 2002:aa7:c792:0:b0:453:98b7:213c with SMTP id n18-20020aa7c792000000b0045398b7213cmr9733748eds.159.1663585701133;
+        Mon, 19 Sep 2022 04:08:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6qRPJbqMLzWIF5o6Bz9+pNwdb52w7wMQDBAImSbvrcpq5cqyDuCg7z+HurZxw1TprXyrk4WA==
+X-Received: by 2002:aa7:c792:0:b0:453:98b7:213c with SMTP id n18-20020aa7c792000000b0045398b7213cmr9733727eds.159.1663585700862;
+        Mon, 19 Sep 2022 04:08:20 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id p24-20020a056402075800b0045081dc93dfsm20033362edy.78.2022.09.19.04.08.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 04:08:20 -0700 (PDT)
+Message-ID: <2f76bf4d-4e7a-14fb-2247-5eb55112ad8e@redhat.com>
+Date:   Mon, 19 Sep 2022 12:08:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 4/5] ACPI: battery: Allow for passing data to battery
+ hooks.
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     rafael@kernel.org, lenb@kernel.org, hmh@hmh.eng.br,
+        matan@svgalib.org, corentin.chary@gmail.com, jeremy@system76.com,
+        productdev@system76.com, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220912125342.7395-1-W_Armin@gmx.de>
+ <20220912125342.7395-5-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220912125342.7395-5-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,259 +85,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CXL security features, global CPU cache flushing nvdimm requirements
-are no longer specific to that subsystem, even beyond the scope of
-security_ops. CXL will need such semantics for features not necessarily
-limited to persistent memory.
+Hi,
 
-The functionality this is enabling is to be able to instantaneously
-secure erase potentially terabytes of memory at once and the kernel
-needs to be sure that none of the data from before the erase is still
-present in the cache. It is also used when unlocking a memory device
-where speculative reads and firmware accesses could have cached poison
-from before the device was unlocked.
+On 9/12/22 13:53, Armin Wolf wrote:
+> Since a driver may register multiple instances of a
+> battery hook, passing data to each instance is
+> convenient.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-This capability is typically only used once per-boot (for unlock), or
-once per bare metal provisioning event (secure erase), like when handing
-off the system to another tenant or decommissioning a device. It may
-also be used for dynamic CXL region provisioning.
+Thanks, patch looks good to me:
 
-Users must first call cpu_cache_has_invalidate_memregion() to know whether
-this functionality is available on the architecture. Only enable it on
-x86-64 via the wbinvd() hammer. Hypervisors are not supported as TDX
-guests may trigger a virtualization exception and may need proper handling
-to recover. See:
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-   e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
+Regards,
 
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
-Changes from v2 (https://lore.kernel.org/all/20220829212918.4039240-1-dave@stgolabs.net/):
-- Change the names and params (Dan).
-- GPL symbols (Boris).
-- Mentioned VMM check in the changelog (Boris).
+Hans
 
 
- arch/x86/Kconfig             |  1 +
- arch/x86/mm/pat/set_memory.c | 15 +++++++++++++
- drivers/acpi/nfit/intel.c    | 41 ++++++++++++++++--------------------
- include/linux/memregion.h    | 35 ++++++++++++++++++++++++++++++
- lib/Kconfig                  |  3 +++
- 5 files changed, 72 insertions(+), 23 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2e8f6fd28e59..fa5cc581315a 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -69,6 +69,7 @@ config X86
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_CACHE_LINE_SIZE
-+	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION  if X86_64
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 0656db33574d..7d940ae2fede 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -330,6 +330,21 @@ void arch_invalidate_pmem(void *addr, size_t size)
- EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
- #endif
- 
-+#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+bool cpu_cache_has_invalidate_memregion(void)
-+{
-+	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
-+}
-+EXPORT_SYMBOL_GPL(cpu_cache_has_invalidate_memregion);
-+
-+int cpu_cache_invalidate_memregion(int res_desc)
-+{
-+	wbinvd_on_all_cpus();
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(cpu_cache_invalidate_memregion);
-+#endif
-+
- static void __cpa_flush_all(void *arg)
- {
- 	unsigned long cache = (unsigned long)arg;
-diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
-index 8dd792a55730..b2bfbf5797da 100644
---- a/drivers/acpi/nfit/intel.c
-+++ b/drivers/acpi/nfit/intel.c
-@@ -3,6 +3,7 @@
- #include <linux/libnvdimm.h>
- #include <linux/ndctl.h>
- #include <linux/acpi.h>
-+#include <linux/memregion.h>
- #include <asm/smp.h>
- #include "intel.h"
- #include "nfit.h"
-@@ -190,8 +191,6 @@ static int intel_security_change_key(struct nvdimm *nvdimm,
- 	}
- }
- 
--static void nvdimm_invalidate_cache(void);
--
- static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 		const struct nvdimm_key_data *key_data)
- {
-@@ -213,6 +212,9 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_UNLOCK_UNIT, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	memcpy(nd_cmd.cmd.passphrase, key_data->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -228,7 +230,7 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM unlocked, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 
- 	return 0;
- }
-@@ -297,8 +299,11 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	if (!test_bit(cmd, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	memcpy(nd_cmd.cmd.passphrase, key->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -318,7 +323,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM erased, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	return 0;
- }
- 
-@@ -341,6 +346,9 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	if (!test_bit(NVDIMM_INTEL_QUERY_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
- 	if (rc < 0)
- 		return rc;
-@@ -355,7 +363,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	}
- 
- 	/* flush all cache before we make the nvdimms available */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	return 0;
- }
- 
-@@ -380,8 +388,11 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	memcpy(nd_cmd.cmd.passphrase, nkey->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -401,22 +412,6 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	}
- }
- 
--/*
-- * TODO: define a cross arch wbinvd equivalent when/if
-- * NVDIMM_FAMILY_INTEL command support arrives on another arch.
-- */
--#ifdef CONFIG_X86
--static void nvdimm_invalidate_cache(void)
--{
--	wbinvd_on_all_cpus();
--}
--#else
--static void nvdimm_invalidate_cache(void)
--{
--	WARN_ON_ONCE("cache invalidation required after unlock\n");
--}
--#endif
--
- static const struct nvdimm_security_ops __intel_security_ops = {
- 	.get_flags = intel_security_flags,
- 	.freeze = intel_security_freeze,
-diff --git a/include/linux/memregion.h b/include/linux/memregion.h
-index e11595256cac..d3fafb6873b5 100644
---- a/include/linux/memregion.h
-+++ b/include/linux/memregion.h
-@@ -20,4 +20,39 @@ void memregion_free(int id)
- {
- }
- #endif
-+
-+/**
-+ * cpu_cache_invalidate_memregion - drop any CPU cached data for
-+ *     memregions described by @res_desc
-+ * @res_desc: one of the IORES_DESC_* types
-+ *
-+ * Perform cache maintenance after a memory event / operation that
-+ * changes the contents of physical memory in a cache-incoherent manner.
-+ * For example, device memory technologies like NVDIMM and CXL have
-+ * device secure erase, or dynamic region provision features where such
-+ * semantics.
-+ *
-+ * Limit the functionality to architectures that have an efficient way
-+ * to writeback and invalidate potentially terabytes of memory at once.
-+ * Note that this routine may or may not write back any dirty contents
-+ * while performing the invalidation.
-+ *
-+ * Returns 0 on success or negative error code on a failure to perform
-+ * the cache maintenance.
-+ */
-+#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+int cpu_cache_invalidate_memregion(int res_desc);
-+bool cpu_cache_has_invalidate_memregion(void);
-+#else
-+static inline bool cpu_cache_has_invalidate_memregion(void)
-+{
-+	return false;
-+}
-+
-+int cpu_cache_invalidate_memregion(int res_desc)
-+{
-+	WARN_ON_ONCE("CPU cache invalidation required");
-+	return -EINVAL;
-+}
-+#endif
- #endif /* _MEMREGION_H_ */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 087e06b4cdfd..757ae7fff93d 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -652,6 +652,9 @@ config ARCH_HAS_PMEM_API
- config MEMREGION
- 	bool
- 
-+config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+	bool
-+
- config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
- 	bool
- 
--- 
-2.37.0
+> ---
+>  drivers/acpi/battery.c               | 11 ++++++-----
+>  drivers/platform/x86/asus-wmi.c      |  7 ++++---
+>  drivers/platform/x86/huawei-wmi.c    |  6 +++---
+>  drivers/platform/x86/lg-laptop.c     |  6 +++---
+>  drivers/platform/x86/system76_acpi.c |  6 +++---
+>  drivers/platform/x86/thinkpad_acpi.c |  6 +++---
+>  include/acpi/battery.h               |  7 ++++---
+>  7 files changed, 26 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+> index 15bb5d868a56..396a7324216c 100644
+> --- a/drivers/acpi/battery.c
+> +++ b/drivers/acpi/battery.c
+> @@ -696,7 +696,7 @@ void battery_hook_unregister(struct acpi_battery_hook *hook)
+>  	mutex_lock(&hook_mutex);
+> 
+>  	list_for_each_entry(battery, &acpi_battery_list, list) {
+> -		hook->ops->remove_battery(battery->bat);
+> +		hook->ops->remove_battery(hook->data, battery->bat);
+>  	}
+>  	list_del(&hook->list);
+> 
+> @@ -706,7 +706,7 @@ void battery_hook_unregister(struct acpi_battery_hook *hook)
+>  }
+>  EXPORT_SYMBOL_GPL(battery_hook_unregister);
+> 
+> -struct acpi_battery_hook *battery_hook_register(const char *name,
+> +struct acpi_battery_hook *battery_hook_register(const char *name, void *data,
+>  						const struct acpi_battery_hook_ops *ops)
+>  {
+>  	struct acpi_battery_hook *hook = kzalloc(sizeof(*hook), GFP_KERNEL);
+> @@ -716,6 +716,7 @@ struct acpi_battery_hook *battery_hook_register(const char *name,
+>  		return ERR_PTR(-ENOMEM);
+> 
+>  	hook->name = name;
+> +	hook->data = data;
+>  	hook->ops = ops;
+> 
+>  	mutex_lock(&hook_mutex);
+> @@ -728,7 +729,7 @@ struct acpi_battery_hook *battery_hook_register(const char *name,
+>  	 * its attributes.
+>  	 */
+>  	list_for_each_entry(battery, &acpi_battery_list, list) {
+> -		hook->ops->add_battery(battery->bat);
+> +		hook->ops->add_battery(hook->data, battery->bat);
+>  	}
+>  	pr_info("new extension: %s\n", hook->name);
+> 
+> @@ -758,7 +759,7 @@ static void battery_hook_add_battery(struct acpi_battery *battery)
+>  	 * during the battery module initialization.
+>  	 */
+>  	list_for_each_entry_safe(hook_node, tmp, &battery_hook_list, list) {
+> -		hook_node->ops->add_battery(battery->bat);
+> +		hook_node->ops->add_battery(hook_node->data, battery->bat);
+>  	}
+>  	mutex_unlock(&hook_mutex);
+>  }
+> @@ -773,7 +774,7 @@ static void battery_hook_remove_battery(struct acpi_battery *battery)
+>  	 * custom attributes from the battery.
+>  	 */
+>  	list_for_each_entry(hook, &battery_hook_list, list) {
+> -		hook->ops->remove_battery(battery->bat);
+> +		hook->ops->remove_battery(hook->data, battery->bat);
+>  	}
+>  	/* Then, just remove the battery from the list */
+>  	list_del(&battery->list);
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 37d8649418f4..18afcf38931f 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -882,7 +882,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
+> 
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+> 
+> -static int asus_wmi_battery_add(struct power_supply *battery)
+> +static int asus_wmi_battery_add(void *data, struct power_supply *battery)
+>  {
+>  	/* The WMI method does not provide a way to specific a battery, so we
+>  	 * just assume it is the first battery.
+> @@ -909,7 +909,7 @@ static int asus_wmi_battery_add(struct power_supply *battery)
+>  	return 0;
+>  }
+> 
+> -static int asus_wmi_battery_remove(struct power_supply *battery)
+> +static int asus_wmi_battery_remove(void *data, struct power_supply *battery)
+>  {
+>  	device_remove_file(&battery->dev,
+>  			   &dev_attr_charge_control_end_threshold);
+> @@ -924,7 +924,8 @@ static const struct acpi_battery_hook_ops battery_hook_ops = {
+>  static void asus_wmi_battery_init(struct asus_wmi *asus)
+>  {
+>  	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_RSOC)) {
+> -		asus->hook = battery_hook_register("ASUS Battery Extension", &battery_hook_ops);
+> +		asus->hook = battery_hook_register("ASUS Battery Extension", NULL,
+> +						   &battery_hook_ops);
+>  	}
+>  }
+> 
+> diff --git a/drivers/platform/x86/huawei-wmi.c b/drivers/platform/x86/huawei-wmi.c
+> index 6fd02b25a97b..f23806299c1a 100644
+> --- a/drivers/platform/x86/huawei-wmi.c
+> +++ b/drivers/platform/x86/huawei-wmi.c
+> @@ -469,7 +469,7 @@ static DEVICE_ATTR_RW(charge_control_start_threshold);
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+>  static DEVICE_ATTR_RW(charge_control_thresholds);
+> 
+> -static int huawei_wmi_battery_add(struct power_supply *battery)
+> +static int huawei_wmi_battery_add(void *data, struct power_supply *battery)
+>  {
+>  	int err = 0;
+> 
+> @@ -484,7 +484,7 @@ static int huawei_wmi_battery_add(struct power_supply *battery)
+>  	return err;
+>  }
+> 
+> -static int huawei_wmi_battery_remove(struct power_supply *battery)
+> +static int huawei_wmi_battery_remove(void *data, struct power_supply *battery)
+>  {
+>  	device_remove_file(&battery->dev, &dev_attr_charge_control_start_threshold);
+>  	device_remove_file(&battery->dev, &dev_attr_charge_control_end_threshold);
+> @@ -507,7 +507,7 @@ static void huawei_wmi_battery_setup(struct device *dev)
+>  		return;
+>  	}
+> 
+> -	huawei->hook = battery_hook_register("Huawei Battery Extension",
+> +	huawei->hook = battery_hook_register("Huawei Battery Extension", NULL,
+>  					     &huawei_wmi_battery_hook_ops);
+>  	device_create_file(dev, &dev_attr_charge_control_thresholds);
+>  }
+> diff --git a/drivers/platform/x86/lg-laptop.c b/drivers/platform/x86/lg-laptop.c
+> index d8a61a07313e..f1abb1924150 100644
+> --- a/drivers/platform/x86/lg-laptop.c
+> +++ b/drivers/platform/x86/lg-laptop.c
+> @@ -547,7 +547,7 @@ static DEVICE_ATTR_RW(fn_lock);
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+>  static DEVICE_ATTR_RW(battery_care_limit);
+> 
+> -static int lg_battery_add(struct power_supply *battery)
+> +static int lg_battery_add(void *data, struct power_supply *battery)
+>  {
+>  	if (device_create_file(&battery->dev,
+>  			       &dev_attr_charge_control_end_threshold))
+> @@ -556,7 +556,7 @@ static int lg_battery_add(struct power_supply *battery)
+>  	return 0;
+>  }
+> 
+> -static int lg_battery_remove(struct power_supply *battery)
+> +static int lg_battery_remove(void *data, struct power_supply *battery)
+>  {
+>  	device_remove_file(&battery->dev,
+>  			   &dev_attr_charge_control_end_threshold);
+> @@ -750,7 +750,7 @@ static int acpi_add(struct acpi_device *device)
+>  	led_classdev_register(&pf_device->dev, &tpad_led);
+> 
+>  	wmi_input_setup();
+> -	hook = battery_hook_register("LG Battery Extension", &battery_hook_ops);
+> +	hook = battery_hook_register("LG Battery Extension", NULL, &battery_hook_ops);
+> 
+>  	return 0;
+> 
+> diff --git a/drivers/platform/x86/system76_acpi.c b/drivers/platform/x86/system76_acpi.c
+> index 1ec22db32bd0..9414b9491806 100644
+> --- a/drivers/platform/x86/system76_acpi.c
+> +++ b/drivers/platform/x86/system76_acpi.c
+> @@ -255,7 +255,7 @@ static struct attribute *system76_battery_attrs[] = {
+> 
+>  ATTRIBUTE_GROUPS(system76_battery);
+> 
+> -static int system76_battery_add(struct power_supply *battery)
+> +static int system76_battery_add(void *data, struct power_supply *battery)
+>  {
+>  	// System76 EC only supports 1 battery
+>  	if (strcmp(battery->desc->name, "BAT0") != 0)
+> @@ -267,7 +267,7 @@ static int system76_battery_add(struct power_supply *battery)
+>  	return 0;
+>  }
+> 
+> -static int system76_battery_remove(struct power_supply *battery)
+> +static int system76_battery_remove(void *data, struct power_supply *battery)
+>  {
+>  	device_remove_groups(&battery->dev, system76_battery_groups);
+>  	return 0;
+> @@ -280,7 +280,7 @@ static const struct acpi_battery_hook_ops system76_battery_hook_ops = {
+> 
+>  static void system76_battery_init(struct system76_data *data)
+>  {
+> -	data->hook = battery_hook_register("System76 Battery Extension",
+> +	data->hook = battery_hook_register("System76 Battery Extension", NULL,
+>  					   &system76_battery_hook_ops);
+>  }
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 8adafc3c31fa..6008d88e0727 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -9898,7 +9898,7 @@ ATTRIBUTE_GROUPS(tpacpi_battery);
+> 
+>  /* ACPI battery hooking */
+> 
+> -static int tpacpi_battery_add(struct power_supply *battery)
+> +static int tpacpi_battery_add(void *data, struct power_supply *battery)
+>  {
+>  	int batteryid = tpacpi_battery_get_id(battery->desc->name);
+> 
+> @@ -9909,7 +9909,7 @@ static int tpacpi_battery_add(struct power_supply *battery)
+>  	return 0;
+>  }
+> 
+> -static int tpacpi_battery_remove(struct power_supply *battery)
+> +static int tpacpi_battery_remove(void *data, struct power_supply *battery)
+>  {
+>  	device_remove_groups(&battery->dev, tpacpi_battery_groups);
+>  	return 0;
+> @@ -9943,7 +9943,7 @@ static int __init tpacpi_battery_init(struct ibm_init_struct *ibm)
+>  					battery_quirk_table,
+>  					ARRAY_SIZE(battery_quirk_table));
+> 
+> -	battery_info.hook = battery_hook_register("ThinkPad Battery Extension",
+> +	battery_info.hook = battery_hook_register("ThinkPad Battery Extension", NULL,
+>  						  &battery_hook_ops);
+> 
+>  	return 0;
+> diff --git a/include/acpi/battery.h b/include/acpi/battery.h
+> index b3c81abada1e..cca401b793b2 100644
+> --- a/include/acpi/battery.h
+> +++ b/include/acpi/battery.h
+> @@ -11,17 +11,18 @@
+>  #define ACPI_BATTERY_NOTIFY_THRESHOLD   0x82
+> 
+>  struct acpi_battery_hook_ops {
+> -	int (*add_battery)(struct power_supply *battery);
+> -	int (*remove_battery)(struct power_supply *battery);
+> +	int (*add_battery)(void *data, struct power_supply *battery);
+> +	int (*remove_battery)(void *data, struct power_supply *battery);
+>  };
+> 
+>  struct acpi_battery_hook {
+>  	const char *name;
+>  	const struct acpi_battery_hook_ops *ops;
+> +	void *data;
+>  	struct list_head list;
+>  };
+> 
+> -struct acpi_battery_hook *battery_hook_register(const char *name,
+> +struct acpi_battery_hook *battery_hook_register(const char *name, void *data,
+>  						const struct acpi_battery_hook_ops *hook);
+>  void battery_hook_unregister(struct acpi_battery_hook *hook);
+> 
+> --
+> 2.30.2
+> 
 
