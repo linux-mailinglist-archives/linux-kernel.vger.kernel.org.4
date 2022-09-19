@@ -2,134 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588575BD298
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00215BD2AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiISQwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S229813AbiISQzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiISQv2 (ORCPT
+        with ESMTP id S229568AbiISQzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:51:28 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82153E77C;
-        Mon, 19 Sep 2022 09:50:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JXDXjZdqWZj7l+/SR/8/woy0gEWnt4MRkuGURkQ9gPM8sgdID2l/B2KWW7EUdIF+yyFRFH2NF536BISUgqr4jO/xJfEax6WGWizjl1zSrxkJtNVqYrMYCat6tgmsW7RzTyWpURO/dZ02FttkM31YTywNkCFFMdZ5FrKuLFc978j0d0E31eW7IbTki+GaK6hUSqiYy8WwBF84O5pF0QjZ+7CIThoZoi3bJnB9XVhSPDaV8WkFYivTtPG1JgFRv6Aojyrben9ek3fR8jEByH5cbTn+LYC8tIQ/I7S+W9XB4twHPkwBysipVcUM9trTRu2Uq0hIwFkKRuKoT/9NwvxFeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=StxzaFq0Yey9oKWHwOM5HIAtfUHzZQ85bBdwE2faQwo=;
- b=mOpqXnIlc1cCObFT2hQqFEec6+T5MDR6/Ia6tcfXTPegIg1QrRRUNIcuEcq+BIhYIVlGu4gpthBXerTSyjU52GfCWz8sv7TIzTop0PYJqB1QwPyQyXLI+5KRyfuqXTPwCynEpjWSr3gI/YJ9jeAaTpE1eN9Sf4IpS6E8HpefwauiAbxy6miQ/qHfbAe/Oee5YvL3vGKwK/b9DljUxvKS+OIouUrVF4VF2BrzojEZNVDdoH+RuGnWkSf0tqzdb3QOHESvVEUagCe5Q0MlkyFJfmvAQr50vLTmaGUCZuHSC4FrGpSt11dfA1kgYy8T786QJJHD127ONEB8O8Y9DHGS2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=StxzaFq0Yey9oKWHwOM5HIAtfUHzZQ85bBdwE2faQwo=;
- b=cYjBzP3aMli8z3CP5QdKpEo927Dl/m64hbXpeDnv+QW3JBLw/xC27Lun0nOYk6oqpc+HjuotWJtPtwZ5cuPFi+w3bCL1MDUbTEVErOFbOe7c5ISRhgx67FhjD+jxBJdCAv45A+yO54+ivG/+v1WIKt8Wa5/3Sbi45/8u+zvRMcI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by BY5PR12MB4164.namprd12.prod.outlook.com (2603:10b6:a03:207::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
- 2022 16:50:20 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::4120:60cf:46a8:7109]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::4120:60cf:46a8:7109%7]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
- 16:50:20 +0000
-Message-ID: <3511f4f6-d043-9a22-7779-af2c2983b6a2@amd.com>
-Date:   Mon, 19 Sep 2022 11:50:15 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v4 11/13] x86/resctrl: Add sysfs interface to write the
- event configuration
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com, eranian@google.com
-References: <166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu>
- <166257367603.1043018.15774268739007323339.stgit@bmoger-ubuntu>
- <32cfa982-037c-6edf-702a-c59d9c5d2f57@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <32cfa982-037c-6edf-702a-c59d9c5d2f57@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0022.namprd03.prod.outlook.com
- (2603:10b6:610:b0::27) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+        Mon, 19 Sep 2022 12:55:50 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A812C651;
+        Mon, 19 Sep 2022 09:55:48 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u18so47938837lfo.8;
+        Mon, 19 Sep 2022 09:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=cF8VhFoOCuUcwQL6IdrBBzoX6yG2kz7mpL9rzrW9mGw=;
+        b=pgDOLayMLZxN9kAy+2gAZ3ZQSBBFWrmtSBM0hAD76alveDNys4YvIAQoS6kWIheRIF
+         LXAwG5CAfx0FN+WdASdWPq1qXT/SSMk+9fJf9yOymEDDOPz4xrYt7lJfxTETQAYQI5rY
+         llUlKynMqT+xa9b/0OsIQgdhxORFj6ik1EaGsAjeIow2RWWd6R1xVIUiY4tLrv8okezD
+         ouVKpTJ5BN+DDrqsssgwhJYXdcAFrKCY+sXZ29LURXqaDOtVIaHxaK9xjH7eh/n+kGYU
+         xe0diZr4V+78iQcDYAbFv4WFmxdToMGRn3908062jXJQzjmmhE/b6uTxAMQJZWaFYtuX
+         21Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=cF8VhFoOCuUcwQL6IdrBBzoX6yG2kz7mpL9rzrW9mGw=;
+        b=aQdRjU7317Qg8WFf48TNobteca94q0ZcDxG2BHot+DCQGnpdU1NRrzMfIQFGLqylbz
+         NJECRDi/7vV6WeEjnbVozygaWNioM+m31us79i4azh2bavtg4Jv7T+9ITI3TrCJ3qqpT
+         M2sEH0/b1EMea6IqgVEVEysP2s+puEn45/5q0Yo2v0yHzGmP/zguLE7lQIZxV2WJ2zws
+         nlNqUNgfn4Lse+uIjPXhP+/uhSYrteqX0El3E5EbTqumObgZlS24ttuRwNR1Me/1otyZ
+         kcSbKkoec59KBAg7DhjGtxGVxQHPpOu3toeIUzZHDrbhFFxBD3lqEozJQg0ySIc0JlYk
+         q2PA==
+X-Gm-Message-State: ACrzQf0bTY5PzY9+NlX/7WLsFEW8nX415CsbXAs1/aZITT03c0vZexLG
+        1h0x7WAjs9nFp+8Af36SUnuNJYXTqZvEWsiVLeI=
+X-Google-Smtp-Source: AMsMyM76BsjpHTgcmtSmF3mumfMlb8X803C7WdI5O4DaMLUcDlT++TnLY4gk8otCrmH9miNFyLINUV8BTJ4qJR4A9B0=
+X-Received: by 2002:a05:6512:b97:b0:497:5c43:2d61 with SMTP id
+ b23-20020a0565120b9700b004975c432d61mr6195134lfv.251.1663606546625; Mon, 19
+ Sep 2022 09:55:46 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|BY5PR12MB4164:EE_
-X-MS-Office365-Filtering-Correlation-Id: 080c3247-6291-4d88-e3bf-08da9a5f09ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eSIx9Nffphca2d933ebIwfBjZCOPC/KWLHPp9aldMeoVz1D0Qb4BUFDOUIhjGUer+3hPppy0zPQjCxaIn7I67b0gGqPNyo7wPuhv0hL4BW6YuZnu3cZAdx34Oo5OqKDdkLCYU/iJRgKFD/BKevsJtzpDbIiLR8tAPEi9Fc+3sQohWG9BJYU+SyetK1SQol21L0e7y3ypCOzTQEXTEo6RGDptVaD9s7uz5ZiKh8OYtoJCSNblObGNdYmKjwEXbt/95ZFLAFitr/VtE8CZ2jYNVC9i2csYczW2EXqWzrMILsahpxSJL04Nagktpj9Vx7FvcZIAE2rNUPTzznFsf3KmwfE/QJvx2WDvAmym6UAM07sFX82E32EKHGJViyd/b2XC5aGHwtRfeICSadWw0RJdtxIrSjrqt4jtECaPBINCHNpvqllo412jMXYK0QmS5uA5dBZT9tAdFYVxQVU2hwAnLfYZIbHLEtRuMzz4KJzA0KnsmBfMKOdsZf8wLrz602epckiQUEJ2h1PwYYQkJRwKp9pbNTNx/Yih5L1L9wX3B0yUkilYuHqzLkPn50OIlvo2b8KmU5IsLw8KNCI5Ve254xNCWISXXRp8yvbPcWWt3XFl2TkoYZqhdgrtLAahRKoGl8djdAvC9/qkowr3BbyrUXTyD6DQj6AEmQTTc7uu819M/60pR4H8Nyx5v8QN7twNZjnruYyOAYRk2rcjZi8V+BeB4gwmrGUgPZR/H1jOESOurtW8++MtaSGiHDulhDzutgLJMIwYbHkWnWdHWZGQjavYByKiSyjCTe0t6OFTVLk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(136003)(366004)(346002)(451199015)(6486002)(36756003)(7416002)(66476007)(66556008)(2906002)(4326008)(3450700001)(8676002)(31696002)(66946007)(86362001)(5660300002)(8936002)(38100700002)(316002)(26005)(31686004)(6512007)(186003)(2616005)(6506007)(478600001)(83380400001)(6666004)(41300700001)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yi9rTmNQSEdmUGZtTXp4bzJjSFBPbEY1UFo0UTQxRXdBMm1adVA0bFhkbWNY?=
- =?utf-8?B?K1lqNWU4bFNMRDZTa0hhYktZeXozY2RVaFk1WWt2MFNDTXIxNEhTdnQvbTlD?=
- =?utf-8?B?UnNodm9HVk9DeVcxTHlDbzdLajB0UCs4bVMwaDZyaklVL0Z1YUdMZmcvVk9L?=
- =?utf-8?B?L3d3REVtNW5WNURPSkNPbWt3K3pIMkxxUlVDYXlJdjBKcGQxWmJqRW5LS3Mz?=
- =?utf-8?B?TnhFSHdhUmp3UGlWWEtFSDZJMUVmaUtLejFSdU1jMkQzV3hobFd4MTFGOWgr?=
- =?utf-8?B?dEhNWWdqQjBSNkQzRytrOFNLK25PY1hvdGkyT1FwRUFyc0x1MXdKRXdvVmta?=
- =?utf-8?B?Q2ZKVHhGNi9qWkVTdUFPZjBjYjN6TVAwcVhpbzRCVU1HTlJ0Wk5lNm5saUVU?=
- =?utf-8?B?UHVMZXM0OXlJblJMRmYxdnB1QXN0YVcvczhNTG1sS0dIb2tmZjJGZTRsdHhk?=
- =?utf-8?B?ZW4yRjlsVXpKTi9KbVJXbTk2OHJOR3lkaGtaUUpraW00TEdyZy9xQlpPOHNR?=
- =?utf-8?B?WGhBYjlXMnpGb3ZUekFxL2N3bHEycDZjSGFiRHVqdzdmZk85bXR5TUhWdTA4?=
- =?utf-8?B?VlIweXM2UW1BU21Tazk5c2l1MjRuTHFnR2Nib2UzM3hsNDVNUlhDTGhBT2Jx?=
- =?utf-8?B?TXFxcS9qcjdRc0VrcDJRQkNhbTdFR3phSyswc0F1Yk50bDZldEh5SjVzS0xB?=
- =?utf-8?B?OURZZ09DS3B5cEV2ZEorZUdLNnJyOW9uUHFudkpuMEhmK254U0QwTzRmdVdX?=
- =?utf-8?B?UE5QeFkvVHVmYUlpY3ozclVJNGFJaUM4ZjBVT2llSlpadkR5cFI2OURLMWVn?=
- =?utf-8?B?MmFKYmtwQ3VxQ1NHY3l4UDgvcGlGeitvU2tiLzZPWkt0TDR1enh3VC9YL0Rq?=
- =?utf-8?B?VEhEOHVWQkVzYWl4MXNDdVVGRDlqTk5FTCthb2RaZW9GNldMbzVaR0FoSlRk?=
- =?utf-8?B?NXZrZE01dGo1bU16bmk1cXZvczVZTzZvWnJja2lUcmFJOEs1LzRqMTFsR0Zm?=
- =?utf-8?B?bmYzdjJSL25CV2dFODZJUnQzVlNsc2o4dzBmeEJLMlV1ZGR1cXBGR01lZGZL?=
- =?utf-8?B?OUJMMmFzY1ErUGlaM1lNWnI2alVXSW9PbGlKOU1PbUNrOW9LSDVVT3ZqOUxU?=
- =?utf-8?B?azlwVFhSb2MrR1U4KzFPREhkQldBK3BOZDkvUUpDTzkvZDU3L3cwSEtqNG9G?=
- =?utf-8?B?ZDdVb25xQnV6S0dEV2dVUHJMNm9XbnRQU3ZrT0cvU3htUU9VMEsrRVloTW5R?=
- =?utf-8?B?VlBQUzlPK3RRN2hlK1FLRmtLTzBxMnBmSmtTdFY5QTNPdThCeEpaM1d3VE9s?=
- =?utf-8?B?ZFI5cXhUaDl0ZlY2emxMQXJjckdFb1M5Q283SWVta1RpeERONHBvZko4bzRs?=
- =?utf-8?B?emZaZkNLdzF3WUY0VmFiZTMrZnFFeHlZWTVGNEY0ZTFXak9kVTdPSFdmeG8y?=
- =?utf-8?B?N2l0U25YK3VKQTRxQVVUSnExR0luQm8rNmZFekJDcmdwN2ZSbGF6N2o5RkZi?=
- =?utf-8?B?WjFyNkh0ZlM5WC8vVURjdkdVNTVmeHNsL3M3OHAvQ284dlk1a1BBZE5VSnhQ?=
- =?utf-8?B?RGtuamdDWVlBUGFORnZUQ0o2VDJWS2dGR095ZVRRNjVEZXdsU0J4clIybWYy?=
- =?utf-8?B?WEUrcDEwM3hKMTBqc056cGlUNGxFaGlsWC9rNTZubWxHbW1PbVZMcklJZVRk?=
- =?utf-8?B?M1Z0MlE1eFZMeFNtTFRiSmIyNENoN0VVWVJqUCsxanlkSzc2eFhXUXdMOTVY?=
- =?utf-8?B?WFlvRTlJT1crdHlydGRLU0ZKbDdBQnByc1VZWlY5dHB4cHIrZmJ6dEplNCtT?=
- =?utf-8?B?WjF3bFdZYis3YVVMNEIwQ3lqdXR6Vk05VkJjS1M5Y24zdWUySDAyWlp3YXJl?=
- =?utf-8?B?aU4rWHI3ZjNzU1I2b1ZXWWNkVjBkR2ZuWHM3RXMzR1c1VFlsYjgzaURRTzd1?=
- =?utf-8?B?aTRESkR3SWJDK3BCODBoZCtoYkZLa2QyU2VlZ0Z1L0hPTWEyRFlnQWIvVUZI?=
- =?utf-8?B?bXlXS0JQK1I2OW1DaGk5ZHFOM05ZUm5jY3lLbFkwb3dtTFVYUWtyWS94VGxD?=
- =?utf-8?B?RTNjOFc2Y1o1bjRWM01Ta1BOQ3pmNko0VExXMzU0dnU0UjhCRm1ROVMzdEo4?=
- =?utf-8?Q?15glOV7ObPcPgN7C9btULSQkF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 080c3247-6291-4d88-e3bf-08da9a5f09ba
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 16:50:20.4816
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mR8movr8E5u/vuL1WI+nXybtxgtMKK7fshQxaxnjps5JMYVl2b8+x+W8ZslIDsbW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4164
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20220917014739.5624-1-yin31149@gmail.com> <20220919084149.127253-1-yin31149@gmail.com>
+In-Reply-To: <20220919084149.127253-1-yin31149@gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 19 Sep 2022 09:55:34 -0700
+Message-ID: <CABBYNZKm_YcMeRTouY6z+748WNYFnkD_UFWCQd8Yts7mNEnxGw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: corrupted list in kobject_add_internal (4)
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail.com,
+        18801353760@163.com, gregkh@linuxfoundation.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcel@holtmann.org, rafael@kernel.org, soenke.huster@eknoes.de,
+        syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,166 +72,428 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hawkins,
 
-On 9/16/22 11:17, Reinette Chatre wrote:
-> Hi Babu,
+On Mon, Sep 19, 2022 at 1:42 AM Hawkins Jiawei <yin31149@gmail.com> wrote:
 >
-> On 9/7/2022 11:01 AM, Babu Moger wrote:
+> On Sat, 17 Sept 2022 at 09:47, Hawkins Jiawei <yin31149@gmail.com> wrote:
+> >
+> >Hi,
+> >
+> >On Fri, 26 Aug 2022 08:27:06, AM S=C3=B6nke Huster <soenke.huster@eknoes=
+.de> wrote:
+> >>Hi Luiz,
+> >>
+> >>On 25.08.22 20:58, Luiz Augusto von Dentz wrote:
+> >>> Hi S=C3=B6nke,
+> >>>
+> >>> On Thu, Aug 25, 2022 at 8:08 AM S=C3=B6nke Huster <soenke.huster@ekno=
+es.de> wrote:
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>>
+> >>>>
+> >>>> While fuzzing I found several crashes similar to the following:
+> >>>>
+> >>>>
+> >>>>         [    5.345731] sysfs: cannot create duplicate filename '/dev=
+ices/virtual/bluetooth/hci0/hci0:0'
+> >>>>
+> >>>>         [...]
+> >>>>
+> >>>>         [    5.430464] BUG: KASAN: use-after-free in klist_add_tail+=
+0x1bd/0x200
+> >>>>
+> >>>>         [    5.430464] Write of size 8 at addr ffff88800bfcc468 by t=
+ask kworker/u3:1/43
+> >>>>
+> >>>>         [    5.430464]
+> >>>>
+> >>>>         [    5.430464] CPU: 0 PID: 43 Comm: kworker/u3:1 Not tainted=
+ 5.19.0-12855-g13f222680b8f #2
+> >>>>
+> >>>>         [    5.430464] Hardware name: QEMU Standard PC (i440FX + PII=
+X, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> >>>>
+> >>>>         [    5.430464] Workqueue: hci0 hci_rx_work
+> >>>>
+> >>>>         [    5.430464] Call Trace:
+> >>>>
+> >>>>         [    5.430464]  <TASK>
+> >>>>
+> >>>>         [    5.430464]  dump_stack_lvl+0x45/0x5d
+> >>>>
+> >>>>         [    5.430464]  print_report.cold+0x5e/0x5e5
+> >>>>
+> >>>>         [    5.430464]  kasan_report+0xb1/0x1c0
+> >>>>
+> >>>>         [    5.430464]  klist_add_tail+0x1bd/0x200
+> >>>>
+> >>>>         [    5.430464]  device_add+0xa6b/0x1b80
+> >>>>
+> >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> >>>>
+> >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
+> >>>>
+> >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
+> >>>>
+> >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> >>>>
+> >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> >>>>
+> >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> >>>>
+> >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> >>>>
+> >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> >>>>
+> >>>>         [    5.430464]  kthread+0x29d/0x340
+> >>>>
+> >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> >>>>
+> >>>>         [    5.430464]  </TASK>
+> >>>>
+> >>>>         [    5.430464]
+> >>>>
+> >>>>         [    5.430464] Allocated by task 44:
+> >>>>
+> >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
+> >>>>
+> >>>>         [    5.430464]  __kasan_kmalloc+0x81/0xa0
+> >>>>
+> >>>>         [    5.430464]  device_add+0xcae/0x1b80
+> >>>>
+> >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> >>>>
+> >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
+> >>>>
+> >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
+> >>>>
+> >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> >>>>
+> >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> >>>>
+> >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> >>>>
+> >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> >>>>
+> >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> >>>>
+> >>>>         [    5.430464]  kthread+0x29d/0x340
+> >>>>
+> >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> >>>>
+> >>>>         [    5.430464]
+> >>>>
+> >>>>         [    5.430464] Freed by task 43:
+> >>>>
+> >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
+> >>>>
+> >>>>         [    5.430464]  kasan_set_track+0x21/0x30
+> >>>>
+> >>>>         [    5.430464]  kasan_set_free_info+0x20/0x40
+> >>>>
+> >>>>         [    5.430464]  __kasan_slab_free+0x108/0x190
+> >>>>
+> >>>>         [    5.430464]  kfree+0xa9/0x360
+> >>>>
+> >>>>         [    5.430464]  device_add+0x33a/0x1b80
+> >>>>
+> >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> >>>>
+> >>>>         [    5.430464]  hci_le_cis_estabilished_evt+0x517/0xa70
+> >>>>
+> >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> >>>>
+> >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> >>>>
+> >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> >>>>
+> >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> >>>>
+> >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> >>>>
+> >>>>         [    5.430464]  kthread+0x29d/0x340
+> >>>>
+> >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> >>>>
+> >>>>
+> >>>>
+> >>>> I think I fixed a similar issue in d5ebaa7c5f6f ("Bluetooth: hci_eve=
+nt: Ignore multiple conn complete events"). Here, the problem was that mult=
+iple connection complete events for the same handle called hci_conn_add_sys=
+fs multiple times, but if it is called with an existing connection conn->de=
+v->p is freed.
+> >>>>
+> >>>> This is because device_add is called - its documentation contains th=
+is sentence: "Do not call this routine or device_register() more than once =
+for any device structure".
+> >>>>
+> >>>>
+> >>>>
+> >>>> This here is similar: First, an hci_le_conn_complete_evt creates a n=
+ew connection.
+> >>>>
+> >>>> Afterwards, an hci_le_cis_estabilished_evt with the same handle find=
+s that connection, and tries to add it to sysfs again, freeing conn->dev->p=
+. Now, an event that might use that connection such as here the hci_le_conn=
+_complete_evt triggers a use after free.
+> >>>>
+> >
+> >Syzkaller reports a bug as follows [1]:
+> >------------[ cut here ]------------
+> >kernel BUG at lib/list_debug.c:33!
+> >invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> >[...]
+> >Call Trace:
+> > <TASK>
+> > __list_add include/linux/list.h:69 [inline]
+> > list_add_tail include/linux/list.h:102 [inline]
+> > kobj_kset_join lib/kobject.c:164 [inline]
+> > kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
+> > kobject_add_varg lib/kobject.c:358 [inline]
+> > kobject_add+0x150/0x1c0 lib/kobject.c:410
+> > device_add+0x368/0x1e90 drivers/base/core.c:3452
+> > hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
+> > hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
+> > hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
+> > hci_event_func net/bluetooth/hci_event.c:7440 [inline]
+> > hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
+> > hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
+> > process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+> > worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+> > kthread+0x2e4/0x3a0 kernel/kthread.c:376
+> > ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> > </TASK>
+> >
+> >I think they are the same problems:
+> >A hci_le_conn_complete_evt creates a new connection, and calls
+> >hci_conn_add_sysfs(). Then hci_le_cis_estabilished_evt with the same han=
+dle
+> >finds that connection, and will also calls hci_conn_add_sysfs(), which m=
+aybe
+> >triggering corrupted list bug.
+> >
+> >Link: https://syzkaller.appspot.com/bug?id=3Dda3246e2d33afdb92d66bc166a0=
+934c5b146404a [1]
+> >
+> >>>>
+> >>>>
+> >>>> I bisected this bug and it was introduced with  26afbd826ee3 ("Bluet=
+ooth: Add initial implementation of CIS connections").
+> >>>>
+> >>>>
+> >>>>
+> >>>> The same happens with hci_le_create_big_complete_evt: Here, multiple=
+ events trigger the following bug:
+> >>>>
+> >>>>
+> >>>>
+> >>>>         [    6.898080] BUG: kernel NULL pointer dereference, address=
+: 0000000000000058
+> >>>>
+> >>>>         [    6.898081] #PF: supervisor read access in kernel mode
+> >>>>
+> >>>>         [    6.898083] #PF: error_code(0x0000) - not-present page
+> >>>>
+> >>>>         [    6.898085] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >>>>
+> >>>>         [    6.898090] Workqueue: hci0 hci_rx_work
+> >>>>
+> >>>>         [    6.898092] RIP: 0010:klist_next+0x12/0x160
+> >>>>
+> >>>>         [    6.898128] Call Trace:
+> >>>>
+> >>>>         [    6.898129]  <TASK>
+> >>>>
+> >>>>         [    6.898130]  ? bt_link_release+0x20/0x20
+> >>>>
+> >>>>         [    6.898133]  device_find_child+0x37/0xa0
+> >>>>
+> >>>>         [    6.898136]  hci_conn_del_sysfs+0x71/0xa0
+> >>>>
+> >>>>         [    6.898138]  hci_conn_cleanup+0x17a/0x2c0
+> >>>>
+> >>>>         [    6.898141]  hci_conn_del+0x14a/0x240
+> >>>>
+> >>>>         [    6.898144]  hci_le_create_big_complete_evt+0x3d8/0x470
+> >>>>
+> >>>>         [    6.898146]  ? hci_le_remote_feat_complete_evt+0x3e0/0x3e=
+0
+> >>>>
+> >>>>         [    6.898148]  hci_le_meta_evt+0x155/0x230
+> >>>>
+> >>>>         [    6.898150]  hci_event_packet+0x328/0x820
+> >>>>
+> >>>>         [    6.898152]  ? hci_conn_drop+0x100/0x100
+> >>>>
+> >>>>         [    6.898155]  hci_rx_work+0x725/0xb70
+> >>>>
+> >>>>         [    6.898157]  process_one_work+0x2a6/0x5d0
+> >>>>
+> >>>>         [    6.898160]  worker_thread+0x4a/0x3e0
+> >>>>
+> >>>>         [    6.898162]  ? process_one_work+0x5d0/0x5d0
+> >>>>
+> >>>>         [    6.898164]  kthread+0xed/0x120
+> >>>>
+> >>>>         [    6.898165]  ? kthread_complete_and_exit+0x20/0x20
+> >>>>
+> >>>>         [    6.898167]  ret_from_fork+0x22/0x30
+> >>>>
+> >>>>         [    6.898170]  </TASK>
+> >>>>
+> >>>>
+> >>>>
+> >>>> I bisected this bug and it was introduced with eca0ae4aea66 ("Blueto=
+oth: Add initial implementation of BIS connections").
+> >>>>
+> >>>>
+> >>>>
+> >>>> I am not really sure how to solve that. As far as I understand, prev=
+iously we simply set an unused handle as connection handle, and checked for=
+ that before setting the correct handle and adding it to sysfs. But here, a=
+dding it to sysfs seems to happen in a different function and the handle is=
+ already set.
+> >>>
+> >>> We should probably check if link-type, if it is an ISO link it shall
+> >>> not be created via Connection Complete events and they have their own
+> >>> events to create that.
+> I wonder if we can check the connection type in hci_le_create_big_complet=
+e_evt()
+> and hci_le_cis_estabilished_evt(), as below:
 >
-> ...
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 6643c9c20fa4..5b83473d51b5 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -6795,8 +6795,16 @@ static void hci_le_cis_estabilished_evt(struct hci=
+_dev *hdev, void *data,
 >
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index 6f067c1ac7c1..59b484eb1267 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -330,9 +330,121 @@ int rdtgroup_mondata_config_show(struct seq_file *m, void *arg)
->>  	return ret;
->>  }
->>  
->> +/*
->> + * This is called via IPI to read the CQM/MBM counters
->> + * in a domain.
-> copy&paste from previous patch?
-Will correct it.
+>         if (!ev->status) {
+>                 conn->state =3D BT_CONNECTED;
+> -               hci_debugfs_create_conn(conn);
+> -               hci_conn_add_sysfs(conn);
+> +
+> +               /* Only ISO_LINK link type need to register connection de=
+vice
+> +                * here, others will register in their relative
+> +                * Connection Complete events
+> +                */
+> +               if (conn->type =3D=3D ISO_LINK) {
+> +                       hci_debugfs_create_conn(conn);
+> +                       hci_conn_add_sysfs(conn);
+> +               }
+
+We should probably just bail out if conn->type !=3D ISO_LINK which can
+be done much earlier.
+
+>                 hci_iso_setup_path(conn);
+>                 goto unlock;
+>         }
+> @@ -6901,8 +6909,16 @@ static void hci_le_create_big_complete_evt(struct =
+hci_dev *hdev, void *data,
 >
->> + */
->> +void mon_event_config_write(void *info)
->> +{
->> +	struct mon_config_info *mon_info = info;
->> +	u32 msr_index;
->> +
->> +	switch (mon_info->evtid) {
->> +	case QOS_L3_MBM_TOTAL_EVENT_ID:
->> +		msr_index = 0;
->> +		break;
->> +	case QOS_L3_MBM_LOCAL_EVENT_ID:
->> +		msr_index = 1;
->> +		break;
->> +	default:
->> +		/* Not expected to come here */
->> +		return;
->> +	}
->> +
->> +	wrmsr(MSR_IA32_EVT_CFG_BASE + msr_index, mon_info->mon_config, 0);
->> +}
->> +
->> +ssize_t  rdtgroup_mondata_config_write(struct kernfs_open_file *of,
->> +				       char *buf, size_t nbytes, loff_t off)
->> +{
->> +	struct mon_config_info mon_info;
->> +	struct rdt_hw_resource *hw_res;
->> +	struct rdtgroup *rdtgrp;
->> +	struct rdt_resource *r;
->> +	unsigned int mon_config;
->> +	cpumask_var_t cpu_mask;
->> +	union mon_data_bits md;
->> +	struct rdt_domain *d;
->> +	u32 resid, domid;
->> +	int ret = 0, cpu;
->> +
->> +	ret = kstrtouint(buf, 0, &mon_config);
->> +	if (ret)
->> +		return ret;
->> +
->> +	rdt_last_cmd_clear();
->> +
->> +	/* mon_config cannot be more than the supported set of events */
->> +	if (mon_config > MAX_EVT_CONFIG_BITS) {
->> +		rdt_last_cmd_puts("Invalid event configuration\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	cpus_read_lock();
->> +	rdtgrp = rdtgroup_kn_lock_live(of->kn);
->> +	if (!rdtgrp) {
->> +		return -ENOENT;
->> +		goto e_unlock;
->> +	}
->> +
->> +	if (!zalloc_cpumask_var(&cpu_mask, GFP_KERNEL)) {
->> +		ret = -ENOMEM;
->> +		goto e_unlock;
->> +	}
->> +
->> +	md.priv = of->kn->priv;
->> +	resid = md.u.rid;
->> +	domid = md.u.domid;
->> +
->> +	hw_res = &rdt_resources_all[resid];
->> +	r = &hw_res->r_resctrl;
->> +	d = rdt_find_domain(r, domid, NULL);
->> +	if (IS_ERR_OR_NULL(d)) {
->> +		ret = -ENOENT;
->> +		goto e_cpumask;
->> +	}
->> +
->> +	/*
->> +	 * Read the current config value first. If both are same
->> +	 * then we dont need to write again
->> +	 */
->> +	mon_info.evtid = md.u.evtid;
->> +	mondata_config_read(d, &mon_info);
->> +	if (mon_info.mon_config == mon_config)
->> +		goto e_cpumask;
->> +
->> +	mon_info.mon_config = mon_config;
->> +
->> +	/* Pick all the CPUs in the domain instance */
->> +	for_each_cpu(cpu, &d->cpu_mask)
->> +		cpumask_set_cpu(cpu, cpu_mask);
->> +
->> +	/* Update MSR_IA32_EVT_CFG_BASE MSR on all the CPUs in cpu_mask */
->> +	on_each_cpu_mask(cpu_mask, mon_event_config_write, &mon_info, 1);
-> If this is required then could you please add a comment why every CPU in
-> the domain needs to be updated? Until now configuration changes
-> only needed to be made on one CPU per domain. 
-> Even in the previous patch when the user reads the current configuration
-> value it is only done on one CPU in the domain ... to me that implies
-> that the scope is per domain and only one CPU in the domain needs to be
-> changed.
-
-Yes, This register is domain specific. However the hardware team
-recommends it to update on all the CPU threads. It is not clear in the
-specs right now.
-
-I have asked them to make that clear in the specs next time.
-
+>         if (!ev->status) {
+>                 conn->state =3D BT_CONNECTED;
+> -               hci_debugfs_create_conn(conn);
+> -               hci_conn_add_sysfs(conn);
+> +
+> +               /* Only ISO_LINK link type need to register connection de=
+vice
+> +                * here, others will register in their relative
+> +                * Connection Complete events
+> +                */
+> +               if (conn->type =3D=3D ISO_LINK) {
+> +                       hci_debugfs_create_conn(conn);
+> +                       hci_conn_add_sysfs(conn);
+> +               }
+> +
+>                 hci_iso_setup_path(conn);
+>                 goto unlock;
+>         }
 >
->> +
->> +	/*
->> +	 * When an Event Configuration is changed, the bandwidth counters
->> +	 * for all RMIDs and Events will be cleared, and the U-bit for every
->> +	 * RMID will be set on the next read to any BwEvent for every RMID.
->> +	 * Clear the mbm_local and mbm_total counts for all the RMIDs.
->> +	 */
-> This is a snippet that was copied from the hardware spec and since it is
-> inserted into the kernel driver the context makes it hard to understand.
-> Could it be translated into what it means in this context?
-> Perhaps something like:
+> It seems that this patch can pass the syzbot test.
 >
-> 	/*
-> 	 * When an Event Configuration is changed, the bandwidth counters
-> 	 * for all RMIDs and Events will be cleared by the hardware. The
->          * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for every
-> 	 * RMID on the next read to any event for every RMID. Subsequent
-> 	 * reads will have MSR_IA32_QM_CTR.Unavailable (bit 62) cleared
-> 	 * while it is tracked by the hardware.
-> 	 * Clear the mbm_local and mbm_total counts for all the RMIDs.
-> 	 */
+> Link: https://lore.kernel.org/all/0000000000004f9ca105e8ba8157@google.com=
+/
+> Reported-and-tested-by: syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail=
+.com
 >
-> Please fixup where I got it wrong.
-
-Looks good.
-
-Thanks Babu
-
+> Link: https://lore.kernel.org/all/0000000000008a7a3f05e8ad02f6@google.com=
+/
+> Reported-and-tested-by: syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail=
+.com
 >
->> +	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);
->> +	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);
->> +
-> Reinette
+> >>>
+> >>
+> >>But then the problem of duplicate hci_le_cis_estabilished_evt / hci_le_=
+create_big_complete_evt still exists, isn't it? For example if the connecti=
+on is created through a hci_le_cis_req_evt, and afterwards two hci_le_cis_e=
+stabilished_evt arrive, the second event calls hci_conn_add_sysfs a second =
+time which frees parts of the device structure.
+> As for this problem, I wonder if we can check the connection state in tho=
+se
+> functions as below, liking patch
+> d5ebaa7c5f6f("Bluetooth: hci_event: Ignore multiple conn complete events"=
+):
+>
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 5b83473d51b5..f6b62cfcf082 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -6794,6 +6794,14 @@ static void hci_le_cis_estabilished_evt(struct hci=
+_dev *hdev, void *data,
+>         }
+>
+>         if (!ev->status) {
+> +               /* The HCI_LE_CIS_Estabilished event is only sent once pe=
+r connection.
+> +                * Processing it more than once per connection can corrup=
+t kernel memory.
+> +                *
+> +                * As the connection state is set here for the first time=
+, it indicates
+> +                * whether the connection is already set up.
+> +                */
+> +               if (conn->state =3D=3D BT_CONNECTED)
+> +                       goto unlock;
+>                 conn->state =3D BT_CONNECTED;
+>
+>                 /* Only ISO_LINK link type need to register connection de=
+vice
+> @@ -6908,6 +6916,14 @@ static void hci_le_create_big_complete_evt(struct =
+hci_dev *hdev, void *data,
+>                 conn->handle =3D __le16_to_cpu(ev->bis_handle[0]);
+>
+>         if (!ev->status) {
+> +               /* The HCI_LE_Create_BIG_Complete event is only sent once=
+ per connection.
+> +                * Processing it more than once per connection can corrup=
+t kernel memory.
+> +                *
+> +                * As the connection state is set here for the first time=
+, it indicates
+> +                * whether the connection is already set up.
+> +                */
+> +               if (conn->state =3D=3D BT_CONNECTED)
+> +                       goto unlock;
 
--- 
-Thanks
-Babu Moger
+These changes look good, please send a proper patch.
 
+>                 conn->state =3D BT_CONNECTED;
+>
+>                 /* Only ISO_LINK link type need to register connection de=
+vice
+>
+> >>
+> >>>> Best
+> >>>> S=C3=B6nke
+> >I wonder that if we need both two patches? Because they
+> >seems to be used to patch different bugs?
+
+
+
+--=20
+Luiz Augusto von Dentz
