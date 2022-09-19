@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A565BD4F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCF55BD4F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiISSyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S229709AbiISSzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiISSyb (ORCPT
+        with ESMTP id S229522AbiISSzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:54:31 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A03C1A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:54:28 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1278624b7c4so743103fac.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=w33pPDCD1aAOGDcHMeuqpnuOb/6wJdl4+wJdfUS6lPU=;
-        b=dl5JCIDnAH0WNZPP7AXJKzEkpEjFNrQtVc0zpeo6JqFuO3PcCHm70ZEw4d1E64xR/O
-         EbXrtumHFnU4aIhPLcHp1Uni08OQ8Een8oSNZdK55hwa0eZ3J0mqwZIsLok8EO2N0S86
-         Cu68DbMNIy0sQKkV3uaBK4QLwyHUfamBySiSFHKLaOWsWjUSG1DrMlcgPAouXOJ0nAHZ
-         8pTyICqox+ml2WU/ECUTnwWWawtro9N9Mh4WeEdVCXLsjr6a0bkBsy6QF1xei5T2NfCk
-         ivrjIipNfpWdq6LT6f/b+xCMmL/0JIVjH0XYQaqPfWCofN06rCh7N1oV+o38xsudiwkL
-         F1/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=w33pPDCD1aAOGDcHMeuqpnuOb/6wJdl4+wJdfUS6lPU=;
-        b=jevB4XohiazoCfBSPDmctiPnGBqZDolv1A29WgdgebCqNE7Jl49APUGPBydcqjyhKE
-         YI0nvfu09Jqqs7RkhAzmXZsI+LGNLIc64brwVMoBHpN9bF56q3I3x64cGIlZy0sAXQ7A
-         1ScpW9JQ9SDUAChYl1HMkiSgSDynxhTMnyyydxNq+p69oxwulB2S8m9ca9+i2uKuLpAZ
-         mpKbLGqZc6RhV/mu2cSMaMmrJ7bLavmFqE6ZoMsfBf1AKduQhvqUw2Gt4NMrrDgIKduB
-         QNpiBRh6yNv6CEChg308FdkN5qq9ihIddxFRhGod+QnX4vm7N0VgApBqAXU/JxTdIYJJ
-         FPsA==
-X-Gm-Message-State: ACgBeo0LReo25cfu3dP0tlQaSobMdt4EX+3EFYCwx1fHV0dSUwIzQViE
-        fChox3a9Wbtz2TQpjIBAoZ/VnCz2uzDTp/nxVQM=
-X-Google-Smtp-Source: AA6agR7RKrsWP0o80KqRPTxHM43wTN2OPHeWqW/uQRVcW/daJkFUt4Prn2gsm2qVzCxMFTDI1l3srE64RLAChO7YH/8=
-X-Received: by 2002:a05:6870:96a9:b0:126:dbc4:76db with SMTP id
- o41-20020a05687096a900b00126dbc476dbmr16103967oaq.174.1663613667523; Mon, 19
- Sep 2022 11:54:27 -0700 (PDT)
+        Mon, 19 Sep 2022 14:55:16 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED7527CF5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663613714; x=1695149714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i+aEGsVW1WXRn39/yQinuqupanGyjkup5oZc7L/h3Ts=;
+  b=CF2t5fnQhA9wXD1VhBkbaMiYraB41xlL+0oT40ngC/yplZEzvudXXsgr
+   FuoDsgRQojWRfHKcqwXK3D5E4e9HT6ToV58LyiqXrPXM+rbTjJcxGJB6Q
+   UIACEthQAR0+oDGJsUABcKo5afCRJVbSxqjExc/Jv2Cev4s4sqcKAn6fn
+   7rwyFiCRxOtjIZLA2qZGhtgAn3E+juM+oNftDOgLzRBHmeBnkoPozQkNI
+   xp+0EVGwhpvQU7yqXejir2BdxToan2Wz+KuKcqjW3K6+uxf5IFmNS4i90
+   FlSPSFDUzUTtfeitz90K0tgcwr09kReIp6zuOH8x5kIY2HpH9Hz127Wbn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="325786910"
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="325786910"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 11:55:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="651797465"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 19 Sep 2022 11:55:11 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaLvC-0002BB-0M;
+        Mon, 19 Sep 2022 18:55:10 +0000
+Date:   Tue, 20 Sep 2022 02:54:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH 5/9] mm/mm_init.c: use hotplug_memory_notifier() directly
+Message-ID: <202209200223.T0pXU4pA-lkp@intel.com>
+References: <20220919083152.1824305-6-liushixin2@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6808:209d:0:0:0:0 with HTTP; Mon, 19 Sep 2022 11:54:27
- -0700 (PDT)
-Reply-To: pastordavidagentdhl311@gmail.com
-From:   David Ekenna <janevivian878@gmail.com>
-Date:   Mon, 19 Sep 2022 18:54:27 +0000
-Message-ID: <CAGd23ZoEJAsq+QTgvFFn9D_5psy1-a_VRBPmsS71bV8hCb4vkQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [janevivian878[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pastordavidagentdhl311[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [janevivian878[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919083152.1824305-6-liushixin2@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Friend , your funds are here , reply now for more details.
+Hi Liu,
 
-Thanks.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Shixin/mm-Use-hotplug_memory_notifier-instead-of-register_hotmemory_notifier/20220919-160043
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: arm64-randconfig-r036-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200223.T0pXU4pA-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/33c4e50ed97460db120701f262ae1814509ba982
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liu-Shixin/mm-Use-hotplug_memory_notifier-instead-of-register_hotmemory_notifier/20220919-160043
+        git checkout 33c4e50ed97460db120701f262ae1814509ba982
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/mm_init.c:184:26: error: expected identifier or '('
+           hotplug_memory_notifier(&mm_compute_batch_notifier, IPC_CALLBACK_PRI);
+                                   ^
+>> mm/mm_init.c:184:2: error: use of undeclared identifier 'mm_compute_batch_notifier_mem_nb'
+           hotplug_memory_notifier(&mm_compute_batch_notifier, IPC_CALLBACK_PRI);
+           ^
+   include/linux/memory.h:167:28: note: expanded from macro 'hotplug_memory_notifier'
+           register_memory_notifier(&fn##_mem_nb);                 \
+                                     ^
+   <scratch space>:31:1: note: expanded from here
+   mm_compute_batch_notifier_mem_nb
+   ^
+   2 errors generated.
+
+
+vim +184 mm/mm_init.c
+
+   180	
+   181	static int __init mm_compute_batch_init(void)
+   182	{
+   183		mm_compute_batch(sysctl_overcommit_memory);
+ > 184		hotplug_memory_notifier(&mm_compute_batch_notifier, IPC_CALLBACK_PRI);
+   185		return 0;
+   186	}
+   187	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
