@@ -2,159 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BED5BD389
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2576B5BD38D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiISRV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S230300AbiISRW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiISRV0 (ORCPT
+        with ESMTP id S229617AbiISRW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:21:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFB53A15D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:21:22 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r18so197823eja.11
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=T9tjs2C6JiXyUusbaKulAdI7lGnBQljvbsg/PdLJCpA=;
-        b=d9OWu4XihWylyVprmVcBC5mpF2dwkINsQkbE45w0j52Xy81466CqXQPMiUn98OKp2I
-         D0OR+cpGgXgnZk/F2jIxYmIK2vfKKSY72iauA7Bdb3NO4Rsn4PtIq5pbAlsF4TH6MKLA
-         dYmf0PmOlJ4YKvN7Iu0BbKVYqGq7ucGD9f4OE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T9tjs2C6JiXyUusbaKulAdI7lGnBQljvbsg/PdLJCpA=;
-        b=hEMlAhun3lLldoqkR2MyB9rEqWAb2DOsH6WTSvbH+7VBwHhLbFN00arHAz8E/gBqIp
-         zgTP77V206ZzJsVaexAT473LI5T9l0RvQuUC6pGa6JkVJ5QZnnspY+e02biyCXD2rIdy
-         d9NkM/cC5qC0bEKjjloRLItgdZXHqBdx5JRj5tyI1ZarEcwv3Pqh2y7xBciPl2dMftm1
-         AG1ytp/JrCsSeb6Yve8YSK8tqXZ5ow8y42ERB/Jk9hYC+spkBlNcPiDbzq2/xQghPd5o
-         +YUR3LEANM1+LAGG72JWerPu/9EhCFzzCowlZwt+KM+DuuSbJJPwLIQxNVNzeFuZ7J4j
-         Of5Q==
-X-Gm-Message-State: ACrzQf0055n9ZumV05W1y2iOx5AYOythHdn81/+KnofnnuQDnGg7pZkj
-        LwVFcXyz0MvsTSD1UZ8J8XSAHYs6F6qstp7noak=
-X-Google-Smtp-Source: AMsMyM4EBbHqsVqnE3xigaE9iffIvESNnTde6Bl3oC1Ecr6gG5n4W+a2i5WTHQYg1lk7BMIPrm9WhQ==
-X-Received: by 2002:a17:907:1df1:b0:779:4f57:6bb2 with SMTP id og49-20020a1709071df100b007794f576bb2mr13939685ejc.407.1663608080944;
-        Mon, 19 Sep 2022 10:21:20 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id gf10-20020a170906e20a00b0073022b796a7sm15857999ejb.93.2022.09.19.10.21.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 10:21:20 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id k9so286837wri.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:21:20 -0700 (PDT)
-X-Received: by 2002:a05:6512:3d16:b0:498:f04f:56cf with SMTP id
- d22-20020a0565123d1600b00498f04f56cfmr7388621lfv.612.1663608070133; Mon, 19
- Sep 2022 10:21:10 -0700 (PDT)
+        Mon, 19 Sep 2022 13:22:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AB43A48A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:22:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF18DB8069D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5B8C433D6;
+        Mon, 19 Sep 2022 17:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663608173;
+        bh=HQIglUDLQBaVF3vEx2t8CopF+c8dwQhHTb2AFxrgu3c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cv58B3MTc5nooSeZ9Qg1zHKNeXUqEIGH1PDfcEBDT9ZrVx8Rps0eTWEhDjl/WApmd
+         Jkb3WSKtiQBsPBPGn7fZ9/3C2okpojKRa9Rkc9tLvwYdSREFXA74/mB67mujbBBpMQ
+         sjz9o1utC+J0Cmu+DLwJN+/MFZBq0+Ed95XWkP7D+T7LmltXLzxTsz8olcNEQ8u4XD
+         EW0Vd4aj3mYE9eT/jNvNi1vOs1xJWOA71NKadjoBr14D/QIe6KIYtwh4H6MQAQ0eTH
+         gfIOOyxcRtkvnY0Ii2OyQV9QhirDOxWsQkfDDU4+PTK0ARp4NU36auS4CQHmQaMC4A
+         dpWYps+/xMzmg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Xin Hao <xhao@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] mm/damon/sysfs: use kzmalloc instead kmalloc to simplify codes
+Date:   Mon, 19 Sep 2022 17:22:51 +0000
+Message-Id: <20220919172251.61428-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220919151201.66696-2-xhao@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
-References: <20220805154231.31257-13-ojeda@kernel.org> <Yu5Bex9zU6KJpcEm@yadro.com>
- <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
- <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev> <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 19 Sep 2022 10:20:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
-Message-ID: <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        alex.gaynor@gmail.com, ark.email@gmail.com,
-        bjorn3_gh@protonmail.com, bobo1239@web.de, bonifaido@gmail.com,
-        boqun.feng@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
-        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com, gary@garyguo.net,
-        geofft@ldpreload.com, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, john.m.baublitz@gmail.com,
-        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
-        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, viktor@v-gar.de,
-        Andreas Hindborg <andreas.hindborg@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 9:09 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> The whole "really know what context this code is running within" is
-> really important. You may want to write very explicit comments about
-> it.
+On Mon, 19 Sep 2022 23:12:01 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
 
-Side note: a corollary of this is that people should avoid "dynamic
-context" things like the plague, because it makes for such pain when
-the context isn't statically obvious.
+> In damon_sysfs_access_pattern_alloc() adn damon_sysfs_attrs_alloc(),
+> we can use kzmalloc to alloc instance of the related structs, This makes
+> the function code much cleaner.
 
-So things like conditional locking should generally be avoided as much
-as humanly possible. Either you take the lock or you don't - don't
-write code where the lock context depends on some argument value or
-flag, for example.
+This definitely makes the code cleaner, thank you.  But, the initial intent of
+the code is to initialize the fiedls that really need to be initialized at the
+point, for the efficiency and also for making it clear which field is needed to
+be initialized to what value here.  It's also intended to make readers wonder
+about where and how the remaining fields are initialized.
 
-Code like this is fine:
+So, to my humble eyes, this change looks like making the code a little bit
+inefficient and unclear, sorry.
 
-        if (some_condition) {
-                spin_lock(&mylock);
-                xyz();
-                spin_unlock(&mylock);
-        }
 
-because 'xyz()' is always run in the same context. But avoid patterns like
+Thanks,
+SJ
 
-        if (some_condition)
-                spin_lock(&mylock);
-        xyz();
-        if (same_condition)
-                spin_unlock(&mylock);
-
-where now 'xyz()' sometimes does something with the lock held, and
-sometimes not. That way lies insanity.
-
-Now, obviously, the context for helper functions (like the Rust kernel
-crate is, pretty much by definition) obviously depends on the context
-of the callers of said helpers, so in that sense the above kind of
-"sometimes in locked context, sometimes not" will always be the case.
-
-So those kinds of helper functions will generally need to be either
-insensitive to context and usable in all contexts (best), or
-documented - and verify with debug code like 'might_sleep()' - that
-they only run in certain contexts.
-
-And then in the worst case there's a gfp_flag that says "you can only
-do these kinds of allocations" or whatever, but even then you should
-strive to never have other dynamic behavior (ie please try to avoid
-behavior like having a "already locked" argument and then taking a
-lock depending on that).
-
-Because if you follow those rules, at least you can statically see the
-context from a call chain (so, for example, the stack trace of an oops
-will make the context unambiguous, because there's hopefully no lock
-or interrupt disabling or similar that has some dynamic behavior like
-in that second example of "xyz()".
-
-Do we have places in the kernel that do conditional locking? Yes we
-do. Examples like that second case do exist. It's bad. Sometimes you
-can't avoid it. But you can always *strive* to avoid it, and
-minimizing those kinds of "context depends on other things"
-situations.
-
-And we should strive very hard to make those kinds of contexts very
-clear and explicit and not dynamic exactly because it's so important
-in the kernel, and it has subtle implications wrt other locking, and
-memory allocations.
-
-             Linus
+> 
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> ---
+>  mm/damon/sysfs.c | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+> 
+> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+> index b852a75b9f39..06154ece7960 100644
+> --- a/mm/damon/sysfs.c
+> +++ b/mm/damon/sysfs.c
+> @@ -657,13 +657,7 @@ struct damon_sysfs_access_pattern {
+>  static
+>  struct damon_sysfs_access_pattern *damon_sysfs_access_pattern_alloc(void)
+>  {
+> -	struct damon_sysfs_access_pattern *access_pattern =
+> -		kmalloc(sizeof(*access_pattern), GFP_KERNEL);
+> -
+> -	if (!access_pattern)
+> -		return NULL;
+> -	access_pattern->kobj = (struct kobject){};
+> -	return access_pattern;
+> +	return kzalloc(sizeof(struct damon_sysfs_access_pattern), GFP_KERNEL);
+>  }
+>  
+>  static int damon_sysfs_access_pattern_add_range_dir(
+> @@ -1620,12 +1614,7 @@ struct damon_sysfs_attrs {
+>  
+>  static struct damon_sysfs_attrs *damon_sysfs_attrs_alloc(void)
+>  {
+> -	struct damon_sysfs_attrs *attrs = kmalloc(sizeof(*attrs), GFP_KERNEL);
+> -
+> -	if (!attrs)
+> -		return NULL;
+> -	attrs->kobj = (struct kobject){};
+> -	return attrs;
+> +	return kzalloc(sizeof(struct damon_sysfs_attrs), GFP_KERNEL);
+>  }
+>  
+>  static int damon_sysfs_attrs_add_dirs(struct damon_sysfs_attrs *attrs)
+> -- 
+> 2.31.0
