@@ -2,77 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEB85BCEED
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538475BCEF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiISOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S229832AbiISOdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiISOc2 (ORCPT
+        with ESMTP id S230128AbiISOch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:32:28 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CBF32EDB;
-        Mon, 19 Sep 2022 07:32:10 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id z25so47296258lfr.2;
-        Mon, 19 Sep 2022 07:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fbOtVx32xD0An1BP4gF5wsbpUuDHf0RuAIKgzeGlyw8=;
-        b=oCY3SQQ06GI1T0nc3vcegfw92SJwkc8GhNmDuFea6YzJroQA1iJ/C0VGdrJSgUz9jx
-         mApqMR+9XBUm/uurHE2l+5JQHn2ITXWeQV9bcFU0CNL9s/AsShY84T7chTNmXJLWe4wu
-         WCP+4EKr9Nr34D7du1LtLHoiWh7Br/ERUuvDz1gBnykah2JOscL2r/aUjHsOHwb9ltbJ
-         la5S4xmdhcWePibJaIj099rNjvZPOikrYSFMzzIMFFgI8RfwnlpHlXHB52MRUmJUBjs+
-         SdqxwySj5lN9Am7atnFcJv1SQm1DdpFDiYichNtnI6qxbj8CBO8UxKyxH1InjVj1eEj4
-         8Rzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fbOtVx32xD0An1BP4gF5wsbpUuDHf0RuAIKgzeGlyw8=;
-        b=Lt1D4qLYnzvhgfZDUFcwtSDGcX4eTXghxl/bK7NF3aAsvIBA0fd/Flr76bm+Us3/dh
-         F2uoFk6aw6BjNPdStZL5UXzzstS8/eKWAYPC+XxTLLukIPCImAlMwr/v4XNVoAJBT8mF
-         Y4OZhg8WscoiWaCHx1kt0lZHv9WFnb+ZQFqXGPIN03meJTy/SdaM34YNyXD2AHckHKxX
-         r3j79qIJL7yphWMhzOQqLekwDuutH0uLsZXaY706e3xn8tTB6OYbsv0jlP1yiDgzdN6G
-         3ADC1Q+agPsjLjWi2v1bP4jzoPBuyZCVAhDpoB6tjQOe1zq3J8vajArI2Z8BP6cGd8Qg
-         VxfQ==
-X-Gm-Message-State: ACrzQf1CI2oYgSVCzHkXDk6+n7xSleC06/HaGhfmJ1Y769SRwLq6tdTB
-        0IBaQcDMV91qkmV1LG9gF50x5vo2tzAhdtFrQNg=
-X-Google-Smtp-Source: AMsMyM4TvhQ+C6HD/ZV0YS/n8Apo8lVG6faXAtccFQUMj9KOsAXpl4UCFWGvBlxtGV9MQYWcekd+O4B2UpHaNWuzNlw=
-X-Received: by 2002:a05:6512:eaa:b0:497:a1ed:6fa5 with SMTP id
- bi42-20020a0565120eaa00b00497a1ed6fa5mr6073634lfb.108.1663597928023; Mon, 19
- Sep 2022 07:32:08 -0700 (PDT)
+        Mon, 19 Sep 2022 10:32:37 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77E1B2D1F0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iTD2U
+        dbZKthlMc/IsUF/zdf2RgSerD0lLPtiNsZWyPM=; b=D7VRKCHqyJY1IhBAyhWCF
+        Oob+buHUpKLLfjGOIqkqBfHF6pF+FsgdFXELm8aSZjriRBjRJOUzYfV3s+VLHqSB
+        jdid3tExibgvz48Jy4JjRz3s9uBYyv+lynuKR3VU6ByFVpY2IN3Vmxoelm2aTbkT
+        VG/Szj1nxqgWOxYXH+W0ww=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp4 (Coremail) with SMTP id HNxpCgAXZ_NmfShjVRpZeQ--.15551S2;
+        Mon, 19 Sep 2022 22:32:06 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     dimitri.sivanich@hpe.com
+Cc:     zyytlz.wz@163.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org
+Subject: [PATCH] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Mon, 19 Sep 2022 22:32:05 +0800
+Message-Id: <20220919143205.207353-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220714122322.63663-1-tmaimon77@gmail.com> <20220714122322.63663-2-tmaimon77@gmail.com>
- <20220718211046.GA3547663-robh@kernel.org> <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
- <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org>
-In-Reply-To: <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 19 Sep 2022 17:31:56 +0300
-Message-ID: <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgAXZ_NmfShjVRpZeQ--.15551S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxur1xGr45JFy5CFyUWw47XFb_yoW7JFWxpa
+        1jg348urW3XF4Y9rsrta1kXFW3Cay8XFW5Gr9rt3s5ur4FyFs8GryDtas8tr4DZrW8tr4Y
+        yF45tFnIk3Z09aDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziFdg_UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQgaBU1aEC9HEIQAAs7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,66 +52,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+In grufile.c, gru_file_unlocked_ioctl function can be called by user.
 
-Sorry but I didn't understand,
+If the req is GRU_SET_CONTEXT_OPTION, it will call gru_set_context_option.
 
-On Mon, 19 Sept 2022 at 09:56, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 18/09/2022 20:28, Tomer Maimon wrote:
-> > Hi Rob,
-> >
-> > Thanks for your comment and sorry for the late reply.
->
-> Two months... we are out of the context and this will not help your
-> patchset.
->
-> >
-> > On Tue, 19 Jul 2022 at 00:10, Rob Herring <robh@kernel.org> wrote:
-> >>
->
-> (...)
->
-> >>> +examples:
-> >>> +  - |
-> >>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >>> +    #include <dt-bindings/gpio/gpio.h>
-> >>> +
-> >>> +    soc {
-> >>> +      #address-cells = <2>;
-> >>> +      #size-cells = <2>;
-> >>> +
-> >>> +      pinctrl: pinctrl@f0800000 {
-> >>> +        compatible = "nuvoton,npcm845-pinctrl";
-> >>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
-> >>> +        #address-cells = <1>;
-> >>> +        #size-cells = <1>;
-> >>> +        nuvoton,sysgcr = <&gcr>;
-> >>> +
-> >>> +        gpio0: gpio@f0010000 {
-> >>
-> >> gpio@0
-> >>
-> >> Is this really a child block of the pinctrl? Doesn't really look like it
-> >> based on addressess. Where are the pinctrl registers? In the sysgcr? If
-> >> so, then pinctrl should be a child of it. But that doesn't really work
-> >> too well with gpio child nodes...
-> > the pin controller mux is handled by sysgcr this is why the sysgcr in
-> > the mother node,
-> > and the pin configuration are handled by the GPIO registers.  each
-> > GPIO bank (child) contains 32 GPIO.
-> > this is why the GPIO is the child node.
->
-> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
-The pin controller using the sysgcr to handle the pinmux, this is why
-the sysgcr is in the mother node, is it problematic?
+In gru_set_context_option, as req can be controlled by user,
 
->
->
-> Best regards,
-> Krzysztof
+We can reach gru_check_context_placement function call.
 
-Best regards,
+In gru_check_context_placement function, if the error path was steped,
 
-Tomer
+say gru_check_chiplet_assignment return 0,
+
+Then it will fall into gru_unload_context function.
+
+And it will finnaly call kfree gts in gts_drop function.
+
+Then gru_unlock_gts will be called in gru_set_context_option function.
+
+This is a typical Use after free.
+
+The same problem exists in gru_handle_user_call_os and gru_fault.
+
+Fix it by introduce the return value to see if gts is in good case or not.
+
+Free the gts in caller when gru_check_chiplet_assignment check failed.
+
+Reported-by: Zheng Wang <hackerzheng666@gmail.com> Zhuorao Yang <alex000young@gmail.com>
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..2b5b049fbd38 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			ret = gru_check_context_placement(gts);
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
+ 		ret = -EINVAL;
+ 	}
+ 	gru_unlock_gts(gts);
++	if (ret) {
++		gru_unload_context(gts, 1);
++		ret = -EINVAL;
++	}
+ 
+ 	return ret;
+ }
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..79903cf7e706 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	struct gru_thread_state *gts;
+ 	unsigned long paddr, vaddr;
+ 	unsigned long expires;
++	int ret;
+ 
+ 	vaddr = vmf->address;
+ 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret) {
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return ret;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
+-- 
+2.25.1
+
