@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12AF5BC4C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DB95BC4B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiISIxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S230209AbiISIuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiISIwg (ORCPT
+        with ESMTP id S230179AbiISItq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:52:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557E82408E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663577540; x=1695113540;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZelDhvYGETW6vTz48/kGx9/Naj6tZGI84ZYZBKLByqw=;
-  b=noZHnzLBxHXyY7r+eTvxFG+ErGjIWjDsVCP5VuIPFdb+i5WDnxKUCTxB
-   yyTikPO7A4hMvJbhi0l5ISOlitt64mGOj+HLWCmdDZj9oFHRMturVliM4
-   3mO7Z3vXuOrldx+1iUlahDhvZh9qRd9hc70gTpLIXosIt3FSEjWVtk8jT
-   g1NGkY30EKE6b8YJO+qBfjx3e4T0UipAhr1pxjjEoR8G4Xt/iFXHLI+l7
-   4Q//Amzs17Iovgx5t5OkCm0ecFNqEgUI1EMGrhAkzmmWq5LX5c277ebPT
-   7KP82XcHjEe9K9yUBFgxgigj/b+21U0bY++b/6qLXS56DA8GutCEuut7C
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="286389370"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="286389370"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="707485785"
-Received: from ilick-mobl1.ger.corp.intel.com (HELO [10.252.59.91]) ([10.252.59.91])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:17 -0700
-Message-ID: <8d511299-5f92-603f-35e5-64e87b776286@linux.intel.com>
-Date:   Mon, 19 Sep 2022 10:48:35 +0200
+        Mon, 19 Sep 2022 04:49:46 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119CC237EC;
+        Mon, 19 Sep 2022 01:49:22 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bi3so99351pgb.11;
+        Mon, 19 Sep 2022 01:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=f4lJ3N0uKHqbaTlJ2yJchpCS7uT21SgUgyF132AXj88=;
+        b=Kvt6IxivfZ9AdelKHj+0aVmVKjmSEK59vtDHoyQlD/1I0ytsotSWHqyBD2fL6vqMQB
+         R4sM8C3e7773ITsR5x2bG3GVybnaeQjcRbeRjK1yBz2y1LEE0uA2Lr3ioFSCdbPrXhY5
+         Lz+pLENV6AedTARCPjT3lQoSC4RyuNdo3Wy0MZRlaX85qsulXcEgRLCP9xWjvHzwspZU
+         6TW3L70d35OPXjAKS4J/v0p51LHiDn3aLisTbfvWoiJAA2GDoFqhWTurroc6oCOYKilf
+         oOnt3KcxndHTbS1r77Z4pW22/qLhajoKsOb45SJlYBp98k9pT7YZh+VsRL53p2zYEC3T
+         39Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=f4lJ3N0uKHqbaTlJ2yJchpCS7uT21SgUgyF132AXj88=;
+        b=YQkmssABbvmdieD8mQjLKcj6KS+iRtcLNojBxFSL+7onslYPswLa3s0POynpH2ifrt
+         lNcqe8BYfx2kB4jlabWndILqa1O6xL9z8FYYH79wt6TkGE+HfHoEY7b5IK6ubVr4cV2L
+         zThh0SR1i8aQUqhfLXugxk3XSVwnr8TRyIZj2PEFX11Ym17u0d+Ef0TNwZ8GMBJBXLCD
+         GJKDremaUObmfUyFe6kOrHMyJOJW6TinQlbJwd4DZpwz3LUR1kHYl5f0V9Q60Y52URPX
+         fLDOGqybL7z8wvAcH/V8DK7QFvi7Gyr+89hHQz4gA+ZdrleLQd/r0uX7k+YTD3JYPFtV
+         gQuw==
+X-Gm-Message-State: ACrzQf21DQ/6ukqFpQ1Ynv6CQ6I0xWnWH7sJZq7SREylQlnVgQziQcP5
+        hUNmmIuD34sMlNiT+PuiWqk=
+X-Google-Smtp-Source: AMsMyM5WyR2QEL3sFfFzy9AA6p83zqLW8oRvtZ5YMWGujrMZH5OhGa2LxH3pz3VfAMzCjuLMU8RsAA==
+X-Received: by 2002:aa7:8058:0:b0:54f:1644:a4fd with SMTP id y24-20020aa78058000000b0054f1644a4fdmr3525961pfm.63.1663577351766;
+        Mon, 19 Sep 2022 01:49:11 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id w16-20020aa79550000000b0054555418ca4sm14692040pfq.29.2022.09.19.01.49.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 01:49:11 -0700 (PDT)
+Message-ID: <f3cc0afb-f24a-9b71-1f55-db4c437cc458@gmail.com>
+Date:   Mon, 19 Sep 2022 16:49:04 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] soundwire: cadence: Simplify error paths in
- cdns_xfer_msg()
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/3] KVM: x86/pmu: Stop adding speculative Intel GP
+ PMCs that don't exist yet
 Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20220917154822.690472-1-rf@opensource.cirrus.com>
- <20220917154822.690472-2-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220917154822.690472-2-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+References: <20220907104838.8424-1-likexu@tencent.com>
+ <CALMp9eSPfxPunKW-K6LLPxsXdaeezKU=2G9Sdh7FS6VGb3goFA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CALMp9eSPfxPunKW-K6LLPxsXdaeezKU=2G9Sdh7FS6VGb3goFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/17/22 17:48, Richard Fitzgerald wrote:
-> There's no need to goto an exit label to return from cdns_xfer_msg().
-> It doesn't do any cleanup, only a return statement.
+On 8/9/2022 12:33 am, Jim Mattson wrote:
+> On Wed, Sep 7, 2022 at 3:48 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> The Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs adds
+>> a new architectural IA32_OVERCLOCKING_STATUS msr (0x195), plus the
+>> presence of IA32_CORE_CAPABILITIES (0xCF), the theoretical effective
+>> maximum value of the Intel GP PMCs is 14 (0xCF - 0xC1) instead of 18.
+>>
+>> But the conclusion of this speculation "14" is very fragile and can
+>> easily be overturned once Intel declares another meaningful arch msr
+>> in the above reserved range, and even worse, Intel probably put PMCs
+>> 8-15 in a completely different range of MSR indices.
 > 
-> Replace the gotos with returns.
+> The last clause is just conjecture.
 > 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-> ---
->  drivers/soundwire/cadence_master.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+>> A conservative proposal would be to stop at the maximum number of Intel
+>> GP PMCs supported today. Also subsequent changes would limit both AMD
+>> and Intel on the number of GP counter supported by KVM.
+>>
+>> There are some boxes like Intel P4 may indeed have 18 counters, but
+>> those counters are in a completely different msr address range and do
+>> not strictly adhere to the Intel Arch PMU specification, and will not
+>> be supported by KVM in the near future.
 > 
-> diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-> index 3543a923ee6b..30b8c628fdbd 100644
-> --- a/drivers/soundwire/cadence_master.c
-> +++ b/drivers/soundwire/cadence_master.c
-> @@ -709,17 +709,14 @@ cdns_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
->  		ret = _cdns_xfer_msg(cdns, msg, cmd, i * CDNS_MCP_CMD_LEN,
->  				     CDNS_MCP_CMD_LEN, false);
->  		if (ret != SDW_CMD_OK)
-> -			goto exit;
-> +			return ret;
->  	}
->  
->  	if (!(msg->len % CDNS_MCP_CMD_LEN))
-> -		goto exit;
-> +		return SDW_CMD_OK;
->  
-> -	ret = _cdns_xfer_msg(cdns, msg, cmd, i * CDNS_MCP_CMD_LEN,
-> -			     msg->len % CDNS_MCP_CMD_LEN, false);
-> -
-> -exit:
-> -	return ret;
-> +	return _cdns_xfer_msg(cdns, msg, cmd, i * CDNS_MCP_CMD_LEN,
-> +			      msg->len % CDNS_MCP_CMD_LEN, false);
->  }
->  EXPORT_SYMBOL(cdns_xfer_msg);
->  
+> The P4 PMU isn't virtualized by KVM today, is it?
+
+According to [1], P4 PMU has ZERO number of Intel Architectural Events, and
+the KVM support for non Intel Arch PMUs has been dropped recently.
+
+[1] 
+https://www.intel.com/content/dam/develop/external/us/en/documents/30320-nehalem-pmu-programming-guide-core.pdf
+
+> 
+>>
+>> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Suggested-by: Jim Mattson <jmattson@google.com>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+> 
+> Please put the "Fixes" tag back. You convinced me that it should be there.
+> 
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+
