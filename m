@@ -2,359 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058E25BCC3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7D45BCC3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiISMy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S230256AbiISMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiISMyp (ORCPT
+        with ESMTP id S230233AbiISMyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:54:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3887A63DB;
-        Mon, 19 Sep 2022 05:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663592084; x=1695128084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pDHnGJ052zacw3HgtgxHVNxxjkrdU96eZo13SUq3dME=;
-  b=1fHsX7qn9jIWPGGh9Bas8aNslwoTagQug/hmLl/DjVg3QECrf+19XckD
-   XK3HgO/pEnoZcgpl8kZ0aaXWxKWmvaZPpHBVNq4hV29+3O3eHuhG1/R0l
-   +C9JnOmhxUgObTfFGs0ExQZZUyCr04hLUsR3s3sbk+ay0+7OTK11C32vq
-   H/zIGnw41BsZmRJV5v/cdcxpqGCHNY4F5s1FZz+RJPO7QfzuopXA7QBnz
-   X4evwUGlV3NOU83M0Z+/od5z3vnhGf+bs9L/L20hW6lRzPCb20Wmtq/XI
-   zBKzlRfc10zpExJWigyr4ANGDyR3m4iGg+dOzWgEXwX7Mdwp4piHKezMK
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="114339675"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Sep 2022 05:54:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 19 Sep 2022 05:54:17 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 19 Sep 2022 05:54:16 -0700
-Date:   Mon, 19 Sep 2022 13:53:56 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
-Message-ID: <YyhmZBmfJvJ9/vBg@wendy>
-References: <20220824091215.141577-1-conor.dooley@microchip.com>
- <20220824091215.141577-4-conor.dooley@microchip.com>
- <20220915072152.y346csakn7wetpz5@pengutronix.de>
+        Mon, 19 Sep 2022 08:54:43 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5EAA18D;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d82so27981807pfd.10;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
+        b=IA1ULq2eITg3H242o0ceTuR+29XaGcATRGaKSuDc8T6b1OAXgPKHFsoE/F8qKLaEbj
+         LHKF72D1D4D6AtFv3+T5yxrnjf3sZcQcoypvrSojyA0T41EVh3zsb7QO3PD14E7mOEzy
+         cMj3HF1NpkzPiR5DWW3kjUKSDXWSbPb8KrU1d1daapDHlWrvM3bOMGFGCTx+nX9Mjuq5
+         EFuRxKx/dWnBpQkKI0ovXtWn4cekG1ViBEbHBQdWSzZH+kDAZMOqyozq0ejQU4kNanzC
+         JMdcnwOZ/rjbHytSrgKjQZFqpN/c5u521Tm4UFl3JUUUjRctDQfgiqtuX6/XIrevCd0h
+         KOPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
+        b=VJ9NOlXeimGLQTBfEL0BKY0/p3walSrGNbO1DT197D39iouAu2n1TgZeND5GYD/uc1
+         73AM3e5kcAtPHLooJamBnMDBIJVhh66daLieivhpYNBczxN5boPtMMQ7gpffiRTwdsAC
+         KYO5l9LpwVwtuIgxWPefJjHOCSns119/SuqHuDV3vO3ked84Vq43mhYPGcasMSJQ/54z
+         bWDITB0g5KFsjEddxHur53tQ11VmHSayoe8XpGUhgapW2/MH7jAFzAsVMr70s6rrelEX
+         pdUzI4OUU6GNW5Xf1e9i+znUE6Qa8o2uEuaNTDZxS0BJOXUhY4OFcRtjSDy72rbb2L+t
+         0R0Q==
+X-Gm-Message-State: ACrzQf1ErKdXkYa+s/pU2YnvL3M8og665fbeaZYyjTWih2ROXGola/NZ
+        5xw2Jpvg31jfCQbIykKhTrifHOAqnADqeA==
+X-Google-Smtp-Source: AMsMyM5n8v4bAl9gCQfKXo/bFnEfAhrhcNlccrkoIujrz8tigtnIa/6BRh7KaefuUdNnAfjVvrwJaQ==
+X-Received: by 2002:a63:594c:0:b0:438:f2ce:8780 with SMTP id j12-20020a63594c000000b00438f2ce8780mr15582233pgm.285.1663592076255;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b00536431c6ae0sm20195289pfc.101.2022.09.19.05.54.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 05:54:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5ee31cd1-76af-dae7-0902-3808a2696754@roeck-us.net>
+Date:   Mon, 19 Sep 2022 05:54:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220915072152.y346csakn7wetpz5@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220806000706.3eeafc9c@endymion.delvare>
+ <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
+ <20220919113335.18cebc74@endymion.delvare>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+In-Reply-To: <20220919113335.18cebc74@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Uwe,
-Thanks (as always). I've switched up my email setup a bit so I hope
-that I've not mangled anything here.
-
-On Thu, Sep 15, 2022 at 09:21:52AM +0200, Uwe Kleine-König wrote:
-> Hello,
+On 9/19/22 02:33, Jean Delvare wrote:
+> Hi Guenter,
 > 
-> On Wed, Aug 24, 2022 at 10:12:14AM +0100, Conor Dooley wrote:
-> > Add a driver that supports the Microchip FPGA "soft" PWM IP core.
-> > 
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  drivers/pwm/Kconfig              |  10 +
-> >  drivers/pwm/Makefile             |   1 +
-> >  drivers/pwm/pwm-microchip-core.c | 402 +++++++++++++++++++++++++++++++
-> >  3 files changed, 413 insertions(+)
-> >  create mode 100644 drivers/pwm/pwm-microchip-core.c
-> > 
-
-> > +static int mchp_core_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> > +			       const struct pwm_state *state)
-> > +{
-> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > +	struct pwm_state current_state = pwm->state;
-> > +	bool period_locked;
-> > +	u64 duty_steps;
-> > +	u16 prescale;
-> > +	u8 period_steps;
-> > +	int ret;
-> > +
-> > +	mutex_lock(&mchp_core_pwm->lock);
-> > +
-> > +	if (!state->enabled) {
-> > +		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
-> > +		mutex_unlock(&mchp_core_pwm->lock);
-> > +		return 0;
-> > +	}
-> > +
-> > +	/*
-> > +	 * If the only thing that has changed is the duty cycle or the polarity,
-> > +	 * we can shortcut the calculations and just compute/apply the new duty
-> > +	 * cycle pos & neg edges
-> > +	 * As all the channels share the same period, do not allow it to be
-> > +	 * changed if any other channels are enabled.
-> > +	 * If the period is locked, it may not be possible to use a period
-> > +	 * less than that requested. In that case, we just abort.
-> > +	 */
-> > +	period_locked = mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpwm);
-> > +
-> > +	if (period_locked) {
-> > +		u16 hw_prescale;
-> > +		u8 hw_period_steps;
-> > +
-> > +		mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
+> A few questions from an old discussion:
 > 
-> Huh, if (u8 *)&prescale works depends on endianness.
-
-Big endian? What's that? ;)
-I think the cast can just be dropped and the u16 used directly instead.
-
+> On Mon, 8 Aug 2022 04:36:42 -0700, Guenter Roeck wrote:
+>> On 8/5/22 15:07, Jean Delvare wrote:
+>>> To be honest, I'm not sold to the idea of a software-emulated
+>>> maximum timeout value above what the hardware can do, but if doing
+>>> that makes sense in certain situations, then I believe it should be
+>>> implemented as a boolean flag (named emulate_large_timeout, for
+>>> example) to complement max_timeout instead of a separate time value.
+>>> Is there a reason I'm missing, why it was not done that way?
+>>
+>> There are watchdogs with very low maximum timeout values, sometimes less than
+>> 3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
+>> rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
+>> accuracy is important, second-based limits are insufficient, and there is an
+>> actual need for software timeout handling on top of hardware.
 > 
-> > +		hw_prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-> > +		hw_period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-> > +
-> > +		if ((period_steps + 1) * (prescale + 1) <
-> > +		    (hw_period_steps + 1) * (hw_prescale + 1)) {
-> > +			mutex_unlock(&mchp_core_pwm->lock);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		/*
-> > +		 * It is possible that something could have set the period_steps
-> 
-> My German feel for the English language says s/could have/has/
-
-What I wrote is _fine_ but the could is redudant given the possible.
-I'll change it over.
-
-> > +		 * register to 0xff, which would prevent us from setting a 100%
-> 
-> For my understanding: It would also prevent a 0% relative duty, right?
-
-Yeah, I guess the comment could reflect that.
-
-> 
-> > +		 * duty cycle, as explained in the mchp_core_pwm_calc_period()
-> 
-> s/duty/relative duty/; s/the //
-> 
-> > +		 * above.
-> > +		 * The period is locked and we cannot change this, so we abort.
-> > +		 */
-> > +		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
-> 
-> Don't you need to check hw_period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX
-> here?
-
-D'oh.
-
-> 
-> > +			mutex_unlock(&mchp_core_pwm->lock);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		prescale = hw_prescale;
-> > +		period_steps = hw_period_steps;
-> > +	} else if (!current_state.enabled || current_state.period != state->period) {
-> > +		ret = mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
-> 
-> ret is only used in this block, so the declaration can go into here,
-> too.
-> 
-> > +		if (ret) {
-> > +			mutex_unlock(&mchp_core_pwm->lock);
-> > +			return ret;
-> > +		}
-> > +		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-> > +	} else {
-> > +		prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-> > +		period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-> > +		/*
-> > +		 * As above, it is possible that something could have set the
-> > +		 * period_steps register to 0xff, which would prevent us from
-> > +		 * setting a 100% duty cycle, as explained above.
-> > +		 * As the period is not locked, we are free to fix this.
-> > +		 */
-> 
-> Are you sure this is safe? I think it isn't. Consider:
-> 
-> 	pwm_apply_state(mypwm, { .duty = 0, .period = A, .enabled = true, });
-> 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = false, });
-> 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = true, });
-> 
-> Then you have in the third call prescale and period_steps still
-> corresponding to A because you didn't update these registers in the 2nd
-> call as you exited early.
-
-Riiight. I think I am a little confused here - this comment does not
-refer to my comment but rather to the whole logic I have?
-
-As in, what you're concerned about is the early exit if the state is
-disabled & that I take the values in the hardware as accurate?
-
-What makes sense to me to do here (assuming I understood correctly)
-is to compare state->period against what is in the hardare rather than
-against what the pwm core thinks?
-Or else I could stop exiting early if the pwm is to be disabled &
-instead allow the period and duty to be set so that the state of the
-hardware is as close to the pwm core's representation of it as possible.
-
-Keeping the core's interpretation as close to correct as possible seems
-like a good idea to me - my only concern is that the apply() will fail.
-But if I have read & understand the core code correctly, the core will
-not update pwm->state from {.duty = 0, .period = A, .enabled = true}
-if callying apply with {.duty = 0, .period = B, .enabled = false}
-fails?
-
-> 
-> > +		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
-> > +			period_steps -= 1;
-> > +			mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-> > +		}
-> > +	}
-> > +
-> > +	duty_steps = mchp_core_pwm_calc_duty(chip, pwm, state, prescale, period_steps);
-> > +
-> > +	/*
-> > +	 * Because the period is per channel, it is possible that the requested
-> > +	 * duty cycle is longer than the period, in which case cap it to the
-> > +	 * period, IOW a 100% duty cycle.
-> > +	 */
-> > +	if (duty_steps > period_steps)
-> > +		duty_steps = period_steps + 1;
-> > +
-> > +	mchp_core_pwm_apply_duty(chip, pwm, state, duty_steps, period_steps);
-> > +
-> > +	mchp_core_pwm_enable(chip, pwm, true, state->period);
-> > +
-> > +	mutex_unlock(&mchp_core_pwm->lock);
-> > +
-> > +	return 0;
- 
-> Locking could be a bit simplified by doing:
- 
-> The diffstat is negative, so maybe that's subjective.
-
-Much simplier at the cost of 4 lines sounds objective to me!
- 
-> > +}
-> > +
-> > +static void mchp_core_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
-> > +				    struct pwm_state *state)
-> > +{
-> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > +	u16 prescale;
-> > +	u8 period_steps, duty_steps, posedge, negedge;
-> > +
-> > +	mutex_lock(&mchp_core_pwm->lock);
-> > +
-> > +	if (mchp_core_pwm->channel_enabled & (1 << pwm->hwpwm))
-> > +		state->enabled = true;
-> > +	else
-> > +		state->enabled = false;
-> > +
-> > +	prescale = PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE));
-> > +
-> > +	period_steps = PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD));
-> > +	state->period = period_steps * prescale * NSEC_PER_SEC;
-> 
-> This is broken on 32 bit archs (here: arm):
-> 
-> $ cat test.c
-> #include <inttypes.h>
-> #include <stdio.h>
-> #include <stdlib.h>
-> 
-> int main(int argc, char *argv[])
-> {
-> 	uint8_t period_steps = atoi(argv[1]);
-> 	uint16_t prescale = atoi(argv[2]);
-> 	uint64_t period;
-> 
-> 	period = period_steps * prescale * 1000000000L;
-> 
-> 	printf("period_steps = %" PRIu8 "\n", period_steps);
-> 	printf("prescale = %" PRIu16 "\n", prescale);
-> 	printf("period = %" PRIu64 "\n", period);
-> 
-> 	return 0;
-> }
-> 
-> $ make test
-> cc     test.c   -o test
-> 
-> $ ./test 255 65535
-> period_steps = 255
-> prescale = 65535
-> period = 18446744073018591744
-> 
-> The problem is that the result of 16711425 * 1000000000L isn't affected
-> by the type of period and so it's promoted to L which isn't big enough
-> to hold 16711425000000000 where longs are only 32 bit wide.
-
-I don't think this is ever going to be hit in the wild, since prescale
-comes from the hardware where it is limited to 255 - but preventing the
-issue seems trivially done by splitting the multiplication so no reason
-not to. Thanks for providing the test program btw :)
-
-> 
-> > +	state->period = DIV64_U64_ROUND_UP(state->period, clk_get_rate(mchp_core_pwm->clk));
-> > +
-> > +	posedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_POSEDGE(pwm->hwpwm));
-> > +	negedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE(pwm->hwpwm));
-> > +
-> > +	if ((negedge == posedge) && state->enabled) {
-> 
-> Why do you need that state->enabled?
-
-Because I was running into conflicts between the reporting here and some
-of the checks that I have added to prevent the PWM being put into an
-invalid state. On boot both negedge and posedge will be zero & this was
-preventing me from setting the period at all.
-
-> 
-> > +		state->duty_cycle = state->period;
-> > +		state->period *= 2;
-> > +	} else {
-> > +		duty_steps = abs((s16)posedge - (s16)negedge);
-> > +		state->duty_cycle = duty_steps * prescale * NSEC_PER_SEC;
-> > +		state->duty_cycle = DIV64_U64_ROUND_UP(state->duty_cycle,
-> > +						       clk_get_rate(mchp_core_pwm->clk));
-> 
-> Micro optimisation: Call clk_get_rate() only once.
-> 
-> > +	}
-> > +
-> > +	state->polarity = negedge < posedge ? PWM_POLARITY_INVERSED : PWM_POLARITY_NORMAL;
-> > +
-> > +	mutex_unlock(&mchp_core_pwm->lock);
-> 
-> You could release the lock a bit earlier.
+> Out of curiosity, what prevents user-space itself from pinging
+> /dev/watchdog every 0.5 second? I assume hardware using such watchdog
+> devices is "special" and would be running finely tuned user-space, so
+> the process pinging /dev/watchdog could be given higher priority or
+> even real-time status to ensure it runs without delays. Is that not
+> sufficient?
 > 
 
-Sure, I'll move it after the last register access.
+It took us forever to get the in-kernel support stable, using the right timers
+and making sure that the kernel actually executes the code fast enough. Maybe
+that would work nowadays from a userspace process with the right permissions,
+but I would not trust it. Then there is watchdog support in, for example,
+systemd. I would not want to force users to run systemd as high priority
+real-time process just to make an odd watchdog work. I also would not want to
+tell people that they must not use the systemd watchdog timer to make their
+watchdog work.
 
-Thanks,
-Conor.
+Also, there is no guarantee that the odd hardware with the weird watchdog hardware
+is actually always used in an application where such a fast timeout is needed or
+even wanted.
 
+On top of that, the code in the kernel also now supports "ping until opened"
+for systems where the watchdog is already running when the system boots.
 
+Overall, I don't think it would be a good idea to revert the in-kernel support
+of pinging watchdogs.
+
+>> At the same time, there is actually a need to make timeouts milli-second based
+>> instead of second-based, for uses such as medical devices where timeouts need
+>> to be short and accurate. The only reason for not implementing this is that
+>> the proposals I have seen so far (including mine) were too messy for my liking,
+>> and I never had the time to clean it up. Reverting milli-second support would
+>> be the completely wrong direction.
+> 
+> I might look into this at some point (for example as a SUSE Hackweek
+> project). Did you post your work somewhere? I'd like to take a look.
+> 
+There was one submission from someone else if I recall correctly, but mine never
+got to the point where it was submittable.
+
+Guenter
