@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645685BCAF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AABA5BCAF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiISLk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
+        id S229567AbiISLlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiISLkv (ORCPT
+        with ESMTP id S229614AbiISLld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:40:51 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054AD15FFC;
-        Mon, 19 Sep 2022 04:40:51 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 198so37036033ybc.1;
-        Mon, 19 Sep 2022 04:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=99zbpHyljYgorKF920Y7sKiR42NQt8fjAj417BqAEvM=;
-        b=B9YfLnYqiSoPPoQXpq9fMjhAnUNXVLaypeVd33fU7AzcEi7beWb1nDqIheJCZ0D9Bo
-         851PwQhks1dvH9DHcYEZi6d9Jy6bhe+8ELmEBzUe1KpjHUNRK6ZJ/ZL5uxSBoRc5YzU5
-         6X4LrUlaug4JFSGW8RIUBn8Ffyp+7TyKkH4E78EcaGnsFRznqGdFJojxk/G0lZFUpvqq
-         ctGiFaYlpPUngHdZ0xlITcXJQDQkfZB1CH//gDHJKsSbu03IO2Q6Gl1BjHaUPjRQrmco
-         nsFpZnwjy/X034T6aUiPGOtEp/O1H2Ifm+EQNe7q/5v6Q5L4iISnBs/WZgMh7qWHhm3A
-         tRug==
+        Mon, 19 Sep 2022 07:41:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50862DE8E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663587691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NYrB5jXka4MSSRtLAagt7tKGvBVemiYpsuNtJkRXpFM=;
+        b=avhjaMC3InwdTh4ZRWCAnABbT9F1+7fXM3UrXGtbFGqhQZyBdSuE2mA7zClmhfkFqNXaV0
+        JyLTcFRe8PP2bXCnUpV68o2GvvD6YTJ8ihG60MbiWbf6Vjw1+w6B3ngg6JWjxEEMtJdfZ3
+        yxATjvpyE8ltVxq1HUXfUdDdcYGuj9U=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-13-c0WIN4BFPEaN7UhE9nkpbg-1; Mon, 19 Sep 2022 07:41:28 -0400
+X-MC-Unique: c0WIN4BFPEaN7UhE9nkpbg-1
+Received: by mail-ed1-f71.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so19996831eda.19
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:41:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=99zbpHyljYgorKF920Y7sKiR42NQt8fjAj417BqAEvM=;
-        b=Xb3SDiu+iBLiP4AFsEsPW0rz5Eu80J0cTS//vx/fLAPfdT5zNo56oIgnQOyq39VTWZ
-         OU8pTJpNV4kpMpQcAER35jaVja3VA6Ukai7mGjcSpXL7zSyYLU62bC1bzl8jJ2JYowg3
-         h6Hj/qt8DskK9BPAL2L2aStORA7rTFs6eS4x05ys7nu/sk6ih6RrO7FV9ZGk+caL6egu
-         SBmnTZ6UDe8KI9udsGZ/jUOWBZWv1aaNm1Hp8I0s+ZgBDZjyiYTKJtahEepkNIHg1E4g
-         d6tcCRTLmZkkPO8k/eEdwb63KBd+yIUcf9J187K2HEm/piZLjyDM+PNh7nCo7SskJc7n
-         4P8w==
-X-Gm-Message-State: ACrzQf3ChMApoX14PaO2KnglauUuwzTF6AP3YsDk3kMqHB/yALGiNDiG
-        QPIV6BcVYd9134lPNmwdk4igR2qPfxu4XNTVC2rN/BGPGz8=
-X-Google-Smtp-Source: AMsMyM5TdD4vl/dOOkzUqbZdwVEK/mnJxlfCKc3Bik1j5Kp9r99vkYfgD0J1ICbJ+yjVv/CCrpb97bj8pqhiRoXr1FE=
-X-Received: by 2002:a5b:107:0:b0:67c:4077:17f0 with SMTP id
- 7-20020a5b0107000000b0067c407717f0mr13252085ybx.363.1663587650140; Mon, 19
- Sep 2022 04:40:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=NYrB5jXka4MSSRtLAagt7tKGvBVemiYpsuNtJkRXpFM=;
+        b=N9neLwiKOFGFkboPLyQ/9uDC0LVI4tzb3w1teBfLA8stm+2e9hdQ2D1GF0hkzvgOxy
+         uH6PnvZcg6lvtj0H/YsRR1L7HYoXAfTV9Qzh2NHpf0yq7EU9SpH3YydObzVlnPCiSX/Q
+         yANq8vOi/MiUqFkZSY2ogpqIZGiTnRFDJZub0C6XpnZ5DjdpS/OyMOHIdVXShJ/RDjA4
+         B9AcfQ4was7n7SWkkXsEs4zAzdDorl2RM3cBXb6x4hJ/5prGuncarjYDvvNEpvl8QDDH
+         MNNNJD9p9sPuVSzUvW9l7OxvUnqWqIAUOUGgkJUNWiL/eS6tNOWvy24yVXHl/1R2sZJu
+         q5mg==
+X-Gm-Message-State: ACrzQf132SpQjCE9H7JMH12oskaJJ87BXanzesWapfADMv9jrlNyhX+B
+        A0sS4ZMr9NgtbO03f9YxO7Dl7oQYKFEHTxISsLSKtTsOeK6u1FrDtYXawaoeZDnIS34qvudm5sh
+        1bwWAhOEOQx7sZJjZnDKwLXUk
+X-Received: by 2002:a05:6402:e01:b0:442:dd7e:f49d with SMTP id h1-20020a0564020e0100b00442dd7ef49dmr14815593edh.355.1663587686949;
+        Mon, 19 Sep 2022 04:41:26 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6vNL48ciwqGn+vRPvAPI7nBmFGOKzBvaNfpCQGIp249nFnSOGMgIDTjEzjxM51VUfJ1QpeGg==
+X-Received: by 2002:a05:6402:e01:b0:442:dd7e:f49d with SMTP id h1-20020a0564020e0100b00442dd7ef49dmr14815584edh.355.1663587686807;
+        Mon, 19 Sep 2022 04:41:26 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id z15-20020a170906434f00b007413360a48fsm4381702ejm.50.2022.09.19.04.41.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 04:41:26 -0700 (PDT)
+Message-ID: <3537fa63-9015-c63d-2321-a77062e24d6f@redhat.com>
+Date:   Mon, 19 Sep 2022 12:41:25 +0100
 MIME-Version: 1.0
-References: <20220917071427.28499-1-akinobu.mita@gmail.com> <93c044ca-7d2f-e23f-8eb4-72c133737a15@redhat.com>
-In-Reply-To: <93c044ca-7d2f-e23f-8eb4-72c133737a15@redhat.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Mon, 19 Sep 2022 20:40:38 +0900
-Message-ID: <CAC5umyhhnoJvoGT5NQX8VNn4QT_3qA1nY5tnZre59pL7vbMpzg@mail.gmail.com>
-Subject: Re: [PATCH -v2] lib/notifier-error-inject: fix error when writing
- errno to debugfs file
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, osalvador@suse.de,
-        shuah@kernel.org, Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 2/2] platform/x86/intel: pmc/core: Add Raptor Lake
+ support to pmc core driver
+Content-Language: en-US
+To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, irenic.rajneesh@gmail.com,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Box <david.e.box@intel.com>
+References: <20220912233307.409954-1-gayatri.kammela@linux.intel.com>
+ <20220912233307.409954-2-gayatri.kammela@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220912233307.409954-2-gayatri.kammela@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +86,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B49=E6=9C=8819=E6=97=A5(=E6=9C=88) 18:20 David Hildenbrand <davi=
-d@redhat.com>:
->
-> On 17.09.22 09:14, Akinobu Mita wrote:
-> > The simple attribute files do not accept a negative value since the
-> > commit 488dac0c9237 ("libfs: fix error cast of negative value in
-> > simple_attr_write()"), so we can no longer use DEFINE_SIMPLE_ATTRIBUTE(=
-) to
-> > define a file operations for errno value.
-> >
-> > Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple=
-_attr_write()")
-> > Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
->
-> But shouldn't we fix simple_attr_write() instead?
->
-> I mean, simple_attr_read() might use attr->fmt to print a signed value,
-> but simple_attr_write() fails on signed values now?
->
-> I might be wrong, but there is a disconnect. I feel like
-> simple_attr_write() should similarly make decisions based on attr->fmt.
+Hk,
 
-I agree there is a disconnect, but I have no idea how to fix
-simple_attr_write().
-(strcmp(attr->fmt, "%%lld\n") is ugly)
-If no one seems to come up with a good idea, I'll fix the similar problems
-in fault-injection the same way I did here.
+On 9/13/22 00:33, Gayatri Kammela wrote:
+> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
+> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
+> 
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: David Box <david.e.box@intel.com>
+> Acked-by: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
+> ---
+> Changes since v1:
+> 1) Added a dependency patch- ea902bcc1943f7539200ec464de3f54335588774 :
+>  "x86/cpu: Add new Raptor Lake CPU model number".
+> 2) Rebased the above patch on v6.0-rc1 with "Acked-by" from Hans and
+>  Rajneesh.
+
+I still cannot take this, since patch 1/2 is *already merged* through
+another tree, so me cherry-picking it leads to potential conflicts.
+
+As I have already explained twice you need to submit this upstream
+throuh the same tree which has the original merge of patch 1/2.
+
+You can tell the maintainer of that tree that I'm ok with merging this
+through that maintainers tree and that that is what my Ack is for.
+
+Regards,
+
+Hans
+
+
+> 
+>  drivers/platform/x86/intel/pmc/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index a1fe1e0dcf4a..17ec5825d13d 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1914,6 +1914,8 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+>  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&tgl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&adl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &tgl_reg_map),
+> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_reg_map),
+> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_reg_map),
+>  	{}
+>  };
+>  
+
