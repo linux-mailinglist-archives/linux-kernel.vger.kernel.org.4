@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1E05BCBBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5FD5BCBBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiISMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S229781AbiISMYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiISMXe (ORCPT
+        with ESMTP id S229676AbiISMYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:23:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A712B1A3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663590213; x=1695126213;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RyA6YjjwOYMUSUFTMy5U8Ixh8/xTmFz42y4WrB2KlQo=;
-  b=Kv3GCmuKbb3Uw7sA3PHqn08XhR/hQgpcv2cKn0Zcc8+mpsfk0OSMY2Yb
-   jcQGVQMAdZGX0tcY6vPmEvKzGMsKEuBpJZCI7hTg5FdZ9khfJaislBw85
-   tqbvg2e3vNfvXCrE3fBorGhWwT226W+v3PwBnokJDc+63o6/TSSfxsc82
-   +6wKZZpbk0jck4OVLM/p7JWCYcNvH5GLypKUtBrisTssq2CmN8MymJeqa
-   PpJUP4P1hd6ZjjSVt+KVuWGs8RNAArPmgU8nOKyCAx4n27GTU74C0o9wK
-   opMyCT9KUnnigQHnA49aJTiTzVWAM2eVLnDHvnN2Hp4QqtvFvNedy60R5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361123563"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="361123563"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 05:23:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="947199087"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Sep 2022 05:23:32 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaFoB-0001y9-1N;
-        Mon, 19 Sep 2022 12:23:31 +0000
-Date:   Mon, 19 Sep 2022 20:23:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:319:45: error: call to
- '__compiletime_assert_226' declared with attribute error: BUILD_BUG_ON
- failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-Message-ID: <202209192009.XyKPpQpe-lkp@intel.com>
+        Mon, 19 Sep 2022 08:24:07 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7182CDD8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:24:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b21so27749654plz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ingics-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=85YaJ+ireb/FRtyHjT/Ws8muuIzn5SK5AqIxSV1NVQM=;
+        b=DAAYXaVclvaBPc/xmjSdBkEtPHl/zkMAZVcsKAIMZXN3G2CCAJO1CeLss137m6issr
+         EYn+IutWnpWV/8CUYLCpwAqzCfczgOe8APmRj82XbENsnurMDMI6X9+fFszwNptY/A1p
+         TJDxiEbAXMSztJBY6LgMu7WOmgJ/ucwz+DSBWlYgQnAtpdYADJD6GCjlHv8g2mBaOZLF
+         Ncx9i6NX9B+1s4AOGEo+Yyp/uIvTzTYUD6ciUrmay+Yl6ADMjgWPAIwsj2hxQ0vR5J55
+         orrOeZysofAd1NN/AI5mLd/gFGhUowoeUZpg8ePinuB39huP+R/qQSVXccLzD5++cSgG
+         zfpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=85YaJ+ireb/FRtyHjT/Ws8muuIzn5SK5AqIxSV1NVQM=;
+        b=uqtTLwDolD6RYYbczSJJEnj0G5qHakBe6lQ3/oSXhIjSuroBXsJMX1ANWAAFG56Izu
+         WREmuAH24LVogocUhvIaB0iCAuHEvjuyMq9jgIm4bap2ppvwx1zAzkskHTtZFP90YfbB
+         jTPlA/5b19hU/hfHrcELtvizT/fOX8NVMEjRblR3bvWIxLQCObyirr26DZii3nVKWqP4
+         Gh04TX1IGJWhqx9vNw/MOYydne0L/k2hPFBVP3AnX5M9cqErk8TfZis8gXxNn4RmB+bQ
+         wZTj1vWXhZnKFCW2/W0TZC6njlYhHci5M/njKX2e1GpTs0Z8iUXGGcUKG/gdd6EggR3x
+         e8MQ==
+X-Gm-Message-State: ACrzQf3AKo9BclAQytI5ShETnRgEy13RujwQUxD90XvmC/nzMeT/Q2tQ
+        9aFaK3rZpiRzyFKaVOYCN932yMoJjXjhFuvi
+X-Google-Smtp-Source: AMsMyM7UHVH0XvyQfAT9lVMIt2PrUsHP5aDrI8DBJal4lwGiQYZH7cOPronjq4YUYqAD0Eggs5+VKg==
+X-Received: by 2002:a17:902:8643:b0:178:a33f:aa29 with SMTP id y3-20020a170902864300b00178a33faa29mr3601434plt.29.1663590244462;
+        Mon, 19 Sep 2022 05:24:04 -0700 (PDT)
+Received: from alpha.. (122-117-179-2.hinet-ip.hinet.net. [122.117.179.2])
+        by smtp.googlemail.com with ESMTPSA id 126-20020a630484000000b00439f027789asm3518988pge.59.2022.09.19.05.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 05:24:03 -0700 (PDT)
+From:   Axel Lin <axel.lin@ingics.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jerome Neanne <jneanne@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
+Subject: [PATCH] regulator: tps65219: Fix is_enabled checking in tps65219_set_bypass
+Date:   Mon, 19 Sep 2022 20:23:53 +0800
+Message-Id: <20220919122353.384171-1-axel.lin@ingics.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,79 +68,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Testing .enable cannot tell if a regulator is enabled or not, check return
+value of .is_enabled() instead.
+Also remove unneeded ret variable.
 
-FYI, the error/warning still remains.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ drivers/regulator/tps65219-regulator.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   521a547ced6477c54b4b0cc206000406c221b4d6
-commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
-date:   1 year, 10 months ago
-config: arc-randconfig-r001-20220919 (https://download.01.org/0day-ci/archive/20220919/202209192009.XyKPpQpe-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/mm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   arch/arc/mm/highmem.c: In function 'kmap_init':
->> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_226' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
-     300 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
-      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_226 +319 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
-
-:::::: The code at line 319 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
+diff --git a/drivers/regulator/tps65219-regulator.c b/drivers/regulator/tps65219-regulator.c
+index b198dcc60bc7..c484c943e467 100644
+--- a/drivers/regulator/tps65219-regulator.c
++++ b/drivers/regulator/tps65219-regulator.c
+@@ -181,16 +181,14 @@ static int tps65219_set_bypass(struct regulator_dev *dev, bool enable)
+ {
+ 	struct tps65219 *tps = rdev_get_drvdata(dev);
+ 	unsigned int rid = rdev_get_id(dev);
+-	int ret = 0;
+ 
+-	if (dev->desc->ops->enable) {
++	if (dev->desc->ops->is_enabled(dev)) {
+ 		dev_err(tps->dev,
+ 			"%s LDO%d enabled, must be shut down to set bypass ",
+ 			__func__, rid);
+ 		return -EBUSY;
+ 	}
+-	ret =  regulator_set_bypass_regmap(dev, enable);
+-	return ret;
++	return regulator_set_bypass_regmap(dev, enable);
+ }
+ 
+ /* Operations permitted on BUCK1/2/3 */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
