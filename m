@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4D05BCDF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3FA5BCDFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiISOFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S229943AbiISOG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiISOFe (ORCPT
+        with ESMTP id S229589AbiISOGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:05:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC972A724;
-        Mon, 19 Sep 2022 07:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A1261D09;
-        Mon, 19 Sep 2022 14:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C24C433D6;
-        Mon, 19 Sep 2022 14:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663596331;
-        bh=hqpQnG/rjRJ81hfuIK0S1DY9cC3WlcP1cwCcwyGmRYo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GHvlWwU9iLcICr4GA0wvbFMtZRycSkePLGuwn0Wq5plVfbx/Tii0XIdCQwikDrLjw
-         8Ks+UtynxkCYfDfznCu4vxoy6lrN/1pyw4n452OCoSaGSHU6rwFAge3K0QhIyFLOSR
-         JGneRdFLQ3rSxrl3hkt0tqmVBZ/aZlW7qNuV1GyRpm6KCN+WFHSxCwjpjeba7CsIOP
-         Yz5MJFMiZIm1WV9KbMnzB0jGhj2MtGbU+l9tyWqJP0PDtWjbgH1Du9ac2P3Fhm8B0Z
-         Kpv3AlVh+w6otMGKiyBZUitW8Nu9ZoBDlKme+nShAv6Iz6s/fxHg30/YEVxKu5MA6Y
-         P0mCOXh99bXNQ==
-Date:   Mon, 19 Sep 2022 16:05:27 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 06/44] cpuidle,tegra: Push RCU-idle into driver
-Message-ID: <20220919140527.GC58444@lothringen>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.736563806@infradead.org>
+        Mon, 19 Sep 2022 10:06:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D57F29CB6;
+        Mon, 19 Sep 2022 07:06:24 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JD2ALm025426;
+        Mon, 19 Sep 2022 14:05:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=sAFBwTn6aPWjxDZhtM8w19gmpStMi/5ToNfU76dDP+I=;
+ b=BxQWEwtlvhDrsOV6EXozgkNJlIvOx3M2jiBmtXW3uoP8LiCsfoeCQ5Svk4uSk1yTllJo
+ CS8YGhZWzGYeZ/z7KEFqRNaNcd85MsZbRqXnkqTNW9kG1Kdr60c7czNayUlI8LSPw+8T
+ ZxCM/jhtkhIxwOreexcGtJDk3iAqRxoJfiz4mB4InkfQNIJwqkAcVx6YeUKEl+iFNOz+
+ OgZkZ9Uhwo8Ow9zz/ADpYvwa3LS+YJCIydkPchBIaCyK1sS6glCGHRFRS3y5V6TloMy3
+ IUyNpc6xn2AFbp4vFdVJ7gGy5eHb11CQFrCj3Kdyex5a0qXt8CfDgwfrcNQGbsBkUD8c ZQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jn7he4svn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 14:05:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JE5dNr028348
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 14:05:39 GMT
+Received: from [10.216.41.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 19 Sep
+ 2022 07:05:34 -0700
+Message-ID: <27bc7d85-9fc0-5112-7d4f-bbf949b54724@quicinc.com>
+Date:   Mon, 19 Sep 2022 19:35:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919101520.736563806@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 2/8] remoteproc: qcom: Add flag in adsp private data
+ structure
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com>
+ <1662643422-14909-3-git-send-email-quic_srivasam@quicinc.com>
+ <9a483cbc-f90a-65c8-5edf-95fa9016ce6b@quicinc.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <9a483cbc-f90a-65c8-5edf-95fa9016ce6b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ojDxbGhHtVrOsFo0Yc9kWg7rT5kt1D0G
+X-Proofpoint-ORIG-GUID: ojDxbGhHtVrOsFo0Yc9kWg7rT5kt1D0G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 malwarescore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190095
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,10 +88,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:59:45AM +0200, Peter Zijlstra wrote:
-> Doing RCU-idle outside the driver, only to then temporarily enable it
-> again, at least twice, before going idle is daft.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+On 9/14/2022 2:36 PM, Sibi Sankar wrote:
+Thanks for Your time Sibi Sankar!!!
+> On 9/8/22 6:53 PM, Srinivasa Rao Mandadapu wrote:
+>> Add flag in qcom_adsp private data structure and initialize
+>> it to distinguish ADSP and WPSS modules for using iommu selectively.
+>
+> There are other flags available to distinguish between ADSP and WPSS
+> like 'is_wpss'. So you probably want to tweak your commit message to
+> just say if it has a iommu in front of it or not and skip referencing
+> WPSS.
+Okay. Will update commit message.
+>
+> Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+>
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>> Changes since V5:
+>>     -- Rename adsp_sandbox_needed to has_iommu.
+>> Changes since V3:
+>>     -- Rename is_adsp_sb_needed to adsp_sandbox_needed.
+>> Changes since V2:
+>>     -- Add is_adsp_sb_needed flag instead of is_wpss.
+>>
+>>   drivers/remoteproc/qcom_q6v5_adsp.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c 
+>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> index 2f3b9f5..fa2ccac 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> @@ -62,6 +62,7 @@ struct adsp_pil_data {
+>>       const char *sysmon_name;
+>>       int ssctl_id;
+>>       bool is_wpss;
+>> +    bool has_iommu;
+>>       bool auto_boot;
+>>         const char **clk_ids;
+>> @@ -99,6 +100,7 @@ struct qcom_adsp {
+>>       phys_addr_t mem_reloc;
+>>       void *mem_region;
+>>       size_t mem_size;
+>> +    bool has_iommu;
+>>         struct device *proxy_pds[QCOM_Q6V5_RPROC_PROXY_PD_MAX];
+>>       size_t proxy_pd_count;
+>> @@ -596,12 +598,15 @@ static int adsp_probe(struct platform_device 
+>> *pdev)
+>>       }
+>>         rproc->auto_boot = desc->auto_boot;
+>> +    rproc->has_iommu = desc->has_iommu;
+>>       rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+>>         adsp = (struct qcom_adsp *)rproc->priv;
+>>       adsp->dev = &pdev->dev;
+>>       adsp->rproc = rproc;
+>>       adsp->info_name = desc->sysmon_name;
+>> +    adsp->has_iommu = desc->has_iommu;
+>> +
+>>       platform_set_drvdata(pdev, adsp);
+>>         if (desc->is_wpss)
+>>
