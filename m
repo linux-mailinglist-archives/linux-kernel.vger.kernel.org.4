@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFDA5BCC17
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928415BCC1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiISMoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S230165AbiISMpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiISMnx (ORCPT
+        with ESMTP id S230042AbiISMpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:43:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E425EB6;
-        Mon, 19 Sep 2022 05:43:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 23F0E1F37C;
-        Mon, 19 Sep 2022 12:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663591429; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JNX3geAB//04COTSGgSRyqX/fXrPKwlxVbihxLJjBaQ=;
-        b=UylC8mAQp4O+cNM3Tcy8fjxSdkSJRh7gc2HsGfzGyM3x+1XS6QZTc+jnSa1Td7bHXoKx/l
-        p3jp6cZDWG5/QwCNfq0C3PUc8mCbHtnKhPCUfoK1ArQ5Gw2O74lAJRYe+I5vbQb33DuMkw
-        HG7PqAh13vk6cNsvTlZdnfScdU7SRkY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663591429;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JNX3geAB//04COTSGgSRyqX/fXrPKwlxVbihxLJjBaQ=;
-        b=txuzUCvTxHfpl3iN1j6oSXzgGSg5Oclu02kv91fVyUmjHAX++4Gk7ikGF/Xd9JzsQLjRkl
-        w/GDh7hu5YspJwAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACCFB13A96;
-        Mon, 19 Sep 2022 12:43:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DOQiKgRkKGMLMQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 19 Sep 2022 12:43:48 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id B9944A0682; Mon, 19 Sep 2022 14:43:44 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 14:43:44 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] jbd2: add miss release buffer head in
- fc_do_one_pass()
-Message-ID: <20220919124344.muyhkpxm4d3wumd3@quack3>
-References: <20220917093805.1782845-1-yebin10@huawei.com>
+        Mon, 19 Sep 2022 08:45:47 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA0C2A70E;
+        Mon, 19 Sep 2022 05:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663591547; x=1695127547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nTdFWlp48VZPIupFKHt9Tiw7GdXCoXMKvJ7imFE6yPI=;
+  b=BIYpYxak9D0Vae2xMQytEWAA9e7mj0Wo646ACuQ6q0OqvbXCrfj/g887
+   fYU5SgDghDsP3R0uZdpjgte3g73Gx34WJC51KyzHwE/lONyc3/yAmRD7W
+   HBUguyn4wjLahS7kfgHX5AlU4O8NGu387Pf23a4yVul9bkENbnK3RNYRb
+   CQTpkYj8o3eWepbFDwcj5l3Mqt9nqb059tf2POPEf+q70c0ZDlRhN7Ucb
+   A56sUXdvQuE88bjCL4jUmeprFLuOY+kPJ8PIqpzQiz/1xIKNfwBcz7a1p
+   0g1li46ldyjbsAlHrGTAFvzqqwca1pU8Se+CRyxgLYp0x6bN8H0tl/ASS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="385678401"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="385678401"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 05:45:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="613985517"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 05:45:44 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 6FB16202D2;
+        Mon, 19 Sep 2022 15:45:42 +0300 (EEST)
+Date:   Mon, 19 Sep 2022 12:45:42 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
+        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] media: mt9m111: fix device power usage
+Message-ID: <YyhkdtFzXn36AytN@paasikivi.fi.intel.com>
+References: <20220916135713.143890-1-m.felsch@pengutronix.de>
+ <20220916135713.143890-2-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220917093805.1782845-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220916135713.143890-2-m.felsch@pengutronix.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 17-09-22 17:38:05, Ye Bin wrote:
-> In fc_do_one_pass() miss release buffer head after use which will lead
-> to reference count leak.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+Hi Marco,
 
-Indeed. Good catch! Feel free to add:
+On Fri, Sep 16, 2022 at 03:57:12PM +0200, Marco Felsch wrote:
+> @@ -758,10 +751,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
+>  	if (reg->reg > 0x2ff)
+>  		return -EINVAL;
+>  
+> +	mt9m111_s_power(sd, 1);
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+It would be nice to have this driver converted to runtime PM. Up to you.
 
-								Honza
-
-> ---
->  fs/jbd2/recovery.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/jbd2/recovery.c b/fs/jbd2/recovery.c
-> index 1f878c315b03..8286a9ec122f 100644
-> --- a/fs/jbd2/recovery.c
-> +++ b/fs/jbd2/recovery.c
-> @@ -261,6 +261,7 @@ static int fc_do_one_pass(journal_t *journal,
->  		err = journal->j_fc_replay_callback(journal, bh, pass,
->  					next_fc_block - journal->j_fc_first,
->  					expected_commit_id);
-> +		brelse(bh);
->  		next_fc_block++;
->  		if (err < 0 || err == JBD2_FC_REPLAY_STOP)
->  			break;
-> -- 
-> 2.31.1
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Sakari Ailus
