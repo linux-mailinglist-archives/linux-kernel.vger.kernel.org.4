@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96065BC3C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D716D5BC3CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiISH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S229609AbiISH62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiISH6L (ORCPT
+        with ESMTP id S229931AbiISH6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Sep 2022 03:58:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790521EEDC
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:58:09 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWH3q4TKczMn3p;
-        Mon, 19 Sep 2022 15:53:27 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997FB1EEF7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:58:10 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWH4W3hWCzVfhv;
+        Mon, 19 Sep 2022 15:54:03 +0800 (CST)
 Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Mon, 19 Sep 2022 15:58:07 +0800
 Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
@@ -30,9 +30,9 @@ From:   Liu Shixin <liushixin2@huawei.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>,
         "Kefeng Wang" <wangkefeng.wang@huawei.com>
-Subject: [PATCH 1/9] cgroup/cpuset: use hotplug_memory_notifier() directly
-Date:   Mon, 19 Sep 2022 16:31:44 +0800
-Message-ID: <20220919083152.1824305-2-liushixin2@huawei.com>
+Subject: [PATCH 2/9] fs/proc/kcore.c: use hotplug_memory_notifier() directly
+Date:   Mon, 19 Sep 2022 16:31:45 +0800
+Message-ID: <20220919083152.1824305-3-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220919083152.1824305-1-liushixin2@huawei.com>
 References: <20220919083152.1824305-1-liushixin2@huawei.com>
@@ -58,34 +58,41 @@ register_hotmemory_notifier().
 
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- kernel/cgroup/cpuset.c | 7 +------
+ fs/proc/kcore.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b474289c15b8..0c6db6a4f427 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3630,11 +3630,6 @@ static int cpuset_track_online_nodes(struct notifier_block *self,
+diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+index dff921f7ca33..7692a360972d 100644
+--- a/fs/proc/kcore.c
++++ b/fs/proc/kcore.c
+@@ -18,7 +18,6 @@
+ #include <linux/capability.h>
+ #include <linux/elf.h>
+ #include <linux/elfcore.h>
+-#include <linux/notifier.h>
+ #include <linux/vmalloc.h>
+ #include <linux/highmem.h>
+ #include <linux/printk.h>
+@@ -638,10 +637,6 @@ static int __meminit kcore_callback(struct notifier_block *self,
  	return NOTIFY_OK;
  }
  
--static struct notifier_block cpuset_track_online_nodes_nb = {
--	.notifier_call = cpuset_track_online_nodes,
--	.priority = 10,		/* ??! */
+-static struct notifier_block kcore_callback_nb __meminitdata = {
+-	.notifier_call = kcore_callback,
+-	.priority = 0,
 -};
--
- /**
-  * cpuset_init_smp - initialize cpus_allowed
-  *
-@@ -3652,7 +3647,7 @@ void __init cpuset_init_smp(void)
- 	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
- 	top_cpuset.effective_mems = node_states[N_MEMORY];
  
--	register_hotmemory_notifier(&cpuset_track_online_nodes_nb);
-+	hotplug_memory_notifier(cpuset_track_online_nodes, 10);
+ static struct kcore_list kcore_vmalloc;
  
- 	cpuset_migrate_mm_wq = alloc_ordered_workqueue("cpuset_migrate_mm", 0);
- 	BUG_ON(!cpuset_migrate_mm_wq);
+@@ -694,7 +689,7 @@ static int __init proc_kcore_init(void)
+ 	add_modules_range();
+ 	/* Store direct-map area from physical memory map */
+ 	kcore_update_ram();
+-	register_hotmemory_notifier(&kcore_callback_nb);
++	hotplug_memory_notifier(kcore_callback, 0);
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
