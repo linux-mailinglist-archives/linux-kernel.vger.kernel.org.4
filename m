@@ -2,184 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D57C5BC35C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0E55BC33B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiISHIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S229875AbiISG6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 02:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiISHIU (ORCPT
+        with ESMTP id S229865AbiISG6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:08:20 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335CC1CB28
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r7so4928217wrm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
-        b=OgBqv3IZzdUFqvuLhn6EFV4R9bDvxhESon8U4vW40j+TSLmigg9qsdpoGxMi5BPLLg
-         0unGK3NEoyGanilR3J1V/VKvExTq6SrFYMDXmYaiIPnSEozEMMSwmhzdYDM+gIrOaaMg
-         Ji3IDXFgdCSA73EiM4w021yuoCXfNAJVAHRUc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
-        b=Xx6yq9vTkzZiBqPqL6JRCyFrTpB4igHeGidiPTqccACrlHzCCpPaVVExa8Sz4vRlrg
-         of4TV4LDJmSGy9RnGeyaFvXUmXFh2iHfRUyhUbedSTypuHUAoxu2cwGnYB/CDejnYsC5
-         cC+9i6Hs1UJRVGpBkwgiCeA5w9aWp1UMl17m5YaslCcDgtHUNpEq0GG68NhHkI588WEH
-         n1jX9DLe+aUK+9lJ5y61ezv5LuwuPGosX5fpZndnBvRWYVUUFZ/O9YZNL0gtrCigSF/N
-         UmBB66Xmd3eBaoEmsoTVnW7nGOmpQtWEGwItAz1hxGNYZWJjHnUAbefMlw2F26+QQWR6
-         aVKQ==
-X-Gm-Message-State: ACrzQf3+PRQDsY/bXSikRmxG7U9OsbI3GVJFsQl4ulQtY6Mpp5LOs/3r
-        stux+uMQOnn7yJs1ykIP7/J3KQ==
-X-Google-Smtp-Source: AMsMyM5WuE0u/PpMDPiqFT5hqYfJFSqTAYnpfKtBn+3NHLlEFItVukIyZebdE5bJbyYXtyGz31yIfg==
-X-Received: by 2002:adf:f3d2:0:b0:22a:e5d2:5c with SMTP id g18-20020adff3d2000000b0022ae5d2005cmr6872977wrp.131.1663571296615;
-        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
-        by smtp.gmail.com with ESMTPSA id bk23-20020a0560001d9700b0022b014fb0b7sm2088897wrb.110.2022.09.19.00.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 09:08:13 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Christian Hemp <c.hemp@phytec.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
-Message-ID: <20220919070813.GA3958@tom-ThinkPad-T14s-Gen-2i>
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <20220911200147.375198-3-mike.rudenko@gmail.com>
- <20220914155122.GA9874@tom-ThinkPad-T14s-Gen-2i>
- <87k064pa2v.fsf@gmail.com>
- <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
- <87r10bo1k5.fsf@gmail.com>
+        Mon, 19 Sep 2022 02:58:30 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6DA1D0DF;
+        Sun, 18 Sep 2022 23:58:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWFp445MWzKNxn;
+        Mon, 19 Sep 2022 14:56:28 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgAnenMPEyhjBBpFBA--.10045S4;
+        Mon, 19 Sep 2022 14:58:25 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     paolo.valente@linaro.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH v2 0/3] blk-wbt: simple improvment to enable wbt correctly
+Date:   Mon, 19 Sep 2022 15:09:13 +0800
+Message-Id: <20220919070916.2738443-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r10bo1k5.fsf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAnenMPEyhjBBpFBA--.10045S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5i7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
+        U==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mikhail,
+From: Yu Kuai <yukuai3@huawei.com>
 
-On Fri, Sep 16, 2022 at 04:44:31PM +0300, Mikhail Rudenko wrote:
-> 
-> On 2022-09-16 at 15:34 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
-> > Hi Mikhail,
-> >
-> > On Thu, Sep 15, 2022 at 11:50:23PM +0300, Mikhail Rudenko wrote:
-> >>
-> >> Hi Tommaso,
-> >>
-> >> On 2022-09-14 at 17:51 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
-> >> > Hi Mikhail,
-> >> > I do a first round on reviewing your driver :)
-> >> >
-> >> > On Sun, Sep 11, 2022 at 11:01:35PM +0300, Mikhail Rudenko wrote:
-> 
-> <snip>
-> 
-> >> >> +
-> >> >> +	ov4689->xvclk = devm_clk_get(dev, "xvclk");
-> >> >> +	if (IS_ERR(ov4689->xvclk)) {
-> >> >> +		dev_err(dev, "Failed to get xvclk\n");
-> >> >> +		return -EINVAL;
-> >> >> +	}
-> >> >
-> >> > ^ I think is better to use devm_clk_get_optional instead of clck_get.
-> >> > clck_get can fail in CPU's that use ACPI
-> >> >
-> >> >> +
-> >> >> +	ret = clk_set_rate(ov4689->xvclk, OV4689_XVCLK_FREQ);
-> >> >> +	if (ret < 0) {
-> >> >> +		dev_err(dev, "Failed to set xvclk rate (24MHz)\n");
-> >> >> +		return ret;
-> >> >> +	}
-> >> >> +	if (clk_get_rate(ov4689->xvclk) != OV4689_XVCLK_FREQ)
-> >> >> +		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
-> >> >
-> >> >
-> >> > What do you think about?
-> >> > Thanks.
-> >>
-> >> Unfortunately, I have no experience with ACPI-based devices. :(
-> >>
-> >> Do you mean that in the case of an ACPI device and devm_clk_get_optional
-> >> returning NULL we should assume that the clock is already enabled and
-> >> will stay enabled during sensor operation? How should we distinguish it
-> >> from the case of an OF-based system and clock just missing from device
-> >> tree?
-> >
-> > Not exaclty :)
-> >
-> > I copy comment from [1]
-> >
-> > if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
-> > you use the get_optionl() version ? Otherwise in the ACPI case you will have
-> > -ENOENT if there's not 'xvclk' property and bail out.
-> >
-> > Unless my understanding is wrong on ACPI we have "clock-frequency" and
-> > on OF "xvclk" with an "assigned-clock-rates",
-> >
-> > [1] https://patchwork.linuxtv.org/project/linux-media/patch/20220627150453.220292-5-tommaso.merciai@amarulasolutions.com/
-> >
-> > Let me know if you need more details.
-> 
-> Thanks for the pointer! I'll try to implement something along the lines
-> of your ov5693 series.
-> 
-> But I'm not sure that will be enough to support ACPI systems
-> correctly. What about lanes number and link frequency checks? Should
-> they be made conditional on CONFIG_OF? Anything else I don't know?
+changes in v2:
+ - define new api if wbt config is not enabled in patch 1.
 
-In my opinion, lanes number and link frequency checks are ok :)
-We don't need conditional CONFIG_OF.
+Yu Kuai (3):
+  wbt: don't show valid wbt_lat_usec in sysfs while wbt is disabled
+  block: add a helper to check elevator name
+  blk-wbt: don't enable throttling if default elevator is bfq
 
-fwnode* function support both ACPI and dts.
-
-Thanks,
-Tommaso
-
-> 
-> >
-> > Regards,
-> > Tommaso
-> >
-> --
-> Best regards,
-> Mikhail Rudenko
+ block/bfq-iosched.c |  2 +-
+ block/blk-sysfs.c   | 11 +++++++++--
+ block/blk-wbt.c     | 13 ++++++++++++-
+ block/blk-wbt.h     | 10 ++++++++--
+ block/elevator.h    |  5 +++++
+ 5 files changed, 35 insertions(+), 6 deletions(-)
 
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+2.31.1
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
