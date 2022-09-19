@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B434F5BCD78
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117345BCD7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiISNoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S230149AbiISNpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiISNok (ORCPT
+        with ESMTP id S229667AbiISNpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:44:40 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFF15F61
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:44:37 -0700 (PDT)
-Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28JDiI3U060788;
-        Mon, 19 Sep 2022 22:44:19 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
- Mon, 19 Sep 2022 22:44:18 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28JDiIvT060785
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 19 Sep 2022 22:44:18 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <83fc4085-60cc-fdc6-43ba-ac701cfde80c@I-love.SAKURA.ne.jp>
-Date:   Mon, 19 Sep 2022 22:44:16 +0900
+        Mon, 19 Sep 2022 09:45:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA8517066;
+        Mon, 19 Sep 2022 06:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bjogngX1F/JZwA+k9RfkZhp88x9yf+GaiFwl+CZH6hg=; b=d4nxG+MzP54k7yWbKFQHdqhuGv
+        ozyorpIIgc4NNC9rIw994EZtM6mjs1hztVHSPVx0bIG5bf2wtTh988madhgQtJGM3ytUd3pLN6Nsf
+        7MzV3Npvn+edwN/xTN4XEAVPVUU/tfjGeKs4EHIMgdaiynn5Lt8FqTIye5owf8vMn4xpy0CeeUAK8
+        TSbFhnqlzFxMKabPlf5uh6Mt5IdwNJxhvHB8gah14SkZun2E10bmeyq3usOtPdHhKLFgRNPd9qiwd
+        Fm/2Z/pCv+mydapcnpDMHXuSw5tGuGQyjepzNCFwihAkcNWhF7zJWpe3a69ymybUjV/sPZAPOYsUa
+        PQSlWAOA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaH5L-004k8i-9t; Mon, 19 Sep 2022 13:45:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1CA95300202;
+        Mon, 19 Sep 2022 15:45:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ED5F02BAC75BE; Mon, 19 Sep 2022 15:45:14 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 15:45:14 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>, keescook@chromium.org
+Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Message-ID: <Yyhyap+Xi3UtV+T0@hirez.programming.kicks-ass.net>
+References: <20220918155246.1203293-1-guoren@kernel.org>
+ <20220918155246.1203293-9-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] lockdep: report name and key when look_up_lock_class()
- got confused
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <55111c45-0f8f-c6f9-640c-6919939b77dd@I-love.SAKURA.ne.jp>
- <YydkEtcVc0GtCizz@boqun-archlinux>
- <bd99391e-f787-efe9-5ec6-3c6dc4c587b0@I-love.SAKURA.ne.jp>
- <YyhI93taOenZMHrY@hirez.programming.kicks-ass.net>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YyhI93taOenZMHrY@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220918155246.1203293-9-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/19 19:48, Peter Zijlstra wrote:
-> On Mon, Sep 19, 2022 at 09:52:13AM +0900, Tetsuo Handa wrote:
->> Printing this information will be helpful.
->>
->>   ------------[ cut here ]------------
->>   Looking for class "l2tp_sock" with key l2tp_socket_class, but found a different class "slock-AF_INET6" with the same key
->>   WARNING: CPU: 1 PID: 14195 at kernel/locking/lockdep.c:940 look_up_lock_class+0xcc/0x140
->>   Modules linked in:
->>   CPU: 1 PID: 14195 Comm: a.out Not tainted 6.0.0-rc6-dirty #863
->>   Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
->>   RIP: 0010:look_up_lock_class+0xcc/0x140
->>
->> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> 
-> Urgh, you hitting that WARN enough times to want to improve it seems to
-> suggest your machine is quite sick.
+On Sun, Sep 18, 2022 at 11:52:43AM -0400, guoren@kernel.org wrote:
 
-My machine is not sick at all. I just wanted this hint for debugging
-https://syzkaller.appspot.com/bug?extid=94cc2a66fc228b23f360 .
+> +ENTRY(call_on_stack)
+> +	/* Create a frame record to save our ra and fp */
+> +	addi	sp, sp, -RISCV_SZPTR
+> +	REG_S	ra, (sp)
+> +	addi	sp, sp, -RISCV_SZPTR
+> +	REG_S	fp, (sp)
+> +
+> +	/* Save sp in fp */
+> +	move	fp, sp
+> +
+> +	/* Move to the new stack and call the function there */
+> +	li	a3, IRQ_STACK_SIZE
+> +	add	sp, a1, a3
+> +	jalr	a2
+> +
+> +	/*
+> +	 * Restore sp from prev fp, and fp, ra from the frame
+> +	 */
+> +	move	sp, fp
+> +	REG_L	fp, (sp)
+> +	addi	sp, sp, RISCV_SZPTR
+> +	REG_L	ra, (sp)
+> +	addi	sp, sp, RISCV_SZPTR
+> +	ret
+> +ENDPROC(call_on_stack)
 
-In a world of debugging without vmcore, printing as much hint as possible is
-important. Therefore, WARN_ONCE() is more appreciated than WARN_ON_ONCE().
+IIRC x86_64 moved away from a stack-switch function like this because it
+presents a convenient exploit gadget.
 
-> 
-> Anyway, patch is ok I suppose.
-
-Thank you. Please send this patch and
-https://lkml.kernel.org/r/9f42e8a5-f809-3f2c-0fda-b7657bc94eb3@I-love.SAKURA.ne.jp
-via your tree.
-
+I'm not much of an exploit writer and I've no idea how effective our
+inline stategy is, perhaps other can comment.
