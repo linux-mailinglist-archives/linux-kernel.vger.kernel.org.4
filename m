@@ -2,144 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3E45BC1A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 05:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAE95BC1A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 05:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiISDMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 23:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S229839AbiISDNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 23:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiISDLz (ORCPT
+        with ESMTP id S229826AbiISDNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 23:11:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258321A3A4;
-        Sun, 18 Sep 2022 20:11:54 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MW8kD0D5QzlVyk;
-        Mon, 19 Sep 2022 11:07:48 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 11:11:52 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
- 2022 11:11:51 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <aeasi@marvell.com>, <dwagner@suse.de>,
-        <himanshu.madhani@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] scsi: qla2xxx: Fix build error implicit-function-declaration
-Date:   Mon, 19 Sep 2022 11:08:10 +0800
-Message-ID: <20220919030810.1626-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 18 Sep 2022 23:13:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A4A1A3A1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 20:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663557181; x=1695093181;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TJneCTmLlrztD6YAx7hnp5eutOdkGZbB+hdFQjt3lUk=;
+  b=F0HzyqpD1eA+wqjZQwp8IBufVoP5mqlogbktqTt0mFqPEfitqYk8eI/y
+   RWOYj8dBmRHNwpbeiJxEBKU5M7aTxIcK8H7yYl3yw8zPrhTN5nu/fs6sm
+   HqJVi8McqnK2lZhdVVDFyRPTZs5If6kPkj3UMSjuSn4+35PkJ4cly2LTc
+   u1afthKKRLKKQXqVWjchV5g/0SiZTN0ssBjITFem69Aeu2WP9uPxTwf7W
+   neEEDOpoxVQY6AKoQeEx8i6znnFRknD2uwTn8yxzgNMzsYEdczFBHVLH5
+   rOSi/PWylpTKcVAqrdi2fPOQ+LfrwfpxhsQr8ibWu9EcXZ3an5BD53R2w
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="385583749"
+X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
+   d="scan'208";a="385583749"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 20:13:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
+   d="scan'208";a="569477795"
+Received: from feng-clx.sh.intel.com ([10.238.200.228])
+  by orsmga003.jf.intel.com with ESMTP; 18 Sep 2022 20:12:57 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Feng Tang <feng.tang@intel.com>
+Subject: [PATCH] mm/slab_common: fix possiable double free of kmem_cache
+Date:   Mon, 19 Sep 2022 11:12:41 +0800
+Message-Id: <20220919031241.1358001-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_TRACING is not set,
-make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-will be failed, like this:
+When doing slub_debug test, kfence's 'test_memcache_typesafe_by_rcu'
+kunit test case cause a use-after-free error:
 
-drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_init’:
-drivers/scsi/qla2xxx/qla_os.c:2854:18: error: implicit declaration of function ‘trace_array_get_by_name’; did you mean ‘trace_array_set_clr_event’? [-Werror=implicit-function-declaration]
-  qla_trc_array = trace_array_get_by_name("qla2xxx");
-                  ^~~~~~~~~~~~~~~~~~~~~~~
-                  trace_array_set_clr_event
-drivers/scsi/qla2xxx/qla_os.c:2854:16: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
-  qla_trc_array = trace_array_get_by_name("qla2xxx");
-                ^
-drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_uninit’:
-drivers/scsi/qla2xxx/qla_os.c:2869:2: error: implicit declaration of function ‘trace_array_put’; did you mean ‘trace_seq_putc’? [-Werror=implicit-function-declaration]
-  trace_array_put(qla_trc_array);
-  ^~~~~~~~~~~~~~~
-  trace_seq_putc
-cc1: all warnings being treated as errors
+  BUG: KASAN: use-after-free in kobject_del+0x14/0x30
+  Read of size 8 at addr ffff888007679090 by task kunit_try_catch/261
 
-To fix this error, wrap up all the relevant code with CONFIG_TRACING.
+  CPU: 1 PID: 261 Comm: kunit_try_catch Tainted: G    B            N 6.0.0-rc5-next-20220916 #17
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x34/0x48
+   print_address_description.constprop.0+0x87/0x2a5
+   print_report+0x103/0x1ed
+   kasan_report+0xb7/0x140
+   kobject_del+0x14/0x30
+   kmem_cache_destroy+0x130/0x170
+   test_exit+0x1a/0x30
+   kunit_try_run_case+0xad/0xc0
+   kunit_generic_run_threadfn_adapter+0x26/0x50
+   kthread+0x17b/0x1b0
+   </TASK>
 
-Fixes: 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+The cause is inside kmem_cache_destroy():
+
+kmem_cache_destroy
+    acquire lock/mutex
+    shutdown_cache
+        schedule_work(kmem_cache_release) (if RCU flag set)
+    release lock/mutex
+    kmem_cache_release (if RCU flag set)
+
+in some certain timing, the scheduled work could be run before
+the next RCU flag checking which will get a wrong state.
+
+Fix it by caching the RCU flag inside protected area, just like 'refcnt'
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 2c85f3cce726..e445105ee16d 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -37,7 +37,9 @@ static int apidev_major;
-  */
- struct kmem_cache *srb_cachep;
- 
-+#ifdef CONFIG_TRACING
- static struct trace_array *qla_trc_array;
-+#endif
- 
- int ql2xfulldump_on_mpifail;
- module_param(ql2xfulldump_on_mpifail, int, S_IRUGO | S_IWUSR);
-@@ -2848,6 +2850,7 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
- 	spin_unlock_irqrestore(&vha->work_lock, flags);
- }
- 
-+#ifdef CONFIG_TRACING
- static void
- qla_trace_init(void)
+note:
+
+The error only happens on linux-next tree, and not in Linus' tree,
+which already has Waiman's commit:
+0495e337b703 ("mm/slab_common: Deleting kobject in kmem_cache_destroy()
+without holding slab_mutex/cpu_hotplug_lock")
+
+ mm/slab_common.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 07b948288f84..ccc02573588f 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -475,6 +475,7 @@ void slab_kmem_cache_release(struct kmem_cache *s)
+ void kmem_cache_destroy(struct kmem_cache *s)
  {
-@@ -2868,7 +2871,7 @@ qla_trace_uninit(void)
+ 	int refcnt;
++	bool rcu_set;
+ 
+ 	if (unlikely(!s) || !kasan_check_byte(s))
  		return;
- 	trace_array_put(qla_trc_array);
+@@ -482,6 +483,8 @@ void kmem_cache_destroy(struct kmem_cache *s)
+ 	cpus_read_lock();
+ 	mutex_lock(&slab_mutex);
+ 
++	rcu_set = s->flags & SLAB_TYPESAFE_BY_RCU;
++
+ 	refcnt = --s->refcount;
+ 	if (refcnt)
+ 		goto out_unlock;
+@@ -492,7 +495,7 @@ void kmem_cache_destroy(struct kmem_cache *s)
+ out_unlock:
+ 	mutex_unlock(&slab_mutex);
+ 	cpus_read_unlock();
+-	if (!refcnt && !(s->flags & SLAB_TYPESAFE_BY_RCU))
++	if (!refcnt && !rcu_set)
+ 		kmem_cache_release(s);
  }
--
-+#endif
- /*
-  * PCI driver interface
-  */
-@@ -8209,7 +8212,9 @@ qla2x00_module_init(void)
- 	BUILD_BUG_ON(sizeof(sw_info_t) != 32);
- 	BUILD_BUG_ON(sizeof(target_id_t) != 2);
- 
-+#ifdef CONFIG_TRACING
- 	qla_trace_init();
-+#endif
- 
- 	/* Allocate cache for SRBs. */
- 	srb_cachep = kmem_cache_create("qla2xxx_srbs", sizeof(srb_t), 0,
-@@ -8290,7 +8295,9 @@ qla2x00_module_init(void)
- destroy_cache:
- 	kmem_cache_destroy(srb_cachep);
- 
-+#ifdef CONFIG_TRACING
- 	qla_trace_uninit();
-+#endif
- 	return ret;
- }
- 
-@@ -8309,7 +8316,9 @@ qla2x00_module_exit(void)
- 	fc_release_transport(qla2xxx_transport_template);
- 	qlt_exit();
- 	kmem_cache_destroy(srb_cachep);
-+#ifdef CONFIG_TRACING
- 	qla_trace_uninit();
-+#endif
- }
- 
- module_init(qla2x00_module_init);
+ EXPORT_SYMBOL(kmem_cache_destroy);
 -- 
-2.17.1
+2.34.1
 
