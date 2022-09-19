@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05A05BCCB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05385BCCB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiISNNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S230228AbiISNPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiISNNo (ORCPT
+        with ESMTP id S230243AbiISNO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:13:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590591E3CF;
-        Mon, 19 Sep 2022 06:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663593223; x=1695129223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kl8u/QncRP4RluJNzmTTBp2YYqFYhohf9QZvMNgIXnM=;
-  b=BQ1/mcNigvlEG02MpwM5hh/h3paezewO+F82FEIuK2CUTEu4X+N0Amt4
-   NRbfeZgQedy9fZqHSemsv6/pfiY3wcGNPOE6J5ek+Yu1D8voo37FBblHx
-   CFw5r30TowZd65p5xKv/HN+NsLo9c69yfZBquNacKIPlcgTPzzNj0wBBM
-   r+s6U9CN9TcQX9cmBcxs6Ox7uFUQ90bf9SYwRVAShth4cjPXRwoZjwhvI
-   539kBecYfGlWA7vg6hqCIfJHsGadVdxEgLVZHgH9gEZQnyTgqTmf+4hVC
-   v+O2jAPEe80Ai/woXG9KG1AN4EjqDSzYD8F7s9dmWgeBlCSpR0PXqN/dw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282421122"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="282421122"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:13:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="744110405"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:13:41 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id D223B202D2;
-        Mon, 19 Sep 2022 16:13:38 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 13:13:38 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        mchehab@kernel.org, akinobu.mita@gmail.com,
-        jacopo+renesas@jmondi.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: mt9m111: fix device power usage
-Message-ID: <YyhrAg1GJ+arWdMt@paasikivi.fi.intel.com>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <20220916135713.143890-2-m.felsch@pengutronix.de>
- <YyhkdtFzXn36AytN@paasikivi.fi.intel.com>
- <Yyhm1o44NHWe018B@pendragon.ideasonboard.com>
- <20220919131009.m2vdtsmftqntc2e6@pengutronix.de>
+        Mon, 19 Sep 2022 09:14:57 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8619DE8B;
+        Mon, 19 Sep 2022 06:14:55 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b21so27875656plz.7;
+        Mon, 19 Sep 2022 06:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=sIdX+KvJzSz8VQO2i8+nyP74m6V2LlUV6kWGw0Al+eo=;
+        b=JHQ0nnC79SidXusB5KgASHgTs0CPClKpYMR0m+2M3VxKN5Xv1YkoRDqe8LERjDFPx/
+         XYUT5anRgJRpsS4bcDLPeEQmpIC8DtsKZZHjN5tRq+tJMXA3XdCj7u3qcOrX/rQwfdLU
+         W+plCryOdLwAgDlD7ktpQoCAkbtWiyLpEUDQ6WxLFSDvL4cdDEPb7vmC/J/2eQxtjF99
+         bM+Br68Lac5NuSpesaToLh5e3QuDKabvBmuLA4dup3ZgLB7tlJITI5vAtTBy3lG6CFv0
+         W6czAwRlUYakMJeAbBNKWGmDV/JkEfyNhrwYd15ocEhtcmysDJFIbd5EYzX5TdemBf0j
+         lnXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=sIdX+KvJzSz8VQO2i8+nyP74m6V2LlUV6kWGw0Al+eo=;
+        b=hPXNjeoG8Fdca/wzz4C1DBsfUgu1MWCESTjLsVPTJ2RlYBQ1hd8gcCg3x3yzP6Cmfv
+         +qSLd8IyFpppKnZhV86Zve6xQ8ymVhy649qoo62NZBaVSpjkUBlaMkAFoaKnX2am4hs5
+         a/r2DlgBOasMZuDiPdQvgPDk1a3t+62XiUprPPL2l9iwekyN3AAtEGbEKIQy/nyZck64
+         7xmFhsgITntKyvEczaz6j6iZm/79rHAwEc8P0idAb71o6PtDc6zx5xziT74zkEm5AIwc
+         VT+H07EheaaKP0gd8Fngxfn5BqcAA5oAkZgmMAQ98djsm6QnL4R6L66zUvaYT2mQP3G7
+         9ovA==
+X-Gm-Message-State: ACrzQf0zKt5PHH00DuybZ/se1+qZWgKQLfj0ad95hD/Xg+LHrqYYLRLq
+        usLqsgmlHAQnd6ju/5Nqa5U=
+X-Google-Smtp-Source: AMsMyM5+CZ26gFhgHzgxwgFP5yjvQAsUI9ehnhJLDcb+Gssm42XcEIPVwinU6iM+MSqMZImRVlcJvw==
+X-Received: by 2002:a17:90b:1b4c:b0:202:c1a3:25ce with SMTP id nv12-20020a17090b1b4c00b00202c1a325cemr31516220pjb.232.1663593295278;
+        Mon, 19 Sep 2022 06:14:55 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902d70900b0016d1b70872asm11895663ply.134.2022.09.19.06.14.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 06:14:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 19 Sep 2022 06:14:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix Quadro fan speed offsets
+Message-ID: <20220919131453.GA3546413@roeck-us.net>
+References: <20220914114327.6941-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919131009.m2vdtsmftqntc2e6@pengutronix.de>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220914114327.6941-1-savicaleksa83@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:10:09PM +0200, Marco Felsch wrote:
-> On 22-09-19, Laurent Pinchart wrote:
-> > On Mon, Sep 19, 2022 at 12:45:42PM +0000, Sakari Ailus wrote:
-> > > Hi Marco,
-> > > 
-> > > On Fri, Sep 16, 2022 at 03:57:12PM +0200, Marco Felsch wrote:
-> > > > @@ -758,10 +751,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
-> > > >  	if (reg->reg > 0x2ff)
-> > > >  		return -EINVAL;
-> > > >  
-> > > > +	mt9m111_s_power(sd, 1);
-> > > 
-> > > It would be nice to have this driver converted to runtime PM. Up to you.
-> > 
-> > I second that :-)
+On Wed, Sep 14, 2022 at 01:43:27PM +0200, Aleksa Savic wrote:
+> The offsets for setting speeds of fans connected to Quadro are off by one.
+> Set them to their correct values.
 > 
-> I would rather keep it this way and add 2nd patch to change. So it would
-> be easier to backport the patch.
+> The offsets as shown point to registers for setting the fan control mode,
+> which will be explored in future patches, but slipped in here. When
+> setting fan speeds, the resulting values were overlapping, which made the
+> fans still run in my initial testing.
+> 
+> Fixes: cdbe34da01e3 ("hwmon: (aquacomputer_d5next) Add support for Aquacomputer Quadro fan controller")
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Works for me.
+Applied.
 
--- 
-Sakari Ailus
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/aquacomputer_d5next.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 3ea25edfc7a5..c51a2678f0eb 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -120,7 +120,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
+>  static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+>  
+>  /* Fan speed registers in Quadro control report (from 0-100%) */
+> -static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
+> +static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 };
+>  
+>  /* Register offsets for the High Flow Next */
+>  #define HIGHFLOWNEXT_NUM_SENSORS	2
