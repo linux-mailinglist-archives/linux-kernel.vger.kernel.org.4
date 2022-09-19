@@ -2,82 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413A95BD64E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4B95BD650
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiISVW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S229973AbiISVYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 17:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiISVWZ (ORCPT
+        with ESMTP id S229521AbiISVYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:22:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC914D174;
-        Mon, 19 Sep 2022 14:22:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04869B820F3;
-        Mon, 19 Sep 2022 21:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4394C433D6;
-        Mon, 19 Sep 2022 21:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663622541;
-        bh=IvWPxgYC8Y7/jKbvrMgvoSlVhNU4G8aj4azB6VTN5qk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LDukC2laWLeAS1hTstk3+uI80cx9+0pZ+wPFhhsMNlRE1bu16hMatnmZ1crpFbqt1
-         k3tuAb9cL3igaJ1hDw7pjHvCDdVDLLmsBbe8qF07lur0B2xwaCdMINQtpmSO8vGW4c
-         Wm8sgUtgNwKfKIY2ok3U8REzvC4BSqFPOn0IFdSj7Nw4tvVH2ISkeHNNXtB698XHbA
-         uzxcqMJLg0T1xmOP/eHgGvkLgQDLvJAfLjdQ/w6afxgTGGwuF5TtgJcCpyRafNtP2a
-         qbELnhcSynvFccTFurRKvvc8gGi6OMcf1cAYn2a79rBiiIey0Kb9Xl0WsTfpXmYe+Z
-         /sx7/IpnsHzsw==
-Date:   Mon, 19 Sep 2022 16:22:18 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] drm/msm/dp: Implement hpd_notify()
-Message-ID: <20220919212218.chyeo7uga2sitwk7@builder.lan>
-References: <20220916200028.25009-1-quic_bjorande@quicinc.com>
- <20220916200028.25009-6-quic_bjorande@quicinc.com>
- <07b39c97-30be-4e82-044e-51b0d98a5197@quicinc.com>
+        Mon, 19 Sep 2022 17:24:05 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC744CA3A;
+        Mon, 19 Sep 2022 14:24:04 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 21:23:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663622642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NQO1pumSa/KfMYi+Zrv7/FLFzatbUmZ/Js3onvV1Rf4=;
+        b=uPvogrlZEPm19kQ2OkUMqT5SWUP4Xqawx8ZuABCXpiJf8LcXs+aUJwmPohX7ZJjzZoppAg
+        61uQrbGrAF09GdIVf2FyjLSbBHhlB+0uaKRDRhrPQhz997WXg1eI57bTwTXgblGSNnlk3d
+        kMk4JB32oZ3uzCPz9SmwEM+yadiqj7c=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH 4/5] KVM: selftests: Explicitly verify KVM doesn't patch
+ hypercall if quirk==off
+Message-ID: <Yyjd7pcBw0NkYVQE@google.com>
+References: <20220908233134.3523339-1-seanjc@google.com>
+ <20220908233134.3523339-5-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <07b39c97-30be-4e82-044e-51b0d98a5197@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220908233134.3523339-5-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:17:30PM -0700, Jeff Johnson wrote:
-> On 9/16/2022 1:00 PM, Bjorn Andersson wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > The DisplayPort controller's hot-plug mechanism is based on pinmuxing a
-> > physical signal no a GPIO pin into the controller. This is not always
+On Thu, Sep 08, 2022 at 11:31:33PM +0000, Sean Christopherson wrote:
+> Explicitly verify that KVM doesn't patch in the native hypercall if the
+> FIX_HYPERCALL_INSN quirk is disabled.  The test currently verifies that
+> a #UD occurred, but doesn't actually verify that no patching occurred.
 > 
-> nit: s/ no / on /?
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  .../selftests/kvm/x86_64/fix_hypercall_test.c | 35 ++++++++++++++-----
+>  1 file changed, 26 insertions(+), 9 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> index dde97be3e719..5925da3b3648 100644
+> --- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> @@ -21,8 +21,8 @@ static bool ud_expected;
+>  
+>  static void guest_ud_handler(struct ex_regs *regs)
+>  {
+> -	GUEST_ASSERT(ud_expected);
+> -	GUEST_DONE();
+> +	regs->rax = -EFAULT;
+> +	regs->rip += HYPERCALL_INSN_SIZE;
+>  }
+>  
+>  extern unsigned char svm_hypercall_insn[HYPERCALL_INSN_SIZE];
+> @@ -57,17 +57,18 @@ static void guest_main(void)
+>  {
+>  	unsigned char *native_hypercall_insn, *hypercall_insn;
+>  	uint8_t apic_id;
+> +	uint64_t ret;
+>  
+>  	apic_id = GET_APIC_ID_FIELD(xapic_read_reg(APIC_ID));
+>  
+>  	if (is_intel_cpu()) {
+>  		native_hypercall_insn = vmx_hypercall_insn;
+>  		hypercall_insn = svm_hypercall_insn;
+> -		svm_do_sched_yield(apic_id);
+> +		ret = svm_do_sched_yield(apic_id);
+>  	} else if (is_amd_cpu()) {
+>  		native_hypercall_insn = svm_hypercall_insn;
+>  		hypercall_insn = vmx_hypercall_insn;
+> -		vmx_do_sched_yield(apic_id);
+> +		ret = vmx_do_sched_yield(apic_id);
+>  	} else {
+>  		GUEST_ASSERT(0);
+>  		/* unreachable */
+> @@ -75,12 +76,28 @@ static void guest_main(void)
+>  	}
+>  
+>  	/*
+> -	 * The hypercall didn't #UD (guest_ud_handler() signals "done" if a #UD
+> -	 * occurs).  Verify that a #UD is NOT expected and that KVM patched in
+> -	 * the native hypercall.
+> +	 * If the quirk is disabled, verify that guest_ud_handler() "returned"
+> +	 * -EFAULT and that KVM did NOT patch the hypercall.  If the quirk is
+> +	 * enabled, verify that the hypercall succeeded and that KVM patched in
+> +	 * the "right" hypercall.
+>  	 */
+> -	GUEST_ASSERT(!ud_expected);
+> -	GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn, HYPERCALL_INSN_SIZE));
+> +	if (ud_expected) {
+> +		GUEST_ASSERT(ret == (uint64_t)-EFAULT);
+> +
+> +		/*
+> +		 * Divergence should occur only on the last byte, as the VMCALL
+> +		 * (0F 01 C1) and VMMCALL (0F 01 D9) share the first two bytes.
+> +		 */
+> +		GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn,
+> +				     HYPERCALL_INSN_SIZE - 1));
+> +		GUEST_ASSERT(memcmp(native_hypercall_insn, hypercall_insn,
+> +				    HYPERCALL_INSN_SIZE));
 
-Correct, thank you Jeff.
+Should we just keep the assertions consistent for both cases (patched
+and unpatched)?
 
-> > possible, either because there aren't dedicated GPIOs available or
-> > because the hot-plug signal is a virtual notification, in cases such as
-> > USB Type-C.
+--
+Thanks,
+Oliver
+
+> +	} else {
+> +		GUEST_ASSERT(!ret);
+> +		GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn,
+> +			     HYPERCALL_INSN_SIZE));
+> +	}
+> +
+>  	GUEST_DONE();
+>  }
+>  
+> -- 
+> 2.37.2.789.g6183377224-goog
 > 
