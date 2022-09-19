@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683C85BC4C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04075BC474
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiISIwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S229919AbiISIkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiISIw0 (ORCPT
+        with ESMTP id S229633AbiISIj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:52:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106A422BFD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663577530; x=1695113530;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=soUQOddqp60l+A0SvBrHsI8rwpW1H/6Q8f4MbqONHts=;
-  b=SoZzs+736uPee0XWD4l9aAjuXnKTrl5pgTLdYytmTmiZ9PjbKQF1cVkx
-   LzhJoB8SuHNZdymSWHFZnL3JQwgjRWVEDAPO9HmXJ+IkFbMmpmWErl1m6
-   kus2oyi+SQrHw8gZF/Ky+2HasEx0+gSZrjc4OWXeF5KMS125airA2p7l7
-   FDMhjfzyOkrGTWD7DDvBHJ+Cq33sImh1gtwrOW89Vw2Z2Os0DAJ/Dm04g
-   GYIvTKSAffqdwTXfNPNLLKgTwPlJ0e9GGoiJcdmTs93Dz1F/bJgzWjC80
-   uqEpm+lRZSZtIyNyYSb0wwMhJMJvA0/q7s5tLFiWiRX58NEh0Bj8FjdmE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="298073445"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="298073445"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="680761406"
-Received: from ilick-mobl1.ger.corp.intel.com (HELO [10.252.59.91]) ([10.252.59.91])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:03 -0700
-Message-ID: <5b9040e8-fe19-2438-0072-74b2f0d914e3@linux.intel.com>
-Date:   Mon, 19 Sep 2022 10:39:32 +0200
+        Mon, 19 Sep 2022 04:39:58 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71976B863
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:39:57 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id m81so12095279oia.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=mOea9VIe5TKVbrxrtHOk3/1g3G6kjBcfmXLvwxDeUU+CgiVY2ZrqgX3tmyxjSXt2ld
+         PaGqbib2HPV4jeFKZNQoX21R82tjZNiWV/NGxRJLvqI//xvGUAcHtZBS+Uwy6MeBL3KI
+         aDOzmPVS114ObSkYq/CMdKY5npNnmA27VEYefheJJO9GmSv+hLWsJHswHXJGlluqu8B8
+         DAEN4z9lMkQn3Rv4EKCDn+PWt1SmQEayo30bPTUbMYmZtuTO167reRNqiClsE+/ZtCBi
+         roWWNqqnLtxGWKyvxmNBkZEGKsHhXEfuMJpqgwkGYvEwcwfqH128NmyQXZprZ9KUgrnq
+         NQaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=myshPBKWMgA5AYKbBu0fkjlrfr7V0Khdr6X88WdgnMBxgW8rb3XT7PuPjySe8oF7bh
+         ktF4UsicucxoLTgYEg0LG5DoGxlXsaxDX866LT17c1k8iwQWPsc4vDZsUQwJ0pJ0GvTu
+         4neCxDJtyM1lb/nqDa421gzh8rHGtASai8glMuWRXRocw2BO5JOnSww3S+HJEHXOrL4Z
+         RckO1+nX1+CJdHcfhdyBK7CwiFKYspXGBDVr6VyV9q8eKFPzL05CUkotigeWMzbehNrb
+         b5IH+JyJyJWV+xxx6erE38weRRhHhX2FxcqICvghTlGXuttAYdw7JjHjAyequ28ZDL6l
+         9CSw==
+X-Gm-Message-State: ACgBeo37flSaLj2qBD7M0bsYn6AUldRhzV9Rb3rlBMjsAK+QXh/gCX+B
+        nvY9h5k1LamjWHyooIsdu4U8sO1V6ViSD6Q0ZBQ=
+X-Google-Smtp-Source: AA6agR6OIaWBIMLcUt29O9a5oeegOiMaHSvQpoE6sON7p/JvsVuVNQNSbu16wqXip7oSp21+w/8ZKGX32PrruajqD4Y=
+X-Received: by 2002:a05:6808:1717:b0:334:9342:63f1 with SMTP id
+ bc23-20020a056808171700b00334934263f1mr12242787oib.77.1663576796824; Mon, 19
+ Sep 2022 01:39:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] soundwire: cadence: Write to correct address for each
- FIFO chunk
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20220917123517.229153-1-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220917123517.229153-1-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:52c7:b0:b3:4dd7:8c58 with HTTP; Mon, 19 Sep 2022
+ 01:39:56 -0700 (PDT)
+Reply-To: sb9174937@gmail.com
+From:   Susan Bikram <redw07882@gmail.com>
+Date:   Mon, 19 Sep 2022 01:39:56 -0700
+Message-ID: <CAND8bMKQT1SkxPZ7D5k9r+0V2sHqyLm_JTGD5YxP3D6Ctjgfow@mail.gmail.com>
+Subject: Waiting to hear from you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:233 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [redw07882[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [sb9174937[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [redw07882[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear ,
 
+Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
+Please if you can respond, i have an issue that i will be most
+grateful if you could help me deal with it please.
 
-On 9/17/22 14:35, Richard Fitzgerald wrote:
-> _cdns_xfer_msg() must add the fragment offset to msg->addr to get the
-> base target address of each FIFO chunk. Otherwise every chunk will
-> be written to the first 32 register addresses.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
->  drivers/soundwire/cadence_master.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-> index 3ef472049980..ca241bbeadd9 100644
-> --- a/drivers/soundwire/cadence_master.c
-> +++ b/drivers/soundwire/cadence_master.c
-> @@ -569,7 +569,7 @@ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
->  	}
->  
->  	base = CDNS_MCP_CMD_BASE;
-> -	addr = msg->addr;
-> +	addr = msg->addr + offset;
-
-LGTM, probably means that sending a large command broken in several
-pieces never worked. D'oh.
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-Thanks Richard!
-
->  
->  	for (i = 0; i < count; i++) {
->  		data = FIELD_PREP(CDNS_MCP_CMD_DEV_ADDR, msg->dev_num);
+Susan
