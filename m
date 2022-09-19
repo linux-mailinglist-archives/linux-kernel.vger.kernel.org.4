@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423685BCB02
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88D65BCB0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiISLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S229853AbiISLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiISLq5 (ORCPT
+        with ESMTP id S229658AbiISLuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:46:57 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F90125EB0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:46:55 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id u189so29591549vsb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fKtska7zV2Fg+EfIPpoEMTUbCLRCeKFO87xJdNKwlXs=;
-        b=hZ7qcRrATubjNu9J6EKzo2G34ZYs2VQWzktnPNz1RQQB229BKCnI7QQ04IdjOhNpiS
-         noYMJmgZgiJOwbZTutMyxzTqkxPgPt2bgCPdjvnCuYfqkQFGkr2g8fUr4KHgZipb24FI
-         z4KWMWL17qtO0cagxkH24dDB84/YklxtzvCssO2xbuRXTGSlPKw5/CUwi3xTDqnKm31V
-         B/ENsTUQZTliTm92Rd+Gdci81MoL4ag72lK0A4uRGsuVu+2X7tBbpW9OkiuW3nA74Bqp
-         e2Ve3D2HwkJRQR3gRS+T48vN3oD/SSpnkwFNT3Ajl1Rd3wkQf8edxKQGaiOOHkoAnWjw
-         1gYA==
+        Mon, 19 Sep 2022 07:50:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164C52A71D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663588221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CD9LgQ4mipRBRhM2oAmyf57AJ2qYnRbtIiemUERdoCY=;
+        b=h1s1Z4rmy7QFGLxUdHXjSaKD+YJmf+JH/QufS5kZn7PSmoEtX9UyGUkx8wKEtD6tK44M8i
+        OdGNj8wNSm5FUoCRbctpqtZW0h7wuAIPRPl29t48SXHMTVbRCP9IOwTzD02RkI2GKDwEVd
+        25xOuENW8qVd5KhycFE8G9PNP1x6l3A=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-518-QmTBalNBMXq8NP2Cst2SRA-1; Mon, 19 Sep 2022 07:50:19 -0400
+X-MC-Unique: QmTBalNBMXq8NP2Cst2SRA-1
+Received: by mail-ed1-f71.google.com with SMTP id r11-20020a05640251cb00b004516feb8c09so17220364edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:50:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fKtska7zV2Fg+EfIPpoEMTUbCLRCeKFO87xJdNKwlXs=;
-        b=o/q1KJOzZHp7QqXA75cGpHkHftpQXFB7jtr9Q7U5nkLSO+mj1VGi+9rMZw+hGhhT5R
-         MXUdf6sONQoIee2sO3441ErTbo3KqWYHpwrEHBMS69HK2uCLxhkWmWIy03N8nvA5ayeN
-         /feWu0OQg+9YpMCo0B6DQZt3ZQ6xt5qhH4SL8z++IET4af1GYnxwCMeFMoW/ZJzUcakw
-         +/qR52KWjOrsv0VPnLBPs0sMs4Ek2fZ5LVgMtCCw2pY9Q8skBtb2PWD31fvJA9NA6yFT
-         xGbRO+T0d+qKexZPYoxYW1fnJOOG+VKOS8ixLiznWUaVdNwqOCgvNLUx5MmT8HLdL7Fd
-         4OJw==
-X-Gm-Message-State: ACrzQf3oCKtXVMG2Eu9EOina3Z0Ezchcas7F2psfMvCvQcbBtM4Ye+Xb
-        i5G2rERA4sxxFK1FJN278xEq+kep3c5jaL6J99g=
-X-Google-Smtp-Source: AMsMyM4M2ser5bOF6J2igC/p57FX5aXjOfh63rBKsvNVK82zChDx25dnwcFkZuYVUg+agaq0+PNxstXRhVrSUizXXIk=
-X-Received: by 2002:a67:8c43:0:b0:398:6815:d340 with SMTP id
- o64-20020a678c43000000b003986815d340mr5863396vsd.42.1663588014187; Mon, 19
- Sep 2022 04:46:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=CD9LgQ4mipRBRhM2oAmyf57AJ2qYnRbtIiemUERdoCY=;
+        b=8R9SuRxNYZZCPacpLAevMV17VtuUZGSkNi6y0LFsAzdrNJu0hp10ZKjEXZaJzeb4LL
+         kT8lOyknjZaMVziUyWcCAkLA8LQY3294kdJ38j33DoUfuTyfkJToKvt6Tkh+/7bfL9v1
+         c8iKdJwMociuYP6ll40/0VFzodcDR90WuBldmZMDVB6kpdUv01V5xHui6BnwXwCTdnUj
+         OH3fAqcFwrZyzE5FfXOpaVv4jRPP6AD5lFJii0Bt7egvvITPl/zA1+vAPxVEOKYeIbs3
+         y9OozxS26bNOn4Z7ncm9RENlisKkDbPNac0fexvbLIUg2/5foxD3uptQ8TcqmJ12E2gw
+         jfnQ==
+X-Gm-Message-State: ACrzQf2McTolY+P3ljsf8J2rVOSyCZ+tbYOQqgXmkHBFLO5/tPLnw4fk
+        oK/M1PW06zwaE3sDBt8U/AKpZc/OmHrp4+G5lpt+995CjpPmrBbKlgOZxa/AFMzYqlIkeOBzaOM
+        vimUVXQk9B6GsFq2p1d2rF50I
+X-Received: by 2002:a05:6402:180d:b0:453:bd1d:421c with SMTP id g13-20020a056402180d00b00453bd1d421cmr7465908edy.311.1663588218248;
+        Mon, 19 Sep 2022 04:50:18 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7iwknGHBOKUY7UBLj3fK7C/RR/ucIGe/rzb5/tClauXGsdWA9F6hvLkgNTZ+myYqvs4TxyyQ==
+X-Received: by 2002:a05:6402:180d:b0:453:bd1d:421c with SMTP id g13-20020a056402180d00b00453bd1d421cmr7465894edy.311.1663588218081;
+        Mon, 19 Sep 2022 04:50:18 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id b24-20020a17090630d800b0077b523d309asm14661094ejb.185.2022.09.19.04.50.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 04:50:17 -0700 (PDT)
+Message-ID: <dbb9a37c-d155-2026-72f4-b48e835f3d2c@redhat.com>
+Date:   Mon, 19 Sep 2022 12:50:16 +0100
 MIME-Version: 1.0
-References: <CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com>
- <871qs7dav5.wl-tiwai@suse.de> <87r107btti.wl-tiwai@suse.de>
-In-Reply-To: <87r107btti.wl-tiwai@suse.de>
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Mon, 19 Sep 2022 19:46:43 +0800
-Message-ID: <CAB7eexL-H7v5+EB6DVLLZSaV0daHtWhr1gjpuMOspJhJSjq5Lw@mail.gmail.com>
-Subject: Re: KASAN: invalid-free in snd_card_new
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2] platform/x86/amd: pmc: Add sysfs files for SMU
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Cc:     Mark Gross <markgross@kernel.org>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220914141850.259-1-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220914141850.259-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,111 +82,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-I tested this patch with the reproducer and the crash did not trigger again.
+On 9/14/22 15:18, Mario Limonciello wrote:
+> The CPU/APU SMU FW version and program is currently discoverable by
+> turning on dynamic debugging or examining debugfs for the amdgpu
+> driver. To make this more discoverable, create a dedicated sysfs
+> file for it that userspace can parse without debugging enabled.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-On Mon, Sep 19, 2022 at 5:24 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 19 Sep 2022 10:30:54 +0200,
-> Takashi Iwai wrote:
-> >
-> > On Sun, 18 Sep 2022 15:01:11 +0200,
-> > Rondreis wrote:
-> > >
-> > > Hello,
-> > >
-> > > When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
-> > > triggered.
-> > >
-> > > HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
-> > > git tree: upstream
-> > >
-> > > kernel config: https://pastebin.com/raw/xtrgsXP3
-> > > C reproducer: https://pastebin.com/raw/w2sdQWYj
-> > > console output: https://pastebin.com/raw/Yyf7zw2d
-> > >
-> > > Basically, in the c reproducer, we use the gadget module to emulate
-> > > attaching a USB device(vendor id: 0x1bc7, product id: 0x1206, with the
-> > > midi function) and executing some simple sequence of system calls.
-> > > To reproduce this crash, we utilize a third-party library to emulate
-> > > the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
-> > > Just clone this repository, install it, and compile the c
-> > > reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
-> > > the trick.
-> > >
-> > > I would appreciate it if you have any idea how to solve this bug.
-> >
-> > Could you try the patch below?  It looks like a simple double-free in
-> > the code.
->
-> A more proper patch is below.  Please give it a try.
->
->
-> thanks,
->
-> Takashi
->
-> -- 8< --
-> From: Takashi Iwai <tiwai@suse.de>
-> Subject: [PATCH] ALSA: core: Fix double-free at snd_card_new()
->
-> During the code change to add the support for devres-managed card
-> instance, we put an explicit kfree(card) call at the error path in
-> snd_card_new().  This is needed for the early error path before the
-> card is initialized with the device, but is rather superfluous and
-> causes a double-free at the error path after the card instance is
-> initialized, as the destructor of the card object already contains a
-> kfree() call.
->
-> This patch fixes the double-free situation by removing the superfluous
-> kfree().  Meanwhile we need to call kfree() explicitly for the early
-> error path, so it's added there instead.
->
-> Fixes: e8ad415b7a55 ("ALSA: core: Add managed card creation")
-> Reported-by: Rondreis <linhaoguo86@gmail.com>
-> Cc: <stable@vger.kernel.org>
-> Link: https://lore.kernel.org/r/CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 > ---
->  sound/core/init.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/sound/core/init.c b/sound/core/init.c
-> index 193dae361fac..5377f94eb211 100644
-> --- a/sound/core/init.c
-> +++ b/sound/core/init.c
-> @@ -178,10 +178,8 @@ int snd_card_new(struct device *parent, int idx, const char *xid,
->                 return -ENOMEM;
->
->         err = snd_card_init(card, parent, idx, xid, module, extra_size);
-> -       if (err < 0) {
-> -               kfree(card);
-> -               return err;
-> -       }
-> +       if (err < 0)
-> +               return err; /* card is freed by error handler */
->
->         *card_ret = card;
->         return 0;
-> @@ -233,7 +231,7 @@ int snd_devm_card_new(struct device *parent, int idx, const char *xid,
->         card->managed = true;
->         err = snd_card_init(card, parent, idx, xid, module, extra_size);
->         if (err < 0) {
-> -               devres_free(card);
-> +               devres_free(card); /* in managed mode, we need to free manually */
->                 return err;
->         }
->
-> @@ -297,6 +295,8 @@ static int snd_card_init(struct snd_card *card, struct device *parent,
->                 mutex_unlock(&snd_card_mutex);
->                 dev_err(parent, "cannot find the slot for index %d (range 0-%i), error: %d\n",
->                          idx, snd_ecards_limit - 1, err);
-> +               if (!card->managed)
-> +                       kfree(card); /* manually free here, as no destructor called */
->                 return err;
->         }
->         set_bit(idx, snd_cards_lock);           /* lock it */
-> --
-> 2.35.3
->
+> v1->v2:
+>  * Feedback from Barnabás Pőcze
+>    - Fix documentation EOF missing newline
+>    - Use ATTRIBUTE_GROUPS macro
+>    - Add missing NULL at end of attr
+> 
+>  Documentation/ABI/testing/sysfs-amd-pmc | 14 +++++++++
+>  drivers/platform/x86/amd/pmc.c          | 39 +++++++++++++++++++++++++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-amd-pmc
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-amd-pmc b/Documentation/ABI/testing/sysfs-amd-pmc
+> new file mode 100644
+> index 000000000000..5d71c2298f5b
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-amd-pmc
+> @@ -0,0 +1,14 @@
+> +What:		/sys/bus/platform/drivers/amd_pmc/*/smu_fw_version
+> +Date:		October 2022
+> +Contact:	Mario Limonciello <mario.limonciello@amd.com>
+> +Description:	Reading this file reports the version of the firmware loaded to
+> +		System Management Unit (SMU) contained in AMD CPUs and
+> +		APUs.
+> +
+> +What:		/sys/bus/platform/drivers/amd_pmc/*/smu_program
+> +Date:		October 2022
+> +Contact:	Mario Limonciello <mario.limonciello@amd.com>
+> +Description:	Reading this file reports the program corresponding to the SMU
+> +		firmware version.  The program field is used to disambiguate two
+> +		APU/CPU models that can share the same firmware binary.
+> +
+> diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+> index 700eb19e8450..6373c1bce649 100644
+> --- a/drivers/platform/x86/amd/pmc.c
+> +++ b/drivers/platform/x86/amd/pmc.c
+> @@ -455,6 +455,44 @@ static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+>  	return 0;
+>  }
+>  
+> +static ssize_t smu_fw_version_show(struct device *d, struct device_attribute *attr,
+> +				   char *buf)
+> +{
+> +	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> +
+> +	if (!dev->major) {
+> +		int rc = amd_pmc_get_smu_version(dev);
+> +
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	return sysfs_emit(buf, "%u.%u.%u\n", dev->major, dev->minor, dev->rev);
+> +}
+> +
+> +static ssize_t smu_program_show(struct device *d, struct device_attribute *attr,
+> +				   char *buf)
+> +{
+> +	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> +
+> +	if (!dev->major) {
+> +		int rc = amd_pmc_get_smu_version(dev);
+> +
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	return sysfs_emit(buf, "%u\n", dev->smu_program);
+> +}
+> +
+> +static DEVICE_ATTR_RO(smu_fw_version);
+> +static DEVICE_ATTR_RO(smu_program);
+> +
+> +static struct attribute *pmc_attrs[] = {
+> +	&dev_attr_smu_fw_version.attr,
+> +	&dev_attr_smu_program.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(pmc);
+> +
+>  static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
+>  {
+>  	struct amd_pmc_dev *dev = s->private;
+> @@ -935,6 +973,7 @@ static struct platform_driver amd_pmc_driver = {
+>  	.driver = {
+>  		.name = "amd_pmc",
+>  		.acpi_match_table = amd_pmc_acpi_ids,
+> +		.dev_groups = pmc_groups,
+>  	},
+>  	.probe = amd_pmc_probe,
+>  	.remove = amd_pmc_remove,
+
