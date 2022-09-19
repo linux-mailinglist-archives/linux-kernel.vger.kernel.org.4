@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B3F5BC3EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B61B5BC3F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiISIFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S229890AbiISIGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiISIF3 (ORCPT
+        with ESMTP id S229754AbiISIGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:05:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2EA12779
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:05:28 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 792E96601A05;
-        Mon, 19 Sep 2022 09:05:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663574727;
-        bh=zXPTcvw/TefhoaPSogtRftO+DMhN8kcfYVae45CwGHw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CalT+fawla8opHrjOOc6bXxxBDHsNqDG7NXNc82xjT+R/AEjNMGxy3Hdqkxqj3ldK
-         5W1ZxbUKOLqrhRWfQcb9Y7A74ArrN+3zoq3bPkpxa6t/o8b8V2jd5cXM8ZGqrCS/B3
-         4tS7hVImGsEZyn28ytCXbEqLgKua+LbxeMxZDB1xTxTg2KFEKHfgjgOb1skXeKBB3u
-         OUwit8fhknIZqcvNC0b6hw1D+Esx7b0gdR/55U7snrLfEV74c5DhpSTcEDxtzX/qH6
-         gEKhqx1oriiXT4tgCFEv84oFKhzZYwvXB4PwVmnwB7kPvc9XbVzfMzwGgk5GVwQnqd
-         N/2J+CDuqPFsQ==
-Message-ID: <673d61a1-1c92-04b3-523b-1852c7980358@collabora.com>
-Date:   Mon, 19 Sep 2022 10:05:24 +0200
+        Mon, 19 Sep 2022 04:06:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846ADDEB6;
+        Mon, 19 Sep 2022 01:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663574774; x=1695110774;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xCWOlIVedeUSMrJDrVauyFgN/2kkkiDl5exTSJm4CdI=;
+  b=a7mfaJu8b30R6wO/VLmqLphQl+FfRmFpixEcuCKfvSZrJOlOi0m107qA
+   J6RGjHzdBc2zlhRsO46FI+M1Rci+z6rHlrb3iP/8BHl7jytH4v8/Zz6Zw
+   nSaCA9kCZLRfwoYkUjbIBBGrhuZHOYBtti4F2Ex4t3Sux9DAW1/PuGa5R
+   gY0xPnPo62Va7OCGOOP7QhmAGdzk9OIGR6iV4JuYjUmmEHRTbnM9gH4Y5
+   ubelKCsnJCaQ5ZlLtFXnXDCGe8h2SBCArwle6vHyirA9MwCfk9xZlnXzO
+   2pitxsfk64wsTv0Tl0BuLJs4OTFfKJ7vuOOnRBZd056kBe0wbso8lDcNN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="279066021"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="279066021"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:06:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="707473135"
+Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.255.30.38]) ([10.255.30.38])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:06:12 -0700
+Message-ID: <dbf54143-b514-5155-ac2a-9f934e9dd8bc@linux.intel.com>
+Date:   Mon, 19 Sep 2022 16:06:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 3/3] drm/mediatek: dp: Fix warning in
- mtk_dp_video_mute()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] net/ncsi: Add Intel OS2BMC OEM command
 Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie
-Cc:     matthias.bgg@gmail.com, granquet@baylibre.com, daniel@ffwll.ch,
-        jitao.shi@mediatek.com, ck.hu@mediatek.com,
-        liangxu.xu@mediatek.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220916133821.27980-1-rex-bc.chen@mediatek.com>
- <20220916133821.27980-4-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220916133821.27980-4-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Paul Fertser <fercerpav@gmail.com>
+Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220909025716.2610386-1-jiaqing.zhao@linux.intel.com>
+ <YxrWPfErV7tKRjyQ@home.paul.comp>
+ <8eabb29b-7302-d0a2-5949-d7aa6bc59809@linux.intel.com>
+ <Yxrun9LRcFv2QntR@home.paul.comp>
+ <36c12486-57d4-c11d-474f-f26a7de8e59a@linux.intel.com>
+ <YyNIPjNX9MCI3zkK@home.paul.comp>
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+In-Reply-To: <YyNIPjNX9MCI3zkK@home.paul.comp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/09/22 15:38, Bo-Chen Chen ha scritto:
-> Warning:
-> ../drivers/gpu/drm/mediatek/mtk_dp.c: In function ‘mtk_dp_video_mute’:
-> ../drivers/gpu/drm/mediatek/mtk_dp.c:947:23: warning: format ‘%x’
-> expects argument of type ‘unsigned int’, but argument 4 has type ‘long
-> unsigned int’ [-Wformat=]
->    947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
->        |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../include/linux/dev_printk.h:129:27: note: in definition of macro ‘dev_printk’
->    129 |   _dev_printk(level, dev, fmt, ##__VA_ARGS__);  \
->        |                           ^~~
-> ../include/linux/dev_printk.h:163:31: note: in expansion of macro ‘dev_fmt’
->    163 |   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
->        |                               ^~~~~~~
-> ../drivers/gpu/drm/mediatek/mtk_dp.c:947:2: note: in expansion of
-> macro ‘dev_dbg’
->    947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
->        |  ^~~~~~~
-> ../drivers/gpu/drm/mediatek/mtk_dp.c:947:36: note: format string is defined here
->    947 |  dev_dbg(mtk_dp->dev, "smc cmd: 0x%x, p1: 0x%x, ret: 0x%lx-0x%lx\n",
->        |                                   ~^
->        |                                    |
->        |                                    unsigned int
->        |                                   %lx
+On 2022-09-15 23:43, Paul Fertser wrote:
+> Hello,
 > 
-> To fix this issue, we use %s to replace 0x%x.
+> On Tue, Sep 13, 2022 at 10:12:06AM +0800, Jiaqing Zhao wrote:
+>> On 2022-09-09 15:43, Paul Fertser wrote:
+>>> On Fri, Sep 09, 2022 at 03:34:53PM +0800, Jiaqing Zhao wrote:
+>>>>> Can you please outline some particular use cases for this feature?
+>>>>>
+>>>> It enables access between host and BMC when BMC shares the network connection
+>>>> with host using NCSI, like accessing BMC via HTTP or SSH from host. 
+>>>
+>>> Why having a compile time kernel option here more appropriate than
+>>> just running something like "/usr/bin/ncsi-netlink --package 0
+>>> --channel 0 --index 3 --oem-payload 00000157200001" (this example uses
+>>> another OEM command) on BMC userspace startup?
+>>>
+>>
+>> Using ncsi-netlink is one way, but the package and channel id is undetermined
+>> as it is selected at runtime. Calling the netlink command on a nonexistent
+>> package/channel may lead to kernel panic.
 > 
-> Fixes: f70ac097a2cf ("drm/mediatek: Add MT8195 Embedded DisplayPort driver")
-> Reported-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> That sounds like a bug all right. If you can reproduce, it's likely
+> the fix is reasonably easy, please consider doing it.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+It cannot be reproduced stably and varies on NICs, I'm still investigating it,
+it might be some NIC firmware issue. 
 
+>> Why I prefer the kernel option is that it applies the config to all ncsi
+>> devices by default when setting up them. This reduces the effort and keeps
+>> compatibility. Lots of things in current ncsi kernel driver can be done via
+>> commands from userspace, but I think it is not a good idea to have a driver
+>> resides on both kernel and userspace.
+> 
+> How should the developer decide whether to enable this compile-time
+> option for a platform or not? If it's always nice to have why not
+> add the code unconditionally? And if not, are you sure kernel compile
+> time is the right decision point? So far I get an impression a sysfs
+> runtime knob would be more useful.
 
+Disabling Host-BMC traffic ensures the isolation between Host network and BMC's
+management network, some developers/vendors may prefer disable it for security
+concerns. Though having a runtime knob in sysfs would be useful, setting the
+default behavior in kernel config is also useful from my point.
