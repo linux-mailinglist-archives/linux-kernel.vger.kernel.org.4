@@ -2,282 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87405BD754
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AA85BD755
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiISWaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 18:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S229924AbiISWbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiISWar (ORCPT
+        with ESMTP id S229940AbiISWbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 18:30:47 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63ED74F694
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:30:44 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so410402wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=H64L7pxloe6ABjQPB6dOZxxjzAKfBLX2WzxDmXIAW9k=;
-        b=h6hdPIuuXe/NvoMHtntpj69O9G+CzBzEIubkbH2eD3iogfL2/4jClFnCSNBob1GlbG
-         1BLs4fDDqrW6KF18dFxr15CuEee6qnNOoO8z6rvHWf5e+1W2nHhYvZ/ka8AI+GfSK9hC
-         QLmfZtPIogBXCS7MLwijj2Qq5LU9CmllsqYXIliveBUKwMisqFS83sCEm6yjvk2vZnI2
-         d+BH9ApZUt04jn/7AVMFz38gfRupRSDRDuXuqxvX5HYFkSy/p/i5Zqqe6E6LpJeuxAA8
-         HCHK5ae9CptsbVx/vTnWBPL1bQoxPDnSk6bjkXGYMrsHyOYRRLDgpaFw8kKhVPAOhUC3
-         YR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=H64L7pxloe6ABjQPB6dOZxxjzAKfBLX2WzxDmXIAW9k=;
-        b=Y4vQ6R7LoBbohnjBW9QY5WI7DRrWzI9HHbI7GwvOGWb8izY5qTTnfQbwnwLTQCzjr6
-         ghOGO+E0EYMnXDHRi2dqt7VP9tBqvkQIUFIGhuyA5GgCGpXjQrn7wCoJKrf9/GlP9J67
-         Rx2mfra3TIKkak6TggET71pb7JwNE0ZwkDChq2lh/M+40M5Ztz+2NKpKhwO+deSWjwIz
-         Tu/ufeCtmF6gqvJtSatQkhIYtDmWR+9l5pqkPdVMpDr9tN83hmVU7TozuEN7Me5NAvyB
-         LYoHs1eUSaAvB4AE6vxlY/CTHGz6+TJBm4X3t3JqHJe0NTyI7AzKsq4JGS/BAIFe7xFP
-         w3Ew==
-X-Gm-Message-State: ACrzQf0Zulj+t0Zh+eSXffOQIrKW7YLkHFXuag1DFbgofDxE2lOOD6iv
-        IqOfZgibZxxe+nx80H4ujk5nfw==
-X-Google-Smtp-Source: AMsMyM4rhC/gFJIckxCkKzWYA+1S2wvnQLDFWaaAHKzLCWW53xSA/CpQVaBpxQp/saH/1X3R3XoI+g==
-X-Received: by 2002:a05:600c:27d1:b0:3b4:5e9c:23ed with SMTP id l17-20020a05600c27d100b003b45e9c23edmr237361wmb.180.1663626642884;
-        Mon, 19 Sep 2022 15:30:42 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05600c1d1000b003a601a1c2f7sm16407376wms.19.2022.09.19.15.30.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 15:30:42 -0700 (PDT)
-Message-ID: <193bf7d7-ac7c-5bcd-1f2b-f95dc3621f61@sifive.com>
-Date:   Mon, 19 Sep 2022 23:30:41 +0100
+        Mon, 19 Sep 2022 18:31:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B44F6A4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663626663; x=1695162663;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zVkJ3kPa+mINvuZHZ/hajJ3LbNc82czNXNGS2m7Y7TE=;
+  b=M9WMa6MZBHAjppbjd1zkNYMbNIsUwTDhWH4UsPHAzP10LttA6vFI3x4J
+   bR2PB3iQh4Qm+f3MUvNrVEZ80dn2f/5/qh/4JZ3I7nvtsQEQ7y94ZlYie
+   lnJYu2uBKCX0bCmo2WzA0Q7i0sAx6eFHLo82w3nf47lIiZKoOpOlp9ze/
+   Lqfb5CKyoMy44hSD2SeEBHKOyHjrrUwA5DqzE0aZGISj51NkRJXGde/lb
+   O2Sn0e2D3cqcL2FeAW8P9+yJmlAAsDGt87++kHxNsNlXXe7z/ma8KxjkA
+   OBIFFEgf40wZxjo/1wWQanFbMN+fIymwHSvnRmkNmRyf80jT1dBnvqYPi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300357921"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="300357921"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 15:31:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="863742420"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Sep 2022 15:31:01 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaPI4-0002GS-2w;
+        Mon, 19 Sep 2022 22:31:00 +0000
+Date:   Tue, 20 Sep 2022 06:30:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Erdem Aktas <erdemaktas@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: [intel-tdx:kvm-upstream-workaround 207/314]
+ include/x86_64/processor.h:761: warning: "__stringify_1" redefined
+Message-ID: <202209200617.qET1i5ic-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC v4 08/10] pwm: dwc: add of/platform support
-Content-Language: en-GB
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-References: <20220816211454.237751-1-ben.dooks@sifive.com>
- <20220816211454.237751-9-ben.dooks@sifive.com>
- <20220914164720.bjh6tqw6zb66vsyz@pengutronix.de>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220914164720.bjh6tqw6zb66vsyz@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 17:47, Uwe Kleine-König wrote:
-> On Tue, Aug 16, 2022 at 10:14:52PM +0100, Ben Dooks wrote:
->> The dwc pwm controller can be used in non-PCI systems, so allow
->> either platform or OF based probing.
->>
->> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->> ---
->> v4:
->>   - split the of code out of the core
->>   - moved the compile test code earlier
->>   - fixed review comments
->>    - used NS_PER_SEC
->>    - use devm_clk_get_enabled
->> v3:
->>   - changed compatible name
->> ---
->>   drivers/pwm/Kconfig      |  9 +++++
->>   drivers/pwm/Makefile     |  1 +
->>   drivers/pwm/pwm-dwc-of.c | 78 ++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 88 insertions(+)
->>   create mode 100644 drivers/pwm/pwm-dwc-of.c
->>
->> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->> index a9f1c554db2b..f1735653365f 100644
->> --- a/drivers/pwm/Kconfig
->> +++ b/drivers/pwm/Kconfig
->> @@ -192,6 +192,15 @@ config PWM_DWC_PCI
->>   	  To compile this driver as a module, choose M here: the module
->>   	  will be called pwm-dwc-pci.
->>   
->> +config PWM_DWC_OF
->> +	tristate "DesignWare PWM Controller (OF bus)
->> +	depends on PWM_DWC && OF
->> +	help
->> +	  PWM driver for Synopsys DWC PWM Controller on an OF bus.
->> +
->> +	  To compile this driver as a module, choose M here: the module
->> +	  will be called pwm-dwc-of.
->> +
->>   config PWM_EP93XX
->>   	tristate "Cirrus Logic EP93xx PWM support"
->>   	depends on ARCH_EP93XX || COMPILE_TEST
->> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
->> index a70d36623129..d1fd1641f077 100644
->> --- a/drivers/pwm/Makefile
->> +++ b/drivers/pwm/Makefile
->> @@ -15,6 +15,7 @@ obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
->>   obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
->>   obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
->>   obj-$(CONFIG_PWM_DWC)		+= pwm-dwc.o
->> +obj-$(CONFIG_PWM_DWC_OF)	+= pwm-dwc-of.o
->>   obj-$(CONFIG_PWM_DWC_PCI)	+= pwm-dwc-pci.o
->>   obj-$(CONFIG_PWM_EP93XX)	+= pwm-ep93xx.o
->>   obj-$(CONFIG_PWM_FSL_FTM)	+= pwm-fsl-ftm.o
->> diff --git a/drivers/pwm/pwm-dwc-of.c b/drivers/pwm/pwm-dwc-of.c
->> new file mode 100644
->> index 000000000000..d18fac287325
->> --- /dev/null
->> +++ b/drivers/pwm/pwm-dwc-of.c
->> @@ -0,0 +1,78 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * DesignWare PWM Controller driver OF
->> + *
->> + * Copyright (C) 2022 SiFive, Inc.
->> + */
->> +
->> +#include <linux/bitops.h>
->> +#include <linux/export.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/clk.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/pwm.h>
->> +#include <linux/io.h>
->> +
->> +#include "pwm-dwc.h"
->> +
->> +static int dwc_pwm_plat_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct dwc_pwm *dwc;
->> +	int ret;
->> +
->> +	dwc = dwc_pwm_alloc(dev);
->> +	if (!dwc)
->> +		return -ENOMEM;
->> +
->> +	dwc->base = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(dwc->base))
->> +		return dev_err_probe(dev, PTR_ERR(dwc->base),
->> +				     "failed to map IO\n");
-> 
-> devm_platform_ioremap_resource() already emits an error message.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   552dd80c48f67ca01bcdd10667e0c11efd375177
+commit: 31055e94daecbccb36f6f4bfde26a583b2790a51 [207/314] KVM: selftest: Add helper functions to create TDX VMs
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # https://github.com/intel/tdx/commit/31055e94daecbccb36f6f4bfde26a583b2790a51
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 31055e94daecbccb36f6f4bfde26a583b2790a51
+        make O=/tmp/kselftest headers
+        make O=/tmp/kselftest -C tools/testing/selftests
 
-ok, fixed
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All error/warnings (new ones prefixed by >>):
 
->> +
->> +	dwc->clk = devm_clk_get_enabled(dev, "timer");
->> +	if (IS_ERR(dwc->clk))
->> +		return dev_err_probe(dev, PTR_ERR(dwc->clk),
->> +				     "failed to get timer clock\n");
->> +
->> +	clk_prepare_enable(dwc->clk);
-> 
-> You don't need clk_prepare_enable() as you used devm_clk_get_enabled().
-> 
-> (Otherwise, when keeping clk_prepare_enable() you need to check the
-> return value.)
+   In file included from lib/kvm_util.c:11:
+>> include/x86_64/processor.h:761: warning: "__stringify_1" redefined
+     761 | #define __stringify_1(x) #x
+         | 
+   In file included from include/x86_64/processor.h:18,
+                    from lib/kvm_util.c:11:
+   ../../../../tools/include/linux/stringify.h:10: note: this is the location of the previous definition
+      10 | #define __stringify_1(x...)     #x
+         | 
+   In file included from lib/kvm_util.c:11:
+>> include/x86_64/processor.h:762: warning: "__stringify" redefined
+     762 | #define __stringify(x)  __stringify_1(x)
+         | 
+   In file included from include/x86_64/processor.h:18,
+                    from lib/kvm_util.c:11:
+   ../../../../tools/include/linux/stringify.h:11: note: this is the location of the previous definition
+      11 | #define __stringify(x...)       __stringify_1(x)
+         | 
+   lib/kvm_util.c: In function '____vm_create':
+   lib/kvm_util.c:191:20: error: 'type' undeclared (first use in this function)
+     191 |         vm->type = type;
+         |                    ^~~~
+   lib/kvm_util.c:191:20: note: each undeclared identifier is reported only once for each function it appears in
+--
+   In file included from lib/perf_test_util.c:9:
+>> include/x86_64/processor.h:761: warning: "__stringify_1" redefined
+     761 | #define __stringify_1(x) #x
+         | 
+   In file included from include/x86_64/processor.h:18,
+                    from lib/perf_test_util.c:9:
+   ../../../../tools/include/linux/stringify.h:10: note: this is the location of the previous definition
+      10 | #define __stringify_1(x...)     #x
+         | 
+   In file included from lib/perf_test_util.c:9:
+>> include/x86_64/processor.h:762: warning: "__stringify" redefined
+     762 | #define __stringify(x)  __stringify_1(x)
+         | 
+   In file included from include/x86_64/processor.h:18,
+                    from lib/perf_test_util.c:9:
+   ../../../../tools/include/linux/stringify.h:11: note: this is the location of the previous definition
+      11 | #define __stringify(x...)       __stringify_1(x)
+         | 
+--
+   In file included from lib/x86_64/processor.c:10:
+>> lib/x86_64/tdx.h:6:10: fatal error: ../kvm_util_internal.h: No such file or directory
+       6 | #include "../kvm_util_internal.h"
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-ok, fixed. I didn't notice that when changing to devm_
-
-> 
->> +	dwc->clk_ns = NSEC_PER_SEC / clk_get_rate(dwc->clk);
-> 
-> I think I already pointed out this is non-optimal.
-> 
-> Later you use clk_ns in __dwc_pwm_configure_timer():
-> 
-> 	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, dwc->clk_ns);
-> 
-> So what you really want here is:
-> 
-> 	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle * clk_get_rate(dwc->clk), NSEC_PER_SEC);
-> 
-> With for example clk_get_rate(dwc->clk) = 201171875 and duty_cycle =
-> 4096 you now get clk_ns = 4 (while the exact value is 4.97087..), tmp =
-> 1024, while the exact value is 824.
-> 
-> So the idea is to add a clkrate member to the private driver struct, let
-> it default to 100000000 for the pci case and use the line I suggested
-> above.
-
-ok, will consider keeping the rate in hz and modifiying the pci
-version to use 10 * NSEC_PER_SEC for the rate.
-
-I've been trying to avoid changing the pci case, but I think for
-anything with a clk pointer we should be doing clk_get_rate in the
-calc code
-
-> 
->> +
->> +	ret = devm_pwmchip_add(dev, &dwc->chip);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return 0;
-> 
-> This is equivalent to
-> 
-> 	return ret;
-
-Will sort that out.
-
-
->> +}
->> +
->> +static int dwc_pwm_plat_remove(struct platform_device *pdev)
->> +{
->> +	struct dwc_pwm *dwc = platform_get_drvdata(pdev);
->> +
->> +	clk_disable_unprepare(dwc->clk);
->> +	return 0;
->> +}
-> 
-> When dropping clk_prepare_enable() the .remove callback can go away,
-> too.
-
-thanks, spotted that one a while ago.
-
->> +
->> +static const struct of_device_id dwc_pwm_dt_ids[] = {
->> +	{ .compatible = "snps,dw-apb-timers-pwm2" },
->> +	{ },
->> +};
->> +MODULE_DEVICE_TABLE(of, dwc_pwm_dt_ids);
->> +
->> +static struct platform_driver dwc_pwm_plat_driver = {
->> +	.driver = {
->> +		.name		= "dwc-pwm",
->> +		.of_match_table  = dwc_pwm_dt_ids,
->> +	},
->> +	.probe	= dwc_pwm_plat_probe,
->> +	.remove	= dwc_pwm_plat_remove,
->> +};
->> +
->> +module_platform_driver(dwc_pwm_plat_driver);
->> +
->> +MODULE_ALIAS("platform:dwc-pwm-of");
->> +MODULE_AUTHOR("Ben Dooks <ben.dooks@sifive.com>");
->> +MODULE_DESCRIPTION("DesignWare PWM Controller");
->> +MODULE_LICENSE("GPL");
-> 
-> Best regards
-> Uwe
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
