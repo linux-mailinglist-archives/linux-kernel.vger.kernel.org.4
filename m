@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855255BCCBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62F45BCCC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiISNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S230321AbiISNST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiISNRP (ORCPT
+        with ESMTP id S230041AbiISNSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:17:15 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55C927CCF;
-        Mon, 19 Sep 2022 06:17:13 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id y5so3926244wrh.3;
-        Mon, 19 Sep 2022 06:17:13 -0700 (PDT)
+        Mon, 19 Sep 2022 09:18:15 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A4424082;
+        Mon, 19 Sep 2022 06:18:14 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id fs14so27807798pjb.5;
+        Mon, 19 Sep 2022 06:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=JQnXUuOJXq/53Yv1BXw4BU5ty1+Q8lF8nWyvKAwQnVk=;
-        b=djAwBlz4IYY0rUhhPbPSWE5HYq9S/iI4r09rzmHuXTKMoHBZMEbHVraoH+31PHYC8W
-         PaI/qr4jI1tuIYiX1rsMt6zZdteqBWUbeY3RFJyCDsmRoojctjj6aWgWtG+eU3zNfJ/j
-         4HtGVnaYijO5BQSDfHs5bRDpBwD0vKSK36ElNPTndJE7sRjJS6t+SHMySFr2/HV+nL2H
-         h8EG24wZj0tfl/hWpfNNnglczOVpb9DH/iPHBqOvQ8fV5rrg43c6K5lNUD4mentn42qM
-         D9Zue07KaQgYuofW/9kXCvBGBqaeyX+/X+lwPzyJnQgoFyb2UvttuEAlWFZ8ekNqIUD3
-         k3dg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=G5PIQAim5D/NGZ1Hfe4AxnReb1kPVNN7aiFtqcVOFts=;
+        b=JI//1M4tK3EtoIgkARNb77ijPKU7BETT+Z+Zf4xaqK0aOzOyL8QGMgez4cc4s5EzNG
+         AmPR3yZV0ER71nH5d6HmxCKOVgBAuCBKWPVBq0tPWpZ0ANlSN44aw/5poVCsmD1oYv72
+         DZfpHaZ4xNldTsyft7LDxfBY2kjoYkdOs44NAxdeV/Ngj99UP0nqscfq89Wzxl6OBX/g
+         a68YGfbQHjkp7Z7JeOO6zhKsq97RUu4NAAF6kYVcSdoxYEFsfXDNURTb+bXNqmTq0Cvi
+         cY+9D+VztKeKhgIH9k9DpC3wY6XxRX/Lb1g7ni30C0z693vQ29avszhB76rKbrZEpo/x
+         osXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JQnXUuOJXq/53Yv1BXw4BU5ty1+Q8lF8nWyvKAwQnVk=;
-        b=T31GtAK8gUSq9nHSGxbk1yyoPQMYpF3u8cmZEk1KypGpkCGXi3DkALr/wKG590ILEP
-         LFb8HUGPl2I3F75ONSQaaaBKRpPEHfTFk6t/Q9wYrQy0l16eOGJykkAhJPrX5cj7Z9y8
-         zUym8w5fZRS67dppZ7T/WauYE770coayD/sVeUWKvAxIFz8b8wegxAym40kXK8fLt2CA
-         qfAYnV6DPurp8qw+AhTaWxlC7AfvuNLAIHd38+7rg/Q5VlUPPvXQ04uriPLqEs/SGr2W
-         9PkoLtKRANE9Emuuz+J4ZRzgwg9+9gCV1gyDqCiVZBq7iaJ2keK2B49JBU4ot0Iavbp3
-         ILeA==
-X-Gm-Message-State: ACrzQf0tx+BwMndwZBDe+ce8ucEf3at3Qs11HrL7RU2PoDDH3rpaQitm
-        lmftxbgHART1ZdEMcP4AO2c=
-X-Google-Smtp-Source: AMsMyM6At6wZZKE3giXauF/PxG0cXvEkzICAJxueaR/qWjhvyI9oPNaCyMGvp6xsR2W7eU60d1x3ug==
-X-Received: by 2002:a5d:6c6f:0:b0:22a:7778:6ea2 with SMTP id r15-20020a5d6c6f000000b0022a77786ea2mr11104709wrz.15.1663593431937;
-        Mon, 19 Sep 2022 06:17:11 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a6125562e1sm14346610wmq.46.2022.09.19.06.17.10
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=G5PIQAim5D/NGZ1Hfe4AxnReb1kPVNN7aiFtqcVOFts=;
+        b=redEdwUcOb2LOP1RUEgixayguE8L9oDJdUs6HcDgIgqYbOpHa0agCZScr1/6gdAfpM
+         BsYl/peENUen04NGhEIyN0fkyHYb4icFikQ51pj3CrSoKg+R3Z4QtrLrS17LJn1hDPY/
+         aFAbRaeDDFA/tncOve5DKEWs4O9wtPWFVYp4zypb48L7kFCnXfjFr5dBh169xkwceTDj
+         HDninFwqcSpnfcykpYCh/v1K+e1s10abTf6VLVB7z03Rr3LR41vc1ZAqHYVkdE2kOIjM
+         blG8VXKGnQ4kUMlldAQLYHZN3SUg0MNc5E6d3kbkLWwtrz4VA2CeJuD1Yqz7Ato62uYC
+         62Ug==
+X-Gm-Message-State: ACrzQf1cO2CqP++FICfEygTv61RtLUeIJyIoIQg8fcklud2z1NtPd3Mc
+        BqHaQxjRwmdB5ljeu7sU3Ds=
+X-Google-Smtp-Source: AMsMyM5D6K7xXJi89SdzXmJep5uZFcYUH297ecSp2h7WYUdyo6NNgw6/J7zE4aF+owPSDnYnKkInIg==
+X-Received: by 2002:a17:90b:350a:b0:200:a7b4:64f7 with SMTP id ls10-20020a17090b350a00b00200a7b464f7mr31347346pjb.113.1663593494354;
+        Mon, 19 Sep 2022 06:18:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902a38f00b001785dddc703sm11554321pla.120.2022.09.19.06.18.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:17:11 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 14:17:09 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220919 due to 3f74cd046fbe ("ata:
- libahci_platform: Parse ports-implemented property in resources getter")
-Message-ID: <Yyhr1VW3Kn30E/Jv@debian>
+        Mon, 19 Sep 2022 06:18:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 19 Sep 2022 06:18:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
+        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v5 16/21] dt-bindings: hwmon: (mr75203) add
+ "moortec,ts-series" property
+Message-ID: <20220919131812.GA3547013@roeck-us.net>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-17-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220908152449.35457-17-farbere@amazon.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +77,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Thu, Sep 08, 2022 at 03:24:44PM +0000, Eliav Farber wrote:
+> Add optional "moortec,ts-series" property to define the temperature
+> equation and coefficients that shall be used to convert the digital
+> output to value in milli-Celsius.
+> Supported series: 5 (default) and 6.
+> 
+> Series 5:
+>   T = G + H * (n / cal5 - 0.5) + J * F
+> Where: G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
+> 
+> Series 6:
+>    T = G + H * (n / cal5 - 0.5)
+> Where: G = 57.4, H = 249.4, cal5 = 4096
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-The builds of arm allmodconfig have failed to build next-20220919
-with the error:
+Applied to hwmon-next.
 
-drivers/ata/ahci_st.c: In function 'st_ahci_probe':
-drivers/ata/ahci_st.c:147:24: error: unused variable 'dev' [-Werror=unused-variable]
-  147 |         struct device *dev = &pdev->dev;
-      |                        ^~~
-
-
-git bisect pointed to 3f74cd046fbe ("ata: libahci_platform: Parse ports-implemented property in resources getter")
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
--- 
-Regards
-Sudip
-
+Thanks,
+Guenter
