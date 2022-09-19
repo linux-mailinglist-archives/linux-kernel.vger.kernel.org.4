@@ -2,166 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F945BD67A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE26D5BD682
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiISVfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S229974AbiISVhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 17:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiISVex (ORCPT
+        with ESMTP id S229962AbiISVhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:34:53 -0400
-Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E54B65F3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:34:46 -0700 (PDT)
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
-        with SMTP; 20 Sep 2022 00:34:40 +0300
-Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 28JLYdWq023082;
-        Mon, 19 Sep 2022 17:34:39 -0400
-Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 28JLYdQw008208;
-        Mon, 19 Sep 2022 17:34:39 -0400
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>, robh@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: [PATCH v4 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
-Date:   Mon, 19 Sep 2022 17:34:31 -0400
-Message-Id: <20220919213431.8045-9-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220919213431.8045-1-asmaa@nvidia.com>
-References: <20220919213431.8045-1-asmaa@nvidia.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 17:37:08 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61584D834
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:36:25 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id g15-20020aa7874f000000b0053e8b9630c7so411697pfo.19
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=gBPDRnXdyvF4xAXr245jZgfFcKRBxlvo8nsBRpPChFM=;
+        b=pBQdFlYTW5SMJZLEMS2PIeY/jXnxQHmBdVPB0G13hsQ/jjd473V1RsISyxaNwQYjyP
+         yH1LP0v5pq5LDRQLhpdkRO31sgmsuTaBoWRWpfl3oJObc2DyxrjOIJQRM78202UbhSDs
+         I3YXeiX+4M9mVmC/jNaFEUhrogAJuDu88LJDMqkZifaAjpi+hYvR1xpnjM+HACqJ94bB
+         LajxRGIq9aCsw8DTPeTOjXxhSvXNlH3t+YvGLSTEWAQ4/W3reGAiQWXWsg7YBT9/1i1f
+         x7kIHKYQ/xdvouPjm2aKVRXkjRJtsiVBtIUblxJ9idoqr+i9hG1fedynPAQfkv10QNB9
+         TPhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gBPDRnXdyvF4xAXr245jZgfFcKRBxlvo8nsBRpPChFM=;
+        b=DgAWPAR4eKMtuZu0SF1Zr7O35puYf12VqIfttIY9IlG8EO0vx5559O/QzvWAFW+8zI
+         auIXwxDVT0ZzDV7MgwvzEes4gmfy9ZC0ndMMFtqETyr68C9i5m0D2rpu7Pkt7nt+r9tf
+         a64J+GJn0ve+VdT7Aw47agl7MAU/xNft3x0+A0lPAc542H7Oo9tjWZDa4Isp2/qk0KiH
+         QOqhaAcZJyNL5SlnQL0NnlWUl/75dB9jK076Akm5paTF6SRGM1+orFoiPY1kyCSusCPk
+         LR6+IWr+OILk2unxscIBQ36d4GT8SLP4WVPM/z7j4m2Aq7tMKxydYeRj+ZXMx0/wR5wP
+         7nVw==
+X-Gm-Message-State: ACrzQf3lmudzHlWM8WJrttKdx1oHkuStmn6RDqUpq3C9ZHK6HQxvGYCG
+        IjfceIvxwa7LS6j0GHyOGQsyam4QXQ6xjQ==
+X-Google-Smtp-Source: AMsMyM5N8FWtYCLqNF0zfkdeNsEsbGZbL/ZlbqHTPultDwLR5KPcpZgvQuO9hx4F8/FG9yKpgr9DjPIcxlzz6A==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:90b:254a:b0:200:53f:891d with SMTP id
+ nw10-20020a17090b254a00b00200053f891dmr246179pjb.168.1663623385293; Mon, 19
+ Sep 2022 14:36:25 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 21:36:22 +0000
+In-Reply-To: <20220919180634.45958-2-ryncsn@gmail.com>
+Mime-Version: 1.0
+References: <20220919180634.45958-1-ryncsn@gmail.com> <20220919180634.45958-2-ryncsn@gmail.com>
+Message-ID: <20220919213622.s3w2v2q7ktvbrpha@google.com>
+Subject: Re: [PATCH v2 1/2] mm: memcontrol: use memcg_kmem_enabled in count_objcg_event
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Kairui Song <kasong@tencent.com>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
-resource was broken down to 3 separate resources "Smbus timer",
-"Smbus master" and "Smbus slave" to accommodate for BlueField-3
-SoC registers' changes.
+On Tue, Sep 20, 2022 at 02:06:33AM +0800, Kairui Song wrote:
+> From: Kairui Song <kasong@tencent.com>
+> 
+> There are currently two helpers for checking if cgroup kmem
+> accounting is enabled:
+> 
+> - mem_cgroup_kmem_disabled
+> - memcg_kmem_enabled
+> 
+> mem_cgroup_kmem_disabled is a simple helper that returns true
+> if cgroup.memory=nokmem is specified, otherwise returns false.
+> 
+> memcg_kmem_enabled is a bit different, it returns true if
+> cgroup.memory=nokmem is not specified and there was at least one
+> non-root memory control enabled cgroup ever created. This help improve
+> performance when kmem accounting was not actually activated. And it's
+> optimized with static branch.
+> 
+> The usage of mem_cgroup_kmem_disabled is for sub-systems that need to
+> preallocate data for kmem accounting since they could be initialized
+> before kmem accounting is activated. But count_objcg_event doesn't
+> need that, so using memcg_kmem_enabled is better here.
+> 
+> Signed-off-by: Kairui Song <kasong@tencent.com>
 
-Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 49 ++++++++++++++-----
- 1 file changed, 37 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-index 93198d5d43a6..12dbe7e7967e 100644
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-@@ -8,6 +8,7 @@ title: Mellanox I2C SMBus on BlueField SoCs
- 
- maintainers:
-   - Khalil Blaiech <kblaiech@nvidia.com>
-+  - Asmaa Mnebhi <asmaa@nvidia.com>
- 
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
-@@ -17,14 +18,19 @@ properties:
-     enum:
-       - mellanox,i2c-mlxbf1
-       - mellanox,i2c-mlxbf2
-+      - mellanox,i2c-mlxbf3
- 
-   reg:
-     minItems: 3
-+    maxItems: 6
-     items:
-       - description: Smbus block registers
-       - description: Cause master registers
-       - description: Cause slave registers
-       - description: Cause coalesce registers
-+      - description: Smbus timer registers
-+      - description: Smbus master registers
-+      - description: Smbus slave registers
- 
-   interrupts:
-     maxItems: 1
-@@ -35,6 +41,13 @@ properties:
-       bus frequency used to configure timing registers;
-       The frequency is expressed in Hz. Default is 100000.
- 
-+  resource_version:
-+    enum: [ 0, 1 ]
-+    description:
-+      Version of the device tree. resource_version = 0 when the driver uses
-+      Smbus block resource. resource_version = 1 when the driver uses Smbus
-+      timer, Smbus master and Smbus slave resources.
-+
- required:
-   - compatible
-   - reg
-@@ -42,18 +55,6 @@ required:
- 
- unevaluatedProperties: false
- 
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - mellanox,i2c-mlxbf1
--
--then:
--  properties:
--    reg:
--      maxItems: 3
--
- examples:
-   - |
-     i2c@2804000 {
-@@ -61,8 +62,13 @@ examples:
-         reg = <0x02804000 0x800>,
-               <0x02801200 0x020>,
-               <0x02801260 0x020>;
-+              <0x00000001 0x1>;
-+              <0x02804000 0x40>,
-+              <0x02804200 0x200>,
-+              <0x02804400 0x200>,
-         interrupts = <57>;
-         clock-frequency = <100000>;
-+        resource_version = <1>;
-     };
- 
-   - |
-@@ -72,6 +78,25 @@ examples:
-               <0x02808e00 0x020>,
-               <0x02808e20 0x020>,
-               <0x02808e40 0x010>;
-+              <0x02808800 0x040>;
-+              <0x02808a00 0x200>,
-+              <0x02808c00 0x200>,
-         interrupts = <57>;
-         clock-frequency = <400000>;
-+        resource_version = <1>;
-+    };
-+
-+  - |
-+    i2c@2808800 {
-+        compatible = "mellanox,i2c-mlxbf3";
-+        reg = <0x00000001 0x1>,
-+              <0x13404400 0x020>,
-+              <0x13404420 0x020>,
-+              <0x13404440 0x010>;
-+              <0x13404480 0x40>,
-+              <0x13404200 0x200>,
-+              <0x13404000 0x200>,
-+        interrupts = <35>;
-+        clock-frequency = <400000>;
-+        resource_version = <1>;
-     };
--- 
-2.30.1
-
+Acked-by: Shakeel Butt <shakeelb@google.com>
