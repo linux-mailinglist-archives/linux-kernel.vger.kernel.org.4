@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DB85BD418
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B765BD417
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiISRvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S231474AbiISRv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiISRvK (ORCPT
+        with ESMTP id S231403AbiISRvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Sep 2022 13:51:10 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB65343E7A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:50:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0012644556
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663609856; x=1695145856;
+  t=1663609858; x=1695145858;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OKogfO4K6IMOMgoifEN6M6CT/AXHoyqz1X/Mml5qstY=;
-  b=QvyNn1DSZBhA3/FEEA7XKqWQyKIPfJBfR4U3IxitQ9tFB2cZ270pRXPC
-   BpIPJUzoxMU21uvgHfsWKi1qQPts4hGnpg9DgXtJqq0yJXx8NlLwz6bMU
-   wmpeN7sgUEtnu+Dh9b2Fwuh2h9AAMUszC9aWneKBBgj7xhHClMz+tPB/5
-   41HsGfxJMsG1/132bg2yq4yw2agiQyIN2A6307dTVDa6w3RF6WpiZNxWl
-   v7eMHnDxkTXCgytYgcbvkm/bYKvffSaXXTJ7nIhlu4sV/pNqGUCebi0hr
-   Ws2ZYK0OzlOJ6ESCDKjSoM63HKSpHahy81P4M3raZBC1nUuqc/x3w23uW
+  bh=081EPmTS3y815iiCscPub7rqoLD2JH0w0KdPzW1+ikI=;
+  b=C7RPc5Svqlhk+sS2TI7iLb3HY3u/3nhO243uvBRLyya2QPKefVXS7ZHI
+   gSR7AJXDtk0APlLxV2heqkh1Pg/TPtwInHDmZR9gWGQSo/YXy3nyX7QUr
+   3Og2uTNZtP1CZ/dhOYVBZGNhY13r4X190I/064DyGULNXG3rpPdtMwj68
+   xLlJ0p9djA46pLyMVmgIpP3Olzw2ruxCJObRCYnQFRFZ/57fWItuLsMzu
+   fu+1KjjKQNTQqs9Ka2xK2eFdSiVmmh9DITSey2hhCmh2udv7ie/vvlLdO
+   VLKWeIQ9ppJZud/I6JnPGWB/+wnwh6rOqA9SXh6GPGyF2Sep+SqsbNGg+
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363429295"
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363429319"
 X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="363429295"
+   d="scan'208";a="363429319"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:50:55 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:50:57 -0700
 X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="863658499"
+   d="scan'208";a="863658548"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:50:54 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:50:56 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 08/11] soundwire: intel: simplify read ops assignment
-Date:   Tue, 20 Sep 2022 01:57:18 +0800
-Message-Id: <20220919175721.354679-9-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 09/11] soundwire: intel: introduce intel_shim_check_wake() helper
+Date:   Tue, 20 Sep 2022 01:57:19 +0800
+Message-Id: <20220919175721.354679-10-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220919175721.354679-1-yung-chuan.liao@linux.intel.com>
 References: <20220919175721.354679-1-yung-chuan.liao@linux.intel.com>
@@ -60,39 +60,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-We can assign the right callback directly in the ops structure. No
-functionality change.
+Add new helper before code partitioning in order to avoid direct read
+from specific register. No functionality change.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/intel.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/soundwire/intel.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 4eeb2b5c1594..66aab02b9323 100644
+index 66aab02b9323..2ca924622153 100644
 --- a/drivers/soundwire/intel.c
 +++ b/drivers/soundwire/intel.c
-@@ -1261,7 +1261,7 @@ static int intel_prop_read(struct sdw_bus *bus)
+@@ -344,6 +344,17 @@ static void intel_shim_init(struct sdw_intel *sdw)
+ 	usleep_range(10, 15);
  }
  
- static struct sdw_master_ops sdw_intel_ops = {
--	.read_prop = sdw_master_read_prop,
-+	.read_prop = intel_prop_read,
- 	.override_adr = sdw_dmi_override_adr,
- 	.xfer_msg = cdns_xfer_msg,
- 	.xfer_msg_defer = cdns_xfer_msg_defer,
-@@ -1304,8 +1304,7 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
++static int intel_shim_check_wake(struct sdw_intel *sdw)
++{
++	void __iomem *shim;
++	u16 wake_sts;
++
++	shim = sdw->link_res->shim;
++	wake_sts = intel_readw(shim, SDW_SHIM_WAKESTS);
++
++	return wake_sts & BIT(sdw->instance);
++}
++
+ static void intel_shim_wake(struct sdw_intel *sdw, bool wake_enable)
+ {
+ 	void __iomem *shim = sdw->link_res->shim;
+@@ -1491,8 +1502,6 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
+ 	struct device *dev = &auxdev->dev;
+ 	struct sdw_intel *sdw;
+ 	struct sdw_bus *bus;
+-	void __iomem *shim;
+-	u16 wake_sts;
  
- 	sdw_cdns_probe(cdns);
+ 	sdw = auxiliary_get_drvdata(auxdev);
+ 	bus = &sdw->cdns.bus;
+@@ -1503,10 +1512,7 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
+ 		return 0;
+ 	}
  
--	/* Set property read ops */
--	sdw_intel_ops.read_prop = intel_prop_read;
-+	/* Set ops */
- 	bus->ops = &sdw_intel_ops;
+-	shim = sdw->link_res->shim;
+-	wake_sts = intel_readw(shim, SDW_SHIM_WAKESTS);
+-
+-	if (!(wake_sts & BIT(sdw->instance)))
++	if (!intel_shim_check_wake(sdw))
+ 		return 0;
  
- 	/* set driver data, accessed by snd_soc_dai_get_drvdata() */
+ 	/* disable WAKEEN interrupt ASAP to prevent interrupt flood */
 -- 
 2.25.1
 
