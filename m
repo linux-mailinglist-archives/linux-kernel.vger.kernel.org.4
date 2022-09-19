@@ -2,204 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70E95BD1E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538115BD1EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiISQKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S229492AbiISQK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiISQKP (ORCPT
+        with ESMTP id S229688AbiISQK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:10:15 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF8A2AE3C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:10:12 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id f14so46769983lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:10:12 -0700 (PDT)
+        Mon, 19 Sep 2022 12:10:56 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B124BD8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:10:54 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id i26so47734169lfp.11
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=klevHm3vypIn+i0yQtuh2tQgsYKrfGVP5Z+xZ4SLjKs=;
-        b=ZWK6YGLx9xp+wN7U3o4oknV3d7wzEt6zdkIwvLYoMR6GHwwihBnPuQsqWLF0E32rVI
-         XWrgHrqAKsnmr2hYIz4w2o0kO+dzIj3hREoT4LKrx2QhuxcShGO4Hxn/FoOHQnnOIEwa
-         DOVcvZm2pyQpKKMr7N+pt2/H35QT9+OITZEH0=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Vz0a4w2GFyT8m3ACo8Kto1JVNekh6584R9ZYJZE84xM=;
+        b=jlllRahwq5fc/r6/tku2rInirf9zZga93Nq37DaOGeFJUI4dV4I9Lk/rgL8Mdca/DH
+         AmXKnMKE7/gIsU2zd38Z6Mcqx2oAAj31a5ORAeDnz35kmEgEUBonzaA7FZDPlzBgce7x
+         B5w2pY6XOkuCWyUsMkJkjBO347uFPpDE3RweGZZoaBdp/5WZksRo/C6eIhUaC/Ka/XWh
+         0tGSwl85xfE105VYQW4vT058ZAORdp8KM6ddqVTi6sXv7k+4BX2uBb2R5lRkjTIp4pXA
+         gpVH/rrVvylPRObiHwtDkfTf5tTJ3lZFxTvAvIrDpHbOc9s8PW0am3CVF972M+GBV3qi
+         E4Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=klevHm3vypIn+i0yQtuh2tQgsYKrfGVP5Z+xZ4SLjKs=;
-        b=T4LXnpVKOEXnDsrOvKk2RSd4+yciD73RIW38y8zHR0aPeIVEgBWtRgcsxH77tmqIt4
-         S5wG785UzH+VMBRmLf1ontcDpgm+lG/w8mnq6+bgWmRUR+amHdD8E167OEXCtxieOfmF
-         VukCsBNOgndr5h2+PdquZyGlKe54SnNa3ZGijjdkYzaSxn4rtYkR31ItLPFU5JH7JKQa
-         US68D2+FmJFtMaZ4XFwMlMnvHGOjvQTsRFETX9Ln/kreaA4PuFyyHyZYdBxmoOMZSi2I
-         XOr6qh+vBjiHW5xYpDaDN+u/mSsFgRgOhBnApyoFKmgvAc30f3D8AuLbTJeesVoi19P2
-         d48w==
-X-Gm-Message-State: ACrzQf1Q99iBdBFgEgY1Pi83oAmF3rVI7+not7gCtG770sLS6vn76NhZ
-        ju3g54olCI9UyysLB6wlKeH9f6pNzwyHQwbF
-X-Google-Smtp-Source: AMsMyM5di7m6iED6smexdxSQVcv4MtVqK3P1Tim+p0T3Fbb1SXu8B0Jm7unnrM+ReD0uqSvu57yoTg==
-X-Received: by 2002:ac2:4e0d:0:b0:49c:d593:9d6c with SMTP id e13-20020ac24e0d000000b0049cd5939d6cmr6717332lfr.37.1663603809356;
-        Mon, 19 Sep 2022 09:10:09 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id r13-20020a2eb60d000000b0026c4374a2a4sm1097900ljn.139.2022.09.19.09.10.08
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Vz0a4w2GFyT8m3ACo8Kto1JVNekh6584R9ZYJZE84xM=;
+        b=tbDZVIl50kZ8X9CHvu6t1AdsrLWdDvb/DvyKm+vQofB48lJXbq2J4mVafqnE1/eWHw
+         aOtPiQEBOm/PTAyFGf3uak+gKzI3AJewdWiobGfHNwkThpqEvTXkg3V42Zn0NBva8BT3
+         o1xb7dYJGGIExUaBGJa89JnREVN7NwqkzDSiHqz1+HHxrk5BMpbfhjJqtoFa0KeyvBVj
+         R2IoE9vc+Vm1F/DWqQU1Gbf7gQfsMM0AnOPyGDEKqIZKh3MCk2BhZZP1r3PwzM6JtVcM
+         FcPr2V50wAaBQ99wB/sKqD98xBKlCp/dlygjzgVyFi9+8x9+T6wqeyVT/PwsdLfzX6s3
+         4gAg==
+X-Gm-Message-State: ACrzQf3bcRTdThCC+bR0kt2Mx/Vux0cR/j4FEgtei/BdlkKMaQkM0PDs
+        CiIFZbaLhWMFH8l0wOxsT4dJ0Q==
+X-Google-Smtp-Source: AMsMyM6ylOdKvZEqrEGFhsZKZwJOdBplQOBp04bfw2KEi8u6CdxHAaSC0nZm4kIsZzecInY8x4LHtg==
+X-Received: by 2002:a05:6512:409:b0:49a:e44a:c6b1 with SMTP id u9-20020a056512040900b0049ae44ac6b1mr6405446lfk.222.1663603853087;
+        Mon, 19 Sep 2022 09:10:53 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05651c118a00b0026c4c1a0b4dsm684148ljo.126.2022.09.19.09.10.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 09:10:08 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id k10so47712367lfm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:10:08 -0700 (PDT)
-X-Received: by 2002:a05:6512:3d16:b0:498:f04f:56cf with SMTP id
- d22-20020a0565123d1600b00498f04f56cfmr7277354lfv.612.1663603797869; Mon, 19
- Sep 2022 09:09:57 -0700 (PDT)
+        Mon, 19 Sep 2022 09:10:52 -0700 (PDT)
+Message-ID: <c86d39c9-82d2-0f9f-9836-76ad3b6d8ede@linaro.org>
+Date:   Mon, 19 Sep 2022 18:10:51 +0200
 MIME-Version: 1.0
-References: <20220805154231.31257-13-ojeda@kernel.org> <Yu5Bex9zU6KJpcEm@yadro.com>
- <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
- <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
-In-Reply-To: <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 19 Sep 2022 09:09:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
-Message-ID: <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        alex.gaynor@gmail.com, ark.email@gmail.com,
-        bjorn3_gh@protonmail.com, bobo1239@web.de, bonifaido@gmail.com,
-        boqun.feng@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
-        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com, gary@garyguo.net,
-        geofft@ldpreload.com, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, john.m.baublitz@gmail.com,
-        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
-        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, viktor@v-gar.de,
-        Andreas Hindborg <andreas.hindborg@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
+Content-Language: en-US
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220919132236.264382-1-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220919132236.264382-1-viorel.suman@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 7:07 AM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
->
-> For GFP_ATOMIC, we could use preempt_count except that it isn't always
-> enabled. Conveniently, it is already separated out into its own config.
-> How do people feel about removing CONFIG_PREEMPT_COUNT and having the
-> count always enabled?
->
-> We would then have a way to reliably detect when we are in atomic
-> context [..]
+On 19/09/2022 15:22, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
+> 
+> Sync defines with the latest available SCFW kit version 1.13.0,
+> may be found at the address below:
+> 
+> https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
+> 
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
+>  include/dt-bindings/firmware/imx/rsrc.h | 294 ++++++++++++++++--------
+>  1 file changed, 198 insertions(+), 96 deletions(-)
+> 
+> Changes since v1: https://lore.kernel.org/all/20220915181805.424670-1-viorel.suman@oss.nxp.com/
+> 	Two patches squashed into one in order to keep changes bissectable
+> 	and compilable as suggested by Alexander Stein.
+> 
+> Changes since v2: https://lore.kernel.org/all/20220919113715.243910-1-viorel.suman@oss.nxp.com/
+> 	Added two more defines in backward compatibility section in order to
+> 	to avoid breaking ABI, so there is no need to change the driver
+> 	anymore.
+> 
+> diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+> index 1675de05ad33..ed33869f184e 100644
+> --- a/include/dt-bindings/firmware/imx/rsrc.h
+> +++ b/include/dt-bindings/firmware/imx/rsrc.h
+> @@ -13,30 +13,30 @@
+>   * never be changed or removed (only added to at the end of the list).
+>   */
+>  
+> -#define IMX_SC_R_A53			0
+> -#define IMX_SC_R_A53_0			1
+> -#define IMX_SC_R_A53_1			2
+> -#define IMX_SC_R_A53_2			3
+> -#define IMX_SC_R_A53_3			4
+> -#define IMX_SC_R_A72			5
+> -#define IMX_SC_R_A72_0			6
+> -#define IMX_SC_R_A72_1			7
+> -#define IMX_SC_R_A72_2			8
+> -#define IMX_SC_R_A72_3			9
+> +#define IMX_SC_R_AP_0			0
+> +#define IMX_SC_R_AP_0_0			1
+> +#define IMX_SC_R_AP_0_1			2
+> +#define IMX_SC_R_AP_0_2			3
+> +#define IMX_SC_R_AP_0_3			4
+> +#define IMX_SC_R_AP_1			5
+> +#define IMX_SC_R_AP_1_0			6
+> +#define IMX_SC_R_AP_1_1			7
+> +#define IMX_SC_R_AP_1_2			8
+> +#define IMX_SC_R_AP_1_3			9
+>  #define IMX_SC_R_CCI			10
+>  #define IMX_SC_R_DB			11
+>  #define IMX_SC_R_DRC_0			12
+>  #define IMX_SC_R_DRC_1			13
+>  #define IMX_SC_R_GIC_SMMU		14
+> -#define IMX_SC_R_IRQSTR_M4_0		15
+> -#define IMX_SC_R_IRQSTR_M4_1		16
+> -#define IMX_SC_R_SMMU			17
+> -#define IMX_SC_R_GIC			18
+> +#define IMX_SC_R_IRQSTR_MCU_0		15
+> +#define IMX_SC_R_IRQSTR_MCU_1		16
+> +#define IMX_SC_R_SMMU_0			17
+> +#define IMX_SC_R_GIC_0			18
+>  #define IMX_SC_R_DC_0_BLIT0		19
+>  #define IMX_SC_R_DC_0_BLIT1		20
+>  #define IMX_SC_R_DC_0_BLIT2		21
+>  #define IMX_SC_R_DC_0_BLIT_OUT		22
+> -#define IMX_SC_R_PERF			23
+> +#define IMX_SC_R_PERF_0			23
+>  #define IMX_SC_R_USB_1_PHY		24
+>  #define IMX_SC_R_DC_0_WARP		25
+>  #define IMX_SC_R_V2X_MU_0		26
+> @@ -56,11 +56,14 @@
+>  #define IMX_SC_R_V2X_MU_3		40
+>  #define IMX_SC_R_V2X_MU_4		41
+>  #define IMX_SC_R_DC_1_WARP		42
+> +#define IMX_SC_R_STM			43
+>  #define IMX_SC_R_SECVIO			44
+>  #define IMX_SC_R_DC_1_VIDEO0		45
+>  #define IMX_SC_R_DC_1_VIDEO1		46
+>  #define IMX_SC_R_DC_1_FRAC0		47
+> +#define IMX_SC_R_V2X			48
+>  #define IMX_SC_R_DC_1			49
+> +#define IMX_SC_R_UNUSED14		50
+>  #define IMX_SC_R_DC_1_PLL_0		51
+>  #define IMX_SC_R_DC_1_PLL_1		52
+>  #define IMX_SC_R_SPI_0			53
+> @@ -151,10 +154,10 @@
+>  #define IMX_SC_R_DMA_1_CH29		137
+>  #define IMX_SC_R_DMA_1_CH30		138
+>  #define IMX_SC_R_DMA_1_CH31		139
+> -#define IMX_SC_R_UNUSED1		140
 
-No.
+This one disappears...
 
-First off, it's not true. There are non-preempt atomic contexts too,
-like interrupts disabled etc. Can you enumerate all those? Possibly.
+> -#define IMX_SC_R_UNUSED2		141
+> -#define IMX_SC_R_UNUSED3		142
+> -#define IMX_SC_R_UNUSED4		143
 
-But more importantly, doing "depending on context, I silently and
-automatically do different things" is simply WRONG. Don't do it. It's
-a disaster.
-
-Doing that for *debugging* is fine. So having a
-
-        WARN_ON_ONCE(in_atomic_context());
-
-is a perfectly fine debug check to find people who do bad bad things,
-and we have lots of variations of that theme (ie might_sleep(), but
-also things like lockdep_assert_held() and friends that assert other
-constraints entirely).
-
-But having *behavior changes* depending on context is a total
-disaster. And that's invariably why people want this disgusting thing.
-
-They want to do broken things like "I want to allocate memory, and I
-don't want to care where I am, so I want the memory allocator to just
-do the whole GFP_ATOMIC for me".
-
-And that is FUNDAMENTALLY BROKEN.
-
-If you want to allocate memory, and you don't want to care about what
-context you are in, or whether you are holding spinlocks etc, then you
-damn well shouldn't be doing kernel programming. Not in C, and not in
-Rust.
-
-It really is that simple. Contexts like this ("I am in a critical
-region, I must not do memory allocation or use sleeping locks") is
-*fundamental* to kernel programming. It has nothing to do with the
-language, and everything to do with the problem space.
-
-So don't go down this "let's have the allocator just know if you're in
-an atomic context automatically" path. It's wrong. It's complete
-garbage. It may generate kernel code that superficially "works", but
-one that is fundamentally broken, and will fail and becaome unreliable
-under memory pressure.
-
-The thing is, when you do kernel programming, and you're holding a
-spinlock and need to allocate memory, you generally shouldn't allocate
-memory at all, you should go "Oh, maybe I need to do the allocation
-*before* getting the lock".
-
-And it's not just locks. It's also "I'm in a hardware interrupt", but
-now the solution is fundamentally different. Maybe you still want to
-do pre-allocation, but now you're a driver interrupt and the
-pre-allocation has to happen in another code sequence entirely,
-because obviously the interrupt itself is asynchronous.
-
-But more commonly, you just want to use GFP_ATOMIC, and go "ok, I know
-the VM layer tries to keep a _limited_ set of pre-allocated buffers
-around".
-
-But it needs to be explicit, because that GFP_ATOMIC pool of
-allocations really is very limited, and you as the allocator need to
-make it *explicit* that yeah, now you're not just doing a random
-allocation, you are doing one of these *special* allocations that will
-eat into that very limited global pool of allocations.
-
-So no, you cannot and MUST NOT have an allocator that silently just
-dips into that special pool, without the user being aware or
-requesting it.
-
-That really is very very fundamental. Allocators that "just work" in
-different contexts are broken garbage within the context of a kernel.
-
-Please just accept this, and really *internalize* it.  Because this
-isn't actually just about allocators. Allocators may be one very
-common special case of this kind of issue, and they come up quite
-often as a result, but this whole "your code needs to *understand* the
-special restrictions that the kernel is under" is something that is
-quite fundamental in general.
-
-It shows up in various other situations too, like "Oh, this code can
-run in an interrupt handler" (which is *different* from the atomicity
-of just "while holding a lock", because it implies a level of random
-nesting that is very relevant for locking).
-
-Or sometimes it's subtler things than just correctness, ie "I'm
-running under a critical lock, so I must be very careful because there
-are scalability issues". The code may *work* just fine, but things
-like tasklist_lock are very very special.
-
-So embrace that kernel requirement. Kernels are special. We do things,
-and we have constraints that pretty much no other environment has.
-
-It is often what makes kernel programming interesting - because it's
-challenging. We have a very limited stack. We have some very direct
-and deep interactions with the CPU, with things like IO and
-interrupts. Some constraints are always there, and others are
-context-dependent.
-
-The whole "really know what context this code is running within" is
-really important. You may want to write very explicit comments about
-it.
-
-And you definitely should always write your code knowing about it.
-
-              Linus
+Best regards,
+Krzysztof
