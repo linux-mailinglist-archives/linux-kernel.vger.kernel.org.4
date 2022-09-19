@@ -2,108 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03BC5BD225
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175F95BD227
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiISQZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S229509AbiISQ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiISQY6 (ORCPT
+        with ESMTP id S229908AbiISQ0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:24:58 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA6929C9A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:24:57 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id j16so20765190lfg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:24:57 -0700 (PDT)
+        Mon, 19 Sep 2022 12:26:16 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142323B967
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:26:14 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11eab59db71so104175fac.11
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=eAOafVCNVmR9N9v0Yvq51YsgQAP+hB4f5u0L/4nUBKA=;
-        b=ethu0EynC43p9UpiI84ruyAXrMRMdZfuiof4jGWO3COHQkx9EjPMb0Llez11+BLPKc
-         5EqefT79o5oAfWdTFyJjgnxiKXiq84VSTx1yMZv0TukcBhrSE770dxQz5AgwGe1/wdX2
-         cUJsrSok2ZwMke4mNjZjszTcRrHhEleMa2aQSfFC8yHWRZB04kXsxZz6CdO77YeDIaKv
-         W7FxT0sb23ogGQ7pc/WVP0aKVEqqH7TJDENRj5695hxAabD43bspb6BjFX+2A2W7QhTc
-         h3skjS9SO/0P+2xMjVxsZpwoqFCCIKq/pCYKaq7GoKibRjTOB+55a8piA4ChmXfjbqDC
-         To3Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=B79VNmtksFZCxxDMaKm5/f3GDhn1sPWt9TTqsHjBc44=;
+        b=p4KBBtjPK5F6KjhfBxOotM/kEf99VqLGvag9iPunX57HEavFuYwQ0Gtr4amfWbjcWh
+         jt1cAKnoH/x09ARebwlsO6Tot4ODwrwH35uTlEqt1p5PSaTMUsaoOe9NgqMAikbvX2+z
+         qhca/cOrPTbArKoxRZmGe9Zk1eykZbYcrfPnXc6xnMU7d8ajY5o/vag9Jug+zD12uAWS
+         flj2v9wTuVQ46qrR7ITj+hG6acIg70QwC9PoDNu1c3GaM1a0oDpRx6lhZUDD1uw7XZkV
+         1ArvlG5ixJKONjKXgPTpCh7KZM0blxlfw4ucY9uqP5SxcyxiwRmQaSevilZmz9GSwLfA
+         O7MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=eAOafVCNVmR9N9v0Yvq51YsgQAP+hB4f5u0L/4nUBKA=;
-        b=Oz0fuGkrmnRk3gEgH9nkOVNtjpOEMmrkbGq9AONdnNZ8a3JBvJCecOHZd9taSZUH24
-         MQgGczHPk/nf3p1NXrUts9MLyW/i2KQGA0mRQk4npH5DNx68heFHIeQdTHIqQn6/98G+
-         j8bP2e08cShtUMb7q53N8Ryo3pnUJgf3KjjnuDHCBZ/ae0GTO9a8CIF9dYrAB3xkcsL6
-         9DtzfyCiWxY76s46r62TvzM8NzuBoK0TozYWP9zv8wVY7q7p6vJF0Pma0t7bJzOR5G/8
-         s9jKPaURc5zLTuLyymLSO50Q/mM5BGTnCxdW2sZ/+j8PCoMedC2RhcKyalNC1TfThz7p
-         wVlQ==
-X-Gm-Message-State: ACrzQf3rzxYtCcmYGPJLG0lFnbug3vt3weOYmeUJad089zfaHhuwzz34
-        RH1EEWuhjaiqIvxokfUw1dcXQQ==
-X-Google-Smtp-Source: AMsMyM7Q5L1McMMFqSUa7fGLN03YMRs0ciA4N40x8PHN9GOTdAWbWDoQN39MejGALAtGiMvhd/RDEg==
-X-Received: by 2002:ac2:4e0d:0:b0:49c:d593:9d6c with SMTP id e13-20020ac24e0d000000b0049cd5939d6cmr6740730lfr.37.1663604695831;
-        Mon, 19 Sep 2022 09:24:55 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v23-20020a056512349700b00499d70c0310sm5061842lfr.3.2022.09.19.09.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 09:24:55 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 18:24:53 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>
-Cc:     netdev@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biao Huang <biao.huang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Jose Abreu <joabreu@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH 2/2] net: dt-bindings: dwmac: add support for mt8188
-Message-ID: <20220919162453.4kkphzhc2tu6wzou@krzk-bin>
-References: <20220919080410.11270-1-jianguo.zhang@mediatek.com>
- <20220919080410.11270-3-jianguo.zhang@mediatek.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=B79VNmtksFZCxxDMaKm5/f3GDhn1sPWt9TTqsHjBc44=;
+        b=qdaZtJzV/xqI91HL1CVFgIMoJ00HkzZ131LkTrnBBVSsVgNLtORNRDV1PL6gVm4Hqt
+         TcuFw4URSWSgdloB+41whMqiK8D1opOh40GlfjR68PV6Vnem5bQYLrfuE+gPIAndVXe/
+         ShZfXkR09HfmW1cTbVKBM+dKCAj70/AZvMluYXRZRcR0wD8xuEIFkGXWKUGirHk8OOQE
+         xWxQEPihKabXfXD8jJGI7yfCdMgBK49dtcwthrVePNH7EQum7aUrUr0W1edcp9CHtqFB
+         5uUALajQi4z6FHSVG1YhstYpkZV52DqfwUgmLpHF1aRrJnoz665x8xBJLUC7A76Vtx+m
+         KRkQ==
+X-Gm-Message-State: ACgBeo3j12qVWdDJcyw+UdEDkL6Q8b2myjcXSvQab/r9xcHWuGVZklQh
+        4rbhGleFg+6fMpT2+aT27rfecfgRqJ9/b++MY/k=
+X-Google-Smtp-Source: AA6agR5UC2hT2uHICYAa0FQGITGaDgBaOc17kIMj80rW+6ebrWUDYWUju/qs8MgQ/D1Q5xmjL6PdkqT7LmmDeG5Z+/I=
+X-Received: by 2002:a05:6870:1783:b0:12a:f442:504d with SMTP id
+ r3-20020a056870178300b0012af442504dmr16904152oae.46.1663604773291; Mon, 19
+ Sep 2022 09:26:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220919080410.11270-3-jianguo.zhang@mediatek.com>
+References: <20220906195721.143022-1-hamza.mahfooz@amd.com> <99314fcf-b886-a7bd-3866-241af6ac9831@suse.de>
+In-Reply-To: <99314fcf-b886-a7bd-3866-241af6ac9831@suse.de>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 19 Sep 2022 12:26:01 -0400
+Message-ID: <CADnq5_MBF2j1Zwe2gFxN-bwe62Yo-RbOepUBwzYDR0APc=T0Zw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: use dirty framebuffer helper
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        linux-kernel@vger.kernel.org, Guchun Chen <guchun.chen@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Fernando Ramos <greenfoo@u92.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 16:04:10 +0800, Jianguo Zhang wrote:
-> Add binding document for the ethernet on mt8188
-> 
-> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/net/mediatek-dwmac.yaml | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+On Mon, Sep 19, 2022 at 2:44 AM Thomas Zimmermann <tzimmermann@suse.de> wro=
+te:
+>
+> Hi
+>
+> Am 06.09.22 um 21:57 schrieb Hamza Mahfooz:
+> > Currently, we aren't handling DRM_IOCTL_MODE_DIRTYFB. So, use
+> > drm_atomic_helper_dirtyfb() as the dirty callback in the amdgpu_fb_func=
+s
+> > struct.
+>
+> drm_atomic_helper_dirtyfb() creates a new atomic commit for the
+> frambuffer's planes. Drivers can then updates these planes' output
+> (e.g., writeback to video memory). I thought that amdgpu simply scans
+> out from the framebuffer's memory regions in VRAM. So I'm curious why
+> this patch is necessary.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+I think in this particular case, the problem is that there are still
+some asic which default to non-atomic code which is what is causing
+the problem here.  Something like this would fix that:
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+index 5b09c8f4fe95..f5e9dd454c54 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+@@ -497,6 +497,11 @@ bool amdgpu_display_ddc_probe(struct
+amdgpu_connector *amdgpu_connector,
+ static const struct drm_framebuffer_funcs amdgpu_fb_funcs =3D {
+        .destroy =3D drm_gem_fb_destroy,
+        .create_handle =3D drm_gem_fb_create_handle,
++};
++
++static const struct drm_framebuffer_funcs amdgpu_fb_funcs_atomic =3D {
++       .destroy =3D drm_gem_fb_destroy,
++       .create_handle =3D drm_gem_fb_create_handle,
+        .dirty =3D drm_atomic_helper_dirtyfb,
+ };
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+@@ -1102,7 +1107,10 @@ static int
+amdgpu_display_gem_fb_verify_and_init(struct drm_device *dev,
+        if (ret)
+                goto err;
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+-       ret =3D drm_framebuffer_init(dev, &rfb->base, &amdgpu_fb_funcs);
++       if (drm_drv_uses_atomic_modeset(adev_to_drm(adev)))
++               ret =3D drm_framebuffer_init(dev, &rfb->base,
+&amdgpu_fb_funcs_atomic);
++       else
++               ret =3D drm_framebuffer_init(dev, &rfb->base, &amdgpu_fb_fu=
+ncs);
+        if (ret)
+                goto err;
 
+As for why we need the dirty callback, I think it's used for PSR.
 
-ethernet@1101c000: Unevaluated properties are not allowed ('clk_csr' was unexpected)
-	arch/arm64/boot/dts/mediatek/mt2712-evb.dtb
+Alex
+
+>
+> Best regards
+> Thomas
+>
+> >
+> > Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_display.c
+> > index c20922a5af9f..5b09c8f4fe95 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> > @@ -38,6 +38,7 @@
+> >   #include <linux/pci.h>
+> >   #include <linux/pm_runtime.h>
+> >   #include <drm/drm_crtc_helper.h>
+> > +#include <drm/drm_damage_helper.h>
+> >   #include <drm/drm_edid.h>
+> >   #include <drm/drm_gem_framebuffer_helper.h>
+> >   #include <drm/drm_fb_helper.h>
+> > @@ -496,6 +497,7 @@ bool amdgpu_display_ddc_probe(struct amdgpu_connect=
+or *amdgpu_connector,
+> >   static const struct drm_framebuffer_funcs amdgpu_fb_funcs =3D {
+> >       .destroy =3D drm_gem_fb_destroy,
+> >       .create_handle =3D drm_gem_fb_create_handle,
+> > +     .dirty =3D drm_atomic_helper_dirtyfb,
+> >   };
+> >
+> >   uint32_t amdgpu_display_supported_domains(struct amdgpu_device *adev,
+>
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
