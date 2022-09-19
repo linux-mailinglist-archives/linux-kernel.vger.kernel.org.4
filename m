@@ -2,285 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACE45BC9F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D869E5BC9FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiISKv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 06:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S229787AbiISKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 06:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiISKuy (ORCPT
+        with ESMTP id S229715AbiISKwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:50:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FBA237E6;
-        Mon, 19 Sep 2022 03:45:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 47D1122187;
-        Mon, 19 Sep 2022 10:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663584353; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TPY7EEFMWVrZdYCxqqnTs3va11awHySIxzPGii1FR0M=;
-        b=pcs8WC6C8N5NT2mpr02B5yJH+LTCvsIeYhCodeQGG/gLeD9Ve1ZmOFpkpwgw4V+wtja7aY
-        RddPku1MGLIpjFQcO9qKlpCVJhYCWu9Pg3CcPENFblbq3F4iOpEH9QM9LSmS5Ghy2jXKlf
-        wzEuCcR+PKVNegczAeY+9+l4n3MbDsI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85A4E13A96;
-        Mon, 19 Sep 2022 10:45:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T0GyHlxIKGNkeAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 19 Sep 2022 10:45:48 +0000
-Message-ID: <41916640-cf05-c00d-95fa-1e0099741f4c@suse.com>
-Date:   Mon, 19 Sep 2022 12:45:47 +0200
+        Mon, 19 Sep 2022 06:52:00 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C47C559A;
+        Mon, 19 Sep 2022 03:46:52 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t7so46799050wrm.10;
+        Mon, 19 Sep 2022 03:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nYkgf7167and0RA6WgS7T9F/ATxyX9JyRvsn4NiAu+k=;
+        b=mdhAoxpAfjgULi4cIuZtoqRNkNbQn0RrM6JNNh7HIrFx9o3gP3Si9/jymROsal3dUP
+         HwU2PulazsLKTSFKrXBzZqET37nvUFSD95pCscgkKULAHUFSsW0bkr09dnuPXyXUXYsY
+         g09DG5+yN54yOk2X38EpFmXbhQP2dV4muqad8H2R77qkw2wvDw4qx0ylU7XcPChwDlbY
+         4nZ/WnwrqYZ3WB0wX45FJEmVDTKw/fK28sPfjhIkrBgiAn0NKmg+lKoIbW5IYicHGAEK
+         FNpqmFKp8/IqwZ86qRSY2vpsWskrQE4o9IYZAHdUy6A6R0ZuSSVCC/yv02WDqm1wqofe
+         iAeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nYkgf7167and0RA6WgS7T9F/ATxyX9JyRvsn4NiAu+k=;
+        b=WNG7uDz5UJWjOmgOENLHoTa/E5lChMlhhoj39xGtQtOcDtfq4+MjdALffcnyK6wv5v
+         6jcBl9ne3Dy4eNZCacHSyVidoM5rNkL0ORUKuiFFwqKpnXuXHIQ3JwTaAXrM6BgkODg2
+         58xpLDodGd+ybdAiv76yiC5JsN6il8+wCf1Qetn3Q2ht7RviNaUFNNS6viybfygU1Wdo
+         sXZfmyGXgXOuH2/Cb1uWpjygiBhh0f7gHJ5eK6wOzNyyXUP908tM2uFyW+OjyCcEjxCF
+         bsbgr6h7Teg7mgrSkdwM2fF4ZrNurdWHgk8Sz4X67QeD96wzw3GhO2G4h+6LycbZwgC/
+         nEBg==
+X-Gm-Message-State: ACrzQf3MAn8NoKMdK2cnTuuxK75sRpEg6ZceGjzWAj/LipbHODkU+FlK
+        DaKFrj0lfO03Du5Dd18zd8GgXtO9FkTZzw==
+X-Google-Smtp-Source: AMsMyM4CtTtPpBEfAfEjyWARnB7GtWGPdIEFw21dBbjjaKoO+IVoC78ZNpOCb9oA+FQ9Fd2H6b128g==
+X-Received: by 2002:a05:6000:1a8a:b0:22a:43ef:94f0 with SMTP id f10-20020a0560001a8a00b0022a43ef94f0mr10528556wry.279.1663584410583;
+        Mon, 19 Sep 2022 03:46:50 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:453:ec29:bd55:6b15])
+        by smtp.gmail.com with ESMTPSA id t1-20020adfe441000000b0022a2bacabbasm13265094wrm.31.2022.09.19.03.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 03:46:50 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] soc: renesas: Kconfig: Explicitly select GPIOLIB and PINCTRL config under SOC_RENESAS
+Date:   Mon, 19 Sep 2022 11:46:06 +0100
+Message-Id: <20220919104606.96553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 30/44] cpuidle,xenpv: Make more PARAVIRT_XXL noinstr
- clean
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-References: <20220919095939.761690562@infradead.org>
- <20220919101522.358582588@infradead.org>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220919101522.358582588@infradead.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------uN7TNqTnDntgyCDMTfJPdXrr"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------uN7TNqTnDntgyCDMTfJPdXrr
-Content-Type: multipart/mixed; boundary="------------bVxl0sFTg1HlWc0dYJ02yXYs";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
- mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
- ulli.kroll@googlemail.com, linus.walleij@linaro.org, shawnguo@kernel.org,
- Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
- festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com, khilman@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
- bcain@quicinc.com, chenhuacai@kernel.org, kernel@xen0n.name,
- geert@linux-m68k.org, sammy@sammy.net, monstr@monstr.eu,
- tsbogend@alpha.franken.de, dinguyen@kernel.org, jonas@southpole.se,
- stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
- James.Bottomley@HansenPartnership.com, deller@gmx.de, mpe@ellerman.id.au,
- npiggin@gmail.com, christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
- gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
- svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
- davem@davemloft.net, richard@nod.at, anton.ivanov@cambridgegreys.com,
- johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
- jolsa@kernel.org, namhyung@kernel.org, srivatsa@csail.mit.edu,
- amakhalov@vmware.com, pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
- chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org, lenb@kernel.org,
- pavel@ucw.cz, gregkh@linuxfoundation.org, mturquette@baylibre.com,
- sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
- sudeep.holla@arm.com, agross@kernel.org, bjorn.andersson@linaro.org,
- konrad.dybcio@somainline.org, anup@brainfault.org, thierry.reding@gmail.com,
- jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
- Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
- andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
- dennis@kernel.org, tj@kernel.org, cl@linux.com, rostedt@goodmis.org,
- pmladek@suse.com, senozhatsky@chromium.org, john.ogness@linutronix.de,
- juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
- bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
- vschneid@redhat.com, fweisbec@gmail.com, ryabinin.a.a@gmail.com,
- glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
- vincenzo.frascino@arm.com, Andrew Morton <akpm@linux-foundation.org>,
- jpoimboe@kernel.org, linux-alpha@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-omap@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-xtensa@linux-xtensa.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
- kasan-dev@googlegroups.com
-Message-ID: <41916640-cf05-c00d-95fa-1e0099741f4c@suse.com>
-Subject: Re: [PATCH v2 30/44] cpuidle,xenpv: Make more PARAVIRT_XXL noinstr
- clean
-References: <20220919095939.761690562@infradead.org>
- <20220919101522.358582588@infradead.org>
-In-Reply-To: <20220919101522.358582588@infradead.org>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
---------------bVxl0sFTg1HlWc0dYJ02yXYs
-Content-Type: multipart/mixed; boundary="------------DqMcUwZmmixeMRf078SIWWNm"
+GPIOLIB and PINCTRL config options are required by all ARM32/ARM64/RISC-V
+Renesas SoCs, so instead of selecting them under ARCH_RENESAS for each
+architecture just explicitly select them under SOC_RENESAS config option
+which will be visible for all the three architectures (if ARCH_RENESAS is
+enabled).
 
---------------DqMcUwZmmixeMRf078SIWWNm
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Note, only when this patch is merged I'll post the patches to drop GPIOLIB
+and PINCTRL from [0] and [1] to avoid bisect build failures.
 
-T24gMTkuMDkuMjIgMTI6MDAsIFBldGVyIFppamxzdHJhIHdyb3RlOg0KPiB2bWxpbnV4Lm86
-IHdhcm5pbmc6IG9ianRvb2w6IGFjcGlfaWRsZV9lbnRlcl9zMmlkbGUrMHhkZTogY2FsbCB0
-byB3YmludmQoKSBsZWF2ZXMgLm5vaW5zdHIudGV4dCBzZWN0aW9uDQo+IHZtbGludXgubzog
-d2FybmluZzogb2JqdG9vbDogZGVmYXVsdF9pZGxlKzB4NDogY2FsbCB0byBhcmNoX3NhZmVf
-aGFsdCgpIGxlYXZlcyAubm9pbnN0ci50ZXh0IHNlY3Rpb24NCj4gdm1saW51eC5vOiB3YXJu
-aW5nOiBvYmp0b29sOiB4ZW5fc2FmZV9oYWx0KzB4YTogY2FsbCB0byBIWVBFUlZJU09SX3Nj
-aGVkX29wLmNvbnN0cHJvcC4wKCkgbGVhdmVzIC5ub2luc3RyLnRleHQgc2VjdGlvbg0KPiAN
-Cj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgWmlqbHN0cmEgKEludGVsKSA8cGV0ZXJ6QGluZnJh
-ZGVhZC5vcmc+DQo+IFJldmlld2VkLWJ5OiBTcml2YXRzYSBTLiBCaGF0IChWTXdhcmUpIDxz
-cml2YXRzYUBjc2FpbC5taXQuZWR1Pg0KDQpSZXZpZXdlZC1ieTogSnVlcmdlbiBHcm9zcyA8
-amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg0K
---------------DqMcUwZmmixeMRf078SIWWNm
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+[0] arch/arm64/Kconfig.platforms
+[1] arch/arm/mach-shmobile/Kconfig
+---
+ drivers/soc/renesas/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
+index f95a1337450d..660498252ec5 100644
+--- a/drivers/soc/renesas/Kconfig
++++ b/drivers/soc/renesas/Kconfig
+@@ -2,6 +2,8 @@
+ menuconfig SOC_RENESAS
+ 	bool "Renesas SoC driver support" if COMPILE_TEST && !ARCH_RENESAS
+ 	default y if ARCH_RENESAS
++	select GPIOLIB
++	select PINCTRL
+ 	select SOC_BUS
+ 
+ if SOC_RENESAS
+-- 
+2.25.1
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------DqMcUwZmmixeMRf078SIWWNm--
-
---------------bVxl0sFTg1HlWc0dYJ02yXYs--
-
---------------uN7TNqTnDntgyCDMTfJPdXrr
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMoSFwFAwAAAAAACgkQsN6d1ii/Ey/T
-hwf/eGOkDCDy7F9Ra0L0GOLdv4GeCljWmcvbdITwnsuB7hQz/+M0V2k7PvSN/ISQ4Vf6Jn+jdWqe
-BIXXQbgSPEGvf145/zXXKI4Z/CR603o4j00ul4vrymonw4oMQfSU6XSgHQPxxoPF3hdqavHf2w48
-1DJPJ8whPxq8qCNOIZt3O0NWTtIKi2fdc7Gpw4aouzNtdCNdCQKzLjhN1LpTcokA22BVdYBG2wMF
-ZkBuZgDmH0auDXsstAEU8aSublQibxzVadACIUCRvtXxxTSXCujB3IoT9CgcYyav5uxi9nNvOEsp
-f9YTwuEzNv1IhRffytywrjyBDZdbHXFDZM0kU7zKkA==
-=9mzX
------END PGP SIGNATURE-----
-
---------------uN7TNqTnDntgyCDMTfJPdXrr--
