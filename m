@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C40A5BC54B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE4C5BC544
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiISJZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S230179AbiISJYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiISJZJ (ORCPT
+        with ESMTP id S230164AbiISJYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:25:09 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDD013FA6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:25:00 -0700 (PDT)
-X-UUID: cdf5796b87a445cd86a32f8f311e7e8b-20220919
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=tYeUrDWmysoKnpRMd2tQy/Csgjdj3CcyZZOmwVF2Qmg=;
-        b=bVBRQVzlsdAr2dWp6i5DxhuQFl/Ux/gkSgTV8whCbw3c8QQy+KeCLtey/MEEj53te7MOoH6T8uk2mvyIUYkWUrm3sIQF5d16NUBB8tM5n04R75hNSxXMT8rqrB831Ypx6Tq0O6SQ2IpQHS6AU7q3k3Ptpoh6JqR1DrDppT/241M=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:c69e3470-6232-4723-9b12-407b821e4953,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:e2d0e2f6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: cdf5796b87a445cd86a32f8f311e7e8b-20220919
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 986780568; Mon, 19 Sep 2022 17:24:57 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 19 Sep 2022 17:24:56 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 19 Sep 2022 17:24:55 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>,
-        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
-        <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH v5 6/6] iommu/mediatek: Remove unused "mapping" member from mtk_iommu_data
-Date:   Mon, 19 Sep 2022 17:24:05 +0800
-Message-ID: <20220919092405.8256-7-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220919092405.8256-1-yong.wu@mediatek.com>
-References: <20220919092405.8256-1-yong.wu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 19 Sep 2022 05:24:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9F1338
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:24:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 516B1221E2;
+        Mon, 19 Sep 2022 09:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663579466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZbT40zAkjhP9+n399AbT5L2GEVohnR2lNfZdDMkmB2I=;
+        b=s7BIrRKzRZ+RqyZh2vSJZm4djBMvyblnab40+wDxnhBKlf3MB4hBjij98pChd1+S+TzuRa
+        MsteH+FOFgTLCu0kdyL0feWZ913GWoADpX0LuFj/yUQ150nRA+wZaxeF07l6ALfUhN2clr
+        6GA0quk9IMOYnSlX0qe6nUayb/9Jhfc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663579466;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZbT40zAkjhP9+n399AbT5L2GEVohnR2lNfZdDMkmB2I=;
+        b=0MM+F95WPpXuJsELVkK2StvHIAoYnMOAq3u+fUYU4cuiMs/GOJvupOr/SOIu/K66OB/2fD
+        IpnycQVdVkOjC6Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CEBE13A96;
+        Mon, 19 Sep 2022 09:24:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xO4ZCko1KGMTVAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 19 Sep 2022 09:24:26 +0000
+Date:   Mon, 19 Sep 2022 11:24:25 +0200
+Message-ID: <87r107btti.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: KASAN: invalid-free in snd_card_new
+In-Reply-To: <871qs7dav5.wl-tiwai@suse.de>
+References: <CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com>
+        <871qs7dav5.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just remove a unused variable that only is for mtk_iommu_v1.
+On Mon, 19 Sep 2022 10:30:54 +0200,
+Takashi Iwai wrote:
+> 
+> On Sun, 18 Sep 2022 15:01:11 +0200,
+> Rondreis wrote:
+> > 
+> > Hello,
+> > 
+> > When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> > triggered.
+> > 
+> > HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> > git tree: upstream
+> > 
+> > kernel config: https://pastebin.com/raw/xtrgsXP3
+> > C reproducer: https://pastebin.com/raw/w2sdQWYj
+> > console output: https://pastebin.com/raw/Yyf7zw2d
+> > 
+> > Basically, in the c reproducer, we use the gadget module to emulate
+> > attaching a USB device(vendor id: 0x1bc7, product id: 0x1206, with the
+> > midi function) and executing some simple sequence of system calls.
+> > To reproduce this crash, we utilize a third-party library to emulate
+> > the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+> > Just clone this repository, install it, and compile the c
+> > reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
+> > the trick.
+> > 
+> > I would appreciate it if you have any idea how to solve this bug.
+> 
+> Could you try the patch below?  It looks like a simple double-free in
+> the code.
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+A more proper patch is below.  Please give it a try.
+
+
+thanks,
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: core: Fix double-free at snd_card_new()
+
+During the code change to add the support for devres-managed card
+instance, we put an explicit kfree(card) call at the error path in
+snd_card_new().  This is needed for the early error path before the
+card is initialized with the device, but is rather superfluous and
+causes a double-free at the error path after the card instance is
+initialized, as the destructor of the card object already contains a
+kfree() call.
+
+This patch fixes the double-free situation by removing the superfluous
+kfree().  Meanwhile we need to call kfree() explicitly for the early
+error path, so it's added there instead.
+
+Fixes: e8ad415b7a55 ("ALSA: core: Add managed card creation")
+Reported-by: Rondreis <linhaoguo86@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/iommu/mtk_iommu.c | 3 ---
- 1 file changed, 3 deletions(-)
+ sound/core/init.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index f92b8c0bb373..eb3ace99beff 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -221,10 +221,7 @@ struct mtk_iommu_data {
- 	struct device			*smicomm_dev;
+diff --git a/sound/core/init.c b/sound/core/init.c
+index 193dae361fac..5377f94eb211 100644
+--- a/sound/core/init.c
++++ b/sound/core/init.c
+@@ -178,10 +178,8 @@ int snd_card_new(struct device *parent, int idx, const char *xid,
+ 		return -ENOMEM;
  
- 	struct mtk_iommu_bank_data	*bank;
--
--	struct dma_iommu_mapping	*mapping; /* For mtk_iommu_v1.c */
- 	struct regmap			*pericfg;
--
- 	struct mutex			mutex; /* Protect m4u_group/m4u_dom above */
+ 	err = snd_card_init(card, parent, idx, xid, module, extra_size);
+-	if (err < 0) {
+-		kfree(card);
+-		return err;
+-	}
++	if (err < 0)
++		return err; /* card is freed by error handler */
  
- 	/*
+ 	*card_ret = card;
+ 	return 0;
+@@ -233,7 +231,7 @@ int snd_devm_card_new(struct device *parent, int idx, const char *xid,
+ 	card->managed = true;
+ 	err = snd_card_init(card, parent, idx, xid, module, extra_size);
+ 	if (err < 0) {
+-		devres_free(card);
++		devres_free(card); /* in managed mode, we need to free manually */
+ 		return err;
+ 	}
+ 
+@@ -297,6 +295,8 @@ static int snd_card_init(struct snd_card *card, struct device *parent,
+ 		mutex_unlock(&snd_card_mutex);
+ 		dev_err(parent, "cannot find the slot for index %d (range 0-%i), error: %d\n",
+ 			 idx, snd_ecards_limit - 1, err);
++		if (!card->managed)
++			kfree(card); /* manually free here, as no destructor called */
+ 		return err;
+ 	}
+ 	set_bit(idx, snd_cards_lock);		/* lock it */
 -- 
-2.18.0
+2.35.3
 
