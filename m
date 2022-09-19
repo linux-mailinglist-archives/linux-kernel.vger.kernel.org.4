@@ -2,294 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9905BC567
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E2D5BC56B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiISJcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S229911AbiISJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiISJck (ORCPT
+        with ESMTP id S229741AbiISJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:32:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539D11403B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663579958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=we5GxzGzXKpS6lC8jA1hfLbTm7ftcwyE5JSw1F7bosw=;
-        b=XOoVbKPa2Kz1i0nfU/rQXuT1eb3OXvKH/+rmDEKYn4g8o2Ss1eZaifIbwzJrwERIIAWoMQ
-        II2Cp/qjy+dg7K7gdN1w0EnMd2CMVONs+Chuf4iGUYnG8rWzmRaQSDjZihjF1lrTzLGiAf
-        j1d2N26qwdRjQ0D/OYCAh7WuFwSmZ3k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-B864o80pPGCOit9ccsQhZw-1; Mon, 19 Sep 2022 05:32:37 -0400
-X-MC-Unique: B864o80pPGCOit9ccsQhZw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB973101AA5D;
-        Mon, 19 Sep 2022 09:32:36 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 60B421121314;
-        Mon, 19 Sep 2022 09:32:30 +0000 (UTC)
-Date:   Mon, 19 Sep 2022 17:32:24 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
-Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
- mechanism
-Message-ID: <Yyg3KLfQaxbS1miq@T590>
-References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
- <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+        Mon, 19 Sep 2022 05:33:25 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6583F14031
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:33:22 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso4186351wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=d12+OyZjgr7PoWm5cPjXSNuyiIQvN3uPV/EGY5V2b1Q=;
+        b=gnfr8cRXbS/wpbvVPvZcKVAjeMmrwlloM2/a/LrdrXKRopoda+y4KaVz6Iju/uYK1P
+         toQR5Q7TobkmWgYQflg+5P8/eftdMw3JyxzmKyoTwa7E0u3e6/Ib2eRqCiqdIpafGHqk
+         OezJxyh9DaEuQXclro49QZR4/pSvVkaTgGhJAOjKNdvDi1BcKVTR2aA95jMZuFZydubi
+         KkpxQviaYs608z0ps55rGip2N2aPpzu0wckrt2joTIKOrveQE4WEzTryTpOWZq+1366i
+         1hkUJzi8X5zwJwLS8e6/a6B6yh1js+HjL1v96fYcmUuWJIoWKjyB/aCqsMwhbcTDWFi7
+         qL3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=d12+OyZjgr7PoWm5cPjXSNuyiIQvN3uPV/EGY5V2b1Q=;
+        b=XZWobLHL0DCzvsyBQ6awVw+IDYPAb8atbDN3uf4c3gP0iFGwVvSVfD9Dyp/wCW9d0x
+         U7Iu8E4BTKMq3p8R/coGkaRir/WJBwJ8BgFXB7tjlRNv0z9BCLkNnM+xpOroWxRkWfXN
+         3McARTAWAlmEcYtgQc8Jart2ycRS66ObE8/pqj2+TZUJxUDBIkQsdNCihTUZRVEucM3D
+         FOinQsFh1chW+EGLZc+XSkP9f7dNEB5JMUiZ26AhEyTUlrU1US0lIcd3ZYdYtrR9LYe/
+         4grsBMpEQpVdrxZdfgnBBTPA8bFkIKByERWdOexKkRa16V+K2YjSSS7Tj1sMrwmulRP7
+         rSpQ==
+X-Gm-Message-State: ACgBeo2ZNQeh5Bt9mX/5coUCFyaCxzjMkwGQSeluysYY3RBUzerAGb6A
+        N1IgEeX1IlWdtu+I3BSFSGnyNA==
+X-Google-Smtp-Source: AA6agR5lkQJ3tnCpGQZbJHAgXSSBjez6nvJjs1S6nmUjNgnywaLZOTGb8zhkbD7IGIUFr9qwaLADpQ==
+X-Received: by 2002:a05:600c:a46:b0:3a6:9c49:b751 with SMTP id c6-20020a05600c0a4600b003a69c49b751mr18914823wmq.169.1663580000598;
+        Mon, 19 Sep 2022 02:33:20 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id z4-20020a05600c0a0400b003a342933727sm15121521wmp.3.2022.09.19.02.33.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 02:33:20 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 12:33:18 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Han Xu <han.xu@nxp.com>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:NXP i.MX CLOCK DRIVERS" <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2] clk: imx: imx6sx: remove the SET_RATE_PARENT flag for
+ QSPI clocks
+Message-ID: <Yyg3XtsmMKgC9IDz@linaro.org>
+References: <20220915150959.3646702-1-han.xu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220915150959.3646702-1-han.xu@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:17:05PM +0800, ZiyangZhang wrote:
-> With USER_RECOVERY feature enabled, the monitor_work schedules
-> quiesce_work after finding a dying ubq_daemon. The quiesce_work's job
-> is to:
-> (1) quiesce request queue.
-> (2) check if there is any INFLIGHT rq with UBLK_IO_FLAG_ACTIVE unset.
->     If so, we retry until all these rqs are requeued by ublk_queue_rq()
->     and task_work and become IDLE.
-
-These requests should be being handled by task work or the io_uring
-fallback wq, and suggest to add the words here.
-
-> (3) requeue/abort inflight rqs issued to the crash ubq_daemon before. If
->     UBLK_F_USER_RECOVERY_REISSUE is set, rq is requeued; or it is
->     aborted.
-> (4) complete all ioucmds by calling io_uring_cmd_done(). We are safe to
->     do so because no ioucmd can be referenced now.
-> (5) set ub's state to UBLK_S_DEV_QUIESCED, which means we are ready for
->     recovery. This state is exposed to userspace by GET_DEV_INFO.
+On 22-09-15 10:09:59, Han Xu wrote:
+> There is no dedicate parent clock for QSPI so SET_RATE_PARENT flag
+> should not be used. For instance, the default parent clock for QSPI is
+> pll2_bus, which is also the parent clock for quite a few modules, such
+> as MMDC, once GPMI NAND set clock rate for EDO5 mode can cause system
+> hang due to pll2_bus rate changed.
 > 
-> The driver can always handle STOP_DEV and cleanup everything no matter
-> ub's state is LIVE or QUIESCED. After ub's state is UBLK_S_DEV_QUIESCED,
-> user can recover with new process by sending START_USER_RECOVERY.
-> 
-> Note: we do not change the default behavior with reocvery feature
-> disabled. monitor_work still schedules stop_work and abort inflight
-> rqs. Finally ublk_device is released.
+> Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
+> Signed-off-by: Han Xu <han.xu@nxp.com>
 
-This version looks much better than before.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
+Stephen, will you be picking this?
+
+Thanks.
 
 > 
-> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
 > ---
->  drivers/block/ublk_drv.c | 168 +++++++++++++++++++++++++++++++++++++--
->  1 file changed, 161 insertions(+), 7 deletions(-)
+> changes in v2
+> - fix the build break due to missing close parenthesis
+> ---
+>  drivers/clk/imx/clk-imx6sx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index b067f33a1913..4409a130d0b6 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -121,7 +121,7 @@ struct ublk_queue {
->  
->  	unsigned long io_addr;	/* mapped vm address */
->  	unsigned int max_io_sz;
-> -	bool abort_work_pending;
-> +	bool force_abort;
->  	unsigned short nr_io_ready;	/* how many ios setup */
->  	struct ublk_device *dev;
->  	struct ublk_io ios[0];
-> @@ -163,6 +163,7 @@ struct ublk_device {
->  	 * monitor each queue's daemon periodically
->  	 */
->  	struct delayed_work	monitor_work;
-> +	struct work_struct	quiesce_work;
->  	struct work_struct	stop_work;
->  };
->  
-> @@ -660,6 +661,11 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
->  	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
->  
->  	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
-> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
-> +				__func__,
-> +				((struct ublk_queue *)req->mq_hctx->driver_data)->q_id,
-
-req->mq_hctx->queue_num is cleaner.
-
-> +				req->tag,
-> +				io->flags);
->  		io->flags |= UBLK_IO_FLAG_ABORTED;
->  		blk_mq_end_request(req, BLK_STS_IOERR);
->  	}
-> @@ -820,6 +826,21 @@ static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
->  	res = ublk_setup_iod(ubq, rq);
->  	if (unlikely(res != BLK_STS_OK))
->  		return BLK_STS_IOERR;
-> +    /* With recovery feature enabled, force_abort is set in
-> +     * ublk_stop_dev() before calling del_gendisk() if ub's state
-> +     * is QUIESCED. We have to abort all requeued and new rqs here
-> +     * to let del_gendisk() move on. Besides, we do not call
-> +     * io_uring_cmd_complete_in_task() to avoid UAF on io_uring ctx.
-> +     *
-> +     * Note: force_abort is guaranteed to be seen because it is set
-> +     * before request queue is unqiuesced.
-> +     */
-> +	if (unlikely(ubq->force_abort)) {
-> +		pr_devel("%s: abort rq: qid %d tag %d io_flags %x\n",
-> +				__func__, ubq->q_id, rq->tag,
-> +				ubq->ios[rq->tag].flags);
-> +		return BLK_STS_IOERR;
-> +	}
->  
->  	blk_mq_start_request(bd->rq);
->  
-> @@ -1003,6 +1024,101 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
->  	ublk_put_device(ub);
->  }
->  
-> +static bool ublk_check_inflight_rq(struct request *rq, void *data)
-> +{
-> +	struct ublk_queue *ubq = rq->mq_hctx->driver_data;
-> +	struct ublk_io *io = &ubq->ios[rq->tag];
-> +	bool *busy = data;
-> +
-> +	if (io->flags & UBLK_IO_FLAG_ACTIVE) {
-> +		*busy = true;
-> +		return false;
-> +	}
-> +	return true;
-> +}
-> +
-> +static void ublk_wait_tagset_rqs_idle(struct ublk_device *ub)
-> +{
-> +	bool busy = false;
-> +
-> +	WARN_ON_ONCE(!blk_queue_quiesced(ub->ub_disk->queue));
-> +	while (true) {
-> +		blk_mq_tagset_busy_iter(&ub->tag_set,
-> +				ublk_check_inflight_rq, &busy);
-> +		if (busy)
-> +			msleep(UBLK_REQUEUE_DELAY_MS);
-> +		else
-> +			break;
-> +	}
-> +}
-> +
-> +static void ublk_quiesce_queue(struct ublk_device *ub,
-> +		struct ublk_queue *ubq)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ubq->q_depth; i++) {
-> +		struct ublk_io *io = &ubq->ios[i];
-> +
-> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
-> +			struct request *rq = blk_mq_tag_to_rq(
-> +					ub->tag_set.tags[ubq->q_id], i);
-> +
-> +			WARN_ON_ONCE(!rq);
-> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
-> +					ublk_queue_can_use_recovery_reissue(ubq) ?
-> +					"requeue" : "abort",
-> +					ubq->q_id, i, io->flags);
-> +			if (ublk_queue_can_use_recovery_reissue(ubq))
-> +				blk_mq_requeue_request(rq, false);
-
-This way is too violent.
-
-There may be just one queue dying, but you requeue all requests
-from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
-such as, just requeuing requests in dying queue.
-
-That said you still can re-use the logic in ublk_abort_queue()/ublk_daemon_monitor_work()
-for making progress, just changing aborting request with requeue in
-ublk_abort_queue().
-
-> +			else
-> +				__ublk_fail_req(io, rq);
-> +		} else {
-> +			pr_devel("%s: done old cmd: qid %d tag %d\n",
-> +					__func__, ubq->q_id, i);
-> +			io_uring_cmd_done(io->cmd, UBLK_IO_RES_ABORT, 0);
-> +			io->flags &= ~UBLK_IO_FLAG_ACTIVE;
-> +		}
-> +		ubq->nr_io_ready--;
-> +	}
-> +	WARN_ON_ONCE(ubq->nr_io_ready);
-> +}
-> +
-> +static void ublk_quiesce_dev(struct ublk_device *ub)
-> +{
-> +	int i;
-> +
-> +	mutex_lock(&ub->mutex);
-> +	if (ub->dev_info.state != UBLK_S_DEV_LIVE)
-> +		goto unlock;
-> +
-> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
-> +		struct ublk_queue *ubq = ublk_get_queue(ub, i);
-> +
-> +		if (!ubq_daemon_is_dying(ubq))
-> +			goto unlock;
-> +	}
-> +	blk_mq_quiesce_queue(ub->ub_disk->queue);
-> +	ublk_wait_tagset_rqs_idle(ub);
-> +	pr_devel("%s: quiesce ub: dev_id %d\n",
-> +			__func__, ub->dev_info.dev_id);
-> +
-> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
-> +		ublk_quiesce_queue(ub, ublk_get_queue(ub, i));
-> +
-> +	ub->dev_info.state = UBLK_S_DEV_QUIESCED;
-> + unlock:
-> +	mutex_unlock(&ub->mutex);
-> +}
-> +
-> +static void ublk_quiesce_work_fn(struct work_struct *work)
-> +{
-> +	struct ublk_device *ub =
-> +		container_of(work, struct ublk_device, quiesce_work);
-> +
-> +	ublk_quiesce_dev(ub);
-> +}
-> +
->  static void ublk_daemon_monitor_work(struct work_struct *work)
->  {
->  	struct ublk_device *ub =
-> @@ -1013,10 +1129,14 @@ static void ublk_daemon_monitor_work(struct work_struct *work)
->  		struct ublk_queue *ubq = ublk_get_queue(ub, i);
->  
->  		if (ubq_daemon_is_dying(ubq)) {
-> -			schedule_work(&ub->stop_work);
-> -
-> -			/* abort queue is for making forward progress */
-> -			ublk_abort_queue(ub, ubq);
-> +			if (ublk_queue_can_use_recovery(ubq)) {
-> +				schedule_work(&ub->quiesce_work);
-> +			} else {
-> +				schedule_work(&ub->stop_work);
-> +
-> +				/* abort queue is for making forward progress */
-> +				ublk_abort_queue(ub, ubq);
-> +			}
-
-If quiesce work are always scheduled exclusively with stop work,
-the two can be defined as union, but not one big deal.
-
-
-Thanks, 
-Ming
-
+> diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
+> index 2301d8fb8c76..d9ff831bdf47 100644
+> --- a/drivers/clk/imx/clk-imx6sx.c
+> +++ b/drivers/clk/imx/clk-imx6sx.c
+> @@ -324,13 +324,13 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
+>  	hws[IMX6SX_CLK_SSI3_SEL]           = imx_clk_hw_mux("ssi3_sel",         base + 0x1c,  14,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+>  	hws[IMX6SX_CLK_SSI2_SEL]           = imx_clk_hw_mux("ssi2_sel",         base + 0x1c,  12,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+>  	hws[IMX6SX_CLK_SSI1_SEL]           = imx_clk_hw_mux("ssi1_sel",         base + 0x1c,  10,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+> -	hws[IMX6SX_CLK_QSPI1_SEL]          = imx_clk_hw_mux_flags("qspi1_sel", base + 0x1c,  7, 3, qspi1_sels, ARRAY_SIZE(qspi1_sels), CLK_SET_RATE_PARENT);
+> +	hws[IMX6SX_CLK_QSPI1_SEL]          = imx_clk_hw_mux("qspi1_sel",        base + 0x1c,  7,      3,      qspi1_sels,        ARRAY_SIZE(qspi1_sels));
+>  	hws[IMX6SX_CLK_PERCLK_SEL]         = imx_clk_hw_mux("perclk_sel",       base + 0x1c,  6,      1,      perclk_sels,       ARRAY_SIZE(perclk_sels));
+>  	hws[IMX6SX_CLK_VID_SEL]            = imx_clk_hw_mux("vid_sel",          base + 0x20,  21,     3,      vid_sels,          ARRAY_SIZE(vid_sels));
+>  	hws[IMX6SX_CLK_ESAI_SEL]           = imx_clk_hw_mux("esai_sel",         base + 0x20,  19,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+>  	hws[IMX6SX_CLK_CAN_SEL]            = imx_clk_hw_mux("can_sel",          base + 0x20,  8,      2,      can_sels,          ARRAY_SIZE(can_sels));
+>  	hws[IMX6SX_CLK_UART_SEL]           = imx_clk_hw_mux("uart_sel",         base + 0x24,  6,      1,      uart_sels,         ARRAY_SIZE(uart_sels));
+> -	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux_flags("qspi2_sel", base + 0x2c, 15, 3, qspi2_sels, ARRAY_SIZE(qspi2_sels), CLK_SET_RATE_PARENT);
+> +	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux("qspi2_sel",        base + 0x2c,  15,     3,      qspi2_sels,        ARRAY_SIZE(qspi2_sels));
+>  	hws[IMX6SX_CLK_SPDIF_SEL]          = imx_clk_hw_mux("spdif_sel",        base + 0x30,  20,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+>  	hws[IMX6SX_CLK_AUDIO_SEL]          = imx_clk_hw_mux("audio_sel",        base + 0x30,  7,      2,      audio_sels,        ARRAY_SIZE(audio_sels));
+>  	hws[IMX6SX_CLK_ENET_PRE_SEL]       = imx_clk_hw_mux("enet_pre_sel",     base + 0x34,  15,     3,      enet_pre_sels,     ARRAY_SIZE(enet_pre_sels));
+> -- 
+> 2.25.1
+> 
