@@ -2,133 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2638F5BC466
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5FC5BC4A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiISIfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S230086AbiISIsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiISIfT (ORCPT
+        with ESMTP id S230083AbiISIsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:35:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEEA15822;
-        Mon, 19 Sep 2022 01:35:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50BB161803;
-        Mon, 19 Sep 2022 08:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5DAC433B5;
-        Mon, 19 Sep 2022 08:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663576517;
-        bh=NDnqlZhtaXp4aa68lUPaptwqfteRjFznv1jId6XcsS8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FwYz92tNSMouuBkIr5MB0ikWNhkT/ojXPVaqBFo9x9Qw3AXpQX6EkpNmq951GANP0
-         B3ExHYccC0OeCAXhQJNx/NZEmoIsrh0R7SFhbWr150UmDA5LTSqL6Tt+IJu8SH1OXD
-         Yhf7sBYd1MELMeun3wN9cfGTH0sQa5yCwugRti/T36YHMfV5oFbGSWkixlQfDH578O
-         h2o+cGoqTG2kyd8EPEB4gcrGSbT8Ogq2c8ldeYoB90/RfqO8UPZV9ozspdXOhhG8zy
-         vXQdfurH6njPs1BbzxIxa3r81/RpXmOczYU6+hZiUGYsAceYNwtJJrp9zz2f6WBwCk
-         5wufF9xkOWJTA==
-Received: by mail-oi1-f182.google.com with SMTP id n83so13770447oif.11;
-        Mon, 19 Sep 2022 01:35:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2+oIwjIlBMnFeETZgBank3gq4LFlkGUBDSHmmj+D+X9JsC+jmN
-        aHnBfIoAYHcX9/s+UbqFtiOoUEnfRYZ578L1Yng=
-X-Google-Smtp-Source: AA6agR5ITfiPWZ9F9F5lkDqO0GA/3OeLcDmqgx/nf0vJ/sBZgtsKJFlK/BPu0y1OEMjk0otXRqR3awY0W+PQUuOvZvM=
-X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
- q31-20020a056808201f00b0034f9fdfdbbfmr11418144oiw.19.1663576516813; Mon, 19
- Sep 2022 01:35:16 -0700 (PDT)
+        Mon, 19 Sep 2022 04:48:37 -0400
+Received: from mail.base45.de (mail.base45.de [80.241.60.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51D122509;
+        Mon, 19 Sep 2022 01:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
+        s=20190804; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=wyupJayZSIFm4y9yPMluAd5MbviJpk1Su8GT/MLhOjk=; b=tzfQxWbqUmiJCTkn6p5176GEvQ
+        Nr6iSRPO7XqqBoc37yt3n2c+COIOanKNp8KNtjNY+RguFlz0Wsy9QxyYFIKZqIE9Oxh1eY0kmRJYx
+        /JsBRFyUcGpPsBDIYiCwkqm8BRd3ETaTlz1G3hCxFRxaxCF7oawUnvoiXw2E2ZKAXoU+lfOMRDxix
+        jk9K3Qx2pruXgvmesvP0GU8Lo8Hl6aHL4KBsjqHXs5KZqtKIEB1PaaN4Y2in7gGCPbRaY0tZL0tnl
+        gOTd3gam97FlNbNM0VVv75owScUUoaMFORiruwkKmUKeRBGiVSGO2Ff1EnF7FjoqVzb97WmF72S2a
+        e3Erp5ig==;
+Received: from dynamic-089-204-138-189.89.204.138.pool.telefonica.de ([89.204.138.189] helo=localhost.localdomain)
+        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lynxis@fe80.eu>)
+        id 1oaCHH-0015f0-Lm; Mon, 19 Sep 2022 08:37:19 +0000
+From:   Alexander Couzens <lynxis@fe80.eu>
+To:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Alexander Couzens <lynxis@fe80.eu>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] net: mediatek: sgmii stability
+Date:   Mon, 19 Sep 2022 10:37:07 +0200
+Message-Id: <20220919083713.730512-1-lynxis@fe80.eu>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
-In-Reply-To: <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 19 Sep 2022 16:35:04 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
-Message-ID: <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Andreas Schwab <schwab@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Sep 10, 2022, at 2:52 PM, Guo Ren wrote:
-> > On Thu, Sep 8, 2022 at 3:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
-> >> > From: Guo Ren <guoren@linux.alibaba.com>
-> >> - When VMAP_STACK is set, make it possible to select non-power-of-two
-> >>   stack sizes. Most importantly, 12KB should be a really interesting
-> >>   choice as 8KB is probably still not enough for many 64-bit workloads,
-> >>   but 16KB is often more than what you need. You probably don't
-> >>   want to allow 64BIT/8KB without VMAP_STACK anyway since that just
-> >>   makes it really hard to debug, so hiding the option when VMAP_STACK
-> >>   is disabled may also be a good idea.
-> > I don't want this config to depend on VMAP_STACK. Some D1 chips would
-> > run with an 8K stack size and !VMAP_STACK.
->
-> That sounds like a really bad idea, why would you want to risk
-> using such a small stack without CONFIG_VMAP_STACK?
->
-> Are you worried about increased memory usage or something else?
->
-> >  /* thread information allocation */
-> > -#ifdef CONFIG_64BIT
-> > -#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
-> > -#else
-> > -#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
-> > -#endif
-> > +#define THREAD_SIZE_ORDER      CONFIG_THREAD_SIZE_ORDER
-> >  #define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
->
-> This doesn't actually allow additional THREAD_SIZE values, as you
-> still round up to the nearest power of two.
->
-> I think all the non-arch code can deal with non-power-of-2
-> sizes, so you'd just need
->
-> #define THREAD_SIZE round_up(CONFIG_THREAD_SIZE, PAGE_SIZE)
->
-> and fix up the risc-v specific code to do the right thing
-> as well. I now see that THREAD_SIZE_ORDER is not actually
-> used anywhere with CONFIG_VMAP_STACK, so I suppose that
-> definition can be skipped, but you still need a THREAD_ALIGN
-> definition that is a power of two and at least a page larger
-> than THREAD_SIZE.
-Sorry, I missed this part. I would RESEND v5
+v1 -> v2:
+ - add & improve comments on unexpected hw behaviour
+ - add patch refactor power cycling into mtk_pcs_config()
 
->
->      Arnd
+Alexander Couzens (5):
+  net: mediatek: sgmii: fix powering up the SGMII phy
+  net: mediatek: sgmii: ensure the SGMII PHY is powered down on
+    configuration
+  net: mediatek: sgmii: mtk_pcs_setup_mode_an: don't rely on register
+    defaults
+  net: mediatek: sgmii: set the speed according to the phy interface in
+    AN
+  net: mediatek: sgmii: refactor power cycling into mtk_pcs_config()
 
-
+ drivers/net/ethernet/mediatek/mtk_sgmii.c | 41 ++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 13 deletions(-)
 
 -- 
-Best Regards
- Guo Ren
+2.37.3
+
