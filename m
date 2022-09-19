@@ -2,99 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154AA5BD37C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27A05BD37F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiISRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S230350AbiISRTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiISRQ4 (ORCPT
+        with ESMTP id S229724AbiISRS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:16:56 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32DA14083;
-        Mon, 19 Sep 2022 10:16:54 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id a3so36032577lfk.9;
-        Mon, 19 Sep 2022 10:16:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=qfmpocwGFcvxn/kfW/YixA1qZZ0ZnBfI95e5FNSla5w=;
-        b=6W9oSie1rr+YzUanoiae8R2/4bL3nOA1ujQouSTEiwv8fKy08xr5c7s2hg6fYYZGUl
-         eVkawaeU9m3PM6Y3/OqwyvFcaaF4H40WwErFDKPlglvOCM1w0hO6yhjz+1x5v+dBu4Qu
-         AmWxq1uRIc3l+wGZC26WGV4YOBkdbY4DAUdEyi/KaDOnYjj6mmYnw7l7j4JqhevTLPfk
-         rP5qjuMs1iOAgq4NHOp19Ee3JgB3rVbW/4lrrZdVkTkp0EqXULVpXz2SnEp6YR+ZrdqM
-         Q4K5a57GXq4evdAJPVwS+qlzU0f3A5LwsXWklvzgrxojUlj/Fop/azgFs3jwMI5KC1TE
-         E0Bg==
-X-Gm-Message-State: ACrzQf1yrgLBqyh+FQI8/ubahhsNzOeo9xb0d/BbAxbrFraVe4UasIkN
-        rJu2HUedjDLG0Fd2aLximLoCtrYkH48=
-X-Google-Smtp-Source: AMsMyM6e2vNq8a+W4zhW2FfI4fcJloJ1eCZNRlpVLQyDkjM94DR2+AAnmViqaXJa2P7NujmNrK4wXA==
-X-Received: by 2002:ac2:4c46:0:b0:49d:c0ff:b172 with SMTP id o6-20020ac24c46000000b0049dc0ffb172mr6350196lfk.19.1663607813182;
-        Mon, 19 Sep 2022 10:16:53 -0700 (PDT)
-Received: from localhost (88-112-11-246.elisa-laajakaista.fi. [88.112.11.246])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05651236d300b004994117b0fdsm5262323lfs.281.2022.09.19.10.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:16:52 -0700 (PDT)
-From:   Hannu Hartikainen <hannu@hrtk.in>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hannu Hartikainen <hannu@hrtk.in>
-Subject: [PATCH] USB: add RESET_RESUME quirk for NVIDIA Jetson devices in RCM
-Date:   Mon, 19 Sep 2022 20:16:10 +0300
-Message-Id: <20220919171610.30484-1-hannu@hrtk.in>
-X-Mailer: git-send-email 2.37.3
+        Mon, 19 Sep 2022 13:18:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD11FCF5;
+        Mon, 19 Sep 2022 10:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7121FB8069D;
+        Mon, 19 Sep 2022 17:18:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B8AC433D6;
+        Mon, 19 Sep 2022 17:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663607933;
+        bh=9ZvJnawDlxY9dZtU1p0CXXCvVjy3I23Z9TlaleTFuPQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MsVjJ6AioCtwqKEp5Uy3poH+nqi0N+rPq/ItcSpu8UbHmfRzCa5FKRFLyEUDJtD8Q
+         C5VaVKvDDyHrMXGLiNG947QlmCYrNyi/Z7c65jTdA/+y5sfPPLHjWYPZ5eThTiVNp5
+         zMPrzhrpdjgt8XrCc/jSdZTut4Cn4aGRA3r4cRWT1tzdtMFi9UrV+c4sJBO+jELULQ
+         ivdUqBgBeY+bW/qGMPaiQyOe/eGuSj0PfDNMsRQ95KGmOOTeyJzDCyLRXfKi9LyCuj
+         eQjRwjAmzP44Vb/Zsr9tmhnVk40QQR5K1XVHLrincl2w/oaukIjIeXH+GEDoHnvnnN
+         GqxYouMYWUaeQ==
+Date:   Mon, 19 Sep 2022 18:18:54 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nuno.sa@analog.com" <nuno.sa@analog.com>,
+        "dragos.bogdan@analog.com" <dragos.bogdan@analog.com>,
+        Stefan Popa <stefan.popa@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>
+Subject: Re: [RFT] potential bug with IIO_CONST_ATTR usage with triggered
+ buffers
+Message-ID: <20220919181854.01214355@jic23-huawei>
+In-Reply-To: <20220919163214.5b757903@jic23-huawei>
+References: <20210215104043.91251-1-alexandru.ardelean@analog.com>
+        <20210215104043.91251-15-alexandru.ardelean@analog.com>
+        <aecd6a19-79a8-d9a6-2dc4-73dcd756c92d@fi.rohmeurope.com>
+        <87fbfc8e-fb17-444d-22a2-3738ade77cb5@fi.rohmeurope.com>
+        <20220919163214.5b757903@jic23-huawei>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NVIDIA Jetson devices in Force Recovery mode (RCM) do not support
-suspending, ie. flashing fails if the device has been suspended. The
-devices are still visible in lsusb and seem to work otherwise, making
-the issue hard to debug. This has been discovered in various forum
-posts, eg. [1].
+On Mon, 19 Sep 2022 16:32:14 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-The patch has been tested on NVIDIA Jetson AGX Xavier, but I'm adding
-all the Jetson models listed in [2] on the assumption that they all
-behave similarly.
+> On Mon, 19 Sep 2022 08:52:38 +0000
+> "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> 
+> > On 9/9/22 11:12, Vaittinen, Matti wrote:  
+> > > Hi dee Ho peeps!
+> > > 
+> > > Disclaimer - I have no HW to test this using real in-tree drivers. If
+> > > someone has a device with a variant of bmc150 or adxl372 or  - it'd be
+> > > nice to see if reading hwfifo_watermark_max or hwfifo_watermark_min
+> > > works with the v6.0-rc4. Maybe I am misreading code and have my own
+> > > issues - in which case I apologize already now and go to the corner
+> > > while being deeply ashamed :)    
+> > 
+> > I would like to add at least the at91-sama5d2_adc (conditonally 
+> > registers the IIO_CONST_ATTR for triggered-buffer) to the list of 
+> > devices that could be potentially tested. I hope some of these devices 
+> > had a user who could either make us worried and verify my assumption - 
+> > or make me ashamed but rest of us relieved :) Eg - I second my request 
+> > for testing this - and add potential owners of at91-sama5d2_adc to the list.
+> >   
+> > > On 2/15/21 12:40, Alexandru Ardelean wrote:    
+> > >> This change wraps all buffer attributes into iio_dev_attr objects, and
+> > >> assigns a reference to the IIO buffer they belong to.
+> > >>
+> > >> With the addition of multiple IIO buffers per one IIO device, we need a way
+> > >> to know which IIO buffer is being enabled/disabled/controlled.
+> > >>
+> > >> We know that all buffer attributes are device_attributes.    
+> > > 
+> > > I think this assumption is slightly unsafe. I see few drivers adding
+> > > IIO_CONST_ATTRs in attribute groups. For example the bmc150 and adxl372
+> > > add the hwfifo_watermark_min and hwfifo_watermark_max.
+> > >    
+> > 
+> > and at91-sama5d2_adc
+> > 
+> > //snip
+> >   
+> > >I noticed that using
+> > > IIO_CONST_ATTRs for triggered buffers seem to cause access to somewhere
+> > > it shouldn't... Oops.
+> > > 
+> > > Reading the code allows me to assume the problem is wrapping the
+> > > attributes to IIO_DEV_ATTRs.
+> > > 
+> > > static struct attribute *iio_buffer_wrap_attr(struct iio_buffer *buffer,
+> > > +					      struct attribute *attr)
+> > > +{
+> > > +	struct device_attribute *dattr = to_dev_attr(attr);
+> > > +	struct iio_dev_attr *iio_attr;
+> > > +
+> > > +	iio_attr = kzalloc(sizeof(*iio_attr), GFP_KERNEL);
+> > > +	if (!iio_attr)
+> > > +		return NULL;
+> > > +
+> > > +	iio_attr->buffer = buffer;
+> > > +	memcpy(&iio_attr->dev_attr, dattr, sizeof(iio_attr->dev_attr));
+> > > 
+> > > This copy does assume all attributes are device_attrs, and does not take
+> > > into account that IIO_CONST_ATTRS have the string stored in a struct
+> > > iio_const_attr which is containing the dev_attr. Eg, copying in the
+> > > iio_buffer_wrap_attr() does not copy the string - and later invoking the
+> > > 'show' callback goes reading something else than the mentioned string
+> > > because the pointer is not copied.    
+> > 
+> > Yours,
+> > 	-- Matti  
+> Hi Matti,
+> 
+> +CC Alexandru on a current email address.
+> 
+> I saw this whilst travelling and completely forgot about when
+> I was back to normal - so great you sent a follow up!
+> 
+> Anyhow, your reasoning seems correct and it would be easy enough
+> to add such a case to iio/dummy/iio_simple_dummy_buffer.c and
+> provide a clear test for the problem.
+> 
+> As to solutions. The quickest is probably to switch these const attrs
+> over to a non const form and add a comment to the header to say they are
+> unsuitable for use with buffers.
 
-[1]: https://forums.developer.nvidia.com/t/flashing-not-working/72365
-[2]: https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3271/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/quick_start.html
+Thinking a little more on this - all / (most?) of the users pass a null terminated
+array of struct device_attribute * to *iio_triggered_buffer_setup_ext()
 
-Signed-off-by: Hannu Hartikainen <hannu@hrtk.in>
----
- drivers/usb/core/quirks.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+That's then assigned to buffer->attrs. 
+We could add an additional pointer to the struct iio_buffer to take
+a null terminated array of struct iio_dev_attr *
+and change the signature of that function to take one of those, thus
+preventing us using iio_const_attr structures for this.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index f99a65a64588..11b27953ccd0 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -388,6 +388,15 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* Kingston DataTraveler 3.0 */
- 	{ USB_DEVICE(0x0951, 0x1666), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* NVIDIA Jetson devices in Force Recovery mode */
-+	{ USB_DEVICE(0x0955, 0x7018), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7019), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7418), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7721), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7c18), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7e19), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7f21), .driver_info = USB_QUIRK_RESET_RESUME },
-+
- 	/* X-Rite/Gretag-Macbeth Eye-One Pro display colorimeter */
- 	{ USB_DEVICE(0x0971, 0x2000), .driver_info = USB_QUIRK_NO_SET_INTF },
- 
--- 
-2.37.3
+Then we can wrap those just fine in the code you highlighted and assign the
+result into buffer->attrs.
+
+We'd need to precede that change with fixes that just switch the
+iio_const_attr uses over to iio_dev_attr but changing this would ensure no
+accidental reintroductions of the problem in future drivers (typically
+as a result of someone forward porting a driver that is out of tree).
+
+I think this combination of fix then prevent future problems is what
+I would prefer.
+
+Jonathan
+
+
+
+> 
+> An alternative would be to make it 'safe' by making the data layouts
+> match up.
+> 
+> struct iio_attr {
+> 	struct device_attribute dev_attr;
+> 	union {
+> 		u64 address;
+> 		const char *string;
+> 	};
+> 	struct list_head l;
+> 	struct iio_chan_spec const *c;
+> 	struct iio_buffer *buffer;
+> };
+> 
+> #define iio_dev_attr iio_attr
+> #define iio_const_attr iio_attr
+> 
+> Looking at this raises another potential problem.
+> Where is the address copied over for attributes using IIO_DEVICE_ATTR()?
+> Maybe I'm just missing it somewhere.  Grepping suggests we've been
+> lucky and there are no users of that field in buffer attributes.
+> 
+> Detecting the problem you found is going to be inherently tricky - though maybe
+> could rely on the naming of the attributes passed in (iio_const...)
+> and some scripting magic. 
+> 
+> Longer term, it's this sort of thing that motivates protections / runnable
+> CI self tests with, for example, the roadtest framework that I'm hoping
+> will be available upstream soonish!
+> 
+> Would you like to send patches given you identified the problem?
+> 
+> If not I'm happy to fix these up. My grepping identified the same 3 cases
+> you found.
+> 
+> Jonathan
+> 
 
