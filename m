@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F2F5BC5E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D49F5BC5E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiISJ5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S230145AbiISJ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiISJ51 (ORCPT
+        with ESMTP id S230160AbiISJ5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:57:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232FAA47E;
-        Mon, 19 Sep 2022 02:57:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD8E60E07;
-        Mon, 19 Sep 2022 09:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340E8C433C1;
-        Mon, 19 Sep 2022 09:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663581442;
-        bh=SC0xpJYfatRTu9GE/Tfh5/6VjsG9r+bd/p1faUdRTkI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Aq2Rbil72SBqmVgyJnsZowmBIeehH7/MFTIFFSPJJlPNLc87aum31tc0l33+1HdxJ
-         VZx6koaAXFC45wDvXeSLXFBZaDYjGDpYx8jFbudlFz7JLWdoI3giurWfY9HOSdTbws
-         X9WOtEGOU0+MuHr3RNY/iHVAtiRqfhf2pjJar6EfMCoWtOnuWrfrVvMRGRhI5vwZSo
-         eNtmZk+PuoImccjmWbnDJgWAmVSZhs88lkb82+EaaxXUs9GpBds1qt06HrNJkW4nLV
-         uVXTWhkiRY5aTsiTC8Wx22OTN0Yw8crP9v3w8PVa6NZ1es5BAGh2BnRQx//4iD/xUc
-         GvnJw2TWrgHmA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oaDWn-0000aD-Ro; Mon, 19 Sep 2022 11:57:26 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] phy: qcom-qmp-combo: fix sc8280xp PCS_USB offset
-Date:   Mon, 19 Sep 2022 11:57:00 +0200
-Message-Id: <20220919095700.2228-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 19 Sep 2022 05:57:47 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82486205C7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:57:44 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 29so40466887edv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=heOqC4DwWEYhTmNneDbejVKHEtSrdEAdofWgZMXtCX4=;
+        b=fX48UDbHqip2CIqV3NKgKxwtocGmPsGoU8wUSEExXntWYwIEZmPR/JZ56KE384psD9
+         6zlg9oW7sWUiAMEqnIzmkgltRDIYyqe3mLmmlG5SqKR6pNu07Rt59ubaMljw168gjC2M
+         hxG9cTfuhxtztL2wa+M/Z8q8sigU0jZLYPX64=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=heOqC4DwWEYhTmNneDbejVKHEtSrdEAdofWgZMXtCX4=;
+        b=jynIEZ/fkcI5UsROyzvVVC+QF0szpY9SpbJa8IaGSHDcMynqHpt6mIuP6XCLIWzfxT
+         qY4ZkTR8fQCROJX0e43S2TkrxvaULIhjfsjcQxEPJ+Kl+PQolNux2UlDQW6yfYwpKCyQ
+         JY0M3qdy5vsHMkjLXMk382Fs9b+Y9U34lTWSn7KfG19cIN1yhz+l9yHU7OS8Peag7fDA
+         6HjzgoTFWXGlWn4IEUnRGmrNHwrKC1nEsuoxdWa26VVObdRA9mPjBLVo4bcoOmwTEo7J
+         G1uNwVteKpMI/dRxzmeWraMRorESUX0Yb8l3WlsZZelN2sBNDKsFrxkuQrtu7BWq8L4R
+         exPg==
+X-Gm-Message-State: ACrzQf15B7Wd+HLJwSbdM3TRaL7wtDos6Sk2cJsM67z6je5q0s6T8DhN
+        09nHKmXY3Fx8l+a4lWrBPTAcD3q1GLdKCaDy3YJhJqL/I0XdIw==
+X-Google-Smtp-Source: AMsMyM64s0x48rfj2Bhse87ZGGUrXt2ChjPhdxL4BRnm2pc1reyuYlLZomBn6syeFVu8ZsniRbMdr/JvNPPOoicUJBs=
+X-Received: by 2002:a05:6402:3485:b0:451:f615:321f with SMTP id
+ v5-20020a056402348500b00451f615321fmr15247486edc.65.1663581462029; Mon, 19
+ Sep 2022 02:57:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CAOf5uwk=Tx+W-JuJBXUYjt2BLmSvr9Q153D1RTyJG_cmeO4AUw@mail.gmail.com>
+ <826cd775-14d2-12ae-2e96-cf0766aa1502@redhat.com> <CAOf5uwmKfcC0OiiuN82tUzcE1XkPuA3N3u+o3Ue_ZPNJqeSM+g@mail.gmail.com>
+ <4475783a-73c1-94f1-804e-507abeb84ab1@redhat.com>
+In-Reply-To: <4475783a-73c1-94f1-804e-507abeb84ab1@redhat.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Mon, 19 Sep 2022 11:57:30 +0200
+Message-ID: <CAOf5uwk8RLRrMa3vM-1+k0oi8XfnWVZH6_uc_UtagWYFVrMYKQ@mail.gmail.com>
+Subject: Re: Correlation CMA size and FORCE_MAX_ZONEORDER
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,38 +65,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PCS_USB register block lives at an offset of 0x300 from the PCS
-region on SC8280XP so add the missing offset to avoid corrupting
-unrelated registers on runtime suspend.
+Hi
 
-Note that this region should probably be described separately in the
-binding.
+On Mon, Sep 19, 2022 at 11:31 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 19.09.22 11:17, Michael Nazzareno Trimarchi wrote:
+> > Hi David
+> >
+> > On Mon, Sep 19, 2022 at 10:38 AM David Hildenbrand <david@redhat.com> wrote:
+> >>
+> >> On 15.09.22 23:36, Michael Nazzareno Trimarchi wrote:
+> >>> Hi all
+> >>
+> >> Hi,
+> >>
+> >>>
+> >>> Working on a small device with 128MB of memory and using imx_v6_v7
+> >>> defconfig I found that CMA_SIZE_MBYTES, CMA_SIZE_PERCENTAGE
+> >>> are not respected. The calculation done does not allow the requested
+> >>> size. I think that this should be somehow documented and described but
+> >>> I did not
+> >>> find the documentation. Does it work this way?
+> >>>
+> >>> With CMA_SIZE of 8MB I need to have FORCE_MAX_ZONEORDER=12 if I have
+> >>> the default FORCE_MAX_ZONEORDER=14 the min size is 32Mb
+> >>
+> >> The underlying constraint is that CMA regions require a certain minimum
+> >> alignment+size. They cannot be arbitrarily in size.
+> >>
+> >> CMA_MIN_ALIGNMENT_BYTES expresses that, and corresponds in upstream
+> >> kernels to the size of a single pageblock.
+> >>
+> >> In previous kernels, it used to be the size of the largest buddy
+> >> allocation granularity (derived from MAX_ORDER, derived from
+> >> FORCE_MAX_ZONEORDER).
+> >>
+> >> On upstream kernels, the FORCE_MAX_ZONEORDER constraint should no longer
+> >> apply. On most archs, the minimum alignment+size should be 2 MiB
+> >> (x86-64, aarch64 with 4k base pages) -- the size of a single pageblock.
+> >>
+> >> So far the theory. Are you still running into this limitation on
+> >> upstream kernels?
+> >>
+> >
+> > I can run 6-rc2 on my board. I test again but according to it, if I
+> > put 4M as CMA in cma=4M in boot
+> > parameters, the result is 32Mb of CMA. Apart of that seems that
+> > process lime tiny membench can not even start
+> > to mblock memory
+> >
+>
+> The CMA alignemnt change went into v5.19. If "cma=4M" still gives you >
+> 4M, can you post /proc/meminfo and the early console output?
+>
 
-Fixes: a2e927b0e50d ("phy: qcom-qmp-combo: Add sc8280xp USB/DP combo phys")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 1 +
- 1 file changed, 1 insertion(+)
+cat /proc/cmdline
+cma=4M mtdparts=gpmi-nand:4m(nandboot),1m(env),24m(kernel),1m(nanddtb),-(rootfs)
+root=ubi0:root rw ubi.mtd=ro
+otfs rootfstype=ubifs rootwait=1
+# cat /proc/meminfo
+MemTotal:         109560 kB
+MemFree:           56084 kB
+MemAvailable:      56820 kB
+Buffers:               0 kB
+Cached:            39680 kB
+SwapCached:            0 kB
+Active:               44 kB
+Inactive:            644 kB
+Active(anon):         44 kB
+Inactive(anon):      644 kB
+Active(file):          0 kB
+Inactive(file):        0 kB
+Unevictable:       39596 kB
+Mlocked:               0 kB
+HighTotal:             0 kB
+HighFree:              0 kB
+LowTotal:         109560 kB
+LowFree:           56084 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:           628 kB
+Mapped:             1480 kB
+Shmem:                84 kB
+KReclaimable:       4268 kB
+Slab:               8456 kB
+SReclaimable:       4268 kB
+SUnreclaim:         4188 kB
+KernelStack:         392 kB
+PageTables:           88 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:       54780 kB
+Committed_AS:       1876 kB
+VmallocTotal:     901120 kB
+VmallocUsed:        2776 kB
+VmallocChunk:          0 kB
+Percpu:               72 kB
+CmaTotal:          32768 kB
+CmaFree:           32484 kB
+# uname -a
+Linux buildroot 6.0.0-rc5 #20 SMP Mon Sep 19 11:51:26 CEST 2022 armv7l GNU/Linux
+#
 
-The corresponding DT fix is here:
+Then here https://pastebin.com/6MUB2VBM dmesg
 
-	https://lore.kernel.org/all/20220919094454.1574-4-johan+linaro@kernel.org/
+CONFIG_ARM_MODULE_PLTS=y
+CONFIG_FORCE_MAX_ZONEORDER=14
+CONFIG_ALIGNMENT_TRAP=y
+...
+CONFIG_CMA
+CONFIG_CMA_AREAS=7
+...
 
-Johan
+CONFIG_CMA_SIZE_MBYTES=8
+CONFIG_CMA_SIZE_SEL_MBYTES=y
 
+Michael
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index d200cd5ca4fa..ed196d00815b 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -1261,6 +1261,7 @@ static const struct qmp_phy_cfg sc8280xp_usb43dp_usb_cfg = {
- 	.vreg_list		= qmp_phy_vreg_l,
- 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
- 	.regs			= qmp_v4_usb3phy_regs_layout,
-+	.pcs_usb_offset		= 0x300,
- 
- 	.start_ctrl		= SERDES_START | PCS_START,
- 	.pwrdn_ctrl		= SW_PWRDN,
--- 
-2.35.1
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
+--
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
