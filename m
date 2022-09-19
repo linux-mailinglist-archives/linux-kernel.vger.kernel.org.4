@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2DA5BC2D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42EF5BC2DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiISGdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 02:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S229725AbiISGev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 02:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiISGdU (ORCPT
+        with ESMTP id S229482AbiISGer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 02:33:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8244317A88;
-        Sun, 18 Sep 2022 23:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663569199; x=1695105199;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r0/uBQA5005Rs7fYs3jAa6s1cVz0tORDno4ZJmynCXc=;
-  b=HfWiTD30ya3KzIEB5BzjcJzveFdfn3v6SzYSsLVyWN+WJJ5dN26yuCBt
-   rD2Y+nR1XPoqOIinwkiWxIEf4Cqr/dljimBFkhVSIOOAd4vgjpn2MKEm5
-   gCxlYo1Y+Iix0yTx5/PTZFCeDt+LVZJPg4gRiH09HZFXgvJeFaBmFOb76
-   IRLN8cI4vGhZ7PfM7sBPzzGqEm9lGJ3BpizkJrcEEOlRralNUBFIF3oWe
-   y7rq23XZ065biZfggxpTvcknQhLfuSJsMyTgnf+ceVeWyYMTZGXojftsz
-   70v3JOFGZ7DpGYFl2awewKsL/+EBeVvWlrx+Hw1zL4vm/kv1mjyC4ln5p
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="282344198"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="282344198"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:33:19 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="760738803"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:33:15 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id BB04220078;
-        Mon, 19 Sep 2022 09:33:12 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 06:33:12 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Christian Hemp <c.hemp@phytec.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
-Message-ID: <YygNKE7LLtpwfnz+@paasikivi.fi.intel.com>
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <20220911200147.375198-3-mike.rudenko@gmail.com>
- <20220914155122.GA9874@tom-ThinkPad-T14s-Gen-2i>
- <87k064pa2v.fsf@gmail.com>
- <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
+        Mon, 19 Sep 2022 02:34:47 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2892055BA;
+        Sun, 18 Sep 2022 23:34:44 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWFH26F6DzlBkt;
+        Mon, 19 Sep 2022 14:33:02 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgA3inN+DShjOEtEBA--.3753S3;
+        Mon, 19 Sep 2022 14:34:40 +0800 (CST)
+Subject: Re: [PATCH -next 1/3] wbt: don't show valid wbt_lat_usec in sysfs
+ while wbt is disabled
+To:     kernel test robot <lkp@intel.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
+Cc:     kbuild-all@lists.01.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220919014939.175497-2-yukuai1@huaweicloud.com>
+ <202209191232.Nwt56uMD-lkp@intel.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <5b70632c-325b-2eda-a819-13be013c42c9@huaweicloud.com>
+Date:   Mon, 19 Sep 2022 14:34:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202209191232.Nwt56uMD-lkp@intel.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgA3inN+DShjOEtEBA--.3753S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4kZrWkuw45Ww4rJFWxXrb_yoW8tw4kpa
+        yUt343K34Iqr48WayxGay7Ww1Ygr4kJa4UJryUGw45Zayj9ry0qFn7KrWrWF9agr1vkFW3
+        Xr4Y9F9Yqw15AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+Hi,
 
-On Fri, Sep 16, 2022 at 03:34:01PM +0200, Tommaso Merciai wrote:
-> > >> +	ret = clk_set_rate(ov4689->xvclk, OV4689_XVCLK_FREQ);
-> > >> +	if (ret < 0) {
-> > >> +		dev_err(dev, "Failed to set xvclk rate (24MHz)\n");
-> > >> +		return ret;
-> > >> +	}
-> > >> +	if (clk_get_rate(ov4689->xvclk) != OV4689_XVCLK_FREQ)
-> > >> +		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
-> > >
-> > >
-> > > What do you think about?
-> > > Thanks.
-> > 
-> > Unfortunately, I have no experience with ACPI-based devices. :(
-> > 
-> > Do you mean that in the case of an ACPI device and devm_clk_get_optional
-> > returning NULL we should assume that the clock is already enabled and
-> > will stay enabled during sensor operation? How should we distinguish it
-> > from the case of an OF-based system and clock just missing from device
-> > tree?
+ÔÚ 2022/09/19 12:28, kernel test robot Ð´µÀ:
+> Hi Yu,
 > 
-> Not exaclty :)
+> Thank you for the patch! Yet something to improve:
 > 
-> I copy comment from [1]
+> [auto build test ERROR on next-20220916]
 > 
-> if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
-> you use the get_optionl() version ? Otherwise in the ACPI case you will have
-> -ENOENT if there's not 'xvclk' property and bail out.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
+> base:    d5538ab91d3a9a237805be6f8c6c272af2987995
+> config: parisc-randconfig-r021-20220919 (https://download.01.org/0day-ci/archive/20220919/202209191232.Nwt56uMD-lkp@intel.com/config)
+> compiler: hppa-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/dd5a7be692b8fc9794f29648d0805a2d65b9c4de
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
+>          git checkout dd5a7be692b8fc9794f29648d0805a2d65b9c4de
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
 > 
-> Unless my understanding is wrong on ACPI we have "clock-frequency" and
-> on OF "xvclk" with an "assigned-clock-rates",
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     block/blk-sysfs.c: In function 'queue_wb_lat_show':
+>>> block/blk-sysfs.c:475:15: error: implicit declaration of function 'wbt_disabled'; did you mean 'irqs_disabled'? [-Werror=implicit-function-declaration]
+>       475 |         lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+>           |               ^~~~~~~~~~~~
+>           |               irqs_disabled
+>     cc1: some warnings being treated as errors
+> 
 
-Generally yes. It's also possible to have a clock in ACPI based system
-although those clocks do not come from ACPI. See e.g.
-drivers/platform/x86/intel/int3472/clk_and_regulator.c .
+I forgot to provide a definition while config is disabled, I'll send a
+new version to fix this.
 
--- 
-Sakari Ailus
+Thanks,
+Kuai
+> 
+> vim +475 block/blk-sysfs.c
+> 
+>     467	
+>     468	static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
+>     469	{
+>     470		u64 lat;
+>     471	
+>     472		if (!wbt_rq_qos(q))
+>     473			return -EINVAL;
+>     474	
+>   > 475		lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+>     476	
+>     477		return sprintf(page, "%llu\n", lat);
+>     478	}
+>     479	
+> 
+
