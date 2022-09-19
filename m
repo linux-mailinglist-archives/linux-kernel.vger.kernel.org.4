@@ -1,127 +1,126 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981F45BCD61
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:37:58 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id ED6AD5BCD55
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiISNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S230172AbiISNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiISNho (ORCPT
+        with ESMTP id S229964AbiISNeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:37:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C7812D10;
-        Mon, 19 Sep 2022 06:37:43 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MWQfZ1sQ5zHnv7;
-        Mon, 19 Sep 2022 21:35:34 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 21:37:41 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
- 2022 21:37:41 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <aeasi@marvell.com>, <dwagner@suse.de>,
-        <himanshu.madhani@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH v2 -next] scsi: qla2xxx: Fix build error implicit-function-declaration
-Date:   Mon, 19 Sep 2022 21:34:04 +0800
-Message-ID: <20220919133404.85425-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 19 Sep 2022 09:34:16 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525381BEBF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:34:15 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id c198so28097685pfc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Ha1sOeqDp1Aaxnz0F/bJCgbMwrqTbZhekqK0lE2fCrM=;
+        b=AhaEwSmrW/dg3dX1TCQ+2vjAVJ/D82teI8TRdqzZONFw2H884oeBcaEO/GgNdZlg2+
+         YpaqeZ9WZQcFgAFqNxZdknPpP/PNnwjshmGtcRWj+7gh7XMQgk516FXsKEqCoA4fve+K
+         bdK7xsddbSaXu6W6zbsu1iaTb1tHvvNCAouZ2Y6MvTdnL7FNd7uVMtgoQLmLh2bJEK3O
+         mQ5wVxzmkqFqvLPwPltrXvTkc3RRdYkOGN3Jytn0Q5AptxgFVYl3enUs12sQ59yCK3lD
+         Fgf+sa6GxEHFyMvwtfLuWv7CX2XTuTiCpMyqV0GcFHu9tvCMj3Rog7M+riZiyuCjgNEw
+         qNGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ha1sOeqDp1Aaxnz0F/bJCgbMwrqTbZhekqK0lE2fCrM=;
+        b=Kug9HVgoEAyWWrDp08egl3s+RmFVyduROZ457LgVoBcN5SrknhBoOI9SMOUD1QRK/C
+         i0k7+TQ4Jsw9CruVITifTWZ0cNuWmLT4jTLt6VX6Ia8CN9e5BxuKJOPIN4gExT8Fue2Q
+         ez34Dcbywge6mUEKKiC9OoJLxUesRFeDwSqJ/eiSH81Vw+alUDLGFOk9LTwhMPPNZrji
+         bF5P1VsWxnBRJf/y2F5TylxxXDFfzhv/qtFLFrgO4EaB0lkh0CaJcCtKwc+GSWweLNJ+
+         3EeTnGmmk1b4nRmhaSqCiMKKSdMGrEeHrxy6bwxQwHGLo/k1PcgpYEuh9gPCzAawh31f
+         0Lyw==
+X-Gm-Message-State: ACrzQf0RJoKpyVj686VRtmEfouUUktrk88jFwJGM67AbFYYQ1m3pF6UC
+        tIdo/6tF+52zq5TTxJu9ArY=
+X-Google-Smtp-Source: AMsMyM5nuR4FijINmdmr3vsN388Mrm0dhZULVsh7P7xc305NY2WoGCicpzP/yYiBxKKRx+Cwqznxbg==
+X-Received: by 2002:a65:6e97:0:b0:439:e6a3:9f6d with SMTP id bm23-20020a656e97000000b00439e6a39f6dmr8202276pgb.369.1663594454625;
+        Mon, 19 Sep 2022 06:34:14 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b00176dac464e5sm20917388plh.173.2022.09.19.06.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 06:34:14 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH v2] staging: rtl8723bs: Fix coding style issue in block comment
+Date:   Mon, 19 Sep 2022 22:34:08 +0900
+Message-Id: <20220919133408.3271462-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_TRACING is not set,
-make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-will be failed, like this:
+This patch removes the following warning generated by checkpatch.pl
 
-drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_init’:
-drivers/scsi/qla2xxx/qla_os.c:2854:18: error: implicit declaration of function ‘trace_array_get_by_name’; did you mean ‘trace_array_set_clr_event’? [-Werror=implicit-function-declaration]
-  qla_trc_array = trace_array_get_by_name("qla2xxx");
-                  ^~~~~~~~~~~~~~~~~~~~~~~
-                  trace_array_set_clr_event
-drivers/scsi/qla2xxx/qla_os.c:2854:16: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
-  qla_trc_array = trace_array_get_by_name("qla2xxx");
-                ^
-drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_uninit’:
-drivers/scsi/qla2xxx/qla_os.c:2869:2: error: implicit declaration of function ‘trace_array_put’; did you mean ‘trace_seq_putc’? [-Werror=implicit-function-declaration]
-  trace_array_put(qla_trc_array);
-  ^~~~~~~~~~~~~~~
-  trace_seq_putc
-cc1: all warnings being treated as errors
+  WARNING: Block comments use * on subsequent lines
+  #206: FILE: rtw_recv.c:206:
+  +/*
+  +signed int     rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
 
-To fix this error, wrap up all the relevant code with CONFIG_TRACING.
+  WARNING: Block comments use * on subsequent lines
+  #216: FILE: rtw_recv.c:216:
+  +/*
+  +caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
 
-Fixes: 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+Signed-off-by: Kang Minchul <tegongkang@gmail.com>
 ---
-Changes in v2:
- - warp the definition statement of qla_trace_init() and qla_trace_uninit() with CONFIG_TRACING.
----
- drivers/scsi/qla2xxx/qla_os.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/rtl8723bs/core/rtw_recv.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 2c85f3cce726..f64063e56f3d 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -37,7 +37,9 @@ static int apidev_major;
-  */
- struct kmem_cache *srb_cachep;
- 
-+#ifdef CONFIG_TRACING
- static struct trace_array *qla_trc_array;
-+#endif
- 
- int ql2xfulldump_on_mpifail;
- module_param(ql2xfulldump_on_mpifail, int, S_IRUGO | S_IWUSR);
-@@ -2851,6 +2853,7 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
- static void
- qla_trace_init(void)
- {
-+#ifdef CONFIG_TRACING
- 	qla_trc_array = trace_array_get_by_name("qla2xxx");
- 	if (!qla_trc_array) {
- 		ql_log(ql_log_fatal, NULL, 0x0001,
-@@ -2859,14 +2862,17 @@ qla_trace_init(void)
- 	}
- 
- 	QLA_TRACE_ENABLE(qla_trc_array);
-+#endif
- }
- 
- static void
- qla_trace_uninit(void)
- {
-+#ifdef CONFIG_TRACING
- 	if (!qla_trc_array)
- 		return;
- 	trace_array_put(qla_trc_array);
-+#endif
+diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
+index d8d394b67eeb..4200b7e0efd2 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_recv.c
++++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
+@@ -203,22 +203,12 @@ signed int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *q
  }
  
  /*
+-signed int	rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+-{
+-	return rtw_free_recvframe(precvframe, queue);
+-}
+-*/
+-
+-
+-
+-
+-/*
+-caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
+-pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
+-
+-using spinlock to protect
+-
+-*/
++ * caller : defrag ; recvframe_chk_defrag in recv_thread  (passive)
++ * pframequeue: defrag_queue : will be accessed in recv_thread  (passive)
++ *
++ * using spinlock to protect
++ *
++ */
+ 
+ void rtw_free_recvframe_queue(struct __queue *pframequeue,  struct __queue *pfree_recv_queue)
+ {
 -- 
-2.17.1
+2.34.1
 
