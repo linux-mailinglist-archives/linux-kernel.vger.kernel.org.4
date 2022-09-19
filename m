@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8C45BC4DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5B05BC4DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiISJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S230118AbiISJAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiISJAQ (ORCPT
+        with ESMTP id S230097AbiISJAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:00:16 -0400
-X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Sep 2022 02:00:14 PDT
-Received: from v4.testbit.eu (v6.testbit.eu [IPv6:2a01:238:43e4:2b00:ae5a:a980:1f63:cc5e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7B611468
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:00:12 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by v4.testbit.eu (Postfix) with ESMTP id 59D4C604EC;
-        Mon, 19 Sep 2022 10:52:35 +0200 (CEST)
-Received: from v4.testbit.eu ([127.0.0.1])
-        by localhost (v4.testbit.eu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wgTW8gE9UBh9; Mon, 19 Sep 2022 10:52:35 +0200 (CEST)
-Received: from [10.111.3.51] (91-253-142-46.pool.kielnet.net [46.142.253.91])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by v4.testbit.eu (Postfix) with ESMTPSA id 51B06604D5;
-        Mon, 19 Sep 2022 10:52:33 +0200 (CEST)
-Message-ID: <5c060322-b132-c9b6-1253-6657ad08a63d@gnu.org>
-Date:   Mon, 19 Sep 2022 10:52:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+        Mon, 19 Sep 2022 05:00:09 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Sep 2022 02:00:04 PDT
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C482BC8E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:00:04 -0700 (PDT)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
+        id 1oaCYO-0005pe-SN
+        for linux-kernel@vger.kernel.org; Mon, 19 Sep 2022 10:55:00 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-kernel@vger.kernel.org
+From:   timj <timj@gnu.org>
 Subject: Re: [PATCH v4 4/8] sched/core: Add permission checks for setting the
  latency_nice value
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com
+Date:   Mon, 19 Sep 2022 10:52:28 +0200
+Message-ID: <5c060322-b132-c9b6-1253-6657ad08a63d@gnu.org>
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-5-vincent.guittot@linaro.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
         valentin.schneider@arm.com, patrick.bellasi@matbug.net,
         David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
         tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
         joshdon@google.com
-Newsgroups: gmane.linux.kernel
-References: <20220916080305.29574-1-vincent.guittot@linaro.org>
- <20220916080305.29574-5-vincent.guittot@linaro.org>
-From:   timj <timj@gnu.org>
+Content-Language: en-US
 In-Reply-To: <20220916080305.29574-5-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -148,4 +137,5 @@ On 16.09.22 10:03, Vincent Guittot wrote:
 >   	}
 >   
 >   	if (pi)
+
 
