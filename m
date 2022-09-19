@@ -2,184 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2E65BC0DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 02:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7547B5BC0E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiISA67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 20:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S229577AbiISBEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 21:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiISA6z (ORCPT
+        with ESMTP id S229505AbiISBET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 20:58:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C5140A3;
-        Sun, 18 Sep 2022 17:58:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW5sK3W1tz4xG5;
-        Mon, 19 Sep 2022 10:58:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663549126;
-        bh=hDw2dsdejkPD/gt5RyWiV32nKiS/nDdYlt7NISnavHI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LcRLz/a8cMtLy7HeeYp42dEiGKqOFbqFT1A+p67fYLrWeOdwDqogH5fWl8eg+L8wV
-         f5l9WR4ocMCmHlN53LozpASgLcsieIHkyJndhEZZOEglk9Qc+Dbbi+l9gLeMzUi4a7
-         EPXZy06J/H6IIIzUF7NYzGETCVH/Zt0ChUhSwpfTlBCT6xw8qlJCOtWDxW+feMUmum
-         OkWz7RbtCUV2PoEjoUmoN4k5ESnEmJQ9Kumhh3EJxmUhDd7WxV8x4UD2D1FzuVGGrt
-         1e/ZWefLZKZg6XWvPiPDT9Xs0MCDMrnjz3WDk0Rtd/eZWfk5LZHLGRHSz5fYhRQsU2
-         pWAGcIPps9fKQ==
-Date:   Mon, 19 Sep 2022 10:58:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20220919105839.496f1b72@canb.auug.org.au>
+        Sun, 18 Sep 2022 21:04:19 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C686913D68;
+        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so4650794pja.1;
+        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=jUwOpqo/BKxzYsEAqMc5DTa4e7zgkceNk79Yq/88PNQ=;
+        b=PVVAw2HxpX0fYEW7l+h8u8PiDVwWlYpDPQ2i2wpajO5gWOtjob9d3snyb8VHTNiql7
+         hd0m2LsuL/VHDZW9Ndf6f+1W3yf8itWFaMYuDNnHydaaJWQy4MDOr7O2SSpR1GBE2NJ7
+         ad7loYP/I8sz47NmBmk3+VnWC4+HKphjgW3vkTUot/GfE0OInYHnhePqDPD/gWPdOyjG
+         GlWWI5//H20ZHoRYN4wyc79h35ZnkZEpXnVIgg7i6nQZ4pnDWq9qRGrgW4bpFUmMHEKA
+         CS4fsUEBrAXvBJ6838xq326TTAWoKxZGrdL9iDth9wYLFk86bAgXzY3LHjTJDPvBCSfi
+         bXcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=jUwOpqo/BKxzYsEAqMc5DTa4e7zgkceNk79Yq/88PNQ=;
+        b=IeRbdQPN22xC7a8zi1e0kD6+wc3pixGoGkqGHWNTo6/UCLzF9kYHoGwAcnMOslcGRP
+         5Wq+MuGbiC/sxEEVCBbSJU4IliW5z/a4XoFO+5LEZnZtbxY3VhxJcdDNuwep15h6P8Rf
+         KQpNSm1fm6fgAmtRcXSLJLHPJJ/9x6Is0/QHeJo3ouwYsClw3mcYTKqElVFwYTwjuNFM
+         9v7td9/PUIJgLs/fRUgFG6mZKNCrqrDrAKGWIkFsEvZA69y5SjV3xpI/M5Igfj2yKJuq
+         Cge/Gfwi+0nRcxkEnTPxzqrt6jkyX9p8i3Qz6dFnVZ6o3pgnSFCa0yCltLA5/RfULKag
+         wL5A==
+X-Gm-Message-State: ACrzQf2OpMLsK+uKj6bBKXakreER8fl+ZBr4ewFQn4a/j3QUXi5OUFiy
+        pu8K1J04XvCrWgMERS3GKDU=
+X-Google-Smtp-Source: AMsMyM78dt2xwmM91h5FXM/uLqGzhsxnoo4uGhSdfr+VVODgDWUqtRy0t13ni+8w9Ob2q4HEKGhY6A==
+X-Received: by 2002:a17:902:f78d:b0:174:f7aa:921b with SMTP id q13-20020a170902f78d00b00174f7aa921bmr10507027pln.37.1663549458152;
+        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
+Received: from rfl-device.localdomain ([110.11.251.111])
+        by smtp.gmail.com with ESMTPSA id 185-20020a6308c2000000b00439c1e13112sm4616627pgi.22.2022.09.18.18.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 18:04:17 -0700 (PDT)
+From:   Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
+X-Google-Original-From: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+To:     Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] liquidio: CN23XX: delete repeated words, add missing words and fix typo in comment
+Date:   Mon, 19 Sep 2022 10:04:08 +0900
+Message-Id: <20220919010410.6081-1-RuffaloLavoisier@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NeLjGeSAXU8n/+K4A/ZwoSk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NeLjGeSAXU8n/+K4A/ZwoSk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+- Delete the repeated word 'to' in the comment.
 
-Hi all,
+- Add the missing 'use' word within the sentence.
 
-Today's linux-next merge of the drm tree got a conflict in:
+- Correct spelling on 'malformation'.
 
-  drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+---
+Please check if it has been corrected properly!
 
-between commit:
+ drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
+ drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-  41012d715d5d ("drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinli=
-ne for stack usage")
+diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+index 3f1c189646f4..244e27ea079c 100644
+--- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
++++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+@@ -88,7 +88,7 @@
+ #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
+ /* The input jabber is used to determine the TSO max size.
+  * Due to H/W limitation, this need to be reduced to 60000
+- * in order to to H/W TSO and avoid the WQE malfarmation
++ * in order to use H/W TSO and avoid the WQE malformation
+  * PKO_BUG_24989_WQE_LEN
+  */
+ #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+index d33dd8f4226f..e85449249670 100644
+--- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
++++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+@@ -37,7 +37,7 @@
+ 
+ /* The input jabber is used to determine the TSO max size.
+  * Due to H/W limitation, this need to be reduced to 60000
+- * in order to to H/W TSO and avoid the WQE malfarmation
++ * in order to use H/W TSO and avoid the WQE malformation
+  * PKO_BUG_24989_WQE_LEN
+  */
+ #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+-- 
+2.25.1
 
-from Linus' tree and commit:
-
-  a0f7e7f759cf ("drm/amd/display: fix i386 frame size warning")
-
-from the drm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-index 1cb858dd6ea0,b7fa003ffe06..000000000000
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-@@@ -6610,66 -6497,11 +6497,11 @@@ static double CalculateUrgentLatency
-  	return ret;
-  }
- =20
- -static void UseMinimumDCFCLK(
- +static noinline_for_stack void UseMinimumDCFCLK(
-  		struct display_mode_lib *mode_lib,
-- 		int MaxInterDCNTileRepeaters,
-+ 		struct vba_vars_st *v,
-  		int MaxPrefetchMode,
-- 		double FinalDRAMClockChangeLatency,
-- 		double SREnterPlusExitTime,
-- 		int ReturnBusWidth,
-- 		int RoundTripPingLatencyCycles,
-- 		int ReorderingBytes,
-- 		int PixelChunkSizeInKByte,
-- 		int MetaChunkSize,
-- 		bool GPUVMEnable,
-- 		int GPUVMMaxPageTableLevels,
-- 		bool HostVMEnable,
-- 		int NumberOfActivePlanes,
-- 		double HostVMMinPageSize,
-- 		int HostVMMaxNonCachedPageTableLevels,
-- 		bool DynamicMetadataVMEnabled,
-- 		enum immediate_flip_requirement ImmediateFlipRequirement,
-- 		bool ProgressiveToInterlaceUnitInOPP,
-- 		double MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOper=
-ation,
-- 		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixel=
-MixedWithVMData,
-- 		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDat=
-aOnly,
-- 		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixel=
-DataOnly,
-- 		int VTotal[],
-- 		int VActive[],
-- 		int DynamicMetadataTransmittedBytes[],
-- 		int DynamicMetadataLinesBeforeActiveRequired[],
-- 		bool Interlace[],
-- 		double RequiredDPPCLK[][2][DC__NUM_DPP__MAX],
-- 		double RequiredDISPCLK[][2],
-- 		double UrgLatency[],
-- 		unsigned int NoOfDPP[][2][DC__NUM_DPP__MAX],
-- 		double ProjectedDCFCLKDeepSleep[][2],
-- 		double MaximumVStartup[][2][DC__NUM_DPP__MAX],
-- 		double TotalVActivePixelBandwidth[][2],
-- 		double TotalVActiveCursorBandwidth[][2],
-- 		double TotalMetaRowBandwidth[][2],
-- 		double TotalDPTERowBandwidth[][2],
-- 		unsigned int TotalNumberOfActiveDPP[][2],
-- 		unsigned int TotalNumberOfDCCActiveDPP[][2],
-- 		int dpte_group_bytes[],
-- 		double PrefetchLinesY[][2][DC__NUM_DPP__MAX],
-- 		double PrefetchLinesC[][2][DC__NUM_DPP__MAX],
-- 		unsigned int swath_width_luma_ub_all_states[][2][DC__NUM_DPP__MAX],
-- 		unsigned int swath_width_chroma_ub_all_states[][2][DC__NUM_DPP__MAX],
-- 		int BytePerPixelY[],
-- 		int BytePerPixelC[],
-- 		int HTotal[],
-- 		double PixelClock[],
-- 		double PDEAndMetaPTEBytesPerFrame[][2][DC__NUM_DPP__MAX],
-- 		double DPTEBytesPerRow[][2][DC__NUM_DPP__MAX],
-- 		double MetaRowBytes[][2][DC__NUM_DPP__MAX],
-- 		bool DynamicMetadataEnable[],
-- 		double VActivePixelBandwidth[][2][DC__NUM_DPP__MAX],
-- 		double VActiveCursorBandwidth[][2][DC__NUM_DPP__MAX],
-- 		double ReadBandwidthLuma[],
-- 		double ReadBandwidthChroma[],
-- 		double DCFCLKPerState[],
-- 		double DCFCLKState[][2])
-+ 		int ReorderingBytes)
-  {
-  	double   NormalEfficiency =3D 0;
-  	double   PTEEfficiency =3D 0;
-
---Sig_/NeLjGeSAXU8n/+K4A/ZwoSk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMnvr8ACgkQAVBC80lX
-0Gwz3Qf/Xrtejbco5JcSqX5BGkL9jtI8TFHKS857oTxMVgwC3kgU8qVILiWrhwf1
-sdrZuYZ+t1llwRu8E8J5GNDkkB4UYdxAkbD6wVbj5chtseyO6k72MP2v5Nc5ZhfP
-x7WdMyhavtYsxrYi02PkKXZoNxT2oVNeCJ/lvhjmg+o2pkNxbk9lB9g0K/9Iwa42
-fdO1TH5KmWWo7JHSFGt0JXd6WjVduWIW5Fg0d2EN5nQaup5cALI3JR+oWkNnfJTl
-MR6aRnXdqfrAhc5ihYTqHOmcLPFS+qAFHXXM39d55aZZs04vVsy4kDA5543tN4uY
-XLEuvCY3kRRkl7B6ztZn6zSYoheYLQ==
-=2sFe
------END PGP SIGNATURE-----
-
---Sig_/NeLjGeSAXU8n/+K4A/ZwoSk--
