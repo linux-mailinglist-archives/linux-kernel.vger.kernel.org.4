@@ -2,320 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D08F5BD7A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746D25BD7B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiISWzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 18:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S230003AbiISW4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiISWzA (ORCPT
+        with ESMTP id S229871AbiISW41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 18:55:00 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3AD3DF2B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:54:58 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MWg416PgFz9sdL;
-        Mon, 19 Sep 2022 22:54:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1663628098; bh=UwpqhM3uzo4Z7LZfC/96nKns/llQWGt2eoOavyjOcGo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Xsb3y7U7BUV8ped2cd1qnlcDlrbxpGAGjgfVjX0yVxmmARCgitxmRkFnEb3gMOhrN
-         4/Q0HgRe1yp1fziPv1ve/XJry4CBEbIuy0oSVznsAC62kwH7EYxwUImb1vkMKjiL2p
-         IxO3LsEjCJoSwq7BzI+KoAYQmeXm3NZxLNJP4BNg=
-X-Riseup-User-ID: 1ED4FD7E94B0D3DD8FA76157A0B5B550419F084B492BC02F936D1364BB95C45C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4MWg3r5tqGz1y9N;
-        Mon, 19 Sep 2022 22:54:48 +0000 (UTC)
-Message-ID: <a398f73d-5556-f488-c5e7-8a0784d273be@riseup.net>
-Date:   Mon, 19 Sep 2022 19:54:45 -0300
+        Mon, 19 Sep 2022 18:56:27 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A70445F54
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:56:23 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sb3so2051735ejb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5S9VBftUHA8Ab+AfT1DhnDF/jWnQCvfphMhw9w+YVhc=;
+        b=pT3AVw/XaQKfMJa28M67X6CWfwalI0Uvo6unsRjOTD2Z+d/hMLJagRy91+fB9mWt/H
+         RvjlLsn+3FsNx74QkbruJHKtTQ+30w35PYmoN36zBZvRhmzaaut2t/ejO0VHEYQ77EDj
+         OXDYFEqkBBbGSPaGws21i+7eNFUtsVpC10Ocfp53V0C+AqpxtnC2gWLf09NvoZb8DNZe
+         nefkWz5Q2xpTnqPE/9sJZpmszdShkKibcjHKjjaL4N2+oQKOJucjE0sZV5m8l2gxJQLL
+         eUTG5Bs9Z5UoBJW4L2zlLkhjGsOc0HVn5guvp/vsJvOqjFnEQJHDOGaHy7aMupntX7WF
+         7vTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5S9VBftUHA8Ab+AfT1DhnDF/jWnQCvfphMhw9w+YVhc=;
+        b=mMiakDLwNtZ8kRm1Ma1n6SyV5Qie1kcMVN62ReIitWmXRRo7PWwMX3OW4DMmk4GUJn
+         XdNK5q7Vvd4S5DGv1jvyMoHZy7DzcgCyhthjDXWFZjMf8t4uy5K4pykBs+z/1KOa7nL/
+         GcfHUR7X1U739sgQJfiP3xbiFaJtg/gHAR78HBCH71Izkix4W/4ycsHhj25HYhQ6qycK
+         2aIAdkfj5pZY1o/H/8014n3zJOlMl6qGp84PbvEhKaWsukxNI4NcucGDJHSlZx0KVrbK
+         DeFwZR/tdsxDwzO+VV8+2Z4oQFKQDWVrLtIlRKLVc3VL+UsWUYDIKm/jZato401Io+wR
+         5TNw==
+X-Gm-Message-State: ACrzQf1xjeZsYqgjQXM2SJi+uSmm4BtOTFWLoZmU8slMnvGpSZonZZ9A
+        CpHwWKwygO9USLxf9Ughx3RJ+WTXDl2Qy2XhXs1iWA==
+X-Google-Smtp-Source: AMsMyM5kdxcAfNB78ChbidtnpNAMschNYMIGpvHRr7zgKTZ4CCEGx6bhJgHHTNr9SAgKH+LAmfDCBtvH2R9hQBackB8=
+X-Received: by 2002:a17:906:ef8c:b0:77c:8f77:330 with SMTP id
+ ze12-20020a170906ef8c00b0077c8f770330mr14503775ejb.604.1663628181793; Mon, 19
+ Sep 2022 15:56:21 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/amd/display: refactor CalculateWriteBackDelay to use
- vba_vars_st ptr
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        aric.cyr@amd.com, Pavle.Kotarac@amd.com, Nevenko.Stupar@amd.com,
-        aurabindo.pillai@amd.com, Bing.Guo@amd.com, nathan@kernel.org,
-        hamza.mahfooz@amd.com, nicholas.kazlauskas@amd.com,
-        agustin.gutierrez@amd.com, mdaenzer@redhat.com,
-        Charlene.Liu@amd.com, roman.li@amd.com, Wesley.Chalmers@amd.com,
-        alvin.lee2@amd.com, Jun.Lei@amd.com, yang.lee@linux.alibaba.com,
-        Syed.Hassan@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220917183744.2526927-1-trix@redhat.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220917183744.2526927-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701012647.2007122-1-saravanak@google.com>
+ <YwS5J3effuHQJRZ5@kroah.com> <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+ <YygsEtxKz8dsEstc@kroah.com>
+In-Reply-To: <YygsEtxKz8dsEstc@kroah.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Mon, 19 Sep 2022 15:56:09 -0700
+Message-ID: <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom
+On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
+> > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > > > These patches are on top of driver-core-next.
+> > > >
+> > > > Even if stdout-path isn't set in DT, this patch should take console
+> > > > probe times back to how they were before the deferred_probe_timeout
+> > > > clean up series[1].
+> > >
+> > > Now dropped from my queue due to lack of a response to other reviewer's
+> > > questions.
+> >
+> > What happened to this patch? I have a 10 second timeout on console
+> > probe on my SiFive Unmatched, and I don't see this flag being set for
+> > the serial driver. In fact, I don't see it anywhere in-tree. I can't
+> > seem to locate another patchset from Saravana around this though, so
+> > I'm not sure where to look for a missing piece for the sifive serial
+> > driver.
+> >
+> > This is the second boot time regression (this one not fatal, unlike
+> > the Layerscape PCIe one) from the fw_devlink patchset.
+> >
+> > Greg, can you revert the whole set for 6.0, please? It's obviously
+> > nowhere near tested enough to go in and I expect we'll see a bunch of
+> > -stable fixups due to this if we let it remain in.
+>
+> What exactly is "the whole set"?  I have the default option fix queued
+> up and will send that to Linus later this week (am traveling back from
+> Plumbers still), but have not heard any problems about any other issues
+> at all other than your report.
 
-Nice to see this patch coming to the DML! Some small nits inline.
+I stand corrected in this case, the issue on the Hifive Unmatched was
+a regression due to a PWM clock change -- I just sent a patch for that
+(serial driver fix).
 
-On 9/17/22 15:37, Tom Rix wrote:
-> Mimimize the function signature by passing a pointer and an index instead
-> of passing several elements of the pointer.
-> 
-> The dml2x,dml3x families uses the same algorithm.  Remove the duplicates.
-> Use dml20_ and dml30_ prefix to distinguish the two variants.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  .../dc/dml/dcn20/display_mode_vba_20.c        |  78 +++---------
->  .../dc/dml/dcn20/display_mode_vba_20v2.c      | 115 ++----------------
->  .../dc/dml/dcn21/display_mode_vba_21.c        | 114 +----------------
->  .../dc/dml/dcn30/display_mode_vba_30.c        |  74 +++--------
->  .../dc/dml/dcn31/display_mode_vba_31.c        |  76 +-----------
->  .../dc/dml/dcn314/display_mode_vba_314.c      |  76 +-----------
->  .../dc/dml/dcn32/display_mode_vba_32.c        |  42 +------
->  .../dc/dml/dcn32/display_mode_vba_util_32.c   |  30 -----
->  .../dc/dml/dcn32/display_mode_vba_util_32.h   |  10 +-
->  9 files changed, 63 insertions(+), 552 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> index d3b5b6fedf04..6e9d7e2b5243 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> @@ -217,16 +217,8 @@ static void CalculateFlipSchedule(
->  		double *DestinationLinesToRequestRowInImmediateFlip,
->  		double *final_flip_bw,
->  		bool *ImmediateFlipSupportedForPipe);
-> -static double CalculateWriteBackDelay(
-> -		enum source_format_class WritebackPixelFormat,
-> -		double WritebackHRatio,
-> -		double WritebackVRatio,
-> -		unsigned int WritebackLumaHTaps,
-> -		unsigned int WritebackLumaVTaps,
-> -		unsigned int WritebackChromaHTaps,
-> -		unsigned int WritebackChromaVTaps,
-> -		unsigned int WritebackDestinationWidth);
->  
-> +double dlm20_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i);
+So it seems like as long as the fw_devlink.strict=1 patch is reverted,
+things are back to a working state here.
 
-Small typo here: s/dlm/dml
+I still struggle with how the fw_devlink patchset is expected to work
+though, since DT is expected to describe the hardware configuration,
+and it has no knowledge of whether there are drivers that will be
+bound to any referenced supplier devnodes. It's not going to work well
+to assume that they will always be bound, and to add 10 second
+timeouts for those cases isn't a good solution. Seems like the number
+of special cases will keep adding up.
 
->  static void dml20_DisplayPipeConfiguration(struct display_mode_lib *mode_lib);
->  static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
->  		struct display_mode_lib *mode_lib);
-> @@ -1085,6 +1077,7 @@ static unsigned int CalculateVMAndRowBytes(
->  static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
->  		struct display_mode_lib *mode_lib)
->  {
-> +	struct vba_vars_st *v = &mode_lib->vba;
->  	unsigned int j, k;
->  
->  	mode_lib->vba.WritebackDISPCLK = 0.0;
-> @@ -1980,36 +1973,15 @@ static void dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPer
->  		if (mode_lib->vba.BlendingAndTiming[k] == k) {
->  			if (mode_lib->vba.WritebackEnable[k] == true) {
->  				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] =
-> -						mode_lib->vba.WritebackLatency
-> -								+ CalculateWriteBackDelay(
-> -										mode_lib->vba.WritebackPixelFormat[k],
-> -										mode_lib->vba.WritebackHRatio[k],
-> -										mode_lib->vba.WritebackVRatio[k],
-> -										mode_lib->vba.WritebackLumaHTaps[k],
-> -										mode_lib->vba.WritebackLumaVTaps[k],
-> -										mode_lib->vba.WritebackChromaHTaps[k],
-> -										mode_lib->vba.WritebackChromaVTaps[k],
-> -										mode_lib->vba.WritebackDestinationWidth[k])
-> -										/ mode_lib->vba.DISPCLK;
-> +					mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(v, k) / mode_lib->vba.DISPCLK;
->  			} else
->  				mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
->  			for (j = 0; j < mode_lib->vba.NumberOfActivePlanes; ++j) {
->  				if (mode_lib->vba.BlendingAndTiming[j] == k
->  						&& mode_lib->vba.WritebackEnable[j] == true) {
->  					mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k] =
-> -							dml_max(
-> -									mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k],
-> -									mode_lib->vba.WritebackLatency
-> -											+ CalculateWriteBackDelay(
-> -													mode_lib->vba.WritebackPixelFormat[j],
-> -													mode_lib->vba.WritebackHRatio[j],
-> -													mode_lib->vba.WritebackVRatio[j],
-> -													mode_lib->vba.WritebackLumaHTaps[j],
-> -													mode_lib->vba.WritebackLumaVTaps[j],
-> -													mode_lib->vba.WritebackChromaHTaps[j],
-> -													mode_lib->vba.WritebackChromaVTaps[j],
-> -													mode_lib->vba.WritebackDestinationWidth[j])
-> -													/ mode_lib->vba.DISPCLK);
-> +							dml_max(mode_lib->vba.WritebackDelay[mode_lib->vba.VoltageLevel][k],
-> +								mode_lib->vba.WritebackLatency + dlm20_CalculateWriteBackDelay(v, j) / mode_lib->vba.DISPCLK);
->  				}
->  			}
->  		}
+The whole design feels like it's falling short, and it's been patched
+here and there to deal with the shortcomings, instead of revisiting
+the full solution. (The patches are the console one, and another to
+deal with nfsroot boots).
 
-[...]
+As long as it doesn't keep regressing others, I suppose the work to
+redesign it can happen in-tree, but it's not usually how we try to do
+it for new functionality. Especially since it's still being iterated
+on (with active patch sets posted around -rc1 for improvements).
 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> index ad100658132f..9778effba7a4 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> @@ -597,15 +597,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
->  		if (mode_lib->vba.BlendingAndTiming[k] == k) {
->  			if (mode_lib->vba.WritebackEnable[k] == true) {
->  				v->WritebackDelay[mode_lib->vba.VoltageLevel][k] = mode_lib->vba.WritebackLatency
-> -						+ dml32_CalculateWriteBackDelay(
-> -								mode_lib->vba.WritebackPixelFormat[k],
-> -								mode_lib->vba.WritebackHRatio[k],
-> -								mode_lib->vba.WritebackVRatio[k],
-> -								mode_lib->vba.WritebackVTaps[k],
-> -								mode_lib->vba.WritebackDestinationWidth[k],
-> -								mode_lib->vba.WritebackDestinationHeight[k],
-> -								mode_lib->vba.WritebackSourceHeight[k],
-> -								mode_lib->vba.HTotal[k]) / mode_lib->vba.DISPCLK;
-> +					+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / mode_lib->vba.DISPCLK;
->  			} else
->  				v->WritebackDelay[mode_lib->vba.VoltageLevel][k] = 0;
->  			for (j = 0; j < mode_lib->vba.NumberOfActiveSurfaces; ++j) {
-> @@ -614,15 +606,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
->  					v->WritebackDelay[mode_lib->vba.VoltageLevel][k] =
->  						dml_max(v->WritebackDelay[mode_lib->vba.VoltageLevel][k],
->  						mode_lib->vba.WritebackLatency +
-> -						dml32_CalculateWriteBackDelay(
-> -								mode_lib->vba.WritebackPixelFormat[j],
-> -								mode_lib->vba.WritebackHRatio[j],
-> -								mode_lib->vba.WritebackVRatio[j],
-> -								mode_lib->vba.WritebackVTaps[j],
-> -								mode_lib->vba.WritebackDestinationWidth[j],
-> -								mode_lib->vba.WritebackDestinationHeight[j],
-> -								mode_lib->vba.WritebackSourceHeight[j],
-> -								mode_lib->vba.HTotal[k]) / mode_lib->vba.DISPCLK);
-> +							dml30_CalculateWriteBackDelay(v, j, v->HTotal[k]) / mode_lib->vba.DISPCLK);
->  				}
->  			}
->  		}
-> @@ -2864,16 +2848,7 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->  					if (mode_lib->vba.WritebackEnable[k] == true) {
->  						mode_lib->vba.WritebackDelayTime[k] =
->  							mode_lib->vba.WritebackLatency
-> -						+ dml32_CalculateWriteBackDelay(
-> -							mode_lib->vba.WritebackPixelFormat[k],
-> -							mode_lib->vba.WritebackHRatio[k],
-> -							mode_lib->vba.WritebackVRatio[k],
-> -							mode_lib->vba.WritebackVTaps[k],
-> -							mode_lib->vba.WritebackDestinationWidth[k],
-> -							mode_lib->vba.WritebackDestinationHeight[k],
-> -							mode_lib->vba.WritebackSourceHeight[k],
-> -							mode_lib->vba.HTotal[k])
-> -							/ mode_lib->vba.RequiredDISPCLK[i][j];
-> +							+ dml30_CalculateWriteBackDelay(v, k, v->HTotal[k]) / mode_lib->vba.RequiredDISPCLK[i][j];
->  					} else {
->  						mode_lib->vba.WritebackDelayTime[k] = 0.0;
->  					}
-> @@ -2883,16 +2858,7 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->  							mode_lib->vba.WritebackDelayTime[k] =
->  								dml_max(mode_lib->vba.WritebackDelayTime[k],
->  									mode_lib->vba.WritebackLatency
-> -								+ dml32_CalculateWriteBackDelay(
-> -									mode_lib->vba.WritebackPixelFormat[m],
-> -									mode_lib->vba.WritebackHRatio[m],
-> -									mode_lib->vba.WritebackVRatio[m],
-> -									mode_lib->vba.WritebackVTaps[m],
-> -									mode_lib->vba.WritebackDestinationWidth[m],
-> -									mode_lib->vba.WritebackDestinationHeight[m],
-> -									mode_lib->vba.WritebackSourceHeight[m],
-> -									mode_lib->vba.HTotal[m]) /
-> -									mode_lib->vba.RequiredDISPCLK[i][j]);
-> +									+ dml30_CalculateWriteBackDelay(v, m, v->HTotal[m]) / mode_lib->vba.RequiredDISPCLK[i][j]);
->  						}
->  					}
->  				}
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
-> index 5b5b94f1024d..a08de0dc080f 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
-> @@ -2856,36 +2856,6 @@ void dml32_CalculateDCFCLKDeepSleep(
->  #endif
->  } // CalculateDCFCLKDeepSleep
->  
-> -double dml32_CalculateWriteBackDelay(
-> -		enum source_format_class WritebackPixelFormat,
-> -		double WritebackHRatio,
-> -		double WritebackVRatio,
-> -		unsigned int WritebackVTaps,
-> -		unsigned int         WritebackDestinationWidth,
-> -		unsigned int         WritebackDestinationHeight,
-> -		unsigned int         WritebackSourceHeight,
-> -		unsigned int HTotal)
-> -{
-> -	double CalculateWriteBackDelay;
-> -	double Line_length;
-> -	double Output_lines_last_notclamped;
-> -	double WritebackVInit;
-> -
-> -	WritebackVInit = (WritebackVRatio + WritebackVTaps + 1) / 2;
-> -	Line_length = dml_max((double) WritebackDestinationWidth,
-> -			dml_ceil((double)WritebackDestinationWidth / 6.0, 1.0) * WritebackVTaps);
-> -	Output_lines_last_notclamped = WritebackDestinationHeight - 1 -
-> -			dml_ceil(((double)WritebackSourceHeight -
-> -					(double) WritebackVInit) / (double)WritebackVRatio, 1.0);
+Oh, and one more thing for the future -- the main patch that changes
+behavior due to dependency tracking is 2f8c3ae8288e, named "driver
+core: Add wait_for_init_devices_probe helper function". It's easy to
+overlook this when looking at a list of patches since it's said to
+just introduce a helper.
 
-The CalculateWriteBackDelay from the DCN30 states:
 
-Output_lines_last_notclamped = WritebackDestinationHeight - 1 -		
-	dml_ceil((WritebackSourceHeight -
-	WritebackVInit) / WritebackVRatio, 1);
-
-I'm not sure if the behavior on the DCN32 will stay the same without the
-casting to double. Maybe AMD engineers will know better, but I would
-check if the behavior of the function stays the same. Moreover, on
-DCN30, WritebackDestinationWidth, WritebackDestinationHeight, and
-WritebackSourceHeight are long, and here they are unsigned int. Again,
-I'm not sure how much this can affect the boundary cases, just something
-to check.
-
-Best Regards,
-- Maíra Canal
-
-> -	if (Output_lines_last_notclamped < 0) {
-> -		CalculateWriteBackDelay = 0;
-> -	} else {
-> -		CalculateWriteBackDelay = Output_lines_last_notclamped * Line_length +
-> -				(HTotal - WritebackDestinationWidth) + 80;
-> -	}
-> -	return CalculateWriteBackDelay;
-> -}
-> -
->  void dml32_UseMinimumDCFCLK(
->  		enum dm_use_mall_for_pstate_change_mode UseMALLForPStateChange[],
->  		bool DRRDisplay[],
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
-> index 3dbc9cf46aad..017acfe5af2f 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.h
-> @@ -571,15 +571,7 @@ void dml32_CalculateDCFCLKDeepSleep(
->  		/* Output */
->  		double *DCFClkDeepSleep);
->  
-> -double dml32_CalculateWriteBackDelay(
-> -		enum source_format_class WritebackPixelFormat,
-> -		double WritebackHRatio,
-> -		double WritebackVRatio,
-> -		unsigned int WritebackVTaps,
-> -		unsigned int         WritebackDestinationWidth,
-> -		unsigned int         WritebackDestinationHeight,
-> -		unsigned int         WritebackSourceHeight,
-> -		unsigned int HTotal);
-> +double dml30_CalculateWriteBackDelay(struct vba_vars_st *vba, unsigned int i, unsigned int HTotal);
->  
->  void dml32_UseMinimumDCFCLK(
->  		enum dm_use_mall_for_pstate_change_mode UseMALLForPStateChange[],
+-Olof
