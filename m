@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B78E5BD48E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6C45BD49A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiISSKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S229549AbiISSNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiISSKE (ORCPT
+        with ESMTP id S229509AbiISSNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:10:04 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A3EE0BD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:09:40 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1278a61bd57so562471fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kinTjsTMKWd+HF2A95PNPhp0ZSHokoUBxlIlduG7fRs=;
-        b=Z9n+eNdWdh71NGqMwqlMdnGMkR+MfqHA3wiPVazUKLvvgnHURhbyz5tXcX8OndG0jF
-         URQm5pcCEx33iQRKI5zFPbEgH51JFbW9BaAXYNFjgA5EPgMkmh2V98Civxgd5idJUz4q
-         N8bx3Ufnvv5tXmdkiuZqMFqLzJ5RWk/VVEmZ/5r6upWFCH9p4MHsGu5NNqC6soqW2oB3
-         lwtV5aFIKP1Mk+gChIWcM5JW1eZiH3puViRgtakqwSp1UjXFmmBx/jq37EYsyjSMOtet
-         U0hoQISnRKXADaLvG+0m5BWoyOYnTaFmXyNvfsj2FyDAvW8FK+lchT/JgcpwM3NoIZ2G
-         iDaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kinTjsTMKWd+HF2A95PNPhp0ZSHokoUBxlIlduG7fRs=;
-        b=aSx7mjeJ0sFZ8hn2asjA2ADqo0GEQouNS3ZdYpC2WovZdsCqj6ZPbAicC3rQbV4DLj
-         7fMGXHi0pWYmFnpsBmTazE+yeA9n1UxQ6wBQuUxkz4qMgBKRjlH1wHUcLJkr90e/gvAc
-         YcDd2tMxflvRM+CwlTw/9mOJTQBB0qgVvR60eYCwpPu4k6Uk6kLKR6wTTLQs/Lb4gOuR
-         fRuzuayjZTupE9LTbjGrv34tii+w3liQn5iXoaTzRWaHCXhe4hHKjeKc0SkTIlVQ3pFI
-         soiTRAdXa21G68lpONEsI+12IPefdAnmTAdZkg3IDEkHE1yK1u1nX37mVlF6+pJ0qqLO
-         wH+A==
-X-Gm-Message-State: ACgBeo2H3dElGPEOBF81j2p0JAwOxCGFbngLLR93QR46CUmTVAktqEn8
-        doraVCfwL4NiJqqnedVx4J8iOCv0FmLQ+KweOwhRRA==
-X-Google-Smtp-Source: AA6agR5DN+7DnOIoUE61op1nJjTuN8PFxR6X8cvIHEmjOifcEhIIHF7V7R8Ea8/MENkIhjW/tg4kd/FPe8WCOTlndv0=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr15703777oap.269.1663610979201; Mon, 19
- Sep 2022 11:09:39 -0700 (PDT)
+        Mon, 19 Sep 2022 14:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A8211829;
+        Mon, 19 Sep 2022 11:13:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CAE761F03;
+        Mon, 19 Sep 2022 18:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933F9C433C1;
+        Mon, 19 Sep 2022 18:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663611208;
+        bh=3OR7ur1Goc0Cu7bBced/Z2/Zs4WPniYPC7zTikqN1Hw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OGBaJIKEFeXto+AKd5riArnbQ6LmnG1vh2L3zUK9Ww/dVZt7LXUUu4cdJtkowYuj9
+         AhE/c/nNs9vHHaaLB2nPkuvmZCMnd0E5CRL2ayhBabNLx0W4yiN+++MizbKs4QeqU7
+         P3cN2PNycD5cv8sf7LjVrCYYnwv1pMZ/lXwll9O29Ssus4rVL+tDYYDjkTi6qSDw5x
+         qxYPOHh5yapiCUyUZ3HYqMqZ31VbrcVk9T/YDEaJA+MGUdij6u3hGHgjYd6Pxxl1Bu
+         aXhdKpkOOvazLwtgVcpxcrUXG6OwKou63ZQR3yMVenoKd7SMeEJuQPSygfIjkPtUg1
+         16zi18lxky9Zg==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jh80.chung@samsung.com
+Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: socfpga: Add clk-phase-sd-hs property to the sdmmc node
+Date:   Mon, 19 Sep 2022 13:13:08 -0500
+Message-Id: <20220919181309.286611-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220916045832.461395-1-jmattson@google.com> <20220916045832.461395-3-jmattson@google.com>
- <YyTZFzaDOufASxqd@google.com> <CALMp9eQXroxQYiWUCejd0Cj7kD5g5navWY_E2O_vzbVAQjLyNg@mail.gmail.com>
- <YyT0G9y0RRyBDiPD@zn.tnic> <YyT5uW8bjXae2c4l@google.com> <YydrsMjAF5zjqTGK@zn.tnic>
-In-Reply-To: <YydrsMjAF5zjqTGK@zn.tnic>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 19 Sep 2022 11:09:28 -0700
-Message-ID: <CALMp9eTmcTjJ+aAN3EPANqx3Qo3Psiafz1iuT3fKgpM4Qe0OaA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] KVM: svm: Disallow EFER.LMSLE on hardware that
- doesn't support it
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Avi Kivity <avi@redhat.com>, Babu Moger <babu.moger@amd.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joerg Roedel <joerg.roedel@amd.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 12:04 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Fri, Sep 16, 2022 at 10:33:29PM +0000, Sean Christopherson wrote:
-> > ...
-> > Either way, KVM appears to be carrying a half-baked "fix" for a buggy guest that's
-> > long since gone.  So like we did in commit 8805875aa473 ("Revert "KVM: nVMX: Do not
-> > expose MPX VMX controls when guest MPX disabled""), I think we should just revert
-> > the "fix".
->
-> If, as message 0/5 says, setting this bit so that SLE11 Xen 4.0 boots as
-> a nested hypervisor is the use case, then sure, unconditional NO_LSMLE
-> and we all should go on with our lives.
+The sdmmc controller's CIU(Card Interface Unit) clock's phase can be
+adjusted through the register in the system manager. Add the binding
+"altr,sysmgr-syscon" to the SDMMC node for the driver to access the
+system manager. Add the "clk-phase-sd-hs" property in the SDMMC node to
+designate the smpsel and drvsel properties for the CIU clock.
 
-Fantastic! That's what I'll do in V2.
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi      | 1 +
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi          | 1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts     | 1 +
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts        | 1 +
+ 5 files changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index 14c220d87807..a5d08920ac81 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -309,6 +309,7 @@ mmc: mmc@ff808000 {
+ 				 <&clkmgr STRATIX10_SDMMC_CLK>;
+ 			clock-names = "biu", "ciu";
+ 			iommus = <&smmu 5>;
++			altr,sysmgr-syscon = <&sysmgr 0x28 0>;
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+index 48424e459f12..19e7284b4cd5 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+@@ -105,6 +105,7 @@ &mmc {
+ 	cap-mmc-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
+ 
+ &osc1 {
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index 7bbec8aafa62..6353f6a361f4 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -313,6 +313,7 @@ mmc: mmc@ff808000 {
+ 				 <&clkmgr AGILEX_SDMMC_CLK>;
+ 			clock-names = "biu", "ciu";
+ 			iommus = <&smmu 5>;
++			altr,sysmgr-syscon = <&sysmgr 0x28 0>;
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index 26cd3c121757..07c3f8876613 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -83,6 +83,7 @@ &mmc {
+ 	cap-sd-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
+ 
+ &osc1 {
+diff --git a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+index 62c66e52b656..08c088571270 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+@@ -74,6 +74,7 @@ &mmc {
+ 	cap-sd-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
+ 
+ &osc1 {
+-- 
+2.25.1
+
