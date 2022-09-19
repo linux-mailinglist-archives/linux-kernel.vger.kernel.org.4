@@ -2,358 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90625BD481
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9F65BD472
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiISSHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S230489AbiISSHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiISSHV (ORCPT
+        with ESMTP id S231158AbiISSGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:07:21 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F218446600;
-        Mon, 19 Sep 2022 11:06:54 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id h130-20020a1c2188000000b003b4cadadce7so3935872wmh.3;
-        Mon, 19 Sep 2022 11:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uv5yxjHWeGx+AJdbwQSqj4Y1uDvP+yaBUQDlqTuyNZA=;
-        b=I6BAx6U2zm10wBKyL1BFpAb6OfD8y61z8c69Dy4dFPGkE9msxcZMlFNkHFm+TlqfAS
-         9UKkny8dogVNIPzQP9R9mq9YlLrkyhDVCgskyb0sPjjsMkkfbPUxpouWapsKj937uwHp
-         nbM9h2vFRexOGw0b7JP3AgFakOt77MJag4CSJ60yguVGfDQavJd9O76xPTjgbrcq+QUw
-         RKhyxAHLLY4WV35qnvEKHbyOmuiMG3id8SWJiocgZLMKhm1xlgw+Bw7HbYrqbAjQTGMR
-         C47zDo+vN0MwEirmUX5z6XUOANOhRZ0VJHKxmZMy77w4BK7MfBUlAWdxTdPY1BqJf3m9
-         F5Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=uv5yxjHWeGx+AJdbwQSqj4Y1uDvP+yaBUQDlqTuyNZA=;
-        b=rwMwyta+VpYBtHqM0MZ2zTN6mrUbzLr1SXqIIdtiVaB9BEbJqOLnYDB0VX2xyAVvo9
-         zb8rDUHiT8en2PQoXTRhHxjIcUCIVtZKUxKLliScUggJ96DWbfHPVNPSYmg0amG7zhep
-         UQY92phI6GCZwQLfGQNzrLJ7gEjqcZVNDgg2eTeti8KSEuCSl4nXvvGCissrqDahocKF
-         n10JUIdUEwL8Ux4Ntpr64igKIiYnfi3YFPju9RJU5BZZjRvyxZTef3rbC0eMdXc6NC7o
-         kTh96dGeSMCBlXv8yUgG2PE2Ea2ob5QdxfdyLF5F65tbADV0+HHXruosFQz/Y+xkSppX
-         bIVg==
-X-Gm-Message-State: ACrzQf0YbGP+XZVxXMg19Sp6Uv3sq4p5yjGcXI9fAnC0ktnJzoGBz2LG
-        rgaHeU1vOwKMo8BHCe4doGA=
-X-Google-Smtp-Source: AMsMyM4PReTywtWunIeOFMI0KmAyMIImk1H2iypB4z+I83MZ7JOfRcAVjQvzJtBZvb2floc0Os6sPg==
-X-Received: by 2002:a05:600c:3506:b0:3b4:c086:fa37 with SMTP id h6-20020a05600c350600b003b4c086fa37mr10735538wmq.165.1663610813348;
-        Mon, 19 Sep 2022 11:06:53 -0700 (PDT)
-Received: from localhost ([77.78.20.135])
-        by smtp.gmail.com with ESMTPSA id m2-20020a5d6242000000b00228df23bd51sm14487524wrv.82.2022.09.19.11.06.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 11:06:52 -0700 (PDT)
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mon, 19 Sep 2022 14:06:53 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2076.outbound.protection.outlook.com [40.107.21.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9547845F61;
+        Mon, 19 Sep 2022 11:06:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XxkGUScv83YBXWk5+agufI1MwmV+joU1SKknepr66zq2uhn3V1ZLbkJCnt0wi+c+oZjNq5nVAITzokwYq9DgEBiDxcJYHJauwiXGFiAq3wYgu4jR6Ryn4VGuN296ieXc4fn6pIHytKtnBKaf+cCsq4wNMvdzX4/bd8vpUZ6aLqmuBFCIgHxlgZc1VQ4zO4fO2ywESxzCzlChBvhLOAGQHEPtiyjX0ksPUHkmpwsPuiQ4+SopWCoQiBiTtP6mJFMfebP1kF2tYy3wRlDhh6sDA3kAh6Fe99fGn9jrJRp1RvqidRcENqQl58QsHx8cPrC+sfaBC4YPdYYs+plZ8EpaLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=riIOQ18Zj+wtFHipvp/WnbS8HABclT2Np3GTyQpdsMc=;
+ b=lmMrYoCY5ITic+PjK+/mkh3VWNGUkJYc0yngZ4FnLvrK5BESLGiVLlOmylX41s545+W8PKWJtU3dfydita68KvSnlnYhQT0suTCc71xbx0IxwCVQAkrEhMrx2xVOP1GBPNxfxJ1eNYj/HsAS6tpW4SVvZopbYuzwbZD+a5rrN3StbllAWu0Y2GJsnOzk2yy86fhyTF1Rp+jg0dClI25YwgqwEmmb6ZLqsrLQSjBb6FUAVDjT0hLc3Vb1mIaMu55tWp4qtD32sr/cS71g+Dp/GSR8O8Pzw1z/HBeCVrwADKBl0wQqK/DGI/lUzgOL+Hq8gvvVYD8xRCFrnyeijofH/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=riIOQ18Zj+wtFHipvp/WnbS8HABclT2Np3GTyQpdsMc=;
+ b=fhjdd14o5eDQORZlJW86lmc8+vJuk1krCN37XwCkPI1NcRXGXaacxpDKad334MMCNOwDd7v3SYLAD8v2chQ7hneKHtp6Lta4Imd2zOexTnKdnq2GSAKbGy4l+QZklMyrYsGwtwxWEdf1g3wa+oluRnG+CFZmVi+8Nnm7PlcJau4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by DBAPR04MB7381.eurprd04.prod.outlook.com (2603:10a6:10:1a2::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
+ 2022 18:06:41 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::9466:d44b:804:72ef]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::9466:d44b:804:72ef%5]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
+ 18:06:40 +0000
+Date:   Mon, 19 Sep 2022 21:06:31 +0300
+From:   Viorel Suman <viorel.suman@oss.nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] arm64: dts: qcom: sm4250: Add support for oneplus-billie2
-Date:   Mon, 19 Sep 2022 21:06:18 +0300
-Message-Id: <20220919180618.1840194-9-iskren.chernev@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220919180618.1840194-1-iskren.chernev@gmail.com>
-References: <20220919180618.1840194-1-iskren.chernev@gmail.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
+Message-ID: <20220919180631.x2telgn6d7woggmz@fsr-ub1664-116>
+References: <20220919132236.264382-1-viorel.suman@oss.nxp.com>
+ <c86d39c9-82d2-0f9f-9836-76ad3b6d8ede@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c86d39c9-82d2-0f9f-9836-76ad3b6d8ede@linaro.org>
+X-ClientProxiedBy: AM4P190CA0023.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:200:56::33) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5005:EE_|DBAPR04MB7381:EE_
+X-MS-Office365-Filtering-Correlation-Id: f74d3d2c-5f7a-4cdc-bcb1-08da9a69b3a3
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tvfCkx4WhpAqk5xG79RsW1kTUojZHYMegyZ37GI30cH3yTetWpS0MK/4EFahWsLjERO7PdKw4xjov1lYLlcNBcekGLH8dFzWu6BThKmNRt5kgAJJ+5QmlxywR/A7DhVW96DrgnbUduFozS9UdbkYKws2uQAabHKeuqQJ8GKdjPQzhyog+u9ZApcjQFdZxfyU9jogtHkTSkh//l3bvtNHJUW/wGoBSbgNdVN2qF4PYb2U4BtiUVqGoZINIh8kh551cvM6mZ40uYoSImjfaeNrFPzUwdnJK5CirLzevPf21DfhvahGPezgN9qvg8k4opoeFHWelaKp7UnqvpXNTd7WwngpLUDkj0CqQ9O/GivNLvOFkguOl6Gy7SJ/PMq+SjaZFQhFnABeB4tHmHIaOIVVYxAoSownLzxK7mIzq6AKvFVdw8IqkCw3SbeEDfMjlVYN2MK/kMWqESSXf0RTT30w86R4oZ1T4GtiE/D3bvpx75LLTX6fSfYEwcmhNTG8JnRYn0ehuO8dZ7xb+qKQ6KMn1bRD3cR8vE/b6g3HqDuhlAboXUsv+Ga8SCYwS+ykKllxOWyCqs4QrmBFsWH1m6HleNL8vMVg/Dy8RCtc1jMLvjVOfDU8NVtymuzp/OU6u8cKpDjNKrsAKYOlXmOCezeFDeP8bQTyqhB8quhef18adKHlrVPoEsBw9EsW0EqUODUmLwfaKxbTzJorrg91AfCYbnwKR9qaHJDy3Eq9gm527IKOuDaMj3tAeB0GMIMb52yHX1O3sxEBxmVvZvM52SBBgIHUHukxvpqyRHE1Zti+3bp6K53ykrZzj93uHonbeRsxcGt8eWMdCaTNcF2gdLYSYg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199015)(66556008)(66946007)(7416002)(4326008)(5660300002)(8676002)(66476007)(6916009)(86362001)(8936002)(54906003)(316002)(38100700002)(38350700002)(83380400001)(53546011)(41300700001)(52116002)(6666004)(6486002)(966005)(6506007)(478600001)(186003)(1076003)(9686003)(26005)(6512007)(44832011)(33716001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mcBWZK6RTRzIQQAIGZ5MQQGHOj2/TjtxCuZmk3r7r3seofGsRlQzDa3WGJL9?=
+ =?us-ascii?Q?AFdkTBHu4wN7pkseTY2Hrr0SoSJiTlBcOpikZ2Z52j7QOGHDW+z3Dc4JpYRC?=
+ =?us-ascii?Q?y1ZO00QQDW3AwYHzK2IxPzB7pSUuylN9YknpVLzeKXmHOh4w4nRQ+x/8NkHO?=
+ =?us-ascii?Q?5pCZpkL9RBZ0aJ+knqEkcJKjZQOzXBOxdAfzClbEQ7tmXcsGcEt5sDD7HBfK?=
+ =?us-ascii?Q?C31y2zIoASy3iTGaJrueFY60uvK9ThyATnx47NJwxDx6otE68yi/PVIdYpDo?=
+ =?us-ascii?Q?jTbuRhK0Uwltt5Z3FS57xjdjibNlZnCf7Wr2SLq4gvHABVbHgdklhqOFcpIH?=
+ =?us-ascii?Q?GM2cFUhp8Q3IGqOG9NN9kwpRZclnKxZDoccofXJj6mac+5ydp7HjaNPZwFDQ?=
+ =?us-ascii?Q?h9Ix1KGV84VnS+lj8MZcuMRz5QJ3WOPB/ibtaUGK6y8q305y+GN4b9H7J5QL?=
+ =?us-ascii?Q?5+yJiKwyFf1VvTJDliv28KKUGbn0NIthhRE+79k1+tGNgC9xC3oVDlUsdHEr?=
+ =?us-ascii?Q?9Rn0Lv9f/u3zLfQ7SyCcXBx4bNzMlPDY+7KcjzdDg+FwtEr6wLEIK2YBqbJS?=
+ =?us-ascii?Q?rNWElT7A1pb1f/LPZDCtm17Si7kYysy1k1vov6yR8cmr0mBnPypp5pevda33?=
+ =?us-ascii?Q?GCqfWoqTTmPggUUIhALMm5g9E+bIIhHvlOUJtufHbFw/Vfih8L7k2oE04d6w?=
+ =?us-ascii?Q?jpxnWbVX7EhoBTFc9pCmihMwltCgbHlq3T89cGk2PhrwbN53zEHEFU1nnf5u?=
+ =?us-ascii?Q?20rtKa37rdpjI/o0QaW+IOBNMBlep3DZwFFdCEOQDxj58y+1T9jN6Cm6Cpp1?=
+ =?us-ascii?Q?WOZ/POrl3YNk9uFd3UMzq5PUa8Fo4t8d2zFWG4LrYmZbdAbwxRKkVW7ec2qg?=
+ =?us-ascii?Q?0yQDnBzYEKdAqRPpkkFQeRyZRIyXqXNKf/uiugBL+fVllZPJRbrDXZc2yU1L?=
+ =?us-ascii?Q?AFsIIGyPfzuQZv8xayA7BLfABKkcs21yyMbHZVYAMUGbgt0nymPAaYErjY2E?=
+ =?us-ascii?Q?SB+puN8YGZWSshBKmmO8uY0UMYziBM0m+z92rmfTQFAl/0hecSmvIJgbABA0?=
+ =?us-ascii?Q?SLaM0uh1Y0QWGoUFJVlBPi0C3ukfRgdGMPPUvU6jJhJ9NHWxjQQAzjfqV1Lq?=
+ =?us-ascii?Q?P3ldea8X0ZXYjhSf5KkRN9IiJgD0Xj28zCxF/cTWfnB1W+FJLK+8U+gPfae2?=
+ =?us-ascii?Q?78/3NllSHnc9szBsF5jKlD7xzDDWu7QLvXB2COxR6mLQicCUKhKlp3shwEMV?=
+ =?us-ascii?Q?RFSg4Y38eGMZ/zlpCUyT67Vk14P6wnqSFQPcB8CDrmQYXeRG6UkjFxIU0QZP?=
+ =?us-ascii?Q?3rHMLaKnJCYIpSb5fq3hPuuuk3xwDFMh3bX4d87wT3Zxyaevm3MMJZIufka6?=
+ =?us-ascii?Q?HfaFcyJwS/+5Co6u0kXu8OcPF0sRue37WwURbiwg4Eh4r1Edzswbar1klRXM?=
+ =?us-ascii?Q?UXeK5k8jcrcYEK8/L6ulAu9Ck4DpHmV+U9RzK5Nwj8dkCaUZn3Gd8Nw5CtBe?=
+ =?us-ascii?Q?DSJtUQXx+dVRxn27aUuf6j6NOi4OVqBOmjx93hZ0kCb2HbEPs4PitPKCJVxc?=
+ =?us-ascii?Q?NNSdzAL9xvFUL4u8jcYmjMvivfb+xx2pX06zJMeW?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f74d3d2c-5f7a-4cdc-bcb1-08da9a69b3a3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 18:06:40.7129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QmtVq7Jx7Ezfa8qHS7MxMyR9PQEZkZH2OoM/xZVhOdp/jIK6nwW8JZJWe04Dmf2VB2uDNH/9Jku6xZfIbgnHKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7381
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial support for OnePlus Nord N100, based on SM4250. Currently
-working:
-- boots
-- usb
-- built-in flash storage (UFS)
-- SD card reader
+On 22-09-19 18:10:51, Krzysztof Kozlowski wrote:
+> On 19/09/2022 15:22, Viorel Suman (OSS) wrote:
+> > From: Viorel Suman <viorel.suman@nxp.com>
+> > 
+> > Sync defines with the latest available SCFW kit version 1.13.0,
+> > may be found at the address below:
+> > 
+> > https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
+> > 
+> > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> > ---
+> >  include/dt-bindings/firmware/imx/rsrc.h | 294 ++++++++++++++++--------
+> >  1 file changed, 198 insertions(+), 96 deletions(-)
+> > 
+> > Changes since v1: https://lore.kernel.org/all/20220915181805.424670-1-viorel.suman@oss.nxp.com/
+> > 	Two patches squashed into one in order to keep changes bissectable
+> > 	and compilable as suggested by Alexander Stein.
+> > 
+> > Changes since v2: https://lore.kernel.org/all/20220919113715.243910-1-viorel.suman@oss.nxp.com/
+> > 	Added two more defines in backward compatibility section in order to
+> > 	to avoid breaking ABI, so there is no need to change the driver
+> > 	anymore.
+> > 
+> > diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+> > index 1675de05ad33..ed33869f184e 100644
+> > --- a/include/dt-bindings/firmware/imx/rsrc.h
+> > +++ b/include/dt-bindings/firmware/imx/rsrc.h
+> > @@ -13,30 +13,30 @@
+> >   * never be changed or removed (only added to at the end of the list).
+> >   */
+> >  
+> > -#define IMX_SC_R_A53			0
+> > -#define IMX_SC_R_A53_0			1
+> > -#define IMX_SC_R_A53_1			2
+> > -#define IMX_SC_R_A53_2			3
+> > -#define IMX_SC_R_A53_3			4
+> > -#define IMX_SC_R_A72			5
+> > -#define IMX_SC_R_A72_0			6
+> > -#define IMX_SC_R_A72_1			7
+> > -#define IMX_SC_R_A72_2			8
+> > -#define IMX_SC_R_A72_3			9
+> > +#define IMX_SC_R_AP_0			0
+> > +#define IMX_SC_R_AP_0_0			1
+> > +#define IMX_SC_R_AP_0_1			2
+> > +#define IMX_SC_R_AP_0_2			3
+> > +#define IMX_SC_R_AP_0_3			4
+> > +#define IMX_SC_R_AP_1			5
+> > +#define IMX_SC_R_AP_1_0			6
+> > +#define IMX_SC_R_AP_1_1			7
+> > +#define IMX_SC_R_AP_1_2			8
+> > +#define IMX_SC_R_AP_1_3			9
+> >  #define IMX_SC_R_CCI			10
+> >  #define IMX_SC_R_DB			11
+> >  #define IMX_SC_R_DRC_0			12
+> >  #define IMX_SC_R_DRC_1			13
+> >  #define IMX_SC_R_GIC_SMMU		14
+> > -#define IMX_SC_R_IRQSTR_M4_0		15
+> > -#define IMX_SC_R_IRQSTR_M4_1		16
+> > -#define IMX_SC_R_SMMU			17
+> > -#define IMX_SC_R_GIC			18
+> > +#define IMX_SC_R_IRQSTR_MCU_0		15
+> > +#define IMX_SC_R_IRQSTR_MCU_1		16
+> > +#define IMX_SC_R_SMMU_0			17
+> > +#define IMX_SC_R_GIC_0			18
+> >  #define IMX_SC_R_DC_0_BLIT0		19
+> >  #define IMX_SC_R_DC_0_BLIT1		20
+> >  #define IMX_SC_R_DC_0_BLIT2		21
+> >  #define IMX_SC_R_DC_0_BLIT_OUT		22
+> > -#define IMX_SC_R_PERF			23
+> > +#define IMX_SC_R_PERF_0			23
+> >  #define IMX_SC_R_USB_1_PHY		24
+> >  #define IMX_SC_R_DC_0_WARP		25
+> >  #define IMX_SC_R_V2X_MU_0		26
+> > @@ -56,11 +56,14 @@
+> >  #define IMX_SC_R_V2X_MU_3		40
+> >  #define IMX_SC_R_V2X_MU_4		41
+> >  #define IMX_SC_R_DC_1_WARP		42
+> > +#define IMX_SC_R_STM			43
+> >  #define IMX_SC_R_SECVIO			44
+> >  #define IMX_SC_R_DC_1_VIDEO0		45
+> >  #define IMX_SC_R_DC_1_VIDEO1		46
+> >  #define IMX_SC_R_DC_1_FRAC0		47
+> > +#define IMX_SC_R_V2X			48
+> >  #define IMX_SC_R_DC_1			49
+> > +#define IMX_SC_R_UNUSED14		50
+> >  #define IMX_SC_R_DC_1_PLL_0		51
+> >  #define IMX_SC_R_DC_1_PLL_1		52
+> >  #define IMX_SC_R_SPI_0			53
+> > @@ -151,10 +154,10 @@
+> >  #define IMX_SC_R_DMA_1_CH29		137
+> >  #define IMX_SC_R_DMA_1_CH30		138
+> >  #define IMX_SC_R_DMA_1_CH31		139
+> > -#define IMX_SC_R_UNUSED1		140
+> 
+> This one disappears...
 
-Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 241 ++++++++++++++++++
- 2 files changed, 242 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+Hi Krzysztof,
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d7669a7cee9f..2656ef21b943 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -139,6 +139,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-new file mode 100644
-index 000000000000..a3f1c7c41fd7
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-@@ -0,0 +1,241 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (c) 2021, Iskren Chernev <iskren.chernev@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "sm4250.dtsi"
-+
-+/ {
-+	model = "OnePlus Nord N100";
-+	compatible = "oneplus,billie2", "qcom,sm4250";
-+
-+	/* required for bootloader to select correct board */
-+	qcom,msm-id = <0x1a1 0x10000 0x1bc 0x10000>;
-+	qcom,board-id = <0x1000b 0x00>;
-+
-+	aliases {
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "framebuffer0";
-+
-+		framebuffer0: framebuffer@9d400000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0 0x5c000000 0 (1600 * 720 * 4)>;
-+			width = <720>;
-+			height = <1600>;
-+			stride = <(720 * 4)>;
-+			format = "a8r8g8b8";
-+		};
-+	};
-+};
-+
-+&reserved_memory {
-+	bootloader_log_mem: memory@5fff7000 {
-+		reg = <0x0 0x5fff7000 0x0 0x8000>;
-+		no-map;
-+	};
-+
-+	ramoops@cbe00000 {
-+		compatible = "ramoops";
-+		reg = <0x0 0xcbe00000 0x0 0x400000>;
-+		record-size = <0x40000>;
-+		pmsg-size = <0x200000>;
-+		console-size = <0x40000>;
-+		ftrace-size = <0x40000>;
-+	};
-+
-+	param_mem: memory@cc200000 {
-+		reg = <0x0 0xcc200000 0x0 0x100000>;
-+		no-map;
-+	};
-+
-+	mtp_mem: memory@cc300000 {
-+		reg = <0x00 0xcc300000 0x00 0xb00000>;
-+		no-map;
-+	};
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm6125-regulators";
-+
-+		vreg_s6a: s6 {
-+			regulator-min-microvolt = <320000>;
-+			regulator-max-microvolt = <1456000>;
-+		};
-+
-+		vreg_s7a: s7 {
-+			regulator-min-microvolt = <1280000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+
-+		vreg_s8a: s8 {
-+			regulator-min-microvolt = <1064000>;
-+			regulator-max-microvolt = <1304000>;
-+		};
-+
-+		vreg_l1a: l1 {
-+			regulator-min-microvolt = <952000>;
-+			regulator-max-microvolt = <1152000>;
-+		};
-+
-+		vreg_l4a: l4 {
-+			regulator-min-microvolt = <488000>;
-+			regulator-max-microvolt = <1000000>;
-+		};
-+
-+		vreg_l5a: l5 {
-+			regulator-min-microvolt = <1648000>;
-+			regulator-max-microvolt = <3056000>;
-+		};
-+
-+		vreg_l6a: l6 {
-+			regulator-min-microvolt = <576000>;
-+			regulator-max-microvolt = <656000>;
-+		};
-+
-+		vreg_l7a: l7 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1304000>;
-+		};
-+
-+		vreg_l8a: l8 {
-+			regulator-min-microvolt = <400000>;
-+			regulator-max-microvolt = <728000>;
-+		};
-+
-+		vreg_l9a: l9 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2000000>;
-+		};
-+
-+		vreg_l10a: l10 {
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <1904000>;
-+		};
-+
-+		vreg_l11a: l11 {
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <1952000>;
-+		};
-+
-+		vreg_l12a: l12 {
-+			regulator-min-microvolt = <1624000>;
-+			regulator-max-microvolt = <1984000>;
-+		};
-+
-+		vreg_l13a: l13 {
-+			regulator-min-microvolt = <1504000>;
-+			regulator-max-microvolt = <1952000>;
-+		};
-+
-+		vreg_l14a: l14 {
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <1904000>;
-+		};
-+
-+		vreg_l15a: l15 {
-+			regulator-min-microvolt = <2920000>;
-+			regulator-max-microvolt = <3232000>;
-+		};
-+
-+		vreg_l16a: l16 {
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <1904000>;
-+		};
-+
-+		vreg_l17a: l17 {
-+			regulator-min-microvolt = <1152000>;
-+			regulator-max-microvolt = <1304000>;
-+		};
-+
-+		vreg_l18a: l18 {
-+			regulator-min-microvolt = <1104000>;
-+			regulator-max-microvolt = <1304000>;
-+		};
-+
-+		vreg_l19a: l19 {
-+			regulator-min-microvolt = <1624000>;
-+			regulator-max-microvolt = <3304000>;
-+		};
-+
-+		vreg_l20a: l20 {
-+			regulator-min-microvolt = <1624000>;
-+			regulator-max-microvolt = <3304000>;
-+		};
-+
-+		vreg_l21a: l21 {
-+			regulator-min-microvolt = <2400000>;
-+			regulator-max-microvolt = <3544000>;
-+		};
-+
-+		vreg_l22a: l22 {
-+			regulator-min-microvolt = <2952000>;
-+			regulator-max-microvolt = <3304000>;
-+		};
-+
-+		vreg_l23a: l23 {
-+			regulator-min-microvolt = <3296000>;
-+			regulator-max-microvolt = <3304000>;
-+		};
-+
-+		vreg_l24a: l24 {
-+			regulator-min-microvolt = <2704000>;
-+			regulator-max-microvolt = <3544000>;
-+		};
-+	};
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32764>;
-+};
-+
-+&sdhc_2 {
-+	vmmc-supply = <&vreg_l22a>;
-+	vqmmc-supply = <&vreg_l5a>;
-+
-+	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
-+
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <14 4>;
-+};
-+
-+&ufs_mem_hc {
-+	vcc-supply = <&vreg_l24a>;
-+	vcc-max-microamp = <600000>;
-+	vccq2-supply = <&vreg_l11a>;
-+	vccq2-max-microamp = <600000>;
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l12a>;
-+	vddp-ref-clk-supply = <&vreg_l18a>;
-+	status = "okay";
-+};
-+
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_hsphy {
-+	vdd-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l12a>;
-+	vdda-phy-dpdm-supply = <&vreg_l15a>;
-+	status = "okay";
-+};
-+
-+&xo_board {
-+	clock-frequency = <19200000>;
-+};
--- 
-2.37.3
+Right, it was renamed in the subsequent SCFW kit
+versions to IMX_SC_R_V2X_PID0, thus - this patch
+rename it in include/dt-bindings/firmware/imx/rsrc.h
+file in order to have this file and SCFW kit defines
+synchronized.
 
+IMX_SC_R_UNUSED1 is not referenced somehow in kernel,
+thus - no compilation issues if renamed to IMX_SC_R_V2X_PID0,
+IMHO it does not make sense to me to add the related
+backward compatibility define like below:
+
+#define IMX_SC_R_UNUSED1 IMX_SC_R_V2X_PID0
+
+Regards,
+Viorel 
+ 
+
+> 
+> > -#define IMX_SC_R_UNUSED2		141
+> > -#define IMX_SC_R_UNUSED3		142
+> > -#define IMX_SC_R_UNUSED4		143
+> 
+> Best regards,
+> Krzysztof
