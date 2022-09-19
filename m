@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BB75BD3C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC785BD3E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiISRdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S230021AbiISRgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiISRdf (ORCPT
+        with ESMTP id S231276AbiISRf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:33:35 -0400
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB143D594
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:33:33 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id aKeAoPhYzAOp2aKeAoyF6y; Mon, 19 Sep 2022 19:33:31 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 19 Sep 2022 19:33:31 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <e4914aa5-3e42-235c-fd9e-65a907a92842@wanadoo.fr>
-Date:   Mon, 19 Sep 2022 19:33:30 +0200
+        Mon, 19 Sep 2022 13:35:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDAD3AB33;
+        Mon, 19 Sep 2022 10:35:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 970A7B8094A;
+        Mon, 19 Sep 2022 17:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5063C433D6;
+        Mon, 19 Sep 2022 17:35:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663608952;
+        bh=/852PW2VlJHyiSgQsLwdhlZsO86XrfHstwRhfor+u30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kqubps6P1Yp/qBJJxiDo7XPigGAvl2S0Q5BqgKXbTCSsXeebcoeb8IB3l0kXBN0JZ
+         d+tj328dfG/sX+ABbLBIJn/8PE2gZ2xfiC3woDKXnBhTSQXodT96+dM/dbfg3RCJDl
+         GGl73fqtQXVxbY02vYNT4O6+eqa0qU7pcRuJEX5WcBFVSeXiA5OTLbzYVf3upVBtnv
+         HTaqKpI3s5tqR6+X4Md4U9o/ZXdwvnkBUlmN4Duh3tFda1ybGBV6lny0TY79VxuODT
+         zIbXiTZbpjxIOi+xsjB4m0aSpTZtRZzKMaqvH9HHDPeBcHCdxzHWn6RWaqU3+KxXUZ
+         s8q1mchMv4BFg==
+Date:   Mon, 19 Sep 2022 18:33:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Omar Sandoval <osandov@osandov.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
+Message-ID: <Yyin1FUU7enibeD8@sirena.org.uk>
+References: <20200428132105.170886-1-hjl.tools@gmail.com>
+ <20200428132105.170886-2-hjl.tools@gmail.com>
+ <YyTRM3/9Mm+b+M8N@relinquished.localdomain>
+ <e15de60c-8133-3d93-eb1c-c6b1b5389887@csgroup.eu>
+ <YyimOW229By98Dn7@relinquished.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Input: applespi - avoid wasting some memory
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-input@vger.kernel.org
-References: <0db94f84920663f3bd45a73e2ae73950627a377f.1663506472.git.christophe.jaillet@wanadoo.fr>
- <YygUFr5cSpZhYKOA@hovoldconsulting.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <YygUFr5cSpZhYKOA@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IQ0PHAJ6cTaIwjtK"
+Content-Disposition: inline
+In-Reply-To: <YyimOW229By98Dn7@relinquished.localdomain>
+X-Cookie: One FISHWICH coming up!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 19/09/2022 à 09:02, Johan Hovold a écrit :
-> On Sun, Sep 18, 2022 at 03:08:17PM +0200, Christophe JAILLET wrote:
->> When the 'struct applespi_data' structure is allocated at the beginning of
->> applespi_probe(), 2504 bytes are allocated.
->>
->> Because of the way memory is allocated, it ends to a 4096 bytes allocation.
->> So, about 1500 bytes are wasted.
->>
->> Later in this function, when 'tx_buffer', 'tx_status', 'rx_buffer' and
->> 'msg_buf' are allocated, 256, 4, 256 and 512 bytes are requested (~1 ko).
->> A devm_ memory allocation has a small overhead of 40 bytes. So, for the
->> same reason as above, it ends to allocate 512, 64, 512 and 1024 (~2 ko).
->>
->> All that said, defining these 4 arrays as part of 'struct applespi_data'
->> saves 2 ko of runtime memory.
->>
->> 3504 bytes are now requested, and 4096 really allocated. All these 4
->> arrays fit in the 'wasted' memory of the first allocation.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> Compile tested only.
->> ---
->>   drivers/input/keyboard/applespi.c | 23 ++++-------------------
->>   1 file changed, 4 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/input/keyboard/applespi.c b/drivers/input/keyboard/applespi.c
->> index fab5473ae5da..bee4ccfa2b05 100644
->> --- a/drivers/input/keyboard/applespi.c
->> +++ b/drivers/input/keyboard/applespi.c
->> @@ -373,11 +373,11 @@ struct applespi_data {
->>   	struct input_dev		*keyboard_input_dev;
->>   	struct input_dev		*touchpad_input_dev;
->>   
->> -	u8				*tx_buffer;
->> -	u8				*tx_status;
->> -	u8				*rx_buffer;
->> +	u8				tx_buffer[APPLESPI_PACKET_SIZE];
->> +	u8				tx_status[APPLESPI_STATUS_SIZE];
->> +	u8				rx_buffer[APPLESPI_PACKET_SIZE];
->>   
->> -	u8				*msg_buf;
->> +	u8				msg_buf[MAX_PKTS_PER_MSG * APPLESPI_PACKET_SIZE];
->>   	unsigned int			saved_msg_len;
->>   
->>   	struct applespi_tp_info		tp_info;
-> 
-> This kind of change is generally broken in case DMA can be involved.
-> 
-> Allocating the transfer buffers separately makes sure that alignment
-> requirements are met and avoids hard-to-debug memory corruption issues.
-> 
-> Johan
-> 
 
-Got it. I'll keep away from it.
+--IQ0PHAJ6cTaIwjtK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for the feed-back and explanation.
+On Mon, Sep 19, 2022 at 10:26:17AM -0700, Omar Sandoval wrote:
 
-CJ
+In general if you're going to CC someone into a thread please put
+a note at the start of your mail explaining why, many of us get
+copied on a lot of irrelevant things for no apparently reason so
+if it's not immediately obvious why we were sent a mail there's
+every chance it'll just be deleted.
+
+> I'm not sure what exactly arch/arm64/include/asm/assembler.h is doing
+> with this file. Perhaps the author, Mark Brown, can clarify?
+
+I don't understand the question, what file are you talking about
+here?  arch/arm64/include/asm/assembler.h is itself a file and I
+couldn't find anything nearby in your mail talking about a file...
+
+--IQ0PHAJ6cTaIwjtK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMop/QACgkQJNaLcl1U
+h9CuYQf+LhieRHN+lWuscUX0Gz1aGefX2uk+u1/zVHlI3IS+bi5cEzI4YZz15Fhm
+dFlonqfvTgV7AtLj9TiUMT97M/LxM9nsW1x9N6OeSOwwOiNcmYkN+0NMsN8jI99S
+wa+rK8Y+KJb1TG3+POFw2Itmy6dmpp5123NKssJodzlZmVn/MBSH5EyztZZv+MO4
+giywJmdOZwonwThPfGztYY/yP3AZe2kvVfEwi7R6fEmh5/zXr++ETpkyRdGpph6i
+ZBx6WFT70pez5QNA/tKJhPo/agvFApr8XTCllr/dr4zpyrDGKM577/al1JYoic9+
+OowcdvXhPOF+9O0gq2jX73BRS0nPJQ==
+=XHOY
+-----END PGP SIGNATURE-----
+
+--IQ0PHAJ6cTaIwjtK--
