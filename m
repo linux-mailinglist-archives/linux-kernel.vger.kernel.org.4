@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B335BD4D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA805BD4DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiISSgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S229647AbiISSkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiISSgI (ORCPT
+        with ESMTP id S229453AbiISSkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:36:08 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44424205CA;
-        Mon, 19 Sep 2022 11:36:03 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id 13so763627ejn.3;
-        Mon, 19 Sep 2022 11:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xysQoAG8p++2395HYwD09N+AaN5kwY2ODmTAdpS3GA4=;
-        b=i8Y6XgiE5SIkU2Jgqa5ydeIJWZzjno9Z6C8UHoyF27aIDGFqYb0xwIUNx1xiObiTcA
-         pZYp+CeZjNWulZCWQfM1BZLMGZK+m4U2jmdhAnHs8x0k8c9RxzQOdlsZRmBhMCoeFzES
-         u2wET8dDm0abuLMjUrpcJSb3P07OYHodvI9Ej/AiugO1FrcB+KyEtFneSuFXOj8rJtgl
-         VyaTqgtX4Xj502OySsFJaddWjVOGRn7M0/kZEiuNhp0sXoTcWWXM6z7Gx46x2DC8Y9x5
-         BneRTdT6Tvty25qV7c8UmFKPK3h9X8ZJUDfu7ZhnvoOZmFaqqkr6haE6kAmDsLwIbefA
-         3W3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xysQoAG8p++2395HYwD09N+AaN5kwY2ODmTAdpS3GA4=;
-        b=F2qOYpCoOIKdqXE2Hcnq6ARyaABREymyr12HyRJ5743jVUHmL5yc1TeSBdEtamTxzH
-         /xmOYp5xnBP7l23488uIM389DpzUhnBxhcx7svHTVhnyRqLNumR2xQtYyPswbCPeowj/
-         QVuJN2Ui6wEiMjMOtf2dxrggVJ6tCl0meIk0ZKAQCLMMRw8qvC4g7hprEdbZmFEJWJtA
-         XyFoNh5ie0YnSr5jLI347+jHUAju+dQ/FgswRAHnqMb9406H0idjRTE2kqlfp0e4I3gV
-         7tsqIoTr4MtVOOJEGqkssM/Q6fadd1jkiitjghH8082IKgcQ+LtD/j4n2YjtYxszQXBC
-         6t3A==
-X-Gm-Message-State: ACrzQf0osy82mrQEACoVr1n3sCU9HJI4hY3JY5gQLNumAgZsOnhiyGQ9
-        ii43DaF0+Emp5qHTvQKdrdmF9j/a9d2diGdQb49M6VKNCfe3fA==
-X-Google-Smtp-Source: AMsMyM7OCjj0N2lq7ypdTFS9K9fbZtKqPqYIrGEwsOjGa9TK9uds8w2DeniWItXZkmVPW5Fx5OcFiYprKjIR0sXIzn0=
-X-Received: by 2002:a17:907:74a:b0:77e:9455:b4e3 with SMTP id
- xc10-20020a170907074a00b0077e9455b4e3mr14078318ejb.471.1663612561632; Mon, 19
- Sep 2022 11:36:01 -0700 (PDT)
+        Mon, 19 Sep 2022 14:40:16 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F59118379;
+        Mon, 19 Sep 2022 11:40:13 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.74.120) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 19 Sep
+ 2022 21:40:02 +0300
+Subject: Re: [PATCH] net: ravb: Fix PHY state warning splat during system
+ resume
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <8ec796f47620980fdd0403e21bd8b7200b4fa1d4.1663598796.git.geert+renesas@glider.be>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <00e5b86b-fe51-98c9-92b7-349b6a03fc1b@omp.ru>
+Date:   Mon, 19 Sep 2022 21:40:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220917014746.3828349-1-floridsleeves@gmail.com> <Yyh/BmvAHNMlENFw@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yyh/BmvAHNMlENFw@hirez.programming.kicks-ass.net>
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Mon, 19 Sep 2022 11:36:13 -0700
-Message-ID: <CAMEuxRrmNT6xdLDiHLKb9COkRO31QuvwMX5zPFKw0uVAnJ6Yjg@mail.gmail.com>
-Subject: Re: [PATCH v1] kernel/events/core: check return value of task_function_call()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
-        acme@kernel.org, mingo@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8ec796f47620980fdd0403e21bd8b7200b4fa1d4.1663598796.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.74.120]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 09/19/2022 18:07:27
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172787 [Sep 19 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 499 499 6614d57ea7c6ac2e38ef0272e2cc77f73b9aae18
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.120 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.120
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/19/2022 18:10:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/19/2022 3:54:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 7:39 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Sep 16, 2022 at 06:47:46PM -0700, Li Zhong wrote:
-> > Check the return value of task_function_call(), which could be error
-> > code when the execution fails.
->
-> How is terminating the cgroup task iteration a useful thing? Also coding
-> style fail for not adding { }
+On 9/19/22 5:48 PM, Geert Uytterhoeven wrote:
 
-Thanks for your reply! Skip and continue the execution is more appropriate
-here. Change it in v2 patch.
+> Since commit 744d23c71af39c7d ("net: phy: Warn about incorrect
+> mdio_bus_phy_resume() state"), a warning splat is printed during system
+> resume with Wake-on-LAN disabled:
+> 
+>         WARNING: CPU: 0 PID: 1197 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xc8
+> 
+> As the Renesas Ethernet AVB driver already calls phy_{stop,start}() in
+> its suspend/resume callbacks, it is sufficient to just mark the MAC
+> responsible for managing the power state of the PHY.
+> 
+> Fixes: fba863b816049b03 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->
-> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> > ---
-> >  kernel/events/core.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index 2621fd24ad26..ac0cf611b12a 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -13520,7 +13520,8 @@ static void perf_cgroup_attach(struct cgroup_taskset *tset)
-> >       struct cgroup_subsys_state *css;
-> >
-> >       cgroup_taskset_for_each(task, css, tset)
-> > -             task_function_call(task, __perf_cgroup_move, task);
-> > +             if (!task_function_call(task, __perf_cgroup_move, task))
-> > +                     return;
-> >  }
-> >
-> >  struct cgroup_subsys perf_event_cgrp_subsys = {
-> > --
-> > 2.25.1
-> >
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+> diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
+> index d013cc1c8a0ad007..abe6f570fe102636 100644
+> --- a/drivers/net/ethernet/renesas/ravb_main.c
+> +++ b/drivers/net/ethernet/renesas/ravb_main.c
+> @@ -1449,6 +1449,8 @@ static int ravb_phy_init(struct net_device *ndev)
+>  		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
+>  	}
+>  
+> +	/* Indicate that the MAC is responsible for managing PHY PM */
+> +	phydev->mac_managed_pm = true;
+
+   Hm, this field is declared as *unsigned*...
+
+>  	phy_attached_info(phydev);
+[...]
+
+MBR, Sergey
