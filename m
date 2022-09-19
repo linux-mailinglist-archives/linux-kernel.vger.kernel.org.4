@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB6E5BC0BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 01:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A0F5BC0C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 02:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiIRX6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 19:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S229548AbiISAAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 20:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIRX6r (ORCPT
+        with ESMTP id S229473AbiISAAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 19:58:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D50013F46;
-        Sun, 18 Sep 2022 16:58:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so4557780pjo.2;
-        Sun, 18 Sep 2022 16:58:46 -0700 (PDT)
+        Sun, 18 Sep 2022 20:00:19 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DC513EA5;
+        Sun, 18 Sep 2022 17:00:18 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id j10so16855601qtv.4;
+        Sun, 18 Sep 2022 17:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nx+a1DvWCBo5ERwaVpW/CuMoX39dd2IN65mPeOU18nk=;
-        b=Htjm9zpZ8qet43rd+8hciEkngTT3Mf9gh89SN468HcXRk3ucOGAT1qqtAaMZEhnQ+5
-         HKO+dyYDDMbhTRmR9hOlUZiBKcCB5G0vFFFNhO2usZIIwCq/GpbIZ1mREUUbG/kdm4XB
-         UxUE5tOK0KIq7xMEdNi6auBBrWyHMhS4LBqq3mCSeeqyLbVhnpEd0YQo4v6MFY894bHM
-         VWFH8AE2DMrvKVROiH7xLpQBS9euYX87lvN5EMyugwHztkvEzA/j9PahLolBMAjWypAu
-         NI6xV55ezEdKYSo+kMyCRrRs3o7PeEUCSt4OF7VYnS4cLQbwWcHem9cjtg2IwW4K9/NS
-         O5Sw==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=eZTV+zU2oTiRAq097+BWcDFn03WYIXYwoyBgocEInuo=;
+        b=gYsMSf0j+6vFWMRAIwv+hIXHVZJOKkqXyShHjfdCk9/PCcCoc6WO0MICA5AFcfUE8R
+         nuNU+FVhvhDZ8EVaCAZKWRR/2IPxzgl7sOPG4bhiSkk4tA7Cy87GvC2Z8kKZYZNSuVr9
+         yhQNTu0UXjA6LE4AjT8xq8mvyNJUSwYdhSpxB0eXtVFkW9OOMQIygibaVwFO4nJ8gQRK
+         sCjLjHT7Keq6A00oQYjTMFIga/geKe3SJc8rK8G8+Am0MkWYRjSs69r6hPjpBZBG1JWG
+         tGHrr+XmQrHpHqXkxNOuYreYLUCSx7QyEEDrODFeLhfzsjOT3t4dyltialC8csBkEO73
+         XDyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nx+a1DvWCBo5ERwaVpW/CuMoX39dd2IN65mPeOU18nk=;
-        b=WD5P5wmLbWIAwF/ob8uD7y3pEJIMLmA5+34GUqMtxpaYjAI/dZej1070Mg5ms4R97W
-         HWwVZ9WqsSfEx8vSK+w0ijMntKg0KmUQV63QCdw1WmVUp1DagEvChOznN4USrG4S5Qqt
-         7qKUG4zHBdrhLrO/wE3jjBYSn+WpH6/L3+6LQ0PtOn6IkVbHJR7Qtaqm3w3uXj6YOI+6
-         2/lu0HGp9Uh0iO/TstpsIRVsgAKwE1r8bb2akrMQ3LUrfWQCrhLi9eY9j18A+nu1d2uk
-         kxWTs00jsV5b9CQ1A6dyYisxx+yqZK62jg9+iP/g0oT0w7nvilBAa3VNRJtWYM3rKbLi
-         ABoQ==
-X-Gm-Message-State: ACrzQf1A52j9P2uISoFkEm9JeQ3XH+e2I5H7FHaGdNz6ZAuMTp+BVGP/
-        thWdEcK3dZgSlePQrbNFXBM=
-X-Google-Smtp-Source: AMsMyM5JrmjGJS75CgJbj2qzE8nX2qZTU6YGWXhtv3RzUnrmmUM4+ok+8STh+zELYZx4q+Rhpj5X6Q==
-X-Received: by 2002:a17:90b:1e0d:b0:202:91ec:e167 with SMTP id pg13-20020a17090b1e0d00b0020291ece167mr16593865pjb.174.1663545525697;
-        Sun, 18 Sep 2022 16:58:45 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id 75-20020a62164e000000b005499599ed30sm8113030pfw.10.2022.09.18.16.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 16:58:45 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 07:58:38 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-Message-ID: <Yyewrm+/viScefKC@sol>
-References: <20220906214114.vj3v32dzwxz6uqik@pali>
- <YxfBKkqce/IQQLk9@google.com>
- <20220906220901.p2c44we7i4c35uvx@pali>
- <YxfMkzW+5W3Hm1dU@google.com>
- <CACRpkdZh0BF1jjPB4FSTg12_=aOpK-kMiOFD+A8p5unr1+4+Ow@mail.gmail.com>
- <CAMRc=MdrX5Pz1d-SM2PPikEYw0zJBe6GCdr4pEfgBLMi1J9PAQ@mail.gmail.com>
- <YyKMsyI961Mo1EQE@sol>
- <CACRpkdYB6dZf4TBhfXB2Z5E2PJ46ctAM_QKLiW-fykbCopcVGQ@mail.gmail.com>
- <YyLwsOBXv9jRw/+n@sol>
- <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eZTV+zU2oTiRAq097+BWcDFn03WYIXYwoyBgocEInuo=;
+        b=T6eDUFi4JVEcWiOt2SwJynVUtFLfgBxJA6vCsZTj/ma7eAFnfsnS14dzTv38+iXa7g
+         DhWXjO3726k+IDFo/6cDX9ZF+ncyMV2EzeSdKKhMmja0EepEwXk0LVpronrxt9NsFZbz
+         OSn0MqDsIkrT8E5evmtnHt36w5UoFOyw2nrsaAF0Nmj79WWwcUfQqCoj9rCW3chag8QT
+         S0DKOGsNKV2ipjW7UUw+c29CXpRTMjo7vhB2CCCeylL+KTJN11WDfpaN911YN5wpp7VX
+         YJvx63qN03oBTHXse7lQvJ903+le00EG2zm9r5RHevczKU5V5/V1p4x+5TZDeB3Pu2tR
+         SpCg==
+X-Gm-Message-State: ACrzQf0TJpjkzJQiBwF6sqU2FDm8VgHaNEznURmJVdqx1jXBduwdrGkU
+        X7zp68O053WhES+sq/2CzNQ=
+X-Google-Smtp-Source: AMsMyM5SDDGit+x7Zjyrv1fnhH9YSnrtdyBdaJpRaFYH8TY0KOGi6vyya7cybIYeIroIgiXTFyVpaA==
+X-Received: by 2002:a05:622a:1014:b0:35c:e8ef:a406 with SMTP id d20-20020a05622a101400b0035ce8efa406mr2443659qte.306.1663545617746;
+        Sun, 18 Sep 2022 17:00:17 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b006bb2cd2f6d1sm10897123qkb.127.2022.09.18.17.00.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 17:00:17 -0700 (PDT)
+Message-ID: <876fe0d9-b3a4-f6c1-d08a-ebad9387d50f@gmail.com>
+Date:   Sun, 18 Sep 2022 17:00:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MeF2uNmx_-mZikg=3nMV4aHK+bCUBEcLGEgJ6JY4jZ_Sg@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.15 00/35] 5.15.69-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220916100446.916515275@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220916100446.916515275@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,28 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 09:22:59AM +0200, Bartosz Golaszewski wrote:
-> On Thu, Sep 15, 2022 at 11:30 AM Kent Gibson <warthog618@gmail.com> wrote:
-> >
-> > Enums work for me - especially if the goal is to differentiate
-> > logical from physical - there should be a distinct enum for each.
-> >
+
+
+On 9/16/2022 3:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.69 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We won't even have to change the function signatures if we go with
-> enums - they already take an int and I'm in general against putting
-> enum types into function signatures in C as they give you a false
-> sense of a strong type.
+> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.69-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-IMO it is far easier to remember that C doesn't range check enums than it
-is to remember what specific values are appropriate for a function
-accepting an enum as int.  A specified type is a strong hint, and unlike
-documentation is one that an IDE can parse and provide valid options for.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Passing enums as int is the norm in the kernel, so fair enough to keep
-it that way, but that does contribute to the confusion that we are trying
-to address here.
-
-Cheers,
-Kent.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
