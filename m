@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B49A5BC37C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65195BC37A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiISHYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S229660AbiISH0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiISHYA (ORCPT
+        with ESMTP id S229540AbiISH0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:24:00 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56161A83E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:23:59 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11e9a7135easo60713957fac.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:23:59 -0700 (PDT)
+        Mon, 19 Sep 2022 03:26:14 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD31AF3B;
+        Mon, 19 Sep 2022 00:26:13 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id e68so27251736pfe.1;
+        Mon, 19 Sep 2022 00:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date;
-        bh=sCiPjQA8piKqpO36PIwKnu4u/TUaVUoG8iasiR3UyYg=;
-        b=FZ0UP0kVQBddy5BvvXz/0bbGguGduK7ReCFhhPrly+/Tr+wl/w8ABX6rJ59mqJIdp1
-         3hLfh9qVzQZVAO9UHVBDq+C9sjaRVbHMtbe8FrmlqUYQEX/IopnJBE2Din+Ygs4ko+9W
-         yPZmG2PIoQ5ecKKgP1h0dqOnYrQy7Ch1heFSZkq90uyWMdnK5csZbcIO4OO0Rfy7GSXg
-         JJYlYNMdOe7qEQJinvCx78ubuPPeoV7rIgjxrW0qbiouPrNzY2lLRekg+L0jlnjBD1/v
-         d4b/qHGOb5+4XIA0RUB1psmV3LfdnhFaJ7y2TmqWJJ4Vw02OZQw7nH+UqahELHcHLhZE
-         6/nA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hXqXe6RjT90LFOD/PAYg7ZqKCrE+b+CKvrN2/qxbWPc=;
+        b=Hol1q/SA/TM1plGqmuLeVgcxKQ2264kUUm33EesYm34vxsbK7gBaYeoHckidynQvBM
+         489NG8Tpa0VyqTJ3FyVO4TNK7nMlT7MW2QVVDn7kWqNJ3EnDPwrpBXQyX+zDzjZ11Xxs
+         SKa00Trkt4OJfvDfZTS05sJGDLrBWt/r66Hwo1KWtnRWw4nG8q8OSEor446PidV13RqM
+         gjgeRt5byHSpnBs7LP5Wr9hljNzaET+Uw/HMxPmxa3HI/5HGi3Jmog7BaIUxqUsbBys1
+         z+3G25LBZLrphxKcRjGs9hHLRsInEQ61yELuW2U++XZawffT4iYeWlFvvkUClskV2ES3
+         MS8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=sCiPjQA8piKqpO36PIwKnu4u/TUaVUoG8iasiR3UyYg=;
-        b=y+J1fiZrQnkZy3JVfpU3aycpKnZyrPLJS+hOhu7BIMQ7EpJu4mbpDCqvET9DatXmtn
-         tL3h5YAfp4boPvSy2DmjzGuCoznrfoiqPnxt2h+oqJkUPlK7lAE01dENc0zO/mYbFFev
-         nwHQPQEgjN+yQX3PFBsx3Qo4Cdf+YHAuKIQ5+JGWvMDUqQOI9BkG9mKSP8f0xOgZY6W9
-         050XDwfK2vPVnqMZv9c5xr2vnTCBptfhYAQJG3rE1Lnwy1bcGAOdG2gNC4lX2MRajfob
-         ym06pxpCet8bR6QP3XFTe2EqjRXYj0NgiRLoDmGxuG8IHRCb8XmWnsRT+JxQJ2dLJ4kC
-         q5Uw==
-X-Gm-Message-State: ACgBeo0eATbMUtzmwGQCem10BGYFcMrGGEpNpeWKHkmlJbFLO7GRJWek
-        9Fz1jLKzSWtxqCm9wavlL0U=
-X-Google-Smtp-Source: AA6agR7bsHoK8O8o+qYLGqJhcg9CxAHfP7w+25hqrijqTl6F8de0QmGpWkd1yEib2fhGsWgd53+Fdg==
-X-Received: by 2002:a05:6870:c38f:b0:12b:cb22:9056 with SMTP id g15-20020a056870c38f00b0012bcb229056mr15542798oao.125.1663572238301;
-        Mon, 19 Sep 2022 00:23:58 -0700 (PDT)
-Received: from haolee.io ([2600:3c00::f03c:91ff:fe02:b162])
-        by smtp.gmail.com with ESMTPSA id x30-20020a056870331e00b00127a91041a9sm7202871oae.38.2022.09.19.00.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 00:23:57 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 07:23:56 +0000
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     hannes@cmpxchg.org, surenb@google.com
-Cc:     peterz@infradead.org, zhaoyang.huang@unisoc.com,
-        haolee.swjtu@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] psi: fix possible missing or delayed pending event
-Message-ID: <20220919072356.GA29069@haolee.io>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hXqXe6RjT90LFOD/PAYg7ZqKCrE+b+CKvrN2/qxbWPc=;
+        b=ZF5j+QxWmRf85kb4TOP5qzIqPpm5XZjiuPeRFClot3Lwdbh7Z/62eArRIYyQWWVfax
+         eeBI5YdobaSgw9K+XzuHVyUfdViHEuX3iVVPRn3cHwRBvfpfCDuCn15aIblv+/VO2v3B
+         h22p/J9wLGSLVhw07QdG6EHJrw3mKsuGkzyAXTGh77MtuQP8O+hXNqU/yHurEyKcGGKm
+         mB0Uzgghyij/+hlDt70B3L2xl7fOr32x56mPN3IU+EmKP1Gyhzl5xXks4d3QkQyk3+Xe
+         f7uYmm2hOl8rkOTRn6zs1AIVirIfinCZ4hUUTpzP8EXwGEFbZfaJY/5EwIADJja0X1lD
+         edLw==
+X-Gm-Message-State: ACrzQf2XHI3OWS69t0PIUuu8GIBB/r3D3umpu5Wni3C6PKRGsT7ZG816
+        9dXr+9SrmzlhIb86baSC4Z8=
+X-Google-Smtp-Source: AMsMyM4I1b8NQ/XCZ+Ut+hsbH8xcih23yH/JQisB8VeSGcDWkj3B0zuJfSfVjIg9Dvscd0JlXYZS6g==
+X-Received: by 2002:a63:2c2:0:b0:439:4581:d2af with SMTP id 185-20020a6302c2000000b004394581d2afmr14678385pgc.497.1663572373329;
+        Mon, 19 Sep 2022 00:26:13 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170903111100b00176ca74c58bsm3909851plh.245.2022.09.19.00.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 00:26:12 -0700 (PDT)
+Message-ID: <ec0f97e9-33b7-61d8-25b8-50175544dbdd@gmail.com>
+Date:   Mon, 19 Sep 2022 15:26:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v14 00/11] KVM: x86/pmu: Guest Last Branch Recording
+ Enabling
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, ak@linux.intel.com,
+        wei.w.wang@intel.com, kan.liang@intel.com,
+        alex.shi@linux.alibaba.com, kvm@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210201051039.255478-1-like.xu@linux.intel.com>
+ <CALMp9eRC2APJgB3Y7S4MWsTs9wom3iQycd60kM2eJg39N_L4Ag@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CALMp9eRC2APJgB3Y7S4MWsTs9wom3iQycd60kM2eJg39N_L4Ag@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a pending event exists and growth is less than the threshold, the
-current logic is to skip this trigger without generating event. However,
-from e6df4ead85d9 ("psi: fix possible trigger missing in the window"),
-our purpose is to generate event as long as pending event exists and the
-rate meets the limit, no matter what growth is.
-This patch handles this case properly.
+On 14/9/2022 7:42 am, Jim Mattson wrote:
+> How does live migration work? I don't see any mechanism for recording
+> the current LBR MSRs on suspend or restoring them on resume.
 
-Fixes: e6df4ead85d9 ("psi: fix possible trigger missing in the window")
-Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
----
- kernel/sched/psi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Considering that LBR is still a model specific feature, migration is less 
+valuable unless
+both LBR_FMT values of the migration side are the same, the compatibility check
+(based on cpu models) is required (gathering dust in my to-do list);
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 9711827e3..7d305d0e0 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -539,10 +539,12 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 
- 			/* Calculate growth since last update */
- 			growth = window_update(&t->win, now, total[t->state]);
--			if (growth < t->threshold)
--				continue;
-+			if (!t->pending_event) {
-+				if (growth < t->threshold)
-+					continue;
- 
--			t->pending_event = true;
-+				t->pending_event = true;
-+			}
- 		}
- 		/* Limit event signaling to once per window */
- 		if (now < t->last_event_time + t->win.size)
--- 
-2.21.0
+and there is another dusty missing piece is how to ensure that vcpu can get LBR 
+hardware in
+vmx transition when KVM lbr event fails in host lbr event competition, the 
+complexity here is
+that the host and guest may have different LBR filtering options.
 
+The good news is the Architecture LBR will add save/restore support since Paolo 
+is not averse to
+putting more msr's into msrs_to_save_all[], perhaps a dynamic addition mechanism 
+is a prerequisite.
+
+Please let me know what your priority preferences are for these tasks above.
