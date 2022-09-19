@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7547B5BC0E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924955BC0E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiISBEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 21:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S229599AbiISBGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 21:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiISBET (ORCPT
+        with ESMTP id S229505AbiISBGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:04:19 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C686913D68;
-        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so4650794pja.1;
-        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
+        Sun, 18 Sep 2022 21:06:47 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E405815A2C;
+        Sun, 18 Sep 2022 18:06:46 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id h21so19735663qta.3;
+        Sun, 18 Sep 2022 18:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=jUwOpqo/BKxzYsEAqMc5DTa4e7zgkceNk79Yq/88PNQ=;
-        b=PVVAw2HxpX0fYEW7l+h8u8PiDVwWlYpDPQ2i2wpajO5gWOtjob9d3snyb8VHTNiql7
-         hd0m2LsuL/VHDZW9Ndf6f+1W3yf8itWFaMYuDNnHydaaJWQy4MDOr7O2SSpR1GBE2NJ7
-         ad7loYP/I8sz47NmBmk3+VnWC4+HKphjgW3vkTUot/GfE0OInYHnhePqDPD/gWPdOyjG
-         GlWWI5//H20ZHoRYN4wyc79h35ZnkZEpXnVIgg7i6nQZ4pnDWq9qRGrgW4bpFUmMHEKA
-         CS4fsUEBrAXvBJ6838xq326TTAWoKxZGrdL9iDth9wYLFk86bAgXzY3LHjTJDPvBCSfi
-         bXcQ==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=F1vce9JNB51xNusHDMYQfyU/s8n7VsYT+MqpGpuJVtg=;
+        b=lTQu121cJwwrkQzhfA1VbGcV9O0i0Z2f8b8maden85vwhjjYjBSZLGcRG19wX5JvJn
+         iXT+U/0UpTGzfxLKm+X4NnpkMofs2Fny3HQRJofmmALNtyMIogWjyDdpLAAshlkzU/V1
+         h08Ms48DIn16L2OT7v2fyi7iX+tj4GgDrnyyR5bTSiENiRuLFe4UEwf6TmE+1+4Czu0b
+         IXgvs4RpgLHtiQTacdK38IvfcTGzFDZjmC75XjYshbBH/2xil8cMn2iCT8B138l2VIcQ
+         c8F1GEuZJDaGWR8YcM4kWC+o4K7kMQjCP5xCAriJQfIAMGNRW2eiQBgd8+e3+0xBihwB
+         mQNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=jUwOpqo/BKxzYsEAqMc5DTa4e7zgkceNk79Yq/88PNQ=;
-        b=IeRbdQPN22xC7a8zi1e0kD6+wc3pixGoGkqGHWNTo6/UCLzF9kYHoGwAcnMOslcGRP
-         5Wq+MuGbiC/sxEEVCBbSJU4IliW5z/a4XoFO+5LEZnZtbxY3VhxJcdDNuwep15h6P8Rf
-         KQpNSm1fm6fgAmtRcXSLJLHPJJ/9x6Is0/QHeJo3ouwYsClw3mcYTKqElVFwYTwjuNFM
-         9v7td9/PUIJgLs/fRUgFG6mZKNCrqrDrAKGWIkFsEvZA69y5SjV3xpI/M5Igfj2yKJuq
-         Cge/Gfwi+0nRcxkEnTPxzqrt6jkyX9p8i3Qz6dFnVZ6o3pgnSFCa0yCltLA5/RfULKag
-         wL5A==
-X-Gm-Message-State: ACrzQf2OpMLsK+uKj6bBKXakreER8fl+ZBr4ewFQn4a/j3QUXi5OUFiy
-        pu8K1J04XvCrWgMERS3GKDU=
-X-Google-Smtp-Source: AMsMyM78dt2xwmM91h5FXM/uLqGzhsxnoo4uGhSdfr+VVODgDWUqtRy0t13ni+8w9Ob2q4HEKGhY6A==
-X-Received: by 2002:a17:902:f78d:b0:174:f7aa:921b with SMTP id q13-20020a170902f78d00b00174f7aa921bmr10507027pln.37.1663549458152;
-        Sun, 18 Sep 2022 18:04:18 -0700 (PDT)
-Received: from rfl-device.localdomain ([110.11.251.111])
-        by smtp.gmail.com with ESMTPSA id 185-20020a6308c2000000b00439c1e13112sm4616627pgi.22.2022.09.18.18.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 18:04:17 -0700 (PDT)
-From:   Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
-X-Google-Original-From: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-To:     Derek Chickles <dchickles@marvell.com>,
-        Satanand Burla <sburla@marvell.com>,
-        Felix Manlunas <fmanlunas@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] liquidio: CN23XX: delete repeated words, add missing words and fix typo in comment
-Date:   Mon, 19 Sep 2022 10:04:08 +0900
-Message-Id: <20220919010410.6081-1-RuffaloLavoisier@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=F1vce9JNB51xNusHDMYQfyU/s8n7VsYT+MqpGpuJVtg=;
+        b=TYsrCyQnNMMEfGzSY0fudA1/Uf1HodAxFbzotSPxwWicqsCoEW+YuJwwNAm94fg8kg
+         Xw8j4bOL1JQt0HwKvMwuiTfhLUxPabmyiaUdibaH6TqrNKPuP7VJtBFEiyEz1ga1YBw/
+         ockpEP949wOUBncX46u3EJvOLM3aPYiB8oh+lU6qW4Xj5Qy8MsJ5kwakLgwW9sgTy5D4
+         p6r9upypYCgkVcL4W82Jr90gVxshu7hZKYyDFSVQEIm5EaR8g7AKjUDlh7z52d9Y5Vlk
+         jqUk255+YfH5Q8g6g2JiuTEatw+pAbA0B+tXQ0V9HDYtF6TAzMFhZfopN5dFJfZYSoAG
+         TCeg==
+X-Gm-Message-State: ACrzQf1Zfm8abStP/u+S+xOt9MDY6tVRB6TjhIv3h8cpXwo/dklvW7t7
+        X3M4zhgVQHXV+xV+OkWwlkQ=
+X-Google-Smtp-Source: AMsMyM7kti+wO7l0SI1TOJ2GHOVppqxVSd+g3iwiidGom+Bpx2wsu2jzcIu0CZowKeM/3qJDsWV+OQ==
+X-Received: by 2002:a05:622a:11c2:b0:343:69d:65b2 with SMTP id n2-20020a05622a11c200b00343069d65b2mr13278756qtk.491.1663549605959;
+        Sun, 18 Sep 2022 18:06:45 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a5-20020ac81085000000b0031ef0081d77sm9396706qtj.79.2022.09.18.18.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 18:06:45 -0700 (PDT)
+Message-ID: <9176d96c-93f3-7581-127a-42de5a220f9d@gmail.com>
+Date:   Sun, 18 Sep 2022 18:06:42 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.19 00/38] 5.19.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220916100448.431016349@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220916100448.431016349@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,46 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Delete the repeated word 'to' in the comment.
 
-- Add the missing 'use' word within the sentence.
 
-- Correct spelling on 'malformation'.
+On 9/16/2022 3:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.10 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 18 Sep 2022 10:04:31 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.10-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
----
-Please check if it has been corrected properly!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
- drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
- drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-index 3f1c189646f4..244e27ea079c 100644
---- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-+++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
-@@ -88,7 +88,7 @@
- #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
- /* The input jabber is used to determine the TSO max size.
-  * Due to H/W limitation, this need to be reduced to 60000
-- * in order to to H/W TSO and avoid the WQE malfarmation
-+ * in order to use H/W TSO and avoid the WQE malformation
-  * PKO_BUG_24989_WQE_LEN
-  */
- #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
-diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-index d33dd8f4226f..e85449249670 100644
---- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-+++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
-@@ -37,7 +37,7 @@
- 
- /* The input jabber is used to determine the TSO max size.
-  * Due to H/W limitation, this need to be reduced to 60000
-- * in order to to H/W TSO and avoid the WQE malfarmation
-+ * in order to use H/W TSO and avoid the WQE malformation
-  * PKO_BUG_24989_WQE_LEN
-  */
- #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
+Florian
 
