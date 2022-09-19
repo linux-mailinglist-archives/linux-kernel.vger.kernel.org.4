@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD465BD547
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8D15BD550
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiISTk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 15:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S229723AbiISToz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 15:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiISTkY (ORCPT
+        with ESMTP id S229492AbiISTox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 15:40:24 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4427040561;
-        Mon, 19 Sep 2022 12:40:22 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 42F7A2058EE3;
-        Mon, 19 Sep 2022 12:40:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 42F7A2058EE3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1663616421;
-        bh=/WIWG7S6KNjk8wJWKkT0USaT8zrYtO8L6yg/Q32VY8k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bts77QXA7BIrksUVQUovqbWAmFI3bpzKeiU2AbO0s5K6L2ituJwwTMAded8eQr+Zg
-         U2XMFQzI0S3yMf2Xm7JH7Q2h/6jmFucuASrd5IGlY2eBEHD7LdV8SLUmc3blUxNHfv
-         Zw8NEVv5cRyYHdohuwnSgem5YW3ZGTzKZCUTqI2c=
-From:   Easwar Hariharan <eahariha@linux.microsoft.com>
-To:     wei.liu@kernel.org
-Cc:     decui@microsoft.com, eahariha@linux.microsoft.com,
-        haiyangz@microsoft.com, kys@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sthemmin@microsoft.com, vkuznets@redhat.com
-Subject: Re: [PATCH v2 1/2] hv: Use PCI_VENDOR_ID_MICROSOFT for better discoverability
-Date:   Mon, 19 Sep 2022 12:39:52 -0700
-Message-Id: <1663616392-11897-1-git-send-email-eahariha@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <Yx9H+semY705LUkB@liuwe-devbox-debian-v2>
-References: <Yx9H+semY705LUkB@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 15:44:53 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2298F59B;
+        Mon, 19 Sep 2022 12:44:51 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D89645C045B;
+        Mon, 19 Sep 2022 15:44:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 19 Sep 2022 15:44:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1663616690; x=1663703090; bh=bM8Zv6hDKlzVWonZNm31Q3HGM
+        Y4j+0tQ5jhkGQLKvN4=; b=Ypl1eQ7zC7pAdxthoD4SmQJhLAff8mrlhtjheqk5s
+        2RpRopEZINHVvvp74JTxDhqXtS/jrrWtaDIf0Fm+P+LDP3niRbV6eaevOcvxhPXI
+        vuapgYto0AB0D77J0hV2c+hEJyy4eE1ldD166K3EqEAVL91c9lHePlRamlHkTyd/
+        qvvXJD9cggQ4w6xz83I1rGTiyG9EU8/KcFC6lZainuALBxokUONsK22RywQJ5iyx
+        hbtdX1P44FEjaPrgLzDP5jH8gs014wBqHDeptCcj2qc5/D66ROt1vc2/8nWaIiYW
+        yars2vfZNSCbz1Zt+840cReFq4Ixx/MEkLitYOPUsC7qA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1663616690; x=1663703090; bh=bM8Zv6hDKlzVWonZNm31Q3HGMY4j+0tQ5jh
+        kGQLKvN4=; b=o/pEr9PSoAI3zuSwTIk5AGfi3UDJVmOlIfxTBse9QmtgP6z1NCx
+        dQILFN4UHWzsnuAirWFPb3oqsdZ9QjnUp4GYf16OLoXHP/GApzTWtRZLFf02RJam
+        RHztbuUuzbJhH4ngyfY9YCTToArrdOgl396ZDVx3JUNXahD90jRQffQr+hv8/h4h
+        SHMER67OeMmwghtmJsIjbAb9U95355dLl3TBB+BHUJSgwdgZL7aqD/is4DRTsbmM
+        0VfzbQLkWopudSk25EbFbSAJtqOWIi9peBZ8GweGOrkmPkK4XOzXnFc78RSYjC3N
+        PkrVWx6liLFarmhzUlTgpVKMITHlNGYCYFA==
+X-ME-Sender: <xms:ssYoY9PhwNpv26htwiPN5bI9LTxKkyJOaERPkNzGqJoKvdHoUzcQ9g>
+    <xme:ssYoY__Ufd9JEo0Ain67Ht5ZIZ0oj9tMrl7FKm-sWqKm9I1JbsOE4BwqfITfxjOnJ
+    9rQtegUJjHxDa4wnQ>
+X-ME-Received: <xmr:ssYoY8QiZaqNAyI5YLmG3Vmbi2uF4HOiS9WY855kYVlZYMhKVxsm81RrTtm9K9QGmLT0EaJdAHiI7mS_mv0ge2YBjW1v_NSAowrMj_s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvjedgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
+    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:ssYoY5tR37McFCjHOGv6xYxgLLYhbRgdij9yL2X3N-B5q7m6edzdeA>
+    <xmx:ssYoY1fFjhp_NUMo0iav5w3fvZVQxFw1vI9Ouw6eV6DONG3hC1Ss7Q>
+    <xmx:ssYoY13MMHN1hbqYqMk8Zp4b5YqrzA7TGxpvuV3K1dqo11tFRmh5Jg>
+    <xmx:ssYoY12wtllVljZx7MLBzEv4Dm1HaSK7EjZ6ecSO0TXura2rfTPNag>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 19 Sep 2022 15:44:49 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/3] bpf: Small nf_conn cleanups
+Date:   Mon, 19 Sep 2022 13:44:34 -0600
+Message-Id: <cover.1663616584.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset cleans up a few small things:
 
-On Mon, 12 Sep 2022, Wei Liu wrote:
+* Delete unused stub
+* Rename variable to be more descriptive
+* Fix some `extern` declaration warnings
 
-> On Fri, Sep 09, 2022 at 11:50:24AM -0700, Easwar Hariharan wrote:
->> From: Easwar Hariharan <easwar.hariharan@microsoft.com>
->>
->> Signed-off-by: Easwar Hariharan <easwar.hariharan@microsoft.com>
->
->> ---
->>  drivers/hv/vmbus_drv.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
->> index 3c833ea..6b77a53 100644
->> --- a/drivers/hv/vmbus_drv.c
->> +++ b/drivers/hv/vmbus_drv.c
->> @@ -39,6 +39,8 @@
->>  #include <clocksource/hyperv_timer.h>
->>  #include "hyperv_vmbus.h"
->>
->> +#define PCI_VENDOR_ID_MICROSOFT 0x1414
->> +
->
-> There is a patch in hyperv-fixes that puts this definition to a proper
-> header. You can wait for that to land and rebase this patch.
->
-> In the future when you send out a series, please chain all the patches
-> to a cover letter.
+Daniel Xu (3):
+  bpf: Remove unused btf_struct_access stub
+  bpf: Rename nfct_bsa to nfct_btf_struct_access
+  bpf: Move nf_conn extern declarations to filter.h
 
-Hi Wei,
+ include/linux/filter.h                   |  6 ++++++
+ include/net/netfilter/nf_conntrack_bpf.h | 17 +----------------
+ net/core/filter.c                        | 18 +++++++++---------
+ net/netfilter/nf_conntrack_bpf.c         |  4 ++--
+ 4 files changed, 18 insertions(+), 27 deletions(-)
 
-This patch is already rebased on hyperv/fixes in response to Vitaly's 
-pointer in this thread: 
-https://lore.kernel.org/lkml/87leqsr6im.fsf@redhat.com
+-- 
+2.37.1
 
-I'll pull in the pci_ids.h inclusion if that's more acceptable.
-
-Thanks,
-Easwar
-
->> --
->> 1.8.3.1
->>
->
