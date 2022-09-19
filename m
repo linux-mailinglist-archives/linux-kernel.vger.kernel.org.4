@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223755BC4C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C905BC4B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiISIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S230166AbiISItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiISIwc (ORCPT
+        with ESMTP id S230118AbiISIsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:52:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2C123BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663577537; x=1695113537;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7QxS/3b+jv8oLEkVkI5TSPtcKOSVhNxh6zUhyAW+1bM=;
-  b=mbZGxeLpVRUAKhleFKAea4EnAOQAuaYdcqsoWgPjXptMQ6jp8I4aLk2m
-   yfQuUwzMmOqbMubqSTmIen4R1gmQNHb4wIrDLxSP97pUW8a4B7yO6qZli
-   elicBuAxiDrI8c4sdgnz/PLh1WN/BTtTJb0Hq/orIud2EEZnZTp4kV0SJ
-   7CMJYrHBwlwBIpkW+oeIEKUr3gnEFq7TVUvIN3QGr6SJdvmW16hQa0pqr
-   2PN6FeBwaQF1N+G12a0QQyCG/WI2o3Huj1PAOiPuHu++/VbhMNAkQiOdI
-   p+HeZfwQTXMULoGN04f56UhNia0YM0rSwWKbQZudn9aTikoYPllwACuZY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="286389363"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="286389363"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:16 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="707485757"
-Received: from ilick-mobl1.ger.corp.intel.com (HELO [10.252.59.91]) ([10.252.59.91])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 01:52:12 -0700
-Message-ID: <e20acd52-a501-713c-c0c3-f5d76670ecf6@linux.intel.com>
-Date:   Mon, 19 Sep 2022 10:48:01 +0200
+        Mon, 19 Sep 2022 04:48:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDA722294
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:48:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id lc7so62895223ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=XNzy8QXvxwZ2UpTnDHe3R7XKvvfCImteHTl3mRKpcsM=;
+        b=i+MT/i2ms5AZZ+tjGq43WTntkkCCpoEtS138K73adMJjmg041OUPqWXqFvpM9KVywj
+         TDgke3sufaBSbceIGNOubrQo146uutANELNtaUc7uhLe6ZIsCrc3MeMSDCUQhVSWeMyn
+         E7dmcmeHqMN0hUjx5Wvktr1kU3tNYC1BG76oFKi84ydETh3HDKfGJf78UO1wAy4kmvjE
+         TbBe9PbfQ9F3xZBLkfTtjd+dP2Hti4piDHyS0tg6E3Zimw0vKyejAwPssL7mWFdSwuP+
+         QAJE5fAdNaeRdTZgVfw1txMlxG+tfhYrMUBKSMffUtGfG+ABRaN6v+nX8ZxsUiXez2kU
+         U0zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=XNzy8QXvxwZ2UpTnDHe3R7XKvvfCImteHTl3mRKpcsM=;
+        b=ZyEyhyeZkJvhhzH91C0yb1HVDkUQt5AgJnjAJDBBaE0odyyzSCve8UXGO3Vac8vE6z
+         pyZLnX1RPCwqxQqpUFUfpL7/nCYxb4TD3tEpBzJEPmdxitcZ5vffwtNDNSAtNyAwllPq
+         GUn96Neu3SfWiIN/pMOriB410MbsrBYTxH03PuQFDFSt8vSDFZT+TWBiiWWqQF6RWIYD
+         43o8aTQygBo5TeIO6plp2bMqkiaG7M/kuOGRnr5SinMvEvPjh4C19HGkk8IGLQcsBSn2
+         YW2ZgrAhkBYIMEB3lo5xZoua8W+1++EW3mzVm/tV7VPU/FrPKgupHaYU7+IA9892ws8m
+         hkwg==
+X-Gm-Message-State: ACrzQf0XZE+lRHwJjLBHgf9uLmLyWrt24VUwaXiuHKXKurNHcPndvnx5
+        lfjKFRppKwfabHagGVAJLGxmofMUTAlrKw==
+X-Google-Smtp-Source: AMsMyM760H9jD3JILh4U8k4DxkhTrd/+xB9n82UOmO/VLgipGN3WKTwo+jUCQsAT/RBF5ZdDOP4hHg==
+X-Received: by 2002:a17:907:60d6:b0:77d:8aed:cf86 with SMTP id hv22-20020a17090760d600b0077d8aedcf86mr12082225ejc.43.1663577318848;
+        Mon, 19 Sep 2022 01:48:38 -0700 (PDT)
+Received: from cmo-ThinkPad-T495.telenet.be (ptr-4xh0y3vyam57ypepalv.18120a2.ip6.access.telenet.be. [2a02:1810:a44c:8f00:d368:146c:ce83:b3f3])
+        by smtp.gmail.com with ESMTPSA id r20-20020aa7d594000000b0044e9a3690e0sm20081326edq.9.2022.09.19.01.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 01:48:38 -0700 (PDT)
+From:   cmo@melexis.com
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Crt Mori <cmo@melexis.com>
+Subject: [PATCH v5 0/3] iio: temperature: mlx90632: Add powermanagement
+Date:   Mon, 19 Sep 2022 10:48:15 +0200
+Message-Id: <cover.1663577091.git.cmo@melexis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] soundwire: cadence: Fix error check in
- cdns_xfer_msg()
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220917154822.690472-1-rf@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220917154822.690472-1-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Crt Mori <cmo@melexis.com>
 
+As discussed previously on the group under the
+"Controlling device power management from terminal" thread the mlx90632
+sensor provides measurement capabilities under sleep_step mode. This
+series runtime suspends the unused chip to sleep step mode to save power
+but in case of continuous sequential reading it switches to continuous
+mode for faster readouts. This value is hardcoded to
+MLX90632_MEAS_MAX_TIME (with some buffer) and not user configurable.
 
-On 9/17/22 17:48, Richard Fitzgerald wrote:
-> _cdns_xfer_msg() returns an sdw_command_response value, not a
-> negative error code.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+The sensor runtime suspension is set to MLX90632_SLEEP_DELAY_MS which is
+hardcoded to 3 times as much as MEAS_MAX_TIME.
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Changes in v5 (per review comments from Jonathan Cameron):
 
-we've got other issues like this such as
+ - Migrate to devm also for driver removal, along with putting it to low
+   power mode
 
-enum sdw_command_response
-cdns_xfer_msg_defer(struct sdw_bus *bus,
-		    struct sdw_msg *msg, struct sdw_defer *defer)
-{
-	struct sdw_cdns *cdns = bus_to_cdns(bus);
-	int cmd = 0, ret;
+Changes in v4 (per review comments from Jonathan Cameron):
 
-	/* for defer only 1 message is supported */
-	if (msg->len > 1)
-		return -ENOTSUPP; <<< that's not right
+ - Migrate back to devm_pm_runtime_enable and remove the pm_disable function
+ - Remove pm stuff from remove and also sleep, since when iio device is
+   not registered also sleep makes no sense.
+ - Replace use EOPNOTSUPP as per checkpatch suggestion although some drivers
+   still use ENOTSUPP.
+ - Change the style of read frequency
 
+Changes in v3 (per review comments from Jonathan Cameron):
 
-We should probably double-check that all functions return enums don't
-return negative values.
+ - Change the "available" attribute presentation to more recent way
+   suggested
+ - Replace devm_pm_runtime_enable with enable and devm_add_action_or_reset
+ - When suspending device also put it to lower power mode in case there is
+   dummy regulator
+ - Use more switch cases instead of if/else
 
-> ---
->  drivers/soundwire/cadence_master.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-> index ca241bbeadd9..3543a923ee6b 100644
-> --- a/drivers/soundwire/cadence_master.c
-> +++ b/drivers/soundwire/cadence_master.c
-> @@ -708,7 +708,7 @@ cdns_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
->  	for (i = 0; i < msg->len / CDNS_MCP_CMD_LEN; i++) {
->  		ret = _cdns_xfer_msg(cdns, msg, cmd, i * CDNS_MCP_CMD_LEN,
->  				     CDNS_MCP_CMD_LEN, false);
-> -		if (ret < 0)
-> +		if (ret != SDW_CMD_OK)
->  			goto exit;
->  	}
->  
+Changes in v2:
+
+ - apply review comments from Andy Shevchenko
+
+Crt Mori (3):
+  iio: temperature: mlx90632 Add runtime powermanagement modes
+  iio: temperature: mlx90632 Read sampling frequency
+  iio: temperature: mlx90632 Change return value of sensor measurement
+    channel
+
+ drivers/iio/temperature/mlx90632.c | 432 ++++++++++++++++++++++++-----
+ 1 file changed, 360 insertions(+), 72 deletions(-)
+
+-- 
+2.34.1
+
