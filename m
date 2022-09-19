@@ -2,145 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7D45BCC3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CB25BCC42
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiISMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S230233AbiISMzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiISMyn (ORCPT
+        with ESMTP id S230272AbiISMzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:54:43 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5EAA18D;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d82so27981807pfd.10;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date;
-        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
-        b=IA1ULq2eITg3H242o0ceTuR+29XaGcATRGaKSuDc8T6b1OAXgPKHFsoE/F8qKLaEbj
-         LHKF72D1D4D6AtFv3+T5yxrnjf3sZcQcoypvrSojyA0T41EVh3zsb7QO3PD14E7mOEzy
-         cMj3HF1NpkzPiR5DWW3kjUKSDXWSbPb8KrU1d1daapDHlWrvM3bOMGFGCTx+nX9Mjuq5
-         EFuRxKx/dWnBpQkKI0ovXtWn4cekG1ViBEbHBQdWSzZH+kDAZMOqyozq0ejQU4kNanzC
-         JMdcnwOZ/rjbHytSrgKjQZFqpN/c5u521Tm4UFl3JUUUjRctDQfgiqtuX6/XIrevCd0h
-         KOPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
-        b=VJ9NOlXeimGLQTBfEL0BKY0/p3walSrGNbO1DT197D39iouAu2n1TgZeND5GYD/uc1
-         73AM3e5kcAtPHLooJamBnMDBIJVhh66daLieivhpYNBczxN5boPtMMQ7gpffiRTwdsAC
-         KYO5l9LpwVwtuIgxWPefJjHOCSns119/SuqHuDV3vO3ked84Vq43mhYPGcasMSJQ/54z
-         bWDITB0g5KFsjEddxHur53tQ11VmHSayoe8XpGUhgapW2/MH7jAFzAsVMr70s6rrelEX
-         pdUzI4OUU6GNW5Xf1e9i+znUE6Qa8o2uEuaNTDZxS0BJOXUhY4OFcRtjSDy72rbb2L+t
-         0R0Q==
-X-Gm-Message-State: ACrzQf1ErKdXkYa+s/pU2YnvL3M8og665fbeaZYyjTWih2ROXGola/NZ
-        5xw2Jpvg31jfCQbIykKhTrifHOAqnADqeA==
-X-Google-Smtp-Source: AMsMyM5n8v4bAl9gCQfKXo/bFnEfAhrhcNlccrkoIujrz8tigtnIa/6BRh7KaefuUdNnAfjVvrwJaQ==
-X-Received: by 2002:a63:594c:0:b0:438:f2ce:8780 with SMTP id j12-20020a63594c000000b00438f2ce8780mr15582233pgm.285.1663592076255;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b00536431c6ae0sm20195289pfc.101.2022.09.19.05.54.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 05:54:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5ee31cd1-76af-dae7-0902-3808a2696754@roeck-us.net>
-Date:   Mon, 19 Sep 2022 05:54:33 -0700
+        Mon, 19 Sep 2022 08:55:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455E52871C;
+        Mon, 19 Sep 2022 05:55:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0A4649BA;
+        Mon, 19 Sep 2022 14:55:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663592129;
+        bh=lwwMmU7LDR16Rh26z5UQagpmACoPd+MPTHdQVhmI3HQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NPXP9sDRGOIhJffJfO6qMYYZSS327AoartD+sxSnYBjX1/tq/2L/EyIjN3ttGzPSX
+         J4szdVxGLko6nSNX0EMWatfTkwGIKDADGQy5OYfq8Nm3Ir71J1pJUrv4ZuuL5Oym0S
+         PyJI17CYr0rC6qtRAuptaSuflXsCkussW3fsqNC0=
+Date:   Mon, 19 Sep 2022 15:55:15 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>, mchehab@kernel.org,
+        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
+Message-ID: <Yyhmswpz6ON4q8fK@pendragon.ideasonboard.com>
+References: <20220916135713.143890-1-m.felsch@pengutronix.de>
+ <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-watchdog@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220806000706.3eeafc9c@endymion.delvare>
- <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
- <20220919113335.18cebc74@endymion.delvare>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
- properly
-In-Reply-To: <20220919113335.18cebc74@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/19/22 02:33, Jean Delvare wrote:
-> Hi Guenter,
+On Mon, Sep 19, 2022 at 12:42:15PM +0000, Sakari Ailus wrote:
+> Hi Marco,
 > 
-> A few questions from an old discussion:
+> On Fri, Sep 16, 2022 at 03:57:11PM +0200, Marco Felsch wrote:
+> > Add support to report the link frequency.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> > The v1 of this small series can be found here:
+> > https://lore.kernel.org/all/20220818144712.997477-1-m.felsch@pengutronix.de/
+> > 
+> > Thanks a lot to Jacopo for the review feedback on my v1.
+> > 
+> > Changelog:
+> > 
+> > v2:
+> > - use V4L2_CID_LINK_FREQ instead of V4L2_CID_PIXEL_RATE
+> > ---
+> >  drivers/media/i2c/mt9m111.c | 21 ++++++++++++++++++++-
+> >  1 file changed, 20 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > index afc86efa9e3e..52be1c310455 100644
+> > --- a/drivers/media/i2c/mt9m111.c
+> > +++ b/drivers/media/i2c/mt9m111.c
+> > @@ -1249,6 +1249,8 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  {
+> >  	struct mt9m111 *mt9m111;
+> >  	struct i2c_adapter *adapter = client->adapter;
+> > +	static s64 extclk_rate;
+> > +	struct v4l2_ctrl *ctrl;
+> >  	int ret;
+> >  
+> >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
+> > @@ -1271,6 +1273,13 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  	if (IS_ERR(mt9m111->clk))
+> >  		return PTR_ERR(mt9m111->clk);
+> >  
+> > +	ret = clk_prepare_enable(mt9m111->clk);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	extclk_rate = clk_get_rate(mt9m111->clk);
+> > +	clk_disable_unprepare(mt9m111->clk);
 > 
-> On Mon, 8 Aug 2022 04:36:42 -0700, Guenter Roeck wrote:
->> On 8/5/22 15:07, Jean Delvare wrote:
->>> To be honest, I'm not sold to the idea of a software-emulated
->>> maximum timeout value above what the hardware can do, but if doing
->>> that makes sense in certain situations, then I believe it should be
->>> implemented as a boolean flag (named emulate_large_timeout, for
->>> example) to complement max_timeout instead of a separate time value.
->>> Is there a reason I'm missing, why it was not done that way?
->>
->> There are watchdogs with very low maximum timeout values, sometimes less than
->> 3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
->> rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
->> accuracy is important, second-based limits are insufficient, and there is an
->> actual need for software timeout handling on top of hardware.
+> I don't think you'll need to enable a clock to just get its frequency.
 > 
-> Out of curiosity, what prevents user-space itself from pinging
-> /dev/watchdog every 0.5 second? I assume hardware using such watchdog
-> devices is "special" and would be running finely tuned user-space, so
-> the process pinging /dev/watchdog could be given higher priority or
-> even real-time status to ensure it runs without delays. Is that not
-> sufficient?
-> 
+> > +
+> >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
+> >  	if (IS_ERR(mt9m111->regulator)) {
+> >  		dev_err(&client->dev, "regulator not found: %ld\n",
+> > @@ -1285,7 +1294,7 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
+> >  
+> > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
+> > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
+> >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
+> >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> > @@ -1309,6 +1318,16 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  				BIT(V4L2_COLORFX_NEGATIVE) |
+> >  				BIT(V4L2_COLORFX_SOLARIZATION)),
+> >  			V4L2_COLORFX_NONE);
+> > +	/*
+> > +	 * The extclk rate equals the link freq. if reg default values are used,
 
-It took us forever to get the in-kernel support stable, using the right timers
-and making sure that the kernel actually executes the code fast enough. Maybe
-that would work nowadays from a userspace process with the right permissions,
-but I would not trust it. Then there is watchdog support in, for example,
-systemd. I would not want to force users to run systemd as high priority
-real-time process just to make an odd watchdog work. I also would not want to
-tell people that they must not use the systemd watchdog timer to make their
-watchdog work.
+s/freq./frequency/
 
-Also, there is no guarantee that the odd hardware with the weird watchdog hardware
-is actually always used in an application where such a fast timeout is needed or
-even wanted.
+> > +	 * which is the case. This must be adapted as soon as we don't use the
+> > +	 * default values anymore.
+> > +	 */
+> > +	ctrl = v4l2_ctrl_new_int_menu(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> > +				      V4L2_CID_LINK_FREQ, 0, 0, &extclk_rate);
+> > +	if (ctrl)
+> > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > +
+> >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
+> >  	if (mt9m111->hdl.error) {
+> >  		ret = mt9m111->hdl.error;
 
-On top of that, the code in the kernel also now supports "ping until opened"
-for systems where the watchdog is already running when the system boots.
+-- 
+Regards,
 
-Overall, I don't think it would be a good idea to revert the in-kernel support
-of pinging watchdogs.
-
->> At the same time, there is actually a need to make timeouts milli-second based
->> instead of second-based, for uses such as medical devices where timeouts need
->> to be short and accurate. The only reason for not implementing this is that
->> the proposals I have seen so far (including mine) were too messy for my liking,
->> and I never had the time to clean it up. Reverting milli-second support would
->> be the completely wrong direction.
-> 
-> I might look into this at some point (for example as a SUSE Hackweek
-> project). Did you post your work somewhere? I'd like to take a look.
-> 
-There was one submission from someone else if I recall correctly, but mine never
-got to the point where it was submittable.
-
-Guenter
+Laurent Pinchart
