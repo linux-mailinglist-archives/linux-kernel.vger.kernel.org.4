@@ -2,189 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0FA5BC360
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F305BC363
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiISHKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S229921AbiISHLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiISHKk (ORCPT
+        with ESMTP id S229924AbiISHLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:10:40 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B2E1D326
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:10:37 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1279948d93dso60557103fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:10:37 -0700 (PDT)
+        Mon, 19 Sep 2022 03:11:15 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4841E3C6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:11:14 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id ay36so10677312wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=PyCIhxIxB6xdPJS86Umt+cZmdjWeyJkrCWWdU0BTFc0=;
-        b=dJGqhxMivVqXBMzG1VTVnJAbcQMh8OeK9ELf67XsoiqHCep3fs4aBaHnnEtzw5vq4f
-         098bSkUfBMWJnf0YkfzR3pFdbxDEexutJrrPTHYEr8SuBeqrnavcpi1+5XHpm/LvpQge
-         yq9LCER/kuZBJbnQI+QScknTbSOLsaa3MGQAuwfqKG82Odukfr0EnrvpeCMaWjNe2nAl
-         zKmGeqM/p1k9vPwbGReMvhjRNCvcXup+ds7f+y2mnexqwn3qpezuoVjiFT/XbzURA/L0
-         q6uDsn1hbis2j1Cj2zx/UGlLYQqM/cQV+AvLCpsI3oVtTBcNsZ1+zqn7JBC1iLFw6DQ3
-         k3oQ==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ZiQM3+Sh2bFW5DQ3ITDJpGDiOAUw0yEVtVDVMfdc7Ak=;
+        b=U3q6wnHhpb2vhDShtHy1OTIbsHMWCetx0yAfP8y0MXxvZM0k+kdU7ydWOm1r7fPoJx
+         HhZVvQLJd270MpJ4sBiZ4QJR64nqlETC3k6v66MFhjeae0Oxmvoq+M4KHTlUhN3p+dUS
+         8VnGha3dKQFx0xsnxzsI3d321x8OjCouIg3QE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=PyCIhxIxB6xdPJS86Umt+cZmdjWeyJkrCWWdU0BTFc0=;
-        b=RuWClCl/8+BdXcFBE5nla2HTIUzG2hsccF85tEBUO5PkCaFcM4515sLsH9I40O116A
-         ncsPMO1aAqa7OxgfJH5YGswFVmqIZxYeGlAAajOkJUa4dw1TpfBqhD+JUFHQN85ysrwp
-         3/RJY+kL8/dIlPgMkgSrD+4iC+CmLfd0uTChiDc7VM/4KdrIpDvad30rumTnceBFSgfK
-         6WTp9GCMqZL7rkmrr8TU+vW2tRK0ArHvyGdik1z26P4toyojgcz8+uKP8cYIQ7qvAeff
-         RUiuCgjl18PIT9qS6GPHRnb/StsrfBC4qe/fcO5qLr/M6REpHNI13jVvST4dWpI75M0V
-         3y+A==
-X-Gm-Message-State: ACgBeo2u9G5a3/vyIrfxSS5xxwz1A2nZ4t88mDvRiGtY3/4o1HGD6nBM
-        DFAxDv8Yoecc3vUQUEfV0pWAJOFMDPI=
-X-Google-Smtp-Source: AA6agR4z43qXPxugZCRAYvg4LpkH98Fp2tU+XK7aoRL8gBhkoqDXiJQ967zZkQ7fAdR5BFBIh/gA+Q==
-X-Received: by 2002:a05:6870:b68f:b0:10b:ba83:92d4 with SMTP id cy15-20020a056870b68f00b0010bba8392d4mr14285525oab.130.1663571436185;
-        Mon, 19 Sep 2022 00:10:36 -0700 (PDT)
-Received: from haolee.io ([2600:3c00::f03c:91ff:fe02:b162])
-        by smtp.gmail.com with ESMTPSA id u21-20020a056870f29500b0010830c24aaasm7204781oap.56.2022.09.19.00.10.35
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZiQM3+Sh2bFW5DQ3ITDJpGDiOAUw0yEVtVDVMfdc7Ak=;
+        b=Vwe7ZCQmFGHKyOAEZHVpREacKhUSSOydm9jN8/uqrIDlm4/FAEEngyUKm6GzH/w4nX
+         uaqjqgkWY7+lzUKDSwdZqndqpm5xL2LPDiooy6aMhX7Aq68j01wm0L/i2QDRxMo3/boK
+         CTS0UXMgOOAJwnyfHdMpTvV0iymRq9eon1kAKU3srqJb8dvshcdH3oEq7onpUiOii5yd
+         /7PkrMtksu7wFpKJ8YxtFUnLtCaZKaqi5I3yRmOTODTmkCI2CwcSLIegouH21ClVX2by
+         K3dU2d12LdYPx7ahmQigyLTppUXuw4expncmYsNYRXFeBjvLDP0hP+h1y602ek4kfgfM
+         Rh6g==
+X-Gm-Message-State: ACgBeo1NobCTtJFWxx4jrHzcYoaaSWP7u+dtALmb5iMHFUMGz0iT3TDB
+        vSP71ZFGKe74hb5cM9Q7BwNL0Xi2bX0psA==
+X-Google-Smtp-Source: AA6agR4GK6jrqGd0b3TRGifakx9josXJ/skrsAb+lA5rd0gWdYb6bEJnkCUQS9FUMML+zBTeF+zlyQ==
+X-Received: by 2002:a05:600c:6015:b0:3b4:a4cb:72f7 with SMTP id az21-20020a05600c601500b003b4a4cb72f7mr16406247wmb.14.1663571473349;
+        Mon, 19 Sep 2022 00:11:13 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
+        by smtp.gmail.com with ESMTPSA id i67-20020a1c3b46000000b003b492753826sm12485057wma.43.2022.09.19.00.11.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 00:10:35 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 07:10:33 +0000
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] psi: fix possible missing or delayed pending event
-Message-ID: <20220919071033.GA26869@haolee.io>
-References: <20220914092959.GA20640@haolee.io>
- <CAJuCfpFVK3ceHy+ipSbLb0jAgE6tJAsu5=kbJEB9X4OWPnsVxA@mail.gmail.com>
- <20220917073124.GA3483@haolee.io>
- <CAJuCfpH6QVuKd-Y1qr1Rzh+hCG-HVgmWfXk9r0tsFhDijZ_ABg@mail.gmail.com>
- <20220918105510.GA22671@haolee.io>
- <CAJuCfpEdT8Vdewyrp0hZ_1--29MbZfa=gX+0+6cOyb7b1TVZYA@mail.gmail.com>
+        Mon, 19 Sep 2022 00:11:12 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 09:11:10 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Christian Hemp <c.hemp@phytec.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
+Message-ID: <20220919071110.GB3958@tom-ThinkPad-T14s-Gen-2i>
+References: <20220911200147.375198-1-mike.rudenko@gmail.com>
+ <20220911200147.375198-3-mike.rudenko@gmail.com>
+ <20220914155122.GA9874@tom-ThinkPad-T14s-Gen-2i>
+ <87k064pa2v.fsf@gmail.com>
+ <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
+ <YygNKE7LLtpwfnz+@paasikivi.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpEdT8Vdewyrp0hZ_1--29MbZfa=gX+0+6cOyb7b1TVZYA@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <YygNKE7LLtpwfnz+@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 10:16:53PM -0700, Suren Baghdasaryan wrote:
-> On Sun, Sep 18, 2022 at 3:55 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
-> >
-> > On Sat, Sep 17, 2022 at 09:44:12PM -0700, Suren Baghdasaryan wrote:
-> > > On Sat, Sep 17, 2022 at 12:31 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
-> > > >
-> > > > On Fri, Sep 16, 2022 at 11:08:34PM -0700, Suren Baghdasaryan wrote:
-> > > > > On Wed, Sep 14, 2022 at 2:30 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
-> > > > > >
-> > > > > > When a pending event exists and growth is less than the threshold, the
-> > > > > > current logic is to skip this trigger without generating event. However,
-> > > > > > from e6df4ead85d9 ("psi: fix possible trigger missing in the window"),
-> > > > > > our purpose is to generate event as long as pending event exists and the
-> > > > > > rate meets the limit. This patch fixes the possible pending-event
-> > > > > > missing or delay.
-> > > > > >
-> > > > > > Fixes: e6df4ead85d9 ("psi: fix possible trigger missing in the window")
-> > > > > > Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
-> > > > > > ---
-> > > > > >  kernel/sched/psi.c | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > > > > index 9711827e3..0bae4ee2b 100644
-> > > > > > --- a/kernel/sched/psi.c
-> > > > > > +++ b/kernel/sched/psi.c
-> > > > > > @@ -539,7 +539,7 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> > > > > >
-> > > > > >                         /* Calculate growth since last update */
-> > > > > >                         growth = window_update(&t->win, now, total[t->state]);
-> > > > > > -                       if (growth < t->threshold)
-> > > > > > +                       if (growth < t->threshold && !t->pending_event)
-> > > > >
-> > > > > I'm not sure how this additional condition changes things. Current
-> > > > > logic is to set t->pending_event=true whenever growth exceeds the
-> > > > > t->threshold. This patch will change this logic into setting
-> > > > > t->pending_event=true also when t->pending_event=true.
-> > > >
-> > > > This is right.
-> > > >
-> > > > > But why would
-> > > > > you want to set t->pending_event=true if it's already true? What am I
-> > > > > missing?
-> > > >
-> > > > If I expand this if-else branch and the pending_event statement
-> > > > to a more detailed snippet, it will be like this:
-> > > >
-> > > > if (growth < t->threshold && !t->pending_event) // under threshold && no pending event. Skip.
-> > > >         continue;
-> > > > else if (growth >= t->threshold) // above threshold. Try to generate event.
-> > > >         t->pending_event = true;
-> > > > else // under threshold && have pending events. Try to generate event.
-> > > >         ; // pending_event is already true. do nothing
-> > > >
-> > > >
-> > > > The original code didn't handle the `else` condition properly.
-> > >
-> > > The `else` condition in your code does nothing, and that's why the
-> > > original code does not implement a handler for that case.
-> > >
-> > > > It will
-> > > > skip the trigger when its growth is under the threshold, even though it
-> > > > has a pending event. This patch handles this condition correctly.
-> > > >
-> > > > But I think assigning true to pending_event when it's already true doesn't
-> > > > have other side effects, so I eliminate the `else if` branch. Maybe we'd
-> > > > better make it explicit, like the above snippet? Thanks.
-> > >
-> > > The new code you posted is functionally the same as the original one
-> > > while being more verbose and IMO less readable. Unless you can explain
-> > > the problem with the original code, I don't see any reason to change
-> > > it.
-> >
-> > Hi, for the original code, let's assume t->pending_event is true:
-> >     * if new_stall is false, we will try to check event ratelimit and
-> >       generate an event for this psi_trigger. This case is right.
-> >     * but if new_stall is true, we will skip this psi_trigger if growth
-> >       growth < t->threshold. I think we shouldn't skip this psi_trigger
-> >       in this case because it has a pending event.
-> 
-> Ok, I see the issue now. I think the following fix would be the simplest:
-> 
->                        /* Calculate growth since last update */
->                         growth = window_update(&t->win, now, total[t->state]);
-> -                       if (growth < t->threshold)
-> -                                continue;
-> +                       if (!t->pending_event) {
-> +                              if (growth < t->threshold)
-> +                                        continue;
-> 
-> -                        t->pending_event = true;
-> +                               t->pending_event = true;
-> +                       }
+Hi Sakari,
 
-Great! I will update in v2.
+On Mon, Sep 19, 2022 at 06:33:12AM +0000, Sakari Ailus wrote:
+> Hi Tommaso,
+> 
+> On Fri, Sep 16, 2022 at 03:34:01PM +0200, Tommaso Merciai wrote:
+> > > >> +	ret = clk_set_rate(ov4689->xvclk, OV4689_XVCLK_FREQ);
+> > > >> +	if (ret < 0) {
+> > > >> +		dev_err(dev, "Failed to set xvclk rate (24MHz)\n");
+> > > >> +		return ret;
+> > > >> +	}
+> > > >> +	if (clk_get_rate(ov4689->xvclk) != OV4689_XVCLK_FREQ)
+> > > >> +		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+> > > >
+> > > >
+> > > > What do you think about?
+> > > > Thanks.
+> > > 
+> > > Unfortunately, I have no experience with ACPI-based devices. :(
+> > > 
+> > > Do you mean that in the case of an ACPI device and devm_clk_get_optional
+> > > returning NULL we should assume that the clock is already enabled and
+> > > will stay enabled during sensor operation? How should we distinguish it
+> > > from the case of an OF-based system and clock just missing from device
+> > > tree?
+> > 
+> > Not exaclty :)
+> > 
+> > I copy comment from [1]
+> > 
+> > if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
+> > you use the get_optionl() version ? Otherwise in the ACPI case you will have
+> > -ENOENT if there's not 'xvclk' property and bail out.
+> > 
+> > Unless my understanding is wrong on ACPI we have "clock-frequency" and
+> > on OF "xvclk" with an "assigned-clock-rates",
+> 
+> Generally yes. It's also possible to have a clock in ACPI based system
+> although those clocks do not come from ACPI. See e.g.
+> drivers/platform/x86/intel/int3472/clk_and_regulator.c .
+
+I save this :)
+Thanks for sharing.
+
+Regards,
+Tommaso
 
 > 
-> 
-> >
-> > >
-> > > >
-> > > > >
-> > > > > >                                 continue;
-> > > > > >
-> > > > > >                         t->pending_event = true;
-> > > > > > --
-> > > > > > 2.21.0
-> > > > > >
+> -- 
+> Sakari Ailus
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
