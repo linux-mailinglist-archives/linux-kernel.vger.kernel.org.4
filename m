@@ -1,77 +1,127 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEF45BCD71
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:43:19 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 981F45BCD61
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiISNnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S230166AbiISNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiISNnN (ORCPT
+        with ESMTP id S229778AbiISNho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:43:13 -0400
-Received: from mail.base45.de (mail.base45.de [80.241.60.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8F211C22;
-        Mon, 19 Sep 2022 06:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
-        s=20190804; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=VocfEw++MFgUsPr0v6ZBZJ3FMCFmFfXe2mplGtWPu2M=; b=OUcgTWX8iTWv1z2PC1W/G8Y0IU
-        VnnVpDlIU5YvD0Wk/RI8jScos5OainyAIVDjdjbSECXSAIFn9eMUqeHIIAhNDc2INKOuy27IMii/y
-        iC0EOnkKV+9CZPsNOHob5h0GbZdC7lTxZzXeJr8SGb/c23czk0bLhQ5P9njD0UHQuAeqa5RrIjcru
-        lWNRMopGKRmZTxdEP91vTSeGLn9ffA88/AcbxaW/L8U5DCa9t20JrBub7vsYTPPATBF28j2Xhrpes
-        c2heHaBJW3qg8eCZdbMzjJ33X3Dr+w1uMAHLQyEcRkZM2sgkdl/bua382CyRdl/L4woJeBjzMKMbJ
-        rEvGPGvw==;
-Received: from [92.206.252.27] (helo=javelin)
-        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lynxis@fe80.eu>)
-        id 1oaGuR-0018Y4-GQ; Mon, 19 Sep 2022 13:34:03 +0000
-Date:   Mon, 19 Sep 2022 15:34:01 +0200
-From:   Alexander 'lynxis' Couzens <lynxis@fe80.eu>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/5] net: mediatek: sgmii:
- mtk_pcs_setup_mode_an: don't rely on register defaults
-Message-ID: <20220919153402.65baf42b@javelin>
-In-Reply-To: <YyhSnqacAE4ajRdy@shell.armlinux.org.uk>
-References: <20220919083713.730512-1-lynxis@fe80.eu>
-        <20220919083713.730512-4-lynxis@fe80.eu>
-        <YyhSnqacAE4ajRdy@shell.armlinux.org.uk>
+        Mon, 19 Sep 2022 09:37:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C7812D10;
+        Mon, 19 Sep 2022 06:37:43 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MWQfZ1sQ5zHnv7;
+        Mon, 19 Sep 2022 21:35:34 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 21:37:41 +0800
+Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
+ 2022 21:37:41 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <aeasi@marvell.com>, <dwagner@suse.de>,
+        <himanshu.madhani@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH v2 -next] scsi: qla2xxx: Fix build error implicit-function-declaration
+Date:   Mon, 19 Sep 2022 21:34:04 +0800
+Message-ID: <20220919133404.85425-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.34]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 12:29:34 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+If CONFIG_TRACING is not set,
+make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+will be failed, like this:
 
-> I'm not sure if I've asked this before, but why does SGMII_AN_RESTART
-> need to be set here? It could do with a comment in the code.
+drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_init’:
+drivers/scsi/qla2xxx/qla_os.c:2854:18: error: implicit declaration of function ‘trace_array_get_by_name’; did you mean ‘trace_array_set_clr_event’? [-Werror=implicit-function-declaration]
+  qla_trc_array = trace_array_get_by_name("qla2xxx");
+                  ^~~~~~~~~~~~~~~~~~~~~~~
+                  trace_array_set_clr_event
+drivers/scsi/qla2xxx/qla_os.c:2854:16: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
+  qla_trc_array = trace_array_get_by_name("qla2xxx");
+                ^
+drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_uninit’:
+drivers/scsi/qla2xxx/qla_os.c:2869:2: error: implicit declaration of function ‘trace_array_put’; did you mean ‘trace_seq_putc’? [-Werror=implicit-function-declaration]
+  trace_array_put(qla_trc_array);
+  ^~~~~~~~~~~~~~~
+  trace_seq_putc
+cc1: all warnings being treated as errors
 
-It's not my bit :). I've not added it. But why not (re)start autoneg
-when powering up the phy?
+To fix this error, wrap up all the relevant code with CONFIG_TRACING.
 
-Should it done elsewhere?
+Fixes: 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+---
+Changes in v2:
+ - warp the definition statement of qla_trace_init() and qla_trace_uninit() with CONFIG_TRACING.
+---
+ drivers/scsi/qla2xxx/qla_os.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 2c85f3cce726..f64063e56f3d 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -37,7 +37,9 @@ static int apidev_major;
+  */
+ struct kmem_cache *srb_cachep;
+ 
++#ifdef CONFIG_TRACING
+ static struct trace_array *qla_trc_array;
++#endif
+ 
+ int ql2xfulldump_on_mpifail;
+ module_param(ql2xfulldump_on_mpifail, int, S_IRUGO | S_IWUSR);
+@@ -2851,6 +2853,7 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
+ static void
+ qla_trace_init(void)
+ {
++#ifdef CONFIG_TRACING
+ 	qla_trc_array = trace_array_get_by_name("qla2xxx");
+ 	if (!qla_trc_array) {
+ 		ql_log(ql_log_fatal, NULL, 0x0001,
+@@ -2859,14 +2862,17 @@ qla_trace_init(void)
+ 	}
+ 
+ 	QLA_TRACE_ENABLE(qla_trc_array);
++#endif
+ }
+ 
+ static void
+ qla_trace_uninit(void)
+ {
++#ifdef CONFIG_TRACING
+ 	if (!qla_trc_array)
+ 		return;
+ 	trace_array_put(qla_trc_array);
++#endif
+ }
+ 
+ /*
+-- 
+2.17.1
+
