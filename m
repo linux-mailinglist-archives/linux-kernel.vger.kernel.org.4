@@ -2,189 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12A15BC15E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AD85BC189
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiISC2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S229864AbiISCtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiISC2M (ORCPT
+        with ESMTP id S229792AbiISCtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:28:12 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C914D36;
-        Sun, 18 Sep 2022 19:28:09 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MW7ll2ZRDz14QMJ;
-        Mon, 19 Sep 2022 10:24:03 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 10:28:06 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [bpf-next v3 2/2] selftests/bpf: Add testcases for pinning to errpath
-Date:   Mon, 19 Sep 2022 10:48:45 +0800
-Message-ID: <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+        Sun, 18 Sep 2022 22:49:24 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144FE193EF;
+        Sun, 18 Sep 2022 19:49:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4787832pjh.3;
+        Sun, 18 Sep 2022 19:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tnJe4HddJzoTq7U3gvumxaLwIT9PB6AzqhNeMSwvGvQ=;
+        b=hXNIFMt8cNaFei+Hbyb+2wy6gVBxGjly+UvtRVh8dq/muS3GjIHB623FWUUNMd/LNd
+         wWnRByglELN/epUmBzVkz6tlGpOAJGovnm4MaGABP8KvJghMBDITGjjgQDNPpXJJ9W12
+         U0ebWlELapWhVXCXXCOBm8OAxdAYDJ3pqwkaIIM4UKepOGKWwYA7UswzCpnvOE5FNiwp
+         IvXxqqVxUMQHkERErV7FWyksskK35K8Is7ajt9Oo6BBXBFXHOee/4bDmgTghUcgc0WA7
+         dlJ8f/D04CAJ8QrABTpA19CzJLRONiOI1shM1uOfptBALy9Ly4XmM29MtfEYcQlbDjMi
+         rTTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tnJe4HddJzoTq7U3gvumxaLwIT9PB6AzqhNeMSwvGvQ=;
+        b=JdXtYPsCFOBdzelcFZ4WZ8nk6yw5MDAzd2kji/wPeurkJSgtHEY7C4qkq1KE3zJgUI
+         ohJg3VcjkjZYa2fVcnSlWaRmEyuR5N1QiZcdSrCLXqJbkKdx54p2f1ex7FJDgktt+EDP
+         ct6XkzPrsDvRILRiC+IJnSGSsWjZxPxCSaXvPlzGTeflqOHjahW0XZ9oAH8uMqO1TmDd
+         R2RvfSMpC4zEkTimu3NR1PkgwBzizlMXO81+IQDCeMx3UTXxjcVu57yk0wpt7IgAlAYp
+         /7+1yj5xf+mrqqkbJ5W2Wo5gRl3dCN+KtEjKjAVRcjhSZkKz8eJZfCNMSNBCz+ne7tkS
+         H4/g==
+X-Gm-Message-State: ACrzQf1k/+HmUXnm4ijpvXQr6hYVPzIl44GH978+NmYkTouZFEtOjlqc
+        kpwD6QrZXzbfWh0KQqyQbAG+YtfKU1Q=
+X-Google-Smtp-Source: AMsMyM4hP8zTE1h0wXRgHbr7oKN06P6gJrWXoBPCpeGT7rIRWS1SHMHF+ITe/rTpoJBoBg77Rira+g==
+X-Received: by 2002:a17:90a:e7cc:b0:202:f493:6ad1 with SMTP id kb12-20020a17090ae7cc00b00202f4936ad1mr28564021pjb.198.1663555763431;
+        Sun, 18 Sep 2022 19:49:23 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090a020200b0020322204672sm5408572pjc.38.2022.09.18.19.49.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 19:49:22 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] power: supply: use strscpy() is more robust and safer
+Date:   Mon, 19 Sep 2022 02:49:19 +0000
+Message-Id: <20220919024919.211210-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add testcases for map and prog pin to errpath.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+The implementation of strscpy() is more robust and safer.
+
+That's now the recommended way to copy NUL terminated strings.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/pinning.c   | 67 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_pinning_path.c        | 19 ++++++
- 2 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_path.c
+ drivers/power/supply/max1721x_battery.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index d95cee5..ab7780f 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -24,6 +24,61 @@ __u32 get_map_id(struct bpf_object *obj, const char *name)
- 	return map_info.id;
- }
+diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supply/max1721x_battery.c
+index 473e53cd2801..0f948db958d5 100644
+--- a/drivers/power/supply/max1721x_battery.c
++++ b/drivers/power/supply/max1721x_battery.c
+@@ -384,7 +384,7 @@ static int devm_w1_max1721x_add_device(struct w1_slave *sl)
+ 	}
  
-+static void test_pin_path(void)
-+{
-+	const char *progfile = "./test_pinning_path.bpf.o";
-+	const char *progpinpath = "/sys/fs/bpf/test_pinpath";
-+	char errpath[PATH_MAX + 1];
-+	char command[64];
-+	int prog_fd, err;
-+	struct bpf_object *obj;
-+	__u32 duration = 0;
-+
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
-+	err = bpf_prog_test_load(progfile, BPF_PROG_TYPE_SOCK_OPS, &obj,
-+				 &prog_fd);
-+	CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno);
-+
-+	memset(&errpath, 't', PATH_MAX);
-+	err = bpf_object__pin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+out:
-+	bpf_object__close(obj);
-+	sprintf(command, "rm -r %s", progpinpath);
-+	system(command);
-+}
-+
- void test_pinning(void)
- {
- 	const char *file_invalid = "./test_pinning_invalid.bpf.o";
-@@ -32,6 +87,7 @@ void test_pinning(void)
- 	const char *nopinpath2 = "/sys/fs/bpf/nopinmap2";
- 	const char *custpath = "/sys/fs/bpf/custom";
- 	const char *pinpath = "/sys/fs/bpf/pinmap";
-+	char errpath[PATH_MAX + 1];
- 	const char *file = "./test_pinning.bpf.o";
- 	__u32 map_id, map_id2, duration = 0;
- 	struct stat statbuf = {};
-@@ -206,7 +262,17 @@ void test_pinning(void)
+ 	if (!info->ManufacturerName[0])
+-		strncpy(info->ManufacturerName, DEF_MFG_NAME,
++		strscpy(info->ManufacturerName, DEF_MFG_NAME,
+ 			2 * MAX1721X_REG_MFG_NUMB);
  
- 	bpf_object__close(obj);
+ 	if (get_string(info, MAX1721X_REG_DEV_STR,
+@@ -403,15 +403,15 @@ static int devm_w1_max1721x_add_device(struct w1_slave *sl)
  
-+	/* test auto-pinning at err path with open opt */
-+	memset(&errpath, 't', PATH_MAX);
-+	opts.pin_root_path = errpath;
-+	obj = bpf_object__open_file(file, &opts);
-+	if (CHECK_FAIL(libbpf_get_error(obj) != -ENAMETOOLONG)) {
-+		obj = NULL;
-+		goto out;
-+	}
-+
- 	/* test auto-pinning at custom path with open opt */
-+	opts.pin_root_path = custpath;
- 	obj = bpf_object__open_file(file, &opts);
- 	if (CHECK_FAIL(libbpf_get_error(obj))) {
- 		obj = NULL;
-@@ -277,4 +343,5 @@ void test_pinning(void)
- 	rmdir(custpath);
- 	if (obj)
- 		bpf_object__close(obj);
-+	test_pin_path();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_pinning_path.c b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-new file mode 100644
-index 0000000..b4e2099
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_ops_map SEC(".maps");
-+
-+SEC("sockops")
-+int bpf_sockmap(struct bpf_sock_ops *skops)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 		switch (dev_name & MAX172XX_DEV_MASK) {
+ 		case MAX172X1_DEV:
+-			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
++			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
+ 				2 * MAX1721X_REG_DEV_NUMB);
+ 			break;
+ 		case MAX172X5_DEV:
+-			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
++			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
+ 				2 * MAX1721X_REG_DEV_NUMB);
+ 			break;
+ 		default:
+-			strncpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
++			strscpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
+ 				2 * MAX1721X_REG_DEV_NUMB);
+ 		}
+ 	}
 -- 
-1.8.3.1
-
+2.25.1
