@@ -2,279 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C8E5BCC38
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862A65BCC37
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiISMya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S229586AbiISMx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiISMy0 (ORCPT
+        with ESMTP id S230131AbiISMx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:54:26 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168FF2AC51
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:54:24 -0700 (PDT)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 28JCs4A5027786
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:54:04 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28JCs4A5027786
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1663592044;
-        bh=VROyJy6r+HI1MVx6q7A+dVODLIUjvUP1B3i9Tlp+Klk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mHXaLSApVnFHYqLEHjcQ4Xt3FNIS8M25dWkpmuXFIYPLtWr8xqXUBW9RcrsddgQgU
-         CzjV1pteE+VHMXqez8wjEWknGjnpdwzYOG8iR4O/TcD7rAiizZD0UulQD6MulNhY/d
-         jyc2viyE9D8MmgC2JHp9r5ozAIllvTcM9ipTli+EfPOLJPD70ZnG4tKMbJebSWGrqY
-         q5h2AJ3guYgtt+jndOBuiS5m2z22fO4WuaPFUDuDZhFgwEYpfRNX3o1uanxeca/TA2
-         6sGN7gGHpqvfFKNX8D653EgOMX6uZobOuym/oUkZPOwUkiyNoCAwkXMNsOO2YYg3fV
-         GeTBsHlDc6PfA==
-X-Nifty-SrcIP: [209.85.161.42]
-Received: by mail-oo1-f42.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so137416oop.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:54:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ZOI7scuGfVwrum8Rc9hfIqT96R93ivZ4ONF1rjdXcaBLIei0K
-        YVi5XLe+zfVKZ9THUQcedCbPAJ0sGMO19VU5oS4=
-X-Google-Smtp-Source: AMsMyM5C2hFn8ab1ZsHwl1juvH+iKVx+1TKLOHpF9MlGlWgiLYBxDr/P/C+KFCJrz/aCrnl4406Pv0/FWM5nBtXwYG4=
-X-Received: by 2002:a4a:9c92:0:b0:473:f49d:d855 with SMTP id
- z18-20020a4a9c92000000b00473f49dd855mr6674253ooj.93.1663592043293; Mon, 19
- Sep 2022 05:54:03 -0700 (PDT)
+        Mon, 19 Sep 2022 08:53:56 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC2628E2E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:53:54 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id f14so45807262lfg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/PlsYiCrYWE3bNlljtDybc2jsSxBRlcBGhvAcXnx76o=;
+        b=Wk54QdhT+uSI4NX9O4XjfgrXNbvDSX3QfnsKmAGKZ0PyeLslUzyqRd4mc0P++8LjIc
+         GAJ3ldbBLjMls6DnSYrtn2AiRrCuFwMiT0ztv3MsDsny94NsfHJTdkPi5CcqXOOZNwkf
+         gGOmpVG1mE6Po+sfBtq6TWVCWjWNCYBfzzrisc9vJ3DCs9X7EXylEW8ALQhIry3BiLvW
+         H78GKd8ZJSGIohupvx/4t9ZxFMmS4I8LOyJq0sQth5jXsNVcHdYJ7ckS8Grt4SNPVge0
+         cI49XIJwPq7JmdPleAJtbyP6W50xvZtw2/05xFOsCPNTifIO6dMSBQckncu6o4G0KuJ+
+         CH2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/PlsYiCrYWE3bNlljtDybc2jsSxBRlcBGhvAcXnx76o=;
+        b=BC/pUycWHZyH5Xg3vl79gFX8LrFXeFM73mHoxXKVdPVqJ/iACcC925El552FFFZD2q
+         96zLODrpUuHwkuXGXjbnhxajKFX/Ik6nTnO9xQnwS095nDM6NS2psIYxmMbVvSbA+Kt9
+         L6Itt7ihu+g73VW3540yymi94W7ors2TMkWh4PlZnt+47iACQmrVu5lY5bLW0fSw+Y+H
+         2PVLhAcykcSrtGlDKazypbNwVhJ7GBBnDVv/Z72s2XVqHb3iI29UtL0nCSvPWZUQJXpF
+         wr5irdWl9ZAyNTsq2OKtUD8CyjJwmwbgX/2gWuokkVhXfOKqNunTwlPW8fQLPn778xbK
+         qDGA==
+X-Gm-Message-State: ACrzQf28SYWzS/plko54qClBwm5T453t0BuYPHL2S/EpnPJ1Lo3qndsD
+        W2q8SOXsm1O3PxBI638Vg0DIEg==
+X-Google-Smtp-Source: AMsMyM6A5zURCyKZYmCY6ziuosivrysIUKdXrEILh2PowSWcOxVqYOZKG4R6OmzpKJ7ip8fTg8HDug==
+X-Received: by 2002:a05:6512:1094:b0:498:f9ed:71 with SMTP id j20-20020a056512109400b00498f9ed0071mr7093535lfg.556.1663592033056;
+        Mon, 19 Sep 2022 05:53:53 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h1-20020a0565123c8100b004979e231fafsm5165669lfv.38.2022.09.19.05.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 05:53:52 -0700 (PDT)
+Message-ID: <6499fa0e-3e07-85b4-0800-849db7c2593b@linaro.org>
+Date:   Mon, 19 Sep 2022 14:53:51 +0200
 MIME-Version: 1.0
-References: <20220429053329.2278740-1-aik@ozlabs.ru> <YoLjpivvU7dRVTuL@dev-arch.thelio-3990X>
- <7d30583e-7e58-5184-be2d-773882dd9092@ozlabs.ru> <ba973bf8-fee6-ba17-244e-32c00d6a06e4@ozlabs.ru>
-In-Reply-To: <ba973bf8-fee6-ba17-244e-32c00d6a06e4@ozlabs.ru>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 19 Sep 2022 21:53:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARNMhTn-+GcOHZrVj=viQxTMUS_7syat4icaPXUGtYkVw@mail.gmail.com>
-Message-ID: <CAK7LNARNMhTn-+GcOHZrVj=viQxTMUS_7syat4icaPXUGtYkVw@mail.gmail.com>
-Subject: Re: [PATCH kernel v2] zstd: Fixing mixed module-builtin objects
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH V2 1/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,resume-hs-terminations' quirk
+Content-Language: en-US
+To:     Piyush Mehta <piyush.mehta@amd.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        git@amd.com, michal.simek@amd.com,
+        siva.durga.prasad.paladugu@amd.com,
+        Piyush Mehta <piyush.mehta@xilinx.com>
+References: <20220919104816.4075019-1-piyush.mehta@amd.com>
+ <20220919104816.4075019-2-piyush.mehta@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220919104816.4075019-2-piyush.mehta@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 3:56 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
->
-> Ping? It's about 2 months now :)
->
->
-> On 6/6/22 15:12, Alexey Kardashevskiy wrote:
-> > Ping?
-> >
-> >
+On 19/09/2022 12:48, Piyush Mehta wrote:
+> From: Piyush Mehta <piyush.mehta@xilinx.com>
+> 
+> Add a new 'snps,resume-hs-terminations' DT quirk to dwc3 core to resolved
+> issue of CRC failed error.
+> 
+> On the resume path, U3/U2 exit controller fails to send proper CRC checksum
+> in CRC5 field. As result Transaction Error is generated. Enabling bit 10 of
+> GUCTL1 will correct this problem.
+> 
+> When this bit is set to '1', the UTMI/ULPI opmode will be changed to
+> "normal" along with HS terminations and term/xcvr select signals after EOR.
+> This option is to support certain legacy UTMI/ULPI PHYs.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+
+Only one SoB is needed for one person. For example switch to amd.com
+(with ownership of commit) or skip second SoB.
+
+> ---
+> Changes in V2:
+> - Addressed Krzysztof Kozlowski review comments
+>  - Update the quirk name and No underscores in properties.
+>  - Modified the quirk description. 
+> Link: https://lore.kernel.org/all/e15168ac-b5a1-0c15-cfb3-34fb518e737f@linaro.org/
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-Applied to linux-kbuild.
-Thanks.
-
-
-
-
-
-
-
-
-
-> > On 5/17/22 09:52, Nathan Chancellor wrote:
-> >> Hi Nick,
-> >>
-> >> Did you have any thoughts on this patch? It is necessary for enabling
-> >> LTO with PowerPC:
-> >>
-> >> https://lore.kernel.org/20220429064547.2334280-1-aik@ozlabs.ru/
-> >>
-> >> If you don't have anything to send to Linus for the next cycle, perhaps
-> >> this patch could be carried by the PowerPC folks with your ack?
-> >>
-> >> Cheers,
-> >> Nathan
-> >>
-> >> On Fri, Apr 29, 2022 at 03:33:29PM +1000, Alexey Kardashevskiy wrote:
-> >>> With CONFIG_ZSTD_COMPRESS=m and CONFIG_ZSTD_DECOMPRESS=y we end up in
-> >>> a situation when files from lib/zstd/common/ are compiled once to be
-> >>> linked later for ZSTD_DECOMPRESS (build-in) and ZSTD_COMPRESS (module)
-> >>> even though CFLAGS are different for builtins and modules.
-> >>> So far somehow this was not a problem but enabling LLVM LTO exposes
-> >>> the problem as:
-> >>>
-> >>> ld.lld: error: linking module flags 'Code Model': IDs have
-> >>> conflicting values in 'lib/built-in.a(zstd_common.o at 5868)' and
-> >>> 'ld-temp.o'
-> >>>
-> >>> This particular conflict is caused by KBUILD_CFLAGS=-mcmodel=medium vs.
-> >>> KBUILD_CFLAGS_MODULE=-mcmodel=large , modules use the large model on
-> >>> POWERPC as explained at
-> >>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/Makefile?h=v5.18-rc4#n127
-> >>> but the current use of common files is wrong anyway.
-> >>>
-> >>> This works around the issue by introducing a zstd_common module with
-> >>> shared code.
-> >>>
-> >>> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> >>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> >>> ---
-> >>> Changes:
-> >>> v2:
-> >>> * add a new module instead of inlining common bits
-> >>>
-> >>> ---
-> >>>   lib/zstd/Makefile                | 18 ++++++++----------
-> >>>   lib/zstd/common/entropy_common.c |  4 +++-
-> >>>   lib/zstd/common/zstd_common.c    |  7 +++++++
-> >>>   lib/Kconfig                      |  8 ++++++--
-> >>>   4 files changed, 24 insertions(+), 13 deletions(-)
-> >>>
-> >>> diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
-> >>> index fc45339fc3a3..440bd0007ae2 100644
-> >>> --- a/lib/zstd/Makefile
-> >>> +++ b/lib/zstd/Makefile
-> >>> @@ -10,14 +10,10 @@
-> >>>   # ################################################################
-> >>>   obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
-> >>>   obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
-> >>> +obj-$(CONFIG_ZSTD_COMMON) += zstd_common.o
-> >>>   zstd_compress-y := \
-> >>>           zstd_compress_module.o \
-> >>> -        common/debug.o \
-> >>> -        common/entropy_common.o \
-> >>> -        common/error_private.o \
-> >>> -        common/fse_decompress.o \
-> >>> -        common/zstd_common.o \
-> >>>           compress/fse_compress.o \
-> >>>           compress/hist.o \
-> >>>           compress/huf_compress.o \
-> >>> @@ -33,12 +29,14 @@ zstd_compress-y := \
-> >>>   zstd_decompress-y := \
-> >>>           zstd_decompress_module.o \
-> >>> -        common/debug.o \
-> >>> -        common/entropy_common.o \
-> >>> -        common/error_private.o \
-> >>> -        common/fse_decompress.o \
-> >>> -        common/zstd_common.o \
-> >>>           decompress/huf_decompress.o \
-> >>>           decompress/zstd_ddict.o \
-> >>>           decompress/zstd_decompress.o \
-> >>>           decompress/zstd_decompress_block.o \
-> >>> +
-> >>> +zstd_common-y := \
-> >>> +        common/debug.o \
-> >>> +        common/entropy_common.o \
-> >>> +        common/error_private.o \
-> >>> +        common/fse_decompress.o \
-> >>> +        common/zstd_common.o \
-> >>> diff --git a/lib/zstd/common/entropy_common.c
-> >>> b/lib/zstd/common/entropy_common.c
-> >>> index 53b47a2b52ff..f84612627471 100644
-> >>> --- a/lib/zstd/common/entropy_common.c
-> >>> +++ b/lib/zstd/common/entropy_common.c
-> >>> @@ -15,6 +15,7 @@
-> >>>   /* *************************************
-> >>>   *  Dependencies
-> >>>   ***************************************/
-> >>> +#include <linux/module.h>
-> >>>   #include "mem.h"
-> >>>   #include "error_private.h"       /* ERR_*, ERROR */
-> >>>   #define FSE_STATIC_LINKING_ONLY  /* FSE_MIN_TABLELOG */
-> >>> @@ -239,7 +240,7 @@ size_t FSE_readNCount(
-> >>>   {
-> >>>       return FSE_readNCount_bmi2(normalizedCounter, maxSVPtr,
-> >>> tableLogPtr, headerBuffer, hbSize, /* bmi2 */ 0);
-> >>>   }
-> >>> -
-> >>> +EXPORT_SYMBOL_GPL(FSE_readNCount);
-> >>>   /*! HUF_readStats() :
-> >>>       Read compact Huffman tree, saved by HUF_writeCTable().
-> >>> @@ -255,6 +256,7 @@ size_t HUF_readStats(BYTE* huffWeight, size_t
-> >>> hwSize, U32* rankStats,
-> >>>       U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
-> >>>       return HUF_readStats_wksp(huffWeight, hwSize, rankStats,
-> >>> nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2
-> >>> */ 0);
-> >>>   }
-> >>> +EXPORT_SYMBOL_GPL(HUF_readStats);
-> >>>   FORCE_INLINE_TEMPLATE size_t
-> >>>   HUF_readStats_body(BYTE* huffWeight, size_t hwSize, U32* rankStats,
-> >>> diff --git a/lib/zstd/common/zstd_common.c
-> >>> b/lib/zstd/common/zstd_common.c
-> >>> index 3d7e35b309b5..06f62b2026d5 100644
-> >>> --- a/lib/zstd/common/zstd_common.c
-> >>> +++ b/lib/zstd/common/zstd_common.c
-> >>> @@ -13,6 +13,7 @@
-> >>>   /*-*************************************
-> >>>   *  Dependencies
-> >>>   ***************************************/
-> >>> +#include <linux/module.h>
-> >>>   #define ZSTD_DEPS_NEED_MALLOC
-> >>>   #include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free,
-> >>> ZSTD_memset */
-> >>>   #include "error_private.h"
-> >>> @@ -59,6 +60,7 @@ void* ZSTD_customMalloc(size_t size, ZSTD_customMem
-> >>> customMem)
-> >>>           return customMem.customAlloc(customMem.opaque, size);
-> >>>       return ZSTD_malloc(size);
-> >>>   }
-> >>> +EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
-> >>>   void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
-> >>>   {
-> >>> @@ -71,6 +73,7 @@ void* ZSTD_customCalloc(size_t size, ZSTD_customMem
-> >>> customMem)
-> >>>       }
-> >>>       return ZSTD_calloc(1, size);
-> >>>   }
-> >>> +EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
-> >>>   void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
-> >>>   {
-> >>> @@ -81,3 +84,7 @@ void ZSTD_customFree(void* ptr, ZSTD_customMem
-> >>> customMem)
-> >>>               ZSTD_free(ptr);
-> >>>       }
-> >>>   }
-> >>> +EXPORT_SYMBOL_GPL(ZSTD_customFree);
-> >>> +
-> >>> +MODULE_LICENSE("Dual BSD/GPL");
-> >>> +MODULE_DESCRIPTION("Zstd Common");
-> >>> diff --git a/lib/Kconfig b/lib/Kconfig
-> >>> index 087e06b4cdfd..33f3a7054cdd 100644
-> >>> --- a/lib/Kconfig
-> >>> +++ b/lib/Kconfig
-> >>> @@ -333,12 +333,16 @@ config LZ4HC_COMPRESS
-> >>>   config LZ4_DECOMPRESS
-> >>>       tristate
-> >>> +config ZSTD_COMMON
-> >>> +    select XXHASH
-> >>> +    tristate
-> >>> +
-> >>>   config ZSTD_COMPRESS
-> >>> -    select XXHASH
-> >>> +    select ZSTD_COMMON
-> >>>       tristate
-> >>>   config ZSTD_DECOMPRESS
-> >>> -    select XXHASH
-> >>> +    select ZSTD_COMMON
-> >>>       tristate
-> >>>   source "lib/xz/Kconfig"
-> >>> --
-> >>> 2.30.2
-> >>>
-> >>>
-> >
->
-> --
-> Alexey
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Best regards,
+Krzysztof
