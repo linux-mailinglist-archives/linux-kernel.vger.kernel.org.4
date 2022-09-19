@@ -2,161 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88C85BCD9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7265BCD97
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiISNti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S229775AbiISNtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiISNtb (ORCPT
+        with ESMTP id S229580AbiISNtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:49:31 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3AD2C650;
-        Mon, 19 Sep 2022 06:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=M4xO9IqxnWbsC4nyc5lGTD297hCkmftCcGG9wBbB0gQ=;
-        b=d3btCep1Cc1NeTJBNhIARli1t53lbEQSnd6rznhDrRvHP5FPnvTxr9XTT7b7/PnstVtjtxQb59tyS
-         L9K81D3CGPAeEJv0QuT1yuTJwV0RXdtPn9oa+L5zqgSYFwsndGczSpjXtBNthYQLmpGJDJeYx8cllV
-         3eIPoNQAspQDGqn8WulyS1X+RUBgAeIuPE+sgfmJ3KCiL2djOWSKDsr/8mVL9MalJtB44+b+baaPx5
-         7cRQ9SMajPT4xhlbndwhG3EerXCw7WmJ1Y4JTPCGpWheg0jM7yKRwkT77UuoKnnOc6rBT3PBHFlBDb
-         UiiK27zSVnvb+PmaYlhMF8tvTM9XBLQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000013,0.013009)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.135779), Hit: No, Details: v2.41.0; Id: 15.52k9ij.1gdb057vj.3chm; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 19 Sep 2022 16:49:15 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        system@metrotek.ru,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v12 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Mon, 19 Sep 2022 16:47:50 +0300
-Message-Id: <20220919134750.25197-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220919134750.25197-1-i.bornyakov@metrotek.ru>
-References: <20220919134750.25197-1-i.bornyakov@metrotek.ru>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 19 Sep 2022 09:49:05 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B52B269
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:49:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ACD5E1F8EF;
+        Mon, 19 Sep 2022 13:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663595343; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mG8qNqOUZiLVI5e04ilFKD8dzskLAhThKDItvZFPL00=;
+        b=mKlBuyMhaxiEWWeeZ36dGVKdOLUJsvi/v7udtA+L3KRnmaHO6TbprWfdEkd9QP638w4EVs
+        vctaMH5rD/8wo7ZmD6zqwwPQo4xdlHZTUfdpyqyZk9n+m1DMnrGNvkSQpwcgI1i08/C4hV
+        KP5Xqw34gzOeedfakPutSRCsg1svaWg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663595343;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mG8qNqOUZiLVI5e04ilFKD8dzskLAhThKDItvZFPL00=;
+        b=tL2lQSkOYWYPav1/k/EEQYv6+oBt1pfIJhl/g4139XzF4FNrSqZvwFThX+wGS8oKkNpD4f
+        w2hvtTZvwVAVNvAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8923F13ABD;
+        Mon, 19 Sep 2022 13:49:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NqW7IE9zKGO5TwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 19 Sep 2022 13:49:03 +0000
+Date:   Mon, 19 Sep 2022 15:49:02 +0200
+Message-ID: <87y1ufh3u9.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: possible deadlock in snd_rawmidi_free
+In-Reply-To: <CAB7eexJP7w1B0mVgDF0dQ+gWor7UdkiwPczmL7pn91xx8xpzOA@mail.gmail.com>
+References: <CAB7eexJP7w1B0mVgDF0dQ+gWor7UdkiwPczmL7pn91xx8xpzOA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 FPGA over
-Slave SPI sysCONFIG interface.
+On Mon, 19 Sep 2022 14:46:13 +0200,
+Rondreis wrote:
+> 
+> Hello,
+> 
+> When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> triggered.
+> 
+> HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> git tree: upstream
+> 
+> kernel config: https://pastebin.com/raw/xtrgsXP3
+> console output: https://pastebin.com/raw/9tabWDtu
+> 
+> Sorry for failing to extract the reproducer, and the crash occurred at
+> the moment of disconnecting the midi device. On other versions of
+> Linux, I also triggered this crash.
+> 
+> I would appreciate it if you have any idea how to solve this bug.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+I think there are two ways to work around it.
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..4fb05eb84e2a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+The first one is to move the unregister_sound*() calls out of the
+sound_oss_mutex, something like:
+-- 8< --
+
+--- a/sound/core/sound_oss.c
++++ b/sound/core/sound_oss.c
+@@ -162,7 +162,6 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+ 		mutex_unlock(&sound_oss_mutex);
+ 		return -ENOENT;
+ 	}
+-	unregister_sound_special(minor);
+ 	switch (SNDRV_MINOR_OSS_DEVICE(minor)) {
+ 	case SNDRV_MINOR_OSS_PCM:
+ 		track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_AUDIO);
+@@ -174,12 +173,18 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+ 		track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_DMMIDI1);
+ 		break;
+ 	}
+-	if (track2 >= 0) {
+-		unregister_sound_special(track2);
++	if (track2 >= 0)
+ 		snd_oss_minors[track2] = NULL;
+-	}
+ 	snd_oss_minors[minor] = NULL;
+ 	mutex_unlock(&sound_oss_mutex);
 +
-+title: Lattice Slave SPI sysCONFIG FPGA manager
++	/* call unregister_sound_special() outside sound_oss_mutex;
++	 * otherwise may deadlock, as it can trigger the release of a card
++	 */
++	unregister_sound_special(minor);
++	if (track2 >= 0)
++		unregister_sound_special(track2);
 +
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,sysconfig-ecp5
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,sysconfig-ecp5
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,sysconfig-ecp5";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
--- 
-2.37.3
+ 	kfree(mptr);
+ 	return 0;
+ }
+-- 8< --
+
+This should be OK, as the unregister_sound_*() itself can be called
+concurrently.
+
+Another workaround would be just to remove the register_mutex call at
+snd_rawmidi_free(), e.g. something like:
+
+-- 8< --
+--- a/sound/core/rawmidi.c
++++ b/sound/core/rawmidi.c
+@@ -1899,10 +1899,8 @@ static int snd_rawmidi_free(struct snd_rawmidi *rmidi)
+ 
+ 	snd_info_free_entry(rmidi->proc_entry);
+ 	rmidi->proc_entry = NULL;
+-	mutex_lock(&register_mutex);
+ 	if (rmidi->ops && rmidi->ops->dev_unregister)
+ 		rmidi->ops->dev_unregister(rmidi);
+-	mutex_unlock(&register_mutex);
+ 
+ 	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_INPUT]);
+ 	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_OUTPUT]);
+-- 8< --
+
+This register_mutex there should be superfluous since the device has
+been already processed and detached by snd_rawmidi_dev_disconnect()
+beforehand.  But if the first one is confirmed to work, the second one
+can be left untouched.
 
 
+thanks,
+
+Takashi
