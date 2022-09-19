@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB7F5BC7B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B655BC5FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiISKTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 06:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
+        id S230140AbiISKE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 06:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiISKRw (ORCPT
+        with ESMTP id S230118AbiISKEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:17:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8A122B00;
-        Mon, 19 Sep 2022 03:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=QoMAr3LApQWawpgafmfgLtjlo5s7sxEjoowggy+JX/o=; b=kEL0jdoeDuXpIUENKRvpLsR2sv
-        0zAz+fP+mIxElsrdbbO1xpXzDOap+WRebbmPNQ1ONsvisMt1NH+BXft1IZG51vqSfudHX4+LIHrSX
-        GpuYNjx2dLnu7Z5tT3hUgpnBnHxsdHEDHmwnC8iDVR8fYaQ5EQ9prZ7UiulCISmqAQGiWbvfv/Fka
-        7RqUHmLKy9t6tMrFWsMxzBo+91RuvQ9ccepql5V9ZWkf8+nomRELgmwDvAsaOBzjxLtdWQ+/I4CgT
-        5P697PEJZAJaRZ4DYe+zb/QXGU0PQvLAotVDC2hCkaErqtdMBvS+goXfu3YsSUVpKgdBiM2Lkvw/S
-        lfEPmrfw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaDqB-004bEl-2D; Mon, 19 Sep 2022 10:17:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A7CD5302F92;
-        Mon, 19 Sep 2022 12:16:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AFEB12BABC0C7; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
-Message-ID: <20220919101523.312333837@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 19 Sep 2022 12:00:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     peterz@infradead.org
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH v2 44/44] arm64,riscv,perf: Remove RCU_NONIDLE() usage
-References: <20220919095939.761690562@infradead.org>
+        Mon, 19 Sep 2022 06:04:53 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F472AFD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:04:51 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id s6so34866893lfo.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=yNE2cp1RD1RoFuEYU5xwyQsBh6VbTtl5xLpOIA56rKU=;
+        b=qL4HPMcfptSWQnmD3iCMUCdb7qVYUg0OJMQvjunISVwVid3qG9+fclUGpBJKtuRDfT
+         7TO7gODJE3ezG0+ABlxs3nWZAfJDaFp/WEdcinjMOA4dK4mE19fWrAFTC8ZSYcFQSqC7
+         z2882o9IRCJ3M62jsAlwbxfCAOdyrZ+Lcrxn7HoY1/ydvoo4jV3/1SF8PRQZdn8OwUZf
+         PG529g6LcMpWf0NG7YSV9GUztHoVPTHwtxnsdNPD4bP3P2TkXg1fLycKtW2hu5O+AQ48
+         KUK6rD9UMJgxPsmx8ZkVK6W2PE5rY+M1+ZS70rrtxv/VT4RS3RK6pQCIgb4vzq44kYsB
+         9jCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=yNE2cp1RD1RoFuEYU5xwyQsBh6VbTtl5xLpOIA56rKU=;
+        b=o+36ljuqBMcD2D/Y6GHO10q35MyUxnVSLz3qsq0gy7lh3uM6BXI88B9xWnEoo605ix
+         xMw4f1vzwV2MWXNm2FYAArFkz8tRymUC4+f+Yrx6OyA/BVQCNenpJ4kTJ6m4JZRcwIot
+         46gosVrbBFQeJKZzuqq07LVtm6Z6xR6Mq4sqwKRYeVGdmYunr7iZ5Q+u8WnuMLp9qI8W
+         +VkfwRVSsoooP27dzCEA2WQ53PCM334x7YeigjVkKhlEwRAXE4dxwX8jLBHtyERJZoyO
+         uKLWvG32dPDtCOpya3uer8HAYN6hcm24Ck0LX5Q6jdyk5YB8GgKpRNO1I0pOx+xbevcM
+         8kLA==
+X-Gm-Message-State: ACrzQf2KgtK/Mbze1Pv0lrPfvGIpjRm5VMzg0au9aGO+xgvEr00seE4X
+        TchDNZGsGG+cjajb1xExs7hbcQ==
+X-Google-Smtp-Source: AMsMyM64syZOKjIOi9iMOVhXz1gn4ACZcGEmVgxFTnQUH4zzM/GgVRcz3QHUBXYJ4FUtBMIK6Y9Wgg==
+X-Received: by 2002:a05:6512:1320:b0:488:8fcc:e196 with SMTP id x32-20020a056512132000b004888fcce196mr5759696lfu.602.1663581889926;
+        Mon, 19 Sep 2022 03:04:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q14-20020a056512210e00b00492cfecf1c0sm5136819lfr.245.2022.09.19.03.04.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 03:04:49 -0700 (PDT)
+Message-ID: <54d22a77-5db7-e44b-176f-755e80e44c25@linaro.org>
+Date:   Mon, 19 Sep 2022 12:04:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH V3] dt-bindings: clock: add i.MX8M Anatop
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "abelvesa@kernel.org" <abelvesa@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "abel.vesa@linaro.org" <abel.vesa@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>
+References: <20220919055904.1659124-1-peng.fan@oss.nxp.com>
+ <20220919065820.fk3ppcdoioubqfbg@krzk-bin>
+ <DU0PR04MB9417BF9DF3BB65B859BBB676884D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB9417BF9DF3BB65B859BBB676884D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM notifiers should no longer be ran with RCU disabled (per the
-previous patches), as such this hack is no longer required either.
+On 19/09/2022 11:28, Peng Fan wrote:
+>>> V2:
+>>>  Drop syscon, use clock-controller
+>>>  Add fsl vendor prefix
+>>>  Add interrupt property
+>>>
+>>>  dts update not included, so there will be dtbs_check fail.
+>>>
+>>>  .../bindings/clock/fsl,imx8m-anatop.yaml      | 51 +++++++++++++++++++
+>>>  1 file changed, 51 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/clock/fsl,imx8m-anatop.yaml
+>>>
+>>
+>> Running 'make dtbs_check' with the schema in this patch gives the following
+>> warnings. Consider if they are expected or the schema is incorrect. These
+>> may not be new warnings.
+> 
+> As I wrote in cover letter, dts patches are not included. Should I post V4
+> to include dts fix? I planned to do that after this yaml got reviewed.
+> 
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- drivers/perf/arm_pmu.c       |   11 +----------
- drivers/perf/riscv_pmu_sbi.c |    8 +-------
- 2 files changed, 2 insertions(+), 17 deletions(-)
+Yes, better to include both DT schema and the DTS changes together.
 
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -762,17 +762,8 @@ static void cpu_pm_pmu_setup(struct arm_
- 		case CPU_PM_ENTER_FAILED:
- 			 /*
- 			  * Restore and enable the counter.
--			  * armpmu_start() indirectly calls
--			  *
--			  * perf_event_update_userpage()
--			  *
--			  * that requires RCU read locking to be functional,
--			  * wrap the call within RCU_NONIDLE to make the
--			  * RCU subsystem aware this cpu is not idle from
--			  * an RCU perspective for the armpmu_start() call
--			  * duration.
- 			  */
--			RCU_NONIDLE(armpmu_start(event, PERF_EF_RELOAD));
-+			armpmu_start(event, PERF_EF_RELOAD);
- 			break;
- 		default:
- 			break;
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -747,14 +747,8 @@ static int riscv_pm_pmu_notify(struct no
- 		case CPU_PM_ENTER_FAILED:
- 			/*
- 			 * Restore and enable the counter.
--			 *
--			 * Requires RCU read locking to be functional,
--			 * wrap the call within RCU_NONIDLE to make the
--			 * RCU subsystem aware this cpu is not idle from
--			 * an RCU perspective for the riscv_pmu_start() call
--			 * duration.
- 			 */
--			RCU_NONIDLE(riscv_pmu_start(event, PERF_EF_RELOAD));
-+			riscv_pmu_start(event, PERF_EF_RELOAD);
- 			break;
- 		default:
- 			break;
-
-
+Best regards,
+Krzysztof
