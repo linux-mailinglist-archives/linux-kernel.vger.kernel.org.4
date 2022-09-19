@@ -2,257 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233625BD3A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98D75BD3A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiISRZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S231299AbiISRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiISRZL (ORCPT
+        with ESMTP id S231220AbiISRZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:25:11 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7DD1E3C0;
-        Mon, 19 Sep 2022 10:25:02 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bh13so27363789pgb.4;
-        Mon, 19 Sep 2022 10:25:02 -0700 (PDT)
+        Mon, 19 Sep 2022 13:25:12 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E56237EB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:25:04 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-127d10b4f19so364886fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=euAaknLa+h5zIEMESHSd9vMo0x33lOPRlPldQOSO1tY=;
-        b=ShNlkKcjQX74zNjF0cFpDDUgQjKD8DIkh4EVc7Mv0LXsJafE4SY2OEYjaXtaX6yg8Z
-         8PJonHc9SvScgzKL+dfAAtAzN5E0QOm7TMiGh2Ekv8ph4CTYvq458StXhFk/3SPwMm3F
-         pBPxy2kCWa/AcGmxcGJKEWMGDaIOsTcrM8xaBFKZCvGgwW/IdONn/pVcY4Fow5+4aJSw
-         0cPtz24cRa12OPlbcMKQngJjGnF67wogF9OE5broq9HuQhZ3ydOxsJpbUfpIjX0ugOuw
-         N27BvSJhGKXz03wnL1LZqtd0vyEKXZjs3SigU8Kfz8DrsmsoOySbz9GKYKX7CBuDtB/Q
-         lnpg==
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vctj5HCSzGwdLm3ihJHxXlvukok6qduDHO/C6dYfeBk=;
+        b=vznTHUMSyxTCsdjO2JXlrufcZeNc+w8lNaKjidvChQ3HXhbZepYOHhytvKeBkM1iA5
+         hKEq0oVjGmC8RGZ4cclAiyV/NG298ZlVqioNuUm7F1hJJwwDDNvvLhaLiYiGYv9IUFxv
+         Q1RWg1cetwNWf9D7VAa5fB6Rq/JriMq50KD2rvNVbxIR3HTEMVV9bkJJwLrhtRx/nliM
+         mgoxinJcLrW1/RctounS3IXs9VAwWOzByvY5eK0vnBLSmXvehL9eSyu7N5AqwPvmJOkj
+         3sKfMG2SbdXFvulCqvyD7JyPOilT2Q4whtWpW/fA3BBTqYouEgRNp9+XiUwtWDtGFrwC
+         LgOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=euAaknLa+h5zIEMESHSd9vMo0x33lOPRlPldQOSO1tY=;
-        b=23UQn5e3Aua4IwfPxPJe0jVDodaXO/0MFLAyLkVyii6rFwg59qTWJdqwhVYxotOOfl
-         SR5bpWUCGdear9c0LbUcu8J8eETh3lHNOE2slv2z2m7gtvDW0rs9PypU4Dpdko+8QHSQ
-         bHjh6dwrRFHGQwvtHHYud0Q5XkV6+VBuh3+pogzSD6hSR/mCpVV0y88OYcQENdp8JAoV
-         tJEmSanSBEomeWUa3K6OhBhHhozfxVi+0dvXZLePwcRzt8H02j9X+Y2Md5UMGWDY3GgR
-         v+u8LT/K9MmNSyYiG0acD/V+DcdDjgfT+TeAur9N9239GCRiC+Of8Px74+DB+CTQ9wfC
-         4vRw==
-X-Gm-Message-State: ACrzQf0dczm7oHhkpRZVL9Lt4IOU5CEny4LaLYFTlaaM1DVTfgVklC5w
-        0+cnziL+XlYNk5WdenPMtZ+9JpKa6nA=
-X-Google-Smtp-Source: AMsMyM6OTf8JGt0/2O1PiJjtsm9iJk3G5nddptF65VkDZixrBOW+hXa9Ea4CpUGY12LhhkBrwX/ErA==
-X-Received: by 2002:a63:b64:0:b0:439:8143:c184 with SMTP id a36-20020a630b64000000b004398143c184mr16377617pgl.22.1663608301881;
-        Mon, 19 Sep 2022 10:25:01 -0700 (PDT)
-Received: from localhost.localdomain (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
-        by smtp.gmail.com with ESMTPSA id h7-20020aa796c7000000b0053f2505318asm21226480pfq.142.2022.09.19.10.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:25:01 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, corbet@lwn.net, david@redhat.com,
-        osalvador@suse.de, shuah@kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        akpm@linux-foundation.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>
-Subject: [PATCH 3/3] debugfs: fix error when writing negative value to atomic_t debugfs file
-Date:   Tue, 20 Sep 2022 02:24:18 +0900
-Message-Id: <20220919172418.45257-4-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919172418.45257-1-akinobu.mita@gmail.com>
-References: <20220919172418.45257-1-akinobu.mita@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vctj5HCSzGwdLm3ihJHxXlvukok6qduDHO/C6dYfeBk=;
+        b=PSQiG361RqK7jy7ZdWi3oAp9wJB79WiDOCmyr2rsEtwI4fRccQDD27BiYUkGaKraZY
+         Gp1jX7VKcqChZv55t3I9DRz3DVIYEMJ0zZ0aZ7t9P3/Otfl2RR/omvEMrGKv5tBCDVib
+         VVv4d/RuROBnC6sEgo6PEFAxYwI/bg8CmO/jA+ALZmdUXNfUwlF8H0eENS6NicOT/jul
+         6dwczT5JaNRa5BSmlvM7XmWk2mRGD1cXpqZRI/prhR9AP37nZbJg7ULqXYqT+P8+2iTO
+         FGZgDqU9tRcqEfuW5fG6jMTXQ/GdyLBBt1r9vmu6jwabrTH/oIYAtkM/YBujY2PkMRYE
+         ji7Q==
+X-Gm-Message-State: ACgBeo2EB/VnOH3g/QiMEej29fWjVzbiYix+5YVre7A3PdrbNPBzlfGb
+        hY8lpmtoTxhpOb2S74KKICbah8duMrb25+dU1maqtA==
+X-Google-Smtp-Source: AA6agR6PIExzbO7BZyGMk5OG1ePbcXS7CYu022otcLvbs4mq2DgJebDFBZx/pL35hUMVSBccEr1PZrv8YzqjfYboeAI=
+X-Received: by 2002:a05:6870:b511:b0:12b:5871:2129 with SMTP id
+ v17-20020a056870b51100b0012b58712129mr17182964oap.80.1663608303236; Mon, 19
+ Sep 2022 10:25:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20200527165718.129307-1-briannorris@chromium.org>
+ <YmPadTu8CfEARfWs@xps> <CA+ASDXPeJ6fD9hvc0Nq_RY05YRdSP77U_96vUZcTYgkQKY9Bvg@mail.gmail.com>
+ <CAG2Q2vXce2V3Y6MnPhV6obcNWyQzyusMTL=5oCQLRNh2_ffNYA@mail.gmail.com>
+ <CAG2Q2vXFcSVwF4CbU5o3VP1MWwrdqrZjTHgfBj_Q0t3nNipJRw@mail.gmail.com> <CA+ASDXNx30A3=BA9b-tiAQzYHP=nV_eLw1QFpJij=F=JgWZ5sg@mail.gmail.com>
+In-Reply-To: <CA+ASDXNx30A3=BA9b-tiAQzYHP=nV_eLw1QFpJij=F=JgWZ5sg@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 19 Sep 2022 10:24:51 -0700
+Message-ID: <CAJ+vNU38WyC=FFZVgqyKunEnjXid6vXqkorv8a8+ywjJBk_0NA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Cale Collins <ccollins@gateworks.com>, kvalo@kernel.org,
+        Patrick Steinhardt <ps@pks.im>,
+        ath10k <ath10k@lists.infradead.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Stephen McCarthy <stephen.mccarthy@pctel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The simple attribute files do not accept a negative value since the
-commit 488dac0c9237 ("libfs: fix error cast of negative value in
-simple_attr_write()"), so we have to use a 64-bit value to write a
-negative value for a debugfs file created by debugfs_create_atomic_t().
+On Tue, Aug 30, 2022 at 2:57 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> Hi Cale,
+>
+> I meant to respond a while back, but didn't get around to it, sorry.
+> In case it's still helpful:
+>
+> On Wed, May 11, 2022 at 3:52 PM Cale Collins <ccollins@gateworks.com> wrote:
+> > On Mon, May 9, 2022 at 11:16 AM Cale Collins <ccollins@gateworks.com> wrote:
+> > > I'm experiencing an issue very similar to this.  The regulatory domain
+> > > settings wouldn't allow me to create an AP on 5ghz bands on kernels
+> > > newer than 5.10 when using a WLE900VX (QCA9984) radio.  I bisected the
+> > > kernel and ultimately landed on the regression that Brian patched.
+>
+> If the revert broke you, then you were also broken before v5.6. This
+> patch only landed in v5.6-rc1:
+>
+> 2dc016599cfa ath: add support for special 0x0 regulatory domain
+>
+> I'm not really an expert on the wide variety of ath-related hardware
+> production, but given the many people complaining about the existence
+> of the non-reverted patch, it seemed like a revert was the best way
+> forward -- don't break those that weren't already broken pre-5.6.
+>
+> > > root@focal-ventana:~# iw reg get
+> > > global
+> > > country 00: DFS-UNSET
+> > >     (2402 - 2472 @ 40), (N/A, 20), (N/A)
+> > >     (2457 - 2482 @ 20), (N/A, 20), (N/A), AUTO-BW, NO-IR
+> > >     (2474 - 2494 @ 20), (N/A, 20), (N/A), NO-OFDM, NO-IR
+> > >     (5170 - 5250 @ 80), (N/A, 20), (N/A), AUTO-BW, NO-IR
+> > >     (5250 - 5330 @ 80), (N/A, 20), (0 ms), DFS, AUTO-BW, NO-IR
+> > >     (5490 - 5730 @ 160), (N/A, 20), (0 ms), DFS, NO-IR
+> > >     (5735 - 5835 @ 80), (N/A, 20), (N/A), NO-IR
+> > >     (57240 - 63720 @ 2160), (N/A, 0), (N/A)
+> > >
+> > > phy#0
+> > > country 99: DFS-UNSET
+> > >     (2402 - 2472 @ 40), (N/A, 20), (N/A)
+> > >     (5140 - 5360 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
+> > >     (5715 - 5860 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
+>
+> Unless there's some other bug hidden in here in how we're reading
+> EEPROM settings, it sounds like you have a badly-provisioned PCI
+> module, with no EEPROM country code. Thus, the driver has to
+> conservatively treat you as a very-limited "world roaming" regulatory
+> class, which mostly disables 5GHz, or at least doesn't let you
+> initiate much radiation on your own (which basically eliminates AP
+> mode).
+>
+> The "fix" there would be to get a different, correctly-provisioned
+> (for your regulatory domain) module.
+>
+> Also, I didn't notice until today: technically, you also could be
+> retrieving your incorrect country code info from ACPI; but if you're
+> using a typical ARM board like claimed, it's unlikely you're using
+> ACPI.
+>
+> Somewhat of a sidetrack: The existence of ACPI override support does
+> suggest that perhaps there's some room for a Device Tree property, so
+> one can set their regulatory domain on a per-board basis. I've
+> definitely known some downstream product makers use that sort of
+> approach -- and that very "solution" is potentially why some devices
+> don't get a valid EEPROM (if the manufacturer could hack the drivers,
+> why bother getting the EEPROM right?), and therefore don't work
+> correctly with upstream kernels... Unfortunately, that kind of
+> solution is hard to deploy 100% correctly for upstream Linux, because
+> the Device Tree would need to change depending on which country the
+> affected system is shipped to. It's easier to get those things right
+> in a pre-flashed firmware or an EEPROM; it's harder to get those in a
+> software DTS file shipped to everyone in the mainline kernel sources.
+>
+> > > #dmesg |grep ath output
+>
+> In the slim chance there's something else going on in the driver, you
+> might try to capture logs with ATH10K_DBG_BOOT and
+> ATH10K_DBG_REGULATORY logging enabled. That could look something like:
+>
+> echo 0x820 > /sys/module/ath10k_core/parameters/debug_mask
+> rmmod ath10k_pci
+> modprobe ath10k_pci
+> dmesg | grep ath
+>
 
-This restores the previous behaviour by introducing
-DEFINE_DEBUGFS_ATTRIBUTE_SIGNED for a signed value.
+Brian,
 
-Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
-Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- .../fault-injection/fault-injection.rst       | 10 +++----
- fs/debugfs/file.c                             | 28 +++++++++++++++----
- include/linux/debugfs.h                       | 19 +++++++++++--
- 3 files changed, 43 insertions(+), 14 deletions(-)
+Thanks for the follow-up. Indeed the situation Cale had here was with
+Compex WLE900VX which apparently does have what we now understand to
+be an unprogrammed EEPROM. I suspect this was some choice from Compex
+that somehow must have benefited them at the time and I'm not clear if
+there are many other cards that have this same issue. Maybe something
+should be added to the ath drivers wiki pages
+(https://wireless.wiki.kernel.org/en/users/drivers/ath9k)
 
-diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/fault-injection/fault-injection.rst
-index 17779a2772e5..5f6454b9dbd4 100644
---- a/Documentation/fault-injection/fault-injection.rst
-+++ b/Documentation/fault-injection/fault-injection.rst
-@@ -83,9 +83,7 @@ configuration of fault-injection capabilities.
- - /sys/kernel/debug/fail*/times:
- 
- 	specifies how many times failures may happen at most. A value of -1
--	means "no limit". Note, though, that this file only accepts unsigned
--	values. So, if you want to specify -1, you better use 'printf' instead
--	of 'echo', e.g.: $ printf %#x -1 > times
-+	means "no limit".
- 
- - /sys/kernel/debug/fail*/space:
- 
-@@ -284,7 +282,7 @@ Application Examples
-     echo Y > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 10 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 100 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 2 > /sys/kernel/debug/$FAILTYPE/verbose
-     echo Y > /sys/kernel/debug/$FAILTYPE/ignore-gfp-wait
-@@ -338,7 +336,7 @@ Application Examples
-     echo N > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 10 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 100 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 2 > /sys/kernel/debug/$FAILTYPE/verbose
-     echo Y > /sys/kernel/debug/$FAILTYPE/ignore-gfp-wait
-@@ -369,7 +367,7 @@ Application Examples
-     echo N > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 100 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 0 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 1 > /sys/kernel/debug/$FAILTYPE/verbose
- 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index 950c63fa4d0b..38930d9b0bb7 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -378,8 +378,8 @@ ssize_t debugfs_attr_read(struct file *file, char __user *buf,
- }
- EXPORT_SYMBOL_GPL(debugfs_attr_read);
- 
--ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
--			 size_t len, loff_t *ppos)
-+static ssize_t debugfs_attr_write_xsigned(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos, bool is_signed)
- {
- 	struct dentry *dentry = F_DENTRY(file);
- 	ssize_t ret;
-@@ -387,12 +387,28 @@ ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
- 	ret = debugfs_file_get(dentry);
- 	if (unlikely(ret))
- 		return ret;
--	ret = simple_attr_write(file, buf, len, ppos);
-+	if (is_signed)
-+		ret = simple_attr_write_signed(file, buf, len, ppos);
-+	else
-+		ret = simple_attr_write(file, buf, len, ppos);
- 	debugfs_file_put(dentry);
- 	return ret;
- }
-+
-+ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos)
-+{
-+	return debugfs_attr_write_xsigned(file, buf, len, ppos, false);
-+}
- EXPORT_SYMBOL_GPL(debugfs_attr_write);
- 
-+ssize_t debugfs_attr_write_signed(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos)
-+{
-+	return debugfs_attr_write_xsigned(file, buf, len, ppos, true);
-+}
-+EXPORT_SYMBOL_GPL(debugfs_attr_write_signed);
-+
- static struct dentry *debugfs_create_mode_unsafe(const char *name, umode_t mode,
- 					struct dentry *parent, void *value,
- 					const struct file_operations *fops,
-@@ -738,11 +754,11 @@ static int debugfs_atomic_t_get(void *data, u64 *val)
- 	*val = atomic_read((atomic_t *)data);
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t, debugfs_atomic_t_get,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t, debugfs_atomic_t_get,
- 			debugfs_atomic_t_set, "%lld\n");
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t_ro, debugfs_atomic_t_get, NULL,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t_ro, debugfs_atomic_t_get, NULL,
- 			"%lld\n");
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t_wo, NULL, debugfs_atomic_t_set,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t_wo, NULL, debugfs_atomic_t_set,
- 			"%lld\n");
- 
- /**
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index f60674692d36..ea2d919fd9c7 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -45,7 +45,7 @@ struct debugfs_u32_array {
- 
- extern struct dentry *arch_debugfs_dir;
- 
--#define DEFINE_DEBUGFS_ATTRIBUTE(__fops, __get, __set, __fmt)		\
-+#define DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, __is_signed)	\
- static int __fops ## _open(struct inode *inode, struct file *file)	\
- {									\
- 	__simple_attr_check_format(__fmt, 0ull);			\
-@@ -56,10 +56,16 @@ static const struct file_operations __fops = {				\
- 	.open	 = __fops ## _open,					\
- 	.release = simple_attr_release,					\
- 	.read	 = debugfs_attr_read,					\
--	.write	 = debugfs_attr_write,					\
-+	.write	 = (__is_signed) ? debugfs_attr_write_signed : debugfs_attr_write,	\
- 	.llseek  = no_llseek,						\
- }
- 
-+#define DEFINE_DEBUGFS_ATTRIBUTE(__fops, __get, __set, __fmt)		\
-+	DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
-+
-+#define DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(__fops, __get, __set, __fmt)	\
-+	DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, true)
-+
- typedef struct vfsmount *(*debugfs_automount_t)(struct dentry *, void *);
- 
- #if defined(CONFIG_DEBUG_FS)
-@@ -102,6 +108,8 @@ ssize_t debugfs_attr_read(struct file *file, char __user *buf,
- 			size_t len, loff_t *ppos);
- ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
- 			size_t len, loff_t *ppos);
-+ssize_t debugfs_attr_write_signed(struct file *file, const char __user *buf,
-+			size_t len, loff_t *ppos);
- 
- struct dentry *debugfs_rename(struct dentry *old_dir, struct dentry *old_dentry,
-                 struct dentry *new_dir, const char *new_name);
-@@ -254,6 +262,13 @@ static inline ssize_t debugfs_attr_write(struct file *file,
- 	return -ENODEV;
- }
- 
-+static inline ssize_t debugfs_attr_write_signed(struct file *file,
-+					const char __user *buf,
-+					size_t len, loff_t *ppos)
-+{
-+	return -ENODEV;
-+}
-+
- static inline struct dentry *debugfs_rename(struct dentry *old_dir, struct dentry *old_dentry,
-                 struct dentry *new_dir, char *new_name)
- {
--- 
-2.34.1
+Reverting commit 2dc016599cfa ("ath: add support for special 0x0
+regulatory domain") does indeed resolve the issue on the older kernels
+but somehow the issue creeps back in with later kernels (definitely
+appears in 5.15) perhaps due to other changes. Perhaps you can confirm
+my findings if you have a card like this.
 
+For 5.15 and newer I've elected to add a hack from OpenWrt for the
+kernel's used to support my companies boards which adds a kernel
+config to not enforce EEPROM reg restrictions for the kernels that our
+users use:
+https://github.com/Gateworks/linux-venice/commit/39ef369cbca269fa32e8f85d31ae813b97d84aec
+
+Best Regards,
+
+Tim
