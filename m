@@ -2,150 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0335BD822
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA475BD828
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiISXTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S230171AbiISXUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiISXTM (ORCPT
+        with ESMTP id S229658AbiISXUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:19:12 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541EE50198;
-        Mon, 19 Sep 2022 16:19:11 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id y2so647161qtv.5;
-        Mon, 19 Sep 2022 16:19:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ZXtqtJ/ea5WuAK5JJBouQcp3rbN8LV4upygNznVncj8=;
-        b=QHr+dm/tg7dJtT/HqbaBjTZSOTteeFctsy7LIJ5exUMIf/gylnr9Yjz+OD85PXAuQF
-         LXNHSijVMEkOZh+Xez52tnZjR/CkQ2h4NdZATP8AgSXRPrAizfWWPRMltOgbJzhp9f3T
-         CHLjtyNdTQOHGq5P5mjeHnkydbHk6UX9RXidGpt0z2mmlR+mTtdVIsNJZgbcB6NTC/pI
-         NatDbekr59je2Nq43XRRqGxKZc9FwXmCmBLw8MReHJUQUO/4qoYshPoUkzzIwX1J1tk0
-         d+j7wb7xvMKPDwwFhnBrCcqV1Vo3dzvYTxFwiSZLT61l7AZj0dVi73NRdiDF9njuuDIR
-         vCNg==
-X-Gm-Message-State: ACrzQf30TMb5+4fUOXTB4GuylKpXUpA6mmjRKcVWSO1+amU0FtRC0Wl9
-        M8Xbd1VoSrjSt/7WZLJHXfI=
-X-Google-Smtp-Source: AMsMyM7NFBScQzKm4DLElxBX0PkeMlBAsh8SvSjEqdrqhH/K8AWn19bUk/Kzg6NwLQGV2SQ7Nys+8g==
-X-Received: by 2002:a05:622a:351:b0:35c:e183:69a2 with SMTP id r17-20020a05622a035100b0035ce18369a2mr9376235qtw.298.1663629550296;
-        Mon, 19 Sep 2022 16:19:10 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::148f])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006ce7cd81359sm14650477qkp.110.2022.09.19.16.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 16:19:10 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 18:19:08 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Joanne Koong <joannelkoong@gmail.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        bpf@vger.kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v5 2/4] bpf: Add bpf_user_ringbuf_drain() helper
-Message-ID: <Yyj47Bc01MvJyU9n@maniforge.dhcp.thefacebook.com>
-References: <20220902234317.2518808-1-void@manifault.com>
- <20220902234317.2518808-3-void@manifault.com>
- <CAEf4BzZgv7W=OBi+PogxrvuM1c8QRoZ8O4s347MfKdm-p=qY0w@mail.gmail.com>
- <YyjO2LspZ3GDELDw@maniforge.dhcp.thefacebook.com>
+        Mon, 19 Sep 2022 19:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F122FFD6;
+        Mon, 19 Sep 2022 16:19:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7160361F5B;
+        Mon, 19 Sep 2022 23:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A552EC433D6;
+        Mon, 19 Sep 2022 23:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663629587;
+        bh=CtUBuu/Umy2olZpL4pXDlTOg0LYoEUfDZxH5fn/WxDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P/vL51iDKs3OZhRJ6BmLOq6I90vgV+JTPtV1YO/5kehBej5jad8rR68d7NlNe4Hwl
+         kNAJymRjvM9Miw4xShk/6MIjzyLHIqaWIgpouRIlNDjvzbAYraorl0ZhZBkoZIqheO
+         wpzV03GnWqF4ZOu0DRXsIjKOu5+YiKZmdipgB5xE9P6ZP0ievWzWUpgw3qJXW+QtSu
+         gAFeHvNwMPYFkwms7Rli6eJrpBT+U4WfRHmeW2ojix8epM7g8ZwGeb/UCgvKLhm/pM
+         CDC216TygjszKnBWE619zkj3f2MATa4pERigRHq72Z/0VHm4GHiwy5eKIUYH6i//1x
+         t+CvjnyW0+mFQ==
+Received: by pali.im (Postfix)
+        id 9BB797DA; Tue, 20 Sep 2022 01:19:44 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 01:19:44 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
+ 3720 boards
+Message-ID: <20220919231944.oge6zctr5uxme6ej@pali>
+References: <20220713125644.3117-1-pali@kernel.org>
+ <20220808202456.lpwvhq22edb56ptf@pali>
+ <YvFzGhBRPTXgdCd8@lunn.ch>
+ <20220902223110.ob2uepbjzubdf4d3@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YyjO2LspZ3GDELDw@maniforge.dhcp.thefacebook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220902223110.ob2uepbjzubdf4d3@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:19:36PM -0500, David Vernet wrote:
-> > > +static void __bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size, u64 flags)
-> > > +{
-> > > +       u64 consumer_pos;
-> > > +       u32 rounded_size = round_up(size + BPF_RINGBUF_HDR_SZ, 8);
-> > > +
-> > > +       /* Using smp_load_acquire() is unnecessary here, as the busy-bit
-> > > +        * prevents another task from writing to consumer_pos after it was read
-> > > +        * by this task with smp_load_acquire() in __bpf_user_ringbuf_peek().
-> > > +        */
-> > > +       consumer_pos = rb->consumer_pos;
-> > > +        /* Synchronizes with smp_load_acquire() in user-space producer. */
-> > > +       smp_store_release(&rb->consumer_pos, consumer_pos + rounded_size);
-> > > +
-> > > +       /* Prevent the clearing of the busy-bit from being reordered before the
-> > > +        * storing of the updated rb->consumer_pos value.
-> > > +        */
-> > > +       smp_mb__before_atomic();
-> > > +       atomic_set(&rb->busy, 0);
-> > > +
-> > > +       if (flags & BPF_RB_FORCE_WAKEUP)
-> > > +               irq_work_queue(&rb->work);
+On Saturday 03 September 2022 00:31:10 Pali Rohár wrote:
+> On Monday 08 August 2022 22:33:30 Andrew Lunn wrote:
+> > On Mon, Aug 08, 2022 at 10:24:56PM +0200, Pali Rohár wrote:
+> > > PING?
 > > 
-> > I think this part is new, you decided to define that FORCE_WAKEUP
-> > sends wakeup after every single consumed sample? I have no strong
-> > opinion on this, tbh, just wonder if it wasn't enough to do it once
-> > after drain?
+> > It is too late for the merge window.
 > 
-> I didn't have a strong reason for doing this other than that I think it
-> more closely matches the behavior for BPF_MAP_TYPE_RINGBUF (which invokes
-> irq_work_queue() after every call to bpf_ringbuf_commit() if
-> BPF_RB_FORCE_WAKEUP is passed). Let's just match that behavior unless we
-> have a good reason not to? I think that will be more intuitive for users.
+> So, now for the next?
 
-Hmm, something else to consider is that if we move the busy-bit setting
-into bpf_user_ringbuf_drain() per your suggestion below, the critical
-section is now the the whole sample drain loop. That's of course _not_ the
-case for BPF_MAP_TYPE_RINGBUF, which just holds the spinlock while
-reserving the sample. It seems excessive to invoke irq_work_queue() while
-the busy bit is held, so I think we should just have the behavior be to
-only have BPF_RB_FORCE_WAKEUP imply that a wakeup will always be sent, even
-if no sample was drained.
+PING?
 
-Let me know if you disagree, but for now I'll work on spinning up a v6 that
-only issues the forced wakeup event once after drain.
-
-> > > +}
-> > > +
-> > > +BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
-> > > +          void *, callback_fn, void *, callback_ctx, u64, flags)
-> > > +{
-> > > +       struct bpf_ringbuf *rb;
-> > > +       long samples, discarded_samples = 0, ret = 0;
-> > > +       bpf_callback_t callback = (bpf_callback_t)callback_fn;
-> > > +       u64 wakeup_flags = BPF_RB_NO_WAKEUP | BPF_RB_FORCE_WAKEUP;
-> > > +
-> > > +       if (unlikely(flags & ~wakeup_flags))
-> > > +               return -EINVAL;
-> > > +
-> > > +       rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
-> > > +       for (samples = 0; samples < BPF_MAX_USER_RINGBUF_SAMPLES && ret == 0; samples++) {
-> > > +               int err;
-> > > +               u32 size;
-> > > +               void *sample;
-> > > +               struct bpf_dynptr_kern dynptr;
-> > > +
-> > > +               err = __bpf_user_ringbuf_peek(rb, &sample, &size);
+> > > > diff --git a/arch/arm64/boot/dts/marvell/armada-372x.dtsi b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > > index 5ce55bdbb995..02ae1e153288 100644
+> > > > --- a/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > > +++ b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > > @@ -13,7 +13,7 @@
+> > > >  
+> > > >  / {
+> > > >  	model = "Marvell Armada 3720 SoC";
+> > > > -	compatible = "marvell,armada3720", "marvell,armada3710";
+> > > > +	compatible = "marvell,armada3720", "marvell,armada3700";
 > > 
-> > so I also just realized that ringbuf_peek will keep setting/resetting
-> > busy flag, and in like all the practical case it's a completely
-> > useless work as we don't intend to have competing consumers, right? So
-> > maybe move busy bit handling into drain itself and document that peek
-> > expect busy taken care of?
+> > Does it make sense to have a compatible here? The board .dts should
+> > provide it. And if the board does not provide it, we probably want the
+> > board to not boot because it does not have a compatible.
 > > 
-> > This should be noticeable faster when there are multiple records
-> > consumed in one drain.
-> 
-> Great idea, I'll do this in v6.
-
-Thanks,
-David
+> >    Andrew
