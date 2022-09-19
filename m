@@ -2,98 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AAE5BD565
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA095BD567
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiISTyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 15:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S229815AbiISTyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 15:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiISTyo (ORCPT
+        with ESMTP id S229808AbiISTyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 15:54:44 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9DF1402D;
-        Mon, 19 Sep 2022 12:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663617282; x=1695153282;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TFylzeOIAdoKTrYXFOCkIxj91jitXePjqSvx77D6gYQ=;
-  b=VAm/VFgeATtp58tv83ToYGxb3sndvgWbMAx5yVKNYt3BOan8y+06td3C
-   y/SengAMrqjXLJOs2Bcd0vNtEN7DDJCAn6CxmvNsiRkx222K3eWzIpAWg
-   MejAzbyV7FF0oaJj2SAIhC947BsaCNbgn7nOFKMV0B8eNH9gLXjxIqBt9
-   L05V6E3faLxio9UZgFkUIcIDoBuDlQOLdtJRdx4XjxJFQVzzbrV+m98ic
-   vSiRSKw+q07PGfSGR5OMsrC89/FEanVRxeXZybKfBoKxRHISjct+72TxU
-   WrTxT6QRXhqozU+1xk0mgrSDA3xnecY/oFVFJ4hyKXkljxidjSnmIHoDN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363466369"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="363466369"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 12:54:41 -0700
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="722439432"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 12:54:38 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 0EF4020238;
-        Mon, 19 Sep 2022 22:54:36 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 19:54:36 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>, mchehab@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, hverkuil@xs4all.nl,
-        jacopo@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 4/4] media: tc358746: add Toshiba TC358746 Parallel to
- CSI-2 bridge driver
-Message-ID: <YyjI/JOcryD8yKzT@paasikivi.fi.intel.com>
-References: <20220916134535.128131-1-m.felsch@pengutronix.de>
- <20220916134535.128131-5-m.felsch@pengutronix.de>
- <YyhktzmcgXKnrMFU@pendragon.ideasonboard.com>
- <20220919171142.6av6ap5gwweldado@pengutronix.de>
- <Yyio06jhK13BiNiP@pendragon.ideasonboard.com>
+        Mon, 19 Sep 2022 15:54:47 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4059D1402D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:54:46 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso294163pjd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=g7zNNY89d4k8ugINF0iti3Ty6QBiU6BSa9NeL6oDdnc=;
+        b=J46nl8pGcRAq9y7Kxtf00LObEtiZeEnL9MXTH3mBudNAB1pfFaVRAWVEJ3JhnrC6Hs
+         Lp0XCwskM8N2p8YqlAQGWOjCPiTwfYw2KW1XHrvT9uJwj5nfl7CFXr/LZ7t4ae2qY+lv
+         Sx2le6JkOjOs30KSx3h1B9Z4g5siK4c3wB7e7TulFuRDlcQvmah8UDL5K/xjRRaJxMBX
+         5sYkHTZaJOPWRckEKssnGgzjl29DcMaMWIZimZVjGFHBOebvxvbYjMqS6NliczIazC1m
+         n9iRrqV6+Ve/lS+byOyYGWzDlvhUNMnHkNk5j2oeVjm33kL4SJzStIKcKXGmspHgr1Cy
+         smLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=g7zNNY89d4k8ugINF0iti3Ty6QBiU6BSa9NeL6oDdnc=;
+        b=iri4sRxv6wx6j3ZXRQk+Huec7QQkVQXPz86mELbxLd24QvdUC9FzfszSRRixfvyPT4
+         WoUebqjtzsuEzmdaQ561VbC9YrWrh7q6hKEfzuq66WtBMy5LWGSNsYVLsiFBIpsnNIFz
+         bxWFUlVPoM4/vZkanTxnkVfcojniyfELbXLGxdYCFzvmBd9gVfualR4Np7IFpXf92HPo
+         hKzCnz4UOIuTCrBrzJVTklAs1tEqz6A+b4hRqCIEhrU6/WhcRdUGxfDSe4U3+nV28BO9
+         ufEVLoLzN6M6mmYoiPLwa42rUFREOt6uv0SiqEshHj0kqzNcu3026GzPx3biuvJC4UxQ
+         73zQ==
+X-Gm-Message-State: ACrzQf0JMKoIs4b2ipad58vAHQNpt0oa5t52mkUL8TkzuF29wNQ1JZ+c
+        QBXeT+PkULPZCF1DOgQqFNCZ9Q==
+X-Google-Smtp-Source: AMsMyM6aAqjbQN2s6/yxk/aDmjhEYxdJeVSFPaipVSZeL3rirrj/BwqC/Vq8QXJ7EyPXjCVJOlmknA==
+X-Received: by 2002:a17:902:e54e:b0:178:5371:5199 with SMTP id n14-20020a170902e54e00b0017853715199mr1320475plf.59.1663617285719;
+        Mon, 19 Sep 2022 12:54:45 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id 14-20020a17090a0cce00b001fd9c63e56bsm819824pjt.32.2022.09.19.12.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 12:54:44 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 13:54:42 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH] coresight: docs: Fix a broken reference
+Message-ID: <20220919195442.GA759648@p14s>
+References: <c7f864854e9e03916017712017ff59132c51c338.1659251193.git.christophe.jaillet@wanadoo.fr>
+ <20220822160202.GB1583519@p14s>
+ <0e5567ee-41ba-2364-5e5a-2a6626c08ed1@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yyio06jhK13BiNiP@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0e5567ee-41ba-2364-5e5a-2a6626c08ed1@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 08:37:23PM +0300, Laurent Pinchart wrote:
-> > > > +	ctrl = v4l2_ctrl_new_int_menu(&tc358746->ctrl_hdl, NULL,
-> > > > +				      V4L2_CID_LINK_FREQ, 0, 0,
+On Mon, Sep 12, 2022 at 10:52:30AM +0100, Suzuki K Poulose wrote:
+> Cc: acme
+> 
+> On 22/08/2022 17:02, Mathieu Poirier wrote:
+> > On Sun, Jul 31, 2022 at 09:06:48AM +0200, Christophe JAILLET wrote:
+> > > Since the commit in Fixes: tag, "coresight-cpu-debug.txt" has been turned
+> > > into "arm,coresight-cpu-debug.yaml".
 > > > 
-> > > Shouldn't the max argument be set to the number of items minus 1 ?
+> > > Update the doc accordingly to avoid a 'make htmldocs' warning
+> > > 
+> > > Fixes: 66d052047ca8 ("dt-bindings: arm: Convert CoreSight CPU debug to DT schema")
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > > ---
+> > >   Documentation/trace/coresight/coresight-cpu-debug.rst | 3 ++-
+> > >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
 > > 
-> > Right now I would keep it that way since the driver only supports one
-> > link-frequencies setting. So the ctrl don't let the userspace assume
-> > that there are more than one link-frequency.
+> > Applied.
 > 
-> Good point. Can you add a short comment above the call to explain this ?
-
-Wouldn't it be just easier to do what Laurent suggested originally? The end
-result is the same, isn't it, and no comment needed?
-
+> fyi, there is another patch fixing the same here.
 > 
-> > > > +				      link_frequencies);
-> > > > +	if (ctrl)
-> > > > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> https://lkml.kernel.org/r/20815dbff3d27f5d3e6876363f052d2a08ad2e72.1660829433.git.mchehab@kernel.org
+> 
+> We may have to decide which one goes in.
+>
 
-Now that this is a bridge, this value presumably doesn't need to change.
-There will just be more blanking if the source sub-device pixel rate is
-slower, right?
+Thanks for pointing that out.  I looked in the documentation's next tree[1] and the
+patch hasn't been added there.  As such I suggest to keep Christophe's patch.
 
--- 
-Sakari Ailus
+Regards,
+Mathieu
+
+[1]. git://git.lwn.net/linux.git docs-next
+
+> Cheers
+> Suzuki
+> 
+> > 
+> > Thanks,
+> > Mathieu
+> > 
+> > > diff --git a/Documentation/trace/coresight/coresight-cpu-debug.rst b/Documentation/trace/coresight/coresight-cpu-debug.rst
+> > > index 993dd294b81b..836b35532667 100644
+> > > --- a/Documentation/trace/coresight/coresight-cpu-debug.rst
+> > > +++ b/Documentation/trace/coresight/coresight-cpu-debug.rst
+> > > @@ -117,7 +117,8 @@ divide into below cases:
+> > >   Device Tree Bindings
+> > >   --------------------
+> > > -See Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt for details.
+> > > +See Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml for
+> > > +details.
+> > >   How to use the module
+> > > -- 
+> > > 2.34.1
+> > > 
+> 
