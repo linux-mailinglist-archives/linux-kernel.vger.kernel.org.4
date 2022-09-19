@@ -2,89 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97A35BD6C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35F65BD6C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiISWEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 18:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S229688AbiISWFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiISWEL (ORCPT
+        with ESMTP id S229520AbiISWEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 18:04:11 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1B54363D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:04:10 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id x2so386822ill.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qNYV3IV0I9YzwwSZ2rZyAqVFa5Tlo4vYZXx3dOJbGyE=;
-        b=Qty/UGzJPzVpzuR8ZRGWaw4OqK7+0psLp6IlAAoHmqCoiibLIWcxZuG8kLn+fkLEFf
-         j/OkpRK2jaOifDUN+9QU1sLJzZG10d8Ive2+Vyhj3ozLNNAvGJJVfFpjwZsIKarZ8e7G
-         Y6gREMq9sCfacCLE+zsycgHlfjdEoEio2VGOc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qNYV3IV0I9YzwwSZ2rZyAqVFa5Tlo4vYZXx3dOJbGyE=;
-        b=fQsQSZ3Skz0d9VF+4Oh/cXFq8dBu2+Nely9TTwe6xOv3CfTOE31HKK98dtpzeK+uTO
-         3+g6eKfvPFh+MLzi+rP+My7nYu7ZNP4edi+ZC26Ockk2oXBI5K9zkLl2Uv8sb93aEOI4
-         4qN/X+mh4qHu/BvXR1AgC03/mohdoPWyar8P0QczYHXfC9acgimciOVnJlB7WwZCrQ6G
-         SY+1UxMg9qdK9Eyaz3iUnJSjeaBVjbBYgJCsbhJcn2fzRXH51tJ704mUltSUgp96S3HN
-         NUKQzbaj79wLcOOypbXudCQPwE/K07rAjHhg292R2sSb1HbeK4YKYiAYR08Yc41I91gj
-         XD4w==
-X-Gm-Message-State: ACrzQf15BHUymOB9ihwAvO+fVo1+HTQfV1R3KNaW3ugmXh9kAbZ6JoXq
-        3/lkW0eLc98DPe3hTPG6IQjK9WEHZ15nqjeNI1/JuLdvPoA=
-X-Google-Smtp-Source: AMsMyM7LQVYifqh7kE/lADrhv3OXw2zz5b3jicXubBcTn9EEtcWrTDVFPfIfJi7sCxwDcxdMdpMrXH+1MtaBN4Yl/6A=
-X-Received: by 2002:a05:6e02:188a:b0:2f5:3486:e6f4 with SMTP id
- o10-20020a056e02188a00b002f53486e6f4mr5779885ilu.65.1663625049588; Mon, 19
- Sep 2022 15:04:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220916230853.49056-1-ivan@cloudflare.com> <20220916170115.35932cba34e2cc2d923b03b5@linux-foundation.org>
- <YyV0AZ9+Zz4aopq4@localhost.localdomain> <CABWYdi1LX5n1DdL1B7s+=TVK=5JDMVyp91d3yRDA0_GW4Xy8wg@mail.gmail.com>
- <Yyhg3L3S0e3zvnP5@localhost.localdomain>
-In-Reply-To: <Yyhg3L3S0e3zvnP5@localhost.localdomain>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Mon, 19 Sep 2022 15:03:58 -0700
-Message-ID: <CABWYdi0_cdketW=Rc-6s1n7ZQ4ALJL7EuOquUSjOGNb5oVjvRA@mail.gmail.com>
-Subject: Re: [RFC] proc: report open files as size in stat() for /proc/pid/fd
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 18:04:55 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4A7F1CFC5;
+        Mon, 19 Sep 2022 15:04:54 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 748362052E21;
+        Mon, 19 Sep 2022 15:04:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 748362052E21
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1663625094;
+        bh=Z73JSV/NwhC08GlZ1iQvd8d8O8nbwnonCMrxhLYMe/E=;
+        h=From:To:Subject:Date:From;
+        b=f1t2S5sryT2te3gjuH5G1QBHZ2snAba19S984SOU7Fi7eafpWiIl7GcXey5xpM7wR
+         V/9p+dtipSqPJ7Hac0lrUPe92+N4tkYRX18edKIQdJcN8+MGcC1kpjvRY32pY4BHbb
+         rnS3dQzDzGdMYsw5uKposMD/QlaxTROBRvAYMuc0=
+From:   Easwar Hariharan <eahariha@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Use PCI_VENDOR_ID_MICROSOFT define instead of magic number
+Date:   Mon, 19 Sep 2022 15:04:43 -0700
+Message-Id: <1663625084-2518-1-git-send-email-eahariha@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 5:30 AM Alexey Dobriyan <adobriyan@gmail.com> wrote:
->
-> On Sat, Sep 17, 2022 at 11:32:02AM -0700, Ivan Babrou wrote:
-> > > > > * Make fd count acces O(1) and expose it in /proc/pid/status
-> > >
-> > > This is doable, next to FDSize.
-> >
-> > It feels like a better solution, but maybe I'm missing some context
-> > here. Let me know whether this is preferred.
->
-> I don't know. I'd put it in st_size as you did initially.
-> /proc/*/status should be slow.
+From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
 
-Could you elaborate what you mean?
+pci_ids.h already defines PCI_VENDOR_ID_MICROSOFT, and is included via
+linux/pci.h. Use the define instead of the magic number.
 
-* Are you saying that having FDUsed in /proc/*/status _would_ be slow?
-I would imagine that adding atomic_read() there shouldn't slow things
-down too much.
-* Are you saying that reading /proc/*/status is already slow and
-reading the number of open files from there would be inefficient?
+base-commit: f0880e2cb7e1f8039a048fdd01ce45ab77247221
+
+Easwar Hariharan (1):
+  hv: Use PCI_VENDOR_ID_MICROSOFT for better discoverability
+
+ drivers/hv/vmbus_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+1.8.3.1
+
