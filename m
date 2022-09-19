@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A202C5BC169
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E7D5BC170
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiISCfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S229768AbiISChh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiISCfB (ORCPT
+        with ESMTP id S229555AbiISCh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:35:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DECE0A7
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663554900; x=1695090900;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pJzFrJkB0Nbc1le4nGOD3AFN3IqIbiIZgq+xh3eakkA=;
-  b=ipNalxceKEMpRMiPfozMg5A+d+yqeZIcq1ofC1Z3HoIpKcRzE+xcbDXO
-   OgVduCqTsIea1iYFo4gwfTGjKM+8K9wEOaY35TyMVEEAg4/uyJtYhSrP3
-   jYOqowEyruvz3A7PM4SpMrQi7MXwjF6AiibjVBowkN0LXlK6Q/IS2PJ4H
-   rFLUaAR6fC/N6QS29vo68SUD24gFUpmbEtSo64mtqeIlo+EU4kQPReomO
-   QgwCpyAG/ENIRtwh0P1IoetJNmzv0ruPToGB+vy7HrzroVH2SIORxMzeR
-   M/k/71myv7A6ObfU7b2v8BwJKra+gC63zJ8s+pFpFpEpNQlrbSwjx3JFh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="298018225"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="298018225"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 19:34:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="569470662"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Sep 2022 19:34:58 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oa6cb-0001ej-1y;
-        Mon, 19 Sep 2022 02:34:57 +0000
-Date:   Mon, 19 Sep 2022 10:34:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:linux-5.4.y 5317/5387] htmldocs:
- ./drivers/usb/core/hub.c:5926: WARNING: Unknown target name: "pre".
-Message-ID: <202209191053.0TKOOfdN-lkp@intel.com>
+        Sun, 18 Sep 2022 22:37:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D877719284
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:37:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663555044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7a6Yx196aUqplgt5mT2Q5wrzyl9YUk8UESPewUTSVmI=;
+        b=hdhdu20ituQe8ZsFhwMXab0BCk2Zt4TeVCGsQzbJSGZtOcccUxSRWIs6BgtGSr0+QYcBj6
+        v0PJOXoz99DJuloHTDwtp9Pl237HtIs0qGPTYMhXreLD4Dpi4uLJitFclqfgNJhWVKVR81
+        rOkY/25ev2jgRQaQjPIjUmI6PCLhs2Q=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-564-Dmd9Op-RNT-lNz6Rs2ZN3Q-1; Sun, 18 Sep 2022 22:37:15 -0400
+X-MC-Unique: Dmd9Op-RNT-lNz6Rs2ZN3Q-1
+Received: by mail-qk1-f199.google.com with SMTP id f12-20020a05620a408c00b006ced53b80e5so5355159qko.17
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:37:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=7a6Yx196aUqplgt5mT2Q5wrzyl9YUk8UESPewUTSVmI=;
+        b=5Xuy4vHqqT8g+gxaR2phT4xwBX07hfNgYCO4BRjdVBliXfD0h+/8wXs2R8G2QsOE0e
+         DGxrrmDCiQEG3BmoDNVsaUTM9YTdOp4FxoSWiC1Kvb5d3MLicQ0j1FlW8s8nGfWNQHzh
+         SkFMYjZDiJXf/o2NcH88vVGiZpATMbufegQ1+R8LMI3MIeXZRfcnW6FxTXzSlPVOjLEy
+         SsV2ljRJQsVf11eH1YqCnliMMur95HoD3E6CUJGJ0RFgdmwgo4FnSVS98Lq9Lyq2pCTI
+         EdfPC6zP8C5C55p0TVufARN7OuO98MfKcUMdHPQ+qEebGWgMKNuXGFf94LjrCz6rpfVd
+         5CFg==
+X-Gm-Message-State: ACrzQf3rbEDIFX8g0Y18yvwv3QG0Tfuqw84GOcDNGHKv/lswMAY3Y6CJ
+        z0vixIWpOKe3ON9AqZQnBC4yqToqK0+CbexwM7u+vlabh5iId/EmsXkOH397xsJsagRRN8xbNeC
+        KyJYdj/eeSY+Af16u9MvumXJU
+X-Received: by 2002:ac8:5b4d:0:b0:35b:b5fa:5e24 with SMTP id n13-20020ac85b4d000000b0035bb5fa5e24mr13585975qtw.163.1663555035071;
+        Sun, 18 Sep 2022 19:37:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM47VVKyCebEesRkuNHbGB2XW5rQsuVvwBSNGfwnQtWukFFfXPDSFto/cMMKiuqOMdgKSB2s4w==
+X-Received: by 2002:ac8:5b4d:0:b0:35b:b5fa:5e24 with SMTP id n13-20020ac85b4d000000b0035bb5fa5e24mr13585954qtw.163.1663555034848;
+        Sun, 18 Sep 2022 19:37:14 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m18-20020a05620a291200b006cf19068261sm743253qkp.116.2022.09.18.19.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 19:37:14 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, aric.cyr@amd.com, Nevenko.Stupar@amd.com,
+        Pavle.Kotarac@amd.com, mairacanal@riseup.net,
+        aurabindo.pillai@amd.com, Bing.Guo@amd.com, hamza.mahfooz@amd.com,
+        nicholas.kazlauskas@amd.com, agustin.gutierrez@amd.com,
+        nathan@kernel.org, mdaenzer@redhat.com, Charlene.Liu@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: remove redundant CalculateTWait's
+Date:   Sun, 18 Sep 2022 22:37:09 -0400
+Message-Id: <20220919023709.3447570-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,150 +80,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-head:   ba0de553122f5be5dde3102746a1060fd2737e63
-commit: df1875084898b15cbc42f712e93d7f113ae6271b [5317/5387] USB: core: Prevent nested device-reset calls
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=df1875084898b15cbc42f712e93d7f113ae6271b
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.4.y
-        git checkout df1875084898b15cbc42f712e93d7f113ae6271b
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+There are several copies of CalculateTwait.
+Reduce to one instance and change local variable name to match common usage.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ .../dc/dml/dcn20/display_mode_vba_20.c        | 16 +++++++-------
+ .../dc/dml/dcn20/display_mode_vba_20v2.c      | 21 ++-----------------
+ .../dc/dml/dcn21/display_mode_vba_21.c        | 19 +----------------
+ .../dc/dml/dcn30/display_mode_vba_30.c        | 18 +---------------
+ .../dc/dml/dcn31/display_mode_vba_31.c        | 13 +-----------
+ .../dc/dml/dcn314/display_mode_vba_314.c      | 13 +-----------
+ 6 files changed, 14 insertions(+), 86 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> ./drivers/usb/core/hub.c:5926: WARNING: Unknown target name: "pre".
-
-vim +/pre +5926 ./drivers/usb/core/hub.c
-
-  5916	
-  5917	/**
-  5918	 * usb_reset_device - warn interface drivers and perform a USB port reset
-  5919	 * @udev: device to reset (not in NOTATTACHED state)
-  5920	 *
-  5921	 * Warns all drivers bound to registered interfaces (using their pre_reset
-  5922	 * method), performs the port reset, and then lets the drivers know that
-  5923	 * the reset is over (using their post_reset method).
-  5924	 *
-  5925	 * Return: The same as for usb_reset_and_verify_device().
-> 5926	 * However, if a reset is already in progress (for instance, if a
-  5927	 * driver doesn't have pre_ or post_reset() callbacks, and while
-  5928	 * being unbound or re-bound during the ongoing reset its disconnect()
-  5929	 * or probe() routine tries to perform a second, nested reset), the
-  5930	 * routine returns -EINPROGRESS.
-  5931	 *
-  5932	 * Note:
-  5933	 * The caller must own the device lock.  For example, it's safe to use
-  5934	 * this from a driver probe() routine after downloading new firmware.
-  5935	 * For calls that might not occur during probe(), drivers should lock
-  5936	 * the device using usb_lock_device_for_reset().
-  5937	 *
-  5938	 * If an interface is currently being probed or disconnected, we assume
-  5939	 * its driver knows how to handle resets.  For all other interfaces,
-  5940	 * if the driver doesn't have pre_reset and post_reset methods then
-  5941	 * we attempt to unbind it and rebind afterward.
-  5942	 */
-  5943	int usb_reset_device(struct usb_device *udev)
-  5944	{
-  5945		int ret;
-  5946		int i;
-  5947		unsigned int noio_flag;
-  5948		struct usb_port *port_dev;
-  5949		struct usb_host_config *config = udev->actconfig;
-  5950		struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
-  5951	
-  5952		if (udev->state == USB_STATE_NOTATTACHED) {
-  5953			dev_dbg(&udev->dev, "device reset not allowed in state %d\n",
-  5954					udev->state);
-  5955			return -EINVAL;
-  5956		}
-  5957	
-  5958		if (!udev->parent) {
-  5959			/* this requires hcd-specific logic; see ohci_restart() */
-  5960			dev_dbg(&udev->dev, "%s for root hub!\n", __func__);
-  5961			return -EISDIR;
-  5962		}
-  5963	
-  5964		if (udev->reset_in_progress)
-  5965			return -EINPROGRESS;
-  5966		udev->reset_in_progress = 1;
-  5967	
-  5968		port_dev = hub->ports[udev->portnum - 1];
-  5969	
-  5970		/*
-  5971		 * Don't allocate memory with GFP_KERNEL in current
-  5972		 * context to avoid possible deadlock if usb mass
-  5973		 * storage interface or usbnet interface(iSCSI case)
-  5974		 * is included in current configuration. The easist
-  5975		 * approach is to do it for every device reset,
-  5976		 * because the device 'memalloc_noio' flag may have
-  5977		 * not been set before reseting the usb device.
-  5978		 */
-  5979		noio_flag = memalloc_noio_save();
-  5980	
-  5981		/* Prevent autosuspend during the reset */
-  5982		usb_autoresume_device(udev);
-  5983	
-  5984		if (config) {
-  5985			for (i = 0; i < config->desc.bNumInterfaces; ++i) {
-  5986				struct usb_interface *cintf = config->interface[i];
-  5987				struct usb_driver *drv;
-  5988				int unbind = 0;
-  5989	
-  5990				if (cintf->dev.driver) {
-  5991					drv = to_usb_driver(cintf->dev.driver);
-  5992					if (drv->pre_reset && drv->post_reset)
-  5993						unbind = (drv->pre_reset)(cintf);
-  5994					else if (cintf->condition ==
-  5995							USB_INTERFACE_BOUND)
-  5996						unbind = 1;
-  5997					if (unbind)
-  5998						usb_forced_unbind_intf(cintf);
-  5999				}
-  6000			}
-  6001		}
-  6002	
-  6003		usb_lock_port(port_dev);
-  6004		ret = usb_reset_and_verify_device(udev);
-  6005		usb_unlock_port(port_dev);
-  6006	
-  6007		if (config) {
-  6008			for (i = config->desc.bNumInterfaces - 1; i >= 0; --i) {
-  6009				struct usb_interface *cintf = config->interface[i];
-  6010				struct usb_driver *drv;
-  6011				int rebind = cintf->needs_binding;
-  6012	
-  6013				if (!rebind && cintf->dev.driver) {
-  6014					drv = to_usb_driver(cintf->dev.driver);
-  6015					if (drv->post_reset)
-  6016						rebind = (drv->post_reset)(cintf);
-  6017					else if (cintf->condition ==
-  6018							USB_INTERFACE_BOUND)
-  6019						rebind = 1;
-  6020					if (rebind)
-  6021						cintf->needs_binding = 1;
-  6022				}
-  6023			}
-  6024	
-  6025			/* If the reset failed, hub_wq will unbind drivers later */
-  6026			if (ret == 0)
-  6027				usb_unbind_and_rebind_marked_interfaces(udev);
-  6028		}
-  6029	
-  6030		usb_autosuspend_device(udev);
-  6031		memalloc_noio_restore(noio_flag);
-  6032		udev->reset_in_progress = 0;
-  6033		return ret;
-  6034	}
-  6035	EXPORT_SYMBOL_GPL(usb_reset_device);
-  6036	
-  6037	
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+index 6e9d7e2b5243..4ca080950924 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+@@ -153,10 +153,10 @@ static unsigned int CalculateVMAndRowBytes(
+ 		bool *PTEBufferSizeNotExceeded,
+ 		unsigned int *dpte_row_height,
+ 		unsigned int *meta_row_height);
+-static double CalculateTWait(
++double CalculateTWait(
+ 		unsigned int PrefetchMode,
+ 		double DRAMClockChangeLatency,
+-		double UrgentLatencyPixelDataOnly,
++		double UrgentLatency,
+ 		double SREnterPlusExitTime);
+ static double CalculateRemoteSurfaceFlipDelay(
+ 		struct display_mode_lib *mode_lib,
+@@ -2892,20 +2892,20 @@ static void dml20_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+ 	}
+ }
+ 
+-static double CalculateTWait(
++double CalculateTWait(
+ 		unsigned int PrefetchMode,
+ 		double DRAMClockChangeLatency,
+-		double UrgentLatencyPixelDataOnly,
++		double UrgentLatency,
+ 		double SREnterPlusExitTime)
+ {
+ 	if (PrefetchMode == 0) {
+ 		return dml_max(
+-				DRAMClockChangeLatency + UrgentLatencyPixelDataOnly,
+-				dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly));
++				DRAMClockChangeLatency + UrgentLatency,
++				dml_max(SREnterPlusExitTime, UrgentLatency));
+ 	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly);
++		return dml_max(SREnterPlusExitTime, UrgentLatency);
+ 	} else {
+-		return UrgentLatencyPixelDataOnly;
++		return UrgentLatency;
+ 	}
+ }
+ 
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+index b02dda8ce70f..2b4dcae4e432 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+@@ -177,10 +177,10 @@ static unsigned int CalculateVMAndRowBytes(
+ 		bool *PTEBufferSizeNotExceeded,
+ 		unsigned int *dpte_row_height,
+ 		unsigned int *meta_row_height);
+-static double CalculateTWait(
++double CalculateTWait(
+ 		unsigned int PrefetchMode,
+ 		double DRAMClockChangeLatency,
+-		double UrgentLatencyPixelDataOnly,
++		double UrgentLatency,
+ 		double SREnterPlusExitTime);
+ static double CalculateRemoteSurfaceFlipDelay(
+ 		struct display_mode_lib *mode_lib,
+@@ -2967,23 +2967,6 @@ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+ 	}
+ }
+ 
+-static double CalculateTWait(
+-		unsigned int PrefetchMode,
+-		double DRAMClockChangeLatency,
+-		double UrgentLatencyPixelDataOnly,
+-		double SREnterPlusExitTime)
+-{
+-	if (PrefetchMode == 0) {
+-		return dml_max(
+-				DRAMClockChangeLatency + UrgentLatencyPixelDataOnly,
+-				dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly));
+-	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatencyPixelDataOnly);
+-	} else {
+-		return UrgentLatencyPixelDataOnly;
+-	}
+-}
+-
+ static double CalculateRemoteSurfaceFlipDelay(
+ 		struct display_mode_lib *mode_lib,
+ 		double VRatio,
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+index 6be14f55c78d..a3ef3638d979 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+@@ -205,7 +205,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		unsigned int *DPDE0BytesFrame,
+ 		unsigned int *MetaPTEBytesFrame);
+ 
+-static double CalculateTWait(
++double CalculateTWait(
+ 		unsigned int PrefetchMode,
+ 		double DRAMClockChangeLatency,
+ 		double UrgentLatency,
+@@ -2980,23 +2980,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+ 	}
+ }
+ 
+-static double CalculateTWait(
+-		unsigned int PrefetchMode,
+-		double DRAMClockChangeLatency,
+-		double UrgentLatency,
+-		double SREnterPlusExitTime)
+-{
+-	if (PrefetchMode == 0) {
+-		return dml_max(
+-				DRAMClockChangeLatency + UrgentLatency,
+-				dml_max(SREnterPlusExitTime, UrgentLatency));
+-	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatency);
+-	} else {
+-		return UrgentLatency;
+-	}
+-}
+-
+ static double CalculateRemoteSurfaceFlipDelay(
+ 		struct display_mode_lib *mode_lib,
+ 		double VRatio,
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+index 229548733177..74f5d9742f59 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+@@ -216,7 +216,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		unsigned int *PTERequestSize,
+ 		unsigned int *DPDE0BytesFrame,
+ 		unsigned int *MetaPTEBytesFrame);
+-static double CalculateTWait(
++double CalculateTWait(
+ 		unsigned int PrefetchMode,
+ 		double DRAMClockChangeLatency,
+ 		double UrgentLatency,
+@@ -3191,22 +3191,6 @@ void dml30_CalculateBytePerPixelAnd256BBlockSizes(
+ 	}
+ }
+ 
+-static double CalculateTWait(
+-		unsigned int PrefetchMode,
+-		double DRAMClockChangeLatency,
+-		double UrgentLatency,
+-		double SREnterPlusExitTime)
+-{
+-	if (PrefetchMode == 0) {
+-		return dml_max(DRAMClockChangeLatency + UrgentLatency,
+-				dml_max(SREnterPlusExitTime, UrgentLatency));
+-	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatency);
+-	} else {
+-		return UrgentLatency;
+-	}
+-}
+-
+ double dml30_CalculateWriteBackDISPCLK(
+ 		enum source_format_class WritebackPixelFormat,
+ 		double PixelClock,
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index 58dc4c046cf4..4563342275f1 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -230,7 +230,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		unsigned int *PTERequestSize,
+ 		int *DPDE0BytesFrame,
+ 		int *MetaPTEBytesFrame);
+-static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
++double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+ static void CalculateRowBandwidth(
+ 		bool GPUVMEnable,
+ 		enum source_format_class SourcePixelFormat,
+@@ -3323,17 +3323,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+ 			&dummysinglestring);
+ }
+ 
+-static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime)
+-{
+-	if (PrefetchMode == 0) {
+-		return dml_max(DRAMClockChangeLatency + UrgentLatency, dml_max(SREnterPlusExitTime, UrgentLatency));
+-	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatency);
+-	} else {
+-		return UrgentLatency;
+-	}
+-}
+-
+ double dml31_CalculateWriteBackDISPCLK(
+ 		enum source_format_class WritebackPixelFormat,
+ 		double PixelClock,
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+index 7024412fe441..89a80eef42f4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+@@ -244,7 +244,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		unsigned int *PTERequestSize,
+ 		int *DPDE0BytesFrame,
+ 		int *MetaPTEBytesFrame);
+-static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
++double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime);
+ static void CalculateRowBandwidth(
+ 		bool GPUVMEnable,
+ 		enum source_format_class SourcePixelFormat,
+@@ -3547,17 +3547,6 @@ static bool CalculateBytePerPixelAnd256BBlockSizes(
+ 	return true;
+ }
+ 
+-static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime)
+-{
+-	if (PrefetchMode == 0) {
+-		return dml_max(DRAMClockChangeLatency + UrgentLatency, dml_max(SREnterPlusExitTime, UrgentLatency));
+-	} else if (PrefetchMode == 1) {
+-		return dml_max(SREnterPlusExitTime, UrgentLatency);
+-	} else {
+-		return UrgentLatency;
+-	}
+-}
+-
+ double dml314_CalculateWriteBackDISPCLK(
+ 		enum source_format_class WritebackPixelFormat,
+ 		double PixelClock,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+
