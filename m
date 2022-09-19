@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CE25BCA9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E18A5BCAA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiISLYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S230111AbiISLZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiISLYO (ORCPT
+        with ESMTP id S230110AbiISLZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:24:14 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6485E1A80A;
-        Mon, 19 Sep 2022 04:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mQIM/EJij0VCL0/KLKnA4As/obLNORXFYtrVRXtkL68=; b=Uy73segPjVyktd8MoQvEluJ9Sh
-        8UMlXvBQXgcmxdqKPCvnG0AJB5XTJrqI6TkyZbqzLgvj3De5Z8SaAM66xp2jYDyFPEyh5IoLJBoyV
-        YnFSkxf+7niuxzR2BJeS+2IUuG63xeDlCLVR6SXgLpKW2GK3p64cjCvnfjEBFSlbhVt5LwUBoty/0
-        17xzYlZme8iC9EEtdlDJLQ6nK5GSU+zmxYvhlmyPJiY/l4nLkPJKT6yULBWYHKzZ1YSxRkPJquYcW
-        16AZAqjaiImN+9RUOneXZF5KblFKbB4dTrNfXa1amvIj0XOknpHPV8q1ZVxCVKiFwppyWVpbxHQNp
-        C+IMmD4g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34400)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oaEsa-0000no-KQ; Mon, 19 Sep 2022 12:24:00 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oaEsX-0006Lj-R3; Mon, 19 Sep 2022 12:23:57 +0100
-Date:   Mon, 19 Sep 2022 12:23:57 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alexander Couzens <lynxis@fe80.eu>
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] net: mediatek: sgmii: refactor power
- cycling into mtk_pcs_config()
-Message-ID: <YyhRTV7mh9emXl4v@shell.armlinux.org.uk>
-References: <20220919083713.730512-1-lynxis@fe80.eu>
- <20220919083713.730512-6-lynxis@fe80.eu>
+        Mon, 19 Sep 2022 07:25:20 -0400
+Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF1619C02;
+        Mon, 19 Sep 2022 04:25:18 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 11:25:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1663586715; x=1663845915;
+        bh=y9rKANHchjNpSN9Qq9D6AIPXx6ITqAMrHklDuvucp2w=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=RBJ+K+7rzjAsOk9Zz+PDE3BkfOK2eCcz0DGQk3cIdvN6b8xmAuHzVJVt1giEHc9Pe
+         BmgZ9MRg8oDeV6hm9SjTh7+G1xTRJGHlwi8yfVnC1YO3MaNLua/A5QON1aF0TJiXZs
+         BR8dLHD7vXpiO9+AdNXC434ZYNlZxv0IVE/DOKaM=
+To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] arm64: dts: qcom: split beryllium dts into common dtsi and tianma dts
+Message-ID: <a28bbb3c-68ca-9d3f-5eb3-837c4ec53e50@connolly.tech>
+In-Reply-To: <20220909035447.36674-2-joelselvaraj.oss@gmail.com>
+References: <20220909035447.36674-1-joelselvaraj.oss@gmail.com> <20220909035447.36674-2-joelselvaraj.oss@gmail.com>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919083713.730512-6-lynxis@fe80.eu>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,75 +53,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 10:37:12AM +0200, Alexander Couzens wrote:
-> Both code paths (autonegotiated and force mode) are power cycling
-> the phy. Move power cycling code to the caller to remove code
-> duplicity.
 
-I think we can do more consolidation here - and it probably makes sense
-to do in another patch.
 
-> diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> index 4c8e8c7b1d32..50f605208295 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> @@ -25,9 +25,6 @@ static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs, phy_interface_t interface
->  {
->  	unsigned int val;
->  
-> -	/* PHYA power down */
-> -	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, SGMII_PHYA_PWD);
-> -
->  	/* Set SGMII phy speed */
->  	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
->  	val &= ~RG_PHY_SPEED_MASK;
-> @@ -72,9 +57,6 @@ static int mtk_pcs_setup_mode_force(struct mtk_pcs *mpcs,
->  {
->  	unsigned int val;
->  
-> -	/* PHYA power down */
-> -	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, SGMII_PHYA_PWD);
-> -
->  	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
->  	val &= ~RG_PHY_SPEED_MASK;
->  	if (interface == PHY_INTERFACE_MODE_2500BASEX)
+On 09/09/2022 04:54, Joel Selvaraj wrote:
+> There are two panel variants of Xiaomi Poco F1. Tianma and EBBG panel.
+> The previous beryllium dts supported the Tianma variant. In order to
+> add support for EBBG variant, the common nodes from beryllium dts are
+> moved to a new common dtsi and to make the variants distinguishable,
+> sdm845-xiaomi-beryllium.dts is now named as
+> sdm845-xiaomi-beryllium-tianma.dts. The model property is updated to
+> distinguish between the variants. The compatibility property is
+> moved to the tianma variant, but it is not updated to avoid any
+> further conflict with other projects/users that might depend on it.
+>
+> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-After powering the PHY down, the next thing that is done is to configure
-the speed. Even with my comments on patch 4, this can still be
-consolidated.
+Reviewed-by: Caleb Connolly <caleb@connolly.tech>
 
-> @@ -115,12 +85,27 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
->  	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-
-	unsigned int val;
-
->  	int err = 0;
->  
-> +	/* PHYA power down */
-> +	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, SGMII_PHYA_PWD);
+Kind regards,
+Caleb
+> ---
+>   arch/arm64/boot/dts/qcom/Makefile                 |  2 +-
+>   ...um.dts =3D> sdm845-xiaomi-beryllium-common.dtsi} | 11 +++++------
+>   .../dts/qcom/sdm845-xiaomi-beryllium-tianma.dts   | 15 +++++++++++++++
+>   3 files changed, 21 insertions(+), 7 deletions(-)
+>   rename arch/arm64/boot/dts/qcom/{sdm845-xiaomi-beryllium.dts =3D> sdm84=
+5-xiaomi-beryllium-common.dtsi} (98%)
+>   create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tia=
+nma.dts
+>
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom=
+/Makefile
+> index 1d86a33de528..d0bba59d2a8c 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -128,7 +128,7 @@ dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-oneplus-fajita.=
+dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-sony-xperia-tama-akari.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-sony-xperia-tama-akatsuki.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-sony-xperia-tama-apollo.dtb
+> -dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-xiaomi-beryllium.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-xiaomi-beryllium-tianma.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-xiaomi-polaris.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm845-shift-axolotl.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)=09+=3D sdm850-lenovo-yoga-c630.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/=
+arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> similarity index 98%
+> rename from arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+> rename to arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> index 82c27f90d300..940ac9cd0aba 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> @@ -26,8 +26,6 @@
+>   /delete-node/ &rmtfs_mem;
+>
+>   / {
+> -=09model =3D "Xiaomi Pocophone F1";
+> -=09compatible =3D "xiaomi,beryllium", "qcom,sdm845";
+>   =09chassis-type =3D "handset";
+>
+>   =09/* required for bootloader to select correct board */
+> @@ -221,8 +219,7 @@ &dsi0 {
+>   =09status =3D "okay";
+>   =09vdda-supply =3D <&vreg_l26a_1p2>;
+>
+> -=09panel@0 {
+> -=09=09compatible =3D "tianma,fhd-video";
+> +=09display_panel: panel@0 {
+>   =09=09reg =3D <0>;
+>   =09=09vddio-supply =3D <&vreg_l14a_1p8>;
+>   =09=09vddpos-supply =3D <&lab>;
+> @@ -234,8 +231,10 @@ panel@0 {
+>   =09=09backlight =3D <&pmi8998_wled>;
+>   =09=09reset-gpios =3D <&tlmm 6 GPIO_ACTIVE_LOW>;
+>
+> +=09=09status =3D "disabled";
 > +
+>   =09=09port {
+> -=09=09=09tianma_nt36672a_in_0: endpoint {
+> +=09=09=09panel_in_0: endpoint {
+>   =09=09=09=09remote-endpoint =3D <&dsi0_out>;
+>   =09=09=09};
+>   =09=09};
+> @@ -243,7 +242,7 @@ tianma_nt36672a_in_0: endpoint {
+>   };
+>
+>   &dsi0_out {
+> -=09remote-endpoint =3D <&tianma_nt36672a_in_0>;
+> +=09remote-endpoint =3D <&panel_in_0>;
+>   =09data-lanes =3D <0 1 2 3>;
+>   };
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts =
+b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
+> new file mode 100644
+> index 000000000000..8e176111e599
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-tianma.dts
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include "sdm845-xiaomi-beryllium-common.dtsi"
+> +
+> +/ {
+> +=09model =3D "Xiaomi Pocophone F1 (Tianma)";
+> +=09compatible =3D "xiaomi,beryllium", "qcom,sdm845";
+> +};
+> +
+> +&display_panel {
+> +=09compatible =3D "tianma,fhd-video";
+> +=09status =3D "okay";
+> +};
+> --
+> 2.37.3
+>
 
-	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-	val &= ~RG_PHY_SPEED_MASK;
-	if (interface == PHY_INTERFACE_MODE_2500BASEX)
-		val |= RG_PHY_SPEED_3_125G;
-	regmap_write(mpcs->regmap, mpcs->ana_rgc3, val);
-
-which would make logical sense to do here, so we always configure the
-speed for the PCS correctly.
-
-That then leaves the configuration of SGMSYS_PCS_CONTROL_1 and
-SGMSYS_SGMII_MODE, which I think could also be consolidated, but I'll
-leave that to those with the hardware to make that decision.
-
-Reading between the lines of the code in this driver, it looks to me
-like this hardware supports only SGMII, but doesn't actually support
-1000base-X and 2500base-X with negotiation. Is that correct? If so,
-it would be good to add a mtk_pcs_validate() function that clears
-ETHTOOL_LINK_MODE_Autoneg_BIT for these modes.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
