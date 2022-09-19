@@ -2,337 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755EB5BD86F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EC15BD875
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiISXrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
+        id S229921AbiISXus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiISXrG (ORCPT
+        with ESMTP id S229681AbiISXun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:47:06 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851544F3B3;
-        Mon, 19 Sep 2022 16:47:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LN9cI0Zu4J0d6VQGm5PwHj+tFdCgAFQkgXs5J8Hhkuwc8N5jhn8u9Q54qGRFteCfZEGWUfNNJ6xIgzJie7yenSci+b0/rbJeEija/14SyCzGFj3YJYsyTHd3KGt88TYNYms4Ww5DQaOtE0eB+qf1fa7zFYzDvDwnpalflEwu3mrTDIfQEbZ3KjUUk5fJ44Tb1ppFy9QyKELo4pDLS9BKzsxH8U/fzWLSuLshEChpFQX4Zf40TTqeT9hZT4qeSa+iPmmsM7J2UJ2ma78YGjqFdyz3yufd+tO4q1OvyZgrqNdu0pxm6WLHr6ANsPbRxXkA1D6hzg3767q2kxKlm2sVXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Df1Qft9DOKFHkGisPgguY/CcqjU/CvKnGNSPmNm+erI=;
- b=EWBWxond+UN6JGFPmcwrTi4Fsu6GDPRUXwUNXpgNBqmiGX4cyrbBAFtg7XwErO7v3ZWYovlv7H4RCjb5+UFw/FPOE9tU3v3vCJKCMZfqUFNmWPaH5pBJzYUtZroCoKLtd/FbrszhgDc4S2gDiJ8TxeQ5jMeg5aG6xulT199ihmLrYAeFs1BrHaSgcdauE4WSyCVFGB/1YolqJlyCPk0FfpVQrAPRk534MoO3aE6Ob81CyA3tkj/VF6PU7ha9mYNxSAggh8T9vlfSBZHgTjFZ4oPxMIUQqA1eliVPlyPHD4abjJA+K/ClGCa0FqLd3CpwtAkkPDcYJa9VM9fkPyAfpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Df1Qft9DOKFHkGisPgguY/CcqjU/CvKnGNSPmNm+erI=;
- b=Xdo9AXS05sQS3sjF70Et0z7EroSpUVmfzef/522AF/7xjeTclgfvce2+E/+Z2MeGPwBkHP5ICEVAdi+Fdf3/0GTswvPg+4Au+c+s4IOcIEj/OHalUJbQUUGv5BCi3AcOg9/cT/dfckSyt3xVw1tcOHnofwSOeL0UaN7FNhhX+8E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by DM4PR12MB5343.namprd12.prod.outlook.com (2603:10b6:5:389::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
- 2022 23:47:01 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::e47d:1a95:23d5:922c]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::e47d:1a95:23d5:922c%7]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
- 23:47:01 +0000
-Message-ID: <31c1b2bb-b43a-709a-2b7e-0e945b9e8bb7@amd.com>
-Date:   Mon, 19 Sep 2022 23:46:55 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH Part2 v6 37/49] KVM: SVM: Add support to handle MSR based
- Page State Change VMGEXIT
-Content-Language: en-US
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Alper Gun <alpergun@google.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <78e30b5a25c926fcfdcaafea3d484f1bb25f20b9.1655761627.git.ashish.kalra@amd.com>
- <CAMkAt6rrGJ5DYTAJKFUTagN9i_opS8u5HPw5c_8NoyEjK7rYzA@mail.gmail.com>
- <CABpDEum157s5+yQvikjwQRaOcxau27NkMzX9eCs9=HFOW5FYnA@mail.gmail.com>
- <0716365f-3572-638b-e841-fcce7d30571a@amd.com>
- <CABpDEu=quPsv6cXfbvpsGS2N+5Pcw7inCfmv=sx3-VaK0UE76g@mail.gmail.com>
- <8113b5d4-31c6-012c-fc0c-78a9bdbb1e69@amd.com>
-From:   Ashish Kalra <ashkalra@amd.com>
-In-Reply-To: <8113b5d4-31c6-012c-fc0c-78a9bdbb1e69@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BL1P223CA0021.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::26) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
+        Mon, 19 Sep 2022 19:50:43 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEE83D5AA;
+        Mon, 19 Sep 2022 16:50:42 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id 129so1274325vsi.10;
+        Mon, 19 Sep 2022 16:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ObiI1LOvSQ4K2EeOpgqHdRP+Ejyw75lzaoql9+78EQw=;
+        b=o1e8CwLVOAi5voveJYTXKQBivySosunePQf6lLcfMAKrUL+kkkMM4llV+JLgrqI8hO
+         YY0qZJet1SROegPN+MIUIYRwOUff4zcGx/lHeZ14UW2GqvRonKt9OSIijW1m4slo95eV
+         HuWSZfk0L1Da9W3AqZZxuN2YIt3UvVuVz00QLn3DonOKsZQLZ2XCf0PGF0XMPOu/Hw1W
+         KBAcgmUjtdwcK7t8mGz1Wp4J0RTLZeSxRbLXBZpNYAJ0LQbiNemhNzGEwytSlf3oyI3q
+         Coa3v4pETrcKRg3cDg3PNZhmXdbf1uyq+TCw5GP70LOHTIvN1N3XWZzJPfp7ks25N2Mq
+         e+7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ObiI1LOvSQ4K2EeOpgqHdRP+Ejyw75lzaoql9+78EQw=;
+        b=hAE27Ep5Gc7XJ2URMK3NPUmx6TfRt5rZ1nS6RN0perTCqJmmjr66Lx5SzHZplTuKBz
+         aJ/M52ShDPggrhS2TT0x2I6aDJTqFzoFahcFH+qDWvGdFJKmKKHGWy/ez2X70IUWS9kE
+         OO7nRiuWEJ5C9PLVNuz9seY9480nfpCXPs+T5WO6bxGp/+geHWAsi8JoNcHRxcJ65nWm
+         lZSKY0mxpUs3ymqbmP+nU7zSR6B6xp3iKoxYwyfTMHo/SkPveLQ9jhpiidip3xgTTgl1
+         HV2zC58zXx2N9YQVFmWKu53W5beOB45BAe4D8vFwINdYVNHROWBryfJzatjlGj0IJyji
+         Hlzw==
+X-Gm-Message-State: ACrzQf2hSlWH/gC5pv+mY3SobkuX8eVL3rhNXRjuJ2r798HDzgrzniTX
+        U2j4iJTpFAMpo0sN9NzExdyld+BdmBip+5HXPmU=
+X-Google-Smtp-Source: AMsMyM5zBGpRWRRHjTEoNolL3My3hxRKT0jP2qArok4XQ9uH1DWogS6Ia6l6+6eb6Gzq6R+TDYGOhVjHliPybwGdbio=
+X-Received: by 2002:a67:ac45:0:b0:388:a1ff:7e89 with SMTP id
+ n5-20020a67ac45000000b00388a1ff7e89mr7771043vsh.42.1663631441184; Mon, 19 Sep
+ 2022 16:50:41 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|DM4PR12MB5343:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48e316d6-8358-4a8c-3090-08da9a993f44
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iTRNTh9uUK7l2luv1/+2KGHAtasU1Y7c5OIVj34rLu3JAd/LQQcsgu2k4UlUC0snBMLFJKVIfGULKE2rZ520RhCeBGligp9B0IH1ZDhdevzFQjYWdvFSpIs9/5y8niqigkZFCxZntNgwGWdc2wT94NS/mt0iOKN0d4gNrqoKKYzaRvVvto6UCaTrQghmwsnyPAWM3Qv9HM5OKr142zTkMtpFu6ciTRiRL8TH0nIURsoG/Sddfwa51Z+pwN/MyhZW26w3FIlIaQVYICXA294fqTW4haa/IuuOvxWpy8M+G0edobUQTbDglQikcQz/3t8fy6nhmwszClKAtocmBsLSOKEnyHtecV/IOO8YMG2vvYQAUMgxFMzdtlRMpfUaApg1429ki2Z6fzFR3UUmpXoXa6RTVB7Mwo5QgCKMNbJJk6rXR5g+ppob3YQsFOq0MDQNTYsPj8BVNDs+1jczVZq5rk/0e6UMieTtzJg+VyGXJoFn5OoSQrEWzRPRWHUNltvI7I6uZ9NrqPzDr02CSbUSxP7ZPBiJcLTAIpjh2Dw7Xvx9fqFLLftODUsQY9rY/UYyGZpDaBtfEs5tfEVTHd6mudLeprYuz8EtA9dRSh+gwgGuMPE6aZVwOCXI54fxBXGTV11sTFOJBURVZ6AjjOwWUUxvZIXphIffmofhlTjHHp7WyOssUxWxqyHvPcCVVfndAzrUTfMFU19SRUcf9CxpZ+PN3Uk6Nx+6ZwmsueTfAyxZwONAZepSnyCTDeP9s4hmuYItUOFikmqloB6KtFFy/c1OOnmtHcXcDEhzF60HVxU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199015)(2616005)(2906002)(54906003)(53546011)(41300700001)(6506007)(6666004)(4326008)(8676002)(66556008)(83380400001)(66476007)(66946007)(316002)(110136005)(6486002)(36756003)(7406005)(7416002)(5660300002)(186003)(31696002)(8936002)(478600001)(6512007)(38100700002)(26005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0t2bGEyYmN5NzhqVmg1TnR3aEt2U1lVTmh5NER0VGVJck5rYXdhTDJVanJ6?=
- =?utf-8?B?ay9DWDduMk9WQnQ2MEp5aXdwU1d1QzZaNy9wbHBzK1UxMFJGY3pYVVVxTktT?=
- =?utf-8?B?VEpmSmExSW1LcnpQaDdXcFV1MFNPWThtcWhOYWF4T3ZFcWNXNm5GeFFlQXU0?=
- =?utf-8?B?cUFJZWZTTWJkNjJVcWo2UzdQNnI4MEFRTktsQjBlUWREakl1OGRYYVp3Z0VG?=
- =?utf-8?B?UEhUK0E5ODR1aFJKS2wvOFQxWGJrZ3VHWjErK3VrNGh5QUlYOXNSSkZrQ0RT?=
- =?utf-8?B?d2JHTDlGM2FNczJUVkxyUk5pRlp1MmFqb0k4U0M4R21paUJUZzBzMkkwQ293?=
- =?utf-8?B?aC9aa2dPakNDTnlrRWViUUhBSlkwWmVOR1ZMZGJXd2dINCtwV0NsUXZlK09u?=
- =?utf-8?B?Z3JQaW9zTkhUOG9UNUI0MGJkRmtuQy83VGhBOHpRdURRRlRCeWhlR051cUNL?=
- =?utf-8?B?dDdNVFRSaDYweVhhNWhSRlYwSHY2b1BVTWMybnk0dForc0pmTFNFZlcyRHFC?=
- =?utf-8?B?ai8vcTMyZTgyeFQxR0F4SjU2T2laNnZkR3dKemFsamE2Z0xuaE5tQjZjTkh4?=
- =?utf-8?B?TXRMMTZnVEtkRVZ5UkV5aHV5QUVQa3hwSm95WmlYd3dqRk1NSjZlcW1ZcXl0?=
- =?utf-8?B?a2pqdjQ3NVZ6WDJOcTJFckFPVlNOT1dCVlZkVm1DVnFic043SEd1ZjlpRGNR?=
- =?utf-8?B?R2xiNWxPN2ZUZXBQNmNJYTRBL2Y1aHB1cEJMaHZPbHRRTnhPUEJkeCt5VWFi?=
- =?utf-8?B?aFFqMEp5MmUrUmplWFVtKzdWTnNKcnd1Si9aNDNsVTNLME42U2ZmNmxQVHJt?=
- =?utf-8?B?OGl6VEZjSjh2WWtkWTkvR1BvWWNSNHlyN1YzQWdWdDNnY2hhUjBKR2RKMHB5?=
- =?utf-8?B?NnNLNXl0VXJtTU5DMUtVa2I0RjNOdFhUQU1qcHpKSDF0VEMvTVBYaVBwSVZr?=
- =?utf-8?B?cGNIVDZtQ05zamNobDZpeEhKdE81SWZUcTE1WFBKUmE0OWdrRHd3UUpoQm4r?=
- =?utf-8?B?UDhqYXJ0aTVKWEtNYmdoYk0xOStxYS85Q1ZxNi83eGxheitLckNUT0Fwa2w0?=
- =?utf-8?B?S3BlVUlGZVdTSldlbitpK3F6aS9pS1Z4WEdFb2plV1FXcG5RZVVmcWdVTW1W?=
- =?utf-8?B?NW82bjdROWVsdzRJa2NLdjRGZWxHSTU4emdVWWs4SVZ4VTFkTkZvdE13bFdK?=
- =?utf-8?B?YXAxaUhhd2JsbEs3am1ZNk1ML1VFUUthSVZ4aDlUOEQ1N25FMEM4bnJFelFH?=
- =?utf-8?B?UGZ1NmpFNGNnaHR5b2c1UWVBSVRURnBOcGt4d2czTUZzMklnVDdzd2FvcDQy?=
- =?utf-8?B?OHZWQkVKQXFjblFpSmM4WEtzd3JkTjJlNWtjeFUwRkRNb1B2eGVncWlvZ1Yw?=
- =?utf-8?B?QTJJVXJlMFFXN0ZPQzQ4WHN1bjNVY3M5bE5mNEJFNmt6VTBMS0tPYXNHY2lN?=
- =?utf-8?B?YUpNSzRodk8wNXU4cmUzaEFsU0FvSFRRYXlQbUl0M0JyTU5WbytHRXdWa0VS?=
- =?utf-8?B?YVVqcWtSTFFubHBLeGZIY1Jpalo4YW50aCtva1RmdDhTa2lDYWV4SUpuL0ww?=
- =?utf-8?B?V1RwT1oycktnM0NwU04vT2xsbGlWTGpiN3h6Y2xxWTNjQnZUTHpnQkswcURm?=
- =?utf-8?B?OWtqLytRaTl0VnlFQUFTNTIwNi9CWWVYWU1LVEVqTzJPTEM1TExwVVAwVng2?=
- =?utf-8?B?cWs0am50UEhjcTN0U1JrdWlKOUJYQnhGTFZEcWsyaklKOTFUTnYzS3BoWlND?=
- =?utf-8?B?TTZKaFpkQVVTdGEvSjQwNWRsVnlGWmpTdEhNZ2pwekhsYzY0NEIzVzhZQ0tp?=
- =?utf-8?B?TXllMVprTlRRbTlFUGhOWWVDenMzREtoSXliaTRqUUYwdHFwckpmdGV1L0pt?=
- =?utf-8?B?QWNsUEFRSXIyYXFrUlhnWi85SFFJMEEwTUJac2VzTUFLNlErUjVYWkc2SVhB?=
- =?utf-8?B?L2FKdFpCTE5HY1B4VWV6MkZtVjNBQWJWRFNIbHpGblgvRjFNSEd2T1p0dzNC?=
- =?utf-8?B?cHVRd0RuREovTEZST1QyYnhaSDR2R1hXazcySGZWcG00bEM1c3pDcy9YRmdF?=
- =?utf-8?B?MmhWYjJuRVk5aXExUkp0Qk4vVUJ2TGJIRXg0cmhuNW54N0ZUNmllUTV2S2k2?=
- =?utf-8?Q?bqbnB/rOO0mBuMdhJvjapWrLD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48e316d6-8358-4a8c-3090-08da9a993f44
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 23:47:01.0797
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NtIS6ocbAMOcHeGq4R5GJc8CFClLek9kHGx52/QStoH5G6qJEy0FfdFZ7sIe/JPcss3i8KW6SCXcEMRFp0wQLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5343
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220805154231.31257-13-ojeda@kernel.org> <Yu5Bex9zU6KJpcEm@yadro.com>
+ <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
+ <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
+ <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
+ <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
+ <YyivY6WIl/ahZQqy@wedsonaf-dev> <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
+ <Yyjut3MHooCwzHRc@wedsonaf-dev> <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
+In-Reply-To: <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
+From:   Alex Gaynor <alex.gaynor@gmail.com>
+Date:   Mon, 19 Sep 2022 19:50:29 -0400
+Message-ID: <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
+        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
+        bonifaido@gmail.com, boqun.feng@gmail.com, davidgow@google.com,
+        dev@niklasmohrin.de, dsosnowski@dsosnowski.pl, foxhlchen@gmail.com,
+        gary@garyguo.net, geofft@ldpreload.com, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, john.m.baublitz@gmail.com,
+        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
+        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        thesven73@gmail.com, viktor@v-gar.de,
+        Andreas Hindborg <andreas.hindborg@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I think there is some amount of talking past each other here.
 
-On 9/19/22 22:18, Tom Lendacky wrote:
-> On 9/19/22 17:02, Alper Gun wrote:
->> On Mon, Sep 19, 2022 at 2:38 PM Tom Lendacky 
->> <thomas.lendacky@amd.com> wrote:
->>>
->>> On 9/19/22 12:53, Alper Gun wrote:
->>>> On Fri, Aug 19, 2022 at 9:54 AM Peter Gonda <pgonda@google.com> wrote:
->>>>>
->>>>>> +
->>>>>> +static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu, 
->>>>>> enum psc_op op, gpa_t gpa,
->>>>>> +                                         int level)
->>>>>> +{
->>>>>> +       struct kvm_sev_info *sev = &to_kvm_svm(vcpu->kvm)->sev_info;
->>>>>> +       struct kvm *kvm = vcpu->kvm;
->>>>>> +       int rc, npt_level;
->>>>>> +       kvm_pfn_t pfn;
->>>>>> +       gpa_t gpa_end;
->>>>>> +
->>>>>> +       gpa_end = gpa + page_level_size(level);
->>>>>> +
->>>>>> +       while (gpa < gpa_end) {
->>>>>> +               /*
->>>>>> +                * If the gpa is not present in the NPT then 
->>>>>> build the NPT.
->>>>>> +                */
->>>>>> +               rc = snp_check_and_build_npt(vcpu, gpa, level);
->>>>>> +               if (rc)
->>>>>> +                       return -EINVAL;
->>>>>> +
->>>>>> +               if (op == SNP_PAGE_STATE_PRIVATE) {
->>>>>> +                       hva_t hva;
->>>>>> +
->>>>>> +                       if (snp_gpa_to_hva(kvm, gpa, &hva))
->>>>>> +                               return -EINVAL;
->>>>>> +
->>>>>> +                       /*
->>>>>> +                        * Verify that the hva range is 
->>>>>> registered. This enforcement is
->>>>>> +                        * required to avoid the cases where a 
->>>>>> page is marked private
->>>>>> +                        * in the RMP table but never gets 
->>>>>> cleanup during the VM
->>>>>> +                        * termination path.
->>>>>> +                        */
->>>>>> +                       mutex_lock(&kvm->lock);
->>>>>> +                       rc = is_hva_registered(kvm, hva, 
->>>>>> page_level_size(level));
->>>>>> +                       mutex_unlock(&kvm->lock);
->>>>>> +                       if (!rc)
->>>>>> +                               return -EINVAL;
->>>>>> +
->>>>>> +                       /*
->>>>>> +                        * Mark the userspace range unmerable 
->>>>>> before adding the pages
->>>>>> +                        * in the RMP table.
->>>>>> +                        */
->>>>>> +                       mmap_write_lock(kvm->mm);
->>>>>> +                       rc = snp_mark_unmergable(kvm, hva, 
->>>>>> page_level_size(level));
->>>>>> +                       mmap_write_unlock(kvm->mm);
->>>>>> +                       if (rc)
->>>>>> +                               return -EINVAL;
->>>>>> +               }
->>>>>> +
->>>>>> +               write_lock(&kvm->mmu_lock);
->>>>>> +
->>>>>> +               rc = kvm_mmu_get_tdp_walk(vcpu, gpa, &pfn, 
->>>>>> &npt_level);
->>>>>> +               if (!rc) {
->>>>>> +                       /*
->>>>>> +                        * This may happen if another vCPU 
->>>>>> unmapped the page
->>>>>> +                        * before we acquire the lock. Retry the 
->>>>>> PSC.
->>>>>> +                        */
->>>>>> + write_unlock(&kvm->mmu_lock);
->>>>>> +                       return 0;
->>>>>> +               }
->>>>>
->>>>> I think we want to return -EAGAIN or similar if we want the caller to
->>>>> retry, right? I think returning 0 here hides the error.
->>>>>
->>>>
->>>> The problem here is that the caller(linux guest kernel) doesn't retry
->>>> if PSC fails. The current implementation in the guest kernel is that
->>>> if a page state change request fails, it terminates the VM with
->>>> GHCB_TERM_PSC reason.
->>>> Returning 0 here is not a good option because it will fail the PSC
->>>> silently and will probably cause a nested RMP fault later. Returning
->>>
->>> Returning 0 here is ok because the PSC current index into the PSC
->>> structure will not be updated and the guest will then retry (see the 
->>> loop
->>> in vmgexit_psc() in arch/x86/kernel/sev.c).
->>>
->>> Thanks,
->>> Tom
->>
->> But the host code updates the index. It doesn't leave the loop because
->> rc is 0. The guest will think that it is successful.
->> rc = __snp_handle_page_state_change(vcpu, op, gpa, level);
->> if (rc)
->> goto out;
->>
->> Also the page state change request with MSR is not retried. It
->> terminates the VM if the MSR request fails.
->
-> Ah, right. I see what you mean. It should probably return a -EAGAIN 
-> instead of 0 and then the if (rc) check should be modified to 
-> specifically look for -EAGAIN and goto out after setting rc to 0.
->
-> But that does leave the MSR protocol open to the problem that you 
-> mention, so, yes, retry logic in snp_handle_page_state_change() for a 
-> -EAGAIN seems reasonable.
->
-> Thanks,
-> Tom
+Rust's rules are that a function that's safe must not exhibit UB, no
+matter what arguments they're called with. This can be done with
+static checking or dynamic checking, with obvious trade offs between
+the two.
 
-I believe it makes more sense to add the retry logic within 
-__snp_handle_page_state_change() itself, as that will make it work for 
-both the GHCB MSR protocol and the GHCB VMGEXIT requests.
+We've had pretty good success, thus far, modeling various kernel
+subsystems with APIs that follow this rule. But when there's not a
+good way, consistent with the kernel's idioms, to expose a kernel API
+in Rust that's safe, that doesn't mean it's impossible! In those cases
+we expose an `unsafe fn` in Rust. This means that the caller (e.g.,
+driver code) needs to ensure it meets the required pre-conditions for
+calling that function.
 
-Thanks, Ashish
+This is how we square the circle of: How do we prioritize the kernel's
+goals, while also staying consistent with Rust's notion of safety?
 
+Wedson's point is that, when possible, finding ways to expose safe
+functions is better, since it puts less of a burden on driver authors.
+But, sadly, we all know we won't be able to find them in all
+circumstances -- we just want to have it as a goal to find them
+whenever possible.
+
+Regards,
+Alex
+
+On Mon, Sep 19, 2022 at 7:40 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
->>
->>>
->>>> an error also terminates the guest immediately with current guest
->>>> implementation. I think the best approach here is adding a retry logic
->>>> to this function. Retrying without returning an error should help it
->>>> work because snp_check_and_build_npt will be called again and in the
->>>> second attempt this should work.
->>>>
->>>>>> +
->>>>>> +               /*
->>>>>> +                * Adjust the level so that we don't go higher 
->>>>>> than the backing
->>>>>> +                * page level.
->>>>>> +                */
->>>>>> +               level = min_t(size_t, level, npt_level);
->>>>>> +
->>>>>> +               trace_kvm_snp_psc(vcpu->vcpu_id, pfn, gpa, op, 
->>>>>> level);
->>>>>> +
->>>>>> +               switch (op) {
->>>>>> +               case SNP_PAGE_STATE_SHARED:
->>>>>> +                       rc = snp_make_page_shared(kvm, gpa, pfn, 
->>>>>> level);
->>>>>> +                       break;
->>>>>> +               case SNP_PAGE_STATE_PRIVATE:
->>>>>> +                       rc = rmp_make_private(pfn, gpa, level, 
->>>>>> sev->asid, false);
->>>>>> +                       break;
->>>>>> +               default:
->>>>>> +                       rc = -EINVAL;
->>>>>> +                       break;
->>>>>> +               }
->>>>>> +
->>>>>> +               write_unlock(&kvm->mmu_lock);
->>>>>> +
->>>>>> +               if (rc) {
->>>>>> +                       pr_err_ratelimited("Error op %d gpa %llx 
->>>>>> pfn %llx level %d rc %d\n",
->>>>>> +                                          op, gpa, pfn, level, rc);
->>>>>> +                       return rc;
->>>>>> +               }
->>>>>> +
->>>>>> +               gpa = gpa + page_level_size(level);
->>>>>> +       }
->>>>>> +
->>>>>> +       return 0;
->>>>>> +}
->>>>>> +
+> On Mon, Sep 19, 2022 at 3:35 PM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+> >
+> > No one is talking about absolute safety guarantees. I am talking about
+> > specific ones that Rust makes: these are well-documented and formally
+> > defined.
+>
+> If you cannot get over the fact that the kernel may have other
+> requirements that trump any language standards, we really can't work
+> together.
+>
+> Those Rust rules may make sense in other environments. But the kernel
+> really does have hard requirements that you continue to limp along
+> even if some fundamental rule has been violated. Exactly because
+> there's often no separate environment outside the kernel that can deal
+> with it.
+>
+> End result: a compiler - or language infrastructure - that says "my
+> rules are so ingrained that I cannot do that" is not one that is valid
+> for kernel work.
+>
+> This is not really any different from the whole notion of "allocation
+> failures cannot panic" that Rust people seemed to readily understand
+> is a major kernel requirement, and that the kernel needed a graceful
+> failure return instead of a hard panic.
+>
+> Also note that the kernel is perfectly willing to say "I will use
+> compiler flags that disable certain guarantees". We do it all the
+> time.
+>
+> For example, the C standard has a lot of "the compiler is allowed to
+> make this assumption". And then we disagree with those, and so "kernel
+> C" is different.
+>
+> For example, the standard says that dereferencing a NULL pointer is
+> undefined behavior, so a C compiler can see a dereference of a pointer
+> to be a guarantee that said pointer isn't NULL, and remove any
+> subsequent NULL pointer tests.
+>
+> That turns out to be one of those "obviously true in a perfect world,
+> but problematic in a real world with bugs", and we tell the compiler
+> to not do that by passing it the '-fno-delete-null-pointer-checks'
+> flag, because the compiler _depending_ on undefined behavior and
+> changing code generation in the build ends up being a really bad idea
+> from a security standpoint.
+>
+> Now, in C, most of these kinds of things come from the C standard
+> being very lax, and having much too many "this is undefined behavior"
+> rules. So in almost all cases we end up saying "we want the
+> well-defined implementation, not the 'strictly speaking, the language
+> specs allows the compiler to do Xyz".
+>
+> Rust comes from a different direction than C, and it may well be that
+> we very much need some of the rules to be relaxed.
+>
+> And hey, Rust people do know about "sometimes the rules have to be
+> relaxed". When it comes to integer overflows etc, there's a
+> "overflow-checks" flag, typically used for debug vs release builds.
+>
+> The kernel has similar issues where sometimes you might want the
+> strict checking (lockdep etc), and sometimes you may end up being less
+> strict and miss a few rules (eg "we don't maintain a preempt count for
+> this config, so we can't check RCU mode violations").
+>
+> > But I won't give up on Rust guarantees just yet, I'll try to find
+> > ergonomic ways to enforce them at compile time.
+>
+> I think that compile-time static checking is wonderful, and as much as
+> possible should be done 100% statically so that people cannot write
+> incorrect programs.
+>
+> But we all know that static checking is limited, and then the amount
+> of dynamic checking for violations is often something that will have
+> to depend on environment flags, because it may come with an exorbitant
+> price in the checking.
+>
+> Exactly like integer overflow checking.
+>
+>                  Linus
+
+
+
+-- 
+All that is necessary for evil to succeed is for good people to do nothing.
