@@ -2,70 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ADF5BC13C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136A5BC140
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiISCGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S229567AbiISCI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiISCGX (ORCPT
+        with ESMTP id S229479AbiISCIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:06:23 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4172913D17;
-        Sun, 18 Sep 2022 19:06:21 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id D18B01E80D75;
-        Mon, 19 Sep 2022 10:03:23 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AqqNgteNPcpr; Mon, 19 Sep 2022 10:03:21 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 526131E80CAB;
-        Mon, 19 Sep 2022 10:03:20 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     aelior@marvell.com, manishc@marvell.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] =?UTF-8?q?linux:=20qed:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=98NULL=E2=80=99=20values=20values=20from=20Pointer?=
-Date:   Mon, 19 Sep 2022 10:06:14 +0800
-Message-Id: <20220919020614.3615-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
+        Sun, 18 Sep 2022 22:08:55 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CFAB13D11
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nCEDr
+        7B9T2lOsIVVEfziWenUjr7H/YIz7zCC+oZks+s=; b=e1/I+UNqLir8VjITwY8zg
+        brmFGkm27Ndt8AM2itTc0atgSXrLBjx0EZXtnwvBegLXUU1nzxeKZWbslsR6eU3V
+        k4nkMwNmxwMSeRu3lT5IVeHpzZYub2sgRsdc7rz+9tazGhzQWFthPAdMDLKfx8cC
+        NgBeKU1YRBr3YxHGkm0s6k=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp5 (Coremail) with SMTP id HdxpCgDH8yEszydjGgoMdw--.41022S2;
+        Mon, 19 Sep 2022 10:08:45 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     dushistov@mail.ru
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] fs/ufs/super.c: use __func__ instead of function name
+Date:   Mon, 19 Sep 2022 10:07:59 +0800
+Message-Id: <20220919020759.3613414-1-13667453960@163.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: HdxpCgDH8yEszydjGgoMdw--.41022S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Jryktr4xGw45ArykKry3Arb_yoW8JF45pa
+        1kC3W7KrZ8G3WkZa4rAFWvqw12q3ykt34xKryxZry3Xws5XwnxXFW8t34Fkry8XrWrXw1U
+        Zr4DKrWSvr1xKw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uuv3nUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/xtbBthyB+11uQiemOgAAsa
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer p_ret is first assigned and finally used as the return value
-of the function.
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
+It is better to use __func__ instead of function name.
+
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 ---
- include/linux/qed/qed_chain.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ufs/super.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/qed/qed_chain.h b/include/linux/qed/qed_chain.h
-index a84063492c71..f52c589e6dfa 100644
---- a/include/linux/qed/qed_chain.h
-+++ b/include/linux/qed/qed_chain.h
-@@ -368,7 +368,7 @@ static inline void qed_chain_return_produced(struct qed_chain *p_chain)
-  */
- static inline void *qed_chain_produce(struct qed_chain *p_chain)
+diff --git a/fs/ufs/super.c b/fs/ufs/super.c
+index 23377c1baed9..87752e5dfd2a 100644
+--- a/fs/ufs/super.c
++++ b/fs/ufs/super.c
+@@ -153,7 +153,7 @@ static void ufs_print_super_stuff(struct super_block *sb,
  {
--	void *p_ret = NULL, *p_prod_idx, *p_prod_page_idx;
-+	void *p_ret, *p_prod_idx, *p_prod_page_idx;
+ 	u32 magic = fs32_to_cpu(sb, usb3->fs_magic);
  
- 	if (is_chain_u16(p_chain)) {
- 		if ((p_chain->u.chain16.prod_idx &
+-	pr_debug("ufs_print_super_stuff\n");
++	pr_debug("%s\n", __func__);
+ 	pr_debug("  magic:     0x%x\n", magic);
+ 	if (fs32_to_cpu(sb, usb3->fs_magic) == UFS2_MAGIC) {
+ 		pr_debug("  fs_size:   %llu\n", (unsigned long long)
+@@ -228,7 +228,7 @@ static void ufs_print_super_stuff(struct super_block *sb,
+ static void ufs_print_cylinder_stuff(struct super_block *sb,
+ 				     struct ufs_cylinder_group *cg)
+ {
+-	pr_debug("\nufs_print_cylinder_stuff\n");
++	pr_debug("\n%s\n", __func__);
+ 	pr_debug("size of ucg: %zu\n", sizeof(struct ufs_cylinder_group));
+ 	pr_debug("  magic:        %x\n", fs32_to_cpu(sb, cg->cg_magic));
+ 	pr_debug("  time:         %u\n", fs32_to_cpu(sb, cg->cg_time));
 -- 
-2.18.2
+2.27.0
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
 
