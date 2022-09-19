@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254B45BD53D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082215BD545
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 21:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiISTd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 15:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S229611AbiISTjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 15:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiISTd0 (ORCPT
+        with ESMTP id S229521AbiISTjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 15:33:26 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2644B44547;
-        Mon, 19 Sep 2022 12:33:25 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 6224732002D8;
-        Mon, 19 Sep 2022 15:33:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 19 Sep 2022 15:33:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:message-id:mime-version:reply-to
-        :sender:subject:subject:to:to; s=fm2; t=1663616000; x=
-        1663702400; bh=/wIED5ZiGUUNAQXfShqAlwSBTSaTfAqoWYXPaDLttnM=; b=h
-        kgJ2ZUpFUNE/ZQE8nR28FjzCOVEuiYm5BYxbPBkgODqYWDnsj/NUC4X5ybuG/WZ6
-        y/tRocPfez+HYk8xG4p3JkPIWg4C87kqbCoOWE+HlbfFlfMx1tuXb94FFdrdB570
-        c7IwsCYk0Mj6vGlU6QOoSsxXBLIiZp44PLKiPCKco+6FNgHiVZx6rhNvBLkzrOtX
-        kQsFbsLjCBw06pw4n4+qM1KenlOiVyl/egWTm+QWUvEkME30hErWQRBSUWvCEMWZ
-        HKRFkO+xhoCvoF0zdsqUz2BfVU0EQRh+Z6a2au5oWVb6Eil/3wX8AN7mAAHRCdI+
-        huCqplCSuPbN0wlj6yEUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1663616000; x=1663702400; bh=/wIED5ZiGUUNAQXfShqAlwSBTSaTfAqoWYX
-        PaDLttnM=; b=AAEJAHuptd0YMViwiHVvpODaKlcUwqPwKy99WZfKt49l4Y6WgHI
-        WLOtdD+Wkw9y79Q5u45HecJ2nWYG1JY0lJ/F/i5R/woJ1Wzynhsrv6JvgIdDbJOZ
-        p5nn8lwV8/qiPWLU5yJ64+jyVc8Vc54jgO527H6Mdjim4qjTSj6ZLvOP28Q5O/mO
-        flmL8F6zCjmTNrNXBL0+RGhxUpEhW1uOdq/2mKY+d4FW8RvVnCpVn4rW2GY11drx
-        iIzQY2VmO5mWzVH7JS1kU1QdwwbydXGlezMTgSefxfJfoSM00HUQJ3CjzDa92xID
-        V9y8TwftmQZBVtf8jPjyACEDNklcDLbzhlQ==
-X-ME-Sender: <xms:AMQoY4_riylCUj0TzQ0e9OG3wCrq9MIx42whOsMlU2mrn9y4XttLmQ>
-    <xme:AMQoYwvi_9dbJnxdRpTdy2fmoQ-z4_0qMu20K-DFAPOfWU_T92-jZYk_bcz5Jdxsr
-    YjgwLFUNpH1wEU>
-X-ME-Received: <xmr:AMQoY-B4jcD_YDbAtmktn__4PYpHCNOgpSZ6mASRa0oXNpm6WFvYi1TgCn00JjrKKXjuywliEjSY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvjedgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffvghmihcu
-    ofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinhhgsh
-    hlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeegkedvkefgffegkefhieejtdff
-    keehhfelheefjeeutefgleeggfdtveeileenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhgshhl
-    rggsrdgtohhm
-X-ME-Proxy: <xmx:AMQoY4cjOQpITLnyg7msgr4BaQQKG15UXPxdCtuO46R0ROj73utsZQ>
-    <xmx:AMQoY9Mu9778mvwS1DBFsSccoS99Djm14-kadKRKErWqugQ9qGKZeA>
-    <xmx:AMQoYykeuwiAOI2Ug_jA3MOCCkekaMUyReHlrgEnjASKwUIipfQmyg>
-    <xmx:AMQoYw3u7Kipi2z-wnfnHXDLcjhwC1xO5n47gfJ7eova9pt1Vo8zmA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Sep 2022 15:33:20 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH v3] Support ESRT in Xen dom0
-Date:   Mon, 19 Sep 2022 15:32:57 -0400
-Message-Id: <20220919193257.2031-1-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 19 Sep 2022 15:39:53 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66415727;
+        Mon, 19 Sep 2022 12:39:50 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a41so744790edf.4;
+        Mon, 19 Sep 2022 12:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=XFv8/s07GWCJPcBdBdWUf3TF+ajCiKTrMdsn8auNwkw=;
+        b=f0DIRu0cqDxg5c/CwpkHebVvvJ0PzpsnxQJECBvzLov876B4CbJwMeNmxF5At7uNE5
+         zNcmi/nLJljwJMSGY3Q/PyG4HdodW/GJm+tO44bauRTke3EbRSBuG5smK480Fphp7wee
+         Jex8inaCvwds8GMO/hZql6j9RkMY0VO3Ds0zDwKk8+KfO/jV4bCrxrUZd0d5p/pjJX/e
+         wK3+ijWqiV6atwOrNaDU4LblXv/2Nlybdg/H5OrxtQ7w8ww6UIiF19TEWSCdy1mSlBnn
+         08ffeAuGNGOEMF29M9rxRWaj/EuZ5PZH9Wrn+cibHrx7+CHLp8PeGyxuBi6OHj2a8Zgd
+         zJIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=XFv8/s07GWCJPcBdBdWUf3TF+ajCiKTrMdsn8auNwkw=;
+        b=zDUJLVvqS8KF45oCLLpUn9FeHCBdS3Zb9mcfyQuAFtSptfj+9RX9c8kMwr0ETKJJz7
+         31vJLKIqs7Rl93z0RFf10qxNqlVWjqkwGtptIpRKCa0xYyXyfCfyCBA9Ti2DTeALYxXb
+         LpOzrqDw2V7fKJzkJvD8wKQY/krEszVo/0TAuKQ9KnRYGDknbbC2LisBqDDQ9AiXoZIe
+         OvuhK2pxBfO++vMeFA3rq080ooQYbW9I3nCOysOFUfAGFR6G2DtdXsVD45mv9/EOYo75
+         9CkBiA8yMSyCBGQvkuwJFBbbkQ6S1RAJrr1+TqnIyiyf32QtVXeN8YjnXO+KppCH6t6e
+         hVAQ==
+X-Gm-Message-State: ACrzQf2lC+XmI9u3/0jdNHJmbYI/wlVPgFIJr5J0/Ip2VmCxVfBp8wRB
+        W2rrloUr1q1FKnDrsvAVcdAgTdBqX1NvFVCCULs=
+X-Google-Smtp-Source: AMsMyM4L1GIyrF0ae2p/Z4ebbcDAMumtOsb/cmTWhLlp0KuDpgU3Q8HgwUQF78eWvNWWUggwhb1u5vt657lMECzavOw=
+X-Received: by 2002:a05:6402:2789:b0:451:a578:74dd with SMTP id
+ b9-20020a056402278900b00451a57874ddmr17033392ede.72.1663616389164; Mon, 19
+ Sep 2022 12:39:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20220912190753.10158-1-jagathjog1996@gmail.com>
+ <20220912190753.10158-3-jagathjog1996@gmail.com> <YyHBKNC/YHbvIn40@mail.local>
+ <CAM+2Eu+jCA9yJma2UtD736opw0=_uCz4Zbiem89ehexTEU7mQw@mail.gmail.com> <YydoGsEU/UPkXvXn@mail.local>
+In-Reply-To: <YydoGsEU/UPkXvXn@mail.local>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Tue, 20 Sep 2022 01:09:37 +0530
+Message-ID: <CAM+2EuJsz9NgEskhYapxFg7UrimB3Po97DZGHtBCHTc8+vx_1g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] rtc: maxim: Add Maxim max31329 real time clock
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,154 +69,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fwupd requires access to the EFI System Resource Table (ESRT) to
-discover which firmware can be updated by the OS.  Currently, Linux does
-not expose the ESRT when running as a Xen dom0.  Therefore, it is not
-possible to use fwupd in a Xen dom0, which is a serious problem for e.g.
-Qubes OS.
+ Hi Alexandre,
 
-Before Xen 4.16, this was not fixable due to hypervisor limitations.
-The UEFI specification requires the ESRT to be in EfiBootServicesData
-memory, which Xen will use for whatever purposes it likes.  Therefore,
-Linux cannot safely access the ESRT, as Xen may have overwritten it.
+Before sending v3 I have one comment,
+Please see below.
 
-Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServicesData
-or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServicesData
-memory, Xen allocates some memory of type EfiRuntimeServicesData, copies
-the ESRT to it, and finally replaces the ESRT pointer with a pointer to
-the copy.  Since Xen will not clobber EfiRuntimeServicesData memory,
-this ensures that the ESRT can safely be accessed by the OS.  It is safe
-to access the ESRT under Xen if, and only if, it is in memory of type
-EfiRuntimeServicesData.
+On Mon, Sep 19, 2022 at 12:18 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 17/09/2022 16:09:54+0530, Jagath Jog J wrote:
+> > > This doesn't feel right, doesn't that break start-year?
+> > >
+> > > What is the actual time range supported by this RTC? Shouldn't you set
+> > > the century?
+> >
+> > The time range supported by RTC is 2000 to 2199.
+> > The alarm registers don't have a century bit.
+> > I have tested the alarm for
+> > 2122-09-17T01:22:00
+> > 2142-09-17T01:22:00
+> > 2160-02-29T00:00:00
+> > 2196-02-29T00:00:00 etc
+> >
+> > I will add another condition such that if the century bit
+> > from the time register is not set then configuring the
+> > alarm for the next century is not allowed.
+>
+> The actual check should be for the alarm to not exceed 100 years in the
+> future then. Else, this wouldn't work well with datetime offsetting.
 
-When running as a Xen dom0, check if the ESRT is in memory of type
-EfiRuntimeServicesData, and if it is, parse it as if not running under
-Xen.  This allows programs such as fwupd which require the ESRT to run
-under Xen, and so makes fwupd support in Qubes OS possible.
+Sure, I will add this check.
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
----
-Changes since v2:
+>
+> > > > +static int max31329_set_time(struct device *dev, struct rtc_time *tm)
+> > > > +{
+> > > > +     struct max31329_data *max31329 = dev_get_drvdata(dev);
+> > > > +     u8 regs[7];
+> > > > +     int ret;
+> > > > +
+> > > > +     ret = max31329_get_osc_status(dev);
+> > > > +     if (ret)
+> > > > +             return ret;
+> > > > +
+> > >
+> > > Checking the oscillator is not needed here but resetting the status is.
+> >
+> > Resetting the device will resets the digital block,
+> > I2C-programmable registers and oscillator also,
+> > The oscillator is taking some time around 80 milli sec
+> > to be back as usual.
+> >
+> > Is it required to reset every time during the time setting?
+> >
+>
+> Not but resetting the osc status is.
 
-- Massively updated commit message.
-- Fetch the ESRT inline in drivers/firmware/efi/esrt.c, instead of using
-  a single-use helper in drivers/xen/efi.c.
+Actually, the STATUS register which contains the Oscillator Stop
+Flag (OSF) bit is a read-only register. If the OSF bit is set, then
+reading the status register will not clear the OSF bit.
 
-Changes since v1:
+Based on the oscillator disable and enable testing, I observed
+that the OSF bit is getting cleared automatically once the clock
+settles, which is taking around 80msec. The manual resetting
+option is not there for the OSC status bit.
 
-- Use a different type (struct xen_efi_mem_info) for memory information
-  provided by Xen, as Xen reports it in a different way than the
-  standard Linux functions do.
+Can I set the time without resetting the OSC status?
 
- drivers/firmware/efi/esrt.c | 71 ++++++++++++++++++++++++++++++-------
- 1 file changed, 58 insertions(+), 13 deletions(-)
+Thank you,
+Jagath
 
-diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
-index 2a2f52b017e736dd995c69e8aeb5fbd7761732e5..378bf2ea770ad3bd747345a89258216919eb21bb 100644
---- a/drivers/firmware/efi/esrt.c
-+++ b/drivers/firmware/efi/esrt.c
-@@ -28,6 +28,11 @@
- #include <asm/io.h>
- #include <asm/early_ioremap.h>
- 
-+#ifdef CONFIG_XEN_EFI
-+#include <asm/xen/hypercall.h>
-+#include <xen/page.h>
-+#endif
-+
- struct efi_system_resource_entry_v1 {
- 	efi_guid_t	fw_class;
- 	u32		fw_type;
-@@ -243,27 +248,67 @@ void __init efi_esrt_init(void)
- 	void *va;
- 	struct efi_system_resource_table tmpesrt;
- 	size_t size, max, entry_size, entries_size;
--	efi_memory_desc_t md;
--	int rc;
- 	phys_addr_t end;
--
--	if (!efi_enabled(EFI_MEMMAP))
--		return;
-+	uint32_t type;
- 
- 	pr_debug("esrt-init: loading.\n");
- 	if (!esrt_table_exists())
- 		return;
- 
--	rc = efi_mem_desc_lookup(efi.esrt, &md);
--	if (rc < 0 ||
--	    (!(md.attribute & EFI_MEMORY_RUNTIME) &&
--	     md.type != EFI_BOOT_SERVICES_DATA &&
--	     md.type != EFI_RUNTIME_SERVICES_DATA)) {
--		pr_warn("ESRT header is not in the memory map.\n");
-+	if (efi_enabled(EFI_MEMMAP)) {
-+		efi_memory_desc_t md;
-+
-+		if (efi_mem_desc_lookup(efi.esrt, &md) < 0 ||
-+		    (!(md.attribute & EFI_MEMORY_RUNTIME) &&
-+		     md.type != EFI_BOOT_SERVICES_DATA &&
-+		     md.type != EFI_RUNTIME_SERVICES_DATA)) {
-+			pr_warn("ESRT header is not in the memory map.\n");
-+			return;
-+		}
-+
-+		type = md.type;
-+		max = efi_mem_desc_end(&md);
-+#ifdef CONFIG_XEN_EFI
-+	} else if (efi_enabled(EFI_PARAVIRT)) {
-+		static_assert(XEN_PAGE_SHIFT == EFI_PAGE_SHIFT,
-+			      "Mismatch between EFI_PAGE_SHIFT and XEN_PAGE_SHIFT");
-+
-+		struct xen_platform_op op = {
-+			.cmd = XENPF_firmware_info,
-+			.u.firmware_info = {
-+				.type = XEN_FW_EFI_INFO,
-+				.index = XEN_FW_EFI_MEM_INFO,
-+				.u.efi_info.mem.addr = efi.esrt,
-+				.u.efi_info.mem.size = ((u64)-1ULL) - efi.esrt,
-+			}
-+		};
-+		union xenpf_efi_info *info = &op.u.firmware_info.u.efi_info;
-+		int rc = HYPERVISOR_platform_op(&op);
-+
-+		if (rc) {
-+			pr_warn("Failed to lookup ESRT header %lu in Xen memory map: error %d\n",
-+				efi.esrt, rc);
-+			return;
-+		}
-+		type = info->mem.type;
-+		max = info->mem.addr + info->mem.size;
-+
-+		/*
-+		 * Recent Xen versions relocate the ESRT to memory of type
-+		 * EfiRuntimeServicesData, which Xen will not reuse.  If the ESRT
-+		 * is not in EfiRuntimeServicesData memory, it has not been reserved
-+		 * by Xen and might be allocated to other guests, so it cannot
-+		 * safely be used.
-+		 */
-+		if (type != EFI_RUNTIME_SERVICES_DATA) {
-+			pr_warn("Xen did not reserve ESRT, ignoring it\n");
-+			return;
-+		}
-+#endif
-+	} else {
- 		return;
- 	}
- 
--	max = efi_mem_desc_end(&md);
- 	if (max < efi.esrt) {
- 		pr_err("EFI memory descriptor is invalid. (esrt: %p max: %p)\n",
- 		       (void *)efi.esrt, (void *)max);
-@@ -333,7 +378,7 @@ void __init efi_esrt_init(void)
- 
- 	end = esrt_data + size;
- 	pr_info("Reserving ESRT space from %pa to %pa.\n", &esrt_data, &end);
--	if (md.type == EFI_BOOT_SERVICES_DATA)
-+	if (type == EFI_BOOT_SERVICES_DATA)
- 		efi_mem_reserve(esrt_data, esrt_data_size);
- 
- 	pr_debug("esrt-init: loaded.\n");
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+>
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
