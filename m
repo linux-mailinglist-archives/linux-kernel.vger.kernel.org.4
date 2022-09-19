@@ -2,92 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B9D5BCD93
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE875BCDA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiISNrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S230518AbiISNte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiISNrM (ORCPT
+        with ESMTP id S229580AbiISNtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:47:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E34D31207;
-        Mon, 19 Sep 2022 06:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663595210; x=1695131210;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=jBbg9Ly3UJMnDmMmkjxG2CXACR0TAhGMOhRzvVmCwvs=;
-  b=Av6zqIxHRTP/UYais3cmU5tsxf6ncaNJc60BELuZkx36r/ZQYyNRmZNQ
-   xfZqT1j/03vx+0aBTXM4BsdeIrDkt4ntyHCu87nVSUeN56U+7O6AfC6Hk
-   ZVIBbFsq6V/MP7bRhzBVkC4O/aYnoumyaqpCo2TUPyWxGtN8BO3P+B3hN
-   Olzk/vwd1l+kNnNaQBb4K4ysrtfr5tKMCo3TPuTO4QGDOGK15eXeT4Eht
-   LO5mP9eYOGQd8CRFLiwnhtkswH2EEA+z1oVzMAjyzxoZVj/fbmSv1wJrL
-   PZaDIRdK6pIP2IugCn/eroVOgs/XDpC0fKHTpHytt4HnipTML6/boo8pJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="296996552"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="296996552"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:46:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="651684842"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 19 Sep 2022 06:46:48 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oaH6k-004ZdO-2Q;
-        Mon, 19 Sep 2022 16:46:46 +0300
-Date:   Mon, 19 Sep 2022 16:46:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Lennert Buytenhek <buytenh@wantstofly.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-Message-ID: <Yyhyxmt+rhxEI0VH@smile.fi.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org>
- <YyGoZLTFhYQvlf+P@smile.fi.intel.com>
- <YyG2tDdq9PWTlaBQ@wantstofly.org>
- <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
- <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
+        Mon, 19 Sep 2022 09:49:31 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6F2FFD8;
+        Mon, 19 Sep 2022 06:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=phcN5G2W4NgGKL7zC1yzBaojnuY/jDS0EdSG5LS1Meg=;
+        b=CsHXQnABNJgUQDJn3Rc7dqN2HVwj5DY6X5zUI77q6ecww67IJQWYbg1RM5lJEdbP2HtLI/QWhXJ8s
+         8jESZGeiFeHsWozJITGKbHl2jZUVt1uEZRc9fybolkvxzkwm/UgYXvebjf32fdasOV0xKiaAo8ICyW
+         ezBd0ZKncNde7mSFLOrMb4sFRZZvwV5xpPEYF3hIrEQ3vael5uLyaSz/4Gmpn4TxrwheSThfMsM2IW
+         eLcXvAD6+2jHcqeGyh1ZbFyDSlzzpot6xmLzxFdMGqXN5eBPLjkVnFutPLCealAfgBpL6X34sDnE4s
+         fvhRB+umhi5vS5Dxipm8edviDDy41KQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.021412)], BW: [Enabled, t: (0.000023,0.000001)], RTDA: [Enabled, t: (0.075608), Hit: No, Details: v2.41.0; Id: 15.52kb0k.1gdb055vp.7sk6; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 19 Sep 2022 16:49:12 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        system@metrotek.ru
+Subject: [PATCH v12 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Mon, 19 Sep 2022 16:47:48 +0300
+Message-Id: <20220919134750.25197-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 07:27:45PM +0300, Ilpo Järvinen wrote:
-> On Wed, 14 Sep 2022, Andy Shevchenko wrote:
-> > On Wed, Sep 14, 2022 at 02:10:44PM +0300, Lennert Buytenhek wrote:
-> > > On Wed, Sep 14, 2022 at 01:09:40PM +0300, Andy Shevchenko wrote:
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI sysCONFIG interface.
 
-...
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
+  v7 -> v8:
+    * dt-bindings: move "program-gpios", "init-gpios" and "done-gpios"
+      to top-level properties and disallow them for MachXO2 variant.
+  v8 -> v9:
+    * dt-bindings: "program-gpios", "init-gpios" and "done-gpios" are
+      now optional for both ECP5 and MachXO2
+    * lattice-sysconfig-spi.c -> sysconfig-spi.c + sysconfig.c +
+      sysconfig.h
+        ** reworked to be one sysCONFIG FPGA Manager rather than two
+	   distinct ECP5 and MachXO2 managers
+	** splitted to port type agnostic sysconfig.c and SPI-specific
+	   sysconfig-spi.c
+	** command transfer function moved to callback for ease of
+	   adding another port type, such as I2C
+  v9 -> v10:
+    * split sysconfig_transfer() callback into separate command_write()
+      and command_write_then_read(). There are too many transfers
+      without readback.
+    * add command_write_with_data() callback which performs single
+      transfer of command + data. It's needed for better abstraction of
+      paged bitstream write routine.
+    * move sysconfig_lsc_burst_init() to bitstream_burst_write_init()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * move sysconfig_lsc_burst_complete() to bitstream_burst_write_complete()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * add bitstream_burst_write() to abstract fpga_manager_ops->write()
+      from bus type
+    * remove struct spi_device from struct sysconfig_priv, use
+      to_spi_device()
+    * move fpga_manager_ops initialization to sysconfig.c
+  v10 -> v11:
+    * rename sysconfig_lsc_burst_init() to sysconfig_spi_lsc_burst_init()
+    * rename sysconfig_bitstream_burst_write() to
+      sysconfig_spi_bitstream_burst_write()
+    * rename sysconfig_lsc_burst_complete() to
+      sysconfig_spi_lsc_burst_complete()
+    * rename "ecp5-fpga-mgr" to "sysconfig-ecp5"
+    * rename "machxo2-fpga-mgr" to "sysconfig-machxo2"
+    * move spi_max_speed_hz from struct sysconfig_fpga_priv to
+      struct sysconfig_spi_fpga_priv, which is local to sysconfig-spi.c
+    * remove SPI bus unlock on write error form
+      sysconfig_spi_bitstream_burst_write(), call
+      sysconfig_burst_write_complete() on error in
+      sysconfig_bitstream_burst_write() instead.
+  v11 -> v12:
+    * build sysconfig core as separate module to prevent duplication of
+      common code segments across different binaries
+    * rename sysconfig.c to lattice-sysconfig.c
+    * rename sysconfig.h to lattice-sysconfig.h
+    * rename sysconfig-spi.c to lattice-sysconfig-spi.c
+    * rename sysconfig_spi_cmd_write_then_read() to
+      sysconfig_spi_cmd_read()
+    * rename command_write_then_read() callback to command_read()
+    * rename sysconfig_cmd_write_then_read() to sysconfig_cmd_read()
+    * rename sysconfig_spi_lsc_burst_init() to
+      sysconfig_spi_bitstream_burst_init()
+    * rename sysconfig_spi_lsc_burst_complete() to
+      sysconfig_spi_bitstream_burst_complete()
+    * remove excessive !spi check from sysconfig_spi_cmd_write(),
+      sysconfig_spi_cmd_read(), sysconfig_spi_bitstream_burst_init(),
+      sysconfig_spi_bitstream_burst_write() and
+      sysconfig_spi_bitstream_burst_complete()
+    * drop MachXO2 support
+        ** drop struct sysconfig_fpga_priv
+        ** drop paged write
+        ** drop command_write_with_data() and friends
+        ** drop ISC_PROGRAM_DONE routine
+        ** drop refresh from sysconfig_isc_finish()
+        ** sysconfig_isc_erase() only erase SRAM
+	** drop MachXO2 mentions from DT bindings doc
 
-> -	/*
-> -	 * The above check will only give an accurate result the first time
-> -	 * the port is opened so this value needs to be preserved.
-> -	 */
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
 
-Side note: I haven't got why you removed this comment (it may be some staled
-info, but shouldn't be done in the separate change then?).
+ .../bindings/fpga/lattice,sysconfig.yaml      |  81 ++++
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 153 +++++++
+ drivers/fpga/lattice-sysconfig.c              | 408 ++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h              |  40 ++
+ 6 files changed, 695 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.3
 
 
