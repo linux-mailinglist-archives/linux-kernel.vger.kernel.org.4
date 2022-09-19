@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BCC5BD840
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C8F5BD848
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiISX2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S229741AbiISXb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiISX17 (ORCPT
+        with ESMTP id S229715AbiISXbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:27:59 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270354E86E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:58 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so691749plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:58 -0700 (PDT)
+        Mon, 19 Sep 2022 19:31:24 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4F4F1A2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:31:23 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b21so681258plz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=xMvfvNVQtD64q8tGiwGnOVfsRnwh7XTr2/3zVgHXpHc=;
-        b=ng9M6AZxxJGzK2DAPzv8G7JXiiarrTi2EMXAAzkq7M3NSGLurxQGcSaW77aXCx6J4E
-         QPVxrAEGAzOCDZfT/cmnUZNFawji6hYzBjlgVu3TkqtmkLv5Aj9w8c3Q+ILb1cl3z5iz
-         OqNlPhBne/YqnrsipEwB4Lb8Z2jRB+5Twv2AvZ+jGxsSm9l96Y4EKSIBQiLXBaMVck5k
-         /IyfGXoAHGe+8Ml6mEx87gJVKkUfV+tryOIUNk/dG1GPofPD2233LRO+K2VdqDHsrAY+
-         w2tlZNeVZkntM3l2/ULU7Qu4PgUAYz5MaSCb28QXY+2Q4HbslxwNAGxtnhreAsMDHuYl
-         wADw==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lHAxiefsOucrxQqyycSBJr0X1tuMp0PUhlLxH7tCQwA=;
+        b=gpXkv92QBZm3XFIS9ab1uvvTwwPlt0chbBh9L5LW+qIy2980eyqrJeCzY1nFfeuv5v
+         keqcPK3USdrT7YdmBhJsBV1zTd5xxjN/iD4bWgeTnBw2WIn3QZA8/JXCn6ovv6BnTDcI
+         /sCgJNGTlQhzeJdwTcs/AzRSudJ69fJcraPsJDdh2LpStwHkF3P8kG8SHbW8Iff+Dpod
+         TO1lz299nCTDYtlv/k8nYvDqhBQsHq6tehV0aOz+r2V8kIPmwNSpiQwOAOgFroLgeYGh
+         kUu5qfIlmU+IDEVuHf2wzPcr055ca2ITv71BB7yoQ4ljA40p3h3jWIjaVOcysxXcBGev
+         HJNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xMvfvNVQtD64q8tGiwGnOVfsRnwh7XTr2/3zVgHXpHc=;
-        b=Q9VHOTuMXkIiUCyWgQ7jtlvdJzl83IBeCNxcSyHILF5L/+SoKvNQHyKjIIHS/HO44y
-         4u93SetU+oqHS7qhJ2Ah4YSh8/XCi21H6slS/5rknPJKLhw4kyhyeQtbLxA6nG76oG5l
-         FDHN0vUdEV2FxBkNC8lqGlP1h1dIb1naMGrYBmoXMEbbFLACgvp9U0SXW1yFe4dovWUd
-         y0VQuEDEuUu7WpnCT4MK9npjPYPrTF5hnpfc4B6j2MQSaWrvqeqWyZMDo5z11tUzaFy1
-         K73IqnjO3LDAXsZYDP2d1m+hyFF92RRTXdy4FUIkIa81LjIAS7ksNWb3qaDaTT/mZ5nB
-         9f+w==
-X-Gm-Message-State: ACrzQf1U3MHYG6TQDAEs1uWt1OBZNkxOhn3lXUuURAM9S9o71GfzYOGj
-        yDgg6D5Cml0dL0H59g/L8z0glq4FNNxIm27tZDA=
-X-Google-Smtp-Source: AMsMyM7GnTGHon8J8F1T8/dNI1bf94Yvt5qoyN9JWoUnWvn6jgbH2UTtMgBP/cAsJEGf9x8UlwJyGq5TMFcU9mjz1oo=
-X-Received: by 2002:a17:902:ccc2:b0:178:29e1:899e with SMTP id
- z2-20020a170902ccc200b0017829e1899emr2090041ple.114.1663630077367; Mon, 19
- Sep 2022 16:27:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lHAxiefsOucrxQqyycSBJr0X1tuMp0PUhlLxH7tCQwA=;
+        b=7uofvhCpttt2G9HPKjBqJfTnCHtbKJlB3Q1/1IrVJVT0Ur6JVqcKXBUKPcW4T7MxbN
+         TNqNDA0Z4T+nSeUn67MmBRKGKZzBtF2w/ncH8A1KvpweQnToEBU2ODr/vqO3gJewgqhE
+         zVS79DLLnoRRR8Q3/9NzTibGNBMUOtOfbHIpnkZvHYQnwWamWlj44FaElG6ZPH/IRYX+
+         4Ghs2wId4Wjr+YTTUZ8ODtYrHriH/jcIl1ZU8xXjIZyGlvJTOIsDhrMjNUZSxqHvjwE6
+         W8rWD/zxf7qePN8ulePrnKP9jJstCt3i0bT8t1h+SGfp+kVmInV1EqNv55MBs3AKKYOr
+         0wqA==
+X-Gm-Message-State: ACrzQf0wrLq0Mmb6b9NZ7iep0HJhq55fgmd0YISMUjiJ44W5RW54GYvC
+        MNcdXeVMu79QBY53Fx+TQ4vTuw==
+X-Google-Smtp-Source: AMsMyM4q8KndGTGlYQXJj8gdkdFxO+PFXd0y/91jobb9+YWGqJp1WvOmfTvvOxc21+WC7iyseBkhrg==
+X-Received: by 2002:a17:90a:c70b:b0:200:4366:d047 with SMTP id o11-20020a17090ac70b00b002004366d047mr685202pjt.240.1663630283103;
+        Mon, 19 Sep 2022 16:31:23 -0700 (PDT)
+Received: from localhost (99-152-116-91.lightspeed.sntcca.sbcglobal.net. [99.152.116.91])
+        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b00536431c6ae0sm20858748pfc.101.2022.09.19.16.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 16:31:21 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 16:31:12 -0700
+From:   Olof Johansson <olof@lixom.net>
+To:     Rafa?? Mi??ecki <zajec5@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>
+Subject: Re: fw_devlink=on breaks probing devices when of_platform_populate()
+ is used
+Message-ID: <Yyj7wJlqJkCwObRn@lx2k>
+References: <696cb2da-20b9-b3dd-46d9-de4bf91a1506@gmail.com>
+ <22bc845c-dffc-7967-a542-f0697feec603@gmail.com>
+ <7be3df2e-2250-8542-1707-121373213fe1@gmail.com>
 MIME-Version: 1.0
-References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
- <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net> <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
- <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
- <20220817160751.moqhebkiuiydraka@mail.igalia.com> <CABXGCsOM9An-+EeaGWm0OA1FN2p94=BF210Lhy0tiO6ye9onWQ@mail.gmail.com>
- <dd2ee57a-2ab2-db94-36d9-8faced18fe61@riseup.net> <CABXGCsMc_D_iJ-r-_s8q13Vq6dgfQg1tnp-0aojfv5Q8izTrfw@mail.gmail.com>
- <a588de9f-958a-fce9-b4d3-2ea45d092b44@riseup.net> <CABXGCsMwTWbgZ-98gcQFbCN3rqzAt01ROpqUpL1d+3gjbwUcpA@mail.gmail.com>
-In-Reply-To: <CABXGCsMwTWbgZ-98gcQFbCN3rqzAt01ROpqUpL1d+3gjbwUcpA@mail.gmail.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Tue, 20 Sep 2022 04:27:45 +0500
-Message-ID: <CABXGCsMr5AZDoxhQSoHCibDOakimp5ukt=eMsUpPsYVnpL04ng@mail.gmail.com>
-Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7be3df2e-2250-8542-1707-121373213fe1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,154 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-Unfortunately the use-after-free issue still happens on the 6.0-rc5 kernel.
-The issue became hard to repeat. I spent the whole day at the computer
-when use-after-free again happened, I was playing the game Tiny Tina's
-Wonderlands.
-Therefore, forget about repeatability. It remains only to hope for
-logs and tracing.
-I didn't see anything new in the logs. It seems that we need to
-somehow expand the logging so that the next time this happens we have
-more information.
+On Sun, Aug 28, 2022 at 04:39:52PM +0200, Rafa?? Mi??ecki wrote:
+> On 30.07.2022 09:36, Rafa?? Mi??ecki wrote:
+> > On 16.07.2022 22:50, Rafa?? Mi??ecki wrote:
+> > > I added of_platform_populate() calls in mtd subsystem in the commit
+> > > bcdf0315a61a2 ("mtd: call of_platform_populate() for MTD partitions"):
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bcdf0315a61a29eb753a607d3a85a4032de72d94
+> > > 
+> > > I recently backported that commit in OpenWrt to kernels 5.10 and 5.15.
+> > > We started receiving reports that probing Ethernet devices stopped
+> > > working in kernel 5.15. I bisected it down to the kernel 5.13 change:
+> > > 
+> > > commit ea718c699055c8566eb64432388a04974c43b2ea (refs/bisect/bad)
+> > > Author: Saravana Kannan <saravanak@google.com>
+> > > Date:???? Tue Mar 2 13:11:32 2021 -0800
+> > > 
+> > > ???????? Revert "Revert "driver core: Set fw_devlink=on by default""
+> > > 
+> > > ???????? This reverts commit 3e4c982f1ce75faf5314477b8da296d2d00919df.
+> > > 
+> > > ???????? Since all reported issues due to fw_devlink=on should be addressed by
+> > > ???????? this series, revert the revert. fw_devlink=on Take II.
+> > > 
+> > > ???????? Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ???????? Link: https://lore.kernel.org/r/20210302211133.2244281-4-saravanak@google.com
+> > > ???????? Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > 
+> > > For me with above commit kernel just never calls bcm4908_enet_probe().
+> > > Reverting it from the top of 5.13.19 and 5.15.50 fixes it. I believe the
+> > > same issue happens with other drivers.
+> > > 
+> > > Critical detail is that in DT Ethernet block node references NVMEM cell
+> > > of MTD partition (see below).
+> > > 
+> > > Could you help me dealing with this issue, please? Can you see something
+> > > obvious breaking fw_devlink=on + of_platform_populate() case? Can I
+> > > provide some extra information to help fixing it?
+> > 
+> > Any ideas about this problem / solution?
+> 
+> I didn't get any reponse for this bug for 6 weeks now. Is that OK if I
+> send a revert patch then?
 
-Sep 18 20:52:16 primary-ws gnome-shell[2388]:
-meta_window_set_stack_position_no_sync: assertion
-'window->stack_position >=3D 0' failed
-Sep 18 20:52:27 primary-ws gnome-shell[2388]:
-meta_window_set_stack_position_no_sync: assertion
-'window->stack_position >=3D 0' failed
-Sep 18 20:53:44 primary-ws gnome-shell[2388]: Window manager warning:
-Window 0x4e00003 sets an MWM hint indicating it isn't resizable, but
-sets min size 1 x 1 and max size 2147483647 x 2147483647; this doesn't
-make much sense.
-Sep 18 20:53:45 primary-ws kernel: umip_printk: 11 callbacks suppressed
-Sep 18 20:53:45 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:14ebb0d03 sp:4ee528: SGDT instruction cannot be used by
-applications.
-Sep 18 20:53:45 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:14ebb0d03 sp:4ee528: For now, expensive software emulation returns
-the result.
-Sep 18 20:53:53 primary-ws gnome-shell[2388]:
-meta_window_set_stack_position_no_sync: assertion
-'window->stack_position >=3D 0' failed
-Sep 18 20:53:53 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:14ebb0d03 sp:4ee528: SGDT instruction cannot be used by
-applications.
-Sep 18 20:53:53 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:14ebb0d03 sp:4ee528: For now, expensive software emulation returns
-the result.
-Sep 18 20:54:15 primary-ws kernel: umip: Wonderlands.exe[214194]
-ip:15a270815 sp:6eaef490: SGDT instruction cannot be used by
-applications.
-Sep 18 20:56:01 primary-ws kernel: umip_printk: 15 callbacks suppressed
-Sep 18 20:56:01 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:15e3a82b0 sp:4ed178: SGDT instruction cannot be used by
-applications.
-Sep 18 20:56:01 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:15e3a82b0 sp:4ed178: For now, expensive software emulation returns
-the result.
-Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:15e3a82b0 sp:4edbe8: SGDT instruction cannot be used by
-applications.
-Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:15e3a82b0 sp:4edbe8: For now, expensive software emulation returns
-the result.
-Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
-ip:15e3a82b0 sp:4ebf18: SGDT instruction cannot be used by
-applications.
-Sep 18 20:57:55 primary-ws kernel: ------------[ cut here ]------------
-Sep 18 20:57:55 primary-ws kernel: refcount_t: underflow; use-after-free.
-Sep 18 20:57:55 primary-ws kernel: WARNING: CPU: 22 PID: 235114 at
-lib/refcount.c:28 refcount_warn_saturate+0xba/0x110
-Sep 18 20:57:55 primary-ws kernel: Modules linked in: tls uinput
-rfcomm snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns
-nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib
-nft_reject_inet nf_reject_ipv4 nf_>
-Sep 18 20:57:55 primary-ws kernel:  asus_wmi ledtrig_audio
-sparse_keymap platform_profile irqbypass rfkill mc rapl snd_timer
-video wmi_bmof pcspkr snd k10temp i2c_piix4 soundcore acpi_cpufreq
-zram amdgpu drm_ttm_helper ttm iommu_v2 crct1>
-Sep 18 20:57:55 primary-ws kernel: Unloaded tainted modules:
-amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_eda>
-Sep 18 20:57:55 primary-ws kernel:  pcc_cpufreq():1 pcc_cpufreq():1
-fjes():1 fjes():1 pcc_cpufreq():1 fjes():1 fjes():1 fjes():1 fjes():1
-fjes():1
-Sep 18 20:57:55 primary-ws kernel: CPU: 22 PID: 235114 Comm:
-kworker/22:0 Tainted: G        W    L    -------  ---
-6.0.0-0.rc5.20220914git3245cb65fd91.39.fc38.x86_64 #1
-Sep 18 20:57:55 primary-ws kernel: Hardware name: System manufacturer
-System Product Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-Sep 18 20:57:55 primary-ws kernel: Workqueue: events
-drm_sched_entity_kill_jobs_work [gpu_sched]
-Sep 18 20:57:55 primary-ws kernel: RIP: 0010:refcount_warn_saturate+0xba/0x=
-110
-Sep 18 20:57:55 primary-ws kernel: Code: 01 01 e8 69 6b 6f 00 0f 0b e9
-32 38 a5 00 80 3d 4d 7d be 01 00 75 85 48 c7 c7 80 b7 8e 95 c6 05 3d
-7d be 01 01 e8 46 6b 6f 00 <0f> 0b e9 0f 38 a5 00 80 3d 28 7d be 01 00
-0f 85 5e ff ff ff 48 c7
-Sep 18 20:57:55 primary-ws kernel: RSP: 0018:ffffa1a853ccbe60 EFLAGS: 00010=
-286
-Sep 18 20:57:55 primary-ws kernel: RAX: 0000000000000026 RBX:
-ffff8e0e60a96c28 RCX: 0000000000000000
-Sep 18 20:57:55 primary-ws kernel: RDX: 0000000000000001 RSI:
-ffffffff958d255c RDI: 00000000ffffffff
-Sep 18 20:57:55 primary-ws kernel: RBP: ffff8e19a83f5600 R08:
-0000000000000000 R09: ffffa1a853ccbd10
-Sep 18 20:57:55 primary-ws kernel: R10: 0000000000000003 R11:
-ffff8e19ee2fffe8 R12: ffff8e19a83fc800
-Sep 18 20:57:55 primary-ws kernel: R13: ffff8e0d44a4b440 R14:
-ffff8e19a83fc805 R15: ffff8e0e60a96c30
-Sep 18 20:57:55 primary-ws kernel: FS:  0000000000000000(0000)
-GS:ffff8e19a8200000(0000) knlGS:0000000000000000
-Sep 18 20:57:55 primary-ws kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
-0000000080050033
-Sep 18 20:57:55 primary-ws kernel: CR2: 00001adc05fb2000 CR3:
-00000002cf050000 CR4: 0000000000350ee0
-Sep 18 20:57:55 primary-ws kernel: Call Trace:
-Sep 18 20:57:55 primary-ws kernel:  <TASK>
-Sep 18 20:57:55 primary-ws kernel:  process_one_work+0x2a0/0x600
-Sep 18 20:57:55 primary-ws kernel:  worker_thread+0x4f/0x3a0
-Sep 18 20:57:55 primary-ws kernel:  ? process_one_work+0x600/0x600
-Sep 18 20:57:55 primary-ws kernel:  kthread+0xf5/0x120
-Sep 18 20:57:55 primary-ws kernel:  ? kthread_complete_and_exit+0x20/0x20
-Sep 18 20:57:55 primary-ws kernel:  ret_from_fork+0x22/0x30
-Sep 18 20:57:55 primary-ws kernel:  </TASK>
-Sep 18 20:57:55 primary-ws kernel: irq event stamp: 63606683
-Sep 18 20:57:55 primary-ws kernel: hardirqs last  enabled at
-(63606691): [<ffffffff9418ce0e>] __up_console_sem+0x5e/0x70
-Sep 18 20:57:55 primary-ws kernel: hardirqs last disabled at
-(63606698): [<ffffffff9418cdf3>] __up_console_sem+0x43/0x70
-Sep 18 20:57:55 primary-ws kernel: softirqs last  enabled at
-(63490566): [<ffffffff940ff749>] __irq_exit_rcu+0xf9/0x170
-Sep 18 20:57:55 primary-ws kernel: softirqs last disabled at
-(63490561): [<ffffffff940ff749>] __irq_exit_rcu+0xf9/0x170
-Sep 18 20:57:55 primary-ws kernel: ---[ end trace 0000000000000000 ]---
-Sep 18 20:57:56 primary-ws abrt-dump-journal-oops[1409]:
-abrt-dump-journal-oops: Found oopses: 1
-Sep 18 20:57:56 primary-ws abrt-dump-journal-oops[1409]:
-abrt-dump-journal-oops: Creating problem directories
-Sep 18 20:57:57 primary-ws abrt-notification[261766]: [=F0=9F=A1=95] System
-encountered a non-fatal error in kthread_complete_and_exit()
-Sep 18 20:57:57 primary-ws abrt-dump-journal-oops[1409]: Reported 1
-kernel oopses to Abrt
-Sep 18 20:58:23 primary-ws gsd-power[2776]: Failed to acquire idle
-monitor proxy: Timeout was reached
-Sep 18 20:58:23 primary-ws gsd-power[2776]: Error setting property
-'PowerSaveMode' on interface org.gnome.Mutter.DisplayConfig: Timeout
-was reached (g-io-error-quark, 24)
-Sep 18 20:58:53 primary-ws gsd-power[2776]: Failed to acquire idle
-monitor proxy: Timeout was reached
-Sep 18 20:58:53 primary-ws gsd-power[2776]: Error setting property
-'PowerSaveMode' on interface org.gnome.Mutter.DisplayConfig: Timeout
-was reached (g-io-error-quark, 24)
-Sep 18 20:58:54 primary-ws gsd-power[2776]: Failed to acquire idle
-monitor proxy: Timeout was reached
+I'm pretty sure this is the same root cause as I had for PCIe with a reference
+to iommu with fw_devlink.strict=1:
 
-Full kernel log: https://pastebin.com/nj2syLPM
+https://lore.kernel.org/lkml/CAOesGMgpJQjMvo6m7on+27F8REiHaVSRL6HBjiRPVDM9Jscnrg@mail.gmail.com/
 
---=20
-Best Regards,
-Mike Gavrilov.
+There's the dependency on the nvmem-cells propery, so the driver core doesn't
+call probe until it's fulfilled. Meanwhile, the platform_driver() code
+unregisters the driver if it (thinks) it as called probe and there are no
+devices linked to it -- since it's not a needed driver. Thus, probe will never
+be called. That code is in drivers/base/platform.c:__platform_driver_probe().
+
+I don't know what the proper fix is here, this seems like a design issue with
+the fw_devlink code.
+
+
+-Olof
