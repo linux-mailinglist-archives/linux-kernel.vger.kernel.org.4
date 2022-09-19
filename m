@@ -2,71 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294465BD84D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC015BD84B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiISXdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S229794AbiISXc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiISXdD (ORCPT
+        with ESMTP id S229706AbiISXcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:33:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FF4F64A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:33:01 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id t14so1504245wrx.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:33:01 -0700 (PDT)
+        Mon, 19 Sep 2022 19:32:53 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D574E867
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:32:52 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JMi2BT020007;
+        Mon, 19 Sep 2022 23:32:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=XWg2sY2rBAL6GT/P1avHCKpLcnoNmPgrq4VmX5nf1v4=;
+ b=K0lRPfmJN3JkBsO53iSY+sme/8ndi376XUzGX/IReK47j7WhxoIyoeMJVzwJGby44yD7
+ nn6pLnHzI2e0FBgkomMJ7dk+1GT0B59zJxwQJdoJMO+NdbpQCrIYZIQ1XAV61p9jJFTh
+ di00ryq+++ix3oqA+3D1e9lFvYaxrG4rG7nrbo/dxXbgjznMN6NKrDfim8gVnCqq4/T1
+ 95K1yo3V0IPIaF//6+MnFdx7fKs20NpnwlCn46tSy2Dsw3iloNmjQz0Joz5fNPZ+2Ics
+ pmt6PlVuje04S5lbkMceOMmuuKXDqLsi/raEzEFrXupIF2sLC9aLNSfZ8xPrHtY06viv Cg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn68m58r7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 23:32:28 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28JMwO5v009178;
+        Mon, 19 Sep 2022 23:32:27 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jp3c8cp0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 23:32:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Znjj/L3UZn6CaEHBoifmZ4lKhXNYJS3K/rrkohJ8dvEojKU30sfGR/5hg9Kad1MaDuMwShQbojWm9R5YrE6bZnwg0jpE4UJQJATK64OBfg9fTeEsPnpnKA3nAbEKwgXf41rd0t9u8hc7YEcucSu4fDPRVHWn6KccAVv+qWXepSxbV+XxQjiVH5xRBaZXqDl8cKAOZ7+cFPW5kXFNfBozw1fOF8v3QvvjFB7u2hZmpBek8u61IAk7G3dEC1lpSROpesT5CgKQ/vgGHzF7+zU86a74WhqdJoINNpxDRRU3GGYg3LVz0ot17ROnSfOuGLVlevLwonJ/WZI/0JjTb0VMVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XWg2sY2rBAL6GT/P1avHCKpLcnoNmPgrq4VmX5nf1v4=;
+ b=R0wHYjmjoB5RMspNKpNHsmrKQ/SHp4LvX+8RWEZXNi5GxPmhPX+zFuUEvEx0wNNdnpLSkJSXoCHzZRJht6SrcbPONcVVgF+OKUdk9/9oPI8dfj0601yWJYiZ6DWhonKVPz02n0NtKSeL53oGf3wxUPIW9yd6e25A9OVOfu0M3Rdm+8FArM3X2o3xbAvXvLl+pnesPcyadNNdlOIaAFdjXY8NDJbNbU7CFMJcb06F0r6MfS8ItqdRT2qVNT1Wu4z9ZlH1Hbv2oESWY27HwfDYJ3vYgftJ8PwUkPqEdpJ5AxFIEuDBM4VewcIiXf/UE3ee1IIh5YY36QezIh1JJRwuDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zo4ltCOqvnTRmheIGSQtx2+8j/N9c4MsCQoSZifobiY=;
-        b=XxYsJfS9I4u3WvjfJ8LQpuGZtQ78FQTZpF4Po6g58SMUSF6Fn44k9ioE1xDvYN0zvC
-         zk6GHbBqA+hFVXCyzCBHcFdxF7txQaUlEQU51SiHbT5qT5oJ7wOy/vCT2fYtRe1R4lXF
-         LoBZspappMyt+wvzYhW1/kWIyJm1lk31szvu2l4HVF5XpWbBnmbjaqNimDpYO39nrp8e
-         YM5fLKYNI0CzlrAvOv+9ueG2bvqH9TQIy2DTLty7d9Ah+p48Z1hM4fE26ifh0wouojXR
-         fv9RPnkXJ5VGsxPfHxkoxtZEKAX5vDeLlc2kdWL34d3L4yBwxwH0wBu90R6vzKig3aDP
-         d6Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zo4ltCOqvnTRmheIGSQtx2+8j/N9c4MsCQoSZifobiY=;
-        b=EcR2MryftJXZ0/3X0c1OTXR5MtD41d+at4s1aO7qyyRNki6xaT/eRtBRdgo4O1lYSl
-         ZOxFAh0U1ce9dxYvXXyqHQUcLORj3WlN/bqnZdqdA3p8Pszu7wJjzndK1QU79fGnMvzZ
-         Zq16DZRh740FIAVu7vQaKGDpXG+wTfrPmm4FCiaiirtrUy+9F4gD5CzBCOetUKCzYkQf
-         j2Rh7Wq64bKw3Bpsz2bltgtUg9q1rVtD+RGjxrt2MwXNHxVfTo4Gr4Ll1Qj6xXa7xhDv
-         L4vOjMOXBeUSW7GMqQxl+km0KF3XmqC+stVC0XtnLcCVjCv+IdHlSC/ueXRqeDDmhwqo
-         u+Jw==
-X-Gm-Message-State: ACrzQf30H9i7xPxPNWbKZ+JX/fsiQoCrIBeqBdVRUcRuRk6uPbKAIgz7
-        LiTUAeipxH0L0xBb2/sz5Mznmfx9HFt5rsOPfxeIsw==
-X-Google-Smtp-Source: AMsMyM61zot+0K7KevmrJbjGPwZQugwWN++0y3OXLM2V8v5oKdcZe2nsAlItI7mSGEgqYGx02gZQBJIpkTZNB/gbG4E=
-X-Received: by 2002:a5d:5611:0:b0:228:e1d2:81d with SMTP id
- l17-20020a5d5611000000b00228e1d2081dmr12193520wrv.210.1663630380280; Mon, 19
- Sep 2022 16:33:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn> <YyLUGnqtZXn4MjJF@casper.infradead.org>
- <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn> <YyLpls9/t6LKQefS@casper.infradead.org>
- <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn> <YyQ2m9vU/plyBNas@casper.infradead.org>
- <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
-In-Reply-To: <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
-From:   Yosry Ahmed <yosryahmed@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XWg2sY2rBAL6GT/P1avHCKpLcnoNmPgrq4VmX5nf1v4=;
+ b=Fy37PdfQq+Pe0BJjeIfSartSH0BZAHavMqiQ6J/y6zhxzCk3CTveGs/Hd/A85CkBlx9HUxXsKNv89gj3RhkUzh89XL8toGlHKXfDauXIAUkDl/HJOPmDF9AjHoXHkwQJSH8cpvYQOeqvNCRQqj3ek4Ole1OtTtWA4eho42vjotw=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by PH0PR10MB5580.namprd10.prod.outlook.com (2603:10b6:510:ff::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.18; Mon, 19 Sep
+ 2022 23:32:24 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a%7]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
+ 23:32:24 +0000
 Date:   Mon, 19 Sep 2022 16:32:21 -0700
-Message-ID: <CAJD7tkZkPVwQYR1mqZoKQ=kkR96JCUzrpw8o-9vtX3qwdkj-=w@mail.gmail.com>
-Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not kswapd
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 9/9] hugetlb: clean up code checking for
+ fault/truncation races
+Message-ID: <Yyj8BdNjQiBMw66F@monkey>
+References: <20220914221810.95771-1-mike.kravetz@oracle.com>
+ <20220914221810.95771-10-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914221810.95771-10-mike.kravetz@oracle.com>
+X-ClientProxiedBy: MW4PR03CA0248.namprd03.prod.outlook.com
+ (2603:10b6:303:b4::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB5580:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7916f8ef-a6a2-4cf0-33a1-08da9a9734e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h/a06+xywir7FbBC8ozgoXpC2ENDpq7Ih5ycfCSw6dKxksLSWZww8ZVg7xOpQhcbsdB+rQdyJgib5LxzFOo1D2VtKsn094IReWd31ANozQ7wYUDw6SYBCAymrn9yGb9tGx9BA53DaZk94UbDAWYVx9plroBINqvSqgMq741XiKpvrByc1P9XST9fYp90nP31mwJrUuojTM6o8PEglKzrjlpDHoqhUjLUOqzBDAJWzjsaLPW4MTlq2Uexgo5+007rOab/83SHwV5Yjz8WSKTM/+GiUmroUvuW+XQSiUHilHxX7AYtpWIKAdwLW/CRg/d4oM/X/TdF7eDjY8RUzDl6mAyTah6YDYMjGU+up/FZYpEI1ssA2nQmSENZmxmWqmNrGvysvIkWV7IBmgoUWN6rF0/lDnKSTecGDk+pBskTS13RSQlICjknAhXAs+7YBZw3aenRb3TReAe/TgopIrIJL8Uj2BhwsXWHv2zPqH21f5RL61KaiBSGWNr/8+o7mr9jNmF368EOJ4yHIf4YJqFo+9yFXdOWzXbUkckHBINvSwSviZIDX/IGeGsp69s8VaErkg9iyjRTeAn7CmPOw1IX/XnJJv7aimA5Ibstdsk+jgUIBR/K5e/38GL8sMeqnBRoChGZAzGaxxZ/d7VdJvHFBxBhu8PmaRiZxL/4DoOkVYTwISvyLH/YJ2s/lGiNBB1jHF225zPYT3RHbYjee2TO4prn0dMR07DOYTVkD/sD7Jk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199015)(26005)(6512007)(9686003)(33716001)(966005)(6486002)(478600001)(53546011)(41300700001)(38100700002)(6666004)(6506007)(186003)(86362001)(83380400001)(8936002)(66476007)(66556008)(2906002)(66946007)(5660300002)(316002)(8676002)(54906003)(7416002)(44832011)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gm3aWBdsodTsPOP0yjrWzzqon95gVyWQKcvrDg6a4vsbEsttipMJQFgPpeUp?=
+ =?us-ascii?Q?y8eW6ODVpABjUfhHOwDGGO0A8s/TTHHB/u8pSFE6f9tH3MUYwSIw7ij4xJW5?=
+ =?us-ascii?Q?1NBdfhsb/oyXOwqqIgOuFOJTqvQJv09nzOdPNnMHT0rR06XBydGNfcvvNg3E?=
+ =?us-ascii?Q?2MIeOhL3x/Ac9GeI/ZjT/zdBsHvKKjszWsOZHgKvgPMd68MeIR1RieC97NZn?=
+ =?us-ascii?Q?RHZeARhiHjm2eM0UgcLOPuTQ+aDaXCQBj1VlxoO52nvnYpcsywJz009x+e1z?=
+ =?us-ascii?Q?VJ4aZkEMIFV2QSkPTbUsvyaJsmbnRvLNUMYnNqLvMf3ldS5vKPDNQy+EEJLc?=
+ =?us-ascii?Q?5OsmwXR2ah2C8vOobsgxBjYM+ff9QwdREzu3g+l8lYSHPbUxMhFL507Aw2Ul?=
+ =?us-ascii?Q?QllBSaXw5AcVBIYYBPsQ7CR228sHe+htRjM2ejW3pN4EQmJapukemslQGd3F?=
+ =?us-ascii?Q?cgM7kkGBnRBRif6/gP7aCwQT1w6mh+Zty1WjHztItNHsRzDQAzSgw6BDycq3?=
+ =?us-ascii?Q?0T+qRJr944KGEP8cafVTXnJFhc5l2IBBTNUVf2HzMzCdXS2jyrudvFE5mHev?=
+ =?us-ascii?Q?Ujr2jSeMk7mQ+ABXVNs0GYPLLYNUdrnatDCMSYXatMQ7vvCwoSxZeVc9iDXp?=
+ =?us-ascii?Q?jQ/BP1GBbZXgqRaM+0ynKamzDXJuF8rfg/obzLrHrVFUth5PTnN6WFMsoFv4?=
+ =?us-ascii?Q?lEAh4NWZZZsXbuFs9DL3SvoIgtjOqnRPcsa1c2NK31AQKh7Xkx2K+S4qgsj4?=
+ =?us-ascii?Q?1O5624hp1gu86I5pshqspb7BhlyHgtdOIWfAiHiiITRn4aIVsN5tHsoga22Y?=
+ =?us-ascii?Q?YVMeMbuIEpyVA2srGRqLJZYHYCiiiYKq0INwsSGo9//zVf5IY3sectrTj2Tf?=
+ =?us-ascii?Q?ljiuHH0kQxZwCLGqIyUwFTUn2kJ3LXRznndjyKkrymHEJj+kldoPnrpdUZon?=
+ =?us-ascii?Q?LOsF/A3q+Iwgz4kBVOE+xthuUCDYVW+haEpsBxwDHqwRlEmRKxPau36Jdgwa?=
+ =?us-ascii?Q?Go9u1/FxCUzuTUvMGpFQz7km/NL6EYe5y9RML+BheOedCzfDWrDvgGMxNqpp?=
+ =?us-ascii?Q?Tqci5GE25aYLWw7TqCVDEGG3zry5ofTccLPn6fDhAnamOykmWajKGon+fj0f?=
+ =?us-ascii?Q?Cayh2cCDW/xbBH0bbU5wQtj2rtrwJV5B3AqurO99EROnQ4PI944Du3y2vsyl?=
+ =?us-ascii?Q?nAT+AjuFoNKj6QIKEVhtmhz4McmdQraLqaUNIEZAg+e5BrGiY1AmzPE/Fe71?=
+ =?us-ascii?Q?cEc2XtX1WTD8EZPMe8u7og1xFUoQ7h6yIJEcai4eYeSCgtRSczxAsUBVKKHy?=
+ =?us-ascii?Q?ZjlBQXOsmU8yEL0t8NS7A/yVgAVo7nG0US7Zf1K6PObXhAgh8SgBDSgnNUni?=
+ =?us-ascii?Q?/CSbAc2H9+IusN3ICLH+nZFYi1MfHuH5r8MvnGEEpx3ySh9NUaj37rU1j9TG?=
+ =?us-ascii?Q?/8I4MAQe8ceTMT8Ba7B+5Hs/767CN0gCLvLrV6GpDaB5VIjxt82O4VANCaoe?=
+ =?us-ascii?Q?AX0U+5Ax1+d8rXO08r7ljH0tZbutoiliUoY/aUwRlIChjByRYcOLTevNH0/M?=
+ =?us-ascii?Q?oI04iRLETmvZDr/6aEDjO9PS35m8ESM6DvsZ/csndcQpGpR27gy3j10aa6xY?=
+ =?us-ascii?Q?5Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7916f8ef-a6a2-4cf0-33a1-08da9a9734e5
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 23:32:24.7021
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JQSkosOp97sjC/e9ueQGFo126V4KerSCHA06VVGLHNenLelXHVCYFU57Ytn8n3laJWKuGiYXPLv2/JxxO+uWxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5580
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 mlxlogscore=944
+ bulkscore=0 suspectscore=0 adultscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209190156
+X-Proofpoint-ORIG-GUID: 55CywNVnZBEIuCzlKNYW8NFSmq91Gkpl
+X-Proofpoint-GUID: 55CywNVnZBEIuCzlKNYW8NFSmq91Gkpl
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,158 +161,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 3:20 AM Hongchen Zhang
-<zhanghongchen@loongson.cn> wrote:
->
-> Hi Andrew and Matthew,
->
-> On 2022/9/16 pm 4:40, Matthew Wilcox wrote:
-> > On Fri, Sep 16, 2022 at 08:57:50AM +0800, Hongchen Zhang wrote:
-> >> Hi Andrew ,
-> >>
-> >> On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
-> >>> On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
-> >>>> Hi Matthew,
-> >>>> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
-> >>>>> On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
-> >>>>>> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
-> >>>>>> seconds.
-> >>>>>> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
-> >>>>>> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> >>>>>> this message.
-> >>>>>> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
-> >>>>>> 77327 flags:0x00004002
-> >>>>>> [ 3748.483358] Call Trace:
-> >>>>>> [ 3748.485964]  <TASK>
-> >>>>>> [ 3748.488150]  __schedule+0x23d/0x590
-> >>>>>> [ 3748.491804]  schedule+0x4e/0xc0
-> >>>>>> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
-> >>>>>> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
-> >>>>>> [ 3748.505181]  down_read+0x43/0xa0
-> >>>>>> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
-> >>>>>> [ 3748.512799]  exc_page_fault+0x77/0x170
-> >>>>>> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
-> >>>>>> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
-> >>>>>> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
-> >>>>>> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
-> >>>>>> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
-> >>>>>> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
-> >>>>>> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
-> >>>>>> 0000000000000010
-> >>>>>> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
-> >>>>>> 00007f99faa1a000
-> >>>>>> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
-> >>>>>> 0000000000000014
-> >>>>>> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
-> >>>>>> 0000000000001000
-> >>>>>> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
-> >>>>>> ffffaa9248fffd98
-> >>>>>> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
-> >>>>>> [ 3748.592614]  filemap_read+0x174/0x3e0
-> >>>>>
-> >>>>> Interesting; it wasn't the process itself which triggered the page
-> >>>>> fault; the process called read() and the kernel took the page fault to
-> >>>>> satisfy the read() call.
-> >>>>>
-> >>>>>> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
-> >>>>>> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
-> >>>>>> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
-> >>>>>> [ 3748.609164]  ? aa_file_perm+0x102/0x250
-> >>>>>> [ 3748.613125]  new_sync_read+0x10d/0x1a0
-> >>>>>> [ 3748.617009]  vfs_read+0x103/0x1a0
-> >>>>>> [ 3748.620423]  ksys_read+0x67/0xf0
-> >>>>>> [ 3748.623743]  __x64_sys_read+0x19/0x20
-> >>>>>> [ 3748.627511]  do_syscall_64+0x59/0xc0
-> >>>>>> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
-> >>>>>> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
-> >>>>>> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
-> >>>>>> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
-> >>>>>> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
-> >>>>>> [ 3748.653737]  ? exc_page_fault+0x89/0x170
-> >>>>>> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> >>>>>> [ 3748.663030] RIP: 0033:0x7f9a852989cc
-> >>>>>> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
-> >>>>>> 0000000000000000
-> >>>>>> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
-> >>>>>> 00007f9a852989cc
-> >>>>>> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
-> >>>>>> 0000000000000061
-> >>>>>> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
-> >>>>>> 00007f99faa18010
-> >>>>>> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
-> >>>>>> 00007f99faa18010
-> >>>>>> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
-> >>>>>> 0000000000027100
-> >>>>>
-> >>>>> ORIG_RAX is 0, which matches sys_read.
-> >>>>> RDI is file descriptor 0x61
-> >>>>> RSI is plausibly a userspace pointer, 0x7f99faa18010
-> >>>>> RDX is the length, 0x27100 or 160kB.
-> >>>>>
-> >>>>> That all seems reasonable.
-> >>>>>
-> >>>>> What I really want to know is who is _holding_ the lock.  We stash
-> >>>>> a pointer to the task_struct in 'owner', so we could clearly find this
-> >>>>> out in the 'blocked for too long' report, and print their stack trace.
-> >>>>>
-> >>>> As described in the comment for __rwsem_set_reader_owned,it is hard to track
-> >>>> read owners.So we could not clearly find out who blocked the process,it was
-> >>>> caused by multiple tasks.
-> >>>
-> >>> Readers don't block readers.  You have a reader here, so it's being
-> >>> blocked by a writer.  And that writer's task_struct is stashed in
-> >>> rwsem->owner.  It would be nice if we dumped that information
-> >>> automatically ... but we don't do that today.  Perhaps you could
-> >>> grab that information from a crash dump if you have one.
-> >>>
-> >>>>> You must have done something like this already in order to deduce that
-> >>>>> it was the direct reclaim path that was the problem?
-> >>>>>
-> >>>> The method we used is to track the direct reclaim using the
-> >>>> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
-> >>>> occurred,we could get a very large "nr_reclaimed" which is not a desirable
-> >>>> value for process except kswapd.
-> >>>
-> >>> I disagree.  If a process needs to allocate memory then it should be
-> >>> paying the cost of reclaiming that memory itself.  kswapd is a last
-> >>> resort to reclaim memory when we have a workload (eg a network router)
-> >>> that does its memory allocation primarily in interrupt context.
-> >>>
-> >> What's your opinion about this scan adjust issue? Is there a better way to
-> >> fix this issue?
-> >
-> > Yes, but we need you to gather more information about what's causing
-> > the issue before we can suggest what that is.
-> >
-> I think the following scenery triggers the scan adjust issue:
-> In function shrink_lruvec, we call get_scan_count and get the following
-> values:
-> targets[LRU_INACTIVE_ANON]=50000
-> targets[LRU_ACTIVE_ANON]=50000
-> targets[LRU_INACTIVE_FILE]=128
-> targets[LRU_ACTIVE_FILE]=129
->
-> After the first scan, we get more than nr_to_reclaim pages, but the
-> percentage of scanning nr[LRU_INACTIVE_FILE+LRU_ACTIVE_FILE] is 256/257,
->
-> Then when we scan adjust, we must scan(possibly reclaim)
-> 256*(50000+50000)/257-256=99354 pages, which is too large and would
-> waste too many time.
-> If it is not kswapd, it is unacceptable to reclaim so many pages.
-> So we should limit the number of pages of scan adjust.
+On 09/14/22 15:18, Mike Kravetz wrote:
+> With the new hugetlb vma lock in place, it can also be used to handle
+> page fault races with file truncation.  The lock is taken at the
+> beginning of the code fault path in read mode.  During truncation, it
+> is taken in write mode for each vma which has the file mapped.  The
+> file's size (i_size) is modified before taking the vma lock to unmap.
+> 
+> How are races handled?
+> 
+> The page fault code checks i_size early in processing after taking the
+> vma lock.  If the fault is beyond i_size, the fault is aborted.  If the
+> fault is not beyond i_size the fault will continue and a new page will
+> be added to the file.  It could be that truncation code modifies i_size
+> after the check in fault code.  That is OK, as truncation code will soon
+> remove the page.  The truncation code will wait until the fault is
+> finished, as it must obtain the vma lock in write mode.
+> 
+> This patch cleans up/removes late checks in the fault paths that try to
+> back out pages racing with truncation.  As noted above, we just let the
+> truncation code remove the pages.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  fs/hugetlbfs/inode.c | 31 ++++++++++++-------------------
+>  mm/hugetlb.c         | 27 ++++++---------------------
+>  2 files changed, 18 insertions(+), 40 deletions(-)
 
-IIUC commit 6eb90d649537 ("mm: vmscan: fix extreme overreclaim and
-swap floods") that was recently sent by Johannes [1] addresses a
-similar issue (reclaiming way beyond nr_to_reclaim when anon vs file
-LRU sizes are very different), but in a slightly different scenario.
-IIUC with Johannes's patch, scan adjustment is already limited for
-scenarios where scan_adjust (aka proportional_reclaim) is not
-initialized to true, which would be all cases except global direct
-reclaim on DEF_PRIORITY. Is my understanding here correct?
+This patch introduced a compiler warning addressed here,
 
-[1] https://lore.kernel.org/lkml/20220802162811.39216-1-hannes@cmpxchg.org/
->
-> Thanks
-> Hongchen Zhang
->
->
+https://lore.kernel.org/linux-mm/Yyj7HsJWfHDoU24U@monkey/
+
+-- 
+Mike Kravetz
