@@ -2,168 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49915BCAEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 595CE5BCAEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiISLjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S229881AbiISLkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiISLjd (ORCPT
+        with ESMTP id S229453AbiISLkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:39:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53CABE1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663587570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQ6zwKhiizSCTbZXM4hYel5ioxpL+B7BAbfA/FrZv8U=;
-        b=IFsWfNXFmqkTZ9NqsO1X3EQRNjYTsxOGtRJALq9R/i1qyLvMy1zhYsg+cE10/7Xrah1xxx
-        hxwdwYIsqJSEzXEARt9PrExcQ78ohrfQsrJFhsQ7sB4NWRfVkLMWJI98zpytKayq7Bn7Cb
-        KS9XU38kCYnPfLc0giXvxBReTZ/upns=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-86-iv7Bv9NSOw2daID41s_Law-1; Mon, 19 Sep 2022 07:39:28 -0400
-X-MC-Unique: iv7Bv9NSOw2daID41s_Law-1
-Received: by mail-ed1-f72.google.com with SMTP id h13-20020a056402280d00b004528c8400afso11740080ede.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:39:28 -0700 (PDT)
+        Mon, 19 Sep 2022 07:40:22 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA01098
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:40:21 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id l12so33496633ljg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=LOhOQBZzBFQxvVFlg60w9WSNTSMawzLUJ3lhh9nsRd8=;
+        b=oMDrNnn7PEzlmS/TtiTBujBv+2cvR52V5cwZqrcQvn0yEXxAHFP9XUBasumZsWhL/s
+         xXfnxFXa/ujRDAgOMothex/hDTOMFz3I9GxhCV0RPMsdnvWvu1MrFHUmAVJJRRkwX1CV
+         btra/q/r/DHfmEg8PuB/kadmHGMfEeddYYU0l9rn8hUSoJugQCQa8CclEI+xUWjokXUe
+         076SDXyM+lq0DsOTjgT7DKR2CGfViMFhNpD76L5hFosFOhFu8J1HArLo5J97u3XcqzVW
+         7wVys14ir3kTRRAL8BEGpyt4HchglXmWjwYXH0li3WnE79lRj1P91SlfzTmCAU1Ol59k
+         HHBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=bQ6zwKhiizSCTbZXM4hYel5ioxpL+B7BAbfA/FrZv8U=;
-        b=GnQ34Ot9S+wCq1E70pWfs3fb2v8dnva0Rd71rtVrDswI3kVfxn5LfLqOwQSNBRk4Ej
-         IuyyZ4uVdm7mrh+9mq95O9lc1fmDmDZ2EPbsZgRxZekanSKZyw4q7yOiKDMITbAGkvZN
-         EKpuv2G2To45wCbvp+2aOhasP6c1No95wcys75xkyTs8lOmQg5nMsZZbM1pUHe1HoaqK
-         sNBV+MCbgsp8BOdyzuXkaCQmCMZYH14Zut77d7wS8HZ8YwvSDmQRgpTCPJB4roTuo2ja
-         2gQeRy7cKeqFKLF2bb5MMiIrHz2aeFMicwIsGf3ELigWoCaXLjZCTLi2hU5tg9nfiekK
-         /jcQ==
-X-Gm-Message-State: ACrzQf0HjGjBIncZ3DfMXRNa0VGxHGiojDMunlyvIh+Fsedu10ElWYPH
-        xpqP77x3yHxiBLcwWusEQC7U/yBSCzNKnBCJd1sXx7kvb8P5bWUSrevT96u/LNKc10blKZZAg+2
-        nRbGWyiSYPDWgRFrZQ3MTLnyj
-X-Received: by 2002:a17:906:4786:b0:780:ed2a:ed6a with SMTP id cw6-20020a170906478600b00780ed2aed6amr7074838ejc.769.1663587567724;
-        Mon, 19 Sep 2022 04:39:27 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7y38ljAWNfKtMrDEWP8DJQZxSxjHC04BKrT2b3l3n2kt5naoWRx4HyyTQts4SVkNvtIXTVgw==
-X-Received: by 2002:a17:906:4786:b0:780:ed2a:ed6a with SMTP id cw6-20020a170906478600b00780ed2aed6amr7074827ejc.769.1663587567562;
-        Mon, 19 Sep 2022 04:39:27 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id fq32-20020a1709069da000b00770812e2394sm15392871ejc.160.2022.09.19.04.39.26
+        bh=LOhOQBZzBFQxvVFlg60w9WSNTSMawzLUJ3lhh9nsRd8=;
+        b=2LNy0ombWw/BZjMnRz5YK7hNgAW0Ptn6IWhe2BfKZbHNbA9MQbSx561Ux5HLy1IxVQ
+         13Qmq8mWFiSLnUFT4WeoQ1k+ZvDLVhYmXSkTvN3Sthu5elElgVdo16dxVVVDYiwzNUI+
+         dfWtCgWCfYExvUlAnC5YPrccQ3o9bF24RcvxovCWDSa6iUSnnpZQ9nR7DXpe0Cth4RJb
+         I29q0Wwq1ty6momId/F0Dp8Bk7/UizxvBEw4oLAOZpFGdFJqnd8y45kSO3QvAN2W5KXV
+         h6NYuZSwSAO3Oqe/a4H1ELBQcL6Goq3EpndnN+2n6kkngyfAWh5Wp37L1WuXA+KpHw4T
+         xPrg==
+X-Gm-Message-State: ACrzQf2ryaDMDDr35Bg19PP4Njsmq4yMeYiwmuR22JubPc3zMH9d8ipM
+        tunyLeCqfwuFbngYyD9VNJXpTg==
+X-Google-Smtp-Source: AMsMyM5yplmebqCLGegjUI9kshg0AL7BDvu6dLs+pjcv0D8b3BXK/yLoY6F6mjlxgpoY47vxzvCTEg==
+X-Received: by 2002:a2e:9d98:0:b0:26c:565f:6cda with SMTP id c24-20020a2e9d98000000b0026c565f6cdamr111304ljj.514.1663587619638;
+        Mon, 19 Sep 2022 04:40:19 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05651c02c300b00268335eaa8asm4887241ljo.51.2022.09.19.04.40.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 04:39:26 -0700 (PDT)
-Message-ID: <5160c28f-03df-b1a7-d02a-3f567fde249b@redhat.com>
-Date:   Mon, 19 Sep 2022 12:39:26 +0100
+        Mon, 19 Sep 2022 04:40:19 -0700 (PDT)
+Message-ID: <ab9154fd-26e9-2d8e-c638-860e716ca8e8@linaro.org>
+Date:   Mon, 19 Sep 2022 13:40:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 1/1] hp-wmi: Setting thermal profile fails with 0x06
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
 Content-Language: en-US
-To:     Jorge Lopez <jorgealtxwork@gmail.com>, balalic.enver@gmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     markgross@kernel.org
-References: <20220912192603.4001-1-jorge.lopez2@hp.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220912192603.4001-1-jorge.lopez2@hp.com>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220919113715.243910-1-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220919113715.243910-1-viorel.suman@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/12/22 20:26, Jorge Lopez wrote:
-> Error 0x06 (invalid command parameter) is reported by hp-wmi module
-> when reading the current thermal profile and then proceed to set it
-> back. The failing condition occurs in Linux NixOS after user
-> configures the thermal profile to ‘quiet mode’ in Windows.  Quiet Fan
-> Mode is supported in Windows but was not supported in hp-wmi module.
+On 19/09/2022 13:37, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
 > 
-> This fix adds support for PLATFORM_PROFILE_QUIET in hp-wmi module for
-> HP notebooks other than HP Omen series.  Quiet thermal profile is not
-> supported in HP Omen series notebooks.
+> Sync defines with the latest available SCFW kit version 1.13.0,
+> may be found at the URL below:
 > 
-> Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
+> https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
 > 
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 > ---
-> Based on the latest platform-drivers-x86.git/for-next
-> 
-> Version 2 - Set bit (PROFILE_QUIET) only for non HP Omen Notebooks
-> Version 1 - Original patch
-> ---
->  drivers/platform/x86/hp-wmi.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-> index bc7020e9df9e..9a64601e217f 100644
-> --- a/drivers/platform/x86/hp-wmi.c
-> +++ b/drivers/platform/x86/hp-wmi.c
-> @@ -177,7 +177,8 @@ enum hp_thermal_profile_omen_v1 {
->  enum hp_thermal_profile {
->  	HP_THERMAL_PROFILE_PERFORMANCE	= 0x00,
->  	HP_THERMAL_PROFILE_DEFAULT		= 0x01,
-> -	HP_THERMAL_PROFILE_COOL			= 0x02
-> +	HP_THERMAL_PROFILE_COOL			= 0x02,
-> +	HP_THERMAL_PROFILE_QUIET		= 0x03,
->  };
->  
->  #define IS_HWBLOCKED(x) ((x & HPWMI_POWER_FW_OR_HW) != HPWMI_POWER_FW_OR_HW)
-> @@ -1194,6 +1195,9 @@ static int hp_wmi_platform_profile_get(struct platform_profile_handler *pprof,
->  	case HP_THERMAL_PROFILE_COOL:
->  		*profile =  PLATFORM_PROFILE_COOL;
->  		break;
-> +	case HP_THERMAL_PROFILE_QUIET:
-> +		*profile = PLATFORM_PROFILE_QUIET;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -1216,6 +1220,10 @@ static int hp_wmi_platform_profile_set(struct platform_profile_handler *pprof,
->  	case PLATFORM_PROFILE_COOL:
->  		tp =  HP_THERMAL_PROFILE_COOL;
->  		break;
-> +	case PLATFORM_PROFILE_QUIET:
-> +		tp = HP_THERMAL_PROFILE_QUIET;
-> +		break;
-> +
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-> @@ -1263,6 +1271,8 @@ static int thermal_profile_setup(void)
->  
->  		platform_profile_handler.profile_get = hp_wmi_platform_profile_get;
->  		platform_profile_handler.profile_set = hp_wmi_platform_profile_set;
-> +
-> +		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
->  	}
->  
->  	set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
+>  drivers/clk/imx/clk-imx8qm-rsrc.c       |   4 +-
+>  include/dt-bindings/firmware/imx/rsrc.h | 292 ++++++++++++++++--------
 
+Bindings cannot be squashed with driver change.
+
+>  2 files changed, 198 insertions(+), 98 deletions(-)
+> 
+> Changes since v1:
+> 	Two patches squashed into one in order to keep changes bissectable
+> 	and compilable as suggested by Alexander Stein.
+
+That's not the solution. Solution is to make driver behaving correctly,
+not squash patches which must not be together.
+
+This is proof of an ABI break, so NAK unless described why it is OK to
+break the ABI/users/boards.
+
+Best regards,
+Krzysztof
