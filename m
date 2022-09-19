@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFC75BD4E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD915BD4E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiISSnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S229489AbiISSnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiISSn2 (ORCPT
+        with ESMTP id S229773AbiISSnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:43:28 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6270E474D2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:43:27 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id c11so482277wrp.11
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=XXL755xKEDAaIr3RDQbYzg0dLX5U1WGFXrDCkU4fSpY=;
-        b=J4wPiGC7ovl46qAq7l3sYYxHuoVAfzBgVQ3EGrQ/Y4UUYC9xm06X6ADhTHPLoNnzRV
-         GMPM5UtiTcnDUp1qw6c7br5p4dsNKpOg4r/03b/IZBOtOlItu2YkUniSlPFfLgmK6G+Q
-         P97NMIFPUOkAnZr3Ra2MP71O8u0t1itle7O0sH5cq2Q+YwUzrqvZhQVJnWGGFZs0UclL
-         c1l+YsM/8WMDTBMdXp3voktas6vUgoCSUkfrvoLITW/GntgQB6sWuDpYHdeW0AWfiG/o
-         8ZW8S4SnUSafjpqy/7gBS7KHVofu+ZsFeNOlCfFIZf1xjh/9oFFh8LqH7L0jh6tA+FsR
-         tMIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XXL755xKEDAaIr3RDQbYzg0dLX5U1WGFXrDCkU4fSpY=;
-        b=Y6lF/EjaYhhzAHIYaJ2uBhenmgCEGfjLDMF3R14uhrADIOOBQXCKhS+MYBLvhh5OV/
-         /zb8bMaOHu5UkDVTtpgsojfgCrM6SVCTqVsSMgkuTqqX0Tl/vUIhbtR4sP+PFjZr7/XM
-         AsaGmPMbTFmhcuCnjttY3gZa29cU3YVYxj388fNQWPJOT2y7QBc4ScierpSBP+jgBusQ
-         eKP053xLPt6gCmKzFMm4ETdWbTdEYvD80a9GAG8WbhkQSZalx7bubwUnNlclbxQKgekF
-         EnFucT+37nRNpI4TMxb8nzvVvTXBIEWy8T/5w2y2NQwpnMVpm4xXAIMmL1F3pYO5dFxt
-         7Wjw==
-X-Gm-Message-State: ACrzQf0R0+1ED7UWBSi//qibWuXkN53ENvtVSpjQ3FVMwK3YS6DyvXuA
-        TNcKkIVDh69fafWt6tX0HehZF3u55GsPyw==
-X-Google-Smtp-Source: AMsMyM6pYWIPMktvaPsLH3jpYC7dKvRYqa7TuL4nvhCWs/913tf3IFdaraB368dR6D/NgTk8prVblg==
-X-Received: by 2002:adf:ee86:0:b0:228:6fe1:371 with SMTP id b6-20020adfee86000000b002286fe10371mr11181771wro.684.1663613005942;
-        Mon, 19 Sep 2022 11:43:25 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f3e:6a10:9fb4:d689:f4a2:c991? (p200300c78f3e6a109fb4d689f4a2c991.dip0.t-ipconnect.de. [2003:c7:8f3e:6a10:9fb4:d689:f4a2:c991])
-        by smtp.gmail.com with ESMTPSA id bi9-20020a05600c3d8900b003a844885f88sm14032089wmb.22.2022.09.19.11.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 11:43:25 -0700 (PDT)
-Message-ID: <e56a77ac-7d63-e428-cc7d-4e512c5e7da8@gmail.com>
-Date:   Mon, 19 Sep 2022 20:43:24 +0200
+        Mon, 19 Sep 2022 14:43:40 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CDF476CB;
+        Mon, 19 Sep 2022 11:43:39 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.74.120) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 19 Sep
+ 2022 21:43:31 +0300
+Subject: Re: [PATCH] net: sh_eth: Fix PHY state warning splat during system
+ resume
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <c6e1331b9bef61225fa4c09db3ba3e2e7214ba2d.1663598886.git.geert+renesas@glider.be>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <817f9c27-70d6-55bd-a201-e54f3f08bbec@omp.ru>
+Date:   Mon, 19 Sep 2022 21:43:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] staging: rtl8192e: Removes blank line
+In-Reply-To: <c6e1331b9bef61225fa4c09db3ba3e2e7214ba2d.1663598886.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Aruna Hewapathirane <aruna.hewapathirane@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     f3sch.git@outlook.com, guozihua@huawei.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220919142726.9101-1-aruna.hewapathirane@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220919142726.9101-1-aruna.hewapathirane@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [178.176.74.120]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 09/19/2022 18:07:27
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172787 [Sep 19 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 499 499 6614d57ea7c6ac2e38ef0272e2cc77f73b9aae18
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.120 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.120 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.120
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/19/2022 18:10:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/19/2022 3:54:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/19/22 16:27, Aruna Hewapathirane wrote:
-> This patch fixes checkpatch multiple
-> blank line issue
-> 
-> Signed-off-by: Aruna Hewapathirane <aruna.hewapathirane@gmail.com>
-> ---
->   drivers/staging/rtl8192e/rtllib_tx.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-> index 933f347fc17e..ee7c1a5e93c6 100644
-> --- a/drivers/staging/rtl8192e/rtllib_tx.c
-> +++ b/drivers/staging/rtl8192e/rtllib_tx.c
-> @@ -895,7 +895,6 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
->   				tcb_desc->bTxDisableRateFallBack = 1;
->   			}
->   
-> -
->   			tcb_desc->RATRIndex = 7;
->   			tcb_desc->bTxUseDriverAssingedRate = 1;
->   		} else {
+On 9/19/22 5:48 PM, Geert Uytterhoeven wrote:
 
-Combine this one with the other patch.
+> Since commit 744d23c71af39c7d ("net: phy: Warn about incorrect
+> mdio_bus_phy_resume() state"), a warning splat is printed during system
+> resume with Wake-on-LAN disabled:
+> 
+> 	WARNING: CPU: 0 PID: 626 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xe4
+> 
+> As the Renesas SuperH Ethernet driver already calls phy_{stop,start}()
+> in its suspend/resume callbacks, it is sufficient to just mark the MAC
+> responsible for managing the power state of the PHY.
+> 
+> Fixes: fba863b816049b03 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Bye Philipp
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+> diff --git a/drivers/net/ethernet/renesas/sh_eth.c b/drivers/net/ethernet/renesas/sh_eth.c
+> index 67ade78fb7671c4a..7fd8828d3a846169 100644
+> --- a/drivers/net/ethernet/renesas/sh_eth.c
+> +++ b/drivers/net/ethernet/renesas/sh_eth.c
+> @@ -2029,6 +2029,8 @@ static int sh_eth_phy_init(struct net_device *ndev)
+>  	if (mdp->cd->register_type != SH_ETH_REG_GIGABIT)
+>  		phy_set_max_speed(phydev, SPEED_100);
+>  
+> +	/* Indicate that the MAC is responsible for managing PHY PM */
+> +	phydev->mac_managed_pm = true;
+
+   Again, this field is declared as *unsigned*...
+
+>  	phy_attached_info(phydev);
+[...]
+
+MBR, Sergey
