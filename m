@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A3A5BCCCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC61B5BCCD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiISNTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230439AbiISNTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiISNTG (ORCPT
+        with ESMTP id S230368AbiISNTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:19:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CA827FF4;
-        Mon, 19 Sep 2022 06:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663593544; x=1695129544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DZvHfGOxcYz6x4E6FinWKgAgs6KZfo4V8zT+OOteJ0Y=;
-  b=EGICckaeGgPU4S+kQ0uaVP+iFM+PtCJMvCw3LakJ34ZISidrZwjVXTkO
-   IixoMhSfvqmSwcjS8uHA+G2dbfTP4M92lnmw3R3DWJ96e+hzQ6861Molh
-   CEN2jREK2v517O9BtJAIQKCrgVsKbg3sDJaOVATmiAwJjJR28fWwVlROu
-   FPHKJKiR+iVv5UJEqSVuCz7uZMElEnx/BgXvI4EMOmF+CRyd2TShjVyd7
-   8PCJY09m0mpvYuVSjdSrkQV0zcP1OQBRzY0U3wB5ezibAc3fU71DGBaty
-   3oql/6ugVehj5+fniLJIYFy4WtDVvErVEWH0bLF3HcHnSLn3Q8Hb4kUOs
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282422317"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="282422317"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:19:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="744112139"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:19:02 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id E19C3202D2;
-        Mon, 19 Sep 2022 16:18:59 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 13:18:59 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
-        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
-Message-ID: <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
- <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
+        Mon, 19 Sep 2022 09:19:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1129818;
+        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso3132473pjk.0;
+        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date;
+        bh=6sojfB0EzarM+k/PZBtiMXpeN1oQ0x+sgKh5POxkET4=;
+        b=pC9aUZj8uxvkyE0WOYKlTkPDbfsZME97W5me+CBvNLN5DoZ7d0OO6m8KZbAq5XQswC
+         m20L97rAYXd0dUEotuALnX9fu6eMHwsu0MZIezud5fQxn2/nZMGNy6gZu7YijbGAJZ2p
+         8ySqyYEtnfxeh+A38Kj2arg73xMIUZnPQ8KgcehtCkfzy4VN3SfRet6cxTrsfrMEp0Lm
+         S3z0ZEg3NYP5taWsmyR7xuBIQv/ilisWSuuEfQFpPyTh+972V8WW+vIRK8dAwDEloz8l
+         yd23IDQTnv3tL9+oCvLybm59w7PLpIieRwPIB2rNILHHnXrFuChPONRZHkOtGVo9phUH
+         0sQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6sojfB0EzarM+k/PZBtiMXpeN1oQ0x+sgKh5POxkET4=;
+        b=lKtHLToyWALXTbHvHZ2RE2eotQOJLRASGQFJZOebfwO052kfOVL+ju5iV9FsYlzD0o
+         pcn8tM5VSjDfLILHTLSF7E3S2Qg+CjHn1EtnErk2vvRIyXBtWkYNZsaXCO4cDf6HLoQH
+         QYNa6lK8BjnjzrqSxn/YoAybPK6ehRSHczFXJ8mOZaiTUy8fBRKJRCxyBRn9jOIpWFlb
+         Ln7Kdu738IEuDbtQXnU1KP153JfBbD7k5WIUijldHr4OnAlefVPvxHx4mFUWPjWWWWcr
+         oO+O1Ozqb+a+36h7efzpdDlg0BRylNsaHOfexWuWgbsKYA6IO8Z8wQ0V8IyH/U4puXLq
+         tVWQ==
+X-Gm-Message-State: ACrzQf0KQH1rCZDIKiD+JpsXuw3gUf6nOfawRp/Ybg2P779gUiU4BC5H
+        xzNecnPzxxsexM+TYGc+ujs=
+X-Google-Smtp-Source: AMsMyM6JaSPlEVM4mfSkdT3DBrLxFCCWZoBo/g1FoEpLYVeyAGh7ayjz3yx9xdtULFqJd1HLIgMYuA==
+X-Received: by 2002:a17:902:db0a:b0:178:2636:b6de with SMTP id m10-20020a170902db0a00b001782636b6demr13047042plx.58.1663593546222;
+        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170903024f00b00176e8f85147sm20042216plh.83.2022.09.19.06.19.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 06:19:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 19 Sep 2022 06:19:04 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
+        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 17/21] hwmon: (mr75203) add support for series 6
+ temperature equation
+Message-ID: <20220919131904.GA3547146@roeck-us.net>
+References: <20220908152449.35457-1-farbere@amazon.com>
+ <20220908152449.35457-18-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220908152449.35457-18-farbere@amazon.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
-
-On Mon, Sep 19, 2022 at 03:08:29PM +0200, Marco Felsch wrote:
-> Hi Sakari,
+On Thu, Sep 08, 2022 at 03:24:45PM +0000, Eliav Farber wrote:
+> The current equation used in code is aligned to series 5:
+> T = G + H * (n / cal5 - 0.5) + J * F
+> Where:
+> G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
 > 
-> On 22-09-19, Sakari Ailus wrote:
-> > Hi Marco,
-> > 
-> > On Fri, Sep 16, 2022 at 03:57:11PM +0200, Marco Felsch wrote:
-> > > Add support to report the link frequency.
-> > > 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > > The v1 of this small series can be found here:
-> > > https://lore.kernel.org/all/20220818144712.997477-1-m.felsch@pengutronix.de/
-> > > 
-> > > Thanks a lot to Jacopo for the review feedback on my v1.
-> > > 
-> > > Changelog:
-> > > 
-> > > v2:
-> > > - use V4L2_CID_LINK_FREQ instead of V4L2_CID_PIXEL_RATE
-> > > ---
-> > >  drivers/media/i2c/mt9m111.c | 21 ++++++++++++++++++++-
-> > >  1 file changed, 20 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > > index afc86efa9e3e..52be1c310455 100644
-> > > --- a/drivers/media/i2c/mt9m111.c
-> > > +++ b/drivers/media/i2c/mt9m111.c
-> > > @@ -1249,6 +1249,8 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  {
-> > >  	struct mt9m111 *mt9m111;
-> > >  	struct i2c_adapter *adapter = client->adapter;
-> > > +	static s64 extclk_rate;
-> > > +	struct v4l2_ctrl *ctrl;
-> > >  	int ret;
-> > >  
-> > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-> > > @@ -1271,6 +1273,13 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  	if (IS_ERR(mt9m111->clk))
-> > >  		return PTR_ERR(mt9m111->clk);
-> > >  
-> > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	extclk_rate = clk_get_rate(mt9m111->clk);
-> > > +	clk_disable_unprepare(mt9m111->clk);
-> > 
-> > I don't think you'll need to enable a clock to just get its frequency.
+> Series 6 has a slightly different equation:
+> T = G + H * (n / cal5 - 0.5)
+> and a different set of coefficients:
+> G = 57.4, H = 249.4, cal5 = 4096
 > 
-> The official API states that you need to turn on the clk before
-> requesting it and it makes sense. Also there is a new helper
-> devm_clk_get_enabled() which addresses simple clk usage since most of
-> drivers don't enable it before requesting the rate.
+> This change supports equation and coefficients for both series.
+> (for series 6, J is set to 0).
+> 
+> The series is determined according to “moortec,ts-series” property in
+> the device tree.
+> If absent, series 5 is assumed to be the default.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I guess the rate could change in the meantime, unless exclusive access is
-requested. The clock framework currently doesn't offer a way to set the
-assigned rate and prevent changing it. But above, couldn't the clock
-frequency be changed again once the clock has been disabled?
+Applied to hwmon-next.
 
--- 
-Sakari Ailus
+Thanks,
+Guenter
