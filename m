@@ -2,133 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F6B5BCB00
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423685BCB02
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiISLqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S229807AbiISLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiISLp6 (ORCPT
+        with ESMTP id S229694AbiISLq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:45:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913012AE12;
-        Mon, 19 Sep 2022 04:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/3DW1goWuoKer9u+A3DtQ9jlkLup9NoDTU3kbas6vLw=; b=N9OI/owuvMz9blgRWzlwoesiBL
-        OTC+fa+ODBPVgmLMgQ+BbcchiiwfIK71hMcuQQ1exYfDdG+L+PV0252Bzkx8/NfHoYqnyjBCQcU0K
-        Hiqvvma4rZxDVrJiYuF4eY1QUO9nVdMXSzCXM7gFrWnbJGpWu6mktfJg90PZ3o6PRURA6uk92gw7W
-        TnmuKIhYU4DtdvaModSpQKsDcwvrWs5JJP0UrYzxBH7y8NlrAuQ4xu/pPTtZQQUbgdDwO89FYgRyW
-        KOvsYNhKvWKCi769nlTYbEtvGdPmNvQRZvjkrtSZgkKO1MAUWiRx38i5+n76BrTrVF0zftvQ0EJvY
-        M7V1lIVQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaFDX-00E4Q6-V2; Mon, 19 Sep 2022 11:45:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8EE30300342;
-        Mon, 19 Sep 2022 13:45:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7480F2B6335FA; Mon, 19 Sep 2022 13:45:38 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 13:45:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH] perf/x86/rapl: fix deadlock in rapl_pmu_event_stop
-Message-ID: <YyhWYt9iSAay+QL9@hirez.programming.kicks-ass.net>
-References: <20220917144729.118500-1-duoming@zju.edu.cn>
+        Mon, 19 Sep 2022 07:46:57 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F90125EB0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:46:55 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id u189so29591549vsb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=fKtska7zV2Fg+EfIPpoEMTUbCLRCeKFO87xJdNKwlXs=;
+        b=hZ7qcRrATubjNu9J6EKzo2G34ZYs2VQWzktnPNz1RQQB229BKCnI7QQ04IdjOhNpiS
+         noYMJmgZgiJOwbZTutMyxzTqkxPgPt2bgCPdjvnCuYfqkQFGkr2g8fUr4KHgZipb24FI
+         z4KWMWL17qtO0cagxkH24dDB84/YklxtzvCssO2xbuRXTGSlPKw5/CUwi3xTDqnKm31V
+         B/ENsTUQZTliTm92Rd+Gdci81MoL4ag72lK0A4uRGsuVu+2X7tBbpW9OkiuW3nA74Bqp
+         e2Ve3D2HwkJRQR3gRS+T48vN3oD/SSpnkwFNT3Ajl1Rd3wkQf8edxKQGaiOOHkoAnWjw
+         1gYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fKtska7zV2Fg+EfIPpoEMTUbCLRCeKFO87xJdNKwlXs=;
+        b=o/q1KJOzZHp7QqXA75cGpHkHftpQXFB7jtr9Q7U5nkLSO+mj1VGi+9rMZw+hGhhT5R
+         MXUdf6sONQoIee2sO3441ErTbo3KqWYHpwrEHBMS69HK2uCLxhkWmWIy03N8nvA5ayeN
+         /feWu0OQg+9YpMCo0B6DQZt3ZQ6xt5qhH4SL8z++IET4af1GYnxwCMeFMoW/ZJzUcakw
+         +/qR52KWjOrsv0VPnLBPs0sMs4Ek2fZ5LVgMtCCw2pY9Q8skBtb2PWD31fvJA9NA6yFT
+         xGbRO+T0d+qKexZPYoxYW1fnJOOG+VKOS8ixLiznWUaVdNwqOCgvNLUx5MmT8HLdL7Fd
+         4OJw==
+X-Gm-Message-State: ACrzQf3oCKtXVMG2Eu9EOina3Z0Ezchcas7F2psfMvCvQcbBtM4Ye+Xb
+        i5G2rERA4sxxFK1FJN278xEq+kep3c5jaL6J99g=
+X-Google-Smtp-Source: AMsMyM4M2ser5bOF6J2igC/p57FX5aXjOfh63rBKsvNVK82zChDx25dnwcFkZuYVUg+agaq0+PNxstXRhVrSUizXXIk=
+X-Received: by 2002:a67:8c43:0:b0:398:6815:d340 with SMTP id
+ o64-20020a678c43000000b003986815d340mr5863396vsd.42.1663588014187; Mon, 19
+ Sep 2022 04:46:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220917144729.118500-1-duoming@zju.edu.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com>
+ <871qs7dav5.wl-tiwai@suse.de> <87r107btti.wl-tiwai@suse.de>
+In-Reply-To: <87r107btti.wl-tiwai@suse.de>
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Mon, 19 Sep 2022 19:46:43 +0800
+Message-ID: <CAB7eexL-H7v5+EB6DVLLZSaV0daHtWhr1gjpuMOspJhJSjq5Lw@mail.gmail.com>
+Subject: Re: KASAN: invalid-free in snd_card_new
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 10:47:29PM +0800, Duoming Zhou wrote:
-> There is a deadlock in rapl_pmu_event_stop(), the process is
-> shown below:
-> 
->     (thread 1)                 |        (thread 2)
-> rapl_pmu_event_stop()          | rapl_hrtimer_handle()
->  ...                           |  if (!pmu->n_active)
->  raw_spin_lock_irqsave() //(1) |  ...
->   ...                          |
->   hrtimer_cancel()             |  raw_spin_lock_irqsave() //(2)
->   (block forever)
-> 
-> We hold pmu->lock in position (1) and use hrtimer_cancel() to wait
-> rapl_hrtimer_handle() to stop, but rapl_hrtimer_handle() also need
-> pmu->lock in position (2). As a result, the rapl_pmu_event_stop()
-> will be blocked forever.
-> 
-> This patch extracts hrtimer_cancel() from the protection of
-> raw_spin_lock_irqsave(). As a result, the rapl_hrtimer_handle() could
-> obtain the pmu->lock. In order to prevent race conditions, we put
-> "if (!pmu->n_active)" in rapl_hrtimer_handle() under the protection
-> of raw_spin_lock_irqsave().
-> 
-> Fixes: 65661f96d3b3 ("perf/x86: Add RAPL hrtimer support")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Hello,
+
+I tested this patch with the reproducer and the crash did not trigger again.
+
+On Mon, Sep 19, 2022 at 5:24 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 19 Sep 2022 10:30:54 +0200,
+> Takashi Iwai wrote:
+> >
+> > On Sun, 18 Sep 2022 15:01:11 +0200,
+> > Rondreis wrote:
+> > >
+> > > Hello,
+> > >
+> > > When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> > > triggered.
+> > >
+> > > HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> > > git tree: upstream
+> > >
+> > > kernel config: https://pastebin.com/raw/xtrgsXP3
+> > > C reproducer: https://pastebin.com/raw/w2sdQWYj
+> > > console output: https://pastebin.com/raw/Yyf7zw2d
+> > >
+> > > Basically, in the c reproducer, we use the gadget module to emulate
+> > > attaching a USB device(vendor id: 0x1bc7, product id: 0x1206, with the
+> > > midi function) and executing some simple sequence of system calls.
+> > > To reproduce this crash, we utilize a third-party library to emulate
+> > > the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+> > > Just clone this repository, install it, and compile the c
+> > > reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
+> > > the trick.
+> > >
+> > > I would appreciate it if you have any idea how to solve this bug.
+> >
+> > Could you try the patch below?  It looks like a simple double-free in
+> > the code.
+>
+> A more proper patch is below.  Please give it a try.
+>
+>
+> thanks,
+>
+> Takashi
+>
+> -- 8< --
+> From: Takashi Iwai <tiwai@suse.de>
+> Subject: [PATCH] ALSA: core: Fix double-free at snd_card_new()
+>
+> During the code change to add the support for devres-managed card
+> instance, we put an explicit kfree(card) call at the error path in
+> snd_card_new().  This is needed for the early error path before the
+> card is initialized with the device, but is rather superfluous and
+> causes a double-free at the error path after the card instance is
+> initialized, as the destructor of the card object already contains a
+> kfree() call.
+>
+> This patch fixes the double-free situation by removing the superfluous
+> kfree().  Meanwhile we need to call kfree() explicitly for the early
+> error path, so it's added there instead.
+>
+> Fixes: e8ad415b7a55 ("ALSA: core: Add managed card creation")
+> Reported-by: Rondreis <linhaoguo86@gmail.com>
+> Cc: <stable@vger.kernel.org>
+> Link: https://lore.kernel.org/r/CAB7eexL1zBnB636hwS27d-LdPYZ_R1-5fJS_h=ZbCWYU=UPWJg@mail.gmail.com
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 > ---
->  arch/x86/events/rapl.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 77e3a47af5a..97c71538d01 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -219,11 +219,11 @@ static enum hrtimer_restart rapl_hrtimer_handle(struct hrtimer *hrtimer)
->  	struct perf_event *event;
->  	unsigned long flags;
->  
-> +	raw_spin_lock_irqsave(&pmu->lock, flags);
-> +
->  	if (!pmu->n_active)
->  		return HRTIMER_NORESTART;
-
-Except now you return with the lock held...
-
->  
-> -	raw_spin_lock_irqsave(&pmu->lock, flags);
-> -
->  	list_for_each_entry(event, &pmu->active_list, active_entry)
->  		rapl_event_update(event);
->  
-> @@ -281,8 +281,11 @@ static void rapl_pmu_event_stop(struct perf_event *event, int mode)
->  	if (!(hwc->state & PERF_HES_STOPPED)) {
->  		WARN_ON_ONCE(pmu->n_active <= 0);
->  		pmu->n_active--;
-> -		if (pmu->n_active == 0)
-> +		if (!pmu->n_active) {
-> +			raw_spin_unlock_irqrestore(&pmu->lock, flags);
->  			hrtimer_cancel(&pmu->hrtimer);
-> +			raw_spin_lock_irqsave(&pmu->lock, flags);
-
-Doing a lock-break makes the nr_active and list_del thing non-atomic,
-breaking the whole purpose of the lock.
-
-> +		}
->  
->  		list_del(&event->active_entry);
-
-
-Now; did you actually observe this deadlock or is this a code-reading
-exercise? If you saw an actual deadlock, was cpu-hotplug involved?
-
-
+>  sound/core/init.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/sound/core/init.c b/sound/core/init.c
+> index 193dae361fac..5377f94eb211 100644
+> --- a/sound/core/init.c
+> +++ b/sound/core/init.c
+> @@ -178,10 +178,8 @@ int snd_card_new(struct device *parent, int idx, const char *xid,
+>                 return -ENOMEM;
+>
+>         err = snd_card_init(card, parent, idx, xid, module, extra_size);
+> -       if (err < 0) {
+> -               kfree(card);
+> -               return err;
+> -       }
+> +       if (err < 0)
+> +               return err; /* card is freed by error handler */
+>
+>         *card_ret = card;
+>         return 0;
+> @@ -233,7 +231,7 @@ int snd_devm_card_new(struct device *parent, int idx, const char *xid,
+>         card->managed = true;
+>         err = snd_card_init(card, parent, idx, xid, module, extra_size);
+>         if (err < 0) {
+> -               devres_free(card);
+> +               devres_free(card); /* in managed mode, we need to free manually */
+>                 return err;
+>         }
+>
+> @@ -297,6 +295,8 @@ static int snd_card_init(struct snd_card *card, struct device *parent,
+>                 mutex_unlock(&snd_card_mutex);
+>                 dev_err(parent, "cannot find the slot for index %d (range 0-%i), error: %d\n",
+>                          idx, snd_ecards_limit - 1, err);
+> +               if (!card->managed)
+> +                       kfree(card); /* manually free here, as no destructor called */
+>                 return err;
+>         }
+>         set_bit(idx, snd_cards_lock);           /* lock it */
+> --
+> 2.35.3
+>
