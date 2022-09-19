@@ -2,229 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0E75BD3A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220065BD3AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiISR1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S231259AbiISR1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiISR1d (ORCPT
+        with ESMTP id S229589AbiISR1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:27:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A846415FC9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663608451;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=7NsGFKg7Zzx4zTkQ2pzi2k9DjtPnYYJNY5qhCGrS9X4=;
-        b=cMEs4y9RVQMf+Ng8LGJXxYcejxRUDPHBZPnEecv1dmBcZZtCsNO4jU/yd8ielWE3MPLvM5
-        ra199OtHgvGhTek5bShSW6ZMko8pSBlzVV6Xo3qAxcY0SUrzft3H3UMUevpZRiywq6LF/h
-        O5sDKgiiKc1w8sb4iWGe96Zx0X1szoM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-mNTVViCPMKSNPtJkDxmu0w-1; Mon, 19 Sep 2022 13:27:28 -0400
-X-MC-Unique: mNTVViCPMKSNPtJkDxmu0w-1
-Received: by mail-qv1-f69.google.com with SMTP id nm17-20020a0562143b1100b004a5a3002d87so184956qvb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:27:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=7NsGFKg7Zzx4zTkQ2pzi2k9DjtPnYYJNY5qhCGrS9X4=;
-        b=vM3cPA7R/4pSFfBSTtpr8SjhZrsfZv7vd9kDm+b+oOkVdOMwvY4fza9UShq3jtFiO0
-         oNLiU8ciVWLwLfTAxsdD8x+dXGd0+RHJFE2xSw99j3cdfMch17/mUzIHbYVuupeR5ONm
-         DjFgfBOeOH8Zhi21VjwqWodCwC1d/68jeLRIuPhTfdX3AYADPudk1pBA2z3ZmgbuIsWR
-         c7/XPXwoJb7hqtK3LZdm0/Uq+EAsZ2ekDdQo8X+xo+oQGGuQ3GIrcCjddl8an3cwUXJZ
-         0Hc0sVxdlyei/oLwj3atzKFStzMOr9TnRUH9VrlUMeJ+VZ/t37KHHPpStPZU5c35qZDg
-         tfeg==
-X-Gm-Message-State: ACrzQf2W3LDRgc05enzi/bZlApfRKT1KgRSo75nVtR48NhONlzIWbo/N
-        KRVN0/GQG++eMFG/7MDGPUuUFcovwZAffpEUR9xkcV+VpTTIa8TI0V3oqkjH6ZnrsXKlesblG4d
-        Wj8HfShE0R6lluoyfJrtr7hJ2
-X-Received: by 2002:ac8:7d55:0:b0:35c:d884:449b with SMTP id h21-20020ac87d55000000b0035cd884449bmr11878618qtb.446.1663608447744;
-        Mon, 19 Sep 2022 10:27:27 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4i0rlAyGMYCTEgKC4McJT8796QdIatMpbatt/bB5p0sKvwg1QXcySq88dwTcJrMAFNtAKCAQ==
-X-Received: by 2002:ac8:7d55:0:b0:35c:d884:449b with SMTP id h21-20020ac87d55000000b0035cd884449bmr11878594qtb.446.1663608447532;
-        Mon, 19 Sep 2022 10:27:27 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id w14-20020ac84d0e000000b003436103df40sm10674862qtv.8.2022.09.19.10.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:27:27 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, Nevenko.Stupar@amd.com, Pavle.Kotarac@amd.com,
-        aric.cyr@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: remove redundant CalculateRemoteSurfaceFlipDelay's
-Date:   Mon, 19 Sep 2022 13:27:20 -0400
-Message-Id: <20220919172720.3496405-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 19 Sep 2022 13:27:40 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9DDB13DC1;
+        Mon, 19 Sep 2022 10:27:38 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,328,1654527600"; 
+   d="scan'208";a="133293979"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 20 Sep 2022 02:27:38 +0900
+Received: from localhost.localdomain (unknown [10.226.92.28])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 828EA40041A0;
+        Tue, 20 Sep 2022 02:27:35 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     conor.dooley@microchip.com
+Cc:     brgl@bgdev.pl, dmitry.torokhov@gmail.com, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michael@walle.cc, Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH] gpiolib: fix OOB access in quirk callbacks
+Date:   Mon, 19 Sep 2022 18:27:32 +0100
+Message-Id: <1041bfe5-6515-feea-36d6-47f8f28938b6@samsung.com> (raw)
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220916110118.446132-1-michael@walle.cc>
+References: <960a9d86-7814-3b2f-d5a0-9bc2b316d12b@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are several copies of CalculateRemoteSurfaceFlipDelay.
-Reduce to one instance.
+On 16.09.2022 13:01, Michael Walle wrote:
+> Commit a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+> introduced an array of quirk functions which get iterated over. But a
+> sentinal value is missing. Add it.
+>
+> Fixes: a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../dc/dml/dcn20/display_mode_vba_20.c        |  4 +-
- .../dc/dml/dcn20/display_mode_vba_20v2.c      | 40 +------------------
- .../dc/dml/dcn21/display_mode_vba_21.c        | 40 +------------------
- 3 files changed, 4 insertions(+), 80 deletions(-)
+This fixes the boot issue on RZ/G2L board since next-20220916.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-index 4ca080950924..8e5d58336bc5 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-@@ -158,7 +158,7 @@ double CalculateTWait(
- 		double DRAMClockChangeLatency,
- 		double UrgentLatency,
- 		double SREnterPlusExitTime);
--static double CalculateRemoteSurfaceFlipDelay(
-+double CalculateRemoteSurfaceFlipDelay(
- 		struct display_mode_lib *mode_lib,
- 		double VRatio,
- 		double SwathWidth,
-@@ -2909,7 +2909,7 @@ double CalculateTWait(
- 	}
- }
- 
--static double CalculateRemoteSurfaceFlipDelay(
-+double CalculateRemoteSurfaceFlipDelay(
- 		struct display_mode_lib *mode_lib,
- 		double VRatio,
- 		double SwathWidth,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-index 2b4dcae4e432..e9ebc81adc71 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-@@ -182,7 +182,7 @@ double CalculateTWait(
- 		double DRAMClockChangeLatency,
- 		double UrgentLatency,
- 		double SREnterPlusExitTime);
--static double CalculateRemoteSurfaceFlipDelay(
-+double CalculateRemoteSurfaceFlipDelay(
- 		struct display_mode_lib *mode_lib,
- 		double VRatio,
- 		double SwathWidth,
-@@ -2967,44 +2967,6 @@ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
- 	}
- }
- 
--static double CalculateRemoteSurfaceFlipDelay(
--		struct display_mode_lib *mode_lib,
--		double VRatio,
--		double SwathWidth,
--		double Bpp,
--		double LineTime,
--		double XFCTSlvVupdateOffset,
--		double XFCTSlvVupdateWidth,
--		double XFCTSlvVreadyOffset,
--		double XFCXBUFLatencyTolerance,
--		double XFCFillBWOverhead,
--		double XFCSlvChunkSize,
--		double XFCBusTransportTime,
--		double TCalc,
--		double TWait,
--		double *SrcActiveDrainRate,
--		double *TInitXFill,
--		double *TslvChk)
--{
--	double TSlvSetup, AvgfillRate, result;
--
--	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
--	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
--	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
--	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
--	*TslvChk = XFCSlvChunkSize / AvgfillRate;
--	dml_print(
--			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
--			*SrcActiveDrainRate);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
--	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
--	return result;
--}
--
- static void CalculateActiveRowBandwidth(
- 		bool GPUVMEnable,
- 		enum source_format_class SourcePixelFormat,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-index a3ef3638d979..d94aaf899f9b 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-@@ -210,7 +210,7 @@ double CalculateTWait(
- 		double DRAMClockChangeLatency,
- 		double UrgentLatency,
- 		double SREnterPlusExitTime);
--static double CalculateRemoteSurfaceFlipDelay(
-+double CalculateRemoteSurfaceFlipDelay(
- 		struct display_mode_lib *mode_lib,
- 		double VRatio,
- 		double SwathWidth,
-@@ -2980,44 +2980,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
- 	}
- }
- 
--static double CalculateRemoteSurfaceFlipDelay(
--		struct display_mode_lib *mode_lib,
--		double VRatio,
--		double SwathWidth,
--		double Bpp,
--		double LineTime,
--		double XFCTSlvVupdateOffset,
--		double XFCTSlvVupdateWidth,
--		double XFCTSlvVreadyOffset,
--		double XFCXBUFLatencyTolerance,
--		double XFCFillBWOverhead,
--		double XFCSlvChunkSize,
--		double XFCBusTransportTime,
--		double TCalc,
--		double TWait,
--		double *SrcActiveDrainRate,
--		double *TInitXFill,
--		double *TslvChk)
--{
--	double TSlvSetup, AvgfillRate, result;
--
--	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
--	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
--	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
--	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
--	*TslvChk = XFCSlvChunkSize / AvgfillRate;
--	dml_print(
--			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
--			*SrcActiveDrainRate);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
--	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
--	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
--	return result;
--}
--
- static void CalculateActiveRowBandwidth(
- 		bool GPUVMEnable,
- 		enum source_format_class SourcePixelFormat,
+Tested-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+> ---
+> FWIW here is the kernel oops backtrace:
+> [    4.108706] Internal error: SP/PC alignment exception: 8a000000 [#1] SMP
+> [    4.115470] Modules linked in:
+> [    4.118549] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc5-next-20220916-00091-g6cae0fcbd5e7 #1821
+> [    4.128033] Hardware name: Kontron KBox A-230-LS (DT)
+> [    4.133127] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    4.140154] pc : 0x61722d6f697067
+> [    4.143495] lr : of_find_gpio+0x138/0x174
+> [    4.147546] sp : ffff80000a24b680
+> [    4.150884] x29: ffff80000a24b680 x28: 0000000000000000 x27: ffff80000996044c
+> [    4.158090] x26: 0000000000000001 x25: ffff80000970f588 x24: ffff800009297968
+> [    4.165295] x23: ffff80000a24b770 x22: 0000000000000000 x21: ffff0020009a7010
+> [    4.172500] x20: ffff8000097752f8 x19: fffffffffffffffe x18: 0000000000000000
+> [    4.179703] x17: ffff8000085fb9d0 x16: ffff8000085fb264 x15: ffff8000085f96ac
+> [    4.186907] x14: 0000000000000000 x13: ffff80000884b3e8 x12: ffff80000884ab04
+> [    4.194111] x11: ffff80000884aa54 x10: 0000000000025080 x9 : ffff8000085fce78
+> [    4.201316] x8 : 0101010101010101 x7 : ffff800009750268 x6 : 051f521459491b57
+> [    4.208520] x5 : 571b495914521f05 x4 : 6e61722d6f697067 x3 : ffff80000a24b6d4
+> [    4.215724] x2 : 0000000000000000 x1 : ffff8000097752f8 x0 : ffff00207f7e4b20
+> [    4.222928] Call trace:
+> [    4.225389]  0x61722d6f697067
+> [    4.228377]  gpiod_get_index+0x12c/0x440
+> [    4.232334]  devm_gpiod_get_index+0x34/0xf0
+> [    4.236553]  devm_gpiod_get_optional+0x20/0x40
+> [    4.241036]  uart_get_rs485_mode+0x104/0x180
+> [    4.245345]  serial8250_register_8250_port+0x198/0x484
+> [    4.250532]  of_platform_serial_probe+0x358/0x640
+> [    4.255279]  platform_probe+0x70/0xe0
+> [    4.258973]  really_probe+0xc4/0x2e4
+> [    4.262577]  __driver_probe_device+0x80/0xec
+> [    4.266882]  driver_probe_device+0x44/0x150
+> [    4.271100]  __driver_attach+0x88/0x1a0
+> [    4.274967]  bus_for_each_dev+0x78/0xdc
+> [    4.278833]  driver_attach+0x2c/0x40
+> [    4.282437]  bus_add_driver+0x15c/0x210
+> [    4.286303]  driver_register+0x80/0x13c
+> [    4.290170]  __platform_driver_register+0x30/0x3c
+> [    4.294915]  of_platform_serial_driver_init+0x24/0x30
+> [    4.300013]  do_one_initcall+0x4c/0x240
+> [    4.303882]  kernel_init_freeable+0x29c/0x30c
+> [    4.308276]  kernel_init+0x2c/0x140
+> [    4.311793]  ret_from_fork+0x10/0x20
+> [    4.315401] Code: bad PC value
+>
+>   drivers/gpio/gpiolib-of.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 95be5f0d2623..0e4e1291604d 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -498,6 +498,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
+>   	of_find_regulator_gpio,
+>   	of_find_arizona_gpio,
+>   	of_find_usb_gpio,
+> +	NULL
+>   };
+>   
+>   struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+
+Best regards
 -- 
-2.27.0
-
+Biju
