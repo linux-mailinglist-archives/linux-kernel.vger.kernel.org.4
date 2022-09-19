@@ -2,191 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011685BCFBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF8B5BCFE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiISO6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S229498AbiISPCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiISO6Q (ORCPT
+        with ESMTP id S229823AbiISPBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:58:16 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753A19C01;
-        Mon, 19 Sep 2022 07:58:15 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id w2so18085709pfb.0;
-        Mon, 19 Sep 2022 07:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=lnYJozcLUmTPYrU24R8V0lK2TwtYqvaT/IHSXf9uJg0=;
-        b=hRmZP+oV1Bl8EjCD8HfT0GqgLngvsP/aBaoWTJ1ML06z73Xew4hyq/urnklLSYH3/q
-         dMPY4mFzOip3Hsohb93b7CLrlknDnOe/YktWjjXLDjm6POoYbFn/tds3R2oy1BleZjSd
-         ThdYET2VaFoimTq2WMbSzrMwONsyEuf+BbWVFjYn+yHXDGIr5BnnT3vcx7Gh0F0WzY/p
-         UyPnLDLeZ+3OLuFYxtytUFI9A9D+YQsIRvdjN4Vbw3aWKFqXeYacSAt2wzSCLCm6BCA1
-         Mo9MaxLow+r5p7N7q9QGNHdmyFNlnoiBVMgP+AFPXrq2mqMyaPABJXUP2NQ8TuNOElrQ
-         s6ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=lnYJozcLUmTPYrU24R8V0lK2TwtYqvaT/IHSXf9uJg0=;
-        b=Qvr9UNS0APM/OpQtGCVuHQ+L6AQ4+JznjIPhSQX/PBTd6dlaLgBIpyu3hfrCAVPn5f
-         WC/jVFLYJ8oy+jo9oCklcpYZCSdQGfNmLCQipsaPg5svwk7/QUP9LKFHvf+XXPeC/Vil
-         QiW8x9PSleZHU4tAdXmUm7aEiudbqEiEW98BdhzoYzlUUOhN2xeSyj1SG3VOsxHy0La+
-         44OGG7/H33gCLs76oowCTE7PkHfAj5OfpYkK8VSROrKxCHqTCapRXFcn+dOKVWvrJBoQ
-         8hOkHjfg5/BllwCHN8nGIopzHIVvpXhq82nB+c+3GDhLV5xjxGLH6C4M0e4jsM2YPGbp
-         QPSQ==
-X-Gm-Message-State: ACrzQf3GHsgMe/BmfUr0bl8cW7Aw0HPK/dUzqNVG90kdJX0OlFdixW3s
-        chqPxuygvu0Vm/yV9yUgfmw=
-X-Google-Smtp-Source: AMsMyM5ZYYdFuNeKzgLJKAadbdkw3BGTjlQj6CuVcT73oxkvecA7RXzVRlY7rFhCUdnWPJ2uEHW6bw==
-X-Received: by 2002:a05:6a00:3392:b0:547:f861:1fad with SMTP id cm18-20020a056a00339200b00547f8611fadmr19226573pfb.16.1663599494511;
-        Mon, 19 Sep 2022 07:58:14 -0700 (PDT)
-Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b00177324a7862sm21108171plf.45.2022.09.19.07.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 07:58:13 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 07:58:11 -0700
-From:   Andrei Vagin <avagin@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-Message-ID: <YyiDg79flhWoMDZB@gmail.com>
-References: <20220826064535.1941190-1-usama.anjum@collabora.com>
+        Mon, 19 Sep 2022 11:01:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D481533A13;
+        Mon, 19 Sep 2022 08:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DH0Mbf0oZaE0931sFQPw1e06bFjL/ZiWgntyEnYtHbE=; b=pBRNinasNKvLHB+U8b6NOmyvAp
+        NcJ00f2rKqpiViUdzBhyD/iX/r5TNR8TZk0k0HBEd4i9El3QwTYBSl1f56Xc3xzafrk2bqlbormlY
+        Ny8TsdVE/g64jo1GdXffNjgUyD0G40ALVOt0+l1GsG5JjVy5mrtYLMtlmDQTVIMRxF8k54pdbXRGK
+        HzcyeH6hyGCp4ruBUUc2OUfxcofiuaTmvUxONlPYCEaQsYg6TiDlCg5vWx6uX6KAF33RsoHoaNNkw
+        hka1z5BGx0hIMu5afWdhKtjtQ+NHL2XeOP61fakNoHFN8VnwC9pSnHgDAbgxdM5pi2ksGx2BUq7bi
+        cO6CxF+A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaIGY-004nR8-L9; Mon, 19 Sep 2022 15:00:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDE1A3005DD;
+        Mon, 19 Sep 2022 17:00:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C27C020139CA8; Mon, 19 Sep 2022 17:00:52 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 17:00:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
+Message-ID: <YyiEJOJL5/Bq+9hK@hirez.programming.kicks-ass.net>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.869531945@infradead.org>
+ <20220919142123.GE58444@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826064535.1941190-1-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220919142123.GE58444@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:45:31AM +0500, Muhammad Usama Anjum wrote:
+On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
+> On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
+> > Doing RCU-idle outside the driver, only to then temporarily enable it
+> > again, at least twice, before going idle is daft.
 > 
-> Hello,
-> 
-> This patch series implements a new ioctl on the pagemap proc fs file to
-> get, clear and perform both get and clear at the same time atomically on
-> the specified range of the memory.
-> 
-> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
-> procfs file. The soft-dirty PTE bit for the whole memory range of the
-> process can be cleared by writing to the clear_refs file. This series
-> adds features that weren't present earlier.
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->   present.
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The proc fs interface is enough for that as I think the process
-> is frozen. We have the use case where we need to track the soft-dirty
-> PTE bit for the running processes. We need this tracking and clear
-> mechanism of a region of memory while the process is running to emulate
-> the getWriteWatch() syscall of Windows. This syscall is used by games to
-> keep track of dirty pages and keep processing only the dirty pages. This
-> new ioctl can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information.
-> 
-> As in the current kernel there is no way to clear a part of memory (instead
-> of clearing the Soft-Dirty bits for the entire process) and get+clear
-> operation cannot be performed atomically, there are other methods to mimic
-> this information entirely in userspace with poor performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-> Some benchmarks can be seen [1].
-> 
-> This ioctl can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information. The following operations are
-> supported in this ioctl:
-> - Get the pages that are soft-dirty.
+> Hmm, what ends up calling RCU_IDLE() here? Also what about
+> cpu_do_idle()?
 
-I think this interface doesn't have to be limited by the soft-dirty
-bits only. For example, CRIU needs to know whether file, present and swap bits
-are set or not.
+Both cpu_pm_enter() and cpu_cluster_pm_enter() use ct_irq_enter_irqson()
+which is another way to spell RCU_NONIDLE().
 
-I mean we should be able to specify for what pages we need to get info
-for. An ioctl argument can have these four fields:
-* required bits (rmask & mask == mask) - all bits from this mask have to be set.
-* any of these bits (amask & mask != 0) - any of these bits is set.
-* exclude masks (emask & mask == 0) = none of these bits are set.
-* return mask - bits that have to be reported to user.
-
-> - Clear the pages which are soft-dirty.
-> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
-> soft-dirty PTE bit
-> 
-> There are two decisions which have been taken about how to get the output
-> from the syscall.
-> - Return offsets of the pages from the start in the vec
-
-We can conside to return regions that contains pages with the same set
-of bits.
-
-struct page_region {
-	void *start;
-	long size;
-	u64 bitmap;
-}
-
-And ioctl returns arrays of page_region-s. I believe it will be more
-compact form for many cases.
-
-> - Stop execution when vec is filled with dirty pages
-> These two arguments doesn't follow the mincore() philosophy where the
-> output array corresponds to the address range in one to one fashion, hence
-> the output buffer length isn't passed and only a flag is set if the page
-> is present. This makes mincore() easy to use with less control. We are
-> passing the size of the output array and putting return data consecutively
-> which is offset of dirty pages from the start. The user can convert these
-> offsets back into the dirty page addresses easily. Suppose, the user want
-> to get first 10 dirty pages from a total memory of 100 pages. He'll
-> allocate output buffer of size 10 and the ioctl will abort after finding the
-> 10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
-> behaviour like mincore() can be achieved by passing output buffer of 100
-> size. This interface can be used for any desired behaviour.
-> 
-> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
-> 
-> Regards,
-> Muhammad Usama Anjum
-> 
-> Muhammad Usama Anjum (4):
->   fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
->   fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
->   selftests: vm: add pagemap ioctl tests
->   mm: add documentation of the new ioctl on pagemap
-> 
->  Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
->  fs/proc/task_mmu.c                          | 342 ++++++++++-
->  include/uapi/linux/fs.h                     |  23 +
->  tools/include/uapi/linux/fs.h               |  23 +
->  tools/testing/selftests/vm/.gitignore       |   1 +
->  tools/testing/selftests/vm/Makefile         |   2 +
->  tools/testing/selftests/vm/pagemap_ioctl.c  | 649 ++++++++++++++++++++
->  7 files changed, 1050 insertions(+), 32 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
-> 
-> -- 
-> 2.30.2
-> 
