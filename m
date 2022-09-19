@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042ED5BD1F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C26D5BD1F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiISQP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S229863AbiISQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiISQPr (ORCPT
+        with ESMTP id S229725AbiISQPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:15:47 -0400
+        Mon, 19 Sep 2022 12:15:52 -0400
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B9C2981C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:15:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54608286C6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:15:50 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 93285C0005;
-        Mon, 19 Sep 2022 16:15:40 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id ACD16C000C;
+        Mon, 19 Sep 2022 16:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663604143;
+        t=1663604149;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LhB1jG5B6jljqSjTaVVV7KYKLqSYj8hCHb/lJYl0jIA=;
-        b=nmlfLDiTpuJdAsbFGPDvuBwZGAS/FBLMNKzuvRVqzOQnNqFt0PrStVq78lagiyjDZwD2XS
-        BWm8Azd9JDEk+A1sBqkhYFl8jTgqigG4M9y3ZPoS6mHKuUgI9eO4oiH22rSHS48B2unEes
-        /mvIpSAoed9/XlItmSmE/Nr4dF4NahNaomJNzdQKGq+Ys7YqTDttM3d0XpeAZN872+Bky2
-        89pIB3wmUyntYrEng54Empwla2l5ofE+i9FuBinH+2dpq406HdTNghOGJubfLx0qA3zFrY
-        6msQzdBj9ttFH41tDCweGm0y/lcLo/5kQd4whKp/3/CRvshDGF7+Q20xk0GY2w==
+        bh=3Dc/RlglN5rD6jeAjq6bz9fLtyemoPUuRw33vxFl6Yo=;
+        b=N/DqyCnoZ+xMZrFCE4iiOhh4jKP7f/F7t3X+VHB/ob54vs0YF6fmJTgeHlksp28mY/sMDf
+        yrXBWs2PCajxTQJOdp1kZ1/9/uv8oeGFyWrTzfDDLgLrr+fM5Nb3fKEpDHRbKh44VFyk19
+        KcDrRVpVz7GveGNxE3m527KKKnsdlPFrsD/0FBcF3sqqi54bnBQflgQs+7EzB9aMVWSxQd
+        gtyGzCs3FrfQMINODn8cJkZTxL/Edh+wC+jvP7RSoTKLlYSf4QcvW0NiXo5OduhT1iyZ3n
+        ppe+s0ovLtsuJIvKj7H/oLF//DF/qglA1Vu2H5SksSGHqemUr4pm0QmZuYWVkg==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Joern Engel <joern@lazybastard.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] mtd: move from strlcpy with unused retval to strscpy
-Date:   Mon, 19 Sep 2022 18:15:39 +0200
-Message-Id: <20220919161539.226422-1-miquel.raynal@bootlin.com>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wangweiyang2@huawei.com
+Subject: Re: [PATCH -next] mtd: ftl: use container_of() rather than cast
+Date:   Mon, 19 Sep 2022 18:15:46 +0200
+Message-Id: <20220919161546.226481-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220818210033.7084-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220816135910.268016-1-cuigaosheng1@huawei.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'80b7e928635168c3699e0fe85dac8ea75dca5806'
+X-linux-mtd-patch-commit: b'bf3e6b8f837afdf01d31cdc86028660f3f342bbe'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -58,13 +55,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-08-18 at 21:00:33 UTC, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Tue, 2022-08-16 at 13:59:10 UTC, Gaosheng Cui wrote:
+> The container_of() is much more readable and also safer.
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
