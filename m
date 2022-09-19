@@ -2,192 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7015BD41B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6017D5BD44F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiISRvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S231128AbiISSAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiISRvN (ORCPT
+        with ESMTP id S230434AbiISSAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:51:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA35C45064
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663609862; x=1695145862;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=c6tZxuELr4NSU9kuMAkq1H8+mPlH4jFBJzfU4tnhLOg=;
-  b=cfdVeli3rU3J+kuoqP1EyQqtKF+H0cl8Q8twK4nYfMzDjdnVz0VbZaCK
-   SJYL0IFoxOM/NM04neyu8t+ao8mBlq2i31HhvJQl3CjoL7NxoFKuYqeT7
-   rBJ9EZs//kY1r32oSSOecXmkn+MsFe8uFNa1bfqwezHkBX7yMJ8MMPV+9
-   DihohPlNrqzuTsqoepbqQzJyKxky6qsgLfWj31t10KkBlaBHKWXi9AaLa
-   MpjyZEFBUvovy772TiQoss0LqY5D35f/AJsjg78OIfhP8s5HCnphoLfMF
-   tjZS0C/P2Rs+hebHq8PVj/Yv0WXFogL7IFxvXdkNQhsP4S5OZgopMk2rO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363429385"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="363429385"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:51:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="863658636"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 10:50:59 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 11/11] soundwire: intel: add helper to stop bus
-Date:   Tue, 20 Sep 2022 01:57:21 +0800
-Message-Id: <20220919175721.354679-12-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220919175721.354679-1-yung-chuan.liao@linux.intel.com>
-References: <20220919175721.354679-1-yung-chuan.liao@linux.intel.com>
+        Mon, 19 Sep 2022 14:00:25 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCDFE019
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:00:24 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11eab59db71so487683fac.11
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tEIs68WPX2uvipp125B48aqh0bfmh+wQV9ksUWd9SVo=;
+        b=qNir+J9O8F4LyGFvxa8ugiu0xA9D2Ihgv3ALdOuQZ+lePvk+zVsTBvMpcy2pGZUoEl
+         7L4jf8wUJ+1XXw/rJwjO9d9FgqqmO8igXnocxy+0PJh7kZMe5lV4+PokzLWxzUTqkNfa
+         MJxl/aaaNQwOGutFe7ZvibN05xadknqiEQ/5vSSYjpKuFD33MhB/iX/1WjE4lAqUPd6A
+         kuCo4VPsvhpNmueBpwBt7HdTuJHbw5TT2wQ3H8uywgSbTqwic0V5Oz8UxOVi1a7McJrH
+         HkRnEakICDjLLEthMK0JctOFSSI5fY4fnhUD2BMPMmxCLSrvkxhEgkrPQf6lCS+eXEH2
+         qniQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tEIs68WPX2uvipp125B48aqh0bfmh+wQV9ksUWd9SVo=;
+        b=TeOB3N53PwHNfxCLuuYoHy3HBNh1tLdFRNCof9vLKTMv3lBuMQPMdWu0Y/sUtZvojo
+         l935D91WJRPaleDaS+XMq6YPwx3S5mWbZOIbXihO/TjHwTm60Kq/fH80OM6O39aFYwNr
+         2ABPjSEFrA4YGuI2IrknnqPyu156/5X/YvLnz0SRw0XpjMoKYEIqzauAgSmwaV9ddufM
+         9FxU8hMrtmka4RtajGHisPmbeH/1Xf5a5Stc5nYVOjglCamqYdfn9LIDWsFh9yNu8/9C
+         HV6nFCkqqOoI+/zezs3Yk7kuR5mDzFuGimawE2cEBDMVDg4R/+a/jurRGuG0hILl/rMO
+         G4fg==
+X-Gm-Message-State: ACrzQf1cLWm1cM5w0gyzosUOBOvR/UuHUOeAN/CuNHEz+sVvSGqlZj3B
+        wmveSn9wKs5WrScCSj0OjkoZBDbOoriZJTIeGxQPLw==
+X-Google-Smtp-Source: AMsMyM5D7J7kacN+vMB7918d0FUlee8JZbF0HU6ajCxGVOMgT8VCVud31CztIxwSVTHiziDhf3zMIBDNSqo8ctxq8yA=
+X-Received: by 2002:a05:6870:88a8:b0:12c:d54d:8978 with SMTP id
+ m40-20020a05687088a800b0012cd54d8978mr5496662oam.7.1663610423695; Mon, 19 Sep
+ 2022 11:00:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1663577091.git.cmo@melexis.com> <dadcba138c48286944cc03563967de9b4daddaaa.1663577091.git.cmo@melexis.com>
+ <20220919172420.1a6fd52f@jic23-huawei> <CAKv63usAjTh9b-HuVdikbtdPKeyFYPy0kENQpkGo6jWXkE_Quw@mail.gmail.com>
+ <20220919183048.00c68a04@jic23-huawei>
+In-Reply-To: <20220919183048.00c68a04@jic23-huawei>
+From:   Crt Mori <cmo@melexis.com>
+Date:   Mon, 19 Sep 2022 19:59:47 +0200
+Message-ID: <CAKv63uvDNbwn=Jb9Ee0fhSEBPJx94ckZTRCTQw7PfAH4UdN2Dg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On Mon, 19 Sept 2022 at 19:30, Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Mon, 19 Sep 2022 19:09:13 +0200
+> Crt Mori <cmo@melexis.com> wrote:
+>
+> > On Mon, 19 Sept 2022 at 18:24, Jonathan Cameron <jic23@kernel.org> wrote:
+> > >
+> > > On Mon, 19 Sep 2022 10:48:16 +0200
+> > > cmo@melexis.com wrote:
+> > >
+> > > > From: Crt Mori <cmo@melexis.com>
+> > > >
+> > > > measurements in lower power mode (SLEEP_STEP), with the lowest refresh
+> > > > rate (2 seconds).
+> > > Hi Crt,
+> > >
+> > > I'm a little nervous about one change in the flow from earlier versions.
+> > > I'm assuming you are sure it is always fine though!
+> > >
+> > > Previously before calling the _sleep() in remove we ensured the device
+> > > was powered up. Now that's no longer true. If runtime pm has it in
+> > > a low power state it will remain in that state at the point where we call
+> > > _sleep().
+> > >
+> > > One note/question on original code...  Why bother marking regcache dirty when
+> > > we are going down anyway?  It's not wrong as such, just probably not
+> > > that useful unless I'm missing something.  Same in the *_wakeup()
+> > > that puts the cache back but is only called in probe now.
+> >
+> > Previously when powered on the device the cache was not updated
+>
+> ah. Got it.  Doing this makes sense if we don't provide the default register
+> values as there is nothing else to get them from.
+>
+> However, I think the regmap core does this for us if defaults are not provided:
+> https://elixir.bootlin.com/linux/v6.0-rc5/source/drivers/base/regmap/regcache.c#L180
+>
+> Does that not work here for some reason?  If so add a comment.
 
-We have three nearly identical sequences to stop the clock, let's
-introduce a helper to reuse the same code.
+It did not work in past, but I can make a few tests and file a bug
+later on if indeed we should not need to mark cache refresh at
+startup. I would here keep it as it was, because I remember having a
+big headache trying to figure out what I was missing with regmap_read
+conversion (I remember I started with simple i2c reads).
 
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
- drivers/soundwire/intel.c | 83 +++++++++++++++++++--------------------
- 1 file changed, 41 insertions(+), 42 deletions(-)
+>
+> We do need the dance in the suspend and resume though as regcache code has no
+> way to know if the values are retained or not so we have to let it know.
+>
+> >, so I
+> > added the marking of regcache at wakeup and saw that the same thing
+> > happens when in resume after powering on. I should keep this
+> > assumption still, so I will re-add the wakeup to resume (not runtime
+> > resume). I did not test this part as I focused on runtime resume so
+> > thanks for noticing.
+> >
+> > >
+> > > Which then raises question of why we don't need to deal with the regcache
+> > > any more when we turn power off in suspend?
+> > >
+> >
+> > It just did not work properly without this. Not correct EEPROM
+> > coefficients were used for calculations.
+> >
+> > > So either we need a statement of why the register state is maintained,
+> > > or add the maintenance for that.  Also probably makes sense to drop
+> > > the left over maintenance from the probe() and remove() (via devm) paths.
+> > >
+> > I thought I did that by completely removing _remove() and using
+> > devm_actions for cleanup. Do you see a spot I missed?
+> >
+>
+> I don't think marking the regcache dirty in remove (via the _sleep() call)
+> does anything useful.  On fresh probe of the driver, we get a new regcache which
+> we can then sync as you are doing - so no point in marking the one we are about
+> to delete as dirty that I can see.
+>
 
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index abe14436d874..15fe083e0402 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -1391,6 +1391,38 @@ static int intel_start_bus_after_clock_stop(struct sdw_intel *sdw)
- 	return 0;
- }
- 
-+static int intel_stop_bus(struct sdw_intel *sdw, bool clock_stop)
-+{
-+	struct device *dev = sdw->cdns.dev;
-+	struct sdw_cdns *cdns = &sdw->cdns;
-+	bool wake_enable = false;
-+	int ret;
-+
-+	if (clock_stop) {
-+		ret = sdw_cdns_clock_stop(cdns, true);
-+		if (ret < 0)
-+			dev_err(dev, "%s: cannot stop clock: %d\n", __func__, ret);
-+		else
-+			wake_enable = true;
-+	}
-+
-+	ret = sdw_cdns_enable_interrupt(cdns, false);
-+	if (ret < 0) {
-+		dev_err(dev, "%s: cannot disable interrupts: %d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	ret = intel_link_power_down(sdw);
-+	if (ret) {
-+		dev_err(dev, "%s: Link power down failed: %d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	intel_shim_wake(sdw, wake_enable);
-+
-+	return 0;
-+}
-+
- static int sdw_master_read_intel_prop(struct sdw_bus *bus)
- {
- 	struct sdw_master_prop *prop = &bus->prop;
-@@ -1790,20 +1822,12 @@ static int __maybe_unused intel_suspend(struct device *dev)
- 		return 0;
- 	}
- 
--	ret = sdw_cdns_enable_interrupt(cdns, false);
-+	ret = intel_stop_bus(sdw, false);
- 	if (ret < 0) {
--		dev_err(dev, "cannot disable interrupts on suspend\n");
-+		dev_err(dev, "%s: cannot stop bus: %d\n", __func__, ret);
- 		return ret;
- 	}
- 
--	ret = intel_link_power_down(sdw);
--	if (ret) {
--		dev_err(dev, "Link power down failed: %d\n", ret);
--		return ret;
--	}
--
--	intel_shim_wake(sdw, false);
--
- 	return 0;
- }
- 
-@@ -1824,44 +1848,19 @@ static int __maybe_unused intel_suspend_runtime(struct device *dev)
- 	clock_stop_quirks = sdw->link_res->clock_stop_quirks;
- 
- 	if (clock_stop_quirks & SDW_INTEL_CLK_STOP_TEARDOWN) {
--
--		ret = sdw_cdns_enable_interrupt(cdns, false);
-+		ret = intel_stop_bus(sdw, false);
- 		if (ret < 0) {
--			dev_err(dev, "cannot disable interrupts on suspend\n");
-+			dev_err(dev, "%s: cannot stop bus during teardown: %d\n",
-+				__func__, ret);
- 			return ret;
- 		}
--
--		ret = intel_link_power_down(sdw);
--		if (ret) {
--			dev_err(dev, "Link power down failed: %d\n", ret);
--			return ret;
--		}
--
--		intel_shim_wake(sdw, false);
--
--	} else if (clock_stop_quirks & SDW_INTEL_CLK_STOP_BUS_RESET ||
--		   !clock_stop_quirks) {
--		bool wake_enable = true;
--
--		ret = sdw_cdns_clock_stop(cdns, true);
--		if (ret < 0) {
--			dev_err(dev, "cannot enable clock stop on suspend\n");
--			wake_enable = false;
--		}
--
--		ret = sdw_cdns_enable_interrupt(cdns, false);
-+	} else if (clock_stop_quirks & SDW_INTEL_CLK_STOP_BUS_RESET || !clock_stop_quirks) {
-+		ret = intel_stop_bus(sdw, true);
- 		if (ret < 0) {
--			dev_err(dev, "cannot disable interrupts on suspend\n");
--			return ret;
--		}
--
--		ret = intel_link_power_down(sdw);
--		if (ret) {
--			dev_err(dev, "Link power down failed: %d\n", ret);
-+			dev_err(dev, "%s: cannot stop bus during clock_stop: %d\n",
-+				__func__, ret);
- 			return ret;
- 		}
--
--		intel_shim_wake(sdw, wake_enable);
- 	} else {
- 		dev_err(dev, "%s clock_stop_quirks %x unsupported\n",
- 			__func__, clock_stop_quirks);
--- 
-2.25.1
+So you would rather that I make a new function which basically will be
+a wrapper around mlx90632_pwr_set_sleep_step (as I don't want to
+change that function to return nothing and take a void pointer)
+instead of using mlx90632_sleep in remove (beside using it in
+pm_suspend after this change)?
 
+>
+> > > Jonathan
+> > >
+> > > >
+> > > > -static int __maybe_unused mlx90632_pm_resume(struct device *dev)
+> > > > +static int mlx90632_pm_resume(struct device *dev)
+> > > >  {
+> > > > -     struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
+> > > > -     struct mlx90632_data *data = iio_priv(indio_dev);
+> > > > +     struct mlx90632_data *data = iio_priv(dev_get_drvdata(dev));
+> > > > +
+> > > > +     return mlx90632_enable_regulator(data);
+> > > > +}
+> > > > +
+> > > > +static int mlx90632_pm_runtime_suspend(struct device *dev)
+> > > > +{
+> > > > +     struct mlx90632_data *data = iio_priv(dev_get_drvdata(dev));
+> > > >
+> > > > -     return mlx90632_wakeup(data);
+> > > Previously we called wakeup here which writes the regcache back to
+> > > the device. Now I'm not seeing that happening anywhere in new code.
+> > > Why is it not needed?
+> > >
+> > I had the same question before, why cache was needed to be marked
+> > dirty, but without it, CPU did not properly obtain the calculation
+> > coefficients. What happens now is that we are in step_sleep mode so
+> > measurements are triggered and it also takes the 2 seconds before they
+> > are updated. I did not check the line with scope, but I have yet to
+> > see the strange temperature output which would indicate that not
+> > proper EEPROM data is used. But I did focus on sleep mostly, so deeper
+> > sleep I did not retest.
+>
+> I'd hope runtime pm doesn't need the dance with the cache as the
+> values should be retained.  It's the deeper sleep that is where I'd
+> see potential problems as you observed.
+
+You are correct - runtime_pm never needed any of the cache stuff.
+
+>
+> Jonathan
+>
+> >
+> > > > +     return mlx90632_pwr_set_sleep_step(data->regmap);
+> > > >  }
+> > >
+>
