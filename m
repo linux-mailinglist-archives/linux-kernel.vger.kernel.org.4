@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272175BD1A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8355BD1B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiISQAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S229582AbiISQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiISP7f (ORCPT
+        with ESMTP id S229991AbiISQCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:59:35 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4409BBA0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:33 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id g6so2607693ild.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uhn02vEcgNMuC4NDL/sdnIiKkA3NV83noPVamoKM5ng=;
-        b=GK6NZXg+SRbg6dlYceBGo3Bdp/8+QXAkMNPp1hBOtDl13ijRJBL7lt2nm1VXjoA8lk
-         c5k+LXWC8GocTjRZSQITTdz9QWBggrsAHr2rlB96VnjYnfOt4sU0EiPRaHKElgg9/K0I
-         jJPJ+xXtUkAMDOO8330oC5RE43uPJHbfzxouE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=uhn02vEcgNMuC4NDL/sdnIiKkA3NV83noPVamoKM5ng=;
-        b=zM0kstqaxwr3q2hyMVy9YLqHeNxsvTX6npfneUpFYS11XL32cPjBj73rqxAlpWNpdr
-         9hoIhjEcFrYo9KBl6EB1FvJg1mSa+B79sxZ7WFem8eCiUeb8eBaYhXV/bZfDT9/9P3On
-         34LlQmFTiFmIyVuPtg8qkZ06Z6e6eHxdaJ+DtGES9uRe34d84R6cgFcQPTY9WEcX+3h/
-         p0IAzdGgEZf/mO4pa17eJHCuOsDeIT1i0vIOqV31xIKg56fmre8ZoAJ/mO9u+hM5aH8t
-         63jfpbcZLJoCZDMWs2RYeK1yJpYP+GznZiK/FpWmDkRyZgGMm317mcR+n0TRKOrgWMFO
-         R3Cw==
-X-Gm-Message-State: ACrzQf0kel0Aoq07WNyxl4y00tghnHXTXjQo+j7yc3bxNICzd+v2GAv/
-        mQLqVdBgPwTbSikdx3ygDK6oQg==
-X-Google-Smtp-Source: AMsMyM5ls8r56kVd8P5UbNod0oeDjqkEjXi/yi/ji3Sa3JWilEMSvxaR2aRHwjrDZtRA8WmAXXqiYw==
-X-Received: by 2002:a05:6e02:f03:b0:2eb:7a76:f9b8 with SMTP id x3-20020a056e020f0300b002eb7a76f9b8mr7612007ilj.41.1663603172286;
-        Mon, 19 Sep 2022 08:59:32 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id t70-20020a025449000000b00349fb9b1abesm5634154jaa.106.2022.09.19.08.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 08:59:32 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     timvp@google.com, hdegoede@redhat.com,
-        andriy.shevchenko@linux.intel.com, rafael@kernel.org,
-        mario.limonciello@amd.com, jingle.wu@emc.com.tw,
-        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
-        linus.walleij@linaro.org, Raul E Rangel <rrangel@chromium.org>,
+        Mon, 19 Sep 2022 12:02:15 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7903AE52
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:00:29 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB70A24000E;
+        Mon, 19 Sep 2022 16:00:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663603227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4w2H0/aVozaHmubnqFnPjiPTuYGSRzmbJ5Wwl6IDQwM=;
+        b=Lcv42Ss9HGpIaCPVGZlsqSX3b4RETBixGo4uKB9QrhoufMMLiAxBu08X17z+G4slmrlwN9
+        Z6WowHP6ZO5LMXhxmBydcyUHnj54Jq2E3Mj4uVzL1yZstEYPbO4zJNE5J4XnvQ0h7POLr8
+        oSAVOOn21UXyjWZKkBGyiyp3sXrL7L8tfC7N5kWrIg/0GuF+sF8/rL/SPppLiv8tquBLre
+        c5kwjH+1qwDO5GwgW93QEETcLp6ugYlLjWklnhej2XFyve0vxTaS2mL0BsR7l+LoEuJzLp
+        76RsJ5bA3HANiTyTGPiCUSrFbvWdg3bkXLJdQgX7i4ZgC5a+FUR6nlXpiNXjqw==
+Date:   Mon, 19 Sep 2022 18:00:22 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Jack Wang <jinpu.wang@ionos.com>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
         Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/13] Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
-Date:   Mon, 19 Sep 2022 09:59:15 -0600
-Message-Id: <20220919095504.v4.13.Ia0b24ab02c22125c5fd686cc25872bd26c27ac23@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220919155916.1044219-1-rrangel@chromium.org>
-References: <20220919155916.1044219-1-rrangel@chromium.org>
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] mtd: rawnand: stm32_fmc2: Fix dma_map_sg error
+ check
+Message-ID: <20220919180022.2c80e2b7@xps-13>
+In-Reply-To: <20220825075338.35338-2-jinpu.wang@ionos.com>
+References: <20220825075338.35338-1-jinpu.wang@ionos.com>
+        <20220825075338.35338-2-jinpu.wang@ionos.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c-core will now handle setting the wake_irq and wake capability
-for DT and ACPI systems.
+Hi Jack,
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
----
+jinpu.wang@ionos.com wrote on Thu, 25 Aug 2022 09:53:37 +0200:
 
-(no changes since v1)
+> dma_map_sg return 0 on error, in case of error return -EIO.
+>=20
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Christophe Kerello <christophe.kerello@foss.st.com>
+> Cc: Cai Huoqing <cai.huoqing@linux.dev>
+> Cc: linux-mtd@lists.infradead.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash=
+ controller driver")
+> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 
- drivers/input/touchscreen/raydium_i2c_ts.c | 9 ---------
- 1 file changed, 9 deletions(-)
+I'll apply this series so I need to re-add Christophe's tag sent on the
+patch alone (which is identical as far as I see):
 
-diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
-index 66c5b577b791d4..88d187dc5d325f 100644
---- a/drivers/input/touchscreen/raydium_i2c_ts.c
-+++ b/drivers/input/touchscreen/raydium_i2c_ts.c
-@@ -1185,15 +1185,6 @@ static int raydium_i2c_probe(struct i2c_client *client,
- 		return error;
- 	}
- 
--	/*
--	 * The wake IRQ should be declared via device tree instead of assuming
--	 * the IRQ can wake the system. This is here for legacy reasons and
--	 * will be removed once the i2c-core supports querying ACPI for wake
--	 * capabilities.
--	 */
--	if (!client->dev.power.wakeirq)
--		dev_pm_set_wake_irq(&client->dev, client->irq);
--
- 	error = devm_device_add_group(&client->dev,
- 				   &raydium_i2c_attribute_group);
- 	if (error) {
--- 
-2.37.3.968.ga6b4b080e4-goog
+Reviewed-by: Christophe Kerello <christophe.kerello@foss.st.com>
 
+> ---
+>  drivers/mtd/nand/raw/stm32_fmc2_nand.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/ra=
+w/stm32_fmc2_nand.c
+> index 87c1c7dd97eb..a0c825af19fa 100644
+> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
+> @@ -862,8 +862,8 @@ static int stm32_fmc2_nfc_xfer(struct nand_chip *chip=
+, const u8 *buf,
+> =20
+>  	ret =3D dma_map_sg(nfc->dev, nfc->dma_data_sg.sgl,
+>  			 eccsteps, dma_data_dir);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (!ret)
+> +		return -EIO;
+> =20
+>  	desc_data =3D dmaengine_prep_slave_sg(dma_ch, nfc->dma_data_sg.sgl,
+>  					    eccsteps, dma_transfer_dir,
+> @@ -893,8 +893,10 @@ static int stm32_fmc2_nfc_xfer(struct nand_chip *chi=
+p, const u8 *buf,
+> =20
+>  		ret =3D dma_map_sg(nfc->dev, nfc->dma_ecc_sg.sgl,
+>  				 eccsteps, dma_data_dir);
+> -		if (ret < 0)
+> +		if (!ret) {
+> +			ret =3D -EIO;
+>  			goto err_unmap_data;
+> +		}
+> =20
+>  		desc_ecc =3D dmaengine_prep_slave_sg(nfc->dma_ecc_ch,
+>  						   nfc->dma_ecc_sg.sgl,
+
+
+Thanks,
+Miqu=C3=A8l
