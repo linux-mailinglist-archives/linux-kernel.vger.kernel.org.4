@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99C75BCC15
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFDA5BCC17
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiISMoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S230189AbiISMoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiISMnt (ORCPT
+        with ESMTP id S230304AbiISMnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:43:49 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D2E2F03B;
-        Mon, 19 Sep 2022 05:43:43 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id y5so3773522wrh.3;
-        Mon, 19 Sep 2022 05:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=oXWgWaZsc822Q0ES3rj4eUwa/2EGT0461kz7ecX1tRE=;
-        b=Edus4t6gzW0NKtAnKX9Z9Fbg0McLpg4JEkXwQBvm0W5Mom/ZtGI3S//hvLLeJhk6WI
-         HJn+walUkx+0q2hxuGprZJeYrrCMd+1L2bR+sgOS+3SeY5bEH930rlP74ILCxlPSoNsy
-         TNxQxJxfXDaoWXTzS/jBtjBZe1kKUmX+OSdJ97vf4Hl1PAsQkuMONfhRWsKVbHDl62qO
-         wXS4PgJKDp5VyJWIRMHZASZuNLgOGPcs8cw2AWrKGjrwFM3YmDmlZh0XMD4zCfCE4EXc
-         H7RLDI9dHeABgkoAsDo31ARgRkb4Eh5W/nEDlRCf1bnt1mVBmwz9r1MeYyzGOT2xurKy
-         V8iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=oXWgWaZsc822Q0ES3rj4eUwa/2EGT0461kz7ecX1tRE=;
-        b=NLChga3AzGOC0vd3a0L+RQGyAY+V/LItSmmerUegqcwd7CoEcgbXm4VcnUFEO6TXYb
-         w/UMAag3HZRzR5Qgookt65VRIFJgG5ZKBaJ9uQHnygP9SaeG2ofIqXoFu1lmMlyijdEW
-         IKmjONrq/4MiPTw3AMliQlS+Rxgi/h4gIsvrN1v8MLXkf7lz4xe8bhkIdzuk+KUkd2RT
-         5ShvdIjDSv0SceHmUyO7f7ZzxjvyUQqt+otMYrOuoIiyEaxNJEX6V/HrBJz8AbFHt11a
-         zS12aROZMlnd3C8/nC1W5HUd2UyLQVJIOtmETfNEOz7eT/P9GmGoXNgGBUt8gsTBZsnE
-         P28g==
-X-Gm-Message-State: ACrzQf0BA1GwbPvorsf2bBm9G1hriwco3lXlE9vq4kfTo5yNhhAvUwVp
-        d20Z9sZ5nLOZh5T8BYmCpFQ=
-X-Google-Smtp-Source: AMsMyM6dm9Y7MpEZZDT4IY9gaQPS/o6y+5OjHwyWUooII0Hg5HjhF6d0L8efsR2qgYW1/lOw1wuytw==
-X-Received: by 2002:adf:d1cc:0:b0:22a:47d5:8a22 with SMTP id b12-20020adfd1cc000000b0022a47d58a22mr10490469wrd.481.1663591421435;
-        Mon, 19 Sep 2022 05:43:41 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id c11-20020adffb0b000000b00228d52b935asm13905566wrr.71.2022.09.19.05.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 05:43:40 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 13:43:38 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220919 due to c0357a73fa4a ("arm64/sysreg:
- Align field names in ID_AA64DFR0_EL1 with architecture")
-Message-ID: <Yyhj+gqfS6mdRnGv@debian>
+        Mon, 19 Sep 2022 08:43:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E425EB6;
+        Mon, 19 Sep 2022 05:43:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 23F0E1F37C;
+        Mon, 19 Sep 2022 12:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663591429; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JNX3geAB//04COTSGgSRyqX/fXrPKwlxVbihxLJjBaQ=;
+        b=UylC8mAQp4O+cNM3Tcy8fjxSdkSJRh7gc2HsGfzGyM3x+1XS6QZTc+jnSa1Td7bHXoKx/l
+        p3jp6cZDWG5/QwCNfq0C3PUc8mCbHtnKhPCUfoK1ArQ5Gw2O74lAJRYe+I5vbQb33DuMkw
+        HG7PqAh13vk6cNsvTlZdnfScdU7SRkY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663591429;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JNX3geAB//04COTSGgSRyqX/fXrPKwlxVbihxLJjBaQ=;
+        b=txuzUCvTxHfpl3iN1j6oSXzgGSg5Oclu02kv91fVyUmjHAX++4Gk7ikGF/Xd9JzsQLjRkl
+        w/GDh7hu5YspJwAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACCFB13A96;
+        Mon, 19 Sep 2022 12:43:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DOQiKgRkKGMLMQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 19 Sep 2022 12:43:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B9944A0682; Mon, 19 Sep 2022 14:43:44 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 14:43:44 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] jbd2: add miss release buffer head in
+ fc_do_one_pass()
+Message-ID: <20220919124344.muyhkpxm4d3wumd3@quack3>
+References: <20220917093805.1782845-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220917093805.1782845-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Sat 17-09-22 17:38:05, Ye Bin wrote:
+> In fc_do_one_pass() miss release buffer head after use which will lead
+> to reference count leak.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-The builds of arm64 allmodconfig have failed to build next-20220919
-with the error:
+Indeed. Good catch! Feel free to add:
 
-drivers/perf/arm_spe_pmu.c: In function 'arm_spe_pmsevfr_res0':
-drivers/perf/arm_spe_pmu.c:679:14: error: 'ID_AA64DFR0_PMSVER_8_2' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_IMP'?
-  679 |         case ID_AA64DFR0_PMSVER_8_2:
-      |              ^~~~~~~~~~~~~~~~~~~~~~
-      |              ID_AA64DFR0_EL1_PMSVer_IMP
-drivers/perf/arm_spe_pmu.c:679:14: note: each undeclared identifier is reported only once for each function it appears in
-drivers/perf/arm_spe_pmu.c:681:14: error: 'ID_AA64DFR0_PMSVER_8_3' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_IMP'?
-  681 |         case ID_AA64DFR0_PMSVER_8_3:
-      |              ^~~~~~~~~~~~~~~~~~~~~~
-      |              ID_AA64DFR0_EL1_PMSVer_IMP
-drivers/perf/arm_spe_pmu.c: In function '__arm_spe_pmu_dev_probe':
-drivers/perf/arm_spe_pmu.c:963:52: error: 'ID_AA64DFR0_PMSVER_SHIFT' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_SHIFT'?
-  963 |                                                    ID_AA64DFR0_PMSVER_SHIFT);
-      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                    ID_AA64DFR0_EL1_PMSVer_SHIFT
+Reviewed-by: Jan Kara <jack@suse.cz>
 
+								Honza
 
-git bisect pointed to c0357a73fa4a ("arm64/sysreg: Align field names in ID_AA64DFR0_EL1 with architecture").
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
+> ---
+>  fs/jbd2/recovery.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/jbd2/recovery.c b/fs/jbd2/recovery.c
+> index 1f878c315b03..8286a9ec122f 100644
+> --- a/fs/jbd2/recovery.c
+> +++ b/fs/jbd2/recovery.c
+> @@ -261,6 +261,7 @@ static int fc_do_one_pass(journal_t *journal,
+>  		err = journal->j_fc_replay_callback(journal, bh, pass,
+>  					next_fc_block - journal->j_fc_first,
+>  					expected_commit_id);
+> +		brelse(bh);
+>  		next_fc_block++;
+>  		if (err < 0 || err == JBD2_FC_REPLAY_STOP)
+>  			break;
+> -- 
+> 2.31.1
+> 
 -- 
-Regards
-Sudip
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
