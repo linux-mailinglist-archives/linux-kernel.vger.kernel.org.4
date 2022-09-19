@@ -2,223 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513455BD047
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9DF5BD00D
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiISPPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S229587AbiISPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiISPOr (ORCPT
+        with ESMTP id S229528AbiISPKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:14:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20245357D8;
-        Mon, 19 Sep 2022 08:14:20 -0700 (PDT)
+        Mon, 19 Sep 2022 11:10:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8592A712;
+        Mon, 19 Sep 2022 08:10:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663600460; x=1695136460;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=c870c32AhfgZVg4pwd9ZMePlL4mjnVCOQA4N7lzg7uk=;
-  b=k60+i5P5Mqyl8vfrc1i+E1GdVv6KyNK+2bguKeMU95I3ACooU2eHHgkd
-   U2FUrfHj+dkYm7W3mLRABpD/Mh8XRGgIjtbUYeOeQ/9JE+fIXcVb8GVT4
-   Fw/qzGqFNIy4KlA7VSJLqXIw614mloVUq6kmbaF19zFcqTK7vl8E5Pnh0
-   JQqijtCIUzB/+YLNky7fiYYPepD2z2cKyZvIk/9YrZDbwXfGWHeQ9oTx8
-   TfthvTR+nY/ysH1UYups6CpvsO21qmDUFW8wK5/ofYzR3iR3kojrtNfIs
-   54jLBMeF2SFzhvrz8gRZsiDcn65t13Wv+0ZKkFXxjB65sMCa5IoatevgV
-   w==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663600246; x=1695136246;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UB13A1XuABk+pdSrOQDK5a/k2hrx2eMwac3alMLt79U=;
+  b=n3AWe4mpqo8/kMJclJ10LTgwNja+U24bRiyGC8gBclP1WbcI5yAFI+8k
+   HUgKsV9XQkQp/505QOrIVAj74mMEpYh2unEY6ihNlKXsnk1ImRjJ85pGz
+   AkQESxuh4e7BZmRa8L0QaDl9fdK859oFpjihJDaXoffDdUo/KiY+uJFQw
+   ey24kjdF/86xenrVAw1bwXwCoFMB+R7BGTRyzS7HVQwD7SlAMDLoapnub
+   SMnQ9/rH49wvLlfySFqDalT4jKxF6TFuWVP7/l8NY+PcX7hjJh815VJha
+   yeh3E1+5f6IDB36ecDDpeRSKFd2gU3jGejPKEC0sJZOlcFE+g4u1AbcEt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361164046"
 X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="114368422"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Sep 2022 08:14:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 19 Sep 2022 08:14:17 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 19 Sep 2022 08:14:13 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <kavyasree.kotagiri@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH v4 9/9] tty: serial: atmel: Make the driver aware of the existence of GCLK
-Date:   Mon, 19 Sep 2022 18:08:47 +0300
-Message-ID: <20220919150846.1148783-10-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919150846.1148783-1-sergiu.moga@microchip.com>
-References: <20220919150846.1148783-1-sergiu.moga@microchip.com>
+   d="scan'208";a="361164046"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 08:10:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
+   d="scan'208";a="947257761"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Sep 2022 08:10:43 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaIPy-00023A-30;
+        Mon, 19 Sep 2022 15:10:42 +0000
+Date:   Mon, 19 Sep 2022 23:10:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] crypto: add rsize config to .config only if lib_poly1305
+ is set
+Message-ID: <202209192252.T6IGLNqC-lkp@intel.com>
+References: <20220919060342.26400-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919060342.26400-1-lukas.bulwahn@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, the atmel serial driver did not take into account the
-possibility of using the more customizable generic clock as its
-baudrate generator. Unless there is a Fractional Part available to
-increase accuracy, there is a high chance that we may be able to
-generate a baudrate closer to the desired one by using the GCLK as the
-clock source. Now, depending on the error rate between
-the desired baudrate and the actual baudrate, the serial driver will
-fallback on the generic clock. The generic clock must be provided
-in the DT node of the serial that may need a more flexible clock source.
+Hi Lukas,
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linus/master v6.0-rc6 next-20220919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220919/202209192252.T6IGLNqC-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/c1954797e493eabf02f354e290fe380ace0633e4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+        git checkout c1954797e493eabf02f354e290fe380ace0633e4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/crypto/caam/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/crypto/caam/ctrl.c:15:
+   In file included from drivers/crypto/caam/compat.h:41:
+>> include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
+                   struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+                                                ^
+   1 error generated.
 
 
-v1 -> v2:
-- take into account the different placement of the baudrate clock source
-into the IP's Mode Register (USART vs UART)
-- don't check for atmel_port->gclk != NULL
-- use clk_round_rate instead of clk_set_rate + clk_get_rate
-- remove clk_disable_unprepare from the end of the probe method
+vim +/CONFIG_CRYPTO_LIB_POLY1305_RSIZE +56 include/crypto/poly1305.h
 
+878afc35cd28bc Eric Biggers       2018-11-16  40  
+2546f811ef45fc Martin Willi       2015-07-16  41  struct poly1305_desc_ctx {
+2546f811ef45fc Martin Willi       2015-07-16  42  	/* partial buffer */
+2546f811ef45fc Martin Willi       2015-07-16  43  	u8 buf[POLY1305_BLOCK_SIZE];
+2546f811ef45fc Martin Willi       2015-07-16  44  	/* bytes used in partial buffer */
+2546f811ef45fc Martin Willi       2015-07-16  45  	unsigned int buflen;
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  46  	/* how many keys have been set in r[] */
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  47  	unsigned short rset;
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  48  	/* whether s[] has been set */
+2546f811ef45fc Martin Willi       2015-07-16  49  	bool sset;
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  50  	/* finalize key */
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  51  	u32 s[4];
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  52  	/* accumulator */
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  53  	struct poly1305_state h;
+ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  54  	/* key */
+1c08a104360f3e Jason A. Donenfeld 2020-01-05  55  	union {
+1c08a104360f3e Jason A. Donenfeld 2020-01-05 @56  		struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+1c08a104360f3e Jason A. Donenfeld 2020-01-05  57  		struct poly1305_core_key core_r;
+1c08a104360f3e Jason A. Donenfeld 2020-01-05  58  	};
+2546f811ef45fc Martin Willi       2015-07-16  59  };
+2546f811ef45fc Martin Willi       2015-07-16  60  
 
-
-v2 -> v3:
-- add the error rate calculation function as an inline function instead of
-a macro definition
-- add `gclk_fail` goto
-- replace `goto err` with `goto err_clk_disable_unprepare;`
-
-
-
-v3 -> v4:
-- Nothing, this was previously [PATCH 14]
-
-
- drivers/tty/serial/atmel_serial.c | 59 ++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index c983798a4ab2..426f9d4f9a5a 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -15,6 +15,7 @@
- #include <linux/init.h>
- #include <linux/serial.h>
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/console.h>
- #include <linux/sysrq.h>
- #include <linux/tty_flip.h>
-@@ -110,6 +111,7 @@ struct atmel_uart_char {
- struct atmel_uart_port {
- 	struct uart_port	uart;		/* uart */
- 	struct clk		*clk;		/* uart clock */
-+	struct clk		*gclk;		/* uart generic clock */
- 	int			may_wakeup;	/* cached value of device_may_wakeup for times we need to disable it */
- 	u32			backup_imr;	/* IMR saved during suspend */
- 	int			break_active;	/* break being received */
-@@ -229,6 +231,11 @@ static inline int atmel_uart_is_half_duplex(struct uart_port *port)
- 		(port->iso7816.flags & SER_ISO7816_ENABLED);
- }
- 
-+static inline int atmel_error_rate(int desired_value, int actual_value)
-+{
-+	return 100 - (desired_value * 100) / actual_value;
-+}
-+
- #ifdef CONFIG_SERIAL_ATMEL_PDC
- static bool atmel_use_pdc_rx(struct uart_port *port)
- {
-@@ -2117,6 +2124,8 @@ static void atmel_serial_pm(struct uart_port *port, unsigned int state,
- 		 * This is called on uart_close() or a suspend event.
- 		 */
- 		clk_disable_unprepare(atmel_port->clk);
-+		if (__clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
- 		break;
- 	default:
- 		dev_err(port->dev, "atmel_serial: unknown pm %d\n", state);
-@@ -2132,7 +2141,9 @@ static void atmel_set_termios(struct uart_port *port,
- {
- 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
- 	unsigned long flags;
--	unsigned int old_mode, mode, imr, quot, baud, div, cd, fp = 0;
-+	unsigned int old_mode, mode, imr, quot, div, cd, fp = 0;
-+	unsigned int baud, actual_baud, gclk_rate;
-+	int ret;
- 
- 	/* save the current mode register */
- 	mode = old_mode = atmel_uart_readl(port, ATMEL_US_MR);
-@@ -2302,6 +2313,46 @@ static void atmel_set_termios(struct uart_port *port,
- 		cd = min_t(unsigned int, cd, ATMEL_US_CD);
- 	}
- 
-+	/*
-+	 * If there is no Fractional Part, there is a high chance that
-+	 * we may be able to generate a baudrate closer to the desired one
-+	 * if we use the GCLK as the clock source driving the baudrate
-+	 * generator.
-+	 */
-+	if (!atmel_port->has_frac_baudrate) {
-+		if (__clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
-+		gclk_rate = clk_round_rate(atmel_port->gclk, 16 * baud);
-+		actual_baud = clk_get_rate(atmel_port->clk) / (16 * cd);
-+		if (gclk_rate && abs(atmel_error_rate(baud, actual_baud)) >
-+		    abs(atmel_error_rate(baud, gclk_rate / 16))) {
-+			clk_set_rate(atmel_port->gclk, 16 * baud);
-+			ret = clk_prepare_enable(atmel_port->gclk);
-+			if (ret)
-+				goto gclk_fail;
-+
-+			if (atmel_port->is_usart) {
-+				mode &= ~ATMEL_US_USCLKS;
-+				mode |= ATMEL_US_USCLKS_GCLK;
-+			} else {
-+				mode &= ~ATMEL_UA_BRSRCCK;
-+				mode |= ATMEL_UA_BRSRCCK_GCLK;
-+			}
-+
-+			/*
-+			 * Set the Clock Divisor for GCLK to 1.
-+			 * Since we were able to generate the smallest
-+			 * multiple of the desired baudrate times 16,
-+			 * then we surely can generate a bigger multiple
-+			 * with the exact error rate for an equally increased
-+			 * CD. Thus no need to take into account
-+			 * a higher value for CD.
-+			 */
-+			cd = 1;
-+		}
-+	}
-+
-+gclk_fail:
- 	quot = cd | fp << ATMEL_US_FP_OFFSET;
- 
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
-@@ -2897,6 +2948,12 @@ static int atmel_serial_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err;
- 
-+	atmel_port->gclk = devm_clk_get_optional(&pdev->dev, "gclk");
-+	if (IS_ERR(atmel_port->gclk)) {
-+		ret = PTR_ERR(atmel_port->gclk);
-+		goto err_clk_disable_unprepare;
-+	}
-+
- 	ret = atmel_init_port(atmel_port, pdev);
- 	if (ret)
- 		goto err_clk_disable_unprepare;
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
