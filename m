@@ -2,152 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3295BD001
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69AF5BCFFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiISPDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S229741AbiISPDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiISPD2 (ORCPT
+        with ESMTP id S229650AbiISPDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:03:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8287033A0B;
-        Mon, 19 Sep 2022 08:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8W4ANpZZg81bkZotlJvZ4fg4qiAvSnY5PZyc1BTsWP4=; b=U5nJ9bmbrG96XYoLlWJMVIlBU2
-        Pac30dBaWX60m+XV25ZBrYpXHzco5Q4NvTRE6aqkUuxUPn4JqSO1GodAj6psxS/Sp6GkOCStGlY4M
-        8BPQdAM8NMp6pZmjrzXDYhoVN0Nr9gBqgJ5fq4StVhTIHRcrv28THIsVzKd1rTfCOQ3w8HGN1n0Uw
-        lG/m8FHJAXyE1D7Z149RX3YBrqwoqT0JLs3qsqzAdv6yyW8A86Z0atiWKYeezmVR2nk0iC8HoYA62
-        F2nkXj4OJNNIj6lZA++w5ieVdxb6fkUT9Y7e4iDEgPe3TS4PMshOdvmBCNLaFz4JSqJjIGbHECwb8
-        O+RP33Rg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaIIa-00E6gl-VJ; Mon, 19 Sep 2022 15:03:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CAF03005DD;
-        Mon, 19 Sep 2022 17:03:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5DBEE2BAC7A31; Mon, 19 Sep 2022 17:03:04 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 17:03:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <YyiEqDSJVOZrQYg8@hirez.programming.kicks-ass.net>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.869531945@infradead.org>
- <20220919144941.GA62211@lothringen>
+        Mon, 19 Sep 2022 11:03:30 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0F533A0D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:03:27 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a8so47330434lff.13
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=29Q13qvIrzikJw/fUgHdsSOAwHmgeU1WfwREQ1Cge1Y=;
+        b=lwxdIbe5BjxF0HFPnwF9Ofpvu0luMg35Ct6ff/AF8HWxyNhmnKGYXO+mANg2sK0aRp
+         zDmKcO1OJAa/tYrxnxzBvTsVbyoz/6hGfgwWltTQlppuEsv2vmOuV0C99/+dJ3qo1nuD
+         nT6doWb23QqnDbH824dGANTgN7MsuOFdOTvQQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=29Q13qvIrzikJw/fUgHdsSOAwHmgeU1WfwREQ1Cge1Y=;
+        b=dIcOoey9bbXsmlXm4NqP60TGl1iJTCc8XR3jaJ7966HtcIEkNZ8zXeB7dIJ6qV71q4
+         ko9js22rkkThZFNGkFxZChNg9ZK3KEgfsRhb+GClMQ+YAHiycDd2PJTyJnL5vzOkpTfK
+         VTgzoBBnHw8hJKGsTAH6aHMvHaHWiJzcMWTYZtUmpIcXcwt9kJa09MYkgQFuLlREyA1/
+         AyADTbFiKOUy7oRufdjA7pNzb2C8F7g4594Ilz7Ng2wjaE369ShmtNdintd+hX75kzcT
+         I1pWk/IRbOiToXZXnwR4QS/L+S25VwPAz06B6gxG6jVsN/hUhpLk2Cimfvba+sKsk3St
+         hQBQ==
+X-Gm-Message-State: ACrzQf2PEJVN7mUXLCIozBiozRQTvGuSd1IpXmluEL8Cxbnj9nFR0Iik
+        cy6KKlwRPexyQ+H9NJzjgzerGTzPB5qt2Q==
+X-Google-Smtp-Source: AMsMyM7PC0ZyTuuiE3oY1YeLNY5S6alvgEY6MCwjUBydhvN4/zAoW2WuGFdZTS/NevVyGqh5TGmpOg==
+X-Received: by 2002:a05:6512:2384:b0:497:ad1c:799 with SMTP id c4-20020a056512238400b00497ad1c0799mr6230382lfv.294.1663599805195;
+        Mon, 19 Sep 2022 08:03:25 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id s4-20020a056512202400b0049ad315cfc3sm4615078lfs.162.2022.09.19.08.03.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 08:03:23 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id q17so20300760lji.11
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:03:23 -0700 (PDT)
+X-Received: by 2002:a05:651c:17a7:b0:261:c0b1:574b with SMTP id
+ bn39-20020a05651c17a700b00261c0b1574bmr5541662ljb.40.1663599802963; Mon, 19
+ Sep 2022 08:03:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919144941.GA62211@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915002235.v2.1.I7c0a79e9b3c52584f5b637fde5f1d6f807605806@changeid>
+ <CAHmME9rhunb05DEnc=UfGr8k9_LBi1NW2Hi0OsRbGwcCN2NzjQ@mail.gmail.com>
+In-Reply-To: <CAHmME9rhunb05DEnc=UfGr8k9_LBi1NW2Hi0OsRbGwcCN2NzjQ@mail.gmail.com>
+From:   Sven van Ashbrook <svenva@chromium.org>
+Date:   Mon, 19 Sep 2022 11:03:11 -0400
+X-Gmail-Original-Message-ID: <CAM7w-FXHWzcN1Y7pwb6+1KA6A2oZRrfpOJdWFVWjRvjbp+DEOg@mail.gmail.com>
+Message-ID: <CAM7w-FXHWzcN1Y7pwb6+1KA6A2oZRrfpOJdWFVWjRvjbp+DEOg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] random: move add_hwgenerator_randomness()'s wait
+ outside function
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Olivia Mackall <olivia@selenic.com>,
+        Alex Levin <levinale@google.com>,
+        Andrey Pronin <apronin@google.com>,
+        "Jason A. Donenfeld" <jason@zx2c4.com>,
+        Stephen Boyd <swboyd@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 04:49:41PM +0200, Frederic Weisbecker wrote:
-> On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
-> > Doing RCU-idle outside the driver, only to then temporarily enable it
-> > again, at least twice, before going idle is daft.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > --- a/arch/arm/mach-imx/cpuidle-imx6sx.c
-> > +++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
-> > @@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
-> >  		cpu_pm_enter();
-> >  		cpu_cluster_pm_enter();
-> >  
-> > +		ct_idle_enter();
-> >  		cpu_suspend(0, imx6sx_idle_finish);
-> > +		ct_idle_exit();
-> >  
-> >  		cpu_cluster_pm_exit();
-> >  		cpu_pm_exit();
-> > @@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
-> >  			 */
-> >  			.exit_latency = 300,
-> >  			.target_residency = 500,
-> > -			.flags = CPUIDLE_FLAG_TIMER_STOP,
-> > +			.flags = CPUIDLE_FLAG_TIMER_STOP |
-> > +				 CPUIDLE_FLAG_RCU_IDLE,
-> >  			.enter = imx6sx_enter_wait,
-> 
-> There is a second one below that also uses imx6sx_enter_wait.
+On Fri, Sep 16, 2022 at 10:51 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> The other thing that occurred to me when reading this patch in context
+> of the other one is that this sleep you're removing here is not the
+> only sleep in the call chain. Each hwrng driver can also sleep, and
+> many do, sometimes for a long time, blocking until there's data
+> available, which might happen after minutes in some cases. So maybe
+> that's something to think about in context of this patchset -- that
+> just moving this to a delayed worker might not actually fix the issue
+> you're having with sleeps.
+>
 
-Oh, above you mean; but only @index==2 gets us into the whole PM crud.
-@index==1 is fine afaict.
+This is an excellent point. A look at tpm2_calc_ordinal_duration()
+reveals that tpm_transmit() may block for 300s at a time. So when
+we are using a WQ_FREEZABLE delayed_work, the PM may have to wait
+for up to 300s when draining the wq on suspend. That will introduce
+a lot of breakage in suspend/resume.
+
+Dominik: in light of this, please proceed with your patch, without
+rebasing it onto mine.
+
++ tpm maintainers Peter Huewe and Jarkko Sakkinen, a quick recap of
+the problem:
+
+- on ChromeOS we are seeing intermittent suspend/resume errors+warnings
+  related to activity of the core's hwrng_fillfn. this kthread keeps
+  runningduring suspend/resume. if this happens to kick off an bus (i2c)
+  transaction while the bus driver is in suspend, this triggers
+  a "Transfer while suspended" warning from the i2c core, followed by
+  an error return:
+
+i2c_designware i2c_designware.1: Transfer while suspended
+tpm tpm0: i2c transfer failed (attempt 1/3): -108
+[ snip 10s of transfer failed attempts]
+
+- in 2019, Stephen Boyd made an attempt at fixing this by making the
+  hwrng_fillfn kthread freezable. But a freezable thread requires
+  different API calls for scheduling, waiting, and timeout. This
+  generated regressions, so the solution had to be reverted.
+
+https://patchwork.kernel.org/project/linux-crypto/patch/20190805233241.220521-1-swboyd@chromium.org/
+
+- the current patch attempts to halt hwrng_fillfn during suspend by
+  converting it to a self-rearming delayed_work. The PM drains all
+  work before going into suspend. But, the potential minute-long
+  blocking delays in tpm make this solution infeasible.
+
+Peter and Jarkko, can you think of a possible way forward to eliminate
+the warnings+errors?
+
+-Sven
