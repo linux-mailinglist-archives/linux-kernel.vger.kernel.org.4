@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEA85BD5B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EC75BD5BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiISU3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 16:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S229794AbiISUb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 16:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiISU3P (ORCPT
+        with ESMTP id S229520AbiISUbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 16:29:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4EF1055F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663619354; x=1695155354;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T3KlIdR7NNehq66mZ3NQ/gWBX5mTPWIpzWn71363Bsw=;
-  b=PaFEZABRlwAFRDau+iZqJl5P9DzZCwuVSr6CZABcPzIhOjoAnFZ/efyq
-   4scrz6F94k6gtGDbmvFrRzk5NFMcBa8NKMB1oz+q35HRg/KOrpD09u3Qf
-   3bGILg0+AyVk1VjiIJx9TBeMFE2fU76AuKqRoNWBUdkvl0PL9ubXx2dE3
-   ju2C+ihT+zG0+eWf+IODg6rsjOFhLXpUcmPmm7PPOKgL7w68+j4D93zGM
-   QEuQ5I7/r4Ywhi/YqTrBHkh+qNkBIoC8+5BBWAqCIJXKHeWkMogWoceyt
-   JVbfR+i56eCd5dvfLFhrr0yRTTuBpnNC16n9lp57sP7zJ655TMNnAAZHX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="298242091"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="298242091"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 13:29:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="649298686"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Sep 2022 13:29:12 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaNOC-0002DF-0K;
-        Mon, 19 Sep 2022 20:29:12 +0000
-Date:   Tue, 20 Sep 2022 04:28:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ban Tao <fengzheng923@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:filetF4IoJ 28/33] sound/soc/sunxi/sun50i-dmic.c:62:1:
- warning: 'static' is not at beginning of declaration
-Message-ID: <202209200416.3fJxLmUY-lkp@intel.com>
+        Mon, 19 Sep 2022 16:31:23 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04828402FB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:31:22 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id b23so557856iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date;
+        bh=wERC1dAKO5PL7pICmuBQieROEUKf+Gdl0m2+8GmdLMc=;
+        b=k+bIQw1gv3n1q1gP34j3JVHb5/2ROiVNrtkcgimiMv5liSirAH20R2T2hVBpeQUTtH
+         hRxTKqutv7n1iDDc/0Eap1MdociUhaThwbtk+zXpW5ti5PLZW3brOG9PioUABvOalx5A
+         5Cxb6J1eoO58JN6l2UgfOIn80R2Uf5VOnrhcy0xzwGs0MCvtZbfOr4ZB5MYVKtBB1VK4
+         4FZLXae+vqlJAN021xzDwDxDXL7PEyGwHRLVLK3NL1jzewK//925hPmFl7Y0yN8fKq+1
+         WZxKyd++7PUbdFL1G0OzUnpIHwR4YzB46zU/CWQVQH5MSGz/XS6kL1V3vIsz7HrmHsce
+         aIYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wERC1dAKO5PL7pICmuBQieROEUKf+Gdl0m2+8GmdLMc=;
+        b=sV3/46iIPH3H9N3PLjQRaVC2D23+TitzCDEaNQrcMot7Tnv4O2b2WvV/q15plYoFOx
+         yR/vje9nPb5FVdsSMVPJxIisg/Iu/rcn4TVmHdQ9mdKYhBzHhlRmie6Qslc2oPEPsLhV
+         I/tUENBqOMY0BEJOt9doqQInYyutZGLVkjvprwcVuDQ6f5mNLCHNgIG7/9vozY3jXIwi
+         ZULsQgZoYWGvtSia/fYgAi214Qz/aDBbuMmMiDuWSKU+akQPOBLD372+YB84A0z9+TRo
+         +BA3TglKRCrcg6KqxL/NOFsIdcHer7SLZqf5vQ62o2IQJQtpVo0NCxXoMsPMDiUzxEzj
+         ey8w==
+X-Gm-Message-State: ACrzQf0xX3aPXGvndIBAXpwFdENJpbMQw8Ze7G2B9ucEUlt5e7WZ1cEi
+        yrDfHroZJZ1Q7tZAAeZwVG21vs5p4cffGWB6U04=
+X-Google-Smtp-Source: AMsMyM4uyTE9TWEVfG7fRfwaInCsHV2uU4TPylCF8V5vznGyN44L9Ifo47Xfh1hEIvqrjq7JRJqAkUYWfqpL6p0bOrY=
+X-Received: by 2002:a05:6638:2103:b0:35a:75b6:9992 with SMTP id
+ n3-20020a056638210300b0035a75b69992mr8540054jaj.244.1663619481260; Mon, 19
+ Sep 2022 13:31:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: honbarristermatthias@gmail.com
+Sender: michealscaparrottis5@gmail.com
+Received: by 2002:a6b:fc0a:0:0:0:0:0 with HTTP; Mon, 19 Sep 2022 13:31:20
+ -0700 (PDT)
+From:   "Hon. Barrister Matthias" <honbarristermatthias@gmail.com>
+Date:   Mon, 19 Sep 2022 13:31:20 -0700
+X-Google-Sender-Auth: zLhptStW6mUIuX9eps8gJ4W7lKs
+Message-ID: <CAKDDtC3DfGJ59o0=XTRPsOHsbp4_aXFt0QYbXtAXG+xqQjGQ1w@mail.gmail.com>
+Subject: My Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNCLAIMED_MONEY,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5239]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [michealscaparrottis5[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [michealscaparrottis5[at]gmail.com]
+        *  2.4 UNCLAIMED_MONEY BODY: People just leave money laying around
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git filetF4IoJ
-head:   717a8ff20f32792d6a94f2883e771482c37d844b
-commit: 9fc2c8ed923d8ec8a49cf5b5076c84867126ca69 [28/33] ASoC: sunxi: Add Allwinner H6 Digital MIC driver
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220920/202209200416.3fJxLmUY-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=9fc2c8ed923d8ec8a49cf5b5076c84867126ca69
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci filetF4IoJ
-        git checkout 9fc2c8ed923d8ec8a49cf5b5076c84867126ca69
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash sound/soc/sunxi/
+My Greetings,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My name's Hon. Barrister Matthias, I am sending this brief letter to
+solicit your support. I had a client who is an Indian and his name is
+Mr. Gurbhagat Singh Bhatti , he was a dealer in magnesite minerals
+here in Austria and also a Gas dealer in Russia.  He died six years
+ago in Russia after a Gas explosion in one of his dealing offices
+which led to the death of both him and his wife.
 
-All warnings (new ones prefixed by >>):
+He deposited the sum of 4.5 million euro in one of the legendary banks
+here in Austria. I have tried all I could to get in touch with any of
+his friends or family members but, no way because he had no child. And
+the recent death of Covid 19 killed his only brothers in India last
+year.
 
->> sound/soc/sunxi/sun50i-dmic.c:62:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-      62 | const static struct dmic_rate dmic_rate_s[] = {
-         | ^~~~~
+So I want you to apply to the bank as his Business partner so that the
+bank can release Mr. Gurbhagat Singh Bhatti funds into your bank
+account. I will provide you the guidelines on how to contact the bank
+and we have to do this with trust, because I don't want the bank to
+transfer the fund into Government treasury account as an unclaimed
+fund, so i need your response
 
-
-vim +/static +62 sound/soc/sunxi/sun50i-dmic.c
-
-    61	
-  > 62	const static struct dmic_rate dmic_rate_s[] = {
-    63		{48000, 0x0},
-    64		{44100, 0x0},
-    65		{32000, 0x1},
-    66		{24000, 0x2},
-    67		{22050, 0x2},
-    68		{16000, 0x3},
-    69		{12000, 0x4},
-    70		{11025, 0x4},
-    71		{8000,  0x5},
-    72	};
-    73	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Warm Regards,
+Hon. Barrister Matthias
