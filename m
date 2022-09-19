@@ -2,77 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B785BD87F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCEB5BD882
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiISXzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S229721AbiISX4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiISXze (ORCPT
+        with ESMTP id S229926AbiISX4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:55:34 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B2C4E600
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:32 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dv25so2244180ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yfATfabNUJHTE7KoWz5tianqb2se6NNt8ssnLCiM3vM=;
-        b=HV77nvu/6m5fXE76OY/pv1J5LagXGgFIHxHVja+vZD5GGHJUZUVtbSeyHyOzP3BI1k
-         q8KZbVHHluXEvWGmq5aB60t1fzHiWETXVO+ymCXT+XNgpK6+dyax8t3CtXb979Vu6wk9
-         rebhZrc/2rOf9d5Q0uY9dSRlcwxvDNuVdAaK8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yfATfabNUJHTE7KoWz5tianqb2se6NNt8ssnLCiM3vM=;
-        b=U5KfGI0e7htDwE5MpG3Gp6Jjc+Rli8En9SRCEKoUeBV2LYIQp+OrWVqd0NWwtMlAHd
-         Ie48TW1cWF7z9aTIceHYcFJqDlbQ8EYAXlHlZwMwsjrDrpQSDtrsLAoYf5WYfUifJ2XO
-         QKwKTitV4kYKBpuzbpXuYcUP7OCEHGGhqTH419nNT7bvxSXFxfza1Ki4WypvYF0oMkhN
-         QuDkLSX4vyBfgtigeW40X0e7MrP+rn0hxIyR4givWcXT9lSzjTmGL19nBVVzxwLJcezF
-         LNBxfP6YAFg7+WNKn4UETcnfxir+eNST6M0RBBzar9SQNBO0h687DRpsA2990Ea4sdE1
-         JkdQ==
-X-Gm-Message-State: ACrzQf2byngsc38Mx/HT4pho2B8+PaQXETWqWKAowd8zYX/vGF8SB8PX
-        xNsZPErj4DkR0F3BbZhhY4/FgO0taGSA7D7S
-X-Google-Smtp-Source: AMsMyM4U3kpTUix9y9ecww6Br6Asfb3pJBp87PrXfUW7rj/6XHoMxe8DTDVxLkDGi7++oK7tFAtjTQ==
-X-Received: by 2002:a17:907:a044:b0:770:da0d:171d with SMTP id gz4-20020a170907a04400b00770da0d171dmr14257352ejc.742.1663631730285;
-        Mon, 19 Sep 2022 16:55:30 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090631c900b0078197a9421csm857940ejf.85.2022.09.19.16.55.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 16:55:28 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id z6so1649528wrq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:55:27 -0700 (PDT)
-X-Received: by 2002:a5d:6c62:0:b0:22a:2f59:cb7d with SMTP id
- r2-20020a5d6c62000000b0022a2f59cb7dmr12106298wrz.405.1663631727515; Mon, 19
- Sep 2022 16:55:27 -0700 (PDT)
+        Mon, 19 Sep 2022 19:56:12 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E5350700
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1663631771; x=1695167771;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=++5axOCldtTWM+izrbSQWpROwyvWlmGRPLJdA2yng0M=;
+  b=Mnn61pXQouxDcedtf8N/mBz6S5pP6OeSTutsTy8vFuXLddEd2EaRRHjt
+   gQvfMQ6dS4FucO9brRAId0fRt6wJzxRWLDymH424LYGRN5njopsgkhdFt
+   +CtbQxPPrQskwUGWQDSKbUqi8UbJBbZdjpfHq0kb7n4vVBCw3BcdxvaE8
+   5vAudGucKD2OcU3JhDBJki2fNrtSWt1m3QlxGVd79hmhnn5z7Kr9nMTr8
+   2K15p/roUDVNSexSdREiG9IlHjDecYqzehLMmVexDWT2oz3xULSk6Qa5g
+   GTjzySy0WQxymKWsTH0AU0G14eee9e6f5WXkRZIQVXIOezAoKYpcOGjuB
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,329,1654531200"; 
+   d="scan'208";a="323859294"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Sep 2022 07:56:10 +0800
+IronPort-SDR: O/z07hOjtRszYMvrYPFuAn6Qy1dJ5/Mj393vftyY7jzSe9OziX93L7KaaAnfwOnawpGIzFRJUL
+ RDLPGtw0XVFbnWnOkIsp/v/nv7/oCdGGWS7/26HSWJZFTqaXLr8sjaTX1+AUoXga3LBygKfbWf
+ /isvELpjS/k6//CF+8NQ4rQFNAYYZ7HuokL0KHyJ1BbHjRZoEJoVWDx76b4KnK3ch5adqOyaJs
+ Ahik6pAFBOZ2cTXmhcanWwnlW4k3pRznEfv9OPZ+B1wjFz/ij0Z4v9n6a9xHlG+FwAnS2O5ibi
+ WkhigQ5kt8GoRIb+qWEOfvFa
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Sep 2022 16:10:47 -0700
+IronPort-SDR: VvONKg5U/M/I++uFtgogWFZ/3HZMlAExqY3gDeOesNT99RnGi3ENMYUaQ5XoJI83/KbxexAhOD
+ 0MQGW/+tR9priecxarmUtrjz5Qpl+wJoudmF5jZUmYwGDoMV7NRKjfhSRfDfcdX+oAWY+O82iH
+ 4AH1WvSGQgzys/tQDKDv7qT6Z7vB6MlvNgT2aXc6Gp8qWBvbTbD47pOxrhS5L9SHOoU/y8k3DR
+ dfjMP/t+Igub/BBIUHREgOk450QO803FeRM7710M31jWpIMYSMiw3HRPgrAjAfGFqtd08DvxEx
+ np8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Sep 2022 16:56:10 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MWhQd4DT7z1RWy0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:56:09 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1663631768; x=1666223769; bh=++5axOCldtTWM+izrbSQWpROwyvWlmGRPLJ
+        dA2yng0M=; b=KumYlcFECCyMFuCCbzzjbk2hBlrl09J7H1BVMMpdpWLqTeK1Udg
+        BQJQNamL7noEQ2kcOpXY79ZFm5an7hgZYNIet+ruTqKUe+qcUHcR0timQfFKEfTT
+        7+EU2aANdBVmxzOTCdnC3Inc+WyuGkoiyybBjJBZHjeFfNTvNNOrWnWtJOt+7C16
+        4xnnoGJ2hsBWcHs8UXmd09FBjoVunvoEbalULcIh0Y9nt/2kAx6gYcjSMb9o+c0p
+        sd2cnrprJIdrUMnVB0OwM0O2rS8UAgnvJDEjxWg63PVisyECEIb91ymOK/63rc3D
+        O4eDxIUJvk8GQtdY7j66BU1zyADl90ojNnQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id uHGWvwxZrQwI for <linux-kernel@vger.kernel.org>;
+        Mon, 19 Sep 2022 16:56:08 -0700 (PDT)
+Received: from [10.225.163.81] (unknown [10.225.163.81])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MWhQV5lcDz1RvLy;
+        Mon, 19 Sep 2022 16:56:02 -0700 (PDT)
+Message-ID: <7872df9d-db4e-0617-84eb-e47394774322@opensource.wdc.com>
+Date:   Tue, 20 Sep 2022 08:55:59 +0900
 MIME-Version: 1.0
-References: <1662754496-31143-1-git-send-email-quic_sibis@quicinc.com>
-In-Reply-To: <1662754496-31143-1-git-send-email-quic_sibis@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 19 Sep 2022 16:55:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XMC28U5eZhqUyr6gcNiFKmHfNLjmVAb0Asx4u0mLXZtw@mail.gmail.com>
-Message-ID: <CAD=FV=XMC28U5eZhqUyr6gcNiFKmHfNLjmVAb0Asx4u0mLXZtw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: Add Google Herobrine WIFI SKU dts fragment
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v8 09/23] ata: libahci_platform: Parse ports-implemented
+ property in resources getter
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Hannes Reinecke <hare@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
+ <20220909193621.17380-10-Sergey.Semin@baikalelectronics.ru>
+ <20220919215014.GA336081@roeck-us.net>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220919215014.GA336081@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,82 +112,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 9/20/22 06:50, Guenter Roeck wrote:
+> On Fri, Sep 09, 2022 at 10:36:07PM +0300, Serge Semin wrote:
+>> The ports-implemented property is mainly used on the OF-based platforms
+>> with no ports mapping initialized by a bootloader/BIOS firmware. Seeing
+>> the same of_property_read_u32()-based pattern has already been implemented
+>> in the generic AHCI LLDD (glue) driver and in the Mediatek, St AHCI
+>> drivers let's move the property read procedure to the generic
+>> ahci_platform_get_resources() method. Thus we'll have the forced ports
+>> mapping feature supported for each OF-based platform which requires that,
+>> and stop re-implementing the same pattern in there a bit simplifying the
+>> code.
+>>
+>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>> ---
+>>  drivers/ata/ahci_mtk.c         | 2 --
+>>  drivers/ata/ahci_platform.c    | 3 ---
+>>  drivers/ata/ahci_st.c          | 3 ---
+>>  drivers/ata/libahci_platform.c | 3 +++
+>>  4 files changed, 3 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/ata/ahci_mtk.c b/drivers/ata/ahci_mtk.c
+>> index 1f6c85fde983..c056378e3e72 100644
+>> --- a/drivers/ata/ahci_mtk.c
+>> +++ b/drivers/ata/ahci_mtk.c
+>> @@ -118,8 +118,6 @@ static int mtk_ahci_parse_property(struct ahci_host_priv *hpriv,
+>>  				   SYS_CFG_SATA_EN);
+>>  	}
+>>  
+>> -	of_property_read_u32(np, "ports-implemented", &hpriv->force_port_map);
+>> -
+>>  	return 0;
+>>  }
+>>  
+>> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+>> index 28a8de5b48b9..9b56490ecbc3 100644
+>> --- a/drivers/ata/ahci_platform.c
+>> +++ b/drivers/ata/ahci_platform.c
+>> @@ -56,9 +56,6 @@ static int ahci_probe(struct platform_device *pdev)
+>>  	if (rc)
+>>  		return rc;
+>>  
+>> -	of_property_read_u32(dev->of_node,
+>> -			     "ports-implemented", &hpriv->force_port_map);
+>> -
+>>  	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
+>>  		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
+>>  
+>> diff --git a/drivers/ata/ahci_st.c b/drivers/ata/ahci_st.c
+>> index 7526653c843b..068621099c00 100644
+>> --- a/drivers/ata/ahci_st.c
+>> +++ b/drivers/ata/ahci_st.c
+>> @@ -168,9 +168,6 @@ static int st_ahci_probe(struct platform_device *pdev)
+>>  
+>>  	st_ahci_configure_oob(hpriv->mmio);
+>>  
+>> -	of_property_read_u32(dev->of_node,
+>> -			     "ports-implemented", &hpriv->force_port_map);
+>> -
+> 
+> With arm:allmodconfig, this results in:
+> 
+>   CC [M]  drivers/ata/ahci_st.o
+> drivers/ata/ahci_st.c: In function 'st_ahci_probe':
+> drivers/ata/ahci_st.c:147:24: error: unused variable 'dev' [-Werror=unused-variable]
+>   147 |         struct device *dev = &pdev->dev;
+> 
+> Guenter
 
-On Fri, Sep 9, 2022 at 1:15 PM Sibi Sankar <quic_sibis@quicinc.com> wrote:
->
-> The Google Herobrine WIFI SKU can save 256M by not having modem/mba/rmtfs
-> memory regions defined. Add the dts fragment and mark all the board files
-> appropriately.
->
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->
-> Depends on:
-> Add LTE SKUs for Villager: https://patchwork.kernel.org/project/linux-arm-msm/cover/20220830182923.3720287-1-dianders@chromium.org/
->
-> Instead of just having remoteproc_mpss node disabled, we go ahead and
-> delete it on wifi only SKUs. This is done to avoid the dtbs_check
-> failures that we would end of getting if we delete the memory-region
-> property present in the node (since it's a required property). I'll
-> send a follow up patch with IPA node enabled only on LTE SKUs as soon
-> as I verify that it doesn't have any affects on suspend/resume.
+Just pushed a fix for this in ata tree for-next and for-6.1 branches. The
+problem should be resolved with the next linux-next merge.
 
-s/affects/effects
+-- 
+Damien Le Moal
+Western Digital Research
 
-
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> index 344338ad8a01..480cb88f2154 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> @@ -9,6 +9,7 @@
->
->  #include "sc7280-idp.dtsi"
->  #include "sc7280-idp-ec-h1.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
-
-This is unrelated to the WiFi only separation, isn't it? This looks
-like it's fixing a bug in commit d42fae738f3a ("arm64: dts: qcom: Add
-LTE SKUs for sc7280-villager family") which removed a fragment from
-"sc7280-chrome-common.dtsi" but then didn't add it back to all the
-previous users. Not sure how I missed that. In any case, feels like
-this should be a separate commit with a Fixes.
-
-...also: instead of adding this include to crd-r3 and idp2, though,
-why not just add it to "idp.dtsi"? Right now all things that include
-"idp.dtsi" are LTE SKUs, right?
-
-
->  / {
->         model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev3 - 4)";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> index ccbe50b6249a..6a2ffaac33bc 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> @@ -8,6 +8,7 @@
->  /dts-v1/;
->
->  #include "sc7280-herobrine.dtsi"
-> +#include "sc7280-herobrine-wifi-sku.dtsi"
-
-I think this is wrong and evoker is a LTE SKU. I'll send out a patch shortly.
-
-
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> index f1017809e5da..ee3bca264f67 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-> @@ -5,7 +5,10 @@
->   * Copyright 2022 Google LLC.
->   */
->
-> -#include "sc7280-herobrine-villager-r1.dts"
-> +/dts-v1/;
-> +
-> +#include "sc7280-herobrine-villager.dtsi"
-> +#include "sc7280-herobrine-audio-wcd9385.dtsi"
-
-I don't think this is enough. villager-r1.dts also has some other
-things that you'll end up missing. I think you need to move the
-existing "villager-r1.dts" to be a dtsi file and then include it from
-both the new "villager-r1.dts" and "villager-r1-lte.dts"
