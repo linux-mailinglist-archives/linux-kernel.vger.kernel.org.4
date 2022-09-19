@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887515BD595
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83355BD599
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiISUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 16:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229548AbiISURy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 16:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiISUQy (ORCPT
+        with ESMTP id S229717AbiISURp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 16:16:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D03ECD4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:16:53 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d24so277388pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=WBdO0q1Vu+HcHQ9Ius//czL20IevKrEflqwUrM1KSMM=;
-        b=Ty4gKC/4TkZyRQW6CBD1IAeVodTeekkH+uQUEdrLdpgsUtXRVv97YXKiMUDHCDxZnP
-         2vkfdFDS6lvAZp/jLT4JmyuroGp4Tq9fViFjRX89s9sGUUcb2tCW5rfBiejSduKzztcS
-         219dy0VIFHHi6CRdTC1dgeR5yORE4DCU/wnGU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=WBdO0q1Vu+HcHQ9Ius//czL20IevKrEflqwUrM1KSMM=;
-        b=pc2RvLC5g1qufz6Yw6sjeqG/R7oMicDHNQDMdN8cfaFlL1mf6XituCMT0JjWzG+2Ja
-         heHYNII1F9khptASRd+2uAeVCZY77adcgtjVa8+RYknyh6NtMQNrBQSpnwwBAsTEdmMc
-         ax0wCtH/Z+yoYPX84NHKUVjBcXKAX74rCloI/MhMr1eaa7MIqNqDqLeTDKtyt6Fi1dvO
-         AhULXvF96iwH54ubiKlHcU4xYr/ZAot9rwTIRTgV5mLOH52mUG2bTmVTajkd7EEcxYqH
-         sxXAyMUPKskwNs5DdTAs/5YAIpatUjhowH3Wfm6V3dHQJ44cCiGERGsw9XVCeNMX6H6J
-         XNTA==
-X-Gm-Message-State: ACrzQf3uKO4koGKu6yBvvwmV+o0jJmtrrxh0Bm14VpNP+5LpaaKcJ/xY
-        HwWZjzKctlheVF29ICb0k9JPSw==
-X-Google-Smtp-Source: AMsMyM45J8dUTKuzhH8ytcQIk4o7i5T+/qBS3EdVAReIHWoir0iQpQeHo617CNtpN3P7qw3uOkozUg==
-X-Received: by 2002:a17:90b:4ac4:b0:202:6d3d:3b60 with SMTP id mh4-20020a17090b4ac400b002026d3d3b60mr21678691pjb.197.1663618613077;
-        Mon, 19 Sep 2022 13:16:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090276c700b00176acd80f69sm14926223plt.102.2022.09.19.13.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 13:16:52 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>, Yu Zhao <yuzhao@google.com>,
-        dev@der-flo.net, Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] x86/uaccess: Avoid check_object_size() in copy_from_user_nmi()
-Date:   Mon, 19 Sep 2022 13:16:48 -0700
-Message-Id: <20220919201648.2250764-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 19 Sep 2022 16:17:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3524333A;
+        Mon, 19 Sep 2022 13:17:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4ABEAB8116D;
+        Mon, 19 Sep 2022 20:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FDCC433D6;
+        Mon, 19 Sep 2022 20:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663618662;
+        bh=eLnSfNg94p3dmevcszHxKEUBtga5UOC1oT5V7Ff96ic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AnmhoQiqIWssaceXNzxDmMLpVCMK+Wn2cIOPOF542JbKO4urTK9eJf3vQnBnSsJRt
+         JkOjNMaUaIEL6wawwBZD4Mun1WuZj34fcvRZZg4Gv6bWDk2kqU4qPTOJFsh6zHK2+v
+         wbJePqHOOBa0+U5kvmSKqYVHyt65OzP2BUMXefVRtWkOagBc1mFloSZ+EG9aKLRmP8
+         DG6GuUW7T0uKyuMRe/rfRinszwIqwSRcB+WO+5CJOElakfMb2DUJ2WjzB3IMPVbmpM
+         P0HAxbf6OMkTdzD/wnZarPq1Xdube0eB7IQW42DmXgzMCaVInYCQJ3+NoPcF0CSvQh
+         q4DnDFqw5WMMw==
+Date:   Mon, 19 Sep 2022 15:17:38 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bryan.odonoghue@linaro.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH] thermal: qcom: tsens-v0_1: Fix MSM8939 fourth sensor
+ hw_id
+Message-ID: <20220919201738.wkdzizmj5lhq2hk2@builder.lan>
+References: <20220811105014.7194-1-vincent.knecht@mailoo.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2452; h=from:subject; bh=xBKIj8xDAkGKVbJ5AWdGFtVHxKNqrP8mAf0eb08IA9w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjKM4w/mv+2+IcarOwGG7EEYI5jpmWaMgZlKFemi3f dvVG79qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyjOMAAKCRCJcvTf3G3AJkCtD/ 9gxNevZi6/8CjjkhkW1FOwIhJRnPq08fMU7/cTBdLVodGWPb7yeZpTUXKXlaQvTdAdnLA91kgGieDT cdloPkkcfj9C0+9lA5CfMcOAQuYePYmEKgPe7IKZjoioalpufUON+2Ao4LQL70hlaPmWLQEmUG/taT B7JFZinDvdig3zr/lRxunypycGLgyxnI2MTQTPYtV3kl+pQn+owMb7t7YptMhjgOwOsCnEdITmeZNZ 2LqKke1qRAptdOOGNbNBxVLQ/b3phKGtdwHcm2gPOXNTNe9u3vZwq12CFqmI4VyEcee26QKkgRSxbq x95BSUxKyLdWsPUIbgL+1URX0XZFzQvUhj/4h+0DUjNio7/3CG5GOpnDeB9QIUkEEiN/T9gCHRpAnQ jkKBnTow1mRV4kU8FXo0Acd9g6WYyUB/9vqHrrNTJvOgjw+GJqtceS8Xr9pZweh27yjdh9r9IqdEZW r5woqIsunQA+hdoS6CutBI4zQOW33URy9bcsh95kBU7bGdnlBm/izWhSdDPzgc6/44WV/cDte/52K1 o7EzKmj/007c9dx0susXEG3GTFY83uXyOA3/KZaj4jsX6DfldnJDJj50zLkWPki5IZ+qNSPKP4OEKl 6zvZPwZY9m+bbb+DSU1LNIP3/xhSOSoo1rQRMfgb5m5KQ5G7uTYECFxKyk7g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
-designed to skip any checks where the length is known at compile time as
-a reasonable heuristic to avoid "likely known-good" cases. However, it can
-only do this when the copy_*_user() helpers are, themselves, inline too.
+On Thu, Aug 11, 2022 at 12:50:14PM +0200, Vincent Knecht wrote:
+> Reading temperature from this sensor fails with 'Invalid argument'.
+> 
+> Looking at old vendor dts [1], its hw_id should be 3 instead of 4.
+> Change this hw_id accordingly.
+> 
+> [1] https://github.com/msm8916-mainline/android_kernel_qcom_msm8916/blob/master/arch/arm/boot/dts/qcom/msm8939-common.dtsi#L511
+> 
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 
-Using find_vmap_area() requires taking a spinlock. The check_object_size()
-helper can call find_vmap_area() when the destination is in vmap memory.
-If show_regs() is called in interrupt context, it will attempt a call to
-copy_from_user_nmi(), which may call check_object_size() and then
-find_vmap_area(). If something in normal context happens to be in the
-middle of calling find_vmap_area() (with the spinlock held), the interrupt
-handler will hang forever.
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-The copy_from_user_nmi() call is actually being called with a fixed-size
-length, so check_object_size() should never have been called in
-the first place. Given the narrow constraints, just replace the
-__copy_from_user_inatomic() call with an open-coded version that calls
-only into the sanitizers and not check_object_size(), followed by a call
-to raw_copy_from_user().
+Regards,
+Bjorn
 
-Reported-by: Yu Zhao <yuzhao@google.com>
-Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
-Reported-by: dev@der-flo.net
-Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2: drop the call explicitly instead of using inline to do it
-v1: https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.org
----
- arch/x86/lib/usercopy.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-index ad0139d25401..d2aff9b176cf 100644
---- a/arch/x86/lib/usercopy.c
-+++ b/arch/x86/lib/usercopy.c
-@@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
- 	 * called from other contexts.
- 	 */
- 	pagefault_disable();
--	ret = __copy_from_user_inatomic(to, from, n);
-+	instrument_copy_from_user(to, from, n);
-+	ret = raw_copy_from_user(to, from, n);
- 	pagefault_enable();
- 
- 	return ret;
--- 
-2.34.1
-
+> ---
+> Fixes reading GPU temperature on msm8939 idol3 with current WIP dtsi
+> ---
+>  drivers/thermal/qcom/tsens-v0_1.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..327f37202c69 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -604,7 +604,7 @@ static const struct tsens_ops ops_8939 = {
+>  struct tsens_plat_data data_8939 = {
+>  	.num_sensors	= 10,
+>  	.ops		= &ops_8939,
+> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 4, 5, 6, 7, 8, 9, 10 },
+> +	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, 10 },
+>  
+>  	.feat		= &tsens_v0_1_feat,
+>  	.fields	= tsens_v0_1_regfields,
+> -- 
+> 2.37.1
+> 
+> 
+> 
