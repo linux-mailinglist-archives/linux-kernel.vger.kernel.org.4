@@ -2,104 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2185BD7E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3553A5BD7F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiISXLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S229498AbiISXM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiISXLL (ORCPT
+        with ESMTP id S230135AbiISXMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:11:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C8A399CE
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:10:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1EBC620DA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:10:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEEA3C433D6;
-        Mon, 19 Sep 2022 23:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663629048;
-        bh=cBqstNirVp3/LMuUXyvejfY8+hDyu9PM9y6tIN40Ns8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=W8/NtMe9xnaROAp8gN8JdYtjSBMspTUF946nQawzwiMcwyDXI9gLP0NiKs8ZqL34b
-         MBKiNnKZ/AT/CaDMjMqtb1MC7Dxz/mdodgJDB18yUBcHL93cf5mShwNoaR/0jx2inG
-         s2vF+zxmCCesL8tgK8B9VPdlnTW+8bfNPI2N7oarlnw7v/QMaXsm0isK9LemyrI19H
-         COWv4fqk3i7sAT7BSTMGX1OcKcmvXr57FWA+Bgzz+f2mhN5CnuKO0E6pixAyE9Ert7
-         Pzt9ffOlj5YySWpMBlez7e+oSCFeHjiZEmHYSEnCFTUVN5k+UbFSlMnWPBUGjjS7ef
-         6ietrQW7ZgPIg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Li Chen <lchen@ambarella.com>, Takashi Iwai <tiwai@suse.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220913212256.151799-1-mike.rudenko@gmail.com>
-References: <YyCqC2EypxnoJFk7@sirena.org.uk> <20220913212256.151799-1-mike.rudenko@gmail.com>
-Subject: Re: [PATCH v2 1/2] ASoC: sunxi: sun4i-codec: silence misleading error in probe
-Message-Id: <166362904468.3419825.3057946964587586588.b4-ty@kernel.org>
-Date:   Tue, 20 Sep 2022 00:10:44 +0100
+        Mon, 19 Sep 2022 19:12:40 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2254B48B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:12:20 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MWgS30pcdz9sxL;
+        Mon, 19 Sep 2022 23:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1663629139; bh=DkQmle7xAKgqaESS7YDG2RtCoM4nsxWLLzIMz/A+uxY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EZolbE5VRNlZbaerDP24iNRkHSP4jyVQn5PQNLlgSFBB6KypAch1berozoV2/14bM
+         oiQ7TQj9a8ELXbMs4cxY2fVvv+xojPZ+xeQWm7FA3kAuzH1WUCQto4zaR/uvplDFrp
+         wP3ZRzyRAXxgKd0wCwC3nbZBrnlBJ0pChwyy1peU=
+X-Riseup-User-ID: 606E763E2668B4D71697192CEAF374585F765B2ECD3DCA0E71DB8D89095DAB43
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MWgRy2wXnz1yPb;
+        Mon, 19 Sep 2022 23:12:14 +0000 (UTC)
+Message-ID: <cd90693c-7324-5a74-9a5b-794032b9717f@riseup.net>
+Date:   Mon, 19 Sep 2022 20:12:12 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH] drm/amd/display: remove redundant
+ CalculateRemoteSurfaceFlipDelay's
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        Nevenko.Stupar@amd.com, Pavle.Kotarac@amd.com, aric.cyr@amd.com
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220919172720.3496405-1-trix@redhat.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220919172720.3496405-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 00:22:54 +0300, Mikhail Rudenko wrote:
-> In the case when a codec device is probed before codec analog
-> controls, snd_soc_register_card() returns -EPROBE_DEFER, resulting in
-> a misleading error message
+Hi Tom
+
+On 9/19/22 14:27, Tom Rix wrote:
+> There are several copies of CalculateRemoteSurfaceFlipDelay.
+> Reduce to one instance.
 > 
->     sun4i-codec 1c22c00.codec: Failed to register our card
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+
+Just a minor comment below.
+
+> ---
+>  .../dc/dml/dcn20/display_mode_vba_20.c        |  4 +-
+>  .../dc/dml/dcn20/display_mode_vba_20v2.c      | 40 +------------------
+>  .../dc/dml/dcn21/display_mode_vba_21.c        | 40 +------------------
+>  3 files changed, 4 insertions(+), 80 deletions(-)
 > 
-> even if the device is probed successfully later. Use dev_err_probe()
-> to demote the above error to a debug message.
-> 
-> [...]
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> index 4ca080950924..8e5d58336bc5 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+> @@ -158,7 +158,7 @@ double CalculateTWait(
+>  		double DRAMClockChangeLatency,
+>  		double UrgentLatency,
+>  		double SREnterPlusExitTime);
+> -static double CalculateRemoteSurfaceFlipDelay(
+> +double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+>  		double SwathWidth,
+> @@ -2909,7 +2909,7 @@ double CalculateTWait(
+>  	}
+>  }
+>  
+> -static double CalculateRemoteSurfaceFlipDelay(
+> +double CalculateRemoteSurfaceFlipDelay(
 
-Applied to
+I guess it would be more clear if this function was placed on the
+display_mode_vba20.h and named dml20_CalculateRemoteSurfaceFlipDelay.
+Then, it would be clearer that this function is shared over the DCN20s.
 
-   broonie/sound.git for-next
+Best Regards,
+- Maíra Canal
 
-Thanks!
-
-[1/2] ASoC: sunxi: sun4i-codec: silence misleading error in probe
-      commit: 30248f618d30cf1ad9d5a72126799f2f0239860c
-[2/2] ASoC: sunxi: sun4i-codec: set debugfs_prefix for CPU DAI component
-      commit: 717a8ff20f32792d6a94f2883e771482c37d844b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+>  		double SwathWidth,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> index 2b4dcae4e432..e9ebc81adc71 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+> @@ -182,7 +182,7 @@ double CalculateTWait(
+>  		double DRAMClockChangeLatency,
+>  		double UrgentLatency,
+>  		double SREnterPlusExitTime);
+> -static double CalculateRemoteSurfaceFlipDelay(
+> +double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+>  		double SwathWidth,
+> @@ -2967,44 +2967,6 @@ static void dml20v2_DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  	}
+>  }
+>  
+> -static double CalculateRemoteSurfaceFlipDelay(
+> -		struct display_mode_lib *mode_lib,
+> -		double VRatio,
+> -		double SwathWidth,
+> -		double Bpp,
+> -		double LineTime,
+> -		double XFCTSlvVupdateOffset,
+> -		double XFCTSlvVupdateWidth,
+> -		double XFCTSlvVreadyOffset,
+> -		double XFCXBUFLatencyTolerance,
+> -		double XFCFillBWOverhead,
+> -		double XFCSlvChunkSize,
+> -		double XFCBusTransportTime,
+> -		double TCalc,
+> -		double TWait,
+> -		double *SrcActiveDrainRate,
+> -		double *TInitXFill,
+> -		double *TslvChk)
+> -{
+> -	double TSlvSetup, AvgfillRate, result;
+> -
+> -	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
+> -	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
+> -	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
+> -	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
+> -	*TslvChk = XFCSlvChunkSize / AvgfillRate;
+> -	dml_print(
+> -			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
+> -			*SrcActiveDrainRate);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
+> -	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
+> -	return result;
+> -}
+> -
+>  static void CalculateActiveRowBandwidth(
+>  		bool GPUVMEnable,
+>  		enum source_format_class SourcePixelFormat,
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> index a3ef3638d979..d94aaf899f9b 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+> @@ -210,7 +210,7 @@ double CalculateTWait(
+>  		double DRAMClockChangeLatency,
+>  		double UrgentLatency,
+>  		double SREnterPlusExitTime);
+> -static double CalculateRemoteSurfaceFlipDelay(
+> +double CalculateRemoteSurfaceFlipDelay(
+>  		struct display_mode_lib *mode_lib,
+>  		double VRatio,
+>  		double SwathWidth,
+> @@ -2980,44 +2980,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  	}
+>  }
+>  
+> -static double CalculateRemoteSurfaceFlipDelay(
+> -		struct display_mode_lib *mode_lib,
+> -		double VRatio,
+> -		double SwathWidth,
+> -		double Bpp,
+> -		double LineTime,
+> -		double XFCTSlvVupdateOffset,
+> -		double XFCTSlvVupdateWidth,
+> -		double XFCTSlvVreadyOffset,
+> -		double XFCXBUFLatencyTolerance,
+> -		double XFCFillBWOverhead,
+> -		double XFCSlvChunkSize,
+> -		double XFCBusTransportTime,
+> -		double TCalc,
+> -		double TWait,
+> -		double *SrcActiveDrainRate,
+> -		double *TInitXFill,
+> -		double *TslvChk)
+> -{
+> -	double TSlvSetup, AvgfillRate, result;
+> -
+> -	*SrcActiveDrainRate = VRatio * SwathWidth * Bpp / LineTime;
+> -	TSlvSetup = XFCTSlvVupdateOffset + XFCTSlvVupdateWidth + XFCTSlvVreadyOffset;
+> -	*TInitXFill = XFCXBUFLatencyTolerance / (1 + XFCFillBWOverhead / 100);
+> -	AvgfillRate = *SrcActiveDrainRate * (1 + XFCFillBWOverhead / 100);
+> -	*TslvChk = XFCSlvChunkSize / AvgfillRate;
+> -	dml_print(
+> -			"DML::CalculateRemoteSurfaceFlipDelay: SrcActiveDrainRate: %f\n",
+> -			*SrcActiveDrainRate);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TSlvSetup: %f\n", TSlvSetup);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TInitXFill: %f\n", *TInitXFill);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: AvgfillRate: %f\n", AvgfillRate);
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: TslvChk: %f\n", *TslvChk);
+> -	result = 2 * XFCBusTransportTime + TSlvSetup + TCalc + TWait + *TslvChk + *TInitXFill; // TODO: This doesn't seem to match programming guide
+> -	dml_print("DML::CalculateRemoteSurfaceFlipDelay: RemoteSurfaceFlipDelay: %f\n", result);
+> -	return result;
+> -}
+> -
+>  static void CalculateActiveRowBandwidth(
+>  		bool GPUVMEnable,
+>  		enum source_format_class SourcePixelFormat,
