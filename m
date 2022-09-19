@@ -2,278 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093305BC366
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1435BC367
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiISHLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S229745AbiISHM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiISHLY (ORCPT
+        with ESMTP id S229497AbiISHM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:11:24 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C031D326
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id o2so43275439lfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
-        b=D/nRppMBq0YAnoEhINH3Z0P9TRgG1BXuZTIwyQM0dyZDLVwNJwi8aESkUvM73QHl+5
-         F9QYMQK/xtCsTHVDZ19PN2TwvyZXD05vkPJLCzo4Ij2OttCP2NEl2aoqD5jAYDbq3iU+
-         KMUaAnNPVXtKyV3LT4gSDILkBs/SV/ucd3Qn9u0YMqrvozsJ7A3DfDbt+kbzoAgfUtjg
-         p5foBSLRm97TnkizKOVfpI3StsmQB5lQkCbUulHvRy8qRJOEjo9cDhs4oTEK6/38kmbq
-         SNdleQ5QVzc6nSfF+j4drb/f4gEA0xgqkpxOEtIr6BUhfXcP1m3I1Ql11/vwTZUXU6Ri
-         2qnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
-        b=pPvMoisTY8STEfGKmrWvWDptSuBlBwayOg9wrOiPMP6P/rbFznH2T1vsHEnh6/u0a5
-         NzlYCvL9+teYvUOw2XdYzJeKcyKMcIJJT12I1RXHzYQQhsEJmA3727kEZIteDFqWgoHZ
-         g+KT4sFgjUUiqs7/Q5nDKmLDy5g+G9ViKl78rEUD47PUqO+DdFMmGp9tj3dy5JHnXTDc
-         uiWI/kCNk69t0SII3Rv8o3qsC/1XAhV/cxyy9pboDWz1ocqdxP9hE8P+xwBXxBNKbd40
-         zjVVCofk/ZOFK8VcII3YpDwfRWHy5m1Wh0AviJZyMet8IeHecM/htgV/2VYM2dzEUcuX
-         N9og==
-X-Gm-Message-State: ACrzQf2EcppMgt2K6KO8JlZnw5zl6qk6s2cnN6stfnYQ/Zg4V96S4r9r
-        BmMD1Zs/F5ipBWdEQeaP2JpKYQ==
-X-Google-Smtp-Source: AMsMyM69FgTlQ/RA3kiV+ul8Cu2ZVr0C81M5qS5BMPwpGr3XxoadcKtBJkR9DBcKrshWMwkdmydh/w==
-X-Received: by 2002:a05:6512:3da9:b0:49f:1742:c692 with SMTP id k41-20020a0565123da900b0049f1742c692mr6275517lfv.313.1663571479878;
-        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b20-20020a056512071400b00492b494c4e8sm5049666lfs.298.2022.09.19.00.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
-Message-ID: <b5578e0f-ac41-9889-a6bb-4b1d74197ec0@linaro.org>
-Date:   Mon, 19 Sep 2022 09:11:18 +0200
+        Mon, 19 Sep 2022 03:12:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAE91D323
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:12:50 -0700 (PDT)
+X-UUID: a0d91455cb5643a2a94b14ff3e6782c4-20220919
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=sybNd4ffeG3bz/UNX8AgLF+t9XR2tFyzTILybVNaYxA=;
+        b=DuSbKAjCuHbjScEC5O2R76jCNy+h61yxFKVFZHEmsaOD4UCndYBaAZkdOXh3jqiP2NZTeYzuZmi1hA+9iRdXwmxM3yrYlVQXDgXXGKlW2JFK32duVDjhMDDwcRjRVjF4tFlDefCMPerghB7ZRT0+TSDJS/gyrhwToYTzuWaphY0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:8dc84897-461d-4292-b110-c2145c63836e,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:feb40ab7-c5e8-499b-b943-bfaa4ae2eb13,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: a0d91455cb5643a2a94b14ff3e6782c4-20220919
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1651711395; Mon, 19 Sep 2022 15:12:43 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 19 Sep 2022 15:12:42 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 19 Sep 2022 15:12:41 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: [RESEND PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
+Date:   Mon, 19 Sep 2022 15:12:38 +0800
+Message-ID: <20220919071238.23920-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 3/3] thermal: ls2k: add thermal management support
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>
-References: <20220919034915.26912-1-zhuyinbo@loongson.cn>
- <20220919034915.26912-3-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919034915.26912-3-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 05:49, Yinbo Zhu wrote:
-> This patch adds the support for loongson2k thermal sensor controller,
-> which can support maximum 3 sensors.
-> 
-> It's based on thermal of framework:
->  - Trip points defined in device tree.
->  - Cpufreq as cooling device registered in loongson2k cpufreq driver.
->  - Pwm fan as cooling device registered in hwmon pwm-fan driver.
-> 
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  drivers/thermal/Kconfig        |  10 ++
->  drivers/thermal/Makefile       |   1 +
->  drivers/thermal/ls2k_thermal.c | 244 +++++++++++++++++++++++++++++++++
->  3 files changed, 255 insertions(+)
->  create mode 100644 drivers/thermal/ls2k_thermal.c
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e052dae614eb..04f5c044bc94 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->  	  If you say yes here you get support for the FAN controlled
->  	  by the Microcontroller found on the Khadas VIM boards.
->  
-> +config LOONGSON2K_THERMAL
-> +	tristate "Loongson 2K SOC series thermal driver"
-> +	depends on OF
-> +	default m
+1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
+and disable gce ddr enable when gce work job done
+2. split cmdq clk enable/disable api, and control gce ddr enable/disable
+in clk enable/disable function to make sure it could protect when cmdq
+is multiple used by display and mdp
 
-Why should it be module by default on x86 or ARM? See how other drivers
-do it.
+this is only for some SOC which has flag "control_by_sw".
+for this kind of gce, there is a handshake flow between gce and ddr
+hardware,
+if not set ddr enable flag of gce, ddr will fall into idle mode,
+then gce instructions will not process done.
+we need set this flag of gce to tell ddr when gce is idle or busy
+controlled by software flow.
 
-> +	help
-> +	  Support for Thermal driver found on Loongson 2K SOC series platforms.
-> +	  It supports one critical trip point and one passive trip point. The
-> +	  cpufreq and the pwm fan is used as the cooling device to throttle CPUs
-> +	  when the passive trip is crossed.
-> +
->  endif
+ddr problem is a special case.
+when test suspend/resume case, gce sometimes will pull ddr, and ddr can
+not go to suspend.
+if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
+as you have referred [1] and [2] (8192 and 8195)
+but for mt8186, the gce is more special, except setting of [1] and [2],
+we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
+when gce working to make sure gce could process all instructions ok.
+this case just need normal bootup, if we not set this, display cmdq
+task will timeout, and chrome homescreen will always black screen.
 
-(...)
+and with this patch, we have done these test on mt8186:
+1.suspend/resume
+2.boot up to home screen
+3.playback video with youtube.
 
-> +
-> +static int ls2k_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	struct ls2k_thermal_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->pdev = pdev;
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
+suspend issue is special gce hardware issue, gce client  driver
+command already process done, but gce still pull ddr.
 
-There is a helper combining these two.
+Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 66 +++++++++++++++++++++++++++---
+ 1 file changed, 61 insertions(+), 5 deletions(-)
 
-> +	if (IS_ERR(data->regs)) {
-> +		dev_err(dev, "failed to get io address\n");
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 9465f9081515..3a1b11de84be 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -80,16 +80,60 @@ struct cmdq {
+ 	bool			suspended;
+ 	u8			shift_pa;
+ 	bool			control_by_sw;
++	bool			sw_ddr_en;
+ 	u32			gce_num;
++	atomic_t		usage;
++	spinlock_t		lock;
+ };
+ 
+ struct gce_plat {
+ 	u32 thread_nr;
+ 	u8 shift;
+ 	bool control_by_sw;
++	bool sw_ddr_en;
+ 	u32 gce_num;
+ };
+ 
++static s32 cmdq_clk_enable(struct cmdq *cmdq)
++{
++	s32 usage, ret;
++	unsigned long flags;
++
++	spin_lock_irqsave(&cmdq->lock, flags);
++
++	usage = atomic_inc_return(&cmdq->usage);
++
++	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
++	if (usage <= 0 || ret < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
++			usage, ret, cmdq->suspended);
++	} else if (usage == 1) {
++		if (cmdq->sw_ddr_en)
++			writel((0x7 << 16) + 0x7, cmdq->base + GCE_GCTL_VALUE);
++	}
++
++	spin_unlock_irqrestore(&cmdq->lock, flags);
++
++	return ret;
++}
++
++static void cmdq_clk_disable(struct cmdq *cmdq)
++{
++	s32 usage;
++
++	usage = atomic_dec_return(&cmdq->usage);
++
++	if (usage < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
++			usage, cmdq->suspended);
++	} else if (usage == 0) {
++		if (cmdq->sw_ddr_en)
++			writel(0x7, cmdq->base + GCE_GCTL_VALUE);
++	}
++
++	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++}
++
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+@@ -266,7 +310,8 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+ 		cmdq_thread_disable(cmdq, thread);
+-		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++		cmdq_clk_disable(cmdq);
+ 	}
+ }
+ 
+@@ -355,8 +400,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 	task->pkt = pkt;
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+-		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
+-
++		WARN_ON(cmdq_clk_enable(cmdq) < 0);
+ 		/*
+ 		 * The thread reset will clear thread related register to 0,
+ 		 * including pc, end, priority, irq, suspend and enable. Thus
+@@ -428,7 +472,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
+ 	}
+ 
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	cmdq_clk_disable(cmdq);
+ 
+ done:
+ 	/*
+@@ -468,7 +512,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ 
+ 	cmdq_thread_resume(thread);
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++	cmdq_clk_disable(cmdq);
+ 
+ out:
+ 	spin_unlock_irqrestore(&thread->chan->lock, flags);
+@@ -543,6 +588,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	cmdq->thread_nr = plat_data->thread_nr;
+ 	cmdq->shift_pa = plat_data->shift;
+ 	cmdq->control_by_sw = plat_data->control_by_sw;
++	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
+ 	cmdq->gce_num = plat_data->gce_num;
+ 	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
+ 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+@@ -615,6 +661,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 
+ 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+ 
++	spin_lock_init(&cmdq->lock);
+ 	cmdq_init(cmdq);
+ 
+ 	return 0;
+@@ -660,9 +707,18 @@ static const struct gce_plat gce_plat_v6 = {
+ 	.gce_num = 2
+ };
+ 
++static const struct gce_plat gce_plat_v7 = {
++	.thread_nr = 24,
++	.shift = 3,
++	.control_by_sw = true,
++	.sw_ddr_en = true,
++	.gce_num = 1
++};
++
+ static const struct of_device_id cmdq_of_ids[] = {
+ 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
+ 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
++	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
+ 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
+ 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
+ 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
+-- 
+2.25.1
 
-I think error msg can be skipped in such case. Core should print it.
-
-> +		return PTR_ERR(data->regs);
-> +	}
-> +
-> +	/* get irq */
-> +	data->irq = platform_get_irq(pdev, 0);
-> +	if (data->irq < 0)
-> +		return data->irq;
-> +
-> +	/* get id */
-> +	if (of_property_read_u32(dev->of_node, "id", &data->id)) {
-> +		dev_err(dev, "not found id property!\n");
-> +		data->id = LS2K_SOC_DEFAULT_SENSOR;
-> +	}
-> +
-> +	if (data->id > LS2K_SOC_MAX_SENSOR_NUM) {
-> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-> +				LS2K_SOC_MAX_SENSOR_NUM);
-> +		return -EINVAL;
-> +	}
-> +
-> +	writeb(0xff, data->regs + LS2K_TSENSOR_STATUS);
-> +
-> +	ls2k_tsensor_set(data, 0, 0, false);
-> +
-> +	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-> +							   data->id, data,
-> +							   &ls2k_of_thermal_ops);
-> +	if (IS_ERR(data->tzd)) {
-> +		ret = PTR_ERR(data->tzd);
-> +		data->tzd = NULL;
-> +		dev_err(&pdev->dev, "failed to register %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(dev, data->irq,
-> +			ls2k_thermal_alarm_irq, ls2k_thermal_irq_thread,
-> +			IRQF_ONESHOT, "ls2k_thermal", data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Thermal_zone doesn't enable hwmon as default,
-> +	 * enable it here
-> +	 */
-> +	data->tzd->tzp->no_hwmon = false;
-> +	ret = thermal_add_hwmon_sysfs(data->tzd);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int ls2k_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct ls2k_thermal_data *data = platform_get_drvdata(pdev);
-> +	int reg_off = data->id * 2;
-> +
-> +	/* disable interrupt */
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_ls2k_thermal_match[] = {
-> +	{ .compatible = "loongson,2k-tsensor",},
-> +	{ /* end */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_ls2k_thermal_match);
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int ls2k_thermal_suspend(struct device *dev)
-> +{
-> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	data->ctrl_low_val = readw(data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	data->ctrl_hi_val = readw(data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ls2k_thermal_resume(struct device *dev)
-> +{
-> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	writew(data->ctrl_low_val, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(data->ctrl_hi_val, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(ls2k_thermal_pm_ops,
-> +			 ls2k_thermal_suspend, ls2k_thermal_resume);
-> +#endif
-> +
-> +static struct platform_driver ls2k_thermal_driver = {
-> +	.driver = {
-> +		.name		= "ls2k_thermal",
-> +#ifdef CONFIG_PM_SLEEP
-
-pm_ptr() (and use same approach as its users - no need for ifdefs,
-DEFINE_SIMPLE_DEV_PM_OPS)
-
-
-> +		.pm = &ls2k_thermal_pm_ops,
-> +#endif
-> +		.of_match_table = of_ls2k_thermal_match,
-> +	},
-> +	.probe	= ls2k_thermal_probe,
-> +	.remove	= ls2k_thermal_remove,
-> +};
-> +module_platform_driver(ls2k_thermal_driver);
-
-
-Best regards,
-Krzysztof
