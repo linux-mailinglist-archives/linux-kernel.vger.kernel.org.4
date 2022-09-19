@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8355BD1B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD985BD1BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiISQCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S230002AbiISQC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiISQCP (ORCPT
+        with ESMTP id S229935AbiISQCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:02:15 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7903AE52
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:00:29 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB70A24000E;
-        Mon, 19 Sep 2022 16:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663603227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4w2H0/aVozaHmubnqFnPjiPTuYGSRzmbJ5Wwl6IDQwM=;
-        b=Lcv42Ss9HGpIaCPVGZlsqSX3b4RETBixGo4uKB9QrhoufMMLiAxBu08X17z+G4slmrlwN9
-        Z6WowHP6ZO5LMXhxmBydcyUHnj54Jq2E3Mj4uVzL1yZstEYPbO4zJNE5J4XnvQ0h7POLr8
-        oSAVOOn21UXyjWZKkBGyiyp3sXrL7L8tfC7N5kWrIg/0GuF+sF8/rL/SPppLiv8tquBLre
-        c5kwjH+1qwDO5GwgW93QEETcLp6ugYlLjWklnhej2XFyve0vxTaS2mL0BsR7l+LoEuJzLp
-        76RsJ5bA3HANiTyTGPiCUSrFbvWdg3bkXLJdQgX7i4ZgC5a+FUR6nlXpiNXjqw==
-Date:   Mon, 19 Sep 2022 18:00:22 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jack Wang <jinpu.wang@ionos.com>
-Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mtd: rawnand: stm32_fmc2: Fix dma_map_sg error
- check
-Message-ID: <20220919180022.2c80e2b7@xps-13>
-In-Reply-To: <20220825075338.35338-2-jinpu.wang@ionos.com>
-References: <20220825075338.35338-1-jinpu.wang@ionos.com>
-        <20220825075338.35338-2-jinpu.wang@ionos.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 19 Sep 2022 12:02:30 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA9B3C8D3;
+        Mon, 19 Sep 2022 09:00:55 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JD2Zbm008848;
+        Mon, 19 Sep 2022 16:00:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=eKdTyxOiLccVrdw63VF1sE1mujYcuFpBho0TboPJW5c=;
+ b=fKm7hjDG3H7LZ3DXi+Q1DsbhOF4mYx/BuCQ2kh/FvRu/1n9QdxiVTqRz9CuEWe2Qfela
+ zi6FVLAq5S15Va+s82vPYG2pg/oPIEzsrQeBBZhPp9T0VD7FWOxSbhBXH6q4hIDRpp7r
+ CitpYSzNZPenT4rTHzaErvU9LDuW9LaeaqTkDyFGY28UsFgRUEqzj10c/yKZVm9BtszN
+ k/yOo7pXuQSZRAUpZRNt6B+JwVdXGqjsid8UTZGv4Cz4jGrPzdffy/gao6Z24cy901XA
+ RfGFJ4xOw/Rb3VFfo5HLykwtP/HIKCNATotd2lmKVJzQH3CcrAWuixn+hyyMcQQulSaD 0A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jn6b1w7qn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 16:00:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JG0mAL027052
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 16:00:48 GMT
+Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 19 Sep 2022 09:00:47 -0700
+From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Subject: [PATCH v1 0/3] Handle coprocessor crash
+Date:   Mon, 19 Sep 2022 09:00:37 -0700
+Message-ID: <cover.1662995608.git.quic_gokukris@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MjeLGTW-q5V1rioyDz0QRALP64xzrRuE
+X-Proofpoint-ORIG-GUID: MjeLGTW-q5V1rioyDz0QRALP64xzrRuE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0
+ adultscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=516 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209190107
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,68 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
+Make the following changes in case of coprocessor crash:
+1. Send subdevice notifications before panic
+2. Do not report crash if SSR is disabled
+3. Avoid setting smem bit in case of crash
 
-jinpu.wang@ionos.com wrote on Thu, 25 Aug 2022 09:53:37 +0200:
+Gokul krishna Krishnakumar (3):
+  remoteproc: qcom: q6v5: Send subdevice notifications before panic
+  remoteproc: qcom: q6v5: Do not report crash if SSR is disabled
+  remoteproc: qcom: q6v5: Avoid setting smem bit in case of crash
+    shutdown
 
-> dma_map_sg return 0 on error, in case of error return -EIO.
->=20
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Christophe Kerello <christophe.kerello@foss.st.com>
-> Cc: Cai Huoqing <cai.huoqing@linux.dev>
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Fixes: 2cd457f328c1 ("mtd: rawnand: stm32_fmc2: add STM32 FMC2 NAND flash=
- controller driver")
-> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+ drivers/remoteproc/qcom_q6v5.c | 43 ++++++++++++++++++++++++++++++++++++++----
+ drivers/remoteproc/qcom_q6v5.h |  2 ++
+ 2 files changed, 41 insertions(+), 4 deletions(-)
 
-I'll apply this series so I need to re-add Christophe's tag sent on the
-patch alone (which is identical as far as I see):
+-- 
+2.7.4
 
-Reviewed-by: Christophe Kerello <christophe.kerello@foss.st.com>
-
-> ---
->  drivers/mtd/nand/raw/stm32_fmc2_nand.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/stm32_fmc2_nand.c b/drivers/mtd/nand/ra=
-w/stm32_fmc2_nand.c
-> index 87c1c7dd97eb..a0c825af19fa 100644
-> --- a/drivers/mtd/nand/raw/stm32_fmc2_nand.c
-> +++ b/drivers/mtd/nand/raw/stm32_fmc2_nand.c
-> @@ -862,8 +862,8 @@ static int stm32_fmc2_nfc_xfer(struct nand_chip *chip=
-, const u8 *buf,
-> =20
->  	ret =3D dma_map_sg(nfc->dev, nfc->dma_data_sg.sgl,
->  			 eccsteps, dma_data_dir);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (!ret)
-> +		return -EIO;
-> =20
->  	desc_data =3D dmaengine_prep_slave_sg(dma_ch, nfc->dma_data_sg.sgl,
->  					    eccsteps, dma_transfer_dir,
-> @@ -893,8 +893,10 @@ static int stm32_fmc2_nfc_xfer(struct nand_chip *chi=
-p, const u8 *buf,
-> =20
->  		ret =3D dma_map_sg(nfc->dev, nfc->dma_ecc_sg.sgl,
->  				 eccsteps, dma_data_dir);
-> -		if (ret < 0)
-> +		if (!ret) {
-> +			ret =3D -EIO;
->  			goto err_unmap_data;
-> +		}
-> =20
->  		desc_ecc =3D dmaengine_prep_slave_sg(nfc->dma_ecc_ch,
->  						   nfc->dma_ecc_sg.sgl,
-
-
-Thanks,
-Miqu=C3=A8l
