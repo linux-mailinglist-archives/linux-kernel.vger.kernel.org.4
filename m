@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47145BC1F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60C05BC1FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiISEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 00:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S229552AbiISERp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 00:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISEJB (ORCPT
+        with ESMTP id S229541AbiISERn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 00:09:01 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FB5BF78
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4912652pjh.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
+        Mon, 19 Sep 2022 00:17:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525111C1B;
+        Sun, 18 Sep 2022 21:17:39 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso4926624pjd.4;
+        Sun, 18 Sep 2022 21:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :from:to:cc:subject:date;
-        bh=vKVWMBC/lzkC1dBkLl/PpdF7wlteKW3GRb48j93XLSY=;
-        b=p3C+Ao+yYwbUhf+o8rEnuJMcZWEGEUBeUFxlvEGwN161ugqeabJHLaCSbIl8UJmfpe
-         H4cmVlADg7g34lIkR3fCVhqXhCfePyqkQco8HyHOn8wutusfSKN5q85tiEVHgsQLTMuN
-         fo+X32L00vDfZYOY+g1kI4/0HN4MmYK8QkzmgXTs29+4lFQXd/XuqfucUwcO3Yt1K6qm
-         Em1oulLusf3dGqkKccIBh7/flk71vTsgLPsByPyG0KmgGtpuTEO5X1pUzY097rwj14bQ
-         132tgs0hIUYhp/vPAHuW3G4FZGzExnua19zltfhgEG/bTd0tNThdo1dZhFoW6aZJMicD
-         G6GA==
+        bh=xvBYQEJlnutmzsBa+QOcpxvGoRXQhVpejHGJpeAOxkU=;
+        b=dU4n/EvFzEBPci2Ddrpy6TiF6zQh2Mtp+oHWXb405CNEATK+AOXtBuYIYd/tMNpqWn
+         M2/PuG1jVEkdMXjaAl9ttTfYpQblWAnfyJ+RHTeH6fxMtzjXCrJWQTU6G4oo0KICfMjA
+         8qw5+NePeMXT2MFHSnX1ZD50Qe37syd73WFMg0QbBbefgOHEo+nTkWu6on+F4Fnj3rH4
+         qzFUVWQ10eI3/iX8eDnD7UavFGFiV5qiRexYwwBEfaguyJQEl7hAlrU+gqV5ck8bW1PR
+         XZSK6dznG2kiu/SkU4MIQdNV05EqPamXVetY5ZL101uPyqjjMoFVMDLrpk/QRf1y5kK8
+         YCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=vKVWMBC/lzkC1dBkLl/PpdF7wlteKW3GRb48j93XLSY=;
-        b=Rbtg3VmO5hU2wQm06ySdbxdTwzagDQIO23qfr+TUG7RRBoX0V7IWbBowwpMOuPLGD3
-         +pwXFNnzcANQqEcoPX7xei5kbMXSILaIvu5y+4kk/bw50fAmjmmLgLSdKsydHhMMON8g
-         fhoAA9SwTFRg0pbsnPEMJEC/6/amBpc1jpOejWkqnw13bnBUAX/nPuVQov0fwrJG+6Pw
-         skNk9yZxghVM6h45jHDVQRdMiEhF4aI2WwPDN1kagamSMSRiU7o/S5Tr4DaQ7j6q2JBR
-         4FytHX8SypaGeuyaLSU9XCmcAFRI2Fx0M//ZQl3umpVdTczBXKUWE/H2EXDESvTMpSes
-         lICg==
-X-Gm-Message-State: ACrzQf2I6ZMIbCDlbsFCH8RKRGEkyJHXx1Mhre1QP60UmQh1wCpvbzYi
-        k+wmtJUxGca3VVLmbFPOhmY=
-X-Google-Smtp-Source: AMsMyM4DkiTRsG5AMCceEzMxJnyp/OmT4CgxZo5vqI1rygXhrtwd9KjJuG4reCMga3fSwYYGFq1TBQ==
-X-Received: by 2002:a17:90a:31c5:b0:200:a749:4857 with SMTP id j5-20020a17090a31c500b00200a7494857mr18417232pjf.148.1663560540187;
-        Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id w28-20020a637b1c000000b004393cb720afsm11513991pgc.38.2022.09.18.21.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 21:08:59 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 21:08:54 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     lkundrak@v3.sk
-Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, linux@dominikbrodowski.net
-Subject: [PATCH v3] char: pcmcia: scr24x_cs: Fix use-after-free in scr24x_fops
-Message-ID: <20220919040854.GA302968@ubuntu>
+        bh=xvBYQEJlnutmzsBa+QOcpxvGoRXQhVpejHGJpeAOxkU=;
+        b=RKiYp+lTa55Oe6xCcxRo8TpJ3yYliwPor/GdttgyDXcuPcR2ah0G3ZxAzEbpPUedGj
+         gPpcX9Rew8PUtUHY7+jOAEKSiHC4T3t8ahi2pxAoxdcchL0QaJWPIRkfGjtXQHJAjxJd
+         lSc+tFpul2jNb+jPjFD1b3BiLctpKI+7tKUj8WlcMzm0xh5sTqDYTFTwhb+eG2niq6eE
+         oKp5g+FR9g3fmfy3pdPL4rsga2LF4gGU5ElToWGqGKnWrNAs4Ph2WujFz897ud0NXADR
+         ABTst+fypabEmGw7LtuJBu7gBEq7bv42BvBmSz7XwvJKZS9vO4/NCBnNPaJdMGS/Uyvr
+         lN2Q==
+X-Gm-Message-State: ACrzQf37NIGCZPaAQMLnGVUqu9RV0TXHhk9AideoJ2/SC64VIPeuZiPw
+        GriDb/QqZYZKl0lWUwnGj5H62+DseL4FNw==
+X-Google-Smtp-Source: AMsMyM59wmTasauLFeA6g9m6IOJ9i5Ww/m2Mg1qGQzdrp0Ek0GINmeCUDLbNvt9Phr0W+EYGHE2K3g==
+X-Received: by 2002:a17:903:2104:b0:176:a9ef:418b with SMTP id o4-20020a170903210400b00176a9ef418bmr11132625ple.134.1663561058922;
+        Sun, 18 Sep 2022 21:17:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d8-20020a631d08000000b00434feb1841dsm17335626pgd.66.2022.09.18.21.17.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 21:17:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
+Date:   Sun, 18 Sep 2022 21:17:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Vladimir Panteleev <git@vladimir.panteleev.md>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220918140829.443722-1-git@vladimir.panteleev.md>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+In-Reply-To: <20220918140829.443722-1-git@vladimir.panteleev.md>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,169 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes the
-pcmcia device while calling open() for this char device node.
+On 9/18/22 07:08, Vladimir Panteleev wrote:
+> Allow configuring the "action" bit, as documented in [1].
+> 
+> Previously, the only action supported by this module was to reset the
+> system (0).  It can now be configured to power off (1) instead.
+> 
+> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+> 
+> Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
+> ---
+>   drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
+>   drivers/watchdog/sp5100_tco.h |  2 +-
+>   2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> index ae54dd33e233..802f12e8fd76 100644
+> --- a/drivers/watchdog/sp5100_tco.c
+> +++ b/drivers/watchdog/sp5100_tco.c
+> @@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
+>   
+>   /* module parameters */
+>   
+> +#define WATCHDOG_ACTION 0
+> +static bool action = WATCHDOG_ACTION;
+> +module_param(action, bool, 0444);
+> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
+> +		 __MODULE_STRING(WATCHDOG_ACTION) ")");
+> +
 
-This is a race condition between the scr24x_open() function and
-the scr24x_remove() function, which may eventually result in UAF.
+Other module parameters are not visible. I do not see the benefit of
+having this one visible.
 
-So, add a mutex to the scr24x_open() and scr24x_remove() functions
-to avoid race contidion of krefs.
+>   #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
+>   static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
+>   module_param(heartbeat, int, 0);
+> @@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+>   	if (val & SP5100_WDT_FIRED)
+>   		wdd->bootstatus = WDIOF_CARDRESET;
+>   
+> -	/* Set watchdog action to reset the system */
+> -	val &= ~SP5100_WDT_ACTION_RESET;
+> +	/* Set watchdog action */
+> +	if (action)
+> +		val |= SP5100_WDT_ACTION;
+> +	else
+> +		val &= ~SP5100_WDT_ACTION;
+>   	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+>   
+>   	/* Set a reasonable heartbeat before we stop the timer */
+> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
+> index 6a0986d2c94b..9752ab2b0130 100644
+> --- a/drivers/watchdog/sp5100_tco.h
+> +++ b/drivers/watchdog/sp5100_tco.h
+> @@ -18,7 +18,7 @@
+>   
+>   #define SP5100_WDT_START_STOP_BIT	BIT(0)
+>   #define SP5100_WDT_FIRED		BIT(1)
+> -#define SP5100_WDT_ACTION_RESET		BIT(2)
+> +#define SP5100_WDT_ACTION		BIT(2)
 
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
----
- drivers/char/pcmcia/scr24x_cs.c | 72 +++++++++++++++++++++++----------
- 1 file changed, 51 insertions(+), 21 deletions(-)
+I do not see the point of renaming this define.
 
-diff --git a/drivers/char/pcmcia/scr24x_cs.c b/drivers/char/pcmcia/scr24x_cs.c
-index 1bdce08fae3d..57fe08b3c03a 100644
---- a/drivers/char/pcmcia/scr24x_cs.c
-+++ b/drivers/char/pcmcia/scr24x_cs.c
-@@ -33,6 +33,7 @@
- 
- struct scr24x_dev {
- 	struct device *dev;
-+	struct pcmcia_device *p_dev;
- 	struct cdev c_dev;
- 	unsigned char buf[CCID_MAX_LEN];
- 	int devno;
-@@ -42,15 +43,31 @@ struct scr24x_dev {
- };
- 
- #define SCR24X_DEVS 8
--static DECLARE_BITMAP(scr24x_minors, SCR24X_DEVS);
-+static struct pcmcia_device *dev_table[SCR24X_DEVS];
-+static DEFINE_MUTEX(remove_mutex);
- 
- static struct class *scr24x_class;
- static dev_t scr24x_devt;
- 
- static void scr24x_delete(struct kref *kref)
- {
--	struct scr24x_dev *dev = container_of(kref, struct scr24x_dev,
--								refcnt);
-+	struct scr24x_dev *dev = container_of(kref, struct scr24x_dev, refcnt);
-+	struct pcmcia_device *link = dev->p_dev;
-+	int devno;
-+
-+	for (devno = 0; devno < SCR24X_DEVS; devno++) {
-+		if (dev_table[devno] == link)
-+			break;
-+	}
-+	if (devno == SCR24X_DEVS)
-+		return;
-+
-+	device_destroy(scr24x_class, MKDEV(MAJOR(scr24x_devt), dev->devno));
-+	mutex_lock(&dev->lock);
-+	pcmcia_disable_device(link);
-+	cdev_del(&dev->c_dev);
-+	dev->dev = NULL;
-+	mutex_unlock(&dev->lock);
- 
- 	kfree(dev);
- }
-@@ -73,11 +90,23 @@ static int scr24x_wait_ready(struct scr24x_dev *dev)
- 
- static int scr24x_open(struct inode *inode, struct file *filp)
- {
--	struct scr24x_dev *dev = container_of(inode->i_cdev,
--				struct scr24x_dev, c_dev);
-+	struct scr24x_dev *dev;
-+	struct pcmcia_device *link;
-+	int minor = iminor(inode);
-+
-+	if (minor >= SCR24X_DEVS)
-+		return -ENODEV;
-+
-+	mutex_lock(&remove_mutex);
-+	link = dev_table[minor];
-+	if (link == NULL) {
-+		mutex_unlock(&remove_mutex);
-+		return -ENODEV;
-+	}
- 
- 	kref_get(&dev->refcnt);
- 	filp->private_data = dev;
-+	mutex_unlock(&remove_mutex);
- 
- 	return stream_open(inode, filp);
- }
-@@ -232,24 +261,31 @@ static int scr24x_config_check(struct pcmcia_device *link, void *priv_data)
- static int scr24x_probe(struct pcmcia_device *link)
- {
- 	struct scr24x_dev *dev;
--	int ret;
-+	int i, ret;
-+
-+	for (i = 0; i < SCR24X_DEVS; i++) {
-+		if (dev_table[i] == NULL)
-+			break;
-+	}
-+
-+	if (i == SCR24X_DEVS)
-+		return -ENODEV;
- 
- 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
- 		return -ENOMEM;
- 
--	dev->devno = find_first_zero_bit(scr24x_minors, SCR24X_DEVS);
--	if (dev->devno >= SCR24X_DEVS) {
--		ret = -EBUSY;
--		goto err;
--	}
-+	dev->devno = i;
- 
- 	mutex_init(&dev->lock);
- 	kref_init(&dev->refcnt);
- 
- 	link->priv = dev;
-+	dev->p_dev = link;
- 	link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
- 
-+	dev_table[i] = link;
-+
- 	ret = pcmcia_loop_config(link, scr24x_config_check, NULL);
- 	if (ret < 0)
- 		goto err;
-@@ -282,8 +318,8 @@ static int scr24x_probe(struct pcmcia_device *link)
- 	return 0;
- 
- err:
--	if (dev->devno < SCR24X_DEVS)
--		clear_bit(dev->devno, scr24x_minors);
-+	dev_table[i] = NULL;
-+
- 	kfree (dev);
- 	return ret;
- }
-@@ -292,15 +328,9 @@ static void scr24x_remove(struct pcmcia_device *link)
- {
- 	struct scr24x_dev *dev = (struct scr24x_dev *)link->priv;
- 
--	device_destroy(scr24x_class, MKDEV(MAJOR(scr24x_devt), dev->devno));
--	mutex_lock(&dev->lock);
--	pcmcia_disable_device(link);
--	cdev_del(&dev->c_dev);
--	clear_bit(dev->devno, scr24x_minors);
--	dev->dev = NULL;
--	mutex_unlock(&dev->lock);
--
-+	mutex_lock(&remove_mutex);
- 	kref_put(&dev->refcnt, scr24x_delete);
-+	mutex_unlock(&remove_mutex);
- }
- 
- static const struct pcmcia_device_id scr24x_ids[] = {
--- 
-2.25.1
+>   #define SP5100_WDT_DISABLED		BIT(3)
+>   #define SP5100_WDT_TRIGGER_BIT		BIT(7)
+>   
 
-
-Dear,
-
-
-I fixed the wrong patch referencing "dev" after kref_put() in the previous version of the patch.
-
-
-Regards,
-Hyunwoo Kim.
