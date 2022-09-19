@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4C25BC54D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08275BC557
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiISJ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S229854AbiISJ2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiISJZx (ORCPT
+        with ESMTP id S229704AbiISJ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:25:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2025EAB;
-        Mon, 19 Sep 2022 02:25:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA3D0B818A4;
-        Mon, 19 Sep 2022 09:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E66C433D6;
-        Mon, 19 Sep 2022 09:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663579523;
-        bh=VYOFlJMYOhC2efc+5NSfiL7HlwpSJjefkN5axUW6Oqo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EpUOv88VA5hPzOWU2hpDWosj4QlIYbx56o81ZCsvFR35RwXcPORryyNr1PUcNUB2U
-         EnrJAR7vhAyf6YOOCspJIB1sAa8ktmQRfzMLhiGUDXNFLpvul54TOLgsvi92dBtzOZ
-         OmHKZNpqh4sXI3bE+NtnRHB/VhvhxCSafqMRHoB3k5TCSxFW+7ZParFVXcvA77fi/D
-         6nRkg3uzoK7AIW0dqZl4z77H6zO5ZRIs2ZA3vl//p4TVAR5ZZnkD+3oObWoM39j/Pj
-         a60ZMr4BZzSD2KZNzOifE6A/GZGPZmZJA4B+ADO72ut4s/PDEO7SqpB3KHo2+b5ggP
-         LP3zvqpZ1oCUg==
-Received: by mail-lj1-f179.google.com with SMTP id b24so3224177ljk.6;
-        Mon, 19 Sep 2022 02:25:23 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3RsG/C+qVxaP378Kxo0RuRK2FiBXD1mFX/tJifMbB6IPxr0x7E
-        A4Ng0xSDRvV2pbZH+THQRvChVOFjLXwAmcExBjU=
-X-Google-Smtp-Source: AMsMyM5r6f/GbIxEEIWV8DO03uBjKfE3taIERGNSYwmiVAR4CXPf26OGRS9W9lFMTMQkb5IaBi8WMb0xUDgi4AWxn10=
-X-Received: by 2002:a2e:7314:0:b0:26a:ca18:60eb with SMTP id
- o20-20020a2e7314000000b0026aca1860ebmr4523372ljc.69.1663579521479; Mon, 19
- Sep 2022 02:25:21 -0700 (PDT)
+        Mon, 19 Sep 2022 05:27:51 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05558B848
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:27:49 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id w8so45937315lft.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Ni5vNsO8umndiniabq8C5W9eiIXqQqotBmgaNWkkLK0=;
+        b=kdGdpmpEChbWIseVkCKVEvUwIFi0MK0B4sNLWcpeEmqU9CRrk2WTj+kKzfKYObMR7m
+         mXTvLyiMeNthhWAu8GagmQ82H8Edn+6gSumV048FtoC17iw9TJG+Nh8+R1WLThAaMurM
+         I4jkZovZ1fuU/0VMZHnBMNWlfWfcv/QYfv1fFbL3meE0eOr1n0zwvocmGc66XdkeMEBe
+         TKiE8eEBKPICnX7K946jxfyP1rPCdO61qSJ6GmKPYeZAgKW0E2f6lQcRIvjugfQDHnTl
+         XcBY+5NOBufJa4x37aCbFok8afQLMXl8ISv2RjLCIgw54pRiwlYDAyoNcT7P6tP8NWZ8
+         ximQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Ni5vNsO8umndiniabq8C5W9eiIXqQqotBmgaNWkkLK0=;
+        b=gXt3DsqUCbW9LLNJPwZNTcXxoZByROfv2Cj0akCyPi4XUIVTavNlaCr2aQ0XeAgrWD
+         dtNLQ3K0TT52mhF5gkeNaKxIiAaQmQivz0aAYpGJ3D+3pkSrXauceDanWAJl4ztZb9Q1
+         2lgYEVkMc46yMEH9qcW5qznldyYUU8oZx0Kxs/oN4u/YtEKSl49HU0tCEuzBE5Zg9rMu
+         /9HoXivtFkAqtJpVxlFH9zHVw3KQ6LQHIl9vQNn0IDNy3H7ruiPCq8zFLmi5J+FBhlOE
+         343MD+2YXO8aeIetBKTrS2bLbH8PSmFeuNzxf8mLe9dNMBLCijjT3LUAdLJjEYkDL+aR
+         S1ww==
+X-Gm-Message-State: ACrzQf0FzwwziKIPfEQMIQQ6BTjAxhW0fTMob4w2pHfn/yN1gEsZHyCt
+        NIoaMEMk071tSgUnjqejASkSwg==
+X-Google-Smtp-Source: AMsMyM7lxiuvbds2FRZKDW9lrUwIuvpGFw0m9oRIkcp0QON8mh5L72dtCjDGDIjOi83tFBanr+gAeA==
+X-Received: by 2002:a05:6512:3d1c:b0:49d:87fc:f63 with SMTP id d28-20020a0565123d1c00b0049d87fc0f63mr5950005lfv.327.1663579667364;
+        Mon, 19 Sep 2022 02:27:47 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q16-20020a194310000000b004946aef1814sm5112366lfa.137.2022.09.19.02.27.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 02:27:46 -0700 (PDT)
+Message-ID: <88412fcc-96be-cd9d-8805-086c7f09c03b@linaro.org>
+Date:   Mon, 19 Sep 2022 11:27:45 +0200
 MIME-Version: 1.0
-References: <20220919191126.4a3c36f9@canb.auug.org.au> <CAMj1kXFKm2A=zNHRSWtWkwBXWM=tQD=x+Q6-Mv_a66qopiXkjQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXFKm2A=zNHRSWtWkwBXWM=tQD=x+Q6-Mv_a66qopiXkjQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 19 Sep 2022 11:25:10 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHsAbn2NtJaT8F0evMd19w4nJON+TXV62k2Jsj+o+LTCA@mail.gmail.com>
-Message-ID: <CAMj1kXHsAbn2NtJaT8F0evMd19w4nJON+TXV62k2Jsj+o+LTCA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the efi tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] stmmac: dwmac-mediatek: add support for mt8188
+Content-Language: en-US
+To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220919080410.11270-1-jianguo.zhang@mediatek.com>
+ <20220919080410.11270-2-jianguo.zhang@mediatek.com>
+ <d28ce676-ed6e-98da-9761-ed46f2fa4a95@linaro.org>
+ <4c537b63f609ae974dfb468ebc31225d45f785e8.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4c537b63f609ae974dfb468ebc31225d45f785e8.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sept 2022 at 11:12, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Mon, 19 Sept 2022 at 11:11, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the efi tree, today's linux-next build (x86_64 allmodconfig)
-> > failed like this:
-> >
-> > x86_64-linux-gnu-ld: drivers/firmware/efi/libstub/x86-stub.stub.o:(.bss.efistub+0x8): multiple definition of `efi_system_table'; drivers/firmware/efi/libstub/systable.stub.o:(.bss.efistub+0x0): first defined here
-> >
-> > Presumably caused by commit
-> >
-> >   8fd3c9a90998 ("efi/libstub: move efi_system_table global var into separate object")
-> >
-> > (or maybe commit
-> >
-> >   ba2dd31b7588 ("efi/libstub: implement generic EFI zboot")
-> > )
-> >
-> > I have used the efi tree from next-20220916 for today.
-> >
->
-> Thanks for the report. I'll take a look and fix this asap.
+On 19/09/2022 10:37, Jianguo Zhang wrote:
+> Dear Krzysztof,
+> 
+> 	Thanks for your comments.
+> 
+> 
+> On Mon, 2022-09-19 at 10:19 +0200, Krzysztof Kozlowski wrote:
+>> On 19/09/2022 10:04, Jianguo Zhang wrote:
+>>> Add ethernet support for MediaTek SoCs from mt8188 family.
+>>> As mt8188 and mt8195 have same ethernet design, so private data
+>>> "mt8195_gmac_variant" can be reused for mt8188.
+>>>
+>>> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+>>> ---
+>>>  drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+>>> b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+>>> index d42e1afb6521..f45be440b6d0 100644
+>>> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+>>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+>>> @@ -720,6 +720,8 @@ static const struct of_device_id
+>>> mediatek_dwmac_match[] = {
+>>>  	  .data = &mt2712_gmac_variant },
+>>>  	{ .compatible = "mediatek,mt8195-gmac",
+>>>  	  .data = &mt8195_gmac_variant },
+>>> +	{ .compatible = "mediatek,mt8188-gmac",
+>>> +	  .data = &mt8195_gmac_variant },
+>>
+>> It's the same. No need for new entry.
+>>
+> mt8188 and mt8195 are different SoCs and we need to distinguish mt8188
+> from mt8195, so I think a new entry is needed for mt8188 with the
+> specific "compatiable".
 
-Fixed now on efi/next so we should be ok for tomorrow.
+No, this does not justify new entry. You need specific compatible, but
+not new entry.
+
+> On the other hand, mt8188 and mt8195 have same ethernet design, so the
+> private data "mt8195_gmac_variant" can be resued to reduce redundant
+> info in driver.
+
+And you do not need new entry in the driver.
+
+Best regards,
+Krzysztof
