@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7325BD6FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0175BD706
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiISWPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 18:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S229838AbiISWPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiISWO6 (ORCPT
+        with ESMTP id S229839AbiISWPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 18:14:58 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AAF2A72F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:14:57 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id p5so790798ljc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:14:57 -0700 (PDT)
+        Mon, 19 Sep 2022 18:15:23 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA7840E1D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:15:21 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so3350582pjo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/1WCedtk/KjBM3RO+wdfRwgGcGH0AKvYxTW8lbAp9Dw=;
-        b=JATdPgqjbylhCP2iuY22LrDcGHAtRI4MOQBlZZcQ8MEo8T0ciL98GV3f/5wLqZ1FiY
-         wtmWK/kbt5x/cx6jEikNLHvWzzr8XnR9IdPGVmgzJ13maJdV7X+cqSXhKr5/6rfelh2G
-         83r/jGveabQ3T+cZLncR0q/ybqtcBCnP0vJWM3E7QiNtscaq0GvnQscaAbUxxKcPjCnf
-         T4qOLAuFGi0gAN+Paybk0KMLZy9lNWG58mX/ztKVjq5muGr7ny2mDkSLd4q/D7zY1yqC
-         WpHgrhVDcFmr4D8RRVqIdA4y3VJdUpDK1qn5uI2HYiJYKWvWcIklq5GmIeDuXdp1MSWm
-         qBbQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=hFNxb6Whue0oJiz38AdcZGTZ6n+cVRFbGd4gEmlGGD0=;
+        b=jP7rxFieQRiXFRZ2axWLx3gqRhoWsQMcKRvVznGi22vxx5FOla3IqFrAKL61+6a2xE
+         tPNaZQwXIy7FPgRF+KnuVXptIEBAJfZRsxqTd8R0NciWeRILAQg4cw90+rxZ+rL+E6m+
+         hrf9wgJpWDOBtK4nbyUzn9b/tN0wvAYldTkVCJK/pwZ1Xqrhi6MnRLQSUnGb6kJMl3x/
+         6+Sp6lghVOHbRBX3+463BzQNN2z9tazJdl3VIWuyGLM+duRdIqfeQiyRdDPaEGOQT7uk
+         bgYoy7W3H39Ilh8s7fo3YA9lRweXp3I4EMtwVykO0c2LCndnD1BH6Zd9tz94EBw+06k8
+         GGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/1WCedtk/KjBM3RO+wdfRwgGcGH0AKvYxTW8lbAp9Dw=;
-        b=PQMA81ZTTGtFE8xGkLvOdsi5htryOde+pkYrjXiYwpUichddtrcs77YTMI9E4bKUZv
-         8w6vz0QCH52k/HKsIpP87q5DmudC3mMrXhAh/XJeM/RpkGgMtBDqU2Bzrg8e9LKhXVJq
-         in5B1PsfyIUOP/nYr8GM8MZ5q7M5NmYUt57L/BYNJyHK2d99A/eKAuJayvSW720ndZGR
-         vMpcQcH4NIDzjLDbTkax1OTbPufNEQu04wumuI2X6INaTMux325vYkFY7IPmN2X3Q+ei
-         C0w+oE//iWZyALhpdtqe5/15pQcAd84t8/RjmPCvk8COt3v/DxBhlH+S/jtXRZ4Wyn3r
-         iWIA==
-X-Gm-Message-State: ACrzQf05C+M6n8lkT2odQ4awJgfP2E7W/epScPntbvJfFQMeFHGfjwBe
-        D8YtU3IT/MmcCaOxHw0fCbnZ7A==
-X-Google-Smtp-Source: AMsMyM6lw1FnCuV/OiFUVeEgIyrZD4IG+NKoayQOz/FI7PiyICtg12frSluN2etQg+NdKwX7RMOupg==
-X-Received: by 2002:a2e:9b91:0:b0:26a:ce59:c517 with SMTP id z17-20020a2e9b91000000b0026ace59c517mr5754803lji.181.1663625695482;
-        Mon, 19 Sep 2022 15:14:55 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id 15-20020ac25f4f000000b00492e3c8a986sm5353357lfz.264.2022.09.19.15.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 15:14:55 -0700 (PDT)
-Message-ID: <3456921e-15cf-90da-44eb-bb378d217daa@linaro.org>
-Date:   Tue, 20 Sep 2022 01:14:54 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=hFNxb6Whue0oJiz38AdcZGTZ6n+cVRFbGd4gEmlGGD0=;
+        b=tJu9PVpbXjbwgAHwMFkUZ6JzyVfQgilgQo073gjNCXZ0fkziz3EcSVOdeJ9QanVUbW
+         xa0FbOuaHev77ZdOxqXhHu7mhmEWXgAU4vCOH8QZf0ldnBwjLVl5aqd++DBIrlrRwASh
+         pqN3ZoHQ4+ntklja6RPFfURG6VIZF84qEE/w90L1rI/cFEDU0SSY7IYX/owBcDzB7NU2
+         I6VD75/QsDOqQKo8yKpGXfx/mkE1p2jLGKWwlR3FZbtpkGziai5X8sA91Yr0Uh4zS6dh
+         IXZ9IuW+uLtwDQGiDgc2sFnWnuWbgdzgAg0hfK+7O4pfde+yjjpRVi3Ve01Uygjd8krd
+         VnSg==
+X-Gm-Message-State: ACrzQf34Aq83boKOYXyQOGEgra4AWNSiHEK9EqaoSQfdDFB9rWLUIEoR
+        5LY8I4BjUdwbxBs8Gv1KGFsTew==
+X-Google-Smtp-Source: AMsMyM72ogfym/DpKOSsJCPhbYyEwdEP7gIqbiSDRSy1NmPzDyV2igPP4gYre6FfScxr//+w3eB4Pg==
+X-Received: by 2002:a17:902:d54e:b0:178:2da7:1bea with SMTP id z14-20020a170902d54e00b001782da71beamr1797101plf.161.1663625721063;
+        Mon, 19 Sep 2022 15:15:21 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
+        by smtp.gmail.com with ESMTPSA id b22-20020a170902d89600b00176ab6a0d5fsm16198966plz.54.2022.09.19.15.15.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 15:15:20 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, thara.gopinath@gmail.com,
+        devicetree@vger.kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        Jordan Crouse <jorcrous@amazon.com>
+Subject: [PATCH v6 0/4 RESEND] ARM: dts + defconfig: Add support for Qualcomm QCE block on new SoCs and in defconfig
+Date:   Tue, 20 Sep 2022 03:45:05 +0530
+Message-Id: <20220919221509.1057574-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: (subset) [PATCH v3 00/15] ARM/hwlock: qcom: switch TCSR mutex to
- MMIO
-Content-Language: en-GB
-To:     Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        ohad@wizery.com, linux-arm-msm@vger.kernel.org,
-        baolin.wang@linux.alibaba.com, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
-        devicetree@vger.kernel.org, vkoul@kernel.org
-References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
- <166310928500.670084.9085382465104729419.b4-ty@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <166310928500.670084.9085382465104729419.b4-ty@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +72,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 01:48, Bjorn Andersson wrote:
-> On Fri, 9 Sep 2022 11:20:20 +0200, Krzysztof Kozlowski wrote:
->> Switch older Qualcomm SoCs to use MMIO-based method instead of syscon.
->>
->> Not tested on hardware. Please kindly provide tests.
->>
->> Changes since v2
->> ================
->> 1. Rebase on current MFD changes.
->> 2. Add Rb tag.
->> 3. Split MFD patch to separate patchset:
->> https://lore.kernel.org/linux-devicetree/20220909091056.128949-1-krzysztof.kozlowski@linaro.org/T/#u
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [05/15] arm64: dts: qcom: ipq6018: add missing TCSR syscon compatible
->          commit: d30bcfa4408596e8dd3714dfdd90334d2bdc9856
-> [06/15] arm64: dts: qcom: msm8953: add missing TCSR syscon compatible
->          commit: d07ac9d93ced0f8203230bf1de49b7cc605e1547
-> [07/15] arm64: dts: qcom: qcs404: add missing TCSR syscon compatible
->          commit: 98460385091fc2e86a296f9643105d8a8777ccc2
-> [08/15] arm64: dts: qcom: msm8996: add missing TCSR syscon compatible
->          commit: 8a99e0fc8bd3fa9c8be1fc115a2e38f4fd51ccda
+Fixed the typos in the cover letter while resending this version.
 
-Please revert 08/15, it is incorrect.
+Changes since v5:
+=================
+- v5 can be seen here: https://lore.kernel.org/lkml/20211110105922.217895-1-bhupesh.sharma@linaro.org/
+- As per Bjorn's suggestion on irc, broke down the patchset into 4
+  separate patchsets, one each for the following areas to allow easier
+  review and handling from the respective maintainer(s):
+        'arm-msm', 'crypto', 'dma' and 'devicetree'
+  This patchset is directed for the 'arm-msm' tree / area.
+- Addressed Rob's, Vladimir's and Bjorn's review comments on v5.
+- Added Tested-by from Jordan received on the v5.
+- Also added a 'defconfig' change where I enabled the QCE block as a module.
 
-> [11/15] arm64: dts: qcom: ipq6018: switch TCSR mutex to MMIO
->          commit: f5e303aefc06b7508d7a490f9a2d80e4dc134c70
-> [12/15] arm64: dts: qcom: msm8994: switch TCSR mutex to MMIO
->          commit: 9e826e05061c61d84217bbe436b4ef0bedbfe458
-> [14/15] ARM: dts: qcom: apq8084: switch TCSR mutex to MMIO
->          commit: 16ae4e557b2fa9fc7372b4503247aca80a476272
-> [15/15] ARM: dts: qcom: msm8226: switch TCSR mutex to MMIO
->          commit: 18a4af7a598445af54e1e16a66b7f31669578701
-> 
-> Best regards,
+Changes since v4:
+=================
+- v4 for sm8250 can be seen here: https://lore.kernel.org/linux-arm-msm/20211013105541.68045-1-bhupesh.sharma@linaro.org/
+- v1 for sm8150 qce enablement can be seen here: https://lore.kernel.org/linux-arm-msm/20211013165823.88123-1-bhupesh.sharma@linaro.org/
+- Merged the sm8150 and sm8250 enablement patches in the same patchset,
+  as per suggestions from Bjorn.
+- Dropped a couple of patches from v4, as these have been picked by
+  Bjorn already via his tree.
+- Addressed review comments from Vladimir, Thara and Rob.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v4 patchset.
+
+Changes since v3:
+=================
+- v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20210519143700.27392-1-bhupesh.sharma@linaro.org/
+- Dropped a couple of patches from v3, on basis of the review comments:
+   ~ [PATCH 13/17] crypto: qce: core: Make clocks optional
+   ~ [PATCH 15/17] crypto: qce: Convert the device found dev_dbg() to dev_info()
+- Addressed review comments from Thara, Rob and Stephan Gerhold.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v3 patchset.
+
+Changes since v2:
+=================
+- v2 can be seen here: https://lore.kernel.org/dmaengine/20210505213731.538612-1-bhupesh.sharma@linaro.org/
+- Drop a couple of patches from v1, which tried to address the defered
+  probing of qce driver in case bam dma driver is not yet probed.
+  Replace it instead with a single (simpler) patch [PATCH 16/17].
+- Convert bam dma and qce crypto dt-bindings to YAML.
+- Addressed review comments from Thara, Bjorn, Vinod and Rob.
+
+Changes since v1:
+=================
+- v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20210310052503.3618486-1-bhupesh.sharma@linaro.org/ 
+- v1 did not work well as reported earlier by Dmitry, so v2 contains the following
+  changes/fixes:
+  ~ Enable the interconnect path b/w BAM DMA and main memory first
+    before trying to access the BAM DMA registers.
+  ~ Enable the interconnect path b/w qce crytpo and main memory first
+    before trying to access the qce crypto registers.
+  ~ Make sure to document the required and optional properties for both
+    BAM DMA and qce crypto drivers.
+  ~ Add a few debug related print messages in case the qce crypto driver
+    passes or fails to probe.
+  ~ Convert the qce crypto driver probe to a defered one in case the BAM DMA
+    or the interconnect driver(s) (needed on specific Qualcomm parts) are not
+    yet probed.
+
+Qualcomm crypto engine (qce) is available on several Snapdragon SoCs.
+The qce block supports hardware accelerated algorithms for encryption
+and authentication. It also provides support for aes, des, 3des
+encryption algorithms and sha1, sha256, hmac(sha1), hmac(sha256)
+authentication algorithms.
+
+Tested the enabled crypto algorithms with cryptsetup test utilities
+on sm8150-mtp, sa8155p-adp, sm8250-mtp and RB5 boards (see [1]) and
+also with crypto self-tests, including the fuzz tests
+ (CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y).
+
+Note that this patchset is dependent on the dt-bindings patchset (see [2]) sent to devicetree list.
+
+[1]. https://linux.die.net/man/8/cryptsetup
+[2]. https://lore.kernel.org/linux-arm-msm/20220919195618.926227-1-bhupesh.sharma@linaro.org/
+
+Cc: thara.gopinath@gmail.com
+Cc: robh@kernel.org
+Cc: andersson@kernel.org
+Tested-by: Jordan Crouse <jorcrous@amazon.com>
+
+Bhupesh Sharma (4):
+  ARM: dts: qcom: Use new compatibles for crypto nodes
+  arm64: dts: qcom: sm8250: Add dt entries to support crypto engine.
+  arm64: dts: qcom: sm8150: Add dt entries to support crypto engine.
+  arm64: defconfig: Enable Qualcomm QCE crypto
+
+ arch/arm/boot/dts/qcom-ipq4019.dtsi   |  2 +-
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi  |  2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi  | 28 +++++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  | 28 +++++++++++++++++++++++++++
+ arch/arm64/configs/defconfig          |  1 +
+ 8 files changed, 62 insertions(+), 5 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.37.1
 
