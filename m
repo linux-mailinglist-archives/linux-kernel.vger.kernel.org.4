@@ -1,105 +1,217 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DA25BC154
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:21:08 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id C6BD15BC157
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiISCVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S229698AbiISCWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISCVE (ORCPT
+        with ESMTP id S229483AbiISCWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:21:04 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49EFB13D2C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 19:21:03 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id EC5FD1E80D75;
-        Mon, 19 Sep 2022 10:18:04 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CZ5HXtYIhMB8; Mon, 19 Sep 2022 10:18:02 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 6F7721E80CAB;
-        Mon, 19 Sep 2022 10:18:00 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     ogabbay@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        ttayar@habana.ai, obitton@habana.ai, osharabi@habana.ai
-Cc:     bdotan@habana.ai, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] drivers: habanalabs: Remove unnecessary (void*) conversions
-Date:   Mon, 19 Sep 2022 10:20:54 +0800
-Message-Id: <20220919022054.3813-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 18 Sep 2022 22:22:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234F813F1A;
+        Sun, 18 Sep 2022 19:22:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C065613D5;
+        Sun, 18 Sep 2022 19:22:39 -0700 (PDT)
+Received: from [192.168.122.164] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0F33F73B;
+        Sun, 18 Sep 2022 19:22:32 -0700 (PDT)
+Message-ID: <a7bb4b9f-61bf-c951-19a6-5b099c399524@arm.com>
+Date:   Sun, 18 Sep 2022 21:22:22 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 0/8] efi: implement generic compressed boot support
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Lennart Poettering <lennart@poettering.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+References: <20220910081152.2238369-1-ardb@kernel.org>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <20220910081152.2238369-1-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The void pointer object can be directly assigned to different structure
-objects, it does not need to be cast.
+Hi,
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+With the BSS "fix" in grub for fedora/rhel, this is now working fine for 
+both systemd-boot and normal grub2, as well as booting directly from the 
+UEFI shell. Given both the magic number and the bss fix were merged at 
+the same time I don't think anyone should ever see the bad bss message, 
+at least not on the above distro's.
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 98336a1a84b0..264376617310 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -6149,7 +6149,7 @@ static int gaudi2_non_hard_reset_late_init(struct hl_device *hdev)
- static void gaudi2_is_tpc_engine_idle(struct hl_device *hdev, int dcore, int inst, u32 offset,
- 					void *data)
- {
--	struct gaudi2_tpc_idle_data *idle_data = (struct gaudi2_tpc_idle_data *)data;
-+	struct gaudi2_tpc_idle_data *idle_data = data;
- 	u32 tpc_cfg_sts, qm_glbl_sts0, qm_glbl_sts1, qm_cgm_sts;
- 	bool is_eng_idle;
- 	int engine_idx;
-@@ -6727,7 +6727,7 @@ static int gaudi2_mmu_shared_prepare(struct hl_device *hdev, u32 asid)
- static void gaudi2_tpc_mmu_prepare(struct hl_device *hdev, int dcore, int inst,	u32 offset,
- 					void *data)
- {
--	struct gaudi2_tpc_mmu_data *mmu_data = (struct gaudi2_tpc_mmu_data *)data;
-+	struct gaudi2_tpc_mmu_data *mmu_data = data;
- 
- 	WREG32(mmDCORE0_TPC0_CFG_AXUSER_HB_MMU_BP + offset, 0);
- 	WREG32(mmDCORE0_TPC0_CFG_AXUSER_HB_ASID + offset, mmu_data->rw_asid);
-@@ -9336,7 +9336,7 @@ static u32 gaudi2_get_queue_id_for_cq(struct hl_device *hdev, u32 cq_idx)
- 
- static u32 gaudi2_gen_signal_cb(struct hl_device *hdev, void *data, u16 sob_id, u32 size, bool eb)
- {
--	struct hl_cb *cb = (struct hl_cb *) data;
-+	struct hl_cb *cb = data;
- 	struct packet_msg_short *pkt;
- 	u32 value, ctl, pkt_size = sizeof(*pkt);
- 
-@@ -9429,7 +9429,7 @@ static u32 gaudi2_add_fence_pkt(struct packet_fence *pkt)
- 
- static u32 gaudi2_gen_wait_cb(struct hl_device *hdev, struct hl_gen_wait_properties *prop)
- {
--	struct hl_cb *cb = (struct hl_cb *) prop->data;
-+	struct hl_cb *cb = prop->data;
- 	void *buf = (void *) (uintptr_t) (cb->kernel_address);
- 
- 	u64 monitor_base, fence_addr = 0;
-@@ -9481,7 +9481,7 @@ static u32 gaudi2_gen_wait_cb(struct hl_device *hdev, struct hl_gen_wait_propert
- 
- static void gaudi2_reset_sob(struct hl_device *hdev, void *data)
- {
--	struct hl_hw_sob *hw_sob = (struct hl_hw_sob *) data;
-+	struct hl_hw_sob *hw_sob = data;
- 
- 	dev_dbg(hdev->dev, "reset SOB, q_idx: %d, sob_id: %d\n", hw_sob->q_idx, hw_sob->sob_id);
- 
--- 
-2.18.2
+I've largely been testing this on the PFTF/RPi4, and in a libvirt 
+qemu/kvm env with/without ksan/etc on a mostly fedora configured kernel. 
+Hooking this up to kinstall makes sense and works, although i'm not a 
+big fan.
+
+So, its looking good. All thumbs up here :)
+
+Tested-by: Jeremy Linton <jeremy.linton@arm.com>
+
+
+On 9/10/22 03:11, Ard Biesheuvel wrote:
+> Relatively modern architectures such as arm64 or RISC-V don't implement
+> a self-decompressing kernel, and leave it up to the bootloader to
+> decompress the compressed image before executing it. For bare metal
+> boot, this policy makes sense, as a self-decompressing image essentially
+> duplicates a lot of fiddly preparation work to create a 1:1 mapping and
+> set up the C runtime, and to discover or infer where DRAM lives from
+> device trees or other firmware tables.
+> 
+> For EFI boot, the situation is a bit different: the EFI entrypoint is
+> called with a 1:1 cached mapping covering all of DRAM already active,
+> and with a stack, a heap, a memory map and boot services to load and
+> start images. This means it is rather trivial to implement a
+> self-decompressing wrapper for EFI boot in a generic manner, and reuse
+> it across architectures that implement EFI boot.
+> 
+> The only slight downside is that when UEFI secure boot is enabled, the
+> generic LoadImage/StartImage only allow signed images to be loaded and
+> started, and we would prefer to avoid the need to sign both the inner
+> and outer PE/COFF images.
+> 
+> However, the only truly generic and portable way to achieve this is to
+> rely on LoadImage/StartImage as the EFI spec defines them, and avoid
+> making assumptions about how things might work under the hood, and how
+> we might circumvent that. This includes just loading the image into
+> memory and jumping to the PE entry point: in the context of secure boot,
+> measured boot and other hardening measures the firmware may take (such
+> as disallowing mappings that are both writable and executable), using
+> the firmware's image loading API is the only maintainable choice.
+> 
+> For this reason, this version of the series includes support for signing
+> the images using sbsign, if the signing key and cert are specified in
+> Kconfig.
+> 
+> The code is wired up for arm64, LoongArch and RISC-V. The latter was
+> build tested only.
+> 
+> Changes since v4:
+> - make CONFIG_EFI_ZBOOT user selectable again, and turn it on by default
+>    only for LoongArch
+> - set KBUILD_IMAGE to vmlinuz.efi if CONFIG_EFI_ZBOOT=y, so that make
+>    targets such as zinstall and bindeb-pkg do the right thing
+> - throw an error is BSS was not cleared by the loader - this is needed
+>    to detect broken distro implementations of LoadImage in shim and grub
+> - add vmlinuz.* to .gitignore on the various architectures
+> - switch back to defining uncompressed_size as 'extern __aligned(1)' so
+>    that the compiler will perform the unaligned access as appropriate on
+>    the architecture in question - this requires the latest binutils on
+>    LoongArch [0]
+> 
+> Changes since v3:
+> - add support for XZ and ZSTD compression
+> - deal with exit data returned by StartImage()
+> - use LoadFile2 based image loading instead of passing the raw buffer -
+>    this way, the provenance of the data is more visible, allowing us,
+>    for instance, to deal with initrd= on arm64 transparently (this means
+>    that systemd-boot on arm64 will work unmodified provided that the
+>    [deprecated] command line initrd loader is enabled in the kernel
+>    build)
+> - include LoongArch support
+> - rename compressed image to vmlinuz.efi on all architectures
+> 
+> Changes since v2:
+> - drop some of the refactoring work to make efi_printk() available in
+>    the decompressor, and just use fixed strings instead;
+> - provide memcpy/memmove/memset based on the UEFI boot services, instead
+>    of having to specify for each architecture how to wire these up;
+> - drop PI/DXE based signature check circumvention, and just sign the
+>    inner image instead, if needed;
+> - add a header to the zimage binary that identifies it as a EFI zboot
+>    image, and describes the compression algorithm and where the payload
+>    lives in the image - this might be used by non-EFI loaders to locate
+>    and decompress the bare metal image, given that the EFI zboot one is
+>    not a hybrid like the one it encapsulates.
+> 
+> [0] https://sourceware.org/pipermail/binutils/2022-September/122713.html
+> 
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+> Cc: Peter Jones <pjones@redhat.com>
+> Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+> Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Atish Patra <atishp@atishpatra.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Huacai Chen <chenhuacai@loongson.cn>
+> Cc: Xi Ruoyao <xry111@xry111.site>
+> Cc: Lennart Poettering <lennart@poettering.net>
+> Cc: Jeremy Linton <jeremy.linton@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> 
+> Ard Biesheuvel (8):
+>    efi: name the ARCH-stub.c files uniformly
+>    efi/libstub: add some missing EFI prototypes
+>    efi/libstub: use EFI provided memcpy/memset routines
+>    efi/libstub: move efi_system_table global var into separate object
+>    efi/libstub: implement generic EFI zboot
+>    arm64: efi: enable generic EFI compressed boot
+>    riscv: efi: enable generic EFI compressed boot
+>    loongarch: efi: enable generic EFI compressed boot
+> 
+>   arch/arm64/Makefile                                       |   9 +-
+>   arch/arm64/boot/.gitignore                                |   1 +
+>   arch/arm64/boot/Makefile                                  |   6 +
+>   arch/arm64/kernel/image-vars.h                            |  13 -
+>   arch/loongarch/Kconfig                                    |   1 +
+>   arch/loongarch/Makefile                                   |   4 +-
+>   arch/loongarch/boot/.gitignore                            |   1 +
+>   arch/loongarch/boot/Makefile                              |   6 +
+>   arch/loongarch/kernel/image-vars.h                        |   3 -
+>   arch/riscv/Makefile                                       |   6 +-
+>   arch/riscv/boot/.gitignore                                |   1 +
+>   arch/riscv/boot/Makefile                                  |   6 +
+>   arch/riscv/kernel/image-vars.h                            |   9 -
+>   drivers/firmware/efi/Kconfig                              |  38 +++
+>   drivers/firmware/efi/libstub/Makefile                     |  21 +-
+>   drivers/firmware/efi/libstub/Makefile.zboot               |  70 +++++
+>   drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} |   0
+>   drivers/firmware/efi/libstub/efi-stub.c                   |   2 -
+>   drivers/firmware/efi/libstub/efistub.h                    |  35 ++-
+>   drivers/firmware/efi/libstub/file.c                       |  17 ++
+>   drivers/firmware/efi/libstub/intrinsics.c                 |  30 ++
+>   drivers/firmware/efi/libstub/systable.c                   |   8 +
+>   drivers/firmware/efi/libstub/zboot-header.S               | 143 ++++++++++
+>   drivers/firmware/efi/libstub/zboot.c                      | 296 ++++++++++++++++++++
+>   drivers/firmware/efi/libstub/zboot.lds                    |  43 +++
+>   include/linux/efi.h                                       |  13 +
+>   26 files changed, 732 insertions(+), 50 deletions(-)
+>   create mode 100644 drivers/firmware/efi/libstub/Makefile.zboot
+>   rename drivers/firmware/efi/libstub/{arm32-stub.c => arm-stub.c} (100%)
+>   create mode 100644 drivers/firmware/efi/libstub/intrinsics.c
+>   create mode 100644 drivers/firmware/efi/libstub/systable.c
+>   create mode 100644 drivers/firmware/efi/libstub/zboot-header.S
+>   create mode 100644 drivers/firmware/efi/libstub/zboot.c
+>   create mode 100644 drivers/firmware/efi/libstub/zboot.lds
+> 
 
