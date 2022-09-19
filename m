@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7555BC259
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A355BC25E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiISEuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 00:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S229724AbiISExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 00:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiISEuj (ORCPT
+        with ESMTP id S229453AbiISExw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 00:50:39 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C51A12D35
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:50:38 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id j16so18028563lfg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:50:38 -0700 (PDT)
+        Mon, 19 Sep 2022 00:53:52 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAB5DFCF;
+        Sun, 18 Sep 2022 21:53:50 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u9so61847070ejy.5;
+        Sun, 18 Sep 2022 21:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=/yZZiOrCpRLwKnyPBye99y+fLuXC1QlTVjHQzC5H4zc=;
-        b=r50KtvDopnWBTthHoq0HJtxdwsyr3bLaMc8vbIQv4HiV/x4DjypRcoAfBrxST5JldQ
-         WOtxYwd7lXYwjgKt9W7gbkYt+K0CHmoTkwJlLhMQ2KIMqSnyiv/M6E7bGdjIQUbH/AIJ
-         EywxpIraHZ9oUMWgPb5Huru1Owr49VxDVym82AAP83UzV+l3hNaoWYcxrkc8QTanqZqm
-         W3t9dwvyTVTbQVzaqWf02dG+Ub6MVJXRsA+CVDODNRMuda4Nhl9gogzw4kd+Thpf2oFc
-         1qeGuT8OnNKpAJ6BNId39hVyg9VWRh7iGzs3Pweb8Xscv47+hW3njD4UeX0lKo+QvWA3
-         5OwQ==
+        bh=RlNy82oQRqLWrukEgPPnsPx9ducFrofzFQxvq1WAWcE=;
+        b=SWzD8Jaq4buNaL5BrTco3g79OygvK1ANfle2ttw6VSUUeLNJRuWEUj9aXuIa6WFA6K
+         oJ2zVNi6VPRUkc1GxJH7N9Ss21z6NFqSbPeeoFDQ60kND6rNSOFOR1dgKENozfyLp+mQ
+         s8CWhNENLdyW3ejGTwZKnuOy9TaWaqEucd1lpB3OyayouB4REUo2O7/xpjrcAw3ZMW7N
+         MtAGOcc1BE/dRwmGuZSuF1r8rmrQ+uQZR80XeGi4DbTjXM3rvT/SDlpcke5IYuTSWq1R
+         iAxdcue8bBet5hdIA2QBmip9NBRCbm6iDeBEv5y7jvpcjFHFRGnsMGyKckpSJ5zrm9KI
+         DOUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/yZZiOrCpRLwKnyPBye99y+fLuXC1QlTVjHQzC5H4zc=;
-        b=L7tfcgF3YY1l0hf7OvDogyit4AZb7hN3YF5+lNVDGUfW0rYdb4K+zgbrnp/XK4YSUv
-         401unYHc16Sv1VR2HfwhsK4qJEAtZ5sj0rtacBKH6KsrHGO4B0YJvPc+tPqr7cvEbBq1
-         zNnk+GAbVJtSHGBlpm+ZRDYk0l81yVHojSj0VcCa0RiURPIZqYo15oNhahcNcxNWSiPg
-         1dO1jelVokuZPmwZyuJNaFjHTUZnUCX9iYzL65M4B84eqmE9SxCAAG/GD4Pyma/iBmiK
-         8hYwwFsYyCSPSc3wSMH0MUFhqHHzM6046xaQ96CWvNOTnw1ITFDCFRF7Ccy4Eaq+mWMz
-         YORw==
-X-Gm-Message-State: ACrzQf36KZAYPWs+7L6AyEUpvnYsTmtWn/rF42UxYsOJGtU8qI8E5agu
-        pfmLI+/s0cZ1dE0PPCojVFUuxf5IG1uOsQUztkJQCw==
-X-Google-Smtp-Source: AMsMyM5bsp2Nl8b4QHVERN8943cc83ixkbIeHc9b8300BTlW4PgPwzFE/IwTzbSeyCX76UK40WZCjSsIPWtpLT+BAnY=
-X-Received: by 2002:a05:6512:4016:b0:49a:81b3:808f with SMTP id
- br22-20020a056512401600b0049a81b3808fmr5934725lfb.137.1663563036519; Sun, 18
- Sep 2022 21:50:36 -0700 (PDT)
+        bh=RlNy82oQRqLWrukEgPPnsPx9ducFrofzFQxvq1WAWcE=;
+        b=pvI/xHotXJ2Jux+btIY9iYc0YvPQRlhOYfmueOhxLE8PRhXJpjNkaYwMAnLZDWvyEl
+         soJzQ2DZitdV0a14c8IJckaFpPR6i1uTPluGPzre8/xu+qRubMtFRvzik69TthqvUxyC
+         q0KhVzQo650BWAV1/K2mWE9ffF6oJbUoOl/pE5Cb7mvbHhll9cjz8FOukHPkrGf+n6s5
+         Q3+ELzr2nKOI5VFgSCFL+zARFdMK3jx31TguarMS/kLWLbtr5lM/q8yH2ZdwwjaQzCOv
+         yiH1W+y210GxTO5JYv5takRE2W1d0PXMiaN+3ATWMOw64jjLk59+4KqFrx4zb9jrB/Cs
+         qbhg==
+X-Gm-Message-State: ACrzQf0P9wiojmPXLcvQTYaMq6KGuo8cpYncBiZlzoXfGBDjHU/PUM0N
+        fKVeE6e7Zd3vmtyh/jJUvaW0SBqMDGI9C2oAtqY=
+X-Google-Smtp-Source: AMsMyM4AYmx+Vf7zVPAGNAasxPMQ83IjOnq+AdlCIQY9kw2WYK+mzB/b5yECnUiPW9LwKnU+Gnlr2169w4VKov+0wUo=
+X-Received: by 2002:a17:907:7f8e:b0:780:ec2b:bcc5 with SMTP id
+ qk14-20020a1709077f8e00b00780ec2bbcc5mr6197116ejc.192.1663563228607; Sun, 18
+ Sep 2022 21:53:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000443a7205e8ece1d9@google.com> <20220918110253.947-1-hdanton@sina.com>
-In-Reply-To: <20220918110253.947-1-hdanton@sina.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 19 Sep 2022 06:50:25 +0200
-Message-ID: <CACT4Y+YqSwZyBi7Pj8o=QXCa1YWzFO2J9wFi31FDvKuEMrbA4Q@mail.gmail.com>
-Subject: Re: [syzbot] BUG: soft lockup in tx
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+5e87db90e68fbc4707c6@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220822082120.8347-1-yangyicong@huawei.com> <20220822082120.8347-5-yangyicong@huawei.com>
+ <1e8642d5-0e2d-5747-d0d2-5aa0817ea4af@arm.com> <CAGsJ_4xD4m-szM1Cm4N5ZRCODGC0fbW+BLBhy8g6+eK=aHPQNw@mail.gmail.com>
+ <1125554b-c183-23c4-5516-95b918a761cc@arm.com> <CAGsJ_4zkRv7RYCB2SC0uydMSQWfwXs3-nkjxMoR7wgn2nt43gA@mail.gmail.com>
+ <dd480976-5054-7926-fb81-0aca74f6d1fd@arm.com>
+In-Reply-To: <dd480976-5054-7926-fb81-0aca74f6d1fd@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Mon, 19 Sep 2022 16:53:36 +1200
+Message-ID: <CAGsJ_4zMs4nrw8fMBn7QGHvWVDkSZFvN5NsCDKPoF=OMe+1c0Q@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net, peterz@infradead.org,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +81,377 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 18 Sept 2022 at 13:03, Hillf Danton <hdanton@sina.com> wrote:
+On Mon, Sep 19, 2022 at 4:24 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
 >
-> On 17 Sep 2022 22:29:32 -0700
-> > syzbot found the following issue on:
+>
+>
+> On 9/15/22 12:12, Barry Song wrote:
+> > On Thu, Sep 15, 2022 at 6:07 PM Anshuman Khandual
+> > <anshuman.khandual@arm.com> wrote:
+> >>
+> >>
+> >>
+> >> On 9/9/22 11:05, Barry Song wrote:
+> >>> On Fri, Sep 9, 2022 at 5:24 PM Anshuman Khandual
+> >>> <anshuman.khandual@arm.com> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 8/22/22 13:51, Yicong Yang wrote:
+> >>>>> From: Barry Song <v-songbaohua@oppo.com>
+> >>>>>
+> >>>>> on x86, batched and deferred tlb shootdown has lead to 90%
+> >>>>> performance increase on tlb shootdown. on arm64, HW can do
+> >>>>> tlb shootdown without software IPI. But sync tlbi is still
+> >>>>> quite expensive.
+> >>>>>
+> >>>>> Even running a simplest program which requires swapout can
+> >>>>> prove this is true,
+> >>>>>  #include <sys/types.h>
+> >>>>>  #include <unistd.h>
+> >>>>>  #include <sys/mman.h>
+> >>>>>  #include <string.h>
+> >>>>>
+> >>>>>  int main()
+> >>>>>  {
+> >>>>>  #define SIZE (1 * 1024 * 1024)
+> >>>>>          volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+> >>>>>                                           MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> >>>>>
+> >>>>>          memset(p, 0x88, SIZE);
+> >>>>>
+> >>>>>          for (int k = 0; k < 10000; k++) {
+> >>>>>                  /* swap in */
+> >>>>>                  for (int i = 0; i < SIZE; i += 4096) {
+> >>>>>                          (void)p[i];
+> >>>>>                  }
+> >>>>>
+> >>>>>                  /* swap out */
+> >>>>>                  madvise(p, SIZE, MADV_PAGEOUT);
+> >>>>>          }
+> >>>>>  }
+> >>>>>
+> >>>>> Perf result on snapdragon 888 with 8 cores by using zRAM
+> >>>>> as the swap block device.
+> >>>>>
+> >>>>>  ~ # perf record taskset -c 4 ./a.out
+> >>>>>  [ perf record: Woken up 10 times to write data ]
+> >>>>>  [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
+> >>>>>  ~ # perf report
+> >>>>>  # To display the perf.data header info, please use --header/--header-only options.
+> >>>>>  # To display the perf.data header info, please use --header/--header-only options.
+> >>>>>  #
+> >>>>>  #
+> >>>>>  # Total Lost Samples: 0
+> >>>>>  #
+> >>>>>  # Samples: 60K of event 'cycles'
+> >>>>>  # Event count (approx.): 35706225414
+> >>>>>  #
+> >>>>>  # Overhead  Command  Shared Object      Symbol
+> >>>>>  # ........  .......  .................  .............................................................................
+> >>>>>  #
+> >>>>>     21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
+> >>>>>      8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+> >>>>>      6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
+> >>>>>      6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
+> >>>>>      5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+> >>>>>      3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
+> >>>>>      3.49%  a.out    [kernel.kallsyms]  [k] memset64
+> >>>>>      1.63%  a.out    [kernel.kallsyms]  [k] clear_page
+> >>>>>      1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
+> >>>>>      1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
+> >>>>>      1.23%  a.out    [kernel.kallsyms]  [k] xas_load
+> >>>>>      1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+> >>>>>
+> >>>>> ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
+> >>>>> swapping in/out a page mapped by only one process. If the
+> >>>>> page is mapped by multiple processes, typically, like more
+> >>>>> than 100 on a phone, the overhead would be much higher as
+> >>>>> we have to run tlb flush 100 times for one single page.
+> >>>>> Plus, tlb flush overhead will increase with the number
+> >>>>> of CPU cores due to the bad scalability of tlb shootdown
+> >>>>> in HW, so those ARM64 servers should expect much higher
+> >>>>> overhead.
+> >>>>>
+> >>>>> Further perf annonate shows 95% cpu time of ptep_clear_flush
+> >>>>> is actually used by the final dsb() to wait for the completion
+> >>>>> of tlb flush. This provides us a very good chance to leverage
+> >>>>> the existing batched tlb in kernel. The minimum modification
+> >>>>> is that we only send async tlbi in the first stage and we send
+> >>>>> dsb while we have to sync in the second stage.
+> >>>>>
+> >>>>> With the above simplest micro benchmark, collapsed time to
+> >>>>> finish the program decreases around 5%.
+> >>>>>
+> >>>>> Typical collapsed time w/o patch:
+> >>>>>  ~ # time taskset -c 4 ./a.out
+> >>>>>  0.21user 14.34system 0:14.69elapsed
+> >>>>> w/ patch:
+> >>>>>  ~ # time taskset -c 4 ./a.out
+> >>>>>  0.22user 13.45system 0:13.80elapsed
+> >>>>>
+> >>>>> Also, Yicong Yang added the following observation.
+> >>>>>       Tested with benchmark in the commit on Kunpeng920 arm64 server,
+> >>>>>       observed an improvement around 12.5% with command
+> >>>>>       `time ./swap_bench`.
+> >>>>>               w/o             w/
+> >>>>>       real    0m13.460s       0m11.771s
+> >>>>>       user    0m0.248s        0m0.279s
+> >>>>>       sys     0m12.039s       0m11.458s
+> >>>>>
+> >>>>>       Originally it's noticed a 16.99% overhead of ptep_clear_flush()
+> >>>>>       which has been eliminated by this patch:
+> >>>>>
+> >>>>>       [root@localhost yang]# perf record -- ./swap_bench && perf report
+> >>>>>       [...]
+> >>>>>       16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
+> >>>>>
+> >>>>> Cc: Jonathan Corbet <corbet@lwn.net>
+> >>>>> Cc: Nadav Amit <namit@vmware.com>
+> >>>>> Cc: Mel Gorman <mgorman@suse.de>
+> >>>>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+> >>>>> Tested-by: Xin Hao <xhao@linux.alibaba.com>
+> >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> >>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> >>>>> ---
+> >>>>>  .../features/vm/TLB/arch-support.txt          |  2 +-
+> >>>>>  arch/arm64/Kconfig                            |  1 +
+> >>>>>  arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++
+> >>>>>  arch/arm64/include/asm/tlbflush.h             | 28 +++++++++++++++++--
+> >>>>>  4 files changed, 40 insertions(+), 3 deletions(-)
+> >>>>>  create mode 100644 arch/arm64/include/asm/tlbbatch.h
+> >>>>>
+> >>>>> diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
+> >>>>> index 1c009312b9c1..2caf815d7c6c 100644
+> >>>>> --- a/Documentation/features/vm/TLB/arch-support.txt
+> >>>>> +++ b/Documentation/features/vm/TLB/arch-support.txt
+> >>>>> @@ -9,7 +9,7 @@
+> >>>>>      |       alpha: | TODO |
+> >>>>>      |         arc: | TODO |
+> >>>>>      |         arm: | TODO |
+> >>>>> -    |       arm64: | TODO |
+> >>>>> +    |       arm64: |  ok  |
+> >>>>>      |        csky: | TODO |
+> >>>>>      |     hexagon: | TODO |
+> >>>>>      |        ia64: | TODO |
+> >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> >>>>> index 571cc234d0b3..09d45cd6d665 100644
+> >>>>> --- a/arch/arm64/Kconfig
+> >>>>> +++ b/arch/arm64/Kconfig
+> >>>>> @@ -93,6 +93,7 @@ config ARM64
+> >>>>>       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> >>>>>       select ARCH_SUPPORTS_NUMA_BALANCING
+> >>>>>       select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+> >>>>> +     select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+> >>>>>       select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+> >>>>>       select ARCH_WANT_DEFAULT_BPF_JIT
+> >>>>>       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> >>>>> diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..fedb0b87b8db
+> >>>>> --- /dev/null
+> >>>>> +++ b/arch/arm64/include/asm/tlbbatch.h
+> >>>>> @@ -0,0 +1,12 @@
+> >>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+> >>>>> +#ifndef _ARCH_ARM64_TLBBATCH_H
+> >>>>> +#define _ARCH_ARM64_TLBBATCH_H
+> >>>>> +
+> >>>>> +struct arch_tlbflush_unmap_batch {
+> >>>>> +     /*
+> >>>>> +      * For arm64, HW can do tlb shootdown, so we don't
+> >>>>> +      * need to record cpumask for sending IPI
+> >>>>> +      */
+> >>>>> +};
+> >>>>> +
+> >>>>> +#endif /* _ARCH_ARM64_TLBBATCH_H */
+> >>>>> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+> >>>>> index 412a3b9a3c25..23cbc987321a 100644
+> >>>>> --- a/arch/arm64/include/asm/tlbflush.h
+> >>>>> +++ b/arch/arm64/include/asm/tlbflush.h
+> >>>>> @@ -254,17 +254,24 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+> >>>>>       dsb(ish);
+> >>>>>  }
+> >>>>>
+> >>>>> -static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> >>>>> +
+> >>>>> +static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+> >>>>>                                        unsigned long uaddr)
+> >>>>>  {
+> >>>>>       unsigned long addr;
+> >>>>>
+> >>>>>       dsb(ishst);
+> >>>>> -     addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
+> >>>>> +     addr = __TLBI_VADDR(uaddr, ASID(mm));
+> >>>>>       __tlbi(vale1is, addr);
+> >>>>>       __tlbi_user(vale1is, addr);
+> >>>>>  }
+> >>>>>
+> >>>>> +static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> >>>>> +                                      unsigned long uaddr)
+> >>>>> +{
+> >>>>> +     return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
+> >>>>> +}
+> >>>>> +
+> >>>>>  static inline void flush_tlb_page(struct vm_area_struct *vma,
+> >>>>>                                 unsigned long uaddr)
+> >>>>>  {
+> >>>>> @@ -272,6 +279,23 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+> >>>>>       dsb(ish);
+> >>>>>  }
+> >>>>>
+> >>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> >>>>> +{
+> >>>>> +     return true;
+> >>>>> +}
+> >>>>
+> >>>> Always defer and batch up TLB flush, unconditionally ?
+> >>>
+> >>> My understanding is we actually don't need tlbbatch for a machine with one
+> >>> or two cores as the tlb flush is not expensive. even for a system with four
+> >>> cortex-a55 cores, i didn't see obvious cost. it was less than 1%.
+> >>> when we have 8 cores, we see the obvious cost of tlb flush. for a server with
+> >>> 100 crores, the cost is incredibly huge.
+> >>
+> >> Although dsb(ish) is deferred via arch_tlbbatch_flush(), there is still
+> >> one dsb(isht) instruction left in __flush_tlb_page_nosync(). Is not that
+> >> expensive as well, while queuing up individual TLB flushes ?
 > >
-> > HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=176b1680880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b22b10880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fce87f080000
+> > This one is much much cheaper as it is not waiting for the
+> > completion of tlbi. waiting for the completion of tlbi is a big
+> > deal in arm64, thus, similar optimization can be seen here
+> >
+> > 3403e56b41c1("arm64: mm: Don't wait for completion of TLB invalidation
+> > when page aging").
+> >
+> >
+> >>
+> >> The very idea behind TLB deferral is the opportunity it (might) provide
+> >> to accumulate address ranges and cpu masks so that individual TLB flush
+> >> can be replaced with a more cost effective range based TLB flush. Hence
+> >> I guess unless address range or cpumask based cost effective TLB flush
+> >> is available, deferral does not improve the unmap performance as much.
+> >
+> >
+> > After sending tlbi, if we wait for the completion of tlbi, we have to get Ack
+> > from all cpus in the system, tlbi is not scalable. The point here is that we
+> > avoid waiting for each individual TLBi. Alternatively, they are batched. If
+> > you read the benchmark in the commit log, you can find the great decline
+> > in the cost to swap out a page.
 >
-> Remove the soft hog in caif uart.
+> Alright, although collecting and deferring 'dsb(ish)' to the very end, does
+> not feel like a direct fit case for ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH but I
+> guess it can be used to improve unmap performance on arm64.
 >
-> #syz test https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git  a6b443748715
->
-> --- a/drivers/net/caif/caif_serial.c
-> +++ b/drivers/net/caif/caif_serial.c
-> @@ -210,6 +210,7 @@ static int handle_tx(struct ser_device *
->         struct tty_struct *tty;
->         struct sk_buff *skb;
->         int tty_wr, len, room;
-> +       unsigned long ts;
->
->         tty = ser->tty;
->         ser->tx_started = true;
-> @@ -218,8 +219,11 @@ static int handle_tx(struct ser_device *
->         if (test_and_set_bit(CAIF_SENDING, &ser->state))
->                 return 0;
->
-> +       ts = jiffies + 2;
->         /* skb_peek is safe because handle_tx is called after skb_queue_tail */
->         while ((skb = skb_peek(&ser->head)) != NULL) {
-> +               if (jiffies > ts)
-> +                       break;
->
->                 /* Make sure you don't write too much */
->                 len = skb->len;
+> But is this 'dsb(ish)' deferral architecturally valid ?
 
-Hi Hillf,
+yes as dsb(ish) ensures the completion of tlbi.
+https://developer.arm.com/documentation/den0024/a/Memory-Ordering/Barriers
 
-I don't know if it's a good fix on its own or not,
-but arm64 command line parsing is currently broken and does not allows
-us to increase stall timeouts:
-https://groups.google.com/g/syzkaller-bugs/c/QoFsDszFLxY/m/mnnUTKuJAAAJ
-This may lead to some false stall reports (the timeout is 22s, but we
-set it to 300s on syzbot).
+We are even depending on the dsb(ish) during context switch in commit:
+3403e56b41c1("arm64: mm: Don't wait for completion of TLB invalidation
+when page aging").
+
+Before the context switch, lots of tlbi could have been sent.
+
+>
+> Let's examine single page unmap path via try_to_unmap_one().
+>
+> should_defer_flush() {
+>         ptep_get_and_clear()
+>         set_tlb_ubc_flush_pending()
+>                 arch_tlbbatch_add_mm()
+>                         __flush_tlb_page_nosync()
+> } else {
+>         ptep_clear_flush()
+>                 ptep_get_and_clear()
+>                 flush_tlb_page()
+>                         flush_tlb_page_nosync()
+>                                 __flush_tlb_page_nosync()
+>                         dsb(ish)
+> }
+>
+> __flush_tlb_page_nosync()
+> {
+>         dsb(ishst);
+>         addr = __TLBI_VADDR(uaddr, ASID(mm));
+>         __tlbi(vale1is, addr);
+>         __tlbi_user(vale1is, addr);
+> }
+>
+> Currently without TLB deferral, 'dsb(ish)' gets executed just after __tlbi()
+> and __tlbi_user(), because __flush_tlb_page_nosync() is an inline function.
+>
+> #define __TLBI_0(op, arg) asm (ARM64_ASM_PREAMBLE                              \
+>                                "tlbi " #op "\n"                                \
+>                    ALTERNATIVE("nop\n                   nop",                  \
+>                                "dsb ish\n               tlbi " #op,            \
+>                                ARM64_WORKAROUND_REPEAT_TLBI,                   \
+>                                CONFIG_ARM64_WORKAROUND_REPEAT_TLBI)            \
+>                             : : )
+>
+> #define __TLBI_1(op, arg) asm (ARM64_ASM_PREAMBLE                              \
+>                                "tlbi " #op ", %0\n"                            \
+>                    ALTERNATIVE("nop\n                   nop",                  \
+>                                "dsb ish\n               tlbi " #op ", %0",     \
+>                                ARM64_WORKAROUND_REPEAT_TLBI,                   \
+>                                CONFIG_ARM64_WORKAROUND_REPEAT_TLBI)            \
+>                             : : "r" (arg))
+>
+> #define __TLBI_N(op, arg, n, ...) __TLBI_##n(op, arg)
+>
+> #define __tlbi(op, ...)         __TLBI_N(op, ##__VA_ARGS__, 1, 0)
+>
+> #define __tlbi_user(op, arg) do {                                               \
+>         if (arm64_kernel_unmapped_at_el0())                                     \
+>                 __tlbi(op, (arg) | USER_ASID_FLAG);                             \
+> } while (0)
+>
+> There is already a 'dsb(ish)' in between two subsequent TLB operations in
+> case ARM64_WORKAROUND_REPEAT_TLBI is detected on the system. Hence I guess
+> deferral should not enabled on such systems ?
+>
+> But with deferral enabled, 'dsb(ish)' will be executed in arch_tlbbatch_flush()
+> via try_to_unmap_flush[_dirty](). There might be random number of instructions
+> in between __tlbi()/__tlbi_user() i.e 'tlbi' instructions and final 'dsb(ish)'.
+> Just wondering, if such 'detached in time with other instructions in between'
+> 'tlbi' and 'dsb(ish)', is architecturally valid ?
+
+yes. I think so, arm64 even depends on the implicit dsb in context switch.
+
+>
+> There is a comment in 'struct tlbflush_unmap_batch'.
+>
+>         /*
+>          * The arch code makes the following promise: generic code can modify a
+>          * PTE, then call arch_tlbbatch_add_mm() (which internally provides all
+>          * needed barriers), then call arch_tlbbatch_flush(), and the entries
+>          * will be flushed on all CPUs by the time that arch_tlbbatch_flush()
+>          * returns.
+>          */
+>
+>
+> It expects arch_tlbbatch_add_mm() to provide all barriers, hence wondering if
+> that would include just the first 'dsb(isht)' not the subsequent 'dsb(ish)' ?
+
+yes. include/asm/tlbflush.h, we see the below comments:
+
+ *      TLB Invalidation
+ *      ================
+ *
+ *      This header file implements the low-level TLB invalidation routines
+ *      (sometimes referred to as "flushing" in the kernel) for arm64.
+ *
+ *      Every invalidation operation uses the following template:
+ *
+ *      DSB ISHST       // Ensure prior page-table updates have completed
+ *      TLBI ...        // Invalidate the TLB
+ *      DSB ISH         // Ensure the TLB invalidation has completed
+ *      if (invalidated kernel mappings)
+ *              ISB     // Discard any instructions fetched from the old mapping
+ *
+
+Clearly dsb(ishst) has ensured page-table updates are visible to all CPUs.
+
+Thanks
+Barry
