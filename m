@@ -2,119 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862A65BCC37
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058E25BCC3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiISMx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S230292AbiISMy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiISMx4 (ORCPT
+        with ESMTP id S230260AbiISMyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:53:56 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC2628E2E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:53:54 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id f14so45807262lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/PlsYiCrYWE3bNlljtDybc2jsSxBRlcBGhvAcXnx76o=;
-        b=Wk54QdhT+uSI4NX9O4XjfgrXNbvDSX3QfnsKmAGKZ0PyeLslUzyqRd4mc0P++8LjIc
-         GAJ3ldbBLjMls6DnSYrtn2AiRrCuFwMiT0ztv3MsDsny94NsfHJTdkPi5CcqXOOZNwkf
-         gGOmpVG1mE6Po+sfBtq6TWVCWjWNCYBfzzrisc9vJ3DCs9X7EXylEW8ALQhIry3BiLvW
-         H78GKd8ZJSGIohupvx/4t9ZxFMmS4I8LOyJq0sQth5jXsNVcHdYJ7ckS8Grt4SNPVge0
-         cI49XIJwPq7JmdPleAJtbyP6W50xvZtw2/05xFOsCPNTifIO6dMSBQckncu6o4G0KuJ+
-         CH2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/PlsYiCrYWE3bNlljtDybc2jsSxBRlcBGhvAcXnx76o=;
-        b=BC/pUycWHZyH5Xg3vl79gFX8LrFXeFM73mHoxXKVdPVqJ/iACcC925El552FFFZD2q
-         96zLODrpUuHwkuXGXjbnhxajKFX/Ik6nTnO9xQnwS095nDM6NS2psIYxmMbVvSbA+Kt9
-         L6Itt7ihu+g73VW3540yymi94W7ors2TMkWh4PlZnt+47iACQmrVu5lY5bLW0fSw+Y+H
-         2PVLhAcykcSrtGlDKazypbNwVhJ7GBBnDVv/Z72s2XVqHb3iI29UtL0nCSvPWZUQJXpF
-         wr5irdWl9ZAyNTsq2OKtUD8CyjJwmwbgX/2gWuokkVhXfOKqNunTwlPW8fQLPn778xbK
-         qDGA==
-X-Gm-Message-State: ACrzQf28SYWzS/plko54qClBwm5T453t0BuYPHL2S/EpnPJ1Lo3qndsD
-        W2q8SOXsm1O3PxBI638Vg0DIEg==
-X-Google-Smtp-Source: AMsMyM6A5zURCyKZYmCY6ziuosivrysIUKdXrEILh2PowSWcOxVqYOZKG4R6OmzpKJ7ip8fTg8HDug==
-X-Received: by 2002:a05:6512:1094:b0:498:f9ed:71 with SMTP id j20-20020a056512109400b00498f9ed0071mr7093535lfg.556.1663592033056;
-        Mon, 19 Sep 2022 05:53:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h1-20020a0565123c8100b004979e231fafsm5165669lfv.38.2022.09.19.05.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 05:53:52 -0700 (PDT)
-Message-ID: <6499fa0e-3e07-85b4-0800-849db7c2593b@linaro.org>
-Date:   Mon, 19 Sep 2022 14:53:51 +0200
+        Mon, 19 Sep 2022 08:54:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3887A63DB;
+        Mon, 19 Sep 2022 05:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663592084; x=1695128084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pDHnGJ052zacw3HgtgxHVNxxjkrdU96eZo13SUq3dME=;
+  b=1fHsX7qn9jIWPGGh9Bas8aNslwoTagQug/hmLl/DjVg3QECrf+19XckD
+   XK3HgO/pEnoZcgpl8kZ0aaXWxKWmvaZPpHBVNq4hV29+3O3eHuhG1/R0l
+   +C9JnOmhxUgObTfFGs0ExQZZUyCr04hLUsR3s3sbk+ay0+7OTK11C32vq
+   H/zIGnw41BsZmRJV5v/cdcxpqGCHNY4F5s1FZz+RJPO7QfzuopXA7QBnz
+   X4evwUGlV3NOU83M0Z+/od5z3vnhGf+bs9L/L20hW6lRzPCb20Wmtq/XI
+   zBKzlRfc10zpExJWigyr4ANGDyR3m4iGg+dOzWgEXwX7Mdwp4piHKezMK
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="114339675"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Sep 2022 05:54:30 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 19 Sep 2022 05:54:17 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 19 Sep 2022 05:54:16 -0700
+Date:   Mon, 19 Sep 2022 13:53:56 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
+Message-ID: <YyhmZBmfJvJ9/vBg@wendy>
+References: <20220824091215.141577-1-conor.dooley@microchip.com>
+ <20220824091215.141577-4-conor.dooley@microchip.com>
+ <20220915072152.y346csakn7wetpz5@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V2 1/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,resume-hs-terminations' quirk
-Content-Language: en-US
-To:     Piyush Mehta <piyush.mehta@amd.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        balbi@kernel.org, linux-usb@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        git@amd.com, michal.simek@amd.com,
-        siva.durga.prasad.paladugu@amd.com,
-        Piyush Mehta <piyush.mehta@xilinx.com>
-References: <20220919104816.4075019-1-piyush.mehta@amd.com>
- <20220919104816.4075019-2-piyush.mehta@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919104816.4075019-2-piyush.mehta@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220915072152.y346csakn7wetpz5@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 12:48, Piyush Mehta wrote:
-> From: Piyush Mehta <piyush.mehta@xilinx.com>
+Hey Uwe,
+Thanks (as always). I've switched up my email setup a bit so I hope
+that I've not mangled anything here.
+
+On Thu, Sep 15, 2022 at 09:21:52AM +0200, Uwe Kleine-König wrote:
+> Hello,
 > 
-> Add a new 'snps,resume-hs-terminations' DT quirk to dwc3 core to resolved
-> issue of CRC failed error.
+> On Wed, Aug 24, 2022 at 10:12:14AM +0100, Conor Dooley wrote:
+> > Add a driver that supports the Microchip FPGA "soft" PWM IP core.
+> > 
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  drivers/pwm/Kconfig              |  10 +
+> >  drivers/pwm/Makefile             |   1 +
+> >  drivers/pwm/pwm-microchip-core.c | 402 +++++++++++++++++++++++++++++++
+> >  3 files changed, 413 insertions(+)
+> >  create mode 100644 drivers/pwm/pwm-microchip-core.c
+> > 
+
+> > +static int mchp_core_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> > +			       const struct pwm_state *state)
+> > +{
+> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
+> > +	struct pwm_state current_state = pwm->state;
+> > +	bool period_locked;
+> > +	u64 duty_steps;
+> > +	u16 prescale;
+> > +	u8 period_steps;
+> > +	int ret;
+> > +
+> > +	mutex_lock(&mchp_core_pwm->lock);
+> > +
+> > +	if (!state->enabled) {
+> > +		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
+> > +		mutex_unlock(&mchp_core_pwm->lock);
+> > +		return 0;
+> > +	}
+> > +
+> > +	/*
+> > +	 * If the only thing that has changed is the duty cycle or the polarity,
+> > +	 * we can shortcut the calculations and just compute/apply the new duty
+> > +	 * cycle pos & neg edges
+> > +	 * As all the channels share the same period, do not allow it to be
+> > +	 * changed if any other channels are enabled.
+> > +	 * If the period is locked, it may not be possible to use a period
+> > +	 * less than that requested. In that case, we just abort.
+> > +	 */
+> > +	period_locked = mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpwm);
+> > +
+> > +	if (period_locked) {
+> > +		u16 hw_prescale;
+> > +		u8 hw_period_steps;
+> > +
+> > +		mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
 > 
-> On the resume path, U3/U2 exit controller fails to send proper CRC checksum
-> in CRC5 field. As result Transaction Error is generated. Enabling bit 10 of
-> GUCTL1 will correct this problem.
+> Huh, if (u8 *)&prescale works depends on endianness.
+
+Big endian? What's that? ;)
+I think the cast can just be dropped and the u16 used directly instead.
+
 > 
-> When this bit is set to '1', the UTMI/ULPI opmode will be changed to
-> "normal" along with HS terminations and term/xcvr select signals after EOR.
-> This option is to support certain legacy UTMI/ULPI PHYs.
+> > +		hw_prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
+> > +		hw_period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
+> > +
+> > +		if ((period_steps + 1) * (prescale + 1) <
+> > +		    (hw_period_steps + 1) * (hw_prescale + 1)) {
+> > +			mutex_unlock(&mchp_core_pwm->lock);
+> > +			return -EINVAL;
+> > +		}
+> > +
+> > +		/*
+> > +		 * It is possible that something could have set the period_steps
 > 
-> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> My German feel for the English language says s/could have/has/
 
-Only one SoB is needed for one person. For example switch to amd.com
-(with ownership of commit) or skip second SoB.
+What I wrote is _fine_ but the could is redudant given the possible.
+I'll change it over.
 
-> ---
-> Changes in V2:
-> - Addressed Krzysztof Kozlowski review comments
->  - Update the quirk name and No underscores in properties.
->  - Modified the quirk description. 
-> Link: https://lore.kernel.org/all/e15168ac-b5a1-0c15-cfb3-34fb518e737f@linaro.org/
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > +		 * register to 0xff, which would prevent us from setting a 100%
+> 
+> For my understanding: It would also prevent a 0% relative duty, right?
+
+Yeah, I guess the comment could reflect that.
+
+> 
+> > +		 * duty cycle, as explained in the mchp_core_pwm_calc_period()
+> 
+> s/duty/relative duty/; s/the //
+> 
+> > +		 * above.
+> > +		 * The period is locked and we cannot change this, so we abort.
+> > +		 */
+> > +		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
+> 
+> Don't you need to check hw_period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX
+> here?
+
+D'oh.
+
+> 
+> > +			mutex_unlock(&mchp_core_pwm->lock);
+> > +			return -EINVAL;
+> > +		}
+> > +
+> > +		prescale = hw_prescale;
+> > +		period_steps = hw_period_steps;
+> > +	} else if (!current_state.enabled || current_state.period != state->period) {
+> > +		ret = mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
+> 
+> ret is only used in this block, so the declaration can go into here,
+> too.
+> 
+> > +		if (ret) {
+> > +			mutex_unlock(&mchp_core_pwm->lock);
+> > +			return ret;
+> > +		}
+> > +		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
+> > +	} else {
+> > +		prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
+> > +		period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
+> > +		/*
+> > +		 * As above, it is possible that something could have set the
+> > +		 * period_steps register to 0xff, which would prevent us from
+> > +		 * setting a 100% duty cycle, as explained above.
+> > +		 * As the period is not locked, we are free to fix this.
+> > +		 */
+> 
+> Are you sure this is safe? I think it isn't. Consider:
+> 
+> 	pwm_apply_state(mypwm, { .duty = 0, .period = A, .enabled = true, });
+> 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = false, });
+> 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = true, });
+> 
+> Then you have in the third call prescale and period_steps still
+> corresponding to A because you didn't update these registers in the 2nd
+> call as you exited early.
+
+Riiight. I think I am a little confused here - this comment does not
+refer to my comment but rather to the whole logic I have?
+
+As in, what you're concerned about is the early exit if the state is
+disabled & that I take the values in the hardware as accurate?
+
+What makes sense to me to do here (assuming I understood correctly)
+is to compare state->period against what is in the hardare rather than
+against what the pwm core thinks?
+Or else I could stop exiting early if the pwm is to be disabled &
+instead allow the period and duty to be set so that the state of the
+hardware is as close to the pwm core's representation of it as possible.
+
+Keeping the core's interpretation as close to correct as possible seems
+like a good idea to me - my only concern is that the apply() will fail.
+But if I have read & understand the core code correctly, the core will
+not update pwm->state from {.duty = 0, .period = A, .enabled = true}
+if callying apply with {.duty = 0, .period = B, .enabled = false}
+fails?
+
+> 
+> > +		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
+> > +			period_steps -= 1;
+> > +			mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
+> > +		}
+> > +	}
+> > +
+> > +	duty_steps = mchp_core_pwm_calc_duty(chip, pwm, state, prescale, period_steps);
+> > +
+> > +	/*
+> > +	 * Because the period is per channel, it is possible that the requested
+> > +	 * duty cycle is longer than the period, in which case cap it to the
+> > +	 * period, IOW a 100% duty cycle.
+> > +	 */
+> > +	if (duty_steps > period_steps)
+> > +		duty_steps = period_steps + 1;
+> > +
+> > +	mchp_core_pwm_apply_duty(chip, pwm, state, duty_steps, period_steps);
+> > +
+> > +	mchp_core_pwm_enable(chip, pwm, true, state->period);
+> > +
+> > +	mutex_unlock(&mchp_core_pwm->lock);
+> > +
+> > +	return 0;
+ 
+> Locking could be a bit simplified by doing:
+ 
+> The diffstat is negative, so maybe that's subjective.
+
+Much simplier at the cost of 4 lines sounds objective to me!
+ 
+> > +}
+> > +
+> > +static void mchp_core_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
+> > +				    struct pwm_state *state)
+> > +{
+> > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
+> > +	u16 prescale;
+> > +	u8 period_steps, duty_steps, posedge, negedge;
+> > +
+> > +	mutex_lock(&mchp_core_pwm->lock);
+> > +
+> > +	if (mchp_core_pwm->channel_enabled & (1 << pwm->hwpwm))
+> > +		state->enabled = true;
+> > +	else
+> > +		state->enabled = false;
+> > +
+> > +	prescale = PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE));
+> > +
+> > +	period_steps = PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD));
+> > +	state->period = period_steps * prescale * NSEC_PER_SEC;
+> 
+> This is broken on 32 bit archs (here: arm):
+> 
+> $ cat test.c
+> #include <inttypes.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> 
+> int main(int argc, char *argv[])
+> {
+> 	uint8_t period_steps = atoi(argv[1]);
+> 	uint16_t prescale = atoi(argv[2]);
+> 	uint64_t period;
+> 
+> 	period = period_steps * prescale * 1000000000L;
+> 
+> 	printf("period_steps = %" PRIu8 "\n", period_steps);
+> 	printf("prescale = %" PRIu16 "\n", prescale);
+> 	printf("period = %" PRIu64 "\n", period);
+> 
+> 	return 0;
+> }
+> 
+> $ make test
+> cc     test.c   -o test
+> 
+> $ ./test 255 65535
+> period_steps = 255
+> prescale = 65535
+> period = 18446744073018591744
+> 
+> The problem is that the result of 16711425 * 1000000000L isn't affected
+> by the type of period and so it's promoted to L which isn't big enough
+> to hold 16711425000000000 where longs are only 32 bit wide.
+
+I don't think this is ever going to be hit in the wild, since prescale
+comes from the hardware where it is limited to 255 - but preventing the
+issue seems trivially done by splitting the multiplication so no reason
+not to. Thanks for providing the test program btw :)
+
+> 
+> > +	state->period = DIV64_U64_ROUND_UP(state->period, clk_get_rate(mchp_core_pwm->clk));
+> > +
+> > +	posedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_POSEDGE(pwm->hwpwm));
+> > +	negedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE(pwm->hwpwm));
+> > +
+> > +	if ((negedge == posedge) && state->enabled) {
+> 
+> Why do you need that state->enabled?
+
+Because I was running into conflicts between the reporting here and some
+of the checks that I have added to prevent the PWM being put into an
+invalid state. On boot both negedge and posedge will be zero & this was
+preventing me from setting the period at all.
+
+> 
+> > +		state->duty_cycle = state->period;
+> > +		state->period *= 2;
+> > +	} else {
+> > +		duty_steps = abs((s16)posedge - (s16)negedge);
+> > +		state->duty_cycle = duty_steps * prescale * NSEC_PER_SEC;
+> > +		state->duty_cycle = DIV64_U64_ROUND_UP(state->duty_cycle,
+> > +						       clk_get_rate(mchp_core_pwm->clk));
+> 
+> Micro optimisation: Call clk_get_rate() only once.
+> 
+> > +	}
+> > +
+> > +	state->polarity = negedge < posedge ? PWM_POLARITY_INVERSED : PWM_POLARITY_NORMAL;
+> > +
+> > +	mutex_unlock(&mchp_core_pwm->lock);
+> 
+> You could release the lock a bit earlier.
 > 
 
+Sure, I'll move it after the last register access.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+Conor.
 
 
-Best regards,
-Krzysztof
