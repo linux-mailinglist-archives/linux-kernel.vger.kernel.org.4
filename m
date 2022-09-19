@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43D75BC806
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB735BC98C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiISKUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 06:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S229836AbiISK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 06:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiISKRU (ORCPT
+        with ESMTP id S231497AbiISKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:17:20 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22331EC5D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:17:17 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a3so34123563lfk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=XOtH2ITlshpecI6bnBjoAK2o/4UpsZgaomPe58WTFa0=;
-        b=GwFABzsbegV66LxbaPP4YDrsxec94wyru8Hz9FS4rgvjS8oOOS858m8qxYp3aMSxnC
-         VCu+vHzF3xlEnnlwmtjkWjY+lrkVKYGVwBVDLgqBVoYi/xwkMUf5+tHzj7F4Ecx8Kx4v
-         H1l9byIZ3wYm6YoXcvgkDLoPJr6kia7fdUOpXgKWjcUJgUfCJuNwGHQOwTfkTKz977CJ
-         PH6G8IeN8iIZ9pkSFILb/BrGWyPv2dhyMr7raDJztLo+oUeIGgN9hzmESOwJHfO9116S
-         Cmm3gwS1dlFMYQAvHt0/97W73qQ6md0kHnBaE6ezK2NFV519DV1U53TwBkEfsFz9IT/T
-         FAYQ==
+        Mon, 19 Sep 2022 06:20:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8F02656D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663582696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YOTFQL5o5jEs+7jz+YoectNCuvyj33bVFuVLnBFO+1g=;
+        b=azxceoLcfn5HwKDym5l4D8e4WrNvy+2kodEktAzKmaclBObQCtmEerxguPaFEUCizQ/nbH
+        bXiKBK1OfEKdxNgN2yvqxJUH2b+OSqyST3ikVuK556tkonmxjXV8LmwynFx/kBpWa9hDKw
+        v8CjAsDOyUUR0045pKmLWK6W0kM2AEs=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-265-tu2EifqwPQ6jw7edLgupoA-1; Mon, 19 Sep 2022 06:18:13 -0400
+X-MC-Unique: tu2EifqwPQ6jw7edLgupoA-1
+Received: by mail-ej1-f72.google.com with SMTP id qw34-20020a1709066a2200b0077e0e8a55b4so8273507ejc.21
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:18:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XOtH2ITlshpecI6bnBjoAK2o/4UpsZgaomPe58WTFa0=;
-        b=BxzL7XGxAk9T2baiVjQRZ/VzEpJiC0K5aq+kUr59cpdtKDEABdctq26x+GRv2KmnTg
-         myLsXHjqmNS0pCujJy+0aKo261GnSfz7FqbNwhgj3MlRvv51svTvnspqjRuhUKm4Kq0Y
-         d/oTK2qzoqGue8blUm5AA4JUkSG0H+jZfaW5wRez9l2jUVJnAvRyAaCcklavkNu36V9K
-         BSjP22DzN2hSg9MAsz19dljqZRscDzbGXJUZOBLvxmz2JbZ59mqtWdDp3Sk8c6ixT/Hn
-         qR7lNFYIVZTiDYH0XwNQSR3tFHdSLwysG/FtLBRhJmjuW5F3dATz+r7IrpbFn6o1JwUV
-         VQ8w==
-X-Gm-Message-State: ACrzQf3LMH9qzRWK6wj3GFauXn/eFGAdlEoKG5ZnCDXTvbQNbVNaenxj
-        gbDm/Ck1rNnHpPN0h8zg1U61kA==
-X-Google-Smtp-Source: AMsMyM6c/cgEmUbMwNS+ktAG5NYNyqQf7jmXokYFYJBjSFcX8SUSKTqHBQ0nwJnCUhV0rlKmUK8rUw==
-X-Received: by 2002:a05:6512:1283:b0:499:d0a3:3ca8 with SMTP id u3-20020a056512128300b00499d0a33ca8mr5781548lfs.665.1663582636171;
-        Mon, 19 Sep 2022 03:17:16 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o20-20020ac24bd4000000b0049c29292250sm3847835lfq.149.2022.09.19.03.17.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 03:17:15 -0700 (PDT)
-Message-ID: <31028736-ba81-122e-b630-b66e9d9d491a@linaro.org>
-Date:   Mon, 19 Sep 2022 12:17:14 +0200
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=YOTFQL5o5jEs+7jz+YoectNCuvyj33bVFuVLnBFO+1g=;
+        b=dJJkgDIRG60RtMn2Zv82Me8MR3aTQbFwWDBJ3r7gqza5IVEp2sBZr3fbPK3L1uRsTz
+         rSAVkcn4/mdoTgIn/2bA64/XdigfKKdDRA1dfqSrAqKwlPa6LPxyAcUI7u7jPiQ9Dfhx
+         jNJ1yyc9OclIP4FaU5IuQAwQGvqyfoInzF/kxPFB2WP+X5v7HalQI9TG0wAe2UZTVvcn
+         WFmiatWYGPGM0+7tWvqz7B43en+kzw2qFGBuVuv1XqVcMSy5SW5XNK1sS1zyy8SNIvRP
+         +XryIrjsmJGe/FNpSJKe0YgqGel+7SN356xeFvOW+p+rq0Yg6D0ggHybeqs9+Ch3o7gF
+         eRQg==
+X-Gm-Message-State: ACrzQf3SGTnoVwrQ4jINwqeBF+0s1+2PAbIwfr2AO78gKrIYtPjKdzIC
+        ukLzRHwoEqsN8pBqb2lVU6y2HOWbkERqMfUmZG99jyjpf3WrT6dQ/PIJQAsYP0U/3lU3aV8VtvY
+        ipAZ+pVn2Esrv26jHOu/kjeR5
+X-Received: by 2002:a17:907:97cd:b0:780:6829:cb9d with SMTP id js13-20020a17090797cd00b007806829cb9dmr12454924ejc.344.1663582692264;
+        Mon, 19 Sep 2022 03:18:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Qj8IpM8UAQyvhXFI9wneRh9xZguxnRaXxgDoIO9Siz4AB7fJxQt+dATnRn5Hgl0uT1QLKCw==
+X-Received: by 2002:a17:907:97cd:b0:780:6829:cb9d with SMTP id js13-20020a17090797cd00b007806829cb9dmr12454906ejc.344.1663582691962;
+        Mon, 19 Sep 2022 03:18:11 -0700 (PDT)
+Received: from [10.39.192.161] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id e10-20020a1709062c0a00b0073d638a7a89sm15454862ejh.99.2022.09.19.03.18.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Sep 2022 03:18:11 -0700 (PDT)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     wangchuanlei <wangchuanlei@inspur.com>
+Cc:     pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, dev@openvswitch.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [ovs-dev] [PATCH] [PATCH 1/2] openvswitch: Add support to count
+ upall packets
+Date:   Mon, 19 Sep 2022 12:18:10 +0200
+X-Mailer: MailMate (1.14r5915)
+Message-ID: <4B4708B6-C411-4AAF-B141-5D0C275483F4@redhat.com>
+In-Reply-To: <20220914121459.1384093-1-wangchuanlei@inspur.com>
+References: <20220914121459.1384093-1-wangchuanlei@inspur.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/6] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J721e
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     lee.jones@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, dan.carpenter@oracle.com,
-        grygorii.strashko@ti.com, rogerq@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sjakhade@cadence.com
-References: <20220914093911.187764-1-s-vadapalli@ti.com>
- <20220914093911.187764-2-s-vadapalli@ti.com>
- <20220914161527.GA2269201-robh@kernel.org>
- <d48e5ef4-6d5b-0977-ed45-de810e42356c@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d48e5ef4-6d5b-0977-ed45-de810e42356c@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,49 +81,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/09/2022 07:28, Siddharth Vadapalli wrote:
->>> @@ -65,12 +66,19 @@ properties:
->>>      description: |
->>>        Required only for QSGMII mode. Array to select the port for
->>>        QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
->>> -      ports automatically. Any one of the 4 CPSW5G ports can act as the
->>> -      main port with the rest of them being the QSGMII_SUB ports.
->>> -    maxItems: 1
->>> -    items:
->>> -      minimum: 1
->>> -      maximum: 4
->>> +      ports automatically. For J7200 CPSW5G with the compatible:
->>> +      ti,j7200-cpsw5g-phy-gmii-sel, ti,qsgmii-main-ports is an
->>> +      array of only one element, which is the port number ranging from
->>> +      1 to 4. For J721e CPSW9G with the compatible:
->>> +      ti,j721e-cpsw9g-phy-gmii-sel, ti,qsgmii-main-ports is an array
->>> +      of two elements, which corresponds to two potential QSGMII main
->>> +      ports. The first element and second element of the array can both
->>> +      range from 1 to 8 each, corresponding to two QSGMII main ports.
->>> +      For J721e CPSW9G, to configure port 2 as the first QSGMII main
->>> +      port and port 7 as the second QSGMII main port, we specify:
->>> +      ti,qsgmii-main-ports = <2>, <7>;
->>> +      If only one QSGMII main port is desired, mention the same main
->>> +      port twice.
->>
->> Two different forms for the same property name is not great. Just make a 
->> new property if you need something different.
-> 
-> Thank you for reviewing the patch. Based on the discussion for the
-> previous series at [1], I had planned to reuse the same property
-> "ti,qsgmii-main-ports" for TI's J721e device too. The reason for this is
-> that the property represents the same feature on both devices which is
-> that of the QSGMII main port. The only difference between the two of
-> them is that J7200's CPSW5G has 4 external ports while J721e's CPSW9G
-> has 8 external ports. Thus, J7200 can have at most one QSGMII main port
-> while J721e can have up to two. Adding a new property which describes
-> the same feature appears to be redundant to me. Please let me know.
-> 
-
-The trouble is that you wrote the description like it were two different
-properties (for xx this is one element, for yy this is something else).
-You need to describe the property in unified way.
 
 
-Best regards,
-Krzysztof
+On 14 Sep 2022, at 14:14, wangchuanlei wrote:
+
+> Add support to count upcall packets on every interface.
+> I always encounter high cpu use of ovs-vswictchd, this
+> help to check which interface send too many packets
+> without open vlog/set switch, and have no influence
+> on datapath.
+
+Hi,
+
+I did not do a full review, but I think we should not try to make the sam=
+e mistake as before and embed a structure inside a netlink message.
+
+You are adding =E2=80=9Cstruct ovs_vport_upcall_stats=E2=80=9D but in the=
+ory, you could have just added the new entry to =E2=80=9Covs_vport_stats=E2=
+=80=9D. But this is breaking userspace as it expects an exact structure s=
+ize :(
+
+So I think the right approach would be to have =E2=80=9COVS_VPORT_ATTR_UP=
+CALL_STATS=E2=80=9D be an NLA_NESTED type, and have individual stat attri=
+butes as NLA_U64 (or whatever type you need).
+
+What is also confusing is that you use upcall_packets in ovs_vport_upcall=
+_stats, which to me are the total of up calls, but you called it n_missed=
+ in your stats. I think you should try to avoid missed in the upcall path=
+, and just call it n_upcall_packets also.
+
+In addition, I think you should keep two types of statics, and make them =
+available, namely the total number of upcalls and the total of upcall fai=
+lures.
+
+Cheers,
+
+Eelco
+
+> Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
+> ---
+>  include/uapi/linux/openvswitch.h |  5 ++++
+>  net/openvswitch/datapath.c       | 45 ++++++++++++++++++++++++++++++++=
+
+>  net/openvswitch/datapath.h       | 10 +++++++
+>  net/openvswitch/vport.c          | 31 ++++++++++++++++++++++
+>  net/openvswitch/vport.h          |  4 +++
+>  5 files changed, 95 insertions(+)
+>
+> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/open=
+vswitch.h
+> index 94066f87e9ee..8ec45511bc41 100644
+> --- a/include/uapi/linux/openvswitch.h
+> +++ b/include/uapi/linux/openvswitch.h
+> @@ -126,6 +126,10 @@ struct ovs_vport_stats {
+>  	__u64   tx_dropped;		/* no space available in linux  */
+>  };
+>
+> +struct ovs_vport_upcall_stats {
+> +	__u64   upcall_packets;             /* total packets upcalls */
+> +};
+> +
+>  /* Allow last Netlink attribute to be unaligned */
+>  #define OVS_DP_F_UNALIGNED	(1 << 0)
+>
+> @@ -277,6 +281,7 @@ enum ovs_vport_attr {
+>  	OVS_VPORT_ATTR_PAD,
+>  	OVS_VPORT_ATTR_IFINDEX,
+>  	OVS_VPORT_ATTR_NETNSID,
+> +	OVS_VPORT_ATTR_UPCALL_STATS, /* struct ovs_vport_upcall_stats */
+>  	__OVS_VPORT_ATTR_MAX
+>  };
+>
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> index c8a9075ddd0a..f4e1f67dc57a 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+> @@ -209,6 +209,23 @@ static struct vport *new_vport(const struct vport_=
+parms *parms)
+>  	return vport;
+>  }
+>
+> +static void ovs_vport_upcalls(struct sk_buff *skb,
+> +			      const struct dp_upcall_info *upcall_info)
+> +{
+> +	if (upcall_info->cmd =3D=3D OVS_PACKET_CMD_MISS ||
+> +	    upcall_info->cmd =3D=3D OVS_PACKET_CMD_ACTION) {
+> +		const struct vport *p =3D OVS_CB(skb)->input_vport;
+> +		struct vport_upcall_stats_percpu *vport_stats;
+> +		u64 *stats_counter_upcall;
+> +
+> +		vport_stats =3D this_cpu_ptr(p->vport_upcall_stats_percpu);
+> +		stats_counter_upcall =3D &vport_stats->n_missed;
+> +		u64_stats_update_begin(&vport_stats->syncp);
+> +		(*stats_counter_upcall)++;
+> +		u64_stats_update_end(&vport_stats->syncp);
+> +	}
+> +}
+> +
+>  void ovs_dp_detach_port(struct vport *p)
+>  {
+>  	ASSERT_OVSL();
+> @@ -216,6 +233,9 @@ void ovs_dp_detach_port(struct vport *p)
+>  	/* First drop references to device. */
+>  	hlist_del_rcu(&p->dp_hash_node);
+>
+> +	/* Free percpu memory */
+> +	free_percpu(p->vport_upcall_stats_percpu);
+> +
+>  	/* Then destroy it. */
+>  	ovs_vport_del(p);
+>  }
+> @@ -308,6 +328,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_bu=
+ff *skb,
+>  	if (err)
+>  		goto err;
+>
+> +	ovs_vport_upcalls(skb, upcall_info);
+> +
+>  	return 0;
+>
+>  err:
+> @@ -1825,6 +1847,13 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, s=
+truct genl_info *info)
+>  		goto err_destroy_portids;
+>  	}
+>
+> +	vport->vport_upcall_stats_percpu =3D
+> +				netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+> +	if (!vport->vport_upcall_stats_percpu) {
+> +		err =3D -ENOMEM;
+> +		goto err_destroy_portids;
+> +	}
+> +
+>  	err =3D ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+>  				   info->snd_seq, 0, OVS_DP_CMD_NEW);
+>  	BUG_ON(err < 0);
+> @@ -2068,6 +2097,7 @@ static int ovs_vport_cmd_fill_info(struct vport *=
+vport, struct sk_buff *skb,
+>  {
+>  	struct ovs_header *ovs_header;
+>  	struct ovs_vport_stats vport_stats;
+> +	struct ovs_vport_upcall_stats vport_upcall_stats;
+>  	int err;
+>
+>  	ovs_header =3D genlmsg_put(skb, portid, seq, &dp_vport_genl_family,
+> @@ -2097,6 +2127,13 @@ static int ovs_vport_cmd_fill_info(struct vport =
+*vport, struct sk_buff *skb,
+>  			  OVS_VPORT_ATTR_PAD))
+>  		goto nla_put_failure;
+>
+> +	ovs_vport_get_upcall_stats(vport, &vport_upcall_stats);
+> +	if (nla_put_64bit(skb, OVS_VPORT_ATTR_UPCALL_STATS,
+> +			  sizeof(struct ovs_vport_upcall_stats),
+> +			  &vport_upcall_stats,
+> +			  OVS_VPORT_ATTR_PAD))
+> +		goto nla_put_failure;
+> +
+>  	if (ovs_vport_get_upcall_portids(vport, skb))
+>  		goto nla_put_failure;
+>
+> @@ -2278,6 +2315,14 @@ static int ovs_vport_cmd_new(struct sk_buff *skb=
+, struct genl_info *info)
+>  		goto exit_unlock_free;
+>  	}
+>
+> +	vport->vport_upcall_stats_percpu =3D
+> +		netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+> +
+> +	if (!vport->vport_upcall_stats_percpu) {
+> +		err =3D -ENOMEM;
+> +		goto exit_unlock_free;
+> +	}
+> +
+>  	err =3D ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
+>  				      info->snd_portid, info->snd_seq, 0,
+>  				      OVS_VPORT_CMD_NEW, GFP_KERNEL);
+> diff --git a/net/openvswitch/datapath.h b/net/openvswitch/datapath.h
+> index 0cd29971a907..57fc002142a3 100644
+> --- a/net/openvswitch/datapath.h
+> +++ b/net/openvswitch/datapath.h
+> @@ -50,6 +50,16 @@ struct dp_stats_percpu {
+>  	struct u64_stats_sync syncp;
+>  };
+>
+> +/**
+> + * struct vport_upcall_stats_percpu - per-cpu packet upcall statistics=
+ for
+> + * a given vport.
+> + * @n_missed: Number of packets that upcall to userspace.
+> + */
+> +struct vport_upcall_stats_percpu {
+> +	u64 n_missed;
+> +	struct u64_stats_sync syncp;
+> +};
+> +
+>  /**
+>   * struct dp_nlsk_pids - array of netlink portids of for a datapath.
+>   *                       This is used when OVS_DP_F_DISPATCH_UPCALL_PE=
+R_CPU
+> diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
+> index 82a74f998966..c05056f907f0 100644
+> --- a/net/openvswitch/vport.c
+> +++ b/net/openvswitch/vport.c
+> @@ -284,6 +284,37 @@ void ovs_vport_get_stats(struct vport *vport, stru=
+ct ovs_vport_stats *stats)
+>  	stats->tx_packets =3D dev_stats->tx_packets;
+>  }
+>
+> +/**
+> + *	ovs_vport_get_upcall_stats - retrieve upcall stats
+> + *
+> + * @vport: vport from which to retrieve the stats
+> + * @ovs_vport_upcall_stats: location to store stats
+> + *
+> + * Retrieves upcall stats for the given device.
+> + *
+> + * Must be called with ovs_mutex or rcu_read_lock.
+> + */
+> +void ovs_vport_get_upcall_stats(struct vport *vport, struct ovs_vport_=
+upcall_stats *stats)
+> +{
+> +	int i;
+> +
+> +	stats->upcall_packets =3D 0;
+> +
+> +	for_each_possible_cpu(i) {
+> +		const struct vport_upcall_stats_percpu *percpu_upcall_stats;
+> +		struct vport_upcall_stats_percpu local_stats;
+> +		unsigned int start;
+> +
+> +		percpu_upcall_stats =3D per_cpu_ptr(vport->vport_upcall_stats_percpu=
+, i);
+> +		do {
+> +			start =3D u64_stats_fetch_begin_irq(&percpu_upcall_stats->syncp);
+> +			local_stats =3D *percpu_upcall_stats;
+> +		} while (u64_stats_fetch_retry_irq(&percpu_upcall_stats->syncp, star=
+t));
+> +
+> +		stats->upcall_packets +=3D local_stats.n_missed;
+> +	}
+> +}
+> +
+>  /**
+>   *	ovs_vport_get_options - retrieve device options
+>   *
+> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+> index 7d276f60c000..6defacd6d718 100644
+> --- a/net/openvswitch/vport.h
+> +++ b/net/openvswitch/vport.h
+> @@ -32,6 +32,9 @@ struct vport *ovs_vport_locate(const struct net *net,=
+ const char *name);
+>
+>  void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
+>
+> +void ovs_vport_get_upcall_stats(struct vport *vport,
+> +				struct ovs_vport_upcall_stats *stats);
+> +
+>  int ovs_vport_set_options(struct vport *, struct nlattr *options);
+>  int ovs_vport_get_options(const struct vport *, struct sk_buff *);
+>
+> @@ -78,6 +81,7 @@ struct vport {
+>  	struct hlist_node hash_node;
+>  	struct hlist_node dp_hash_node;
+>  	const struct vport_ops *ops;
+> +	struct vport_upcall_stats_percpu __percpu *vport_upcall_stats_percpu;=
+
+>
+>  	struct list_head detach_list;
+>  	struct rcu_head rcu;
+> -- =
+
+> 2.27.0
+>
+> _______________________________________________
+> dev mailing list
+> dev@openvswitch.org
+> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+
