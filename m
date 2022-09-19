@@ -2,192 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6C95BD24C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE55BD254
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiISQhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S230021AbiISQha convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Sep 2022 12:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiISQg6 (ORCPT
+        with ESMTP id S229528AbiISQh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:36:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1C9356E0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663605416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mchxf99lMev1aFGv2K+bOlvQAf7i2XmiTm89Tkqpih0=;
-        b=gBgreRG3trOG0Zhk+CB54bvBYdi/IJwHypUPa6xFYglXsDqTpYZGkbIA6OmaI9SA4abJ67
-        IM5mB+7bsSkcS7G+SWchUiC+rYtjT3oX3PiqyWkKC8X0m42kpGx5pmbG8QFcb++SdfB+lR
-        nHbH1kH8ODe3n/Gmjw3hcVoc+C4slpI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-e-vBbojmMZqRGk6nJlTDWA-1; Mon, 19 Sep 2022 12:36:52 -0400
-X-MC-Unique: e-vBbojmMZqRGk6nJlTDWA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2DC3B811E67;
-        Mon, 19 Sep 2022 16:36:52 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.144])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E3F74207B34A;
-        Mon, 19 Sep 2022 16:36:50 +0000 (UTC)
-Date:   Mon, 19 Sep 2022 12:36:48 -0400
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Gwendal Grignou <gwendal@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Evan Green <evgreen@google.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Daniil Lunev <dlunev@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [dm-devel] [PATCH RFC 0/8] Introduce provisioning primitives for
- thinly provisioned storage
-Message-ID: <YyiaoHcueK9g5KVy@fedora>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <YyU5CyQfS+64xmnm@magnolia>
- <CAG9=OMNPnsjaUw2EUG0XFjV94-V1eD63V+1anoGM=EWKyzXEfg@mail.gmail.com>
+        Mon, 19 Sep 2022 12:37:27 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9A837FB8;
+        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id r20so20281449qtn.12;
+        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=6fQ+1twC0Ji8Gsk3L6i3tph/pC38VH4wEOFGFdDw050=;
+        b=Mmr7bRrel8/ocNZnroABkTKsQvtzI/A+XjVlKf4dB+F4JziCKqx3RYhb+xpvYOWrY4
+         DTJc8O26uemqlYgwZ/dYblrzVdpXamOqBGJMqheWYs0nGZMJRxWZe/8TBcPLDg3/A+1G
+         LR2fRbJaTB6L7+G9R471Jhp59Qs/zT7h+2DKbHusFxGgnJRUJST/vb14DqLZjqSdPRnQ
+         bYen9qJXycNNZ88J+zgxobw+CfCsTWJk7rn0latnKc3GU822GWa1+5x6ssA6RbQjh/qX
+         cZbjl2FzlvB89R1MYGvSEAklM8ALVqi5u2lZHL9+CE9s4O8tagyRZO7xke7X2GjT43Ea
+         m02w==
+X-Gm-Message-State: ACrzQf17fZvKBjdwCqwKUN1Ik2yP/E5SShAYEB9y2FgeWM7c2rWjIskl
+        /zWcoFB3UUmP1G5W+QFKHBQjuCW/kS6r1wo1znA=
+X-Google-Smtp-Source: AMsMyM7blqbSOQF2Eb+/gT/WjwNk4M3+7d9RSV0hwBTX8X90/fo4L+7TFwDreiiSDssZGSjBiZZcyiQJ08xH1VjMZaU=
+X-Received: by 2002:a05:622a:104:b0:35c:cb31:c0d9 with SMTP id
+ u4-20020a05622a010400b0035ccb31c0d9mr15708109qtw.49.1663605445534; Mon, 19
+ Sep 2022 09:37:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FvyRLtY8FNQa7tFK"
-Content-Disposition: inline
-In-Reply-To: <CAG9=OMNPnsjaUw2EUG0XFjV94-V1eD63V+1anoGM=EWKyzXEfg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 19 Sep 2022 18:37:14 +0200
+Message-ID: <CAJZ5v0hC5Tif=nR2CjDcStUp+SZx3v7d7RCykzcYGYDHsNcYsg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] ACPI: unify _UID handling as integer
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mark Brown <broonie@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
+        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Robert Moore <robert.moore@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 13, 2022 at 6:32 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> This series is about unification on how we handle ACPI _UID when
+> it's known to be an integer-in-the-string.
+>
+> The idea of merging either all via ACPI tree, or taking ACPI stuff
+> for the v6.1 while the rest may be picked up later on by respective
+> maintainers separately (currently only perf patch is not tagged).
+>
+> Partially compile-tested (x86-64).
+>
+> Changelog v3:
+> - fixed dev_dbg() specifier to be in align with the variable type (LKP)
+> - made use of temporary dev variable beyond the ACPI scope (LKP)
+> - added tags to I²C patches (Wolfram)
 
---FvyRLtY8FNQa7tFK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've replaced the previous version of this patch series in my tree
+with this one.
 
-On Sat, Sep 17, 2022 at 12:46:33PM -0700, Sarthak Kukreti wrote:
-> On Fri, Sep 16, 2022 at 8:03 PM Darrick J. Wong <djwong@kernel.org> wrote:
-> >
-> > On Thu, Sep 15, 2022 at 09:48:18AM -0700, Sarthak Kukreti wrote:
-> > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > >
-> > > Hi,
-> > >
-> > > This patch series is an RFC of a mechanism to pass through provision
-> > > requests on stacked thinly provisioned storage devices/filesystems.
-> >
-> > [Reflowed text]
-> >
-> > > The linux kernel provides several mechanisms to set up thinly
-> > > provisioned block storage abstractions (eg. dm-thin, loop devices over
-> > > sparse files), either directly as block devices or backing storage for
-> > > filesystems. Currently, short of writing data to either the device or
-> > > filesystem, there is no way for users to pre-allocate space for use in
-> > > such storage setups. Consider the following use-cases:
-> > >
-> > > 1) Suspend-to-disk and resume from a dm-thin device: In order to
-> > > ensure that the underlying thinpool metadata is not modified during
-> > > the suspend mechanism, the dm-thin device needs to be fully
-> > > provisioned.
-> > > 2) If a filesystem uses a loop device over a sparse file, fallocate()
-> > > on the filesystem will allocate blocks for files but the underlying
-> > > sparse file will remain intact.
-> > > 3) Another example is virtual machine using a sparse file/dm-thin as a
-> > > storage device; by default, allocations within the VM boundaries will
-> > > not affect the host.
-> > > 4) Several storage standards support mechanisms for thin provisioning
-> > > on real hardware devices. For example:
-> > >   a. The NVMe spec 1.0b section 2.1.1 loosely talks about thin
-> > >   provisioning: "When the THINP bit in the NSFEAT field of the
-> > >   Identify Namespace data structure is set to =E2=80=981=E2=80=99, th=
-e controller ...
-> > >   shall track the number of allocated blocks in the Namespace
-> > >   Utilization field"
-> > >   b. The SCSi Block Commands reference - 4 section references "Thin
-> > >   provisioned logical units",
-> > >   c. UFS 3.0 spec section 13.3.3 references "Thin provisioning".
-> > >
-> > > In all of the above situations, currently the only way for
-> > > pre-allocating space is to issue writes (or use
-> > > WRITE_ZEROES/WRITE_SAME). However, that does not scale well with
-> > > larger pre-allocation sizes.
-> > >
-> > > This patchset introduces primitives to support block-level
-> > > provisioning (note: the term 'provisioning' is used to prevent
-> > > overloading the term 'allocations/pre-allocations') requests across
-> > > filesystems and block devices. This allows fallocate() and file
-> > > creation requests to reserve space across stacked layers of block
-> > > devices and filesystems. Currently, the patchset covers a prototype on
-> > > the device-mapper targets, loop device and ext4, but the same
-> > > mechanism can be extended to other filesystems/block devices as well
-> > > as extended for use with devices in 4 a-c.
-> >
-> > If you call REQ_OP_PROVISION on an unmapped LBA range of a block device
-> > and then try to read the provisioned blocks, what do you get?  Zeroes?
-> > Random stale disk contents?
-> >
-> > I think I saw elsewhere in the thread that any mapped LBAs within the
-> > provisioning range are left alone (i.e. not zeroed) so I'll proceed on
-> > that basis.
-> >
-> For block devices, I'd say it's definitely possible to get stale data, de=
-pending
-> on the implementation of the allocation layer; for example, with dm-thinp=
-ool,
-> the default setting via using LVM2 tools is to zero out blocks on allocat=
-ion.
-> But that's configurable and can be turned off to improve performance.
->=20
-> Similarly, for actual devices that end up supporting thin provisioning, u=
-nless
-> the specification absolutely mandates that an LBA contains zeroes post
-> allocation, some implementations will definitely miss out on that (probab=
-ly
-> similar to the semantics of discard_zeroes_data today). I'm operating und=
-er
-> the assumption that it's possible to get stale data from LBAs allocated u=
-sing
-> provision requests at the block layer and trying to see if we can create a
-> safe default operating model from that.
+Thanks!
 
-Please explain the semantics of REQ_OP_PROVISION in the
-code/documentation in the next revision.
 
-Thanks,
-Stefan
-
---FvyRLtY8FNQa7tFK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmMomqAACgkQnKSrs4Gr
-c8g4vQf/TYZDC6JT8LCVfsDWkwegZYqhX4pz86cryayWYFUYe3u9UmLPrY/TuE1y
-XQwzM9jsI+LdCcQtLZtvre/JsJB6esC/LGv+FTGOSju2n0FLXTS7v80LujcoHnKE
-7RZ0eliz4XGK/X1Q6rLVgNFhFUcQIM4yYNKsAklXpSApXwgQ5W8mKI7GVqi+rhds
-UynMkkK2XKPIeBVRJg7gNCx4vTnwas+AQ5QCuAoGpRxvTcPmKlP9krCi0owiGZKR
-08ORDLnl4g8uxmkJQoYR6Ep6bnJY4mq9XSeNMYwOEWAd63h3aYO27kxvClgMo0mV
-wb0jbsC1V0Qd8XvrdufP80ym3TVKCg==
-=HyVg
------END PGP SIGNATURE-----
-
---FvyRLtY8FNQa7tFK--
-
+> Changelog v2:
+> - rebased pxa2xx patch to be applied against current Linux kernel code
+> - fixed uninitialized variable adev in use (mlxbf)
+> - dropped unneeded temporary variable adev (qcom_l2_pmu)
+> - changed type for ret in patch 8 (Hans)
+> - swapped conditions to check ret == 0 first (Ard)
+> - added tags (Mark, Ard, Hans)
+>
+> Andy Shevchenko (8):
+>   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
+>     integer
+>   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
+>   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
+>   i2c: amd-mp2-plat: Refactor _UID handling to use
+>     acpi_dev_uid_to_integer()
+>   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
+>   perf: qcom_l2_pmu: Refactor _UID handling to use
+>     acpi_dev_uid_to_integer()
+>   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
+>   efi/dev-path-parser: Refactor _UID handling to use
+>     acpi_dev_uid_to_integer()
+>
+>  drivers/acpi/acpi_lpss.c               | 15 +++++------
+>  drivers/acpi/utils.c                   | 24 +++++++++++++++++
+>  drivers/acpi/x86/utils.c               | 14 +++++++---
+>  drivers/firmware/efi/dev-path-parser.c | 10 ++++---
+>  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++------------
+>  drivers/i2c/busses/i2c-mlxbf.c         | 20 +++++---------
+>  drivers/perf/qcom_l2_pmu.c             | 10 +++----
+>  drivers/spi/spi-pxa2xx.c               | 37 +++++++-------------------
+>  include/acpi/acpi_bus.h                |  1 +
+>  include/linux/acpi.h                   |  5 ++++
+>  10 files changed, 83 insertions(+), 80 deletions(-)
+>
+> --
+> 2.35.1
+>
