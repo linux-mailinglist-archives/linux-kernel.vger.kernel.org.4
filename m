@@ -2,66 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8635BCE4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505445BCE53
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiISOPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S229973AbiISOQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiISOPL (ORCPT
+        with ESMTP id S230047AbiISOP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:15:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E282414D30;
-        Mon, 19 Sep 2022 07:15:09 -0700 (PDT)
-Received: from mercury (dyndsl-091-096-063-043.ewe-ip-backbone.de [91.96.63.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 583CD66019EE;
-        Mon, 19 Sep 2022 15:15:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663596908;
-        bh=DJNFm5ow1ScUS1x0+XRJo/WRHt4yrriLZCg7LYoI/Wo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m77qtZSbn46FLo0nsEmpUwkmjkgWDqjmfTmzlAAn7vuX7QCzR3hs67wIn1O7nCpiF
-         DiwFgcl13ZZzN19cA8bNbxxZrlHbwqRmKKQ1JOMyNP86X0FnPrXR0WIQkRfVgBOp4N
-         IYFUSxgr7TS2fOPrBVhoN1vhwUK92rNNesyTP9hY9UWkWvsQvuepZdl23lSvRLirf3
-         eSuG6b6o46iBHSFe5YMpod9N5mWXn0M/geC30xGLO/scEZKQ3JFq5ixW4YDtww2dmj
-         gIrGhsaV/H2KWFKOkFvgjEIwrLKxRIR1QTlmqaWKCA6U335azkuulzHpeCHn7QnzKZ
-         eXj5AawZX8QBw==
-Received: by mercury (Postfix, from userid 1000)
-        id 1D3E910607CF; Mon, 19 Sep 2022 16:15:06 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 16:15:06 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv3 12/14] regulator: expose regmap_find_closest_bigger
-Message-ID: <20220919141506.mgq42y6k2a7ie5vo@mercury.elektranox.org>
-References: <20220909175522.179175-1-sebastian.reichel@collabora.com>
- <20220909175522.179175-13-sebastian.reichel@collabora.com>
- <CANhJrGMd_4pK0Avbngggs3BJme7WgrkhzvJ+VbL7-JYri37Dow@mail.gmail.com>
+        Mon, 19 Sep 2022 10:15:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F332AB7;
+        Mon, 19 Sep 2022 07:15:54 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JDJuhI000922;
+        Mon, 19 Sep 2022 14:15:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mh4LIgXD3tBMsOyRRz6BbYcbwpt0cZ4i7TH7i2evpOI=;
+ b=AKC8HUDnIH7Rz4+cKdgus3lMnDjeF8EyDNmhLVlMs7iIW4jHwCg5sP8te78xrw3dR2cX
+ EpFfJepzRY8ao4Z4Q7Tqtaqjyn3gEptYYFM2UqvPwCi9/nsWe5aOH/dB9KbJ3Yqk1ii1
+ TK0T9Z9ArcsZz0AMR4z0kItzILOcR4tohxezJF9O65q1vqAnfSDZW8liYlUYWGxhJ3CL
+ qoFPfWEJ+IFs0os6UOWocAywCInEpTVA30DeyyTzE2KRu68GwdeHI6NtCKHsLUNGrMzn
+ oJPRH/Yhlhp75EQT21muGXsEbUQzkb9FGTqfZiu78ActixF79xe9pswygPLWBgTLCRcs /g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jprv7r6qv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 14:15:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JEFheg006692
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 14:15:43 GMT
+Received: from [10.216.41.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 19 Sep
+ 2022 07:15:38 -0700
+Message-ID: <a298b048-1435-fc75-7855-bf93016eb280@quicinc.com>
+Date:   Mon, 19 Sep 2022 19:45:35 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jsfypupy7a7paias"
-Content-Disposition: inline
-In-Reply-To: <CANhJrGMd_4pK0Avbngggs3BJme7WgrkhzvJ+VbL7-JYri37Dow@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 4/8] remoteproc: qcom: Update rproc parse firmware
+ callback
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <andersson@kernel.org>
+References: <1662643422-14909-1-git-send-email-quic_srivasam@quicinc.com>
+ <1662643422-14909-5-git-send-email-quic_srivasam@quicinc.com>
+ <babd014c-bf8a-bbff-7bc7-fabeeb250d0d@quicinc.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <babd014c-bf8a-bbff-7bc7-fabeeb250d0d@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wDpUoNSyaDVafj6sl2xL3bfqja1W7aps
+X-Proofpoint-ORIG-GUID: wDpUoNSyaDVafj6sl2xL3bfqja1W7aps
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 malwarescore=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190095
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,62 +89,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jsfypupy7a7paias
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Sat, Sep 10, 2022 at 08:17:09PM +0300, Matti Vaittinen wrote:
-> pe 9. syysk. 2022 klo 21.21 Sebastian Reichel
-> (sebastian.reichel@collabora.com) kirjoitti:
-> >
-> > Expose and document the table lookup logic used by
-> > regulator_set_ramp_delay_regmap, so that it can be
-> > reused for devices that cannot be configured via
-> > regulator_set_ramp_delay_regmap.
-> >
->=20
-> I am always in favor of adding helpers to be used for common tasks. I
-> am not demanding this (so please ignore my comment if you feel so) but
-> I guess finding the "closest bigger" from a table is not ramp-delay or
-> even regulator specific. I believe something like this might live
-> under lib - if exported.
-
-I'm bad with naming :) If you or Mark have a specific suggestion I
-can change it accordingly.
-
-> Anyways, and whatever it is worth:
-> Acked-by: Matti Vaittinen <matti.vaittinen@mazziesaccount@gmail.com>
-> for exporting such a helper. (Or please disregard the ack if acks are
-> reserved only for maintainers - It's just a sign that I think this is
-> a good idea [even if it could live in lib])
-
-I usually use 'Reviewed-by: <...>' in that case. But your Acked
-line is broken. Looks like you have split personality problem
-between work and private mail account :)
-
--- Sebastian
-
---jsfypupy7a7paias
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMoeVwACgkQ2O7X88g7
-+pr48Q//RAc8SdILtafslFNCUGJjg3RZ52DL7/45jBvpLSGdgkNlLsBxCZUutN20
-Nu740kUnW/gDILLLX3J+KkTgO3Wp7Q+d0ZTy5ZWf1rnPGovd6tL+ivHihYN+s/Ya
-jVgVAncV0EGMXD03HPQofyaoS4pVKXpYvDvM4Mdad9th7vYZhij7a6nn3eMBNic/
-7xvFOP0hgbbw7AGEB9PdllE7BSeBxnODGJ6mwGicysDkckaPwcDUj6wkehur42uz
-ZZnoG4C+hoA/d4bCDe/yYT0okaq/ZtHZT4ykQHtFXUJTymyNnfnVcpE5B6Rurxc2
-1TamX/wZjaH8T+wSYMTiQ5ZFoSfSjWJ2W4teYCQO8M7s67JL8etbdNOeq/R3+bee
-qB45IoXLuu4vxDEp7DQgQvtxhD5fqT5V063V3E6d8OdsAhKt+AVpgo3JWKvzMnCp
-joNiHMgAhYAsnfBKJriV37jnHP5JWWNZ3CRd9zvWIwi0bMPiN3ewuRb5MnUgN0C7
-kI+iGpOevRnbgqd+egWbnxf9eMOttE9dHGpvXoEhKnb6uVWk1R4CGRzWgHby3BJU
-GJzN14J+5DT9d7VsQoaMsse47pBfMVdiArj7UFj93ID1/YIxg3tyyDKO3osCf+M9
-bK+i5UhwwWuMAZJ+UBhRU16GpaGHPbthw7zhsCQ4H9AfJBvQ398=
-=1HVD
------END PGP SIGNATURE-----
-
---jsfypupy7a7paias--
+On 9/14/2022 3:05 PM, Sibi Sankar wrote:
+Thanks for Your time and valuable inputs Sibi Sankar!!!
+>
+> On 9/8/22 6:53 PM, Srinivasa Rao Mandadapu wrote:
+>> Change parse_fw callback in rproc ops from qcom_register_dump_segments
+>> to rproc_elf_load_rsc_table, as section header to be parsed for memory
+>> sandboxing required platforms.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>>   drivers/remoteproc/qcom_q6v5_adsp.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c 
+>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> index 02d17b4..207270d4 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> @@ -447,7 +447,7 @@ static unsigned long adsp_panic(struct rproc *rproc)
+>>       return qcom_q6v5_panic(&adsp->q6v5);
+>>   }
+>>   -static const struct rproc_ops adsp_ops = {
+>> +static struct rproc_ops adsp_ops = {
+>>       .start = adsp_start,
+>>       .stop = adsp_stop,
+>>       .da_to_va = adsp_da_to_va,
+>> @@ -590,6 +590,9 @@ static int adsp_probe(struct platform_device *pdev)
+>>           return ret;
+>>       }
+>>   +    if (desc->has_iommu)
+>> +        adsp_ops.parse_fw = rproc_elf_load_rsc_table;
+>> +
+>
+> The parse_fw would still need to perform the register_dump_segments
+> in addition to elf_load_rsc_table, otherwise you'll lose coredump
+> functionality for ADSP on SC7280. You could perhaps just follow
+> qcom_q6v5_mss parse_fw i.e. have a static func internal to adsp
+> doing both and have it assigned to both wpss/adsp with the
+> pre-existing has_iommu flag to differentiate between the two. With
+> this you wouldn't need to remove the const in adsp_ops as well.
+Okay. Will update accordingly and re spin the patches.
+>
+>>       rproc = rproc_alloc(&pdev->dev, pdev->name, &adsp_ops,
+>>                   firmware_name, sizeof(*adsp));
+>>       if (!rproc) {
+>>
