@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FF75BCF51
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DEF5BCF58
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiISOmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S229804AbiISOm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiISOmA (ORCPT
+        with ESMTP id S229727AbiISOmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:42:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB7A1274E;
-        Mon, 19 Sep 2022 07:42:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8C2AB81C95;
-        Mon, 19 Sep 2022 14:41:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAA8C433C1;
-        Mon, 19 Sep 2022 14:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663598517;
-        bh=OtjpbeaSs0DOFS9kOf0McMZwUdBSfPvfxtQWSZ/40g4=;
+        Mon, 19 Sep 2022 10:42:54 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D30B114E;
+        Mon, 19 Sep 2022 07:42:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C26CD02;
+        Mon, 19 Sep 2022 16:42:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663598571;
+        bh=Qy9RieIsYHYKDGtK6BcRK5+sUjxroS2wx65CmlGOgkk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ch0uFShN8RHmZw7yPjqqQCuXY5njwYTuAm2/O6sZyLZ2X8jRkYeOqcXBCiCeHo+jg
-         KqxR/EnNwBticr0u+HS/8DGC8K8zUEnofuYD/5e3++5avFUs04xbFCRRz9o/INZAWF
-         uEQkLdfem5LsH256M7KuWG5B4JnTtnYW9huK7vwceMK+gjXmaaxf5A/mEAZNSMxxgi
-         N237P1956RxE55+nOBclwmgy42BpEheWDBwjGVU/n10oVpitkesIau3+9maZugCzYf
-         YLd0NxuD3jUFdqnJA1kyP8LIcNVu1YrwyMKDwl6LmGcwHaAMcDyaKMKNY/hf3j+zXY
-         fLF/7Cs4k6Q7w==
-Date:   Mon, 19 Sep 2022 15:41:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     krzysztof.kozlowski@linaro.org, andi@etezian.org, kernel@axis.com,
-        alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/4] spi: spi-loopback-test: Add test to trigger DMA/PIO
- mixing
-Message-ID: <Yyh/q5Ql8/QbCXqA@sirena.org.uk>
-References: <20220916113951.228398-1-vincent.whitchurch@axis.com>
- <20220916113951.228398-2-vincent.whitchurch@axis.com>
+        b=Sib6AlAh/7VZXk/FgLUZUSnLNwQHjsG5ad5i/9Flb1b2k27JjnXOt4WBlUQWNWHXs
+         DSsTIVwTPeS4TL8Ofll6YHvItDYLZCEqlR/sEZpFYYW5tNt6zFIiVJbmI44hgrka1L
+         qekRl6d9ejXyHM9f0HR0y2JsuXL8yVt15iX1nFNM=
+Date:   Mon, 19 Sep 2022 17:42:38 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: i2c: ov5645: Drop fetching the clk reference by
+ name
+Message-ID: <Yyh/3uzOJOu3drEB@pendragon.ideasonboard.com>
+References: <20220919143350.176746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o43Lq88mw5JPA5ld"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220916113951.228398-2-vincent.whitchurch@axis.com>
-X-Cookie: One FISHWICH coming up!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919143350.176746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Prabhakar,
 
---o43Lq88mw5JPA5ld
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thank you for the patch.
 
-On Fri, Sep 16, 2022 at 01:39:48PM +0200, Vincent Whitchurch wrote:
-> Add a test where a small and a large transfer in a message hit the same
-> cache line.  This test currently fails on spi-s3c64xx on in DMA mode
-> since it ends up mixing DMA and PIO without proper cache maintenance.
+On Mon, Sep 19, 2022 at 03:33:50PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> The OV5645 sensor has a single clock source, so just drop fetching the
+> clk reference by name.
+> 
+> This is in preparation to drop the "clock-names" property from the DT
+> binding.
+> 
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-To make life easier with sending fixes as such fixes should come
-at the start of a patch series and new features at the end.  This
-avoids creating spurious dependencies.
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
---o43Lq88mw5JPA5ld
-Content-Type: application/pgp-signature; name="signature.asc"
+> ---
+>  drivers/media/i2c/ov5645.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> index 81e4e87e1821..47451238ca05 100644
+> --- a/drivers/media/i2c/ov5645.c
+> +++ b/drivers/media/i2c/ov5645.c
+> @@ -1090,7 +1090,7 @@ static int ov5645_probe(struct i2c_client *client)
+>  	}
+>  
+>  	/* get system clock (xclk) */
+> -	ov5645->xclk = devm_clk_get(dev, "xclk");
+> +	ov5645->xclk = devm_clk_get(dev, NULL);
+>  	if (IS_ERR(ov5645->xclk)) {
+>  		dev_err(dev, "could not get xclk");
+>  		return PTR_ERR(ov5645->xclk);
 
------BEGIN PGP SIGNATURE-----
+-- 
+Regards,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMof6oACgkQJNaLcl1U
-h9CRCQf/WQxRZ8b3fsI8NWiE0SBlk4tYD12r9n9NIpd70354mcRLpYIIrWz0M64k
-mtV/wovHUmKHEC1b7xyVLrHNrJE4/PE6siJUtiJ1uNpxuWRgQ6zdoSKkCfep3D4M
-n59R1MvLFo0zFBRtW2+3p8s1EGtdmRyV8E8CUXKmUE8vcdkSoTRwvboQG/yED7R0
-IxD9cOxxmAsaS9myfkWM2Pyd92LMSe28oisHsV+oPr16GzO+e12/+jYGuU74kWWu
-k8Memh1bLNqttcL2qSsBYvwEDEQ0SYeQ0+oF5HeAA/0yEwXf+LoZBI5exZ0Sge76
-lhNd6VWEBPaMpANG2mAUqMbmgN95YQ==
-=HLzQ
------END PGP SIGNATURE-----
-
---o43Lq88mw5JPA5ld--
+Laurent Pinchart
