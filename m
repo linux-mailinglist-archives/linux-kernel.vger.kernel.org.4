@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E908F5BC4FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2607B5BC4FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiISJGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S229702AbiISJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiISJGi (ORCPT
+        with ESMTP id S229571AbiISJH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:06:38 -0400
+        Mon, 19 Sep 2022 05:07:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312337679;
-        Mon, 19 Sep 2022 02:06:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3C995A4;
+        Mon, 19 Sep 2022 02:07:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E201AB80B17;
-        Mon, 19 Sep 2022 09:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80776C433C1;
-        Mon, 19 Sep 2022 09:06:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46670B810A1;
+        Mon, 19 Sep 2022 09:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1367CC433C1;
+        Mon, 19 Sep 2022 09:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663578394;
-        bh=dTBQ7T1QioQLJ8cwIP5KWmbjaen9neD2VS2nvDARryw=;
+        s=k20201202; t=1663578444;
+        bh=sQEvRIY5evYtU34Ygtjo5VbWFVAY7fo/LsV81WKEafM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qXXZoYJcoNLSIxyFydSIf4PXN9j8G46Eg4wvruqpVOjsvxFW60YcyiCiTX1zpGNiN
-         GU0FrXt4rB3ykDU3/oahFgG/KojGqNFEABHfscNst7lsyZFsXGHMMzj65KAcWcdzXD
-         DDh+glhfp6wiZjbDEyZ9mxRgo2D+OQnJo2uD5QZQTsuhxpCf+DWfKeFK1lZ96AlBFs
-         rKQ3mRE0Mo+YFA76CAWJsGQheFEiuL3PR8RIGvrbyWGy8JtKXauKfUaPDmMmTmUiSu
-         L+usZiXLhQZU511Qr8HOEJ7bLp8PRK0ku3/ZlWfR8lxS4mUMT1fshSxrtQzF7S0db0
-         lQMmR2sXUj9aA==
+        b=l8gUJdcbibvTvULKl9vyNN9QftOJacUh/fg62x+nFG6k4LTNhSmYVGw3QsDxyffWL
+         CFrPEER5aA0AODcsT0F2c3+6oUSAugod+9whmgIT+Y0K7d8dLXTXHMDuQXKSt1sk/b
+         Iekj5yQlyhRX5VEMRFfd2R1cHyHul42RhTP8qXSAfLLJiClx+7BTzCeYiKS5exGfC6
+         F3AVUWqA4XNA+FmGh5w/JCdSoveWBAzJSp+Fy1G7DiDMqCt4uiSEStTs1u9p7DzwKs
+         FX4+6juNl+ETzextyZYlkXey9fVClAWAkLwz4tck5L5op9Qpg5HLYPL/9WNohdQn9i
+         j2gMfoCiv3z8w==
 Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oaChb-00B1Vp-Nh;
-        Mon, 19 Sep 2022 10:06:32 +0100
-Date:   Mon, 19 Sep 2022 10:04:30 +0100
-Message-ID: <87fsgnlopt.wl-maz@kernel.org>
+        id 1oaCkL-00B1aF-MX;
+        Mon, 19 Sep 2022 10:07:21 +0100
+Date:   Mon, 19 Sep 2022 10:07:21 +0100
+Message-ID: <87edw7lol2.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-In-Reply-To: <20220919140531.3741d146@canb.auug.org.au>
-References: <20220919140531.3741d146@canb.auug.org.au>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] gpio: tqmx86: fix uninitialized variable girq
+In-Reply-To: <20220919031250.770285-1-dzm91@hust.edu.cn>
+References: <20220919031250.770285-1-dzm91@hust.edu.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.176.101.241
-X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, broonie@kernel.org, oliver.upton@linux.dev
+X-SA-Exim-Rcpt-To: dzm91@hust.edu.cn, linus.walleij@linaro.org, brgl@bgdev.pl, mudongliangabcd@gmail.com, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,75 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Mon, 19 Sep 2022 04:12:49 +0100,
+Dongliang Mu <dzm91@hust.edu.cn> wrote:
+> 
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> The commit 924610607f19 ("gpio: tpmx86: Move PM device over to
+> irq domain") adds a dereference of girq that may be uninitialized.
+> 
+> Fix this by moving irq_domain_set_pm_device into if true branch
+> as suggested by Marc Zyngier.
+> 
+> Fixes: 924610607f19 ("gpio: tpmx86: Move PM device over to irq domain")
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+> v1->v2: modify fix method to moving irq_domain_set_pm_device into
+> if true branch as suggested by Marc Zyngier
+>  drivers/gpio/gpio-tqmx86.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the heads up.
-
-On Mon, 19 Sep 2022 05:05:31 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> Hi all,
-> 
-> Today's linux-next merge of the kvm-arm tree got a conflict in:
-> 
->   arch/arm64/kvm/sys_regs.c
-> 
-> between commit:
-> 
->   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
-> 
-> from the arm64 tree and commit:
-> 
->   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
-> 
-> from the kvm-arm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/arm64/kvm/sys_regs.c
-> index 2ef1121ab844,9569772cf09a..000000000000
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@@ -1208,9 -1210,9 +1210,9 @@@ static int set_id_aa64pfr0_el1(struct k
->   		return -EINVAL;
->   
->   	/* We can only differ with CSV[23], and anything else is an error */
-> - 	val ^= read_id_reg(vcpu, rd, false);
-> + 	val ^= read_id_reg(vcpu, rd);
->  -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
->  -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
->  +	val &= ~((0xFUL << ID_AA64PFR0_EL1_CSV2_SHIFT) |
->  +		 (0xFUL << ID_AA64PFR0_EL1_CSV3_SHIFT));
->   	if (val)
->   		return -EINVAL;
-
-Catalin, Will: in order to avoid further conflicts, I've taken the
-liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
-Let me know if that's a problem.
-
-Also, I've resolved the conflict in a slightly different way. Not that
-the above was wrong in any way, but we might as well fix it in a more
-idiomatic way:
-
- 	/* We can only differ with CSV[23], and anything else is an error */
- 	val ^= read_id_reg(vcpu, rd);
--	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
--		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
-+	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
-+		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
- 	if (val)
- 		return -EINVAL;
-
-Thanks,
+Acked-by: Marc Zyngier <maz@kernel.org>
 
 	M.
 
