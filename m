@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA78D5BCD22
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA10A5BCD28
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiISN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S230028AbiISN21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiISN0M (ORCPT
+        with ESMTP id S230480AbiISN1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:26:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C58ABE2B;
-        Mon, 19 Sep 2022 06:25:57 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 13:25:54 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663593955;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QmMIGV/ESjZSo5qRWaCTG/Tey5ErL0FYbgOCaxrKzE=;
-        b=G1HKPU5HU3RMZIppQwekM10vHDmt3yCH4Ben9cTtoox45fFcCIhG3BO5dv1Onkif/KFZaU
-        TelKrJKJUybcG1xTEd7CKwlqbn+1nOwf0lQ5CIuONd/z+Lb9FJV4aPrWx+pjsvGVnJEvL1
-        wLMuKVyYITZrIOiSh/eZeDZ0P/tZdt/Zl+b6yQnWmWRGpXVA09g4r11ZvSQ1TouRqqFC3V
-        S5h8XTTBAipWhsgUmk7JXV5mtNmdi/SoMP5HVpbzW7mxA26vISlZ20Ci+FaQy5yhk0tGiW
-        gJBin2NuGqqe2f7NGKOleJtn4M6J+u9DhuH+D6+qga851tX3RY9NEsyqnse3dA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663593955;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QmMIGV/ESjZSo5qRWaCTG/Tey5ErL0FYbgOCaxrKzE=;
-        b=4wcetC8nw4bKAO8i4/1UxFmD36wOZ5iHGuf1bTllCT5DO+24D4/Ty7zgCrOzi1HTrXn2Vr
-        PNSHNi1JUuVH4rBw==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq: Provide generic_handle_domain_irq_safe().
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <YnkfWFzvusFFktSt@linutronix.de>
-References: <YnkfWFzvusFFktSt@linutronix.de>
+        Mon, 19 Sep 2022 09:27:50 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DD62F648;
+        Mon, 19 Sep 2022 06:27:33 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so7182040pjm.1;
+        Mon, 19 Sep 2022 06:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=mkCH4OzN8g5w9NU3RvtGIK1KLmjjbkv0z31pyt5VQ+U=;
+        b=ic6BZzN79DENl3Ss/xkTywrdtJVj3Z5/lUZKEYwtYa56HmZrdQtpcLrjdbJqGv7hcK
+         DdD9oq4PXqMOcZFEvSkdpFy4BHM44AkxnwbVXv52E26eQEs3Mc7DLfObBV6235Qh27sy
+         5U73mBy9ihbbW1XrK4u2U/tiisfFqQLzZITxGIcFRi6YYjg5Gf+tc8cc4SMvo8Y8GIZe
+         1PK7qdF4t4flwv7ux4d/YBoe9H9SvLx4W7s2ju87ZQlPvW6v+BE9X+ytUrB8v5cm+psa
+         PRAJH75bKdwCXv3Cigbxx3qD+7ft6qjHLCbr4Wg8DA4EIA7SumFVnl/LhV7tp+Fy0bBq
+         QupQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=mkCH4OzN8g5w9NU3RvtGIK1KLmjjbkv0z31pyt5VQ+U=;
+        b=TbQjvDIQw5rjfHCdZbJCYRgVUnGgZRzAqYasjYbLDYSBu3BtyCYuPP8ya4E6LNKdEE
+         FmnYYJUSjOH7i1aOayAyHpn2xT83hBpz8jn2eHro7BEaL8Yf+OH00fICmQkjj1paLiLe
+         cx7sE1IH3aofL2iY+tP4IvtoL9g5rQxsaows9qwH94HpeyentK5fXUebsSD3JfYkq+sa
+         BL8ObxziyXNFbNA2wg/EXqpM1l1P4DCqRwHhfcXVkZDCEs+HJycXlMRNi5bVkBNP1D9S
+         61PvH6c2glueRpM+J3WM3s6U93Jij4Kl9FvodH69hhhI3SlTSFLM0X44ohxG7ZqNAW8r
+         OEDw==
+X-Gm-Message-State: ACrzQf1WJlYm79/iVy81L2AERgNlaunlTfzSpURIyPj3jqvG6aD7tCgz
+        xC1xwcT900bLJU+fcRJCBvl5qRvCvo/+7g==
+X-Google-Smtp-Source: AMsMyM70l0UaCXymcy79gKINZcCJtyklQX+Kjs+aSUjY3KMkxMjt0UtG1NEie5fSwYiNiSn8WwOmSA==
+X-Received: by 2002:a17:90b:1d87:b0:200:b6e1:7e9f with SMTP id pf7-20020a17090b1d8700b00200b6e17e9fmr20246816pjb.235.1663594052844;
+        Mon, 19 Sep 2022 06:27:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id mw5-20020a17090b4d0500b002004a2eab5bsm6630417pjb.14.2022.09.19.06.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 06:27:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 19 Sep 2022 06:27:31 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vladimir Panteleev <git@vladimir.panteleev.md>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+Message-ID: <20220919132731.GA3547700@roeck-us.net>
+References: <20220918140829.443722-1-git@vladimir.panteleev.md>
+ <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
+ <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
+ <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
+ <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <166359395444.401.2028340203117719081.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+On Mon, Sep 19, 2022 at 01:18:53PM +0000, Vladimir Panteleev wrote:
+> Hi Guenter,
+> 
+> On Mon, 19 Sept 2022 at 12:29, Guenter Roeck <linux@roeck-us.net> wrote:
+> > I am not getting into define name editing wars. The define is named as
+> > it is. There is never a good reason to rename it. If I'd accept your
+> > change, someone else might come tomorrow and want it renamed to
+> > "SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
+> > the system to power off.
+> 
+> Ah, sorry - this is one of my first attempts at contributing to the
+> kernel, and as such I of course fully defer to you. In case I was
+> misunderstood, I was just trying to explain my line of reasoning at
+> the time, which is what I thought you asked for in your previous
+> message. Thank you for the explanation, I was not aware of the high
+> cost of renaming defines.
+> 
+> I will send a V2 if this is all?
+> 
 
-Commit-ID:     6a164c646999847b843e651f71c53dfaceb2c2b4
-Gitweb:        https://git.kernel.org/tip/6a164c646999847b843e651f71c53dfaceb2c2b4
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Mon, 09 May 2022 16:04:08 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 19 Sep 2022 15:08:38 +02:00
+Sounds good.
 
-genirq: Provide generic_handle_domain_irq_safe().
-
-commit 509853f9e1e7b ("genirq: Provide generic_handle_irq_safe()")
-addressed the problem of demultiplexing interrupt handlers which are force
-threaded on PREEMPT_RT enabled kernels which means that the demultiplexed
-handler is invoked with interrupts enabled which triggers a lockdep
-warning due to a non-irq safe lock acquisition.
-
-The same problem exists for the irq domain based interrupt handling via
-generic_handle_domain_irq() which has been reported against the AMD
-pin-ctrl driver.
-
-Provide generic_handle_domain_irq_safe() which can used from any context.
-
-[ tglx: Split the usage sites out and massaged changelog ]
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/YnkfWFzvusFFktSt@linutronix.de
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215954
----
- include/linux/irqdesc.h |  1 +
- kernel/irq/irqdesc.c    | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
-index 1cd4e36..844a8e3 100644
---- a/include/linux/irqdesc.h
-+++ b/include/linux/irqdesc.h
-@@ -169,6 +169,7 @@ int generic_handle_irq_safe(unsigned int irq);
-  * conversion failed.
-  */
- int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq);
-+int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq);
- int generic_handle_domain_nmi(struct irq_domain *domain, unsigned int hwirq);
- #endif
- 
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index 5db0230..a91f900 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -705,6 +705,30 @@ int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
- }
- EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
- 
-+ /**
-+ * generic_handle_irq_safe - Invoke the handler for a HW irq belonging
-+ *			     to a domain from any context.
-+ * @domain:	The domain where to perform the lookup
-+ * @hwirq:	The HW irq number to convert to a logical one
-+ *
-+ * Returns:	0 on success, a negative value on error.
-+ *
-+ * This function can be called from any context (IRQ or process
-+ * context). If the interrupt is marked as 'enforce IRQ-context only' then
-+ * the function must be invoked from hard interrupt context.
-+ */
-+int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq)
-+{
-+	unsigned long flags;
-+	int ret;
-+
-+	local_irq_save(flags);
-+	ret = handle_irq_desc(irq_resolve_mapping(domain, hwirq));
-+	local_irq_restore(flags);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(generic_handle_domain_irq_safe);
-+
- /**
-  * generic_handle_domain_nmi - Invoke the handler for a HW nmi belonging
-  *                             to a domain.
+Thanks,
+Guenter
