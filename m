@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2B95BCC00
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21D25BCC04
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiISMjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S230133AbiISMkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiISMja (ORCPT
+        with ESMTP id S230168AbiISMkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:39:30 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEE2E9D7;
-        Mon, 19 Sep 2022 05:39:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r133-20020a1c448b000000b003b494ffc00bso4024621wma.0;
-        Mon, 19 Sep 2022 05:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=7UJTc+Y+zTE8URG+9ucJLFfFyaDYsCOkEYM0zdT7dz4=;
-        b=AcezqpbLZNagmi9U3AME7SFRiaGBkS0FJnzX00jzJbB61oD18MbQLdCaM7dtEcXsOR
-         cxf3bef3XFbZ/H8BF7VljbeTpcTxHQWkS6fTVNkdQol2K6wS6t4uLn2MwBPTzSTQZ7n3
-         0qqfmYir8z1uZHH27ZTwCTi1bATKFfIqe3Sipke3G6E/EbcQGSvfxhdEYg8SUbo4FIfp
-         sXSg6mO1A3X1Z+tPmAcj0DgoG3FrSaXSsxFOVj4ZWKHQ7bVDXTP3ja5yoDBajhituq3q
-         XRqnsJWz5766MXLKUwn12lHjwlhv2i1ZYhyu+dJMHYVjDgZ6NQ1mwxJxxhxh3lumBhRO
-         Jyjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=7UJTc+Y+zTE8URG+9ucJLFfFyaDYsCOkEYM0zdT7dz4=;
-        b=JUhbpANjKICDSAP4x7PQOeWHQPVaEvKRKBnRw8GOR6i343pz8l8BvXpKJUm6K5NGFk
-         aMgmsmH1fMTYNaIgutn+UnHiDmK2dYKP+fpj37Fl4KYisM2y39czXYfHSfbJocRXmQfh
-         7LjDh50alcZQT8NHrzrvTskp8Lw5oMl1MqMEc68w+MShT6jbmjKsQ1GZQE/6fGFnyBwR
-         DHF8XAwMBtLwq2npp3HjOKi9GmUGYhiuJ0sHPNgpIy9mARz9M6PtAOMRc5Lzwki/vmWK
-         NGrBcbJNLMpHJg9oIYEIO1Wi8spNWDoJUzW8Du/fXd8iyXNS8NB4YwHnsGqv6yTLQnje
-         Wysg==
-X-Gm-Message-State: ACgBeo20G8e+MErBRpO0H4JMNTtpnS2NlhyONAIAgsSmvpc5sw+dxO4F
-        0+FlPTDE83XEgF1PJvWI6zikazJMMgtXdA==
-X-Google-Smtp-Source: AA6agR6RTFCipdAEF0bxDh258rmk4T8vHFivtl623nsWm11V1DaKCW+3ay50YwguQJe/F5u1MVZdTg==
-X-Received: by 2002:a05:600c:3845:b0:3b4:b187:3d09 with SMTP id s5-20020a05600c384500b003b4b1873d09mr13852619wmr.96.1663591142300;
-        Mon, 19 Sep 2022 05:39:02 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:453:ec29:bd55:6b15])
-        by smtp.gmail.com with ESMTPSA id v13-20020adfebcd000000b0022a403954c3sm14071514wrn.42.2022.09.19.05.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 05:39:01 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2] clk: renesas: r9a07g043: Hide WDT2 clock and reset entries for RZ/Five
-Date:   Mon, 19 Sep 2022 13:38:53 +0100
-Message-Id: <20220919123853.157883-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 19 Sep 2022 08:40:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1E7632A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663591183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7pheDU3szOAwwbK9OaACzET2BRlTQOVXynwN58u5LXI=;
+        b=NJHktj0BS1ygSJdGFWPDsRcDMrl7y/MaN3Hf8SnvKVJ0hAg6DuoiUz1KxDnYxDnTaZpXPT
+        3SSkvxJhHnMz1kC08mjTAkC7FuTw/XXCH60vXed46QbSDvPPdngL6WI6tAPggjxw27OCU7
+        Z1ywZiGbuoFOdOJGujBLJ6Qz/jNObT0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-39-8b79cf2cOZ6tLOl4h0tvKA-1; Mon, 19 Sep 2022 08:39:37 -0400
+X-MC-Unique: 8b79cf2cOZ6tLOl4h0tvKA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B4B5485A59D;
+        Mon, 19 Sep 2022 12:39:36 +0000 (UTC)
+Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A0EF40C2064;
+        Mon, 19 Sep 2022 12:39:31 +0000 (UTC)
+Date:   Mon, 19 Sep 2022 20:39:26 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, ming.lei@redhat.com
+Subject: Re: [PATCH V3 4/7] ublk_drv: requeue rqs with recovery feature
+ enabled
+Message-ID: <Yyhi/kavaq1aLAQY@T590>
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-5-ZiyangZhang@linux.alibaba.com>
+ <YyfoQuw18kOynxcC@T590>
+ <ff61718d-da2d-f754-5e56-b58a3e57820f@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff61718d-da2d-f754-5e56-b58a3e57820f@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Mon, Sep 19, 2022 at 05:12:21PM +0800, Ziyang Zhang wrote:
+> On 2022/9/19 11:55, Ming Lei wrote:
+> > On Tue, Sep 13, 2022 at 12:17:04PM +0800, ZiyangZhang wrote:
+> >> With recovery feature enabled, in ublk_queue_rq or task work
+> >> (in exit_task_work or fallback wq), we requeue rqs instead of
+> >> ending(aborting) them. Besides, No matter recovery feature is enabled
+> >> or disabled, we schedule monitor_work immediately.
+> >>
+> >> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+> >> ---
+> >>  drivers/block/ublk_drv.c | 34 ++++++++++++++++++++++++++++++++--
+> >>  1 file changed, 32 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+> >> index 23337bd7c105..b067f33a1913 100644
+> >> --- a/drivers/block/ublk_drv.c
+> >> +++ b/drivers/block/ublk_drv.c
+> >> @@ -682,6 +682,21 @@ static void ubq_complete_io_cmd(struct ublk_io *io, int res)
+> >>  
+> >>  #define UBLK_REQUEUE_DELAY_MS	3
+> >>  
+> >> +static inline void __ublk_abort_rq_in_task_work(struct ublk_queue *ubq,
+> >> +		struct request *rq)
+> >> +{
+> >> +	pr_devel("%s: %s q_id %d tag %d io_flags %x.\n", __func__,
+> >> +			(ublk_queue_can_use_recovery(ubq)) ? "requeue" : "abort",
+> >> +			ubq->q_id, rq->tag, ubq->ios[rq->tag].flags);
+> >> +	/* We cannot process this rq so just requeue it. */
+> >> +	if (ublk_queue_can_use_recovery(ubq)) {
+> >> +		blk_mq_requeue_request(rq, false);
+> >> +		blk_mq_delay_kick_requeue_list(rq->q, UBLK_REQUEUE_DELAY_MS);
+> > 
+> > Here you needn't to kick requeue list since we know it can't make
+> > progress. And you can do that once before deleting gendisk
+> > or the queue is recovered.
+> 
+> No, kicking rq here is necessary.
+> 
+> Consider USER_RECOVERY is enabled and everything goes well.
+> User sends STOP_DEV, and we have kicked requeue list in
+> ublk_stop_dev() and are going to call del_gendisk().
+> However, a crash happens now. Then rqs may be still requeued
+> by ublk_queue_rq() because ublk_queue_rq() sees a dying
+> ubq_daemon. So del_gendisk() will hang because there are
+> rqs leaving in requeue list and no one kicks them.
 
-Move the WDT2 clock and reset entries under CONFIG_ARM64 so that its only
-visible for RZ/G2UL (ARM64) SoC as the RZ/Five (RISC-V) SoC doesn't have
-the WDT2 channel.
+Why can't you kick requeue list before calling del_gendisk().
 
-While at it, add the WDT2 clocks to r9a07g043_crit_mod_clks[] list as WDT
-CH2 is specifically to check the operation of Cortex-M33 CPU on the RZ/G2UL
-SoC and we dont want to turn off the clocks of WDT2 if it isn't enabled by
-Cortex-A55.
+> 
+> BTW, kicking requeue list after requeue rqs is really harmless
+> since we schedule quiesce_work immediately after finding a
+> dying ubq_daemon. So few rqs have chance to be re-dispatched.
 
-Fixes: 95d48d270305 ("clk: renesas: r9a07g043: Add support for RZ/Five SoC")
-Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1 -> v2
-* Moved the entries in existing section of ARM64
-* Updated the commit message
----
- drivers/clk/renesas/r9a07g043-cpg.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Do you think it makes sense to kick requeue list when the queue
+can't handle any request?
 
-diff --git a/drivers/clk/renesas/r9a07g043-cpg.c b/drivers/clk/renesas/r9a07g043-cpg.c
-index 37475465100d..e4f7f6ade427 100644
---- a/drivers/clk/renesas/r9a07g043-cpg.c
-+++ b/drivers/clk/renesas/r9a07g043-cpg.c
-@@ -137,6 +137,10 @@ static struct rzg2l_mod_clk r9a07g043_mod_clks[] = {
- 				0x518, 0),
- 	DEF_MOD("ia55_clk",	R9A07G043_IA55_CLK, R9A07G043_CLK_P1,
- 				0x518, 1),
-+	DEF_MOD("wdt2_pclk",	R9A07G043_WDT2_PCLK, R9A07G043_CLK_P0,
-+				0x548, 4),
-+	DEF_MOD("wdt2_clk",	R9A07G043_WDT2_CLK, R9A07G043_OSCCLK,
-+				0x548, 5),
- #endif
- #ifdef CONFIG_RISCV
- 	DEF_MOD("iax45_pclk",	R9A07G043_IAX45_PCLK, R9A07G043_CLK_P2,
-@@ -158,10 +162,6 @@ static struct rzg2l_mod_clk r9a07g043_mod_clks[] = {
- 				0x548, 0),
- 	DEF_MOD("wdt0_clk",	R9A07G043_WDT0_CLK, R9A07G043_OSCCLK,
- 				0x548, 1),
--	DEF_MOD("wdt2_pclk",	R9A07G043_WDT2_PCLK, R9A07G043_CLK_P0,
--				0x548, 4),
--	DEF_MOD("wdt2_clk",	R9A07G043_WDT2_CLK, R9A07G043_OSCCLK,
--				0x548, 5),
- 	DEF_MOD("spi_clk2",	R9A07G043_SPI_CLK2, R9A07G043_CLK_SPI1,
- 				0x550, 0),
- 	DEF_MOD("spi_clk",	R9A07G043_SPI_CLK, R9A07G043_CLK_SPI0,
-@@ -259,6 +259,7 @@ static struct rzg2l_reset r9a07g043_resets[] = {
- 	DEF_RST(R9A07G043_GIC600_GICRESET_N, 0x814, 0),
- 	DEF_RST(R9A07G043_GIC600_DBG_GICRESET_N, 0x814, 1),
- 	DEF_RST(R9A07G043_IA55_RESETN, 0x818, 0),
-+	DEF_RST(R9A07G043_WDT2_PRESETN, 0x848, 2),
- #endif
- #ifdef CONFIG_RISCV
- 	DEF_RST(R9A07G043_IAX45_RESETN, 0x818, 0),
-@@ -269,7 +270,6 @@ static struct rzg2l_reset r9a07g043_resets[] = {
- 	DEF_RST(R9A07G043_OSTM1_PRESETZ, 0x834, 1),
- 	DEF_RST(R9A07G043_OSTM2_PRESETZ, 0x834, 2),
- 	DEF_RST(R9A07G043_WDT0_PRESETN, 0x848, 0),
--	DEF_RST(R9A07G043_WDT2_PRESETN, 0x848, 2),
- 	DEF_RST(R9A07G043_SPI_RST, 0x850, 0),
- 	DEF_RST(R9A07G043_SDHI0_IXRST, 0x854, 0),
- 	DEF_RST(R9A07G043_SDHI1_IXRST, 0x854, 1),
-@@ -311,6 +311,8 @@ static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
- #ifdef CONFIG_ARM64
- 	MOD_CLK_BASE + R9A07G043_GIC600_GICCLK,
- 	MOD_CLK_BASE + R9A07G043_IA55_CLK,
-+	MOD_CLK_BASE + R9A07G043_WDT2_PCLK,
-+	MOD_CLK_BASE + R9A07G043_WDT2_CLK,
- #endif
- #ifdef CONFIG_RISCV
- 	MOD_CLK_BASE + R9A07G043_IAX45_CLK,
--- 
-2.25.1
+
+Thanks,
+Ming
 
