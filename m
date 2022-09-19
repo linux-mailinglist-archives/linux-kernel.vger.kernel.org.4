@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F2E5BCAC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE545BCAC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiISL3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S229577AbiISLaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiISL3J (ORCPT
+        with ESMTP id S229547AbiISL3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:29:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3191EC70
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663586948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s+/Mc8w+aIXPz5w8iN1lc+Tc4tSmEaC40xw3lps1GKM=;
-        b=iBq4wHjuWNpSgT9RGAFqQ9l1Y3HivgyIDou4gc0KZXf3oIhCX0ks1dFS5Uo7PCCmY6CDim
-        2wqiLhSPA1PbbTSxHjmCYcPBr+j459hyRe9YaVCimf6l7K7Z4m/kLsoQCn7mL3bWIeUKlf
-        +9Zj0dLxoB6KdHj9c3XTt8T4MZLmiLE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-594-5JMhkMMUNS-1-9FkJrZT5Q-1; Mon, 19 Sep 2022 07:29:07 -0400
-X-MC-Unique: 5JMhkMMUNS-1-9FkJrZT5Q-1
-Received: by mail-wm1-f69.google.com with SMTP id n7-20020a1c2707000000b003a638356355so15046353wmn.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:29:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=s+/Mc8w+aIXPz5w8iN1lc+Tc4tSmEaC40xw3lps1GKM=;
-        b=wlUIEwfPYvvSIu976ahqbLAhg5BAcVxzo4CcFa8xIC1o43ntSLEsb+EZmgejhPYPo2
-         1ojMvcakmMUyOtlRd/Z2WQYgyGPDIrJL/NEuaYB6xYdre4pkniNMVQAdOkajdOXxYK0h
-         HHHGSZxy6gYm8PviZsKoA92DzbttdFsvfQe2Zi8r3KisxZM2WL4kvChoh6wo1LyxBErV
-         Pm+fzzGpOMiO3SsOoCl84M0mm9dKZ3q02JG5hlqNwxRvUNwpCOcPXGSYmBVrch3n9haE
-         ZGG856JUkpCQxfJrBW082/ipNpnEQox3pj8OgWkCEgPM38PiPnTYtokgPTdvy8bDUXOf
-         fa0w==
-X-Gm-Message-State: ACrzQf3UQbaUtOHDb1fyA/8xVWozG2R0YSecX0XUXqBju7VFInvjecpO
-        gWcJ04svxqnpLbgAFkIGy43yOHO5frM6X4wT8Qj7ajA+gOLcSI5DHPHJzJHFguG7dXeX2Z4RLeJ
-        1Fi1ZzvRLia/xcstVzT9y+Tmy
-X-Received: by 2002:a05:600c:154a:b0:3b4:c9ec:41df with SMTP id f10-20020a05600c154a00b003b4c9ec41dfmr6343141wmg.109.1663586945987;
-        Mon, 19 Sep 2022 04:29:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6tHZnjWz3j8PnHqbfxWuekW8WuxqAfOmQax0sp9LqrjbwLphoQoKDKMKbudkqw99jwjjL8kg==
-X-Received: by 2002:a05:600c:154a:b0:3b4:c9ec:41df with SMTP id f10-20020a05600c154a00b003b4c9ec41dfmr6343123wmg.109.1663586945682;
-        Mon, 19 Sep 2022 04:29:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:c100:c136:f914:345f:f5f3? (p200300cbc703c100c136f914345ff5f3.dip0.t-ipconnect.de. [2003:cb:c703:c100:c136:f914:345f:f5f3])
-        by smtp.gmail.com with ESMTPSA id y6-20020a7bcd86000000b003b33de17577sm13136490wmj.13.2022.09.19.04.29.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 04:29:05 -0700 (PDT)
-Message-ID: <27ac1a9c-5f44-a25c-aa09-844debbb88f8@redhat.com>
-Date:   Mon, 19 Sep 2022 13:28:58 +0200
+        Mon, 19 Sep 2022 07:29:48 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45E515806;
+        Mon, 19 Sep 2022 04:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+uLY05c49ecqS91zmmiEb12QI7sOr+RmFbptlGn3Ypk=; b=SgKWhnBdZUGfUYaD7jCyqSh3sQ
+        Vpr2XdOB5RPtruhHeZGTRUWQy/IsQI8LMNoSGlQBXH6h6Nrbxur2rTe8F/ufqVAZvE1eZEXhAJiUq
+        RMmWDjHBXwk0X1bC8KfUv5njGb03/l3r/ZXpRw822B3fP2R2GaSTVICBunqjRgA+w1WbYhyWXl2vW
+        h6QrbkibWGsH9bFMoV/044qDwnWfD4LYW8SLFAEDidHd7r+MNCw2ij6P/IPSAv+XHL9E/8Wy+XuAo
+        XrIfdpyZMCY7ge8+aLWwKfyjJyNa3cRkcrLdKcTbAOfdYxJ6sa8P4hCWXQW3JikQ90klKN7vmLqyW
+        05msk2Tw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34402)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oaEy0-0000oO-TO; Mon, 19 Sep 2022 12:29:36 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oaExy-0006Lv-GH; Mon, 19 Sep 2022 12:29:34 +0100
+Date:   Mon, 19 Sep 2022 12:29:34 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexander Couzens <lynxis@fe80.eu>
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 3/5] net: mediatek: sgmii:
+ mtk_pcs_setup_mode_an: don't rely on register defaults
+Message-ID: <YyhSnqacAE4ajRdy@shell.armlinux.org.uk>
+References: <20220919083713.730512-1-lynxis@fe80.eu>
+ <20220919083713.730512-4-lynxis@fe80.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 08/16] mm/page_alloc: add missing is_migrate_isolate()
- check in set_page_guard()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        osalvador@suse.de, anshuman.khandual@arm.com
-Cc:     willy@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220916072257.9639-1-linmiaohe@huawei.com>
- <20220916072257.9639-9-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220916072257.9639-9-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919083713.730512-4-lynxis@fe80.eu>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.09.22 09:22, Miaohe Lin wrote:
-> In MIGRATE_ISOLATE case, zone freepage state shouldn't be modified as
-> caller will take care of it. Add missing is_migrate_isolate() here to
-> avoid possible unbalanced freepage state. This would happen if someone
-> isolates the block, and then we face an MCE failure/soft-offline on a
-> page within that block. __mod_zone_freepage_state() will be triggered
-> via below call trace which already had been triggered back when block
-> was isolated:
+On Mon, Sep 19, 2022 at 10:37:10AM +0200, Alexander Couzens wrote:
+> Ensure autonegotiation is enabled.
 > 
-> take_page_off_buddy
->    break_down_buddy_pages
->      set_page_guard
-> 
-> Fixes: 06be6ff3d2ec ("mm,hwpoison: rework soft offline for free pages")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+> Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
 > ---
+>  drivers/net/ethernet/mediatek/mtk_sgmii.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+> index 18de85709e87..6f4c1ca5a36f 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
+> +++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+> @@ -32,12 +32,13 @@ static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs)
+>  	regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER,
+>  		     SGMII_LINK_TIMER_DEFAULT);
+>  
+> +	/* disable remote fault & enable auto neg */
+>  	regmap_read(mpcs->regmap, SGMSYS_SGMII_MODE, &val);
+> -	val |= SGMII_REMOTE_FAULT_DIS;
+> +	val |= SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN;
+>  	regmap_write(mpcs->regmap, SGMSYS_SGMII_MODE, val);
+>  
+>  	regmap_read(mpcs->regmap, SGMSYS_PCS_CONTROL_1, &val);
+> -	val |= SGMII_AN_RESTART;
+> +	val |= SGMII_AN_RESTART | SGMII_AN_ENABLE;
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+I'm not sure if I've asked this before, but why does SGMII_AN_RESTART
+need to be set here? It could do with a comment in the code.
+
+Thanks.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
