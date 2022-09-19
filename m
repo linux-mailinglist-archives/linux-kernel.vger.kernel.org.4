@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09025BD7C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4795BD6E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiISXFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S229797AbiISWKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiISXFV (ORCPT
+        with ESMTP id S229695AbiISWKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:05:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB68744572;
-        Mon, 19 Sep 2022 16:05:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MWgHw4jB0z4xFs;
-        Tue, 20 Sep 2022 09:05:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663628716;
-        bh=0Vb4iUvxOh60SdFonZ6snqIJWlbAcUPAtHNSXwh5TMM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GaVcdfv3lUwMBirsjdoitfk4IkVtsiMFjc9hkQOPCpoMeDMfIN3sfVk4SZoqcStW4
-         bL3RAaS7VgsVn/LApuX5ByAd6zDr43zhdEuMjzRXY1Bz7022JUxFdCyfxd6Io4I/bW
-         JxhOJLMNhuwKocMhNB06XvkDtkphSugO+RNgrKkF2pWNoivCkDUli0mjoM6ONnqUM7
-         9qJOEnaa6/3svckXiAM6Arp7D30wwCG6VxwW2skAl4THsW08YfvBkNauveO92lIoXQ
-         ggVAvyjiJbtlLzGO8mmccnGVy6keLRUtz0wkip5DqLskQmA7M4g2mnA8pHtfR9hzAj
-         oMADzHAStmATQ==
-Date:   Tue, 20 Sep 2022 05:19:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the risc-v-mc tree with Linus' tree
-Message-ID: <20220920051905.500a52ce@canb.auug.org.au>
+        Mon, 19 Sep 2022 18:10:14 -0400
+X-Greylist: delayed 1346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Sep 2022 15:10:14 PDT
+Received: from stargate.chelsio.com (stargate.chelsio.com [12.32.117.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178AA3DF00
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:10:13 -0700 (PDT)
+Received: from localhost (divyakrishna.asicdesigners.com [10.193.177.136] (may be forged))
+        by stargate.chelsio.com (8.14.7/8.14.7) with ESMTP id 28JLlYgS031685;
+        Mon, 19 Sep 2022 14:47:35 -0700
+Date:   Tue, 20 Sep 2022 03:17:33 +0530
+From:   Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
+To:     linux-firmware@kernel.org
+Cc:     linux-kernel@vger.kernel.org, jwboyer@kernel.org,
+        rahul.lakkireddy@chelsio.com
+Subject: pull request: linux-firmware: update cxgb4 firmware to 1.27.0.0
+Message-ID: <YyjjdfpfEG89h8cw@chelsio.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HpRREwiX9JmKN_X_O3wxtYf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_20,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/HpRREwiX9JmKN_X_O3wxtYf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Please pull the new Chelsio firmware from the following URL
 
-Hi all,
+http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
 
-Today's linux-next merge of the risc-v-mc tree got a conflict in:
+Thanks,
+Rahul
 
-  arch/riscv/boot/dts/microchip/mpfs.dtsi
+The following changes since commit f09bebf31b0590bdc875d7236aa705279510cfd0:
 
-between commits:
+  amdgpu: update yellow carp DMCUB firmware (2022-09-13 08:02:23 -0400)
 
-  3f67e6997603 ("riscv: dts: microchip: mpfs: fix incorrect pcie child node=
- name")
-  e4009c5fa77b ("riscv: dts: microchip: mpfs: remove pci axi address transl=
-ation property")
+are available in the Git repository at:
 
-from Linus' tree and commit:
+  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
 
-  2ad0883d86c8 ("riscv: dts: microchip: move the mpfs' pci node to -fabric.=
-dtsi")
+for you to fetch changes up to e6e48db2f8509578902d767b2d05a536b117256e:
 
-from the risc-v-mc tree.
+  cxgb4: Update firmware to revision 1.27.0.0 (2022-09-19 20:35:56 +0000)
 
-I fixed it up (the latter change seems to include the other 2) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+----------------------------------------------------------------
+Rahul Lakkireddy (1):
+      cxgb4: Update firmware to revision 1.27.0.0
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/HpRREwiX9JmKN_X_O3wxtYf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMowKkACgkQAVBC80lX
-0Gz2Zwf/QYQJQ+WZRVyqa1QdqKIEdj0BYj1OEsYM2bV3V0jbx05HqcTp41k3lIQY
-96ioFTnyYGlhMhNnw+zWK2qHaPmWL7Nx6H5xHzlG9pn+IeBSJ6tAEmmA95unWeAw
-OG713x9ZEntfsWhrnXe5Peun00DhEAhA33ogS7T/OG5XzrI1Ql0mdgcOQGtzjkBy
-9OAONGg15iTuctUEZhdBGwlTgUT+RIjpbpVDRq17roZAD60q7GXq1DnZkjqEpQck
-43mhze5EScpbVBPZaNZCkBZ1fv6nnYrVkDDLQnsPEscnJ0hl6fCndtRu8JzHACik
-CNygrJwj40XpCE4yYXg2fIbgCXfvUQ==
-=U1tP
------END PGP SIGNATURE-----
-
---Sig_/HpRREwiX9JmKN_X_O3wxtYf--
+ WHENCE                                         |  12 ++++++------
+ cxgb4/{t4fw-1.26.6.0.bin => t4fw-1.27.0.0.bin} | Bin 570880 -> 570880 bytes
+ cxgb4/{t5fw-1.26.6.0.bin => t5fw-1.27.0.0.bin} | Bin 676352 -> 677376 bytes
+ cxgb4/{t6fw-1.26.6.0.bin => t6fw-1.27.0.0.bin} | Bin 729600 -> 729600 bytes
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+ rename cxgb4/{t4fw-1.26.6.0.bin => t4fw-1.27.0.0.bin} (79%)
+ rename cxgb4/{t5fw-1.26.6.0.bin => t5fw-1.27.0.0.bin} (77%)
+ rename cxgb4/{t6fw-1.26.6.0.bin => t6fw-1.27.0.0.bin} (71%)
