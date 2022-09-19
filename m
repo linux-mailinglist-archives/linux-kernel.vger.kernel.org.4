@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFFB5BCED3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F145BCEDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiISObo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S230089AbiISOb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiISObk (ORCPT
+        with ESMTP id S230014AbiISObw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:31:40 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7400F19C06;
-        Mon, 19 Sep 2022 07:31:38 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e79d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e79d:329c:23ff:fea6:a903])
+        Mon, 19 Sep 2022 10:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560732078;
+        Mon, 19 Sep 2022 07:31:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 686171EC0230;
-        Mon, 19 Sep 2022 16:31:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663597892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aOFLwruiG67vJseMHd1aWtOXV4a+xdwAVmA/Tm3D62A=;
-        b=MF31u7W0nciM6gYqCIXOPlJ8PFI3wvqW3+y/53XxRIsto/JsN4N9wwAsYownZNlxxJirxK
-        kPEgRIyry9VZN8H5PB/O+2qeF/5ohzv9ZKiaOKNQktePrMBligl79aCa7043gwsOXH1iDd
-        TEDaelCyuNn5racZYOJ3D5E8Wd/QHbU=
-Date:   Mon, 19 Sep 2022 16:31:32 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBF16B81C4B;
+        Mon, 19 Sep 2022 14:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884E0C433D6;
+        Mon, 19 Sep 2022 14:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663597905;
+        bh=NkXCfQm/FLpDP/QLaoePbhdmGTT1By087FmiZ+g8tK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cPr6ORIkZS1hi0mTfC3IAGOVxe5Xf0YIpXn1FG72c3gSFnG+XbcMopHgOCdZrpVuQ
+         LHqUCo/2hUmO1H6LNW9r9rHA5mXGvztHGS2F3OtBjHAXIwt5oCzU5wdBmMInXf415s
+         ibv233mBU12TSNxEClWBTVHK1fzjS7w3j4hbCapvOVbDE6aKKPaOgVe+365dcYYrsH
+         IXd+ByoZVYWQ1bXlckcr80Mp0FHSvK1giDc4yzOoai/YCnXbUK9IDecCd6Dzc6zaZI
+         kDA/PRtGSO5qjzxSvX9Ec26StLbOH1EWQlWCIdAgthIaznmMEXMje+f6NIOt73HqRu
+         77PbrmkIj/BkA==
+Date:   Mon, 19 Sep 2022 16:31:42 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         linux-perf-users@vger.kernel.org,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] perf/x86/intel/lbr: use setup_clear_cpu_cap
- instead of clear_cpu_cap
-Message-ID: <Yyh9RDbaRqUR1XSW@zn.tnic>
-References: <20220718141123.136106-1-mlevitsk@redhat.com>
- <20220718141123.136106-2-mlevitsk@redhat.com>
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 09/44] cpuidle,omap3: Push RCU-idle into driver
+Message-ID: <20220919143142.GA61009@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.936337959@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718141123.136106-2-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919101520.936337959@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:11:19PM +0300, Maxim Levitsky wrote:
-> clear_cpu_cap(&boot_cpu_data) is very similar to setup_clear_cpu_cap
-> except that the latter also sets a bit in 'cpu_caps_cleared' which
-> later clears the same cap in secondary cpus, which is likely
-> what is meant here.
-> 
-> Fixes: 47125db27e47 ("perf/x86/intel/lbr: Support Architectural LBR")
-> 
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/events/intel/lbr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 13179f31fe10fa..b08715172309a7 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -1860,7 +1860,7 @@ void __init intel_pmu_arch_lbr_init(void)
->  	return;
->  
->  clear_arch_lbr:
-> -	clear_cpu_cap(&boot_cpu_data, X86_FEATURE_ARCH_LBR);
-> +	setup_clear_cpu_cap(X86_FEATURE_ARCH_LBR);
+On Mon, Sep 19, 2022 at 11:59:48AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then teporarily enable it
+> again before going idle is daft.
 
-setup_clear_cpu_cap() has a very specific purpose - see
-apply_forced_caps().
+That doesn't tell where those calls are.
 
-This whole call sequence is an early_initcall() which is way after the
-whole CPU features picking apart happens.
-
-So what is actually this fixing?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks.
