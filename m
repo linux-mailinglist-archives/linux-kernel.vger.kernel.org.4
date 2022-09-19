@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91535BCCEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418145BCCF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiISNVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S230379AbiISNVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiISNVE (ORCPT
+        with ESMTP id S230218AbiISNVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:21:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA542B252
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663593657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pJzkF9UKJ0JT/guvrtnnYyhgP8leVpTS5h5H8IUyZjs=;
-        b=gj1H4nqkDcxH1Hyfkxo2LOMjrmTbm7k8Vd67pteVttXR0i1KXORXlABMqK5SgI6b2qg+nq
-        NIy7Ag3m5Gjyelk35paKG6mNu7mF0Xuvtn9Zxiw6LJXqum50eS++L/EVFtuCuQsPMNEnvj
-        tyon3OrXkXA+HQOjj5x6/0ENEiBO68k=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-596-ZOBmw6LLPquKX74i-c-JSQ-1; Mon, 19 Sep 2022 09:20:56 -0400
-X-MC-Unique: ZOBmw6LLPquKX74i-c-JSQ-1
-Received: by mail-ed1-f70.google.com with SMTP id z13-20020a05640240cd00b0045276a79364so12661311edb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:20:56 -0700 (PDT)
+        Mon, 19 Sep 2022 09:21:44 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEC1627C;
+        Mon, 19 Sep 2022 06:21:43 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 63so1129266ybq.4;
+        Mon, 19 Sep 2022 06:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=tJpygNNITh1u9xwDloalaLqoI943iAIGZRlKPJgD6wg=;
+        b=kGGvh/SYDsBXwkl6lSURIQLZGlSOt0GHhCqLyg4u1r9ESHPVrpeREAYQKQaqfyxwsp
+         SENXSEEXtvneR4LyFu9XmJPbKobhEqen4JZg1AAhcwO/tyRifCPombZNAY+tk2kSG/PW
+         2AvBe7L/oPMAEkVgdN4FR66C6Zo9oius3GRGhZngonhKp+N5GkYt2GA+EyEHlkC/9IwK
+         dJUiIi+2+5zP6i7PCku8B4eNmA3xTFfNFb15vnSvlmyjwPobQ1GZjjQUvlaQe9wPTdjh
+         Tk22gmaHt1jiqSEcXq9aeg6nERq+Gw6EmMsHRvWeai+zAbeNYv98o7kIa85Y+1a46kcn
+         ULDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=pJzkF9UKJ0JT/guvrtnnYyhgP8leVpTS5h5H8IUyZjs=;
-        b=CMcb7gYRhysr6MWzH/gOSRvaerRu1yjMEklP/nPp9IThmh+1WGYNS8M+Gw6UZhLQBs
-         q7CurLLf7ZBTY4qucRZ9lqhe/MxV47u1YfwsXNls76RRpUW/rXesl+zwKP9beal9LxDv
-         dku+7Ul7cxy8t1h8epTk2LJWurPk+QgEMGMSK69FE68tSA6NgkwAL9G7WSi7WxhMcftt
-         YSqm7gZlARxkwnE+Zleb4nNrIOQLzOOIQZ2/oWZ5/uL172k7lu0msbNfHt/M28XofPlq
-         vblSPxb8JzuKbwsAF8W1IJJCXK3u3qXGV5nlyUytaff1jg56+zLnfWmJl+8EBRXSHl1X
-         oClw==
-X-Gm-Message-State: ACrzQf1bVUDcdmfECgqrdSjVfUOLCKIJRBL8yMdPiqQbW+ljsgPP0+IR
-        wZrsA3VKLGydsXK9oem+seOxOoWrX+BeKWO2VOt4AqTDIeJTJYHYohOtEDIlC6H8YRt34MaQx4M
-        zEfLftYfcYmDwC2UCyp3bI+32
-X-Received: by 2002:a05:6402:379:b0:450:dc5c:f536 with SMTP id s25-20020a056402037900b00450dc5cf536mr15713179edw.298.1663593655493;
-        Mon, 19 Sep 2022 06:20:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM769VhH9Ku3KP+FHMxt8AEvuX3TK5FYd3+2H7UhJ2/p7rIGwNNqM0Ah27nVjjauTwJTTEotvQ==
-X-Received: by 2002:a05:6402:379:b0:450:dc5c:f536 with SMTP id s25-20020a056402037900b00450dc5cf536mr15713162edw.298.1663593655264;
-        Mon, 19 Sep 2022 06:20:55 -0700 (PDT)
-Received: from [10.39.192.161] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id s25-20020aa7cb19000000b004531b137e4bsm9551948edt.67.2022.09.19.06.20.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Sep 2022 06:20:54 -0700 (PDT)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] openvswitch: Change the return type for vport_ops.send
- function hook to int
-Date:   Mon, 19 Sep 2022 15:20:53 +0200
-X-Mailer: MailMate (1.14r5915)
-Message-ID: <1A1ECEC1-5CCE-4D86-A116-D291C88743C0@redhat.com>
-In-Reply-To: <20220913230739.228313-1-nhuck@google.com>
-References: <20220913230739.228313-1-nhuck@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=tJpygNNITh1u9xwDloalaLqoI943iAIGZRlKPJgD6wg=;
+        b=KBM9wUT7uduQzlbbIKCk8Z89qtSw7q04o0RmC5rrSLI0P9NoVLwKvKMG3IvMrSPD9y
+         GniAB/k3r4nS2L1lK6LBumOBniJdbdEJ62WfZjXcViNRZN0G5wLG/OTmCYWKBn8flOfw
+         g6eSgIzjxBoO7Gtmk5X3ITceyES7PU1PKp8jWDbfmj51+0WTqbSPcTFQwRYkXa1RyL1C
+         db8YpW9fCtuHlxwMeOvyzi6u58T3GnDiRGIso+BfngxVyImbjvFEYlzOtmVRP6QsFQQx
+         c/Eh3PUSWnD0nmMqkLiKJTgemn66MrGmjD9lG6U2RGkCbs12jSii6M9Wrr5dpYxF29kL
+         xyBw==
+X-Gm-Message-State: ACrzQf3/uZqRL1GEWT6YQKnDWUVT2mBAVs2Qe9xIzPqNbV6G4u/2+RGO
+        TVIxA6JYokkSMLMt35gAyddncqUzQELaanc5F8SqnzGyRGIjCIVR
+X-Google-Smtp-Source: AMsMyM7ENjsS5zZnwpYJ3GPZ60XtTgPR5p7psFM5Qt9zGWHmTD5bTHfREaUIVMWUwfPXfBNijNSdvic3m+UjX5eVs/o=
+X-Received: by 2002:a25:6611:0:b0:67b:e0c2:3239 with SMTP id
+ a17-20020a256611000000b0067be0c23239mr13869436ybc.18.1663593702518; Mon, 19
+ Sep 2022 06:21:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <ab879545-d4b2-0cd8-3ae2-65f9f2baf2fe@gmail.com>
+ <YyCLm0ws8qsiEcaJ@kroah.com> <CAOH5QeAUGBshLQdRCWLg9-Q3JvrqROLYW6uWr8a4TBKxwAOPaw@mail.gmail.com>
+ <CGME20220916094017epcas1p1deed4041f897d2bf0e0486554d79b3af@epcms1p4>
+ <YyREk5hHs2F0eWiE@kroah.com> <1891546521.01663549682346.JavaMail.epsvc@epcpadp4>
+In-Reply-To: <1891546521.01663549682346.JavaMail.epsvc@epcpadp4>
+From:   yong w <yongw.pur@gmail.com>
+Date:   Mon, 19 Sep 2022 21:21:16 +0800
+Message-ID: <CAOH5QeCF2HfGTJHue4GM6r7K3cec4xfReifVOuB_H4Fi6nXupg@mail.gmail.com>
+Subject: Re: [PATCH v4] page_alloc: consider highatomic reserve in watermark fast
+To:     jaewon31.kim@samsung.com
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "wang.yong12@zte.com.cn" <wang.yong12@zte.com.cn>,
+        YongTaek Lee <ytk.lee@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14 Sep 2022, at 1:07, Nathan Huckleberry wrote:
-
-> All usages of the vport_ops struct have the .send field set to
-> dev_queue_xmit or internal_dev_recv.  Since most usages are set to
-> dev_queue_xmit, the function hook should match the signature of
-> dev_queue_xmit.
+Jaewon Kim <jaewon31.kim@samsung.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8819=E6=
+=97=A5=E5=91=A8=E4=B8=80 09:08=E5=86=99=E9=81=93=EF=BC=9A
 >
-> The only call to vport_ops->send() is in net/openvswitch/vport.c and it
-> throws away the return value.
+> >On Wed, Sep 14, 2022 at 08:46:15AM +0800, yong w wrote:
+> >> Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=881=
+3=E6=97=A5=E5=91=A8=E4=BA=8C 21:54?=E9=81=93=EF=BC=9A
+> >>
+> >> >
+> >> > On Tue, Sep 13, 2022 at 09:09:47PM +0800, yong wrote:
+> >> > > Hello,
+> >> > > This patch is required to be patched in linux-5.4.y and linux-4.19=
+.y.
+> >> >
+> >> > What is "this patch"?  There is no context here :(
+> >> >
+> >> Sorry, I forgot to quote the original patch. the patch is as follows
+> >>
+> >>     f27ce0e page_alloc: consider highatomic reserve in watermark fast
+> >>
+> >> > > In addition to that, the following two patches are somewhat relate=
+d:
+> >> > >
+> >> > >       3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_id=
+x
+> >> > >       9282012 page_alloc: fix invalid watermark check on a negativ=
+e value
+> >> >
+> >> > In what way?  What should be done here by us?
+> >> >
+> >>
+> >> I think these two patches should also be merged.
+> >>
+> >>     The classzone_idx  parameter is used in the zone_watermark_fast
+> >> functionzone, and 3334a45 use ac->high_zoneidx for classzone_idx.
+> >>     "9282012 page_alloc: fix invalid watermark check on a negative
+> >> value"  fix f27ce0e introduced issues
+> >
+> >Ok, I need an ack by all the developers involved in those commits, as
+> >well as the subsystem maintainer so that I know it's ok to take them.
+> >
+> >Can you provide a series of backported and tested patches so that they
+> >are easy to review?
+> >
+> >thanks,
+> >
+> >greg k-h
 >
-> This mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
+> Hello I didn't know my Act is needed to merge it.
 >
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> Acked-by: Jaewon Kim <jaewon31.kim@samsung.com>
+>
+> I don't understand well why the commit f27ce0e has dependency on 3334a45,=
+ though.
+>
+Hello, the classzone_idx is used in the zone_watermark_fast function, and
+there will be conflicts when f27ce0e is merged.
 
-The changes look good to me.
+Looking back, the following two patches adjust the classzone_idx parameter.
+     3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_idx
+     97a225e mm/page_alloc: integrate classzone_idx and high_zoneidx
+and 3334a45 is the key modification.
 
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
+Actually, I think 3334a45 can be merged or not.
 
+Thanks.
