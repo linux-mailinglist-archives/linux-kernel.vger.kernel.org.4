@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FEB5BD1C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3E05BD1CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiISQDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S229842AbiISQFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiISQCi (ORCPT
+        with ESMTP id S229904AbiISQEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:02:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B753C17E;
-        Mon, 19 Sep 2022 09:01:01 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JFbj4x020705;
-        Mon, 19 Sep 2022 16:00:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=x/heB6q2D/lSJBzQsR7Yoo/qqho43QjYowbw3qAX/6k=;
- b=ftrjqYqPhNI2orPPPUKMUgXcCfR00zqzbRUjXeoSM6sdYJMO2wRaGhHN/lZ6BiQ9iRXO
- oLuPPkyH2WjT+bHNATHOBLH/++wBr/5vM/2DCHsPXM7nMx/v4CkwDV4PTCDOKQ0m1hie
- 5nZrjwYiu6QjzGxMwIygMnXLmSLcyzaTiAcwXi8KQbF3eTH7yRGAYC2TEDIizT3cBuVi
- p2gDqj0+XwK4Ly700U5SJkr8H6dBOuGzI1ynR7mr/kuJ2vp0AgjCg2GydPxAhN27erlQ
- Wyb0NyxjPhq1h4nHCuUd4rln+PaRjqEiWNA5/zDcDz5T5yNFTUI82T4F/s7C7D6L/5Z7 gQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jn6b1w7rh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Sep 2022 16:00:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JG0sVT027525
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Sep 2022 16:00:54 GMT
-Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 19 Sep 2022 09:00:54 -0700
-From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v1 3/3] remoteproc: qcom: q6v5: Avoid setting smem bit in case of crash shutdown
-Date:   Mon, 19 Sep 2022 09:00:40 -0700
-Message-ID: <9e549a54e2a6ede3e413de933fd1725c660993c3.1662995608.git.quic_gokukris@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1662995608.git.quic_gokukris@quicinc.com>
-References: <cover.1662995608.git.quic_gokukris@quicinc.com>
+        Mon, 19 Sep 2022 12:04:55 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3B664F3;
+        Mon, 19 Sep 2022 09:03:56 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28JG3hAT080911;
+        Mon, 19 Sep 2022 11:03:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663603423;
+        bh=2ObUHsu17ZORD4jCLvyH/uWRJtHCGgdk1cTknrp/V7A=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=u6j+vYJVplWE6z19mG6BuoUQNRORtXY3d9E25m043Z/JjB/brusODlIA1RehuNthK
+         80FZRzehiknHeBsrtfkPNDdIDNqgjhoNG9r98B7O2sBdEHAe14aJ50X0MwvLJoQDDS
+         2ljWqAg8p0Jsy/TrPbLfksQgaQ10b4QcI0tfR+M4=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28JG3hWX004692
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 19 Sep 2022 11:03:43 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 19
+ Sep 2022 11:03:42 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 19 Sep 2022 11:03:42 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28JG3dEr001204;
+        Mon, 19 Sep 2022 11:03:40 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Bryan Brattlof <bb@ti.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/5] arm64: dts: ti: Add support for AM62A family of SoCs
+Date:   Mon, 19 Sep 2022 21:33:36 +0530
+Message-ID: <166360336860.225542.16586137913783585865.b4-ty@ti.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220901141328.899100-1-vigneshr@ti.com>
+References: <20220901141328.899100-1-vigneshr@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: n-KX7HAa2qitOtYYLkAiNSohtgzbd5iS
-X-Proofpoint-ORIG-GUID: n-KX7HAa2qitOtYYLkAiNSohtgzbd5iS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=854 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209190107
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid setting smem bit in case of crash shutdown, as remote
-processor is not able to send the ack back.
+Hi Vignesh Raghavendra,
 
-Change-Id: I33f19087627e5a7fe2c3bcce377b51b903574bc4
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
----
- drivers/remoteproc/qcom_q6v5.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Thu, 1 Sep 2022 19:43:23 +0530, Vignesh Raghavendra wrote:
+> This series adds basic boot support for AM62A SoCs with UART, MMC/SD and
+> GPIO support on AM62A SK EVM
+> 
+> Bootlog: https://gist.github.com/r-vignesh/4d88f53bb0489f1675fa78f993e95d3f
+> Tech Ref manual: https://www.ti.com/lit/zip/spruj16
+> Schematics: https://www.ti.com/lit/zip/sprr459
+> 
+> [...]
 
-diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
-index 1b9e1e1..569427a 100644
---- a/drivers/remoteproc/qcom_q6v5.c
-+++ b/drivers/remoteproc/qcom_q6v5.c
-@@ -237,8 +237,10 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
- 
- 	q6v5->running = false;
- 
--	/* Don't perform SMP2P dance if sysmon already shut down the remote */
--	if (qcom_sysmon_shutdown_acked(sysmon))
-+	/* Don't perform SMP2P dance if sysmon already shut
-+	 * down the remote or if it isn't running
-+	 */
-+	if (q6v5->rproc->state != RPROC_RUNNING || qcom_sysmon_shutdown_acked(sysmon))
- 		return 0;
- 
- 	qcom_smem_state_update_bits(q6v5->state,
--- 
-2.7.4
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+[1/5] dt-bindings: arm: ti: Rearrange IOPAD macros alphabetically
+      commit: a3c52977419beabc5cb4d6f0b062fd4cb460e54d
+[2/5] dt-bindings: arm: ti: Add bindings for AM62A7 SoC
+      commit: cad20a8de86f37d2500963b1a424f9d658d8e54a
+[3/5] dt-bindings: pinctrl: k3: Introduce pinmux definitions for AM62A
+      commit: 1607e6f9289cdb4c982a223e80ff3c5e827b7cd4
+[4/5] arm64: dts: ti: Introduce AM62A7 family of SoCs
+      commit: 5fc6b1b62639c764e6e7e261f384d2fb47eff39b
+[5/5] arm64: dts: ti: Add support for AM62A7-SK
+      commit: 38c4a08c820cd2483750a68f2bf84c3665fe6137
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 
