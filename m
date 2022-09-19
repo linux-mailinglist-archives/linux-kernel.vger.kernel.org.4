@@ -2,313 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CB75BCEC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB785BCECD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiISO35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S229693AbiISOb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiISO3o (ORCPT
+        with ESMTP id S229621AbiISOb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:29:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91761A44C;
-        Mon, 19 Sep 2022 07:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663597782; x=1695133782;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=IsiSELyQZHXzhmHlKNVp/4AhfXD4NvYslEVAsWis7tk=;
-  b=hSYN5OONx1NwFdMUuG1qZ5FbsNsWASEzmfBmfjW3WD7IZ0N0OiXmTcis
-   /mwHd+dBTr4vc87jYiebps15WimfFBqIiXm+9TETlqoDuJR3kxdYm095Z
-   YNeMs/F9uolO7U7xNUF89/cRP7w4icZbJGzavP1CqMrvZECmGDPjp1cny
-   Nk5vhufAnE5zKZKeXegurla6Mue6x0rT2ss9dXZD1gIvnWgYn6LCxUwDV
-   GQOjsV9DjXp7kdqOjuxd15PjHTfTlC8m1g5kKx1Q7yC72Ppwe+Ir1jHdu
-   p5wb/qgiyJGuG22kABj6ljPEh1nAQKnYKP0Xydhnq0sW9mfHriglP9uUG
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="181099035"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Sep 2022 07:29:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 19 Sep 2022 07:29:41 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 19 Sep 2022 07:29:39 -0700
-Date:   Mon, 19 Sep 2022 15:29:19 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
-Message-ID: <Yyh8v+MtHuc0LLf0@wendy>
-References: <20220824091215.141577-1-conor.dooley@microchip.com>
- <20220824091215.141577-4-conor.dooley@microchip.com>
- <20220915072152.y346csakn7wetpz5@pengutronix.de>
- <YyhmZBmfJvJ9/vBg@wendy>
- <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
+        Mon, 19 Sep 2022 10:31:26 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF6958D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 07:31:23 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220919143119euoutp028ab5df73dbe44271c8d6f7b804dcf43f~WSXUWjx100409504095euoutp02W
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:31:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220919143119euoutp028ab5df73dbe44271c8d6f7b804dcf43f~WSXUWjx100409504095euoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663597879;
+        bh=fZdCIzgG41UdH6uSZoCggfFQize6TCzFRhqHY0cCi/g=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=o2+s2e3BH+ZnHFa3C6ZW3d5KnQ3FaG18FYmISgMZMNw6HEzX5msN4mOTyrzcp9Wyi
+         FJaTlltxln5JmOqdTosOnxvfFRU5NZLdfce38kwV+CWK7ufFs4vQSpORopF+frrQjm
+         6xpSIfaXFFcNZlMu7nADwaLgBS/r1BlbkBgQpVXQ=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220919143119eucas1p13a7388723ed19d15afd7f57304f7d71c~WSXUEw6XB2095820958eucas1p1g;
+        Mon, 19 Sep 2022 14:31:19 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id DF.2F.07817.73D78236; Mon, 19
+        Sep 2022 15:31:19 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220919143118eucas1p2392c27fa14e8b20292a6df5ffd2edb9d~WSXTtEv430096800968eucas1p2D;
+        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220919143118eusmtrp205ba37a59b63e4dd8a05a8847f4e6e03~WSXTsPLmy1469814698eusmtrp2z;
+        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
+X-AuditID: cbfec7f4-893ff70000011e89-06-63287d37c581
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2F.7B.10862.63D78236; Mon, 19
+        Sep 2022 15:31:18 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220919143118eusmtip28440eeefea75d51d22be340086dfe286~WSXTKsRqp1420314203eusmtip2h;
+        Mon, 19 Sep 2022 14:31:18 +0000 (GMT)
+Message-ID: <4e60f9aa-b2ab-65bc-2c93-cd0324fccb3a@samsung.com>
+Date:   Mon, 19 Sep 2022 16:31:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 2/2] media: i2c: s5k6a3: switch to using gpiod API
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220913164104.203957-2-dmitry.torokhov@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMKsWRmVeSWpSXmKPExsWy7djP87rmtRrJBpNf8lg8mLeNzWL+kXOs
+        FocXvWC06HvxkNliyp/lTBabHl9jtbi8aw6bRc+GrawWM87vY7JYtukPkwOXx85Zd9k9Nq3q
+        ZPO4c20Pm8fmJfUefVtWMXp83iQXwBbFZZOSmpNZllqkb5fAlXH04DamghvSFf2/LrA3MC4S
+        62Lk5JAQMJFonf6VuYuRi0NIYAWjxPIN89kgnC+MEvvmrWOHcD4DZVZ8Y4Rp6Z77GqplOaNE
+        z6unUFUfGSXmv97JAlLFK2An0fG9D8jm4GARUJXovOELERaUODnzCViJqECyxKxjx8CGCgu4
+        SXSfnsoKYjMLiEvcejKfCWSmiMBrRomLl/vBHGaBZUBnnLnDDlLFJmAo0fW2iw3E5hRwkOi8
+        tYoNolteYvvbOWDnSQj855A4s38R1N0uEm/mXIOyhSVeHd/CDmHLSPzfCbFOQqCdUWLB7/tQ
+        zgRGiYbnt6A6rCXunPvFBvIPs4CmxPpd+hBhR4kX336DhSUE+CRuvBWEOIJPYtK26cwQYV6J
+        jjYhiGo1iVnH18GtPXjhEvMERqVZSAEzCykAZiF5ZxbC3gWMLKsYxVNLi3PTU4uN8lLL9YoT
+        c4tL89L1kvNzNzEC09Xpf8e/7GBc/uqj3iFGJg7GQ4wSHMxKIrxvEzWShXhTEiurUovy44tK
+        c1KLDzFKc7AoifMmZ25IFBJITyxJzU5NLUgtgskycXBKNTA1/9JMOfzzcTVDxazssNdLJ+xr
+        33HeXzPDv0BfgSO75EyJjHO2VfvfoxF/LuWFvT/a2TVl37H8gCCWsB/xMfpr39zuTLHzd71i
+        buEwK3GSwo6HX5o0s+Sqw7wTJvXOz93HFfnir6zN6qjaM8W/cm/5e+hNO34r6IHywgvpbQ6v
+        Z2eqTOdUm3Rgi9UNxqQ9yjJv01bO/saUc8OPRyEosEqlquOiQ4xZhlni2aOSNhU1uVY33/ht
+        m2KhP1uR2VS1z7Da8enNssZ5XXe+VBpH8WlXhEqd0eE1vbH78cozu6oWLmlilNd84q+Q2Hgy
+        c41t5feXf5fNUrdMjzxSXKgv6Wm/fftr/UcfNCerhIRKKLEUZyQaajEXFScCACUVb0LGAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsVy+t/xe7pmtRrJBje6DC0ezNvGZjH/yDlW
+        i8OLXjBa9L14yGwx5c9yJotNj6+xWlzeNYfNomfDVlaLGef3MVks2/SHyYHLY+esu+wem1Z1
+        snncubaHzWPzknqPvi2rGD0+b5ILYIvSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaP
+        tTIyVdK3s0lJzcksSy3St0vQyzh6cBtTwQ3piv5fF9gbGBeJdTFyckgImEh0z33N3MXIxSEk
+        sJRR4u2ih8wQCRmJk9MaWCFsYYk/17rYIIreM0o8aW9mA0nwCthJdHzvY+li5OBgEVCV6Lzh
+        CxEWlDg58wkLiC0qkCyxpOE+2BxhATeJ7tNTwWxmAXGJW0/mM4HYIgJvGSXu7VIFmc8ssIxR
+        Yt27DywQy04ySlw7PAWsg03AUKLrbRfYYk4BB4nOW6vYICaZSXRt7WKEsOUltr+dwzyBUWgW
+        kkNmIVk4C0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgRG57ZjP7fsYFz56qPe
+        IUYmDsZDjBIczEoivG8TNZKFeFMSK6tSi/Lji0pzUosPMZoCA2Mis5Rocj4wPeSVxBuaGZga
+        mphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTCxGAifmRTZynhdOlR/1gujE/qC
+        82xrG3qUBU/mXry+N2eljnKT47cQDsmiQ73TXgd0986TuPjv5dEddbqGgZslDt/elxdjkHhh
+        Y9iMqxJZjGZcp7MVjlff3dS5xm+mgo9uVX0R79bASexCLiZLp2+XFNp7KeWuyu9zUp+Z8p5W
+        BGU0+i6rLNjck/dxltNZtzofe9clj2V/Sq/XnPZ+kuGbS/83fv2UaFdmntK78b1fxTaj388f
+        H7oT9KzwgH0Lr7+E7s27cUJLy94Fv38R2PqkZd1vdtP46bP9WoJfzzPtalzTZh9odn7qa+UX
+        kXkrq49sXpIWt6dnw5e8o1H2++c6vF6zRfz+fibW/CdxT+qVWIozEg21mIuKEwHZXp/BVwMA
+        AA==
+X-CMS-MailID: 20220919143118eucas1p2392c27fa14e8b20292a6df5ffd2edb9d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5
+References: <20220913164104.203957-1-dmitry.torokhov@gmail.com>
+        <CGME20220913174544eucas1p19b228eb6206bb058e8817848c3f8a9b5@eucas1p1.samsung.com>
+        <20220913164104.203957-2-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Uwe,
+Hi,
 
-On Mon, Sep 19, 2022 at 03:50:08PM +0200, Uwe Kleine-König wrote:
-> On Mon, Sep 19, 2022 at 01:53:56PM +0100, Conor Dooley wrote:
-> > Hey Uwe,
-> > Thanks (as always). I've switched up my email setup a bit so I hope
-> > that I've not mangled anything here.
-> > 
-> > On Thu, Sep 15, 2022 at 09:21:52AM +0200, Uwe Kleine-König wrote:
-> > > Hello,
-> > > 
-> > > On Wed, Aug 24, 2022 at 10:12:14AM +0100, Conor Dooley wrote:
-> > > > Add a driver that supports the Microchip FPGA "soft" PWM IP core.
-> > > > 
-> > > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > ---
-> > > >  drivers/pwm/Kconfig              |  10 +
-> > > >  drivers/pwm/Makefile             |   1 +
-> > > >  drivers/pwm/pwm-microchip-core.c | 402 +++++++++++++++++++++++++++++++
-> > > >  3 files changed, 413 insertions(+)
-> > > >  create mode 100644 drivers/pwm/pwm-microchip-core.c
-> > > > 
-> > 
-> > > > +static int mchp_core_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> > > > +			       const struct pwm_state *state)
-> > > > +{
-> > > > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > > > +	struct pwm_state current_state = pwm->state;
-> > > > +	bool period_locked;
-> > > > +	u64 duty_steps;
-> > > > +	u16 prescale;
-> > > > +	u8 period_steps;
-> > > > +	int ret;
-> > > > +
-> > > > +	mutex_lock(&mchp_core_pwm->lock);
-> > > > +
-> > > > +	if (!state->enabled) {
-> > > > +		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
-> > > > +		mutex_unlock(&mchp_core_pwm->lock);
-> > > > +		return 0;
-> > > > +	}
-> > > > +
-> > > > +	/*
-> > > > +	 * If the only thing that has changed is the duty cycle or the polarity,
-> > > > +	 * we can shortcut the calculations and just compute/apply the new duty
-> > > > +	 * cycle pos & neg edges
-> > > > +	 * As all the channels share the same period, do not allow it to be
-> > > > +	 * changed if any other channels are enabled.
-> > > > +	 * If the period is locked, it may not be possible to use a period
-> > > > +	 * less than that requested. In that case, we just abort.
-> > > > +	 */
-> > > > +	period_locked = mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpwm);
-> > > > +
-> > > > +	if (period_locked) {
-> > > > +		u16 hw_prescale;
-> > > > +		u8 hw_period_steps;
-> > > > +
-> > > > +		mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
-> > > 
-> > > Huh, if (u8 *)&prescale works depends on endianness.
-> > 
-> > Big endian? What's that? ;)
-> > I think the cast can just be dropped and the u16 used directly instead.
-> > 
-> > > 
-> > > > +		hw_prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-> > > > +		hw_period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-> > > > +
-> > > > +		if ((period_steps + 1) * (prescale + 1) <
-> > > > +		    (hw_period_steps + 1) * (hw_prescale + 1)) {
-> > > > +			mutex_unlock(&mchp_core_pwm->lock);
-> > > > +			return -EINVAL;
-> > > > +		}
-> > > > +
-> > > > +		/*
-> > > > +		 * It is possible that something could have set the period_steps
-> > > 
-> > > My German feel for the English language says s/could have/has/
-> > 
-> > What I wrote is _fine_ but the could is redudant given the possible.
-> > I'll change it over.
-> > 
-> > > > +		 * register to 0xff, which would prevent us from setting a 100%
-> > > 
-> > > For my understanding: It would also prevent a 0% relative duty, right?
-> > 
-> > Yeah, I guess the comment could reflect that.
-> > 
-> > > 
-> > > > +		 * duty cycle, as explained in the mchp_core_pwm_calc_period()
-> > > 
-> > > s/duty/relative duty/; s/the //
-> > > 
-> > > > +		 * above.
-> > > > +		 * The period is locked and we cannot change this, so we abort.
-> > > > +		 */
-> > > > +		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
-> > > 
-> > > Don't you need to check hw_period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX
-> > > here?
-> > 
-> > D'oh.
-> > 
-> > > 
-> > > > +			mutex_unlock(&mchp_core_pwm->lock);
-> > > > +			return -EINVAL;
-> > > > +		}
-> > > > +
-> > > > +		prescale = hw_prescale;
-> > > > +		period_steps = hw_period_steps;
-> > > > +	} else if (!current_state.enabled || current_state.period != state->period) {
-> > > > +		ret = mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
-> > > 
-> > > ret is only used in this block, so the declaration can go into here,
-> > > too.
-> > > 
-> > > > +		if (ret) {
-> > > > +			mutex_unlock(&mchp_core_pwm->lock);
-> > > > +			return ret;
-> > > > +		}
-> > > > +		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-> > > > +	} else {
-> > > > +		prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-> > > > +		period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-> > > > +		/*
-> > > > +		 * As above, it is possible that something could have set the
-> > > > +		 * period_steps register to 0xff, which would prevent us from
-> > > > +		 * setting a 100% duty cycle, as explained above.
-> > > > +		 * As the period is not locked, we are free to fix this.
-> > > > +		 */
-> > > 
-> > > Are you sure this is safe? I think it isn't. Consider:
-> > > 
-> > > 	pwm_apply_state(mypwm, { .duty = 0, .period = A, .enabled = true, });
-> > > 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = false, });
-> > > 	pwm_apply_state(mypwm, { .duty = 0, .period = B, .enabled = true, });
-> > > 
-> > > Then you have in the third call prescale and period_steps still
-> > > corresponding to A because you didn't update these registers in the 2nd
-> > > call as you exited early.
-> > 
-> > Riiight. I think I am a little confused here - this comment does not
-> > refer to my comment but rather to the whole logic I have?
-> > 
-> > As in, what you're concerned about is the early exit if the state is
-> > disabled & that I take the values in the hardware as accurate?
-> 
-> No, the thing I'm concerned about is assuming MCHPCOREPWM_PRESCALE and
-> MCHPCOREPWM_PERIOD correspond to state->period. So I'd drop the last
-> block use the 2nd last instead without further condition.
+On 13.09.2022 18:41, Dmitry Torokhov wrote:
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes one of the last uses of of_get_gpio_flags().
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-So, if the period isn't locked always re-configure it. Makes life easier
-for me.
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-> 
-> > What makes sense to me to do here (assuming I understood correctly)
-> > is to compare state->period against what is in the hardare rather than
-> > against what the pwm core thinks?
-> > Or else I could stop exiting early if the pwm is to be disabled &
-> > instead allow the period and duty to be set so that the state of the
-> > hardware is as close to the pwm core's representation of it as possible.
-> 
-> exiting early is fine.
->  
-> > > > [...]
-> > > > +	period_steps = PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD));
-> > > > +	state->period = period_steps * prescale * NSEC_PER_SEC;
-> > > 
-> > > This is broken on 32 bit archs (here: arm):
-> > > 
-> > > $ cat test.c
-> > > #include <inttypes.h>
-> > > #include <stdio.h>
-> > > #include <stdlib.h>
-> > > 
-> > > int main(int argc, char *argv[])
-> > > {
-> > > 	uint8_t period_steps = atoi(argv[1]);
-> > > 	uint16_t prescale = atoi(argv[2]);
-> > > 	uint64_t period;
-> > > 
-> > > 	period = period_steps * prescale * 1000000000L;
-> > > 
-> > > 	printf("period_steps = %" PRIu8 "\n", period_steps);
-> > > 	printf("prescale = %" PRIu16 "\n", prescale);
-> > > 	printf("period = %" PRIu64 "\n", period);
-> > > 
-> > > 	return 0;
-> > > }
-> > > 
-> > > $ make test
-> > > cc     test.c   -o test
-> > > 
-> > > $ ./test 255 65535
-> > > period_steps = 255
-> > > prescale = 65535
-> > > period = 18446744073018591744
-> > > 
-> > > The problem is that the result of 16711425 * 1000000000L isn't affected
-> > > by the type of period and so it's promoted to L which isn't big enough
-> > > to hold 16711425000000000 where longs are only 32 bit wide.
-> > 
-> > I don't think this is ever going to be hit in the wild, since prescale
-> > comes from the hardware where it is limited to 255 - but preventing the
-> > issue seems trivially done by splitting the multiplication so no reason
-> > not to. Thanks for providing the test program btw :)
-> 
-> Even 255 * 255 * 1000000000 overflows. With a maintainer's hat on, it is
-> very valuable to prevent such issues because your driver might be used
-> as a template for the next driver.
-> 
-> > > > +	state->period = DIV64_U64_ROUND_UP(state->period, clk_get_rate(mchp_core_pwm->clk));
-> > > > +
-> > > > +	posedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_POSEDGE(pwm->hwpwm));
-> > > > +	negedge = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE(pwm->hwpwm));
-> > > > +
-> > > > +	if ((negedge == posedge) && state->enabled) {
-> > > 
-> > > Why do you need that state->enabled?
-> > 
-> > Because I was running into conflicts between the reporting here and some
-> > of the checks that I have added to prevent the PWM being put into an
-> > invalid state. On boot both negedge and posedge will be zero & this was
-> > preventing me from setting the period at all.
-> 
-> I don't understood that.
+Thanks!
 
-On startup, (negedge == posedge) is true as both are zero, but the reset
-values for prescale and period are actually 0x8. If on reset I try to
-set a small period, say "echo 1000 > period" apply() returns -EINVAL
-because of a check in the pwm core in pwm_apply_state() as I am
-attempting to set the period to lower than the out-of-reset duty cycle.
+> ---
+>   drivers/media/i2c/s5k6a3.c | 30 +++++++++++-------------------
+>   1 file changed, 11 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
+> index a4efd6d10b43..ef6673b10580 100644
+> --- a/drivers/media/i2c/s5k6a3.c
+> +++ b/drivers/media/i2c/s5k6a3.c
+> @@ -9,12 +9,12 @@
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+>   #include <linux/device.h>
+> +#include <linux/err.h>
+>   #include <linux/errno.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>   #include <linux/i2c.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/regulator/consumer.h>
+>   #include <linux/slab.h>
+> @@ -59,7 +59,7 @@ struct s5k6a3 {
+>   	struct v4l2_subdev subdev;
+>   	struct media_pad pad;
+>   	struct regulator_bulk_data supplies[S5K6A3_NUM_SUPPLIES];
+> -	int gpio_reset;
+> +	struct gpio_desc *gpio_reset;
+>   	struct mutex lock;
+>   	struct v4l2_mbus_framefmt format;
+>   	struct clk *clock;
+> @@ -216,11 +216,11 @@ static int __s5k6a3_power_on(struct s5k6a3 *sensor)
+>   			goto error_clk;
+>   	}
+>   
+> -	gpio_set_value(sensor->gpio_reset, 1);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
+>   	usleep_range(600, 800);
+> -	gpio_set_value(sensor->gpio_reset, 0);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
+>   	usleep_range(600, 800);
+> -	gpio_set_value(sensor->gpio_reset, 1);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
+>   
+>   	/* Delay needed for the sensor initialization */
+>   	msleep(20);
+> @@ -240,7 +240,7 @@ static int __s5k6a3_power_off(struct s5k6a3 *sensor)
+>   {
+>   	int i;
+>   
+> -	gpio_set_value(sensor->gpio_reset, 0);
+> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
+>   
+>   	for (i = S5K6A3_NUM_SUPPLIES - 1; i >= 0; i--)
+>   		regulator_disable(sensor->supplies[i].consumer);
+> @@ -285,32 +285,24 @@ static int s5k6a3_probe(struct i2c_client *client)
+>   	struct device *dev = &client->dev;
+>   	struct s5k6a3 *sensor;
+>   	struct v4l2_subdev *sd;
+> -	int gpio, i, ret;
+> +	int i, ret;
+>   
+>   	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+>   	if (!sensor)
+>   		return -ENOMEM;
+>   
+>   	mutex_init(&sensor->lock);
+> -	sensor->gpio_reset = -EINVAL;
+> -	sensor->clock = ERR_PTR(-EINVAL);
+>   	sensor->dev = dev;
+>   
+>   	sensor->clock = devm_clk_get(sensor->dev, S5K6A3_CLK_NAME);
+>   	if (IS_ERR(sensor->clock))
+>   		return PTR_ERR(sensor->clock);
+>   
+> -	gpio = of_get_gpio_flags(dev->of_node, 0, NULL);
+> -	if (!gpio_is_valid(gpio))
+> -		return gpio;
+> -
+> -	ret = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_LOW,
+> -						S5K6A3_DRV_NAME);
+> -	if (ret < 0)
+> +	sensor->gpio_reset = devm_gpiod_get(dev, NULL, GPIOD_OUT_HIGH);
+> +	ret = PTR_ERR_OR_ZERO(sensor->gpio_reset);
+> +	if (ret)
+>   		return ret;
+>   
+> -	sensor->gpio_reset = gpio;
+> -
+>   	if (of_property_read_u32(dev->of_node, "clock-frequency",
+>   				 &sensor->clock_frequency)) {
+>   		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
 
-I considered zeroing the registers, but if something below Linux had
-been using the PWM I felt that may not be the right thing to do. Can I
-continue to check for the enablement here or would you rather I did
-something different?
-
-Thanks,
-Conor.
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
